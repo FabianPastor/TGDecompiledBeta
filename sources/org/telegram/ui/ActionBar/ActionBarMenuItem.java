@@ -265,7 +265,8 @@ public class ActionBarMenuItem extends FrameLayout {
                 for (int i2 = 0; i2 < this.popupLayout.getItemsCount(); i2++) {
                     View itemAt = this.popupLayout.getItemAt(i2);
                     itemAt.getHitRect(this.rect);
-                    if (((Integer) itemAt.getTag()).intValue() < 100) {
+                    Object tag = itemAt.getTag();
+                    if ((tag instanceof Integer) && ((Integer) tag).intValue() < 100) {
                         if (!this.rect.contains((int) f2, (int) f3)) {
                             itemAt.setPressed(false);
                             itemAt.setSelected(false);
@@ -502,7 +503,7 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public ActionBarMenuSubItem addSubItem(int i, int i2, CharSequence charSequence, boolean z) {
         createPopupLayout();
-        ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(getContext(), z);
+        ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(getContext(), z, false, false);
         actionBarMenuSubItem.setTextAndIcon(charSequence, i2);
         actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
         actionBarMenuSubItem.setTag(Integer.valueOf(i));
@@ -679,6 +680,7 @@ public class ActionBarMenuItem extends FrameLayout {
                     } else {
                         updateOrShowPopup(true, false);
                     }
+                    this.popupLayout.updateRadialSelectors();
                     this.popupWindow.startAnimation();
                     return;
                 }

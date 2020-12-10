@@ -3,6 +3,7 @@ package org.telegram.tgnet;
 public class TLRPC$TL_groupCallParticipant extends TLObject {
     public static int constructor = NUM;
     public int active_date;
+    public float amplitude;
     public boolean can_self_unmute;
     public int date;
     public int flags;

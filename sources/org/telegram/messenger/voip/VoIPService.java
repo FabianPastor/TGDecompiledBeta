@@ -45,6 +45,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$GroupCall;
 import org.telegram.tgnet.TLRPC$PhoneCall;
 import org.telegram.tgnet.TLRPC$TL_boolFalse;
@@ -109,20 +110,20 @@ public class VoIPService extends VoIPBaseService {
     private TLRPC$Chat chat;
     private int checkRequestId;
     private Runnable delayedStartOutgoingCall;
-    private boolean endCallAfterRequest = false;
+    private boolean endCallAfterRequest;
     private boolean forceRating;
     private byte[] g_a;
     private byte[] g_a_hash;
     private long keyFingerprint;
     private long lastTypingTimeSend;
     private ProxyVideoSink localSink;
-    private boolean needRateCall = false;
-    private boolean needSendDebugLog = false;
+    private boolean needRateCall;
+    private boolean needSendDebugLog;
     private Runnable onDestroyRunnable;
     private ArrayList<TLRPC$PhoneCall> pendingUpdates = new ArrayList<>();
     private ProxyVideoSink remoteSink;
     private Runnable shortPollRunnable;
-    private boolean startedRinging = false;
+    private boolean startedRinging;
     private TLRPC$User user;
 
     static /* synthetic */ void lambda$null$34(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
@@ -232,6 +233,8 @@ public class VoIPService extends VoIPBaseService {
                 if (!this.isBtHeadsetConnected && !this.isHeadsetPlugged) {
                     setAudioOutput(0);
                 }
+            } else if (this.groupCall != null && !this.isBtHeadsetConnected && !this.isHeadsetPlugged) {
+                setAudioOutput(0);
             }
             TLRPC$User tLRPC$User = this.user;
             if (tLRPC$User == null && this.chat == null) {
@@ -267,6 +270,9 @@ public class VoIPService extends VoIPBaseService {
                 } else {
                     this.micMute = true;
                     startGroupCall(0, (String) null);
+                    if (!this.isBtHeadsetConnected && !this.isHeadsetPlugged) {
+                        setAudioOutput(0);
+                    }
                 }
                 if (intent.getBooleanExtra("start_incall_activity", false)) {
                     startActivity(new Intent(this, LaunchActivity.class).setAction(this.user != null ? "voip" : "voip_chat").addFlags(NUM));
@@ -424,6 +430,12 @@ public class VoIPService extends VoIPBaseService {
         declineIncomingCall((i2 == 16 || (i2 == 13 && this.isOutgoing)) ? 3 : 1, runnable);
         if (this.groupCall != null && i != 2) {
             if (i == 1) {
+                TLRPC$ChatFull chatFull = MessagesController.getInstance(this.currentAccount).getChatFull(this.chat.id);
+                if (chatFull != null) {
+                    chatFull.flags &= -2097153;
+                    chatFull.call = null;
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.groupCallUpdated, Integer.valueOf(this.chat.id), Long.valueOf(this.groupCall.call.id));
+                }
                 TLRPC$TL_phone_discardGroupCall tLRPC$TL_phone_discardGroupCall = new TLRPC$TL_phone_discardGroupCall();
                 tLRPC$TL_phone_discardGroupCall.call = this.groupCall.getInputGroupCall();
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_discardGroupCall, new RequestDelegate() {
@@ -976,6 +988,10 @@ public class VoIPService extends VoIPBaseService {
     /* access modifiers changed from: protected */
     public Class<? extends Activity> getUIActivityClass() {
         return LaunchActivity.class;
+    }
+
+    public boolean isHangingUp() {
+        return this.currentState == 10;
     }
 
     public void declineIncomingCall(int i, final Runnable runnable) {
@@ -1857,7 +1873,9 @@ public class VoIPService extends VoIPBaseService {
     /* access modifiers changed from: private */
     /* renamed from: lambda$createGroupInstance$35 */
     public /* synthetic */ void lambda$createGroupInstance$35$VoIPService(int[] iArr, float[] fArr) {
-        if (VoIPBaseService.sharedInstance != null && this.groupCall != null) {
+        ChatObject.Call call;
+        if (VoIPBaseService.sharedInstance != null && (call = this.groupCall) != null) {
+            call.processVoiceLevelsUpdate(iArr, fArr);
             if (iArr == null) {
                 if (this.lastTypingTimeSend < SystemClock.uptimeMillis() - 5000 && fArr[0] > 0.1f) {
                     this.lastTypingTimeSend = SystemClock.uptimeMillis();
@@ -1870,15 +1888,24 @@ public class VoIPService extends VoIPBaseService {
                 if (tLRPC$TL_groupCallParticipant != null && fArr[0] > 0.1f) {
                     tLRPC$TL_groupCallParticipant.lastSpeakTime = SystemClock.uptimeMillis();
                 }
-                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.webRtcAmplitudeEvent, Float.valueOf(fArr[0] * 4000.0f));
-            } else if (audioLevelsCallback != null) {
-                for (int i = 0; i < iArr.length; i++) {
-                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = this.groupCall.participantsBySources.get(iArr[i]);
-                    if (tLRPC$TL_groupCallParticipant2 != null && fArr[i] > 0.1f) {
-                        tLRPC$TL_groupCallParticipant2.lastSpeakTime = SystemClock.uptimeMillis();
-                    }
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.webRtcMicAmplitudeEvent, Float.valueOf(fArr[0]));
+                return;
+            }
+            float f = 0.0f;
+            for (int i = 0; i < iArr.length; i++) {
+                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = this.groupCall.participantsBySources.get(iArr[i]);
+                if (tLRPC$TL_groupCallParticipant2 != null && fArr[i] > 0.1f) {
+                    tLRPC$TL_groupCallParticipant2.lastSpeakTime = SystemClock.uptimeMillis();
+                    tLRPC$TL_groupCallParticipant2.amplitude = fArr[i];
+                } else if (tLRPC$TL_groupCallParticipant2 != null) {
+                    tLRPC$TL_groupCallParticipant2.amplitude = 0.0f;
                 }
-                audioLevelsCallback.run(iArr, fArr);
+                f = Math.max(f, fArr[i]);
+            }
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.webRtcSpeakerAmplitudeEvent, Float.valueOf(f));
+            NativeInstance.AudioLevelsCallback audioLevelsCallback2 = audioLevelsCallback;
+            if (audioLevelsCallback2 != null) {
+                audioLevelsCallback2.run(iArr, fArr);
             }
         }
     }
@@ -2385,12 +2412,8 @@ public class VoIPService extends VoIPBaseService {
         }
         if (this.currentState == 15) {
             acceptIncomingCall();
-            return;
-        }
-        setMicMute(!isMicMute());
-        Iterator<VoIPBaseService.StateListener> it = this.stateListeners.iterator();
-        while (it.hasNext()) {
-            it.next().onAudioSettingsChanged();
+        } else {
+            setMicMute(!isMicMute(), false);
         }
     }
 

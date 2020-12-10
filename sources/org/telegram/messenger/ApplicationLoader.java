@@ -38,7 +38,8 @@ public class ApplicationLoader extends Application {
     public static volatile boolean isScreenOn = false;
     public static volatile boolean mainInterfacePaused = true;
     public static volatile boolean mainInterfacePausedStageQueue = true;
-    public static volatile long mainInterfacePausedStageQueueTime;
+    public static volatile long mainInterfacePausedStageQueueTime = 0;
+    public static volatile boolean mainInterfaceStopped = true;
 
     /* access modifiers changed from: protected */
     public void attachBaseContext(Context context) {

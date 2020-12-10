@@ -10,6 +10,7 @@ public abstract class TLRPC$Chat extends TLObject {
     public TLRPC$TL_channelBannedRights_layer92 banned_rights_layer92;
     public boolean broadcast;
     public boolean call_active;
+    public boolean call_not_empty;
     public boolean creator;
     public int date;
     public boolean deactivated;

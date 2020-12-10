@@ -67,6 +67,16 @@ public class SvgHelper {
         }
     }
 
+    private static class RoundRect {
+        RectF rect;
+        float rx;
+
+        public RoundRect(RectF rectF, float f) {
+            this.rect = rectF;
+            this.rx = f;
+        }
+    }
+
     public static class SvgDrawable extends Drawable {
         private static float gradientWidth;
         private static long lastUpdateTime;
@@ -128,6 +138,11 @@ public class SvgHelper {
                         canvas.drawCircle(circle.x1, circle.y1, circle.rad, paint);
                     } else if (obj instanceof Oval) {
                         canvas.drawOval(((Oval) obj).rect, paint);
+                    } else if (obj instanceof RoundRect) {
+                        RoundRect roundRect = (RoundRect) obj;
+                        RectF rectF = roundRect.rect;
+                        float f = roundRect.rx;
+                        canvas.drawRoundRect(rectF, f, f, paint);
                     }
                 }
             }
@@ -142,12 +157,12 @@ public class SvgHelper {
                     lastUpdateTime = elapsedRealtime;
                     totalTranslation += (((float) abs) * gradientWidth) / 1800.0f;
                     while (true) {
-                        float f = totalTranslation;
-                        float f2 = gradientWidth;
-                        if (f < f2 / 2.0f) {
+                        float f2 = totalTranslation;
+                        float f3 = gradientWidth;
+                        if (f2 < f3 / 2.0f) {
                             break;
                         }
-                        totalTranslation = f - f2;
+                        totalTranslation = f2 - f3;
                     }
                     shiftDrawable = new WeakReference<>(this);
                     Runnable runnable = shiftRunnable;
@@ -164,8 +179,8 @@ public class SvgHelper {
                 }
                 this.placeholderMatrix.reset();
                 this.placeholderMatrix.postTranslate((((float) (-parentPosition[0])) + totalTranslation) - ((float) bounds.left), 0.0f);
-                float f3 = 1.0f / max;
-                this.placeholderMatrix.postScale(f3, f3);
+                float f4 = 1.0f / max;
+                this.placeholderMatrix.postScale(f4, f4);
                 this.placeholderGradient.setLocalMatrix(this.placeholderMatrix);
                 ImageReceiver imageReceiver2 = this.parentImageReceiver;
                 if (imageReceiver2 != null) {
@@ -469,40 +484,47 @@ public class SvgHelper {
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Can't fix incorrect switch cases order */
-    /* JADX WARNING: Code restructure failed: missing block: B:16:0x004a, code lost:
-        if (r4 != 'L') goto L_0x004d;
+    /* JADX WARNING: Code restructure failed: missing block: B:26:0x0064, code lost:
+        if (r4 != 'V') goto L_0x0067;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:17:0x004d, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:27:0x0067, code lost:
         r2.advance();
         r4 = r7;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:40:0x00ea, code lost:
-        r5 = r5 + r7;
-        r6 = r6 + r8;
+    /* JADX WARNING: Code restructure failed: missing block: B:34:0x007d, code lost:
+        r21 = false;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x005f  */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x0067  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x0075  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0087  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x00c5  */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00dd  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x00f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0109  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x0144  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x0182  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x0186 A[SYNTHETIC] */
+    /* JADX WARNING: Code restructure failed: missing block: B:52:0x00fd, code lost:
+        r5 = r5 + r3;
+        r6 = r6 + r7;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:63:0x018b, code lost:
+        if (r21 != false) goto L_0x0191;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:64:0x018d, code lost:
+        r16 = r5;
+        r17 = r6;
+     */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x0079  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0081  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x0090  */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x00a3  */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x00d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x00f0  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x0108  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x011c  */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x0153  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static android.graphics.Path doPath(java.lang.String r24) {
+    public static android.graphics.Path doPath(java.lang.String r23) {
         /*
-            r0 = r24
-            int r1 = r24.length()
+            r0 = r23
+            int r1 = r23.length()
             org.telegram.messenger.SvgHelper$ParserHelper r2 = new org.telegram.messenger.SvgHelper$ParserHelper
             r3 = 0
             r2.<init>(r0, r3)
             r2.skipWhitespace()
             android.graphics.Path r14 = new android.graphics.Path
             r14.<init>()
-            r15 = 0
             r4 = 0
             r5 = 0
             r6 = 0
@@ -510,240 +532,263 @@ public class SvgHelper {
             r13 = 0
             r16 = 0
             r17 = 0
-        L_0x001e:
+        L_0x001d:
             int r7 = r2.pos
-            if (r7 >= r1) goto L_0x018d
+            if (r7 >= r1) goto L_0x0199
             char r7 = r0.charAt(r7)
             r8 = 43
-            r9 = 108(0x6c, float:1.51E-43)
-            r10 = 99
-            r11 = 109(0x6d, float:1.53E-43)
-            if (r7 == r8) goto L_0x0038
+            r10 = 115(0x73, float:1.61E-43)
+            r11 = 108(0x6c, float:1.51E-43)
+            r3 = 104(0x68, float:1.46E-43)
+            r15 = 99
+            r9 = 109(0x6d, float:1.53E-43)
+            if (r7 == r8) goto L_0x003b
             r8 = 45
-            if (r7 == r8) goto L_0x0038
+            if (r7 == r8) goto L_0x003b
             switch(r7) {
-                case 48: goto L_0x0038;
-                case 49: goto L_0x0038;
-                case 50: goto L_0x0038;
-                case 51: goto L_0x0038;
-                case 52: goto L_0x0038;
-                case 53: goto L_0x0038;
-                case 54: goto L_0x0038;
-                case 55: goto L_0x0038;
-                case 56: goto L_0x0038;
-                case 57: goto L_0x0038;
-                default: goto L_0x0037;
+                case 48: goto L_0x003b;
+                case 49: goto L_0x003b;
+                case 50: goto L_0x003b;
+                case 51: goto L_0x003b;
+                case 52: goto L_0x003b;
+                case 53: goto L_0x003b;
+                case 54: goto L_0x003b;
+                case 55: goto L_0x003b;
+                case 56: goto L_0x003b;
+                case 57: goto L_0x003b;
+                default: goto L_0x003a;
             }
-        L_0x0037:
-            goto L_0x004d
-        L_0x0038:
-            if (r4 == r11) goto L_0x0054
+        L_0x003a:
+            goto L_0x0067
+        L_0x003b:
+            if (r4 == r9) goto L_0x006e
             r8 = 77
-            if (r4 != r8) goto L_0x003f
-            goto L_0x0054
-        L_0x003f:
-            if (r4 == r10) goto L_0x0051
+            if (r4 != r8) goto L_0x0042
+            goto L_0x006e
+        L_0x0042:
+            if (r4 == r15) goto L_0x006b
             r8 = 67
-            if (r4 != r8) goto L_0x0046
-            goto L_0x0051
-        L_0x0046:
-            if (r4 == r9) goto L_0x0051
+            if (r4 != r8) goto L_0x0049
+            goto L_0x006b
+        L_0x0049:
+            if (r4 == r11) goto L_0x006b
             r8 = 76
-            if (r4 != r8) goto L_0x004d
-            goto L_0x0051
-        L_0x004d:
+            if (r4 != r8) goto L_0x0050
+            goto L_0x006b
+        L_0x0050:
+            if (r4 == r10) goto L_0x006b
+            r8 = 83
+            if (r4 != r8) goto L_0x0057
+            goto L_0x006b
+        L_0x0057:
+            if (r4 == r3) goto L_0x006b
+            r8 = 72
+            if (r4 != r8) goto L_0x005e
+            goto L_0x006b
+        L_0x005e:
+            r8 = 118(0x76, float:1.65E-43)
+            if (r4 == r8) goto L_0x006b
+            r8 = 86
+            if (r4 != r8) goto L_0x0067
+            goto L_0x006b
+        L_0x0067:
             r2.advance()
             r4 = r7
-        L_0x0051:
-            r18 = r4
-            goto L_0x005a
-        L_0x0054:
+        L_0x006b:
+            r20 = r4
+            goto L_0x0074
+        L_0x006e:
             int r7 = r4 + -1
             char r7 = (char) r7
-            r18 = r4
+            r20 = r4
             r4 = r7
-        L_0x005a:
-            r19 = 1
+        L_0x0074:
+            r21 = 1
             switch(r4) {
-                case 65: goto L_0x0144;
-                case 67: goto L_0x0109;
-                case 72: goto L_0x00f5;
-                case 76: goto L_0x00dd;
-                case 77: goto L_0x00c5;
-                case 83: goto L_0x0087;
-                case 86: goto L_0x0075;
-                case 90: goto L_0x0067;
-                case 97: goto L_0x0144;
-                case 99: goto L_0x0109;
-                case 104: goto L_0x00f5;
-                case 108: goto L_0x00dd;
-                case 109: goto L_0x00c5;
-                case 115: goto L_0x0087;
-                case 118: goto L_0x0075;
-                case 122: goto L_0x0067;
-                default: goto L_0x005f;
+                case 65: goto L_0x0153;
+                case 67: goto L_0x011c;
+                case 72: goto L_0x0108;
+                case 76: goto L_0x00f0;
+                case 77: goto L_0x00d8;
+                case 83: goto L_0x00a3;
+                case 86: goto L_0x0090;
+                case 90: goto L_0x0081;
+                case 97: goto L_0x0153;
+                case 99: goto L_0x011c;
+                case 104: goto L_0x0108;
+                case 108: goto L_0x00f0;
+                case 109: goto L_0x00d8;
+                case 115: goto L_0x00a3;
+                case 118: goto L_0x0090;
+                case 122: goto L_0x0081;
+                default: goto L_0x0079;
             }
-        L_0x005f:
-            r23 = r12
-            r22 = r13
-        L_0x0063:
-            r19 = 0
-            goto L_0x0180
-        L_0x0067:
+        L_0x0079:
+            r22 = r12
+            r15 = r13
+        L_0x007c:
+            r3 = 0
+        L_0x007d:
+            r21 = 0
+            goto L_0x018b
+        L_0x0081:
             r14.close()
             r14.moveTo(r13, r12)
             r6 = r12
             r17 = r6
             r5 = r13
             r16 = r5
-            goto L_0x0180
-        L_0x0075:
-            float r7 = r2.nextFloat()
-            r8 = 118(0x76, float:1.65E-43)
-            if (r4 != r8) goto L_0x0082
-            r14.rLineTo(r15, r7)
-            float r6 = r6 + r7
-            goto L_0x0063
-        L_0x0082:
-            r14.lineTo(r5, r7)
-            r6 = r7
-            goto L_0x0063
-        L_0x0087:
+        L_0x008d:
+            r3 = 0
+            goto L_0x018b
+        L_0x0090:
+            float r3 = r2.nextFloat()
+            r7 = 118(0x76, float:1.65E-43)
+            if (r4 != r7) goto L_0x009e
+            r4 = 0
+            r14.rLineTo(r4, r3)
+            float r6 = r6 + r3
+            goto L_0x007c
+        L_0x009e:
+            r14.lineTo(r5, r3)
+            r6 = r3
+            goto L_0x007c
+        L_0x00a3:
+            float r3 = r2.nextFloat()
             float r7 = r2.nextFloat()
             float r8 = r2.nextFloat()
             float r9 = r2.nextFloat()
-            float r10 = r2.nextFloat()
-            r11 = 115(0x73, float:1.61E-43)
-            if (r4 != r11) goto L_0x009f
-            float r7 = r7 + r5
-            float r9 = r9 + r5
-            float r8 = r8 + r6
-            float r10 = r10 + r6
-        L_0x009f:
+            if (r4 != r10) goto L_0x00b9
+            float r3 = r3 + r5
+            float r8 = r8 + r5
+            float r7 = r7 + r6
+            float r9 = r9 + r6
+        L_0x00b9:
             r11 = r7
-            r20 = r8
-            r21 = r9
-            r22 = r10
+            r15 = r8
+            r19 = r9
             r4 = 1073741824(0x40000000, float:2.0)
             float r5 = r5 * r4
             float r5 = r5 - r16
             float r6 = r6 * r4
             float r6 = r6 - r17
             r4 = r14
-            r7 = r11
-            r8 = r20
-            r9 = r21
-            r10 = r22
+            r7 = r3
+            r8 = r11
+            r9 = r15
+            r10 = r19
             r4.cubicTo(r5, r6, r7, r8, r9, r10)
-            r16 = r11
-            r17 = r20
-            r5 = r21
-            r6 = r22
-            goto L_0x0180
-        L_0x00c5:
+            r16 = r3
+            r17 = r11
+            r5 = r15
+            r6 = r19
+            goto L_0x008d
+        L_0x00d8:
+            float r3 = r2.nextFloat()
             float r7 = r2.nextFloat()
-            float r8 = r2.nextFloat()
-            if (r4 != r11) goto L_0x00d5
-            float r13 = r13 + r7
-            float r12 = r12 + r8
-            r14.rMoveTo(r7, r8)
-            goto L_0x00ea
-        L_0x00d5:
-            r14.moveTo(r7, r8)
-            r5 = r7
+            if (r4 != r9) goto L_0x00e8
+            float r13 = r13 + r3
+            float r12 = r12 + r7
+            r14.rMoveTo(r3, r7)
+            goto L_0x00fd
+        L_0x00e8:
+            r14.moveTo(r3, r7)
+            r5 = r3
             r13 = r5
-            r6 = r8
+            r6 = r7
             r12 = r6
-            goto L_0x0063
-        L_0x00dd:
+            goto L_0x007c
+        L_0x00f0:
+            float r3 = r2.nextFloat()
             float r7 = r2.nextFloat()
-            float r8 = r2.nextFloat()
-            if (r4 != r9) goto L_0x00ee
-            r14.rLineTo(r7, r8)
-        L_0x00ea:
-            float r5 = r5 + r7
-            float r6 = r6 + r8
-            goto L_0x0063
-        L_0x00ee:
-            r14.lineTo(r7, r8)
-            r5 = r7
-            r6 = r8
-            goto L_0x0063
-        L_0x00f5:
+            if (r4 != r11) goto L_0x0101
+            r14.rLineTo(r3, r7)
+        L_0x00fd:
+            float r5 = r5 + r3
+            float r6 = r6 + r7
+            goto L_0x007c
+        L_0x0101:
+            r14.lineTo(r3, r7)
+            r5 = r3
+            r6 = r7
+            goto L_0x007c
+        L_0x0108:
             float r7 = r2.nextFloat()
-            r8 = 104(0x68, float:1.46E-43)
-            if (r4 != r8) goto L_0x0103
-            r14.rLineTo(r7, r15)
+            if (r4 != r3) goto L_0x0115
+            r3 = 0
+            r14.rLineTo(r7, r3)
             float r5 = r5 + r7
-            goto L_0x0063
-        L_0x0103:
+            goto L_0x007d
+        L_0x0115:
+            r3 = 0
             r14.lineTo(r7, r6)
             r5 = r7
-            goto L_0x0063
-        L_0x0109:
+            goto L_0x007d
+        L_0x011c:
+            r3 = 0
             float r7 = r2.nextFloat()
             float r8 = r2.nextFloat()
             float r9 = r2.nextFloat()
+            float r10 = r2.nextFloat()
             float r11 = r2.nextFloat()
             float r16 = r2.nextFloat()
-            float r17 = r2.nextFloat()
-            if (r4 != r10) goto L_0x012b
+            if (r4 != r15) goto L_0x013e
             float r7 = r7 + r5
             float r9 = r9 + r5
-            float r16 = r16 + r5
+            float r11 = r11 + r5
             float r8 = r8 + r6
-            float r11 = r11 + r6
-            float r17 = r17 + r6
-        L_0x012b:
+            float r10 = r10 + r6
+            float r16 = r16 + r6
+        L_0x013e:
             r5 = r7
             r6 = r8
-            r20 = r11
-            r11 = r9
+            r15 = r9
+            r17 = r10
             r4 = r14
-            r7 = r11
-            r8 = r20
-            r9 = r16
-            r10 = r17
+            r7 = r15
+            r8 = r17
+            r9 = r11
+            r10 = r16
             r4.cubicTo(r5, r6, r7, r8, r9, r10)
-            r5 = r16
-            r6 = r17
-            r17 = r20
-            r16 = r11
-            goto L_0x0180
-        L_0x0144:
+            r5 = r11
+            r6 = r16
+            r16 = r15
+            goto L_0x018b
+        L_0x0153:
+            r3 = 0
             float r9 = r2.nextFloat()
             float r10 = r2.nextFloat()
             float r11 = r2.nextFloat()
             float r4 = r2.nextFloat()
-            int r8 = (int) r4
+            int r15 = (int) r4
             float r4 = r2.nextFloat()
-            int r7 = (int) r4
+            int r8 = (int) r4
+            float r18 = r2.nextFloat()
             float r19 = r2.nextFloat()
-            float r20 = r2.nextFloat()
             r4 = r14
-            r21 = r7
-            r7 = r19
-            r22 = r8
-            r8 = r20
-            r23 = r12
-            r12 = r22
-            r22 = r13
+            r7 = r18
+            r21 = r8
+            r8 = r19
+            r22 = r12
+            r12 = r15
+            r15 = r13
             r13 = r21
             drawArc(r4, r5, r6, r7, r8, r9, r10, r11, r12, r13)
-            r5 = r19
-            r6 = r20
-            r13 = r22
-            r12 = r23
-            goto L_0x0063
-        L_0x0180:
-            if (r19 != 0) goto L_0x0186
+            r13 = r15
+            r5 = r18
+            r6 = r19
+            r12 = r22
+            goto L_0x007d
+        L_0x018b:
+            if (r21 != 0) goto L_0x0191
             r16 = r5
             r17 = r6
-        L_0x0186:
+        L_0x0191:
             r2.skipWhitespace()
-            r4 = r18
-            goto L_0x001e
-        L_0x018d:
+            r4 = r20
+            r3 = 0
+            goto L_0x001d
+        L_0x0199:
             return r14
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.doPath(java.lang.String):android.graphics.Path");
@@ -776,7 +821,8 @@ public class SvgHelper {
         return getFloatAttr(str, attributes, (Float) null);
     }
 
-    private static Float getFloatAttr(String str, Attributes attributes, Float f) {
+    /* access modifiers changed from: private */
+    public static Float getFloatAttr(String str, Attributes attributes, Float f) {
         String stringAttr = getStringAttr(str, attributes);
         if (stringAttr == null) {
             return f;
@@ -1080,6 +1126,7 @@ public class SvgHelper {
         private Paint paint;
         boolean pushed;
         private RectF rect;
+        private RectF rectTmp;
         private float scale;
         private StringBuilder styles;
         private boolean whiteOnly;
@@ -1094,6 +1141,7 @@ public class SvgHelper {
             this.scale = 1.0f;
             this.paint = new Paint(1);
             this.rect = new RectF();
+            this.rectTmp = new RectF();
             this.pushed = false;
             this.globalStyles = new HashMap<>();
             this.desiredWidth = i;
@@ -1209,78 +1257,80 @@ public class SvgHelper {
         public void startElement(String str, String str2, String str3, Attributes attributes) {
             int i;
             String access$600;
-            if (!this.boundsMode || str2.equals("style")) {
+            String str4 = str2;
+            Attributes attributes2 = attributes;
+            if (!this.boundsMode || str4.equals("style")) {
                 str2.hashCode();
                 char c = 65535;
                 switch (str2.hashCode()) {
                     case -1656480802:
-                        if (str2.equals("ellipse")) {
+                        if (str4.equals("ellipse")) {
                             c = 0;
                             break;
                         }
                         break;
                     case -1360216880:
-                        if (str2.equals("circle")) {
+                        if (str4.equals("circle")) {
                             c = 1;
                             break;
                         }
                         break;
                     case -397519558:
-                        if (str2.equals("polygon")) {
+                        if (str4.equals("polygon")) {
                             c = 2;
                             break;
                         }
                         break;
                     case 103:
-                        if (str2.equals("g")) {
+                        if (str4.equals("g")) {
                             c = 3;
                             break;
                         }
                         break;
                     case 114276:
-                        if (str2.equals("svg")) {
+                        if (str4.equals("svg")) {
                             c = 4;
                             break;
                         }
                         break;
                     case 3079438:
-                        if (str2.equals("defs")) {
+                        if (str4.equals("defs")) {
                             c = 5;
                             break;
                         }
                         break;
                     case 3321844:
-                        if (str2.equals("line")) {
+                        if (str4.equals("line")) {
                             c = 6;
                             break;
                         }
                         break;
                     case 3433509:
-                        if (str2.equals("path")) {
+                        if (str4.equals("path")) {
                             c = 7;
                             break;
                         }
                         break;
                     case 3496420:
-                        if (str2.equals("rect")) {
+                        if (str4.equals("rect")) {
                             c = 8;
                             break;
                         }
                         break;
                     case 109780401:
-                        if (str2.equals("style")) {
+                        if (str4.equals("style")) {
                             c = 9;
                             break;
                         }
                         break;
                     case 561938880:
-                        if (str2.equals("polyline")) {
+                        if (str4.equals("polyline")) {
                             c = 10;
                             break;
                         }
                         break;
                     case 917656469:
-                        if (str2.equals("clipPath")) {
+                        if (str4.equals("clipPath")) {
                             c = 11;
                             break;
                         }
@@ -1288,13 +1338,13 @@ public class SvgHelper {
                 }
                 switch (c) {
                     case 0:
-                        Float access$1100 = SvgHelper.getFloatAttr("cx", attributes);
-                        Float access$11002 = SvgHelper.getFloatAttr("cy", attributes);
-                        Float access$11003 = SvgHelper.getFloatAttr("rx", attributes);
-                        Float access$11004 = SvgHelper.getFloatAttr("ry", attributes);
+                        Float access$1100 = SvgHelper.getFloatAttr("cx", attributes2);
+                        Float access$11002 = SvgHelper.getFloatAttr("cy", attributes2);
+                        Float access$11003 = SvgHelper.getFloatAttr("rx", attributes2);
+                        Float access$11004 = SvgHelper.getFloatAttr("ry", attributes2);
                         if (access$1100 != null && access$11002 != null && access$11003 != null && access$11004 != null) {
-                            pushTransform(attributes);
-                            Properties properties = new Properties(attributes, this.globalStyles);
+                            pushTransform(attributes2);
+                            Properties properties = new Properties(attributes2, this.globalStyles);
                             this.rect.set(access$1100.floatValue() - access$11003.floatValue(), access$11002.floatValue() - access$11004.floatValue(), access$1100.floatValue() + access$11003.floatValue(), access$11002.floatValue() + access$11004.floatValue());
                             if (doFill(properties)) {
                                 SvgDrawable svgDrawable = this.drawable;
@@ -1317,12 +1367,12 @@ public class SvgHelper {
                         }
                         return;
                     case 1:
-                        Float access$11005 = SvgHelper.getFloatAttr("cx", attributes);
-                        Float access$11006 = SvgHelper.getFloatAttr("cy", attributes);
-                        Float access$11007 = SvgHelper.getFloatAttr("r", attributes);
+                        Float access$11005 = SvgHelper.getFloatAttr("cx", attributes2);
+                        Float access$11006 = SvgHelper.getFloatAttr("cy", attributes2);
+                        Float access$11007 = SvgHelper.getFloatAttr("r", attributes2);
                         if (access$11005 != null && access$11006 != null && access$11007 != null) {
-                            pushTransform(attributes);
-                            Properties properties2 = new Properties(attributes, this.globalStyles);
+                            pushTransform(attributes2);
+                            Properties properties2 = new Properties(attributes2, this.globalStyles);
                             if (doFill(properties2)) {
                                 SvgDrawable svgDrawable3 = this.drawable;
                                 if (svgDrawable3 != null) {
@@ -1345,18 +1395,18 @@ public class SvgHelper {
                         return;
                     case 2:
                     case 10:
-                        NumberParse access$1400 = SvgHelper.getNumberParseAttr("points", attributes);
-                        if (access$1400 != null) {
+                        NumberParse access$1500 = SvgHelper.getNumberParseAttr("points", attributes2);
+                        if (access$1500 != null) {
                             Path path = new Path();
-                            ArrayList access$500 = access$1400.numbers;
+                            ArrayList access$500 = access$1500.numbers;
                             if (access$500.size() > 1) {
-                                pushTransform(attributes);
-                                Properties properties3 = new Properties(attributes, this.globalStyles);
+                                pushTransform(attributes2);
+                                Properties properties3 = new Properties(attributes2, this.globalStyles);
                                 path.moveTo(((Float) access$500.get(0)).floatValue(), ((Float) access$500.get(1)).floatValue());
                                 for (int i2 = 2; i2 < access$500.size(); i2 += 2) {
                                     path.lineTo(((Float) access$500.get(i2)).floatValue(), ((Float) access$500.get(i2 + 1)).floatValue());
                                 }
-                                if (str2.equals("polygon")) {
+                                if (str4.equals("polygon")) {
                                     path.close();
                                 }
                                 if (doFill(properties3)) {
@@ -1382,15 +1432,15 @@ public class SvgHelper {
                         }
                         return;
                     case 3:
-                        if ("bounds".equalsIgnoreCase(SvgHelper.getStringAttr("id", attributes))) {
+                        if ("bounds".equalsIgnoreCase(SvgHelper.getStringAttr("id", attributes2))) {
                             this.boundsMode = true;
                             return;
                         }
                         return;
                     case 4:
-                        Float access$11008 = SvgHelper.getFloatAttr("width", attributes);
-                        Float access$11009 = SvgHelper.getFloatAttr("height", attributes);
-                        if ((access$11008 == null || access$11009 == null) && (access$600 = SvgHelper.getStringAttr("viewBox", attributes)) != null) {
+                        Float access$11008 = SvgHelper.getFloatAttr("width", attributes2);
+                        Float access$11009 = SvgHelper.getFloatAttr("height", attributes2);
+                        if ((access$11008 == null || access$11009 == null) && (access$600 = SvgHelper.getStringAttr("viewBox", attributes2)) != null) {
                             String[] split = access$600.split(" ");
                             Float valueOf = Float.valueOf(Float.parseFloat(split[2]));
                             access$11009 = Float.valueOf(Float.parseFloat(split[3]));
@@ -1438,12 +1488,12 @@ public class SvgHelper {
                         this.boundsMode = true;
                         return;
                     case 6:
-                        Float access$110010 = SvgHelper.getFloatAttr("x1", attributes);
-                        Float access$110011 = SvgHelper.getFloatAttr("x2", attributes);
-                        Float access$110012 = SvgHelper.getFloatAttr("y1", attributes);
-                        Float access$110013 = SvgHelper.getFloatAttr("y2", attributes);
-                        if (doStroke(new Properties(attributes, this.globalStyles))) {
-                            pushTransform(attributes);
+                        Float access$110010 = SvgHelper.getFloatAttr("x1", attributes2);
+                        Float access$110011 = SvgHelper.getFloatAttr("x2", attributes2);
+                        Float access$110012 = SvgHelper.getFloatAttr("y1", attributes2);
+                        Float access$110013 = SvgHelper.getFloatAttr("y2", attributes2);
+                        if (doStroke(new Properties(attributes2, this.globalStyles))) {
+                            pushTransform(attributes2);
                             SvgDrawable svgDrawable8 = this.drawable;
                             if (svgDrawable8 != null) {
                                 svgDrawable8.addCommand(new Line(access$110010.floatValue(), access$110012.floatValue(), access$110011.floatValue(), access$110013.floatValue()), this.paint);
@@ -1455,44 +1505,48 @@ public class SvgHelper {
                         }
                         return;
                     case 7:
-                        Path access$1500 = SvgHelper.doPath(SvgHelper.getStringAttr("d", attributes));
-                        pushTransform(attributes);
-                        Properties properties4 = new Properties(attributes, this.globalStyles);
+                        Path access$1600 = SvgHelper.doPath(SvgHelper.getStringAttr("d", attributes2));
+                        pushTransform(attributes2);
+                        Properties properties4 = new Properties(attributes2, this.globalStyles);
                         if (doFill(properties4)) {
                             SvgDrawable svgDrawable9 = this.drawable;
                             if (svgDrawable9 != null) {
-                                svgDrawable9.addCommand(access$1500, this.paint);
+                                svgDrawable9.addCommand(access$1600, this.paint);
                             } else {
-                                this.canvas.drawPath(access$1500, this.paint);
+                                this.canvas.drawPath(access$1600, this.paint);
                             }
                         }
                         if (doStroke(properties4)) {
                             SvgDrawable svgDrawable10 = this.drawable;
                             if (svgDrawable10 != null) {
-                                svgDrawable10.addCommand(access$1500, this.paint);
+                                svgDrawable10.addCommand(access$1600, this.paint);
                             } else {
-                                this.canvas.drawPath(access$1500, this.paint);
+                                this.canvas.drawPath(access$1600, this.paint);
                             }
                         }
                         popTransform();
                         return;
                     case 8:
-                        Float access$110014 = SvgHelper.getFloatAttr("x", attributes);
+                        Float access$110014 = SvgHelper.getFloatAttr("x", attributes2);
                         if (access$110014 == null) {
                             access$110014 = Float.valueOf(0.0f);
                         }
-                        Float access$110015 = SvgHelper.getFloatAttr("y", attributes);
+                        Float access$110015 = SvgHelper.getFloatAttr("y", attributes2);
                         if (access$110015 == null) {
                             access$110015 = Float.valueOf(0.0f);
                         }
-                        Float access$110016 = SvgHelper.getFloatAttr("width", attributes);
-                        Float access$110017 = SvgHelper.getFloatAttr("height", attributes);
-                        pushTransform(attributes);
-                        Properties properties5 = new Properties(attributes, this.globalStyles);
+                        Float access$110016 = SvgHelper.getFloatAttr("width", attributes2);
+                        Float access$110017 = SvgHelper.getFloatAttr("height", attributes2);
+                        Float access$1200 = SvgHelper.getFloatAttr("rx", attributes2, (Float) null);
+                        pushTransform(attributes2);
+                        Properties properties5 = new Properties(attributes2, this.globalStyles);
                         if (doFill(properties5)) {
                             SvgDrawable svgDrawable11 = this.drawable;
                             if (svgDrawable11 != null) {
-                                svgDrawable11.addCommand(new RectF(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue()), this.paint);
+                                svgDrawable11.addCommand(new RoundRect(new RectF(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue()), access$1200.floatValue()), this.paint);
+                            } else if (access$1200 != null) {
+                                this.rectTmp.set(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue());
+                                this.canvas.drawRoundRect(this.rectTmp, access$1200.floatValue(), access$1200.floatValue(), this.paint);
                             } else {
                                 this.canvas.drawRect(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue(), this.paint);
                             }
@@ -1500,7 +1554,10 @@ public class SvgHelper {
                         if (doStroke(properties5)) {
                             SvgDrawable svgDrawable12 = this.drawable;
                             if (svgDrawable12 != null) {
-                                svgDrawable12.addCommand(new RectF(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue()), this.paint);
+                                svgDrawable12.addCommand(new RoundRect(new RectF(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue()), access$1200.floatValue()), this.paint);
+                            } else if (access$1200 != null) {
+                                this.rectTmp.set(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue());
+                                this.canvas.drawRoundRect(this.rectTmp, access$1200.floatValue(), access$1200.floatValue(), this.paint);
                             } else {
                                 this.canvas.drawRect(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue(), this.paint);
                             }
@@ -2116,13 +2173,13 @@ public class SvgHelper {
                 i++;
             }
             double d2 = (double) i;
-            double[] access$1600 = SvgHelper.pow10;
+            double[] access$1700 = SvgHelper.pow10;
             if (i2 > 0) {
-                double d3 = access$1600[i2];
+                double d3 = access$1700[i2];
                 Double.isNaN(d2);
                 d = d2 * d3;
             } else {
-                double d4 = access$1600[-i2];
+                double d4 = access$1700[-i2];
                 Double.isNaN(d2);
                 d = d2 / d4;
             }

@@ -1337,6 +1337,10 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
                 }
 
+                public /* synthetic */ SparseArray getExcludeCallParticipants() {
+                    return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeCallParticipants(this);
+                }
+
                 public /* synthetic */ SparseArray getExcludeUsers() {
                     return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeUsers(this);
                 }
@@ -1471,7 +1475,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 r1 = 8
                 r4.setVisibility(r1)
                 android.widget.TextView r4 = r5.title
-                r1 = 2131626054(0x7f0e0846, float:1.8879333E38)
+                r1 = 2131626064(0x7f0e0850, float:1.8879354E38)
                 java.lang.String r2 = "NoContacts"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r4.setText(r1)

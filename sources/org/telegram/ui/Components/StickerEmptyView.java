@@ -20,7 +20,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
     private boolean animateLayoutChange;
     int currentAccount = UserConfig.selectedAccount;
     int keyboardSize;
-    int lastH;
+    private int lastH;
     private LinearLayout linearLayout;
     /* access modifiers changed from: private */
     public RadialProgressView progressBar;
@@ -126,6 +126,14 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             }
         }
         this.lastH = getMeasuredHeight();
+    }
+
+    public void setColors(String str, String str2, String str3, String str4) {
+        this.title.setTag(str);
+        this.title.setTextColor(Theme.getColor(str));
+        this.subtitle.setTag(str2);
+        this.subtitle.setTextColor(Theme.getColor(str2));
+        this.stubDrawable.setColors(str3, str4);
     }
 
     public void setVisibility(int i) {

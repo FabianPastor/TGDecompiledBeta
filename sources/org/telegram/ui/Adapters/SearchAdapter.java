@@ -77,6 +77,10 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                 return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
             }
 
+            public /* synthetic */ SparseArray getExcludeCallParticipants() {
+                return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeCallParticipants(this);
+            }
+
             public /* synthetic */ void onSetHashtags(ArrayList arrayList, HashMap hashMap) {
                 SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$onSetHashtags(this, arrayList, hashMap);
             }

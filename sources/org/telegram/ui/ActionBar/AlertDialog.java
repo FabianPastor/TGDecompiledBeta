@@ -39,6 +39,8 @@ import org.telegram.ui.Components.RadialProgressView;
 
 public class AlertDialog extends Dialog implements Drawable.Callback {
     /* access modifiers changed from: private */
+    public float aspectRatio;
+    /* access modifiers changed from: private */
     public Rect backgroundPaddings = new Rect();
     protected FrameLayout buttonsLayout;
     private boolean canCacnel = true;
@@ -247,7 +249,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             }
 
             /* access modifiers changed from: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:79:0x031a  */
+            /* JADX WARNING: Removed duplicated region for block: B:79:0x031b  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public void onMeasure(int r13, int r14) {
                 /*
@@ -268,7 +270,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     int r13 = android.view.View.MeasureSpec.getSize(r13)
                     int r14 = android.view.View.MeasureSpec.getSize(r14)
                     r12.setMeasuredDimension(r13, r14)
-                    goto L_0x0398
+                    goto L_0x0399
                 L_0x0033:
                     r0 = 1
                     r12.inLayout = r0
@@ -425,13 +427,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.view.View r14 = r14.topView
                     r5 = 1098907648(0x41800000, float:16.0)
-                    if (r14 == 0) goto L_0x01e0
+                    if (r14 == 0) goto L_0x01e1
                     int r14 = org.telegram.messenger.AndroidUtilities.dp(r5)
                     int r14 = r13 - r14
                     float r9 = (float) r14
-                    r10 = 1147797504(0x446a0000, float:936.0)
-                    float r9 = r9 / r10
-                    r10 = 1135673344(0x43b10000, float:354.0)
+                    org.telegram.ui.ActionBar.AlertDialog r10 = org.telegram.ui.ActionBar.AlertDialog.this
+                    float r10 = r10.aspectRatio
                     float r9 = r9 * r10
                     int r9 = (int) r9
                     org.telegram.ui.ActionBar.AlertDialog r10 = org.telegram.ui.ActionBar.AlertDialog.this
@@ -447,83 +448,83 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     android.view.View r14 = r14.topView
                     int r14 = r14.getMeasuredHeight()
                     int r2 = r2 - r14
-                L_0x01e0:
+                L_0x01e1:
                     org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
                     int r14 = r14.progressViewStyle
                     r9 = 8
-                    if (r14 != 0) goto L_0x02a2
+                    if (r14 != 0) goto L_0x02a3
                     org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.ScrollView r14 = r14.contentScrollView
                     android.view.ViewGroup$LayoutParams r14 = r14.getLayoutParams()
                     android.widget.LinearLayout$LayoutParams r14 = (android.widget.LinearLayout.LayoutParams) r14
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.view.View r1 = r1.customView
-                    if (r1 == 0) goto L_0x0231
+                    if (r1 == 0) goto L_0x0232
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.titleTextView
-                    if (r1 != 0) goto L_0x021f
+                    if (r1 != 0) goto L_0x0220
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.messageTextView
                     int r1 = r1.getVisibility()
-                    if (r1 != r9) goto L_0x021f
+                    if (r1 != r9) goto L_0x0220
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     java.lang.CharSequence[] r1 = r1.items
-                    if (r1 != 0) goto L_0x021f
+                    if (r1 != 0) goto L_0x0220
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r5)
-                    goto L_0x0220
-                L_0x021f:
-                    r1 = 0
+                    goto L_0x0221
                 L_0x0220:
+                    r1 = 0
+                L_0x0221:
                     r14.topMargin = r1
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.FrameLayout r1 = r1.buttonsLayout
-                    if (r1 != 0) goto L_0x022d
+                    if (r1 != 0) goto L_0x022e
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r8)
-                    goto L_0x022e
-                L_0x022d:
-                    r1 = 0
+                    goto L_0x022f
                 L_0x022e:
+                    r1 = 0
+                L_0x022f:
                     r14.bottomMargin = r1
-                    goto L_0x0282
-                L_0x0231:
+                    goto L_0x0283
+                L_0x0232:
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     java.lang.CharSequence[] r1 = r1.items
-                    if (r1 == 0) goto L_0x025c
+                    if (r1 == 0) goto L_0x025d
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.titleTextView
-                    if (r1 != 0) goto L_0x0252
+                    if (r1 != 0) goto L_0x0253
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.messageTextView
                     int r1 = r1.getVisibility()
-                    if (r1 != r9) goto L_0x0252
+                    if (r1 != r9) goto L_0x0253
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r8)
-                    goto L_0x0253
-                L_0x0252:
-                    r1 = 0
+                    goto L_0x0254
                 L_0x0253:
+                    r1 = 0
+                L_0x0254:
                     r14.topMargin = r1
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r8)
                     r14.bottomMargin = r1
-                    goto L_0x0282
-                L_0x025c:
+                    goto L_0x0283
+                L_0x025d:
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.messageTextView
                     int r1 = r1.getVisibility()
-                    if (r1 != 0) goto L_0x0282
+                    if (r1 != 0) goto L_0x0283
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.titleTextView
-                    if (r1 != 0) goto L_0x0277
+                    if (r1 != 0) goto L_0x0278
                     r1 = 1100480512(0x41980000, float:19.0)
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                    goto L_0x0278
-                L_0x0277:
-                    r1 = 0
+                    goto L_0x0279
                 L_0x0278:
+                    r1 = 0
+                L_0x0279:
                     r14.topMargin = r1
                     r1 = 1101004800(0x41a00000, float:20.0)
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                     r14.bottomMargin = r1
-                L_0x0282:
+                L_0x0283:
                     int r1 = r14.bottomMargin
                     int r14 = r14.topMargin
                     int r1 = r1 + r14
@@ -536,11 +537,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     android.widget.ScrollView r14 = r14.contentScrollView
                     int r14 = r14.getMeasuredHeight()
                     int r2 = r2 - r14
-                    goto L_0x0374
-                L_0x02a2:
+                    goto L_0x0375
+                L_0x02a3:
                     org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.FrameLayout r14 = r14.progressViewContainer
-                    if (r14 == 0) goto L_0x02d5
+                    if (r14 == 0) goto L_0x02d6
                     org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.FrameLayout r14 = r14.progressViewContainer
                     int r4 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r7)
@@ -555,14 +556,14 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     int r5 = r14.bottomMargin
                     int r4 = r4 + r5
                     int r14 = r14.topMargin
-                L_0x02d2:
+                L_0x02d3:
                     int r4 = r4 + r14
                     int r2 = r2 - r4
-                    goto L_0x0312
-                L_0x02d5:
+                    goto L_0x0313
+                L_0x02d6:
                     org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r14 = r14.messageTextView
-                    if (r14 == 0) goto L_0x0312
+                    if (r14 == 0) goto L_0x0313
                     org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r14 = r14.messageTextView
                     int r4 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r7)
@@ -570,7 +571,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r14 = r14.messageTextView
                     int r14 = r14.getVisibility()
-                    if (r14 == r9) goto L_0x0312
+                    if (r14 == r9) goto L_0x0313
                     org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r14 = r14.messageTextView
                     android.view.ViewGroup$LayoutParams r14 = r14.getLayoutParams()
@@ -581,11 +582,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     int r5 = r14.bottomMargin
                     int r4 = r4 + r5
                     int r14 = r14.topMargin
-                    goto L_0x02d2
-                L_0x0312:
+                    goto L_0x02d3
+                L_0x0313:
                     org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
                     org.telegram.ui.Components.LineProgressView r14 = r14.lineProgressView
-                    if (r14 == 0) goto L_0x0374
+                    if (r14 == 0) goto L_0x0375
                     org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
                     org.telegram.ui.Components.LineProgressView r14 = r14.lineProgressView
                     r4 = 1082130432(0x40800000, float:4.0)
@@ -620,7 +621,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     int r14 = r14.topMargin
                     int r1 = r1 + r14
                     int r2 = r2 - r1
-                L_0x0374:
+                L_0x0375:
                     int r0 = r0 - r2
                     int r14 = r12.getPaddingTop()
                     int r0 = r0 + r14
@@ -632,11 +633,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     int r13 = r13.lastScreenWidth
                     android.graphics.Point r14 = org.telegram.messenger.AndroidUtilities.displaySize
                     int r14 = r14.x
-                    if (r13 == r14) goto L_0x0398
+                    if (r13 == r14) goto L_0x0399
                     org.telegram.ui.ActionBar.-$$Lambda$AlertDialog$1$JIrJ56APQSM_xO6XCF5kj8j2lPQ r13 = new org.telegram.ui.ActionBar.-$$Lambda$AlertDialog$1$JIrJ56APQSM_xO6XCF5kj8j2lPQ
                     r13.<init>()
                     org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)
-                L_0x0398:
+                L_0x0399:
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.AlertDialog.AnonymousClass1.onMeasure(int, int):void");
@@ -1528,6 +1529,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         public Builder setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
             this.alertDialog.setOnDismissListener(onDismissListener);
             return this;
+        }
+
+        public void setTopViewAspectRatio(float f) {
+            float unused = this.alertDialog.aspectRatio = f;
         }
     }
 }

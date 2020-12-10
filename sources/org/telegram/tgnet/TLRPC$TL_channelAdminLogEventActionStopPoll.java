@@ -2,6 +2,7 @@ package org.telegram.tgnet;
 
 public class TLRPC$TL_channelAdminLogEventActionStopPoll extends TLRPC$ChannelAdminLogEventAction {
     public static int constructor = -NUM;
+    public TLRPC$Message message;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.message = TLRPC$Message.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);

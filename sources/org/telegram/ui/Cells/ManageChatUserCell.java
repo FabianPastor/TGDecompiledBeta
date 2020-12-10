@@ -26,6 +26,7 @@ public class ManageChatUserCell extends FrameLayout {
     private CharSequence currentName;
     private Object currentObject;
     private CharSequence currrntStatus;
+    private ImageView customImageView;
     private ManageChatUserCellDelegate delegate;
     private String dividerColor;
     private boolean isAdmin;
@@ -83,7 +84,7 @@ public class ManageChatUserCell extends FrameLayout {
             this.optionsButton.setImageResource(NUM);
             this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), PorterDuff.Mode.MULTIPLY));
             this.optionsButton.setScaleType(ImageView.ScaleType.CENTER);
-            addView(this.optionsButton, LayoutHelper.createFrame(52, 64, (LocaleController.isRTL ? 3 : i3) | 48));
+            addView(this.optionsButton, LayoutHelper.createFrame(60, 64, (LocaleController.isRTL ? 3 : i3) | 48));
             this.optionsButton.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
                     ManageChatUserCell.this.lambda$new$0$ManageChatUserCell(view);
@@ -99,8 +100,25 @@ public class ManageChatUserCell extends FrameLayout {
         this.delegate.onOptionsButtonCheck(this, true);
     }
 
+    public void setCustomRightImage(int i) {
+        ImageView imageView = new ImageView(getContext());
+        this.customImageView = imageView;
+        imageView.setImageResource(i);
+        this.customImageView.setScaleType(ImageView.ScaleType.CENTER);
+        this.customImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("voipgroup_mutedIconUnscrolled"), PorterDuff.Mode.MULTIPLY));
+        addView(this.customImageView, LayoutHelper.createFrame(52, 64, (LocaleController.isRTL ? 3 : 5) | 48));
+    }
+
+    public void setCustomImageVisible(boolean z) {
+        ImageView imageView = this.customImageView;
+        if (imageView != null) {
+            imageView.setVisibility(z ? 0 : 8);
+        }
+    }
+
     public void setData(Object obj, CharSequence charSequence, CharSequence charSequence2, boolean z) {
         float f;
+        float f2;
         Object obj2 = obj;
         CharSequence charSequence3 = charSequence2;
         boolean z2 = z;
@@ -116,30 +134,65 @@ public class ManageChatUserCell extends FrameLayout {
         this.currrntStatus = charSequence3;
         this.currentName = charSequence;
         this.currentObject = obj2;
+        float f3 = 20.5f;
+        int i = 5;
+        int i2 = 28;
         if (this.optionsButton != null) {
             boolean onOptionsButtonCheck = this.delegate.onOptionsButtonCheck(this, false);
             this.optionsButton.setVisibility(onOptionsButtonCheck ? 0 : 4);
             SimpleTextView simpleTextView = this.nameTextView;
             boolean z3 = LocaleController.isRTL;
-            int i = 5;
-            int i2 = 46;
-            simpleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, (z3 ? 5 : 3) | 48, (float) (z3 ? onOptionsButtonCheck ? 46 : 28 : this.namePadding + 68), (charSequence3 == null || charSequence2.length() > 0) ? 11.5f : 20.5f, (float) (LocaleController.isRTL ? this.namePadding + 68 : onOptionsButtonCheck ? 46 : 28), 0.0f));
+            int i3 = (z3 ? 5 : 3) | 48;
+            float f4 = (float) (z3 ? onOptionsButtonCheck ? 46 : 28 : this.namePadding + 68);
+            if (charSequence3 == null || charSequence2.length() > 0) {
+                f3 = 11.5f;
+            }
+            simpleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, i3, f4, f3, (float) (LocaleController.isRTL ? this.namePadding + 68 : onOptionsButtonCheck ? 46 : 28), 0.0f));
             SimpleTextView simpleTextView2 = this.statusTextView;
             boolean z4 = LocaleController.isRTL;
             if (!z4) {
                 i = 3;
             }
-            int i3 = i | 48;
-            float f2 = (float) (z4 ? onOptionsButtonCheck ? 46 : 28 : this.namePadding + 68);
+            int i4 = i | 48;
+            float f5 = (float) (z4 ? onOptionsButtonCheck ? 46 : 28 : this.namePadding + 68);
             if (z4) {
-                f = (float) (this.namePadding + 68);
+                f2 = (float) (this.namePadding + 68);
             } else {
-                if (!onOptionsButtonCheck) {
-                    i2 = 28;
+                if (onOptionsButtonCheck) {
+                    i2 = 46;
                 }
-                f = (float) i2;
+                f2 = (float) i2;
             }
-            simpleTextView2.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, i3, f2, 34.5f, f, 0.0f));
+            simpleTextView2.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, i4, f5, 34.5f, f2, 0.0f));
+        } else {
+            ImageView imageView = this.customImageView;
+            if (imageView != null) {
+                boolean z5 = imageView.getVisibility() == 0;
+                SimpleTextView simpleTextView3 = this.nameTextView;
+                boolean z6 = LocaleController.isRTL;
+                int i5 = (z6 ? 5 : 3) | 48;
+                float f6 = (float) (z6 ? z5 ? 54 : 28 : this.namePadding + 68);
+                if (charSequence3 == null || charSequence2.length() > 0) {
+                    f3 = 11.5f;
+                }
+                simpleTextView3.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, i5, f6, f3, (float) (LocaleController.isRTL ? this.namePadding + 68 : z5 ? 54 : 28), 0.0f));
+                SimpleTextView simpleTextView4 = this.statusTextView;
+                boolean z7 = LocaleController.isRTL;
+                if (!z7) {
+                    i = 3;
+                }
+                int i6 = i | 48;
+                float f7 = (float) (z7 ? z5 ? 54 : 28 : this.namePadding + 68);
+                if (z7) {
+                    f = (float) (this.namePadding + 68);
+                } else {
+                    if (z5) {
+                        i2 = 54;
+                    }
+                    f = (float) i2;
+                }
+                simpleTextView4.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, i6, f7, 34.5f, f, 0.0f));
+            }
         }
         this.needDivider = z2;
         setWillNotDraw(!z2);
@@ -316,14 +369,14 @@ public class ManageChatUserCell extends FrameLayout {
             goto L_0x00d2
         L_0x00c3:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131624540(0x7f0e025c, float:1.8876263E38)
+            r4 = 2131624541(0x7f0e025d, float:1.8876265E38)
             java.lang.String r5 = "BotStatusCantRead"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
             goto L_0x013e
         L_0x00d2:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131624541(0x7f0e025d, float:1.8876265E38)
+            r4 = 2131624542(0x7f0e025e, float:1.8876267E38)
             java.lang.String r5 = "BotStatusRead"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
@@ -364,7 +417,7 @@ public class ManageChatUserCell extends FrameLayout {
             int r4 = r12.statusOnlineColor
             r13.setTextColor(r4)
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131626293(0x7f0e0935, float:1.8879818E38)
+            r4 = 2131626303(0x7f0e093f, float:1.8879838E38)
             java.lang.String r5 = "Online"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
@@ -484,7 +537,7 @@ public class ManageChatUserCell extends FrameLayout {
             boolean r13 = r0.has_geo
             if (r13 == 0) goto L_0x020f
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131625881(0x7f0e0799, float:1.8878982E38)
+            r4 = 2131625891(0x7f0e07a3, float:1.8879003E38)
             java.lang.String r5 = "MegaLocation"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
@@ -494,14 +547,14 @@ public class ManageChatUserCell extends FrameLayout {
             boolean r13 = android.text.TextUtils.isEmpty(r13)
             if (r13 == 0) goto L_0x0226
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131625882(0x7f0e079a, float:1.8878984E38)
+            r4 = 2131625892(0x7f0e07a4, float:1.8879005E38)
             java.lang.String r5 = "MegaPrivate"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
             goto L_0x0234
         L_0x0226:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131625885(0x7f0e079d, float:1.887899E38)
+            r4 = 2131625895(0x7f0e07a7, float:1.887901E38)
             java.lang.String r5 = "MegaPublic"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)

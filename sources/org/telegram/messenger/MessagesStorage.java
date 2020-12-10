@@ -16759,6 +16759,8 @@ public class MessagesStorage extends BaseController {
                                     TLdeserialize.broadcast = tLRPC$Chat.broadcast;
                                     TLdeserialize.verified = tLRPC$Chat.verified;
                                     TLdeserialize.megagroup = tLRPC$Chat.megagroup;
+                                    TLdeserialize.call_not_empty = tLRPC$Chat.call_not_empty;
+                                    TLdeserialize.call_active = tLRPC$Chat.call_active;
                                     TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights = tLRPC$Chat.default_banned_rights;
                                     if (tLRPC$TL_chatBannedRights != null) {
                                         TLdeserialize.default_banned_rights = tLRPC$TL_chatBannedRights;
@@ -21367,7 +21369,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: type inference failed for: r7v4 */
     /* JADX WARNING: type inference failed for: r7v11 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v1, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v1, types: [boolean, int] */
     /* JADX WARNING: Removed duplicated region for block: B:27:0x00c7 A[Catch:{ Exception -> 0x0106 }] */
     /* JADX WARNING: Removed duplicated region for block: B:32:0x00f4  */
     /* JADX WARNING: Removed duplicated region for block: B:45:0x012e A[Catch:{ Exception -> 0x02b0 }] */
@@ -25598,7 +25600,7 @@ public class MessagesStorage extends BaseController {
             org.telegram.messenger.UserConfig r4 = org.telegram.messenger.UserConfig.getInstance(r4)
             int r4 = r4.getClientUserId()
             java.lang.String r5 = "SavedMessages"
-            r6 = 2131626974(0x7f0e0bde, float:1.88812E38)
+            r6 = 2131626986(0x7f0e0bea, float:1.8881224E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)     // Catch:{ Exception -> 0x0651 }
             java.lang.String r5 = r5.toLowerCase()     // Catch:{ Exception -> 0x0651 }
             java.lang.String r6 = r25.trim()     // Catch:{ Exception -> 0x0651 }

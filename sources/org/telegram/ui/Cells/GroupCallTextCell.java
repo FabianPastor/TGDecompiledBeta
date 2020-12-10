@@ -127,13 +127,11 @@ public class GroupCallTextCell extends FrameLayout {
         this.textView.setTextColor(i);
     }
 
-    public void setColors(String str, String str2) {
-        this.textView.setTextColor(Theme.getColor(str2));
-        this.textView.setTag(str2);
-        if (str != null) {
-            this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), PorterDuff.Mode.MULTIPLY));
-            this.imageView.setTag(str);
-        }
+    public void setColors(int i, int i2) {
+        this.textView.setTextColor(i2);
+        this.textView.setTag((Object) null);
+        this.imageView.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+        this.imageView.setTag((Object) null);
     }
 
     public void setTextAndIcon(String str, int i, boolean z) {

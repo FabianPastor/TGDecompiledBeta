@@ -780,7 +780,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.doneItem = r13
             r13.setLongClickEnabled(r8)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.doneItem
-            r1 = 2131624944(0x7f0e03f0, float:1.8877082E38)
+            r1 = 2131624945(0x7f0e03f1, float:1.8877084E38)
             java.lang.String r2 = "Create"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -813,7 +813,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = 2131165476(0x7var_, float:1.794517E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
-            r1 = 2131626986(0x7f0e0bea, float:1.8881224E38)
+            r1 = 2131626998(0x7f0e0bf6, float:1.8881248E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -1029,7 +1029,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r2 = r29
             r0.<init>(r2, r3, r4, r5)
             r6.commentTextView = r12
-            r0 = 2131624168(0x7f0e00e8, float:1.8875508E38)
+            r0 = 2131624169(0x7f0e00e9, float:1.887551E38)
             java.lang.String r1 = "AddCaption"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r12.setHint(r0)
@@ -1497,15 +1497,18 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             });
             this.sendPopupLayout.setShowedFromBotton(false);
             this.itemCells = new ActionBarMenuSubItem[2];
-            for (int i = 0; i < 2; i++) {
+            int i = 0;
+            while (i < 2) {
                 if (i == 0) {
                     if (chatActivity.canScheduleMessage()) {
                         if (!this.currentAttachLayout.canScheduleMessages()) {
                         }
                     }
+                    i++;
                 } else if (i == 1 && UserObject.isUserSelf(currentUser)) {
+                    i++;
                 }
-                this.itemCells[i] = new ActionBarMenuSubItem(getContext());
+                this.itemCells[i] = new ActionBarMenuSubItem(getContext(), i == 0, i == 1);
                 if (i == 0) {
                     if (UserObject.isUserSelf(currentUser)) {
                         this.itemCells[i].setTextAndIcon(LocaleController.getString("SetReminder", NUM), NUM);
@@ -1530,6 +1533,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         ChatAttachAlert.this.lambda$null$14$ChatAttachAlert(this.f$1, this.f$2, view);
                     }
                 });
+                i++;
             }
             this.sendPopupLayout.setupRadialSelectors(Theme.getColor("dialogButtonSelector"));
             ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2);

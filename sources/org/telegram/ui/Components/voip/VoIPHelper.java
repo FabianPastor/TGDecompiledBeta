@@ -33,6 +33,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.voip.VoIPService;
@@ -51,12 +52,14 @@ import org.telegram.tgnet.TLRPC$TL_updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.ui.ActionBar.AlertDialog;
+import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Components.BetterRatingView;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.GroupCallActivity;
 import org.telegram.ui.LaunchActivity;
 
 public class VoIPHelper {
@@ -161,10 +164,10 @@ public class VoIPHelper {
             builder.setTitle(LocaleController.getString(str, i2));
             if (z) {
                 i3 = NUM;
-                str2 = "VoipOfflineAirplane";
+                str2 = "VoipGroupOfflineAirplane";
             } else {
                 i3 = NUM;
-                str2 = "VoipOffline";
+                str2 = "VoipGroupOffline";
             }
             builder.setMessage(LocaleController.getString(str2, i3));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
@@ -277,9 +280,11 @@ public class VoIPHelper {
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     builder.show();
-                    return;
+                } else if (tLRPC$User != null || !(activity instanceof LaunchActivity)) {
+                    activity.startActivity(new Intent(activity, LaunchActivity.class).setAction(tLRPC$User != null ? "voip" : "voip_chat"));
+                } else {
+                    GroupCallActivity.create((LaunchActivity) activity, AccountInstance.getInstance(UserConfig.selectedAccount));
                 }
-                activity.startActivity(new Intent(activity, LaunchActivity.class).setAction(tLRPC$User != null ? "voip" : "voip_chat"));
             } else if (VoIPService.callIShouldHavePutIntoIntent == null) {
                 doInitiateCall(tLRPC$User, tLRPC$Chat, z, z2, i, activity);
             }
@@ -965,5 +970,50 @@ public class VoIPHelper {
             }
         }
         return new File(logsDir, j + ".log").getAbsolutePath();
+    }
+
+    public static void showGroupCallAlert(BaseFragment baseFragment, TLRPC$Chat tLRPC$Chat, boolean z) {
+        if (baseFragment != null && baseFragment.getParentActivity() != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
+            builder.setTitle(LocaleController.getString("StartVoipChatTitle", NUM));
+            if (z) {
+                builder.setMessage(LocaleController.getString("VoipGroupEndedStartNew", NUM));
+            } else {
+                builder.setMessage(LocaleController.getString("StartVoipChatAlertText", NUM));
+            }
+            builder.setPositiveButton(LocaleController.getString("Start", NUM), new DialogInterface.OnClickListener(tLRPC$Chat) {
+                public final /* synthetic */ TLRPC$Chat f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    VoIPHelper.lambda$showGroupCallAlert$18(BaseFragment.this, this.f$1, dialogInterface, i);
+                }
+            });
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+            baseFragment.showDialog(builder.create());
+        }
+    }
+
+    static /* synthetic */ void lambda$showGroupCallAlert$18(BaseFragment baseFragment, TLRPC$Chat tLRPC$Chat, DialogInterface dialogInterface, int i) {
+        if (baseFragment.getParentActivity() != null) {
+            if (tLRPC$Chat.megagroup) {
+                startCall(tLRPC$Chat, 1, baseFragment.getParentActivity());
+            } else {
+                baseFragment.getMessagesController().convertToMegaGroup(baseFragment.getParentActivity(), tLRPC$Chat.id, baseFragment, new MessagesStorage.IntCallback() {
+                    public final void run(int i) {
+                        VoIPHelper.lambda$null$17(BaseFragment.this, i);
+                    }
+                });
+            }
+        }
+    }
+
+    static /* synthetic */ void lambda$null$17(BaseFragment baseFragment, int i) {
+        if (i != 0) {
+            startCall(baseFragment.getMessagesController().getChat(Integer.valueOf(i)), 1, baseFragment.getParentActivity());
+        }
     }
 }

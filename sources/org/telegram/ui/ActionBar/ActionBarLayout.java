@@ -763,17 +763,19 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void onBackPressed() {
-        ActionBar actionBar;
         if (!this.transitionAnimationPreviewMode && !this.startedTracking && !checkTransitionAnimation() && !this.fragmentsStack.isEmpty()) {
-            if (this.currentActionBar.isActionModeShowed() || (actionBar = this.currentActionBar) == null || !actionBar.isSearchFieldVisible) {
-                ArrayList<BaseFragment> arrayList = this.fragmentsStack;
-                if (arrayList.get(arrayList.size() - 1).onBackPressed() && !this.fragmentsStack.isEmpty()) {
-                    closeLastFragment(true);
+            ActionBar actionBar = this.currentActionBar;
+            if (actionBar != null && !actionBar.isActionModeShowed()) {
+                ActionBar actionBar2 = this.currentActionBar;
+                if (actionBar2.isSearchFieldVisible) {
+                    actionBar2.closeSearchField();
                     return;
                 }
-                return;
             }
-            actionBar.closeSearchField();
+            ArrayList<BaseFragment> arrayList = this.fragmentsStack;
+            if (arrayList.get(arrayList.size() - 1).onBackPressed() && !this.fragmentsStack.isEmpty()) {
+                closeLastFragment(true);
+            }
         }
     }
 
@@ -1196,8 +1198,6 @@ public class ActionBarLayout extends FrameLayout {
                     startLayoutAnimation(true, true, z7);
                 }
             } else {
-                this.containerView.setAlpha(1.0f);
-                this.containerView.setTranslationX(0.0f);
                 this.currentAnimation = onCustomTransitionAnimation;
             }
         } else {

@@ -13,24 +13,27 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarMenuSubItem extends FrameLayout {
+    boolean bottom;
     private ImageView checkView;
     private int iconColor;
     private ImageView imageView;
     private int selectorColor;
     private int textColor;
     private TextView textView;
+    boolean top;
 
-    public ActionBarMenuSubItem(Context context) {
-        this(context, false);
+    public ActionBarMenuSubItem(Context context, boolean z, boolean z2) {
+        this(context, false, z, z2);
     }
 
-    public ActionBarMenuSubItem(Context context, boolean z) {
+    public ActionBarMenuSubItem(Context context, boolean z, boolean z2, boolean z3) {
         super(context);
         this.textColor = Theme.getColor("actionBarDefaultSubmenuItem");
         this.iconColor = Theme.getColor("actionBarDefaultSubmenuItemIcon");
-        int color = Theme.getColor("dialogButtonSelector");
-        this.selectorColor = color;
-        setBackground(Theme.createSelectorDrawable(color, 2));
+        this.selectorColor = Theme.getColor("dialogButtonSelector");
+        this.top = z2;
+        this.bottom = z3;
+        updateBackground();
         setPadding(AndroidUtilities.dp(18.0f), 0, AndroidUtilities.dp(18.0f), 0);
         ImageView imageView2 = new ImageView(context);
         this.imageView = imageView2;
@@ -46,14 +49,14 @@ public class ActionBarMenuSubItem extends FrameLayout {
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         this.textView.setTextColor(this.textColor);
         this.textView.setTextSize(1, 16.0f);
-        addView(this.textView, LayoutHelper.createFrame(-2, -2, (!LocaleController.isRTL ? 3 : i) | 16));
+        addView(this.textView, LayoutHelper.createFrame(-2, -2, (LocaleController.isRTL ? 5 : 3) | 16));
         if (z) {
             ImageView imageView3 = new ImageView(context);
             this.checkView = imageView3;
             imageView3.setImageResource(NUM);
             this.checkView.setScaleType(ImageView.ScaleType.CENTER);
             this.checkView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
-            addView(this.checkView, LayoutHelper.createFrame(26, -1, 19));
+            addView(this.checkView, LayoutHelper.createFrame(26, -1, (!LocaleController.isRTL ? 3 : i) | 16));
         }
     }
 
@@ -120,8 +123,22 @@ public class ActionBarMenuSubItem extends FrameLayout {
 
     public void setSelectorColor(int i) {
         if (this.selectorColor != i) {
-            this.selectorColor = i;
-            setBackground(Theme.createSelectorDrawable(i, 2));
+            updateBackground();
         }
+    }
+
+    public void updateSelectorBackground(boolean z, boolean z2) {
+        this.top = z;
+        this.bottom = z2;
+        updateBackground();
+    }
+
+    private void updateBackground() {
+        int i = 6;
+        int i2 = this.top ? 6 : 0;
+        if (!this.bottom) {
+            i = 0;
+        }
+        setBackground(Theme.createRadSelectorDrawable(this.selectorColor, i2, i));
     }
 }

@@ -131,6 +131,7 @@ public class FilterTabsView extends FrameLayout {
     /* access modifiers changed from: private */
     public boolean isEditing;
     DefaultItemAnimator itemAnimator;
+    private final ItemTouchHelper itemTouchHelper;
     /* access modifiers changed from: private */
     public long lastAnimationTime;
     private long lastEditingAnimationTime;
@@ -1561,7 +1562,9 @@ public class FilterTabsView extends FrameLayout {
         };
         this.layoutManager = r33;
         recyclerListView.setLayoutManager(r33);
-        new ItemTouchHelper(new TouchHelperCallback()).attachToRecyclerView(this.listView);
+        ItemTouchHelper itemTouchHelper2 = new ItemTouchHelper(new TouchHelperCallback());
+        this.itemTouchHelper = itemTouchHelper2;
+        itemTouchHelper2.attachToRecyclerView(this.listView);
         this.listView.setPadding(AndroidUtilities.dp(7.0f), 0, AndroidUtilities.dp(7.0f), 0);
         this.listView.setClipToPadding(false);
         this.listView.setDrawSelectorBehind(true);
@@ -2245,6 +2248,9 @@ public class FilterTabsView extends FrameLayout {
                 int i6 = tab.id;
                 tab.id = tab2.id;
                 tab2.id = i6;
+                int i7 = FilterTabsView.this.positionToStableId.get(i);
+                FilterTabsView.this.positionToStableId.put(i, FilterTabsView.this.positionToStableId.get(i2));
+                FilterTabsView.this.positionToStableId.put(i2, i7);
                 FilterTabsView.this.delegate.onPageReorder(tab2.id, tab.id);
                 if (FilterTabsView.this.currentPosition == i) {
                     int unused = FilterTabsView.this.currentPosition = i2;
@@ -2264,6 +2270,7 @@ public class FilterTabsView extends FrameLayout {
                 FilterTabsView.this.tabs.set(i2, tab);
                 FilterTabsView.this.updateTabsWidths();
                 boolean unused9 = FilterTabsView.this.orderChanged = true;
+                FilterTabsView.this.listView.setItemAnimator(FilterTabsView.this.itemAnimator);
                 notifyItemMoved(i, i2);
             }
         }

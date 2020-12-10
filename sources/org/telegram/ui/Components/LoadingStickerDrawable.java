@@ -41,16 +41,20 @@ public class LoadingStickerDrawable extends Drawable {
     public LoadingStickerDrawable(View view, String str, int i, int i2) {
         this.bitmap = SvgHelper.getBitmapByPathOnly(str, 512, 512, i, i2);
         this.parentView = view;
-        int color = Theme.getColor("dialogBackground");
-        int color2 = Theme.getColor("dialogBackgroundGray");
+        this.placeholderMatrix = new Matrix();
+        setColors("dialogBackground", "dialogBackgroundGray");
+    }
+
+    public void setColors(String str, String str2) {
+        int color = Theme.getColor(str);
+        int color2 = Theme.getColor(str2);
         int averageColor = AndroidUtilities.getAverageColor(color2, color);
         this.placeholderPaint.setColor(color2);
         float dp = (float) AndroidUtilities.dp(500.0f);
         this.gradientWidth = dp;
-        this.placeholderGradient = new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color2, averageColor, color2}, new float[]{0.0f, 0.18f, 0.36f}, Shader.TileMode.REPEAT);
-        Matrix matrix = new Matrix();
-        this.placeholderMatrix = matrix;
-        this.placeholderGradient.setLocalMatrix(matrix);
+        LinearGradient linearGradient = new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color2, averageColor, color2}, new float[]{0.0f, 0.18f, 0.36f}, Shader.TileMode.REPEAT);
+        this.placeholderGradient = linearGradient;
+        linearGradient.setLocalMatrix(this.placeholderMatrix);
         Bitmap bitmap2 = this.bitmap;
         Shader.TileMode tileMode = Shader.TileMode.CLAMP;
         this.placeholderPaint.setShader(new ComposeShader(this.placeholderGradient, new BitmapShader(bitmap2, tileMode, tileMode), PorterDuff.Mode.MULTIPLY));

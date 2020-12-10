@@ -403,7 +403,7 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m10iterator() {
+    public Iterator m4iterator() {
         return v.h(spliterator());
     }
 

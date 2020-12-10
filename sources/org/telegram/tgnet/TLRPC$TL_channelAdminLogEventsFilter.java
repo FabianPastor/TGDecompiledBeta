@@ -7,6 +7,7 @@ public class TLRPC$TL_channelAdminLogEventsFilter extends TLObject {
     public boolean demote;
     public boolean edit;
     public int flags;
+    public boolean group_call;
     public boolean info;
     public boolean invite;
     public boolean join;
@@ -35,10 +36,11 @@ public class TLRPC$TL_channelAdminLogEventsFilter extends TLObject {
         this.settings = (readInt32 & 1024) != 0;
         this.pinned = (readInt32 & 2048) != 0;
         this.edit = (readInt32 & 4096) != 0;
-        if ((readInt32 & 8192) != 0) {
+        this.delete = (readInt32 & 8192) != 0;
+        if ((readInt32 & 16384) != 0) {
             z2 = true;
         }
-        this.delete = z2;
+        this.group_call = z2;
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -71,6 +73,8 @@ public class TLRPC$TL_channelAdminLogEventsFilter extends TLObject {
         this.flags = i13;
         int i14 = this.delete ? i13 | 8192 : i13 & -8193;
         this.flags = i14;
-        abstractSerializedData.writeInt32(i14);
+        int i15 = this.group_call ? i14 | 16384 : i14 & -16385;
+        this.flags = i15;
+        abstractSerializedData.writeInt32(i15);
     }
 }

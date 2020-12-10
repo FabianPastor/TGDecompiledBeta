@@ -707,6 +707,7 @@ public final class R {
         public static final int msg_draw_neon = NUM;
         public static final int msg_draw_pen = NUM;
         public static final int msg_edit = NUM;
+        public static final int msg_endcall = NUM;
         public static final int msg_fave = NUM;
         public static final int msg_forward = NUM;
         public static final int msg_gallery = NUM;
@@ -718,6 +719,7 @@ public final class R {
         public static final int msg_home = NUM;
         public static final int msg_hybrid = NUM;
         public static final int msg_instant = NUM;
+        public static final int msg_invited = NUM;
         public static final int msg_language = NUM;
         public static final int msg_leave = NUM;
         public static final int msg_link = NUM;
@@ -786,6 +788,9 @@ public final class R {
         public static final int msg_videocall = NUM;
         public static final int msg_viewreplies = NUM;
         public static final int msg_views = NUM;
+        public static final int msg_voice_muted = NUM;
+        public static final int msg_voice_pip = NUM;
+        public static final int msg_voice_unmuted = NUM;
         public static final int msg_voicechat = NUM;
         public static final int msg_warning = NUM;
         public static final int music_empty = NUM;
@@ -1456,6 +1461,7 @@ public final class R {
         public static final int filter_new = NUM;
         public static final int filter_no_chats = NUM;
         public static final int filters = NUM;
+        public static final int group_pip_delete_icon = NUM;
         public static final int ic_admin = NUM;
         public static final int ic_delete = NUM;
         public static final int ic_download = NUM;
@@ -1468,6 +1474,8 @@ public final class R {
         public static final int permission_map_dark = NUM;
         public static final int permission_pin = NUM;
         public static final int permission_pin_dark = NUM;
+        public static final int pip_video_request = NUM;
+        public static final int pip_voice_request = NUM;
         public static final int player_prev = NUM;
         public static final int qr_login = NUM;
         public static final int sound_in = NUM;
@@ -1491,10 +1499,16 @@ public final class R {
         public static final int voip_connecting = NUM;
         public static final int voip_end = NUM;
         public static final int voip_failed = NUM;
+        public static final int voip_group_removed = NUM;
+        public static final int voip_invite = NUM;
+        public static final int voip_muted = NUM;
         public static final int voip_ringback = NUM;
+        public static final int voip_unmuted = NUM;
         public static final int wallet_allset = NUM;
         public static final int wallet_congrats = NUM;
         public static final int wallet_science = NUM;
+        public static final int write_contacts_fab_icon = NUM;
+        public static final int write_contacts_fab_icon_reverse = NUM;
 
         private raw() {
         }
@@ -1675,6 +1689,7 @@ public final class R {
         public static final int ActionGroupCallInvited = NUM;
         public static final int ActionGroupCallInvitedYou = NUM;
         public static final int ActionGroupCallStarted = NUM;
+        public static final int ActionGroupCallStartedByYou = NUM;
         public static final int ActionGroupCallYouInvited = NUM;
         public static final int ActionInviteUser = NUM;
         public static final int ActionInviteYou = NUM;
@@ -2761,6 +2776,7 @@ public final class R {
         public static final int EmojiUseDefault = NUM;
         public static final int EmpryUsersPlaceholder = NUM;
         public static final int EmptyExceptions = NUM;
+        public static final int Enable = NUM;
         public static final int EnableAllStreamingInfo = NUM;
         public static final int EnableAnimations = NUM;
         public static final int EnableStreaming = NUM;
@@ -2831,7 +2847,9 @@ public final class R {
         public static final int EventLogEmptyChannel = NUM;
         public static final int EventLogEmptySearch = NUM;
         public static final int EventLogEmptyTextSearch = NUM;
+        public static final int EventLogEndedVoiceChat = NUM;
         public static final int EventLogFilterAll = NUM;
+        public static final int EventLogFilterCalls = NUM;
         public static final int EventLogFilterChannelInfo = NUM;
         public static final int EventLogFilterDeletedMessages = NUM;
         public static final int EventLogFilterEditedMessages = NUM;
@@ -2886,6 +2904,7 @@ public final class R {
         public static final int EventLogRestrictedSendStickers = NUM;
         public static final int EventLogRestrictedUntil = NUM;
         public static final int EventLogSelectedEvents = NUM;
+        public static final int EventLogStartedVoiceChat = NUM;
         public static final int EventLogStopPoll = NUM;
         public static final int EventLogStopQuiz = NUM;
         public static final int EventLogToggledInvitesHistoryOff = NUM;
@@ -2897,6 +2916,10 @@ public final class R {
         public static final int EventLogToggledSlowmodeOff = NUM;
         public static final int EventLogToggledSlowmodeOn = NUM;
         public static final int EventLogUnpinnedMessages = NUM;
+        public static final int EventLogVoiceChatAllowedToSpeak = NUM;
+        public static final int EventLogVoiceChatMuted = NUM;
+        public static final int EventLogVoiceChatNotAllowedToSpeak = NUM;
+        public static final int EventLogVoiceChatUnmuted = NUM;
         public static final int Events = NUM;
         public static final int Exception_few = NUM;
         public static final int Exception_many = NUM;
@@ -3249,6 +3272,7 @@ public final class R {
         public static final int InviteToGroupError = NUM;
         public static final int InviteToTelegram = NUM;
         public static final int InviteUser = NUM;
+        public static final int Invited = NUM;
         public static final int IsRecordingAudio = NUM;
         public static final int IsRecordingRound = NUM;
         public static final int IsSendingAudio = NUM;
@@ -4196,6 +4220,8 @@ public final class R {
         public static final int PermissionBackgroundLocation = NUM;
         public static final int PermissionContacts = NUM;
         public static final int PermissionDrawAboveOtherApps = NUM;
+        public static final int PermissionDrawAboveOtherAppsGroupCall = NUM;
+        public static final int PermissionDrawAboveOtherAppsTitle = NUM;
         public static final int PermissionNoAudio = NUM;
         public static final int PermissionNoAudioVideo = NUM;
         public static final int PermissionNoCamera = NUM;
@@ -4810,7 +4836,6 @@ public final class R {
         public static final int StartMessaging = NUM;
         public static final int StartText = NUM;
         public static final int StartVoipChat = NUM;
-        public static final int StartVoipChatAlertOnlyAdmins = NUM;
         public static final int StartVoipChatAlertText = NUM;
         public static final int StartVoipChatPermission = NUM;
         public static final int StartVoipChatTitle = NUM;
@@ -5249,25 +5274,45 @@ public final class R {
         public static final int VoipFailed = NUM;
         public static final int VoipFeedbackCommentHint = NUM;
         public static final int VoipFlip = NUM;
+        public static final int VoipGroupAdd = NUM;
+        public static final int VoipGroupAddMemberText = NUM;
+        public static final int VoipGroupAddMemberTitle = NUM;
         public static final int VoipGroupAllCanSpeak = NUM;
+        public static final int VoipGroupAllowToSpeak = NUM;
         public static final int VoipGroupConnecting = NUM;
+        public static final int VoipGroupCopyInviteLink = NUM;
+        public static final int VoipGroupCopyInviteLinkCopied = NUM;
         public static final int VoipGroupEnd = NUM;
         public static final int VoipGroupEndAlertText = NUM;
         public static final int VoipGroupEndAlertTitle = NUM;
         public static final int VoipGroupEndChat = NUM;
+        public static final int VoipGroupEndedStartNew = NUM;
         public static final int VoipGroupInviteAlreadyParticipant = NUM;
+        public static final int VoipGroupInviteMember = NUM;
         public static final int VoipGroupInviteText = NUM;
         public static final int VoipGroupInvitedToVoiceChat = NUM;
+        public static final int VoipGroupInvitedUser = NUM;
         public static final int VoipGroupJoinAnonymousAdmin = NUM;
         public static final int VoipGroupJoinCall = NUM;
         public static final int VoipGroupLeave = NUM;
         public static final int VoipGroupLeaveAlertEndChat = NUM;
         public static final int VoipGroupLeaveAlertText = NUM;
         public static final int VoipGroupLeaveAlertTitle = NUM;
+        public static final int VoipGroupMute = NUM;
         public static final int VoipGroupMuteMemberAlertText = NUM;
         public static final int VoipGroupMuteMemberAlertTitle = NUM;
+        public static final int VoipGroupOffline = NUM;
+        public static final int VoipGroupOfflineAirplane = NUM;
         public static final int VoipGroupOnlyAdminsCanSpeak = NUM;
+        public static final int VoipGroupRemoveMemberAlertText = NUM;
+        public static final int VoipGroupRemoveMemberAlertTitle = NUM;
+        public static final int VoipGroupRemovedFromGroup = NUM;
+        public static final int VoipGroupSearchMembers = NUM;
         public static final int VoipGroupShareInviteLink = NUM;
+        public static final int VoipGroupUnmute = NUM;
+        public static final int VoipGroupUserCanNowSpeak = NUM;
+        public static final int VoipGroupUserCantNowSpeak = NUM;
+        public static final int VoipGroupUserRemove = NUM;
         public static final int VoipGroupViewVoiceChat = NUM;
         public static final int VoipGroupVoiceChat = NUM;
         public static final int VoipHangingUp = NUM;

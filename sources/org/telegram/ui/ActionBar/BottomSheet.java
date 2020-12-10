@@ -86,6 +86,7 @@ public class BottomSheet extends Dialog {
     public BottomSheetDelegateInterface delegate;
     /* access modifiers changed from: private */
     public boolean dimBehind = true;
+    private int dimBehindAlpha = 51;
     /* access modifiers changed from: private */
     public boolean disableScroll;
     /* access modifiers changed from: private */
@@ -112,10 +113,13 @@ public class BottomSheet extends Dialog {
     public WindowInsets lastInsets;
     /* access modifiers changed from: private */
     public int layoutCount;
+    protected int navBarColor;
+    protected String navBarColorKey = "windowBackgroundGray";
     protected View nestedScrollChild;
     /* access modifiers changed from: private */
     public DialogInterface.OnClickListener onClickListener;
     protected Interpolator openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
+    protected boolean scrollNavBar;
     /* access modifiers changed from: protected */
     public Drawable shadowDrawable;
     private boolean showWithoutAnimation;
@@ -129,6 +133,7 @@ public class BottomSheet extends Dialog {
     public boolean useFastDismiss;
     /* access modifiers changed from: private */
     public boolean useHardwareLayer = true;
+    protected boolean useLightNavBar;
     protected boolean useLightStatusBar = true;
     protected boolean useSmoothKeyboard;
 
@@ -857,15 +862,22 @@ public class BottomSheet extends Dialog {
             if ((bottomSheet.drawNavigationBar && bottomSheet.bottomInset != 0) || BottomSheet.this.currentPanTranslationY != 0.0f) {
                 int i = Build.VERSION.SDK_INT;
                 if (i >= 26) {
-                    this.backgroundPaint.setColor(Theme.getColor("windowBackgroundGray"));
+                    BottomSheet bottomSheet2 = BottomSheet.this;
+                    String str = bottomSheet2.navBarColorKey;
+                    if (str != null) {
+                        this.backgroundPaint.setColor(Theme.getColor(str));
+                    } else {
+                        this.backgroundPaint.setColor(bottomSheet2.navBarColor);
+                    }
                 } else {
                     this.backgroundPaint.setColor(-16777216);
                 }
-                if (i >= 29 && BottomSheet.this.getAdditionalMandatoryOffsets() > 0) {
+                BottomSheet bottomSheet3 = BottomSheet.this;
+                if (bottomSheet3.scrollNavBar || (i >= 29 && bottomSheet3.getAdditionalMandatoryOffsets() > 0)) {
                     f = Math.max(0.0f, ((float) BottomSheet.this.bottomInset) - (((float) BottomSheet.this.containerView.getMeasuredHeight()) - BottomSheet.this.containerView.getTranslationY()));
                 }
-                BottomSheet bottomSheet2 = BottomSheet.this;
-                canvas.drawRect((float) (BottomSheet.this.containerView.getLeft() + BottomSheet.this.backgroundPaddingLeft), (((float) (getMeasuredHeight() - (bottomSheet2.drawNavigationBar ? bottomSheet2.bottomInset : 0))) + f) - BottomSheet.this.currentPanTranslationY, (float) (BottomSheet.this.containerView.getRight() - BottomSheet.this.backgroundPaddingLeft), ((float) getMeasuredHeight()) + f, this.backgroundPaint);
+                BottomSheet bottomSheet4 = BottomSheet.this;
+                canvas.drawRect((float) (BottomSheet.this.containerView.getLeft() + BottomSheet.this.backgroundPaddingLeft), (((float) (getMeasuredHeight() - (bottomSheet4.drawNavigationBar ? bottomSheet4.bottomInset : 0))) + f) - BottomSheet.this.currentPanTranslationY, (float) (BottomSheet.this.containerView.getRight() - BottomSheet.this.backgroundPaddingLeft), ((float) getMeasuredHeight()) + f, this.backgroundPaint);
             }
         }
 
@@ -1097,6 +1109,9 @@ public class BottomSheet extends Dialog {
         if (this.useLightStatusBar && i2 >= 23 && Theme.getColor("actionBarDefault", (boolean[]) null, true) == -1) {
             this.container.setSystemUiVisibility(this.container.getSystemUiVisibility() | 8192);
         }
+        if (this.useLightNavBar && i2 >= 26) {
+            AndroidUtilities.setLightNavigationBar(getWindow(), false);
+        }
         if (this.containerView == null) {
             AnonymousClass2 r3 = new FrameLayout(getContext()) {
                 public boolean hasOverlappingRendering() {
@@ -1237,17 +1252,21 @@ public class BottomSheet extends Dialog {
         if (this.showWithoutAnimation) {
             ColorDrawable colorDrawable = this.backDrawable;
             if (this.dimBehind) {
-                i = 51;
+                i = this.dimBehindAlpha;
             }
             colorDrawable.setAlpha(i);
             this.containerView.setTranslationY(0.0f);
             return;
         }
         this.backDrawable.setAlpha(0);
-        if (Build.VERSION.SDK_INT >= 18) {
+        int i2 = Build.VERSION.SDK_INT;
+        if (i2 >= 18) {
             this.layoutCount = 2;
             ViewGroup viewGroup = this.containerView;
-            viewGroup.setTranslationY((float) viewGroup.getMeasuredHeight());
+            if (i2 >= 21) {
+                i = AndroidUtilities.statusBarHeight;
+            }
+            viewGroup.setTranslationY((float) (i + viewGroup.getMeasuredHeight()));
             AnonymousClass3 r0 = new Runnable() {
                 public void run() {
                     BottomSheet bottomSheet = BottomSheet.this;
@@ -1334,7 +1353,7 @@ public class BottomSheet extends Dialog {
                 ColorDrawable colorDrawable = this.backDrawable;
                 Property<ColorDrawable, Integer> property = AnimationProperties.COLOR_DRAWABLE_ALPHA;
                 int[] iArr = new int[1];
-                iArr[0] = this.dimBehind ? 51 : 0;
+                iArr[0] = this.dimBehind ? this.dimBehindAlpha : 0;
                 animatorArr[1] = ObjectAnimator.ofInt(colorDrawable, property, iArr);
                 animatorSet.playTogether(animatorArr);
                 this.currentSheetAnimation.setDuration(400);
@@ -1392,6 +1411,10 @@ public class BottomSheet extends Dialog {
 
     public void setDimBehind(boolean z) {
         this.dimBehind = z;
+    }
+
+    public void setDimBehindAlpha(int i) {
+        this.dimBehindAlpha = i;
     }
 
     public void setItemColor(int i, int i2, int i3) {

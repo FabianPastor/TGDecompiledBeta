@@ -19,7 +19,8 @@ public class TLRPC$TL_channel extends TLRPC$Chat {
         this.has_link = (1048576 & readInt32) != 0;
         this.has_geo = (2097152 & readInt32) != 0;
         this.slowmode_enabled = (4194304 & readInt32) != 0;
-        this.call_active = (readInt32 & 8388608) != 0;
+        this.call_active = (8388608 & readInt32) != 0;
+        this.call_not_empty = (readInt32 & 16777216) != 0;
         this.id = abstractSerializedData.readInt32(z);
         if ((this.flags & 8192) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);
@@ -92,7 +93,9 @@ public class TLRPC$TL_channel extends TLRPC$Chat {
         this.flags = i12;
         int i13 = this.call_active ? i12 | 8388608 : i12 & -8388609;
         this.flags = i13;
-        abstractSerializedData.writeInt32(i13);
+        int i14 = this.call_not_empty ? i13 | 16777216 : i13 & -16777217;
+        this.flags = i14;
+        abstractSerializedData.writeInt32(i14);
         abstractSerializedData.writeInt32(this.id);
         if ((this.flags & 8192) != 0) {
             abstractSerializedData.writeInt64(this.access_hash);
@@ -108,8 +111,8 @@ public class TLRPC$TL_channel extends TLRPC$Chat {
             abstractSerializedData.writeInt32(NUM);
             int size = this.restriction_reason.size();
             abstractSerializedData.writeInt32(size);
-            for (int i14 = 0; i14 < size; i14++) {
-                this.restriction_reason.get(i14).serializeToStream(abstractSerializedData);
+            for (int i15 = 0; i15 < size; i15++) {
+                this.restriction_reason.get(i15).serializeToStream(abstractSerializedData);
             }
         }
         if ((this.flags & 16384) != 0) {

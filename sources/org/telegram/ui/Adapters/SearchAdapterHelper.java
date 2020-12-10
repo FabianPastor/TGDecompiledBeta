@@ -32,6 +32,7 @@ import org.telegram.tgnet.TLRPC$TL_contact;
 import org.telegram.tgnet.TLRPC$TL_contacts_found;
 import org.telegram.tgnet.TLRPC$TL_contacts_search;
 import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.tgnet.TLRPC$User;
 
 public class SearchAdapterHelper {
@@ -70,6 +71,10 @@ public class SearchAdapterHelper {
                 return true;
             }
 
+            public static SparseArray $default$getExcludeCallParticipants(SearchAdapterHelperDelegate searchAdapterHelperDelegate) {
+                return null;
+            }
+
             public static SparseArray $default$getExcludeUsers(SearchAdapterHelperDelegate searchAdapterHelperDelegate) {
                 return null;
             }
@@ -79,6 +84,8 @@ public class SearchAdapterHelper {
         }
 
         boolean canApplySearchResults(int i);
+
+        SparseArray<TLRPC$TL_groupCallParticipant> getExcludeCallParticipants();
 
         SparseArray<TLRPC$User> getExcludeUsers();
 
@@ -289,6 +296,7 @@ public class SearchAdapterHelper {
                         this.groupSearch.remove(tLRPC$ChannelParticipant);
                     }
                 }
+                removeGroupSearchFromGlobal();
                 ArrayList<TLObject> arrayList = this.localSearchResults;
                 if (arrayList != null) {
                     mergeResults(arrayList);
@@ -434,6 +442,7 @@ public class SearchAdapterHelper {
                     }
                 }
             }
+            removeGroupSearchFromGlobal();
             this.lastFoundUsername = str.toLowerCase();
             ArrayList<TLObject> arrayList2 = this.localSearchResults;
             if (arrayList2 != null) {
@@ -441,6 +450,20 @@ public class SearchAdapterHelper {
             }
             mergeExcludeResults();
             this.delegate.onDataSetChanged(i4);
+        }
+    }
+
+    private void removeGroupSearchFromGlobal() {
+        if (this.globalSearchMap.size() != 0) {
+            int size = this.groupSearchMap.size();
+            for (int i = 0; i < size; i++) {
+                TLRPC$User tLRPC$User = (TLRPC$User) this.globalSearchMap.get(this.groupSearchMap.keyAt(i));
+                if (tLRPC$User != null) {
+                    this.globalSearch.remove(tLRPC$User);
+                    this.localServerSearch.remove(tLRPC$User);
+                    this.globalSearchMap.remove(tLRPC$User.id);
+                }
+            }
         }
     }
 
@@ -544,16 +567,30 @@ public class SearchAdapterHelper {
     }
 
     public void mergeExcludeResults() {
-        SparseArray<TLRPC$User> excludeUsers;
         SearchAdapterHelperDelegate searchAdapterHelperDelegate = this.delegate;
-        if (searchAdapterHelperDelegate != null && (excludeUsers = searchAdapterHelperDelegate.getExcludeUsers()) != null) {
-            int size = excludeUsers.size();
-            for (int i = 0; i < size; i++) {
-                TLRPC$User tLRPC$User = (TLRPC$User) this.globalSearchMap.get(excludeUsers.keyAt(i));
-                if (tLRPC$User != null) {
-                    this.globalSearch.remove(tLRPC$User);
-                    this.localServerSearch.remove(tLRPC$User);
-                    this.globalSearchMap.remove(tLRPC$User.id);
+        if (searchAdapterHelperDelegate != null) {
+            SparseArray<TLRPC$User> excludeUsers = searchAdapterHelperDelegate.getExcludeUsers();
+            if (excludeUsers != null) {
+                int size = excludeUsers.size();
+                for (int i = 0; i < size; i++) {
+                    TLRPC$User tLRPC$User = (TLRPC$User) this.globalSearchMap.get(excludeUsers.keyAt(i));
+                    if (tLRPC$User != null) {
+                        this.globalSearch.remove(tLRPC$User);
+                        this.localServerSearch.remove(tLRPC$User);
+                        this.globalSearchMap.remove(tLRPC$User.id);
+                    }
+                }
+            }
+            SparseArray<TLRPC$TL_groupCallParticipant> excludeCallParticipants = this.delegate.getExcludeCallParticipants();
+            if (excludeCallParticipants != null) {
+                int size2 = excludeCallParticipants.size();
+                for (int i2 = 0; i2 < size2; i2++) {
+                    TLRPC$User tLRPC$User2 = (TLRPC$User) this.globalSearchMap.get(excludeCallParticipants.keyAt(i2));
+                    if (tLRPC$User2 != null) {
+                        this.globalSearch.remove(tLRPC$User2);
+                        this.localServerSearch.remove(tLRPC$User2);
+                        this.globalSearchMap.remove(tLRPC$User2.id);
+                    }
                 }
             }
         }

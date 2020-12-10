@@ -2,6 +2,8 @@ package org.telegram.tgnet;
 
 public class TLRPC$TL_channelAdminLogEventActionChangeStickerSet extends TLRPC$ChannelAdminLogEventAction {
     public static int constructor = -NUM;
+    public TLRPC$InputStickerSet new_stickerset;
+    public TLRPC$InputStickerSet prev_stickerset;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.prev_stickerset = TLRPC$InputStickerSet.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);

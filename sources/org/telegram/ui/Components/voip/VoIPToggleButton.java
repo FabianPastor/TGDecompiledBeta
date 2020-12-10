@@ -26,33 +26,46 @@ public class VoIPToggleButton extends FrameLayout {
     int animateToBackgroundColor;
     public int animationDelay;
     int backgroundColor;
-    private Paint bitmapPaint = new Paint(1);
+    private Paint bitmapPaint;
     private boolean checkable;
     private boolean checked;
-    Paint circlePaint = new Paint(1);
+    Paint circlePaint;
     private float crossOffset;
-    private Paint crossPaint = new Paint(1);
+    private Paint crossPaint;
     private float crossProgress;
     int currentBackgroundColor;
     int currentIconColor;
     int currentIconRes;
     String currentText;
-    private boolean drawBackground = true;
+    private boolean drawBackground;
     private boolean drawCross;
-    Drawable[] icon = new Drawable[2];
+    Drawable[] icon;
     private Bitmap iconBitmap;
     private Canvas iconCanvas;
     /* access modifiers changed from: private */
     public boolean iconChangeColor;
+    private float radius;
     ValueAnimator replaceAnimator;
     private int replaceColorFrom;
     float replaceProgress;
     Drawable rippleDrawable;
-    TextView[] textView = new TextView[2];
-    private Paint xRefPaint = new Paint(1);
+    TextView[] textView;
+    private Paint xRefPaint;
 
     public VoIPToggleButton(Context context) {
+        this(context, 52.0f);
+    }
+
+    public VoIPToggleButton(Context context, float f) {
         super(context);
+        this.circlePaint = new Paint(1);
+        this.drawBackground = true;
+        this.icon = new Drawable[2];
+        this.textView = new TextView[2];
+        this.crossPaint = new Paint(1);
+        this.xRefPaint = new Paint(1);
+        this.bitmapPaint = new Paint(1);
+        this.radius = f;
         setWillNotDraw(false);
         for (int i = 0; i < 2; i++) {
             TextView textView2 = new TextView(context);
@@ -60,7 +73,7 @@ public class VoIPToggleButton extends FrameLayout {
             textView2.setTextSize(1, 11.0f);
             textView2.setTextColor(-1);
             textView2.setImportantForAccessibility(2);
-            addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 0, 0.0f, 58.0f, 0.0f, 0.0f));
+            addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 0, 0.0f, f + 4.0f, 0.0f, 0.0f));
             this.textView[i] = textView2;
         }
         this.textView[1].setVisibility(8);
@@ -83,8 +96,8 @@ public class VoIPToggleButton extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x01dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x02a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x01e2  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x02aa  */
     @android.annotation.SuppressLint({"DrawAllocation"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onDraw(android.graphics.Canvas r21) {
@@ -111,248 +124,251 @@ public class VoIPToggleButton extends FrameLayout {
             float r2 = (float) r2
             r4 = 1073741824(0x40000000, float:2.0)
             float r2 = r2 / r4
-            r5 = 1112539136(0x42500000, float:52.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r6 = (float) r6
-            float r6 = r6 / r4
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r7 = (float) r7
-            float r7 = r7 / r4
-            boolean r8 = r0.drawBackground
-            if (r8 == 0) goto L_0x0045
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r8 = (float) r8
-            float r8 = r8 / r4
-            android.graphics.Paint r9 = r0.circlePaint
-            r1.drawCircle(r2, r6, r8, r9)
-        L_0x0045:
-            android.graphics.drawable.Drawable r8 = r0.rippleDrawable
-            r9 = 0
-            if (r8 != 0) goto L_0x0059
+            float r5 = r0.radius
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r8 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r5, r9, r8)
-            r0.rippleDrawable = r5
-            r5.setCallback(r0)
-        L_0x0059:
-            android.graphics.drawable.Drawable r5 = r0.rippleDrawable
-            float r8 = r2 - r7
-            int r8 = (int) r8
-            float r10 = r6 - r7
-            int r10 = (int) r10
-            float r11 = r2 + r7
-            int r11 = (int) r11
-            float r7 = r7 + r6
-            int r7 = (int) r7
-            r5.setBounds(r8, r10, r11, r7)
-            android.graphics.drawable.Drawable r5 = r0.rippleDrawable
-            r5.draw(r1)
-            boolean r5 = r0.drawCross
-            r7 = 255(0xff, float:3.57E-43)
-            r8 = 1
-            r10 = 1065353216(0x3var_, float:1.0)
-            r11 = 2
-            if (r5 != 0) goto L_0x0122
-            float r5 = r0.crossProgress
-            int r5 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1))
-            if (r5 == 0) goto L_0x0080
-            goto L_0x0122
-        L_0x0080:
-            float r5 = r0.replaceProgress
-            int r5 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1))
-            if (r5 == 0) goto L_0x008d
-            boolean r5 = r0.iconChangeColor
-            if (r5 == 0) goto L_0x008b
-            goto L_0x008d
-        L_0x008b:
-            r5 = 2
-            goto L_0x008e
-        L_0x008d:
-            r5 = 1
-        L_0x008e:
-            if (r9 >= r5) goto L_0x02e5
-            android.graphics.drawable.Drawable[] r5 = r0.icon
-            r5 = r5[r9]
-            if (r5 == 0) goto L_0x011e
-            r21.save()
-            float r5 = r0.replaceProgress
-            int r12 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1))
-            if (r12 == 0) goto L_0x00b7
-            boolean r12 = r0.iconChangeColor
-            if (r12 != 0) goto L_0x00b7
-            if (r9 != 0) goto L_0x00a7
-            float r5 = r10 - r5
-        L_0x00a7:
-            r1.scale(r5, r5, r2, r6)
-            android.graphics.drawable.Drawable[] r12 = r0.icon
-            r12 = r12[r9]
-            r13 = 1132396544(0x437var_, float:255.0)
-            float r5 = r5 * r13
-            int r5 = (int) r5
-            r12.setAlpha(r5)
-            goto L_0x00dd
-        L_0x00b7:
-            boolean r12 = r0.iconChangeColor
-            if (r12 == 0) goto L_0x00d6
-            int r12 = r0.replaceColorFrom
-            int r13 = r0.currentIconColor
-            int r5 = androidx.core.graphics.ColorUtils.blendARGB(r12, r13, r5)
-            android.graphics.drawable.Drawable[] r12 = r0.icon
-            r12 = r12[r9]
-            android.graphics.PorterDuffColorFilter r13 = new android.graphics.PorterDuffColorFilter
-            android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r13.<init>(r5, r14)
-            r12.setColorFilter(r13)
-            android.graphics.Paint r12 = r0.crossPaint
-            r12.setColor(r5)
-        L_0x00d6:
-            android.graphics.drawable.Drawable[] r5 = r0.icon
-            r5 = r5[r9]
-            r5.setAlpha(r7)
-        L_0x00dd:
-            android.graphics.drawable.Drawable[] r5 = r0.icon
-            r12 = r5[r9]
-            r5 = r5[r9]
-            int r5 = r5.getIntrinsicWidth()
             float r5 = (float) r5
             float r5 = r5 / r4
-            float r5 = r2 - r5
-            int r5 = (int) r5
+            float r6 = r0.radius
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
+            float r6 = r6 / r4
+            boolean r7 = r0.drawBackground
+            if (r7 == 0) goto L_0x0049
+            float r7 = r0.radius
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            float r7 = (float) r7
+            float r7 = r7 / r4
+            android.graphics.Paint r8 = r0.circlePaint
+            r1.drawCircle(r2, r5, r7, r8)
+        L_0x0049:
+            android.graphics.drawable.Drawable r7 = r0.rippleDrawable
+            r8 = 0
+            if (r7 != 0) goto L_0x005f
+            float r7 = r0.radius
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r9 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r7, r8, r9)
+            r0.rippleDrawable = r7
+            r7.setCallback(r0)
+        L_0x005f:
+            android.graphics.drawable.Drawable r7 = r0.rippleDrawable
+            float r9 = r2 - r6
+            int r9 = (int) r9
+            float r10 = r5 - r6
+            int r10 = (int) r10
+            float r11 = r2 + r6
+            int r11 = (int) r11
+            float r6 = r6 + r5
+            int r6 = (int) r6
+            r7.setBounds(r9, r10, r11, r6)
+            android.graphics.drawable.Drawable r6 = r0.rippleDrawable
+            r6.draw(r1)
+            boolean r6 = r0.drawCross
+            r7 = 255(0xff, float:3.57E-43)
+            r9 = 1
+            r10 = 1065353216(0x3var_, float:1.0)
+            r11 = 2
+            if (r6 != 0) goto L_0x0128
+            float r6 = r0.crossProgress
+            int r6 = (r6 > r3 ? 1 : (r6 == r3 ? 0 : -1))
+            if (r6 == 0) goto L_0x0086
+            goto L_0x0128
+        L_0x0086:
+            float r6 = r0.replaceProgress
+            int r6 = (r6 > r3 ? 1 : (r6 == r3 ? 0 : -1))
+            if (r6 == 0) goto L_0x0093
+            boolean r6 = r0.iconChangeColor
+            if (r6 == 0) goto L_0x0091
+            goto L_0x0093
+        L_0x0091:
+            r6 = 2
+            goto L_0x0094
+        L_0x0093:
+            r6 = 1
+        L_0x0094:
+            if (r8 >= r6) goto L_0x02eb
+            android.graphics.drawable.Drawable[] r6 = r0.icon
+            r6 = r6[r8]
+            if (r6 == 0) goto L_0x0124
+            r21.save()
+            float r6 = r0.replaceProgress
+            int r12 = (r6 > r3 ? 1 : (r6 == r3 ? 0 : -1))
+            if (r12 == 0) goto L_0x00bd
+            boolean r12 = r0.iconChangeColor
+            if (r12 != 0) goto L_0x00bd
+            if (r8 != 0) goto L_0x00ad
+            float r6 = r10 - r6
+        L_0x00ad:
+            r1.scale(r6, r6, r2, r5)
+            android.graphics.drawable.Drawable[] r12 = r0.icon
+            r12 = r12[r8]
+            r13 = 1132396544(0x437var_, float:255.0)
+            float r6 = r6 * r13
+            int r6 = (int) r6
+            r12.setAlpha(r6)
+            goto L_0x00e3
+        L_0x00bd:
+            boolean r12 = r0.iconChangeColor
+            if (r12 == 0) goto L_0x00dc
+            int r12 = r0.replaceColorFrom
+            int r13 = r0.currentIconColor
+            int r6 = androidx.core.graphics.ColorUtils.blendARGB(r12, r13, r6)
+            android.graphics.drawable.Drawable[] r12 = r0.icon
+            r12 = r12[r8]
+            android.graphics.PorterDuffColorFilter r13 = new android.graphics.PorterDuffColorFilter
+            android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r13.<init>(r6, r14)
+            r12.setColorFilter(r13)
+            android.graphics.Paint r12 = r0.crossPaint
+            r12.setColor(r6)
+        L_0x00dc:
+            android.graphics.drawable.Drawable[] r6 = r0.icon
+            r6 = r6[r8]
+            r6.setAlpha(r7)
+        L_0x00e3:
+            android.graphics.drawable.Drawable[] r6 = r0.icon
+            r12 = r6[r8]
+            r6 = r6[r8]
+            int r6 = r6.getIntrinsicWidth()
+            float r6 = (float) r6
+            float r6 = r6 / r4
+            float r6 = r2 - r6
+            int r6 = (int) r6
             android.graphics.drawable.Drawable[] r13 = r0.icon
-            r13 = r13[r9]
+            r13 = r13[r8]
             int r13 = r13.getIntrinsicHeight()
             int r13 = r13 / r11
             float r13 = (float) r13
-            float r13 = r6 - r13
+            float r13 = r5 - r13
             int r13 = (int) r13
             android.graphics.drawable.Drawable[] r14 = r0.icon
-            r14 = r14[r9]
+            r14 = r14[r8]
             int r14 = r14.getIntrinsicWidth()
             int r14 = r14 / r11
             float r14 = (float) r14
             float r14 = r14 + r2
             int r14 = (int) r14
             android.graphics.drawable.Drawable[] r15 = r0.icon
-            r15 = r15[r9]
+            r15 = r15[r8]
             int r15 = r15.getIntrinsicHeight()
             int r15 = r15 / r11
             float r15 = (float) r15
-            float r15 = r15 + r6
+            float r15 = r15 + r5
             int r15 = (int) r15
-            r12.setBounds(r5, r13, r14, r15)
-            android.graphics.drawable.Drawable[] r5 = r0.icon
-            r5 = r5[r9]
-            r5.draw(r1)
+            r12.setBounds(r6, r13, r14, r15)
+            android.graphics.drawable.Drawable[] r6 = r0.icon
+            r6 = r6[r8]
+            r6.draw(r1)
             r21.restore()
-        L_0x011e:
-            int r9 = r9 + 1
-            goto L_0x0080
-        L_0x0122:
-            boolean r5 = r0.iconChangeColor
-            if (r5 == 0) goto L_0x0143
-            int r5 = r0.replaceColorFrom
+        L_0x0124:
+            int r8 = r8 + 1
+            goto L_0x0086
+        L_0x0128:
+            boolean r6 = r0.iconChangeColor
+            if (r6 == 0) goto L_0x0149
+            int r6 = r0.replaceColorFrom
             int r12 = r0.currentIconColor
             float r13 = r0.replaceProgress
-            int r5 = androidx.core.graphics.ColorUtils.blendARGB(r5, r12, r13)
+            int r6 = androidx.core.graphics.ColorUtils.blendARGB(r6, r12, r13)
             android.graphics.drawable.Drawable[] r12 = r0.icon
-            r12 = r12[r9]
+            r12 = r12[r8]
             android.graphics.PorterDuffColorFilter r13 = new android.graphics.PorterDuffColorFilter
             android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r13.<init>(r5, r14)
+            r13.<init>(r6, r14)
             r12.setColorFilter(r13)
             android.graphics.Paint r12 = r0.crossPaint
-            r12.setColor(r5)
-        L_0x0143:
-            android.graphics.drawable.Drawable[] r5 = r0.icon
-            r5 = r5[r9]
-            r5.setAlpha(r7)
-            android.graphics.Bitmap r5 = r0.iconBitmap
-            if (r5 != 0) goto L_0x016a
-            r5 = 1107296256(0x42000000, float:32.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            r12.setColor(r6)
+        L_0x0149:
+            android.graphics.drawable.Drawable[] r6 = r0.icon
+            r6 = r6[r8]
+            r6.setAlpha(r7)
+            android.graphics.Bitmap r6 = r0.iconBitmap
+            if (r6 != 0) goto L_0x0170
+            r6 = 1107296256(0x42000000, float:32.0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             android.graphics.Bitmap$Config r13 = android.graphics.Bitmap.Config.ARGB_8888
-            android.graphics.Bitmap r5 = android.graphics.Bitmap.createBitmap(r12, r5, r13)
-            r0.iconBitmap = r5
-            android.graphics.Canvas r5 = new android.graphics.Canvas
+            android.graphics.Bitmap r6 = android.graphics.Bitmap.createBitmap(r12, r6, r13)
+            r0.iconBitmap = r6
+            android.graphics.Canvas r6 = new android.graphics.Canvas
             android.graphics.Bitmap r12 = r0.iconBitmap
-            r5.<init>(r12)
-            r0.iconCanvas = r5
-            goto L_0x016d
-        L_0x016a:
-            r5.eraseColor(r9)
-        L_0x016d:
-            android.graphics.Bitmap r5 = r0.iconBitmap
-            int r5 = r5.getWidth()
-            int r5 = r5 >> r8
-            float r5 = (float) r5
+            r6.<init>(r12)
+            r0.iconCanvas = r6
+            goto L_0x0173
+        L_0x0170:
+            r6.eraseColor(r8)
+        L_0x0173:
+            android.graphics.Bitmap r6 = r0.iconBitmap
+            int r6 = r6.getWidth()
+            int r6 = r6 >> r9
+            float r6 = (float) r6
             android.graphics.Bitmap r12 = r0.iconBitmap
             int r12 = r12.getHeight()
-            int r8 = r12 >> 1
-            float r8 = (float) r8
+            int r9 = r12 >> 1
+            float r9 = (float) r9
             float r12 = r0.replaceProgress
             int r13 = (r12 > r3 ? 1 : (r12 == r3 ? 0 : -1))
-            if (r13 == 0) goto L_0x01a3
+            if (r13 == 0) goto L_0x01a9
             boolean r13 = r0.iconChangeColor
-            if (r13 == 0) goto L_0x01a3
+            if (r13 == 0) goto L_0x01a9
             int r13 = r0.replaceColorFrom
             int r14 = r0.currentIconColor
             int r12 = androidx.core.graphics.ColorUtils.blendARGB(r13, r14, r12)
             android.graphics.drawable.Drawable[] r13 = r0.icon
-            r13 = r13[r9]
+            r13 = r13[r8]
             android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
             android.graphics.PorterDuff$Mode r15 = android.graphics.PorterDuff.Mode.MULTIPLY
             r14.<init>(r12, r15)
             r13.setColorFilter(r14)
             android.graphics.Paint r13 = r0.crossPaint
             r13.setColor(r12)
-        L_0x01a3:
+        L_0x01a9:
             android.graphics.drawable.Drawable[] r12 = r0.icon
-            r12 = r12[r9]
+            r12 = r12[r8]
             r12.setAlpha(r7)
             boolean r7 = r0.drawCross
             r12 = 1034147594(0x3da3d70a, float:0.08)
-            if (r7 == 0) goto L_0x01c5
+            if (r7 == 0) goto L_0x01cb
             float r13 = r0.crossProgress
             int r14 = (r13 > r10 ? 1 : (r13 == r10 ? 0 : -1))
-            if (r14 >= 0) goto L_0x01c5
+            if (r14 >= 0) goto L_0x01cb
             float r13 = r13 + r12
             r0.crossProgress = r13
             int r7 = (r13 > r10 ? 1 : (r13 == r10 ? 0 : -1))
-            if (r7 <= 0) goto L_0x01c1
+            if (r7 <= 0) goto L_0x01c7
             r0.crossProgress = r10
-            goto L_0x01d6
-        L_0x01c1:
+            goto L_0x01dc
+        L_0x01c7:
             r20.invalidate()
-            goto L_0x01d6
-        L_0x01c5:
-            if (r7 != 0) goto L_0x01d6
+            goto L_0x01dc
+        L_0x01cb:
+            if (r7 != 0) goto L_0x01dc
             float r7 = r0.crossProgress
             float r7 = r7 - r12
             r0.crossProgress = r7
             int r7 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1))
-            if (r7 >= 0) goto L_0x01d3
+            if (r7 >= 0) goto L_0x01d9
             r0.crossProgress = r3
-            goto L_0x01d6
-        L_0x01d3:
+            goto L_0x01dc
+        L_0x01d9:
             r20.invalidate()
-        L_0x01d6:
+        L_0x01dc:
             float r7 = r0.crossProgress
             int r3 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1))
-            if (r3 <= 0) goto L_0x02a4
+            if (r3 <= 0) goto L_0x02aa
             android.graphics.drawable.Drawable[] r3 = r0.icon
-            r3 = r3[r9]
+            r3 = r3[r8]
             int r3 = r3.getIntrinsicWidth()
             float r3 = (float) r3
             float r3 = r3 / r4
-            float r3 = r5 - r3
+            float r3 = r6 - r3
             int r3 = (int) r3
             android.graphics.drawable.Drawable[] r7 = r0.icon
-            r7 = r7[r9]
+            r7 = r7[r8]
             int r7 = r7.getIntrinsicHeight()
             int r7 = r7 / r11
             float r7 = (float) r7
-            float r7 = r5 - r7
+            float r7 = r6 - r7
             int r7 = (int) r7
             float r3 = (float) r3
             r12 = 1090519040(0x41000000, float:8.0)
@@ -381,45 +397,45 @@ public class VoIPToggleButton extends FrameLayout {
             float r12 = r12 * r13
             float r12 = r12 + r7
             android.graphics.drawable.Drawable[] r13 = r0.icon
-            r14 = r13[r9]
-            r13 = r13[r9]
+            r14 = r13[r8]
+            r13 = r13[r8]
             int r13 = r13.getIntrinsicWidth()
             float r13 = (float) r13
             float r13 = r13 / r4
-            float r13 = r5 - r13
+            float r13 = r6 - r13
             int r13 = (int) r13
             android.graphics.drawable.Drawable[] r15 = r0.icon
-            r15 = r15[r9]
+            r15 = r15[r8]
             int r15 = r15.getIntrinsicHeight()
             int r15 = r15 / r11
             float r15 = (float) r15
-            float r15 = r8 - r15
+            float r15 = r9 - r15
             int r15 = (int) r15
             android.graphics.drawable.Drawable[] r4 = r0.icon
-            r4 = r4[r9]
+            r4 = r4[r8]
             int r4 = r4.getIntrinsicWidth()
             int r4 = r4 / r11
             float r4 = (float) r4
-            float r4 = r4 + r5
+            float r4 = r4 + r6
             int r4 = (int) r4
             android.graphics.drawable.Drawable[] r11 = r0.icon
-            r11 = r11[r9]
+            r11 = r11[r8]
             int r11 = r11.getIntrinsicHeight()
             r17 = 2
             int r11 = r11 / 2
             float r11 = (float) r11
-            float r11 = r11 + r8
+            float r11 = r11 + r9
             int r11 = (int) r11
             r14.setBounds(r13, r15, r4, r11)
             android.graphics.drawable.Drawable[] r4 = r0.icon
-            r4 = r4[r9]
-            android.graphics.Canvas r9 = r0.iconCanvas
-            r4.draw(r9)
+            r4 = r4[r8]
+            android.graphics.Canvas r8 = r0.iconCanvas
+            r4.draw(r8)
             android.graphics.Canvas r14 = r0.iconCanvas
             r4 = 1073741824(0x40000000, float:2.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r9 = (float) r9
-            float r16 = r7 - r9
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            float r8 = (float) r8
+            float r16 = r7 - r8
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r4 = (float) r4
             float r18 = r12 - r4
@@ -435,51 +451,56 @@ public class VoIPToggleButton extends FrameLayout {
             r19 = r4
             r14.drawLine(r15, r16, r17, r18, r19)
             android.graphics.Bitmap r3 = r0.iconBitmap
-            float r2 = r2 - r5
-            float r6 = r6 - r8
+            float r2 = r2 - r6
+            float r5 = r5 - r9
             android.graphics.Paint r4 = r0.bitmapPaint
-            r1.drawBitmap(r3, r2, r6, r4)
-            goto L_0x02e5
-        L_0x02a4:
+            r1.drawBitmap(r3, r2, r5, r4)
+            goto L_0x02eb
+        L_0x02aa:
             android.graphics.drawable.Drawable[] r3 = r0.icon
-            r4 = r3[r9]
-            r3 = r3[r9]
+            r4 = r3[r8]
+            r3 = r3[r8]
             int r3 = r3.getIntrinsicWidth()
             float r3 = (float) r3
-            r5 = 1073741824(0x40000000, float:2.0)
-            float r3 = r3 / r5
+            r6 = 1073741824(0x40000000, float:2.0)
+            float r3 = r3 / r6
             float r3 = r2 - r3
             int r3 = (int) r3
-            android.graphics.drawable.Drawable[] r5 = r0.icon
-            r5 = r5[r9]
-            int r5 = r5.getIntrinsicHeight()
+            android.graphics.drawable.Drawable[] r6 = r0.icon
+            r6 = r6[r8]
+            int r6 = r6.getIntrinsicHeight()
             r7 = 2
-            int r5 = r5 / r7
-            float r5 = (float) r5
-            float r5 = r6 - r5
-            int r5 = (int) r5
-            android.graphics.drawable.Drawable[] r8 = r0.icon
-            r8 = r8[r9]
-            int r8 = r8.getIntrinsicWidth()
-            int r8 = r8 / r7
-            float r8 = (float) r8
-            float r2 = r2 + r8
-            int r2 = (int) r2
-            android.graphics.drawable.Drawable[] r8 = r0.icon
-            r8 = r8[r9]
-            int r8 = r8.getIntrinsicHeight()
-            int r8 = r8 / r7
-            float r7 = (float) r8
-            float r6 = r6 + r7
+            int r6 = r6 / r7
+            float r6 = (float) r6
+            float r6 = r5 - r6
             int r6 = (int) r6
-            r4.setBounds(r3, r5, r2, r6)
+            android.graphics.drawable.Drawable[] r9 = r0.icon
+            r9 = r9[r8]
+            int r9 = r9.getIntrinsicWidth()
+            int r9 = r9 / r7
+            float r9 = (float) r9
+            float r2 = r2 + r9
+            int r2 = (int) r2
+            android.graphics.drawable.Drawable[] r9 = r0.icon
+            r9 = r9[r8]
+            int r9 = r9.getIntrinsicHeight()
+            int r9 = r9 / r7
+            float r7 = (float) r9
+            float r5 = r5 + r7
+            int r5 = (int) r5
+            r4.setBounds(r3, r6, r2, r5)
             android.graphics.drawable.Drawable[] r2 = r0.icon
-            r2 = r2[r9]
+            r2 = r2[r8]
             r2.draw(r1)
-        L_0x02e5:
+        L_0x02eb:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPToggleButton.onDraw(android.graphics.Canvas):void");
+    }
+
+    public void setBackgroundColor(int i) {
+        this.backgroundColor = i;
+        invalidate();
     }
 
     public void setData(int i, int i2, int i3, String str, boolean z, boolean z2) {
@@ -495,11 +516,11 @@ public class VoIPToggleButton extends FrameLayout {
         if (this.currentIconRes != i || this.currentIconColor != i2 || this.currentBackgroundColor != i3 || (str2 = this.currentText) == null || !str2.equals(str)) {
             if (this.rippleDrawable == null || z) {
                 if (Color.alpha(i3) != 255 || ((double) AndroidUtilities.computePerceivedBrightness(i3)) <= 0.5d) {
-                    Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(52.0f), 0, ColorUtils.setAlphaComponent(-1, (int) (f * 76.5f)));
+                    Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(this.radius), 0, ColorUtils.setAlphaComponent(-1, (int) (f * 76.5f)));
                     this.rippleDrawable = createSimpleSelectorCircleDrawable;
                     createSimpleSelectorCircleDrawable.setCallback(this);
                 } else {
-                    Drawable createSimpleSelectorCircleDrawable2 = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(52.0f), 0, ColorUtils.setAlphaComponent(-16777216, (int) (f * 25.5f)));
+                    Drawable createSimpleSelectorCircleDrawable2 = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(this.radius), 0, ColorUtils.setAlphaComponent(-16777216, (int) (f * 25.5f)));
                     this.rippleDrawable = createSimpleSelectorCircleDrawable2;
                     createSimpleSelectorCircleDrawable2.setCallback(this);
                 }
@@ -632,6 +653,10 @@ public class VoIPToggleButton extends FrameLayout {
 
     public void setChecked(boolean z) {
         this.checked = z;
+    }
+
+    public boolean isChecked() {
+        return this.checked;
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {

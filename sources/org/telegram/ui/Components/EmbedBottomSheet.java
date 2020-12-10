@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
-import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.view.MotionEvent;
@@ -34,7 +33,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.browser.Browser;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.Components.EmbedBottomSheet;
 
@@ -493,7 +491,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r14.setPadding(r8, r5, r12, r5)
-            r8 = 2131624850(0x7f0e0392, float:1.8876891E38)
+            r8 = 2131624851(0x7f0e0393, float:1.8876893E38)
             java.lang.String r12 = "Close"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r12, r8)
             java.lang.String r8 = r8.toUpperCase()
@@ -519,7 +517,7 @@ public class EmbedBottomSheet extends BottomSheet {
             android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r12)
             android.widget.ImageView r2 = r0.pipButton
-            r12 = 2131166064(0x7var_, float:1.7946363E38)
+            r12 = 2131166069(0x7var_, float:1.7946373E38)
             r2.setImageResource(r12)
             android.widget.ImageView r2 = r0.pipButton
             r12 = 2131624006(0x7f0e0046, float:1.887518E38)
@@ -562,9 +560,9 @@ public class EmbedBottomSheet extends BottomSheet {
             r11.<init>(r1)
             android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER
             r11.setScaleType(r12)
-            r12 = 2131166056(0x7var_, float:1.7946347E38)
+            r12 = 2131166061(0x7var_d, float:1.7946357E38)
             r11.setImageResource(r12)
-            r12 = 2131624935(0x7f0e03e7, float:1.8877064E38)
+            r12 = 2131624936(0x7f0e03e8, float:1.8877066E38)
             java.lang.String r14 = "CopyLink"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r14, r12)
             r11.setContentDescription(r12)
@@ -606,7 +604,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r7.setPadding(r11, r5, r12, r5)
             android.widget.TextView r7 = r0.copyTextButton
-            r11 = 2131624933(0x7f0e03e5, float:1.887706E38)
+            r11 = 2131624934(0x7f0e03e6, float:1.8877062E38)
             java.lang.String r12 = "Copy"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             java.lang.String r11 = r11.toUpperCase()
@@ -637,7 +635,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r2.setPadding(r1, r5, r3, r5)
-            r1 = 2131626310(0x7f0e0946, float:1.8879853E38)
+            r1 = 2131626320(0x7f0e0950, float:1.8879873E38)
             java.lang.String r3 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -796,25 +794,8 @@ public class EmbedBottomSheet extends BottomSheet {
         if (Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(activity)) {
             return true;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentActivity);
-        builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", NUM));
-        builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                EmbedBottomSheet.this.lambda$checkInlinePermissions$7$EmbedBottomSheet(dialogInterface, i);
-            }
-        });
-        builder.show();
+        AlertsCreator.createDrawOverlayPermissionDialog(this.parentActivity, (DialogInterface.OnClickListener) null);
         return false;
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$checkInlinePermissions$7 */
-    public /* synthetic */ void lambda$checkInlinePermissions$7$EmbedBottomSheet(DialogInterface dialogInterface, int i) {
-        Activity activity = this.parentActivity;
-        if (activity != null) {
-            activity.startActivity(new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse("package:" + this.parentActivity.getPackageName())));
-        }
     }
 
     /* access modifiers changed from: protected */

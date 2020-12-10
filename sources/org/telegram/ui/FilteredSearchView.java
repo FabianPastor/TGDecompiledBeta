@@ -443,7 +443,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131165947(0x7var_fb, float:1.7946125E38)
+            r3 = 2131165952(0x7var_, float:1.7946136E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>(r2)
@@ -1536,12 +1536,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         r0 = 2
                         java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
                         r1 = 0
-                        r2 = 2131626303(0x7f0e093f, float:1.8879838E38)
+                        r2 = 2131626313(0x7f0e0949, float:1.8879859E38)
                         java.lang.String r3 = "Open"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
                         r1 = 1
-                        r2 = 2131624933(0x7f0e03e5, float:1.887706E38)
+                        r2 = 2131624934(0x7f0e03e6, float:1.8877062E38)
                         java.lang.String r3 = "Copy"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
@@ -2025,7 +2025,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
                     android.content.Context r3 = r3.getContext()
                     r4.<init>(r3)
-                    r3 = 2131627010(0x7f0e0CLASSNAME, float:1.8881272E38)
+                    r3 = 2131627022(0x7f0e0c0e, float:1.8881297E38)
                     java.lang.String r0 = "SearchMessages"
                     java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r0, r3)
                     r4.setText(r3)

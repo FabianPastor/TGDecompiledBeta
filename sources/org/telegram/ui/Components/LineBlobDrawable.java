@@ -1,7 +1,6 @@
 package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import java.util.Random;
@@ -20,7 +19,6 @@ public class LineBlobDrawable {
     public LineBlobDrawable(int i) {
         new Paint(1);
         this.random = new Random();
-        new Matrix();
         this.N = (float) i;
         int i2 = i + 1;
         this.radius = new float[i2];
@@ -60,21 +58,21 @@ public class LineBlobDrawable {
         }
     }
 
-    public void draw(float f, float f2, float f3, float f4, Canvas canvas, Paint paint) {
-        float f5 = f;
-        float f6 = f3;
-        float f7 = f4;
+    public void draw(float f, float f2, float f3, float f4, Canvas canvas, Paint paint, float f5, float f6) {
+        float f7 = f;
+        float f8 = f3;
+        float f9 = f4;
         this.path.reset();
-        this.path.moveTo(f6, f7);
-        this.path.lineTo(f5, f7);
+        this.path.moveTo(f8, f9);
+        this.path.lineTo(f7, f9);
         int i = 0;
         while (true) {
-            float f8 = (float) i;
-            float f9 = this.N;
-            if (f8 <= f9) {
+            float var_ = (float) i;
+            float var_ = this.N;
+            if (var_ <= var_) {
                 if (i == 0) {
                     float var_ = this.progress[i];
-                    this.path.lineTo(f5, f2 - ((this.radius[i] * (1.0f - var_)) + (this.radiusNext[i] * var_)));
+                    this.path.lineTo(f7, ((f2 - ((this.radius[i] * (1.0f - var_)) + (this.radiusNext[i] * var_))) * f6) + (f5 * (1.0f - f6)));
                 } else {
                     float[] fArr = this.progress;
                     int i2 = i - 1;
@@ -84,14 +82,15 @@ public class LineBlobDrawable {
                     float[] fArr3 = this.radiusNext;
                     float var_ = fArr[i];
                     float var_ = (fArr2[i] * (1.0f - var_)) + (fArr3[i] * var_);
-                    float var_ = f6 - f5;
-                    float var_ = (var_ / f9) * ((float) i2);
-                    float var_ = (var_ / f9) * f8;
+                    float var_ = f8 - f7;
+                    float var_ = (var_ / var_) * ((float) i2);
+                    float var_ = (var_ / var_) * var_;
                     float var_ = var_ + ((var_ - var_) / 2.0f);
-                    float var_ = f2 - var_;
-                    this.path.cubicTo(var_, f2 - (var_ + (fArr3[i2] * var_)), var_, var_, var_, var_);
-                    if (f8 == this.N) {
-                        this.path.lineTo(f6, f7);
+                    float var_ = (1.0f - f6) * f5;
+                    float var_ = ((f2 - var_) * f6) + var_;
+                    this.path.cubicTo(var_, ((f2 - (var_ + (fArr3[i2] * var_))) * f6) + var_, var_, var_, var_, var_);
+                    if (var_ == this.N) {
+                        this.path.lineTo(f8, f9);
                     }
                 }
                 i++;

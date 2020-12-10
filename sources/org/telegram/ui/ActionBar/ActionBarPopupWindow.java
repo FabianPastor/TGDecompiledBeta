@@ -301,6 +301,33 @@ public class ActionBarPopupWindow extends PopupWindow {
                 i2++;
             }
         }
+
+        public void updateRadialSelectors() {
+            int childCount = this.linearLayout.getChildCount();
+            View view = null;
+            View view2 = null;
+            for (int i = 0; i < childCount; i++) {
+                View childAt = this.linearLayout.getChildAt(i);
+                if (childAt.getVisibility() == 0) {
+                    if (view == null) {
+                        view = childAt;
+                    }
+                    view2 = childAt;
+                }
+            }
+            for (int i2 = 0; i2 < childCount; i2++) {
+                View childAt2 = this.linearLayout.getChildAt(i2);
+                if (childAt2.getVisibility() == 0 && (childAt2 instanceof ActionBarMenuSubItem)) {
+                    ActionBarMenuSubItem actionBarMenuSubItem = (ActionBarMenuSubItem) childAt2;
+                    boolean z = true;
+                    boolean z2 = childAt2 == view;
+                    if (childAt2 != view2) {
+                        z = false;
+                    }
+                    actionBarMenuSubItem.updateSelectorBackground(z2, z);
+                }
+            }
+        }
     }
 
     public ActionBarPopupWindow(View view, int i, int i2) {

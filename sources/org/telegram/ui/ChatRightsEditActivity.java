@@ -183,14 +183,14 @@ public class ChatRightsEditActivity extends BaseFragment {
         if (this.myAdminRights == null) {
             TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights2 = new TLRPC$TL_chatAdminRights();
             this.myAdminRights = tLRPC$TL_chatAdminRights2;
-            boolean z4 = tLRPC$TL_chatAdminRights2.add_admins;
-            tLRPC$TL_chatAdminRights2.pin_messages = z4;
-            tLRPC$TL_chatAdminRights2.invite_users = z4;
-            tLRPC$TL_chatAdminRights2.ban_users = z4;
-            tLRPC$TL_chatAdminRights2.delete_messages = z4;
-            tLRPC$TL_chatAdminRights2.edit_messages = z4;
-            tLRPC$TL_chatAdminRights2.post_messages = z4;
-            tLRPC$TL_chatAdminRights2.change_info = z4;
+            tLRPC$TL_chatAdminRights2.add_admins = true;
+            tLRPC$TL_chatAdminRights2.pin_messages = true;
+            tLRPC$TL_chatAdminRights2.invite_users = true;
+            tLRPC$TL_chatAdminRights2.ban_users = true;
+            tLRPC$TL_chatAdminRights2.delete_messages = true;
+            tLRPC$TL_chatAdminRights2.edit_messages = true;
+            tLRPC$TL_chatAdminRights2.post_messages = true;
+            tLRPC$TL_chatAdminRights2.change_info = true;
             if (!this.isChannel) {
                 tLRPC$TL_chatAdminRights2.manage_call = true;
             }
@@ -210,27 +210,27 @@ public class ChatRightsEditActivity extends BaseFragment {
                 tLRPC$TL_chatAdminRights3.pin_messages = tLRPC$TL_chatAdminRights4.pin_messages;
                 this.initialIsSet = false;
             } else {
-                boolean z5 = tLRPC$TL_chatAdminRights.change_info;
-                tLRPC$TL_chatAdminRights3.change_info = z5;
-                boolean z6 = tLRPC$TL_chatAdminRights.post_messages;
-                tLRPC$TL_chatAdminRights3.post_messages = z6;
-                boolean z7 = tLRPC$TL_chatAdminRights.edit_messages;
-                tLRPC$TL_chatAdminRights3.edit_messages = z7;
-                boolean z8 = tLRPC$TL_chatAdminRights.delete_messages;
-                tLRPC$TL_chatAdminRights3.delete_messages = z8;
-                boolean z9 = tLRPC$TL_chatAdminRights.manage_call;
-                tLRPC$TL_chatAdminRights3.manage_call = z9;
-                boolean z10 = tLRPC$TL_chatAdminRights.ban_users;
-                tLRPC$TL_chatAdminRights3.ban_users = z10;
-                boolean z11 = tLRPC$TL_chatAdminRights.invite_users;
-                tLRPC$TL_chatAdminRights3.invite_users = z11;
-                boolean z12 = tLRPC$TL_chatAdminRights.pin_messages;
-                tLRPC$TL_chatAdminRights3.pin_messages = z12;
-                boolean z13 = tLRPC$TL_chatAdminRights.add_admins;
-                tLRPC$TL_chatAdminRights3.add_admins = z13;
-                boolean z14 = tLRPC$TL_chatAdminRights.anonymous;
-                tLRPC$TL_chatAdminRights3.anonymous = z14;
-                if (!z5 && !z6 && !z7 && !z8 && !z10 && !z11 && !z12 && !z13 && !z9 && !z14) {
+                boolean z4 = tLRPC$TL_chatAdminRights.change_info;
+                tLRPC$TL_chatAdminRights3.change_info = z4;
+                boolean z5 = tLRPC$TL_chatAdminRights.post_messages;
+                tLRPC$TL_chatAdminRights3.post_messages = z5;
+                boolean z6 = tLRPC$TL_chatAdminRights.edit_messages;
+                tLRPC$TL_chatAdminRights3.edit_messages = z6;
+                boolean z7 = tLRPC$TL_chatAdminRights.delete_messages;
+                tLRPC$TL_chatAdminRights3.delete_messages = z7;
+                boolean z8 = tLRPC$TL_chatAdminRights.manage_call;
+                tLRPC$TL_chatAdminRights3.manage_call = z8;
+                boolean z9 = tLRPC$TL_chatAdminRights.ban_users;
+                tLRPC$TL_chatAdminRights3.ban_users = z9;
+                boolean z10 = tLRPC$TL_chatAdminRights.invite_users;
+                tLRPC$TL_chatAdminRights3.invite_users = z10;
+                boolean z11 = tLRPC$TL_chatAdminRights.pin_messages;
+                tLRPC$TL_chatAdminRights3.pin_messages = z11;
+                boolean z12 = tLRPC$TL_chatAdminRights.add_admins;
+                tLRPC$TL_chatAdminRights3.add_admins = z12;
+                boolean z13 = tLRPC$TL_chatAdminRights.anonymous;
+                tLRPC$TL_chatAdminRights3.anonymous = z13;
+                if (!z4 && !z5 && !z6 && !z7 && !z9 && !z10 && !z11 && !z12 && !z8 && !z13) {
                     z3 = false;
                 }
                 this.initialIsSet = z3;

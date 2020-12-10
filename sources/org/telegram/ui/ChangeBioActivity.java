@@ -37,16 +37,17 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.CodepointsLengthInputFilter;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.NumberTextView;
 
 public class ChangeBioActivity extends BaseFragment {
     /* access modifiers changed from: private */
-    public TextView checkTextView;
+    public NumberTextView checkTextView;
     /* access modifiers changed from: private */
     public View doneButton;
-    /* access modifiers changed from: private */
-    public EditTextBoldCursor firstNameField;
+    private EditTextBoldCursor firstNameField;
     private TextView helpTextView;
 
     static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
@@ -96,7 +97,7 @@ public class ChangeBioActivity extends BaseFragment {
         this.firstNameField.setImeOptions(NUM);
         this.firstNameField.setInputType(147457);
         this.firstNameField.setImeOptions(6);
-        this.firstNameField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(70) {
+        this.firstNameField.setFilters(new InputFilter[]{new CodepointsLengthInputFilter(70) {
             public CharSequence filter(CharSequence charSequence, int i, int i2, Spanned spanned, int i3, int i4) {
                 if (charSequence == null || TextUtils.indexOf(charSequence, 10) == -1) {
                     CharSequence filter = super.filter(charSequence, i, i2, spanned, i3, i4);
@@ -131,20 +132,21 @@ public class ChangeBioActivity extends BaseFragment {
             }
 
             public void afterTextChanged(Editable editable) {
-                ChangeBioActivity.this.checkTextView.setText(String.format("%d", new Object[]{Integer.valueOf(70 - ChangeBioActivity.this.firstNameField.length())}));
+                ChangeBioActivity.this.checkTextView.setNumber(70 - Character.codePointCount(editable, 0, editable.length()), true);
             }
         });
         frameLayout.addView(this.firstNameField, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 0.0f, 4.0f, 0.0f));
-        TextView textView = new TextView(context2);
-        this.checkTextView = textView;
-        textView.setTextSize(1, 15.0f);
-        this.checkTextView.setText(String.format("%d", new Object[]{70}));
+        NumberTextView numberTextView = new NumberTextView(context2);
+        this.checkTextView = numberTextView;
+        numberTextView.setTextSize(15);
+        this.checkTextView.setNumber(70, false);
+        this.checkTextView.setCenterAlign(true);
         this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         this.checkTextView.setImportantForAccessibility(2);
-        frameLayout.addView(this.checkTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 3 : 5, 0.0f, 4.0f, 4.0f, 0.0f));
-        TextView textView2 = new TextView(context2);
-        this.helpTextView = textView2;
-        textView2.setFocusable(true);
+        frameLayout.addView(this.checkTextView, LayoutHelper.createFrame(20, 20.0f, LocaleController.isRTL ? 3 : 5, 0.0f, 4.0f, 4.0f, 0.0f));
+        TextView textView = new TextView(context2);
+        this.helpTextView = textView;
+        textView.setFocusable(true);
         this.helpTextView.setTextSize(1, 15.0f);
         this.helpTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
         this.helpTextView.setGravity(LocaleController.isRTL ? 5 : 3);

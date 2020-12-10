@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class FillLastLinearLayoutManager extends LinearLayoutManager {
     private int additionalHeight;
+    private boolean bind = true;
+    private boolean canScrollVertically = true;
     private SparseArray<RecyclerView.ViewHolder> heights = new SparseArray<>();
     private int lastItemHeight = -1;
     private int listHeight;
@@ -25,6 +27,18 @@ public class FillLastLinearLayoutManager extends LinearLayoutManager {
         this.skipFirstItem = true;
     }
 
+    public void setBind(boolean z) {
+        this.bind = z;
+    }
+
+    public void setCanScrollVertically(boolean z) {
+        this.canScrollVertically = z;
+    }
+
+    public boolean canScrollVertically() {
+        return this.canScrollVertically;
+    }
+
     private void calcLastItemHeight() {
         RecyclerView.Adapter adapter;
         if (this.listHeight > 0 && (adapter = this.listView.getAdapter()) != null) {
@@ -40,7 +54,9 @@ public class FillLastLinearLayoutManager extends LinearLayoutManager {
                         viewHolder.itemView.setLayoutParams(generateDefaultLayoutParams());
                     }
                 }
-                adapter.onBindViewHolder(viewHolder, i2);
+                if (this.bind) {
+                    adapter.onBindViewHolder(viewHolder, i2);
+                }
                 RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) viewHolder.itemView.getLayoutParams();
                 viewHolder.itemView.measure(RecyclerView.LayoutManager.getChildMeasureSpec(this.listWidth, getWidthMode(), getPaddingLeft() + getPaddingRight() + layoutParams.leftMargin + layoutParams.rightMargin, layoutParams.width, canScrollHorizontally()), RecyclerView.LayoutManager.getChildMeasureSpec(this.listHeight, getHeightMode(), getPaddingTop() + getPaddingBottom() + layoutParams.topMargin + layoutParams.bottomMargin, layoutParams.height, canScrollVertically()));
                 i += viewHolder.itemView.getMeasuredHeight();

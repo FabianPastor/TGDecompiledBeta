@@ -726,6 +726,7 @@
     <public type="drawable" name="msg_draw_neon" id="NUM" />
     <public type="drawable" name="msg_draw_pen" id="NUM" />
     <public type="drawable" name="msg_edit" id="NUM" />
+    <public type="drawable" name="msg_endcall" id="NUM" />
     <public type="drawable" name="msg_fave" id="NUM" />
     <public type="drawable" name="msg_forward" id="NUM" />
     <public type="drawable" name="msg_gallery" id="NUM" />
@@ -737,6 +738,7 @@
     <public type="drawable" name="msg_home" id="NUM" />
     <public type="drawable" name="msg_hybrid" id="NUM" />
     <public type="drawable" name="msg_instant" id="NUM" />
+    <public type="drawable" name="msg_invited" id="NUM" />
     <public type="drawable" name="msg_language" id="NUM" />
     <public type="drawable" name="msg_leave" id="NUM" />
     <public type="drawable" name="msg_link" id="NUM" />
@@ -805,6 +807,9 @@
     <public type="drawable" name="msg_videocall" id="NUM" />
     <public type="drawable" name="msg_viewreplies" id="NUM" />
     <public type="drawable" name="msg_views" id="NUM" />
+    <public type="drawable" name="msg_voice_muted" id="NUM" />
+    <public type="drawable" name="msg_voice_pip" id="NUM" />
+    <public type="drawable" name="msg_voice_unmuted" id="NUM" />
     <public type="drawable" name="msg_voicechat" id="NUM" />
     <public type="drawable" name="msg_warning" id="NUM" />
     <public type="drawable" name="music_empty" id="NUM" />
@@ -1323,6 +1328,7 @@
     <public type="raw" name="filter_new" id="NUM" />
     <public type="raw" name="filter_no_chats" id="NUM" />
     <public type="raw" name="filters" id="NUM" />
+    <public type="raw" name="group_pip_delete_icon" id="NUM" />
     <public type="raw" name="ic_admin" id="NUM" />
     <public type="raw" name="ic_delete" id="NUM" />
     <public type="raw" name="ic_download" id="NUM" />
@@ -1335,6 +1341,8 @@
     <public type="raw" name="permission_map_dark" id="NUM" />
     <public type="raw" name="permission_pin" id="NUM" />
     <public type="raw" name="permission_pin_dark" id="NUM" />
+    <public type="raw" name="pip_video_request" id="NUM" />
+    <public type="raw" name="pip_voice_request" id="NUM" />
     <public type="raw" name="player_prev" id="NUM" />
     <public type="raw" name="qr_login" id="NUM" />
     <public type="raw" name="sound_in" id="NUM" />
@@ -1358,10 +1366,16 @@
     <public type="raw" name="voip_connecting" id="NUM" />
     <public type="raw" name="voip_end" id="NUM" />
     <public type="raw" name="voip_failed" id="NUM" />
+    <public type="raw" name="voip_group_removed" id="NUM" />
+    <public type="raw" name="voip_invite" id="NUM" />
+    <public type="raw" name="voip_muted" id="NUM" />
     <public type="raw" name="voip_ringback" id="NUM" />
+    <public type="raw" name="voip_unmuted" id="NUM" />
     <public type="raw" name="wallet_allset" id="NUM" />
     <public type="raw" name="wallet_congrats" id="NUM" />
     <public type="raw" name="wallet_science" id="NUM" />
+    <public type="raw" name="write_contacts_fab_icon" id="NUM" />
+    <public type="raw" name="write_contacts_fab_icon_reverse" id="NUM" />
     <public type="string" name="ALongTimeAgo" id="NUM" />
     <public type="string" name="Abort" id="NUM" />
     <public type="string" name="AbortEmail" id="NUM" />
@@ -1536,6 +1550,7 @@
     <public type="string" name="ActionGroupCallInvited" id="NUM" />
     <public type="string" name="ActionGroupCallInvitedYou" id="NUM" />
     <public type="string" name="ActionGroupCallStarted" id="NUM" />
+    <public type="string" name="ActionGroupCallStartedByYou" id="NUM" />
     <public type="string" name="ActionGroupCallYouInvited" id="NUM" />
     <public type="string" name="ActionInviteUser" id="NUM" />
     <public type="string" name="ActionInviteYou" id="NUM" />
@@ -2622,6 +2637,7 @@
     <public type="string" name="EmojiUseDefault" id="NUM" />
     <public type="string" name="EmpryUsersPlaceholder" id="NUM" />
     <public type="string" name="EmptyExceptions" id="NUM" />
+    <public type="string" name="Enable" id="NUM" />
     <public type="string" name="EnableAllStreamingInfo" id="NUM" />
     <public type="string" name="EnableAnimations" id="NUM" />
     <public type="string" name="EnableStreaming" id="NUM" />
@@ -2692,7 +2708,9 @@
     <public type="string" name="EventLogEmptyChannel" id="NUM" />
     <public type="string" name="EventLogEmptySearch" id="NUM" />
     <public type="string" name="EventLogEmptyTextSearch" id="NUM" />
+    <public type="string" name="EventLogEndedVoiceChat" id="NUM" />
     <public type="string" name="EventLogFilterAll" id="NUM" />
+    <public type="string" name="EventLogFilterCalls" id="NUM" />
     <public type="string" name="EventLogFilterChannelInfo" id="NUM" />
     <public type="string" name="EventLogFilterDeletedMessages" id="NUM" />
     <public type="string" name="EventLogFilterEditedMessages" id="NUM" />
@@ -2747,6 +2765,7 @@
     <public type="string" name="EventLogRestrictedSendStickers" id="NUM" />
     <public type="string" name="EventLogRestrictedUntil" id="NUM" />
     <public type="string" name="EventLogSelectedEvents" id="NUM" />
+    <public type="string" name="EventLogStartedVoiceChat" id="NUM" />
     <public type="string" name="EventLogStopPoll" id="NUM" />
     <public type="string" name="EventLogStopQuiz" id="NUM" />
     <public type="string" name="EventLogToggledInvitesHistoryOff" id="NUM" />
@@ -2758,6 +2777,10 @@
     <public type="string" name="EventLogToggledSlowmodeOff" id="NUM" />
     <public type="string" name="EventLogToggledSlowmodeOn" id="NUM" />
     <public type="string" name="EventLogUnpinnedMessages" id="NUM" />
+    <public type="string" name="EventLogVoiceChatAllowedToSpeak" id="NUM" />
+    <public type="string" name="EventLogVoiceChatMuted" id="NUM" />
+    <public type="string" name="EventLogVoiceChatNotAllowedToSpeak" id="NUM" />
+    <public type="string" name="EventLogVoiceChatUnmuted" id="NUM" />
     <public type="string" name="Events" id="NUM" />
     <public type="string" name="Exception_few" id="NUM" />
     <public type="string" name="Exception_many" id="NUM" />
@@ -3110,6 +3133,7 @@
     <public type="string" name="InviteToGroupError" id="NUM" />
     <public type="string" name="InviteToTelegram" id="NUM" />
     <public type="string" name="InviteUser" id="NUM" />
+    <public type="string" name="Invited" id="NUM" />
     <public type="string" name="IsRecordingAudio" id="NUM" />
     <public type="string" name="IsRecordingRound" id="NUM" />
     <public type="string" name="IsSendingAudio" id="NUM" />
@@ -4057,6 +4081,8 @@
     <public type="string" name="PermissionBackgroundLocation" id="NUM" />
     <public type="string" name="PermissionContacts" id="NUM" />
     <public type="string" name="PermissionDrawAboveOtherApps" id="NUM" />
+    <public type="string" name="PermissionDrawAboveOtherAppsGroupCall" id="NUM" />
+    <public type="string" name="PermissionDrawAboveOtherAppsTitle" id="NUM" />
     <public type="string" name="PermissionNoAudio" id="NUM" />
     <public type="string" name="PermissionNoAudioVideo" id="NUM" />
     <public type="string" name="PermissionNoCamera" id="NUM" />
@@ -4671,7 +4697,6 @@
     <public type="string" name="StartMessaging" id="NUM" />
     <public type="string" name="StartText" id="NUM" />
     <public type="string" name="StartVoipChat" id="NUM" />
-    <public type="string" name="StartVoipChatAlertOnlyAdmins" id="NUM" />
     <public type="string" name="StartVoipChatAlertText" id="NUM" />
     <public type="string" name="StartVoipChatPermission" id="NUM" />
     <public type="string" name="StartVoipChatTitle" id="NUM" />
@@ -5110,25 +5135,45 @@
     <public type="string" name="VoipFailed" id="NUM" />
     <public type="string" name="VoipFeedbackCommentHint" id="NUM" />
     <public type="string" name="VoipFlip" id="NUM" />
+    <public type="string" name="VoipGroupAdd" id="NUM" />
+    <public type="string" name="VoipGroupAddMemberText" id="NUM" />
+    <public type="string" name="VoipGroupAddMemberTitle" id="NUM" />
     <public type="string" name="VoipGroupAllCanSpeak" id="NUM" />
+    <public type="string" name="VoipGroupAllowToSpeak" id="NUM" />
     <public type="string" name="VoipGroupConnecting" id="NUM" />
+    <public type="string" name="VoipGroupCopyInviteLink" id="NUM" />
+    <public type="string" name="VoipGroupCopyInviteLinkCopied" id="NUM" />
     <public type="string" name="VoipGroupEnd" id="NUM" />
     <public type="string" name="VoipGroupEndAlertText" id="NUM" />
     <public type="string" name="VoipGroupEndAlertTitle" id="NUM" />
     <public type="string" name="VoipGroupEndChat" id="NUM" />
+    <public type="string" name="VoipGroupEndedStartNew" id="NUM" />
     <public type="string" name="VoipGroupInviteAlreadyParticipant" id="NUM" />
+    <public type="string" name="VoipGroupInviteMember" id="NUM" />
     <public type="string" name="VoipGroupInviteText" id="NUM" />
     <public type="string" name="VoipGroupInvitedToVoiceChat" id="NUM" />
+    <public type="string" name="VoipGroupInvitedUser" id="NUM" />
     <public type="string" name="VoipGroupJoinAnonymousAdmin" id="NUM" />
     <public type="string" name="VoipGroupJoinCall" id="NUM" />
     <public type="string" name="VoipGroupLeave" id="NUM" />
     <public type="string" name="VoipGroupLeaveAlertEndChat" id="NUM" />
     <public type="string" name="VoipGroupLeaveAlertText" id="NUM" />
     <public type="string" name="VoipGroupLeaveAlertTitle" id="NUM" />
+    <public type="string" name="VoipGroupMute" id="NUM" />
     <public type="string" name="VoipGroupMuteMemberAlertText" id="NUM" />
     <public type="string" name="VoipGroupMuteMemberAlertTitle" id="NUM" />
+    <public type="string" name="VoipGroupOffline" id="NUM" />
+    <public type="string" name="VoipGroupOfflineAirplane" id="NUM" />
     <public type="string" name="VoipGroupOnlyAdminsCanSpeak" id="NUM" />
+    <public type="string" name="VoipGroupRemoveMemberAlertText" id="NUM" />
+    <public type="string" name="VoipGroupRemoveMemberAlertTitle" id="NUM" />
+    <public type="string" name="VoipGroupRemovedFromGroup" id="NUM" />
+    <public type="string" name="VoipGroupSearchMembers" id="NUM" />
     <public type="string" name="VoipGroupShareInviteLink" id="NUM" />
+    <public type="string" name="VoipGroupUnmute" id="NUM" />
+    <public type="string" name="VoipGroupUserCanNowSpeak" id="NUM" />
+    <public type="string" name="VoipGroupUserCantNowSpeak" id="NUM" />
+    <public type="string" name="VoipGroupUserRemove" id="NUM" />
     <public type="string" name="VoipGroupViewVoiceChat" id="NUM" />
     <public type="string" name="VoipGroupVoiceChat" id="NUM" />
     <public type="string" name="VoipHangingUp" id="NUM" />

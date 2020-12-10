@@ -1414,9 +1414,10 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 });
                 this.sendPopupLayout.setShowedFromBotton(false);
                 this.itemCells = new ActionBarMenuSubItem[2];
-                for (int i = 0; i < 2; i++) {
+                int i = 0;
+                while (i < 2) {
                     if ((i != 0 || this.chatActivity.canScheduleMessage()) && (i != 1 || !UserObject.isUserSelf(currentUser))) {
-                        this.itemCells[i] = new ActionBarMenuSubItem(getParentActivity());
+                        this.itemCells[i] = new ActionBarMenuSubItem(getParentActivity(), i == 0, i == 1);
                         if (i == 0) {
                             if (UserObject.isUserSelf(currentUser)) {
                                 this.itemCells[i].setTextAndIcon(LocaleController.getString("SetReminder", NUM), NUM);
@@ -1440,6 +1441,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             }
                         });
                     }
+                    i++;
                 }
                 this.sendPopupLayout.setupRadialSelectors(Theme.getColor("dialogButtonSelector"));
                 ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2);

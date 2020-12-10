@@ -156,6 +156,10 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                 return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
             }
 
+            public /* synthetic */ SparseArray getExcludeCallParticipants() {
+                return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeCallParticipants(this);
+            }
+
             public /* synthetic */ SparseArray getExcludeUsers() {
                 return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$getExcludeUsers(this);
             }

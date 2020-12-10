@@ -14,6 +14,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class ManageChatTextCell extends FrameLayout {
     private boolean divider;
+    private String dividerColor;
     private ImageView imageView;
     private SimpleTextView textView;
     private SimpleTextView valueTextView;
@@ -46,6 +47,10 @@ public class ManageChatTextCell extends FrameLayout {
 
     public SimpleTextView getValueTextView() {
         return this.valueTextView;
+    }
+
+    public void setDividerColor(String str) {
+        this.dividerColor = str;
     }
 
     /* access modifiers changed from: protected */
@@ -88,6 +93,10 @@ public class ManageChatTextCell extends FrameLayout {
     }
 
     public void setText(String str, String str2, int i, boolean z) {
+        setText(str, str2, i, 5, z);
+    }
+
+    public void setText(String str, String str2, int i, int i2, boolean z) {
         this.textView.setText(str);
         if (str2 != null) {
             this.valueTextView.setText(str2);
@@ -95,7 +104,7 @@ public class ManageChatTextCell extends FrameLayout {
         } else {
             this.valueTextView.setVisibility(4);
         }
-        this.imageView.setPadding(0, AndroidUtilities.dp(5.0f), 0, 0);
+        this.imageView.setPadding(0, AndroidUtilities.dp((float) i2), 0, 0);
         this.imageView.setImageResource(i);
         this.divider = z;
         setWillNotDraw(!z);
@@ -104,7 +113,11 @@ public class ManageChatTextCell extends FrameLayout {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.divider) {
-            canvas.drawLine((float) AndroidUtilities.dp(71.0f), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            String str = this.dividerColor;
+            if (str != null) {
+                Theme.dividerExtraPaint.setColor(Theme.getColor(str));
+            }
+            canvas.drawLine((float) AndroidUtilities.dp(71.0f), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), this.dividerColor != null ? Theme.dividerExtraPaint : Theme.dividerPaint);
         }
     }
 }
