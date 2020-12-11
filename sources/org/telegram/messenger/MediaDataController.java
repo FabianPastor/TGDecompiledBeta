@@ -6648,7 +6648,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0247 }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131626892(0x7f0e0b8c, float:1.8881033E38)
+            r9 = 2131626893(0x7f0e0b8d, float:1.8881035E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
         L_0x0067:
             r9 = r4
@@ -6658,7 +6658,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0247 }
             if (r8 == 0) goto L_0x007a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626986(0x7f0e0bea, float:1.8881224E38)
+            r9 = 2131626987(0x7f0e0beb, float:1.8881226E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
             goto L_0x0067
         L_0x007a:

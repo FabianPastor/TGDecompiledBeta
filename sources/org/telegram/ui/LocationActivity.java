@@ -2422,7 +2422,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
             org.telegram.ui.Components.HintView r1 = r7.hintView
-            r3 = 2131626799(0x7f0e0b2f, float:1.8880844E38)
+            r3 = 2131626800(0x7f0e0b30, float:1.8880846E38)
             java.lang.Object[] r5 = new java.lang.Object[r4]
             java.lang.String r0 = org.telegram.messenger.UserObject.getFirstName(r0)
             r5[r2] = r0
@@ -2432,7 +2432,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             goto L_0x0063
         L_0x0055:
             org.telegram.ui.Components.HintView r0 = r7.hintView
-            r1 = 2131626798(0x7f0e0b2e, float:1.8880842E38)
+            r1 = 2131626799(0x7f0e0b2f, float:1.8880844E38)
             java.lang.String r2 = "ProximityTooltioGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setOverrideText(r1)

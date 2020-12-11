@@ -4522,7 +4522,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x00b7:
             android.app.Activity r1 = r6.parentActivity     // Catch:{ Exception -> 0x00d0 }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131627151(0x7f0e0c8f, float:1.8881558E38)
+            r3 = 2131627152(0x7f0e0CLASSNAME, float:1.888156E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x00d0 }
             android.content.Intent r0 = android.content.Intent.createChooser(r0, r2)     // Catch:{ Exception -> 0x00d0 }
             r2 = 500(0x1f4, float:7.0E-43)
@@ -13199,7 +13199,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r7 = 0
                 r0.sharedMediaType = r7
                 org.telegram.ui.ActionBar.ActionBarMenuSubItem r8 = r0.allMediaItem
-                r13 = 2131627205(0x7f0e0cc5, float:1.8881668E38)
+                r13 = 2131627206(0x7f0e0cc6, float:1.888167E38)
                 java.lang.String r10 = "ShowAllMedia"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r13)
                 r8.setText(r10)
@@ -13408,9 +13408,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r7 = r7.getTotalImageCount()
                 r0.totalImagesCount = r7
             L_0x02ad:
-                r7 = 2131627204(0x7f0e0cc4, float:1.8881666E38)
+                r7 = 2131627205(0x7f0e0cc5, float:1.8881668E38)
                 java.lang.String r9 = "ShowAllGIFs"
-                r11 = 2131627203(0x7f0e0cc3, float:1.8881664E38)
+                r11 = 2131627204(0x7f0e0cc4, float:1.8881666E38)
                 java.lang.String r13 = "ShowAllFiles"
                 r10 = 5
                 if (r1 == 0) goto L_0x03dd
@@ -13691,7 +13691,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r3.put(r4, r2)
                 int r1 = r1 + 1
                 r10 = 5
-                r11 = 2131627203(0x7f0e0cc3, float:1.8881664E38)
+                r11 = 2131627204(0x7f0e0cc4, float:1.8881666E38)
                 goto L_0x049f
             L_0x04ce:
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
@@ -13717,7 +13717,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (r2 == 0) goto L_0x050c
                 r0.sharedMediaType = r14
                 org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r0.allMediaItem
-                r2 = 2131627203(0x7f0e0cc3, float:1.8881664E38)
+                r2 = 2131627204(0x7f0e0cc4, float:1.8881666E38)
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r13, r2)
                 r1.setText(r2)
                 goto L_0x0527
@@ -14465,7 +14465,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 long r9 = (long) r7
                 r13 = 1000(0x3e8, double:4.94E-321)
                 long r9 = r9 * r13
-                r7 = 2131627899(0x7f0e0f7b, float:1.8883075E38)
+                r7 = 2131627900(0x7f0e0f7c, float:1.8883077E38)
                 r13 = 2
                 java.lang.Object[] r14 = new java.lang.Object[r13]
                 org.telegram.messenger.LocaleController r13 = org.telegram.messenger.LocaleController.getInstance()
@@ -15455,7 +15455,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 boolean r5 = r2.self
                 if (r5 == 0) goto L_0x0974
                 org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-                r5 = 2131626986(0x7f0e0bea, float:1.8881224E38)
+                r5 = 2131626987(0x7f0e0beb, float:1.8881226E38)
                 java.lang.String r8 = "SavedMessages"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r8, r5)
                 r2.setTitle(r5)

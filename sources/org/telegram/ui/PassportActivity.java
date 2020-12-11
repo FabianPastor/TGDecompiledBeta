@@ -3441,7 +3441,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.FrameLayout r0 = (android.widget.FrameLayout) r0
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r1 = "TelegramPassport"
-            r2 = 2131627356(0x7f0e0d5c, float:1.8881974E38)
+            r2 = 2131627357(0x7f0e0d5d, float:1.8881976E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setTitle(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
@@ -3506,7 +3506,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r9)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.deletePassportCell
             java.lang.String r9 = "TelegramPassportDelete"
-            r10 = 2131627359(0x7f0e0d5f, float:1.888198E38)
+            r10 = 2131627360(0x7f0e0d60, float:1.8881982E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r10 = 0
             r0.setText(r9, r10)
@@ -10688,7 +10688,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627108(0x7f0e0CLASSNAME, float:1.8881471E38)
+                r8 = 2131627109(0x7f0e0CLASSNAME, float:1.8881473E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -10716,7 +10716,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627112(0x7f0e0CLASSNAME, float:1.888148E38)
+                r8 = 2131627113(0x7f0e0CLASSNAME, float:1.8881481E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -11739,7 +11739,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         if (r2 != r6) goto L_0x007e
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131627240(0x7f0e0ce8, float:1.8881739E38)
+                                        r3 = 2131627241(0x7f0e0ce9, float:1.888174E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -11847,7 +11847,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                     L_0x0140:
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131627104(0x7f0e0CLASSNAME, float:1.8881463E38)
+                                        r1 = 2131627105(0x7f0e0CLASSNAME, float:1.8881465E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)

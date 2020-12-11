@@ -1362,6 +1362,8 @@
     <public type="raw" name="tsv_setup_monkey_tracking" id="NUM" />
     <public type="raw" name="voice_muted" id="NUM" />
     <public type="raw" name="voice_outlined" id="NUM" />
+    <public type="raw" name="voicechat_join" id="NUM" />
+    <public type="raw" name="voicechat_leave" id="NUM" />
     <public type="raw" name="voip_busy" id="NUM" />
     <public type="raw" name="voip_connecting" id="NUM" />
     <public type="raw" name="voip_end" id="NUM" />
@@ -4082,6 +4084,7 @@
     <public type="string" name="PermissionContacts" id="NUM" />
     <public type="string" name="PermissionDrawAboveOtherApps" id="NUM" />
     <public type="string" name="PermissionDrawAboveOtherAppsGroupCall" id="NUM" />
+    <public type="string" name="PermissionDrawAboveOtherAppsGroupCallTitle" id="NUM" />
     <public type="string" name="PermissionDrawAboveOtherAppsTitle" id="NUM" />
     <public type="string" name="PermissionNoAudio" id="NUM" />
     <public type="string" name="PermissionNoAudioVideo" id="NUM" />

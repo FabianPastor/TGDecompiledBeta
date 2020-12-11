@@ -727,7 +727,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r31 = r8
             r26.<init>(r28, r29, r30, r31)
             r0.commentTextView = r3
-            r2 = 2131627148(0x7f0e0c8c, float:1.8881552E38)
+            r2 = 2131627149(0x7f0e0c8d, float:1.8881554E38)
             java.lang.String r5 = "ShareComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r3.setHint(r2)

@@ -54,6 +54,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public int customViewHeight = -2;
     /* access modifiers changed from: private */
     public int customViewOffset = 20;
+    /* access modifiers changed from: private */
+    public boolean dimEnabled = true;
     private boolean dismissDialogByButtons = true;
     /* access modifiers changed from: private */
     public Runnable dismissRunnable = new Runnable() {
@@ -1070,8 +1072,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         if (this.progressViewStyle == 3) {
             layoutParams.width = -1;
         } else {
-            layoutParams.dimAmount = 0.6f;
-            layoutParams.flags |= 2;
+            if (this.dimEnabled) {
+                layoutParams.dimAmount = 0.6f;
+                layoutParams.flags |= 2;
+            }
             int i6 = AndroidUtilities.displaySize.x;
             this.lastScreenWidth = i6;
             int dp = i6 - AndroidUtilities.dp(48.0f);
@@ -1533,6 +1537,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
         public void setTopViewAspectRatio(float f) {
             float unused = this.alertDialog.aspectRatio = f;
+        }
+
+        public void setDimEnabled(boolean z) {
+            boolean unused = this.alertDialog.dimEnabled = z;
         }
     }
 }

@@ -133,6 +133,7 @@ public class RecyclerListView extends RecyclerView {
     /* access modifiers changed from: private */
     public boolean selfOnLayout;
     private int startSection;
+    private int topBottomSelectorRadius;
 
     public static abstract class FastScrollAdapter extends SelectionAdapter {
         public abstract String getLetter(int i);
@@ -1248,6 +1249,10 @@ public class RecyclerListView extends RecyclerView {
         this.selectorRadius = i;
     }
 
+    public void setTopBottomSelectorRadius(int i) {
+        this.topBottomSelectorRadius = i;
+    }
+
     public void setDrawSelectorBehind(boolean z) {
         this.drawSelectorBehind = z;
     }
@@ -1257,15 +1262,20 @@ public class RecyclerListView extends RecyclerView {
         if (drawable != null) {
             drawable.setCallback((Drawable.Callback) null);
         }
-        int i2 = this.selectorRadius;
+        int i2 = this.topBottomSelectorRadius;
         if (i2 > 0) {
-            this.selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(i2, 0, i, -16777216);
+            this.selectorDrawable = Theme.createRadSelectorDrawable(i, i2, i2);
         } else {
-            int i3 = this.selectorType;
-            if (i3 == 2) {
-                this.selectorDrawable = Theme.getSelectorDrawable(i, false);
+            int i3 = this.selectorRadius;
+            if (i3 > 0) {
+                this.selectorDrawable = Theme.createSimpleSelectorRoundRectDrawable(i3, 0, i, -16777216);
             } else {
-                this.selectorDrawable = Theme.createSelectorDrawable(i, i3);
+                int i4 = this.selectorType;
+                if (i4 == 2) {
+                    this.selectorDrawable = Theme.getSelectorDrawable(i, false);
+                } else {
+                    this.selectorDrawable = Theme.createSelectorDrawable(i, i4);
+                }
             }
         }
         this.selectorDrawable.setCallback(this);
@@ -1770,6 +1780,9 @@ public class RecyclerListView extends RecyclerView {
             int selectionBottomPadding = getAdapter() instanceof SelectionAdapter ? ((SelectionAdapter) getAdapter()).getSelectionBottomPadding(view) : 0;
             if (i != -1) {
                 this.selectorPosition = i;
+            }
+            if (this.topBottomSelectorRadius > 0 && getAdapter() != null) {
+                Theme.setMaskDrawableRad(this.selectorDrawable, i == 0 ? this.topBottomSelectorRadius : 0, i == getAdapter().getItemCount() + -2 ? this.topBottomSelectorRadius : 0);
             }
             this.selectorRect.set(view.getLeft(), view.getTop(), view.getRight(), view.getBottom() - selectionBottomPadding);
             boolean isEnabled = view.isEnabled();

@@ -8,9 +8,12 @@ import android.graphics.Shader;
 import android.os.SystemClock;
 import android.view.View;
 import java.util.ArrayList;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.VoIPService;
+import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.ui.ActionBar.Theme;
 
 public class FragmentContextViewWavesDrawable {
@@ -211,27 +214,32 @@ public class FragmentContextViewWavesDrawable {
     }
 
     public void updateState() {
-        VoIPService sharedInstance = VoIPService.getSharedInstance();
-        if (sharedInstance != null) {
-            int callState = sharedInstance.getCallState();
+        if (VoIPService.getSharedInstance() != null) {
+            int callState = VoIPService.getSharedInstance().getCallState();
             if (callState == 1 || callState == 2 || callState == 6 || callState == 5) {
                 setState(2);
-            } else {
-                setState(sharedInstance.isMicMute() ? 1 : 0);
+                return;
             }
+            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = VoIPService.getSharedInstance().groupCall.participants.get(AccountInstance.getInstance(VoIPService.getSharedInstance().getAccount()).getUserConfig().getClientUserId());
+            if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(VoIPService.getSharedInstance().getChat())) {
+                setState(VoIPService.getSharedInstance().isMicMute() ? 1 : 0);
+                return;
+            }
+            VoIPService.getSharedInstance().setMicMute(true, false, false);
+            setState(2);
         }
     }
 
     public static class WeavingState {
-        String blueKey1 = "voipgroup_topPannelBlue1";
-        String blueKey2 = "voipgroup_topPannelBlue2";
+        String blueKey1 = "voipgroup_topPanelBlue1";
+        String blueKey2 = "voipgroup_topPanelBlue2";
         int color1;
         int color2;
         /* access modifiers changed from: private */
         public final int currentState;
         private float duration;
-        String greenKey1 = "voipgroup_topPannelGreen1";
-        String greenKey2 = "voipgroup_topPannelGreen2";
+        String greenKey1 = "voipgroup_topPanelGreen1";
+        String greenKey2 = "voipgroup_topPanelGreen2";
         private final Matrix matrix = new Matrix();
         public Shader shader;
         private float startX;
@@ -329,7 +337,7 @@ public class FragmentContextViewWavesDrawable {
                 return;
             }
             paint.setShader((Shader) null);
-            paint.setColor(Theme.getColor("voipgroup_disabledButton"));
+            paint.setColor(Theme.getColor("voipgroup_topPanelGray"));
         }
     }
 }

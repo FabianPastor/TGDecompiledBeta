@@ -326,31 +326,33 @@ public class VoIPHelper {
         if (activity == null) {
             return;
         }
-        if (!(tLRPC$User == null && tLRPC$Chat == null) && SystemClock.elapsedRealtime() - lastCallTime >= 2000) {
-            lastCallTime = SystemClock.elapsedRealtime();
-            Intent intent = new Intent(activity, VoIPService.class);
-            if (tLRPC$User != null) {
-                intent.putExtra("user_id", tLRPC$User.id);
-            } else {
-                intent.putExtra("chat_id", tLRPC$Chat.id);
-                if (i != 0) {
-                    intent.putExtra("createGroupCall", i);
+        if (tLRPC$User != null || tLRPC$Chat != null) {
+            if (SystemClock.elapsedRealtime() - lastCallTime >= ((long) (tLRPC$Chat != null ? 200 : 2000))) {
+                lastCallTime = SystemClock.elapsedRealtime();
+                Intent intent = new Intent(activity, VoIPService.class);
+                if (tLRPC$User != null) {
+                    intent.putExtra("user_id", tLRPC$User.id);
+                } else {
+                    intent.putExtra("chat_id", tLRPC$Chat.id);
+                    if (i != 0) {
+                        intent.putExtra("createGroupCall", i);
+                    }
                 }
-            }
-            boolean z3 = true;
-            intent.putExtra("is_outgoing", true);
-            intent.putExtra("start_incall_activity", true);
-            int i2 = Build.VERSION.SDK_INT;
-            intent.putExtra("video_call", i2 >= 18 && z);
-            if (i2 < 18 || !z2) {
-                z3 = false;
-            }
-            intent.putExtra("can_video_call", z3);
-            intent.putExtra("account", UserConfig.selectedAccount);
-            try {
-                activity.startService(intent);
-            } catch (Throwable th) {
-                FileLog.e(th);
+                boolean z3 = true;
+                intent.putExtra("is_outgoing", true);
+                intent.putExtra("start_incall_activity", true);
+                int i2 = Build.VERSION.SDK_INT;
+                intent.putExtra("video_call", i2 >= 18 && z);
+                if (i2 < 18 || !z2) {
+                    z3 = false;
+                }
+                intent.putExtra("can_video_call", z3);
+                intent.putExtra("account", UserConfig.selectedAccount);
+                try {
+                    activity.startService(intent);
+                } catch (Throwable th) {
+                    FileLog.e(th);
+                }
             }
         }
     }

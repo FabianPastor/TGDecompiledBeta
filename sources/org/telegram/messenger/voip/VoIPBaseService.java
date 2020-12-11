@@ -274,6 +274,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected int spFailedID;
     protected int spPlayID;
     protected int spRingbackID;
+    protected int spVoiceChatEndId;
+    protected int spVoiceChatStartId;
     protected boolean speakerphoneStateToSet;
     protected ArrayList<StateListener> stateListeners = new ArrayList<>();
     protected boolean switchingCamera;
@@ -447,19 +449,26 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         this.stateListeners.remove(stateListener);
     }
 
-    public void setMicMute(boolean z, boolean z2) {
+    public void setMicMute(boolean z, boolean z2, boolean z3) {
+        boolean z4 = true;
+        boolean z5 = this.micMute != z;
         this.micMute = z;
-        this.unmutedByHold = !z && z2;
-        if (this.groupCall != null) {
+        if (this.groupCall != null && z3) {
             editCallMember(UserConfig.getInstance(this.currentAccount).getCurrentUser(), z);
         }
+        if (this.micMute || !z2) {
+            z4 = false;
+        }
+        this.unmutedByHold = z4;
         NativeInstance nativeInstance = this.tgVoip;
         if (nativeInstance != null) {
             nativeInstance.setMuteMicrophone(z);
         }
-        Iterator<StateListener> it = this.stateListeners.iterator();
-        while (it.hasNext()) {
-            it.next().onAudioSettingsChanged();
+        if (z5) {
+            Iterator<StateListener> it = this.stateListeners.iterator();
+            while (it.hasNext()) {
+                it.next().onAudioSettingsChanged();
+            }
         }
     }
 
@@ -977,6 +986,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             this.spFailedID = this.soundPool.load(this, NUM, 1);
             this.spEndId = this.soundPool.load(this, NUM, 1);
             this.spBusyId = this.soundPool.load(this, NUM, 1);
+            this.spVoiceChatEndId = this.soundPool.load(this, NUM, 1);
+            this.spVoiceChatStartId = this.soundPool.load(this, NUM, 1);
             audioManager.registerMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
             if (!z2 && (bluetoothAdapter = this.btAdapter) != null && bluetoothAdapter.isEnabled()) {
                 try {
@@ -1373,7 +1384,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     /* JADX WARNING: type inference failed for: r7v11 */
     /* JADX WARNING: type inference failed for: r7v12 */
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v4, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v4, types: [int, boolean] */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x00eb  */
     /* JADX WARNING: Removed duplicated region for block: B:32:0x0133  */
@@ -1392,9 +1403,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r4.setAction(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r1)
-            r6 = 2131627740(0x7f0e0edc, float:1.8882753E38)
+            r6 = 2131627741(0x7f0e0edd, float:1.8882755E38)
             java.lang.String r7 = "VoipInVideoCallBranding"
-            r8 = 2131627738(0x7f0e0eda, float:1.8882749E38)
+            r8 = 2131627739(0x7f0e0edb, float:1.888275E38)
             java.lang.String r9 = "VoipInCallBranding"
             if (r22 == 0) goto L_0x002b
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -1538,7 +1549,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             java.lang.String r8 = "call_id"
             r2.putExtra(r8, r6)
             java.lang.String r6 = "VoipDeclineCall"
-            r7 = 2131627688(0x7f0e0ea8, float:1.8882648E38)
+            r7 = 2131627689(0x7f0e0ea9, float:1.888265E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10 = 24
             if (r12 < r10) goto L_0x01a0
@@ -1573,7 +1584,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             long r13 = r18.getCallID()
             r9.putExtra(r8, r13)
             java.lang.String r8 = "VoipAnswerCall"
-            r13 = 2131627678(0x7f0e0e9e, float:1.8882627E38)
+            r13 = 2131627679(0x7f0e0e9f, float:1.888263E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r8, r13)
             if (r12 < r10) goto L_0x01f5
             android.text.SpannableString r10 = new android.text.SpannableString
@@ -1653,7 +1664,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             if (r22 == 0) goto L_0x02a8
-            r12 = 2131627741(0x7f0e0edd, float:1.8882755E38)
+            r12 = 2131627742(0x7f0e0ede, float:1.8882757E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r14 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1665,7 +1676,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             goto L_0x02be
         L_0x02a8:
             r14 = 0
-            r12 = 2131627739(0x7f0e0edb, float:1.888275E38)
+            r12 = 2131627740(0x7f0e0edc, float:1.8882753E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1679,11 +1690,11 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         L_0x02c2:
             if (r22 == 0) goto L_0x02ca
             r10 = r17
-            r0 = 2131627740(0x7f0e0edc, float:1.8882753E38)
+            r0 = 2131627741(0x7f0e0edd, float:1.8882755E38)
             goto L_0x02cf
         L_0x02ca:
             r10 = r16
-            r0 = 2131627738(0x7f0e0eda, float:1.8882749E38)
+            r0 = 2131627739(0x7f0e0edb, float:1.888275E38)
         L_0x02cf:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r10, r0)
             r7.setTextViewText(r11, r0)
@@ -1695,7 +1706,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             int r0 = r1.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
-            r10 = 2131627679(0x7f0e0e9f, float:1.888263E38)
+            r10 = 2131627680(0x7f0e0ea0, float:1.8882631E38)
             java.lang.Object[] r14 = new java.lang.Object[r14]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1717,7 +1728,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r13)
             r7.setTextViewText(r3, r8)
             r3 = 2131230792(0x7var_, float:1.8077647E38)
-            r8 = 2131627688(0x7f0e0ea8, float:1.8882648E38)
+            r8 = 2131627689(0x7f0e0ea9, float:1.888265E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r8)
             r7.setTextViewText(r3, r6)
             r3 = 2131230867(0x7var_, float:1.8077799E38)
@@ -1898,21 +1909,23 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 VoIPBaseService.this.lambda$callEnded$8$VoIPBaseService();
             }
         });
-        long j = 700;
-        if (this.needPlayEndSound && this.groupCall == null) {
+        int i = 700;
+        if (this.needPlayEndSound) {
             this.playingSound = true;
-            this.soundPool.play(this.spEndId, 1.0f, 1.0f, 0, 0, 1.0f);
-            AndroidUtilities.runOnUIThread(this.afterSoundRunnable, 700);
+            if (this.groupCall == null) {
+                this.soundPool.play(this.spEndId, 1.0f, 1.0f, 0, 0, 1.0f);
+            } else {
+                this.soundPool.play(this.spVoiceChatEndId, 0.8f, 0.8f, 0, 0, 1.0f);
+                i = 1000;
+            }
+            AndroidUtilities.runOnUIThread(this.afterSoundRunnable, (long) i);
         }
         Runnable runnable = this.timeoutRunnable;
         if (runnable != null) {
             AndroidUtilities.cancelRunOnUIThread(runnable);
             this.timeoutRunnable = null;
         }
-        if (!this.needPlayEndSound) {
-            j = 0;
-        }
-        endConnectionServiceCall(j);
+        endConnectionServiceCall(this.needPlayEndSound ? (long) i : 0);
         stopSelf();
     }
 

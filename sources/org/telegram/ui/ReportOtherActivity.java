@@ -126,7 +126,7 @@ public class ReportOtherActivity extends BaseFragment {
                     if (r4 == 0) goto L_0x00c5
                     org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
                     android.app.Activity r4 = r4.getParentActivity()
-                    r0 = 2131626907(0x7f0e0b9b, float:1.8881063E38)
+                    r0 = 2131626908(0x7f0e0b9c, float:1.8881065E38)
                     java.lang.String r1 = "ReportChatSent"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     r1 = 0

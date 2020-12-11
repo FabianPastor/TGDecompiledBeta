@@ -20,6 +20,9 @@ public class CheckBoxSquare extends View {
     private boolean isAlert;
     private boolean isChecked;
     private boolean isDisabled;
+    private String key1;
+    private String key2;
+    private String key3;
     private float progress;
     private RectF rectF;
 
@@ -28,10 +31,20 @@ public class CheckBoxSquare extends View {
         if (Theme.checkboxSquare_backgroundPaint == null) {
             Theme.createCommonResources(context);
         }
+        boolean z2 = this.isAlert;
+        this.key1 = z2 ? "dialogCheckboxSquareUnchecked" : "checkboxSquareUnchecked";
+        this.key2 = z2 ? "dialogCheckboxSquareBackground" : "checkboxSquareBackground";
+        this.key3 = z2 ? "dialogCheckboxSquareCheck" : "checkboxSquareCheck";
         this.rectF = new RectF();
         this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp(18.0f), AndroidUtilities.dp(18.0f), Bitmap.Config.ARGB_4444);
         this.drawCanvas = new Canvas(this.drawBitmap);
         this.isAlert = z;
+    }
+
+    public void setColors(String str, String str2, String str3) {
+        this.key1 = str;
+        this.key2 = str2;
+        this.key3 = str3;
     }
 
     @Keep
@@ -106,8 +119,8 @@ public class CheckBoxSquare extends View {
         float f;
         float f2;
         if (getVisibility() == 0) {
-            int color = Theme.getColor(this.isAlert ? "dialogCheckboxSquareUnchecked" : "checkboxSquareUnchecked");
-            int color2 = Theme.getColor(this.isAlert ? "dialogCheckboxSquareBackground" : "checkboxSquareBackground");
+            int color = Theme.getColor(this.key1);
+            int color2 = Theme.getColor(this.key2);
             float f3 = this.progress;
             if (f3 <= 0.5f) {
                 f = f3 / 0.5f;
@@ -131,7 +144,7 @@ public class CheckBoxSquare extends View {
                 this.drawCanvas.drawRect(this.rectF, Theme.checkboxSquare_eraserPaint);
             }
             if (this.progress > 0.5f) {
-                Theme.checkboxSquare_checkPaint.setColor(Theme.getColor(this.isAlert ? "dialogCheckboxSquareCheck" : "checkboxSquareCheck"));
+                Theme.checkboxSquare_checkPaint.setColor(Theme.getColor(this.key3));
                 float f4 = 1.0f - f2;
                 this.drawCanvas.drawLine((float) AndroidUtilities.dp(7.0f), (float) ((int) AndroidUtilities.dpf2(13.0f)), (float) ((int) (((float) AndroidUtilities.dp(7.0f)) - (((float) AndroidUtilities.dp(3.0f)) * f4))), (float) ((int) (AndroidUtilities.dpf2(13.0f) - (((float) AndroidUtilities.dp(3.0f)) * f4))), Theme.checkboxSquare_checkPaint);
                 this.drawCanvas.drawLine((float) ((int) AndroidUtilities.dpf2(7.0f)), (float) ((int) AndroidUtilities.dpf2(13.0f)), (float) ((int) (AndroidUtilities.dpf2(7.0f) + (((float) AndroidUtilities.dp(7.0f)) * f4))), (float) ((int) (AndroidUtilities.dpf2(13.0f) - (((float) AndroidUtilities.dp(7.0f)) * f4))), Theme.checkboxSquare_checkPaint);

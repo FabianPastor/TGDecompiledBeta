@@ -119,8 +119,6 @@ public class GroupVoipInviteAlert extends BottomSheet {
     private SparseArray<TLObject> participantsMap;
     /* access modifiers changed from: private */
     public int participantsStartRow;
-    /* access modifiers changed from: private */
-    public RadialProgressView progressBar;
     private FrameLayout progressLayout;
     /* access modifiers changed from: private */
     public RectF rect = new RectF();
@@ -252,7 +250,6 @@ public class GroupVoipInviteAlert extends BottomSheet {
                             GroupVoipInviteAlert.this.showItemsAnimated(0);
                         }
                     }
-                    GroupVoipInviteAlert.this.progressBar.setVisibility(8);
                     GroupVoipInviteAlert.this.flickerLoadingView.setVisibility(0);
                 }
             });
@@ -380,14 +377,6 @@ public class GroupVoipInviteAlert extends BottomSheet {
             android.widget.FrameLayout r3 = r0.progressLayout
             org.telegram.ui.Components.FlickerLoadingView r9 = r0.flickerLoadingView
             r3.addView(r9)
-            org.telegram.ui.Components.RadialProgressView r3 = new org.telegram.ui.Components.RadialProgressView
-            r3.<init>(r1)
-            r0.progressBar = r3
-            android.widget.FrameLayout r9 = r0.progressLayout
-            r10 = -2
-            r11 = 17
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r10, r11)
-            r9.addView(r3, r10)
             android.view.ViewGroup r3 = r0.containerView
             android.widget.FrameLayout r9 = r0.progressLayout
             r10 = -1
@@ -411,7 +400,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
             org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
             android.widget.TextView r3 = r3.subtitle
             java.lang.String r9 = "SearchEmptyViewFilteredSubtitle2"
-            r10 = 2131627003(0x7f0e0bfb, float:1.8881258E38)
+            r10 = 2131627004(0x7f0e0bfc, float:1.888126E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r3.setText(r9)
             org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView

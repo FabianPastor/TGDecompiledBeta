@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 4.1.1
 
 Name: AndroidManifest.xml
-SHA1-Digest: 5wHnn6KoRHuVcM5XbnNZE09NBEY=
+SHA1-Digest: QS9Ik8eiITqaOIu1UP/JbaU/wNU=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -105,7 +105,7 @@ Name: assets/countries.txt
 SHA1-Digest: WiMP8kBFstLoYoEKP08BGOiStGY=
 
 Name: assets/darkblue.attheme
-SHA1-Digest: 2MpTBwWQbEObAn+8qOHijJLRBis=
+SHA1-Digest: OrS4tUdfeqlftxiNzQacXkT3glE=
 
 Name: assets/day.attheme
 SHA1-Digest: 81THxTPgjo7TS9R0QkbBKBGuG4o=
@@ -9870,7 +9870,7 @@ Name: assets/fonts/rmono.ttf
 SHA1-Digest: aaZcK3l9L6EktMcJCX52G3hXoDU=
 
 Name: assets/night.attheme
-SHA1-Digest: 9soAN2Vta+8Wfkn79GPYsO5xLX8=
+SHA1-Digest: t1Dx85f/cuIKdeF7vxRaobG/1xo=
 
 Name: assets/secureid_ocr_nn.dat
 SHA1-Digest: baCkFlis9uqkjrzfYyVFGLmb0x8=
@@ -9879,13 +9879,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: +0XIkAhD4fgeT2kdV/vTSSvLsqU=
+SHA1-Digest: jA434/tNGHGDAQyxRwcTBoC8D8w=
 
 Name: classes2.dex
 SHA1-Digest: GQNky92ExRcYASorLeQ9ZA9MVVY=
 
 Name: classes3.dex
-SHA1-Digest: Xfbof0QlWaYhS6uKzBIzcGAjeM4=
+SHA1-Digest: hNN4szq3XualV+j19zhFY+aOTV0=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -9939,16 +9939,16 @@ Name: isoparser-default.properties
 SHA1-Digest: 6/KBb+rGX/5O2/xNP3HN6XIg3lI=
 
 Name: lib/arm64-v8a/libtmessages.34.so
-SHA1-Digest: y52xq0hWdhj/u64UUhATLi/lX4c=
+SHA1-Digest: xRQUvN5v3WyN4xPzp1MCE2h3AHg=
 
 Name: lib/armeabi-v7a/libtmessages.34.so
-SHA1-Digest: Audz4J2XUO1jnf8N2UsRyFpNlOU=
+SHA1-Digest: UtshOk66lvMKxpUJSAKkfpsp6kk=
 
 Name: lib/x86/libtmessages.34.so
-SHA1-Digest: Q2j+mrh3Glf5/Zj5raU39vnq7Ao=
+SHA1-Digest: fZih2HcJ7MberN2EH5ZyUYQtRbo=
 
 Name: lib/x86_64/libtmessages.34.so
-SHA1-Digest: DBnOiX/LgGLiKPYD83oU1qvykBA=
+SHA1-Digest: KRQ2uFBTlyNNUfJbDglJwoBEo2k=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: /3UPL+65RV1bQ1opEtJnBMah8ZI=
@@ -20284,6 +20284,12 @@ SHA1-Digest: r1prQRNVCbClvPnSJGKpXVaqRKE=
 Name: res/raw/voice_outlined.json
 SHA1-Digest: VrQNytRnRyiogm/V0QjeD5Hf+TI=
 
+Name: res/raw/voicechat_join.wav
+SHA1-Digest: 3uPZbQ+zdFqPOrEeNDAnPyzGxRY=
+
+Name: res/raw/voicechat_leave.wav
+SHA1-Digest: Ij1OLkr27d43oSykihrLFaNLloY=
+
 Name: res/raw/voip_busy.mp3
 SHA1-Digest: QwkeKUlMkH+BUX477YpkssJQ6v4=
 
@@ -20333,7 +20339,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: mNbfAADvnM6BikUihMHrWpqV3s0=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: wsQ4uPPPQoHoSN9vuU4T09jfpwI=
+SHA1-Digest: i+6jrKfqB1QssCA8yN49+a3Icdo=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: vNxeRePtnY64Hxd7k8wXLkWhqV0=
@@ -20351,7 +20357,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: FRsGzr5BmLCQKFkAJI8icuboL8k=
+SHA1-Digest: 4n25L8osQd0fEPqJgz3/dgpHfrc=
 
 Name: transport-api.properties
 SHA1-Digest: Jz4dPszpGdGJqctaJoPe9Lpu55k=

@@ -1483,7 +1483,8 @@ public class FilterTabsView extends FrameLayout {
                     if (tabView.animateChange) {
                         ValueAnimator valueAnimator = tabView.changeAnimator;
                         if (valueAnimator != null) {
-                            valueAnimator.cancel();
+                            valueAnimator.removeAllListeners();
+                            tabView.changeAnimator.cancel();
                         }
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                         ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -1501,7 +1502,9 @@ public class FilterTabsView extends FrameLayout {
                                 TabView tabView2 = tabView;
                                 tabView2.animateTextX = false;
                                 boolean unused2 = tabView2.animateTabWidth = false;
-                                tabView.changeAnimator = null;
+                                TabView tabView3 = tabView;
+                                tabView3.changeAnimator = null;
+                                tabView3.invalidate();
                             }
                         });
                         tabView.changeAnimator = ofFloat;

@@ -119,6 +119,7 @@ import org.telegram.tgnet.TLRPC$TL_keyboardButtonUrl;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonUrlAuth;
 import org.telegram.tgnet.TLRPC$TL_message;
 import org.telegram.tgnet.TLRPC$TL_messageMediaDocument;
+import org.telegram.tgnet.TLRPC$TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$TL_photo;
@@ -5484,11 +5485,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             CharSequence[] charSequenceArr = {this.messageEditText.getText()};
             ArrayList<TLRPC$MessageEntity> entities = MediaDataController.getInstance(this.currentAccount).getEntities(charSequenceArr, supportsSendingNewEntities());
-            MessageObject messageObject = this.editingMessageObject;
-            messageObject.editingMessage = charSequenceArr[0];
-            messageObject.editingMessageEntities = entities;
-            messageObject.editingMessageSearchWebPage = this.messageWebPageSearch;
-            SendMessagesHelper.getInstance(this.currentAccount).editMessage(this.editingMessageObject, (TLRPC$TL_photo) null, (VideoEditedInfo) null, (TLRPC$TL_document) null, (String) null, (HashMap<String, String>) null, false, (Object) null);
+            if (!TextUtils.equals(charSequenceArr[0], this.editingMessageObject.messageText) || ((entities != null && !entities.isEmpty()) || (this.editingMessageObject.messageOwner.media instanceof TLRPC$TL_messageMediaWebPage))) {
+                MessageObject messageObject = this.editingMessageObject;
+                messageObject.editingMessage = charSequenceArr[0];
+                messageObject.editingMessageEntities = entities;
+                messageObject.editingMessageSearchWebPage = this.messageWebPageSearch;
+                SendMessagesHelper.getInstance(this.currentAccount).editMessage(this.editingMessageObject, (TLRPC$TL_photo) null, (VideoEditedInfo) null, (TLRPC$TL_document) null, (String) null, (HashMap<String, String>) null, false, (Object) null);
+            }
             setEditingMessageObject((MessageObject) null, false);
         }
     }

@@ -84,14 +84,18 @@ public class GroupCallInvitedCell extends FrameLayout {
         return this.nameTextView.getText();
     }
 
-    public void setData(int i, Integer num, boolean z) {
-        this.needDivider = z;
+    public void setData(int i, Integer num) {
         TLRPC$User user = MessagesController.getInstance(i).getUser(num);
         this.currentUser = user;
         this.avatarDrawable.setInfo(user);
         this.nameTextView.setText(UserObject.getUserName(this.currentUser));
         this.avatarImageView.getImageReceiver().setCurrentAccount(i);
         this.avatarImageView.setImage(ImageLocation.getForUser(this.currentUser, false), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
+    }
+
+    public void setDrawDivider(boolean z) {
+        this.needDivider = z;
+        invalidate();
     }
 
     public void setGrayIconColor(String str, int i) {

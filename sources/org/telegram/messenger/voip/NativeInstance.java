@@ -213,28 +213,6 @@ public class NativeInstance {
         this.audioLevelsCallback.run(iArr, fArr);
     }
 
-    private void onMyAudioLevelUpdated(float f) {
-        AndroidUtilities.runOnUIThread(new Runnable(f) {
-            public final /* synthetic */ float f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                NativeInstance.this.lambda$onMyAudioLevelUpdated$2$NativeInstance(this.f$1);
-            }
-        });
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$onMyAudioLevelUpdated$2 */
-    public /* synthetic */ void lambda$onMyAudioLevelUpdated$2$NativeInstance(float f) {
-        float[] fArr = this.temp;
-        fArr[0] = f;
-        this.audioLevelsCallback.run((int[]) null, fArr);
-    }
-
     private void onEmitJoinPayload(String str, String str2, Instance.Fingerprint[] fingerprintArr, int i) {
         try {
             JSONObject jSONObject = new JSONObject();
@@ -260,7 +238,7 @@ public class NativeInstance {
                 }
 
                 public final void run() {
-                    NativeInstance.this.lambda$onEmitJoinPayload$3$NativeInstance(this.f$1, this.f$2);
+                    NativeInstance.this.lambda$onEmitJoinPayload$2$NativeInstance(this.f$1, this.f$2);
                 }
             });
         } catch (Exception e) {
@@ -269,8 +247,8 @@ public class NativeInstance {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onEmitJoinPayload$3 */
-    public /* synthetic */ void lambda$onEmitJoinPayload$3$NativeInstance(int i, JSONObject jSONObject) {
+    /* renamed from: lambda$onEmitJoinPayload$2 */
+    public /* synthetic */ void lambda$onEmitJoinPayload$2$NativeInstance(int i, JSONObject jSONObject) {
         this.payloadCallback.run(i, jSONObject.toString());
     }
 

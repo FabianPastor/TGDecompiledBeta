@@ -1495,6 +1495,8 @@ public final class R {
         public static final int tsv_setup_monkey_tracking = NUM;
         public static final int voice_muted = NUM;
         public static final int voice_outlined = NUM;
+        public static final int voicechat_join = NUM;
+        public static final int voicechat_leave = NUM;
         public static final int voip_busy = NUM;
         public static final int voip_connecting = NUM;
         public static final int voip_end = NUM;
@@ -4221,6 +4223,7 @@ public final class R {
         public static final int PermissionContacts = NUM;
         public static final int PermissionDrawAboveOtherApps = NUM;
         public static final int PermissionDrawAboveOtherAppsGroupCall = NUM;
+        public static final int PermissionDrawAboveOtherAppsGroupCallTitle = NUM;
         public static final int PermissionDrawAboveOtherAppsTitle = NUM;
         public static final int PermissionNoAudio = NUM;
         public static final int PermissionNoAudioVideo = NUM;
