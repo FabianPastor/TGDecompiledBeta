@@ -1330,10 +1330,14 @@
     <public type="raw" name="filters" id="NUM" />
     <public type="raw" name="group_pip_delete_icon" id="NUM" />
     <public type="raw" name="ic_admin" id="NUM" />
+    <public type="raw" name="ic_ban" id="NUM" />
     <public type="raw" name="ic_delete" id="NUM" />
     <public type="raw" name="ic_download" id="NUM" />
     <public type="raw" name="ic_mute" id="NUM" />
     <public type="raw" name="ic_pin" id="NUM" />
+    <public type="raw" name="ic_save_to_gallery" id="NUM" />
+    <public type="raw" name="ic_save_to_music" id="NUM" />
+    <public type="raw" name="ic_unban" id="NUM" />
     <public type="raw" name="ic_unmute" id="NUM" />
     <public type="raw" name="ic_unpin" id="NUM" />
     <public type="raw" name="mapstyle_night" id="NUM" />
@@ -3816,6 +3820,12 @@
     <public type="string" name="PaintOutlined" id="NUM" />
     <public type="string" name="PaintPen" id="NUM" />
     <public type="string" name="PaintRegular" id="NUM" />
+    <public type="string" name="Participants_few" id="NUM" />
+    <public type="string" name="Participants_many" id="NUM" />
+    <public type="string" name="Participants_one" id="NUM" />
+    <public type="string" name="Participants_other" id="NUM" />
+    <public type="string" name="Participants_two" id="NUM" />
+    <public type="string" name="Participants_zero" id="NUM" />
     <public type="string" name="Passcode" id="NUM" />
     <public type="string" name="PasscodeDoNotMatch" id="NUM" />
     <public type="string" name="PasscodePIN" id="NUM" />
@@ -4996,6 +5006,7 @@
     <public type="string" name="UserBlocked" id="NUM" />
     <public type="string" name="UserChannelTooMuchJoin" id="NUM" />
     <public type="string" name="UserRemovedBy" id="NUM" />
+    <public type="string" name="UserRemovedFromChatHint" id="NUM" />
     <public type="string" name="UserRestricted" id="NUM" />
     <public type="string" name="UserRestrictions" id="NUM" />
     <public type="string" name="UserRestrictionsApplyChanges" id="NUM" />

@@ -66,11 +66,11 @@ public class NotificationsCheckCell extends FrameLayout {
         if (z2) {
             f = 80.0f;
         } else {
-            f = (float) (z ? 64 : 23);
+            f = (float) (z ? 64 : i);
         }
         float f5 = (float) (((this.currentHeight - 70) / 2) + 13);
         if (z2) {
-            f2 = (float) (z ? 64 : 23);
+            f2 = (float) (z ? 64 : i);
         } else {
             f2 = 80.0f;
         }
@@ -91,11 +91,11 @@ public class NotificationsCheckCell extends FrameLayout {
         if (z3) {
             f3 = 80.0f;
         } else {
-            f3 = (float) (z ? 64 : 23);
+            f3 = (float) (z ? 64 : i);
         }
         float f6 = (float) (((this.currentHeight - 70) / 2) + 38);
         if (z3) {
-            f4 = (float) (!z ? 23 : i5);
+            f4 = (float) (!z ? i : i5);
         }
         addView(textView5, LayoutHelper.createFrame(-2, -2.0f, i6, f3, f6, f4, 0.0f));
         Switch switchR = new Switch(context2);

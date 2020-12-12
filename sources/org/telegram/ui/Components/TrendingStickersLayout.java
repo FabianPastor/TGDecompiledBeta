@@ -691,7 +691,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 r0 = 5
                 if (r4 == r0) goto L_0x0013
                 r3 = 0
-                goto L_0x0063
+                goto L_0x0064
             L_0x0013:
                 org.telegram.ui.Cells.FeaturedStickerSetCell2 r4 = new org.telegram.ui.Cells.FeaturedStickerSetCell2
                 android.content.Context r0 = r2.context
@@ -701,17 +701,17 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 r4.setAddOnClickListener(r0)
                 org.telegram.ui.Components.BackupImageView r0 = r4.getImageView()
                 r0.setLayerNum(r3)
-                goto L_0x0062
+                goto L_0x0063
             L_0x002a:
                 org.telegram.ui.Cells.GraySectionCell r3 = new org.telegram.ui.Cells.GraySectionCell
                 android.content.Context r4 = r2.context
                 r3.<init>(r4)
-                goto L_0x0063
+                goto L_0x0064
             L_0x0032:
                 android.view.View r3 = new android.view.View
                 android.content.Context r4 = r2.context
                 r3.<init>(r4)
-                goto L_0x0063
+                goto L_0x0064
             L_0x003a:
                 org.telegram.ui.Cells.FeaturedStickerSetInfoCell r3 = new org.telegram.ui.Cells.FeaturedStickerSetInfoCell
                 android.content.Context r4 = r2.context
@@ -720,21 +720,22 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 org.telegram.ui.Components.-$$Lambda$TrendingStickersLayout$TrendingStickersAdapter$5h68zIM4r8Fh3fz7SJKnXtEBrps r4 = new org.telegram.ui.Components.-$$Lambda$TrendingStickersLayout$TrendingStickersAdapter$5h68zIM4r8Fh3fz7SJKnXtEBrps
                 r4.<init>()
                 r3.setAddOnClickListener(r4)
-                goto L_0x0063
+                goto L_0x0064
             L_0x004c:
                 org.telegram.ui.Cells.EmptyCell r3 = new org.telegram.ui.Cells.EmptyCell
                 android.content.Context r4 = r2.context
                 r3.<init>(r4)
-                goto L_0x0063
+                goto L_0x0064
             L_0x0054:
                 org.telegram.ui.Components.TrendingStickersLayout$TrendingStickersAdapter$1 r4 = new org.telegram.ui.Components.TrendingStickersLayout$TrendingStickersAdapter$1
                 android.content.Context r0 = r2.context
-                r4.<init>(r2, r0)
+                r1 = 0
+                r4.<init>(r2, r0, r1)
                 org.telegram.ui.Components.BackupImageView r0 = r4.getImageView()
                 r0.setLayerNum(r3)
-            L_0x0062:
-                r3 = r4
             L_0x0063:
+                r3 = r4
+            L_0x0064:
                 org.telegram.ui.Components.RecyclerListView$Holder r4 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r4.<init>(r3)
                 return r4

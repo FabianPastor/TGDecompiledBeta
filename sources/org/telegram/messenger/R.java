@@ -1463,10 +1463,14 @@ public final class R {
         public static final int filters = NUM;
         public static final int group_pip_delete_icon = NUM;
         public static final int ic_admin = NUM;
+        public static final int ic_ban = NUM;
         public static final int ic_delete = NUM;
         public static final int ic_download = NUM;
         public static final int ic_mute = NUM;
         public static final int ic_pin = NUM;
+        public static final int ic_save_to_gallery = NUM;
+        public static final int ic_save_to_music = NUM;
+        public static final int ic_unban = NUM;
         public static final int ic_unmute = NUM;
         public static final int ic_unpin = NUM;
         public static final int mapstyle_night = NUM;
@@ -3955,6 +3959,12 @@ public final class R {
         public static final int PaintOutlined = NUM;
         public static final int PaintPen = NUM;
         public static final int PaintRegular = NUM;
+        public static final int Participants_few = NUM;
+        public static final int Participants_many = NUM;
+        public static final int Participants_one = NUM;
+        public static final int Participants_other = NUM;
+        public static final int Participants_two = NUM;
+        public static final int Participants_zero = NUM;
         public static final int Passcode = NUM;
         public static final int PasscodeDoNotMatch = NUM;
         public static final int PasscodePIN = NUM;
@@ -5135,6 +5145,7 @@ public final class R {
         public static final int UserBlocked = NUM;
         public static final int UserChannelTooMuchJoin = NUM;
         public static final int UserRemovedBy = NUM;
+        public static final int UserRemovedFromChatHint = NUM;
         public static final int UserRestricted = NUM;
         public static final int UserRestrictions = NUM;
         public static final int UserRestrictionsApplyChanges = NUM;

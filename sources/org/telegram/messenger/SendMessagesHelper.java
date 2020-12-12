@@ -12158,17 +12158,17 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r0.id = r2
             long r1 = r1.access_hash
             r0.access_hash = r1
-            goto L_0x0620
+            goto L_0x0622
         L_0x02e8:
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument
-            if (r3 == 0) goto L_0x05d8
+            if (r3 == 0) goto L_0x05da
             org.telegram.tgnet.TLRPC$Document r3 = r2.document
-            if (r3 == 0) goto L_0x05d8
+            if (r3 == 0) goto L_0x05da
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r9.media
             boolean r5 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument
-            if (r5 == 0) goto L_0x05d8
+            if (r5 == 0) goto L_0x05da
             org.telegram.tgnet.TLRPC$Document r3 = r3.document
-            if (r3 == 0) goto L_0x05d8
+            if (r3 == 0) goto L_0x05da
             int r2 = r2.ttl_seconds
             if (r2 != 0) goto L_0x039b
             org.telegram.messenger.VideoEditedInfo r2 = r0.videoEditedInfo
@@ -12282,7 +12282,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r6.append(r4)
             java.lang.String r4 = r6.toString()
             boolean r6 = r5.equals(r4)
-            if (r6 != 0) goto L_0x047a
+            if (r6 != 0) goto L_0x047c
             java.io.File r6 = new java.io.File
             r10 = 4
             java.io.File r11 = org.telegram.messenger.FileLoader.getDirectory(r10)
@@ -12310,32 +12310,33 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r2.location = r1
             int r1 = r3.size
             r2.size = r1
-            goto L_0x047a
+            goto L_0x047c
         L_0x0451:
-            if (r2 == 0) goto L_0x0460
+            if (r3 == 0) goto L_0x0462
+            if (r2 == 0) goto L_0x0462
             boolean r1 = org.telegram.messenger.MessageObject.isStickerMessage(r18)
-            if (r1 == 0) goto L_0x0460
+            if (r1 == 0) goto L_0x0462
             org.telegram.tgnet.TLRPC$FileLocation r1 = r2.location
-            if (r1 == 0) goto L_0x0460
+            if (r1 == 0) goto L_0x0462
             r3.location = r1
-            goto L_0x047a
-        L_0x0460:
-            if (r2 == 0) goto L_0x046e
-            if (r2 == 0) goto L_0x046a
+            goto L_0x047c
+        L_0x0462:
+            if (r2 == 0) goto L_0x0470
+            if (r2 == 0) goto L_0x046c
             org.telegram.tgnet.TLRPC$FileLocation r1 = r2.location
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable
-            if (r1 != 0) goto L_0x046e
-        L_0x046a:
+            if (r1 != 0) goto L_0x0470
+        L_0x046c:
             boolean r1 = r2 instanceof org.telegram.tgnet.TLRPC$TL_photoSizeEmpty
-            if (r1 == 0) goto L_0x047a
-        L_0x046e:
+            if (r1 == 0) goto L_0x047c
+        L_0x0470:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r9.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r7.media
             org.telegram.tgnet.TLRPC$Document r2 = r2.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r2.thumbs
             r1.thumbs = r2
-        L_0x047a:
+        L_0x047c:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r9.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r7.media
@@ -12347,57 +12348,57 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             long r2 = r2.access_hash
             r1.access_hash = r2
             r1 = 0
-        L_0x048f:
+        L_0x0491:
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r9.media
             org.telegram.tgnet.TLRPC$Document r2 = r2.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r2 = r2.attributes
             int r2 = r2.size()
-            if (r1 >= r2) goto L_0x04b1
+            if (r1 >= r2) goto L_0x04b3
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r9.media
             org.telegram.tgnet.TLRPC$Document r2 = r2.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r2 = r2.attributes
             java.lang.Object r2 = r2.get(r1)
             org.telegram.tgnet.TLRPC$DocumentAttribute r2 = (org.telegram.tgnet.TLRPC$DocumentAttribute) r2
             boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeAudio
-            if (r3 == 0) goto L_0x04ae
+            if (r3 == 0) goto L_0x04b0
             byte[] r3 = r2.waveform
-            goto L_0x04b2
-        L_0x04ae:
+            goto L_0x04b4
+        L_0x04b0:
             int r1 = r1 + 1
-            goto L_0x048f
-        L_0x04b1:
+            goto L_0x0491
+        L_0x04b3:
             r3 = 0
-        L_0x04b2:
+        L_0x04b4:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r9.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r7.media
             org.telegram.tgnet.TLRPC$Document r2 = r2.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r2 = r2.attributes
             r1.attributes = r2
-            if (r3 == 0) goto L_0x04e8
+            if (r3 == 0) goto L_0x04ea
             r1 = 0
-        L_0x04c1:
+        L_0x04c3:
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r9.media
             org.telegram.tgnet.TLRPC$Document r2 = r2.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r2 = r2.attributes
             int r2 = r2.size()
-            if (r1 >= r2) goto L_0x04e8
+            if (r1 >= r2) goto L_0x04ea
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r9.media
             org.telegram.tgnet.TLRPC$Document r2 = r2.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r2 = r2.attributes
             java.lang.Object r2 = r2.get(r1)
             org.telegram.tgnet.TLRPC$DocumentAttribute r2 = (org.telegram.tgnet.TLRPC$DocumentAttribute) r2
             boolean r4 = r2 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeAudio
-            if (r4 == 0) goto L_0x04e5
+            if (r4 == 0) goto L_0x04e7
             r2.waveform = r3
             int r4 = r2.flags
             r5 = 4
             r4 = r4 | r5
             r2.flags = r4
-        L_0x04e5:
+        L_0x04e7:
             int r1 = r1 + 1
-            goto L_0x04c1
-        L_0x04e8:
+            goto L_0x04c3
+        L_0x04ea:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r9.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r7.media
@@ -12409,41 +12410,41 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             int r1 = r7.flags
             r2 = 4
             r1 = r1 & r2
-            if (r1 != 0) goto L_0x0556
+            if (r1 != 0) goto L_0x0558
             boolean r1 = org.telegram.messenger.MessageObject.isOut(r18)
-            if (r1 == 0) goto L_0x0556
+            if (r1 == 0) goto L_0x0558
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             boolean r1 = org.telegram.messenger.MessageObject.isNewGifDocument((org.telegram.tgnet.TLRPC$Document) r1)
-            if (r1 == 0) goto L_0x0530
+            if (r1 == 0) goto L_0x0532
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             boolean r1 = org.telegram.messenger.MessageObject.isDocumentHasAttachedStickers(r1)
-            if (r1 == 0) goto L_0x051f
+            if (r1 == 0) goto L_0x0521
             org.telegram.messenger.MessagesController r1 = r16.getMessagesController()
             boolean r1 = r1.saveGifsWithStickers
-            goto L_0x0520
-        L_0x051f:
+            goto L_0x0522
+        L_0x0521:
             r1 = 1
-        L_0x0520:
-            if (r1 == 0) goto L_0x0556
+        L_0x0522:
+            if (r1 == 0) goto L_0x0558
             org.telegram.messenger.MediaDataController r1 = r16.getMediaDataController()
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r7.media
             org.telegram.tgnet.TLRPC$Document r2 = r2.document
             int r3 = r7.date
             r1.addRecentGif(r2, r3)
-            goto L_0x0556
-        L_0x0530:
+            goto L_0x0558
+        L_0x0532:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             boolean r1 = org.telegram.messenger.MessageObject.isStickerDocument(r1)
-            if (r1 != 0) goto L_0x0545
+            if (r1 != 0) goto L_0x0547
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             r2 = 1
             boolean r1 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r1, r2)
-            if (r1 == 0) goto L_0x0556
-        L_0x0545:
+            if (r1 == 0) goto L_0x0558
+        L_0x0547:
             org.telegram.messenger.MediaDataController r1 = r16.getMediaDataController()
             r2 = 0
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r7.media
@@ -12452,88 +12453,88 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r6 = 0
             r3 = r18
             r1.addRecentSticker(r2, r3, r4, r5, r6)
-        L_0x0556:
+        L_0x0558:
             java.lang.String r1 = r9.attachPath
-            if (r1 == 0) goto L_0x05cf
+            if (r1 == 0) goto L_0x05d1
             r2 = 4
             java.io.File r2 = org.telegram.messenger.FileLoader.getDirectory(r2)
             java.lang.String r2 = r2.getAbsolutePath()
             boolean r1 = r1.startsWith(r2)
-            if (r1 == 0) goto L_0x05cf
+            if (r1 == 0) goto L_0x05d1
             java.io.File r1 = new java.io.File
             java.lang.String r2 = r9.attachPath
             r1.<init>(r2)
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r7.media
             org.telegram.tgnet.TLRPC$Document r3 = r2.document
             int r2 = r2.ttl_seconds
-            if (r2 == 0) goto L_0x057a
+            if (r2 == 0) goto L_0x057c
             r2 = 1
-            goto L_0x057b
-        L_0x057a:
+            goto L_0x057d
+        L_0x057c:
             r2 = 0
-        L_0x057b:
+        L_0x057d:
             java.io.File r2 = org.telegram.messenger.FileLoader.getPathToAttach(r3, r2)
             boolean r3 = r1.renameTo(r2)
-            if (r3 != 0) goto L_0x059f
+            if (r3 != 0) goto L_0x05a1
             boolean r1 = r1.exists()
-            if (r1 == 0) goto L_0x0590
+            if (r1 == 0) goto L_0x0592
             java.lang.String r1 = r9.attachPath
             r7.attachPath = r1
-            goto L_0x0593
-        L_0x0590:
+            goto L_0x0595
+        L_0x0592:
             r1 = 0
             r0.attachPathExists = r1
-        L_0x0593:
+        L_0x0595:
             boolean r1 = r2.exists()
             r0.mediaExists = r1
             java.lang.String r0 = r9.message
             r7.message = r0
-            goto L_0x0620
-        L_0x059f:
+            goto L_0x0622
+        L_0x05a1:
             boolean r1 = org.telegram.messenger.MessageObject.isVideoMessage(r18)
-            if (r1 == 0) goto L_0x05aa
+            if (r1 == 0) goto L_0x05ac
             r1 = 1
             r0.attachPathExists = r1
-            goto L_0x0620
-        L_0x05aa:
+            goto L_0x0622
+        L_0x05ac:
             boolean r1 = r0.attachPathExists
             r0.mediaExists = r1
             r1 = 0
             r0.attachPathExists = r1
             java.lang.String r0 = ""
             r9.attachPath = r0
-            if (r8 == 0) goto L_0x0620
+            if (r8 == 0) goto L_0x0622
             java.lang.String r0 = "http"
             boolean r0 = r8.startsWith(r0)
-            if (r0 == 0) goto L_0x0620
+            if (r0 == 0) goto L_0x0622
             org.telegram.messenger.MessagesStorage r0 = r16.getMessagesStorage()
             java.lang.String r1 = r2.toString()
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r9.media
             org.telegram.tgnet.TLRPC$Document r2 = r2.document
             r0.addRecentLocalFile(r8, r1, r2)
-            goto L_0x0620
-        L_0x05cf:
+            goto L_0x0622
+        L_0x05d1:
             java.lang.String r0 = r9.attachPath
             r7.attachPath = r0
             java.lang.String r0 = r9.message
             r7.message = r0
-            goto L_0x0620
-        L_0x05d8:
+            goto L_0x0622
+        L_0x05da:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaContact
-            if (r0 == 0) goto L_0x05e5
+            if (r0 == 0) goto L_0x05e7
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r9.media
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaContact
-            if (r0 == 0) goto L_0x05e5
+            if (r0 == 0) goto L_0x05e7
             r9.media = r2
-            goto L_0x0620
-        L_0x05e5:
+            goto L_0x0622
+        L_0x05e7:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
-            if (r0 == 0) goto L_0x05ec
+            if (r0 == 0) goto L_0x05ee
             r9.media = r2
-            goto L_0x0620
-        L_0x05ec:
+            goto L_0x0622
+        L_0x05ee:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeo
-            if (r0 == 0) goto L_0x05ff
+            if (r0 == 0) goto L_0x0601
             org.telegram.tgnet.TLRPC$GeoPoint r0 = r2.geo
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r9.media
             org.telegram.tgnet.TLRPC$GeoPoint r1 = r1.geo
@@ -12541,26 +12542,26 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r0.lat = r2
             double r1 = r1._long
             r0._long = r1
-            goto L_0x0620
-        L_0x05ff:
+            goto L_0x0622
+        L_0x0601:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGame
-            if (r0 == 0) goto L_0x061a
+            if (r0 == 0) goto L_0x061c
             r9.media = r2
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGame
-            if (r0 == 0) goto L_0x0620
+            if (r0 == 0) goto L_0x0622
             java.lang.String r0 = r7.message
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x0620
+            if (r0 != 0) goto L_0x0622
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r0 = r7.entities
             r9.entities = r0
             java.lang.String r0 = r7.message
             r9.message = r0
-            goto L_0x0620
-        L_0x061a:
+            goto L_0x0622
+        L_0x061c:
             boolean r0 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPoll
-            if (r0 == 0) goto L_0x0620
+            if (r0 == 0) goto L_0x0622
             r9.media = r2
-        L_0x0620:
+        L_0x0622:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.updateMediaPaths(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$Message, int, java.lang.String, boolean):void");

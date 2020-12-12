@@ -1801,7 +1801,7 @@ public class MessageObject {
     private void createPathThumb() {
         TLRPC$Document document = getDocument();
         if (document != null) {
-            this.pathThumb = DocumentObject.getSvgThumb(document, true);
+            this.pathThumb = DocumentObject.getSvgThumb(document, "chat_serviceBackground", 1.0f);
         }
     }
 
@@ -2452,7 +2452,7 @@ public class MessageObject {
             goto L_0x045e
         L_0x04b1:
             java.lang.StringBuilder r12 = new java.lang.StringBuilder
-            r2 = 2131627581(0x7f0e0e3d, float:1.888243E38)
+            r2 = 2131627588(0x7f0e0e44, float:1.8882445E38)
             java.lang.String r10 = "UserRestrictionsUntilForever"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r10, r2)
             r12.<init>(r2)
@@ -5688,7 +5688,7 @@ public class MessageObject {
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
             if (r2 == 0) goto L_0x0687
-            r2 = 2131627900(0x7f0e0f7c, float:1.8883077E38)
+            r2 = 2131627907(0x7f0e0var_, float:1.8883092E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -5879,7 +5879,7 @@ public class MessageObject {
         L_0x07f5:
             boolean r7 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
             if (r7 == 0) goto L_0x0809
-            r0 = 2131627831(0x7f0e0var_, float:1.8882938E38)
+            r0 = 2131627838(0x7f0e0f3e, float:1.8882952E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"
@@ -6359,13 +6359,13 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$Poll r0 = r1.poll
             boolean r0 = r0.quiz
             if (r0 == 0) goto L_0x0bf5
-            r0 = 2131626836(0x7f0e0b54, float:1.888092E38)
+            r0 = 2131626842(0x7f0e0b5a, float:1.8880932E38)
             java.lang.String r1 = "QuizPoll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0d9e
         L_0x0bf5:
-            r0 = 2131626729(0x7f0e0ae9, float:1.8880702E38)
+            r0 = 2131626735(0x7f0e0aef, float:1.8880715E38)
             java.lang.String r1 = "Poll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -6468,7 +6468,7 @@ public class MessageObject {
         L_0x0cca:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaUnsupported
             if (r0 == 0) goto L_0x0cdb
-            r0 = 2131627505(0x7f0e0df1, float:1.8882276E38)
+            r0 = 2131627511(0x7f0e0df7, float:1.8882289E38)
             java.lang.String r1 = "UnsupportedMedia"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0

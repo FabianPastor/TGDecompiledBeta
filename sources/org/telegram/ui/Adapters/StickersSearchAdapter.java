@@ -609,53 +609,57 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View view;
         LinearLayout linearLayout;
-        if (i == 0) {
-            AnonymousClass2 r8 = new StickerEmojiCell(this, this.context) {
-                public void onMeasure(int i, int i2) {
-                    super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
-                }
-            };
-            r8.getImageView().setLayerNum(3);
-            linearLayout = r8;
-        } else if (i == 1) {
-            linearLayout = new EmptyCell(this.context);
-        } else if (i == 2) {
-            linearLayout = new StickerSetNameCell(this.context, false, true);
-        } else if (i == 3) {
-            FeaturedStickerSetInfoCell featuredStickerSetInfoCell = new FeaturedStickerSetInfoCell(this.context, 17, true);
-            featuredStickerSetInfoCell.setAddOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    StickersSearchAdapter.this.lambda$onCreateViewHolder$0$StickersSearchAdapter(view);
-                }
-            });
-            linearLayout = featuredStickerSetInfoCell;
-        } else if (i == 4) {
-            linearLayout = new View(this.context);
-        } else if (i != 5) {
-            linearLayout = null;
-        } else {
-            LinearLayout linearLayout2 = new LinearLayout(this.context);
-            linearLayout2.setOrientation(1);
-            linearLayout2.setGravity(17);
-            ImageView imageView = new ImageView(this.context);
-            this.emptyImageView = imageView;
-            imageView.setScaleType(ImageView.ScaleType.CENTER);
-            this.emptyImageView.setImageResource(NUM);
-            this.emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_emojiPanelEmptyText"), PorterDuff.Mode.MULTIPLY));
-            linearLayout2.addView(this.emptyImageView, LayoutHelper.createLinear(-2, -2));
-            linearLayout2.addView(new Space(this.context), LayoutHelper.createLinear(-1, 15));
-            TextView textView = new TextView(this.context);
-            this.emptyTextView = textView;
-            textView.setText(LocaleController.getString("NoStickersFound", NUM));
-            this.emptyTextView.setTextSize(1, 16.0f);
-            this.emptyTextView.setTextColor(Theme.getColor("chat_emojiPanelEmptyText"));
-            linearLayout2.addView(this.emptyTextView, LayoutHelper.createLinear(-2, -2));
-            linearLayout2.setMinimumHeight(AndroidUtilities.dp(112.0f));
-            linearLayout2.setLayoutParams(LayoutHelper.createFrame(-1, -1.0f));
-            linearLayout = linearLayout2;
+        if (i != 0) {
+            if (i == 1) {
+                view = new EmptyCell(this.context);
+            } else if (i == 2) {
+                linearLayout = new StickerSetNameCell(this.context, false, true);
+            } else if (i == 3) {
+                FeaturedStickerSetInfoCell featuredStickerSetInfoCell = new FeaturedStickerSetInfoCell(this.context, 17, true);
+                featuredStickerSetInfoCell.setAddOnClickListener(new View.OnClickListener() {
+                    public final void onClick(View view) {
+                        StickersSearchAdapter.this.lambda$onCreateViewHolder$0$StickersSearchAdapter(view);
+                    }
+                });
+                linearLayout = featuredStickerSetInfoCell;
+            } else if (i == 4) {
+                view = new View(this.context);
+            } else if (i != 5) {
+                view = null;
+            } else {
+                LinearLayout linearLayout2 = new LinearLayout(this.context);
+                linearLayout2.setOrientation(1);
+                linearLayout2.setGravity(17);
+                ImageView imageView = new ImageView(this.context);
+                this.emptyImageView = imageView;
+                imageView.setScaleType(ImageView.ScaleType.CENTER);
+                this.emptyImageView.setImageResource(NUM);
+                this.emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_emojiPanelEmptyText"), PorterDuff.Mode.MULTIPLY));
+                linearLayout2.addView(this.emptyImageView, LayoutHelper.createLinear(-2, -2));
+                linearLayout2.addView(new Space(this.context), LayoutHelper.createLinear(-1, 15));
+                TextView textView = new TextView(this.context);
+                this.emptyTextView = textView;
+                textView.setText(LocaleController.getString("NoStickersFound", NUM));
+                this.emptyTextView.setTextSize(1, 16.0f);
+                this.emptyTextView.setTextColor(Theme.getColor("chat_emojiPanelEmptyText"));
+                linearLayout2.addView(this.emptyTextView, LayoutHelper.createLinear(-2, -2));
+                linearLayout2.setMinimumHeight(AndroidUtilities.dp(112.0f));
+                linearLayout2.setLayoutParams(LayoutHelper.createFrame(-1, -1.0f));
+                linearLayout = linearLayout2;
+            }
+            return new RecyclerListView.Holder(view);
         }
-        return new RecyclerListView.Holder(linearLayout);
+        AnonymousClass2 r8 = new StickerEmojiCell(this, this.context, false) {
+            public void onMeasure(int i, int i2) {
+                super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
+            }
+        };
+        r8.getImageView().setLayerNum(3);
+        linearLayout = r8;
+        view = linearLayout;
+        return new RecyclerListView.Holder(view);
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {

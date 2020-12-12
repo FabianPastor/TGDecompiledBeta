@@ -6,6 +6,7 @@ import android.media.audiofx.NoiseSuppressor;
 import android.os.Build;
 import java.util.List;
 import java.util.UUID;
+import org.telegram.messenger.SharedConfig;
 import org.webrtc.Logging;
 
 public class WebRtcAudioEffects {
@@ -149,7 +150,7 @@ public class WebRtcAudioEffects {
             this.aec = create;
             if (create != null) {
                 boolean enabled = create.getEnabled();
-                boolean z2 = this.shouldEnableAec && canUseAcousticEchoCanceler();
+                boolean z2 = this.shouldEnableAec && canUseAcousticEchoCanceler() && !SharedConfig.disableVoiceAudioEffects;
                 if (this.aec.setEnabled(z2) != 0) {
                     Logging.e("WebRtcAudioEffects", "Failed to set the AcousticEchoCanceler state");
                 }
@@ -180,7 +181,7 @@ public class WebRtcAudioEffects {
             this.ns = create2;
             if (create2 != null) {
                 boolean enabled2 = create2.getEnabled();
-                if (!this.shouldEnableNs || !canUseNoiseSuppressor()) {
+                if (!this.shouldEnableNs || !canUseNoiseSuppressor() || SharedConfig.disableVoiceAudioEffects) {
                     z = false;
                 }
                 if (this.ns.setEnabled(z) != 0) {

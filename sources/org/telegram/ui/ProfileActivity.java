@@ -2082,7 +2082,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r1.setActionBarMenuItemSearchListener(r3)
             r11.searchItem = r1
             java.lang.String r3 = "SearchInSettings"
-            r4 = 2131627021(0x7f0e0c0d, float:1.8881295E38)
+            r4 = 2131627027(0x7f0e0CLASSNAME, float:1.8881307E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r1.setContentDescription(r5)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r11.searchItem
@@ -2100,7 +2100,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r3 = 2131165935(0x7var_ef, float:1.7946101E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r3)
             r11.videoCallItem = r1
-            r3 = 2131627619(0x7f0e0e63, float:1.8882508E38)
+            r3 = 2131627626(0x7f0e0e6a, float:1.8882522E38)
             java.lang.String r4 = "VideoCall"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setContentDescription(r3)
@@ -2697,7 +2697,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r7 = 2131165928(0x7var_e8, float:1.7946087E38)
             r1.setImageResource(r7)
             android.widget.ImageView r1 = r11.writeButton
-            r7 = 2131627649(0x7f0e0e81, float:1.8882568E38)
+            r7 = 2131627656(0x7f0e0e88, float:1.8882583E38)
             java.lang.String r8 = "ViewDiscussion"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r1.setContentDescription(r7)
@@ -2908,7 +2908,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             } else if (i2 == this.unblockRow) {
                 getMessagesController().unblockPeer(this.user_id);
-                AlertsCreator.showSimpleToast(this, LocaleController.getString("UserUnblocked", NUM));
+                if (BulletinFactory.canShowBulletin(this)) {
+                    BulletinFactory.createBanBulletin(this, false).show();
+                }
             } else if (i2 == this.sendMessageRow) {
                 onWriteButtonClick();
             } else if (i2 == this.reportRow) {
@@ -5960,7 +5962,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     private void kickUser(int i) {
         if (i != 0) {
-            getMessagesController().deleteUserFromChat(this.chat_id, getMessagesController().getUser(Integer.valueOf(i)), this.chatInfo);
+            TLRPC$User user = getMessagesController().getUser(Integer.valueOf(i));
+            getMessagesController().deleteUserFromChat(this.chat_id, user, this.chatInfo);
+            if (this.currentChat != null && user != null && BulletinFactory.canShowBulletin(this)) {
+                BulletinFactory.createRemoveFromChatBulletin(this, user.first_name, this.currentChat.title).show();
+                return;
+            }
             return;
         }
         NotificationCenter notificationCenter = getNotificationCenter();
@@ -6722,7 +6729,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r2 = 2
             r4 = 1
             if (r1 != r2) goto L_0x0022
-            r1 = 2131627795(0x7f0e0var_, float:1.8882865E38)
+            r1 = 2131627802(0x7f0e0f1a, float:1.8882879E38)
             java.lang.String r5 = "WaitingForNetwork"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
@@ -6735,7 +6742,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x002e:
             r5 = 5
             if (r1 != r5) goto L_0x003b
-            r1 = 2131627520(0x7f0e0e00, float:1.8882307E38)
+            r1 = 2131627526(0x7f0e0e06, float:1.8882319E38)
             java.lang.String r5 = "Updating"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
@@ -6836,7 +6843,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x00ea:
             boolean r9 = org.telegram.messenger.MessagesController.isSupportUser(r5)
             if (r9 == 0) goto L_0x00fa
-            r9 = 2131627327(0x7f0e0d3f, float:1.8881915E38)
+            r9 = 2131627333(0x7f0e0d45, float:1.8881927E38)
             java.lang.String r10 = "SupportStatus"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             goto L_0x0145
@@ -6875,7 +6882,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r10.setTextColor(r11)
             goto L_0x0145
         L_0x013c:
-            r9 = 2131627115(0x7f0e0c6b, float:1.8881485E38)
+            r9 = 2131627121(0x7f0e0CLASSNAME, float:1.8881497E38)
             java.lang.String r10 = "ServiceNotifications"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
         L_0x0145:
@@ -7153,7 +7160,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x0389:
             boolean r2 = org.telegram.messenger.ChatObject.isKickedFromChat(r5)
             if (r2 == 0) goto L_0x039a
-            r2 = 2131627834(0x7f0e0f3a, float:1.8882944E38)
+            r2 = 2131627841(0x7f0e0var_, float:1.8882958E38)
             java.lang.String r3 = "YouWereKicked"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x0398:
@@ -7162,7 +7169,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x039a:
             boolean r2 = org.telegram.messenger.ChatObject.isLeftFromChat(r5)
             if (r2 == 0) goto L_0x03aa
-            r2 = 2131627833(0x7f0e0var_, float:1.8882942E38)
+            r2 = 2131627840(0x7f0e0var_, float:1.8882956E38)
             java.lang.String r3 = "YouLeft"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x0398
@@ -8466,7 +8473,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.String r7 = r4.toString()     // Catch:{ Exception -> 0x00a0 }
             L_0x0076:
                 java.lang.String r4 = "TelegramVersion"
-                r5 = 2131627363(0x7f0e0d63, float:1.8881988E38)
+                r5 = 2131627369(0x7f0e0d69, float:1.8882E38)
                 java.lang.Object[] r8 = new java.lang.Object[r2]     // Catch:{ Exception -> 0x00a0 }
                 java.util.Locale r9 = java.util.Locale.US     // Catch:{ Exception -> 0x00a0 }
                 java.lang.String r10 = "v%s (%d) %s"
@@ -8615,7 +8622,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int r2 = r13.getItemViewType()
                 r3 = 2131624661(0x7f0e02d5, float:1.8876508E38)
                 java.lang.String r4 = "ChannelMembers"
-                r5 = 2131627547(0x7f0e0e1b, float:1.8882362E38)
+                r5 = 2131627553(0x7f0e0e21, float:1.8882374E38)
                 java.lang.String r6 = "UserBio"
                 r7 = 0
                 r8 = -1
@@ -8859,7 +8866,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x02a6
             L_0x0216:
                 r2 = 3600(0xe10, float:5.045E-42)
-                r3 = 2131627815(0x7f0e0var_, float:1.8882905E38)
+                r3 = 2131627822(0x7f0e0f2e, float:1.888292E38)
                 java.lang.String r4 = "WillUnmuteIn"
                 if (r1 >= r2) goto L_0x0232
                 java.lang.Object[] r2 = new java.lang.Object[r10]
@@ -8968,7 +8975,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.tgnet.TLRPC$EncryptedChat r1 = r1.getEncryptedChat(r2)
                 int r1 = r1.ttl
                 if (r1 != 0) goto L_0x02fd
-                r1 = 2131627203(0x7f0e0cc3, float:1.8881664E38)
+                r1 = 2131627209(0x7f0e0cc9, float:1.8881676E38)
                 java.lang.String r2 = "ShortMessageLifetimeForever"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 goto L_0x0301
@@ -8985,7 +8992,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int r2 = r2.unblockRow
                 java.lang.String r6 = "windowBackgroundWhiteRedText5"
                 if (r14 != r2) goto L_0x032b
-                r1 = 2131627488(0x7f0e0de0, float:1.8882242E38)
+                r1 = 2131627494(0x7f0e0de6, float:1.8882254E38)
                 java.lang.String r2 = "Unblock"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r0.setText(r1, r9)
@@ -9021,13 +9028,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.tgnet.TLRPC$Chat r1 = r1.currentChat
                 boolean r1 = r1.megagroup
                 if (r1 == 0) goto L_0x0385
-                r1 = 2131626792(0x7f0e0b28, float:1.888083E38)
+                r1 = 2131626798(0x7f0e0b2e, float:1.8880842E38)
                 java.lang.String r2 = "ProfileJoinGroup"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r0.setText(r1, r9)
                 goto L_0x0a0e
             L_0x0385:
-                r1 = 2131626791(0x7f0e0b27, float:1.8880828E38)
+                r1 = 2131626797(0x7f0e0b2d, float:1.888084E38)
                 java.lang.String r2 = "ProfileJoinChannel"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r0.setText(r1, r9)
@@ -9218,7 +9225,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r2 = org.telegram.ui.ProfileActivity.this
                 int r2 = r2.sendMessageRow
                 if (r14 != r2) goto L_0x0553
-                r1 = 2131627086(0x7f0e0c4e, float:1.8881426E38)
+                r1 = 2131627092(0x7f0e0CLASSNAME, float:1.8881439E38)
                 java.lang.String r2 = "SendMessageLocation"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r0.setText(r1, r10)
@@ -9227,7 +9234,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r2 = org.telegram.ui.ProfileActivity.this
                 int r2 = r2.reportRow
                 if (r14 != r2) goto L_0x056c
-                r1 = 2131626922(0x7f0e0baa, float:1.8881094E38)
+                r1 = 2131626928(0x7f0e0bb0, float:1.8881106E38)
                 java.lang.String r2 = "ReportUserLocation"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r0.setText(r1, r9)
@@ -9257,7 +9264,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r2 = org.telegram.ui.ProfileActivity.this
                 int r2 = r2.privacyRow
                 if (r14 != r2) goto L_0x05b7
-                r1 = 2131626787(0x7f0e0b23, float:1.888082E38)
+                r1 = 2131626793(0x7f0e0b29, float:1.8880832E38)
                 java.lang.String r2 = "PrivacySettings"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r2 = 2131165678(0x7var_ee, float:1.794558E38)
@@ -9307,7 +9314,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r2 = org.telegram.ui.ProfileActivity.this
                 int r2 = r2.faqRow
                 if (r14 != r2) goto L_0x0634
-                r1 = 2131627354(0x7f0e0d5a, float:1.888197E38)
+                r1 = 2131627360(0x7f0e0d60, float:1.8881982E38)
                 java.lang.String r2 = "TelegramFAQ"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r2 = 2131165654(0x7var_d6, float:1.7945531E38)
@@ -9317,7 +9324,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r2 = org.telegram.ui.ProfileActivity.this
                 int r2 = r2.policyRow
                 if (r14 != r2) goto L_0x064d
-                r1 = 2131626780(0x7f0e0b1c, float:1.8880806E38)
+                r1 = 2131626786(0x7f0e0b22, float:1.8880818E38)
                 java.lang.String r2 = "PrivacyPolicy"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r2 = 2131165672(0x7var_e8, float:1.7945568E38)
@@ -9370,7 +9377,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.String r1 = "windowBackgroundWhiteBlueIcon"
                 java.lang.String r2 = "windowBackgroundWhiteBlueButton"
                 r0.setColors(r1, r2)
-                r1 = 2131627128(0x7f0e0CLASSNAME, float:1.8881512E38)
+                r1 = 2131627134(0x7f0e0c7e, float:1.8881524E38)
                 java.lang.String r2 = "SetProfilePhoto"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r2 = 2131165708(0x7var_c, float:1.794564E38)
@@ -9443,11 +9450,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.String r1 = r2.format(r1)
                 goto L_0x0777
             L_0x076e:
-                r1 = 2131626654(0x7f0e0a9e, float:1.888055E38)
+                r1 = 2131626660(0x7f0e0aa4, float:1.8880562E38)
                 java.lang.String r2 = "PhoneHidden"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             L_0x0777:
-                r2 = 2131626657(0x7f0e0aa1, float:1.8880556E38)
+                r2 = 2131626663(0x7f0e0aa7, float:1.8880569E38)
                 java.lang.String r3 = "PhoneMobile"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setTextAndValue(r1, r2, r9)
@@ -9455,7 +9462,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             L_0x0785:
                 org.telegram.ui.ProfileActivity r2 = org.telegram.ui.ProfileActivity.this
                 int r2 = r2.usernameRow
-                r4 = 2131627584(0x7f0e0e40, float:1.8882437E38)
+                r4 = 2131627591(0x7f0e0e47, float:1.888245E38)
                 java.lang.String r8 = "Username"
                 if (r14 != r2) goto L_0x081f
                 org.telegram.ui.ProfileActivity r1 = org.telegram.ui.ProfileActivity.this
@@ -9560,7 +9567,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.String r2 = "NumberUnknown"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             L_0x089a:
-                r2 = 2131627341(0x7f0e0d4d, float:1.8881944E38)
+                r2 = 2131627347(0x7f0e0d53, float:1.8881956E38)
                 java.lang.String r3 = "TapToChangePhone"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setTextAndValue(r1, r2, r10)
@@ -9587,7 +9594,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 java.lang.String r1 = r2.toString()
                 goto L_0x08e8
             L_0x08df:
-                r1 = 2131627587(0x7f0e0e43, float:1.8882443E38)
+                r1 = 2131627594(0x7f0e0e4a, float:1.8882457E38)
                 java.lang.String r2 = "UsernameEmpty"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             L_0x08e8:
@@ -9610,7 +9617,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x092d
             L_0x0913:
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r5)
-                r2 = 2131627548(0x7f0e0e1c, float:1.8882364E38)
+                r2 = 2131627554(0x7f0e0e22, float:1.8882376E38)
                 java.lang.String r3 = "UserBioDetail"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setTextAndValue(r1, r2, r9)
@@ -9660,7 +9667,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r1 = org.telegram.ui.ProfileActivity.this
                 int r1 = r1.channelInfoRow
                 if (r1 == r8) goto L_0x099e
-                r1 = 2131626905(0x7f0e0b99, float:1.888106E38)
+                r1 = 2131626911(0x7f0e0b9f, float:1.8881072E38)
                 java.lang.String r2 = "ReportChatDescription"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r0.setText(r1)
@@ -9682,7 +9689,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r2 = org.telegram.ui.ProfileActivity.this
                 int r2 = r2.settingsSectionRow2
                 if (r14 != r2) goto L_0x09d0
-                r1 = 2131626975(0x7f0e0bdf, float:1.8881201E38)
+                r1 = 2131626981(0x7f0e0be5, float:1.8881214E38)
                 java.lang.String r2 = "SETTINGS"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r0.setText(r1)
@@ -9700,7 +9707,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r2 = org.telegram.ui.ProfileActivity.this
                 int r2 = r2.helpHeaderRow
                 if (r14 != r2) goto L_0x09fa
-                r1 = 2131627143(0x7f0e0CLASSNAME, float:1.8881542E38)
+                r1 = 2131627149(0x7f0e0c8d, float:1.8881554E38)
                 java.lang.String r2 = "SettingsHelp"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r0.setText(r1)
@@ -9709,7 +9716,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 org.telegram.ui.ProfileActivity r2 = org.telegram.ui.ProfileActivity.this
                 int r2 = r2.debugHeaderRow
                 if (r14 != r2) goto L_0x0a0e
-                r1 = 2131627141(0x7f0e0CLASSNAME, float:1.8881538E38)
+                r1 = 2131627147(0x7f0e0c8b, float:1.888155E38)
                 java.lang.String r2 = "SettingsDebug"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r0.setText(r1)

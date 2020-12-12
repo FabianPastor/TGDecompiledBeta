@@ -1,5 +1,6 @@
 package org.telegram.messenger;
 
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import java.util.ArrayList;
@@ -332,7 +333,7 @@ public class ChatObject {
             }
         }
 
-        public void processVoiceLevelsUpdate(int[] iArr, float[] fArr) {
+        public void processVoiceLevelsUpdate(int[] iArr, float[] fArr, boolean[] zArr) {
             TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant;
             int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
             boolean z = false;
@@ -342,9 +343,18 @@ public class ChatObject {
                 } else {
                     tLRPC$TL_groupCallParticipant = this.participantsBySources.get(iArr[i]);
                 }
-                if (fArr[i] > 0.1f && tLRPC$TL_groupCallParticipant != null && tLRPC$TL_groupCallParticipant.active_date + 1 < currentTime) {
-                    tLRPC$TL_groupCallParticipant.active_date = currentTime;
-                    z = true;
+                if (tLRPC$TL_groupCallParticipant != null) {
+                    tLRPC$TL_groupCallParticipant.hasVoice = zArr[i];
+                    if (fArr[i] > 0.1f) {
+                        if (zArr[i] && tLRPC$TL_groupCallParticipant.active_date + 1 < currentTime) {
+                            tLRPC$TL_groupCallParticipant.active_date = currentTime;
+                            z = true;
+                        }
+                        tLRPC$TL_groupCallParticipant.lastSpeakTime = SystemClock.uptimeMillis();
+                        tLRPC$TL_groupCallParticipant.amplitude = fArr[i];
+                    } else {
+                        tLRPC$TL_groupCallParticipant.amplitude = 0.0f;
+                    }
                 }
             }
             if (z) {
@@ -388,10 +398,12 @@ public class ChatObject {
                                 this.participantsBySources.put(i6, tLRPC$TL_groupCallParticipant2);
                             }
                         } else {
-                            int i7 = tLRPC$TL_updateGroupCallParticipants.version;
-                            TLRPC$GroupCall tLRPC$GroupCall = this.call;
-                            if (i7 != tLRPC$GroupCall.version) {
-                                tLRPC$GroupCall.participants_count++;
+                            if (tLRPC$TL_groupCallParticipant.just_joined) {
+                                int i7 = tLRPC$TL_updateGroupCallParticipants.version;
+                                TLRPC$GroupCall tLRPC$GroupCall = this.call;
+                                if (i7 != tLRPC$GroupCall.version) {
+                                    tLRPC$GroupCall.participants_count++;
+                                }
                             }
                             this.sortedParticipants.add(tLRPC$TL_groupCallParticipant);
                             this.participants.put(tLRPC$TL_groupCallParticipant.user_id, tLRPC$TL_groupCallParticipant);

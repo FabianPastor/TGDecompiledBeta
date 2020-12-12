@@ -297,7 +297,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2.setImeOptions(r4)
                 if (r3 != 0) goto L_0x014c
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627026(0x7f0e0CLASSNAME, float:1.8881305E38)
+                r3 = 2131627032(0x7f0e0CLASSNAME, float:1.8881317E38)
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -305,7 +305,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             L_0x014c:
                 if (r3 != r6) goto L_0x015d
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627003(0x7f0e0bfb, float:1.8881258E38)
+                r3 = 2131627009(0x7f0e0CLASSNAME, float:1.888127E38)
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -314,7 +314,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2 = 2
                 if (r3 != r2) goto L_0x016e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627017(0x7f0e0CLASSNAME, float:1.8881287E38)
+                r3 = 2131627023(0x7f0e0c0f, float:1.8881299E38)
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -1132,28 +1132,62 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             }
         }
 
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            StickerSetNameCell stickerSetNameCell;
-            if (i == 0) {
-                stickerSetNameCell = new StickerEmojiCell(this, this.context) {
-                    public void onMeasure(int i, int i2) {
-                        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
-                    }
-                };
-            } else if (i == 1) {
-                stickerSetNameCell = new EmptyCell(this.context);
-            } else if (i == 2) {
-                StickerSetNameCell stickerSetNameCell2 = new StickerSetNameCell(this.context, false);
-                stickerSetNameCell2.setTitleColor(-7829368);
-                stickerSetNameCell = stickerSetNameCell2;
-            } else if (i != 4) {
-                stickerSetNameCell = null;
-            } else {
-                View view = new View(this.context);
-                view.setLayoutParams(new RecyclerView.LayoutParams(-1, StickerMasksAlert.this.searchFieldHeight + AndroidUtilities.dp(48.0f)));
-                stickerSetNameCell = view;
-            }
-            return new RecyclerListView.Holder(stickerSetNameCell);
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v2, resolved type: org.telegram.ui.Components.StickerMasksAlert$StickersGridAdapter$1} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v8, resolved type: org.telegram.ui.Components.StickerMasksAlert$StickersGridAdapter$1} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v9, resolved type: org.telegram.ui.Components.StickerMasksAlert$StickersGridAdapter$1} */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r4, int r5) {
+            /*
+                r3 = this;
+                r4 = 0
+                if (r5 == 0) goto L_0x0042
+                r0 = 1
+                if (r5 == r0) goto L_0x003a
+                r0 = 2
+                if (r5 == r0) goto L_0x002c
+                r4 = 4
+                if (r5 == r4) goto L_0x000e
+                r4 = 0
+                goto L_0x004a
+            L_0x000e:
+                android.view.View r4 = new android.view.View
+                android.content.Context r5 = r3.context
+                r4.<init>(r5)
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r5 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r0 = -1
+                org.telegram.ui.Components.StickerMasksAlert r1 = org.telegram.ui.Components.StickerMasksAlert.this
+                int r1 = r1.searchFieldHeight
+                r2 = 1111490560(0x42400000, float:48.0)
+                int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+                int r1 = r1 + r2
+                r5.<init>((int) r0, (int) r1)
+                r4.setLayoutParams(r5)
+                goto L_0x004a
+            L_0x002c:
+                org.telegram.ui.Cells.StickerSetNameCell r5 = new org.telegram.ui.Cells.StickerSetNameCell
+                android.content.Context r0 = r3.context
+                r5.<init>(r0, r4)
+                r4 = -7829368(0xfffffffffvar_, float:NaN)
+                r5.setTitleColor(r4)
+                goto L_0x0049
+            L_0x003a:
+                org.telegram.ui.Cells.EmptyCell r4 = new org.telegram.ui.Cells.EmptyCell
+                android.content.Context r5 = r3.context
+                r4.<init>(r5)
+                goto L_0x004a
+            L_0x0042:
+                org.telegram.ui.Components.StickerMasksAlert$StickersGridAdapter$1 r5 = new org.telegram.ui.Components.StickerMasksAlert$StickersGridAdapter$1
+                android.content.Context r0 = r3.context
+                r5.<init>(r3, r0, r4)
+            L_0x0049:
+                r4 = r5
+            L_0x004a:
+                org.telegram.ui.Components.RecyclerListView$Holder r5 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r5.<init>(r4)
+                return r5
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickerMasksAlert.StickersGridAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
@@ -2031,43 +2065,48 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+            AnonymousClass3 r13;
             View view;
-            if (i == 0) {
-                view = new StickerEmojiCell(this, this.context) {
-                    public void onMeasure(int i, int i2) {
-                        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
-                    }
-                };
-            } else if (i == 1) {
-                view = new EmptyCell(this.context);
-            } else if (i == 2) {
-                view = new StickerSetNameCell(this.context, false);
-            } else if (i == 4) {
-                view = new View(this.context);
-                view.setLayoutParams(new RecyclerView.LayoutParams(-1, StickerMasksAlert.this.searchFieldHeight + AndroidUtilities.dp(48.0f)));
-            } else if (i != 5) {
-                view = null;
-            } else {
-                AnonymousClass3 r14 = new FrameLayout(this.context) {
-                    /* access modifiers changed from: protected */
-                    public void onMeasure(int i, int i2) {
-                        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(((StickerMasksAlert.this.gridView.getMeasuredHeight() - StickerMasksAlert.this.searchFieldHeight) - AndroidUtilities.dp(48.0f)) - AndroidUtilities.dp(48.0f), NUM));
-                    }
-                };
-                ImageView imageView = new ImageView(this.context);
-                imageView.setScaleType(ImageView.ScaleType.CENTER);
-                imageView.setImageResource(NUM);
-                imageView.setColorFilter(new PorterDuffColorFilter(-7038047, PorterDuff.Mode.MULTIPLY));
-                r14.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 50.0f));
-                TextView textView = new TextView(this.context);
-                textView.setText(LocaleController.getString("NoStickersFound", NUM));
-                textView.setTextSize(1, 16.0f);
-                textView.setTextColor(-7038047);
-                r14.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 0.0f));
-                r14.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-                view = r14;
+            if (i != 0) {
+                if (i == 1) {
+                    r13 = new EmptyCell(this.context);
+                } else if (i == 2) {
+                    view = new StickerSetNameCell(this.context, false);
+                } else if (i == 4) {
+                    View view2 = new View(this.context);
+                    view2.setLayoutParams(new RecyclerView.LayoutParams(-1, StickerMasksAlert.this.searchFieldHeight + AndroidUtilities.dp(48.0f)));
+                    r13 = view2;
+                } else if (i != 5) {
+                    r13 = null;
+                } else {
+                    AnonymousClass3 r132 = new FrameLayout(this.context) {
+                        /* access modifiers changed from: protected */
+                        public void onMeasure(int i, int i2) {
+                            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(((StickerMasksAlert.this.gridView.getMeasuredHeight() - StickerMasksAlert.this.searchFieldHeight) - AndroidUtilities.dp(48.0f)) - AndroidUtilities.dp(48.0f), NUM));
+                        }
+                    };
+                    ImageView imageView = new ImageView(this.context);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER);
+                    imageView.setImageResource(NUM);
+                    imageView.setColorFilter(new PorterDuffColorFilter(-7038047, PorterDuff.Mode.MULTIPLY));
+                    r132.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 50.0f));
+                    TextView textView = new TextView(this.context);
+                    textView.setText(LocaleController.getString("NoStickersFound", NUM));
+                    textView.setTextSize(1, 16.0f);
+                    textView.setTextColor(-7038047);
+                    r132.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 0.0f));
+                    r132.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+                    r13 = r132;
+                }
+                return new RecyclerListView.Holder(r13);
             }
-            return new RecyclerListView.Holder(view);
+            view = new StickerEmojiCell(this, this.context, false) {
+                public void onMeasure(int i, int i2) {
+                    super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
+                }
+            };
+            r13 = view;
+            return new RecyclerListView.Holder(r13);
         }
 
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v13, resolved type: java.lang.Object} */

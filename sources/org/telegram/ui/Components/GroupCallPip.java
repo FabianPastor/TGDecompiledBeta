@@ -134,7 +134,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     groupCallPip.lastScreenY = point.y;
                     if (groupCallPip.xRelative < 0.0f) {
                         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("groupcallpipconfig", 0);
-                        GroupCallPip.this.xRelative = sharedPreferences.getFloat("relativeX", 0.5f);
+                        GroupCallPip.this.xRelative = sharedPreferences.getFloat("relativeX", 1.0f);
                         GroupCallPip.this.yRelative = sharedPreferences.getFloat("relativeY", 0.5f);
                     }
                     GroupCallPip access$100 = GroupCallPip.instance;
@@ -773,6 +773,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             ofFloat3.setStartDelay((long) (0.7f * f));
             ofFloat3.setDuration((long) (f * 0.3f));
             animatorSet.playTogether(new Animator[]{ofFloat3});
+            AndroidUtilities.runOnUIThread($$Lambda$GroupCallPip$xgZsLWasbbNg91cOicWH8iHQb88.INSTANCE, 370);
             ObjectAnimator ofFloat4 = ObjectAnimator.ofFloat(this.removeTooltipView, View.SCALE_X, new float[]{1.0f, 1.05f});
             ofFloat4.setDuration(530);
             CubicBezierInterpolator cubicBezierInterpolator2 = CubicBezierInterpolator.EASE_BOTH;
@@ -897,11 +898,8 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     private void onDestroy() {
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.groupCallUpdated);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.webRtcSpeakerAmplitudeEvent);
-        NotificationCenter globalInstance = NotificationCenter.getGlobalInstance();
-        int i = NotificationCenter.groupCallVisibilityChanged;
-        globalInstance.removeObserver(this, i);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.groupCallVisibilityChanged);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didEndCall);
-        NotificationCenter.getGlobalInstance().postNotificationName(i, new Object[0]);
     }
 
     /* access modifiers changed from: private */
@@ -941,6 +939,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             }).start();
             instance.onDestroy();
             instance = null;
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.groupCallVisibilityChanged, new Object[0]);
         }
     }
 
@@ -1048,7 +1047,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             this.pinAnimator = ofFloat;
             ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    GroupCallPip.this.lambda$pinnedToCenter$2$GroupCallPip(valueAnimator);
+                    GroupCallPip.this.lambda$pinnedToCenter$3$GroupCallPip(valueAnimator);
                 }
             });
             this.pinAnimator.addListener(new AnimatorListenerAdapter() {
@@ -1074,8 +1073,8 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$pinnedToCenter$2 */
-    public /* synthetic */ void lambda$pinnedToCenter$2$GroupCallPip(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$pinnedToCenter$3 */
+    public /* synthetic */ void lambda$pinnedToCenter$3$GroupCallPip(ValueAnimator valueAnimator) {
         if (!this.removed) {
             float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             this.pinnedProgress = floatValue;
@@ -1126,7 +1125,8 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     /* access modifiers changed from: private */
     public void getRelativePosition(float f, float f2, float[] fArr) {
         Point point2 = AndroidUtilities.displaySize;
-        fArr[0] = f / (((float) point2.x) - ((float) AndroidUtilities.dp(105.0f)));
+        float f3 = (float) (-AndroidUtilities.dp(36.0f));
+        fArr[0] = (f - f3) / ((((float) point2.x) - (f3 * 2.0f)) - ((float) AndroidUtilities.dp(105.0f)));
         fArr[1] = f2 / (((float) point2.y) - ((float) AndroidUtilities.dp(105.0f)));
         fArr[0] = Math.min(1.0f, Math.max(0.0f, fArr[0]));
         fArr[1] = Math.min(1.0f, Math.max(0.0f, fArr[1]));

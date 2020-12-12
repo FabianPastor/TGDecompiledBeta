@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.core.util.Consumer;
-import androidx.core.util.Preconditions;
 import androidx.core.view.ViewCompat;
 import androidx.dynamicanimation.animation.DynamicAnimation;
 import androidx.dynamicanimation.animation.SpringAnimation;
@@ -124,87 +124,86 @@ public final class Bulletin {
 
     public Bulletin show() {
         if (!this.showing) {
-            boolean z = true;
             this.showing = true;
-            if (this.layout.getParent() != this.parentLayout) {
-                z = false;
-            }
-            Preconditions.checkState(z, "Layout has incorrect parent");
-            Bulletin bulletin = visibleBulletin;
-            if (bulletin != null) {
-                bulletin.hide();
-            }
-            visibleBulletin = this;
-            this.layout.onAttach(this);
-            this.layout.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                public void onLayoutChange(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
-                    Bulletin.this.layout.removeOnLayoutChangeListener(this);
-                    if (Bulletin.this.showing) {
-                        Bulletin.this.layout.onShow();
-                        Delegate unused = Bulletin.this.currentDelegate = (Delegate) Bulletin.delegates.get(Bulletin.this.containerLayout);
-                        Bulletin bulletin = Bulletin.this;
-                        int unused2 = bulletin.currentBottomOffset = bulletin.currentDelegate != null ? Bulletin.this.currentDelegate.getBottomOffset() : 0;
-                        if (Bulletin.isTransitionsEnabled()) {
-                            if (Bulletin.this.currentBottomOffset != 0) {
-                                ViewCompat.setClipBounds(Bulletin.this.parentLayout, new Rect(i, i2 - Bulletin.this.currentBottomOffset, i3, i4 - Bulletin.this.currentBottomOffset));
-                            } else {
-                                ViewCompat.setClipBounds(Bulletin.this.parentLayout, (Rect) null);
+            if (this.layout.getParent() == this.parentLayout) {
+                Bulletin bulletin = visibleBulletin;
+                if (bulletin != null) {
+                    bulletin.hide();
+                }
+                visibleBulletin = this;
+                this.layout.onAttach(this);
+                this.layout.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                    public void onLayoutChange(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
+                        Bulletin.this.layout.removeOnLayoutChangeListener(this);
+                        if (Bulletin.this.showing) {
+                            Bulletin.this.layout.onShow();
+                            Delegate unused = Bulletin.this.currentDelegate = (Delegate) Bulletin.delegates.get(Bulletin.this.containerLayout);
+                            Bulletin bulletin = Bulletin.this;
+                            int unused2 = bulletin.currentBottomOffset = bulletin.currentDelegate != null ? Bulletin.this.currentDelegate.getBottomOffset() : 0;
+                            if (Bulletin.isTransitionsEnabled()) {
+                                if (Bulletin.this.currentBottomOffset != 0) {
+                                    ViewCompat.setClipBounds(Bulletin.this.parentLayout, new Rect(i, i2 - Bulletin.this.currentBottomOffset, i3, i4 - Bulletin.this.currentBottomOffset));
+                                } else {
+                                    ViewCompat.setClipBounds(Bulletin.this.parentLayout, (Rect) null);
+                                }
+                                Bulletin.this.ensureLayoutTransitionCreated();
+                                Layout.Transition access$1000 = Bulletin.this.layoutTransition;
+                                Layout access$100 = Bulletin.this.layout;
+                                Layout access$1002 = Bulletin.this.layout;
+                                access$1002.getClass();
+                                access$1000.animateEnter(access$100, new Runnable() {
+                                    public final void run() {
+                                        Bulletin.Layout.this.onEnterTransitionStart();
+                                    }
+                                }, new Runnable() {
+                                    public final void run() {
+                                        Bulletin.AnonymousClass2.this.lambda$onLayoutChange$0$Bulletin$2();
+                                    }
+                                }, new Consumer() {
+                                    public final void accept(Object obj) {
+                                        Bulletin.AnonymousClass2.this.lambda$onLayoutChange$1$Bulletin$2((Float) obj);
+                                    }
+                                }, Bulletin.this.currentBottomOffset);
+                                return;
                             }
-                            Bulletin.this.ensureLayoutTransitionCreated();
-                            Layout.Transition access$1000 = Bulletin.this.layoutTransition;
-                            Layout access$100 = Bulletin.this.layout;
-                            Layout access$1002 = Bulletin.this.layout;
-                            access$1002.getClass();
-                            access$1000.animateEnter(access$100, new Runnable() {
-                                public final void run() {
-                                    Bulletin.Layout.this.onEnterTransitionStart();
-                                }
-                            }, new Runnable() {
-                                public final void run() {
-                                    Bulletin.AnonymousClass2.this.lambda$onLayoutChange$0$Bulletin$2();
-                                }
-                            }, new Consumer() {
-                                public final void accept(Object obj) {
-                                    Bulletin.AnonymousClass2.this.lambda$onLayoutChange$1$Bulletin$2((Float) obj);
-                                }
-                            }, Bulletin.this.currentBottomOffset);
-                            return;
+                            if (Bulletin.this.currentDelegate != null) {
+                                Bulletin.this.currentDelegate.onOffsetChange((float) (Bulletin.this.layout.getHeight() - Bulletin.this.currentBottomOffset));
+                            }
+                            Bulletin.this.layout.setTranslationY((float) (-Bulletin.this.currentBottomOffset));
+                            Bulletin.this.layout.onEnterTransitionStart();
+                            Bulletin.this.layout.onEnterTransitionEnd();
+                            Bulletin.this.setCanHide(true);
                         }
-                        if (Bulletin.this.currentDelegate != null) {
-                            Bulletin.this.currentDelegate.onOffsetChange((float) (Bulletin.this.layout.getHeight() - Bulletin.this.currentBottomOffset));
-                        }
-                        Bulletin.this.layout.setTranslationY((float) (-Bulletin.this.currentBottomOffset));
-                        Bulletin.this.layout.onEnterTransitionStart();
+                    }
+
+                    /* access modifiers changed from: private */
+                    /* renamed from: lambda$onLayoutChange$0 */
+                    public /* synthetic */ void lambda$onLayoutChange$0$Bulletin$2() {
                         Bulletin.this.layout.onEnterTransitionEnd();
                         Bulletin.this.setCanHide(true);
                     }
-                }
 
-                /* access modifiers changed from: private */
-                /* renamed from: lambda$onLayoutChange$0 */
-                public /* synthetic */ void lambda$onLayoutChange$0$Bulletin$2() {
-                    Bulletin.this.layout.onEnterTransitionEnd();
-                    Bulletin.this.setCanHide(true);
-                }
-
-                /* access modifiers changed from: private */
-                /* renamed from: lambda$onLayoutChange$1 */
-                public /* synthetic */ void lambda$onLayoutChange$1$Bulletin$2(Float f) {
-                    if (Bulletin.this.currentDelegate != null) {
-                        Bulletin.this.currentDelegate.onOffsetChange(((float) Bulletin.this.layout.getHeight()) - f.floatValue());
+                    /* access modifiers changed from: private */
+                    /* renamed from: lambda$onLayoutChange$1 */
+                    public /* synthetic */ void lambda$onLayoutChange$1$Bulletin$2(Float f) {
+                        if (Bulletin.this.currentDelegate != null) {
+                            Bulletin.this.currentDelegate.onOffsetChange(((float) Bulletin.this.layout.getHeight()) - f.floatValue());
+                        }
                     }
-                }
-            });
-            this.layout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                public void onViewAttachedToWindow(View view) {
-                }
+                });
+                this.layout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                    public void onViewAttachedToWindow(View view) {
+                    }
 
-                public void onViewDetachedFromWindow(View view) {
-                    Bulletin.this.layout.removeOnAttachStateChangeListener(this);
-                    Bulletin.this.hide(false);
-                }
-            });
-            this.containerLayout.addView(this.parentLayout);
+                    public void onViewDetachedFromWindow(View view) {
+                        Bulletin.this.layout.removeOnAttachStateChangeListener(this);
+                        Bulletin.this.hide(false);
+                    }
+                });
+                this.containerLayout.addView(this.parentLayout);
+            } else {
+                throw new IllegalStateException("Layout has incorrect parent");
+            }
         }
         return this;
     }
@@ -554,16 +553,18 @@ public final class Bulletin {
             public void animateEnter(Layout layout, Runnable runnable, Runnable runnable2, Consumer<Float> consumer, int i) {
                 float height = (float) (layout.getHeight() - i);
                 layout.setTranslationY(height);
-                consumer.accept(Float.valueOf(height));
+                if (consumer != null) {
+                    consumer.accept(Float.valueOf(height));
+                }
                 SpringAnimation springAnimation = new SpringAnimation(layout, DynamicAnimation.TRANSLATION_Y, (float) (-i));
                 springAnimation.getSpring().setDampingRatio(0.8f);
                 springAnimation.getSpring().setStiffness(400.0f);
                 if (runnable2 != null) {
                     springAnimation.addEndListener(
                     /*  JADX ERROR: Method code generation error
-                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0033: INVOKE  
-                          (r0v4 'springAnimation' androidx.dynamicanimation.animation.SpringAnimation)
-                          (wrap: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU : 0x0030: CONSTRUCTOR  (r3v4 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU) = (r5v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU.<init>(java.lang.Runnable):void type: CONSTRUCTOR)
+                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0035: INVOKE  
+                          (r0v3 'springAnimation' androidx.dynamicanimation.animation.SpringAnimation)
+                          (wrap: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU : 0x0032: CONSTRUCTOR  (r3v4 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU) = (r5v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU.<init>(java.lang.Runnable):void type: CONSTRUCTOR)
                          androidx.dynamicanimation.animation.DynamicAnimation.addEndListener(androidx.dynamicanimation.animation.DynamicAnimation$OnAnimationEndListener):androidx.dynamicanimation.animation.DynamicAnimation type: VIRTUAL in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -630,7 +631,7 @@ public final class Bulletin {
                         	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                         	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                         	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0030: CONSTRUCTOR  (r3v4 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU) = (r5v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU.<init>(java.lang.Runnable):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
+                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0032: CONSTRUCTOR  (r3v4 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU) = (r5v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU.<init>(java.lang.Runnable):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -652,8 +653,10 @@ public final class Bulletin {
                         int r0 = r0 - r7
                         float r0 = (float) r0
                         r3.setTranslationY(r0)
+                        if (r6 == 0) goto L_0x0012
                         java.lang.Float r0 = java.lang.Float.valueOf(r0)
                         r6.accept(r0)
+                    L_0x0012:
                         androidx.dynamicanimation.animation.SpringAnimation r0 = new androidx.dynamicanimation.animation.SpringAnimation
                         androidx.dynamicanimation.animation.DynamicAnimation$ViewProperty r1 = androidx.dynamicanimation.animation.DynamicAnimation.TRANSLATION_Y
                         int r7 = -r7
@@ -665,20 +668,20 @@ public final class Bulletin {
                         androidx.dynamicanimation.animation.SpringForce r3 = r0.getSpring()
                         r7 = 1137180672(0x43CLASSNAME, float:400.0)
                         r3.setStiffness(r7)
-                        if (r5 == 0) goto L_0x0036
+                        if (r5 == 0) goto L_0x0038
                         org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU r3 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU
                         r3.<init>(r5)
                         r0.addEndListener(r3)
-                    L_0x0036:
-                        if (r6 == 0) goto L_0x0040
+                    L_0x0038:
+                        if (r6 == 0) goto L_0x0042
                         org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$yAIzcIUeM0Hya8bGgnNWpp7S4UI r3 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$yAIzcIUeM0Hya8bGgnNWpp7S4UI
                         r3.<init>(r6)
                         r0.addUpdateListener(r3)
-                    L_0x0040:
+                    L_0x0042:
                         r0.start()
-                        if (r4 == 0) goto L_0x0048
+                        if (r4 == 0) goto L_0x004a
                         r4.run()
-                    L_0x0048:
+                    L_0x004a:
                         return
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void");
@@ -972,9 +975,9 @@ public final class Bulletin {
 
                 public void setAnimation(int i, String... strArr) {
                     this.imageView.setAnimation(i, 28, 28);
-                    for (int i2 = 0; i2 < strArr.length; i2++) {
+                    for (String str : strArr) {
                         RLottieImageView rLottieImageView = this.imageView;
-                        rLottieImageView.setLayerColor(strArr[i2] + ".**", this.textColor);
+                        rLottieImageView.setLayerColor(str + ".**", this.textColor);
                     }
                 }
             }
@@ -993,13 +996,14 @@ public final class Bulletin {
                     this.textColor = i2;
                     RLottieImageView rLottieImageView = new RLottieImageView(context);
                     this.imageView = rLottieImageView;
-                    addView(rLottieImageView, LayoutHelper.createFrameRelatively(28.0f, 28.0f, 8388627, 14.0f, 10.0f, 14.0f, 10.0f));
+                    addView(rLottieImageView, LayoutHelper.createFrameRelatively(32.0f, 32.0f, 8388627, 12.0f, 8.0f, 12.0f, 8.0f));
                     TextView textView2 = new TextView(context);
                     this.textView = textView2;
                     textView2.setSingleLine();
                     textView2.setTextColor(i2);
                     textView2.setTypeface(Typeface.SANS_SERIF);
                     textView2.setTextSize(1, 15.0f);
+                    textView2.setEllipsize(TextUtils.TruncateAt.END);
                     addView(textView2, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
                 }
 
@@ -1010,11 +1014,15 @@ public final class Bulletin {
                 }
 
                 public void setAnimation(int i, String... strArr) {
-                    this.imageView.setAnimation(i, 28, 28);
-                    for (int i2 = 0; i2 < strArr.length; i2++) {
+                    this.imageView.setAnimation(i, 32, 32);
+                    for (String str : strArr) {
                         RLottieImageView rLottieImageView = this.imageView;
-                        rLottieImageView.setLayerColor(strArr[i2] + ".**", this.textColor);
+                        rLottieImageView.setLayerColor(str + ".**", this.textColor);
                     }
+                }
+
+                public void setIconPaddingBottom(int i) {
+                    this.imageView.setLayoutParams(LayoutHelper.createFrameRelatively(32.0f, 32.0f, 8388627, 12.0f, (float) (8 - i), 12.0f, (float) (i + 8)));
                 }
             }
 
@@ -1043,6 +1051,7 @@ public final class Bulletin {
                 }
             }
 
+            @SuppressLint({"ViewConstructor"})
             public static final class UndoButton extends Button {
                 private Bulletin bulletin;
                 private Runnable delayedAction;
@@ -1067,7 +1076,7 @@ public final class Bulletin {
                         textView.setText(LocaleController.getString("Undo", NUM));
                         textView.setGravity(16);
                         ViewHelper.setPaddingRelative(textView, 16.0f, 0.0f, 16.0f, 0.0f);
-                        addView(textView, LayoutHelper.createFrameRelatively(-2.0f, 48.0f, 16, 0.0f, 0.0f, 0.0f, 0.0f));
+                        addView(textView, LayoutHelper.createFrameRelatively(-2.0f, 48.0f, 16, 8.0f, 0.0f, 0.0f, 0.0f));
                         return;
                     }
                     ImageView imageView = new ImageView(getContext());

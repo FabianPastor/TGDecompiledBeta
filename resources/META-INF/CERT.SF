@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 4.1.1
-SHA1-Digest-Manifest: 48xgOeuHyqAE7T8CH+Bjrw+KH/I=
+SHA1-Digest-Manifest: F7vTNGrs3IOEU6Cs6o2IIjAxSHE=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: 5pYjNbJzzA3e3V/Wmb8mtrkn5Bk=
+SHA1-Digest: yqAcvX5CKNtg2gSRuZSZnLhcHkA=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9880,13 +9880,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: LMn8fT+FSZaUqrn9HKMbQLqpDzg=
+SHA1-Digest: OnGyKrUcWKB7IU8t7gfCuoadzYg=
 
 Name: classes2.dex
 SHA1-Digest: XTIq0AhHhp7Eo+YytesJ9taX0Yw=
 
 Name: classes3.dex
-SHA1-Digest: ZILyiR3x4Ed5tp7vuagvnKz4ef4=
+SHA1-Digest: FxPyaY2lrhTKhzVXtH/x61feXq8=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -9940,16 +9940,16 @@ Name: isoparser-default.properties
 SHA1-Digest: ix2/FbuQDYdbrL/0Ibd5Tj5OTV0=
 
 Name: lib/arm64-v8a/libtmessages.34.so
-SHA1-Digest: t1COnCQB+nQY9lnjSqo83FSd2lY=
+SHA1-Digest: e+joIzGlDZ+EQ7axZ1cTemuWZQY=
 
 Name: lib/armeabi-v7a/libtmessages.34.so
-SHA1-Digest: lBGuXl0C2aKS727j6/JVSnyYKRY=
+SHA1-Digest: x5SgQ5kYB8QqtM1VpA+kCSn5RHQ=
 
 Name: lib/x86/libtmessages.34.so
-SHA1-Digest: F0nk5fIRAuvaPVbUsTgqVMWBX1c=
+SHA1-Digest: Px7Om/RuPON3Pw9/8ygyL+xA0Nw=
 
 Name: lib/x86_64/libtmessages.34.so
-SHA1-Digest: k7a3vVFUgXDUHbYZ45MOt/ukIEM=
+SHA1-Digest: 0Wvbzb8N52Tdain8cGP7p0uL0xg=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -20189,17 +20189,29 @@ SHA1-Digest: YsgUpyrukzioKI9h8p4vKWyAuKA=
 Name: res/raw/ic_admin.json
 SHA1-Digest: VtbWfy1D4gf4Ofc4z8i3grW41E0=
 
+Name: res/raw/ic_ban.json
+SHA1-Digest: 6uFa35Uqg1opH1/p4lsj1Og+81M=
+
 Name: res/raw/ic_delete.json
 SHA1-Digest: E4FxeJFvMw3FDtYcpy9gE/sYbX0=
 
 Name: res/raw/ic_download.json
-SHA1-Digest: SW0V2bJg4Dx/ake5lRYocjZcTU8=
+SHA1-Digest: 3LvgixA4ahu+vEYAyQJ/I1cYQ5k=
 
 Name: res/raw/ic_mute.json
 SHA1-Digest: +DKeIsKUB/6l+7liduMoQbiaHC4=
 
 Name: res/raw/ic_pin.json
 SHA1-Digest: znqmU88uZ87RdMvmkD3APiAkgt4=
+
+Name: res/raw/ic_save_to_gallery.json
+SHA1-Digest: rlTgHpLYqQ/jzQMpDfVjxKBy4X8=
+
+Name: res/raw/ic_save_to_music.json
+SHA1-Digest: ncU/CAT9um7a37zAmp3cqKUAr3Q=
+
+Name: res/raw/ic_unban.json
+SHA1-Digest: MxtzUqeu0QCIl2bYLSoERXyXp+U=
 
 Name: res/raw/ic_unmute.json
 SHA1-Digest: d/p0RG3HrVjOPBEEKkuQB3zXFnQ=
@@ -20223,10 +20235,10 @@ Name: res/raw/permission_pin_dark.svg
 SHA1-Digest: 8m/CWLaJbAiiWQ77URnxCAGteN4=
 
 Name: res/raw/pip_video_request.svg
-SHA1-Digest: lGIeSJt0xJanl0+c52vE+6SPuwc=
+SHA1-Digest: wF2DpKu2XD836PJECLXR6xocUEI=
 
 Name: res/raw/pip_voice_request.svg
-SHA1-Digest: g7NNKmxNa18nDT8Jin9krcSagL0=
+SHA1-Digest: EAp3wZACa0pLGB7oksATG8+2TZo=
 
 Name: res/raw/player_prev.json
 SHA1-Digest: 5lTlzxHDgqXorljo2nS/+IC5JNQ=
@@ -20340,7 +20352,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: vjkQu52BhCKoR9nCmq5xHjBbZD8=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: +op8a8lAlu858t+/Xfe+U5zCZO0=
+SHA1-Digest: a0z//70Wgzwv9mxSmcA+RFjmqvs=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -20358,7 +20370,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: sLZPc6gCEz/wgdGNYmw6ijg40HA=
+SHA1-Digest: vEZu5Wlk9NdQUIsNKXwxGXj2NeA=
 
 Name: transport-api.properties
 SHA1-Digest: OrUd0dvMYm2tlcfDVrGNApZLT1M=

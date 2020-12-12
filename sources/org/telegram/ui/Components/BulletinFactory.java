@@ -2,7 +2,6 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.widget.FrameLayout;
-import androidx.core.util.Preconditions;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -13,12 +12,10 @@ public final class BulletinFactory {
     private final BaseFragment fragment;
 
     public static BulletinFactory of(BaseFragment baseFragment) {
-        Preconditions.checkNotNull(baseFragment);
         return new BulletinFactory(baseFragment);
     }
 
     public static BulletinFactory of(FrameLayout frameLayout) {
-        Preconditions.checkNotNull(frameLayout);
         return new BulletinFactory(frameLayout);
     }
 
@@ -27,31 +24,35 @@ public final class BulletinFactory {
     }
 
     public enum FileType {
-        PHOTO("PhotoSavedHint", NUM),
-        PHOTO_TO_DOWNLOADS("PhotoSavedToDownloadsHint", NUM),
-        PHOTOS("PhotosSavedHint"),
-        VIDEO("VideoSavedHint", NUM),
-        VIDEO_TO_DOWNLOADS("VideoSavedToDownloadsHint", NUM),
-        VIDEOS("VideosSavedHint"),
-        AUDIO("AudioSavedHint", NUM),
-        AUDIOS("AudiosSavedHint"),
-        GIF("GifSavedToDownloadsHint", NUM),
-        MEDIA("MediaSavedHint"),
-        UNKNOWN("FileSavedHint", NUM),
-        UNKNOWNS("FilesSavedHint");
+        PHOTO("PhotoSavedHint", NUM, r5),
+        PHOTOS("PhotosSavedHint", r7),
+        VIDEO("VideoSavedHint", NUM, r5),
+        VIDEOS("VideosSavedHint", r7),
+        MEDIA("MediaSavedHint", r7),
+        PHOTO_TO_DOWNLOADS("PhotoSavedToDownloadsHint", r5),
+        VIDEO_TO_DOWNLOADS("VideoSavedToDownloadsHint", NUM, r5),
+        GIF("GifSavedToDownloadsHint", r5),
+        AUDIO("AudioSavedHint", r14),
+        AUDIOS("AudiosSavedHint", r14),
+        UNKNOWN("FileSavedHint", r5),
+        UNKNOWNS("FilesSavedHint", r5);
         
+        /* access modifiers changed from: private */
+        public final Icon icon;
         private final String localeKey;
         private final int localeRes;
         private final boolean plural;
 
-        private FileType(String str, int i) {
+        private FileType(String str, int i, Icon icon2) {
             this.localeKey = str;
             this.localeRes = i;
+            this.icon = icon2;
             this.plural = false;
         }
 
-        private FileType(String str) {
+        private FileType(String str, Icon icon2) {
             this.localeKey = str;
+            this.icon = icon2;
             this.localeRes = 0;
             this.plural = true;
         }
@@ -62,6 +63,25 @@ public final class BulletinFactory {
                 return LocaleController.formatPluralString(this.localeKey, i);
             }
             return LocaleController.getString(this.localeKey, this.localeRes);
+        }
+
+        private enum Icon {
+            SAVED_TO_DOWNLOADS(NUM, 1, "Box", "Arrow"),
+            SAVED_TO_GALLERY(NUM, 0, "Box", "Arrow", "Mask", "Arrow 2", "Splash"),
+            SAVED_TO_MUSIC(NUM, 1, "Box", "Arrow");
+            
+            /* access modifiers changed from: private */
+            public final String[] layers;
+            /* access modifiers changed from: private */
+            public final int paddingBottom;
+            /* access modifiers changed from: private */
+            public final int resId;
+
+            private Icon(int i, int i2, String... strArr) {
+                this.resId = i;
+                this.paddingBottom = i2;
+                this.layers = strArr;
+            }
         }
     }
 
@@ -90,8 +110,11 @@ public final class BulletinFactory {
         } else {
             lottieLayout = new Bulletin.LottieLayout(getContext(), i2, i3);
         }
-        lottieLayout.setAnimation(NUM, "Box", "Arrow", "Mask", "Arrow 2", "Splash");
+        lottieLayout.setAnimation(fileType.icon.resId, fileType.icon.layers);
         lottieLayout.textView.setText(fileType.getText(i));
+        if (fileType.icon.paddingBottom != 0) {
+            lottieLayout.setIconPaddingBottom(fileType.icon.paddingBottom);
+        }
         return create(lottieLayout, 1500);
     }
 
@@ -108,13 +131,11 @@ public final class BulletinFactory {
         return baseFragment != null ? baseFragment.getParentActivity() : this.containerLayout.getContext();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x006e  */
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x008c  */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0067  */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x0085  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static org.telegram.ui.Components.Bulletin createMuteBulletin(org.telegram.ui.ActionBar.BaseFragment r10, int r11) {
         /*
-            boolean r0 = canShowBulletin(r10)
-            androidx.core.util.Preconditions.checkArgument(r0)
             org.telegram.ui.Components.Bulletin$LottieLayout r0 = new org.telegram.ui.Components.Bulletin$LottieLayout
             android.app.Activity r1 = r10.getParentActivity()
             r0.<init>(r1)
@@ -126,49 +147,49 @@ public final class BulletinFactory {
             r6 = 2
             r7 = 0
             r8 = 1
-            if (r11 == 0) goto L_0x005f
-            if (r11 == r8) goto L_0x0050
-            if (r11 == r6) goto L_0x0041
-            if (r11 == r5) goto L_0x0037
-            if (r11 != r4) goto L_0x0031
+            if (r11 == 0) goto L_0x0058
+            if (r11 == r8) goto L_0x0049
+            if (r11 == r6) goto L_0x003a
+            if (r11 == r5) goto L_0x0030
+            if (r11 != r4) goto L_0x002a
             r11 = 2131626295(0x7f0e0937, float:1.8879822E38)
             java.lang.String r1 = "NotificationsUnmutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r1, r11)
             r1 = 0
-            goto L_0x006c
-        L_0x0031:
+            goto L_0x0065
+        L_0x002a:
             java.lang.IllegalArgumentException r10 = new java.lang.IllegalArgumentException
             r10.<init>()
             throw r10
-        L_0x0037:
+        L_0x0030:
             r11 = 2131626275(0x7f0e0923, float:1.8879782E38)
             java.lang.String r1 = "NotificationsMutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r1, r11)
-            goto L_0x006b
-        L_0x0041:
+            goto L_0x0064
+        L_0x003a:
             java.lang.Object[] r11 = new java.lang.Object[r8]
             java.lang.String r1 = "Days"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r1, r6)
             r11[r7] = r1
             java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r3, r2, r11)
-            goto L_0x006b
-        L_0x0050:
+            goto L_0x0064
+        L_0x0049:
             java.lang.Object[] r11 = new java.lang.Object[r8]
             r9 = 8
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r1, r9)
             r11[r7] = r1
             java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r3, r2, r11)
-            goto L_0x006b
-        L_0x005f:
+            goto L_0x0064
+        L_0x0058:
             java.lang.Object[] r11 = new java.lang.Object[r8]
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r1, r8)
             r11[r7] = r1
             java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r3, r2, r11)
-        L_0x006b:
+        L_0x0064:
             r1 = 1
-        L_0x006c:
-            if (r1 == 0) goto L_0x008c
-            r1 = 2131558426(0x7f0d001a, float:1.8742167E38)
+        L_0x0065:
+            if (r1 == 0) goto L_0x0085
+            r1 = 2131558427(0x7f0d001b, float:1.874217E38)
             r2 = 5
             java.lang.String[] r2 = new java.lang.String[r2]
             java.lang.String r3 = "Body Main"
@@ -182,9 +203,9 @@ public final class BulletinFactory {
             java.lang.String r3 = "Curve Small"
             r2[r4] = r3
             r0.setAnimation(r1, r2)
-            goto L_0x00a4
-        L_0x008c:
-            r1 = 2131558428(0x7f0d001c, float:1.8742172E38)
+            goto L_0x009d
+        L_0x0085:
+            r1 = 2131558432(0x7f0d0020, float:1.874218E38)
             java.lang.String[] r2 = new java.lang.String[r4]
             java.lang.String r3 = "BODY"
             r2[r7] = r3
@@ -195,7 +216,7 @@ public final class BulletinFactory {
             java.lang.String r3 = "Wibe Small"
             r2[r5] = r3
             r0.setAnimation(r1, r2)
-        L_0x00a4:
+        L_0x009d:
             android.widget.TextView r1 = r0.textView
             r1.setText(r11)
             r11 = 1500(0x5dc, float:2.102E-42)
@@ -217,15 +238,13 @@ public final class BulletinFactory {
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static org.telegram.ui.Components.Bulletin createUnpinAllMessagesBulletin(org.telegram.ui.ActionBar.BaseFragment r7, int r8, boolean r9, java.lang.Runnable r10, java.lang.Runnable r11) {
         /*
-            boolean r0 = canShowBulletin(r7)
-            androidx.core.util.Preconditions.checkArgument(r0)
             java.lang.String r0 = "Line"
             java.lang.String r1 = "Pin"
             r2 = 0
             r3 = 2
-            r4 = 2131558429(0x7f0d001d, float:1.8742174E38)
+            r4 = 2131558433(0x7f0d0021, float:1.8742182E38)
             r5 = 1
-            if (r9 == 0) goto L_0x0042
+            if (r9 == 0) goto L_0x003b
             org.telegram.ui.Components.Bulletin$TwoLineLottieLayout r8 = new org.telegram.ui.Components.Bulletin$TwoLineLottieLayout
             android.app.Activity r9 = r7.getParentActivity()
             r8.<init>(r9)
@@ -234,17 +253,17 @@ public final class BulletinFactory {
             r9[r5] = r0
             r8.setAnimation(r4, r9)
             android.widget.TextView r9 = r8.titleTextView
-            r0 = 2131626710(0x7f0e0ad6, float:1.8880664E38)
+            r0 = 2131626716(0x7f0e0adc, float:1.8880676E38)
             java.lang.String r1 = "PinnedMessagesHidden"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r9.setText(r0)
             android.widget.TextView r9 = r8.subtitleTextView
-            r0 = 2131626711(0x7f0e0ad7, float:1.8880666E38)
+            r0 = 2131626717(0x7f0e0add, float:1.8880678E38)
             java.lang.String r1 = "PinnedMessagesHiddenInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r9.setText(r0)
-            goto L_0x0060
-        L_0x0042:
+            goto L_0x0059
+        L_0x003b:
             org.telegram.ui.Components.Bulletin$LottieLayout r9 = new org.telegram.ui.Components.Bulletin$LottieLayout
             android.app.Activity r6 = r7.getParentActivity()
             r9.<init>(r6)
@@ -257,7 +276,7 @@ public final class BulletinFactory {
             java.lang.String r8 = org.telegram.messenger.LocaleController.formatPluralString(r1, r8)
             r0.setText(r8)
             r8 = r9
-        L_0x0060:
+        L_0x0059:
             org.telegram.ui.Components.Bulletin$UndoButton r9 = new org.telegram.ui.Components.Bulletin$UndoButton
             android.app.Activity r0 = r7.getParentActivity()
             r9.<init>(r0, r5)
@@ -280,10 +299,30 @@ public final class BulletinFactory {
     }
 
     public static Bulletin createPromoteToAdminBulletin(BaseFragment baseFragment, String str) {
-        Preconditions.checkArgument(canShowBulletin(baseFragment));
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity());
         lottieLayout.setAnimation(NUM, "Shield");
         lottieLayout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserSetAsAdminHint", NUM, str)));
+        return Bulletin.make(baseFragment, (Bulletin.Layout) lottieLayout, 1500);
+    }
+
+    public static Bulletin createRemoveFromChatBulletin(BaseFragment baseFragment, String str, String str2) {
+        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity());
+        lottieLayout.setAnimation(NUM, "Hand");
+        lottieLayout.textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("UserRemovedFromChatHint", NUM, str, str2)));
+        return Bulletin.make(baseFragment, (Bulletin.Layout) lottieLayout, 1500);
+    }
+
+    public static Bulletin createBanBulletin(BaseFragment baseFragment, boolean z) {
+        String str;
+        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity());
+        if (z) {
+            lottieLayout.setAnimation(NUM, "Hand");
+            str = LocaleController.getString("UserBlocked", NUM);
+        } else {
+            lottieLayout.setAnimation(NUM, "Main", "Finger 1", "Finger 2", "Finger 3", "Finger 4");
+            str = LocaleController.getString("UserUnblocked", NUM);
+        }
+        lottieLayout.textView.setText(AndroidUtilities.replaceTags(str));
         return Bulletin.make(baseFragment, (Bulletin.Layout) lottieLayout, 1500);
     }
 
@@ -296,7 +335,6 @@ public final class BulletinFactory {
     }
 
     private static Bulletin createPinMessageBulletin(BaseFragment baseFragment, boolean z, Runnable runnable, Runnable runnable2) {
-        Preconditions.checkArgument(canShowBulletin(baseFragment));
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity());
         lottieLayout.setAnimation(z ? NUM : NUM, "Pin", "Line");
         lottieLayout.textView.setText(LocaleController.getString(z ? "MessagePinnedHint" : "MessageUnpinnedHint", z ? NUM : NUM));

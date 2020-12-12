@@ -31,6 +31,7 @@ public class StickerEmojiCell extends FrameLayout {
     private boolean changingAlpha;
     private int currentAccount = UserConfig.selectedAccount;
     private TextView emojiTextView;
+    private boolean fromEmojiPanel;
     private BackupImageView imageView;
     private long lastUpdateTime;
     private Object parentObject;
@@ -40,8 +41,9 @@ public class StickerEmojiCell extends FrameLayout {
     private TLRPC$Document sticker;
     private long time;
 
-    public StickerEmojiCell(Context context) {
+    public StickerEmojiCell(Context context, boolean z) {
         super(context);
+        this.fromEmojiPanel = z;
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setAspectFit(true);
@@ -82,7 +84,8 @@ public class StickerEmojiCell extends FrameLayout {
             this.sticker = tLRPC$Document2;
             this.parentObject = obj;
             TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
-            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document2, false);
+            boolean z3 = this.fromEmojiPanel;
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document2, z3 ? "emptyListPlaceholder" : "windowBackgroundGray", z3 ? 0.2f : 1.0f);
             if (MessageObject.canAutoplayAnimatedSticker(tLRPC$Document)) {
                 if (svgThumb != null) {
                     this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", (String) null, svgThumb, this.parentObject);
@@ -90,6 +93,12 @@ public class StickerEmojiCell extends FrameLayout {
                     this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, 0, this.parentObject);
                 } else {
                     this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "80_80", (String) null, (Drawable) null, this.parentObject);
+                }
+            } else if (svgThumb != null) {
+                if (closestPhotoSizeWithSize != null) {
+                    this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, "webp", svgThumb, this.parentObject);
+                } else {
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, "webp", svgThumb, this.parentObject);
                 }
             } else if (closestPhotoSizeWithSize != null) {
                 this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), (String) null, "webp", (Drawable) null, this.parentObject);

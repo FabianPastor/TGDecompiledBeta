@@ -57,8 +57,8 @@ public class GroupCallInvitedCell extends FrameLayout {
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         SimpleTextView simpleTextView2 = this.nameTextView;
         boolean z2 = LocaleController.isRTL;
-        float f = 48.0f;
-        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (z2 ? 5 : 3) | 48, z2 ? 48.0f : 67.0f, 10.0f, z2 ? 67.0f : 48.0f, 0.0f));
+        float f = 54.0f;
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (z2 ? 5 : 3) | 48, z2 ? 54.0f : 67.0f, 10.0f, z2 ? 67.0f : 54.0f, 0.0f));
         SimpleTextView simpleTextView3 = new SimpleTextView(context);
         this.statusTextView = simpleTextView3;
         simpleTextView3.setTextSize(15);
@@ -67,7 +67,7 @@ public class GroupCallInvitedCell extends FrameLayout {
         this.statusTextView.setText(LocaleController.getString("Invited", NUM));
         SimpleTextView simpleTextView4 = this.statusTextView;
         boolean z3 = LocaleController.isRTL;
-        addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (z3 ? 5 : 3) | 48, z3 ? 48.0f : 67.0f, 32.0f, z3 ? 67.0f : f, 0.0f));
+        addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (z3 ? 5 : 3) | 48, z3 ? 54.0f : 67.0f, 32.0f, z3 ? 67.0f : f, 0.0f));
         ImageView imageView = new ImageView(context);
         this.muteButton = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -75,7 +75,7 @@ public class GroupCallInvitedCell extends FrameLayout {
         this.muteButton.setImportantForAccessibility(2);
         this.muteButton.setPadding(0, 0, AndroidUtilities.dp(4.0f), 0);
         this.muteButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(this.grayIconColor), PorterDuff.Mode.MULTIPLY));
-        addView(this.muteButton, LayoutHelper.createFrame(48, -1.0f, (LocaleController.isRTL ? 3 : i) | 16, 0.0f, 0.0f, 0.0f, 0.0f));
+        addView(this.muteButton, LayoutHelper.createFrame(48, -1.0f, (LocaleController.isRTL ? 3 : i) | 16, 6.0f, 0.0f, 6.0f, 0.0f));
         setWillNotDraw(false);
         setFocusable(true);
     }

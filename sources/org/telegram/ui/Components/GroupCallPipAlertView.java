@@ -545,7 +545,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             if (callState == 1 || callState == 2 || callState == 6 || callState == 5) {
                 this.subtitleView.setText(LocaleController.getString("VoipGroupConnecting", NUM));
             } else {
-                this.subtitleView.setText(LocaleController.formatPluralString("Members", sharedInstance.groupCall.call.participants_count));
+                this.subtitleView.setText(LocaleController.formatPluralString("Participants", sharedInstance.groupCall.call.participants_count));
             }
         }
     }

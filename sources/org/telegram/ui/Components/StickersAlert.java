@@ -1191,7 +1191,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r1 = r0.set
             boolean r1 = r1.masks
-            r6 = 2131626877(0x7f0e0b7d, float:1.8881003E38)
+            r6 = 2131626883(0x7f0e0b83, float:1.8881015E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r1 == 0) goto L_0x00d1
             java.lang.Object[] r1 = new java.lang.Object[r5]
@@ -1597,21 +1597,27 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            FeaturedStickerSetInfoCell featuredStickerSetInfoCell;
-            if (i == 0) {
-                AnonymousClass1 r4 = new StickerEmojiCell(this.context) {
-                    public void onMeasure(int i, int i2) {
-                        super.onMeasure(View.MeasureSpec.makeMeasureSpec(StickersAlert.this.itemSize, NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
-                    }
-                };
-                r4.getImageView().setLayerNum(7);
-                featuredStickerSetInfoCell = r4;
-            } else if (i != 1) {
-                featuredStickerSetInfoCell = i != 2 ? null : new FeaturedStickerSetInfoCell(this.context, 8, true, false);
-            } else {
-                featuredStickerSetInfoCell = new EmptyCell(this.context);
+            FrameLayout frameLayout;
+            FrameLayout frameLayout2;
+            if (i != 0) {
+                if (i == 1) {
+                    frameLayout = new EmptyCell(this.context);
+                } else if (i != 2) {
+                    frameLayout = null;
+                } else {
+                    frameLayout2 = new FeaturedStickerSetInfoCell(this.context, 8, true, false);
+                }
+                return new RecyclerListView.Holder(frameLayout);
             }
-            return new RecyclerListView.Holder(featuredStickerSetInfoCell);
+            AnonymousClass1 r5 = new StickerEmojiCell(this.context, false) {
+                public void onMeasure(int i, int i2) {
+                    super.onMeasure(View.MeasureSpec.makeMeasureSpec(StickersAlert.this.itemSize, NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
+                }
+            };
+            r5.getImageView().setLayerNum(7);
+            frameLayout2 = r5;
+            frameLayout = frameLayout2;
+            return new RecyclerListView.Holder(frameLayout);
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {

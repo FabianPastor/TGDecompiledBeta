@@ -1133,21 +1133,25 @@ public class VoIPService extends VoIPBaseService {
         ChatObject.Call call;
         if (this.chat != null && (call = this.groupCall) != null && call.call.id == tLRPC$TL_updateGroupCallParticipants.call.id) {
             ArrayList arrayList = null;
+            int i = UserConfig.getInstance(this.currentAccount).clientUserId;
             int size = tLRPC$TL_updateGroupCallParticipants.participants.size();
-            for (int i = 0; i < size; i++) {
-                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = tLRPC$TL_updateGroupCallParticipants.participants.get(i);
+            for (int i2 = 0; i2 < size; i2++) {
+                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = tLRPC$TL_updateGroupCallParticipants.participants.get(i2);
                 if (tLRPC$TL_groupCallParticipant.left) {
                     if (arrayList == null) {
                         arrayList = new ArrayList();
                     }
                     arrayList.add(Integer.valueOf(tLRPC$TL_groupCallParticipant.source));
+                } else if (tLRPC$TL_groupCallParticipant.user_id == i && tLRPC$TL_groupCallParticipant.source != this.mySource) {
+                    hangUp(2);
+                    return;
                 }
             }
             if (arrayList != null) {
                 int[] iArr = new int[arrayList.size()];
                 int size2 = arrayList.size();
-                for (int i2 = 0; i2 < size2; i2++) {
-                    iArr[i2] = ((Integer) arrayList.get(i2)).intValue();
+                for (int i3 = 0; i3 < size2; i3++) {
+                    iArr[i3] = ((Integer) arrayList.get(i3)).intValue();
                 }
                 this.tgVoip.removeSsrcs(iArr);
             }
@@ -1634,7 +1638,7 @@ public class VoIPService extends VoIPBaseService {
                 showNotification();
                 AndroidUtilities.runOnUIThread($$Lambda$VoIPService$tGLyMzKBQ5hlAuZqJ0vWtFAsmcE.INSTANCE);
                 createGroupInstance();
-            } else if (getSharedInstance() != null) {
+            } else if (getSharedInstance() != null && this.groupCall != null) {
                 dispatchStateChanged(1);
                 this.mySource = i;
                 TLRPC$TL_phone_joinGroupCall tLRPC$TL_phone_joinGroupCall = new TLRPC$TL_phone_joinGroupCall();
@@ -1867,8 +1871,8 @@ public class VoIPService extends VoIPBaseService {
                 VoIPService.this.startGroupCall(i, str);
             }
         }, new NativeInstance.AudioLevelsCallback() {
-            public final void run(int[] iArr, float[] fArr) {
-                VoIPService.this.lambda$createGroupInstance$35$VoIPService(iArr, fArr);
+            public final void run(int[] iArr, float[] fArr, boolean[] zArr) {
+                VoIPService.this.lambda$createGroupInstance$35$VoIPService(iArr, fArr, zArr);
             }
         });
         this.tgVoip = makeGroup;
@@ -1882,37 +1886,24 @@ public class VoIPService extends VoIPBaseService {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$createGroupInstance$35 */
-    public /* synthetic */ void lambda$createGroupInstance$35$VoIPService(int[] iArr, float[] fArr) {
+    public /* synthetic */ void lambda$createGroupInstance$35$VoIPService(int[] iArr, float[] fArr, boolean[] zArr) {
         ChatObject.Call call;
-        int[] iArr2 = iArr;
-        float[] fArr2 = fArr;
         if (VoIPBaseService.sharedInstance != null && (call = this.groupCall) != null) {
-            call.processVoiceLevelsUpdate(iArr2, fArr2);
-            boolean z = false;
+            call.processVoiceLevelsUpdate(iArr, fArr, zArr);
             float f = 0.0f;
-            for (int i = 0; i < iArr2.length; i++) {
-                if (iArr2[i] == 0) {
-                    if (this.lastTypingTimeSend < SystemClock.uptimeMillis() - 5000 && fArr2[i] > 0.1f) {
+            boolean z = false;
+            for (int i = 0; i < iArr.length; i++) {
+                if (iArr[i] == 0) {
+                    if (this.lastTypingTimeSend < SystemClock.uptimeMillis() - 5000 && fArr[i] > 0.1f && zArr[i]) {
                         this.lastTypingTimeSend = SystemClock.uptimeMillis();
                         TLRPC$TL_messages_setTyping tLRPC$TL_messages_setTyping = new TLRPC$TL_messages_setTyping();
                         tLRPC$TL_messages_setTyping.action = new TLRPC$TL_speakingInGroupCallAction();
                         tLRPC$TL_messages_setTyping.peer = MessagesController.getInputPeer(this.chat);
                         ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_setTyping, $$Lambda$VoIPService$2ibAjneDk9vGW6Nw2TIThdGMncw.INSTANCE);
                     }
-                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.groupCall.participants.get(UserConfig.getInstance(this.currentAccount).getClientUserId());
-                    if (tLRPC$TL_groupCallParticipant != null && fArr2[i] > 0.1f) {
-                        tLRPC$TL_groupCallParticipant.lastSpeakTime = SystemClock.uptimeMillis();
-                    }
-                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.webRtcMicAmplitudeEvent, Float.valueOf(fArr2[i]));
+                    NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.webRtcMicAmplitudeEvent, Float.valueOf(fArr[i]));
                 } else {
-                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = this.groupCall.participantsBySources.get(iArr2[i]);
-                    if (tLRPC$TL_groupCallParticipant2 != null && fArr2[i] > 0.1f) {
-                        tLRPC$TL_groupCallParticipant2.lastSpeakTime = SystemClock.uptimeMillis();
-                        tLRPC$TL_groupCallParticipant2.amplitude = fArr2[i];
-                    } else if (tLRPC$TL_groupCallParticipant2 != null) {
-                        tLRPC$TL_groupCallParticipant2.amplitude = 0.0f;
-                    }
-                    f = Math.max(f, fArr2[i]);
+                    f = Math.max(f, fArr[i]);
                     z = true;
                 }
             }
@@ -1920,7 +1911,7 @@ public class VoIPService extends VoIPBaseService {
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.webRtcSpeakerAmplitudeEvent, Float.valueOf(f));
                 NativeInstance.AudioLevelsCallback audioLevelsCallback2 = audioLevelsCallback;
                 if (audioLevelsCallback2 != null) {
-                    audioLevelsCallback2.run(iArr2, fArr2);
+                    audioLevelsCallback2.run(iArr, fArr, zArr);
                 }
             }
         }
@@ -1936,7 +1927,7 @@ public class VoIPService extends VoIPBaseService {
         }
         cancelGroupCheckShortPoll();
         if (!this.playedConnectedSound) {
-            this.soundPool.play(this.spVoiceChatStartId, 0.8f, 0.8f, 0, 0, 1.0f);
+            this.soundPool.play(this.spVoiceChatStartId, 0.6f, 0.6f, 0, 0, 1.0f);
             this.playedConnectedSound = true;
         }
     }

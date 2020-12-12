@@ -64,6 +64,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
     };
     /* access modifiers changed from: private */
+    public boolean drawBackground;
+    /* access modifiers changed from: private */
     public int[] itemIcons;
     private ArrayList<AlertDialogCell> itemViews = new ArrayList<>();
     /* access modifiers changed from: private */
@@ -89,6 +91,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     /* access modifiers changed from: private */
     public CharSequence neutralButtonText;
     /* access modifiers changed from: private */
+    public boolean notDrawBackgroundOnTopView;
+    /* access modifiers changed from: private */
     public DialogInterface.OnClickListener onBackButtonListener;
     private DialogInterface.OnCancelListener onCancelListener;
     /* access modifiers changed from: private */
@@ -112,7 +116,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public BitmapDrawable[] shadow = new BitmapDrawable[2];
     /* access modifiers changed from: private */
     public AnimatorSet[] shadowAnimation = new AnimatorSet[2];
-    private Drawable shadowDrawable;
+    /* access modifiers changed from: private */
+    public Drawable shadowDrawable;
     private boolean[] shadowVisibility = new boolean[2];
     private Runnable showRunnable = new Runnable() {
         public final void run() {
@@ -704,12 +709,39 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     super.requestLayout();
                 }
             }
+
+            /* access modifiers changed from: protected */
+            public void dispatchDraw(Canvas canvas) {
+                if (AlertDialog.this.drawBackground) {
+                    AlertDialog.this.shadowDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                    if (AlertDialog.this.topView == null || !AlertDialog.this.notDrawBackgroundOnTopView) {
+                        AlertDialog.this.shadowDrawable.draw(canvas);
+                    } else {
+                        int bottom = AlertDialog.this.topView.getBottom();
+                        canvas.save();
+                        canvas.clipRect(0, bottom, getMeasuredWidth(), getMeasuredHeight());
+                        AlertDialog.this.shadowDrawable.draw(canvas);
+                        canvas.restore();
+                    }
+                }
+                super.dispatchDraw(canvas);
+            }
         };
         r2.setOrientation(1);
         if (this.progressViewStyle == 3) {
             r2.setBackgroundDrawable((Drawable) null);
+            r2.setPadding(0, 0, 0, 0);
+            this.drawBackground = false;
+        } else if (this.notDrawBackgroundOnTopView) {
+            Rect rect = new Rect();
+            this.shadowDrawable.getPadding(rect);
+            r2.setPadding(rect.left, rect.top, rect.right, rect.bottom);
+            this.drawBackground = true;
         } else {
+            r2.setBackgroundDrawable((Drawable) null);
+            r2.setPadding(0, 0, 0, 0);
             r2.setBackgroundDrawable(this.shadowDrawable);
+            this.drawBackground = false;
         }
         r2.setFitsSystemWindows(i2 >= 21);
         setContentView(r2);
@@ -780,7 +812,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.shadow[1].setAlpha(0);
             this.shadow[0].setCallback(this);
             this.shadow[1].setCallback(this);
-            AnonymousClass2 r7 = new ScrollView(getContext()) {
+            AnonymousClass2 r5 = new ScrollView(getContext()) {
                 /* access modifiers changed from: protected */
                 public boolean drawChild(Canvas canvas, View view, long j) {
                     boolean drawChild = super.drawChild(canvas, view, j);
@@ -795,8 +827,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     return drawChild;
                 }
             };
-            this.contentScrollView = r7;
-            r7.setVerticalScrollBarEnabled(false);
+            this.contentScrollView = r5;
+            r5.setVerticalScrollBarEnabled(false);
             AndroidUtilities.setScrollViewEdgeEffectColor(this.contentScrollView, getThemeColor("dialogScrollGlow"));
             r2.addView(this.contentScrollView, LayoutHelper.createLinear(-1, -2, 0.0f, 0.0f, 0.0f, 0.0f));
             LinearLayout linearLayout = new LinearLayout(getContext());
@@ -1087,8 +1119,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 i = AndroidUtilities.dp(496.0f);
             }
             int min = Math.min(i, dp);
-            Rect rect = this.backgroundPaddings;
-            layoutParams.width = min + rect.left + rect.right;
+            Rect rect2 = this.backgroundPaddings;
+            layoutParams.width = min + rect2.left + rect2.right;
         }
         View view3 = this.customView;
         if (view3 == null || !canTextInput(view3)) {
@@ -1541,6 +1573,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
         public void setDimEnabled(boolean z) {
             boolean unused = this.alertDialog.dimEnabled = z;
+        }
+
+        public void notDrawBackgroundOnTopView(boolean z) {
+            boolean unused = this.alertDialog.notDrawBackgroundOnTopView = z;
         }
     }
 }

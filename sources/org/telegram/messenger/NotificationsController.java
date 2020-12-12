@@ -3473,7 +3473,7 @@ public class NotificationsController extends BaseController {
             boolean r12 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation
             r14 = 3
             if (r12 == 0) goto L_0x029b
-            r1 = 2131627900(0x7f0e0f7c, float:1.8883077E38)
+            r1 = 2131627907(0x7f0e0var_, float:1.8883092E38)
             r2 = 2
             java.lang.Object[] r3 = new java.lang.Object[r2]
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
@@ -5065,12 +5065,12 @@ public class NotificationsController extends BaseController {
             org.telegram.tgnet.TLRPC$Poll r0 = r2.poll
             boolean r0 = r0.quiz
             if (r0 == 0) goto L_0x0ee8
-            r0 = 2131626836(0x7f0e0b54, float:1.888092E38)
+            r0 = 2131626842(0x7f0e0b5a, float:1.8880932E38)
             java.lang.String r1 = "QuizPoll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
         L_0x0ee8:
-            r0 = 2131626729(0x7f0e0ae9, float:1.8880702E38)
+            r0 = 2131626735(0x7f0e0aef, float:1.8880715E38)
             java.lang.String r1 = "Poll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
@@ -5367,7 +5367,7 @@ public class NotificationsController extends BaseController {
         L_0x014d:
             int r4 = (int) r3
             if (r4 != 0) goto L_0x015b
-            r0 = 2131627832(0x7f0e0var_, float:1.888294E38)
+            r0 = 2131627839(0x7f0e0f3f, float:1.8882954E38)
             java.lang.String r1 = "YouHaveNewMessage"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x16e7
@@ -5412,7 +5412,7 @@ public class NotificationsController extends BaseController {
         L_0x01aa:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation
             if (r2 == 0) goto L_0x020d
-            r1 = 2131627900(0x7f0e0f7c, float:1.8883077E38)
+            r1 = 2131627907(0x7f0e0var_, float:1.8883092E38)
             r2 = 2
             java.lang.Object[] r3 = new java.lang.Object[r2]
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
@@ -8032,7 +8032,7 @@ public class NotificationsController extends BaseController {
         L_0x16e7:
             return r14
         L_0x16e8:
-            r0 = 2131627832(0x7f0e0var_, float:1.888294E38)
+            r0 = 2131627839(0x7f0e0f3f, float:1.8882954E38)
             java.lang.String r1 = "YouHaveNewMessage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
@@ -8497,10 +8497,10 @@ public class NotificationsController extends BaseController {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:191:0x0408 A[LOOP:1: B:189:0x0405->B:191:0x0408, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:194:0x0415  */
-    /* JADX WARNING: Removed duplicated region for block: B:197:0x0421  */
-    /* JADX WARNING: Removed duplicated region for block: B:204:0x0440  */
+    /* JADX WARNING: Removed duplicated region for block: B:199:0x0421 A[LOOP:1: B:197:0x041e->B:199:0x0421, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:202:0x042e  */
+    /* JADX WARNING: Removed duplicated region for block: B:205:0x043a  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x0459  */
     @android.annotation.TargetApi(26)
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private java.lang.String validateChannelId(long r26, java.lang.String r28, long[] r29, int r30, android.net.Uri r31, int r32, boolean r33, boolean r34, boolean r35, int r36) {
@@ -8633,11 +8633,11 @@ public class NotificationsController extends BaseController {
             java.lang.StringBuilder r8 = new java.lang.StringBuilder
             r8.<init>()
             java.lang.String r9 = "secret"
-            if (r35 != 0) goto L_0x03ba
-            if (r14 == 0) goto L_0x03ba
+            if (r35 != 0) goto L_0x03d3
+            if (r14 == 0) goto L_0x03d3
             android.app.NotificationManager r12 = systemNotificationManager
             android.app.NotificationChannel r12 = r12.getNotificationChannel(r14)
-            if (r12 == 0) goto L_0x03ba
+            if (r12 == 0) goto L_0x03d3
             r16 = r6
             int r6 = r12.getImportance()
             r17 = r10
@@ -8673,83 +8673,86 @@ public class NotificationsController extends BaseController {
             r3 = 0
             r8.setLength(r3)
             boolean r3 = r15.equals(r0)
-            if (r3 != 0) goto L_0x03a5
+            if (r3 != 0) goto L_0x03be
             java.lang.String r3 = "notify2_"
-            if (r6 != 0) goto L_0x0184
+            if (r6 != 0) goto L_0x0187
+            if (r34 == 0) goto L_0x017c
             android.content.SharedPreferences$Editor r4 = r5.edit()
-            if (r33 == 0) goto L_0x0167
+            if (r33 == 0) goto L_0x0168
             java.lang.String r3 = getGlobalNotificationsKey(r36)
             r6 = 2147483647(0x7fffffff, float:NaN)
             r4.putInt(r3, r6)
-            r11 = 2
-            goto L_0x017a
-        L_0x0167:
+            goto L_0x017d
+        L_0x0168:
             java.lang.StringBuilder r6 = new java.lang.StringBuilder
             r6.<init>()
             r6.append(r3)
             r6.append(r1)
             java.lang.String r3 = r6.toString()
-            r11 = 2
-            r4.putInt(r3, r11)
-        L_0x017a:
-            r11 = r36
+            r6 = 2
+            r4.putInt(r3, r6)
+            goto L_0x017d
+        L_0x017c:
+            r4 = 0
+        L_0x017d:
+            r14 = r36
             r35 = r0
-            r14 = r4
+            r11 = r4
             r0 = 1
             r4 = r32
-            goto L_0x0213
-        L_0x0184:
+            goto L_0x021d
+        L_0x0187:
             r4 = r32
-            r11 = 2
-            if (r6 == r4) goto L_0x020d
-            android.content.SharedPreferences$Editor r14 = r5.edit()
-            r11 = 4
-            if (r6 == r11) goto L_0x01a1
-            r11 = 5
-            if (r6 != r11) goto L_0x0194
-            goto L_0x01a1
-        L_0x0194:
-            r11 = 1
-            if (r6 != r11) goto L_0x019a
+            if (r6 == r4) goto L_0x0217
+            if (r34 != 0) goto L_0x0210
+            android.content.SharedPreferences$Editor r11 = r5.edit()
+            r14 = 4
+            if (r6 == r14) goto L_0x01a5
+            r14 = 5
+            if (r6 != r14) goto L_0x0198
+            goto L_0x01a5
+        L_0x0198:
+            r14 = 1
+            if (r6 != r14) goto L_0x019e
             r6 = 4
-            r11 = 2
-            goto L_0x01a3
-        L_0x019a:
-            r11 = 2
-            if (r6 != r11) goto L_0x019f
+            r14 = 2
+            goto L_0x01a7
+        L_0x019e:
+            r14 = 2
+            if (r6 != r14) goto L_0x01a3
             r6 = 5
-            goto L_0x01a3
-        L_0x019f:
-            r6 = 0
-            goto L_0x01a3
-        L_0x01a1:
-            r11 = 2
-            r6 = 1
+            goto L_0x01a7
         L_0x01a3:
-            if (r33 == 0) goto L_0x01cc
+            r6 = 0
+            goto L_0x01a7
+        L_0x01a5:
+            r14 = 2
+            r6 = 1
+        L_0x01a7:
+            if (r33 == 0) goto L_0x01d0
             java.lang.String r3 = getGlobalNotificationsKey(r36)
-            r11 = 0
-            android.content.SharedPreferences$Editor r3 = r14.putInt(r3, r11)
+            r14 = 0
+            android.content.SharedPreferences$Editor r3 = r11.putInt(r3, r14)
             r3.commit()
-            r11 = r36
+            r14 = r36
             r3 = 2
-            if (r11 != r3) goto L_0x01be
+            if (r14 != r3) goto L_0x01c2
             java.lang.String r3 = "priority_channel"
-            r14.putInt(r3, r6)
-        L_0x01bb:
+            r11.putInt(r3, r6)
+        L_0x01bf:
             r35 = r0
-            goto L_0x020b
-        L_0x01be:
-            if (r11 != 0) goto L_0x01c6
+            goto L_0x0215
+        L_0x01c2:
+            if (r14 != 0) goto L_0x01ca
             java.lang.String r3 = "priority_group"
-            r14.putInt(r3, r6)
-            goto L_0x01bb
-        L_0x01c6:
+            r11.putInt(r3, r6)
+            goto L_0x01bf
+        L_0x01ca:
             java.lang.String r3 = "priority_messages"
-            r14.putInt(r3, r6)
-            goto L_0x01bb
-        L_0x01cc:
-            r11 = r36
+            r11.putInt(r3, r6)
+            goto L_0x01bf
+        L_0x01d0:
+            r14 = r36
             r35 = r0
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
@@ -8757,43 +8760,49 @@ public class NotificationsController extends BaseController {
             r0.append(r1)
             java.lang.String r0 = r0.toString()
             r3 = 0
-            r14.putInt(r0, r3)
+            r11.putInt(r0, r3)
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r3 = "notifyuntil_"
             r0.append(r3)
             r0.append(r1)
             java.lang.String r0 = r0.toString()
-            r14.remove(r0)
+            r11.remove(r0)
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r3 = "priority_"
             r0.append(r3)
             r0.append(r1)
             java.lang.String r0 = r0.toString()
-            r14.putInt(r0, r6)
-        L_0x020b:
+            r11.putInt(r0, r6)
+            goto L_0x0215
+        L_0x0210:
+            r14 = r36
+            r35 = r0
+            r11 = 0
+        L_0x0215:
             r0 = 1
-            goto L_0x0213
-        L_0x020d:
-            r11 = r36
+            goto L_0x021d
+        L_0x0217:
+            r14 = r36
             r35 = r0
             r0 = 0
-            r14 = 0
-        L_0x0213:
-            if (r10 != 0) goto L_0x0217
-            if (r31 != 0) goto L_0x0229
-        L_0x0217:
-            if (r10 == 0) goto L_0x02f6
-            if (r31 == 0) goto L_0x0229
+            r11 = 0
+        L_0x021d:
+            if (r10 != 0) goto L_0x0221
+            if (r31 != 0) goto L_0x0233
+        L_0x0221:
+            if (r10 == 0) goto L_0x030b
+            if (r31 == 0) goto L_0x0233
             java.lang.String r3 = r10.toString()
             java.lang.String r6 = r31.toString()
             boolean r3 = android.text.TextUtils.equals(r3, r6)
-            if (r3 != 0) goto L_0x02f6
-        L_0x0229:
-            if (r14 != 0) goto L_0x022f
-            android.content.SharedPreferences$Editor r14 = r5.edit()
-        L_0x022f:
+            if (r3 != 0) goto L_0x030b
+        L_0x0233:
+            if (r34 != 0) goto L_0x0301
+            if (r11 != 0) goto L_0x023b
+            android.content.SharedPreferences$Editor r11 = r5.edit()
+        L_0x023b:
             java.lang.String r0 = "GroupSound"
             java.lang.String r3 = "GlobalSound"
             java.lang.String r6 = "ChannelSound"
@@ -8801,219 +8810,227 @@ public class NotificationsController extends BaseController {
             java.lang.String r15 = "sound_"
             r22 = r9
             java.lang.String r9 = "NoSound"
-            if (r10 != 0) goto L_0x026b
-            if (r33 == 0) goto L_0x0254
+            if (r10 != 0) goto L_0x0277
+            if (r33 == 0) goto L_0x0260
             r23 = r13
             r13 = 2
-            if (r11 != r13) goto L_0x024a
-            r14.putString(r6, r9)
-            goto L_0x0268
-        L_0x024a:
-            if (r11 != 0) goto L_0x0250
-            r14.putString(r0, r9)
-            goto L_0x0268
-        L_0x0250:
-            r14.putString(r3, r9)
-            goto L_0x0268
-        L_0x0254:
+            if (r14 != r13) goto L_0x0256
+            r11.putString(r6, r9)
+            goto L_0x0274
+        L_0x0256:
+            if (r14 != 0) goto L_0x025c
+            r11.putString(r0, r9)
+            goto L_0x0274
+        L_0x025c:
+            r11.putString(r3, r9)
+            goto L_0x0274
+        L_0x0260:
             r23 = r13
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             r0.append(r15)
             r0.append(r1)
             java.lang.String r0 = r0.toString()
-            r14.putString(r0, r9)
-        L_0x0268:
+            r11.putString(r0, r9)
+        L_0x0274:
             r24 = r10
-            goto L_0x02c7
-        L_0x026b:
+            goto L_0x02d3
+        L_0x0277:
             r23 = r13
             java.lang.String r9 = r10.toString()
             android.content.Context r13 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.media.Ringtone r13 = android.media.RingtoneManager.getRingtone(r13, r10)
             r31 = r9
-            if (r13 == 0) goto L_0x029b
+            if (r13 == 0) goto L_0x02a7
             android.net.Uri r9 = android.provider.Settings.System.DEFAULT_RINGTONE_URI
             boolean r9 = r10.equals(r9)
-            if (r9 == 0) goto L_0x028f
+            if (r9 == 0) goto L_0x029b
             r9 = 2131625013(0x7f0e0435, float:1.8877222E38)
             r24 = r10
             java.lang.String r10 = "DefaultRingtone"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            goto L_0x0297
-        L_0x028f:
+            goto L_0x02a3
+        L_0x029b:
             r24 = r10
             android.content.Context r9 = org.telegram.messenger.ApplicationLoader.applicationContext
             java.lang.String r9 = r13.getTitle(r9)
-        L_0x0297:
+        L_0x02a3:
             r13.stop()
-            goto L_0x029e
-        L_0x029b:
+            goto L_0x02aa
+        L_0x02a7:
             r24 = r10
             r9 = 0
-        L_0x029e:
-            if (r9 == 0) goto L_0x02c5
-            if (r33 == 0) goto L_0x02b3
+        L_0x02aa:
+            if (r9 == 0) goto L_0x02d1
+            if (r33 == 0) goto L_0x02bf
             r10 = 2
-            if (r11 != r10) goto L_0x02a9
-            r14.putString(r6, r9)
-            goto L_0x02c5
-        L_0x02a9:
-            if (r11 != 0) goto L_0x02af
-            r14.putString(r0, r9)
-            goto L_0x02c5
-        L_0x02af:
-            r14.putString(r3, r9)
-            goto L_0x02c5
-        L_0x02b3:
+            if (r14 != r10) goto L_0x02b5
+            r11.putString(r6, r9)
+            goto L_0x02d1
+        L_0x02b5:
+            if (r14 != 0) goto L_0x02bb
+            r11.putString(r0, r9)
+            goto L_0x02d1
+        L_0x02bb:
+            r11.putString(r3, r9)
+            goto L_0x02d1
+        L_0x02bf:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             r0.append(r15)
             r0.append(r1)
             java.lang.String r0 = r0.toString()
-            r14.putString(r0, r9)
-        L_0x02c5:
+            r11.putString(r0, r9)
+        L_0x02d1:
             r9 = r31
-        L_0x02c7:
-            if (r33 == 0) goto L_0x02e0
+        L_0x02d3:
+            if (r33 == 0) goto L_0x02ec
             r0 = 2
-            if (r11 != r0) goto L_0x02d2
+            if (r14 != r0) goto L_0x02de
             java.lang.String r0 = "ChannelSoundPath"
-            r14.putString(r0, r9)
-            goto L_0x02f4
-        L_0x02d2:
-            if (r11 != 0) goto L_0x02da
+            r11.putString(r0, r9)
+            goto L_0x0309
+        L_0x02de:
+            if (r14 != 0) goto L_0x02e6
             java.lang.String r0 = "GroupSoundPath"
-            r14.putString(r0, r9)
-            goto L_0x02f4
-        L_0x02da:
+            r11.putString(r0, r9)
+            goto L_0x0309
+        L_0x02e6:
             java.lang.String r0 = "GlobalSoundPath"
-            r14.putString(r0, r9)
-            goto L_0x02f4
-        L_0x02e0:
+            r11.putString(r0, r9)
+            goto L_0x0309
+        L_0x02ec:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r3 = "sound_path_"
             r0.append(r3)
             r0.append(r1)
             java.lang.String r0 = r0.toString()
-            r14.putString(r0, r9)
-        L_0x02f4:
+            r11.putString(r0, r9)
+            goto L_0x0309
+        L_0x0301:
+            r22 = r9
+            r24 = r10
+            r23 = r13
+            r21 = r15
+        L_0x0309:
             r0 = 1
-            goto L_0x02fe
-        L_0x02f6:
+            goto L_0x0313
+        L_0x030b:
             r22 = r9
             r23 = r13
             r21 = r15
             r24 = r31
-        L_0x02fe:
+        L_0x0313:
             boolean r3 = r12.shouldVibrate()
             r6 = r25
             r9 = r29
             boolean r10 = r6.isEmptyVibration(r9)
             r12 = 1
             r10 = r10 ^ r12
-            if (r10 == r3) goto L_0x035e
-            if (r14 != 0) goto L_0x0314
-            android.content.SharedPreferences$Editor r14 = r5.edit()
-        L_0x0314:
-            if (r33 == 0) goto L_0x033f
-            r0 = 2
-            if (r11 != r0) goto L_0x0325
-            if (r3 == 0) goto L_0x031d
-            r0 = 0
-            goto L_0x031e
-        L_0x031d:
-            r0 = 2
-        L_0x031e:
-            java.lang.String r3 = "vibrate_channel"
-            r14.putInt(r3, r0)
-            goto L_0x0359
-        L_0x0325:
-            if (r11 != 0) goto L_0x0333
-            if (r3 == 0) goto L_0x032b
-            r0 = 0
-            goto L_0x032c
+            if (r10 == r3) goto L_0x0375
+            if (r34 != 0) goto L_0x0370
+            if (r11 != 0) goto L_0x032b
+            android.content.SharedPreferences$Editor r11 = r5.edit()
         L_0x032b:
+            if (r33 == 0) goto L_0x0356
             r0 = 2
-        L_0x032c:
-            java.lang.String r3 = "vibrate_group"
-            r14.putInt(r3, r0)
-            goto L_0x0359
-        L_0x0333:
-            if (r3 == 0) goto L_0x0337
+            if (r14 != r0) goto L_0x033c
+            if (r3 == 0) goto L_0x0334
             r0 = 0
-            goto L_0x0338
-        L_0x0337:
+            goto L_0x0335
+        L_0x0334:
             r0 = 2
-        L_0x0338:
+        L_0x0335:
+            java.lang.String r3 = "vibrate_channel"
+            r11.putInt(r3, r0)
+            goto L_0x0370
+        L_0x033c:
+            if (r14 != 0) goto L_0x034a
+            if (r3 == 0) goto L_0x0342
+            r0 = 0
+            goto L_0x0343
+        L_0x0342:
+            r0 = 2
+        L_0x0343:
+            java.lang.String r3 = "vibrate_group"
+            r11.putInt(r3, r0)
+            goto L_0x0370
+        L_0x034a:
+            if (r3 == 0) goto L_0x034e
+            r0 = 0
+            goto L_0x034f
+        L_0x034e:
+            r0 = 2
+        L_0x034f:
             java.lang.String r3 = "vibrate_messages"
-            r14.putInt(r3, r0)
-            goto L_0x0359
-        L_0x033f:
+            r11.putInt(r3, r0)
+            goto L_0x0370
+        L_0x0356:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r9 = "vibrate_"
             r0.append(r9)
             r0.append(r1)
             java.lang.String r0 = r0.toString()
-            if (r3 == 0) goto L_0x0355
+            if (r3 == 0) goto L_0x036c
             r3 = 0
-            goto L_0x0356
-        L_0x0355:
+            goto L_0x036d
+        L_0x036c:
             r3 = 2
-        L_0x0356:
-            r14.putInt(r0, r3)
-        L_0x0359:
+        L_0x036d:
+            r11.putInt(r0, r3)
+        L_0x0370:
             r0 = 0
             long[] r3 = new long[r0]
             r9 = r3
             r0 = 1
-        L_0x035e:
+        L_0x0375:
             r3 = r30
-            if (r7 == r3) goto L_0x0397
-            if (r14 != 0) goto L_0x0368
-            android.content.SharedPreferences$Editor r14 = r5.edit()
-        L_0x0368:
-            if (r33 == 0) goto L_0x0381
-            r0 = 2
-            if (r11 != r0) goto L_0x0373
-            java.lang.String r0 = "ChannelLed"
-            r14.putInt(r0, r7)
-            goto L_0x0395
-        L_0x0373:
-            if (r11 != 0) goto L_0x037b
-            java.lang.String r0 = "GroupLed"
-            r14.putInt(r0, r7)
-            goto L_0x0395
-        L_0x037b:
-            java.lang.String r0 = "MessagesLed"
-            r14.putInt(r0, r7)
-            goto L_0x0395
+            if (r7 == r3) goto L_0x03b0
+            if (r34 != 0) goto L_0x03ae
+            if (r11 != 0) goto L_0x0381
+            android.content.SharedPreferences$Editor r11 = r5.edit()
         L_0x0381:
+            if (r33 == 0) goto L_0x039a
+            r0 = 2
+            if (r14 != r0) goto L_0x038c
+            java.lang.String r0 = "ChannelLed"
+            r11.putInt(r0, r7)
+            goto L_0x03ae
+        L_0x038c:
+            if (r14 != 0) goto L_0x0394
+            java.lang.String r0 = "GroupLed"
+            r11.putInt(r0, r7)
+            goto L_0x03ae
+        L_0x0394:
+            java.lang.String r0 = "MessagesLed"
+            r11.putInt(r0, r7)
+            goto L_0x03ae
+        L_0x039a:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r3 = "color_"
             r0.append(r3)
             r0.append(r1)
             java.lang.String r0 = r0.toString()
-            r14.putInt(r0, r7)
-        L_0x0395:
+            r11.putInt(r0, r7)
+        L_0x03ae:
             r3 = 1
-            goto L_0x0399
-        L_0x0397:
+            goto L_0x03b2
+        L_0x03b0:
             r7 = r3
             r3 = r0
-        L_0x0399:
-            if (r14 == 0) goto L_0x039e
-            r14.commit()
-        L_0x039e:
+        L_0x03b2:
+            if (r11 == 0) goto L_0x03b7
+            r11.commit()
+        L_0x03b7:
             r10 = r3
             r3 = r7
             r0 = r24
             r7 = r35
-            goto L_0x03d4
-        L_0x03a5:
+            goto L_0x03ed
+        L_0x03be:
             r6 = r25
             r3 = r30
             r4 = r32
@@ -9024,8 +9041,8 @@ public class NotificationsController extends BaseController {
             r9 = r29
             r0 = r31
             r7 = r35
-            goto L_0x03d3
-        L_0x03ba:
+            goto L_0x03ec
+        L_0x03d3:
             r4 = r3
             r16 = r6
             r19 = r7
@@ -9040,11 +9057,11 @@ public class NotificationsController extends BaseController {
             r6 = r0
             r0 = r31
             r7 = 0
-        L_0x03d3:
+        L_0x03ec:
             r10 = 0
-        L_0x03d4:
-            if (r10 == 0) goto L_0x03fe
-            if (r7 == 0) goto L_0x03fe
+        L_0x03ed:
+            if (r10 == 0) goto L_0x0417
+            if (r7 == 0) goto L_0x0417
             android.content.SharedPreferences$Editor r8 = r5.edit()
             r10 = r19
             r11 = r20
@@ -9057,46 +9074,46 @@ public class NotificationsController extends BaseController {
             java.lang.String r12 = r12.toString()
             android.content.SharedPreferences$Editor r8 = r8.putString(r12, r7)
             r8.commit()
-        L_0x03fc:
+        L_0x0415:
             r14 = r11
-            goto L_0x043e
-        L_0x03fe:
+            goto L_0x0457
+        L_0x0417:
             r13 = r18
             r10 = r19
             r11 = r20
             r7 = 0
-        L_0x0405:
+        L_0x041e:
             int r12 = r9.length
-            if (r7 >= r12) goto L_0x0410
+            if (r7 >= r12) goto L_0x0429
             r14 = r9[r7]
             r8.append(r14)
             int r7 = r7 + 1
-            goto L_0x0405
-        L_0x0410:
+            goto L_0x041e
+        L_0x0429:
             r8.append(r3)
-            if (r0 == 0) goto L_0x041c
+            if (r0 == 0) goto L_0x0435
             java.lang.String r7 = r0.toString()
             r8.append(r7)
-        L_0x041c:
+        L_0x0435:
             r8.append(r4)
-            if (r23 == 0) goto L_0x0426
+            if (r23 == 0) goto L_0x043f
             r7 = r22
             r8.append(r7)
-        L_0x0426:
+        L_0x043f:
             java.lang.String r7 = r8.toString()
             java.lang.String r7 = org.telegram.messenger.Utilities.MD5(r7)
-            if (r11 == 0) goto L_0x03fc
+            if (r11 == 0) goto L_0x0415
             r8 = r21
             boolean r8 = r8.equals(r7)
-            if (r8 != 0) goto L_0x03fc
+            if (r8 != 0) goto L_0x0415
             android.app.NotificationManager r8 = systemNotificationManager
             r8.deleteNotificationChannel(r11)
             r14 = 0
-        L_0x043e:
-            if (r14 != 0) goto L_0x0505
+        L_0x0457:
+            if (r14 != 0) goto L_0x051e
             java.lang.String r8 = "_"
             java.lang.String r11 = "channel_"
-            if (r33 == 0) goto L_0x0467
+            if (r33 == 0) goto L_0x0480
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             int r2 = r6.currentAccount
@@ -9108,8 +9125,8 @@ public class NotificationsController extends BaseController {
             long r11 = r2.nextLong()
             r1.append(r11)
             java.lang.String r1 = r1.toString()
-            goto L_0x0487
-        L_0x0467:
+            goto L_0x04a0
+        L_0x0480:
             java.lang.StringBuilder r12 = new java.lang.StringBuilder
             r12.<init>()
             int r14 = r6.currentAccount
@@ -9121,56 +9138,56 @@ public class NotificationsController extends BaseController {
             long r1 = r1.nextLong()
             r12.append(r1)
             java.lang.String r1 = r12.toString()
-        L_0x0487:
+        L_0x04a0:
             r14 = r1
             android.app.NotificationChannel r1 = new android.app.NotificationChannel
-            if (r23 == 0) goto L_0x0496
-            r2 = 2131627044(0x7f0e0CLASSNAME, float:1.8881341E38)
+            if (r23 == 0) goto L_0x04af
+            r2 = 2131627050(0x7f0e0c2a, float:1.8881353E38)
             java.lang.String r8 = "SecretChatName"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r8, r2)
-            goto L_0x0498
-        L_0x0496:
+            goto L_0x04b1
+        L_0x04af:
             r2 = r16
-        L_0x0498:
+        L_0x04b1:
             r1.<init>(r14, r2, r4)
             r2 = r17
             r1.setGroup(r2)
-            if (r3 == 0) goto L_0x04ab
+            if (r3 == 0) goto L_0x04c4
             r2 = 1
             r1.enableLights(r2)
             r1.setLightColor(r3)
             r3 = 0
-            goto L_0x04b0
-        L_0x04ab:
+            goto L_0x04c9
+        L_0x04c4:
             r2 = 1
             r3 = 0
             r1.enableLights(r3)
-        L_0x04b0:
+        L_0x04c9:
             boolean r4 = r6.isEmptyVibration(r9)
-            if (r4 != 0) goto L_0x04c0
+            if (r4 != 0) goto L_0x04d9
             r1.enableVibration(r2)
             int r2 = r9.length
-            if (r2 <= 0) goto L_0x04c3
+            if (r2 <= 0) goto L_0x04dc
             r1.setVibrationPattern(r9)
-            goto L_0x04c3
-        L_0x04c0:
+            goto L_0x04dc
+        L_0x04d9:
             r1.enableVibration(r3)
-        L_0x04c3:
+        L_0x04dc:
             android.media.AudioAttributes$Builder r2 = new android.media.AudioAttributes$Builder
             r2.<init>()
             r3 = 4
             r2.setContentType(r3)
             r3 = 5
             r2.setUsage(r3)
-            if (r0 == 0) goto L_0x04da
+            if (r0 == 0) goto L_0x04f3
             android.media.AudioAttributes r2 = r2.build()
             r1.setSound(r0, r2)
-            goto L_0x04e2
-        L_0x04da:
+            goto L_0x04fb
+        L_0x04f3:
             android.media.AudioAttributes r0 = r2.build()
             r2 = 0
             r1.setSound(r2, r0)
-        L_0x04e2:
+        L_0x04fb:
             android.app.NotificationManager r0 = systemNotificationManager
             r0.createNotificationChannel(r1)
             android.content.SharedPreferences$Editor r0 = r5.edit()
@@ -9182,7 +9199,7 @@ public class NotificationsController extends BaseController {
             java.lang.String r1 = r1.toString()
             android.content.SharedPreferences$Editor r0 = r0.putString(r1, r7)
             r0.commit()
-        L_0x0505:
+        L_0x051e:
             return r14
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NotificationsController.validateChannelId(long, java.lang.String, long[], int, android.net.Uri, int, boolean, boolean, boolean, int):java.lang.String");
@@ -10595,7 +10612,7 @@ public class NotificationsController extends BaseController {
             if (r8 > r2) goto L_0x0a30
             r2 = 2131165475(0x7var_, float:1.7945168E38)
             java.lang.String r3 = "Reply"
-            r4 = 2131626900(0x7f0e0b94, float:1.888105E38)
+            r4 = 2131626906(0x7f0e0b9a, float:1.8881061E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0a74 }
             android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0a74 }
             r5 = 134217728(0x8000000, float:3.85186E-34)
@@ -10606,7 +10623,7 @@ public class NotificationsController extends BaseController {
         L_0x0a30:
             r2 = 2131165474(0x7var_, float:1.7945166E38)
             java.lang.String r3 = "Reply"
-            r4 = 2131626900(0x7f0e0b94, float:1.888105E38)
+            r4 = 2131626906(0x7f0e0b9a, float:1.8881061E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0a74 }
             android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0a74 }
             r5 = 134217728(0x8000000, float:3.85186E-34)
@@ -10958,7 +10975,7 @@ public class NotificationsController extends BaseController {
             long r5 = (long) r12
             boolean r5 = org.telegram.messenger.UserObject.isReplyUser((long) r5)
             if (r5 == 0) goto L_0x01d3
-            r5 = 2131626893(0x7f0e0b8d, float:1.8881035E38)
+            r5 = 2131626899(0x7f0e0b93, float:1.8881047E38)
             java.lang.String r6 = "RepliesTitle"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
         L_0x01cc:
@@ -11107,7 +11124,7 @@ public class NotificationsController extends BaseController {
         L_0x02e0:
             r0 = 0
         L_0x02e1:
-            r5 = 2131627044(0x7f0e0CLASSNAME, float:1.8881341E38)
+            r5 = 2131627050(0x7f0e0c2a, float:1.8881353E38)
             java.lang.String r6 = "SecretChatName"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = r0
@@ -11239,7 +11256,7 @@ public class NotificationsController extends BaseController {
             androidx.core.app.RemoteInput$Builder r3 = new androidx.core.app.RemoteInput$Builder
             java.lang.String r6 = "extra_voice_reply"
             r3.<init>(r6)
-            r6 = 2131626900(0x7f0e0b94, float:1.888105E38)
+            r6 = 2131626906(0x7f0e0b9a, float:1.8881061E38)
             java.lang.String r7 = "Reply"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setLabel(r6)
@@ -11251,12 +11268,12 @@ public class NotificationsController extends BaseController {
             r6[r7] = r10
             java.lang.String r7 = "ReplyToGroup"
             r50 = r15
-            r15 = 2131626901(0x7f0e0b95, float:1.8881051E38)
+            r15 = 2131626907(0x7f0e0b9b, float:1.8881063E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r7, r15, r6)
             goto L_0x0408
         L_0x03f7:
             r50 = r15
-            r6 = 2131626902(0x7f0e0b96, float:1.8881053E38)
+            r6 = 2131626908(0x7f0e0b9c, float:1.8881065E38)
             r7 = 1
             java.lang.Object[] r15 = new java.lang.Object[r7]
             r7 = 0

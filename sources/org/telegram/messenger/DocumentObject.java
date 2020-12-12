@@ -50,7 +50,7 @@ public class DocumentObject {
         }
     }
 
-    public static SvgHelper.SvgDrawable getSvgThumb(TLRPC$Document tLRPC$Document, boolean z) {
+    public static SvgHelper.SvgDrawable getSvgThumb(TLRPC$Document tLRPC$Document, String str, float f) {
         int i;
         int size = tLRPC$Document.thumbs.size();
         int i2 = 0;
@@ -81,7 +81,7 @@ public class DocumentObject {
                     if (drawableByPath == null) {
                         return drawableByPath;
                     }
-                    drawableByPath.setupGradient(z);
+                    drawableByPath.setupGradient(str, f);
                     return drawableByPath;
                 }
             } else {

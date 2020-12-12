@@ -86,8 +86,11 @@ public class SvgHelper {
         public static Runnable shiftRunnable;
         private static float totalTranslation;
         private LinearGradient backgroundGradient;
+        private float colorAlpha;
         /* access modifiers changed from: private */
         public ArrayList<Object> commands = new ArrayList<>();
+        private int currentColor;
+        private String currentColorKey;
         /* access modifiers changed from: private */
         public int height;
         /* access modifiers changed from: private */
@@ -109,6 +112,10 @@ public class SvgHelper {
         }
 
         public void draw(Canvas canvas) {
+            String str = this.currentColorKey;
+            if (str != null) {
+                setupGradient(str, this.colorAlpha);
+            }
             Rect bounds = getBounds();
             float max = Math.max(((float) bounds.width()) / ((float) this.width), ((float) bounds.height()) / ((float) this.height));
             canvas.save();
@@ -204,25 +211,25 @@ public class SvgHelper {
             this.parentImageReceiver = imageReceiver;
         }
 
-        public void setupGradient(boolean z) {
-            int i;
-            if (z) {
-                i = Theme.getColor("chat_serviceBackground");
-            } else {
-                i = Theme.getColor("windowBackgroundGray");
-            }
-            gradientWidth = (float) (AndroidUtilities.displaySize.x * 2);
-            float dp = ((float) AndroidUtilities.dp(180.0f)) / gradientWidth;
-            int argb = Color.argb(Color.alpha(i) / 2, Color.red(i), Color.green(i), Color.blue(i));
-            float f = (1.0f - dp) / 2.0f;
-            float f2 = dp / 2.0f;
-            this.placeholderGradient = new LinearGradient(0.0f, 0.0f, gradientWidth, 0.0f, new int[]{0, 0, argb, 0, 0}, new float[]{0.0f, f - f2, f, f + f2, 1.0f}, Shader.TileMode.REPEAT);
-            this.backgroundGradient = new LinearGradient(0.0f, 0.0f, gradientWidth, 0.0f, new int[]{argb, argb}, (float[]) null, Shader.TileMode.REPEAT);
-            Matrix matrix = new Matrix();
-            this.placeholderMatrix = matrix;
-            this.placeholderGradient.setLocalMatrix(matrix);
-            for (Paint shader : this.paints.values()) {
-                shader.setShader(new ComposeShader(this.placeholderGradient, this.backgroundGradient, PorterDuff.Mode.ADD));
+        public void setupGradient(String str, float f) {
+            int color = Theme.getColor(str);
+            if (this.currentColor != color) {
+                this.colorAlpha = f;
+                this.currentColorKey = str;
+                this.currentColor = color;
+                gradientWidth = (float) (AndroidUtilities.displaySize.x * 2);
+                float dp = ((float) AndroidUtilities.dp(180.0f)) / gradientWidth;
+                int argb = Color.argb((int) (((float) (Color.alpha(color) / 2)) * this.colorAlpha), Color.red(color), Color.green(color), Color.blue(color));
+                float f2 = (1.0f - dp) / 2.0f;
+                float f3 = dp / 2.0f;
+                this.placeholderGradient = new LinearGradient(0.0f, 0.0f, gradientWidth, 0.0f, new int[]{0, 0, argb, 0, 0}, new float[]{0.0f, f2 - f3, f2, f2 + f3, 1.0f}, Shader.TileMode.REPEAT);
+                this.backgroundGradient = new LinearGradient(0.0f, 0.0f, gradientWidth, 0.0f, new int[]{argb, argb}, (float[]) null, Shader.TileMode.REPEAT);
+                Matrix matrix = new Matrix();
+                this.placeholderMatrix = matrix;
+                this.placeholderGradient.setLocalMatrix(matrix);
+                for (Paint shader : this.paints.values()) {
+                    shader.setShader(new ComposeShader(this.placeholderGradient, this.backgroundGradient, PorterDuff.Mode.ADD));
+                }
             }
         }
     }

@@ -8,6 +8,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.voip.Instance;
 import org.webrtc.ContextUtils;
 import org.webrtc.VideoSink;
@@ -27,7 +28,7 @@ public class NativeInstance {
     private float[] temp = new float[1];
 
     public interface AudioLevelsCallback {
-        void run(int[] iArr, float[] fArr);
+        void run(int[] iArr, float[] fArr, boolean[] zArr);
     }
 
     public interface PayloadCallback {
@@ -38,7 +39,7 @@ public class NativeInstance {
 
     public static native void destroyVideoCapturer(long j);
 
-    private static native long makeGroupNativeInstance(NativeInstance nativeInstance);
+    private static native long makeGroupNativeInstance(NativeInstance nativeInstance, boolean z);
 
     private static native long makeNativeInstance(String str, NativeInstance nativeInstance, Instance.Config config, String str2, Instance.Endpoint[] endpointArr, Instance.Proxy proxy, int i, Instance.EncryptionKey encryptionKey, VideoSink videoSink, long j, float f);
 
@@ -115,7 +116,7 @@ public class NativeInstance {
         nativeInstance.payloadCallback = payloadCallback2;
         nativeInstance.audioLevelsCallback = audioLevelsCallback2;
         nativeInstance.isGroup = true;
-        nativeInstance.nativePtr = makeGroupNativeInstance(nativeInstance);
+        nativeInstance.nativePtr = makeGroupNativeInstance(nativeInstance, SharedConfig.disableVoiceAudioEffects);
         return nativeInstance;
     }
 
@@ -189,19 +190,21 @@ public class NativeInstance {
         this.onStateUpdatedListener.onStateUpdated(z ? 1 : 0);
     }
 
-    private void onAudioLevelsUpdated(int[] iArr, float[] fArr) {
+    private void onAudioLevelsUpdated(int[] iArr, float[] fArr, boolean[] zArr) {
         if (iArr.length != 0) {
-            AndroidUtilities.runOnUIThread(new Runnable(iArr, fArr) {
+            AndroidUtilities.runOnUIThread(new Runnable(iArr, fArr, zArr) {
                 public final /* synthetic */ int[] f$1;
                 public final /* synthetic */ float[] f$2;
+                public final /* synthetic */ boolean[] f$3;
 
                 {
                     this.f$1 = r2;
                     this.f$2 = r3;
+                    this.f$3 = r4;
                 }
 
                 public final void run() {
-                    NativeInstance.this.lambda$onAudioLevelsUpdated$1$NativeInstance(this.f$1, this.f$2);
+                    NativeInstance.this.lambda$onAudioLevelsUpdated$1$NativeInstance(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
@@ -209,8 +212,8 @@ public class NativeInstance {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$onAudioLevelsUpdated$1 */
-    public /* synthetic */ void lambda$onAudioLevelsUpdated$1$NativeInstance(int[] iArr, float[] fArr) {
-        this.audioLevelsCallback.run(iArr, fArr);
+    public /* synthetic */ void lambda$onAudioLevelsUpdated$1$NativeInstance(int[] iArr, float[] fArr, boolean[] zArr) {
+        this.audioLevelsCallback.run(iArr, fArr, zArr);
     }
 
     private void onEmitJoinPayload(String str, String str2, Instance.Fingerprint[] fingerprintArr, int i) {

@@ -838,7 +838,7 @@ public class AlertsCreator {
         L_0x0133:
             if (r7 == 0) goto L_0x0171
             if (r24 == 0) goto L_0x0171
-            r2 = 2131626919(0x7f0e0ba7, float:1.8881088E38)
+            r2 = 2131626925(0x7f0e0bad, float:1.88811E38)
             java.lang.String r6 = "ReportUnrelatedGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r11.setTitle(r2)
@@ -847,7 +847,7 @@ public class AlertsCreator {
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelLocation
             if (r2 == 0) goto L_0x0164
             org.telegram.tgnet.TLRPC$TL_channelLocation r1 = (org.telegram.tgnet.TLRPC$TL_channelLocation) r1
-            r2 = 2131626920(0x7f0e0ba8, float:1.888109E38)
+            r2 = 2131626926(0x7f0e0bae, float:1.8881102E38)
             java.lang.Object[] r4 = new java.lang.Object[r4]
             java.lang.String r1 = r1.address
             r4[r5] = r1
@@ -857,13 +857,13 @@ public class AlertsCreator {
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0164:
-            r1 = 2131626921(0x7f0e0ba9, float:1.8881092E38)
+            r1 = 2131626927(0x7f0e0baf, float:1.8881104E38)
             java.lang.String r2 = "ReportUnrelatedGroupTextNoAddress"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0171:
-            r1 = 2131626917(0x7f0e0ba5, float:1.8881084E38)
+            r1 = 2131626923(0x7f0e0bab, float:1.8881096E38)
             java.lang.String r2 = "ReportSpamTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setTitle(r1)
@@ -871,18 +871,18 @@ public class AlertsCreator {
             if (r1 == 0) goto L_0x0194
             boolean r1 = r7.megagroup
             if (r1 != 0) goto L_0x0194
-            r1 = 2131626913(0x7f0e0ba1, float:1.8881076E38)
+            r1 = 2131626919(0x7f0e0ba7, float:1.8881088E38)
             java.lang.String r2 = "ReportSpamAlertChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0194:
-            r1 = 2131626914(0x7f0e0ba2, float:1.8881078E38)
+            r1 = 2131626920(0x7f0e0ba8, float:1.888109E38)
             java.lang.String r2 = "ReportSpamAlertGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
         L_0x01a0:
-            r1 = 2131626903(0x7f0e0b97, float:1.8881055E38)
+            r1 = 2131626909(0x7f0e0b9d, float:1.8881068E38)
             java.lang.String r2 = "ReportChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r12 = r1
@@ -3039,7 +3039,7 @@ public class AlertsCreator {
             org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
             org.telegram.ui.Components.-$$Lambda$AlertsCreator$0RXwUTdI77ZTQTxncld97m8cCLASSNAME r2 = org.telegram.ui.Components.$$Lambda$AlertsCreator$0RXwUTdI77ZTQTxncld97m8cCLASSNAME.INSTANCE
             r1.sendRequest(r0, r2)
-            r1 = 2131626908(0x7f0e0b9c, float:1.8881065E38)
+            r1 = 2131626914(0x7f0e0ba2, float:1.8881078E38)
             java.lang.String r2 = "ReportChatSent"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r2 = 0
@@ -3781,7 +3781,7 @@ public class AlertsCreator {
         });
         View view = new View(activity);
         view.setBackground(new BitmapDrawable(SvgHelper.getBitmap(readRes, AndroidUtilities.dp(320.0f), AndroidUtilities.dp(161.36752f), false)));
-        frameLayout.addView(view, LayoutHelper.createFrame(-1, -1.0f));
+        frameLayout.addView(view, LayoutHelper.createFrame(-1, -1.0f, 0, -1.0f, -1.0f, -1.0f, -1.0f));
         builder.setTopView(frameLayout);
         builder.setTitle(LocaleController.getString("PermissionDrawAboveOtherAppsTitle", NUM));
         builder.setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", NUM));
@@ -3796,6 +3796,7 @@ public class AlertsCreator {
                 AlertsCreator.lambda$createDrawOverlayPermissionDialog$56(this.f$0, dialogInterface, i);
             }
         });
+        builder.notDrawBackgroundOnTopView(true);
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), onClickListener);
         builder.setTopViewAspectRatio(0.50427353f);
         return builder;
@@ -3807,11 +3808,12 @@ public class AlertsCreator {
         }
     }
 
-    public static AlertDialog.Builder createDrawOverlayGroupCallPermissionDialog(final Context context) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    public static AlertDialog.Builder createDrawOverlayGroupCallPermissionDialog(Context context) {
+        final Context context2 = context;
+        AlertDialog.Builder builder = new AlertDialog.Builder(context2);
         String readRes = RLottieDrawable.readRes((File) null, NUM);
-        final GroupCallPipButton groupCallPipButton = new GroupCallPipButton(context, 0, true);
-        AnonymousClass12 r6 = new FrameLayout(context) {
+        final GroupCallPipButton groupCallPipButton = new GroupCallPipButton(context2, 0, true);
+        AnonymousClass12 r7 = new FrameLayout(context2) {
             /* access modifiers changed from: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                 super.onLayout(z, i, i2, i3, i4);
@@ -3819,27 +3821,27 @@ public class AlertsCreator {
                 groupCallPipButton.setTranslationX((((float) getMeasuredWidth()) * 0.82f) - (((float) groupCallPipButton.getMeasuredWidth()) / 2.0f));
             }
         };
-        r6.setBackground(new GradientDrawable(GradientDrawable.Orientation.BL_TR, new int[]{-15128003, -15118002}));
-        r6.setClipToOutline(true);
-        r6.setOutlineProvider(new ViewOutlineProvider() {
+        r7.setBackground(new GradientDrawable(GradientDrawable.Orientation.BL_TR, new int[]{-15128003, -15118002}));
+        r7.setClipToOutline(true);
+        r7.setOutlineProvider(new ViewOutlineProvider() {
             public void getOutline(View view, Outline outline) {
                 outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight() + AndroidUtilities.dp(6.0f), AndroidUtilities.dpf2(6.0f));
             }
         });
-        View view = new View(context);
+        View view = new View(context2);
         view.setBackground(new BitmapDrawable(SvgHelper.getBitmap(readRes, AndroidUtilities.dp(320.0f), AndroidUtilities.dp(184.61539f), false)));
-        r6.addView(view, LayoutHelper.createFrame(-1, -1.0f));
-        r6.addView(groupCallPipButton, LayoutHelper.createFrame(117, 117.0f));
-        builder.setTopView(r6);
+        r7.addView(view, LayoutHelper.createFrame(-1, -1.0f, 0, -1.0f, -1.0f, -1.0f, -1.0f));
+        r7.addView(groupCallPipButton, LayoutHelper.createFrame(117, 117.0f));
+        builder.setTopView(r7);
         builder.setTitle(LocaleController.getString("PermissionDrawAboveOtherAppsGroupCallTitle", NUM));
         builder.setMessage(LocaleController.getString("PermissionDrawAboveOtherAppsGroupCall", NUM));
         builder.setPositiveButton(LocaleController.getString("Enable", NUM), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                Context context = context;
+                Context context = context2;
                 if (context != null) {
                     try {
                         if (Build.VERSION.SDK_INT >= 23) {
-                            context.startActivity(new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse("package:" + context.getPackageName())));
+                            context.startActivity(new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse("package:" + context2.getPackageName())));
                         }
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);
@@ -3847,6 +3849,7 @@ public class AlertsCreator {
                 }
             }
         });
+        builder.notDrawBackgroundOnTopView(true);
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setTopViewAspectRatio(0.5769231f);
         return builder;

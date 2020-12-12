@@ -147,7 +147,7 @@ public class AvatarsImageView extends FrameLayout {
         invalidate();
     }
 
-    private class DrawingState {
+    private static class DrawingState {
         /* access modifiers changed from: private */
         public int animationType;
         /* access modifiers changed from: private */
@@ -166,7 +166,7 @@ public class AvatarsImageView extends FrameLayout {
         /* access modifiers changed from: private */
         public GroupCallUserCell.AvatarWavesDrawable wavesDrawable;
 
-        private DrawingState(AvatarsImageView avatarsImageView) {
+        private DrawingState() {
         }
     }
 
