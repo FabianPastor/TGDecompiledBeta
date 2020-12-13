@@ -134,10 +134,15 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
     }
 
     public static void show(Activity activity, int i, int i2, int i3, int i4) {
+        WindowManager windowManager2;
         if (instance == null && VideoCameraCapturer.eglBase != null) {
             WindowManager.LayoutParams createWindowLayoutParams = createWindowLayoutParams(activity, i2, i3, 0.25f);
             instance = new VoIPPiPView(activity, i2, i3, false);
-            WindowManager windowManager2 = (WindowManager) activity.getSystemService("window");
+            if (AndroidUtilities.checkInlinePermissions(activity)) {
+                windowManager2 = (WindowManager) ApplicationLoader.applicationContext.getSystemService("window");
+            } else {
+                windowManager2 = (WindowManager) activity.getSystemService("window");
+            }
             VoIPPiPView voIPPiPView = instance;
             voIPPiPView.currentAccount = i;
             voIPPiPView.windowManager = windowManager2;

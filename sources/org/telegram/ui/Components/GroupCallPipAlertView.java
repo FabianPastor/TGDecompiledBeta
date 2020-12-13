@@ -40,6 +40,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
     VoIPToggleButton muteButton;
     float muteProgress;
     private boolean mutedByAdmin;
+    float mutedByAdminProgress;
     Paint paint = new Paint(1);
     private int position;
     RectF rectF = new RectF();
@@ -81,7 +82,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
         this.avatarImageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(22.0f));
         this.groupInfoContainer.addView(this.avatarImageView, LayoutHelper.createFrame(44, 44.0f));
-        this.groupInfoContainer.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), 0, ColorUtils.setAlphaComponent(-1, 153)));
+        this.groupInfoContainer.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), 0, ColorUtils.setAlphaComponent(-1, 76)));
         this.groupInfoContainer.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 GroupCallPipAlertView.this.lambda$new$0$GroupCallPipAlertView(view);
@@ -213,11 +214,13 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x0056  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x017c  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x0185  */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x01c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:44:0x01e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x0055  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x006c  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x0085  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x01c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x01cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x0207  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x022a  */
     @android.annotation.SuppressLint({"DrawAllocation"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onDraw(android.graphics.Canvas r28) {
@@ -271,9 +274,37 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             r0.invalidateGradient = r4
             r27.invalidate()
         L_0x0051:
+            boolean r2 = r0.mutedByAdmin
+            if (r2 == 0) goto L_0x006a
+            float r8 = r0.mutedByAdminProgress
+            int r9 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1))
+            if (r9 == 0) goto L_0x006a
+            float r8 = r8 + r5
+            r0.mutedByAdminProgress = r8
+            int r2 = (r8 > r6 ? 1 : (r8 == r6 ? 0 : -1))
+            if (r2 < 0) goto L_0x0064
+            r0.mutedByAdminProgress = r6
+        L_0x0064:
+            r0.invalidateGradient = r4
+            r27.invalidate()
+            goto L_0x0080
+        L_0x006a:
+            if (r2 != 0) goto L_0x0080
+            float r2 = r0.mutedByAdminProgress
+            int r8 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
+            if (r8 == 0) goto L_0x0080
+            float r2 = r2 - r5
+            r0.mutedByAdminProgress = r2
+            int r2 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
+            if (r2 >= 0) goto L_0x007b
+            r0.mutedByAdminProgress = r7
+        L_0x007b:
+            r0.invalidateGradient = r4
+            r27.invalidate()
+        L_0x0080:
             boolean r2 = r0.invalidateGradient
             r5 = 2
-            if (r2 == 0) goto L_0x014f
+            if (r2 == 0) goto L_0x0196
             java.lang.String r2 = "voipgroup_overlayAlertGradientMuted"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             java.lang.String r8 = "voipgroup_overlayAlertGradientUnmuted"
@@ -288,11 +319,19 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             float r10 = r0.muteProgress
             float r6 = r6 - r10
             int r6 = androidx.core.graphics.ColorUtils.blendARGB(r8, r9, r6)
+            java.lang.String r8 = "voipgroup_overlayAlertMutedByAdmin"
+            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            float r9 = r0.mutedByAdminProgress
+            int r2 = androidx.core.graphics.ColorUtils.blendARGB(r2, r8, r9)
+            java.lang.String r8 = "kvoipgroup_overlayAlertMutedByAdmin2"
+            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            float r9 = r0.mutedByAdminProgress
+            int r6 = androidx.core.graphics.ColorUtils.blendARGB(r6, r8, r9)
             r0.invalidateGradient = r3
             int r8 = r0.position
             r9 = 1073741824(0x40000000, float:2.0)
             r10 = 1114636288(0x42700000, float:60.0)
-            if (r8 != 0) goto L_0x00b7
+            if (r8 != 0) goto L_0x00fe
             android.graphics.LinearGradient r8 = new android.graphics.LinearGradient
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r10 = -r10
@@ -314,9 +353,9 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             r16 = r9
             r11.<init>(r12, r13, r14, r15, r16, r17, r18)
             r0.linearGradient = r8
-            goto L_0x014f
-        L_0x00b7:
-            if (r8 != r4) goto L_0x00ec
+            goto L_0x0196
+        L_0x00fe:
+            if (r8 != r4) goto L_0x0133
             android.graphics.LinearGradient r8 = new android.graphics.LinearGradient
             r20 = 0
             int r11 = r27.getMeasuredHeight()
@@ -339,9 +378,9 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             r24 = r10
             r19.<init>(r20, r21, r22, r23, r24, r25, r26)
             r0.linearGradient = r8
-            goto L_0x014f
-        L_0x00ec:
-            if (r8 != r5) goto L_0x011d
+            goto L_0x0196
+        L_0x0133:
+            if (r8 != r5) goto L_0x0164
             android.graphics.LinearGradient r8 = new android.graphics.LinearGradient
             float r11 = r0.cx
             float r12 = r27.getTranslationX()
@@ -363,8 +402,8 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             r16 = r9
             r11.<init>(r12, r13, r14, r15, r16, r17, r18)
             r0.linearGradient = r8
-            goto L_0x014f
-        L_0x011d:
+            goto L_0x0196
+        L_0x0164:
             android.graphics.LinearGradient r8 = new android.graphics.LinearGradient
             int r11 = r27.getMeasuredWidth()
             float r11 = (float) r11
@@ -387,7 +426,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             r24 = r10
             r19.<init>(r20, r21, r22, r23, r24, r25, r26)
             r0.linearGradient = r8
-        L_0x014f:
+        L_0x0196:
             android.graphics.RectF r2 = r0.rectF
             int r3 = r27.getMeasuredWidth()
             float r3 = (float) r3
@@ -406,34 +445,34 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             android.graphics.Paint r9 = r0.paint
             r1.drawRoundRect(r2, r6, r8, r9)
             int r2 = r0.position
-            if (r2 != 0) goto L_0x0185
+            if (r2 != 0) goto L_0x01cc
             float r2 = r0.cy
             float r6 = r27.getTranslationY()
             float r2 = r2 - r6
             r6 = 0
-            goto L_0x01ad
-        L_0x0185:
-            if (r2 != r4) goto L_0x0194
+            goto L_0x01f4
+        L_0x01cc:
+            if (r2 != r4) goto L_0x01db
             float r2 = r0.cy
             float r6 = r27.getTranslationY()
             float r2 = r2 - r6
             int r6 = r27.getMeasuredWidth()
             float r6 = (float) r6
-            goto L_0x01ad
-        L_0x0194:
-            if (r2 != r5) goto L_0x01a0
+            goto L_0x01f4
+        L_0x01db:
+            if (r2 != r5) goto L_0x01e7
             float r2 = r0.cx
             float r6 = r27.getTranslationX()
             float r6 = r2 - r6
             r2 = 0
-            goto L_0x01ad
-        L_0x01a0:
+            goto L_0x01f4
+        L_0x01e7:
             float r2 = r0.cx
             float r6 = r27.getTranslationX()
             float r6 = r2 - r6
             int r2 = r27.getMeasuredHeight()
             float r2 = (float) r2
-        L_0x01ad:
+        L_0x01f4:
             r0.setPivotX(r6)
             r0.setPivotY(r2)
             r28.save()
@@ -441,7 +480,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             r9 = 1110704128(0x42340000, float:45.0)
             r10 = 1077936128(0x40400000, float:3.0)
             r11 = 1097859072(0x41700000, float:15.0)
-            if (r8 != 0) goto L_0x01e3
+            if (r8 != 0) goto L_0x022a
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
             float r4 = (float) r4
             float r4 = r6 - r4
@@ -456,9 +495,9 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             float r4 = (float) r4
             r1.translate(r4, r7)
             r1.rotate(r9, r6, r2)
-            goto L_0x024f
-        L_0x01e3:
-            if (r8 != r4) goto L_0x0208
+            goto L_0x0296
+        L_0x022a:
+            if (r8 != r4) goto L_0x024f
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
             float r4 = (float) r4
             float r4 = r2 - r4
@@ -474,9 +513,9 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             float r4 = (float) r4
             r1.translate(r4, r7)
             r1.rotate(r9, r6, r2)
-            goto L_0x024f
-        L_0x0208:
-            if (r8 != r5) goto L_0x022d
+            goto L_0x0296
+        L_0x024f:
+            if (r8 != r5) goto L_0x0274
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
             float r4 = (float) r4
             float r4 = r6 - r4
@@ -491,8 +530,8 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r10)
             float r4 = (float) r4
             r1.translate(r7, r4)
-            goto L_0x024f
-        L_0x022d:
+            goto L_0x0296
+        L_0x0274:
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
             float r4 = (float) r4
             float r4 = r6 - r4
@@ -508,7 +547,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             int r4 = -r4
             float r4 = (float) r4
             r1.translate(r7, r4)
-        L_0x024f:
+        L_0x0296:
             android.graphics.RectF r4 = r0.rectF
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
             float r5 = (float) r5
@@ -559,6 +598,12 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             if (VoIPService.getSharedInstance() != null) {
                 this.mutedByAdmin = VoIPService.getSharedInstance().mutedByAdmin();
             }
+            float f = 1.0f;
+            this.mutedByAdminProgress = this.mutedByAdmin ? 1.0f : 0.0f;
+            if (!(VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().isMicMute() || this.mutedByAdmin)) {
+                f = 0.0f;
+            }
+            this.muteProgress = f;
         }
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.groupCallUpdated);
         updateButtons(false);
@@ -645,10 +690,12 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
+        boolean mutedByAdmin2;
         if (i == NotificationCenter.groupCallUpdated) {
             updateMembersCount();
-            if (VoIPService.getSharedInstance() != null) {
-                this.mutedByAdmin = VoIPService.getSharedInstance().mutedByAdmin();
+            if (VoIPService.getSharedInstance() != null && (mutedByAdmin2 = VoIPService.getSharedInstance().mutedByAdmin()) != this.mutedByAdmin) {
+                this.mutedByAdmin = mutedByAdmin2;
+                invalidate();
             }
         }
     }

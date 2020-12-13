@@ -899,7 +899,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     public static void show(Context context, int i) {
         if (instance == null) {
             instance = new GroupCallPip(context, i);
-            WindowManager windowManager2 = (WindowManager) context.getSystemService("window");
+            WindowManager windowManager2 = (WindowManager) ApplicationLoader.applicationContext.getSystemService("window");
             instance.windowManager = windowManager2;
             WindowManager.LayoutParams createWindowLayoutParams = createWindowLayoutParams(context);
             createWindowLayoutParams.width = -1;

@@ -241,6 +241,9 @@ public class FragmentContextViewWavesDrawable {
         String greenKey1 = "voipgroup_topPanelGreen1";
         String greenKey2 = "voipgroup_topPanelGreen2";
         private final Matrix matrix = new Matrix();
+        String mutedByAdmin = "voipgroup_mutedByAdminGradient";
+        String mutedByAdmin2 = "voipgroup_mutedByAdminGradient2";
+        String mutedByAdmin3 = "voipgroup_mutedByAdminGradient3";
         public Shader shader;
         private float startX;
         private float startY;
@@ -267,18 +270,27 @@ public class FragmentContextViewWavesDrawable {
                 int color5 = Theme.getColor(this.blueKey2);
                 this.color2 = color5;
                 this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color4, color5}, (float[]) null, Shader.TileMode.CLAMP);
+            } else if (i == 3) {
+                int color6 = Theme.getColor(this.mutedByAdmin);
+                this.color1 = color6;
+                int color7 = Theme.getColor(this.mutedByAdmin2);
+                this.color2 = color7;
+                this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color6, Theme.getColor(this.mutedByAdmin3), color7}, new float[]{0.0f, 0.6f, 1.0f}, Shader.TileMode.CLAMP);
             }
         }
 
         public void update(int i, int i2, long j, float f) {
-            int i3 = this.currentState;
-            if (i3 != 2 && i3 != 3) {
+            if (this.currentState != 2) {
                 float f2 = this.duration;
                 if (f2 == 0.0f || this.time >= f2) {
                     this.duration = (float) (Utilities.random.nextInt(700) + 500);
                     this.time = 0.0f;
                     if (this.targetX == -1.0f) {
-                        if (this.currentState == 0) {
+                        int i3 = this.currentState;
+                        if (i3 == 3) {
+                            this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.05f) / 100.0f) - 14.4f;
+                            this.targetY = ((((float) Utilities.random.nextInt(100)) * 0.05f) / 100.0f) + 0.7f;
+                        } else if (i3 == 0) {
                             this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.2f) / 100.0f) - 14.4f;
                             this.targetY = ((((float) Utilities.random.nextInt(100)) * 0.3f) / 100.0f) + 0.7f;
                         } else {
@@ -288,12 +300,16 @@ public class FragmentContextViewWavesDrawable {
                     }
                     this.startX = this.targetX;
                     this.startY = this.targetY;
-                    if (this.currentState == 0) {
+                    int i4 = this.currentState;
+                    if (i4 == 3) {
+                        this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.05f) / 100.0f) - 14.4f;
+                        this.targetY = ((((float) Utilities.random.nextInt(100)) * 0.05f) / 100.0f) + 0.7f;
+                    } else if (i4 == 0) {
                         this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.2f) / 100.0f) - 14.4f;
                         this.targetY = ((((float) Utilities.random.nextInt(100)) * 0.3f) / 100.0f) + 0.7f;
                     } else {
                         this.targetX = ((((float) Utilities.random.nextInt(100)) / 100.0f) * 0.2f) + 1.1f;
-                        this.targetY = (((float) Utilities.random.nextInt(100)) * 2.0f) / 100.0f;
+                        this.targetY = (((float) Utilities.random.nextInt(100)) * 4.0f) / 100.0f;
                     }
                 }
                 float f3 = (float) j;
@@ -309,7 +325,9 @@ public class FragmentContextViewWavesDrawable {
                 float f8 = ((f7 + ((this.targetX - f7) * interpolation)) * f6) - 200.0f;
                 float f9 = this.startY;
                 float var_ = (((float) i) * (f9 + ((this.targetY - f9) * interpolation))) - 200.0f;
-                float var_ = (f6 / 400.0f) * (this.currentState == 0 ? 3.0f : 1.5f);
+                float var_ = f6 / 400.0f;
+                int i5 = this.currentState;
+                float var_ = var_ * ((i5 == 0 || i5 == 3) ? 3.0f : 1.5f);
                 this.matrix.reset();
                 this.matrix.postTranslate(f8, var_);
                 this.matrix.postScale(var_, var_, f8 + 200.0f, var_ + 200.0f);
@@ -323,9 +341,13 @@ public class FragmentContextViewWavesDrawable {
                 if (this.color1 != Theme.getColor(this.greenKey1) || this.color2 != Theme.getColor(this.greenKey2)) {
                     createGradients();
                 }
-            } else if (i != 1) {
-            } else {
+            } else if (i == 1) {
                 if (this.color1 != Theme.getColor(this.blueKey1) || this.color2 != Theme.getColor(this.blueKey2)) {
+                    createGradients();
+                }
+            } else if (i != 3) {
+            } else {
+                if (this.color1 != Theme.getColor(this.mutedByAdmin) || this.color2 != Theme.getColor(this.mutedByAdmin2)) {
                     createGradients();
                 }
             }
@@ -333,12 +355,12 @@ public class FragmentContextViewWavesDrawable {
 
         public void setToPaint(Paint paint) {
             int i = this.currentState;
-            if (i == 0 || i == 1) {
+            if (i == 0 || i == 1 || i == 3) {
                 paint.setShader(this.shader);
                 return;
             }
             paint.setShader((Shader) null);
-            paint.setColor(Theme.getColor(this.currentState == 2 ? "voipgroup_topPanelGray" : "voipgroup_topPanelGray2"));
+            paint.setColor(Theme.getColor("voipgroup_topPanelGray"));
         }
     }
 }

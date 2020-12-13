@@ -8,6 +8,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
@@ -122,9 +123,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     public int backgroundColor;
     private RLottieDrawable bigMicDrawable;
     /* access modifiers changed from: private */
-    public BlobDrawable bigWaveDrawable;
-    /* access modifiers changed from: private */
-    public BlobDrawable buttonWaveDrawable;
+    public final BlobDrawable bigWaveDrawable;
     private FrameLayout buttonsContainer;
     public ChatObject.Call call;
     /* access modifiers changed from: private */
@@ -257,9 +256,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     /* access modifiers changed from: private */
     public RadialGradient radialGradient;
     /* access modifiers changed from: private */
-    public Matrix radialMatrix;
+    public final Matrix radialMatrix;
     /* access modifiers changed from: private */
-    public Paint radialPaint;
+    public final Paint radialPaint;
     /* access modifiers changed from: private */
     public RadialProgressView radialProgressView;
     /* access modifiers changed from: private */
@@ -293,7 +292,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     /* access modifiers changed from: private */
     public float switchProgress = 1.0f;
     /* access modifiers changed from: private */
-    public BlobDrawable tinyWaveDrawable;
+    public final BlobDrawable tinyWaveDrawable;
     private TextView titleTextView;
     private UndoView[] undoView = new UndoView[2];
     /* access modifiers changed from: private */
@@ -372,23 +371,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     this.duration = (float) (Utilities.random.nextInt(700) + 500);
                     this.time = 0.0f;
                     if (this.targetX == -1.0f) {
-                        if (this.currentState == 1) {
-                            this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.3f) / 100.0f) + 0.2f;
-                            this.targetY = ((((float) Utilities.random.nextInt(100)) * 0.3f) / 100.0f) + 0.7f;
-                        } else {
-                            this.targetX = ((((float) Utilities.random.nextInt(100)) / 100.0f) * 0.2f) + 0.8f;
-                            this.targetY = ((float) Utilities.random.nextInt(100)) / 100.0f;
-                        }
+                        setTarget();
                     }
                     this.startX = this.targetX;
                     this.startY = this.targetY;
-                    if (this.currentState == 1) {
-                        this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.3f) / 100.0f) + 0.2f;
-                        this.targetY = ((((float) Utilities.random.nextInt(100)) * 0.3f) / 100.0f) + 0.7f;
-                    } else {
-                        this.targetX = ((((float) Utilities.random.nextInt(100)) / 100.0f) * 0.2f) + 0.8f;
-                        this.targetY = ((float) Utilities.random.nextInt(100)) / 100.0f;
-                    }
+                    setTarget();
                 }
                 float f2 = (float) j;
                 float access$200 = this.time + ((BlobDrawable.GRADIENT_SPEED_MIN + 0.5f) * f2) + (f2 * BlobDrawable.GRADIENT_SPEED_MAX * 2.0f * GroupCallActivity.this.amplitude);
@@ -403,11 +390,26 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 float f6 = (((float) i2) + ((f5 + ((this.targetX - f5) * interpolation)) * f4)) - 200.0f;
                 float f7 = this.startY;
                 float f8 = (((float) i) + (f4 * (f7 + ((this.targetY - f7) * interpolation)))) - 200.0f;
-                float dp = (((float) AndroidUtilities.dp(122.0f)) / 400.0f) * (this.currentState == 1 ? 4.0f : 2.5f);
+                int i4 = this.currentState;
+                float dp = (((float) AndroidUtilities.dp(122.0f)) / 400.0f) * (i4 == 2 ? 1.0f : i4 == 1 ? 4.0f : 2.5f);
                 this.matrix.reset();
                 this.matrix.postTranslate(f6, f8);
                 this.matrix.postScale(dp, dp, f6 + 200.0f, f8 + 200.0f);
                 this.shader.setLocalMatrix(this.matrix);
+            }
+        }
+
+        private void setTarget() {
+            int i = this.currentState;
+            if (i == 2) {
+                this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.05f) / 100.0f) + 0.95f;
+                this.targetY = 1.0f;
+            } else if (i == 1) {
+                this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.3f) / 100.0f) + 0.2f;
+                this.targetY = ((((float) Utilities.random.nextInt(100)) * 0.3f) / 100.0f) + 0.7f;
+            } else {
+                this.targetX = ((((float) Utilities.random.nextInt(100)) / 100.0f) * 0.2f) + 0.8f;
+                this.targetY = ((float) Utilities.random.nextInt(100)) / 100.0f;
             }
         }
     }
@@ -919,84 +921,56 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             android.graphics.RadialGradient r9 = r0.radialGradient
             r7.setShader(r9)
             org.telegram.ui.Components.BlobDrawable r7 = new org.telegram.ui.Components.BlobDrawable
-            r9 = 6
+            r9 = 9
             r7.<init>(r9)
-            r0.buttonWaveDrawable = r7
-            org.telegram.ui.Components.BlobDrawable r7 = new org.telegram.ui.Components.BlobDrawable
-            r11 = 9
-            r7.<init>(r11)
             r0.tinyWaveDrawable = r7
-            org.telegram.ui.Components.BlobDrawable r7 = new org.telegram.ui.Components.BlobDrawable
+            org.telegram.ui.Components.BlobDrawable r9 = new org.telegram.ui.Components.BlobDrawable
             r11 = 12
-            r7.<init>(r11)
-            r0.bigWaveDrawable = r7
-            org.telegram.ui.Components.BlobDrawable r7 = r0.buttonWaveDrawable
-            r12 = 1113849856(0x42640000, float:57.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            float r12 = (float) r12
-            r7.minRadius = r12
-            org.telegram.ui.Components.BlobDrawable r7 = r0.buttonWaveDrawable
-            r12 = 1115422720(0x427CLASSNAME, float:63.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            float r12 = (float) r12
-            r7.maxRadius = r12
-            org.telegram.ui.Components.BlobDrawable r7 = r0.buttonWaveDrawable
-            r7.generateBlob()
-            org.telegram.ui.Components.BlobDrawable r7 = r0.tinyWaveDrawable
+            r9.<init>(r11)
+            r0.bigWaveDrawable = r9
             r12 = 1115160576(0x42780000, float:62.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             float r12 = (float) r12
             r7.minRadius = r12
-            org.telegram.ui.Components.BlobDrawable r7 = r0.tinyWaveDrawable
             r12 = 1116733440(0x42900000, float:72.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             float r12 = (float) r12
             r7.maxRadius = r12
-            org.telegram.ui.Components.BlobDrawable r7 = r0.tinyWaveDrawable
             r7.generateBlob()
-            org.telegram.ui.Components.BlobDrawable r7 = r0.bigWaveDrawable
             r12 = 1115815936(0x42820000, float:65.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             float r12 = (float) r12
-            r7.minRadius = r12
-            org.telegram.ui.Components.BlobDrawable r7 = r0.bigWaveDrawable
+            r9.minRadius = r12
             r12 = 1117126656(0x42960000, float:75.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             float r12 = (float) r12
-            r7.maxRadius = r12
-            org.telegram.ui.Components.BlobDrawable r7 = r0.bigWaveDrawable
-            r7.generateBlob()
-            org.telegram.ui.Components.BlobDrawable r7 = r0.tinyWaveDrawable
+            r9.maxRadius = r12
+            r9.generateBlob()
             android.graphics.Paint r7 = r7.paint
             java.lang.String r12 = "voipgroup_unmuteButton"
             int r13 = org.telegram.ui.ActionBar.Theme.getColor(r12)
             r14 = 38
             int r13 = androidx.core.graphics.ColorUtils.setAlphaComponent(r13, r14)
             r7.setColor(r13)
-            org.telegram.ui.Components.BlobDrawable r7 = r0.bigWaveDrawable
-            android.graphics.Paint r7 = r7.paint
-            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r14 = 76
-            int r13 = androidx.core.graphics.ColorUtils.setAlphaComponent(r13, r14)
-            r7.setColor(r13)
-            org.telegram.ui.Components.BlobDrawable r7 = r0.buttonWaveDrawable
-            android.graphics.Paint r7 = r7.paint
-            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r7.setColor(r12)
+            android.graphics.Paint r7 = r9.paint
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r12)
+            r12 = 76
+            int r9 = androidx.core.graphics.ColorUtils.setAlphaComponent(r9, r12)
+            r7.setColor(r9)
             org.telegram.ui.Components.voip.VoIPToggleButton r7 = new org.telegram.ui.Components.voip.VoIPToggleButton
             r7.<init>(r1)
             r0.soundButton = r7
             r7.setTextSize(r11)
             android.widget.FrameLayout r7 = r0.buttonsContainer
-            org.telegram.ui.Components.voip.VoIPToggleButton r12 = r0.soundButton
-            r13 = 68
-            r14 = 1117782016(0x42a00000, float:80.0)
-            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14)
-            r7.addView(r12, r15)
+            org.telegram.ui.Components.voip.VoIPToggleButton r9 = r0.soundButton
+            r12 = 68
+            r13 = 1117782016(0x42a00000, float:80.0)
+            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13)
+            r7.addView(r9, r14)
             org.telegram.ui.Components.voip.VoIPToggleButton r7 = r0.soundButton
-            org.telegram.ui.-$$Lambda$GroupCallActivity$onClwEf4q4phWZrpZQ1GtYC_tCo r12 = new org.telegram.ui.-$$Lambda$GroupCallActivity$onClwEf4q4phWZrpZQ1GtYC_tCo
-            r12.<init>()
-            r7.setOnClickListener(r12)
+            org.telegram.ui.-$$Lambda$GroupCallActivity$onClwEf4q4phWZrpZQ1GtYC_tCo r9 = new org.telegram.ui.-$$Lambda$GroupCallActivity$onClwEf4q4phWZrpZQ1GtYC_tCo
+            r9.<init>()
+            r7.setOnClickListener(r9)
             org.telegram.ui.Components.voip.VoIPToggleButton r7 = new org.telegram.ui.Components.voip.VoIPToggleButton
             r7.<init>(r1)
             r0.leaveButton = r7
@@ -1004,11 +978,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.ui.Components.voip.VoIPToggleButton r7 = r0.leaveButton
             r7.setTextSize(r11)
             org.telegram.ui.Components.voip.VoIPToggleButton r7 = r0.leaveButton
-            java.lang.String r11 = "voipgroup_leaveButton"
-            int r20 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            java.lang.String r12 = "VoipGroupLeave"
-            r15 = 2131627724(0x7f0e0ecc, float:1.888272E38)
-            java.lang.String r23 = org.telegram.messenger.LocaleController.getString(r12, r15)
+            java.lang.String r9 = "voipgroup_leaveButton"
+            int r20 = org.telegram.ui.ActionBar.Theme.getColor(r9)
+            java.lang.String r11 = "VoipGroupLeave"
+            r14 = 2131627724(0x7f0e0ecc, float:1.888272E38)
+            java.lang.String r23 = org.telegram.messenger.LocaleController.getString(r11, r14)
             r18 = 2131165316(0x7var_, float:1.7944846E38)
             r19 = -1
             r21 = 1050253722(0x3e99999a, float:0.3)
@@ -1018,71 +992,71 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r17 = r7
             r17.setData(r18, r19, r20, r21, r22, r23, r24, r25)
             android.widget.FrameLayout r7 = r0.buttonsContainer
-            org.telegram.ui.Components.voip.VoIPToggleButton r12 = r0.leaveButton
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14)
-            r7.addView(r12, r13)
+            org.telegram.ui.Components.voip.VoIPToggleButton r11 = r0.leaveButton
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13)
+            r7.addView(r11, r12)
             org.telegram.ui.Components.voip.VoIPToggleButton r7 = r0.leaveButton
-            org.telegram.ui.-$$Lambda$GroupCallActivity$tSjI6SD3O_hXLBkiFode-FDcY9Y r12 = new org.telegram.ui.-$$Lambda$GroupCallActivity$tSjI6SD3O_hXLBkiFode-FDcY9Y
-            r12.<init>(r1)
-            r7.setOnClickListener(r12)
+            org.telegram.ui.-$$Lambda$GroupCallActivity$tSjI6SD3O_hXLBkiFode-FDcY9Y r11 = new org.telegram.ui.-$$Lambda$GroupCallActivity$tSjI6SD3O_hXLBkiFode-FDcY9Y
+            r11.<init>(r1)
+            r7.setOnClickListener(r11)
             org.telegram.ui.GroupCallActivity$9 r7 = new org.telegram.ui.GroupCallActivity$9
             r7.<init>(r1)
             r0.muteButton = r7
-            org.telegram.ui.Components.RLottieDrawable r12 = r0.bigMicDrawable
-            r7.setAnimation(r12)
+            org.telegram.ui.Components.RLottieDrawable r11 = r0.bigMicDrawable
+            r7.setAnimation(r11)
             org.telegram.ui.Components.RLottieImageView r7 = r0.muteButton
-            android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER
-            r7.setScaleType(r12)
+            android.widget.ImageView$ScaleType r11 = android.widget.ImageView.ScaleType.CENTER
+            r7.setScaleType(r11)
             android.widget.FrameLayout r7 = r0.buttonsContainer
-            org.telegram.ui.Components.RLottieImageView r12 = r0.muteButton
-            r13 = 122(0x7a, float:1.71E-43)
-            r14 = 49
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r13, r14)
-            r7.addView(r12, r13)
+            org.telegram.ui.Components.RLottieImageView r11 = r0.muteButton
+            r12 = 122(0x7a, float:1.71E-43)
+            r13 = 49
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r12, r13)
+            r7.addView(r11, r12)
             org.telegram.ui.Components.RLottieImageView r7 = r0.muteButton
-            org.telegram.ui.-$$Lambda$GroupCallActivity$u4roEPnPeT7DyJ-i_bWGO552ynY r12 = new org.telegram.ui.-$$Lambda$GroupCallActivity$u4roEPnPeT7DyJ-i_bWGO552ynY
-            r12.<init>()
-            r7.setOnClickListener(r12)
+            org.telegram.ui.-$$Lambda$GroupCallActivity$u4roEPnPeT7DyJ-i_bWGO552ynY r11 = new org.telegram.ui.-$$Lambda$GroupCallActivity$u4roEPnPeT7DyJ-i_bWGO552ynY
+            r11.<init>()
+            r7.setOnClickListener(r11)
             org.telegram.ui.Components.RadialProgressView r7 = new org.telegram.ui.Components.RadialProgressView
             r7.<init>(r1)
             r0.radialProgressView = r7
-            r12 = 1122500608(0x42e80000, float:116.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            r7.setSize(r12)
+            r11 = 1122500608(0x42e80000, float:116.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            r7.setSize(r11)
             org.telegram.ui.Components.RadialProgressView r7 = r0.radialProgressView
-            r12 = 1082130432(0x40800000, float:4.0)
-            r7.setStrokeWidth(r12)
+            r11 = 1082130432(0x40800000, float:4.0)
+            r7.setStrokeWidth(r11)
             org.telegram.ui.Components.RadialProgressView r7 = r0.radialProgressView
-            java.lang.String r12 = "voipgroup_connectingProgress"
-            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r7.setProgressColor(r12)
+            java.lang.String r11 = "voipgroup_connectingProgress"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r7.setProgressColor(r11)
             android.widget.FrameLayout r7 = r0.buttonsContainer
-            org.telegram.ui.Components.RadialProgressView r12 = r0.radialProgressView
-            r13 = 126(0x7e, float:1.77E-43)
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r13, r14)
-            r7.addView(r12, r13)
+            org.telegram.ui.Components.RadialProgressView r11 = r0.radialProgressView
+            r12 = 126(0x7e, float:1.77E-43)
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r12, r13)
+            r7.addView(r11, r12)
             r7 = 0
-        L_0x03ac:
-            java.lang.String r12 = "voipgroup_actionBarItems"
-            if (r7 >= r4) goto L_0x0437
-            android.widget.TextView[] r13 = r0.muteLabel
-            android.widget.TextView r14 = new android.widget.TextView
-            r14.<init>(r1)
-            r13[r7] = r14
+        L_0x036e:
+            java.lang.String r11 = "voipgroup_actionBarItems"
+            if (r7 >= r4) goto L_0x03f9
+            android.widget.TextView[] r12 = r0.muteLabel
+            android.widget.TextView r13 = new android.widget.TextView
+            r13.<init>(r1)
+            r12[r7] = r13
+            android.widget.TextView[] r12 = r0.muteLabel
+            r12 = r12[r7]
+            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r12.setTextColor(r13)
+            android.widget.TextView[] r12 = r0.muteLabel
+            r12 = r12[r7]
+            r13 = 1099956224(0x41900000, float:18.0)
+            r12.setTextSize(r6, r13)
+            android.widget.TextView[] r12 = r0.muteLabel
+            r12 = r12[r7]
+            r12.setGravity(r6)
+            android.widget.FrameLayout r12 = r0.buttonsContainer
             android.widget.TextView[] r13 = r0.muteLabel
             r13 = r13[r7]
-            int r14 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r13.setTextColor(r14)
-            android.widget.TextView[] r13 = r0.muteLabel
-            r13 = r13[r7]
-            r14 = 1099956224(0x41900000, float:18.0)
-            r13.setTextSize(r6, r14)
-            android.widget.TextView[] r13 = r0.muteLabel
-            r13 = r13[r7]
-            r13.setGravity(r6)
-            android.widget.FrameLayout r13 = r0.buttonsContainer
-            android.widget.TextView[] r14 = r0.muteLabel
-            r14 = r14[r7]
             r17 = -2
             r18 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             r19 = 81
@@ -1090,98 +1064,98 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r21 = 0
             r22 = 0
             r23 = 1104150528(0x41d00000, float:26.0)
-            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
-            r13.addView(r14, r15)
-            android.widget.TextView[] r13 = r0.muteSubLabel
-            android.widget.TextView r14 = new android.widget.TextView
-            r14.<init>(r1)
-            r13[r7] = r14
-            android.widget.TextView[] r13 = r0.muteSubLabel
-            r13 = r13[r7]
-            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r13.setTextColor(r12)
-            android.widget.TextView[] r12 = r0.muteSubLabel
-            r12 = r12[r7]
-            r13 = 1094713344(0x41400000, float:12.0)
-            r12.setTextSize(r6, r13)
-            android.widget.TextView[] r12 = r0.muteSubLabel
-            r12 = r12[r7]
-            r12.setGravity(r6)
-            android.widget.FrameLayout r12 = r0.buttonsContainer
-            android.widget.TextView[] r13 = r0.muteSubLabel
-            r13 = r13[r7]
-            r23 = 1092616192(0x41200000, float:10.0)
             android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
             r12.addView(r13, r14)
-            if (r7 != r6) goto L_0x0433
-            android.widget.TextView[] r12 = r0.muteLabel
-            r12 = r12[r7]
-            r12.setVisibility(r5)
+            android.widget.TextView[] r12 = r0.muteSubLabel
+            android.widget.TextView r13 = new android.widget.TextView
+            r13.<init>(r1)
+            r12[r7] = r13
             android.widget.TextView[] r12 = r0.muteSubLabel
             r12 = r12[r7]
-            r12.setVisibility(r5)
-        L_0x0433:
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r12.setTextColor(r11)
+            android.widget.TextView[] r11 = r0.muteSubLabel
+            r11 = r11[r7]
+            r12 = 1094713344(0x41400000, float:12.0)
+            r11.setTextSize(r6, r12)
+            android.widget.TextView[] r11 = r0.muteSubLabel
+            r11 = r11[r7]
+            r11.setGravity(r6)
+            android.widget.FrameLayout r11 = r0.buttonsContainer
+            android.widget.TextView[] r12 = r0.muteSubLabel
+            r12 = r12[r7]
+            r23 = 1092616192(0x41200000, float:10.0)
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
+            r11.addView(r12, r13)
+            if (r7 != r6) goto L_0x03f5
+            android.widget.TextView[] r11 = r0.muteLabel
+            r11 = r11[r7]
+            r11.setVisibility(r5)
+            android.widget.TextView[] r11 = r0.muteSubLabel
+            r11 = r11[r7]
+            r11.setVisibility(r5)
+        L_0x03f5:
             int r7 = r7 + 1
-            goto L_0x03ac
-        L_0x0437:
+            goto L_0x036e
+        L_0x03f9:
             org.telegram.ui.GroupCallActivity$10 r7 = new org.telegram.ui.GroupCallActivity$10
             r7.<init>(r1)
             r0.actionBar = r7
-            r13 = 2131165466(0x7var_a, float:1.794515E38)
-            r7.setBackButtonImage(r13)
+            r12 = 2131165466(0x7var_a, float:1.794515E38)
+            r7.setBackButtonImage(r12)
             org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
             r7.setOccupyStatusBar(r3)
             org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
             r7.setAllowOverlayTitle(r3)
             org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
-            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r7.setItemsColor(r13, r3)
+            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r7.setItemsColor(r12, r3)
             org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
-            java.lang.String r13 = "actionBarActionModeDefaultSelector"
-            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r7.setItemsBackgroundColor(r13, r3)
+            java.lang.String r12 = "actionBarActionModeDefaultSelector"
+            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
+            r7.setItemsBackgroundColor(r12, r3)
             org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
-            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r7.setTitleColor(r13)
+            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r7.setTitleColor(r12)
             org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
-            java.lang.String r13 = "voipgroup_lastSeenTextUnscrolled"
-            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r7.setSubtitleColor(r13)
+            java.lang.String r12 = "voipgroup_lastSeenTextUnscrolled"
+            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
+            r7.setSubtitleColor(r12)
             org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
-            org.telegram.ui.GroupCallActivity$11 r13 = new org.telegram.ui.GroupCallActivity$11
-            r13.<init>(r2)
-            r7.setActionBarMenuOnItemClick(r13)
+            org.telegram.ui.GroupCallActivity$11 r12 = new org.telegram.ui.GroupCallActivity$11
+            r12.<init>(r2)
+            r7.setActionBarMenuOnItemClick(r12)
             org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
-            r13 = 0
-            r7.setAlpha(r13)
-            org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
-            android.widget.ImageView r7 = r7.getBackButton()
-            r14 = 1063675494(0x3var_, float:0.9)
-            r7.setScaleX(r14)
+            r12 = 0
+            r7.setAlpha(r12)
             org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
             android.widget.ImageView r7 = r7.getBackButton()
-            r7.setScaleY(r14)
+            r13 = 1063675494(0x3var_, float:0.9)
+            r7.setScaleX(r13)
             org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
             android.widget.ImageView r7 = r7.getBackButton()
-            r14 = 1096810496(0x41600000, float:14.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            int r14 = -r14
-            float r14 = (float) r14
-            r7.setTranslationX(r14)
+            r7.setScaleY(r13)
+            org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
+            android.widget.ImageView r7 = r7.getBackButton()
+            r13 = 1096810496(0x41600000, float:14.0)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            int r13 = -r13
+            float r13 = (float) r13
+            r7.setTranslationX(r13)
             org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
             org.telegram.ui.ActionBar.SimpleTextView r7 = r7.getTitleTextView()
-            r14 = 1102577664(0x41b80000, float:23.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            float r14 = (float) r14
-            r7.setTranslationY(r14)
+            r13 = 1102577664(0x41b80000, float:23.0)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            float r13 = (float) r13
+            r7.setTranslationY(r13)
             org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
             org.telegram.ui.ActionBar.SimpleTextView r7 = r7.getSubtitleTextView()
-            r14 = 1101004800(0x41a00000, float:20.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            r13 = 1101004800(0x41a00000, float:20.0)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r13)
             float r14 = (float) r14
             r7.setTranslationY(r14)
             org.telegram.ui.ActionBar.ActionBarMenuItem r7 = new org.telegram.ui.ActionBar.ActionBarMenuItem
-            int r14 = org.telegram.ui.ActionBar.Theme.getColor(r12)
+            int r14 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             r7.<init>(r1, r8, r3, r14)
             r0.otherItem = r7
             r7.setLongClickEnabled(r3)
@@ -1202,205 +1176,207 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.otherItem
             java.lang.String r14 = "voipgroup_actionBarItemsSelector"
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r14)
-            android.graphics.drawable.Drawable r15 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r15, r9)
-            r7.setBackgroundDrawable(r15)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.otherItem
-            org.telegram.ui.-$$Lambda$GroupCallActivity$7jXM7rTvd0NFVgLsvfHI1ZCDFFo r15 = new org.telegram.ui.-$$Lambda$GroupCallActivity$7jXM7rTvd0NFVgLsvfHI1ZCDFFo
-            r15.<init>(r2)
-            r7.setOnClickListener(r15)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.otherItem
-            int r15 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r7.setPopupItemsColor(r15, r3)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.otherItem
-            int r15 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r7.setPopupItemsColor(r15, r6)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.otherItem
-            int r15 = org.telegram.ui.ActionBar.Theme.getColor(r14)
-            r7.setPopupItemsSelectorColor(r15)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = new org.telegram.ui.ActionBar.ActionBarMenuItem
-            int r15 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r7.<init>(r1, r8, r3, r15)
-            r0.pipItem = r7
-            r7.setLongClickEnabled(r3)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.pipItem
-            r8 = 2131165813(0x7var_, float:1.7945854E38)
-            r7.setIcon((int) r8)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.pipItem
-            r8 = 2131624006(0x7f0e0046, float:1.887518E38)
-            java.lang.String r15 = "AccDescrPipMode"
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r15, r8)
-            r7.setContentDescription(r8)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.pipItem
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r14)
-            android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r8, r9)
-            r7.setBackgroundDrawable(r8)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.pipItem
-            org.telegram.ui.-$$Lambda$GroupCallActivity$H8y3AsTTCzyy6Vg1B16yTAimQww r8 = new org.telegram.ui.-$$Lambda$GroupCallActivity$H8y3AsTTCzyy6Vg1B16yTAimQww
-            r8.<init>()
-            r7.setOnClickListener(r8)
-            android.widget.TextView r7 = new android.widget.TextView
-            r7.<init>(r1)
-            r0.titleTextView = r7
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r7.setTextColor(r8)
-            android.widget.TextView r7 = r0.titleTextView
-            r8 = 1101004800(0x41a00000, float:20.0)
-            r7.setTextSize(r6, r8)
-            android.widget.TextView r7 = r0.titleTextView
-            java.lang.String r8 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r8 = org.telegram.messenger.AndroidUtilities.getTypeface(r8)
-            r7.setTypeface(r8)
-            android.widget.TextView r7 = r0.titleTextView
-            r8 = 51
-            r7.setGravity(r8)
-            android.widget.TextView r7 = r0.titleTextView
-            r8 = 2131627744(0x7f0e0ee0, float:1.8882761E38)
-            java.lang.String r9 = "VoipGroupVoiceChat"
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
-            r7.setText(r8)
-            org.telegram.ui.GroupCallActivity$12 r7 = new org.telegram.ui.GroupCallActivity$12
-            r7.<init>(r0, r1)
-            r0.actionBarBackground = r7
-            r7.setAlpha(r13)
-            android.view.ViewGroup r7 = r0.containerView
-            android.view.View r8 = r0.actionBarBackground
-            r17 = -1
-            r18 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r19 = 51
-            r20 = 0
+            r5 = 6
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r15, r5)
+            r7.setBackgroundDrawable(r5)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.otherItem
+            org.telegram.ui.-$$Lambda$GroupCallActivity$7jXM7rTvd0NFVgLsvfHI1ZCDFFo r7 = new org.telegram.ui.-$$Lambda$GroupCallActivity$7jXM7rTvd0NFVgLsvfHI1ZCDFFo
+            r7.<init>(r2)
+            r5.setOnClickListener(r7)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.otherItem
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r5.setPopupItemsColor(r7, r3)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.otherItem
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r5.setPopupItemsColor(r7, r6)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.otherItem
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            r5.setPopupItemsSelectorColor(r7)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = new org.telegram.ui.ActionBar.ActionBarMenuItem
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r5.<init>(r1, r8, r3, r7)
+            r0.pipItem = r5
+            r5.setLongClickEnabled(r3)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.pipItem
+            r7 = 2131165813(0x7var_, float:1.7945854E38)
+            r5.setIcon((int) r7)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.pipItem
+            r7 = 2131624006(0x7f0e0046, float:1.887518E38)
+            java.lang.String r8 = "AccDescrPipMode"
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            r5.setContentDescription(r7)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.pipItem
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            r8 = 6
+            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r7, r8)
+            r5.setBackgroundDrawable(r7)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.pipItem
+            org.telegram.ui.-$$Lambda$GroupCallActivity$H8y3AsTTCzyy6Vg1B16yTAimQww r7 = new org.telegram.ui.-$$Lambda$GroupCallActivity$H8y3AsTTCzyy6Vg1B16yTAimQww
+            r7.<init>()
+            r5.setOnClickListener(r7)
+            android.widget.TextView r5 = new android.widget.TextView
+            r5.<init>(r1)
+            r0.titleTextView = r5
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r5.setTextColor(r7)
+            android.widget.TextView r5 = r0.titleTextView
+            r5.setTextSize(r6, r13)
+            android.widget.TextView r5 = r0.titleTextView
+            java.lang.String r7 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
+            r5.setTypeface(r7)
+            android.widget.TextView r5 = r0.titleTextView
+            r7 = 51
+            r5.setGravity(r7)
+            android.widget.TextView r5 = r0.titleTextView
+            r7 = 2131627744(0x7f0e0ee0, float:1.8882761E38)
+            java.lang.String r8 = "VoipGroupVoiceChat"
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            r5.setText(r7)
+            org.telegram.ui.GroupCallActivity$12 r5 = new org.telegram.ui.GroupCallActivity$12
+            r5.<init>(r0, r1)
+            r0.actionBarBackground = r5
+            r5.setAlpha(r12)
+            android.view.ViewGroup r5 = r0.containerView
+            android.view.View r7 = r0.actionBarBackground
+            r18 = -1
+            r19 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r20 = 51
             r21 = 0
             r22 = 0
             r23 = 0
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
-            r7.addView(r8, r9)
+            r24 = 0
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24)
+            r5.addView(r7, r8)
+            android.view.ViewGroup r5 = r0.containerView
+            android.widget.TextView r7 = r0.titleTextView
+            r18 = -2
+            r21 = 1102577664(0x41b80000, float:23.0)
+            r23 = 1111490560(0x42400000, float:48.0)
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24)
+            r5.addView(r7, r8)
+            android.view.ViewGroup r5 = r0.containerView
+            org.telegram.ui.ActionBar.ActionBar r7 = r0.actionBar
+            r18 = -1
+            r21 = 0
+            r23 = 0
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24)
+            r5.addView(r7, r8)
+            android.widget.LinearLayout r5 = new android.widget.LinearLayout
+            r5.<init>(r1)
+            r0.menuItemsContainer = r5
+            r5.setOrientation(r3)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.pipItem
+            r8 = 48
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r8, r8)
+            r5.addView(r7, r13)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.otherItem
+            android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear(r8, r8)
+            r5.addView(r7, r8)
             android.view.ViewGroup r7 = r0.containerView
-            android.widget.TextView r8 = r0.titleTextView
-            r17 = -2
-            r20 = 1102577664(0x41b80000, float:23.0)
-            r22 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
-            r7.addView(r8, r9)
-            android.view.ViewGroup r7 = r0.containerView
-            org.telegram.ui.ActionBar.ActionBar r8 = r0.actionBar
-            r17 = -1
-            r20 = 0
-            r22 = 0
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
-            r7.addView(r8, r9)
-            android.widget.LinearLayout r7 = new android.widget.LinearLayout
-            r7.<init>(r1)
-            r0.menuItemsContainer = r7
-            r7.setOrientation(r3)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r8 = r0.pipItem
-            r9 = 48
-            android.widget.LinearLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r9)
-            r7.addView(r8, r14)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r8 = r0.otherItem
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r9)
-            r7.addView(r8, r9)
-            android.view.ViewGroup r8 = r0.containerView
-            r9 = -2
-            r14 = -2
-            r15 = 53
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r14, r15)
-            r8.addView(r7, r9)
-            android.view.View r7 = new android.view.View
-            r7.<init>(r1)
-            r0.actionBarShadow = r7
-            r7.setAlpha(r13)
+            r8 = -2
+            r13 = -2
+            r14 = 53
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r13, r14)
+            r7.addView(r5, r8)
+            android.view.View r5 = new android.view.View
+            r5.<init>(r1)
+            r0.actionBarShadow = r5
+            r5.setAlpha(r12)
+            android.view.View r5 = r0.actionBarShadow
+            java.lang.String r7 = "dialogShadowLine"
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+            r5.setBackgroundColor(r7)
+            android.view.ViewGroup r5 = r0.containerView
             android.view.View r7 = r0.actionBarShadow
-            java.lang.String r8 = "dialogShadowLine"
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            r7.setBackgroundColor(r8)
+            r8 = 1065353216(0x3var_, float:1.0)
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r8)
+            r5.addView(r7, r8)
+            r5 = 0
+        L_0x05fa:
+            if (r5 >= r4) goto L_0x0645
+            org.telegram.ui.Components.UndoView[] r7 = r0.undoView
+            org.telegram.ui.Components.UndoView r8 = new org.telegram.ui.Components.UndoView
+            r8.<init>(r1)
+            r7[r5] = r8
+            org.telegram.ui.Components.UndoView[] r7 = r0.undoView
+            r7 = r7[r5]
+            r8 = 1092616192(0x41200000, float:10.0)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            float r8 = (float) r8
+            r7.setAdditionalTranslationY(r8)
+            int r7 = android.os.Build.VERSION.SDK_INT
+            r8 = 21
+            if (r7 < r8) goto L_0x0627
+            org.telegram.ui.Components.UndoView[] r7 = r0.undoView
+            r7 = r7[r5]
+            r8 = 1084227584(0x40a00000, float:5.0)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            float r8 = (float) r8
+            r7.setTranslationZ(r8)
+        L_0x0627:
             android.view.ViewGroup r7 = r0.containerView
-            android.view.View r8 = r0.actionBarShadow
-            r9 = 1065353216(0x3var_, float:1.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r9)
-            r7.addView(r8, r9)
-            r7 = 0
-        L_0x0638:
-            if (r7 >= r4) goto L_0x0682
             org.telegram.ui.Components.UndoView[] r8 = r0.undoView
-            org.telegram.ui.Components.UndoView r9 = new org.telegram.ui.Components.UndoView
-            r9.<init>(r1)
-            r8[r7] = r9
-            org.telegram.ui.Components.UndoView[] r8 = r0.undoView
-            r8 = r8[r7]
-            r9 = 1092616192(0x41200000, float:10.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            float r9 = (float) r9
-            r8.setAdditionalTranslationY(r9)
-            int r8 = android.os.Build.VERSION.SDK_INT
-            r9 = 21
-            if (r8 < r9) goto L_0x0665
-            org.telegram.ui.Components.UndoView[] r8 = r0.undoView
-            r8 = r8[r7]
-            r9 = 1084227584(0x40a00000, float:5.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            float r9 = (float) r9
-            r8.setTranslationZ(r9)
-        L_0x0665:
-            android.view.ViewGroup r8 = r0.containerView
-            org.telegram.ui.Components.UndoView[] r9 = r0.undoView
-            r9 = r9[r7]
-            r14 = -1
-            r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r16 = 83
-            r17 = 1090519040(0x41000000, float:8.0)
-            r18 = 0
-            r19 = 1090519040(0x41000000, float:8.0)
-            r20 = 1090519040(0x41000000, float:8.0)
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
-            r8.addView(r9, r10)
-            int r7 = r7 + 1
-            goto L_0x0638
-        L_0x0682:
+            r8 = r8[r5]
+            r18 = -1
+            r19 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r20 = 83
+            r21 = 1090519040(0x41000000, float:8.0)
+            r22 = 0
+            r23 = 1090519040(0x41000000, float:8.0)
+            r24 = 1090519040(0x41000000, float:8.0)
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24)
+            r7.addView(r8, r10)
+            int r5 = r5 + 1
+            goto L_0x05fa
+        L_0x0645:
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.otherItem
-            r7 = 2131627707(0x7f0e0ebb, float:1.8882686E38)
-            java.lang.String r8 = "VoipGroupAllCanSpeak"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
-            org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r1.addSubItem((int) r6, (int) r3, (java.lang.CharSequence) r7, (boolean) r6)
+            r5 = 2131627707(0x7f0e0ebb, float:1.8882686E38)
+            java.lang.String r7 = "VoipGroupAllCanSpeak"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r1.addSubItem((int) r6, (int) r3, (java.lang.CharSequence) r5, (boolean) r6)
             r0.everyoneItem = r1
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.otherItem
-            r7 = 2131627733(0x7f0e0ed5, float:1.8882739E38)
-            java.lang.String r8 = "VoipGroupOnlyAdminsCanSpeak"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
-            org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r1.addSubItem((int) r4, (int) r3, (java.lang.CharSequence) r7, (boolean) r6)
+            r5 = 2131627733(0x7f0e0ed5, float:1.8882739E38)
+            java.lang.String r7 = "VoipGroupOnlyAdminsCanSpeak"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r1.addSubItem((int) r4, (int) r3, (java.lang.CharSequence) r5, (boolean) r6)
             r0.adminItem = r1
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r0.everyoneItem
-            java.lang.String r6 = "voipgroup_checkMenu"
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r1.setCheckColor(r7)
+            java.lang.String r5 = "voipgroup_checkMenu"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r1.setCheckColor(r6)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r0.everyoneItem
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r1.setColors(r7, r8)
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r1.setColors(r6, r7)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r0.adminItem
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r1.setCheckColor(r7)
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r1.setCheckColor(r6)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r0.adminItem
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r1.setColors(r7, r6)
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r1.setColors(r6, r5)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.otherItem
-            java.lang.String r6 = "voipgroup_listViewBackground"
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            android.view.View r1 = r1.addDivider(r6)
+            java.lang.String r5 = "voipgroup_listViewBackground"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            android.view.View r1 = r1.addDivider(r5)
             r0.dividerItem = r1
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.otherItem
-            r6 = 3
-            r7 = 2131165746(0x7var_, float:1.7945718E38)
-            r8 = 2131627738(0x7f0e0eda, float:1.8882749E38)
-            java.lang.String r9 = "VoipGroupShareInviteLink"
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
-            org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r1.addSubItem(r6, r7, r8)
-            r0.inviteItem = r1
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.otherItem
-            r6 = 2131165731(0x7var_, float:1.7945687E38)
-            r7 = 2131627715(0x7f0e0ec3, float:1.8882702E38)
-            java.lang.String r8 = "VoipGroupEndChat"
+            r5 = 3
+            r6 = 2131165746(0x7var_, float:1.7945718E38)
+            r7 = 2131627738(0x7f0e0eda, float:1.8882749E38)
+            java.lang.String r8 = "VoipGroupShareInviteLink"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r1.addSubItem(r5, r6, r7)
+            r0.inviteItem = r1
+            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.otherItem
+            r5 = 2131165731(0x7var_, float:1.7945687E38)
+            r6 = 2131627715(0x7f0e0ec3, float:1.8882702E38)
+            java.lang.String r7 = "VoipGroupEndChat"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
+            r7 = 4
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r1.addSubItem(r7, r5, r6)
             r0.leaveItem = r1
             java.lang.String r5 = "voipgroup_leaveCallMenu"
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
@@ -1408,8 +1384,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r1.setColors(r5, r6)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r0.inviteItem
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r12)
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             r1.setColors(r5, r6)
             org.telegram.ui.GroupCallActivity$ListAdapter r1 = r0.listAdapter
             r1.notifyDataSetChanged()
@@ -1439,9 +1415,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r26.updateItems()
             r0.updateSpeakerPhoneIcon(r3)
             r0.updateState(r3, r3)
-            r0.setColorProgress(r13)
+            r0.setColorProgress(r12)
             android.graphics.Paint r1 = r0.leaveBackgroundPaint
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             r1.setColor(r2)
             return
         */
@@ -2033,7 +2009,6 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 animatorSet.cancel();
                 this.actionBarAnimation = null;
             }
-            float f4 = 0.9f;
             ViewPropertyAnimator scaleY = this.actionBar.getBackButton().animate().scaleX(z2 ? 1.0f : 0.9f).scaleY(z2 ? 1.0f : 0.9f);
             if (z2) {
                 f = 0.0f;
@@ -2057,14 +2032,9 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 f3 = (float) AndroidUtilities.dp(20.0f);
             }
             animate2.translationY(f3).setDuration(300).setInterpolator(cubicBezierInterpolator).start();
-            ViewPropertyAnimator scaleX = this.titleTextView.animate().scaleX(z2 ? 0.9f : 1.0f);
-            if (!z2) {
-                f4 = 1.0f;
-            }
-            scaleX.scaleY(f4).alpha(z2 ? 0.0f : 1.0f).setDuration(180).setInterpolator(cubicBezierInterpolator).start();
             AnimatorSet animatorSet2 = new AnimatorSet();
             this.actionBarAnimation = animatorSet2;
-            animatorSet2.setDuration(180);
+            animatorSet2.setDuration(140);
             AnimatorSet animatorSet3 = this.actionBarAnimation;
             Animator[] animatorArr = new Animator[3];
             ActionBar actionBar2 = this.actionBar;
@@ -2091,21 +2061,30 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             this.actionBarAnimation.start();
         }
         int i3 = ((FrameLayout.LayoutParams) this.listView.getLayoutParams()).topMargin;
-        float f5 = max + ((float) i3);
-        if (this.scrollOffsetY != f5) {
+        float f4 = max + ((float) i3);
+        if (this.scrollOffsetY != f4) {
             RecyclerListView recyclerListView2 = this.listView;
-            this.scrollOffsetY = f5;
-            recyclerListView2.setTopGlowOffset((int) (f5 - ((float) i3)));
+            this.scrollOffsetY = f4;
+            recyclerListView2.setTopGlowOffset((int) (f4 - ((float) i3)));
             int dp = AndroidUtilities.dp(74.0f);
-            float f6 = this.scrollOffsetY - ((float) dp);
-            if (((float) this.backgroundPaddingTop) + f6 < ((float) (ActionBar.getCurrentActionBarHeight() * 2))) {
-                float min = Math.min(1.0f, ((((float) (ActionBar.getCurrentActionBarHeight() * 2)) - f6) - ((float) this.backgroundPaddingTop)) / ((float) (((dp - this.backgroundPaddingTop) - AndroidUtilities.dp(14.0f)) + ActionBar.getCurrentActionBarHeight())));
+            float f5 = this.scrollOffsetY - ((float) dp);
+            if (((float) this.backgroundPaddingTop) + f5 < ((float) (ActionBar.getCurrentActionBarHeight() * 2))) {
+                float min = Math.min(1.0f, ((((float) (ActionBar.getCurrentActionBarHeight() * 2)) - f5) - ((float) this.backgroundPaddingTop)) / ((float) (((dp - this.backgroundPaddingTop) - AndroidUtilities.dp(14.0f)) + ActionBar.getCurrentActionBarHeight())));
                 i = (int) (((float) AndroidUtilities.dp(AndroidUtilities.isTablet() ? 17.0f : 13.0f)) * min);
                 if (Math.abs(Math.min(1.0f, min) - this.colorProgress) > 1.0E-4f) {
                     setColorProgress(Math.min(1.0f, min));
                 }
-            } else if (this.colorProgress > 1.0E-4f) {
-                setColorProgress(0.0f);
+                float f6 = 1.0f - ((0.1f * min) * 1.2f);
+                this.titleTextView.setScaleX(Math.max(0.9f, f6));
+                this.titleTextView.setScaleY(Math.max(0.9f, f6));
+                this.titleTextView.setAlpha(Math.max(0.0f, 1.0f - (min * 1.2f)));
+            } else {
+                this.titleTextView.setScaleX(1.0f);
+                this.titleTextView.setScaleY(1.0f);
+                this.titleTextView.setAlpha(1.0f);
+                if (this.colorProgress > 1.0E-4f) {
+                    setColorProgress(0.0f);
+                }
             }
             float f7 = (float) i;
             this.menuItemsContainer.setTranslationY(Math.max((float) AndroidUtilities.dp(4.0f), (this.scrollOffsetY - ((float) AndroidUtilities.dp(53.0f))) - f7));
@@ -2213,6 +2192,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         int color2;
         int color3;
         String str4;
+        String str5;
         int i10;
         int i11;
         int i12 = i;
@@ -2222,7 +2202,6 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 valueAnimator.cancel();
                 this.muteButtonAnimator = null;
             }
-            String str5 = "";
             if (i12 == 0) {
                 int color4 = Theme.getColor("voipgroup_unmuteButton");
                 int color5 = Theme.getColor("voipgroup_unmuteButton2");
@@ -2231,75 +2210,70 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 } else {
                     i11 = Theme.getColor("voipgroup_soundButton");
                 }
-                str = LocaleController.getString("VoipGroupUnmute", NUM);
-                String string = LocaleController.getString("VoipHoldAndTalk", NUM);
+                String string = LocaleController.getString("VoipGroupUnmute", NUM);
+                String string2 = LocaleController.getString("VoipHoldAndTalk", NUM);
                 this.bigMicDrawable.setCustomEndFrame(12);
                 this.radialProgressView.setVisibility(4);
-                this.buttonWaveDrawable.minRadius = (float) AndroidUtilities.dp(57.0f);
-                this.buttonWaveDrawable.maxRadius = (float) AndroidUtilities.dp(63.0f);
                 i3 = color4;
-                i4 = color5;
-                i2 = i11;
                 str2 = string;
+                str = string2;
+                int i13 = color5;
+                i2 = i11;
+                i4 = i13;
             } else if (i12 == 1) {
                 int color6 = Theme.getColor("voipgroup_muteButton");
-                int color7 = Theme.getColor("voipgroup_muteButton2");
+                i4 = Theme.getColor("voipgroup_muteButton2");
                 if (this.soundButton.isChecked()) {
                     i10 = Theme.getColor("voipgroup_soundButtonActive2");
                 } else {
                     i10 = Theme.getColor("voipgroup_soundButton2");
                 }
-                int i13 = color6;
+                int i14 = color6;
+                String string3 = LocaleController.getString("VoipTapToMute", NUM);
                 this.bigMicDrawable.setCustomEndFrame(0);
                 this.radialProgressView.setVisibility(4);
-                this.buttonWaveDrawable.minRadius = (float) AndroidUtilities.dp(57.0f);
-                this.buttonWaveDrawable.maxRadius = (float) AndroidUtilities.dp(63.0f);
-                str2 = str5;
+                str2 = string3;
+                str = "";
+                int i15 = i14;
                 i2 = i10;
-                i3 = i13;
-                i4 = color7;
-                str = LocaleController.getString("VoipTapToMute", NUM);
+                i3 = i15;
             } else {
+                String str6 = "";
                 if (i12 == 3) {
                     this.radialProgressView.setVisibility(0);
-                    str4 = LocaleController.getString("Connecting", NUM);
+                    str5 = LocaleController.getString("Connecting", NUM);
+                    str4 = str6;
                 } else {
                     this.radialProgressView.setVisibility(4);
-                    str4 = LocaleController.getString("VoipMutedByAdmin", NUM);
-                    str5 = LocaleController.getString("VoipMutedByAdminInfo", NUM);
+                    str5 = LocaleController.getString("VoipMutedByAdmin", NUM);
+                    str4 = LocaleController.getString("VoipMutedByAdminInfo", NUM);
                 }
-                String str6 = str4;
-                BlobDrawable blobDrawable = this.buttonWaveDrawable;
-                float dp = (float) AndroidUtilities.dp(63.0f);
-                blobDrawable.maxRadius = dp;
-                blobDrawable.minRadius = dp;
-                String str7 = str6;
-                String str8 = str5;
+                String str7 = str5;
+                String str8 = str4;
                 int offsetColor = AndroidUtilities.getOffsetColor(Theme.getColor("voipgroup_listViewBackgroundUnscrolled"), Theme.getColor("voipgroup_disabledButton"), this.colorProgress, 1.0f);
-                int color8 = this.soundButton.isChecked() ? Theme.getColor("voipgroup_disabledButtonActive") : offsetColor;
+                int color7 = this.soundButton.isChecked() ? Theme.getColor("voipgroup_disabledButtonActive") : offsetColor;
                 this.bigMicDrawable.setCustomEndFrame(12);
                 i4 = offsetColor;
-                str2 = str8;
+                str2 = str7;
                 i3 = 0;
-                String str9 = str7;
-                i2 = color8;
-                str = str9;
+                i2 = color7;
+                str = str8;
             }
-            if (!TextUtils.isEmpty(str2)) {
+            if (!TextUtils.isEmpty(str)) {
                 StringBuilder sb = new StringBuilder();
-                sb.append(str);
+                sb.append(str2);
                 i5 = i3;
                 sb.append(" ");
-                sb.append(str2);
+                sb.append(str);
                 str3 = sb.toString();
             } else {
                 i5 = i3;
-                str3 = str;
+                str3 = str2;
             }
             this.muteButton.setContentDescription(str3);
             if (z) {
-                int i14 = this.muteButtonState;
-                if (i14 == 0) {
+                int i16 = this.muteButtonState;
+                if (i16 == 0) {
                     color = Theme.getColor("voipgroup_unmuteButton");
                     color2 = Theme.getColor("voipgroup_unmuteButton2");
                     if (this.soundButton.isChecked()) {
@@ -2307,7 +2281,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     } else {
                         color3 = Theme.getColor("voipgroup_soundButton");
                     }
-                } else if (i14 == 1) {
+                } else if (i16 == 1) {
                     color = Theme.getColor("voipgroup_muteButton");
                     color2 = Theme.getColor("voipgroup_muteButton2");
                     if (this.soundButton.isChecked()) {
@@ -2316,26 +2290,27 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         color3 = Theme.getColor("voipgroup_soundButton2");
                     }
                 } else {
+                    int color8 = Theme.getColor("voipgroup_disabledButton");
                     i8 = Theme.getColor("voipgroup_disabledButton");
-                    i7 = Theme.getColor("voipgroup_disabledButton");
                     if (this.soundButton.isChecked()) {
                         i9 = Theme.getColor("voipgroup_disabledButtonActive");
                     } else {
                         i9 = AndroidUtilities.getOffsetColor(Theme.getColor("voipgroup_listViewBackgroundUnscrolled"), Theme.getColor("voipgroup_disabledButton"), this.colorProgress, 1.0f);
                     }
                     i6 = i9;
+                    i7 = color8;
                     this.muteButton.playAnimation();
                     this.muteLabel[1].setVisibility(0);
                     this.muteLabel[1].setAlpha(0.0f);
                     this.muteLabel[1].setTranslationY((float) (-AndroidUtilities.dp(5.0f)));
-                    this.muteLabel[1].setText(str);
+                    this.muteLabel[1].setText(str2);
                     this.muteSubLabel[1].setVisibility(0);
                     this.muteSubLabel[1].setAlpha(0.0f);
                     this.muteSubLabel[1].setTranslationY((float) (-AndroidUtilities.dp(5.0f)));
-                    this.muteSubLabel[1].setText(str2);
+                    this.muteSubLabel[1].setText(str);
                     ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                     this.muteButtonAnimator = ofFloat;
-                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(i7, i4, i8, i5, i6, i2) {
+                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(i8, i4, i7, i5, i6, i2) {
                         public final /* synthetic */ int f$1;
                         public final /* synthetic */ int f$2;
                         public final /* synthetic */ int f$3;
@@ -2378,21 +2353,21 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     this.muteButtonState = i;
                     return;
                 }
-                i7 = color2;
+                i7 = color;
+                i8 = color2;
                 i6 = color3;
-                i8 = color;
                 this.muteButton.playAnimation();
                 this.muteLabel[1].setVisibility(0);
                 this.muteLabel[1].setAlpha(0.0f);
                 this.muteLabel[1].setTranslationY((float) (-AndroidUtilities.dp(5.0f)));
-                this.muteLabel[1].setText(str);
+                this.muteLabel[1].setText(str2);
                 this.muteSubLabel[1].setVisibility(0);
                 this.muteSubLabel[1].setAlpha(0.0f);
                 this.muteSubLabel[1].setTranslationY((float) (-AndroidUtilities.dp(5.0f)));
-                this.muteSubLabel[1].setText(str2);
+                this.muteSubLabel[1].setText(str);
                 ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                 this.muteButtonAnimator = ofFloat2;
-                ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(i7, i4, i8, i5, i6, i2) {
+                ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(i8, i4, i7, i5, i6, i2) {
                     public final /* synthetic */ int f$1;
                     public final /* synthetic */ int f$2;
                     public final /* synthetic */ int f$3;
@@ -2439,8 +2414,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             RLottieDrawable rLottieDrawable = this.bigMicDrawable;
             rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame(), false, true);
             setColors(i4, i5, i2, 1.0f);
-            this.muteLabel[0].setText(str);
-            this.muteSubLabel[0].setText(str2);
+            this.muteLabel[0].setText(str2);
+            this.muteSubLabel[0].setText(str);
         }
     }
 
@@ -2473,19 +2448,20 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         this.muteButton.invalidate();
         this.tinyWaveDrawable.paint.setColor(ColorUtils.setAlphaComponent(i4, 38));
         this.bigWaveDrawable.paint.setColor(ColorUtils.setAlphaComponent(i4, 76));
-        this.buttonWaveDrawable.paint.setColor(i4);
         this.soundButton.setBackgroundColor(i3);
         WeavingState[] weavingStateArr = this.states;
         int i5 = this.muteButtonState;
         if (weavingStateArr[i5] == null) {
             weavingStateArr[i5] = new WeavingState(i5);
             int i6 = this.muteButtonState;
-            if (i6 == 2 || i6 == 3) {
+            if (i6 == 3) {
                 Shader unused = this.states[i6].shader = null;
+            } else if (i6 == 2) {
+                Shader unused2 = this.states[i6].shader = new LinearGradient(0.0f, 400.0f, 400.0f, 0.0f, new int[]{Theme.getColor("voipgroup_mutedByAdminGradient"), Theme.getColor("voipgroup_mutedByAdminGradient3"), Theme.getColor("voipgroup_mutedByAdminGradient2")}, (float[]) null, Shader.TileMode.CLAMP);
             } else if (i6 == 1) {
-                Shader unused2 = this.states[i6].shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{Theme.getColor("voipgroup_muteButton"), Theme.getColor("voipgroup_unmuteButton")}, (float[]) null, Shader.TileMode.CLAMP);
+                Shader unused3 = this.states[i6].shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{Theme.getColor("voipgroup_muteButton"), Theme.getColor("voipgroup_unmuteButton")}, (float[]) null, Shader.TileMode.CLAMP);
             } else {
-                Shader unused3 = this.states[i6].shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{Theme.getColor("voipgroup_unmuteButton2"), Theme.getColor("voipgroup_unmuteButton")}, (float[]) null, Shader.TileMode.CLAMP);
+                Shader unused4 = this.states[i6].shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{Theme.getColor("voipgroup_unmuteButton2"), Theme.getColor("voipgroup_unmuteButton")}, (float[]) null, Shader.TileMode.CLAMP);
             }
         }
         WeavingState[] weavingStateArr2 = this.states;

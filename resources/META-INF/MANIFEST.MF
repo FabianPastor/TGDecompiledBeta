@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 4.1.1
 
 Name: AndroidManifest.xml
-SHA1-Digest: VqgFlNETPTsCXEDWtEDS08QyINQ=
+SHA1-Digest: X73Fh/bOp+yqhBL7rkF6Lk+1rJ0=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9879,13 +9879,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: BjpRROptX7h9gYy3+8yNEQLFhIA=
+SHA1-Digest: Ect8DC2C7t9KeD65n9wPuRiCiKQ=
 
 Name: classes2.dex
 SHA1-Digest: GQNky92ExRcYASorLeQ9ZA9MVVY=
 
 Name: classes3.dex
-SHA1-Digest: 1qQeBQm7gqAw/7OaS3dgFQHtLIg=
+SHA1-Digest: kehIVBbFzvK3w7vHo3S4ANolzh0=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -20300,10 +20300,10 @@ Name: res/raw/voicechat_connecting.mp3
 SHA1-Digest: tbP5LHqjRYs8LJvguG16GJTAXik=
 
 Name: res/raw/voicechat_join.mp3
-SHA1-Digest: fdZy9u3wXyS0GxR0qqQfxihmWE4=
+SHA1-Digest: TabPJTHsGf3nzHSiTTQhVHw92LA=
 
 Name: res/raw/voicechat_leave.mp3
-SHA1-Digest: qay078S0e6ia510SZMNy7lh8eRM=
+SHA1-Digest: 3obbMooHhKwK6uHY7nC84aoq6EM=
 
 Name: res/raw/voip_busy.mp3
 SHA1-Digest: QwkeKUlMkH+BUX477YpkssJQ6v4=

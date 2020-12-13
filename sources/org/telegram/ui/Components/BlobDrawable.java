@@ -9,7 +9,6 @@ import java.util.Random;
 public class BlobDrawable {
     public static float AMPLITUDE_SPEED = 0.33f;
     public static float FORM_BIG_MAX = 0.6f;
-    public static float FORM_BUTTON_MAX = 0.0f;
     public static float FORM_SMALL_MAX = 0.6f;
     public static float GLOBAL_SCALE = 1.0f;
     public static float GRADIENT_SPEED_MAX = 0.01f;

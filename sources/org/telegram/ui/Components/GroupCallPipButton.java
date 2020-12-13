@@ -108,6 +108,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
     public static class WeavingState {
         int color1;
         int color2;
+        int color3;
         /* access modifiers changed from: private */
         public final int currentState;
         private float duration;
@@ -129,19 +130,29 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
                 if (!(this.color1 == Theme.getColor("voipgroup_overlayGreen1") && this.color2 == Theme.getColor("voipgroup_overlayGreen2"))) {
                     int color = Theme.getColor("voipgroup_overlayGreen1");
                     this.color1 = color;
-                    int color3 = Theme.getColor("voipgroup_overlayGreen2");
-                    this.color2 = color3;
-                    this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color, color3}, (float[]) null, Shader.TileMode.CLAMP);
+                    int color4 = Theme.getColor("voipgroup_overlayGreen2");
+                    this.color2 = color4;
+                    this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color, color4}, (float[]) null, Shader.TileMode.CLAMP);
                 }
-            } else if (i != 1) {
+            } else if (i == 1) {
+                if (!(this.color1 == Theme.getColor("voipgroup_overlayBlue1") && this.color2 == Theme.getColor("voipgroup_overlayBlue2"))) {
+                    int color5 = Theme.getColor("voipgroup_overlayBlue1");
+                    this.color1 = color5;
+                    int color6 = Theme.getColor("voipgroup_overlayBlue2");
+                    this.color2 = color6;
+                    this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color5, color6}, (float[]) null, Shader.TileMode.CLAMP);
+                }
+            } else if (i != 3) {
                 return;
             } else {
-                if (!(this.color1 == Theme.getColor("voipgroup_overlayBlue1") && this.color2 == Theme.getColor("voipgroup_overlayBlue2"))) {
-                    int color4 = Theme.getColor("voipgroup_overlayBlue1");
-                    this.color1 = color4;
-                    int color5 = Theme.getColor("voipgroup_overlayBlue2");
-                    this.color2 = color5;
-                    this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color4, color5}, (float[]) null, Shader.TileMode.CLAMP);
+                if (!(this.color1 == Theme.getColor("voipgroup_mutedByAdminGradient") && this.color2 == Theme.getColor("voipgroup_mutedByAdminGradient2") && this.color3 == Theme.getColor("voipgroup_mutedByAdminGradient3"))) {
+                    int color7 = Theme.getColor("voipgroup_mutedByAdminGradient2");
+                    this.color2 = color7;
+                    int color8 = Theme.getColor("voipgroup_mutedByAdminGradient3");
+                    this.color3 = color8;
+                    int color9 = Theme.getColor("voipgroup_mutedByAdminGradient");
+                    this.color1 = color9;
+                    this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color7, color8, color9}, (float[]) null, Shader.TileMode.CLAMP);
                 }
             }
             int dp = AndroidUtilities.dp(130.0f);
@@ -150,49 +161,54 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
                 this.duration = (float) (Utilities.random.nextInt(700) + 500);
                 this.time = 0.0f;
                 if (this.targetX == -1.0f) {
-                    if (this.currentState == 0) {
-                        this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.3f) / 100.0f) + 0.2f;
-                        this.targetY = ((((float) Utilities.random.nextInt(100)) * 0.3f) / 100.0f) + 0.7f;
-                    } else {
-                        this.targetX = ((((float) Utilities.random.nextInt(100)) / 100.0f) * 0.2f) + 0.8f;
-                        this.targetY = ((float) Utilities.random.nextInt(100)) / 100.0f;
-                    }
+                    updateTargets();
                 }
                 this.startX = this.targetX;
                 this.startY = this.targetY;
-                if (this.currentState == 0) {
-                    this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.2f) / 100.0f) + 0.0f;
-                    this.targetY = ((((float) Utilities.random.nextInt(100)) * 0.3f) / 100.0f) + 0.9f;
-                } else {
-                    this.targetX = ((((float) Utilities.random.nextInt(100)) / 100.0f) * 0.2f) + 0.8f;
-                    this.targetY = ((float) Utilities.random.nextInt(100)) / 100.0f;
-                }
+                updateTargets();
             }
             float f3 = (float) j;
-            float f4 = this.time + ((BlobDrawable.GRADIENT_SPEED_MIN + 0.5f) * f3) + (f3 * BlobDrawable.GRADIENT_SPEED_MAX * 2.0f * f);
-            this.time = f4;
-            float f5 = this.duration;
-            if (f4 > f5) {
-                this.time = f5;
+            float f4 = 2.0f;
+            float f5 = this.time + ((BlobDrawable.GRADIENT_SPEED_MIN + 0.5f) * f3) + (f3 * BlobDrawable.GRADIENT_SPEED_MAX * 2.0f * f);
+            this.time = f5;
+            float f6 = this.duration;
+            if (f5 > f6) {
+                this.time = f6;
             }
-            float interpolation = CubicBezierInterpolator.EASE_OUT.getInterpolation(this.time / f5);
-            float f6 = (float) dp;
-            float f7 = this.startX;
-            float f8 = ((f7 + ((this.targetX - f7) * interpolation)) * f6) - 200.0f;
-            float f9 = this.startY;
-            float var_ = ((f9 + ((this.targetY - f9) * interpolation)) * f6) - 200.0f;
-            float var_ = (f6 / 400.0f) * (this.currentState == 0 ? 3.0f : 1.5f);
+            float interpolation = CubicBezierInterpolator.EASE_OUT.getInterpolation(this.time / f6);
+            float f7 = (float) dp;
+            float f8 = this.startX;
+            float f9 = ((f8 + ((this.targetX - f8) * interpolation)) * f7) - 200.0f;
+            float var_ = this.startY;
+            float var_ = ((var_ + ((this.targetY - var_) * interpolation)) * f7) - 200.0f;
+            if (this.currentState != 3) {
+                f4 = 1.5f;
+            }
+            float var_ = (f7 / 400.0f) * f4;
             this.matrix.reset();
-            this.matrix.postTranslate(f8, var_);
-            this.matrix.postScale(var_, var_, f8 + 200.0f, var_ + 200.0f);
+            this.matrix.postTranslate(f9, var_);
+            this.matrix.postScale(var_, var_, f9 + 200.0f, var_ + 200.0f);
             this.shader.setLocalMatrix(this.matrix);
         }
 
-        public void setToPaint(Paint paint) {
+        private void updateTargets() {
             int i = this.currentState;
-            if (i == 2 || i == 3) {
+            if (i == 0) {
+                this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.1f) / 100.0f) + 0.2f;
+                this.targetY = ((((float) Utilities.random.nextInt(100)) * 0.1f) / 100.0f) + 0.7f;
+            } else if (i == 3) {
+                this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.1f) / 100.0f) + 0.6f;
+                this.targetY = (((float) Utilities.random.nextInt(100)) * 0.1f) / 100.0f;
+            } else {
+                this.targetX = ((((float) Utilities.random.nextInt(100)) / 100.0f) * 0.2f) + 0.8f;
+                this.targetY = ((float) Utilities.random.nextInt(100)) / 100.0f;
+            }
+        }
+
+        public void setToPaint(Paint paint) {
+            if (this.currentState == 2) {
                 paint.setShader((Shader) null);
-                paint.setColor(Theme.getColor(this.currentState == 3 ? "voipgroup_topPanelGray2" : "voipgroup_topPanelGray"));
+                paint.setColor(Theme.getColor("voipgroup_topPanelGray"));
                 return;
             }
             paint.setShader(this.shader);

@@ -44,7 +44,7 @@ public class VoIPButtonsLayout extends FrameLayout {
                 }
             }
         }
-        setMeasuredDimension(size, Math.max(i4, AndroidUtilities.dp(this.startPadding ? 63.0f : 80.0f)));
+        setMeasuredDimension(size, Math.max(i4, AndroidUtilities.dp(80.0f)));
     }
 
     /* access modifiers changed from: protected */

@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 4.1.1
-SHA1-Digest-Manifest: wjj+tG8VkXkln5b/kH0LD05forY=
+SHA1-Digest-Manifest: x3lijrpq64QpXKoPfc2RHoXVi/I=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: IUaxNKXBDSnZrhq7LbtObpexeIg=
+SHA1-Digest: ThzF+2RmOimdNeUHUVE2fYZhDvI=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9880,13 +9880,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: p6n4neVEOegwx4HSgm2bfLzWz0o=
+SHA1-Digest: WpLtYmP0+a119C5xQysew0DfFeY=
 
 Name: classes2.dex
 SHA1-Digest: XTIq0AhHhp7Eo+YytesJ9taX0Yw=
 
 Name: classes3.dex
-SHA1-Digest: 7npWUOypRnYriAMB4YXuu3K8POI=
+SHA1-Digest: FLGYifZodhW2t4ksXWz22ov6IfQ=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -20301,10 +20301,10 @@ Name: res/raw/voicechat_connecting.mp3
 SHA1-Digest: LHdhLmHsSfwtJV7XIqdDFw/Cl1c=
 
 Name: res/raw/voicechat_join.mp3
-SHA1-Digest: tfwWcQNGgwz+GCdKk2V+V9N0Jo0=
+SHA1-Digest: lWJqkmqs4qOEFRrrjbr85l3sZLs=
 
 Name: res/raw/voicechat_leave.mp3
-SHA1-Digest: QQAvC0a3pUGK8Z0nqlAD7bWHF5U=
+SHA1-Digest: HWWc0boIL3hB1WQB+xxnU9dAEHM=
 
 Name: res/raw/voip_busy.mp3
 SHA1-Digest: uJILGWUE9868InKSCNMT4c3osv4=
