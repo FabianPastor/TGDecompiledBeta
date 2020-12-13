@@ -14,26 +14,27 @@ import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
-import org.telegram.tgnet.TLRPC$TL_photoSize;
-import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.ui.Components.Bulletin;
 
 @SuppressLint({"ViewConstructor"})
 public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public StickerSetBulletinLayout(Context context, TLObject tLObject, int i) {
         super(context);
         TLRPC$StickerSet tLRPC$StickerSet;
         ImageLocation imageLocation;
+        TLObject tLObject2 = tLObject;
+        int i2 = i;
         TLRPC$Document tLRPC$Document = null;
-        if (tLObject instanceof TLRPC$TL_messages_stickerSet) {
-            TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = (TLRPC$TL_messages_stickerSet) tLObject;
+        if (tLObject2 instanceof TLRPC$TL_messages_stickerSet) {
+            TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = (TLRPC$TL_messages_stickerSet) tLObject2;
             tLRPC$StickerSet = tLRPC$TL_messages_stickerSet.set;
             ArrayList<TLRPC$Document> arrayList = tLRPC$TL_messages_stickerSet.documents;
             if (arrayList != null && !arrayList.isEmpty()) {
                 tLRPC$Document = arrayList.get(0);
             }
-        } else if (tLObject instanceof TLRPC$StickerSetCovered) {
-            TLRPC$StickerSetCovered tLRPC$StickerSetCovered = (TLRPC$StickerSetCovered) tLObject;
+        } else if (tLObject2 instanceof TLRPC$StickerSetCovered) {
+            TLRPC$StickerSetCovered tLRPC$StickerSetCovered = (TLRPC$StickerSetCovered) tLObject2;
             tLRPC$StickerSet = tLRPC$StickerSetCovered.set;
             TLRPC$Document tLRPC$Document2 = tLRPC$StickerSetCovered.cover;
             if (tLRPC$Document2 != null) {
@@ -46,30 +47,28 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
         }
         TLRPC$StickerSet tLRPC$StickerSet2 = tLRPC$StickerSet;
         if (tLRPC$Document != null) {
-            TLObject tLObject2 = tLRPC$StickerSet2.thumb;
-            if (!(tLObject2 instanceof TLRPC$TL_photoSize) && !(tLObject2 instanceof TLRPC$TL_photoSizeProgressive)) {
-                tLObject2 = tLRPC$Document;
-            }
-            boolean z = tLObject2 instanceof TLRPC$Document;
+            TLObject closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$StickerSet2.thumbs, 90);
+            closestPhotoSizeWithSize = closestPhotoSizeWithSize == null ? tLRPC$Document : closestPhotoSizeWithSize;
+            boolean z = closestPhotoSizeWithSize instanceof TLRPC$Document;
             if (z) {
                 imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
             } else {
-                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) tLObject2, tLRPC$Document);
+                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document);
             }
             ImageLocation imageLocation2 = imageLocation;
             if (z && MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
                 this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", imageLocation2, (String) null, 0, (Object) tLObject);
             } else if (imageLocation2 == null || imageLocation2.imageType != 1) {
-                this.imageView.setImage(imageLocation2, "50_50", "webp", (Drawable) null, tLObject);
+                this.imageView.setImage(imageLocation2, "50_50", "webp", (Drawable) null, (Object) tLObject);
             } else {
-                this.imageView.setImage(imageLocation2, "50_50", "tgs", (Drawable) null, tLObject);
+                this.imageView.setImage(imageLocation2, "50_50", "tgs", (Drawable) null, (Object) tLObject);
             }
         } else {
-            this.imageView.setImage((ImageLocation) null, (String) null, "webp", (Drawable) null, tLObject);
+            this.imageView.setImage((ImageLocation) null, (String) null, "webp", (Drawable) null, (Object) tLObject);
         }
-        if (i != 0) {
-            if (i != 1) {
-                if (i == 2) {
+        if (i2 != 0) {
+            if (i2 != 1) {
+                if (i2 == 2) {
                     if (tLRPC$StickerSet2.masks) {
                         this.titleTextView.setText(LocaleController.getString("AddMasksInstalled", NUM));
                         this.subtitleTextView.setText(LocaleController.formatString("AddMasksInstalledInfo", NUM, tLRPC$StickerSet2.title));

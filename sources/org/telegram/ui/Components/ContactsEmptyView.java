@@ -3,6 +3,7 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -96,7 +97,7 @@ public class ContactsEmptyView extends LinearLayout implements NotificationCente
             this.stickerView.setImageDrawable(this.drawable);
             return;
         }
-        this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$TL_messages_stickerSet.documents.get(0)), "130_130", "tgs", this.drawable, tLRPC$TL_messages_stickerSet);
+        this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$TL_messages_stickerSet.documents.get(0)), "130_130", "tgs", (Drawable) this.drawable, (Object) tLRPC$TL_messages_stickerSet);
     }
 
     /* access modifiers changed from: protected */

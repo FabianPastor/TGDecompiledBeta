@@ -10,10 +10,12 @@ public class TLRPC$TL_chat extends TLRPC$Chat {
         this.creator = (readInt32 & 1) != 0;
         this.kicked = (readInt32 & 2) != 0;
         this.left = (readInt32 & 4) != 0;
-        if ((readInt32 & 32) != 0) {
+        this.deactivated = (readInt32 & 32) != 0;
+        this.call_active = (8388608 & readInt32) != 0;
+        if ((readInt32 & 16777216) != 0) {
             z2 = true;
         }
-        this.deactivated = z2;
+        this.call_not_empty = z2;
         this.id = abstractSerializedData.readInt32(z);
         this.title = abstractSerializedData.readString(z);
         this.photo = TLRPC$ChatPhoto.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -41,7 +43,11 @@ public class TLRPC$TL_chat extends TLRPC$Chat {
         this.flags = i3;
         int i4 = this.deactivated ? i3 | 32 : i3 & -33;
         this.flags = i4;
-        abstractSerializedData.writeInt32(i4);
+        int i5 = this.call_active ? i4 | 8388608 : i4 & -8388609;
+        this.flags = i5;
+        int i6 = this.call_not_empty ? i5 | 16777216 : i5 & -16777217;
+        this.flags = i6;
+        abstractSerializedData.writeInt32(i6);
         abstractSerializedData.writeInt32(this.id);
         abstractSerializedData.writeString(this.title);
         this.photo.serializeToStream(abstractSerializedData);

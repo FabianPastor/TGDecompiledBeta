@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 4.1.1
-SHA1-Digest-Manifest: F7vTNGrs3IOEU6Cs6o2IIjAxSHE=
+SHA1-Digest-Manifest: wjj+tG8VkXkln5b/kH0LD05forY=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: yqAcvX5CKNtg2gSRuZSZnLhcHkA=
+SHA1-Digest: IUaxNKXBDSnZrhq7LbtObpexeIg=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9880,13 +9880,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: OnGyKrUcWKB7IU8t7gfCuoadzYg=
+SHA1-Digest: p6n4neVEOegwx4HSgm2bfLzWz0o=
 
 Name: classes2.dex
 SHA1-Digest: XTIq0AhHhp7Eo+YytesJ9taX0Yw=
 
 Name: classes3.dex
-SHA1-Digest: FxPyaY2lrhTKhzVXtH/x61feXq8=
+SHA1-Digest: 7npWUOypRnYriAMB4YXuu3K8POI=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -19965,7 +19965,7 @@ Name: res/interpolator/ft_avd_toarrow_animation_interpolator_5.xml
 SHA1-Digest: LgcbwMW3ZUoeSMjioiuOSX7WYLM=
 
 Name: res/layout-v16/notification_template_custom_big.xml
-SHA1-Digest: 3gHuFnzrsC89sd1zgSPQi13HjsA=
+SHA1-Digest: 3+GoYiCo54cLnO4587s9nKKav0A=
 
 Name: res/layout-v17/notification_action.xml
 SHA1-Digest: Uc7/VGjAT+NDU+0LNa2VBh054ZY=
@@ -19974,7 +19974,7 @@ Name: res/layout-v17/notification_action_tombstone.xml
 SHA1-Digest: CTJCS7PlB/7sKYMcaPy2N3c6J88=
 
 Name: res/layout-v17/notification_template_custom_big.xml
-SHA1-Digest: imnc8UNZPHEOKjOODpwuth2uZYo=
+SHA1-Digest: i9PcyTUShPurQZ0K2R5cj6Sm5bg=
 
 Name: res/layout-v21/notification_action.xml
 SHA1-Digest: pA31MsaBdv394cGeHfNTuqtZMac=
@@ -19983,16 +19983,16 @@ Name: res/layout-v21/notification_action_tombstone.xml
 SHA1-Digest: 1wUPLlRilu2fAHmlG9PxTj08XgA=
 
 Name: res/layout-v21/notification_template_custom_big.xml
-SHA1-Digest: pW7y+ayG3YSg1l7m+BdAdZt/3bs=
+SHA1-Digest: AwBRua9egGW3+GR7FMkNMZcfjEc=
 
 Name: res/layout-v21/notification_template_icon_group.xml
 SHA1-Digest: TtEqaDu/BhH4eEixwQ2dnRqHMfI=
 
 Name: res/layout/call_notification.xml
-SHA1-Digest: IQsjM9VV2B1G80SJdebryrqD1dc=
+SHA1-Digest: rPRgOZ2LiJVoe91Kvlq4oV4+VGY=
 
 Name: res/layout/call_notification_rtl.xml
-SHA1-Digest: gvAI+EZoIMmUbhBbvieJADbVoi8=
+SHA1-Digest: UYDF7LUaG7ikL3AqyN+smTfe680=
 
 Name: res/layout/custom_dialog.xml
 SHA1-Digest: SzHsnyI33inWkfqRc0LF11HaQvo=
@@ -20010,7 +20010,7 @@ Name: res/layout/notification_template_part_chronometer.xml
 SHA1-Digest: Am7Nvx+wBAAvHBkawRPhvxn6LAY=
 
 Name: res/layout/notification_template_part_time.xml
-SHA1-Digest: jH8E+NcLet4zHSN9VYFN3NoJdxw=
+SHA1-Digest: FiPYKPHRB1FyIg//u+L0uSCanlY=
 
 Name: res/layout/player_big_notification.xml
 SHA1-Digest: obZ7J8FPlm8nVEV9SztugCpM2As=
@@ -20297,11 +20297,14 @@ SHA1-Digest: 8KoQCQ0guqCdmAtnGEEh3tSV+84=
 Name: res/raw/voice_outlined.json
 SHA1-Digest: ePDHIIE8amBbL09bJjKSyw2W+5M=
 
-Name: res/raw/voicechat_join.wav
-SHA1-Digest: ZxP6a5+NWHLuhhXFQbYj2jF/UmU=
+Name: res/raw/voicechat_connecting.mp3
+SHA1-Digest: LHdhLmHsSfwtJV7XIqdDFw/Cl1c=
 
-Name: res/raw/voicechat_leave.wav
-SHA1-Digest: sAhMFtAd0DN0WeHmZdhOYXkjPPs=
+Name: res/raw/voicechat_join.mp3
+SHA1-Digest: tfwWcQNGgwz+GCdKk2V+V9N0Jo0=
+
+Name: res/raw/voicechat_leave.mp3
+SHA1-Digest: QQAvC0a3pUGK8Z0nqlAD7bWHF5U=
 
 Name: res/raw/voip_busy.mp3
 SHA1-Digest: uJILGWUE9868InKSCNMT4c3osv4=
@@ -20352,7 +20355,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: vjkQu52BhCKoR9nCmq5xHjBbZD8=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: a0z//70Wgzwv9mxSmcA+RFjmqvs=
+SHA1-Digest: Sbz0piUUWKnSYAdFuaDAPltGPdo=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -20370,7 +20373,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: vEZu5Wlk9NdQUIsNKXwxGXj2NeA=
+SHA1-Digest: FvHaZiYy4PdkS39q0yUeqDAsPkE=
 
 Name: transport-api.properties
 SHA1-Digest: OrUd0dvMYm2tlcfDVrGNApZLT1M=

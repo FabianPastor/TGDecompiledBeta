@@ -135,8 +135,6 @@ import org.telegram.tgnet.TLRPC$TL_messages_toggleStickerSets;
 import org.telegram.tgnet.TLRPC$TL_messages_uninstallStickerSet;
 import org.telegram.tgnet.TLRPC$TL_peerChat;
 import org.telegram.tgnet.TLRPC$TL_peerUser;
-import org.telegram.tgnet.TLRPC$TL_photoSize;
-import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.tgnet.TLRPC$TL_stickerPack;
 import org.telegram.tgnet.TLRPC$TL_topPeer;
 import org.telegram.tgnet.TLRPC$TL_topPeerCategoryBotsInline;
@@ -3276,15 +3274,15 @@ public class MediaDataController extends BaseController {
 
     public void preloadStickerSetThumb(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
         ArrayList<TLRPC$Document> arrayList;
-        TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$TL_messages_stickerSet.set.thumb;
-        if (((tLRPC$PhotoSize instanceof TLRPC$TL_photoSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoSizeProgressive)) && (arrayList = tLRPC$TL_messages_stickerSet.documents) != null && !arrayList.isEmpty()) {
-            loadStickerSetThumbInternal(tLRPC$TL_messages_stickerSet.set.thumb, tLRPC$TL_messages_stickerSet, arrayList.get(0));
+        TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_messages_stickerSet.set.thumbs, 90);
+        if (closestPhotoSizeWithSize != null && (arrayList = tLRPC$TL_messages_stickerSet.documents) != null && !arrayList.isEmpty()) {
+            loadStickerSetThumbInternal(closestPhotoSizeWithSize, tLRPC$TL_messages_stickerSet, arrayList.get(0));
         }
     }
 
     public void preloadStickerSetThumb(TLRPC$StickerSetCovered tLRPC$StickerSetCovered) {
-        TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$StickerSetCovered.set.thumb;
-        if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoSizeProgressive)) {
+        TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$StickerSetCovered.set.thumbs, 90);
+        if (closestPhotoSizeWithSize != null) {
             TLRPC$Document tLRPC$Document = tLRPC$StickerSetCovered.cover;
             if (tLRPC$Document == null) {
                 if (!tLRPC$StickerSetCovered.covers.isEmpty()) {
@@ -3293,7 +3291,7 @@ public class MediaDataController extends BaseController {
                     return;
                 }
             }
-            loadStickerSetThumbInternal(tLRPC$StickerSetCovered.set.thumb, tLRPC$StickerSetCovered, tLRPC$Document);
+            loadStickerSetThumbInternal(closestPhotoSizeWithSize, tLRPC$StickerSetCovered, tLRPC$Document);
         }
     }
 
@@ -6648,7 +6646,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0247 }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131626899(0x7f0e0b93, float:1.8881047E38)
+            r9 = 2131626900(0x7f0e0b94, float:1.888105E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
         L_0x0067:
             r9 = r4
@@ -6658,7 +6656,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0247 }
             if (r8 == 0) goto L_0x007a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626993(0x7f0e0bf1, float:1.8881238E38)
+            r9 = 2131626994(0x7f0e0bf2, float:1.888124E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
             goto L_0x0067
         L_0x007a:

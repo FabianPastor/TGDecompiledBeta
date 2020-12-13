@@ -356,7 +356,7 @@ public class AvatarDrawable extends Drawable {
                     if (drawableArr[1] != null) {
                         int intrinsicWidth3 = drawableArr[1].getIntrinsicWidth();
                         int intrinsicHeight3 = Theme.avatarDrawables[1].getIntrinsicHeight();
-                        if (intrinsicWidth3 > width || intrinsicHeight3 > width) {
+                        if (intrinsicWidth3 > width - AndroidUtilities.dp(6.0f) || intrinsicHeight3 > width - AndroidUtilities.dp(6.0f)) {
                             float dp = f / ((float) AndroidUtilities.dp(50.0f));
                             intrinsicWidth3 = (int) (((float) intrinsicWidth3) * dp);
                             intrinsicHeight3 = (int) (((float) intrinsicHeight3) * dp);

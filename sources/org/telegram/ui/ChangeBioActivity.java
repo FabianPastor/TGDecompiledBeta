@@ -138,9 +138,9 @@ public class ChangeBioActivity extends BaseFragment {
         frameLayout.addView(this.firstNameField, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 0.0f, 4.0f, 0.0f));
         NumberTextView numberTextView = new NumberTextView(context2);
         this.checkTextView = numberTextView;
-        numberTextView.setTextSize(15);
+        numberTextView.setCenterAlign(true);
+        this.checkTextView.setTextSize(15);
         this.checkTextView.setNumber(70, false);
-        this.checkTextView.setCenterAlign(true);
         this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         this.checkTextView.setImportantForAccessibility(2);
         frameLayout.addView(this.checkTextView, LayoutHelper.createFrame(20, 20.0f, LocaleController.isRTL ? 3 : 5, 0.0f, 4.0f, 4.0f, 0.0f));

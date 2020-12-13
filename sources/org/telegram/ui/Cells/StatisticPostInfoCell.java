@@ -87,7 +87,7 @@ public class StatisticPostInfoCell extends FrameLayout {
             this.imageView.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize, messageObject.photoThumbsObject), "50_50", ImageLocation.getForObject(closestPhotoSizeWithSize2, messageObject.photoThumbsObject), "b1", 0, (Object) messageObject);
             this.imageView.setRoundRadius(AndroidUtilities.dp(4.0f));
         } else if (this.chat.chat_photo.sizes.size() > 0) {
-            this.imageView.setImage(ImageLocation.getForPhoto(this.chat.chat_photo.sizes.get(0), this.chat.chat_photo), "50_50", (String) null, (Drawable) null, this.chat);
+            this.imageView.setImage(ImageLocation.getForPhoto(this.chat.chat_photo.sizes.get(0), this.chat.chat_photo), "50_50", (String) null, (Drawable) null, (Object) this.chat);
             this.imageView.setRoundRadius(AndroidUtilities.dp(46.0f) >> 1);
         }
         if (messageObject.isMusic()) {

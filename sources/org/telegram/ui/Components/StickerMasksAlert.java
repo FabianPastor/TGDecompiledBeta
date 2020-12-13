@@ -32,9 +32,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DocumentObject;
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -45,8 +48,6 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messages_getStickers;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_messages_stickers;
-import org.telegram.tgnet.TLRPC$TL_photoSize;
-import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.EmptyCell;
@@ -297,7 +298,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2.setImeOptions(r4)
                 if (r3 != 0) goto L_0x014c
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627032(0x7f0e0CLASSNAME, float:1.8881317E38)
+                r3 = 2131627033(0x7f0e0CLASSNAME, float:1.888132E38)
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -305,7 +306,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             L_0x014c:
                 if (r3 != r6) goto L_0x015d
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627009(0x7f0e0CLASSNAME, float:1.888127E38)
+                r3 = 2131627010(0x7f0e0CLASSNAME, float:1.8881272E38)
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -314,7 +315,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2 = 2
                 if (r3 != r2) goto L_0x016e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627023(0x7f0e0c0f, float:1.8881299E38)
+                r3 = 2131627024(0x7f0e0CLASSNAME, float:1.88813E38)
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -935,11 +936,12 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             for (int i4 = 0; i4 < this.stickerSets[this.currentType].size(); i4++) {
                 TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet2 = this.stickerSets[this.currentType].get(i4);
                 TLRPC$Document tLRPC$Document = tLRPC$TL_messages_stickerSet2.documents.get(0);
-                TLObject tLObject = tLRPC$TL_messages_stickerSet2.set.thumb;
-                if (!(tLObject instanceof TLRPC$TL_photoSize) && !(tLObject instanceof TLRPC$TL_photoSizeProgressive)) {
-                    tLObject = tLRPC$Document;
+                TLObject closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_messages_stickerSet2.set.thumbs, 90);
+                SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$TL_messages_stickerSet2.set.thumbs, "windowBackgroundGray", 1.0f);
+                if (closestPhotoSizeWithSize == null) {
+                    closestPhotoSizeWithSize = tLRPC$Document;
                 }
-                View addStickerTab = this.stickersTab.addStickerTab(tLObject, tLRPC$Document, tLRPC$TL_messages_stickerSet2);
+                View addStickerTab = this.stickersTab.addStickerTab(closestPhotoSizeWithSize, svgThumb, tLRPC$Document, tLRPC$TL_messages_stickerSet2);
                 addStickerTab.setContentDescription(tLRPC$TL_messages_stickerSet2.set.title + ", " + LocaleController.getString("AccDescrStickerSet", NUM));
             }
             this.stickersTab.commitUpdate();

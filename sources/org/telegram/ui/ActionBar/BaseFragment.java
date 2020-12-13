@@ -148,6 +148,9 @@ public class BaseFragment {
     public void onTransitionAnimationStart(boolean z, boolean z2) {
     }
 
+    public void saveKeyboardPositionBeforeTransition() {
+    }
+
     public void saveSelfArgs(Bundle bundle) {
     }
 

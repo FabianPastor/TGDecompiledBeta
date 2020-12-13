@@ -40,6 +40,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -74,7 +75,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
     public int backgroundColor;
     private float colorProgress;
     /* access modifiers changed from: private */
-    public ArrayList<TLRPC$ChannelParticipant> contacts;
+    public ArrayList<TLObject> contacts;
     private boolean contactsEndReached;
     /* access modifiers changed from: private */
     public int contactsEndRow;
@@ -99,7 +100,8 @@ public class GroupVoipInviteAlert extends BottomSheet {
     private FrameLayout frameLayout;
     /* access modifiers changed from: private */
     public SparseArray<TLRPC$TL_groupCallParticipant> ignoredUsers;
-    private TLRPC$ChatFull info;
+    /* access modifiers changed from: private */
+    public TLRPC$ChatFull info;
     /* access modifiers changed from: private */
     public HashSet<Integer> invitedUsers;
     /* access modifiers changed from: private */
@@ -113,7 +115,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
     /* access modifiers changed from: private */
     public int membersHeaderRow;
     /* access modifiers changed from: private */
-    public ArrayList<TLRPC$ChannelParticipant> participants;
+    public ArrayList<TLObject> participants;
     /* access modifiers changed from: private */
     public int participantsEndRow;
     private SparseArray<TLObject> participantsMap;
@@ -129,6 +131,8 @@ public class GroupVoipInviteAlert extends BottomSheet {
     /* access modifiers changed from: private */
     public SearchAdapter searchListViewAdapter;
     private SearchField searchView;
+    /* access modifiers changed from: private */
+    public boolean searching;
     /* access modifiers changed from: private */
     public View shadow;
     /* access modifiers changed from: private */
@@ -162,7 +166,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
             super(context);
             View view = new View(context);
             this.searchBackground = view;
-            view.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("voipgroup_listViewBackgroundUnscrolled")));
+            view.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("voipgroup_searchBackground")));
             addView(this.searchBackground, LayoutHelper.createFrame(-1, 36.0f, 51, 14.0f, 11.0f, 14.0f, 0.0f));
             ImageView imageView = new ImageView(context);
             this.searchIconImageView = imageView;
@@ -181,7 +185,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
             this.clearSearchImageView.setScaleX(0.1f);
             this.clearSearchImageView.setScaleY(0.1f);
             this.clearSearchImageView.setAlpha(0.0f);
-            this.clearSearchImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("voipgroup_searchText"), PorterDuff.Mode.MULTIPLY));
+            this.clearSearchImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("voipgroup_searchPlaceholder"), PorterDuff.Mode.MULTIPLY));
             addView(this.clearSearchImageView, LayoutHelper.createFrame(36, 36.0f, 53, 14.0f, 11.0f, 14.0f, 0.0f));
             this.clearSearchImageView.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
@@ -300,7 +304,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
 
     /* JADX WARNING: Illegal instructions before constructor call */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public GroupVoipInviteAlert(android.content.Context r18, int r19, org.telegram.tgnet.TLRPC$Chat r20, org.telegram.tgnet.TLRPC$ChatFull r21) {
+    public GroupVoipInviteAlert(android.content.Context r18, int r19, org.telegram.tgnet.TLRPC$Chat r20, org.telegram.tgnet.TLRPC$ChatFull r21, android.util.SparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r22, java.util.HashSet<java.lang.Integer> r23) {
         /*
             r17 = this;
             r0 = r17
@@ -333,6 +337,10 @@ public class GroupVoipInviteAlert extends BottomSheet {
             r0.currentChat = r3
             r3 = r21
             r0.info = r3
+            r3 = r22
+            r0.ignoredUsers = r3
+            r3 = r23
+            r0.invitedUsers = r3
             android.content.res.Resources r3 = r18.getResources()
             r5 = 2131165979(0x7var_b, float:1.794619E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r5)
@@ -372,8 +380,9 @@ public class GroupVoipInviteAlert extends BottomSheet {
             r3.setUseHeaderOffset(r4)
             org.telegram.ui.Components.FlickerLoadingView r3 = r0.flickerLoadingView
             java.lang.String r5 = "voipgroup_inviteMembersBackground"
-            java.lang.String r8 = "voipgroup_emptyView"
-            r3.setColors(r5, r8)
+            java.lang.String r8 = "voipgroup_searchBackground"
+            java.lang.String r9 = "voipgroup_actionBarUnscrolled"
+            r3.setColors(r5, r8, r9)
             android.widget.FrameLayout r3 = r0.progressLayout
             org.telegram.ui.Components.FlickerLoadingView r9 = r0.flickerLoadingView
             r3.addView(r9)
@@ -383,7 +392,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
             r11 = -1082130432(0xffffffffbvar_, float:-1.0)
             r12 = 51
             r13 = 0
-            r14 = 1115160576(0x42780000, float:62.0)
+            r14 = 1115422720(0x427CLASSNAME, float:63.0)
             r15 = 0
             r16 = 0
             android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
@@ -400,7 +409,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
             org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
             android.widget.TextView r3 = r3.subtitle
             java.lang.String r9 = "SearchEmptyViewFilteredSubtitle2"
-            r10 = 2131627010(0x7f0e0CLASSNAME, float:1.8881272E38)
+            r10 = 2131627011(0x7f0e0CLASSNAME, float:1.8881274E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r3.setText(r9)
             org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
@@ -521,7 +530,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
             r1.setAnimateEmptyView(r4, r2)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.<init>(android.content.Context, int, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$ChatFull):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.<init>(android.content.Context, int, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$ChatFull, android.util.SparseArray, java.util.HashSet):void");
     }
 
     /* access modifiers changed from: private */
@@ -579,11 +588,6 @@ public class GroupVoipInviteAlert extends BottomSheet {
         this.delegate = groupVoipInviteAlertDelegate;
     }
 
-    public void setIgnoredUsers(SparseArray<TLRPC$TL_groupCallParticipant> sparseArray, HashSet<Integer> hashSet) {
-        this.ignoredUsers = sparseArray;
-        this.invitedUsers = hashSet;
-    }
-
     private void updateRows() {
         this.addNewRow = -1;
         this.emptyRow = -1;
@@ -598,7 +602,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
         this.rowCount = 0;
         this.rowCount = 0 + 1;
         this.emptyRow = 0;
-        if (ChatObject.canAddUsers(this.currentChat)) {
+        if (!TextUtils.isEmpty(this.currentChat.username) || ChatObject.canUserDoAdminAction(this.currentChat, 3)) {
             int i = this.rowCount;
             this.rowCount = i + 1;
             this.addNewRow = i;
@@ -737,14 +741,42 @@ public class GroupVoipInviteAlert extends BottomSheet {
     }
 
     private void loadChatParticipants(int i, int i2, boolean z) {
+        SparseArray<TLRPC$TL_groupCallParticipant> sparseArray;
+        TLRPC$User user;
+        if (!ChatObject.isChannel(this.currentChat)) {
+            this.loadingUsers = false;
+            this.participants.clear();
+            this.contacts.clear();
+            this.participantsMap.clear();
+            this.contactsMap.clear();
+            if (this.info != null) {
+                int i3 = UserConfig.getInstance(this.currentAccount).clientUserId;
+                int size = this.info.participants.participants.size();
+                for (int i4 = 0; i4 < size; i4++) {
+                    TLRPC$ChatParticipant tLRPC$ChatParticipant = this.info.participants.participants.get(i4);
+                    int i5 = tLRPC$ChatParticipant.user_id;
+                    if (i5 != i3 && (((sparseArray = this.ignoredUsers) == null || sparseArray.indexOfKey(i5) < 0) && ((user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(tLRPC$ChatParticipant.user_id))) == null || !user.bot))) {
+                        this.participants.add(tLRPC$ChatParticipant);
+                        this.participantsMap.put(tLRPC$ChatParticipant.user_id, tLRPC$ChatParticipant);
+                    }
+                }
+            }
+            updateRows();
+            ListAdapter listAdapter = this.listViewAdapter;
+            if (listAdapter != null) {
+                listAdapter.notifyDataSetChanged();
+                return;
+            }
+            return;
+        }
         this.loadingUsers = true;
         StickerEmptyView stickerEmptyView = this.emptyView;
         if (stickerEmptyView != null) {
             stickerEmptyView.showProgress(true, false);
         }
-        ListAdapter listAdapter = this.listViewAdapter;
-        if (listAdapter != null) {
-            listAdapter.notifyDataSetChanged();
+        ListAdapter listAdapter2 = this.listViewAdapter;
+        if (listAdapter2 != null) {
+            listAdapter2.notifyDataSetChanged();
         }
         TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants = new TLRPC$TL_channels_getParticipants();
         tLRPC$TL_channels_getParticipants.channel = MessagesController.getInputChannel(this.currentChat);
@@ -799,7 +831,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
     /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$GroupVoipInviteAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants) {
         SparseArray<TLObject> sparseArray;
-        ArrayList<TLRPC$ChannelParticipant> arrayList;
+        ArrayList<TLObject> arrayList;
         boolean z;
         SparseArray<TLRPC$TL_groupCallParticipant> sparseArray2;
         if (tLRPC$TL_error == null) {
@@ -835,7 +867,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
             int size2 = this.participants.size();
             int i3 = 0;
             while (i3 < size2) {
-                TLRPC$ChannelParticipant tLRPC$ChannelParticipant2 = this.participants.get(i3);
+                TLRPC$ChannelParticipant tLRPC$ChannelParticipant2 = (TLRPC$ChannelParticipant) this.participants.get(i3);
                 if (this.contactsMap.get(tLRPC$ChannelParticipant2.user_id) == null && ((sparseArray2 = this.ignoredUsers) == null || sparseArray2.indexOfKey(tLRPC$ChannelParticipant2.user_id) < 0)) {
                     z = false;
                 } else {
@@ -863,7 +895,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
                         }
 
                         public final int compare(Object obj, Object obj2) {
-                            return GroupVoipInviteAlert.this.lambda$null$1$GroupVoipInviteAlert(this.f$1, (TLRPC$ChannelParticipant) obj, (TLRPC$ChannelParticipant) obj2);
+                            return GroupVoipInviteAlert.this.lambda$null$1$GroupVoipInviteAlert(this.f$1, (TLObject) obj, (TLObject) obj2);
                         }
 
                         public /* synthetic */ Comparator reversed() {
@@ -917,13 +949,13 @@ public class GroupVoipInviteAlert extends BottomSheet {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$1 */
-    public /* synthetic */ int lambda$null$1$GroupVoipInviteAlert(int i, TLRPC$ChannelParticipant tLRPC$ChannelParticipant, TLRPC$ChannelParticipant tLRPC$ChannelParticipant2) {
+    public /* synthetic */ int lambda$null$1$GroupVoipInviteAlert(int i, TLObject tLObject, TLObject tLObject2) {
         int i2;
         int i3;
         TLRPC$UserStatus tLRPC$UserStatus;
         TLRPC$UserStatus tLRPC$UserStatus2;
-        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(tLRPC$ChannelParticipant.user_id));
-        TLRPC$User user2 = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(tLRPC$ChannelParticipant2.user_id));
+        TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TLRPC$ChannelParticipant) tLObject).user_id));
+        TLRPC$User user2 = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(((TLRPC$ChannelParticipant) tLObject2).user_id));
         if (user == null || (tLRPC$UserStatus2 = user.status) == null) {
             i2 = 0;
         } else {
@@ -970,6 +1002,8 @@ public class GroupVoipInviteAlert extends BottomSheet {
         public int lastSearchId;
         private Context mContext;
         private SearchAdapterHelper searchAdapterHelper;
+        /* access modifiers changed from: private */
+        public boolean searchInProgress;
         private Runnable searchRunnable;
         private int totalCount;
 
@@ -1000,7 +1034,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
                         if (SearchAdapter.this.getItemCount() > itemCount) {
                             GroupVoipInviteAlert.this.showItemsAnimated(itemCount);
                         }
-                        if (SearchAdapter.this.getItemCount() <= 2) {
+                        if (!SearchAdapter.this.searchInProgress && SearchAdapter.this.getItemCount() <= 2) {
                             GroupVoipInviteAlert.this.emptyView.showProgress(false, true);
                         }
                     }
@@ -1023,6 +1057,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
             notifyDataSetChanged();
             if (!TextUtils.isEmpty(str)) {
                 GroupVoipInviteAlert.this.emptyView.showProgress(true, true);
+                this.searchInProgress = true;
                 int i = this.lastSearchId + 1;
                 this.lastSearchId = i;
                 $$Lambda$GroupVoipInviteAlert$SearchAdapter$CjJVFO4QLy91LWrj5CbugY1KnwU r1 = new Runnable(str, i) {
@@ -1050,7 +1085,231 @@ public class GroupVoipInviteAlert extends BottomSheet {
         public /* synthetic */ void lambda$searchUsers$0$GroupVoipInviteAlert$SearchAdapter(String str, int i) {
             if (this.searchRunnable != null) {
                 this.searchRunnable = null;
-                this.searchAdapterHelper.queryServerSearch(str, true, false, true, false, false, GroupVoipInviteAlert.this.currentChat.id, false, 2, i);
+                processSearch(str, i);
+            }
+        }
+
+        private void processSearch(String str, int i) {
+            AndroidUtilities.runOnUIThread(new Runnable(str, i) {
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ int f$2;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                }
+
+                public final void run() {
+                    GroupVoipInviteAlert.SearchAdapter.this.lambda$processSearch$2$GroupVoipInviteAlert$SearchAdapter(this.f$1, this.f$2);
+                }
+            });
+        }
+
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$processSearch$2 */
+        public /* synthetic */ void lambda$processSearch$2$GroupVoipInviteAlert$SearchAdapter(String str, int i) {
+            ArrayList arrayList = null;
+            this.searchRunnable = null;
+            if (!ChatObject.isChannel(GroupVoipInviteAlert.this.currentChat) && GroupVoipInviteAlert.this.info != null) {
+                arrayList = new ArrayList(GroupVoipInviteAlert.this.info.participants.participants);
+            }
+            if (arrayList != null) {
+                Utilities.searchQueue.postRunnable(new Runnable(str, i, arrayList) {
+                    public final /* synthetic */ String f$1;
+                    public final /* synthetic */ int f$2;
+                    public final /* synthetic */ ArrayList f$3;
+
+                    {
+                        this.f$1 = r2;
+                        this.f$2 = r3;
+                        this.f$3 = r4;
+                    }
+
+                    public final void run() {
+                        GroupVoipInviteAlert.SearchAdapter.this.lambda$null$1$GroupVoipInviteAlert$SearchAdapter(this.f$1, this.f$2, this.f$3);
+                    }
+                });
+            } else {
+                this.searchInProgress = false;
+            }
+            this.searchAdapterHelper.queryServerSearch(str, ChatObject.canAddUsers(GroupVoipInviteAlert.this.currentChat), false, true, false, false, GroupVoipInviteAlert.this.currentChat.id, false, 2, i);
+        }
+
+        /* access modifiers changed from: private */
+        /* JADX WARNING: Code restructure failed: missing block: B:41:0x00d9, code lost:
+            if (r14.contains(" " + r5) != false) goto L_0x00e9;
+         */
+        /* JADX WARNING: Removed duplicated region for block: B:50:0x00f1 A[LOOP:1: B:32:0x009d->B:50:0x00f1, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:59:0x00ed A[SYNTHETIC] */
+        /* renamed from: lambda$null$1 */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public /* synthetic */ void lambda$null$1$GroupVoipInviteAlert$SearchAdapter(java.lang.String r19, int r20, java.util.ArrayList r21) {
+            /*
+                r18 = this;
+                r0 = r18
+                r1 = r20
+                r2 = r21
+                java.lang.String r3 = r19.trim()
+                java.lang.String r3 = r3.toLowerCase()
+                int r4 = r3.length()
+                if (r4 != 0) goto L_0x001d
+                java.util.ArrayList r2 = new java.util.ArrayList
+                r2.<init>()
+                r0.updateSearchResults(r2, r1)
+                return
+            L_0x001d:
+                org.telegram.messenger.LocaleController r4 = org.telegram.messenger.LocaleController.getInstance()
+                java.lang.String r4 = r4.getTranslitString(r3)
+                boolean r5 = r3.equals(r4)
+                if (r5 != 0) goto L_0x0031
+                int r5 = r4.length()
+                if (r5 != 0) goto L_0x0032
+            L_0x0031:
+                r4 = 0
+            L_0x0032:
+                r5 = 0
+                r7 = 1
+                if (r4 == 0) goto L_0x0038
+                r8 = 1
+                goto L_0x0039
+            L_0x0038:
+                r8 = 0
+            L_0x0039:
+                int r8 = r8 + r7
+                java.lang.String[] r9 = new java.lang.String[r8]
+                r9[r5] = r3
+                if (r4 == 0) goto L_0x0042
+                r9[r7] = r4
+            L_0x0042:
+                java.util.ArrayList r3 = new java.util.ArrayList
+                r3.<init>()
+                if (r2 == 0) goto L_0x00fc
+                int r4 = r21.size()
+                r10 = 0
+            L_0x004e:
+                if (r10 >= r4) goto L_0x00fc
+                java.lang.Object r11 = r2.get(r10)
+                org.telegram.tgnet.TLObject r11 = (org.telegram.tgnet.TLObject) r11
+                boolean r12 = r11 instanceof org.telegram.tgnet.TLRPC$ChatParticipant
+                if (r12 == 0) goto L_0x0060
+                r12 = r11
+                org.telegram.tgnet.TLRPC$ChatParticipant r12 = (org.telegram.tgnet.TLRPC$ChatParticipant) r12
+                int r12 = r12.user_id
+                goto L_0x0069
+            L_0x0060:
+                boolean r12 = r11 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
+                if (r12 == 0) goto L_0x00f6
+                r12 = r11
+                org.telegram.tgnet.TLRPC$ChannelParticipant r12 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r12
+                int r12 = r12.user_id
+            L_0x0069:
+                org.telegram.ui.Components.GroupVoipInviteAlert r13 = org.telegram.ui.Components.GroupVoipInviteAlert.this
+                int r13 = r13.currentAccount
+                org.telegram.messenger.MessagesController r13 = org.telegram.messenger.MessagesController.getInstance(r13)
+                java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
+                org.telegram.tgnet.TLRPC$User r12 = r13.getUser(r12)
+                boolean r13 = org.telegram.messenger.UserObject.isUserSelf(r12)
+                if (r13 == 0) goto L_0x0083
+                goto L_0x00f6
+            L_0x0083:
+                java.lang.String r13 = org.telegram.messenger.UserObject.getUserName(r12)
+                java.lang.String r13 = r13.toLowerCase()
+                org.telegram.messenger.LocaleController r14 = org.telegram.messenger.LocaleController.getInstance()
+                java.lang.String r14 = r14.getTranslitString(r13)
+                boolean r15 = r13.equals(r14)
+                if (r15 == 0) goto L_0x009a
+                r14 = 0
+            L_0x009a:
+                r15 = 0
+                r16 = 0
+            L_0x009d:
+                if (r15 >= r8) goto L_0x00f6
+                r5 = r9[r15]
+                boolean r17 = r13.startsWith(r5)
+                if (r17 != 0) goto L_0x00e9
+                java.lang.StringBuilder r6 = new java.lang.StringBuilder
+                r6.<init>()
+                java.lang.String r7 = " "
+                r6.append(r7)
+                r6.append(r5)
+                java.lang.String r6 = r6.toString()
+                boolean r6 = r13.contains(r6)
+                if (r6 != 0) goto L_0x00e9
+                if (r14 == 0) goto L_0x00dc
+                boolean r6 = r14.startsWith(r5)
+                if (r6 != 0) goto L_0x00e9
+                java.lang.StringBuilder r6 = new java.lang.StringBuilder
+                r6.<init>()
+                r6.append(r7)
+                r6.append(r5)
+                java.lang.String r6 = r6.toString()
+                boolean r6 = r14.contains(r6)
+                if (r6 == 0) goto L_0x00dc
+                goto L_0x00e9
+            L_0x00dc:
+                java.lang.String r6 = r12.username
+                if (r6 == 0) goto L_0x00eb
+                boolean r5 = r6.startsWith(r5)
+                if (r5 == 0) goto L_0x00eb
+                r16 = 2
+                goto L_0x00eb
+            L_0x00e9:
+                r16 = 1
+            L_0x00eb:
+                if (r16 == 0) goto L_0x00f1
+                r3.add(r11)
+                goto L_0x00f6
+            L_0x00f1:
+                int r15 = r15 + 1
+                r5 = 0
+                r7 = 1
+                goto L_0x009d
+            L_0x00f6:
+                int r10 = r10 + 1
+                r5 = 0
+                r7 = 1
+                goto L_0x004e
+            L_0x00fc:
+                r0.updateSearchResults(r3, r1)
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.SearchAdapter.lambda$null$1$GroupVoipInviteAlert$SearchAdapter(java.lang.String, int, java.util.ArrayList):void");
+        }
+
+        private void updateSearchResults(ArrayList<TLObject> arrayList, int i) {
+            AndroidUtilities.runOnUIThread(new Runnable(i, arrayList) {
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ ArrayList f$2;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                }
+
+                public final void run() {
+                    GroupVoipInviteAlert.SearchAdapter.this.lambda$updateSearchResults$3$GroupVoipInviteAlert$SearchAdapter(this.f$1, this.f$2);
+                }
+            });
+        }
+
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$updateSearchResults$3 */
+        public /* synthetic */ void lambda$updateSearchResults$3$GroupVoipInviteAlert$SearchAdapter(int i, ArrayList arrayList) {
+            if (GroupVoipInviteAlert.this.searching && i == this.lastSearchId) {
+                this.searchInProgress = false;
+                if (!ChatObject.isChannel(GroupVoipInviteAlert.this.currentChat)) {
+                    ArrayList<TLObject> groupSearch = this.searchAdapterHelper.getGroupSearch();
+                    groupSearch.clear();
+                    groupSearch.addAll(arrayList);
+                }
+                int itemCount = getItemCount();
+                notifyDataSetChanged();
+                if (getItemCount() > itemCount) {
+                    GroupVoipInviteAlert.this.showItemsAnimated(itemCount);
+                }
+                if (!this.searchAdapterHelper.isSearchInProgress() && getItemCount() <= 2) {
+                    GroupVoipInviteAlert.this.emptyView.showProgress(false, true);
+                }
             }
         }
 
@@ -1104,65 +1363,67 @@ public class GroupVoipInviteAlert extends BottomSheet {
             return this.searchAdapterHelper.getGlobalSearch().get((i - this.globalStartRow) - 1);
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v2, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v8, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v9, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v2, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v9, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v10, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v13, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
         /* JADX WARNING: Multi-variable type inference failed */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r4, int r5) {
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r3, int r4) {
             /*
-                r3 = this;
-                java.lang.String r4 = "voipgroup_nameText"
-                r0 = 2
-                if (r5 == 0) goto L_0x003d
-                r1 = 1
-                if (r5 == r1) goto L_0x0029
-                if (r5 == r0) goto L_0x0012
-                android.view.View r4 = new android.view.View
-                android.content.Context r5 = r3.mContext
-                r4.<init>(r5)
-                goto L_0x0065
-            L_0x0012:
-                android.view.View r4 = new android.view.View
-                android.content.Context r5 = r3.mContext
-                r4.<init>(r5)
-                androidx.recyclerview.widget.RecyclerView$LayoutParams r5 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r2 = this;
+                r3 = 2
+                if (r4 == 0) goto L_0x003d
+                r0 = 1
+                if (r4 == r0) goto L_0x0027
+                if (r4 == r3) goto L_0x0010
+                android.view.View r3 = new android.view.View
+                android.content.Context r4 = r2.mContext
+                r3.<init>(r4)
+                goto L_0x0069
+            L_0x0010:
+                android.view.View r3 = new android.view.View
+                android.content.Context r4 = r2.mContext
+                r3.<init>(r4)
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r4 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = 1113587712(0x42600000, float:56.0)
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                r5.<init>((int) r0, (int) r1)
-                r4.setLayoutParams(r5)
-                goto L_0x0065
-            L_0x0029:
-                org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
-                android.content.Context r0 = r3.mContext
-                r5.<init>(r0)
-                java.lang.String r0 = "voipgroup_emptyView"
-                int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r5.setBackgroundColor(r0)
-                r5.setTextColor(r4)
-                goto L_0x0064
-            L_0x003d:
-                org.telegram.ui.Cells.ManageChatUserCell r5 = new org.telegram.ui.Cells.ManageChatUserCell
-                android.content.Context r1 = r3.mContext
-                r2 = 0
-                r5.<init>(r1, r0, r0, r2)
-                r0 = 2131165743(0x7var_f, float:1.7945712E38)
-                r5.setCustomRightImage(r0)
-                int r0 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-                r5.setNameColor(r0)
+                r4.<init>((int) r0, (int) r1)
+                r3.setLayoutParams(r4)
+                goto L_0x0069
+            L_0x0027:
+                org.telegram.ui.Cells.GraySectionCell r3 = new org.telegram.ui.Cells.GraySectionCell
+                android.content.Context r4 = r2.mContext
+                r3.<init>(r4)
+                java.lang.String r4 = "voipgroup_actionBarUnscrolled"
                 int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-                java.lang.String r0 = "voipgroup_blueText"
+                r3.setBackgroundColor(r4)
+                java.lang.String r4 = "voipgroup_searchPlaceholder"
+                r3.setTextColor(r4)
+                goto L_0x0069
+            L_0x003d:
+                org.telegram.ui.Cells.ManageChatUserCell r4 = new org.telegram.ui.Cells.ManageChatUserCell
+                android.content.Context r0 = r2.mContext
+                r1 = 0
+                r4.<init>(r0, r3, r3, r1)
+                r3 = 2131165743(0x7var_f, float:1.7945712E38)
+                r4.setCustomRightImage(r3)
+                java.lang.String r3 = "voipgroup_nameText"
+                int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+                r4.setNameColor(r3)
+                java.lang.String r3 = "voipgroup_lastSeenTextUnscrolled"
+                int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+                java.lang.String r0 = "voipgroup_listeningText"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r5.setStatusColors(r4, r0)
-                java.lang.String r4 = "voipgroup_listViewBackground"
-                r5.setDividerColor(r4)
-            L_0x0064:
-                r4 = r5
-            L_0x0065:
-                org.telegram.ui.Components.RecyclerListView$Holder r5 = new org.telegram.ui.Components.RecyclerListView$Holder
-                r5.<init>(r4)
-                return r5
+                r4.setStatusColors(r3, r0)
+                java.lang.String r3 = "voipgroup_listViewBackground"
+                r4.setDividerColor(r3)
+                r3 = r4
+            L_0x0069:
+                org.telegram.ui.Components.RecyclerListView$Holder r4 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r4.<init>(r3)
+                return r4
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.SearchAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }
@@ -1173,16 +1434,16 @@ public class GroupVoipInviteAlert extends BottomSheet {
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v6, resolved type: android.text.SpannableStringBuilder} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v4, resolved type: java.lang.String} */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Removed duplicated region for block: B:48:0x00e9  */
+        /* JADX WARNING: Removed duplicated region for block: B:48:0x00ee  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r14, int r15) {
             /*
                 r13 = this;
                 int r0 = r14.getItemViewType()
                 r1 = 1
-                if (r0 == 0) goto L_0x0049
+                if (r0 == 0) goto L_0x0033
                 if (r0 == r1) goto L_0x000b
-                goto L_0x012a
+                goto L_0x012f
             L_0x000b:
                 android.view.View r14 = r14.itemView
                 org.telegram.ui.Cells.GraySectionCell r14 = (org.telegram.ui.Cells.GraySectionCell) r14
@@ -1192,33 +1453,24 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 java.lang.String r0 = "ChannelMembers"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
-                goto L_0x012a
+                goto L_0x012f
             L_0x0021:
                 int r0 = r13.globalStartRow
-                if (r15 != r0) goto L_0x0033
+                if (r15 != r0) goto L_0x012f
                 r15 = 2131625572(0x7f0e0664, float:1.8878356E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
-                goto L_0x012a
+                goto L_0x012f
             L_0x0033:
-                org.telegram.ui.Components.GroupVoipInviteAlert r0 = org.telegram.ui.Components.GroupVoipInviteAlert.this
-                int r0 = r0.contactsStartRow
-                if (r15 != r0) goto L_0x012a
-                r15 = 2131624920(0x7f0e03d8, float:1.8877033E38)
-                java.lang.String r0 = "Contacts"
-                java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
-                r14.setText(r15)
-                goto L_0x012a
-            L_0x0049:
                 org.telegram.tgnet.TLObject r0 = r13.getItem(r15)
                 boolean r2 = r0 instanceof org.telegram.tgnet.TLRPC$User
-                if (r2 == 0) goto L_0x0054
+                if (r2 == 0) goto L_0x003e
                 org.telegram.tgnet.TLRPC$User r0 = (org.telegram.tgnet.TLRPC$User) r0
-                goto L_0x006e
-            L_0x0054:
+                goto L_0x0073
+            L_0x003e:
                 boolean r2 = r0 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
-                if (r2 == 0) goto L_0x012a
+                if (r2 == 0) goto L_0x0059
                 org.telegram.ui.Components.GroupVoipInviteAlert r2 = org.telegram.ui.Components.GroupVoipInviteAlert.this
                 int r2 = r2.currentAccount
                 org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
@@ -1226,85 +1478,96 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 int r0 = r0.user_id
                 java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                 org.telegram.tgnet.TLRPC$User r0 = r2.getUser(r0)
-            L_0x006e:
+                goto L_0x0073
+            L_0x0059:
+                boolean r2 = r0 instanceof org.telegram.tgnet.TLRPC$ChatParticipant
+                if (r2 == 0) goto L_0x012f
+                org.telegram.ui.Components.GroupVoipInviteAlert r2 = org.telegram.ui.Components.GroupVoipInviteAlert.this
+                int r2 = r2.currentAccount
+                org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
+                org.telegram.tgnet.TLRPC$ChatParticipant r0 = (org.telegram.tgnet.TLRPC$ChatParticipant) r0
+                int r0 = r0.user_id
+                java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+                org.telegram.tgnet.TLRPC$User r0 = r2.getUser(r0)
+            L_0x0073:
                 java.lang.String r2 = r0.username
                 org.telegram.ui.Adapters.SearchAdapterHelper r3 = r13.searchAdapterHelper
                 java.util.ArrayList r3 = r3.getGroupSearch()
                 int r3 = r3.size()
                 r4 = 0
                 r5 = 0
-                if (r3 == 0) goto L_0x008a
+                if (r3 == 0) goto L_0x008f
                 int r3 = r3 + r1
-                if (r3 <= r15) goto L_0x0089
+                if (r3 <= r15) goto L_0x008e
                 org.telegram.ui.Adapters.SearchAdapterHelper r3 = r13.searchAdapterHelper
                 java.lang.String r3 = r3.getLastFoundChannel()
                 r6 = 1
-                goto L_0x008c
-            L_0x0089:
+                goto L_0x0091
+            L_0x008e:
                 int r15 = r15 - r3
-            L_0x008a:
+            L_0x008f:
                 r3 = r5
                 r6 = 0
-            L_0x008c:
+            L_0x0091:
                 r7 = 33
-                java.lang.String r8 = "voipgroup_blueText"
+                java.lang.String r8 = "voipgroup_listeningText"
                 r9 = -1
-                if (r6 != 0) goto L_0x00e6
-                if (r2 == 0) goto L_0x00e6
+                if (r6 != 0) goto L_0x00eb
+                if (r2 == 0) goto L_0x00eb
                 org.telegram.ui.Adapters.SearchAdapterHelper r6 = r13.searchAdapterHelper
                 java.util.ArrayList r6 = r6.getGlobalSearch()
                 int r6 = r6.size()
-                if (r6 == 0) goto L_0x00e6
+                if (r6 == 0) goto L_0x00eb
                 int r6 = r6 + r1
-                if (r6 <= r15) goto L_0x00e6
+                if (r6 <= r15) goto L_0x00eb
                 org.telegram.ui.Adapters.SearchAdapterHelper r6 = r13.searchAdapterHelper
                 java.lang.String r6 = r6.getLastFoundUsername()
                 java.lang.String r10 = "@"
                 boolean r11 = r6.startsWith(r10)
-                if (r11 == 0) goto L_0x00b6
+                if (r11 == 0) goto L_0x00bb
                 java.lang.String r6 = r6.substring(r1)
-            L_0x00b6:
-                android.text.SpannableStringBuilder r1 = new android.text.SpannableStringBuilder     // Catch:{ Exception -> 0x00e1 }
-                r1.<init>()     // Catch:{ Exception -> 0x00e1 }
-                r1.append(r10)     // Catch:{ Exception -> 0x00e1 }
-                r1.append(r2)     // Catch:{ Exception -> 0x00e1 }
-                int r10 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r2, r6)     // Catch:{ Exception -> 0x00e1 }
-                if (r10 == r9) goto L_0x00df
-                int r6 = r6.length()     // Catch:{ Exception -> 0x00e1 }
-                if (r10 != 0) goto L_0x00d0
+            L_0x00bb:
+                android.text.SpannableStringBuilder r1 = new android.text.SpannableStringBuilder     // Catch:{ Exception -> 0x00e6 }
+                r1.<init>()     // Catch:{ Exception -> 0x00e6 }
+                r1.append(r10)     // Catch:{ Exception -> 0x00e6 }
+                r1.append(r2)     // Catch:{ Exception -> 0x00e6 }
+                int r10 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r2, r6)     // Catch:{ Exception -> 0x00e6 }
+                if (r10 == r9) goto L_0x00e4
+                int r6 = r6.length()     // Catch:{ Exception -> 0x00e6 }
+                if (r10 != 0) goto L_0x00d5
                 int r6 = r6 + 1
-                goto L_0x00d2
-            L_0x00d0:
+                goto L_0x00d7
+            L_0x00d5:
                 int r10 = r10 + 1
-            L_0x00d2:
-                android.text.style.ForegroundColorSpan r11 = new android.text.style.ForegroundColorSpan     // Catch:{ Exception -> 0x00e1 }
-                int r12 = org.telegram.ui.ActionBar.Theme.getColor(r8)     // Catch:{ Exception -> 0x00e1 }
-                r11.<init>(r12)     // Catch:{ Exception -> 0x00e1 }
+            L_0x00d7:
+                android.text.style.ForegroundColorSpan r11 = new android.text.style.ForegroundColorSpan     // Catch:{ Exception -> 0x00e6 }
+                int r12 = org.telegram.ui.ActionBar.Theme.getColor(r8)     // Catch:{ Exception -> 0x00e6 }
+                r11.<init>(r12)     // Catch:{ Exception -> 0x00e6 }
                 int r6 = r6 + r10
-                r1.setSpan(r11, r10, r6, r7)     // Catch:{ Exception -> 0x00e1 }
-            L_0x00df:
+                r1.setSpan(r11, r10, r6, r7)     // Catch:{ Exception -> 0x00e6 }
+            L_0x00e4:
                 r2 = r1
-                goto L_0x00e7
-            L_0x00e1:
+                goto L_0x00ec
+            L_0x00e6:
                 r1 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-                goto L_0x00e7
-            L_0x00e6:
+                goto L_0x00ec
+            L_0x00eb:
                 r2 = r5
-            L_0x00e7:
-                if (r3 == 0) goto L_0x0109
+            L_0x00ec:
+                if (r3 == 0) goto L_0x010e
                 java.lang.String r1 = org.telegram.messenger.UserObject.getUserName(r0)
                 android.text.SpannableStringBuilder r5 = new android.text.SpannableStringBuilder
                 r5.<init>(r1)
                 int r1 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r1, r3)
-                if (r1 == r9) goto L_0x0109
+                if (r1 == r9) goto L_0x010e
                 android.text.style.ForegroundColorSpan r6 = new android.text.style.ForegroundColorSpan
                 int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
                 r6.<init>(r8)
                 int r3 = r3.length()
                 int r3 = r3 + r1
                 r5.setSpan(r6, r1, r3, r7)
-            L_0x0109:
+            L_0x010e:
                 android.view.View r14 = r14.itemView
                 org.telegram.ui.Cells.ManageChatUserCell r14 = (org.telegram.ui.Cells.ManageChatUserCell) r14
                 java.lang.Integer r15 = java.lang.Integer.valueOf(r15)
@@ -1316,7 +1579,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 boolean r15 = r15.contains(r1)
                 r14.setCustomImageVisible(r15)
                 r14.setData(r0, r5, r2, r4)
-            L_0x012a:
+            L_0x012f:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.SearchAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
@@ -1363,81 +1626,82 @@ public class GroupVoipInviteAlert extends BottomSheet {
             return GroupVoipInviteAlert.this.rowCount;
         }
 
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v2, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v2, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v2, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v3, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v4, resolved type: org.telegram.ui.Cells.ManageChatTextCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v4, resolved type: org.telegram.ui.Cells.GraySectionCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v11, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v12, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v8, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v3, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v4, resolved type: org.telegram.ui.Cells.ManageChatTextCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v4, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v12, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v13, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v8, resolved type: org.telegram.ui.Cells.ManageChatUserCell} */
         /* JADX WARNING: Multi-variable type inference failed */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r7, int r8) {
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r6, int r7) {
             /*
-                r6 = this;
-                java.lang.String r7 = "voipgroup_actionBar"
-                java.lang.String r0 = "voipgroup_nameText"
-                r1 = 2
-                java.lang.String r2 = "voipgroup_blueText"
-                if (r8 == 0) goto L_0x0052
-                r3 = 1
-                if (r8 == r3) goto L_0x0044
-                if (r8 == r1) goto L_0x0030
-                r7 = 3
-                if (r8 == r7) goto L_0x0019
-                android.view.View r7 = new android.view.View
-                android.content.Context r8 = r6.mContext
-                r7.<init>(r8)
-                goto L_0x0079
-            L_0x0019:
-                android.view.View r7 = new android.view.View
-                android.content.Context r8 = r6.mContext
-                r7.<init>(r8)
-                androidx.recyclerview.widget.RecyclerView$LayoutParams r8 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r5 = this;
+                java.lang.String r6 = "voipgroup_actionBar"
+                r0 = 2
+                java.lang.String r1 = "voipgroup_listeningText"
+                if (r7 == 0) goto L_0x0052
+                r2 = 1
+                if (r7 == r2) goto L_0x0044
+                if (r7 == r0) goto L_0x002e
+                r6 = 3
+                if (r7 == r6) goto L_0x0017
+                android.view.View r6 = new android.view.View
+                android.content.Context r7 = r5.mContext
+                r6.<init>(r7)
+                goto L_0x007b
+            L_0x0017:
+                android.view.View r6 = new android.view.View
+                android.content.Context r7 = r5.mContext
+                r6.<init>(r7)
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r7 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = 1113587712(0x42600000, float:56.0)
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                r8.<init>((int) r0, (int) r1)
-                r7.setLayoutParams(r8)
-                goto L_0x0079
-            L_0x0030:
-                org.telegram.ui.Cells.GraySectionCell r7 = new org.telegram.ui.Cells.GraySectionCell
-                android.content.Context r8 = r6.mContext
-                r7.<init>(r8)
-                java.lang.String r8 = "voipgroup_emptyView"
-                int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-                r7.setBackgroundColor(r8)
-                r7.setTextColor(r0)
-                goto L_0x0079
+                r7.<init>((int) r0, (int) r1)
+                r6.setLayoutParams(r7)
+                goto L_0x007b
+            L_0x002e:
+                org.telegram.ui.Cells.GraySectionCell r6 = new org.telegram.ui.Cells.GraySectionCell
+                android.content.Context r7 = r5.mContext
+                r6.<init>(r7)
+                java.lang.String r7 = "voipgroup_actionBarUnscrolled"
+                int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+                r6.setBackgroundColor(r7)
+                java.lang.String r7 = "voipgroup_searchPlaceholder"
+                r6.setTextColor(r7)
+                goto L_0x007b
             L_0x0044:
-                org.telegram.ui.Cells.ManageChatTextCell r8 = new org.telegram.ui.Cells.ManageChatTextCell
-                android.content.Context r0 = r6.mContext
-                r8.<init>(r0)
-                r8.setColors(r2, r2)
-                r8.setDividerColor(r7)
-                goto L_0x0078
+                org.telegram.ui.Cells.ManageChatTextCell r7 = new org.telegram.ui.Cells.ManageChatTextCell
+                android.content.Context r0 = r5.mContext
+                r7.<init>(r0)
+                r7.setColors(r1, r1)
+                r7.setDividerColor(r6)
+                goto L_0x007a
             L_0x0052:
-                org.telegram.ui.Cells.ManageChatUserCell r8 = new org.telegram.ui.Cells.ManageChatUserCell
-                android.content.Context r3 = r6.mContext
-                r4 = 6
-                r5 = 0
-                r8.<init>(r3, r4, r1, r5)
-                r1 = 2131165743(0x7var_f, float:1.7945712E38)
-                r8.setCustomRightImage(r1)
+                org.telegram.ui.Cells.ManageChatUserCell r7 = new org.telegram.ui.Cells.ManageChatUserCell
+                android.content.Context r2 = r5.mContext
+                r3 = 6
+                r4 = 0
+                r7.<init>(r2, r3, r0, r4)
+                r0 = 2131165743(0x7var_f, float:1.7945712E38)
+                r7.setCustomRightImage(r0)
+                java.lang.String r0 = "voipgroup_nameText"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                r8.setNameColor(r0)
-                java.lang.String r0 = "voipgroup_lastSeenText"
+                r7.setNameColor(r0)
+                java.lang.String r0 = "voipgroup_lastSeenTextUnscrolled"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-                r8.setStatusColors(r0, r1)
-                r8.setDividerColor(r7)
-            L_0x0078:
-                r7 = r8
-            L_0x0079:
-                org.telegram.ui.Components.RecyclerListView$Holder r8 = new org.telegram.ui.Components.RecyclerListView$Holder
-                r8.<init>(r7)
-                return r8
+                int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+                r7.setStatusColors(r0, r1)
+                r7.setDividerColor(r6)
+            L_0x007a:
+                r6 = r7
+            L_0x007b:
+                org.telegram.ui.Components.RecyclerListView$Holder r7 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r7.<init>(r6)
+                return r7
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.ListAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }

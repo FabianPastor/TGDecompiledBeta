@@ -1200,7 +1200,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             java.lang.String r9 = "100_100_b"
             r7 = r15
             r12 = r6
-            r7.setImage(r8, r9, r10, r11, r12)
+            r7.setImage((org.telegram.messenger.ImageLocation) r8, (java.lang.String) r9, (java.lang.String) r10, (android.graphics.drawable.Drawable) r11, (java.lang.Object) r12)
             r4 = 8
             goto L_0x0164
         L_0x0147:
@@ -1270,7 +1270,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             r11 = 0
             r7 = r15
             r12 = r6
-            r7.setImage(r8, r9, r10, r11, r12)
+            r7.setImage((org.telegram.messenger.ImageLocation) r8, (java.lang.String) r9, (java.lang.String) r10, (android.graphics.drawable.Drawable) r11, (java.lang.Object) r12)
             goto L_0x032a
         L_0x01cc:
             int r4 = r6.currentAccount

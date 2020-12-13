@@ -4,6 +4,7 @@ public class TLRPC$TL_stickerSet_layer97 extends TLRPC$TL_stickerSet {
     public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+        TLRPC$PhotoSize TLdeserialize;
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
         boolean z2 = false;
@@ -20,8 +21,8 @@ public class TLRPC$TL_stickerSet_layer97 extends TLRPC$TL_stickerSet {
         this.access_hash = abstractSerializedData.readInt64(z);
         this.title = abstractSerializedData.readString(z);
         this.short_name = abstractSerializedData.readString(z);
-        if ((this.flags & 16) != 0) {
-            this.thumb = TLRPC$PhotoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        if (!((this.flags & 16) == 0 || (TLdeserialize = TLRPC$PhotoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z)) == null)) {
+            this.thumbs.add(TLdeserialize);
         }
         this.count = abstractSerializedData.readInt32(z);
         this.hash = abstractSerializedData.readInt32(z);
@@ -44,7 +45,7 @@ public class TLRPC$TL_stickerSet_layer97 extends TLRPC$TL_stickerSet {
         abstractSerializedData.writeString(this.title);
         abstractSerializedData.writeString(this.short_name);
         if ((this.flags & 16) != 0) {
-            this.thumb.serializeToStream(abstractSerializedData);
+            this.thumbs.get(0).serializeToStream(abstractSerializedData);
         }
         abstractSerializedData.writeInt32(this.count);
         abstractSerializedData.writeInt32(this.hash);

@@ -966,7 +966,7 @@ public class ActionBarLayout extends FrameLayout {
 
     public boolean presentFragment(BaseFragment baseFragment, boolean z, boolean z2, boolean z3, boolean z4) {
         ActionBarLayoutDelegate actionBarLayoutDelegate;
-        BaseFragment baseFragment2;
+        final BaseFragment baseFragment2;
         final BaseFragment baseFragment3 = baseFragment;
         boolean z5 = z;
         boolean z6 = z2;
@@ -1137,6 +1137,7 @@ public class ActionBarLayout extends FrameLayout {
                     this.containerView.setScaleY(1.0f);
                 }
                 if (this.containerView.isKeyboardVisible || this.containerViewBack.isKeyboardVisible) {
+                    baseFragment2.saveKeyboardPositionBeforeTransition();
                     final BaseFragment baseFragment4 = baseFragment2;
                     final BaseFragment baseFragment5 = baseFragment;
                     final boolean z10 = z4;
@@ -1163,13 +1164,14 @@ public class ActionBarLayout extends FrameLayout {
                         }
                     };
                     if (baseFragment.needDelayOpenAnimation()) {
-                        if (baseFragment2 != null) {
-                            baseFragment2.onTransitionAnimationStart(false, false);
-                        }
                         this.delayedOpenAnimationRunnable = new Runnable() {
                             public void run() {
                                 if (ActionBarLayout.this.delayedOpenAnimationRunnable == this) {
                                     Runnable unused = ActionBarLayout.this.delayedOpenAnimationRunnable = null;
+                                    BaseFragment baseFragment = baseFragment2;
+                                    if (baseFragment != null) {
+                                        baseFragment.onTransitionAnimationStart(false, false);
+                                    }
                                     baseFragment3.onTransitionAnimationStart(true, false);
                                     ActionBarLayout.this.startLayoutAnimation(true, true, z7);
                                 }

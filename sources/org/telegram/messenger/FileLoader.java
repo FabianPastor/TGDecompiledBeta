@@ -1610,6 +1610,18 @@ public class FileLoader extends BaseController {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(java.util.ArrayList, int, boolean):org.telegram.tgnet.TLRPC$PhotoSize");
     }
 
+    public static TLRPC$TL_photoPathSize getPathPhotoSize(ArrayList<TLRPC$PhotoSize> arrayList) {
+        if (arrayList != null && !arrayList.isEmpty()) {
+            for (int i = 0; i < arrayList.size(); i++) {
+                TLRPC$PhotoSize tLRPC$PhotoSize = arrayList.get(i);
+                if (!(tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize)) {
+                    return (TLRPC$TL_photoPathSize) tLRPC$PhotoSize;
+                }
+            }
+        }
+        return null;
+    }
+
     public static String getFileExtension(File file) {
         String name = file.getName();
         try {

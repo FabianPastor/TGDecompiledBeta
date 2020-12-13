@@ -26,6 +26,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Document;
@@ -298,7 +299,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         this.delegate.onPageSelected(((Integer) view.getTag(NUM)).intValue());
     }
 
-    public View addStickerTab(TLObject tLObject, TLRPC$Document tLRPC$Document, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
+    public View addStickerTab(TLObject tLObject, SvgHelper.SvgDrawable svgDrawable, TLRPC$Document tLRPC$Document, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
         String str = "set" + tLRPC$TL_messages_stickerSet.set.id;
         int i = this.tabCount;
         this.tabCount = i + 1;
@@ -324,6 +325,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         frameLayout.setTag(NUM, Integer.valueOf(i));
         frameLayout.setTag(NUM, tLRPC$TL_messages_stickerSet);
         frameLayout.setTag(NUM, tLRPC$Document);
+        frameLayout.setTag(NUM, svgDrawable);
         if (i != this.currentPosition) {
             z = false;
         }
@@ -385,6 +387,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             View childAt = this.tabsContainer.getChildAt(scrollX);
             Object tag = childAt.getTag();
             Object tag2 = childAt.getTag(NUM);
+            SvgHelper.SvgDrawable svgDrawable = (SvgHelper.SvgDrawable) childAt.getTag(NUM);
             TLRPC$Document tLRPC$Document = (TLRPC$Document) childAt.getTag(NUM);
             boolean z = tag instanceof TLRPC$Document;
             if (z) {
@@ -396,12 +399,16 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             }
             if (imageLocation != null) {
                 BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);
-                if (z && MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
-                    backupImageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "30_30", imageLocation, (String) null, 0, tag2);
-                } else if (imageLocation.imageType == 1) {
-                    backupImageView.setImage(imageLocation, "30_30", "tgs", (Drawable) null, tag2);
+                if (!z || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
+                    if (imageLocation.imageType == 1) {
+                        backupImageView.setImage(imageLocation, "30_30", "tgs", (Drawable) svgDrawable, tag2);
+                    } else {
+                        backupImageView.setImage(imageLocation, (String) null, "webp", (Drawable) svgDrawable, tag2);
+                    }
+                } else if (svgDrawable != null) {
+                    backupImageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "30_30", (Drawable) svgDrawable, 0, tag2);
                 } else {
-                    backupImageView.setImage(imageLocation, (String) null, "webp", (Drawable) null, tag2);
+                    backupImageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "30_30", imageLocation, (String) null, 0, tag2);
                 }
             }
             scrollX++;

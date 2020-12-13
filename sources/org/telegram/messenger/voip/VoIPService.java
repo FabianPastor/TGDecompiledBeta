@@ -145,6 +145,40 @@ public class VoIPService extends VoIPBaseService {
         return this.isFrontFaceCamera;
     }
 
+    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0008, code lost:
+        r0 = r0.participants.get(org.telegram.messenger.UserConfig.getInstance(r2.currentAccount).getClientUserId());
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean mutedByAdmin() {
+        /*
+            r2 = this;
+            org.telegram.messenger.voip.VoIPService r0 = getSharedInstance()
+            org.telegram.messenger.ChatObject$Call r0 = r0.groupCall
+            if (r0 == 0) goto L_0x0034
+            android.util.SparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r0 = r0.participants
+            int r1 = r2.currentAccount
+            org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
+            int r1 = r1.getClientUserId()
+            java.lang.Object r0 = r0.get(r1)
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r0 = (org.telegram.tgnet.TLRPC$TL_groupCallParticipant) r0
+            if (r0 == 0) goto L_0x0034
+            boolean r1 = r0.can_self_unmute
+            if (r1 != 0) goto L_0x0034
+            boolean r0 = r0.muted
+            if (r0 == 0) goto L_0x0034
+            org.telegram.messenger.voip.VoIPService r0 = getSharedInstance()
+            org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat()
+            boolean r0 = org.telegram.messenger.ChatObject.canManageCalls(r0)
+            if (r0 != 0) goto L_0x0034
+            r0 = 1
+            return r0
+        L_0x0034:
+            r0 = 0
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.mutedByAdmin():boolean");
+    }
+
     private static class ProxyVideoSink implements VideoSink {
         private VideoSink background;
         private VideoSink target;
@@ -1616,7 +1650,7 @@ public class VoIPService extends VoIPBaseService {
                 }
                 dispatchStateChanged(6);
                 TLRPC$TL_phone_createGroupCall tLRPC$TL_phone_createGroupCall = new TLRPC$TL_phone_createGroupCall();
-                tLRPC$TL_phone_createGroupCall.channel = MessagesController.getInputChannel(this.chat);
+                tLRPC$TL_phone_createGroupCall.peer = MessagesController.getInputPeer(this.chat);
                 tLRPC$TL_phone_createGroupCall.random_id = Utilities.random.nextInt();
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_createGroupCall, new RequestDelegate(z) {
                     public final /* synthetic */ boolean f$1;
@@ -1920,16 +1954,36 @@ public class VoIPService extends VoIPBaseService {
     /* access modifiers changed from: private */
     /* renamed from: lambda$createGroupInstance$36 */
     public /* synthetic */ void lambda$createGroupInstance$36$VoIPService(int i) {
+        int i2;
         dispatchStateChanged(i == 1 ? 3 : 5);
         if (i == 0) {
             startGroupCheckShortpoll();
+            if (this.playedConnectedSound && (i2 = this.spPlayID) == 0) {
+                if (i2 != 0) {
+                    this.soundPool.stop(i2);
+                }
+                this.spPlayID = this.soundPool.play(this.spVoiceChatConnecting, 1.0f, 1.0f, 0, -1, 1.0f);
+                return;
+            }
             return;
         }
         cancelGroupCheckShortPoll();
-        if (!this.playedConnectedSound) {
-            this.soundPool.play(this.spVoiceChatStartId, 0.6f, 0.6f, 0, 0, 1.0f);
-            this.playedConnectedSound = true;
+        if (this.playedConnectedSound) {
+            int i3 = this.spPlayID;
+            if (i3 != 0) {
+                this.soundPool.stop(i3);
+                this.spPlayID = 0;
+            }
+            Runnable runnable = this.connectingSoundRunnable;
+            if (runnable != null) {
+                AndroidUtilities.cancelRunOnUIThread(runnable);
+                this.connectingSoundRunnable = null;
+                return;
+            }
+            return;
         }
+        this.soundPool.play(this.spVoiceChatStartId, 0.7f, 0.7f, 0, 0, 1.0f);
+        this.playedConnectedSound = true;
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:26:?, code lost:

@@ -229,7 +229,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r11.returnAsResult
             if (r0 == 0) goto L_0x002e
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131627064(0x7f0e0CLASSNAME, float:1.8881382E38)
+            r1 = 2131627065(0x7f0e0CLASSNAME, float:1.8881384E38)
             java.lang.String r2 = "SelectContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -270,7 +270,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r2.<init>()
             r1.setActionBarMenuItemSearchListener(r2)
             java.lang.String r2 = "Search"
-            r3 = 2131627005(0x7f0e0bfd, float:1.8881262E38)
+            r3 = 2131627006(0x7f0e0bfe, float:1.8881264E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setSearchFieldHint(r4)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
@@ -402,7 +402,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r1.setText(r2)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.subtitle
-            r2 = 2131627010(0x7f0e0CLASSNAME, float:1.8881272E38)
+            r2 = 2131627011(0x7f0e0CLASSNAME, float:1.8881274E38)
             java.lang.String r3 = "SearchEmptyViewFilteredSubtitle2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -536,7 +536,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r1.<init>(r6, r7)
             r0.setColorFilter(r1)
             org.telegram.ui.Components.RLottieImageView r0 = r11.floatingButton
-            r1 = 2131558474(0x7f0d004a, float:1.8742265E38)
+            r1 = 2131558475(0x7f0d004b, float:1.8742267E38)
             r6 = 52
             r0.setAnimation(r1, r6, r6)
             android.widget.FrameLayout r0 = r11.floatingButtonContainer

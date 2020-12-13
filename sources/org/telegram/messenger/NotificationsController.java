@@ -3278,7 +3278,7 @@ public class NotificationsController extends BaseController {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r2)
             return r0
         L_0x00c5:
-            r1 = 2131626217(0x7f0e08e9, float:1.8879664E38)
+            r1 = 2131626218(0x7f0e08ea, float:1.8879666E38)
             java.lang.Object[] r2 = new java.lang.Object[r14]
             java.lang.String r3 = r0.localUserName
             r2[r7] = r3
@@ -3403,7 +3403,7 @@ public class NotificationsController extends BaseController {
             int r4 = (int) r3
             if (r4 != 0) goto L_0x01c7
             r20[r7] = r15
-            r0 = 2131626194(0x7f0e08d2, float:1.8879617E38)
+            r0 = 2131626195(0x7f0e08d3, float:1.887962E38)
             java.lang.String r1 = "NotificationHiddenMessage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
@@ -3473,7 +3473,7 @@ public class NotificationsController extends BaseController {
             boolean r12 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation
             r14 = 3
             if (r12 == 0) goto L_0x029b
-            r1 = 2131627907(0x7f0e0var_, float:1.8883092E38)
+            r1 = 2131627909(0x7f0e0var_, float:1.8883096E38)
             r2 = 2
             java.lang.Object[] r3 = new java.lang.Object[r2]
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
@@ -3496,7 +3496,7 @@ public class NotificationsController extends BaseController {
             r3[r4] = r2
             java.lang.String r2 = "formatDateAtTime"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r2, r1, r3)
-            r2 = 2131626244(0x7f0e0904, float:1.8879719E38)
+            r2 = 2131626245(0x7f0e0905, float:1.887972E38)
             r3 = 4
             java.lang.Object[] r3 = new java.lang.Object[r3]
             org.telegram.messenger.UserConfig r5 = r18.getUserConfig()
@@ -3571,7 +3571,7 @@ public class NotificationsController extends BaseController {
             r3 = 2
             r4 = 1
             if (r1 != r10) goto L_0x031a
-            r0 = 2131626196(0x7f0e08d4, float:1.8879621E38)
+            r0 = 2131626197(0x7f0e08d5, float:1.8879623E38)
             java.lang.Object[] r1 = new java.lang.Object[r3]
             r1[r7] = r11
             java.lang.String r2 = r6.title
@@ -3696,7 +3696,7 @@ public class NotificationsController extends BaseController {
         L_0x0403:
             if (r1 == 0) goto L_0x0445
             if (r1 != r10) goto L_0x041b
-            r0 = 2131626188(0x7f0e08cc, float:1.8879605E38)
+            r0 = 2131626189(0x7f0e08cd, float:1.8879607E38)
             r1 = 2
             java.lang.Object[] r1 = new java.lang.Object[r1]
             r1[r7] = r11
@@ -3713,7 +3713,7 @@ public class NotificationsController extends BaseController {
             if (r0 != 0) goto L_0x042a
             return r15
         L_0x042a:
-            r1 = 2131626187(0x7f0e08cb, float:1.8879603E38)
+            r1 = 2131626188(0x7f0e08cc, float:1.8879605E38)
             r2 = 3
             java.lang.Object[] r2 = new java.lang.Object[r2]
             r2[r7] = r11
@@ -3755,7 +3755,7 @@ public class NotificationsController extends BaseController {
             int r2 = r2 + 1
             goto L_0x044b
         L_0x0482:
-            r0 = 2131626187(0x7f0e08cb, float:1.8879603E38)
+            r0 = 2131626188(0x7f0e08cc, float:1.8879605E38)
             r2 = 3
             java.lang.Object[] r2 = new java.lang.Object[r2]
             r2[r7] = r11
@@ -3772,7 +3772,7 @@ public class NotificationsController extends BaseController {
             r12 = 2
             boolean r14 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatJoinedByLink
             if (r14 == 0) goto L_0x04b5
-            r0 = 2131626197(0x7f0e08d5, float:1.8879623E38)
+            r0 = 2131626198(0x7f0e08d6, float:1.8879625E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             r1[r7] = r11
             java.lang.String r2 = r6.title
@@ -3804,7 +3804,7 @@ public class NotificationsController extends BaseController {
             if (r3 == 0) goto L_0x0539
             int r1 = r4.user_id
             if (r1 != r10) goto L_0x04f2
-            r0 = 2131626190(0x7f0e08ce, float:1.887961E38)
+            r0 = 2131626191(0x7f0e08cf, float:1.8879611E38)
             r3 = 2
             java.lang.Object[] r1 = new java.lang.Object[r3]
             r1[r7] = r11
@@ -3818,7 +3818,7 @@ public class NotificationsController extends BaseController {
             r3 = 2
             r4 = 1
             if (r1 != r2) goto L_0x0508
-            r0 = 2131626191(0x7f0e08cf, float:1.8879611E38)
+            r0 = 2131626192(0x7f0e08d0, float:1.8879613E38)
             java.lang.Object[] r1 = new java.lang.Object[r3]
             r1[r7] = r11
             java.lang.String r2 = r6.title
@@ -3837,7 +3837,7 @@ public class NotificationsController extends BaseController {
             r1 = 0
             return r1
         L_0x051e:
-            r1 = 2131626189(0x7f0e08cd, float:1.8879607E38)
+            r1 = 2131626190(0x7f0e08ce, float:1.887961E38)
             r2 = 3
             java.lang.Object[] r2 = new java.lang.Object[r2]
             r2[r7] = r11
@@ -5065,12 +5065,12 @@ public class NotificationsController extends BaseController {
             org.telegram.tgnet.TLRPC$Poll r0 = r2.poll
             boolean r0 = r0.quiz
             if (r0 == 0) goto L_0x0ee8
-            r0 = 2131626842(0x7f0e0b5a, float:1.8880932E38)
+            r0 = 2131626843(0x7f0e0b5b, float:1.8880934E38)
             java.lang.String r1 = "QuizPoll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
         L_0x0ee8:
-            r0 = 2131626735(0x7f0e0aef, float:1.8880715E38)
+            r0 = 2131626736(0x7f0e0af0, float:1.8880717E38)
             java.lang.String r1 = "Poll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
@@ -5180,7 +5180,7 @@ public class NotificationsController extends BaseController {
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r12, r0)
             return r0
         L_0x0fd4:
-            r0 = 2131626194(0x7f0e08d2, float:1.8879617E38)
+            r0 = 2131626195(0x7f0e08d3, float:1.887962E38)
             java.lang.String r1 = "NotificationHiddenMessage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
@@ -5227,7 +5227,7 @@ public class NotificationsController extends BaseController {
             java.lang.String r9 = r9.toString()
             boolean r9 = r8.getBoolean(r9, r6)
             boolean r10 = r19.isFcmMessage()
-            r11 = 2131626230(0x7f0e08f6, float:1.887969E38)
+            r11 = 2131626231(0x7f0e08f7, float:1.8879692E38)
             java.lang.String r12 = "NotificationMessageNoText"
             r13 = 2
             if (r10 == 0) goto L_0x00c4
@@ -5278,7 +5278,7 @@ public class NotificationsController extends BaseController {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r2)
             return r0
         L_0x00a9:
-            r1 = 2131626217(0x7f0e08e9, float:1.8879664E38)
+            r1 = 2131626218(0x7f0e08ea, float:1.8879666E38)
             java.lang.Object[] r2 = new java.lang.Object[r13]
             java.lang.String r3 = r0.localUserName
             r2[r7] = r3
@@ -5329,7 +5329,7 @@ public class NotificationsController extends BaseController {
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             goto L_0x0138
         L_0x0104:
-            r11 = 2131626238(0x7f0e08fe, float:1.8879707E38)
+            r11 = 2131626239(0x7f0e08ff, float:1.8879709E38)
             java.lang.String r12 = "NotificationMessageScheduledName"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             goto L_0x0138
@@ -5367,7 +5367,7 @@ public class NotificationsController extends BaseController {
         L_0x014d:
             int r4 = (int) r3
             if (r4 != 0) goto L_0x015b
-            r0 = 2131627839(0x7f0e0f3f, float:1.8882954E38)
+            r0 = 2131627841(0x7f0e0var_, float:1.8882958E38)
             java.lang.String r1 = "YouHaveNewMessage"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x16e7
@@ -5412,7 +5412,7 @@ public class NotificationsController extends BaseController {
         L_0x01aa:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation
             if (r2 == 0) goto L_0x020d
-            r1 = 2131627907(0x7f0e0var_, float:1.8883092E38)
+            r1 = 2131627909(0x7f0e0var_, float:1.8883096E38)
             r2 = 2
             java.lang.Object[] r3 = new java.lang.Object[r2]
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
@@ -5435,7 +5435,7 @@ public class NotificationsController extends BaseController {
             r3[r6] = r2
             java.lang.String r2 = "formatDateAtTime"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r2, r1, r3)
-            r2 = 2131626244(0x7f0e0904, float:1.8879719E38)
+            r2 = 2131626245(0x7f0e0905, float:1.887972E38)
             r3 = 4
             java.lang.Object[] r3 = new java.lang.Object[r3]
             org.telegram.messenger.UserConfig r4 = r18.getUserConfig()
@@ -5501,7 +5501,7 @@ public class NotificationsController extends BaseController {
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             java.lang.String r0 = r0.message
             r1[r6] = r0
-            r0 = 2131626241(0x7f0e0901, float:1.8879713E38)
+            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r13, r0, r1)
             r21[r2] = r6
             goto L_0x16e7
@@ -5510,12 +5510,12 @@ public class NotificationsController extends BaseController {
             java.lang.Object[] r0 = new java.lang.Object[r6]
             r0[r2] = r11
             r5 = r16
-            r1 = 2131626230(0x7f0e08f6, float:1.887969E38)
+            r1 = 2131626231(0x7f0e08f7, float:1.8879692E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r5, r1, r0)
             goto L_0x16e7
         L_0x0285:
             r5 = r16
-            r1 = 2131626230(0x7f0e08f6, float:1.887969E38)
+            r1 = 2131626231(0x7f0e08f7, float:1.8879692E38)
             r2 = 0
             java.lang.Object[] r0 = new java.lang.Object[r6]
             r0[r2] = r11
@@ -5546,7 +5546,7 @@ public class NotificationsController extends BaseController {
             r3.append(r0)
             java.lang.String r0 = r3.toString()
             r1[r6] = r0
-            r0 = 2131626241(0x7f0e0901, float:1.8879713E38)
+            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r13, r0, r1)
             r21[r2] = r6
             goto L_0x16e7
@@ -5556,14 +5556,14 @@ public class NotificationsController extends BaseController {
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             int r0 = r0.ttl_seconds
             if (r0 == 0) goto L_0x02ec
-            r0 = 2131626235(0x7f0e08fb, float:1.88797E38)
+            r0 = 2131626236(0x7f0e08fc, float:1.8879702E38)
             java.lang.Object[] r1 = new java.lang.Object[r6]
             r1[r2] = r11
             java.lang.String r2 = "NotificationMessageSDPhoto"
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             goto L_0x16e7
         L_0x02ec:
-            r0 = 2131626231(0x7f0e08f7, float:1.8879692E38)
+            r0 = 2131626232(0x7f0e08f8, float:1.8879694E38)
             java.lang.Object[] r1 = new java.lang.Object[r6]
             r1[r2] = r11
             java.lang.String r2 = "NotificationMessagePhoto"
@@ -5591,7 +5591,7 @@ public class NotificationsController extends BaseController {
             r3.append(r0)
             java.lang.String r0 = r3.toString()
             r1[r6] = r0
-            r0 = 2131626241(0x7f0e0901, float:1.8879713E38)
+            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r13, r0, r1)
             r21[r7] = r6
             goto L_0x16e7
@@ -5601,14 +5601,14 @@ public class NotificationsController extends BaseController {
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             int r0 = r0.ttl_seconds
             if (r0 == 0) goto L_0x034f
-            r0 = 2131626236(0x7f0e08fc, float:1.8879702E38)
+            r0 = 2131626237(0x7f0e08fd, float:1.8879705E38)
             java.lang.Object[] r1 = new java.lang.Object[r6]
             r1[r7] = r11
             java.lang.String r2 = "NotificationMessageSDVideo"
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             goto L_0x16e7
         L_0x034f:
-            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
+            r0 = 2131626243(0x7f0e0903, float:1.8879717E38)
             java.lang.Object[] r1 = new java.lang.Object[r6]
             r1[r7] = r11
             java.lang.String r2 = "NotificationMessageVideo"
@@ -5618,7 +5618,7 @@ public class NotificationsController extends BaseController {
             r7 = 0
             boolean r2 = r19.isGame()
             if (r2 == 0) goto L_0x037f
-            r1 = 2131626204(0x7f0e08dc, float:1.8879638E38)
+            r1 = 2131626205(0x7f0e08dd, float:1.887964E38)
             r2 = 2
             java.lang.Object[] r2 = new java.lang.Object[r2]
             r2[r7] = r11
@@ -5633,7 +5633,7 @@ public class NotificationsController extends BaseController {
         L_0x037f:
             boolean r2 = r19.isVoice()
             if (r2 == 0) goto L_0x0395
-            r0 = 2131626199(0x7f0e08d7, float:1.8879627E38)
+            r0 = 2131626200(0x7f0e08d8, float:1.887963E38)
             java.lang.Object[] r1 = new java.lang.Object[r6]
             r2 = 0
             r1[r2] = r11
@@ -5644,7 +5644,7 @@ public class NotificationsController extends BaseController {
             r2 = 0
             boolean r7 = r19.isRoundVideo()
             if (r7 == 0) goto L_0x03ab
-            r0 = 2131626234(0x7f0e08fa, float:1.8879698E38)
+            r0 = 2131626235(0x7f0e08fb, float:1.88797E38)
             java.lang.Object[] r1 = new java.lang.Object[r6]
             r1[r2] = r11
             java.lang.String r2 = "NotificationMessageRound"
@@ -5653,7 +5653,7 @@ public class NotificationsController extends BaseController {
         L_0x03ab:
             boolean r7 = r19.isMusic()
             if (r7 == 0) goto L_0x03c0
-            r0 = 2131626229(0x7f0e08f5, float:1.8879688E38)
+            r0 = 2131626230(0x7f0e08f6, float:1.887969E38)
             java.lang.Object[] r1 = new java.lang.Object[r6]
             r1[r2] = r11
             java.lang.String r2 = "NotificationMessageMusic"
@@ -5665,7 +5665,7 @@ public class NotificationsController extends BaseController {
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaContact
             if (r8 == 0) goto L_0x03e4
             org.telegram.tgnet.TLRPC$TL_messageMediaContact r7 = (org.telegram.tgnet.TLRPC$TL_messageMediaContact) r7
-            r0 = 2131626200(0x7f0e08d8, float:1.887963E38)
+            r0 = 2131626201(0x7f0e08d9, float:1.8879632E38)
             r1 = 2
             java.lang.Object[] r1 = new java.lang.Object[r1]
             r1[r2] = r11
@@ -5683,7 +5683,7 @@ public class NotificationsController extends BaseController {
             org.telegram.tgnet.TLRPC$Poll r0 = r7.poll
             boolean r1 = r0.quiz
             if (r1 == 0) goto L_0x0404
-            r1 = 2131626233(0x7f0e08f9, float:1.8879696E38)
+            r1 = 2131626234(0x7f0e08fa, float:1.8879698E38)
             r2 = 2
             java.lang.Object[] r2 = new java.lang.Object[r2]
             r3 = 0
@@ -5696,7 +5696,7 @@ public class NotificationsController extends BaseController {
         L_0x0404:
             r2 = 2
             r3 = 0
-            r1 = 2131626232(0x7f0e08f8, float:1.8879694E38)
+            r1 = 2131626233(0x7f0e08f9, float:1.8879696E38)
             java.lang.Object[] r2 = new java.lang.Object[r2]
             r2[r3] = r11
             java.lang.String r0 = r0.question
@@ -5715,7 +5715,7 @@ public class NotificationsController extends BaseController {
         L_0x0424:
             boolean r2 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeoLive
             if (r2 == 0) goto L_0x0438
-            r0 = 2131626227(0x7f0e08f3, float:1.8879684E38)
+            r0 = 2131626228(0x7f0e08f4, float:1.8879686E38)
             java.lang.Object[] r1 = new java.lang.Object[r6]
             r2 = 0
             r1[r2] = r11
@@ -5752,13 +5752,13 @@ public class NotificationsController extends BaseController {
             r4.append(r0)
             java.lang.String r0 = r4.toString()
             r1[r6] = r0
-            r0 = 2131626241(0x7f0e0901, float:1.8879713E38)
+            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r13, r0, r1)
             r21[r2] = r6
             goto L_0x16e7
         L_0x0486:
             r2 = 0
-            r0 = 2131626206(0x7f0e08de, float:1.8879642E38)
+            r0 = 2131626207(0x7f0e08df, float:1.8879644E38)
             java.lang.Object[] r1 = new java.lang.Object[r6]
             r1[r2] = r11
             java.lang.String r2 = "NotificationMessageGif"
@@ -5784,12 +5784,12 @@ public class NotificationsController extends BaseController {
             r3.append(r0)
             java.lang.String r0 = r3.toString()
             r1[r6] = r0
-            r0 = 2131626241(0x7f0e0901, float:1.8879713E38)
+            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r13, r0, r1)
             r21[r2] = r6
             goto L_0x16e7
         L_0x04cc:
-            r0 = 2131626201(0x7f0e08d9, float:1.8879632E38)
+            r0 = 2131626202(0x7f0e08da, float:1.8879634E38)
             java.lang.Object[] r1 = new java.lang.Object[r6]
             r1[r2] = r11
             java.lang.String r2 = "NotificationMessageDocument"
@@ -5799,7 +5799,7 @@ public class NotificationsController extends BaseController {
             r2 = 0
             java.lang.String r0 = r19.getStickerEmoji()
             if (r0 == 0) goto L_0x04f4
-            r1 = 2131626240(0x7f0e0900, float:1.887971E38)
+            r1 = 2131626241(0x7f0e0901, float:1.8879713E38)
             r3 = 2
             java.lang.Object[] r3 = new java.lang.Object[r3]
             r3[r2] = r11
@@ -5808,7 +5808,7 @@ public class NotificationsController extends BaseController {
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r3)
             goto L_0x0417
         L_0x04f4:
-            r0 = 2131626239(0x7f0e08ff, float:1.8879709E38)
+            r0 = 2131626240(0x7f0e0900, float:1.887971E38)
             java.lang.Object[] r1 = new java.lang.Object[r6]
             r1[r2] = r11
             java.lang.String r2 = "NotificationMessageSticker"
@@ -5825,19 +5825,19 @@ public class NotificationsController extends BaseController {
             r1[r2] = r11
             java.lang.CharSequence r0 = r0.messageText
             r1[r6] = r0
-            r0 = 2131626241(0x7f0e0901, float:1.8879713E38)
+            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r13, r0, r1)
             r21[r2] = r6
             goto L_0x16e7
         L_0x0522:
             java.lang.Object[] r0 = new java.lang.Object[r6]
             r0[r2] = r11
-            r1 = 2131626230(0x7f0e08f6, float:1.887969E38)
+            r1 = 2131626231(0x7f0e08f7, float:1.8879692E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r5, r1, r0)
             goto L_0x16e7
         L_0x052f:
             r2 = 0
-            r0 = 2131626228(0x7f0e08f4, float:1.8879686E38)
+            r0 = 2131626229(0x7f0e08f5, float:1.8879688E38)
             java.lang.Object[] r1 = new java.lang.Object[r6]
             r1[r2] = r11
             java.lang.String r2 = "NotificationMessageMap"
@@ -5851,7 +5851,7 @@ public class NotificationsController extends BaseController {
         L_0x0546:
             java.lang.Object[] r0 = new java.lang.Object[r6]
             r0[r2] = r11
-            r1 = 2131626230(0x7f0e08f6, float:1.887969E38)
+            r1 = 2131626231(0x7f0e08f7, float:1.8879692E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r5, r1, r0)
             goto L_0x16e7
         L_0x0553:
@@ -5916,7 +5916,7 @@ public class NotificationsController extends BaseController {
             r3 = 2
             r4 = 0
             if (r1 != r10) goto L_0x05db
-            r0 = 2131626196(0x7f0e08d4, float:1.8879621E38)
+            r0 = 2131626197(0x7f0e08d5, float:1.8879623E38)
             java.lang.Object[] r1 = new java.lang.Object[r3]
             r1[r4] = r11
             java.lang.String r2 = r12.title
@@ -6045,7 +6045,7 @@ public class NotificationsController extends BaseController {
         L_0x06cc:
             if (r1 == 0) goto L_0x070f
             if (r1 != r10) goto L_0x06e4
-            r0 = 2131626188(0x7f0e08cc, float:1.8879605E38)
+            r0 = 2131626189(0x7f0e08cd, float:1.8879607E38)
             r1 = 2
             java.lang.Object[] r1 = new java.lang.Object[r1]
             r1[r2] = r11
@@ -6062,7 +6062,7 @@ public class NotificationsController extends BaseController {
             r1 = 0
             return r1
         L_0x06f4:
-            r1 = 2131626187(0x7f0e08cb, float:1.8879603E38)
+            r1 = 2131626188(0x7f0e08cc, float:1.8879605E38)
             java.lang.Object[] r2 = new java.lang.Object[r7]
             r3 = 0
             r2[r3] = r11
@@ -6103,7 +6103,7 @@ public class NotificationsController extends BaseController {
             int r2 = r2 + 1
             goto L_0x0715
         L_0x074c:
-            r0 = 2131626187(0x7f0e08cb, float:1.8879603E38)
+            r0 = 2131626188(0x7f0e08cc, float:1.8879605E38)
             java.lang.Object[] r2 = new java.lang.Object[r7]
             r3 = 0
             r2[r3] = r11
@@ -6119,7 +6119,7 @@ public class NotificationsController extends BaseController {
             r9 = 2
             boolean r13 = r8 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatJoinedByLink
             if (r13 == 0) goto L_0x0780
-            r0 = 2131626197(0x7f0e08d5, float:1.8879623E38)
+            r0 = 2131626198(0x7f0e08d6, float:1.8879625E38)
             java.lang.Object[] r1 = new java.lang.Object[r9]
             r13 = 0
             r1[r13] = r11
@@ -6151,7 +6151,7 @@ public class NotificationsController extends BaseController {
             if (r5 == 0) goto L_0x0808
             int r1 = r8.user_id
             if (r1 != r10) goto L_0x07bf
-            r0 = 2131626190(0x7f0e08ce, float:1.887961E38)
+            r0 = 2131626191(0x7f0e08cf, float:1.8879611E38)
             r3 = 2
             java.lang.Object[] r1 = new java.lang.Object[r3]
             r4 = 0
@@ -6165,7 +6165,7 @@ public class NotificationsController extends BaseController {
             r3 = 2
             r4 = 0
             if (r1 != r2) goto L_0x07d6
-            r0 = 2131626191(0x7f0e08cf, float:1.8879611E38)
+            r0 = 2131626192(0x7f0e08d0, float:1.8879613E38)
             java.lang.Object[] r1 = new java.lang.Object[r3]
             r1[r4] = r11
             java.lang.String r2 = r12.title
@@ -6184,7 +6184,7 @@ public class NotificationsController extends BaseController {
             r2 = 0
             return r2
         L_0x07ec:
-            r1 = 2131626189(0x7f0e08cd, float:1.8879607E38)
+            r1 = 2131626190(0x7f0e08ce, float:1.887961E38)
             r2 = 3
             java.lang.Object[] r2 = new java.lang.Object[r2]
             r3 = 0
@@ -7327,7 +7327,7 @@ public class NotificationsController extends BaseController {
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             java.lang.String r0 = r0.message
             r1[r6] = r0
-            r0 = 2131626241(0x7f0e0901, float:1.8879713E38)
+            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r13, r0, r1)
             r21[r2] = r6
             goto L_0x16e7
@@ -7362,7 +7362,7 @@ public class NotificationsController extends BaseController {
             r3.append(r0)
             java.lang.String r0 = r3.toString()
             r1[r6] = r0
-            r0 = 2131626241(0x7f0e0901, float:1.8879713E38)
+            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r13, r0, r1)
             r21[r2] = r6
             goto L_0x16e7
@@ -7396,7 +7396,7 @@ public class NotificationsController extends BaseController {
             r3.append(r0)
             java.lang.String r0 = r3.toString()
             r1[r6] = r0
-            r0 = 2131626241(0x7f0e0901, float:1.8879713E38)
+            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r13, r0, r1)
             r21[r2] = r6
             goto L_0x16e7
@@ -7527,7 +7527,7 @@ public class NotificationsController extends BaseController {
             r4.append(r0)
             java.lang.String r0 = r4.toString()
             r1[r6] = r0
-            r0 = 2131626241(0x7f0e0901, float:1.8879713E38)
+            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r13, r0, r1)
             r21[r2] = r6
             goto L_0x16e7
@@ -7559,7 +7559,7 @@ public class NotificationsController extends BaseController {
             r3.append(r0)
             java.lang.String r0 = r3.toString()
             r1[r6] = r0
-            r0 = 2131626241(0x7f0e0901, float:1.8879713E38)
+            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r13, r0, r1)
             r21[r2] = r6
             goto L_0x16e7
@@ -7600,7 +7600,7 @@ public class NotificationsController extends BaseController {
             r1[r2] = r11
             java.lang.CharSequence r0 = r0.messageText
             r1[r6] = r0
-            r0 = 2131626241(0x7f0e0901, float:1.8879713E38)
+            r0 = 2131626242(0x7f0e0902, float:1.8879715E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r13, r0, r1)
             r21[r2] = r6
             goto L_0x16e7
@@ -7621,7 +7621,7 @@ public class NotificationsController extends BaseController {
             goto L_0x16e7
         L_0x13b0:
             boolean r2 = r19.isMediaEmpty()
-            r5 = 2131626224(0x7f0e08f0, float:1.8879678E38)
+            r5 = 2131626225(0x7f0e08f1, float:1.887968E38)
             java.lang.String r7 = "NotificationMessageGroupText"
             if (r2 == 0) goto L_0x13f3
             if (r20 != 0) goto L_0x13de
@@ -7643,7 +7643,7 @@ public class NotificationsController extends BaseController {
             goto L_0x16e7
         L_0x13de:
             r2 = 2
-            r0 = 2131626217(0x7f0e08e9, float:1.8879664E38)
+            r0 = 2131626218(0x7f0e08ea, float:1.8879666E38)
             java.lang.Object[] r1 = new java.lang.Object[r2]
             r2 = 0
             r1[r2] = r11
@@ -7682,7 +7682,7 @@ public class NotificationsController extends BaseController {
             goto L_0x16e7
         L_0x142f:
             r2 = 2
-            r0 = 2131626218(0x7f0e08ea, float:1.8879666E38)
+            r0 = 2131626219(0x7f0e08eb, float:1.8879668E38)
             java.lang.Object[] r1 = new java.lang.Object[r2]
             r2 = 0
             r1[r2] = r11
@@ -7720,7 +7720,7 @@ public class NotificationsController extends BaseController {
             goto L_0x16e7
         L_0x1480:
             r2 = 2
-            r0 = 2131626225(0x7f0e08f1, float:1.887968E38)
+            r0 = 2131626226(0x7f0e08f2, float:1.8879682E38)
             java.lang.Object[] r1 = new java.lang.Object[r2]
             r8 = 0
             r1[r8] = r11
@@ -7734,7 +7734,7 @@ public class NotificationsController extends BaseController {
             r8 = 0
             boolean r9 = r19.isVoice()
             if (r9 == 0) goto L_0x14b0
-            r0 = 2131626207(0x7f0e08df, float:1.8879644E38)
+            r0 = 2131626208(0x7f0e08e0, float:1.8879646E38)
             java.lang.Object[] r1 = new java.lang.Object[r2]
             r1[r8] = r11
             java.lang.String r2 = r12.title
@@ -7745,7 +7745,7 @@ public class NotificationsController extends BaseController {
         L_0x14b0:
             boolean r9 = r19.isRoundVideo()
             if (r9 == 0) goto L_0x14c9
-            r0 = 2131626221(0x7f0e08ed, float:1.8879672E38)
+            r0 = 2131626222(0x7f0e08ee, float:1.8879674E38)
             java.lang.Object[] r1 = new java.lang.Object[r2]
             r1[r8] = r11
             java.lang.String r2 = r12.title
@@ -7756,7 +7756,7 @@ public class NotificationsController extends BaseController {
         L_0x14c9:
             boolean r9 = r19.isMusic()
             if (r9 == 0) goto L_0x14e2
-            r0 = 2131626216(0x7f0e08e8, float:1.8879662E38)
+            r0 = 2131626217(0x7f0e08e9, float:1.8879664E38)
             java.lang.Object[] r1 = new java.lang.Object[r2]
             r1[r8] = r11
             java.lang.String r2 = r12.title
@@ -7770,7 +7770,7 @@ public class NotificationsController extends BaseController {
             boolean r8 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaContact
             if (r8 == 0) goto L_0x150c
             org.telegram.tgnet.TLRPC$TL_messageMediaContact r2 = (org.telegram.tgnet.TLRPC$TL_messageMediaContact) r2
-            r0 = 2131626208(0x7f0e08e0, float:1.8879646E38)
+            r0 = 2131626209(0x7f0e08e1, float:1.8879648E38)
             r1 = 3
             java.lang.Object[] r1 = new java.lang.Object[r1]
             r3 = 0
@@ -7792,7 +7792,7 @@ public class NotificationsController extends BaseController {
             org.telegram.tgnet.TLRPC$Poll r0 = r2.poll
             boolean r1 = r0.quiz
             if (r1 == 0) goto L_0x1532
-            r1 = 2131626220(0x7f0e08ec, float:1.887967E38)
+            r1 = 2131626221(0x7f0e08ed, float:1.8879672E38)
             r2 = 3
             java.lang.Object[] r2 = new java.lang.Object[r2]
             r3 = 0
@@ -7809,7 +7809,7 @@ public class NotificationsController extends BaseController {
             r2 = 3
             r3 = 0
             r4 = 2
-            r1 = 2131626219(0x7f0e08eb, float:1.8879668E38)
+            r1 = 2131626220(0x7f0e08ec, float:1.887967E38)
             java.lang.Object[] r2 = new java.lang.Object[r2]
             r2[r3] = r11
             java.lang.String r3 = r12.title
@@ -7822,7 +7822,7 @@ public class NotificationsController extends BaseController {
         L_0x154c:
             boolean r8 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGame
             if (r8 == 0) goto L_0x156c
-            r0 = 2131626210(0x7f0e08e2, float:1.887965E38)
+            r0 = 2131626211(0x7f0e08e3, float:1.8879652E38)
             r1 = 3
             java.lang.Object[] r1 = new java.lang.Object[r1]
             r3 = 0
@@ -7845,7 +7845,7 @@ public class NotificationsController extends BaseController {
         L_0x1576:
             boolean r8 = r2 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGeoLive
             if (r8 == 0) goto L_0x158f
-            r0 = 2131626214(0x7f0e08e6, float:1.8879658E38)
+            r0 = 2131626215(0x7f0e08e7, float:1.887966E38)
             r1 = 2
             java.lang.Object[] r1 = new java.lang.Object[r1]
             r2 = 0
@@ -7892,7 +7892,7 @@ public class NotificationsController extends BaseController {
             goto L_0x16e7
         L_0x15dd:
             r2 = 2
-            r0 = 2131626212(0x7f0e08e4, float:1.8879654E38)
+            r0 = 2131626213(0x7f0e08e5, float:1.8879656E38)
             java.lang.Object[] r1 = new java.lang.Object[r2]
             r2 = 0
             r1[r2] = r11
@@ -7928,7 +7928,7 @@ public class NotificationsController extends BaseController {
             goto L_0x16e7
         L_0x1628:
             r2 = 2
-            r0 = 2131626209(0x7f0e08e1, float:1.8879648E38)
+            r0 = 2131626210(0x7f0e08e2, float:1.887965E38)
             java.lang.Object[] r1 = new java.lang.Object[r2]
             r2 = 0
             r1[r2] = r11
@@ -7941,7 +7941,7 @@ public class NotificationsController extends BaseController {
             r2 = 0
             java.lang.String r0 = r19.getStickerEmoji()
             if (r0 == 0) goto L_0x165b
-            r1 = 2131626223(0x7f0e08ef, float:1.8879676E38)
+            r1 = 2131626224(0x7f0e08f0, float:1.8879678E38)
             r3 = 3
             java.lang.Object[] r3 = new java.lang.Object[r3]
             r3[r2] = r11
@@ -7954,7 +7954,7 @@ public class NotificationsController extends BaseController {
             goto L_0x0417
         L_0x165b:
             r4 = 2
-            r0 = 2131626222(0x7f0e08ee, float:1.8879674E38)
+            r0 = 2131626223(0x7f0e08ef, float:1.8879676E38)
             java.lang.Object[] r1 = new java.lang.Object[r4]
             r1[r2] = r11
             java.lang.String r2 = r12.title
@@ -7981,7 +7981,7 @@ public class NotificationsController extends BaseController {
         L_0x168d:
             r2 = 0
             r3 = 2
-            r0 = 2131626217(0x7f0e08e9, float:1.8879664E38)
+            r0 = 2131626218(0x7f0e08ea, float:1.8879666E38)
             java.lang.Object[] r1 = new java.lang.Object[r3]
             r1[r2] = r11
             java.lang.String r2 = r12.title
@@ -7992,7 +7992,7 @@ public class NotificationsController extends BaseController {
         L_0x16a1:
             r2 = 0
             r3 = 2
-            r0 = 2131626215(0x7f0e08e7, float:1.887966E38)
+            r0 = 2131626216(0x7f0e08e8, float:1.8879662E38)
             java.lang.Object[] r1 = new java.lang.Object[r3]
             r1[r2] = r11
             java.lang.String r2 = r12.title
@@ -8016,7 +8016,7 @@ public class NotificationsController extends BaseController {
             java.lang.String r14 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
             goto L_0x16e7
         L_0x16d2:
-            r0 = 2131626217(0x7f0e08e9, float:1.8879664E38)
+            r0 = 2131626218(0x7f0e08ea, float:1.8879666E38)
             r1 = 2
             java.lang.Object[] r1 = new java.lang.Object[r1]
             r1[r2] = r11
@@ -8032,7 +8032,7 @@ public class NotificationsController extends BaseController {
         L_0x16e7:
             return r14
         L_0x16e8:
-            r0 = 2131627839(0x7f0e0f3f, float:1.8882954E38)
+            r0 = 2131627841(0x7f0e0var_, float:1.8882958E38)
             java.lang.String r1 = "YouHaveNewMessage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
@@ -8563,7 +8563,7 @@ public class NotificationsController extends BaseController {
             r13 = 0
         L_0x0073:
             if (r35 == 0) goto L_0x0081
-            r6 = 2131626291(0x7f0e0933, float:1.8879814E38)
+            r6 = 2131626292(0x7f0e0934, float:1.8879816E38)
             java.lang.String r7 = "NotificationsSilent"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             java.lang.String r7 = "silent"
@@ -8571,11 +8571,11 @@ public class NotificationsController extends BaseController {
         L_0x0081:
             if (r33 == 0) goto L_0x00aa
             if (r34 == 0) goto L_0x008b
-            r14 = 2131626269(0x7f0e091d, float:1.887977E38)
+            r14 = 2131626270(0x7f0e091e, float:1.8879771E38)
             java.lang.String r15 = "NotificationsInAppDefault"
             goto L_0x0090
         L_0x008b:
-            r14 = 2131626253(0x7f0e090d, float:1.8879737E38)
+            r14 = 2131626254(0x7f0e090e, float:1.887974E38)
             java.lang.String r15 = "NotificationsDefault"
         L_0x0090:
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
@@ -8600,7 +8600,7 @@ public class NotificationsController extends BaseController {
             goto L_0x009b
         L_0x00aa:
             if (r34 == 0) goto L_0x00ba
-            r6 = 2131626250(0x7f0e090a, float:1.887973E38)
+            r6 = 2131626251(0x7f0e090b, float:1.8879733E38)
             java.lang.Object[] r7 = new java.lang.Object[r11]
             r7[r12] = r28
             java.lang.String r8 = "NotificationsChatInApp"
@@ -9142,7 +9142,7 @@ public class NotificationsController extends BaseController {
             r14 = r1
             android.app.NotificationChannel r1 = new android.app.NotificationChannel
             if (r23 == 0) goto L_0x04af
-            r2 = 2131627050(0x7f0e0c2a, float:1.8881353E38)
+            r2 = 2131627051(0x7f0e0c2b, float:1.8881356E38)
             java.lang.String r8 = "SecretChatName"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r8, r2)
             goto L_0x04b1
@@ -9915,12 +9915,12 @@ public class NotificationsController extends BaseController {
             if (r8 == 0) goto L_0x04ca
             if (r12 == 0) goto L_0x04c0
             java.lang.String r3 = "NotificationHiddenChatName"
-            r8 = 2131626192(0x7f0e08d0, float:1.8879613E38)
+            r8 = 2131626193(0x7f0e08d1, float:1.8879615E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r8)     // Catch:{ Exception -> 0x0a74 }
             goto L_0x04d3
         L_0x04c0:
             java.lang.String r3 = "NotificationHiddenName"
-            r8 = 2131626195(0x7f0e08d3, float:1.887962E38)
+            r8 = 2131626196(0x7f0e08d4, float:1.8879621E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r8)     // Catch:{ Exception -> 0x0a74 }
             goto L_0x04d3
         L_0x04ca:
@@ -10005,7 +10005,7 @@ public class NotificationsController extends BaseController {
             java.lang.String r12 = org.telegram.messenger.LocaleController.formatPluralString(r12, r15)     // Catch:{ Exception -> 0x0a74 }
             r15 = 1
             r11[r15] = r12     // Catch:{ Exception -> 0x0a74 }
-            r12 = 2131626243(0x7f0e0903, float:1.8879717E38)
+            r12 = 2131626244(0x7f0e0904, float:1.8879719E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r7, r12, r11)     // Catch:{ Exception -> 0x0a74 }
             r1.append(r7)     // Catch:{ Exception -> 0x0a74 }
             java.lang.String r7 = r1.toString()     // Catch:{ Exception -> 0x0a74 }
@@ -10612,7 +10612,7 @@ public class NotificationsController extends BaseController {
             if (r8 > r2) goto L_0x0a30
             r2 = 2131165475(0x7var_, float:1.7945168E38)
             java.lang.String r3 = "Reply"
-            r4 = 2131626906(0x7f0e0b9a, float:1.8881061E38)
+            r4 = 2131626907(0x7f0e0b9b, float:1.8881063E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0a74 }
             android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0a74 }
             r5 = 134217728(0x8000000, float:3.85186E-34)
@@ -10623,7 +10623,7 @@ public class NotificationsController extends BaseController {
         L_0x0a30:
             r2 = 2131165474(0x7var_, float:1.7945166E38)
             java.lang.String r3 = "Reply"
-            r4 = 2131626906(0x7f0e0b9a, float:1.8881061E38)
+            r4 = 2131626907(0x7f0e0b9b, float:1.8881063E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0a74 }
             android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0a74 }
             r5 = 134217728(0x8000000, float:3.85186E-34)
@@ -10975,7 +10975,7 @@ public class NotificationsController extends BaseController {
             long r5 = (long) r12
             boolean r5 = org.telegram.messenger.UserObject.isReplyUser((long) r5)
             if (r5 == 0) goto L_0x01d3
-            r5 = 2131626899(0x7f0e0b93, float:1.8881047E38)
+            r5 = 2131626900(0x7f0e0b94, float:1.888105E38)
             java.lang.String r6 = "RepliesTitle"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
         L_0x01cc:
@@ -11124,7 +11124,7 @@ public class NotificationsController extends BaseController {
         L_0x02e0:
             r0 = 0
         L_0x02e1:
-            r5 = 2131627050(0x7f0e0c2a, float:1.8881353E38)
+            r5 = 2131627051(0x7f0e0c2b, float:1.8881356E38)
             java.lang.String r6 = "SecretChatName"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = r0
@@ -11143,12 +11143,12 @@ public class NotificationsController extends BaseController {
             if (r16 == 0) goto L_0x031e
             if (r12 >= 0) goto L_0x030b
             r43 = r6
-            r6 = 2131626192(0x7f0e08d0, float:1.8879613E38)
+            r6 = 2131626193(0x7f0e08d1, float:1.8879615E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r6)
             goto L_0x0314
         L_0x030b:
             r43 = r6
-            r6 = 2131626195(0x7f0e08d3, float:1.887962E38)
+            r6 = 2131626196(0x7f0e08d4, float:1.8879621E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r15, r6)
         L_0x0314:
             r34 = r3
@@ -11256,7 +11256,7 @@ public class NotificationsController extends BaseController {
             androidx.core.app.RemoteInput$Builder r3 = new androidx.core.app.RemoteInput$Builder
             java.lang.String r6 = "extra_voice_reply"
             r3.<init>(r6)
-            r6 = 2131626906(0x7f0e0b9a, float:1.8881061E38)
+            r6 = 2131626907(0x7f0e0b9b, float:1.8881063E38)
             java.lang.String r7 = "Reply"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setLabel(r6)
@@ -11268,12 +11268,12 @@ public class NotificationsController extends BaseController {
             r6[r7] = r10
             java.lang.String r7 = "ReplyToGroup"
             r50 = r15
-            r15 = 2131626907(0x7f0e0b9b, float:1.8881063E38)
+            r15 = 2131626908(0x7f0e0b9c, float:1.8881065E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r7, r15, r6)
             goto L_0x0408
         L_0x03f7:
             r50 = r15
-            r6 = 2131626908(0x7f0e0b9c, float:1.8881065E38)
+            r6 = 2131626909(0x7f0e0b9d, float:1.8881068E38)
             r7 = 1
             java.lang.Object[] r15 = new java.lang.Object[r7]
             r7 = 0
@@ -11507,7 +11507,7 @@ public class NotificationsController extends BaseController {
             org.telegram.tgnet.TLRPC$Message r8 = r2.messageOwner
             boolean r8 = r8.from_scheduled
             if (r8 == 0) goto L_0x05a4
-            r8 = 2131626238(0x7f0e08fe, float:1.8879707E38)
+            r8 = 2131626239(0x7f0e08ff, float:1.8879709E38)
             r63 = r10
             java.lang.String r10 = "NotificationMessageScheduledName"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
@@ -11560,7 +11560,7 @@ public class NotificationsController extends BaseController {
             if (r12 <= 0) goto L_0x061b
             r3 = 2
             java.lang.Object[] r10 = new java.lang.Object[r3]
-            r3 = 2131626238(0x7f0e08fe, float:1.8879707E38)
+            r3 = 2131626239(0x7f0e08ff, float:1.8879709E38)
             r64 = r4
             java.lang.String r4 = "NotificationMessageScheduledName"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
@@ -11621,19 +11621,19 @@ public class NotificationsController extends BaseController {
             r40 = r6
             if (r9 <= r10) goto L_0x0674
             r6 = r46
-            r10 = 2131626192(0x7f0e08d0, float:1.8879613E38)
+            r10 = 2131626193(0x7f0e08d1, float:1.8879615E38)
             java.lang.String r46 = org.telegram.messenger.LocaleController.getString(r6, r10)
             r66 = r6
             r6 = r45
             r10 = r46
             goto L_0x06ba
         L_0x0674:
-            r10 = 2131626192(0x7f0e08d0, float:1.8879613E38)
+            r10 = 2131626193(0x7f0e08d1, float:1.8879615E38)
             goto L_0x06a2
         L_0x0678:
             r40 = r6
             r6 = r46
-            r10 = 2131626193(0x7f0e08d1, float:1.8879615E38)
+            r10 = 2131626194(0x7f0e08d2, float:1.8879617E38)
             r66 = r6
             java.lang.String r6 = "NotificationHiddenChatUserName"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r10)
@@ -11646,7 +11646,7 @@ public class NotificationsController extends BaseController {
             r6 = 27
             if (r9 <= r6) goto L_0x069d
             r6 = r45
-            r10 = 2131626195(0x7f0e08d3, float:1.887962E38)
+            r10 = 2131626196(0x7f0e08d4, float:1.8879621E38)
             java.lang.String r42 = org.telegram.messenger.LocaleController.getString(r6, r10)
             goto L_0x06b8
         L_0x069d:
@@ -11658,14 +11658,14 @@ public class NotificationsController extends BaseController {
             r6 = r45
             r66 = r46
         L_0x06a6:
-            r10 = 2131626195(0x7f0e08d3, float:1.887962E38)
+            r10 = 2131626196(0x7f0e08d4, float:1.8879621E38)
             r10 = r8
             goto L_0x06ba
         L_0x06ab:
             r40 = r6
             r6 = r45
             r66 = r46
-            r10 = 2131626195(0x7f0e08d3, float:1.887962E38)
+            r10 = 2131626196(0x7f0e08d4, float:1.8879621E38)
             r20 = 0
             r42 = r11[r20]
         L_0x06b8:

@@ -33,7 +33,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.voip.VoIPService;
@@ -148,64 +147,66 @@ public class VoIPHelper {
         String str;
         int i3;
         String str2;
-        boolean z = false;
-        if (ConnectionsManager.getInstance(UserConfig.selectedAccount).getConnectionState() != 3) {
-            if (Settings.System.getInt(activity.getContentResolver(), "airplane_mode_on", 0) != 0) {
-                z = true;
-            }
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
-            if (z) {
-                i2 = NUM;
-                str = "VoipOfflineAirplaneTitle";
-            } else {
-                i2 = NUM;
-                str = "VoipOfflineTitle";
-            }
-            builder.setTitle(LocaleController.getString(str, i2));
-            if (z) {
-                i3 = NUM;
-                str2 = "VoipGroupOfflineAirplane";
-            } else {
-                i3 = NUM;
-                str2 = "VoipGroupOffline";
-            }
-            builder.setMessage(LocaleController.getString(str2, i3));
-            builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-            if (z) {
-                Intent intent = new Intent("android.settings.AIRPLANE_MODE_SETTINGS");
-                if (intent.resolveActivity(activity.getPackageManager()) != null) {
-                    builder.setNeutralButton(LocaleController.getString("VoipOfflineOpenSettings", NUM), new DialogInterface.OnClickListener(activity, intent) {
-                        public final /* synthetic */ Activity f$0;
-                        public final /* synthetic */ Intent f$1;
-
-                        {
-                            this.f$0 = r1;
-                            this.f$1 = r2;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            this.f$0.startActivity(this.f$1);
-                        }
-                    });
+        if (activity != null) {
+            boolean z = false;
+            if (ConnectionsManager.getInstance(UserConfig.selectedAccount).getConnectionState() != 3) {
+                if (Settings.System.getInt(activity.getContentResolver(), "airplane_mode_on", 0) != 0) {
+                    z = true;
                 }
-            }
-            try {
-                builder.show();
-            } catch (Exception e) {
-                FileLog.e((Throwable) e);
-            }
-        } else if (Build.VERSION.SDK_INT >= 23) {
-            ArrayList arrayList = new ArrayList();
-            if (activity.checkSelfPermission("android.permission.RECORD_AUDIO") != 0) {
-                arrayList.add("android.permission.RECORD_AUDIO");
-            }
-            if (arrayList.isEmpty()) {
-                initiateCall((TLRPC$User) null, tLRPC$Chat, false, false, i, activity);
+                AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
+                if (z) {
+                    i2 = NUM;
+                    str = "VoipOfflineAirplaneTitle";
+                } else {
+                    i2 = NUM;
+                    str = "VoipOfflineTitle";
+                }
+                builder.setTitle(LocaleController.getString(str, i2));
+                if (z) {
+                    i3 = NUM;
+                    str2 = "VoipGroupOfflineAirplane";
+                } else {
+                    i3 = NUM;
+                    str2 = "VoipGroupOffline";
+                }
+                builder.setMessage(LocaleController.getString(str2, i3));
+                builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+                if (z) {
+                    Intent intent = new Intent("android.settings.AIRPLANE_MODE_SETTINGS");
+                    if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                        builder.setNeutralButton(LocaleController.getString("VoipOfflineOpenSettings", NUM), new DialogInterface.OnClickListener(activity, intent) {
+                            public final /* synthetic */ Activity f$0;
+                            public final /* synthetic */ Intent f$1;
+
+                            {
+                                this.f$0 = r1;
+                                this.f$1 = r2;
+                            }
+
+                            public final void onClick(DialogInterface dialogInterface, int i) {
+                                this.f$0.startActivity(this.f$1);
+                            }
+                        });
+                    }
+                }
+                try {
+                    builder.show();
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
+                }
+            } else if (Build.VERSION.SDK_INT >= 23) {
+                ArrayList arrayList = new ArrayList();
+                if (activity.checkSelfPermission("android.permission.RECORD_AUDIO") != 0) {
+                    arrayList.add("android.permission.RECORD_AUDIO");
+                }
+                if (arrayList.isEmpty()) {
+                    initiateCall((TLRPC$User) null, tLRPC$Chat, false, false, i, activity);
+                } else {
+                    activity.requestPermissions((String[]) arrayList.toArray(new String[0]), 103);
+                }
             } else {
-                activity.requestPermissions((String[]) arrayList.toArray(new String[0]), 103);
+                initiateCall((TLRPC$User) null, tLRPC$Chat, false, false, i, activity);
             }
-        } else {
-            initiateCall((TLRPC$User) null, tLRPC$Chat, false, false, i, activity);
         }
     }
 
@@ -991,7 +992,7 @@ public class VoIPHelper {
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    VoIPHelper.lambda$showGroupCallAlert$18(BaseFragment.this, this.f$1, dialogInterface, i);
+                    VoIPHelper.lambda$showGroupCallAlert$17(BaseFragment.this, this.f$1, dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -999,23 +1000,9 @@ public class VoIPHelper {
         }
     }
 
-    static /* synthetic */ void lambda$showGroupCallAlert$18(BaseFragment baseFragment, TLRPC$Chat tLRPC$Chat, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$showGroupCallAlert$17(BaseFragment baseFragment, TLRPC$Chat tLRPC$Chat, DialogInterface dialogInterface, int i) {
         if (baseFragment.getParentActivity() != null) {
-            if (tLRPC$Chat.megagroup) {
-                startCall(tLRPC$Chat, 1, baseFragment.getParentActivity());
-            } else {
-                baseFragment.getMessagesController().convertToMegaGroup(baseFragment.getParentActivity(), tLRPC$Chat.id, baseFragment, new MessagesStorage.IntCallback() {
-                    public final void run(int i) {
-                        VoIPHelper.lambda$null$17(BaseFragment.this, i);
-                    }
-                });
-            }
-        }
-    }
-
-    static /* synthetic */ void lambda$null$17(BaseFragment baseFragment, int i) {
-        if (i != 0) {
-            startCall(baseFragment.getMessagesController().getChat(Integer.valueOf(i)), 1, baseFragment.getParentActivity());
+            startCall(tLRPC$Chat, 1, baseFragment.getParentActivity());
         }
     }
 }

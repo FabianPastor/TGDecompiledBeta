@@ -18,16 +18,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
-import org.telegram.tgnet.TLRPC$TL_photoSize;
-import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
@@ -189,22 +189,27 @@ public class StickerSetCell extends FrameLayout {
         }
         this.valueTextView.setText(LocaleController.formatPluralString("Stickers", arrayList.size()));
         TLRPC$Document tLRPC$Document = arrayList.get(0);
-        TLObject tLObject = tLRPC$TL_messages_stickerSet.set.thumb;
-        if (!(tLObject instanceof TLRPC$TL_photoSize) && !(tLObject instanceof TLRPC$TL_photoSizeProgressive)) {
-            tLObject = tLRPC$Document;
+        TLObject closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_messages_stickerSet.set.thumbs, 90);
+        if (closestPhotoSizeWithSize == null) {
+            closestPhotoSizeWithSize = tLRPC$Document;
         }
-        boolean z2 = tLObject instanceof TLRPC$Document;
+        SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$TL_messages_stickerSet.set.thumbs, "windowBackgroundGray", 1.0f);
+        boolean z2 = closestPhotoSizeWithSize instanceof TLRPC$Document;
         if (z2) {
             imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
         } else {
-            imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) tLObject, tLRPC$Document);
+            imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document);
         }
-        if (z2 && MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
-            this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", imageLocation, (String) null, 0, (Object) tLRPC$TL_messages_stickerSet);
-        } else if (imageLocation == null || imageLocation.imageType != 1) {
-            this.imageView.setImage(imageLocation, "50_50", "webp", (Drawable) null, tLRPC$TL_messages_stickerSet);
+        if (!z2 || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
+            if (imageLocation == null || imageLocation.imageType != 1) {
+                this.imageView.setImage(imageLocation, "50_50", "webp", (Drawable) svgThumb, (Object) tLRPC$TL_messages_stickerSet);
+            } else {
+                this.imageView.setImage(imageLocation, "50_50", "tgs", (Drawable) svgThumb, (Object) tLRPC$TL_messages_stickerSet);
+            }
+        } else if (svgThumb != null) {
+            this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", (Drawable) svgThumb, 0, (Object) tLRPC$TL_messages_stickerSet);
         } else {
-            this.imageView.setImage(imageLocation, "50_50", "tgs", (Drawable) null, tLRPC$TL_messages_stickerSet);
+            this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", imageLocation, (String) null, 0, (Object) tLRPC$TL_messages_stickerSet);
         }
     }
 

@@ -125,7 +125,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 this.stickerView.setImageDrawable(this.drawable);
                 return;
             }
-            this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$TL_messages_stickerSet.documents.get(2)), "104_104", "tgs", this.drawable, tLRPC$TL_messages_stickerSet);
+            this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$TL_messages_stickerSet.documents.get(2)), "104_104", "tgs", (Drawable) this.drawable, (Object) tLRPC$TL_messages_stickerSet);
         }
 
         /* access modifiers changed from: protected */

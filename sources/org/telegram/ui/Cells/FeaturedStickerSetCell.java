@@ -17,18 +17,18 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
-import org.telegram.tgnet.TLRPC$TL_photoSize;
-import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -176,26 +176,31 @@ public class FeaturedStickerSetCell extends FrameLayout {
             tLRPC$Document = tLRPC$StickerSetCovered2.covers.get(0);
         }
         if (tLRPC$Document != null) {
-            TLObject tLObject = tLRPC$StickerSetCovered2.set.thumb;
-            if (!(tLObject instanceof TLRPC$TL_photoSize) && !(tLObject instanceof TLRPC$TL_photoSizeProgressive)) {
-                tLObject = tLRPC$Document;
+            TLObject closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$StickerSetCovered2.set.thumbs, 90);
+            if (closestPhotoSizeWithSize == null) {
+                closestPhotoSizeWithSize = tLRPC$Document;
             }
-            boolean z6 = tLObject instanceof TLRPC$Document;
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$StickerSetCovered2.set.thumbs, "windowBackgroundGray", 1.0f);
+            boolean z6 = closestPhotoSizeWithSize instanceof TLRPC$Document;
             if (z6) {
                 imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
             } else {
-                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) tLObject, tLRPC$Document);
+                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document);
             }
             ImageLocation imageLocation2 = imageLocation;
-            if (z6 && MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
-                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", imageLocation2, (String) null, 0, (Object) tLRPC$StickerSetCovered);
-            } else if (imageLocation2 == null || imageLocation2.imageType != 1) {
-                this.imageView.setImage(imageLocation2, "50_50", "webp", (Drawable) null, tLRPC$StickerSetCovered);
+            if (!z6 || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
+                if (imageLocation2 == null || imageLocation2.imageType != 1) {
+                    this.imageView.setImage(imageLocation2, "50_50", "webp", (Drawable) svgThumb, (Object) tLRPC$StickerSetCovered);
+                } else {
+                    this.imageView.setImage(imageLocation2, "50_50", "tgs", (Drawable) svgThumb, (Object) tLRPC$StickerSetCovered);
+                }
+            } else if (svgThumb != null) {
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", (Drawable) svgThumb, 0, (Object) tLRPC$StickerSetCovered);
             } else {
-                this.imageView.setImage(imageLocation2, "50_50", "tgs", (Drawable) null, tLRPC$StickerSetCovered);
+                this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", imageLocation2, (String) null, 0, (Object) tLRPC$StickerSetCovered);
             }
         } else {
-            this.imageView.setImage((ImageLocation) null, (String) null, "webp", (Drawable) null, tLRPC$StickerSetCovered);
+            this.imageView.setImage((ImageLocation) null, (String) null, "webp", (Drawable) null, (Object) tLRPC$StickerSetCovered);
         }
         if (z4) {
             boolean z7 = this.isInstalled;

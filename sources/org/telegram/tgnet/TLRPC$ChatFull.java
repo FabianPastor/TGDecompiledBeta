@@ -80,6 +80,9 @@ public abstract class TLRPC$ChatFull extends TLObject {
             case 56920439:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer99();
                 break;
+            case 231260545:
+                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                break;
             case 277964371:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer103();
                 break;
@@ -87,7 +90,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer71();
                 break;
             case 461151667:
-                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                tLRPC$ChatFull = new TLRPC$TL_chatFull_layer121();
                 break;
             case 478652186:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer98();

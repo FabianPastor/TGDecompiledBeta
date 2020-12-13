@@ -2249,6 +2249,7 @@
     <string name="NotificationGroupAddSelfMega">%1$s joined the group %2$s</string>
     <string name="NotificationGroupAlbum">%1$s sent an album to the group %2$s</string>
     <string name="NotificationGroupCreatedCall">%1$s started a voice chat in the group %2$s</string>
+    <string name="NotificationGroupEndedCall">%1$s ended a voice chat in the group %2$s</string>
     <string name="NotificationGroupFew">%1$s sent %3$s to the group %2$s</string>
     <string name="NotificationGroupForwardedFew">%1$s forwarded %3$s to the group %2$s</string>
     <string name="NotificationGroupInvitedToCall">%1$s invited %3$s to a voice chat in the group %2$s</string>
@@ -3818,6 +3819,7 @@
     <string name="VoipMute">Mute</string>
     <string name="VoipMutedByAdmin">Muted by admin</string>
     <string name="VoipMutedByAdminInfo">You are in Listen Only Mode</string>
+    <string name="VoipMutedByAdminShort">Muted</string>
     <string name="VoipNeedMicCameraPermission">Telegram needs access to your microphone and camera so that you can make video calls.</string>
     <string name="VoipNeedMicPermission">Telegram needs access to your microphone so that you can make calls.</string>
     <string name="VoipNotificationSettings">Voice calls</string>

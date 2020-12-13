@@ -32,10 +32,10 @@ public class FragmentContextViewWavesDrawable {
     WeavingState pausedState;
     WeavingState previousState;
     float progressToState = 1.0f;
-    WeavingState[] states = new WeavingState[3];
+    WeavingState[] states = new WeavingState[4];
 
     public FragmentContextViewWavesDrawable() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             this.states[i] = new WeavingState(i);
         }
     }
@@ -226,7 +226,7 @@ public class FragmentContextViewWavesDrawable {
                 return;
             }
             VoIPService.getSharedInstance().setMicMute(true, false, false);
-            setState(2);
+            setState(3);
         }
     }
 
@@ -271,7 +271,8 @@ public class FragmentContextViewWavesDrawable {
         }
 
         public void update(int i, int i2, long j, float f) {
-            if (this.currentState != 2) {
+            int i3 = this.currentState;
+            if (i3 != 2 && i3 != 3) {
                 float f2 = this.duration;
                 if (f2 == 0.0f || this.time >= f2) {
                     this.duration = (float) (Utilities.random.nextInt(700) + 500);
@@ -337,7 +338,7 @@ public class FragmentContextViewWavesDrawable {
                 return;
             }
             paint.setShader((Shader) null);
-            paint.setColor(Theme.getColor("voipgroup_topPanelGray"));
+            paint.setColor(Theme.getColor(this.currentState == 2 ? "voipgroup_topPanelGray" : "voipgroup_topPanelGray2"));
         }
     }
 }

@@ -1365,6 +1365,7 @@ public final class R {
         public static final int start = NUM;
         public static final int strict_sandbox = NUM;
         public static final int subtitle = NUM;
+        public static final int svg_tag = NUM;
         public static final int tag_accessibility_actions = NUM;
         public static final int tag_accessibility_clickable_spans = NUM;
         public static final int tag_accessibility_heading = NUM;
@@ -1499,6 +1500,7 @@ public final class R {
         public static final int tsv_setup_monkey_tracking = NUM;
         public static final int voice_muted = NUM;
         public static final int voice_outlined = NUM;
+        public static final int voicechat_connecting = NUM;
         public static final int voicechat_join = NUM;
         public static final int voicechat_leave = NUM;
         public static final int voip_busy = NUM;
@@ -3770,6 +3772,7 @@ public final class R {
         public static final int NotificationGroupAddSelfMega = NUM;
         public static final int NotificationGroupAlbum = NUM;
         public static final int NotificationGroupCreatedCall = NUM;
+        public static final int NotificationGroupEndedCall = NUM;
         public static final int NotificationGroupFew = NUM;
         public static final int NotificationGroupForwardedFew = NUM;
         public static final int NotificationGroupInvitedToCall = NUM;
@@ -5339,6 +5342,7 @@ public final class R {
         public static final int VoipMute = NUM;
         public static final int VoipMutedByAdmin = NUM;
         public static final int VoipMutedByAdminInfo = NUM;
+        public static final int VoipMutedByAdminShort = NUM;
         public static final int VoipNeedMicCameraPermission = NUM;
         public static final int VoipNeedMicPermission = NUM;
         public static final int VoipNotificationSettings = NUM;

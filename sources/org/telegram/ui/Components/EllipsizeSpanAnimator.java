@@ -14,20 +14,25 @@ import org.telegram.ui.Components.EllipsizeSpanAnimator;
 public class EllipsizeSpanAnimator {
     boolean attachedToWindow;
     /* access modifiers changed from: private */
-    public AnimatorSet ellAnimator;
-    private TextAlphaSpan[] ellSpans = {new TextAlphaSpan(), new TextAlphaSpan(), new TextAlphaSpan()};
+    public final AnimatorSet ellAnimator;
+    private final TextAlphaSpan[] ellSpans;
     public ArrayList<View> ellipsizedViews = new ArrayList<>();
 
     public EllipsizeSpanAnimator(final View view) {
+        TextAlphaSpan[] textAlphaSpanArr = {new TextAlphaSpan(), new TextAlphaSpan(), new TextAlphaSpan()};
+        this.ellSpans = textAlphaSpanArr;
         AnimatorSet animatorSet = new AnimatorSet();
         this.ellAnimator = animatorSet;
-        animatorSet.playTogether(new Animator[]{createEllipsizeAnimator(this.ellSpans[0], 0, 255, 0, 300), createEllipsizeAnimator(this.ellSpans[1], 0, 255, 150, 300), createEllipsizeAnimator(this.ellSpans[2], 0, 255, 300, 300), createEllipsizeAnimator(this.ellSpans[0], 255, 0, 1000, 400), createEllipsizeAnimator(this.ellSpans[1], 255, 0, 1000, 400), createEllipsizeAnimator(this.ellSpans[2], 255, 0, 1000, 400)});
-        this.ellAnimator.addListener(new AnimatorListenerAdapter() {
+        animatorSet.playTogether(new Animator[]{createEllipsizeAnimator(textAlphaSpanArr[0], 0, 255, 0, 300), createEllipsizeAnimator(textAlphaSpanArr[1], 0, 255, 150, 300), createEllipsizeAnimator(textAlphaSpanArr[2], 0, 255, 300, 300), createEllipsizeAnimator(textAlphaSpanArr[0], 255, 0, 1000, 400), createEllipsizeAnimator(textAlphaSpanArr[1], 255, 0, 1000, 400), createEllipsizeAnimator(textAlphaSpanArr[2], 255, 0, 1000, 400)});
+        animatorSet.addListener(new AnimatorListenerAdapter() {
             private Runnable restarter = new Runnable() {
                 public void run() {
                     EllipsizeSpanAnimator ellipsizeSpanAnimator = EllipsizeSpanAnimator.this;
-                    if (ellipsizeSpanAnimator.attachedToWindow && !ellipsizeSpanAnimator.ellipsizedViews.isEmpty()) {
-                        EllipsizeSpanAnimator.this.ellAnimator.start();
+                    if (ellipsizeSpanAnimator.attachedToWindow && !ellipsizeSpanAnimator.ellipsizedViews.isEmpty() && !EllipsizeSpanAnimator.this.ellAnimator.isRunning()) {
+                        try {
+                            EllipsizeSpanAnimator.this.ellAnimator.start();
+                        } catch (Exception unused) {
+                        }
                     }
                 }
             };
@@ -98,7 +103,9 @@ public class EllipsizeSpanAnimator {
         if (this.ellipsizedViews.isEmpty()) {
             this.ellAnimator.start();
         }
-        this.ellipsizedViews.add(view);
+        if (!this.ellipsizedViews.contains(view)) {
+            this.ellipsizedViews.add(view);
+        }
     }
 
     public void removeView(View view) {

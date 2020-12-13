@@ -36,6 +36,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
     private RLottieImageView muteButton;
     Paint paint = new Paint(1);
     WeavingState pausedState;
+    float pinnedProgress;
     boolean prepareToRemove;
     private final LinearGradient prepareToRemoveShader;
     float pressedProgress;
@@ -45,7 +46,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
     float progressToState = 1.0f;
     Random random = new Random();
     float removeAngle;
-    WeavingState[] states = new WeavingState[3];
+    WeavingState[] states = new WeavingState[4];
     private boolean stub;
 
     public /* synthetic */ void onCameraSwitch(boolean z) {
@@ -72,7 +73,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
         super(context);
         this.stub = z;
         this.currentAccount = i;
-        for (int i2 = 0; i2 < 3; i2++) {
+        for (int i2 = 0; i2 < 4; i2++) {
             this.states[i2] = new WeavingState(i2);
         }
         this.blobDrawable.maxRadius = (float) AndroidUtilities.dp(37.0f);
@@ -98,6 +99,10 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
 
     public void setPressedState(boolean z) {
         this.pressedState = z;
+    }
+
+    public void setPinnedProgress(float f) {
+        this.pinnedProgress = f;
     }
 
     public static class WeavingState {
@@ -184,9 +189,10 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
         }
 
         public void setToPaint(Paint paint) {
-            if (this.currentState == 2) {
+            int i = this.currentState;
+            if (i == 2 || i == 3) {
                 paint.setShader((Shader) null);
-                paint.setColor(Theme.getColor("voipgroup_topPanelGray"));
+                paint.setColor(Theme.getColor(this.currentState == 3 ? "voipgroup_topPanelGray2" : "voipgroup_topPanelGray"));
                 return;
             }
             paint.setShader(this.shader);
@@ -194,15 +200,15 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x005c  */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x0099  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x00b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x00cf  */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x00e1  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x00fb  */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x00ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x010e  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x0118  */
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x0065  */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x00a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00c0  */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x00d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x00ea  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x0104  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x0108  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x0117  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0121  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onDraw(android.graphics.Canvas r18) {
         /*
@@ -210,168 +216,173 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
             r0 = r17
             r1 = r18
             super.onDraw(r18)
+            float r2 = r17.getAlpha()
+            r3 = 0
+            int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
+            if (r2 != 0) goto L_0x0011
+            return
+        L_0x0011:
             int r2 = r17.getMeasuredWidth()
-            r3 = 1
-            int r2 = r2 >> r3
+            r4 = 1
+            int r2 = r2 >> r4
             float r2 = (float) r2
-            int r4 = r17.getMeasuredHeight()
-            int r4 = r4 >> r3
-            float r4 = (float) r4
-            boolean r5 = r0.pressedState
-            r6 = 1037726734(0x3dda740e, float:0.10666667)
-            r7 = 0
+            int r5 = r17.getMeasuredHeight()
+            int r5 = r5 >> r4
+            float r5 = (float) r5
+            boolean r6 = r0.pressedState
+            r7 = 1037726734(0x3dda740e, float:0.10666667)
             r8 = 1065353216(0x3var_, float:1.0)
-            if (r5 == 0) goto L_0x002e
+            if (r6 == 0) goto L_0x0037
             float r9 = r0.pressedProgress
             int r10 = (r9 > r8 ? 1 : (r9 == r8 ? 0 : -1))
-            if (r10 == 0) goto L_0x002e
-            float r9 = r9 + r6
+            if (r10 == 0) goto L_0x0037
+            float r9 = r9 + r7
             r0.pressedProgress = r9
-            int r5 = (r9 > r8 ? 1 : (r9 == r8 ? 0 : -1))
-            if (r5 <= 0) goto L_0x003f
+            int r6 = (r9 > r8 ? 1 : (r9 == r8 ? 0 : -1))
+            if (r6 <= 0) goto L_0x0048
             r0.pressedProgress = r8
-            goto L_0x003f
-        L_0x002e:
-            if (r5 != 0) goto L_0x003f
-            float r5 = r0.pressedProgress
-            int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-            if (r9 == 0) goto L_0x003f
-            float r5 = r5 - r6
-            r0.pressedProgress = r5
-            int r5 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-            if (r5 >= 0) goto L_0x003f
-            r0.pressedProgress = r7
-        L_0x003f:
-            org.telegram.ui.Components.CubicBezierInterpolator r5 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
+            goto L_0x0048
+        L_0x0037:
+            if (r6 != 0) goto L_0x0048
             float r6 = r0.pressedProgress
-            float r5 = r5.getInterpolation(r6)
-            org.telegram.ui.Components.RLottieImageView r6 = r0.muteButton
+            int r9 = (r6 > r3 ? 1 : (r6 == r3 ? 0 : -1))
+            if (r9 == 0) goto L_0x0048
+            float r6 = r6 - r7
+            r0.pressedProgress = r6
+            int r6 = (r6 > r3 ? 1 : (r6 == r3 ? 0 : -1))
+            if (r6 >= 0) goto L_0x0048
+            r0.pressedProgress = r3
+        L_0x0048:
+            org.telegram.ui.Components.CubicBezierInterpolator r6 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
+            float r7 = r0.pressedProgress
+            float r6 = r6.getInterpolation(r7)
+            org.telegram.ui.Components.RLottieImageView r7 = r0.muteButton
             r9 = 1036831949(0x3dcccccd, float:0.1)
-            float r5 = r5 * r9
-            float r10 = r5 + r8
-            r6.setScaleY(r10)
-            org.telegram.ui.Components.RLottieImageView r6 = r0.muteButton
-            r6.setScaleX(r10)
-            boolean r6 = r0.stub
-            if (r6 == 0) goto L_0x0091
+            float r6 = r6 * r9
+            float r10 = r6 + r8
+            r7.setScaleY(r10)
+            org.telegram.ui.Components.RLottieImageView r7 = r0.muteButton
+            r7.setScaleX(r10)
+            boolean r7 = r0.stub
+            if (r7 == 0) goto L_0x009a
             long r11 = java.lang.System.currentTimeMillis()
             long r13 = r0.lastStubUpdateAmplitude
             long r13 = r11 - r13
             r15 = 1000(0x3e8, double:4.94E-321)
-            int r6 = (r13 > r15 ? 1 : (r13 == r15 ? 0 : -1))
-            if (r6 <= 0) goto L_0x0091
+            int r7 = (r13 > r15 ? 1 : (r13 == r15 ? 0 : -1))
+            if (r7 <= 0) goto L_0x009a
             r0.lastStubUpdateAmplitude = r11
-            java.util.Random r6 = r0.random
-            int r6 = r6.nextInt()
-            int r6 = r6 % 100
-            int r6 = java.lang.Math.abs(r6)
-            float r6 = (float) r6
+            java.util.Random r7 = r0.random
+            int r7 = r7.nextInt()
+            int r7 = r7 % 100
+            int r7 = java.lang.Math.abs(r7)
+            float r7 = (float) r7
             r11 = 1056964608(0x3var_, float:0.5)
-            float r6 = r6 * r11
+            float r7 = r7 * r11
             r12 = 1120403456(0x42CLASSNAME, float:100.0)
-            float r6 = r6 / r12
-            float r6 = r6 + r11
-            r0.animateToAmplitude = r6
+            float r7 = r7 / r12
+            float r7 = r7 + r11
+            r0.animateToAmplitude = r7
             float r11 = r0.amplitude
-            float r6 = r6 - r11
+            float r7 = r7 - r11
             r11 = 1153138688(0x44bb8000, float:1500.0)
             float r13 = org.telegram.ui.Components.BlobDrawable.AMPLITUDE_SPEED
             float r13 = r13 * r11
             float r13 = r13 + r12
-            float r6 = r6 / r13
-            r0.animateAmplitudeDiff = r6
-        L_0x0091:
-            float r6 = r0.animateToAmplitude
+            float r7 = r7 / r13
+            r0.animateAmplitudeDiff = r7
+        L_0x009a:
+            float r7 = r0.animateToAmplitude
             float r11 = r0.amplitude
-            int r12 = (r6 > r11 ? 1 : (r6 == r11 ? 0 : -1))
-            if (r12 == 0) goto L_0x00b3
+            int r12 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1))
+            if (r12 == 0) goto L_0x00bc
             float r12 = r0.animateAmplitudeDiff
             r13 = 1098907648(0x41800000, float:16.0)
             float r13 = r13 * r12
             float r11 = r11 + r13
             r0.amplitude = r11
-            int r12 = (r12 > r7 ? 1 : (r12 == r7 ? 0 : -1))
-            if (r12 <= 0) goto L_0x00ad
-            int r11 = (r11 > r6 ? 1 : (r11 == r6 ? 0 : -1))
-            if (r11 <= 0) goto L_0x00b3
-            r0.amplitude = r6
-            goto L_0x00b3
-        L_0x00ad:
-            int r11 = (r11 > r6 ? 1 : (r11 == r6 ? 0 : -1))
-            if (r11 >= 0) goto L_0x00b3
-            r0.amplitude = r6
-        L_0x00b3:
-            org.telegram.ui.Components.GroupCallPipButton$WeavingState r6 = r0.previousState
-            if (r6 == 0) goto L_0x00c8
-            float r6 = r0.progressToState
+            int r12 = (r12 > r3 ? 1 : (r12 == r3 ? 0 : -1))
+            if (r12 <= 0) goto L_0x00b6
+            int r11 = (r11 > r7 ? 1 : (r11 == r7 ? 0 : -1))
+            if (r11 <= 0) goto L_0x00bc
+            r0.amplitude = r7
+            goto L_0x00bc
+        L_0x00b6:
+            int r11 = (r11 > r7 ? 1 : (r11 == r7 ? 0 : -1))
+            if (r11 >= 0) goto L_0x00bc
+            r0.amplitude = r7
+        L_0x00bc:
+            org.telegram.ui.Components.GroupCallPipButton$WeavingState r7 = r0.previousState
+            if (r7 == 0) goto L_0x00d1
+            float r7 = r0.progressToState
             r11 = 1032000111(0x3d83126f, float:0.064)
-            float r6 = r6 + r11
-            r0.progressToState = r6
-            int r6 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r6 <= 0) goto L_0x00c8
+            float r7 = r7 + r11
+            r0.progressToState = r7
+            int r7 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
+            if (r7 <= 0) goto L_0x00d1
             r0.progressToState = r8
-            r6 = 0
-            r0.previousState = r6
-        L_0x00c8:
-            boolean r6 = r0.prepareToRemove
+            r7 = 0
+            r0.previousState = r7
+        L_0x00d1:
+            boolean r7 = r0.prepareToRemove
             r11 = 1027292903(0x3d3b3ee7, float:0.NUM)
-            if (r6 == 0) goto L_0x00df
+            if (r7 == 0) goto L_0x00e8
             float r12 = r0.progressToPrepareRemove
             int r13 = (r12 > r8 ? 1 : (r12 == r8 ? 0 : -1))
-            if (r13 == 0) goto L_0x00df
+            if (r13 == 0) goto L_0x00e8
             float r12 = r12 + r11
             r0.progressToPrepareRemove = r12
-            int r6 = (r12 > r8 ? 1 : (r12 == r8 ? 0 : -1))
-            if (r6 <= 0) goto L_0x00f0
+            int r7 = (r12 > r8 ? 1 : (r12 == r8 ? 0 : -1))
+            if (r7 <= 0) goto L_0x00f9
             r0.progressToPrepareRemove = r8
-            goto L_0x00f0
-        L_0x00df:
-            if (r6 != 0) goto L_0x00f0
-            float r6 = r0.progressToPrepareRemove
-            int r12 = (r6 > r7 ? 1 : (r6 == r7 ? 0 : -1))
-            if (r12 == 0) goto L_0x00f0
-            float r6 = r6 - r11
-            r0.progressToPrepareRemove = r6
-            int r6 = (r6 > r7 ? 1 : (r6 == r7 ? 0 : -1))
-            if (r6 >= 0) goto L_0x00f0
+            goto L_0x00f9
+        L_0x00e8:
+            if (r7 != 0) goto L_0x00f9
+            float r7 = r0.progressToPrepareRemove
+            int r12 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1))
+            if (r12 == 0) goto L_0x00f9
+            float r7 = r7 - r11
             r0.progressToPrepareRemove = r7
-        L_0x00f0:
-            org.telegram.ui.Components.BlobDrawable r6 = r0.blobDrawable
+            int r7 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1))
+            if (r7 >= 0) goto L_0x00f9
+            r0.progressToPrepareRemove = r3
+        L_0x00f9:
+            org.telegram.ui.Components.BlobDrawable r7 = r0.blobDrawable
             float r11 = r0.amplitude
             boolean r12 = r0.stub
             r13 = 1061997773(0x3f4ccccd, float:0.8)
-            if (r12 == 0) goto L_0x00ff
+            if (r12 == 0) goto L_0x0108
             r12 = 1036831949(0x3dcccccd, float:0.1)
-            goto L_0x0102
-        L_0x00ff:
+            goto L_0x010b
+        L_0x0108:
             r12 = 1061997773(0x3f4ccccd, float:0.8)
-        L_0x0102:
-            r6.update(r11, r12)
-            org.telegram.ui.Components.BlobDrawable r6 = r0.blobDrawable2
+        L_0x010b:
+            r7.update(r11, r12)
+            org.telegram.ui.Components.BlobDrawable r7 = r0.blobDrawable2
             float r11 = r0.amplitude
             boolean r12 = r0.stub
-            if (r12 == 0) goto L_0x010e
-            goto L_0x0111
-        L_0x010e:
+            if (r12 == 0) goto L_0x0117
+            goto L_0x011a
+        L_0x0117:
             r9 = 1061997773(0x3f4ccccd, float:0.8)
-        L_0x0111:
-            r6.update(r11, r9)
-            r6 = 0
-        L_0x0115:
+        L_0x011a:
+            r7.update(r11, r9)
+            r7 = 0
+        L_0x011e:
             r9 = 3
-            if (r6 >= r9) goto L_0x0264
-            if (r6 != 0) goto L_0x0120
+            if (r7 >= r9) goto L_0x0279
+            if (r7 != 0) goto L_0x0129
             org.telegram.ui.Components.GroupCallPipButton$WeavingState r9 = r0.previousState
-            if (r9 != 0) goto L_0x0120
-            goto L_0x0260
-        L_0x0120:
+            if (r9 != 0) goto L_0x0129
+            goto L_0x0275
+        L_0x0129:
             r11 = 16
-            if (r6 != 0) goto L_0x013f
+            if (r7 != 0) goto L_0x0148
             float r9 = r0.progressToPrepareRemove
             int r9 = (r9 > r8 ? 1 : (r9 == r8 ? 0 : -1))
-            if (r9 != 0) goto L_0x012c
-            goto L_0x0260
-        L_0x012c:
+            if (r9 != 0) goto L_0x0135
+            goto L_0x0275
+        L_0x0135:
             float r9 = r0.progressToState
             float r9 = r8 - r9
             org.telegram.ui.Components.GroupCallPipButton$WeavingState r13 = r0.previousState
@@ -380,38 +391,38 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
             org.telegram.ui.Components.GroupCallPipButton$WeavingState r11 = r0.previousState
             android.graphics.Paint r12 = r0.paint
             r11.setToPaint(r12)
-            goto L_0x01a3
-        L_0x013f:
-            if (r6 != r3) goto L_0x0165
+            goto L_0x01ac
+        L_0x0148:
+            if (r7 != r4) goto L_0x016e
             org.telegram.ui.Components.GroupCallPipButton$WeavingState r9 = r0.currentState
-            if (r9 != 0) goto L_0x0146
+            if (r9 != 0) goto L_0x014f
             return
-        L_0x0146:
+        L_0x014f:
             float r13 = r0.progressToPrepareRemove
             int r13 = (r13 > r8 ? 1 : (r13 == r8 ? 0 : -1))
-            if (r13 != 0) goto L_0x014e
-            goto L_0x0260
-        L_0x014e:
-            org.telegram.ui.Components.GroupCallPipButton$WeavingState r13 = r0.previousState
-            if (r13 == 0) goto L_0x0155
-            float r13 = r0.progressToState
-            goto L_0x0157
-        L_0x0155:
-            r13 = 1065353216(0x3var_, float:1.0)
+            if (r13 != 0) goto L_0x0157
+            goto L_0x0275
         L_0x0157:
+            org.telegram.ui.Components.GroupCallPipButton$WeavingState r13 = r0.previousState
+            if (r13 == 0) goto L_0x015e
+            float r13 = r0.progressToState
+            goto L_0x0160
+        L_0x015e:
+            r13 = 1065353216(0x3var_, float:1.0)
+        L_0x0160:
             float r14 = r0.amplitude
             r9.update(r11, r14)
             org.telegram.ui.Components.GroupCallPipButton$WeavingState r9 = r0.currentState
             android.graphics.Paint r11 = r0.paint
             r9.setToPaint(r11)
             r9 = r13
-            goto L_0x01a3
-        L_0x0165:
+            goto L_0x01ac
+        L_0x016e:
             float r9 = r0.progressToPrepareRemove
-            int r9 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
-            if (r9 != 0) goto L_0x016d
-            goto L_0x0260
-        L_0x016d:
+            int r9 = (r9 > r3 ? 1 : (r9 == r3 ? 0 : -1))
+            if (r9 != 0) goto L_0x0176
+            goto L_0x0275
+        L_0x0176:
             android.graphics.Paint r9 = r0.paint
             r11 = -65536(0xfffffffffffvar_, float:NaN)
             r9.setColor(r11)
@@ -425,10 +436,10 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
             float r12 = r0.progressToPrepareRemove
             float r12 = r8 - r12
             float r11 = r11 * r12
-            r9.postTranslate(r11, r7)
+            r9.postTranslate(r11, r3)
             android.graphics.Matrix r9 = r0.matrix
             float r11 = r0.removeAngle
-            r9.postRotate(r11, r2, r4)
+            r9.postRotate(r11, r2, r5)
             android.graphics.LinearGradient r9 = r0.prepareToRemoveShader
             android.graphics.Matrix r11 = r0.matrix
             r9.setLocalMatrix(r11)
@@ -436,7 +447,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
             android.graphics.LinearGradient r11 = r0.prepareToRemoveShader
             r9.setShader(r11)
             r9 = 1065353216(0x3var_, float:1.0)
-        L_0x01a3:
+        L_0x01ac:
             org.telegram.ui.Components.BlobDrawable r11 = r0.blobDrawable
             r12 = 1109393408(0x42200000, float:40.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
@@ -459,7 +470,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
             r11.minRadius = r13
             r11 = 1117257728(0x42980000, float:76.0)
             r13 = 2
-            if (r6 == r13) goto L_0x01e3
+            if (r7 == r13) goto L_0x01ec
             android.graphics.Paint r14 = r0.paint
             float r11 = r11 * r9
             float r15 = r0.progressToPrepareRemove
@@ -467,71 +478,77 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
             float r11 = r11 * r15
             int r11 = (int) r11
             r14.setAlpha(r11)
-            goto L_0x01ef
-        L_0x01e3:
+            goto L_0x01f8
+        L_0x01ec:
             android.graphics.Paint r14 = r0.paint
             float r11 = r11 * r9
             float r15 = r0.progressToPrepareRemove
             float r11 = r11 * r15
             int r11 = (int) r11
             r14.setAlpha(r11)
-        L_0x01ef:
+        L_0x01f8:
             r11 = 1050253722(0x3e99999a, float:0.3)
             float r14 = r0.amplitude
             float r14 = r14 * r11
             float r14 = r14 + r8
-            float r14 = r14 + r5
+            float r14 = r14 + r6
+            float r11 = r0.pinnedProgress
+            float r11 = r8 - r11
+            float r14 = r14 * r11
             r11 = 1067869798(0x3fa66666, float:1.3)
             float r14 = java.lang.Math.min(r14, r11)
             r18.save()
-            r1.scale(r14, r14, r2, r4)
+            r1.scale(r14, r14, r2, r5)
             org.telegram.ui.Components.BlobDrawable r14 = r0.blobDrawable
             android.graphics.Paint r15 = r0.paint
-            r14.draw(r2, r4, r1, r15)
+            r14.draw(r2, r5, r1, r15)
             r18.restore()
             r14 = 1048911544(0x3e851eb8, float:0.26)
             float r15 = r0.amplitude
             float r15 = r15 * r14
             float r15 = r15 + r8
-            float r15 = r15 + r5
+            float r15 = r15 + r6
+            float r14 = r0.pinnedProgress
+            float r14 = r8 - r14
+            float r15 = r15 * r14
             float r11 = java.lang.Math.min(r15, r11)
             r18.save()
-            r1.scale(r11, r11, r2, r4)
+            r1.scale(r11, r11, r2, r5)
             org.telegram.ui.Components.BlobDrawable r11 = r0.blobDrawable2
             android.graphics.Paint r14 = r0.paint
-            r11.draw(r2, r4, r1, r14)
+            r11.draw(r2, r5, r1, r14)
             r18.restore()
             r11 = 1132396544(0x437var_, float:255.0)
-            if (r6 != r13) goto L_0x023b
+            if (r7 != r13) goto L_0x0250
             android.graphics.Paint r9 = r0.paint
             float r13 = r0.progressToPrepareRemove
             float r13 = r13 * r11
             int r11 = (int) r13
             r9.setAlpha(r11)
-            goto L_0x024d
-        L_0x023b:
-            if (r6 != r3) goto L_0x0246
+            goto L_0x0262
+        L_0x0250:
+            if (r7 != r4) goto L_0x025b
             android.graphics.Paint r13 = r0.paint
             float r9 = r9 * r11
             int r9 = (int) r9
             r13.setAlpha(r9)
-            goto L_0x024d
-        L_0x0246:
+            goto L_0x0262
+        L_0x025b:
             android.graphics.Paint r9 = r0.paint
             r11 = 255(0xff, float:3.57E-43)
             r9.setAlpha(r11)
-        L_0x024d:
+        L_0x0262:
             r18.save()
-            r1.scale(r10, r10, r2, r4)
+            r1.scale(r10, r10, r2, r5)
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r12)
             float r9 = (float) r9
             android.graphics.Paint r11 = r0.paint
-            r1.drawCircle(r2, r4, r9, r11)
+            r1.drawCircle(r2, r5, r9, r11)
             r18.restore()
-        L_0x0260:
-            int r6 = r6 + 1
-            goto L_0x0115
-        L_0x0264:
+        L_0x0275:
+            int r7 = r7 + 1
+            goto L_0x011e
+        L_0x0279:
             r17.invalidate()
             return
         */
@@ -582,7 +599,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
     }
 
     private void updateButtonState() {
-        if (VoIPService.getSharedInstance() != null) {
+        if (VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().groupCall != null) {
             int callState = VoIPService.getSharedInstance().getCallState();
             if (callState == 1 || callState == 2 || callState == 6 || callState == 5) {
                 setState(2);
@@ -596,7 +613,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
             if (!VoIPService.getSharedInstance().isMicMute()) {
                 VoIPService.getSharedInstance().setMicMute(true, false, false);
             }
-            setState(2);
+            setState(3);
             long uptimeMillis = SystemClock.uptimeMillis();
             MotionEvent obtain = MotionEvent.obtain(uptimeMillis, uptimeMillis, 3, 0.0f, 0.0f, 0);
             if (getParent() != null) {

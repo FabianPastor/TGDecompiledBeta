@@ -1,5 +1,6 @@
 package org.telegram.messenger;
 
+import java.util.ArrayList;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
@@ -48,6 +49,33 @@ public class DocumentObject {
             this.id = -2147483648L;
             this.dc_id = Integer.MIN_VALUE;
         }
+    }
+
+    public static SvgHelper.SvgDrawable getSvgThumb(ArrayList<TLRPC$PhotoSize> arrayList, String str, float f) {
+        int size = arrayList.size();
+        int i = 0;
+        TLRPC$TL_photoPathSize tLRPC$TL_photoPathSize = null;
+        int i2 = 0;
+        int i3 = 0;
+        while (i < size) {
+            TLRPC$PhotoSize tLRPC$PhotoSize = arrayList.get(i);
+            if (tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize) {
+                tLRPC$TL_photoPathSize = (TLRPC$TL_photoPathSize) tLRPC$PhotoSize;
+            } else {
+                i2 = tLRPC$PhotoSize.w;
+                i3 = tLRPC$PhotoSize.h;
+            }
+            if (tLRPC$TL_photoPathSize == null || i2 == 0 || i3 == 0) {
+                i++;
+            } else {
+                SvgHelper.SvgDrawable drawableByPath = SvgHelper.getDrawableByPath(SvgHelper.decompress(tLRPC$TL_photoPathSize.bytes), i2, i3);
+                if (drawableByPath != null) {
+                    drawableByPath.setupGradient(str, f);
+                }
+                return drawableByPath;
+            }
+        }
+        return null;
     }
 
     public static SvgHelper.SvgDrawable getSvgThumb(TLRPC$Document tLRPC$Document, String str, float f) {

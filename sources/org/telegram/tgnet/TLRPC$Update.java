@@ -46,6 +46,9 @@ public abstract class TLRPC$Update extends TLObject {
             case -1574314746:
                 tLRPC$Update = new TLRPC$TL_updateConfig();
                 break;
+            case -1537295973:
+                tLRPC$Update = new TLRPC$TL_updateGroupCall();
+                break;
             case -1512627963:
                 tLRPC$Update = new TLRPC$TL_updateDialogFilterOrder();
                 break;
@@ -124,6 +127,9 @@ public abstract class TLRPC$Update extends TLObject {
             case 314359194:
                 tLRPC$Update = new TLRPC$TL_updateNewEncryptedMessage();
                 break;
+            case 321954198:
+                tLRPC$Update = new TLRPC$TL_updateChat();
+                break;
             case 357013699:
                 tLRPC$Update = new TLRPC$TL_updateMessageReactions();
                 break;
@@ -198,9 +204,6 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case 1461528386:
                 tLRPC$Update = new TLRPC$TL_updateReadFeaturedStickers();
-                break;
-            case 1462009966:
-                tLRPC$Update = new TLRPC$TL_updateGroupCall();
                 break;
             case 1548249383:
                 tLRPC$Update = new TLRPC$TL_updateUserTyping();

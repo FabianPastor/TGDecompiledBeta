@@ -138,6 +138,15 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     public FrameLayout writeButtonContainer;
 
     public interface ShareAlertDelegate {
+
+        /* renamed from: org.telegram.ui.Components.ShareAlert$ShareAlertDelegate$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static void $default$didShare(ShareAlertDelegate shareAlertDelegate) {
+            }
+        }
+
+        boolean didCopy();
+
         void didShare();
     }
 
@@ -727,7 +736,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r31 = r8
             r26.<init>(r28, r29, r30, r31)
             r0.commentTextView = r3
-            r2 = 2131627155(0x7f0e0CLASSNAME, float:1.8881566E38)
+            r2 = 2131627156(0x7f0e0CLASSNAME, float:1.8881568E38)
             java.lang.String r5 = "ShareComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r3.setHint(r2)
@@ -1087,6 +1096,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         return paddingTop - i;
     }
 
+    public void setDelegate(ShareAlertDelegate shareAlertDelegate) {
+        this.delegate = shareAlertDelegate;
+    }
+
     public void dismissInternal() {
         super.dismissInternal();
         EditTextEmoji editTextEmoji = this.commentTextView;
@@ -1192,11 +1205,14 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     str = this.exportedMessageLink.link;
                 }
                 clipboardManager.setPrimaryClip(ClipData.newPlainText("label", str));
-                TLRPC$TL_exportedMessageLink tLRPC$TL_exportedMessageLink = this.exportedMessageLink;
-                if (tLRPC$TL_exportedMessageLink == null || !tLRPC$TL_exportedMessageLink.link.contains("/c/")) {
-                    Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("LinkCopied", NUM), 0).show();
-                } else {
-                    Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("LinkCopiedPrivate", NUM), 0).show();
+                ShareAlertDelegate shareAlertDelegate = this.delegate;
+                if (shareAlertDelegate == null || !shareAlertDelegate.didCopy()) {
+                    TLRPC$TL_exportedMessageLink tLRPC$TL_exportedMessageLink = this.exportedMessageLink;
+                    if (tLRPC$TL_exportedMessageLink == null || !tLRPC$TL_exportedMessageLink.link.contains("/c/")) {
+                        Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("LinkCopied", NUM), 0).show();
+                    } else {
+                        Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("LinkCopiedPrivate", NUM), 0).show();
+                    }
                 }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);

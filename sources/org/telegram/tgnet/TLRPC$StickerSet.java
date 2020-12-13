@@ -1,5 +1,7 @@
 package org.telegram.tgnet;
 
+import java.util.ArrayList;
+
 public abstract class TLRPC$StickerSet extends TLObject {
     public long access_hash;
     public boolean animated;
@@ -13,8 +15,8 @@ public abstract class TLRPC$StickerSet extends TLObject {
     public boolean masks;
     public boolean official;
     public String short_name;
-    public TLRPC$PhotoSize thumb;
     public int thumb_dc_id;
+    public ArrayList<TLRPC$PhotoSize> thumbs = new ArrayList<>();
     public String title;
 
     public static TLRPC$StickerSet TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -27,6 +29,9 @@ public abstract class TLRPC$StickerSet extends TLObject {
                 tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer75();
                 break;
             case -290164953:
+                tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer121();
+                break;
+            case 1088567208:
                 tLRPC$StickerSet = new TLRPC$TL_stickerSet();
                 break;
             case 1434820921:

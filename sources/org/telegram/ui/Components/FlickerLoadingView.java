@@ -14,22 +14,24 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 
 public class FlickerLoadingView extends View {
-    int color0;
-    int color1;
+    private int color0;
+    private int color1;
     private String colorKey1 = "windowBackgroundWhite";
     private String colorKey2 = "windowBackgroundGray";
-    LinearGradient gradient;
-    int gradientWidth;
+    private String colorKey3;
+    private LinearGradient gradient;
+    private int gradientWidth;
+    private Paint headerPaint = new Paint();
     private boolean isSingleCell;
     private long lastUpdateTime;
     private Matrix matrix = new Matrix();
-    Paint paint = new Paint();
-    RectF rectF = new RectF();
+    private Paint paint = new Paint();
+    private RectF rectF = new RectF();
     private boolean showDate = true;
-    int skipDrawItemsCount;
+    private int skipDrawItemsCount;
     private int totalTranslation;
     private boolean useHeaderOffset;
-    int viewType;
+    private int viewType;
 
     public int getColumnsCount() {
         return 2;
@@ -48,9 +50,10 @@ public class FlickerLoadingView extends View {
         return this.viewType;
     }
 
-    public void setColors(String str, String str2) {
+    public void setColors(String str, String str2, String str3) {
         this.colorKey1 = str;
         this.colorKey2 = str2;
+        this.colorKey3 = str3;
         invalidate();
     }
 
@@ -89,7 +92,11 @@ public class FlickerLoadingView extends View {
         }
         if (this.useHeaderOffset) {
             i = AndroidUtilities.dp(32.0f) + 0;
-            canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) AndroidUtilities.dp(32.0f), this.paint);
+            String str = this.colorKey3;
+            if (str != null) {
+                this.headerPaint.setColor(Theme.getColor(str));
+            }
+            canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) AndroidUtilities.dp(32.0f), this.colorKey3 != null ? this.headerPaint : this.paint);
         } else {
             i = 0;
         }

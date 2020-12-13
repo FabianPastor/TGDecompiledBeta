@@ -3,6 +3,7 @@ package org.telegram.ui.Components;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
@@ -210,7 +211,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             this.stickerView.setImageDrawable(this.stubDrawable);
             return;
         }
-        this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$TL_messages_stickerSet.documents.get(this.stickerType)), "130_130", "tgs", this.stubDrawable, tLRPC$TL_messages_stickerSet);
+        this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$TL_messages_stickerSet.documents.get(this.stickerType)), "130_130", "tgs", (Drawable) this.stubDrawable, (Object) tLRPC$TL_messages_stickerSet);
         this.stickerView.getImageReceiver().setAutoRepeat(2);
     }
 

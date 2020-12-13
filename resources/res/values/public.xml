@@ -1262,6 +1262,7 @@
     <public type="id" name="start" id="NUM" />
     <public type="id" name="strict_sandbox" id="NUM" />
     <public type="id" name="subtitle" id="NUM" />
+    <public type="id" name="svg_tag" id="NUM" />
     <public type="id" name="tag_accessibility_actions" id="NUM" />
     <public type="id" name="tag_accessibility_clickable_spans" id="NUM" />
     <public type="id" name="tag_accessibility_heading" id="NUM" />
@@ -1366,6 +1367,7 @@
     <public type="raw" name="tsv_setup_monkey_tracking" id="NUM" />
     <public type="raw" name="voice_muted" id="NUM" />
     <public type="raw" name="voice_outlined" id="NUM" />
+    <public type="raw" name="voicechat_connecting" id="NUM" />
     <public type="raw" name="voicechat_join" id="NUM" />
     <public type="raw" name="voicechat_leave" id="NUM" />
     <public type="raw" name="voip_busy" id="NUM" />
@@ -3631,6 +3633,7 @@
     <public type="string" name="NotificationGroupAddSelfMega" id="NUM" />
     <public type="string" name="NotificationGroupAlbum" id="NUM" />
     <public type="string" name="NotificationGroupCreatedCall" id="NUM" />
+    <public type="string" name="NotificationGroupEndedCall" id="NUM" />
     <public type="string" name="NotificationGroupFew" id="NUM" />
     <public type="string" name="NotificationGroupForwardedFew" id="NUM" />
     <public type="string" name="NotificationGroupInvitedToCall" id="NUM" />
@@ -5200,6 +5203,7 @@
     <public type="string" name="VoipMute" id="NUM" />
     <public type="string" name="VoipMutedByAdmin" id="NUM" />
     <public type="string" name="VoipMutedByAdminInfo" id="NUM" />
+    <public type="string" name="VoipMutedByAdminShort" id="NUM" />
     <public type="string" name="VoipNeedMicCameraPermission" id="NUM" />
     <public type="string" name="VoipNeedMicPermission" id="NUM" />
     <public type="string" name="VoipNotificationSettings" id="NUM" />
