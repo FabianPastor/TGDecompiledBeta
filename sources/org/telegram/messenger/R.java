@@ -1057,6 +1057,8 @@ public final class R {
         public static final int voice2x = NUM;
         public static final int voice_muted_large = NUM;
         public static final int voice_unmuted_large = NUM;
+        public static final int voicechat_active = NUM;
+        public static final int voicechat_muted = NUM;
         public static final int volume_off = NUM;
         public static final int volume_on = NUM;
         public static final int wall_selection = NUM;

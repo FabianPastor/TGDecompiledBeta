@@ -563,7 +563,7 @@ public class VoIPToggleButton extends FrameLayout {
                 invalidate();
                 return;
             }
-            if (!this.iconChangeColor && i != this.currentIconRes) {
+            if (!this.iconChangeColor) {
                 this.icon[1] = ContextCompat.getDrawable(getContext(), i).mutate();
                 this.icon[1].setColorFilter(new PorterDuffColorFilter(i2, PorterDuff.Mode.MULTIPLY));
             }

@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 4.1.1
 
 Name: AndroidManifest.xml
-SHA1-Digest: X73Fh/bOp+yqhBL7rkF6Lk+1rJ0=
+SHA1-Digest: 0w3CTfMjz343u7mdtnzHfsx/6FE=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9879,13 +9879,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: Ect8DC2C7t9KeD65n9wPuRiCiKQ=
+SHA1-Digest: ZFcQQM216LvSCRYB0F25LEtofSs=
 
 Name: classes2.dex
 SHA1-Digest: GQNky92ExRcYASorLeQ9ZA9MVVY=
 
 Name: classes3.dex
-SHA1-Digest: kehIVBbFzvK3w7vHo3S4ANolzh0=
+SHA1-Digest: 5yQHCF+EUf0bXoLfL2jZu0DQGyE=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -12433,6 +12433,12 @@ SHA1-Digest: eOZ5XhH6EYpJnA3SK8bdYrjtoCc=
 Name: res/drawable-hdpi-v4/voice_unmuted_large.png
 SHA1-Digest: +y7UiRKyZwJs9RSYXLg+SQ3ikDo=
 
+Name: res/drawable-hdpi-v4/voicechat_active.png
+SHA1-Digest: 5dVBdzsG3UC1NH01d2t1ssfgIRM=
+
+Name: res/drawable-hdpi-v4/voicechat_muted.png
+SHA1-Digest: j0lx8yGjBT2kSHQRuZHuMoaG+lo=
+
 Name: res/drawable-hdpi-v4/volume_off.png
 SHA1-Digest: GXgGGfa28HTYrXAPrtCPkgz1PPs=
 
@@ -14798,6 +14804,12 @@ SHA1-Digest: 0orUObQw/hc1FtGQr5jWM/EIPbo=
 
 Name: res/drawable-mdpi-v4/voice_unmuted_large.png
 SHA1-Digest: 2jr28zib5ClrfeIACLT6glRb4Uc=
+
+Name: res/drawable-mdpi-v4/voicechat_active.png
+SHA1-Digest: yvsZ5+mEpwNqTv23xoCC4u2w6Ic=
+
+Name: res/drawable-mdpi-v4/voicechat_muted.png
+SHA1-Digest: DSys1kPo0LQYf3bIF31Xhgw6ky4=
 
 Name: res/drawable-mdpi-v4/volume_off.png
 SHA1-Digest: yZQm5lhbf47RwyQ/j8RUiRzvpR8=
@@ -17216,6 +17228,12 @@ SHA1-Digest: 8vjxI8WcHFLspv/ZkRa7jVo8h1k=
 Name: res/drawable-xhdpi-v4/voice_unmuted_large.png
 SHA1-Digest: Mc+ds1ZKoCflVC0hFe9lchPEXpk=
 
+Name: res/drawable-xhdpi-v4/voicechat_active.png
+SHA1-Digest: qD5LA6539n4caeokOkGr43qN8p4=
+
+Name: res/drawable-xhdpi-v4/voicechat_muted.png
+SHA1-Digest: ziUrs/SlXzUN0mEDoj7PzH4YdMU=
+
 Name: res/drawable-xhdpi-v4/volume_off.png
 SHA1-Digest: MecT5CLHCVOt7GN+FI3ms0cLkuU=
 
@@ -19558,6 +19576,12 @@ SHA1-Digest: DlFpj3dOYehxmsLErBx/dhooxOE=
 Name: res/drawable-xxhdpi-v4/voice_unmuted_large.png
 SHA1-Digest: PVcZRP5Vu+Sr8wT9BFeHmWoMT7g=
 
+Name: res/drawable-xxhdpi-v4/voicechat_active.png
+SHA1-Digest: KnAJGDOvBzC3vIFaUI+37NsBBOA=
+
+Name: res/drawable-xxhdpi-v4/voicechat_muted.png
+SHA1-Digest: LgTOwU0F1T54MF/SKjKCbMOxYXQ=
+
 Name: res/drawable-xxhdpi-v4/volume_off.png
 SHA1-Digest: rU5OGDDoqDF1TXmaoVVCLZmzudA=
 
@@ -20372,7 +20396,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: i69K9wPrsoW6Gq8aJMNazrBYJZo=
+SHA1-Digest: L05GNruw8VLIwLnKrCMhhesectE=
 
 Name: transport-api.properties
 SHA1-Digest: Jz4dPszpGdGJqctaJoPe9Lpu55k=

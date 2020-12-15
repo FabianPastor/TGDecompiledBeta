@@ -13,7 +13,6 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.SystemClock;
 import android.util.Property;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewTreeObserver;
@@ -90,6 +89,8 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     WindowManager.LayoutParams windowLayoutParams;
     int windowLeft;
     WindowManager windowManager;
+    float windowOffsetLeft;
+    float windowOffsetTop;
     FrameLayout windowRemoveTooltipOverlayView;
     FrameLayout windowRemoveTooltipView;
     int windowTop;
@@ -150,40 +151,40 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             }
 
             /* JADX WARNING: Code restructure failed: missing block: B:8:0x0022, code lost:
-                if (r4 != 3) goto L_0x02c1;
+                if (r4 != 3) goto L_0x02f5;
              */
             /* JADX WARNING: Removed duplicated region for block: B:19:0x0064  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
-            public boolean onTouchEvent(android.view.MotionEvent r12) {
+            public boolean onTouchEvent(android.view.MotionEvent r13) {
                 /*
-                    r11 = this;
+                    r12 = this;
                     org.telegram.ui.Components.GroupCallPip r0 = org.telegram.ui.Components.GroupCallPip.instance
                     r1 = 0
                     if (r0 != 0) goto L_0x0008
                     return r1
                 L_0x0008:
-                    float r0 = r12.getRawX()
-                    float r2 = r12.getRawY()
-                    android.view.ViewParent r3 = r11.getParent()
-                    int r4 = r12.getAction()
+                    float r0 = r13.getRawX()
+                    float r2 = r13.getRawY()
+                    android.view.ViewParent r3 = r12.getParent()
+                    int r4 = r13.getAction()
                     r5 = 1
-                    if (r4 == 0) goto L_0x0297
+                    if (r4 == 0) goto L_0x02ae
                     r6 = 3
                     r7 = 0
                     r8 = 2
-                    if (r4 == r5) goto L_0x0115
+                    if (r4 == r5) goto L_0x011b
                     if (r4 == r8) goto L_0x0026
-                    if (r4 == r6) goto L_0x0115
-                    goto L_0x02c1
+                    if (r4 == r6) goto L_0x011b
+                    goto L_0x02f5
                 L_0x0026:
-                    float r12 = r11.startX
-                    float r12 = r0 - r12
-                    float r4 = r11.startY
+                    float r13 = r12.startX
+                    float r13 = r0 - r13
+                    float r4 = r12.startY
                     float r4 = r2 - r4
                     org.telegram.ui.Components.GroupCallPip r6 = org.telegram.ui.Components.GroupCallPip.this
                     boolean r6 = r6.moving
                     if (r6 != 0) goto L_0x005d
-                    float r6 = r12 * r12
+                    float r6 = r13 * r13
                     float r8 = r4 * r4
                     float r6 = r6 + r8
                     float r8 = r13
@@ -193,48 +194,50 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     if (r3 == 0) goto L_0x0046
                     r3.requestDisallowInterceptTouchEvent(r5)
                 L_0x0046:
-                    java.lang.Runnable r12 = r11.pressedRunnable
-                    org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r12)
-                    org.telegram.ui.Components.GroupCallPip r12 = org.telegram.ui.Components.GroupCallPip.this
-                    r12.moving = r5
-                    r12.showRemoveTooltip(r5)
-                    org.telegram.ui.Components.GroupCallPip r12 = org.telegram.ui.Components.GroupCallPip.this
-                    r12.showAlert(r1)
-                    r11.startX = r0
-                    r11.startY = r2
+                    java.lang.Runnable r13 = r12.pressedRunnable
+                    org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r13)
+                    org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
+                    r13.moving = r5
+                    r13.showRemoveTooltip(r5)
+                    org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
+                    r13.showAlert(r1)
+                    r12.startX = r0
+                    r12.startY = r2
                     r4 = 0
                     goto L_0x005e
                 L_0x005d:
-                    r7 = r12
+                    r7 = r13
                 L_0x005e:
-                    org.telegram.ui.Components.GroupCallPip r12 = org.telegram.ui.Components.GroupCallPip.this
-                    boolean r3 = r12.moving
-                    if (r3 == 0) goto L_0x02c1
-                    float r3 = r12.windowX
+                    org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
+                    boolean r3 = r13.moving
+                    if (r3 == 0) goto L_0x02f5
+                    float r3 = r13.windowX
                     float r3 = r3 + r7
-                    r12.windowX = r3
-                    float r3 = r12.windowY
+                    r13.windowX = r3
+                    float r3 = r13.windowY
                     float r3 = r3 + r4
-                    r12.windowY = r3
-                    r11.startX = r0
-                    r11.startY = r2
-                    r12.updateButtonPosition()
-                    org.telegram.ui.Components.GroupCallPip r12 = org.telegram.ui.Components.GroupCallPip.this
-                    float r12 = r12.windowX
-                    int r0 = r11.getMeasuredWidth()
+                    r13.windowY = r3
+                    r12.startX = r0
+                    r12.startY = r2
+                    r13.updateButtonPosition()
+                    org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
+                    float r13 = r13.windowX
+                    int r0 = r12.getMeasuredWidth()
                     float r0 = (float) r0
                     r2 = 1073741824(0x40000000, float:2.0)
                     float r0 = r0 / r2
-                    float r12 = r12 + r0
+                    float r13 = r13 + r0
                     org.telegram.ui.Components.GroupCallPip r0 = org.telegram.ui.Components.GroupCallPip.this
                     float r0 = r0.windowY
-                    int r3 = r11.getMeasuredHeight()
+                    int r3 = r12.getMeasuredHeight()
                     float r3 = (float) r3
                     float r3 = r3 / r2
                     float r0 = r0 + r3
                     org.telegram.ui.Components.GroupCallPip r3 = org.telegram.ui.Components.GroupCallPip.this
                     int r4 = r3.windowLeft
                     float r4 = (float) r4
+                    float r6 = r3.windowOffsetLeft
+                    float r4 = r4 - r6
                     android.widget.FrameLayout r3 = r3.windowRemoveTooltipView
                     int r3 = r3.getMeasuredWidth()
                     float r3 = (float) r3
@@ -243,12 +246,14 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     org.telegram.ui.Components.GroupCallPip r3 = org.telegram.ui.Components.GroupCallPip.this
                     int r6 = r3.windowTop
                     float r6 = (float) r6
+                    float r7 = r3.windowOffsetTop
+                    float r6 = r6 - r7
                     android.widget.FrameLayout r3 = r3.windowRemoveTooltipView
                     int r3 = r3.getMeasuredHeight()
                     float r3 = (float) r3
                     float r3 = r3 / r2
                     float r6 = r6 + r3
-                    float r2 = r12 - r4
+                    float r2 = r13 - r4
                     float r3 = r2 * r2
                     float r7 = r0 - r6
                     float r8 = r7 * r7
@@ -259,259 +264,282 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     int r9 = r9 * r8
                     float r8 = (float) r9
                     int r8 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
-                    if (r8 >= 0) goto L_0x0108
+                    if (r8 >= 0) goto L_0x010e
                     float r2 = r2 / r7
                     double r7 = (double) r2
                     double r7 = java.lang.Math.atan(r7)
                     double r7 = java.lang.Math.toDegrees(r7)
-                    int r2 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
-                    if (r2 <= 0) goto L_0x00d5
+                    int r2 = (r13 > r4 ? 1 : (r13 == r4 ? 0 : -1))
+                    if (r2 <= 0) goto L_0x00db
                     int r2 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
-                    if (r2 < 0) goto L_0x00dd
-                L_0x00d5:
-                    int r12 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
-                    if (r12 >= 0) goto L_0x00e3
-                    int r12 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
-                    if (r12 >= 0) goto L_0x00e3
-                L_0x00dd:
-                    r9 = 4643457506423603200(0x4070eNUM, double:270.0)
-                    goto L_0x00e8
+                    if (r2 < 0) goto L_0x00e3
+                L_0x00db:
+                    int r13 = (r13 > r4 ? 1 : (r13 == r4 ? 0 : -1))
+                    if (r13 >= 0) goto L_0x00e9
+                    int r13 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
+                    if (r13 >= 0) goto L_0x00e9
                 L_0x00e3:
+                    r9 = 4643457506423603200(0x4070eNUM, double:270.0)
+                    goto L_0x00ee
+                L_0x00e9:
                     r9 = 4636033603912859648(0xNUM, double:90.0)
-                L_0x00e8:
+                L_0x00ee:
                     double r9 = r9 - r7
-                    org.telegram.ui.Components.GroupCallPip r12 = org.telegram.ui.Components.GroupCallPip.this
-                    org.telegram.ui.Components.GroupCallPipButton r12 = r12.button
-                    r12.setRemoveAngle(r9)
-                    r12 = 1112014848(0x42480000, float:50.0)
-                    int r0 = org.telegram.messenger.AndroidUtilities.dp(r12)
-                    int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-                    int r0 = r0 * r12
-                    float r12 = (float) r0
-                    int r12 = (r3 > r12 ? 1 : (r3 == r12 ? 0 : -1))
-                    if (r12 >= 0) goto L_0x0106
-                    r12 = 1
+                    org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
+                    org.telegram.ui.Components.GroupCallPipButton r13 = r13.button
+                    r13.setRemoveAngle(r9)
+                    r13 = 1112014848(0x42480000, float:50.0)
+                    int r0 = org.telegram.messenger.AndroidUtilities.dp(r13)
+                    int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+                    int r0 = r0 * r13
+                    float r13 = (float) r0
+                    int r13 = (r3 > r13 ? 1 : (r3 == r13 ? 0 : -1))
+                    if (r13 >= 0) goto L_0x010c
+                    r13 = 1
                     r1 = 1
-                    goto L_0x0109
-                L_0x0106:
-                    r12 = 1
-                    goto L_0x0109
-                L_0x0108:
-                    r12 = 0
-                L_0x0109:
+                    goto L_0x010f
+                L_0x010c:
+                    r13 = 1
+                    goto L_0x010f
+                L_0x010e:
+                    r13 = 0
+                L_0x010f:
                     org.telegram.ui.Components.GroupCallPip r0 = org.telegram.ui.Components.GroupCallPip.this
                     r0.pinnedToCenter(r1)
                     org.telegram.ui.Components.GroupCallPip r0 = org.telegram.ui.Components.GroupCallPip.this
-                    r0.prepareToRemove(r12)
-                    goto L_0x02c1
-                L_0x0115:
-                    java.lang.Runnable r0 = r11.micRunnable
+                    r0.prepareToRemove(r13)
+                    goto L_0x02f5
+                L_0x011b:
+                    java.lang.Runnable r0 = r12.micRunnable
                     org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
-                    java.lang.Runnable r0 = r11.pressedRunnable
+                    java.lang.Runnable r0 = r12.pressedRunnable
                     org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
                     org.telegram.ui.Components.GroupCallPip r0 = org.telegram.ui.Components.GroupCallPip.this
                     boolean r2 = r0.animateToPrepareRemove
-                    if (r2 == 0) goto L_0x012b
-                    r11.pressed = r1
+                    if (r2 == 0) goto L_0x0131
+                    r12.pressed = r1
                     r0.remove()
                     return r1
-                L_0x012b:
+                L_0x0131:
                     r0.pressedState = r1
                     r0.checkButtonAlpha()
-                    boolean r0 = r11.pressed
-                    if (r0 == 0) goto L_0x0147
-                    org.telegram.messenger.voip.VoIPService r12 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-                    if (r12 == 0) goto L_0x0144
-                    org.telegram.messenger.voip.VoIPService r12 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-                    r12.setMicMute(r5, r1, r1)
-                    r11.performHapticFeedback(r6, r8)
-                L_0x0144:
-                    r11.pressed = r1
-                    goto L_0x0157
-                L_0x0147:
-                    int r12 = r12.getAction()
-                    if (r12 != r5) goto L_0x0157
-                    org.telegram.ui.Components.GroupCallPip r12 = org.telegram.ui.Components.GroupCallPip.this
-                    boolean r12 = r12.moving
-                    if (r12 != 0) goto L_0x0157
-                    r11.onTap()
+                    boolean r0 = r12.pressed
+                    if (r0 == 0) goto L_0x014d
+                    org.telegram.messenger.voip.VoIPService r13 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+                    if (r13 == 0) goto L_0x014a
+                    org.telegram.messenger.voip.VoIPService r13 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+                    r13.setMicMute(r5, r1, r1)
+                    r12.performHapticFeedback(r6, r8)
+                L_0x014a:
+                    r12.pressed = r1
+                    goto L_0x015d
+                L_0x014d:
+                    int r13 = r13.getAction()
+                    if (r13 != r5) goto L_0x015d
+                    org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
+                    boolean r13 = r13.moving
+                    if (r13 != 0) goto L_0x015d
+                    r12.onTap()
                     return r1
-                L_0x0157:
-                    if (r3 == 0) goto L_0x028f
-                    org.telegram.ui.Components.GroupCallPip r12 = org.telegram.ui.Components.GroupCallPip.this
-                    boolean r12 = r12.moving
-                    if (r12 == 0) goto L_0x028f
+                L_0x015d:
+                    if (r3 == 0) goto L_0x02a6
+                    org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
+                    boolean r13 = r13.moving
+                    if (r13 == 0) goto L_0x02a6
                     r3.requestDisallowInterceptTouchEvent(r1)
-                    android.graphics.Point r12 = org.telegram.messenger.AndroidUtilities.displaySize
-                    int r0 = r12.x
-                    int r12 = r12.y
+                    android.graphics.Point r13 = org.telegram.messenger.AndroidUtilities.displaySize
+                    int r0 = r13.x
+                    int r13 = r13.y
                     org.telegram.ui.Components.GroupCallPip r2 = org.telegram.ui.Components.GroupCallPip.this
                     android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
                     int r2 = r2.x
                     float r2 = (float) r2
-                    int r3 = r11.getMeasuredWidth()
+                    int r3 = r12.getMeasuredWidth()
                     float r3 = (float) r3
                     float r3 = r3 + r2
                     org.telegram.ui.Components.GroupCallPip r4 = org.telegram.ui.Components.GroupCallPip.this
                     android.view.WindowManager$LayoutParams r4 = r4.windowLayoutParams
                     int r4 = r4.y
                     float r4 = (float) r4
-                    int r6 = r11.getMeasuredHeight()
+                    int r6 = r12.getMeasuredHeight()
                     float r6 = (float) r6
                     float r6 = r6 + r4
                     android.animation.AnimatorSet r9 = new android.animation.AnimatorSet
                     r9.<init>()
-                    r11.moveToBoundsAnimator = r9
+                    r12.moveToBoundsAnimator = r9
                     r9 = 1108344832(0x42100000, float:36.0)
-                    int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-                    int r9 = -r9
-                    float r9 = (float) r9
-                    int r10 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1))
-                    if (r10 >= 0) goto L_0x01ba
+                    int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                    int r10 = -r10
+                    float r10 = (float) r10
+                    int r11 = (r2 > r10 ? 1 : (r2 == r10 ? 0 : -1))
+                    if (r11 >= 0) goto L_0x01c0
                     float[] r0 = new float[r8]
                     org.telegram.ui.Components.GroupCallPip r2 = org.telegram.ui.Components.GroupCallPip.this
                     android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
                     int r2 = r2.x
                     float r2 = (float) r2
                     r0[r1] = r2
-                    r0[r5] = r9
+                    r0[r5] = r10
                     android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
                     org.telegram.ui.Components.GroupCallPip r2 = org.telegram.ui.Components.GroupCallPip.this
                     android.animation.ValueAnimator$AnimatorUpdateListener r2 = r2.updateXlistener
                     r0.addUpdateListener(r2)
-                    android.animation.AnimatorSet r2 = r11.moveToBoundsAnimator
+                    android.animation.AnimatorSet r2 = r12.moveToBoundsAnimator
                     android.animation.Animator[] r3 = new android.animation.Animator[r5]
                     r3[r1] = r0
                     r2.playTogether(r3)
-                    r2 = r9
-                    goto L_0x01eb
-                L_0x01ba:
-                    float r10 = (float) r0
-                    float r10 = r10 - r9
-                    int r3 = (r3 > r10 ? 1 : (r3 == r10 ? 0 : -1))
-                    if (r3 <= 0) goto L_0x01eb
+                    r2 = r10
+                    goto L_0x01f1
+                L_0x01c0:
+                    float r11 = (float) r0
+                    float r11 = r11 - r10
+                    int r3 = (r3 > r11 ? 1 : (r3 == r11 ? 0 : -1))
+                    if (r3 <= 0) goto L_0x01f1
                     float[] r2 = new float[r8]
                     org.telegram.ui.Components.GroupCallPip r3 = org.telegram.ui.Components.GroupCallPip.this
                     android.view.WindowManager$LayoutParams r3 = r3.windowLayoutParams
                     int r3 = r3.x
                     float r3 = (float) r3
                     r2[r1] = r3
-                    int r3 = r11.getMeasuredWidth()
+                    int r3 = r12.getMeasuredWidth()
                     int r0 = r0 - r3
                     float r0 = (float) r0
-                    float r0 = r0 - r9
+                    float r0 = r0 - r10
                     r2[r5] = r0
                     android.animation.ValueAnimator r2 = android.animation.ValueAnimator.ofFloat(r2)
                     org.telegram.ui.Components.GroupCallPip r3 = org.telegram.ui.Components.GroupCallPip.this
                     android.animation.ValueAnimator$AnimatorUpdateListener r3 = r3.updateXlistener
                     r2.addUpdateListener(r3)
-                    android.animation.AnimatorSet r3 = r11.moveToBoundsAnimator
-                    android.animation.Animator[] r9 = new android.animation.Animator[r5]
-                    r9[r1] = r2
-                    r3.playTogether(r9)
+                    android.animation.AnimatorSet r3 = r12.moveToBoundsAnimator
+                    android.animation.Animator[] r10 = new android.animation.Animator[r5]
+                    r10[r1] = r2
+                    r3.playTogether(r10)
                     r2 = r0
-                L_0x01eb:
+                L_0x01f1:
+                    int r0 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                    int r13 = r13 + r0
                     int r0 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-                    float r3 = (float) r0
-                    int r3 = (r4 > r3 ? 1 : (r4 == r3 ? 0 : -1))
-                    if (r3 >= 0) goto L_0x0217
-                    float[] r12 = new float[r8]
-                    org.telegram.ui.Components.GroupCallPip r3 = org.telegram.ui.Components.GroupCallPip.this
-                    android.view.WindowManager$LayoutParams r3 = r3.windowLayoutParams
-                    int r3 = r3.y
-                    float r3 = (float) r3
-                    r12[r1] = r3
+                    int r3 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                    int r0 = r0 - r3
+                    float r0 = (float) r0
+                    int r0 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1))
+                    if (r0 >= 0) goto L_0x022e
+                    float[] r13 = new float[r8]
+                    org.telegram.ui.Components.GroupCallPip r0 = org.telegram.ui.Components.GroupCallPip.this
+                    android.view.WindowManager$LayoutParams r0 = r0.windowLayoutParams
+                    int r0 = r0.y
+                    float r0 = (float) r0
+                    r13[r1] = r0
+                    int r0 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+                    int r3 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                    int r0 = r0 - r3
                     float r4 = (float) r0
-                    r12[r5] = r4
-                    android.animation.ValueAnimator r12 = android.animation.ValueAnimator.ofFloat(r12)
+                    r13[r5] = r4
+                    android.animation.ValueAnimator r13 = android.animation.ValueAnimator.ofFloat(r13)
                     org.telegram.ui.Components.GroupCallPip r0 = org.telegram.ui.Components.GroupCallPip.this
                     android.animation.ValueAnimator$AnimatorUpdateListener r0 = r0.updateYlistener
-                    r12.addUpdateListener(r0)
-                    android.animation.AnimatorSet r0 = r11.moveToBoundsAnimator
+                    r13.addUpdateListener(r0)
+                    android.animation.AnimatorSet r0 = r12.moveToBoundsAnimator
                     android.animation.Animator[] r3 = new android.animation.Animator[r5]
-                    r3[r1] = r12
+                    r3[r1] = r13
                     r0.playTogether(r3)
-                    goto L_0x0245
-                L_0x0217:
-                    float r0 = (float) r12
+                    goto L_0x025c
+                L_0x022e:
+                    float r0 = (float) r13
                     int r0 = (r6 > r0 ? 1 : (r6 == r0 ? 0 : -1))
-                    if (r0 <= 0) goto L_0x0245
+                    if (r0 <= 0) goto L_0x025c
                     float[] r0 = new float[r8]
                     org.telegram.ui.Components.GroupCallPip r3 = org.telegram.ui.Components.GroupCallPip.this
                     android.view.WindowManager$LayoutParams r3 = r3.windowLayoutParams
                     int r3 = r3.y
                     float r3 = (float) r3
                     r0[r1] = r3
-                    int r3 = r11.getMeasuredHeight()
-                    int r12 = r12 - r3
-                    float r4 = (float) r12
+                    int r3 = r12.getMeasuredHeight()
+                    int r13 = r13 - r3
+                    float r4 = (float) r13
                     r0[r5] = r4
-                    android.animation.ValueAnimator r12 = android.animation.ValueAnimator.ofFloat(r0)
+                    android.animation.ValueAnimator r13 = android.animation.ValueAnimator.ofFloat(r0)
                     org.telegram.ui.Components.GroupCallPip r0 = org.telegram.ui.Components.GroupCallPip.this
                     android.animation.ValueAnimator$AnimatorUpdateListener r0 = r0.updateYlistener
-                    r12.addUpdateListener(r0)
-                    android.animation.AnimatorSet r0 = r11.moveToBoundsAnimator
+                    r13.addUpdateListener(r0)
+                    android.animation.AnimatorSet r0 = r12.moveToBoundsAnimator
                     android.animation.Animator[] r3 = new android.animation.Animator[r5]
-                    r3[r1] = r12
+                    r3[r1] = r13
                     r0.playTogether(r3)
-                L_0x0245:
-                    android.animation.AnimatorSet r12 = r11.moveToBoundsAnimator
+                L_0x025c:
+                    android.animation.AnimatorSet r13 = r12.moveToBoundsAnimator
                     r8 = 150(0x96, double:7.4E-322)
-                    android.animation.AnimatorSet r12 = r12.setDuration(r8)
+                    android.animation.AnimatorSet r13 = r13.setDuration(r8)
                     org.telegram.ui.Components.CubicBezierInterpolator r0 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-                    r12.setInterpolator(r0)
-                    android.animation.AnimatorSet r12 = r11.moveToBoundsAnimator
-                    r12.start()
-                    org.telegram.ui.Components.GroupCallPip r12 = org.telegram.ui.Components.GroupCallPip.this
-                    float r0 = r12.xRelative
+                    r13.setInterpolator(r0)
+                    android.animation.AnimatorSet r13 = r12.moveToBoundsAnimator
+                    r13.start()
+                    org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
+                    float r0 = r13.xRelative
                     int r0 = (r0 > r7 ? 1 : (r0 == r7 ? 0 : -1))
-                    if (r0 < 0) goto L_0x028f
-                    float[] r0 = r12.point
-                    r12.getRelativePosition(r2, r4, r0)
-                    android.content.Context r12 = org.telegram.messenger.ApplicationLoader.applicationContext
+                    if (r0 < 0) goto L_0x02a6
+                    float[] r0 = r13.point
+                    r13.getRelativePosition(r2, r4, r0)
+                    android.content.Context r13 = org.telegram.messenger.ApplicationLoader.applicationContext
                     java.lang.String r0 = "groupcallpipconfig"
-                    android.content.SharedPreferences r12 = r12.getSharedPreferences(r0, r1)
-                    android.content.SharedPreferences$Editor r12 = r12.edit()
+                    android.content.SharedPreferences r13 = r13.getSharedPreferences(r0, r1)
+                    android.content.SharedPreferences$Editor r13 = r13.edit()
                     org.telegram.ui.Components.GroupCallPip r0 = org.telegram.ui.Components.GroupCallPip.this
                     float[] r2 = r0.point
                     r2 = r2[r1]
                     r0.xRelative = r2
                     java.lang.String r0 = "relativeX"
-                    android.content.SharedPreferences$Editor r12 = r12.putFloat(r0, r2)
+                    android.content.SharedPreferences$Editor r13 = r13.putFloat(r0, r2)
                     org.telegram.ui.Components.GroupCallPip r0 = org.telegram.ui.Components.GroupCallPip.this
                     float[] r2 = r0.point
                     r2 = r2[r5]
                     r0.yRelative = r2
                     java.lang.String r0 = "relativeY"
-                    android.content.SharedPreferences$Editor r12 = r12.putFloat(r0, r2)
-                    r12.apply()
-                L_0x028f:
-                    org.telegram.ui.Components.GroupCallPip r12 = org.telegram.ui.Components.GroupCallPip.this
-                    r12.moving = r1
-                    r12.showRemoveTooltip(r1)
-                    goto L_0x02c1
-                L_0x0297:
-                    r11.startX = r0
-                    r11.startY = r2
+                    android.content.SharedPreferences$Editor r13 = r13.putFloat(r0, r2)
+                    r13.apply()
+                L_0x02a6:
+                    org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
+                    r13.moving = r1
+                    r13.showRemoveTooltip(r1)
+                    goto L_0x02f5
+                L_0x02ae:
+                    org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
+                    int[] r13 = r13.location
+                    r12.getLocationOnScreen(r13)
+                    org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
+                    int[] r3 = r13.location
+                    r1 = r3[r1]
+                    android.view.WindowManager$LayoutParams r4 = r13.windowLayoutParams
+                    int r6 = r4.x
+                    int r1 = r1 - r6
+                    float r1 = (float) r1
+                    r13.windowOffsetLeft = r1
+                    r1 = r3[r5]
+                    int r3 = r4.y
+                    int r1 = r1 - r3
+                    float r1 = (float) r1
+                    r13.windowOffsetTop = r1
+                    r12.startX = r0
+                    r12.startY = r2
                     java.lang.System.currentTimeMillis()
-                    int r12 = android.view.ViewConfiguration.getTapTimeout()
-                    float r12 = (float) r12
+                    int r13 = android.view.ViewConfiguration.getTapTimeout()
+                    float r13 = (float) r13
                     r0 = 1068708659(0x3fb33333, float:1.4)
-                    float r12 = r12 * r0
-                    long r0 = (long) r12
-                    java.lang.Runnable r12 = r11.pressedRunnable
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r12, r0)
-                    org.telegram.ui.Components.GroupCallPip r12 = org.telegram.ui.Components.GroupCallPip.this
-                    android.view.WindowManager$LayoutParams r0 = r12.windowLayoutParams
+                    float r13 = r13 * r0
+                    long r0 = (long) r13
+                    java.lang.Runnable r13 = r12.pressedRunnable
+                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r13, r0)
+                    org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
+                    android.view.WindowManager$LayoutParams r0 = r13.windowLayoutParams
                     int r1 = r0.x
                     float r1 = (float) r1
-                    r12.windowX = r1
+                    r13.windowX = r1
                     int r0 = r0.y
                     float r0 = (float) r0
-                    r12.windowY = r0
-                    r12.pressedState = r5
-                    r12.checkButtonAlpha()
-                L_0x02c1:
+                    r13.windowY = r0
+                    r13.pressedState = r5
+                    r13.checkButtonAlpha()
+                L_0x02f5:
                     return r5
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupCallPip.AnonymousClass3.onTouchEvent(android.view.MotionEvent):boolean");
@@ -626,11 +654,28 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
         rLottieImageView.setColorFilter(-1);
         this.windowRemoveTooltipOverlayView.addView(rLottieImageView, LayoutHelper.createFrame(40, 40.0f, 17, 0.0f, 0.0f, 0.0f, 25.0f));
         AnonymousClass6 r132 = new FrameLayout(context) {
-            public boolean dispatchKeyEvent(KeyEvent keyEvent) {
-                if (keyEvent.getKeyCode() == 4 && keyEvent.getAction() == 1) {
-                    GroupCallPip.this.showAlert(false);
+            int lastSize = -1;
+
+            /* access modifiers changed from: protected */
+            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+                super.onLayout(z, i, i2, i3, i4);
+                Point point = AndroidUtilities.displaySize;
+                int i5 = point.x + point.y;
+                int i6 = this.lastSize;
+                if (i6 > 0 && i6 != i5) {
+                    setVisibility(8);
+                    GroupCallPip groupCallPip = GroupCallPip.this;
+                    groupCallPip.showAlert = false;
+                    groupCallPip.checkButtonAlpha();
                 }
-                return super.dispatchKeyEvent(keyEvent);
+                this.lastSize = i5;
+            }
+
+            public void setVisibility(int i) {
+                super.setVisibility(i);
+                if (i == 8) {
+                    this.lastSize = -1;
+                }
             }
         };
         this.alertContainer = r132;
@@ -666,6 +711,15 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
         return true;
     }
 
+    public static boolean onBackPressed() {
+        GroupCallPip groupCallPip = instance;
+        if (groupCallPip == null || !groupCallPip.showAlert) {
+            return false;
+        }
+        groupCallPip.showAlert(false);
+        return true;
+    }
+
     /* access modifiers changed from: private */
     public void showAlert(boolean z) {
         if (z != this.showAlert) {
@@ -673,8 +727,8 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             this.alertContainer.animate().setListener((Animator.AnimatorListener) null).cancel();
             if (this.showAlert) {
                 this.alertContainer.getLocationOnScreen(this.location);
-                final float measuredWidth = (((float) this.windowLayoutParams.x) + (((float) this.button.getMeasuredWidth()) / 2.0f)) - ((float) this.location[0]);
-                final float measuredWidth2 = (((float) this.windowLayoutParams.y) + (((float) this.button.getMeasuredWidth()) / 2.0f)) - ((float) this.location[1]);
+                final float measuredWidth = ((((float) this.windowLayoutParams.x) + this.windowOffsetLeft) + (((float) this.button.getMeasuredWidth()) / 2.0f)) - ((float) this.location[0]);
+                final float measuredWidth2 = ((((float) this.windowLayoutParams.y) + this.windowOffsetTop) + (((float) this.button.getMeasuredWidth()) / 2.0f)) - ((float) this.location[1]);
                 if (this.alertContainer.getVisibility() != 0) {
                     this.alertContainer.setVisibility(0);
                     this.alertContainer.setAlpha(0.0f);
@@ -684,7 +738,8 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                 this.alertContainer.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     public boolean onPreDraw() {
                         GroupCallPip.this.alertContainer.getViewTreeObserver().removeOnPreDrawListener(this);
-                        if (measuredWidth + ((float) AndroidUtilities.dp(61.0f)) + ((float) GroupCallPip.this.pipAlertView.getMeasuredWidth()) < ((float) (GroupCallPip.this.alertContainer.getMeasuredWidth() - AndroidUtilities.dp(16.0f)))) {
+                        boolean z = measuredWidth2 - ((float) AndroidUtilities.dp(61.0f)) > 0.0f && measuredWidth2 + ((float) AndroidUtilities.dp(61.0f)) < ((float) GroupCallPip.this.alertContainer.getMeasuredHeight());
+                        if (measuredWidth + ((float) AndroidUtilities.dp(61.0f)) + ((float) GroupCallPip.this.pipAlertView.getMeasuredWidth()) < ((float) (GroupCallPip.this.alertContainer.getMeasuredWidth() - AndroidUtilities.dp(16.0f))) && z) {
                             GroupCallPip.this.pipAlertView.setTranslationX(measuredWidth + ((float) AndroidUtilities.dp(61.0f)));
                             float measuredHeight = measuredWidth2 / ((float) GroupCallPip.this.alertContainer.getMeasuredHeight());
                             float dp = ((float) AndroidUtilities.dp(40.0f)) / ((float) GroupCallPip.this.pipAlertView.getMeasuredHeight());
@@ -692,7 +747,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                             GroupCallPipAlertView groupCallPipAlertView = GroupCallPip.this.pipAlertView;
                             groupCallPipAlertView.setTranslationY((float) ((int) (measuredWidth2 - (((float) groupCallPipAlertView.getMeasuredHeight()) * max))));
                             GroupCallPip.this.pipAlertView.setPosition(0, measuredWidth, measuredWidth2);
-                        } else if ((measuredWidth - ((float) AndroidUtilities.dp(61.0f))) - ((float) GroupCallPip.this.pipAlertView.getMeasuredWidth()) > ((float) AndroidUtilities.dp(16.0f))) {
+                        } else if ((measuredWidth - ((float) AndroidUtilities.dp(61.0f))) - ((float) GroupCallPip.this.pipAlertView.getMeasuredWidth()) > ((float) AndroidUtilities.dp(16.0f)) && z) {
                             float measuredHeight2 = measuredWidth2 / ((float) GroupCallPip.this.alertContainer.getMeasuredHeight());
                             float dp2 = ((float) AndroidUtilities.dp(40.0f)) / ((float) GroupCallPip.this.pipAlertView.getMeasuredHeight());
                             float max2 = Math.max(dp2, Math.min(measuredHeight2, 1.0f - dp2));
@@ -758,8 +813,8 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             groupCallPip.showAlert(false);
             float measuredWidth = ((float) this.windowLayoutParams.x) + (((float) this.windowView.getMeasuredWidth()) / 2.0f);
             float measuredHeight = ((float) this.windowLayoutParams.y) + (((float) this.windowView.getMeasuredHeight()) / 2.0f);
-            float measuredWidth2 = (((float) this.windowLeft) + (((float) this.windowRemoveTooltipView.getMeasuredWidth()) / 2.0f)) - measuredWidth;
-            float measuredHeight2 = (((float) this.windowTop) + (((float) this.windowRemoveTooltipView.getMeasuredHeight()) / 2.0f)) - measuredHeight;
+            float measuredWidth2 = ((((float) this.windowLeft) - this.windowOffsetLeft) + (((float) this.windowRemoveTooltipView.getMeasuredWidth()) / 2.0f)) - measuredWidth;
+            float measuredHeight2 = ((((float) this.windowTop) - this.windowOffsetTop) + (((float) this.windowRemoveTooltipView.getMeasuredHeight()) / 2.0f)) - measuredHeight;
             GroupCallPip groupCallPip2 = instance;
             final WindowManager windowManager2 = groupCallPip2.windowManager;
             FrameLayout frameLayout = groupCallPip2.windowView;
@@ -905,7 +960,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             createWindowLayoutParams.width = -1;
             createWindowLayoutParams.height = -1;
             createWindowLayoutParams.dimAmount = 0.25f;
-            createWindowLayoutParams.flags = 131842;
+            createWindowLayoutParams.flags = 522;
             windowManager2.addView(instance.alertContainer, createWindowLayoutParams);
             instance.alertContainer.setVisibility(8);
             WindowManager.LayoutParams createWindowLayoutParams2 = createWindowLayoutParams(context);
@@ -982,7 +1037,6 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     }
 
     private static WindowManager.LayoutParams createWindowLayoutParams(Context context) {
-        int i = Build.VERSION.SDK_INT;
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         layoutParams.height = AndroidUtilities.dp(105.0f);
         layoutParams.width = AndroidUtilities.dp(105.0f);
@@ -990,15 +1044,12 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
         layoutParams.format = -3;
         if (!AndroidUtilities.checkInlinePermissions(context)) {
             layoutParams.type = 99;
-        } else if (i >= 26) {
+        } else if (Build.VERSION.SDK_INT >= 26) {
             layoutParams.type = 2038;
         } else {
             layoutParams.type = 2003;
         }
-        layoutParams.flags = 776;
-        if (i >= 21) {
-            layoutParams.flags = 776 | Integer.MIN_VALUE;
-        }
+        layoutParams.flags = 520;
         return layoutParams;
     }
 
@@ -1128,8 +1179,8 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
 
     /* access modifiers changed from: private */
     public void updateButtonPosition() {
-        float measuredWidth = (((float) this.windowLeft) + (((float) this.windowRemoveTooltipView.getMeasuredWidth()) / 2.0f)) - (((float) this.windowView.getMeasuredWidth()) / 2.0f);
-        float measuredHeight = ((((float) this.windowTop) + (((float) this.windowRemoveTooltipView.getMeasuredHeight()) / 2.0f)) - (((float) this.windowView.getMeasuredHeight()) / 2.0f)) - ((float) AndroidUtilities.dp(25.0f));
+        float measuredWidth = ((((float) this.windowLeft) - this.windowOffsetLeft) + (((float) this.windowRemoveTooltipView.getMeasuredWidth()) / 2.0f)) - (((float) this.windowView.getMeasuredWidth()) / 2.0f);
+        float measuredHeight = (((((float) this.windowTop) - this.windowOffsetTop) + (((float) this.windowRemoveTooltipView.getMeasuredHeight()) / 2.0f)) - (((float) this.windowView.getMeasuredHeight()) / 2.0f)) - ((float) AndroidUtilities.dp(25.0f));
         WindowManager.LayoutParams layoutParams = this.windowLayoutParams;
         float f = this.windowX;
         float f2 = this.pinnedProgress;

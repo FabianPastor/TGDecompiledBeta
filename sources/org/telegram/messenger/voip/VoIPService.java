@@ -107,7 +107,6 @@ public class VoIPService extends VoIPBaseService {
     private byte[] a_or_b;
     private byte[] authKey;
     private int callReqId;
-    private TLRPC$Chat chat;
     private int checkRequestId;
     private Runnable delayedStartOutgoingCall;
     private boolean endCallAfterRequest;
@@ -119,9 +118,7 @@ public class VoIPService extends VoIPBaseService {
     private ProxyVideoSink localSink;
     private boolean needRateCall;
     private boolean needSendDebugLog;
-    private Runnable onDestroyRunnable;
     private ArrayList<TLRPC$PhoneCall> pendingUpdates = new ArrayList<>();
-    private boolean playedConnectedSound;
     private ProxyVideoSink remoteSink;
     private Runnable shortPollRunnable;
     private boolean startedRinging;
@@ -370,7 +367,13 @@ public class VoIPService extends VoIPBaseService {
         super.onCreate();
         if (callIShouldHavePutIntoIntent != null && Build.VERSION.SDK_INT >= 26) {
             NotificationsController.checkOtherNotificationsChannel();
-            startForeground(201, new Notification.Builder(this, NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setSmallIcon(NUM).setContentTitle(LocaleController.getString("VoipOutgoingCall", NUM)).setShowWhen(false).build());
+            Notification.Builder showWhen = new Notification.Builder(this, NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setContentTitle(LocaleController.getString("VoipOutgoingCall", NUM)).setShowWhen(false);
+            if (this.groupCall != null) {
+                showWhen.setSmallIcon(isMicMute() ? NUM : NUM);
+            } else {
+                showWhen.setSmallIcon(NUM);
+            }
+            startForeground(201, showWhen.build());
         }
     }
 

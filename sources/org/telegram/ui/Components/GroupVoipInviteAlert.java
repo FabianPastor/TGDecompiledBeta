@@ -637,9 +637,9 @@ public class GroupVoipInviteAlert extends BottomSheet {
         this.lastRow = i6;
     }
 
-    public void dismissInternal() {
-        super.dismissInternal();
+    public void dismiss() {
         AndroidUtilities.hideKeyboard(this.searchView.searchEditText);
+        super.dismiss();
     }
 
     /* access modifiers changed from: private */

@@ -2830,17 +2830,17 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     static /* synthetic */ int lambda$sortPlaylist$12(MessageObject messageObject, MessageObject messageObject2) {
         int id = messageObject.getId();
         int id2 = messageObject2.getId();
-        long groupId = messageObject.getGroupId();
-        long groupId2 = messageObject2.getGroupId();
+        long j = messageObject.messageOwner.grouped_id;
+        long j2 = messageObject2.messageOwner.grouped_id;
         if (id >= 0 || id2 >= 0) {
-            if (groupId == groupId2) {
-                return C$r8$backportedMethods$utility$Integer$2$compare.compare(id2, id);
+            if (j == 0 || j != j2) {
+                return C$r8$backportedMethods$utility$Integer$2$compare.compare(id, id2);
             }
-            return C$r8$backportedMethods$utility$Integer$2$compare.compare(id, id2);
-        } else if (groupId == groupId2) {
-            return C$r8$backportedMethods$utility$Integer$2$compare.compare(id, id2);
-        } else {
             return C$r8$backportedMethods$utility$Integer$2$compare.compare(id2, id);
+        } else if (j == 0 || j != j2) {
+            return C$r8$backportedMethods$utility$Integer$2$compare.compare(id2, id);
+        } else {
+            return C$r8$backportedMethods$utility$Integer$2$compare.compare(id, id2);
         }
     }
 

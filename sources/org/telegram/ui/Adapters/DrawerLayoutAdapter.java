@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.Collections;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -22,6 +23,7 @@ import org.telegram.ui.Components.SideMenultItemAnimator;
 public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
     private ArrayList<Integer> accountNumbers = new ArrayList<>();
     private boolean accountsShown;
+    private boolean hasGps;
     private SideMenultItemAnimator itemAnimator;
     private ArrayList<Item> items = new ArrayList<>(11);
     private Context mContext;
@@ -34,6 +36,11 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         this.accountsShown = (UserConfig.getActivatedAccountsCount() <= 1 || !MessagesController.getGlobalMainSettings().getBoolean("accountsShown", true)) ? false : z;
         Theme.createDialogsResources(context);
         resetItems();
+        try {
+            this.hasGps = ApplicationLoader.applicationContext.getPackageManager().hasSystemFeature("android.hardware.location.gps");
+        } catch (Throwable unused) {
+            this.hasGps = false;
+        }
     }
 
     private int getAccountRowsCount() {
@@ -170,20 +177,17 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         int i5;
         int i6;
         int i7;
-        int i8;
         this.accountNumbers.clear();
-        for (int i9 = 0; i9 < 3; i9++) {
-            if (UserConfig.getInstance(i9).isClientActivated()) {
-                this.accountNumbers.add(Integer.valueOf(i9));
+        for (int i8 = 0; i8 < 3; i8++) {
+            if (UserConfig.getInstance(i8).isClientActivated()) {
+                this.accountNumbers.add(Integer.valueOf(i8));
             }
         }
         Collections.sort(this.accountNumbers, $$Lambda$DrawerLayoutAdapter$pyljm01qtLl0BbFoRFh7svzDDE.INSTANCE);
         this.items.clear();
         if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
             int eventType = Theme.getEventType();
-            int i10 = NUM;
             if (eventType == 0) {
-                i8 = NUM;
                 i7 = NUM;
                 i6 = NUM;
                 i5 = NUM;
@@ -193,17 +197,13 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 i = NUM;
             } else {
                 if (eventType == 1) {
-                    i8 = NUM;
                     i7 = NUM;
-                    i10 = NUM;
                     i6 = NUM;
                     i5 = NUM;
                     i4 = NUM;
                     i3 = NUM;
                     i2 = NUM;
                 } else if (eventType == 2) {
-                    i8 = NUM;
-                    i10 = NUM;
                     i7 = NUM;
                     i6 = NUM;
                     i5 = NUM;
@@ -212,8 +212,6 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                     i2 = NUM;
                     i = NUM;
                 } else {
-                    i8 = NUM;
-                    i10 = NUM;
                     i7 = NUM;
                     i6 = NUM;
                     i5 = NUM;
@@ -223,11 +221,12 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 }
                 i = NUM;
             }
-            this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), i8));
-            this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), i10));
-            this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), i7));
+            this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), i7));
             this.items.add(new Item(6, LocaleController.getString("Contacts", NUM), i6));
             this.items.add(new Item(10, LocaleController.getString("Calls", NUM), i5));
+            if (this.hasGps) {
+                this.items.add(new Item(12, LocaleController.getString("PeopleNearby", NUM), NUM));
+            }
             this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), i4));
             this.items.add(new Item(8, LocaleController.getString("Settings", NUM), i3));
             this.items.add((Object) null);

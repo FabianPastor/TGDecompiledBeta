@@ -123,6 +123,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
 
     public void setSelectorColor(int i) {
         if (this.selectorColor != i) {
+            this.selectorColor = i;
             updateBackground();
         }
     }

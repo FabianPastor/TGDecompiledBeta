@@ -28,6 +28,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Property;
 import android.util.SparseArray;
@@ -2612,6 +2613,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         Location location = null;
         for (int size = providers.size() - 1; size >= 0; size--) {
             location = locationManager.getLastKnownLocation(providers.get(size));
+            if (Build.VERSION.SDK_INT >= 17 && (SystemClock.elapsedRealtimeNanos() - location.getElapsedRealtimeNanos()) / NUM > 300) {
+                location = null;
+            }
             if (location != null) {
                 break;
             }

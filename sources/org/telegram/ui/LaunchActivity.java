@@ -9,11 +9,13 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StatFs;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.ActionMode;
@@ -22,6 +24,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -920,6 +923,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* access modifiers changed from: private */
     /* renamed from: lambda$onCreate$2 */
     public /* synthetic */ void lambda$onCreate$2$LaunchActivity(View view, int i, float f, float f2) {
+        boolean z = true;
         if (i == 0) {
             DrawerProfileCell drawerProfileCell = (DrawerProfileCell) view;
             if (drawerProfileCell.isInAvatar(f, f2)) {
@@ -992,6 +996,29 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 bundle3.putInt("user_id", UserConfig.getInstance(this.currentAccount).getClientUserId());
                 lambda$runLinkRequest$38(new ChatActivity(bundle3));
                 this.drawerLayoutContainer.closeDrawer(false);
+            } else if (id == 12) {
+                int i4 = Build.VERSION.SDK_INT;
+                if (i4 < 23 || checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") == 0) {
+                    if (i4 >= 28) {
+                        z = ((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isLocationEnabled();
+                    } else if (i4 >= 19) {
+                        try {
+                            if (Settings.Secure.getInt(ApplicationLoader.applicationContext.getContentResolver(), "location_mode", 0) == 0) {
+                                z = false;
+                            }
+                        } catch (Throwable th) {
+                            FileLog.e(th);
+                        }
+                    }
+                    if (!z) {
+                        lambda$runLinkRequest$38(new ActionIntroActivity(4));
+                        return;
+                    }
+                    lambda$runLinkRequest$38(new PeopleNearbyActivity());
+                    this.drawerLayoutContainer.closeDrawer(false);
+                    return;
+                }
+                lambda$runLinkRequest$38(new ActionIntroActivity(1));
             }
         }
     }
@@ -1058,78 +1085,25 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         this.drawerLayoutContainer.closeDrawer(false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x0049  */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x004b  */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x0053  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:? A[RETURN, SYNTHETIC] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void checkSystemBarColors() {
-        /*
-            r7 = this;
-            int r0 = android.os.Build.VERSION.SDK_INT
-            r1 = 23
-            if (r0 < r1) goto L_0x007b
-            java.lang.String r1 = "actionBarDefault"
-            r2 = 0
-            r3 = 1
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1, r2, r3)
-            boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-            r5 = 0
-            if (r4 != 0) goto L_0x003f
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r7.actionBarLayout
-            if (r4 == 0) goto L_0x003f
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = r4.fragmentsStack
-            boolean r4 = r4.isEmpty()
-            if (r4 != 0) goto L_0x003f
-            org.telegram.ui.ActionBar.ActionBarLayout r4 = r7.actionBarLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = r4.fragmentsStack
-            int r6 = r4.size()
-            int r6 = r6 - r3
-            java.lang.Object r4 = r4.get(r6)
-            org.telegram.ui.ActionBar.BaseFragment r4 = (org.telegram.ui.ActionBar.BaseFragment) r4
-            boolean r6 = r4 instanceof org.telegram.ui.ChatUsersActivity
-            if (r6 == 0) goto L_0x003f
-            org.telegram.ui.ChatUsersActivity r4 = (org.telegram.ui.ChatUsersActivity) r4
-            int r4 = r4.getSelectType()
-            r6 = 4
-            if (r4 != r6) goto L_0x003f
-            r4 = 1
-            goto L_0x0040
-        L_0x003f:
-            r4 = 0
-        L_0x0040:
-            android.view.Window r6 = r7.getWindow()
-            if (r4 != 0) goto L_0x004b
-            r4 = -1
-            if (r1 != r4) goto L_0x004b
-            r1 = 1
-            goto L_0x004c
-        L_0x004b:
-            r1 = 0
-        L_0x004c:
-            org.telegram.messenger.AndroidUtilities.setLightStatusBar(r6, r1)
-            r1 = 26
-            if (r0 < r1) goto L_0x007b
-            android.view.Window r0 = r7.getWindow()
-            java.lang.String r1 = "windowBackgroundGray"
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1, r2, r3)
-            int r2 = r0.getNavigationBarColor()
-            if (r2 == r1) goto L_0x007b
-            r0.setNavigationBarColor(r1)
-            float r0 = org.telegram.messenger.AndroidUtilities.computePerceivedBrightness(r1)
-            android.view.Window r1 = r7.getWindow()
-            r2 = 1060672373(0x3var_, float:0.721)
-            int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 < 0) goto L_0x0077
-            goto L_0x0078
-        L_0x0077:
-            r3 = 0
-        L_0x0078:
-            org.telegram.messenger.AndroidUtilities.setLightNavigationBar(r1, r3)
-        L_0x007b:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.checkSystemBarColors():void");
+        int i = Build.VERSION.SDK_INT;
+        if (i >= 23) {
+            boolean z = true;
+            AndroidUtilities.setLightStatusBar(getWindow(), Theme.getColor("actionBarDefault", (boolean[]) null, true) == -1);
+            if (i >= 26) {
+                Window window = getWindow();
+                int color = Theme.getColor("windowBackgroundGray", (boolean[]) null, true);
+                if (window.getNavigationBarColor() != color) {
+                    window.setNavigationBarColor(color);
+                    float computePerceivedBrightness = AndroidUtilities.computePerceivedBrightness(color);
+                    Window window2 = getWindow();
+                    if (computePerceivedBrightness < 0.721f) {
+                        z = false;
+                    }
+                    AndroidUtilities.setLightNavigationBar(window2, z);
+                }
+            }
+        }
     }
 
     public void switchToAccount(int i, boolean z) {

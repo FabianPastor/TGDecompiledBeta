@@ -155,6 +155,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected BluetoothAdapter btAdapter;
     protected int callDiscardReason;
     protected long callStartTime;
+    protected TLRPC$Chat chat;
     protected Runnable connectingSoundRunnable;
     protected PowerManager.WakeLock cpuWakelock;
     protected int createGroupCall;
@@ -182,7 +183,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected boolean needPlayEndSound;
     protected boolean needSwitchToBluetoothAfterScoActivates;
     protected boolean notificationsDisabled;
+    protected Runnable onDestroyRunnable;
     protected Notification ongoingCallNotification;
+    protected boolean playedConnectedSound;
     protected boolean playingSound;
     protected Instance.TrafficStats prevTrafficStats;
     public TLRPC$PhoneCall privateCall;
@@ -479,6 +482,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         this.micMute = z;
         if (this.groupCall != null && z3) {
             editCallMember(UserConfig.getInstance(this.currentAccount).getCurrentUser(), z);
+            TLRPC$Chat tLRPC$Chat = this.chat;
+            showNotification(tLRPC$Chat.title, getRoundAvatarBitmap(tLRPC$Chat));
         }
         if (this.micMute || !z2) {
             z4 = false;
@@ -776,7 +781,12 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             i = NUM;
             str2 = "VoipOutgoingCall";
         }
-        Notification.Builder contentIntent = builder.setContentTitle(LocaleController.getString(str2, i)).setContentText(str).setSmallIcon(NUM).setContentIntent(PendingIntent.getActivity(this, 50, action, 0));
+        Notification.Builder contentIntent = builder.setContentTitle(LocaleController.getString(str2, i)).setContentText(str).setContentIntent(PendingIntent.getActivity(this, 50, action, 0));
+        if (this.groupCall != null) {
+            contentIntent.setSmallIcon(isMicMute() ? NUM : NUM);
+        } else {
+            contentIntent.setSmallIcon(NUM);
+        }
         int i3 = Build.VERSION.SDK_INT;
         if (i3 >= 16) {
             Intent intent = new Intent(this, VoIPActionsReceiver.class);
@@ -1939,6 +1949,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("Call " + getCallID() + " ended");
         }
+        if (this.groupCall != null && (!this.playedConnectedSound || this.onDestroyRunnable != null)) {
+            this.needPlayEndSound = false;
+        }
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
                 VoIPBaseService.this.lambda$callEnded$9$VoIPBaseService();
@@ -1960,7 +1973,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             if (this.groupCall == null) {
                 this.soundPool.play(this.spEndId, 1.0f, 1.0f, 0, 0, 1.0f);
             } else {
-                this.soundPool.play(this.spVoiceChatEndId, 0.7f, 0.7f, 0, 0, 1.0f);
+                this.soundPool.play(this.spVoiceChatEndId, 0.6f, 0.6f, 0, 0, 1.0f);
                 i = 400;
             }
             AndroidUtilities.runOnUIThread(this.afterSoundRunnable, (long) i);

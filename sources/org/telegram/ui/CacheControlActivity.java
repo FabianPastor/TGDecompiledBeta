@@ -6,8 +6,8 @@ import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.Environment;
 import android.os.StatFs;
+import android.text.TextUtils;
 import android.transition.ChangeBounds;
 import android.transition.Fade;
 import android.transition.TransitionManager;
@@ -136,9 +136,12 @@ public class CacheControlActivity extends BaseFragment {
     /* access modifiers changed from: private */
     /* renamed from: lambda$onFragmentCreate$1 */
     public /* synthetic */ void lambda$onFragmentCreate$1$CacheControlActivity() {
+        File file;
         long j;
         long j2;
         long j3;
+        int i = Build.VERSION.SDK_INT;
+        int i2 = 0;
         this.cacheSize = getDirectorySize(FileLoader.checkDirectory(4), 0);
         if (!this.canceled) {
             this.photoSize = getDirectorySize(FileLoader.checkDirectory(0), 0);
@@ -154,8 +157,28 @@ public class CacheControlActivity extends BaseFragment {
                                 long directorySize = getDirectorySize(FileLoader.checkDirectory(1), 0);
                                 this.audioSize = directorySize;
                                 this.totalSize = this.cacheSize + this.videoSize + directorySize + this.photoSize + this.documentsSize + this.musicSize + this.stickersSize;
-                                StatFs statFs = new StatFs(Environment.getDataDirectory().getPath());
-                                int i = Build.VERSION.SDK_INT;
+                                if (i >= 19) {
+                                    ArrayList<File> rootDirs = AndroidUtilities.getRootDirs();
+                                    file = rootDirs.get(0);
+                                    file.getAbsolutePath();
+                                    if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
+                                        int size = rootDirs.size();
+                                        while (true) {
+                                            if (i2 >= size) {
+                                                break;
+                                            }
+                                            File file2 = rootDirs.get(i2);
+                                            if (file2.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
+                                                file = file2;
+                                                break;
+                                            }
+                                            i2++;
+                                        }
+                                    }
+                                } else {
+                                    file = new File(SharedConfig.storageCacheDir);
+                                }
+                                StatFs statFs = new StatFs(file.getPath());
                                 if (i >= 18) {
                                     j = statFs.getBlockSizeLong();
                                 } else {

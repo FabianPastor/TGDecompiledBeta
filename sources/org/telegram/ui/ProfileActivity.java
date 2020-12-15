@@ -702,7 +702,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             this.pressedOverlayGradient = new GradientDrawable[2];
             this.pressedOverlayVisible = new boolean[2];
             this.pressedOverlayAlpha = new float[2];
-            this.alpha = 1.0f;
+            this.alpha = 0.0f;
             this.alphas = null;
             this.previousSelectedPotision = -1;
             this.currentLoadingAnimationDirection = 1;
@@ -909,7 +909,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int r12 = r12.overlayCountVisible
                 r13 = 3
                 if (r12 != 0) goto L_0x0097
-                r0.alpha = r11
+                r0.alpha = r6
                 org.telegram.ui.ProfileActivity r12 = org.telegram.ui.ProfileActivity.this
                 int unused = r12.overlayCountVisible = r13
                 goto L_0x00a6
@@ -7601,7 +7601,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                     }
                 } else {
-                    if (chat.creator) {
+                    if (this.chatInfo != null && ChatObject.canManageCalls(chat) && this.chatInfo.call == null) {
                         this.otherItem.addSubItem(15, NUM, LocaleController.getString("StartVoipChat", NUM));
                         this.hasVoiceChatItem = true;
                     }

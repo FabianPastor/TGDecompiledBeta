@@ -37,6 +37,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Components.GroupCallPip;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarLayout extends FrameLayout {
@@ -763,7 +764,7 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void onBackPressed() {
-        if (!this.transitionAnimationPreviewMode && !this.startedTracking && !checkTransitionAnimation() && !this.fragmentsStack.isEmpty()) {
+        if (!this.transitionAnimationPreviewMode && !this.startedTracking && !checkTransitionAnimation() && !this.fragmentsStack.isEmpty() && !GroupCallPip.onBackPressed()) {
             ActionBar actionBar = this.currentActionBar;
             if (actionBar != null && !actionBar.isActionModeShowed()) {
                 ActionBar actionBar2 = this.currentActionBar;
@@ -1137,7 +1138,9 @@ public class ActionBarLayout extends FrameLayout {
                     this.containerView.setScaleY(1.0f);
                 }
                 if (this.containerView.isKeyboardVisible || this.containerViewBack.isKeyboardVisible) {
-                    baseFragment2.saveKeyboardPositionBeforeTransition();
+                    if (baseFragment2 != null) {
+                        baseFragment2.saveKeyboardPositionBeforeTransition();
+                    }
                     final BaseFragment baseFragment4 = baseFragment2;
                     final BaseFragment baseFragment5 = baseFragment;
                     final boolean z10 = z4;
