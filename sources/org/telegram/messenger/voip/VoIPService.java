@@ -41,6 +41,7 @@ import org.telegram.messenger.XiaomiUtilities;
 import org.telegram.messenger.voip.Instance;
 import org.telegram.messenger.voip.NativeInstance;
 import org.telegram.messenger.voip.VoIPBaseService;
+import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -124,10 +125,10 @@ public class VoIPService extends VoIPBaseService {
     private boolean startedRinging;
     private TLRPC$User user;
 
-    static /* synthetic */ void lambda$null$34(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    static /* synthetic */ void lambda$null$36(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
-    static /* synthetic */ void lambda$onSignalingData$38(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    static /* synthetic */ void lambda$onSignalingData$43(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     public IBinder onBind(Intent intent) {
@@ -1233,26 +1234,26 @@ public class VoIPService extends VoIPBaseService {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x0162  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x016f  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x015d  */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x016a  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void onCallUpdated(org.telegram.tgnet.TLRPC$PhoneCall r10) {
+    public void onCallUpdated(org.telegram.tgnet.TLRPC$PhoneCall r7) {
         /*
-            r9 = this;
-            org.telegram.tgnet.TLRPC$User r0 = r9.user
+            r6 = this;
+            org.telegram.tgnet.TLRPC$User r0 = r6.user
             if (r0 != 0) goto L_0x0005
             return
         L_0x0005:
-            org.telegram.tgnet.TLRPC$PhoneCall r0 = r9.privateCall
+            org.telegram.tgnet.TLRPC$PhoneCall r0 = r6.privateCall
             if (r0 != 0) goto L_0x000f
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhoneCall> r0 = r9.pendingUpdates
-            r0.add(r10)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhoneCall> r0 = r6.pendingUpdates
+            r0.add(r7)
             return
         L_0x000f:
-            if (r10 != 0) goto L_0x0012
+            if (r7 != 0) goto L_0x0012
             return
         L_0x0012:
-            long r1 = r10.id
+            long r1 = r7.id
             long r3 = r0.id
             int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
             if (r5 == 0) goto L_0x0046
@@ -1262,26 +1263,26 @@ public class VoIPService extends VoIPBaseService {
             r0.<init>()
             java.lang.String r1 = "onCallUpdated called with wrong call id (got "
             r0.append(r1)
-            long r1 = r10.id
+            long r1 = r7.id
             r0.append(r1)
-            java.lang.String r10 = ", expected "
-            r0.append(r10)
-            org.telegram.tgnet.TLRPC$PhoneCall r10 = r9.privateCall
-            long r1 = r10.id
+            java.lang.String r7 = ", expected "
+            r0.append(r7)
+            org.telegram.tgnet.TLRPC$PhoneCall r7 = r6.privateCall
+            long r1 = r7.id
             r0.append(r1)
-            java.lang.String r10 = ")"
-            r0.append(r10)
-            java.lang.String r10 = r0.toString()
-            org.telegram.messenger.FileLog.w(r10)
+            java.lang.String r7 = ")"
+            r0.append(r7)
+            java.lang.String r7 = r0.toString()
+            org.telegram.messenger.FileLog.w(r7)
         L_0x0045:
             return
         L_0x0046:
-            long r1 = r10.access_hash
+            long r1 = r7.access_hash
             r3 = 0
             int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
             if (r5 != 0) goto L_0x0052
             long r0 = r0.access_hash
-            r10.access_hash = r0
+            r7.access_hash = r0
         L_0x0052:
             boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED
             if (r0 == 0) goto L_0x006a
@@ -1289,203 +1290,189 @@ public class VoIPService extends VoIPBaseService {
             r0.<init>()
             java.lang.String r1 = "Call updated: "
             r0.append(r1)
-            r0.append(r10)
+            r0.append(r7)
             java.lang.String r0 = r0.toString()
             org.telegram.messenger.FileLog.d(r0)
         L_0x006a:
-            r9.privateCall = r10
-            boolean r0 = r10 instanceof org.telegram.tgnet.TLRPC$TL_phoneCallDiscarded
+            r6.privateCall = r7
+            boolean r0 = r7 instanceof org.telegram.tgnet.TLRPC$TL_phoneCallDiscarded
             r1 = 1
-            if (r0 == 0) goto L_0x00b2
-            boolean r0 = r10.need_debug
-            r9.needSendDebugLog = r0
-            boolean r0 = r10.need_rating
-            r9.needRateCall = r0
+            if (r0 == 0) goto L_0x00ad
+            boolean r0 = r7.need_debug
+            r6.needSendDebugLog = r0
+            boolean r0 = r7.need_rating
+            r6.needRateCall = r0
             boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED
             if (r0 == 0) goto L_0x0082
             java.lang.String r0 = "call discarded, stopping service"
             org.telegram.messenger.FileLog.d(r0)
         L_0x0082:
-            org.telegram.tgnet.TLRPC$PhoneCallDiscardReason r10 = r10.reason
-            boolean r10 = r10 instanceof org.telegram.tgnet.TLRPC$TL_phoneCallDiscardReasonBusy
-            if (r10 == 0) goto L_0x00ad
-            r10 = 17
-            r9.dispatchStateChanged(r10)
-            r9.playingSound = r1
-            android.media.SoundPool r2 = r9.soundPool
-            int r3 = r9.spBusyId
-            r4 = 1065353216(0x3var_, float:1.0)
-            r5 = 1065353216(0x3var_, float:1.0)
-            r6 = 0
-            r7 = -1
-            r8 = 1065353216(0x3var_, float:1.0)
-            r2.play(r3, r4, r5, r6, r7, r8)
-            java.lang.Runnable r10 = r9.afterSoundRunnable
+            org.telegram.tgnet.TLRPC$PhoneCallDiscardReason r7 = r7.reason
+            boolean r7 = r7 instanceof org.telegram.tgnet.TLRPC$TL_phoneCallDiscardReasonBusy
+            if (r7 == 0) goto L_0x00a8
+            r7 = 17
+            r6.dispatchStateChanged(r7)
+            r6.playingSound = r1
+            org.telegram.messenger.DispatchQueue r7 = org.telegram.messenger.Utilities.globalQueue
+            org.telegram.messenger.voip.-$$Lambda$VoIPService$RNbVktdEwQBTJmDL9WrFrWzcXck r0 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$RNbVktdEwQBTJmDL9WrFrWzcXck
+            r0.<init>()
+            r7.postRunnable(r0)
+            java.lang.Runnable r7 = r6.afterSoundRunnable
             r0 = 1500(0x5dc, double:7.41E-321)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r10, r0)
-            r9.endConnectionServiceCall(r0)
-            r9.stopSelf()
-            goto L_0x01d8
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r7, r0)
+            r6.endConnectionServiceCall(r0)
+            r6.stopSelf()
+            goto L_0x01c2
+        L_0x00a8:
+            r6.callEnded()
+            goto L_0x01c2
         L_0x00ad:
-            r9.callEnded()
-            goto L_0x01d8
-        L_0x00b2:
-            boolean r0 = r10 instanceof org.telegram.tgnet.TLRPC$TL_phoneCall
-            if (r0 == 0) goto L_0x0173
-            byte[] r0 = r9.authKey
-            if (r0 != 0) goto L_0x0173
-            byte[] r0 = r10.g_a_or_b
-            if (r0 != 0) goto L_0x00cb
-            boolean r10 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r10 == 0) goto L_0x00c7
-            java.lang.String r10 = "stopping VoIP service, Ga == null"
-            org.telegram.messenger.FileLog.w(r10)
-        L_0x00c7:
-            r9.callFailed()
+            boolean r0 = r7 instanceof org.telegram.tgnet.TLRPC$TL_phoneCall
+            if (r0 == 0) goto L_0x016e
+            byte[] r0 = r6.authKey
+            if (r0 != 0) goto L_0x016e
+            byte[] r0 = r7.g_a_or_b
+            if (r0 != 0) goto L_0x00c6
+            boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r7 == 0) goto L_0x00c2
+            java.lang.String r7 = "stopping VoIP service, Ga == null"
+            org.telegram.messenger.FileLog.w(r7)
+        L_0x00c2:
+            r6.callFailed()
             return
-        L_0x00cb:
-            byte[] r2 = r9.g_a_hash
+        L_0x00c6:
+            byte[] r2 = r6.g_a_hash
             int r3 = r0.length
             r4 = 0
             byte[] r0 = org.telegram.messenger.Utilities.computeSHA256(r0, r4, r3)
             boolean r0 = java.util.Arrays.equals(r2, r0)
-            if (r0 != 0) goto L_0x00e6
-            boolean r10 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r10 == 0) goto L_0x00e2
-            java.lang.String r10 = "stopping VoIP service, Ga hash doesn't match"
-            org.telegram.messenger.FileLog.w(r10)
-        L_0x00e2:
-            r9.callFailed()
+            if (r0 != 0) goto L_0x00e1
+            boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r7 == 0) goto L_0x00dd
+            java.lang.String r7 = "stopping VoIP service, Ga hash doesn't match"
+            org.telegram.messenger.FileLog.w(r7)
+        L_0x00dd:
+            r6.callFailed()
             return
-        L_0x00e6:
-            byte[] r0 = r10.g_a_or_b
-            r9.g_a = r0
+        L_0x00e1:
+            byte[] r0 = r7.g_a_or_b
+            r6.g_a = r0
             java.math.BigInteger r0 = new java.math.BigInteger
-            byte[] r2 = r10.g_a_or_b
+            byte[] r2 = r7.g_a_or_b
             r0.<init>(r1, r2)
             java.math.BigInteger r2 = new java.math.BigInteger
-            int r3 = r9.currentAccount
+            int r3 = r6.currentAccount
             org.telegram.messenger.MessagesStorage r3 = org.telegram.messenger.MessagesStorage.getInstance(r3)
             byte[] r3 = r3.getSecretPBytes()
             r2.<init>(r1, r3)
             boolean r3 = org.telegram.messenger.Utilities.isGoodGaAndGb(r0, r2)
-            if (r3 != 0) goto L_0x0113
-            boolean r10 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r10 == 0) goto L_0x010f
-            java.lang.String r10 = "stopping VoIP service, bad Ga and Gb (accepting)"
-            org.telegram.messenger.FileLog.w(r10)
-        L_0x010f:
-            r9.callFailed()
+            if (r3 != 0) goto L_0x010e
+            boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r7 == 0) goto L_0x010a
+            java.lang.String r7 = "stopping VoIP service, bad Ga and Gb (accepting)"
+            org.telegram.messenger.FileLog.w(r7)
+        L_0x010a:
+            r6.callFailed()
             return
-        L_0x0113:
+        L_0x010e:
             java.math.BigInteger r3 = new java.math.BigInteger
-            byte[] r5 = r9.a_or_b
+            byte[] r5 = r6.a_or_b
             r3.<init>(r1, r5)
             java.math.BigInteger r0 = r0.modPow(r3, r2)
             byte[] r0 = r0.toByteArray()
             int r1 = r0.length
             r2 = 256(0x100, float:3.59E-43)
-            if (r1 <= r2) goto L_0x0130
+            if (r1 <= r2) goto L_0x012b
             byte[] r1 = new byte[r2]
             int r3 = r0.length
             int r3 = r3 - r2
             java.lang.System.arraycopy(r0, r3, r1, r4, r2)
-        L_0x012e:
+        L_0x0129:
             r0 = r1
-            goto L_0x0147
-        L_0x0130:
+            goto L_0x0142
+        L_0x012b:
             int r1 = r0.length
-            if (r1 >= r2) goto L_0x0147
+            if (r1 >= r2) goto L_0x0142
             byte[] r1 = new byte[r2]
             int r3 = r0.length
             int r3 = 256 - r3
             int r5 = r0.length
             java.lang.System.arraycopy(r0, r4, r1, r3, r5)
             r3 = 0
-        L_0x013d:
+        L_0x0138:
             int r5 = r0.length
             int r5 = 256 - r5
-            if (r3 >= r5) goto L_0x012e
+            if (r3 >= r5) goto L_0x0129
             r1[r3] = r4
             int r3 = r3 + 1
-            goto L_0x013d
-        L_0x0147:
+            goto L_0x0138
+        L_0x0142:
             byte[] r1 = org.telegram.messenger.Utilities.computeSHA1((byte[]) r0)
             r2 = 8
             byte[] r3 = new byte[r2]
             int r5 = r1.length
             int r5 = r5 - r2
             java.lang.System.arraycopy(r1, r5, r3, r4, r2)
-            r9.authKey = r0
+            r6.authKey = r0
             long r0 = org.telegram.messenger.Utilities.bytesToLong(r3)
-            r9.keyFingerprint = r0
-            long r2 = r10.key_fingerprint
-            int r10 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r10 == 0) goto L_0x016f
-            boolean r10 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r10 == 0) goto L_0x016b
-            java.lang.String r10 = "key fingerprints don't match"
-            org.telegram.messenger.FileLog.w(r10)
-        L_0x016b:
-            r9.callFailed()
+            r6.keyFingerprint = r0
+            long r2 = r7.key_fingerprint
+            int r7 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+            if (r7 == 0) goto L_0x016a
+            boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r7 == 0) goto L_0x0166
+            java.lang.String r7 = "key fingerprints don't match"
+            org.telegram.messenger.FileLog.w(r7)
+        L_0x0166:
+            r6.callFailed()
             return
-        L_0x016f:
-            r9.initiateActualEncryptedCall()
-            goto L_0x01d8
-        L_0x0173:
-            boolean r0 = r10 instanceof org.telegram.tgnet.TLRPC$TL_phoneCallAccepted
-            if (r0 == 0) goto L_0x017f
-            byte[] r0 = r9.authKey
-            if (r0 != 0) goto L_0x017f
-            r9.processAcceptedCall()
-            goto L_0x01d8
-        L_0x017f:
-            int r0 = r9.currentState
+        L_0x016a:
+            r6.initiateActualEncryptedCall()
+            goto L_0x01c2
+        L_0x016e:
+            boolean r0 = r7 instanceof org.telegram.tgnet.TLRPC$TL_phoneCallAccepted
+            if (r0 == 0) goto L_0x017a
+            byte[] r0 = r6.authKey
+            if (r0 != 0) goto L_0x017a
+            r6.processAcceptedCall()
+            goto L_0x01c2
+        L_0x017a:
+            int r0 = r6.currentState
             r1 = 13
-            if (r0 != r1) goto L_0x01d8
-            int r10 = r10.receive_date
-            if (r10 == 0) goto L_0x01d8
-            r10 = 16
-            r9.dispatchStateChanged(r10)
-            boolean r10 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r10 == 0) goto L_0x0197
-            java.lang.String r10 = "!!!!!! CALL RECEIVED"
-            org.telegram.messenger.FileLog.d(r10)
-        L_0x0197:
-            java.lang.Runnable r10 = r9.connectingSoundRunnable
+            if (r0 != r1) goto L_0x01c2
+            int r7 = r7.receive_date
+            if (r7 == 0) goto L_0x01c2
+            r7 = 16
+            r6.dispatchStateChanged(r7)
+            boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED
+            if (r7 == 0) goto L_0x0192
+            java.lang.String r7 = "!!!!!! CALL RECEIVED"
+            org.telegram.messenger.FileLog.d(r7)
+        L_0x0192:
+            java.lang.Runnable r7 = r6.connectingSoundRunnable
             r0 = 0
-            if (r10 == 0) goto L_0x01a1
-            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r10)
-            r9.connectingSoundRunnable = r0
-        L_0x01a1:
-            int r10 = r9.spPlayID
-            if (r10 == 0) goto L_0x01aa
-            android.media.SoundPool r1 = r9.soundPool
-            r1.stop(r10)
-        L_0x01aa:
-            android.media.SoundPool r2 = r9.soundPool
-            int r3 = r9.spRingbackID
-            r4 = 1065353216(0x3var_, float:1.0)
-            r5 = 1065353216(0x3var_, float:1.0)
-            r6 = 0
-            r7 = -1
-            r8 = 1065353216(0x3var_, float:1.0)
-            int r10 = r2.play(r3, r4, r5, r6, r7, r8)
-            r9.spPlayID = r10
-            java.lang.Runnable r10 = r9.timeoutRunnable
-            if (r10 == 0) goto L_0x01c5
-            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r10)
-            r9.timeoutRunnable = r0
-        L_0x01c5:
-            org.telegram.messenger.voip.-$$Lambda$VoIPService$RNbVktdEwQBTJmDL9WrFrWzcXck r10 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$RNbVktdEwQBTJmDL9WrFrWzcXck
-            r10.<init>()
-            r9.timeoutRunnable = r10
-            int r0 = r9.currentAccount
+            if (r7 == 0) goto L_0x019c
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r7)
+            r6.connectingSoundRunnable = r0
+        L_0x019c:
+            org.telegram.messenger.DispatchQueue r7 = org.telegram.messenger.Utilities.globalQueue
+            org.telegram.messenger.voip.-$$Lambda$VoIPService$KmYVqcAZ0uG31IQIdA1Z-MU_PmY r1 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$KmYVqcAZ0uG31IQIdA1Z-MU_PmY
+            r1.<init>()
+            r7.postRunnable(r1)
+            java.lang.Runnable r7 = r6.timeoutRunnable
+            if (r7 == 0) goto L_0x01af
+            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r7)
+            r6.timeoutRunnable = r0
+        L_0x01af:
+            org.telegram.messenger.voip.-$$Lambda$VoIPService$cVj6RuJCv533q_4Bv0gyzG9XU9s r7 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$cVj6RuJCv533q_4Bv0gyzG9XU9s
+            r7.<init>()
+            r6.timeoutRunnable = r7
+            int r0 = r6.currentAccount
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             int r0 = r0.callRingTimeout
             long r0 = (long) r0
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r10, r0)
-        L_0x01d8:
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r7, r0)
+        L_0x01c2:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.onCallUpdated(org.telegram.tgnet.TLRPC$PhoneCall):void");
@@ -1494,6 +1481,22 @@ public class VoIPService extends VoIPBaseService {
     /* access modifiers changed from: private */
     /* renamed from: lambda$onCallUpdated$20 */
     public /* synthetic */ void lambda$onCallUpdated$20$VoIPService() {
+        this.soundPool.play(this.spBusyId, 1.0f, 1.0f, 0, -1, 1.0f);
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCallUpdated$21 */
+    public /* synthetic */ void lambda$onCallUpdated$21$VoIPService() {
+        int i = this.spPlayID;
+        if (i != 0) {
+            this.soundPool.stop(i);
+        }
+        this.spPlayID = this.soundPool.play(this.spRingbackID, 1.0f, 1.0f, 0, -1, 1.0f);
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCallUpdated$22 */
+    public /* synthetic */ void lambda$onCallUpdated$22$VoIPService() {
         this.timeoutRunnable = null;
         declineIncomingCall(3, (Runnable) null);
     }
@@ -1560,7 +1563,7 @@ public class VoIPService extends VoIPBaseService {
             tLRPC$TL_phoneCallProtocol2.library_versions.addAll(Instance.AVAILABLE_VERSIONS);
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_confirmCall, new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    VoIPService.this.lambda$processAcceptedCall$22$VoIPService(tLObject, tLRPC$TL_error);
+                    VoIPService.this.lambda$processAcceptedCall$24$VoIPService(tLObject, tLRPC$TL_error);
                 }
             });
         }
@@ -1589,14 +1592,14 @@ public class VoIPService extends VoIPBaseService {
         tLRPC$TL_phoneCallProtocol22.library_versions.addAll(Instance.AVAILABLE_VERSIONS);
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_confirmCall2, new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                VoIPService.this.lambda$processAcceptedCall$22$VoIPService(tLObject, tLRPC$TL_error);
+                VoIPService.this.lambda$processAcceptedCall$24$VoIPService(tLObject, tLRPC$TL_error);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processAcceptedCall$22 */
-    public /* synthetic */ void lambda$processAcceptedCall$22$VoIPService(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$processAcceptedCall$24 */
+    public /* synthetic */ void lambda$processAcceptedCall$24$VoIPService(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -1607,14 +1610,14 @@ public class VoIPService extends VoIPBaseService {
             }
 
             public final void run() {
-                VoIPService.this.lambda$null$21$VoIPService(this.f$1, this.f$2);
+                VoIPService.this.lambda$null$23$VoIPService(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$21 */
-    public /* synthetic */ void lambda$null$21$VoIPService(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$null$23 */
+    public /* synthetic */ void lambda$null$23$VoIPService(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error != null) {
             callFailed();
             return;
@@ -1628,6 +1631,10 @@ public class VoIPService extends VoIPBaseService {
             return i;
         }
         return ApplicationLoader.isRoaming() ? 1 : 0;
+    }
+
+    public void migrateToChat(TLRPC$Chat tLRPC$Chat) {
+        this.chat = tLRPC$Chat;
     }
 
     /* access modifiers changed from: private */
@@ -1663,7 +1670,7 @@ public class VoIPService extends VoIPBaseService {
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        VoIPService.this.lambda$startGroupCall$26$VoIPService(this.f$1, tLObject, tLRPC$TL_error);
+                        VoIPService.this.lambda$startGroupCall$28$VoIPService(this.f$1, tLObject, tLRPC$TL_error);
                     }
                 }, 2);
                 this.createGroupCall = 0;
@@ -1673,7 +1680,7 @@ public class VoIPService extends VoIPBaseService {
                 }
                 configureDeviceForCall();
                 showNotification();
-                AndroidUtilities.runOnUIThread($$Lambda$VoIPService$tGLyMzKBQ5hlAuZqJ0vWtFAsmcE.INSTANCE);
+                AndroidUtilities.runOnUIThread($$Lambda$VoIPService$jeLp4qadaQlaTEPMEZddhttGjk.INSTANCE);
                 createGroupInstance();
             } else if (getSharedInstance() != null && this.groupCall != null) {
                 dispatchStateChanged(1);
@@ -1685,9 +1692,9 @@ public class VoIPService extends VoIPBaseService {
                 tLRPC$TL_phone_joinGroupCall.params = tLRPC$TL_dataJSON;
                 tLRPC$TL_dataJSON.data = str;
                 ConnectionsManager instance = ConnectionsManager.getInstance(this.currentAccount);
-                $$Lambda$VoIPService$BtHVA7AO1irDjn7CxzA6aZSsGZM r0 = new RequestDelegate() {
+                $$Lambda$VoIPService$Y5qAbEU_fH0f2eYrEyifbCYpTgI r0 = new RequestDelegate() {
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        VoIPService.this.lambda$startGroupCall$30$VoIPService(tLObject, tLRPC$TL_error);
+                        VoIPService.this.lambda$startGroupCall$32$VoIPService(tLObject, tLRPC$TL_error);
                     }
                 };
                 if (!BuildVars.DEBUG_PRIVATE_VERSION) {
@@ -1699,8 +1706,8 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startGroupCall$26 */
-    public /* synthetic */ void lambda$startGroupCall$26$VoIPService(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$startGroupCall$28 */
+    public /* synthetic */ void lambda$startGroupCall$28$VoIPService(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             TLRPC$Updates tLRPC$Updates = (TLRPC$Updates) tLObject;
             int i = 0;
@@ -1720,7 +1727,7 @@ public class VoIPService extends VoIPBaseService {
                         }
 
                         public final void run() {
-                            VoIPService.this.lambda$null$24$VoIPService(this.f$1, this.f$2);
+                            VoIPService.this.lambda$null$26$VoIPService(this.f$1, this.f$2);
                         }
                     });
                     break;
@@ -1738,14 +1745,14 @@ public class VoIPService extends VoIPBaseService {
             }
 
             public final void run() {
-                VoIPService.this.lambda$null$25$VoIPService(this.f$1);
+                VoIPService.this.lambda$null$27$VoIPService(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$24 */
-    public /* synthetic */ void lambda$null$24$VoIPService(TLRPC$TL_updateGroupCall tLRPC$TL_updateGroupCall, boolean z) {
+    /* renamed from: lambda$null$26 */
+    public /* synthetic */ void lambda$null$26$VoIPService(TLRPC$TL_updateGroupCall tLRPC$TL_updateGroupCall, boolean z) {
         if (VoIPBaseService.sharedInstance != null) {
             TLRPC$GroupCall tLRPC$GroupCall = this.groupCall.call;
             TLRPC$GroupCall tLRPC$GroupCall2 = tLRPC$TL_updateGroupCall.call;
@@ -1761,7 +1768,7 @@ public class VoIPService extends VoIPBaseService {
                 tLRPC$TL_phone_toggleGroupCallSettings.join_muted = true;
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_toggleGroupCallSettings, new RequestDelegate() {
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        VoIPService.this.lambda$null$23$VoIPService(tLObject, tLRPC$TL_error);
+                        VoIPService.this.lambda$null$25$VoIPService(tLObject, tLRPC$TL_error);
                     }
                 });
             }
@@ -1770,28 +1777,28 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$23 */
-    public /* synthetic */ void lambda$null$23$VoIPService(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$null$25 */
+    public /* synthetic */ void lambda$null$25$VoIPService(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC$Updates) tLObject, false);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$25 */
-    public /* synthetic */ void lambda$null$25$VoIPService(TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$null$27 */
+    public /* synthetic */ void lambda$null$27$VoIPService(TLRPC$TL_error tLRPC$TL_error) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.needShowAlert, 6, tLRPC$TL_error.text);
         hangUp(0);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startGroupCall$30 */
-    public /* synthetic */ void lambda$startGroupCall$30$VoIPService(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$startGroupCall$32 */
+    public /* synthetic */ void lambda$startGroupCall$32$VoIPService(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC$Updates) tLObject, false);
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
-                    VoIPService.this.lambda$null$28$VoIPService();
+                    VoIPService.this.lambda$null$30$VoIPService();
                 }
             });
             return;
@@ -1804,20 +1811,20 @@ public class VoIPService extends VoIPBaseService {
             }
 
             public final void run() {
-                VoIPService.this.lambda$null$29$VoIPService(this.f$1);
+                VoIPService.this.lambda$null$31$VoIPService(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$28 */
-    public /* synthetic */ void lambda$null$28$VoIPService() {
+    /* renamed from: lambda$null$30 */
+    public /* synthetic */ void lambda$null$30$VoIPService() {
         this.groupCall.loadMembers(false);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$29 */
-    public /* synthetic */ void lambda$null$29$VoIPService(TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$null$31 */
+    public /* synthetic */ void lambda$null$31$VoIPService(TLRPC$TL_error tLRPC$TL_error) {
         if ("GROUPCALL_SSRC_DUPLICATE_MUCH".equals(tLRPC$TL_error.text)) {
             createGroupInstance();
             return;
@@ -1828,9 +1835,9 @@ public class VoIPService extends VoIPBaseService {
 
     private void startGroupCheckShortpoll() {
         if (this.shortPollRunnable == null && VoIPBaseService.sharedInstance != null && this.groupCall != null) {
-            $$Lambda$VoIPService$X0c_kB7d9gnY7H0LaF2BDaHdU r0 = new Runnable() {
+            $$Lambda$VoIPService$Whw_70T_B58Kxo9daP564M0r9s r0 = new Runnable() {
                 public final void run() {
-                    VoIPService.this.lambda$startGroupCheckShortpoll$33$VoIPService();
+                    VoIPService.this.lambda$startGroupCheckShortpoll$35$VoIPService();
                 }
             };
             this.shortPollRunnable = r0;
@@ -1839,23 +1846,23 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startGroupCheckShortpoll$33 */
-    public /* synthetic */ void lambda$startGroupCheckShortpoll$33$VoIPService() {
+    /* renamed from: lambda$startGroupCheckShortpoll$35 */
+    public /* synthetic */ void lambda$startGroupCheckShortpoll$35$VoIPService() {
         if (this.shortPollRunnable != null && VoIPBaseService.sharedInstance != null && this.groupCall != null) {
             TLRPC$TL_phone_checkGroupCall tLRPC$TL_phone_checkGroupCall = new TLRPC$TL_phone_checkGroupCall();
             tLRPC$TL_phone_checkGroupCall.call = this.groupCall.getInputGroupCall();
             tLRPC$TL_phone_checkGroupCall.source = this.mySource;
             this.checkRequestId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_checkGroupCall, new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    VoIPService.this.lambda$null$32$VoIPService(tLObject, tLRPC$TL_error);
+                    VoIPService.this.lambda$null$34$VoIPService(tLObject, tLRPC$TL_error);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$32 */
-    public /* synthetic */ void lambda$null$32$VoIPService(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$null$34 */
+    public /* synthetic */ void lambda$null$34$VoIPService(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, tLRPC$TL_error) {
             public final /* synthetic */ TLObject f$1;
             public final /* synthetic */ TLRPC$TL_error f$2;
@@ -1866,14 +1873,14 @@ public class VoIPService extends VoIPBaseService {
             }
 
             public final void run() {
-                VoIPService.this.lambda$null$31$VoIPService(this.f$1, this.f$2);
+                VoIPService.this.lambda$null$33$VoIPService(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$31 */
-    public /* synthetic */ void lambda$null$31$VoIPService(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$null$33 */
+    public /* synthetic */ void lambda$null$33$VoIPService(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (this.shortPollRunnable != null && VoIPBaseService.sharedInstance != null && this.groupCall != null) {
             this.shortPollRunnable = null;
             this.checkRequestId = 0;
@@ -1909,21 +1916,21 @@ public class VoIPService extends VoIPBaseService {
             }
         }, new NativeInstance.AudioLevelsCallback() {
             public final void run(int[] iArr, float[] fArr, boolean[] zArr) {
-                VoIPService.this.lambda$createGroupInstance$35$VoIPService(iArr, fArr, zArr);
+                VoIPService.this.lambda$createGroupInstance$37$VoIPService(iArr, fArr, zArr);
             }
         });
         this.tgVoip = makeGroup;
         makeGroup.setOnStateUpdatedListener(new Instance.OnStateUpdatedListener() {
             public final void onStateUpdated(int i) {
-                VoIPService.this.lambda$createGroupInstance$36$VoIPService(i);
+                VoIPService.this.lambda$createGroupInstance$40$VoIPService(i);
             }
         });
         dispatchStateChanged(1);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createGroupInstance$35 */
-    public /* synthetic */ void lambda$createGroupInstance$35$VoIPService(int[] iArr, float[] fArr, boolean[] zArr) {
+    /* renamed from: lambda$createGroupInstance$37 */
+    public /* synthetic */ void lambda$createGroupInstance$37$VoIPService(int[] iArr, float[] fArr, boolean[] zArr) {
         ChatObject.Call call;
         if (VoIPBaseService.sharedInstance != null && (call = this.groupCall) != null) {
             call.processVoiceLevelsUpdate(iArr, fArr, zArr);
@@ -1936,7 +1943,7 @@ public class VoIPService extends VoIPBaseService {
                         TLRPC$TL_messages_setTyping tLRPC$TL_messages_setTyping = new TLRPC$TL_messages_setTyping();
                         tLRPC$TL_messages_setTyping.action = new TLRPC$TL_speakingInGroupCallAction();
                         tLRPC$TL_messages_setTyping.peer = MessagesController.getInputPeer(this.chat);
-                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_setTyping, $$Lambda$VoIPService$2ibAjneDk9vGW6Nw2TIThdGMncw.INSTANCE);
+                        ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_setTyping, $$Lambda$VoIPService$NzWrNGqO1legpSGbZM_sjHzp2DQ.INSTANCE);
                     }
                     NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.webRtcMicAmplitudeEvent, Float.valueOf(fArr[i]));
                 } else {
@@ -1955,8 +1962,8 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createGroupInstance$36 */
-    public /* synthetic */ void lambda$createGroupInstance$36$VoIPService(int i) {
+    /* renamed from: lambda$createGroupInstance$40 */
+    public /* synthetic */ void lambda$createGroupInstance$40$VoIPService(int i) {
         int i2;
         dispatchStateChanged(i == 1 ? 3 : 5);
         if (i == 0) {
@@ -1972,11 +1979,11 @@ public class VoIPService extends VoIPBaseService {
         }
         cancelGroupCheckShortPoll();
         if (this.playedConnectedSound) {
-            int i3 = this.spPlayID;
-            if (i3 != 0) {
-                this.soundPool.stop(i3);
-                this.spPlayID = 0;
-            }
+            Utilities.globalQueue.postRunnable(new Runnable() {
+                public final void run() {
+                    VoIPService.this.lambda$null$38$VoIPService();
+                }
+            });
             Runnable runnable = this.connectingSoundRunnable;
             if (runnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(runnable);
@@ -1985,8 +1992,28 @@ public class VoIPService extends VoIPBaseService {
             }
             return;
         }
-        this.soundPool.play(this.spVoiceChatStartId, 0.7f, 0.7f, 0, 0, 1.0f);
+        Utilities.globalQueue.postRunnable(new Runnable() {
+            public final void run() {
+                VoIPService.this.lambda$null$39$VoIPService();
+            }
+        });
         this.playedConnectedSound = true;
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$38 */
+    public /* synthetic */ void lambda$null$38$VoIPService() {
+        int i = this.spPlayID;
+        if (i != 0) {
+            this.soundPool.stop(i);
+            this.spPlayID = 0;
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$39 */
+    public /* synthetic */ void lambda$null$39$VoIPService() {
+        this.soundPool.play(this.spVoiceChatStartId, 1.0f, 1.0f, 0, 0, 1.0f);
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:26:?, code lost:
@@ -2236,7 +2263,7 @@ public class VoIPService extends VoIPBaseService {
             r29 = r5
             r7 = r15
             if (r2 == 0) goto L_0x01d7
-            org.telegram.messenger.voip.-$$Lambda$VoIPService$2n9wh10VvWKivmqLujW9wiucLXk r0 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$2n9wh10VvWKivmqLujW9wiucLXk     // Catch:{ Exception -> 0x02d3 }
+            org.telegram.messenger.voip.-$$Lambda$VoIPService$OEt7LVAXV1NjVqb_EbFlqynwxsc r0 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$OEt7LVAXV1NjVqb_EbFlqynwxsc     // Catch:{ Exception -> 0x02d3 }
             r0.<init>()     // Catch:{ Exception -> 0x02d3 }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x02d3 }
         L_0x01d7:
@@ -2372,8 +2399,8 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initiateActualEncryptedCall$37 */
-    public /* synthetic */ void lambda$initiateActualEncryptedCall$37$VoIPService() {
+    /* renamed from: lambda$initiateActualEncryptedCall$41 */
+    public /* synthetic */ void lambda$initiateActualEncryptedCall$41$VoIPService() {
         Toast.makeText(this, "This call uses TCP which will degrade its quality.", 0).show();
     }
 
@@ -2389,6 +2416,16 @@ public class VoIPService extends VoIPBaseService {
     }
 
     private void startConnectingSound() {
+        Utilities.globalQueue.postRunnable(new Runnable() {
+            public final void run() {
+                VoIPService.this.lambda$startConnectingSound$42$VoIPService();
+            }
+        });
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$startConnectingSound$42 */
+    public /* synthetic */ void lambda$startConnectingSound$42$VoIPService() {
         int i = this.spPlayID;
         if (i != 0) {
             this.soundPool.stop(i);
@@ -2399,16 +2436,26 @@ public class VoIPService extends VoIPBaseService {
             AnonymousClass3 r0 = new Runnable() {
                 public void run() {
                     if (VoIPBaseService.sharedInstance != null) {
-                        VoIPService voIPService = VoIPService.this;
-                        if (voIPService.spPlayID == 0) {
-                            voIPService.spPlayID = voIPService.soundPool.play(voIPService.spConnectingId, 1.0f, 1.0f, 0, -1, 1.0f);
-                        }
-                        VoIPService voIPService2 = VoIPService.this;
-                        if (voIPService2.spPlayID == 0) {
-                            AndroidUtilities.runOnUIThread(this, 100);
-                        } else {
-                            voIPService2.connectingSoundRunnable = null;
-                        }
+                        Utilities.globalQueue.postRunnable(new Runnable() {
+                            public final void run() {
+                                VoIPService.AnonymousClass3.this.lambda$run$0$VoIPService$3();
+                            }
+                        });
+                    }
+                }
+
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$run$0 */
+                public /* synthetic */ void lambda$run$0$VoIPService$3() {
+                    VoIPService voIPService = VoIPService.this;
+                    if (voIPService.spPlayID == 0) {
+                        voIPService.spPlayID = voIPService.soundPool.play(voIPService.spConnectingId, 1.0f, 1.0f, 0, -1, 1.0f);
+                    }
+                    VoIPService voIPService2 = VoIPService.this;
+                    if (voIPService2.spPlayID == 0) {
+                        AndroidUtilities.runOnUIThread(this, 100);
+                    } else {
+                        voIPService2.connectingSoundRunnable = null;
                     }
                 }
             };
@@ -2426,7 +2473,7 @@ public class VoIPService extends VoIPBaseService {
             tLRPC$TL_inputPhoneCall.access_hash = tLRPC$PhoneCall.access_hash;
             tLRPC$TL_inputPhoneCall.id = tLRPC$PhoneCall.id;
             tLRPC$TL_phone_sendSignalingData.data = bArr;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_sendSignalingData, $$Lambda$VoIPService$Cfd5Q5CD23jkengMqfF4cBoBKtc.INSTANCE);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_sendSignalingData, $$Lambda$VoIPService$vUNqZAvkm5x_4ROauvZnsrS8Ks.INSTANCE);
         }
     }
 
@@ -2446,12 +2493,12 @@ public class VoIPService extends VoIPBaseService {
             NativeInstance nativeInstance = this.tgVoip;
             tLRPC$TL_phone_discardCall.connection_id = nativeInstance != null ? nativeInstance.getPreferredRelayId() : 0;
             tLRPC$TL_phone_discardCall.reason = new TLRPC$TL_phoneCallDiscardReasonDisconnect();
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_discardCall, $$Lambda$VoIPService$0yqB0NU11RJQEfbpKRXpaloAMc.INSTANCE);
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_discardCall, $$Lambda$VoIPService$ehdZ1oD0WxvOYSW__D6A6UwgPa8.INSTANCE);
         }
         super.callFailed(str);
     }
 
-    static /* synthetic */ void lambda$callFailed$39(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    static /* synthetic */ void lambda$callFailed$44(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.e("error on phone.discardCall: " + tLRPC$TL_error);
@@ -2518,14 +2565,14 @@ public class VoIPService extends VoIPBaseService {
             }
 
             public final void run() {
-                VoIPService.this.lambda$onConnectionStateChanged$40$VoIPService(this.f$1);
+                VoIPService.this.lambda$onConnectionStateChanged$45$VoIPService(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onConnectionStateChanged$40 */
-    public /* synthetic */ void lambda$onConnectionStateChanged$40$VoIPService(int i) {
+    /* renamed from: lambda$onConnectionStateChanged$45 */
+    public /* synthetic */ void lambda$onConnectionStateChanged$45$VoIPService(int i) {
         if (i == 3 && this.callStartTime == 0) {
             this.callStartTime = SystemClock.elapsedRealtime();
         }
@@ -2542,9 +2589,9 @@ public class VoIPService extends VoIPBaseService {
             this.systemCallConnection = callConnection;
             callConnection.setInitializing();
             if (this.isOutgoing) {
-                $$Lambda$VoIPService$DYO4rintqxCoEnv4pdXCvVeT5I r0 = new Runnable() {
+                $$Lambda$VoIPService$q15Fta4PMdg5Elo92FkHHOi4U r0 = new Runnable() {
                     public final void run() {
-                        VoIPService.this.lambda$getConnectionAndStartCall$41$VoIPService();
+                        VoIPService.this.lambda$getConnectionAndStartCall$46$VoIPService();
                     }
                 };
                 this.delayedStartOutgoingCall = r0;
@@ -2560,8 +2607,8 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getConnectionAndStartCall$41 */
-    public /* synthetic */ void lambda$getConnectionAndStartCall$41$VoIPService() {
+    /* renamed from: lambda$getConnectionAndStartCall$46 */
+    public /* synthetic */ void lambda$getConnectionAndStartCall$46$VoIPService() {
         this.delayedStartOutgoingCall = null;
         startOutgoingCall();
     }

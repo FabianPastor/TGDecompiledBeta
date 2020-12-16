@@ -13355,7 +13355,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r7.setVisibility(r10)
                 r0.muteVideo = r11
                 android.widget.ImageView r7 = r0.muteItem
-                r11 = 2131166076(0x7var_c, float:1.7946387E38)
+                r11 = 2131166077(0x7var_d, float:1.794639E38)
                 r7.setImageResource(r11)
                 org.telegram.ui.Components.PickerBottomLayoutViewer r7 = r0.editorDoneLayout
                 r7.setVisibility(r10)
@@ -17587,7 +17587,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (android.graphics.drawable.Drawable) r4, (int) r5, (java.lang.String) r6, (java.lang.Object) r7, (int) r8)
                 goto L_0x0695
             L_0x0314:
-                r2 = 2131165828(0x7var_, float:1.7945884E38)
+                r2 = 2131165829(0x7var_, float:1.7945886E38)
                 if (r1 == 0) goto L_0x0358
                 if (r17 == 0) goto L_0x032d
                 org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForWebFile(r1)
@@ -17659,7 +17659,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             L_0x0384:
                 org.telegram.ui.PhotoViewer$PageBlocksAdapter r2 = r0.pageBlocksAdapter
                 r3 = -1
-                r6 = 2131165888(0x7var_c0, float:1.7946006E38)
+                r6 = 2131165889(0x7var_c1, float:1.7946008E38)
                 if (r2 == 0) goto L_0x046c
                 r7 = 1
                 int[] r4 = new int[r7]

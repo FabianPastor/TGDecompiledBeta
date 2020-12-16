@@ -60,6 +60,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
@@ -117,18 +118,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected static final boolean USE_CONNECTION_SERVICE = isDeviceCompatibleWithConnectionServiceAPI();
     protected static VoIPBaseService sharedInstance;
     protected Runnable afterSoundRunnable = new Runnable() {
-        /* access modifiers changed from: private */
-        /* renamed from: lambda$run$0 */
-        public /* synthetic */ void lambda$run$0$VoIPBaseService$1() {
-            VoIPBaseService.this.soundPool.release();
-        }
-
         public void run() {
-            Utilities.globalQueue.postRunnable(new Runnable() {
-                public final void run() {
-                    VoIPBaseService.AnonymousClass1.this.lambda$run$0$VoIPBaseService$1();
-                }
-            });
             AudioManager audioManager = (AudioManager) VoIPBaseService.this.getSystemService("audio");
             audioManager.abandonAudioFocus(VoIPBaseService.this);
             audioManager.unregisterMediaButtonEventReceiver(new ComponentName(VoIPBaseService.this, VoIPMediaButtonReceiver.class));
@@ -139,12 +129,29 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                     VoIPBaseService.this.bluetoothScoActive = false;
                 }
                 audioManager.setSpeakerphoneOn(false);
-                try {
-                    audioManager.setMode(0);
-                } catch (SecurityException e) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.e("Error setting audio more to normal", e);
+                Utilities.globalQueue.postRunnable(new Runnable(audioManager) {
+                    public final /* synthetic */ AudioManager f$1;
+
+                    {
+                        this.f$1 = r2;
                     }
+
+                    public final void run() {
+                        VoIPBaseService.AnonymousClass1.this.lambda$run$0$VoIPBaseService$1(this.f$1);
+                    }
+                });
+            }
+        }
+
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$run$0 */
+        public /* synthetic */ void lambda$run$0$VoIPBaseService$1(AudioManager audioManager) {
+            VoIPBaseService.this.soundPool.release();
+            try {
+                audioManager.setMode(0);
+            } catch (SecurityException e) {
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.e("Error setting audio more to normal", e);
                 }
             }
         }
@@ -917,7 +924,14 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             StatsController.getInstance(this.currentAccount).incrementTotalCallsTime(getStatsNetworkType(), ((int) (getCallDuration() / 1000)) % 5);
             onTgVoipPreStop();
             if (this.tgVoip.isGroup()) {
-                this.tgVoip.stopGroup();
+                NativeInstance nativeInstance = this.tgVoip;
+                DispatchQueue dispatchQueue = Utilities.globalQueue;
+                nativeInstance.getClass();
+                dispatchQueue.postRunnable(new Runnable() {
+                    public final void run() {
+                        NativeInstance.this.stopGroup();
+                    }
+                });
             } else {
                 Instance.FinalState stop = this.tgVoip.stop();
                 updateTrafficStats(stop.trafficStats);
@@ -943,12 +957,18 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                     audioManager.setSpeakerphoneOn(false);
                     this.bluetoothScoActive = false;
                 }
-                try {
-                    audioManager.setMode(0);
-                } catch (SecurityException e) {
-                    if (BuildVars.LOGS_ENABLED) {
-                        FileLog.e("Error setting audio more to normal", e);
-                    }
+                if (this.onDestroyRunnable == null) {
+                    Utilities.globalQueue.postRunnable(new Runnable(audioManager) {
+                        public final /* synthetic */ AudioManager f$0;
+
+                        {
+                            this.f$0 = r1;
+                        }
+
+                        public final void run() {
+                            VoIPBaseService.lambda$onDestroy$4(this.f$0);
+                        }
+                    });
                 }
                 audioManager.abandonAudioFocus(this);
             }
@@ -958,7 +978,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             }
             Utilities.globalQueue.postRunnable(new Runnable() {
                 public final void run() {
-                    VoIPBaseService.this.lambda$onDestroy$4$VoIPBaseService();
+                    VoIPBaseService.this.lambda$onDestroy$5$VoIPBaseService();
                 }
             });
         }
@@ -975,9 +995,19 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         VoIPHelper.lastCallTime = SystemClock.elapsedRealtime();
     }
 
+    static /* synthetic */ void lambda$onDestroy$4(AudioManager audioManager) {
+        try {
+            audioManager.setMode(0);
+        } catch (SecurityException e) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("Error setting audio more to normal", e);
+            }
+        }
+    }
+
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onDestroy$4 */
-    public /* synthetic */ void lambda$onDestroy$4$VoIPBaseService() {
+    /* renamed from: lambda$onDestroy$5 */
+    public /* synthetic */ void lambda$onDestroy$5$VoIPBaseService() {
         this.soundPool.release();
     }
 
@@ -1023,16 +1053,11 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             }
             registerReceiver(this.receiver, intentFilter);
             fetchBluetoothDeviceName();
-            SoundPool soundPool2 = new SoundPool(1, 0, 0);
-            this.soundPool = soundPool2;
-            this.spConnectingId = soundPool2.load(this, NUM, 1);
-            this.spRingbackID = this.soundPool.load(this, NUM, 1);
-            this.spFailedID = this.soundPool.load(this, NUM, 1);
-            this.spEndId = this.soundPool.load(this, NUM, 1);
-            this.spBusyId = this.soundPool.load(this, NUM, 1);
-            this.spVoiceChatEndId = this.soundPool.load(this, NUM, 1);
-            this.spVoiceChatStartId = this.soundPool.load(this, NUM, 1);
-            this.spVoiceChatConnecting = this.soundPool.load(this, NUM, 1);
+            Utilities.globalQueue.postRunnable(new Runnable() {
+                public final void run() {
+                    VoIPBaseService.this.lambda$onCreate$6$VoIPBaseService();
+                }
+            });
             audioManager.registerMediaButtonEventReceiver(new ComponentName(this, VoIPMediaButtonReceiver.class));
             if (!z2 && (bluetoothAdapter = this.btAdapter) != null && bluetoothAdapter.isEnabled()) {
                 try {
@@ -1068,6 +1093,21 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             }
             callFailed();
         }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCreate$6 */
+    public /* synthetic */ void lambda$onCreate$6$VoIPBaseService() {
+        SoundPool soundPool2 = new SoundPool(1, 0, 0);
+        this.soundPool = soundPool2;
+        this.spConnectingId = soundPool2.load(this, NUM, 1);
+        this.spRingbackID = this.soundPool.load(this, NUM, 1);
+        this.spFailedID = this.soundPool.load(this, NUM, 1);
+        this.spEndId = this.soundPool.load(this, NUM, 1);
+        this.spBusyId = this.soundPool.load(this, NUM, 1);
+        this.spVoiceChatEndId = this.soundPool.load(this, NUM, 1);
+        this.spVoiceChatStartId = this.soundPool.load(this, NUM, 1);
+        this.spVoiceChatConnecting = this.soundPool.load(this, NUM, 1);
     }
 
     /* access modifiers changed from: protected */
@@ -1125,7 +1165,17 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         this.needPlayEndSound = true;
         AudioManager audioManager = (AudioManager) getSystemService("audio");
         if (!USE_CONNECTION_SERVICE) {
-            audioManager.setMode(3);
+            Utilities.globalQueue.postRunnable(new Runnable(audioManager) {
+                public final /* synthetic */ AudioManager f$0;
+
+                {
+                    this.f$0 = r1;
+                }
+
+                public final void run() {
+                    VoIPBaseService.lambda$configureDeviceForCall$7(this.f$0);
+                }
+            });
             audioManager.requestAudioFocus(this, 0, 1);
             if (isBluetoothHeadsetConnected() && hasEarpiece()) {
                 int i = this.audioRouteToSet;
@@ -1166,6 +1216,14 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                     FileLog.e("Error initializing proximity sensor", e);
                 }
             }
+        }
+    }
+
+    static /* synthetic */ void lambda$configureDeviceForCall$7(AudioManager audioManager) {
+        try {
+            audioManager.setMode(3);
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
         }
     }
 
@@ -1268,7 +1326,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                     }
 
                     public final void run() {
-                        VoIPBaseService.lambda$updateBluetoothHeadsetState$5(this.f$0);
+                        VoIPBaseService.lambda$updateBluetoothHeadsetState$8(this.f$0);
                     }
                 }, 500);
             }
@@ -1279,7 +1337,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         }
     }
 
-    static /* synthetic */ void lambda$updateBluetoothHeadsetState$5(AudioManager audioManager) {
+    static /* synthetic */ void lambda$updateBluetoothHeadsetState$8(AudioManager audioManager) {
         try {
             audioManager.startBluetoothSco();
         } catch (Throwable unused) {
@@ -1460,7 +1518,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         L_0x002f:
             android.app.Notification$Builder r5 = r5.setContentTitle(r10)
             android.app.Notification$Builder r5 = r5.setContentText(r0)
-            r10 = 2131165830(0x7var_, float:1.7945888E38)
+            r10 = 2131165831(0x7var_, float:1.794589E38)
             android.app.Notification$Builder r5 = r5.setSmallIcon(r10)
             android.app.Notification$Builder r5 = r5.setSubText(r2)
             r10 = 0
@@ -1796,7 +1854,6 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     /* access modifiers changed from: protected */
     public void callFailed(String str) {
         CallConnection callConnection;
-        SoundPool soundPool2;
         try {
             throw new Exception("Call " + getCallID() + " failed with error: " + str);
         } catch (Exception e) {
@@ -1804,12 +1861,16 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             this.lastError = str;
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
-                    VoIPBaseService.this.lambda$callFailed$6$VoIPBaseService();
+                    VoIPBaseService.this.lambda$callFailed$9$VoIPBaseService();
                 }
             });
-            if (TextUtils.equals(str, "ERROR_LOCALIZED") && (soundPool2 = this.soundPool) != null) {
+            if (TextUtils.equals(str, "ERROR_LOCALIZED") && this.soundPool != null) {
                 this.playingSound = true;
-                soundPool2.play(this.spFailedID, 1.0f, 1.0f, 0, 0, 1.0f);
+                Utilities.globalQueue.postRunnable(new Runnable() {
+                    public final void run() {
+                        VoIPBaseService.this.lambda$callFailed$10$VoIPBaseService();
+                    }
+                });
                 AndroidUtilities.runOnUIThread(this.afterSoundRunnable, 1000);
             }
             if (USE_CONNECTION_SERVICE && (callConnection = this.systemCallConnection) != null) {
@@ -1822,9 +1883,15 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$callFailed$6 */
-    public /* synthetic */ void lambda$callFailed$6$VoIPBaseService() {
+    /* renamed from: lambda$callFailed$9 */
+    public /* synthetic */ void lambda$callFailed$9$VoIPBaseService() {
         dispatchStateChanged(4);
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$callFailed$10 */
+    public /* synthetic */ void lambda$callFailed$10$VoIPBaseService() {
+        this.soundPool.play(this.spFailedID, 1.0f, 1.0f, 0, 0, 1.0f);
     }
 
     /* access modifiers changed from: package-private */
@@ -1847,11 +1914,11 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 AndroidUtilities.cancelRunOnUIThread(runnable);
                 this.connectingSoundRunnable = null;
             }
-            int i2 = this.spPlayID;
-            if (i2 != 0) {
-                this.soundPool.stop(i2);
-                this.spPlayID = 0;
-            }
+            Utilities.globalQueue.postRunnable(new Runnable() {
+                public final void run() {
+                    VoIPBaseService.this.lambda$onConnectionStateChanged$11$VoIPBaseService();
+                }
+            });
             if (this.groupCall == null && !this.wasEstablished) {
                 this.wasEstablished = true;
                 if (!this.isProximityNear && !this.privateCall.video) {
@@ -1877,13 +1944,33 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             }
         }
         if (i == 5) {
-            int i3 = this.spPlayID;
-            if (i3 != 0) {
-                this.soundPool.stop(i3);
-            }
-            this.spPlayID = this.soundPool.play(this.groupCall != null ? this.spVoiceChatConnecting : this.spConnectingId, 1.0f, 1.0f, 0, -1, 1.0f);
+            Utilities.globalQueue.postRunnable(new Runnable() {
+                public final void run() {
+                    VoIPBaseService.this.lambda$onConnectionStateChanged$12$VoIPBaseService();
+                }
+            });
         }
         dispatchStateChanged(i);
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onConnectionStateChanged$11 */
+    public /* synthetic */ void lambda$onConnectionStateChanged$11$VoIPBaseService() {
+        int i = this.spPlayID;
+        if (i != 0) {
+            this.soundPool.stop(i);
+            this.spPlayID = 0;
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onConnectionStateChanged$12 */
+    public /* synthetic */ void lambda$onConnectionStateChanged$12$VoIPBaseService() {
+        int i = this.spPlayID;
+        if (i != 0) {
+            this.soundPool.stop(i);
+        }
+        this.spPlayID = this.soundPool.play(this.groupCall != null ? this.spVoiceChatConnecting : this.spConnectingId, 1.0f, 1.0f, 0, -1, 1.0f);
     }
 
     public void onSignalBarCountChanged(int i) {
@@ -1895,14 +1982,14 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             }
 
             public final void run() {
-                VoIPBaseService.this.lambda$onSignalBarCountChanged$7$VoIPBaseService(this.f$1);
+                VoIPBaseService.this.lambda$onSignalBarCountChanged$13$VoIPBaseService(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onSignalBarCountChanged$7 */
-    public /* synthetic */ void lambda$onSignalBarCountChanged$7$VoIPBaseService(int i) {
+    /* renamed from: lambda$onSignalBarCountChanged$13 */
+    public /* synthetic */ void lambda$onSignalBarCountChanged$13$VoIPBaseService(int i) {
         this.signalBarCount = i;
         for (int i2 = 0; i2 < this.stateListeners.size(); i2++) {
             this.stateListeners.get(i2).onSignalBarsCountChanged(i);
@@ -1928,14 +2015,14 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             }
 
             public final void run() {
-                VoIPBaseService.this.lambda$onMediaStateUpdated$8$VoIPBaseService(this.f$1, this.f$2);
+                VoIPBaseService.this.lambda$onMediaStateUpdated$14$VoIPBaseService(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onMediaStateUpdated$8 */
-    public /* synthetic */ void lambda$onMediaStateUpdated$8$VoIPBaseService(int i, int i2) {
+    /* renamed from: lambda$onMediaStateUpdated$14 */
+    public /* synthetic */ void lambda$onMediaStateUpdated$14$VoIPBaseService(int i, int i2) {
         this.currentAudioState = i;
         this.currentVideoState = i2;
         checkIsNear();
@@ -1954,15 +2041,15 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         }
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                VoIPBaseService.this.lambda$callEnded$9$VoIPBaseService();
+                VoIPBaseService.this.lambda$callEnded$15$VoIPBaseService();
             }
         });
         int i = 700;
-        int i2 = this.spPlayID;
-        if (i2 != 0) {
-            this.soundPool.stop(i2);
-            this.spPlayID = 0;
-        }
+        Utilities.globalQueue.postRunnable(new Runnable() {
+            public final void run() {
+                VoIPBaseService.this.lambda$callEnded$16$VoIPBaseService();
+            }
+        });
         Runnable runnable = this.connectingSoundRunnable;
         if (runnable != null) {
             AndroidUtilities.cancelRunOnUIThread(runnable);
@@ -1971,9 +2058,17 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         if (this.needPlayEndSound) {
             this.playingSound = true;
             if (this.groupCall == null) {
-                this.soundPool.play(this.spEndId, 1.0f, 1.0f, 0, 0, 1.0f);
+                Utilities.globalQueue.postRunnable(new Runnable() {
+                    public final void run() {
+                        VoIPBaseService.this.lambda$callEnded$17$VoIPBaseService();
+                    }
+                });
             } else {
-                this.soundPool.play(this.spVoiceChatEndId, 0.6f, 0.6f, 0, 0, 1.0f);
+                Utilities.globalQueue.postRunnable(new Runnable() {
+                    public final void run() {
+                        VoIPBaseService.this.lambda$callEnded$18$VoIPBaseService();
+                    }
+                });
                 i = 400;
             }
             AndroidUtilities.runOnUIThread(this.afterSoundRunnable, (long) i);
@@ -1988,17 +2083,39 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$callEnded$9 */
-    public /* synthetic */ void lambda$callEnded$9$VoIPBaseService() {
+    /* renamed from: lambda$callEnded$15 */
+    public /* synthetic */ void lambda$callEnded$15$VoIPBaseService() {
         dispatchStateChanged(11);
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$callEnded$16 */
+    public /* synthetic */ void lambda$callEnded$16$VoIPBaseService() {
+        int i = this.spPlayID;
+        if (i != 0) {
+            this.soundPool.stop(i);
+            this.spPlayID = 0;
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$callEnded$17 */
+    public /* synthetic */ void lambda$callEnded$17$VoIPBaseService() {
+        this.soundPool.play(this.spEndId, 1.0f, 1.0f, 0, 0, 1.0f);
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$callEnded$18 */
+    public /* synthetic */ void lambda$callEnded$18$VoIPBaseService() {
+        this.soundPool.play(this.spVoiceChatEndId, 1.0f, 1.0f, 0, 0, 1.0f);
     }
 
     /* access modifiers changed from: protected */
     public void endConnectionServiceCall(long j) {
         if (USE_CONNECTION_SERVICE) {
-            $$Lambda$VoIPBaseService$7EKFtLLoPalZdK4yIWzfxKWtv5o r0 = new Runnable() {
+            $$Lambda$VoIPBaseService$tE2y4Vw4UoB5cz5VbFnIKujBEmU r0 = new Runnable() {
                 public final void run() {
-                    VoIPBaseService.this.lambda$endConnectionServiceCall$10$VoIPBaseService();
+                    VoIPBaseService.this.lambda$endConnectionServiceCall$19$VoIPBaseService();
                 }
             };
             if (j > 0) {
@@ -2010,8 +2127,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$endConnectionServiceCall$10 */
-    public /* synthetic */ void lambda$endConnectionServiceCall$10$VoIPBaseService() {
+    /* renamed from: lambda$endConnectionServiceCall$19 */
+    public /* synthetic */ void lambda$endConnectionServiceCall$19$VoIPBaseService() {
         CallConnection callConnection = this.systemCallConnection;
         if (callConnection != null) {
             int i = this.callDiscardReason;

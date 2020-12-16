@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -124,6 +125,14 @@ public class ChatObject {
             sortParticipants();
             this.nextLoadOffset = tLRPC$TL_phone_groupCall.participants_next_offset;
             loadMembers(true);
+        }
+
+        public void migrateToChat(TLRPC$Chat tLRPC$Chat) {
+            this.chatId = tLRPC$Chat.id;
+            VoIPService sharedInstance = VoIPService.getSharedInstance();
+            if (sharedInstance != null && sharedInstance.getAccount() == this.currentAccount && sharedInstance.getChat() != null && sharedInstance.getChat().id == (-this.chatId)) {
+                sharedInstance.migrateToChat(tLRPC$Chat);
+            }
         }
 
         public void loadMembers(boolean z) {

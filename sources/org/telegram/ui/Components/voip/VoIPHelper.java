@@ -143,16 +143,13 @@ public class VoIPHelper {
     }
 
     public static void startCall(TLRPC$Chat tLRPC$Chat, int i, Activity activity) {
-        int i2;
         String str;
-        int i3;
+        int i2;
         String str2;
+        int i3;
         if (activity != null) {
-            boolean z = false;
             if (ConnectionsManager.getInstance(UserConfig.selectedAccount).getConnectionState() != 3) {
-                if (Settings.System.getInt(activity.getContentResolver(), "airplane_mode_on", 0) != 0) {
-                    z = true;
-                }
+                boolean z = Settings.System.getInt(activity.getContentResolver(), "airplane_mode_on", 0) != 0;
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
                 if (z) {
                     i2 = NUM;
@@ -193,6 +190,9 @@ public class VoIPHelper {
                     builder.show();
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
+                }
+                if (GroupCallActivity.groupCallInstance == null) {
+                    GroupCallActivity.groupCallUiVisible = false;
                 }
             } else if (Build.VERSION.SDK_INT >= 23) {
                 ArrayList arrayList = new ArrayList();
@@ -1002,6 +1002,7 @@ public class VoIPHelper {
 
     static /* synthetic */ void lambda$showGroupCallAlert$17(BaseFragment baseFragment, TLRPC$Chat tLRPC$Chat, DialogInterface dialogInterface, int i) {
         if (baseFragment.getParentActivity() != null) {
+            GroupCallActivity.groupCallUiVisible = true;
             startCall(tLRPC$Chat, 1, baseFragment.getParentActivity());
         }
     }

@@ -683,9 +683,11 @@ public class LocationController extends BaseController implements NotificationCe
 
     /* access modifiers changed from: private */
     public void setLastKnownLocation(Location location) {
-        this.lastKnownLocation = location;
-        if (location != null) {
-            AndroidUtilities.runOnUIThread($$Lambda$LocationController$sBQ0ISjA9CLASSNAMEnOsUV79F6MakmT0.INSTANCE);
+        if (location == null || Build.VERSION.SDK_INT < 17 || (SystemClock.elapsedRealtimeNanos() - location.getElapsedRealtimeNanos()) / NUM <= 300) {
+            this.lastKnownLocation = location;
+            if (location != null) {
+                AndroidUtilities.runOnUIThread($$Lambda$LocationController$sBQ0ISjA9CLASSNAMEnOsUV79F6MakmT0.INSTANCE);
+            }
         }
     }
 

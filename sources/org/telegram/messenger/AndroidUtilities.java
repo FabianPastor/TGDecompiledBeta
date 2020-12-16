@@ -49,6 +49,7 @@ import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.DisplayMetrics;
 import android.util.StateSet;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
@@ -333,6 +334,16 @@ public class AndroidUtilities {
             indexOf = lowerCase.indexOf(str, indexOf + 1);
         }
         return valueOf;
+    }
+
+    public static Activity findActivity(Context context) {
+        if (context instanceof Activity) {
+            return (Activity) context;
+        }
+        if (context instanceof ContextThemeWrapper) {
+            return findActivity(((ContextThemeWrapper) context).getBaseContext());
+        }
+        return null;
     }
 
     private static class LinkSpec {

@@ -289,28 +289,25 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.muteDrawable = rLottieDrawable;
         rLottieDrawable.setPlayInDirectionOfCustomEndFrame(true);
         AnonymousClass4 r3 = new RLottieImageView(context2) {
-            private Runnable hapticRunnable = new Runnable() {
+            private final Runnable pressRunnable = new Runnable() {
                 public final void run() {
                     FragmentContextView.AnonymousClass4.this.lambda$$1$FragmentContextView$4();
                 }
             };
-            private Runnable pressRunnable = new Runnable() {
+            boolean pressed;
+            boolean scheduled;
+            private final Runnable toggleMicRunnable = new Runnable() {
                 public final void run() {
                     FragmentContextView.AnonymousClass4.this.lambda$$0$FragmentContextView$4();
                 }
             };
-            boolean pressed;
-            boolean scheduled;
 
             /* access modifiers changed from: private */
             /* renamed from: lambda$$0 */
             public /* synthetic */ void lambda$$0$FragmentContextView$4() {
-                if (this.scheduled && VoIPService.getSharedInstance() != null) {
+                if (VoIPService.getSharedInstance() != null) {
                     int i = 0;
                     VoIPService.getSharedInstance().setMicMute(false, true, false);
-                    this.scheduled = false;
-                    this.pressed = true;
-                    boolean unused = FragmentContextView.this.isMuted = false;
                     RLottieDrawable access$500 = FragmentContextView.this.muteDrawable;
                     if (!FragmentContextView.this.isMuted) {
                         i = 15;
@@ -325,6 +322,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             /* renamed from: lambda$$1 */
             public /* synthetic */ void lambda$$1$FragmentContextView$4() {
                 if (this.scheduled && VoIPService.getSharedInstance() != null) {
+                    this.scheduled = false;
+                    this.pressed = true;
+                    boolean unused = FragmentContextView.this.isMuted = false;
+                    AndroidUtilities.runOnUIThread(this.toggleMicRunnable, 90);
                     FragmentContextView.this.muteButton.performHapticFeedback(3, 2);
                 }
             }
@@ -336,17 +337,16 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 VoIPService sharedInstance = VoIPService.getSharedInstance();
                 if (sharedInstance == null) {
                     AndroidUtilities.cancelRunOnUIThread(this.pressRunnable);
-                    AndroidUtilities.cancelRunOnUIThread(this.hapticRunnable);
+                    AndroidUtilities.cancelRunOnUIThread(this.toggleMicRunnable);
                     this.scheduled = false;
                     this.pressed = false;
                     return true;
                 }
                 if (motionEvent.getAction() == 0 && sharedInstance.isMicMute()) {
                     AndroidUtilities.runOnUIThread(this.pressRunnable, (long) ViewConfiguration.getTapTimeout());
-                    AndroidUtilities.runOnUIThread(this.hapticRunnable, (long) Math.max(0, ViewConfiguration.getTapTimeout() - 90));
                     this.scheduled = true;
                 } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
-                    AndroidUtilities.cancelRunOnUIThread(this.hapticRunnable);
+                    AndroidUtilities.cancelRunOnUIThread(this.toggleMicRunnable);
                     if (this.scheduled) {
                         AndroidUtilities.cancelRunOnUIThread(this.pressRunnable);
                         this.scheduled = false;

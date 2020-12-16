@@ -2097,7 +2097,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r1.setVisibility(r2)
         L_0x00db:
             r1 = 16
-            r3 = 2131165935(0x7var_ef, float:1.7946101E38)
+            r3 = 2131165936(0x7var_f0, float:1.7946103E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r3)
             r11.videoCallItem = r1
             r3 = 2131627627(0x7f0e0e6b, float:1.8882524E38)
@@ -2684,7 +2684,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             goto L_0x064a
         L_0x061d:
             android.widget.ImageView r1 = r11.writeButton
-            r7 = 2131165932(0x7var_ec, float:1.7946095E38)
+            r7 = 2131165933(0x7var_ed, float:1.7946097E38)
             r1.setImageResource(r7)
             android.widget.ImageView r1 = r11.writeButton
             r7 = 2131623998(0x7f0e003e, float:1.8875163E38)
@@ -2694,7 +2694,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             goto L_0x064a
         L_0x0634:
             android.widget.ImageView r1 = r11.writeButton
-            r7 = 2131165928(0x7var_e8, float:1.7946087E38)
+            r7 = 2131165929(0x7var_e9, float:1.7946089E38)
             r1.setImageResource(r7)
             android.widget.ImageView r1 = r11.writeButton
             r7 = 2131627657(0x7f0e0e89, float:1.8882585E38)
@@ -9257,7 +9257,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r1 = 2131626248(0x7f0e0908, float:1.8879727E38)
                 java.lang.String r2 = "NotificationsAndSounds"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                r2 = 2131165668(0x7var_e4, float:1.794556E38)
+                r2 = 2131165669(0x7var_e5, float:1.7945562E38)
                 r0.setTextAndIcon((java.lang.String) r1, (int) r2, (boolean) r10)
                 goto L_0x0a0e
             L_0x059e:
@@ -9267,7 +9267,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r1 = 2131626794(0x7f0e0b2a, float:1.8880834E38)
                 java.lang.String r2 = "PrivacySettings"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                r2 = 2131165678(0x7var_ee, float:1.794558E38)
+                r2 = 2131165679(0x7var_ef, float:1.7945582E38)
                 r0.setTextAndIcon((java.lang.String) r1, (int) r2, (boolean) r10)
                 goto L_0x0a0e
             L_0x05b7:
@@ -9307,7 +9307,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r1 = 2131624344(0x7f0e0198, float:1.8875865E38)
                 java.lang.String r2 = "AskAQuestion"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                r2 = 2131165690(0x7var_fa, float:1.7945604E38)
+                r2 = 2131165691(0x7var_fb, float:1.7945606E38)
                 r0.setTextAndIcon((java.lang.String) r1, (int) r2, (boolean) r10)
                 goto L_0x0a0e
             L_0x061b:
@@ -9327,7 +9327,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r1 = 2131626787(0x7f0e0b23, float:1.888082E38)
                 java.lang.String r2 = "PrivacyPolicy"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                r2 = 2131165672(0x7var_e8, float:1.7945568E38)
+                r2 = 2131165673(0x7var_e9, float:1.794557E38)
                 r0.setTextAndIcon((java.lang.String) r1, (int) r2, (boolean) r9)
                 goto L_0x0a0e
             L_0x064d:
@@ -9380,7 +9380,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r1 = 2131627135(0x7f0e0c7f, float:1.8881526E38)
                 java.lang.String r2 = "SetProfilePhoto"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                r2 = 2131165708(0x7var_c, float:1.794564E38)
+                r2 = 2131165709(0x7var_d, float:1.7945643E38)
                 r0.setTextAndIcon((java.lang.String) r1, (int) r2, (boolean) r9)
                 goto L_0x0a0e
             L_0x06cc:
@@ -11491,6 +11491,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void updateListAnimated() {
+        LinearLayoutManager linearLayoutManager;
+        int findFirstVisibleItemPosition;
+        View findViewByPosition;
         if (this.listAdapter == null) {
             updateRowsIds();
             return;
@@ -11501,6 +11504,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         updateRowsIds();
         diffCallback.fillPositions(diffCallback.newPositionToItem);
         DiffUtil.calculateDiff(diffCallback).dispatchUpdatesTo((RecyclerView.Adapter) this.listAdapter);
+        if (this.listView != null && (linearLayoutManager = this.layoutManager) != null && (findFirstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()) != -1 && (findViewByPosition = this.layoutManager.findViewByPosition(findFirstVisibleItemPosition)) != null) {
+            this.layoutManager.scrollToPositionWithOffset(findFirstVisibleItemPosition, findViewByPosition.getTop() - this.listView.getPaddingTop());
+        }
     }
 
     private class DiffCallback extends DiffUtil.Callback {

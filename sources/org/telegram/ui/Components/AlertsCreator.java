@@ -3837,11 +3837,16 @@ public class AlertsCreator {
         builder.setMessage(LocaleController.getString("PermissionDrawAboveOtherAppsGroupCall", NUM));
         builder.setPositiveButton(LocaleController.getString("Enable", NUM), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialogInterface, int i) {
-                Context context = context2;
-                if (context != null) {
+                if (context2 != null) {
                     try {
                         if (Build.VERSION.SDK_INT >= 23) {
-                            context.startActivity(new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse("package:" + context2.getPackageName())));
+                            Intent intent = new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse("package:" + context2.getPackageName()));
+                            Activity findActivity = AndroidUtilities.findActivity(context2);
+                            if (findActivity instanceof LaunchActivity) {
+                                findActivity.startActivityForResult(intent, 105);
+                            } else {
+                                context2.startActivity(intent);
+                            }
                         }
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);

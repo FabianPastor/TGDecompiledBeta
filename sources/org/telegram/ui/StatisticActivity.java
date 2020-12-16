@@ -3447,7 +3447,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 java.lang.String r10 = "StatisticOpenProfile"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165673(0x7var_e9, float:1.794557E38)
+                r9 = 2131165674(0x7var_ea, float:1.7945572E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 2

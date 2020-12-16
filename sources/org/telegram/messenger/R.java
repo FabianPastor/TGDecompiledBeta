@@ -641,6 +641,7 @@ public final class R {
         public static final int menu_language = NUM;
         public static final int menu_location = NUM;
         public static final int menu_mail = NUM;
+        public static final int menu_nearby = NUM;
         public static final int menu_newfilter = NUM;
         public static final int menu_newphone = NUM;
         public static final int menu_night = NUM;

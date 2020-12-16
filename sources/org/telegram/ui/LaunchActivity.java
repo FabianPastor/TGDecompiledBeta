@@ -325,7 +325,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0118:
         L_0x0119:
             android.view.Window r6 = r13.getWindow()
-            r7 = 2131166054(0x7var_, float:1.7946343E38)
+            r7 = 2131166055(0x7var_, float:1.7946345E38)
             r6.setBackgroundDrawableResource(r7)
             java.lang.String r6 = org.telegram.messenger.SharedConfig.passcodeHash
             int r6 = r6.length()
@@ -1010,11 +1010,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                             FileLog.e(th);
                         }
                     }
-                    if (!z) {
+                    if (z) {
+                        lambda$runLinkRequest$38(new PeopleNearbyActivity());
+                    } else {
                         lambda$runLinkRequest$38(new ActionIntroActivity(4));
-                        return;
                     }
-                    lambda$runLinkRequest$38(new PeopleNearbyActivity());
                     this.drawerLayoutContainer.closeDrawer(false);
                     return;
                 }
@@ -8704,32 +8704,44 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
             UserConfig.getInstance(this.currentAccount).saveConfig(false);
         }
-        super.onActivityResult(i, i2, intent);
-        if (i == 140) {
-            LocationController instance = LocationController.getInstance(this.currentAccount);
-            if (i2 == -1) {
-                z = true;
+        if (i != 105) {
+            super.onActivityResult(i, i2, intent);
+            if (i == 140) {
+                LocationController instance = LocationController.getInstance(this.currentAccount);
+                if (i2 == -1) {
+                    z = true;
+                }
+                instance.startFusedLocationRequest(z);
+                return;
             }
-            instance.startFusedLocationRequest(z);
-            return;
-        }
-        ThemeEditorView instance2 = ThemeEditorView.getInstance();
-        if (instance2 != null) {
-            instance2.onActivityResult(i, i2, intent);
-        }
-        if (this.actionBarLayout.fragmentsStack.size() != 0) {
-            ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;
-            arrayList.get(arrayList.size() - 1).onActivityResultFragment(i, i2, intent);
-        }
-        if (AndroidUtilities.isTablet()) {
-            if (this.rightActionBarLayout.fragmentsStack.size() != 0) {
-                ArrayList<BaseFragment> arrayList2 = this.rightActionBarLayout.fragmentsStack;
-                arrayList2.get(arrayList2.size() - 1).onActivityResultFragment(i, i2, intent);
+            ThemeEditorView instance2 = ThemeEditorView.getInstance();
+            if (instance2 != null) {
+                instance2.onActivityResult(i, i2, intent);
             }
-            if (this.layersActionBarLayout.fragmentsStack.size() != 0) {
-                ArrayList<BaseFragment> arrayList3 = this.layersActionBarLayout.fragmentsStack;
-                arrayList3.get(arrayList3.size() - 1).onActivityResultFragment(i, i2, intent);
+            if (this.actionBarLayout.fragmentsStack.size() != 0) {
+                ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;
+                arrayList.get(arrayList.size() - 1).onActivityResultFragment(i, i2, intent);
             }
+            if (AndroidUtilities.isTablet()) {
+                if (this.rightActionBarLayout.fragmentsStack.size() != 0) {
+                    ArrayList<BaseFragment> arrayList2 = this.rightActionBarLayout.fragmentsStack;
+                    arrayList2.get(arrayList2.size() - 1).onActivityResultFragment(i, i2, intent);
+                }
+                if (this.layersActionBarLayout.fragmentsStack.size() != 0) {
+                    ArrayList<BaseFragment> arrayList3 = this.layersActionBarLayout.fragmentsStack;
+                    arrayList3.get(arrayList3.size() - 1).onActivityResultFragment(i, i2, intent);
+                }
+            }
+        } else if (Build.VERSION.SDK_INT >= 23 && Settings.canDrawOverlays(this)) {
+            AndroidUtilities.runOnUIThread($$Lambda$LaunchActivity$eqo5HqReQ4TBSmqSq4jhVLOhXgM.INSTANCE, 60);
+        }
+    }
+
+    static /* synthetic */ void lambda$onActivityResult$54() {
+        GroupCallPip.clearForce();
+        GroupCallActivity groupCallActivity = GroupCallActivity.groupCallInstance;
+        if (groupCallActivity != null) {
+            groupCallActivity.dismiss();
         }
     }
 
@@ -8805,7 +8817,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         builder.setMessage(str);
         builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                LaunchActivity.this.lambda$showPermissionErrorAlert$54$LaunchActivity(dialogInterface, i);
+                LaunchActivity.this.lambda$showPermissionErrorAlert$55$LaunchActivity(dialogInterface, i);
             }
         });
         builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
@@ -8813,8 +8825,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showPermissionErrorAlert$54 */
-    public /* synthetic */ void lambda$showPermissionErrorAlert$54$LaunchActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$showPermissionErrorAlert$55 */
+    public /* synthetic */ void lambda$showPermissionErrorAlert$55$LaunchActivity(DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -8837,7 +8849,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
 
             public final void run() {
-                LaunchActivity.lambda$onPause$55(this.f$0);
+                LaunchActivity.lambda$onPause$56(this.f$0);
             }
         });
         onPasscodePause();
@@ -8859,7 +8871,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
     }
 
-    static /* synthetic */ void lambda$onPause$55(int i) {
+    static /* synthetic */ void lambda$onPause$56(int i) {
         ApplicationLoader.mainInterfacePausedStageQueue = true;
         ApplicationLoader.mainInterfacePausedStageQueueTime = 0;
         if (VoIPService.getSharedInstance() == null) {
@@ -8947,7 +8959,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         MediaController.getInstance().setFeedbackView(this.actionBarLayout, true);
         ApplicationLoader.mainInterfacePaused = false;
         showLanguageAlert(false);
-        Utilities.stageQueue.postRunnable($$Lambda$LaunchActivity$z2hE7GdJQgLCay_MODOmOmH2MbE.INSTANCE);
+        Utilities.stageQueue.postRunnable($$Lambda$LaunchActivity$w0fSrKFjviFuge2j7pq7uTSn6Yc.INSTANCE);
         checkFreeDiscSpace();
         MediaController.checkGallery();
         onPasscodeResume();
@@ -8985,7 +8997,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
     }
 
-    static /* synthetic */ void lambda$onResume$56() {
+    static /* synthetic */ void lambda$onResume$57() {
         ApplicationLoader.mainInterfacePausedStageQueue = false;
         ApplicationLoader.mainInterfacePausedStageQueueTime = System.currentTimeMillis();
     }
@@ -9123,7 +9135,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r4 = 2131625995(0x7f0e080b, float:1.8879214E38)
             java.lang.String r5 = "MoreInfo"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            org.telegram.ui.-$$Lambda$LaunchActivity$664d2wBwELcb7Q7vWqZO6ajpa3w r5 = new org.telegram.ui.-$$Lambda$LaunchActivity$664d2wBwELcb7Q7vWqZO6ajpa3w
+            org.telegram.ui.-$$Lambda$LaunchActivity$osXFdXOssRLrUL23pVLr2lvxFvs r5 = new org.telegram.ui.-$$Lambda$LaunchActivity$osXFdXOssRLrUL23pVLr2lvxFvs
             r5.<init>(r2)
             r3.setNegativeButton(r4, r5)
         L_0x00c5:
@@ -9176,7 +9188,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0 = 2131625815(0x7f0e0757, float:1.8878849E38)
             java.lang.String r2 = "LogOut"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
-            org.telegram.ui.-$$Lambda$LaunchActivity$zxuCDIzOd5BnOGAsFqQ23aR8_p4 r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$zxuCDIzOd5BnOGAsFqQ23aR8_p4
+            org.telegram.ui.-$$Lambda$LaunchActivity$50QdEdpJc6a--M0iwHeJsU6Rn90 r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$50QdEdpJc6a--M0iwHeJsU6Rn90
             r2.<init>()
             r3.setNegativeButton(r0, r2)
             goto L_0x0183
@@ -9231,7 +9243,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r4 = 2131627175(0x7f0e0ca7, float:1.8881607E38)
             java.lang.String r5 = "ShareYouLocationUnableManually"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            org.telegram.ui.-$$Lambda$LaunchActivity$EwU1Mj6mQUy33ax8ngOivDRl_Ds r5 = new org.telegram.ui.-$$Lambda$LaunchActivity$EwU1Mj6mQUy33ax8ngOivDRl_Ds
+            org.telegram.ui.-$$Lambda$LaunchActivity$ZMLlQEwfC1sKQjT396tMQlxyZB0 r5 = new org.telegram.ui.-$$Lambda$LaunchActivity$ZMLlQEwfC1sKQjT396tMQlxyZB0
             r5.<init>(r0, r2)
             r3.setNegativeButton(r4, r5)
             r0 = 2131627174(0x7f0e0ca6, float:1.8881605E38)
@@ -9380,15 +9392,15 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setMessage(r9)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r15, r14)
-            org.telegram.ui.-$$Lambda$LaunchActivity$A_1czXHx8JwAX5GFDa-_rNTACI8 r10 = new org.telegram.ui.-$$Lambda$LaunchActivity$A_1czXHx8JwAX5GFDa-_rNTACI8
+            org.telegram.ui.-$$Lambda$LaunchActivity$xu8--zgftucB9B4b5mi1aMS7AjI r10 = new org.telegram.ui.-$$Lambda$LaunchActivity$xu8--zgftucB9B4b5mi1aMS7AjI
             r10.<init>(r2, r0, r3, r4)
             r8.setPositiveButton(r9, r10)
             r9 = 2131624584(0x7f0e0288, float:1.8876352E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r9)
-            org.telegram.ui.-$$Lambda$LaunchActivity$xu8--zgftucB9B4b5mi1aMS7AjI r9 = new org.telegram.ui.-$$Lambda$LaunchActivity$xu8--zgftucB9B4b5mi1aMS7AjI
+            org.telegram.ui.-$$Lambda$LaunchActivity$48VwJD_1DkhegnFokJs0AwVcMe8 r9 = new org.telegram.ui.-$$Lambda$LaunchActivity$48VwJD_1DkhegnFokJs0AwVcMe8
             r9.<init>(r2, r0, r3, r4)
             r8.setNegativeButton(r7, r9)
-            org.telegram.ui.-$$Lambda$LaunchActivity$48VwJD_1DkhegnFokJs0AwVcMe8 r7 = new org.telegram.ui.-$$Lambda$LaunchActivity$48VwJD_1DkhegnFokJs0AwVcMe8
+            org.telegram.ui.-$$Lambda$LaunchActivity$kOq5nhLrYq4MJ_kgpH-qE8IViR4 r7 = new org.telegram.ui.-$$Lambda$LaunchActivity$kOq5nhLrYq4MJ_kgpH-qE8IViR4
             r7.<init>(r2, r0, r3, r4)
             r8.setOnBackButtonListener(r7)
             org.telegram.ui.ActionBar.AlertDialog r0 = r8.create()
@@ -9682,7 +9694,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r0.wallpaper = r3
             int r3 = r2.account
             org.telegram.tgnet.ConnectionsManager r3 = org.telegram.tgnet.ConnectionsManager.getInstance(r3)
-            org.telegram.ui.-$$Lambda$LaunchActivity$0Sbo1E_p0pFa4NtabuMx_5G075g r4 = new org.telegram.ui.-$$Lambda$LaunchActivity$0Sbo1E_p0pFa4NtabuMx_5G075g
+            org.telegram.ui.-$$Lambda$LaunchActivity$dYipcjEfmq9e2CmM5gVTv_1gr8E r4 = new org.telegram.ui.-$$Lambda$LaunchActivity$dYipcjEfmq9e2CmM5gVTv_1gr8E
             r4.<init>(r2)
             r3.sendRequest(r0, r4)
             return
@@ -9724,7 +9736,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x05e9:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r2 = r1.loadingThemeInfo
             org.telegram.messenger.DispatchQueue r3 = org.telegram.messenger.Utilities.globalQueue
-            org.telegram.ui.-$$Lambda$LaunchActivity$qkj7VCKCUOZNzO71QKX8cpWwhSA r4 = new org.telegram.ui.-$$Lambda$LaunchActivity$qkj7VCKCUOZNzO71QKX8cpWwhSA
+            org.telegram.ui.-$$Lambda$LaunchActivity$hMkQkThyspAhZoUtD3JjjQC7DzQ r4 = new org.telegram.ui.-$$Lambda$LaunchActivity$hMkQkThyspAhZoUtD3JjjQC7DzQ
             r4.<init>(r2, r0)
             r3.postRunnable(r4)
             goto L_0x062e
@@ -9766,7 +9778,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
     }
 
-    static /* synthetic */ void lambda$didReceivedNotification$57(int i, DialogInterface dialogInterface, int i2) {
+    static /* synthetic */ void lambda$didReceivedNotification$58(int i, DialogInterface dialogInterface, int i2) {
         if (!mainFragmentsStack.isEmpty()) {
             MessagesController instance = MessagesController.getInstance(i);
             ArrayList<BaseFragment> arrayList = mainFragmentsStack;
@@ -9775,14 +9787,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$58 */
-    public /* synthetic */ void lambda$didReceivedNotification$58$LaunchActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$didReceivedNotification$59 */
+    public /* synthetic */ void lambda$didReceivedNotification$59$LaunchActivity(DialogInterface dialogInterface, int i) {
         MessagesController.getInstance(this.currentAccount).performLogout(2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$60 */
-    public /* synthetic */ void lambda$didReceivedNotification$60$LaunchActivity(HashMap hashMap, int i, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$didReceivedNotification$61 */
+    public /* synthetic */ void lambda$didReceivedNotification$61$LaunchActivity(HashMap hashMap, int i, DialogInterface dialogInterface, int i2) {
         if (!mainFragmentsStack.isEmpty()) {
             ArrayList<BaseFragment> arrayList = mainFragmentsStack;
             if (AndroidUtilities.isGoogleMapsInstalled(arrayList.get(arrayList.size() - 1))) {
@@ -9797,7 +9809,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                     }
 
                     public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-                        LaunchActivity.lambda$null$59(this.f$0, this.f$1, tLRPC$MessageMedia, i, z, i2);
+                        LaunchActivity.lambda$null$60(this.f$0, this.f$1, tLRPC$MessageMedia, i, z, i2);
                     }
                 });
                 lambda$runLinkRequest$38(locationActivity);
@@ -9805,7 +9817,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         }
     }
 
-    static /* synthetic */ void lambda$null$59(HashMap hashMap, int i, TLRPC$MessageMedia tLRPC$MessageMedia, int i2, boolean z, int i3) {
+    static /* synthetic */ void lambda$null$60(HashMap hashMap, int i, TLRPC$MessageMedia tLRPC$MessageMedia, int i2, boolean z, int i3) {
         for (Map.Entry value : hashMap.entrySet()) {
             MessageObject messageObject = (MessageObject) value.getValue();
             SendMessagesHelper.getInstance(i).sendMessage(tLRPC$MessageMedia, messageObject.getDialogId(), messageObject, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i3);
@@ -9813,8 +9825,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$65 */
-    public /* synthetic */ void lambda$didReceivedNotification$65$LaunchActivity(Theme.ThemeInfo themeInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$didReceivedNotification$66 */
+    public /* synthetic */ void lambda$didReceivedNotification$66$LaunchActivity(Theme.ThemeInfo themeInfo, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, themeInfo) {
             public final /* synthetic */ TLObject f$1;
             public final /* synthetic */ Theme.ThemeInfo f$2;
@@ -9825,14 +9837,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
 
             public final void run() {
-                LaunchActivity.this.lambda$null$64$LaunchActivity(this.f$1, this.f$2);
+                LaunchActivity.this.lambda$null$65$LaunchActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$64 */
-    public /* synthetic */ void lambda$null$64$LaunchActivity(TLObject tLObject, Theme.ThemeInfo themeInfo) {
+    /* renamed from: lambda$null$65 */
+    public /* synthetic */ void lambda$null$65$LaunchActivity(TLObject tLObject, Theme.ThemeInfo themeInfo) {
         if (tLObject instanceof TLRPC$TL_wallPaper) {
             TLRPC$TL_wallPaper tLRPC$TL_wallPaper = (TLRPC$TL_wallPaper) tLObject;
             this.loadingThemeInfo = themeInfo;
@@ -9845,19 +9857,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$67 */
-    public /* synthetic */ void lambda$didReceivedNotification$67$LaunchActivity(Theme.ThemeInfo themeInfo, File file) {
+    /* renamed from: lambda$didReceivedNotification$68 */
+    public /* synthetic */ void lambda$didReceivedNotification$68$LaunchActivity(Theme.ThemeInfo themeInfo, File file) {
         themeInfo.createBackground(file, themeInfo.pathToWallpaper);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                LaunchActivity.this.lambda$null$66$LaunchActivity();
+                LaunchActivity.this.lambda$null$67$LaunchActivity();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$66 */
-    public /* synthetic */ void lambda$null$66$LaunchActivity() {
+    /* renamed from: lambda$null$67 */
+    public /* synthetic */ void lambda$null$67$LaunchActivity() {
         if (this.loadingTheme != null) {
             File filesDirFixed = ApplicationLoader.getFilesDirFixed();
             File file = new File(filesDirFixed, "remote" + this.loadingTheme.id + ".attheme");
@@ -9905,15 +9917,15 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         if (Build.VERSION.SDK_INT < 26) {
             Utilities.globalQueue.postRunnable(new Runnable() {
                 public final void run() {
-                    LaunchActivity.this.lambda$checkFreeDiscSpace$69$LaunchActivity();
+                    LaunchActivity.this.lambda$checkFreeDiscSpace$70$LaunchActivity();
                 }
             }, 2000);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkFreeDiscSpace$69 */
-    public /* synthetic */ void lambda$checkFreeDiscSpace$69$LaunchActivity() {
+    /* renamed from: lambda$checkFreeDiscSpace$70 */
+    public /* synthetic */ void lambda$checkFreeDiscSpace$70$LaunchActivity() {
         File directory;
         long j;
         if (UserConfig.getInstance(this.currentAccount).isClientActivated()) {
@@ -9930,7 +9942,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                         globalMainSettings.edit().putLong("last_space_check", System.currentTimeMillis()).commit();
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public final void run() {
-                                LaunchActivity.this.lambda$null$68$LaunchActivity();
+                                LaunchActivity.this.lambda$null$69$LaunchActivity();
                             }
                         });
                     }
@@ -9941,8 +9953,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$68 */
-    public /* synthetic */ void lambda$null$68$LaunchActivity() {
+    /* renamed from: lambda$null$69 */
+    public /* synthetic */ void lambda$null$69$LaunchActivity() {
         try {
             AlertsCreator.createFreeSpaceDialog(this).show();
         } catch (Throwable unused) {
@@ -10058,7 +10070,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r13, r14)     // Catch:{ Exception -> 0x0115 }
             r2.addView(r3, r13)     // Catch:{ Exception -> 0x0115 }
             r3 = r9[r4]     // Catch:{ Exception -> 0x0115 }
-            org.telegram.ui.-$$Lambda$LaunchActivity$ZgeOfkREjH5NDNxHzlfoj79qst8 r13 = new org.telegram.ui.-$$Lambda$LaunchActivity$ZgeOfkREjH5NDNxHzlfoj79qst8     // Catch:{ Exception -> 0x0115 }
+            org.telegram.ui.-$$Lambda$LaunchActivity$rBHV2hHDUk6jJe163PPjcoOfkpE r13 = new org.telegram.ui.-$$Lambda$LaunchActivity$rBHV2hHDUk6jJe163PPjcoOfkpE     // Catch:{ Exception -> 0x0115 }
             r13.<init>(r10, r9)     // Catch:{ Exception -> 0x0115 }
             r3.setOnClickListener(r13)     // Catch:{ Exception -> 0x0115 }
             int r4 = r4 + 1
@@ -10073,7 +10085,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0115 }
             java.lang.String r0 = r1.getStringForLanguageAlert(r6, r0, r5)     // Catch:{ Exception -> 0x0115 }
             r3.setValue(r4, r0)     // Catch:{ Exception -> 0x0115 }
-            org.telegram.ui.-$$Lambda$LaunchActivity$q8aTNmH9GDSI1kcaIUHV4Aum8qM r0 = new org.telegram.ui.-$$Lambda$LaunchActivity$q8aTNmH9GDSI1kcaIUHV4Aum8qM     // Catch:{ Exception -> 0x0115 }
+            org.telegram.ui.-$$Lambda$LaunchActivity$PeIw6reevRLl7kZ3VtIGKMFbsfo r0 = new org.telegram.ui.-$$Lambda$LaunchActivity$PeIw6reevRLl7kZ3VtIGKMFbsfo     // Catch:{ Exception -> 0x0115 }
             r0.<init>()     // Catch:{ Exception -> 0x0115 }
             r3.setOnClickListener(r0)     // Catch:{ Exception -> 0x0115 }
             r0 = 50
@@ -10083,7 +10095,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r0 = "OK"
             r2 = 2131626300(0x7f0e093c, float:1.8879832E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x0115 }
-            org.telegram.ui.-$$Lambda$LaunchActivity$NJw8qMmnXPGjtZrE3N-vgzam1KY r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$NJw8qMmnXPGjtZrE3N-vgzam1KY     // Catch:{ Exception -> 0x0115 }
+            org.telegram.ui.-$$Lambda$LaunchActivity$EFJavar_xV0Xk2zr1M7-2GeCuu1Q r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$EFJavar_xV0Xk2zr1M7-2GeCuu1Q     // Catch:{ Exception -> 0x0115 }
             r2.<init>(r10)     // Catch:{ Exception -> 0x0115 }
             r7.setNegativeButton(r0, r2)     // Catch:{ Exception -> 0x0115 }
             org.telegram.ui.ActionBar.AlertDialog r0 = r1.showAlertDialog(r7)     // Catch:{ Exception -> 0x0115 }
@@ -10104,7 +10116,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.showLanguageAlertInternal(org.telegram.messenger.LocaleController$LocaleInfo, org.telegram.messenger.LocaleController$LocaleInfo, java.lang.String):void");
     }
 
-    static /* synthetic */ void lambda$showLanguageAlertInternal$70(LocaleController.LocaleInfo[] localeInfoArr, LanguageCell[] languageCellArr, View view) {
+    static /* synthetic */ void lambda$showLanguageAlertInternal$71(LocaleController.LocaleInfo[] localeInfoArr, LanguageCell[] languageCellArr, View view) {
         Integer num = (Integer) view.getTag();
         localeInfoArr[0] = ((LanguageCell) view).getCurrentLocale();
         int i = 0;
@@ -10115,8 +10127,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showLanguageAlertInternal$71 */
-    public /* synthetic */ void lambda$showLanguageAlertInternal$71$LaunchActivity(View view) {
+    /* renamed from: lambda$showLanguageAlertInternal$72 */
+    public /* synthetic */ void lambda$showLanguageAlertInternal$72$LaunchActivity(View view) {
         this.localeDialog = null;
         this.drawerLayoutContainer.closeDrawer(true);
         lambda$runLinkRequest$38(new LanguageSelectActivity());
@@ -10128,8 +10140,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showLanguageAlertInternal$72 */
-    public /* synthetic */ void lambda$showLanguageAlertInternal$72$LaunchActivity(LocaleController.LocaleInfo[] localeInfoArr, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$showLanguageAlertInternal$73 */
+    public /* synthetic */ void lambda$showLanguageAlertInternal$73$LaunchActivity(LocaleController.LocaleInfo[] localeInfoArr, DialogInterface dialogInterface, int i) {
         LocaleController.getInstance().applyLanguage(localeInfoArr[0], true, false, this.currentAccount);
         rebuildAllFragments(true);
     }
@@ -10194,7 +10206,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                 }
 
                                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                                    LaunchActivity.this.lambda$showLanguageAlert$74$LaunchActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                                    LaunchActivity.this.lambda$showLanguageAlert$75$LaunchActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                                 }
                             }, 8);
                             TLRPC$TL_langpack_getStrings tLRPC$TL_langpack_getStrings2 = new TLRPC$TL_langpack_getStrings();
@@ -10213,7 +10225,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                                 }
 
                                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                                    LaunchActivity.this.lambda$showLanguageAlert$76$LaunchActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                                    LaunchActivity.this.lambda$showLanguageAlert$77$LaunchActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                                 }
                             }, 8);
                         }
@@ -10228,8 +10240,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showLanguageAlert$74 */
-    public /* synthetic */ void lambda$showLanguageAlert$74$LaunchActivity(LocaleController.LocaleInfo[] localeInfoArr, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$showLanguageAlert$75 */
+    public /* synthetic */ void lambda$showLanguageAlert$75$LaunchActivity(LocaleController.LocaleInfo[] localeInfoArr, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         HashMap hashMap = new HashMap();
         if (tLObject != null) {
             TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
@@ -10250,14 +10262,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
 
             public final void run() {
-                LaunchActivity.this.lambda$null$73$LaunchActivity(this.f$1, this.f$2, this.f$3);
+                LaunchActivity.this.lambda$null$74$LaunchActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$73 */
-    public /* synthetic */ void lambda$null$73$LaunchActivity(HashMap hashMap, LocaleController.LocaleInfo[] localeInfoArr, String str) {
+    /* renamed from: lambda$null$74 */
+    public /* synthetic */ void lambda$null$74$LaunchActivity(HashMap hashMap, LocaleController.LocaleInfo[] localeInfoArr, String str) {
         this.systemLocaleStrings = hashMap;
         if (this.englishLocaleStrings != null && hashMap != null) {
             showLanguageAlertInternal(localeInfoArr[1], localeInfoArr[0], str);
@@ -10265,8 +10277,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showLanguageAlert$76 */
-    public /* synthetic */ void lambda$showLanguageAlert$76$LaunchActivity(LocaleController.LocaleInfo[] localeInfoArr, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$showLanguageAlert$77 */
+    public /* synthetic */ void lambda$showLanguageAlert$77$LaunchActivity(LocaleController.LocaleInfo[] localeInfoArr, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         HashMap hashMap = new HashMap();
         if (tLObject != null) {
             TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
@@ -10287,14 +10299,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             }
 
             public final void run() {
-                LaunchActivity.this.lambda$null$75$LaunchActivity(this.f$1, this.f$2, this.f$3);
+                LaunchActivity.this.lambda$null$76$LaunchActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$75 */
-    public /* synthetic */ void lambda$null$75$LaunchActivity(HashMap hashMap, LocaleController.LocaleInfo[] localeInfoArr, String str) {
+    /* renamed from: lambda$null$76 */
+    public /* synthetic */ void lambda$null$76$LaunchActivity(HashMap hashMap, LocaleController.LocaleInfo[] localeInfoArr, String str) {
         this.englishLocaleStrings = hashMap;
         if (hashMap != null && this.systemLocaleStrings != null) {
             showLanguageAlertInternal(localeInfoArr[1], localeInfoArr[0], str);
@@ -10370,7 +10382,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int i2 = 0;
             int connectionState = ConnectionsManager.getInstance(this.currentAccount).getConnectionState();
             this.currentConnectionState = connectionState;
-            $$Lambda$LaunchActivity$fyAv8wc7FgVnpORfRkv8P4RtLbw r4 = null;
+            $$Lambda$LaunchActivity$2tNR72lqBAsJdl27poKUqkd0CiE r4 = null;
             if (connectionState == 2) {
                 i2 = NUM;
                 str = "WaitingForNetwork";
@@ -10389,7 +10401,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (connectionState == 1 || connectionState == 4) {
                 r4 = new Runnable() {
                     public final void run() {
-                        LaunchActivity.this.lambda$updateCurrentConnectionState$77$LaunchActivity();
+                        LaunchActivity.this.lambda$updateCurrentConnectionState$78$LaunchActivity();
                     }
                 };
             }
@@ -10400,9 +10412,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:13:0x003e  */
     /* JADX WARNING: Removed duplicated region for block: B:16:? A[RETURN, SYNTHETIC] */
-    /* renamed from: lambda$updateCurrentConnectionState$77 */
+    /* renamed from: lambda$updateCurrentConnectionState$78 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$updateCurrentConnectionState$77$LaunchActivity() {
+    public /* synthetic */ void lambda$updateCurrentConnectionState$78$LaunchActivity() {
         /*
             r2 = this;
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
@@ -10441,7 +10453,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0046:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$updateCurrentConnectionState$77$LaunchActivity():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.lambda$updateCurrentConnectionState$78$LaunchActivity():void");
     }
 
     public void hideVisibleActionMode() {

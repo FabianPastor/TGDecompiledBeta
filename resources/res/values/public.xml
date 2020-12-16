@@ -660,6 +660,7 @@
     <public type="drawable" name="menu_language" id="NUM" />
     <public type="drawable" name="menu_location" id="NUM" />
     <public type="drawable" name="menu_mail" id="NUM" />
+    <public type="drawable" name="menu_nearby" id="NUM" />
     <public type="drawable" name="menu_newfilter" id="NUM" />
     <public type="drawable" name="menu_newphone" id="NUM" />
     <public type="drawable" name="menu_night" id="NUM" />

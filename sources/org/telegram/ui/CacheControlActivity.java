@@ -164,38 +164,41 @@ public class CacheControlActivity extends BaseFragment {
                                     if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
                                         int size = rootDirs.size();
                                         while (true) {
-                                            if (i2 >= size) {
-                                                break;
+                                            if (i2 < size) {
+                                                File file2 = rootDirs.get(i2);
+                                                if (file2.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
+                                                    file = file2;
+                                                    break;
+                                                }
+                                                i2++;
                                             }
-                                            File file2 = rootDirs.get(i2);
-                                            if (file2.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
-                                                file = file2;
-                                                break;
-                                            }
-                                            i2++;
                                         }
                                     }
                                 } else {
                                     file = new File(SharedConfig.storageCacheDir);
                                 }
-                                StatFs statFs = new StatFs(file.getPath());
-                                if (i >= 18) {
-                                    j = statFs.getBlockSizeLong();
-                                } else {
-                                    j = (long) statFs.getBlockSize();
+                                try {
+                                    StatFs statFs = new StatFs(file.getPath());
+                                    if (i >= 18) {
+                                        j = statFs.getBlockSizeLong();
+                                    } else {
+                                        j = (long) statFs.getBlockSize();
+                                    }
+                                    if (i >= 18) {
+                                        j2 = statFs.getAvailableBlocksLong();
+                                    } else {
+                                        j2 = (long) statFs.getAvailableBlocks();
+                                    }
+                                    if (i >= 18) {
+                                        j3 = statFs.getBlockCountLong();
+                                    } else {
+                                        j3 = (long) statFs.getBlockCount();
+                                    }
+                                    this.totalDeviceSize = j3 * j;
+                                    this.totalDeviceFreeSize = j2 * j;
+                                } catch (Exception e) {
+                                    FileLog.e((Throwable) e);
                                 }
-                                if (i >= 18) {
-                                    j2 = statFs.getAvailableBlocksLong();
-                                } else {
-                                    j2 = (long) statFs.getAvailableBlocks();
-                                }
-                                if (i >= 18) {
-                                    j3 = statFs.getBlockCountLong();
-                                } else {
-                                    j3 = (long) statFs.getBlockCount();
-                                }
-                                this.totalDeviceSize = j3 * j;
-                                this.totalDeviceFreeSize = j2 * j;
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public final void run() {
                                         CacheControlActivity.this.lambda$null$0$CacheControlActivity();

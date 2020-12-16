@@ -13623,7 +13623,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r2 == 0) goto L_0x3d83
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             android.content.res.Resources r3 = r69.getResources()
-            r4 = 2131166038(0x7var_, float:1.794631E38)
+            r4 = 2131166039(0x7var_, float:1.7946312E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             r2.setImageBitmap((android.graphics.drawable.Drawable) r3)
         L_0x3d7f:

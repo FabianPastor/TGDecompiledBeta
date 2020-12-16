@@ -8323,7 +8323,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     int unused3 = ChatActivityEnterView.this.innerTextChange = 0;
                 }
 
-                public void onStickerSelected(View view, TLRPC$Document tLRPC$Document, Object obj, boolean z, int i) {
+                public void onStickerSelected(View view, TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, int i) {
                     if (ChatActivityEnterView.this.trendingStickersAlert != null) {
                         ChatActivityEnterView.this.trendingStickersAlert.dismiss();
                         TrendingStickersAlert unused = ChatActivityEnterView.this.trendingStickersAlert = null;
@@ -8337,7 +8337,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             }
                             ChatActivityEnterView.this.setStickersExpanded(false, true, false);
                         }
-                        ChatActivityEnterView.this.lambda$onStickerSelected$31(tLRPC$Document, obj, false, z, i);
+                        ChatActivityEnterView.this.lambda$onStickerSelected$31(tLRPC$Document, str, obj, false, z, i);
                         if (((int) ChatActivityEnterView.this.dialog_id) == 0 && MessageObject.isGifDocument(tLRPC$Document)) {
                             ChatActivityEnterView.this.accountInstance.getMessagesController().saveGif(obj, tLRPC$Document);
                         }
@@ -8357,25 +8357,26 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
 
                 /* renamed from: onGifSelected */
-                public void lambda$onGifSelected$0(View view, Object obj, Object obj2, boolean z, int i) {
-                    View view2 = view;
+                public void lambda$onGifSelected$0(View view, Object obj, String str, Object obj2, boolean z, int i) {
                     Object obj3 = obj;
                     Object obj4 = obj2;
                     int i2 = i;
                     if (isInScheduleMode() && i2 == 0) {
-                        AlertsCreator.createScheduleDatePickerDialog(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(view2, obj3, obj4) {
+                        AlertsCreator.createScheduleDatePickerDialog(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(view, obj, str, obj2) {
                             public final /* synthetic */ View f$1;
                             public final /* synthetic */ Object f$2;
-                            public final /* synthetic */ Object f$3;
+                            public final /* synthetic */ String f$3;
+                            public final /* synthetic */ Object f$4;
 
                             {
                                 this.f$1 = r2;
                                 this.f$2 = r3;
                                 this.f$3 = r4;
+                                this.f$4 = r5;
                             }
 
                             public final void didSelectDate(boolean z, int i) {
-                                ChatActivityEnterView.AnonymousClass42.this.lambda$onGifSelected$0$ChatActivityEnterView$42(this.f$1, this.f$2, this.f$3, z, i);
+                                ChatActivityEnterView.AnonymousClass42.this.lambda$onGifSelected$0$ChatActivityEnterView$42(this.f$1, this.f$2, this.f$3, this.f$4, z, i);
                             }
                         });
                     } else if (ChatActivityEnterView.this.slowModeTimer <= 0 || isInScheduleMode()) {
@@ -8387,7 +8388,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                         if (obj3 instanceof TLRPC$Document) {
                             TLRPC$Document tLRPC$Document = (TLRPC$Document) obj3;
-                            SendMessagesHelper.getInstance(ChatActivityEnterView.this.currentAccount).sendSticker(tLRPC$Document, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), obj2, z, i);
+                            SendMessagesHelper.getInstance(ChatActivityEnterView.this.currentAccount).sendSticker(tLRPC$Document, str, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), obj2, z, i);
                             MediaDataController.getInstance(ChatActivityEnterView.this.currentAccount).addRecentGif(tLRPC$Document, (int) (System.currentTimeMillis() / 1000));
                             if (((int) ChatActivityEnterView.this.dialog_id) == 0) {
                                 ChatActivityEnterView.this.accountInstance.getMessagesController().saveGif(obj4, tLRPC$Document);
@@ -8416,11 +8417,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             ChatActivityEnterView.this.delegate.onMessageSend((CharSequence) null, z, i2);
                         }
                     } else if (ChatActivityEnterView.this.delegate != null) {
-                        ChatActivityEnterViewDelegate access$1300 = ChatActivityEnterView.this.delegate;
-                        if (view2 == null) {
-                            view2 = ChatActivityEnterView.this.slowModeButton;
-                        }
-                        access$1300.onUpdateSlowModeButton(view2, true, ChatActivityEnterView.this.slowModeButton.getText());
+                        ChatActivityEnterView.this.delegate.onUpdateSlowModeButton(view != null ? view : ChatActivityEnterView.this.slowModeButton, true, ChatActivityEnterView.this.slowModeButton.getText());
                     }
                 }
 
@@ -8613,53 +8610,49 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: onStickerSelected */
-    public void lambda$onStickerSelected$31(TLRPC$Document tLRPC$Document, Object obj, boolean z, boolean z2, int i) {
-        boolean z3 = z;
+    public void lambda$onStickerSelected$31(TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, boolean z2, int i) {
         int i2 = i;
-        if (!isInScheduleMode() || i2 != 0) {
-            TLRPC$Document tLRPC$Document2 = tLRPC$Document;
-            Object obj2 = obj;
-            if (this.slowModeTimer <= 0 || isInScheduleMode()) {
-                if (this.searchingType != 0) {
-                    this.searchingType = 0;
-                    this.emojiView.closeSearch(true);
-                    this.emojiView.hideSearchKeyboard();
+        if (isInScheduleMode() && i2 == 0) {
+            AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tLRPC$Document, str, obj, z) {
+                public final /* synthetic */ TLRPC$Document f$1;
+                public final /* synthetic */ String f$2;
+                public final /* synthetic */ Object f$3;
+                public final /* synthetic */ boolean f$4;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                    this.f$4 = r5;
                 }
-                setStickersExpanded(false, true, false);
-                SendMessagesHelper.getInstance(this.currentAccount).sendSticker(tLRPC$Document, this.dialog_id, this.replyingMessageObject, getThreadMessage(), obj, z2, i);
-                ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
-                if (chatActivityEnterViewDelegate != null) {
-                    chatActivityEnterViewDelegate.onMessageSend((CharSequence) null, true, i2);
+
+                public final void didSelectDate(boolean z, int i) {
+                    ChatActivityEnterView.this.lambda$onStickerSelected$31$ChatActivityEnterView(this.f$1, this.f$2, this.f$3, this.f$4, z, i);
                 }
-                if (z3) {
-                    setFieldText("");
-                }
-                MediaDataController.getInstance(this.currentAccount).addRecentSticker(0, obj, tLRPC$Document, (int) (System.currentTimeMillis() / 1000), false);
-                return;
+            });
+        } else if (this.slowModeTimer <= 0 || isInScheduleMode()) {
+            if (this.searchingType != 0) {
+                this.searchingType = 0;
+                this.emojiView.closeSearch(true);
+                this.emojiView.hideSearchKeyboard();
             }
+            setStickersExpanded(false, true, false);
+            SendMessagesHelper.getInstance(this.currentAccount).sendSticker(tLRPC$Document, str, this.dialog_id, this.replyingMessageObject, getThreadMessage(), obj, z2, i);
+            ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
+            if (chatActivityEnterViewDelegate != null) {
+                chatActivityEnterViewDelegate.onMessageSend((CharSequence) null, true, i2);
+            }
+            if (z) {
+                setFieldText("");
+            }
+            MediaDataController.getInstance(this.currentAccount).addRecentSticker(0, obj, tLRPC$Document, (int) (System.currentTimeMillis() / 1000), false);
+        } else {
             ChatActivityEnterViewDelegate chatActivityEnterViewDelegate2 = this.delegate;
             if (chatActivityEnterViewDelegate2 != null) {
                 SimpleTextView simpleTextView = this.slowModeButton;
                 chatActivityEnterViewDelegate2.onUpdateSlowModeButton(simpleTextView, true, simpleTextView.getText());
-                return;
             }
-            return;
         }
-        AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tLRPC$Document, obj, z3) {
-            public final /* synthetic */ TLRPC$Document f$1;
-            public final /* synthetic */ Object f$2;
-            public final /* synthetic */ boolean f$3;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-                this.f$3 = r4;
-            }
-
-            public final void didSelectDate(boolean z, int i) {
-                ChatActivityEnterView.this.lambda$onStickerSelected$31$ChatActivityEnterView(this.f$1, this.f$2, this.f$3, z, i);
-            }
-        });
     }
 
     public boolean canSchedule() {
@@ -9137,7 +9130,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 return;
             }
             this.searchingType = 0;
-            this.emojiView.closeSearch(true);
+            EmojiView emojiView2 = this.emojiView;
+            if (emojiView2 != null) {
+                emojiView2.closeSearch(true);
+            }
             this.messageEditText.requestFocus();
             setStickersExpanded(false, true, false);
             if (this.emojiTabOpen) {

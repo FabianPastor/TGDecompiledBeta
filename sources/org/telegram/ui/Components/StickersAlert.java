@@ -111,6 +111,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     private TextView pickerBottomLayout;
     /* access modifiers changed from: private */
     public ContentPreviewViewer.ContentPreviewViewerDelegate previewDelegate = new ContentPreviewViewer.ContentPreviewViewerDelegate() {
+        public /* synthetic */ String getQuery(boolean z) {
+            return ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$getQuery(this, z);
+        }
+
         public /* synthetic */ void gifAddedOrDeleted() {
             ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$gifAddedOrDeleted(this);
         }
@@ -130,9 +134,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$sendGif(this, obj, obj2, z, i);
         }
 
-        public void sendSticker(TLRPC$Document tLRPC$Document, Object obj, boolean z, int i) {
+        public void sendSticker(TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, int i) {
             if (StickersAlert.this.delegate != null) {
-                StickersAlert.this.delegate.onStickerSelected(tLRPC$Document, obj, StickersAlert.this.clearsInputField, z, i);
+                StickersAlert.this.delegate.onStickerSelected(tLRPC$Document, str, obj, StickersAlert.this.clearsInputField, z, i);
                 StickersAlert.this.dismiss();
             }
         }
@@ -189,7 +193,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
         boolean isInScheduleMode();
 
-        void onStickerSelected(TLRPC$Document tLRPC$Document, Object obj, boolean z, boolean z2, int i);
+        void onStickerSelected(TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, boolean z2, int i);
     }
 
     public interface StickersAlertInstallDelegate {
@@ -1032,7 +1036,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     /* access modifiers changed from: private */
     /* renamed from: lambda$init$10 */
     public /* synthetic */ void lambda$init$10$StickersAlert(View view) {
-        this.delegate.onStickerSelected(this.selectedSticker, this.stickerSet, this.clearsInputField, true, 0);
+        this.delegate.onStickerSelected(this.selectedSticker, (String) null, this.stickerSet, this.clearsInputField, true, 0);
         dismiss();
     }
 

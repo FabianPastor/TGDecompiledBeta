@@ -141,7 +141,8 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         if (getVisibility() != i && i == 0) {
             if (this.progressShowing) {
                 this.linearLayout.animate().alpha(0.0f).scaleY(0.8f).scaleX(0.8f).setDuration(150).start();
-                this.showProgressRunnable.run();
+                this.progressView.setVisibility(0);
+                this.progressView.setAlpha(1.0f);
             } else {
                 this.linearLayout.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
                 View view = this.progressView;

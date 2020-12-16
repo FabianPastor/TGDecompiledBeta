@@ -4666,7 +4666,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 i = 8;
             }
             filterTabsView2.setVisibility(i);
-            this.fragmentView.invalidate();
+            View view = this.fragmentView;
+            if (view != null) {
+                view.invalidate();
+            }
         }
     }
 
@@ -5427,7 +5430,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r8 = 2
             int[] r10 = new int[r8]
             if (r7 == 0) goto L_0x0186
-            r11 = 2131165674(0x7var_ea, float:1.7945572E38)
+            r11 = 2131165675(0x7var_eb, float:1.7945574E38)
             goto L_0x0187
         L_0x0186:
             r11 = 0

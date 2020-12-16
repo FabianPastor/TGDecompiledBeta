@@ -189,142 +189,165 @@ public class AvatarsImageView extends FrameLayout {
         setWillNotDraw(false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:13:0x0096  */
-    /* JADX WARNING: Removed duplicated region for block: B:14:0x00b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x00da  */
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x00dd  */
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x00ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x00ed  */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x00c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x00df  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x0106  */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x0109  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0116  */
+    /* JADX WARNING: Removed duplicated region for block: B:29:0x0119  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setObject(int r12, int r13, org.telegram.tgnet.TLObject r14) {
+    public void setObject(int r15, int r16, org.telegram.tgnet.TLObject r17) {
         /*
-            r11 = this;
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r0 = r11.animatingStates
-            r0 = r0[r12]
-            r1 = 0
-            int unused = r0.id = r1
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r0 = r11.animatingStates
-            r2 = r0[r12]
+            r14 = this;
+            r0 = r14
+            r1 = r17
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
+            r2 = r2[r15]
             r3 = 0
-            r2.participant = r3
-            if (r14 != 0) goto L_0x001e
-            r12 = r0[r12]
-            org.telegram.messenger.ImageReceiver r12 = r12.imageReceiver
-            r12.setImageBitmap((android.graphics.drawable.Drawable) r3)
-            r11.invalidate()
+            int unused = r2.id = r3
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
+            r4 = r2[r15]
+            r5 = 0
+            r4.participant = r5
+            if (r1 != 0) goto L_0x0021
+            r1 = r2[r15]
+            org.telegram.messenger.ImageReceiver r1 = r1.imageReceiver
+            r1.setImageBitmap((android.graphics.drawable.Drawable) r5)
+            r14.invalidate()
             return
-        L_0x001e:
-            r0 = r0[r12]
-            r4 = -1
-            long unused = r0.lastSpeakTime = r4
-            boolean r0 = r14 instanceof org.telegram.tgnet.TLRPC$TL_groupCallParticipant
-            if (r0 == 0) goto L_0x0060
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r14 = (org.telegram.tgnet.TLRPC$TL_groupCallParticipant) r14
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r0 = r11.animatingStates
-            r0 = r0[r12]
-            r0.participant = r14
-            org.telegram.messenger.MessagesController r13 = org.telegram.messenger.MessagesController.getInstance(r13)
-            int r0 = r14.user_id
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
-            org.telegram.tgnet.TLRPC$User r13 = r13.getUser(r0)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r0 = r11.animatingStates
-            r0 = r0[r12]
-            org.telegram.ui.Components.AvatarDrawable r0 = r0.avatarDrawable
-            r0.setInfo((org.telegram.tgnet.TLRPC$User) r13)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r0 = r11.animatingStates
-            r0 = r0[r12]
-            int r14 = r14.active_date
-            long r4 = (long) r14
-            long unused = r0.lastSpeakTime = r4
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r14 = r11.animatingStates
-            r14 = r14[r12]
-            int r0 = r13.id
-            int unused = r14.id = r0
-            r9 = r13
-        L_0x005e:
-            r7 = r3
-            goto L_0x0094
-        L_0x0060:
-            boolean r13 = r14 instanceof org.telegram.tgnet.TLRPC$User
-            if (r13 == 0) goto L_0x007c
-            org.telegram.tgnet.TLRPC$User r14 = (org.telegram.tgnet.TLRPC$User) r14
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r13 = r11.animatingStates
-            r13 = r13[r12]
-            org.telegram.ui.Components.AvatarDrawable r13 = r13.avatarDrawable
-            r13.setInfo((org.telegram.tgnet.TLRPC$User) r14)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r13 = r11.animatingStates
-            r13 = r13[r12]
-            int r0 = r14.id
-            int unused = r13.id = r0
-            r9 = r14
-            goto L_0x005e
-        L_0x007c:
-            org.telegram.tgnet.TLRPC$Chat r14 = (org.telegram.tgnet.TLRPC$Chat) r14
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r13 = r11.animatingStates
-            r13 = r13[r12]
-            org.telegram.ui.Components.AvatarDrawable r13 = r13.avatarDrawable
-            r13.setInfo((org.telegram.tgnet.TLRPC$Chat) r14)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r13 = r11.animatingStates
-            r13 = r13[r12]
-            int r0 = r14.id
-            int unused = r13.id = r0
-            r7 = r14
-            r9 = r3
-        L_0x0094:
-            if (r9 == 0) goto L_0x00b2
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r13 = r11.animatingStates
-            r13 = r13[r12]
-            org.telegram.messenger.ImageReceiver r4 = r13.imageReceiver
-            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForUser(r9, r1)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r13 = r11.animatingStates
-            r13 = r13[r12]
-            org.telegram.ui.Components.AvatarDrawable r7 = r13.avatarDrawable
-            r8 = 0
-            r10 = 0
-            java.lang.String r6 = "50_50"
-            r4.setImage(r5, r6, r7, r8, r9, r10)
-            goto L_0x00cd
-        L_0x00b2:
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r13 = r11.animatingStates
-            r13 = r13[r12]
-            org.telegram.messenger.ImageReceiver r2 = r13.imageReceiver
-            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForChat(r7, r1)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r13 = r11.animatingStates
-            r13 = r13[r12]
-            org.telegram.ui.Components.AvatarDrawable r5 = r13.avatarDrawable
+        L_0x0021:
+            r2 = r2[r15]
+            r6 = -1
+            long unused = r2.lastSpeakTime = r6
+            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_groupCallParticipant
+            r4 = 4
+            if (r2 == 0) goto L_0x008c
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = (org.telegram.tgnet.TLRPC$TL_groupCallParticipant) r1
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
+            r2 = r2[r15]
+            r2.participant = r1
+            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r16)
+            int r6 = r1.user_id
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+            org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r6)
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r6 = r0.animatingStates
+            r6 = r6[r15]
+            org.telegram.ui.Components.AvatarDrawable r6 = r6.avatarDrawable
+            r6.setInfo((org.telegram.tgnet.TLRPC$User) r2)
+            int r6 = r0.currentStyle
+            if (r6 != r4) goto L_0x0077
+            int r6 = r1.user_id
+            org.telegram.messenger.AccountInstance r7 = org.telegram.messenger.AccountInstance.getInstance(r16)
+            org.telegram.messenger.UserConfig r7 = r7.getUserConfig()
+            int r7 = r7.getClientUserId()
+            if (r6 != r7) goto L_0x006c
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
+            r1 = r1[r15]
             r6 = 0
-            r8 = 0
-            java.lang.String r4 = "50_50"
-            r2.setImage(r3, r4, r5, r6, r7, r8)
-        L_0x00cd:
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r13 = r11.animatingStates
-            r13 = r13[r12]
-            org.telegram.messenger.ImageReceiver r13 = r13.imageReceiver
-            int r14 = r11.currentStyle
-            r0 = 4
-            if (r14 != r0) goto L_0x00dd
-            r14 = 1098907648(0x41800000, float:16.0)
-            goto L_0x00df
-        L_0x00dd:
-            r14 = 1094713344(0x41400000, float:12.0)
+            long unused = r1.lastSpeakTime = r6
+            goto L_0x0081
+        L_0x006c:
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r6 = r0.animatingStates
+            r6 = r6[r15]
+            int r1 = r1.active_date
+            long r7 = (long) r1
+            long unused = r6.lastSpeakTime = r7
+            goto L_0x0081
+        L_0x0077:
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r6 = r0.animatingStates
+            r6 = r6[r15]
+            int r1 = r1.active_date
+            long r7 = (long) r1
+            long unused = r6.lastSpeakTime = r7
+        L_0x0081:
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
+            r1 = r1[r15]
+            int r6 = r2.id
+            int unused = r1.id = r6
+            r12 = r2
+            goto L_0x00a7
+        L_0x008c:
+            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$User
+            if (r2 == 0) goto L_0x00a9
+            org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
+            r2 = r2[r15]
+            org.telegram.ui.Components.AvatarDrawable r2 = r2.avatarDrawable
+            r2.setInfo((org.telegram.tgnet.TLRPC$User) r1)
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
+            r2 = r2[r15]
+            int r6 = r1.id
+            int unused = r2.id = r6
+            r12 = r1
+        L_0x00a7:
+            r10 = r5
+            goto L_0x00c1
+        L_0x00a9:
+            org.telegram.tgnet.TLRPC$Chat r1 = (org.telegram.tgnet.TLRPC$Chat) r1
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
+            r2 = r2[r15]
+            org.telegram.ui.Components.AvatarDrawable r2 = r2.avatarDrawable
+            r2.setInfo((org.telegram.tgnet.TLRPC$Chat) r1)
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
+            r2 = r2[r15]
+            int r6 = r1.id
+            int unused = r2.id = r6
+            r10 = r1
+            r12 = r5
+        L_0x00c1:
+            if (r12 == 0) goto L_0x00df
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
+            r1 = r1[r15]
+            org.telegram.messenger.ImageReceiver r7 = r1.imageReceiver
+            org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForUser(r12, r3)
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
+            r1 = r1[r15]
+            org.telegram.ui.Components.AvatarDrawable r10 = r1.avatarDrawable
+            r11 = 0
+            r13 = 0
+            java.lang.String r9 = "50_50"
+            r7.setImage(r8, r9, r10, r11, r12, r13)
+            goto L_0x00fa
         L_0x00df:
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            r13.setRoundRadius((int) r14)
-            int r13 = r11.currentStyle
-            if (r13 != r0) goto L_0x00ed
-            r13 = 1107296256(0x42000000, float:32.0)
-            goto L_0x00ef
-        L_0x00ed:
-            r13 = 1103101952(0x41CLASSNAME, float:24.0)
-        L_0x00ef:
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r14 = r11.animatingStates
-            r12 = r14[r12]
-            org.telegram.messenger.ImageReceiver r12 = r12.imageReceiver
-            float r13 = (float) r13
-            r14 = 0
-            r12.setImageCoords(r14, r14, r13, r13)
-            r11.invalidate()
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
+            r1 = r1[r15]
+            org.telegram.messenger.ImageReceiver r5 = r1.imageReceiver
+            org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForChat(r10, r3)
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
+            r1 = r1[r15]
+            org.telegram.ui.Components.AvatarDrawable r8 = r1.avatarDrawable
+            r9 = 0
+            r11 = 0
+            java.lang.String r7 = "50_50"
+            r5.setImage(r6, r7, r8, r9, r10, r11)
+        L_0x00fa:
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
+            r1 = r1[r15]
+            org.telegram.messenger.ImageReceiver r1 = r1.imageReceiver
+            int r2 = r0.currentStyle
+            if (r2 != r4) goto L_0x0109
+            r2 = 1098907648(0x41800000, float:16.0)
+            goto L_0x010b
+        L_0x0109:
+            r2 = 1094713344(0x41400000, float:12.0)
+        L_0x010b:
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r1.setRoundRadius((int) r2)
+            int r1 = r0.currentStyle
+            if (r1 != r4) goto L_0x0119
+            r1 = 1107296256(0x42000000, float:32.0)
+            goto L_0x011b
+        L_0x0119:
+            r1 = 1103101952(0x41CLASSNAME, float:24.0)
+        L_0x011b:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
+            r2 = r2[r15]
+            org.telegram.messenger.ImageReceiver r2 = r2.imageReceiver
+            float r1 = (float) r1
+            r3 = 0
+            r2.setImageCoords(r3, r3, r1, r1)
+            r14.invalidate()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AvatarsImageView.setObject(int, int, org.telegram.tgnet.TLObject):void");

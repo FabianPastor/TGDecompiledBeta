@@ -69,6 +69,10 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             return 0;
         }
 
+        public /* synthetic */ String getQuery(boolean z) {
+            return ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$getQuery(this, z);
+        }
+
         public /* synthetic */ void gifAddedOrDeleted() {
             ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$gifAddedOrDeleted(this);
         }
@@ -96,7 +100,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$sendGif(this, obj, obj2, z, i);
         }
 
-        public void sendSticker(TLRPC$Document tLRPC$Document, Object obj, boolean z, int i) {
+        public void sendSticker(TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, int i) {
             StickerMasksAlert.this.delegate.onStickerSelected(obj, tLRPC$Document);
         }
     };
@@ -222,7 +226,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r4.<init>(r2)
                 android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
                 r4.setScaleType(r7)
-                r7 = 2131165991(0x7var_, float:1.7946215E38)
+                r7 = 2131165992(0x7var_, float:1.7946217E38)
                 r4.setImageResource(r7)
                 android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
                 android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.MULTIPLY

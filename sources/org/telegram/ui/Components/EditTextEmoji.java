@@ -548,8 +548,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     return EmojiView.EmojiViewDelegate.CC.$default$isSearchOpened(this);
                 }
 
-                public /* synthetic */ void onGifSelected(View view, Object obj, Object obj2, boolean z, int i) {
-                    EmojiView.EmojiViewDelegate.CC.$default$onGifSelected(this, view, obj, obj2, z, i);
+                public /* synthetic */ void onGifSelected(View view, Object obj, String str, Object obj2, boolean z, int i) {
+                    EmojiView.EmojiViewDelegate.CC.$default$onGifSelected(this, view, obj, str, obj2, z, i);
                 }
 
                 public /* synthetic */ void onSearchOpenClose(int i) {
@@ -560,8 +560,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     EmojiView.EmojiViewDelegate.CC.$default$onShowStickerSet(this, tLRPC$StickerSet, tLRPC$InputStickerSet);
                 }
 
-                public /* synthetic */ void onStickerSelected(View view, TLRPC$Document tLRPC$Document, Object obj, boolean z, int i) {
-                    EmojiView.EmojiViewDelegate.CC.$default$onStickerSelected(this, view, tLRPC$Document, obj, z, i);
+                public /* synthetic */ void onStickerSelected(View view, TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, int i) {
+                    EmojiView.EmojiViewDelegate.CC.$default$onStickerSelected(this, view, tLRPC$Document, str, obj, z, i);
                 }
 
                 public /* synthetic */ void onStickerSetAdd(TLRPC$StickerSetCovered tLRPC$StickerSetCovered) {

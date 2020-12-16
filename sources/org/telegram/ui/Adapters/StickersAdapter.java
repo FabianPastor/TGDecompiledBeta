@@ -533,6 +533,10 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         }
     }
 
+    public String getQuery() {
+        return this.lastSticker;
+    }
+
     public boolean isShowingKeywords() {
         ArrayList<MediaDataController.KeywordResult> arrayList = this.keywordResults;
         return arrayList != null && !arrayList.isEmpty();

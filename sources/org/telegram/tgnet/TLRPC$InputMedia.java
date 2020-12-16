@@ -66,7 +66,7 @@ public abstract class TLRPC$InputMedia extends TLObject {
             case 505969924:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaUploadedPhoto();
                 break;
-            case 598418386:
+            case 860303448:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaDocument();
                 break;
             case 1530447553:
