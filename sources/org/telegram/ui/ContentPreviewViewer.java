@@ -472,7 +472,7 @@ public class ContentPreviewViewer {
     /* JADX WARNING: Removed duplicated region for block: B:69:0x0138  */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x013e  */
     /* JADX WARNING: Removed duplicated region for block: B:78:0x0160  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x017f  */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x0184  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouch(android.view.MotionEvent r15, org.telegram.ui.Components.RecyclerListView r16, int r17, java.lang.Object r18, org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r19) {
         /*
@@ -485,27 +485,27 @@ public class ContentPreviewViewer {
             r2 = 0
             if (r1 != 0) goto L_0x0012
             boolean r1 = r14.isVisible()
-            if (r1 == 0) goto L_0x024e
+            if (r1 == 0) goto L_0x025d
         L_0x0012:
             int r1 = r15.getAction()
             r3 = 0
             r8 = 1
-            if (r1 == r8) goto L_0x020c
+            if (r1 == r8) goto L_0x021b
             int r1 = r15.getAction()
             r4 = 3
-            if (r1 == r4) goto L_0x020c
+            if (r1 == r4) goto L_0x021b
             int r1 = r15.getAction()
             r4 = 6
             if (r1 != r4) goto L_0x002a
-            goto L_0x020c
+            goto L_0x021b
         L_0x002a:
             int r1 = r15.getAction()
-            if (r1 == 0) goto L_0x024e
+            if (r1 == 0) goto L_0x025d
             boolean r1 = r7.isVisible
             r4 = 2
-            if (r1 == 0) goto L_0x01d1
+            if (r1 == 0) goto L_0x01e0
             int r1 = r15.getAction()
-            if (r1 != r4) goto L_0x01d0
+            if (r1 != r4) goto L_0x01df
             int r1 = r7.currentContentType
             if (r1 != r8) goto L_0x00b7
             org.telegram.ui.ActionBar.BottomSheet r0 = r7.visibleDialog
@@ -577,7 +577,7 @@ public class ContentPreviewViewer {
             int r5 = r16.getChildCount()
             r6 = 0
         L_0x00c6:
-            if (r6 >= r5) goto L_0x01d0
+            if (r6 >= r5) goto L_0x01df
             boolean r9 = r0 instanceof org.telegram.ui.Components.RecyclerListView
             if (r9 == 0) goto L_0x00d1
             android.view.View r9 = r0.getChildAt(r6)
@@ -592,11 +592,11 @@ public class ContentPreviewViewer {
             int r11 = r9.getBottom()
             int r12 = r9.getLeft()
             int r13 = r9.getRight()
-            if (r10 > r4) goto L_0x01ca
-            if (r11 < r4) goto L_0x01ca
-            if (r12 > r1) goto L_0x01ca
+            if (r10 > r4) goto L_0x01d9
+            if (r11 < r4) goto L_0x01d9
+            if (r12 > r1) goto L_0x01d9
             if (r13 >= r1) goto L_0x00ef
-            goto L_0x01ca
+            goto L_0x01d9
         L_0x00ef:
             boolean r0 = r9 instanceof org.telegram.ui.Cells.StickerEmojiCell
             r1 = -1
@@ -617,8 +617,8 @@ public class ContentPreviewViewer {
             if (r0 == 0) goto L_0x012b
             r0 = r9
             org.telegram.ui.Cells.ContextLinkCell r0 = (org.telegram.ui.Cells.ContextLinkCell) r0
-            boolean r3 = r0.isSticker()
-            if (r3 == 0) goto L_0x0118
+            boolean r4 = r0.isSticker()
+            if (r4 == 0) goto L_0x0118
             org.telegram.messenger.ImageReceiver r0 = r7.centerImage
             r0.setRoundRadius((int) r2)
             goto L_0x00f9
@@ -626,18 +626,18 @@ public class ContentPreviewViewer {
             boolean r0 = r0.isGif()
             if (r0 == 0) goto L_0x012b
             org.telegram.messenger.ImageReceiver r0 = r7.centerImage
-            r3 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r0.setRoundRadius((int) r3)
+            r4 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r0.setRoundRadius((int) r4)
             r10 = 1
             goto L_0x012c
         L_0x012b:
             r10 = -1
         L_0x012c:
-            if (r10 == r1) goto L_0x01d0
+            if (r10 == r1) goto L_0x01df
             android.view.View r0 = r7.currentPreviewCell
             if (r9 != r0) goto L_0x0134
-            goto L_0x01d0
+            goto L_0x01df
         L_0x0134:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
             if (r1 == 0) goto L_0x013e
@@ -662,12 +662,18 @@ public class ContentPreviewViewer {
             r7.clearsInputField = r2
             android.view.View r0 = r7.currentPreviewCell
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
-            if (r1 == 0) goto L_0x017f
+            if (r1 == 0) goto L_0x0184
             r9 = r0
             org.telegram.ui.Cells.StickerEmojiCell r9 = (org.telegram.ui.Cells.StickerEmojiCell) r9
             org.telegram.tgnet.TLRPC$Document r1 = r9.getSticker()
             org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r7.delegate
-            java.lang.String r2 = r0.getQuery(r2)
+            if (r0 == 0) goto L_0x0171
+            java.lang.String r0 = r0.getQuery(r2)
+            r2 = r0
+            goto L_0x0172
+        L_0x0171:
+            r2 = r3
+        L_0x0172:
             r3 = 0
             boolean r5 = r9.isRecent()
             java.lang.Object r6 = r9.getParentObject()
@@ -675,15 +681,21 @@ public class ContentPreviewViewer {
             r4 = r10
             r0.open(r1, r2, r3, r4, r5, r6)
             r9.setScaled(r8)
-            goto L_0x01c9
-        L_0x017f:
+            goto L_0x01d8
+        L_0x0184:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerCell
-            if (r1 == 0) goto L_0x01a5
+            if (r1 == 0) goto L_0x01af
             r9 = r0
             org.telegram.ui.Cells.StickerCell r9 = (org.telegram.ui.Cells.StickerCell) r9
             org.telegram.tgnet.TLRPC$Document r1 = r9.getSticker()
             org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r7.delegate
-            java.lang.String r2 = r0.getQuery(r2)
+            if (r0 == 0) goto L_0x0199
+            java.lang.String r0 = r0.getQuery(r2)
+            r2 = r0
+            goto L_0x019a
+        L_0x0199:
+            r2 = r3
+        L_0x019a:
             r3 = 0
             r5 = 0
             java.lang.Object r6 = r9.getParentObject()
@@ -693,36 +705,42 @@ public class ContentPreviewViewer {
             r9.setScaled(r8)
             boolean r0 = r9.isClearsInputField()
             r7.clearsInputField = r0
-            goto L_0x01c9
-        L_0x01a5:
+            goto L_0x01d8
+        L_0x01af:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.ContextLinkCell
-            if (r1 == 0) goto L_0x01c9
+            if (r1 == 0) goto L_0x01d8
             r9 = r0
             org.telegram.ui.Cells.ContextLinkCell r9 = (org.telegram.ui.Cells.ContextLinkCell) r9
             org.telegram.tgnet.TLRPC$Document r1 = r9.getDocument()
             org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r7.delegate
-            java.lang.String r2 = r0.getQuery(r8)
+            if (r0 == 0) goto L_0x01c4
+            java.lang.String r0 = r0.getQuery(r8)
+            r2 = r0
+            goto L_0x01c5
+        L_0x01c4:
+            r2 = r3
+        L_0x01c5:
             org.telegram.tgnet.TLRPC$BotInlineResult r3 = r9.getBotInlineResult()
             r5 = 0
             org.telegram.tgnet.TLRPC$User r6 = r9.getInlineBot()
             r0 = r14
             r4 = r10
             r0.open(r1, r2, r3, r4, r5, r6)
-            if (r10 == r8) goto L_0x01c9
+            if (r10 == r8) goto L_0x01d8
             r9.setScaled(r8)
-        L_0x01c9:
+        L_0x01d8:
             return r8
-        L_0x01ca:
+        L_0x01d9:
             r9 = r17
             int r6 = r6 + 1
             goto L_0x00c6
-        L_0x01d0:
+        L_0x01df:
             return r8
-        L_0x01d1:
+        L_0x01e0:
             java.lang.Runnable r0 = r7.openPreviewRunnable
-            if (r0 == 0) goto L_0x024e
+            if (r0 == 0) goto L_0x025d
             int r0 = r15.getAction()
-            if (r0 != r4) goto L_0x0204
+            if (r0 != r4) goto L_0x0213
             int r0 = r7.startX
             float r0 = (float) r0
             float r1 = r15.getX()
@@ -738,52 +756,52 @@ public class ContentPreviewViewer {
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             double r4 = (double) r4
             int r6 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r6 <= 0) goto L_0x024e
+            if (r6 <= 0) goto L_0x025d
             java.lang.Runnable r0 = r7.openPreviewRunnable
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
             r7.openPreviewRunnable = r3
-            goto L_0x024e
-        L_0x0204:
+            goto L_0x025d
+        L_0x0213:
             java.lang.Runnable r0 = r7.openPreviewRunnable
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
             r7.openPreviewRunnable = r3
-            goto L_0x024e
-        L_0x020c:
+            goto L_0x025d
+        L_0x021b:
             org.telegram.ui.-$$Lambda$ContentPreviewViewer$fTVdUVOkyauWT6lnO5eDqKhjScQ r1 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$fTVdUVOkyauWT6lnO5eDqKhjScQ
             r4 = r18
             r1.<init>(r4)
             r4 = 150(0x96, double:7.4E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r4)
             java.lang.Runnable r0 = r7.openPreviewRunnable
-            if (r0 == 0) goto L_0x0222
+            if (r0 == 0) goto L_0x0231
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
             r7.openPreviewRunnable = r3
-            goto L_0x024e
-        L_0x0222:
+            goto L_0x025d
+        L_0x0231:
             boolean r0 = r14.isVisible()
-            if (r0 == 0) goto L_0x024e
+            if (r0 == 0) goto L_0x025d
             r14.close()
             android.view.View r0 = r7.currentPreviewCell
-            if (r0 == 0) goto L_0x024e
+            if (r0 == 0) goto L_0x025d
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
-            if (r1 == 0) goto L_0x0239
+            if (r1 == 0) goto L_0x0248
             org.telegram.ui.Cells.StickerEmojiCell r0 = (org.telegram.ui.Cells.StickerEmojiCell) r0
             r0.setScaled(r2)
-            goto L_0x024c
-        L_0x0239:
+            goto L_0x025b
+        L_0x0248:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerCell
-            if (r1 == 0) goto L_0x0243
+            if (r1 == 0) goto L_0x0252
             org.telegram.ui.Cells.StickerCell r0 = (org.telegram.ui.Cells.StickerCell) r0
             r0.setScaled(r2)
-            goto L_0x024c
-        L_0x0243:
+            goto L_0x025b
+        L_0x0252:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.ContextLinkCell
-            if (r1 == 0) goto L_0x024c
+            if (r1 == 0) goto L_0x025b
             org.telegram.ui.Cells.ContextLinkCell r0 = (org.telegram.ui.Cells.ContextLinkCell) r0
             r0.setScaled(r2)
-        L_0x024c:
+        L_0x025b:
             r7.currentPreviewCell = r3
-        L_0x024e:
+        L_0x025d:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onTouch(android.view.MotionEvent, org.telegram.ui.Components.RecyclerListView, int, java.lang.Object, org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate):boolean");
@@ -903,6 +921,7 @@ public class ContentPreviewViewer {
     /* renamed from: lambda$onInterceptTouchEvent$1 */
     public /* synthetic */ void lambda$onInterceptTouchEvent$1$ContentPreviewViewer(RecyclerListView recyclerListView, int i, int i2) {
         if (this.openPreviewRunnable != null) {
+            String str = null;
             recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) null);
             recyclerListView.requestDisallowInterceptTouchEvent(true);
             this.openPreviewRunnable = null;
@@ -912,16 +931,31 @@ public class ContentPreviewViewer {
             View view = this.currentPreviewCell;
             if (view instanceof StickerEmojiCell) {
                 StickerEmojiCell stickerEmojiCell = (StickerEmojiCell) view;
-                open(stickerEmojiCell.getSticker(), this.delegate.getQuery(false), (TLRPC$BotInlineResult) null, i2, stickerEmojiCell.isRecent(), stickerEmojiCell.getParentObject());
+                TLRPC$Document sticker = stickerEmojiCell.getSticker();
+                ContentPreviewViewerDelegate contentPreviewViewerDelegate = this.delegate;
+                if (contentPreviewViewerDelegate != null) {
+                    str = contentPreviewViewerDelegate.getQuery(false);
+                }
+                open(sticker, str, (TLRPC$BotInlineResult) null, i2, stickerEmojiCell.isRecent(), stickerEmojiCell.getParentObject());
                 stickerEmojiCell.setScaled(true);
             } else if (view instanceof StickerCell) {
                 StickerCell stickerCell = (StickerCell) view;
-                open(stickerCell.getSticker(), this.delegate.getQuery(false), (TLRPC$BotInlineResult) null, i2, false, stickerCell.getParentObject());
+                TLRPC$Document sticker2 = stickerCell.getSticker();
+                ContentPreviewViewerDelegate contentPreviewViewerDelegate2 = this.delegate;
+                if (contentPreviewViewerDelegate2 != null) {
+                    str = contentPreviewViewerDelegate2.getQuery(false);
+                }
+                open(sticker2, str, (TLRPC$BotInlineResult) null, i2, false, stickerCell.getParentObject());
                 stickerCell.setScaled(true);
                 this.clearsInputField = stickerCell.isClearsInputField();
             } else if (view instanceof ContextLinkCell) {
                 ContextLinkCell contextLinkCell = (ContextLinkCell) view;
-                open(contextLinkCell.getDocument(), this.delegate.getQuery(true), contextLinkCell.getBotInlineResult(), i2, false, contextLinkCell.getInlineBot());
+                TLRPC$Document document = contextLinkCell.getDocument();
+                ContentPreviewViewerDelegate contentPreviewViewerDelegate3 = this.delegate;
+                if (contentPreviewViewerDelegate3 != null) {
+                    str = contentPreviewViewerDelegate3.getQuery(true);
+                }
+                open(document, str, contextLinkCell.getBotInlineResult(), i2, false, contextLinkCell.getInlineBot());
                 if (i2 != 1) {
                     contextLinkCell.setScaled(true);
                 }

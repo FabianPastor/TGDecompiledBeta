@@ -75,7 +75,7 @@ public class RadialProgressView extends View {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:18:0x005d  */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x0102  */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x0101  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void updateAnimation() {
         /*
@@ -132,23 +132,23 @@ public class RadialProgressView extends View {
         L_0x0057:
             boolean r0 = r10.noProgress
             r6 = 1082130432(0x40800000, float:4.0)
-            if (r0 == 0) goto L_0x0102
+            if (r0 == 0) goto L_0x0101
             float r0 = r10.toCircleProgress
             r7 = 1132789760(0x43850000, float:266.0)
             r8 = 1132920832(0x43870000, float:270.0)
-            r9 = 1159479296(0x451CLASSNAME, float:2500.0)
+            r9 = 1140457472(0x43fa0000, float:500.0)
             int r0 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-            if (r0 != 0) goto L_0x00b3
+            if (r0 != 0) goto L_0x00b2
             float r0 = r10.currentProgressTime
             float r1 = (float) r2
             float r0 = r0 + r1
             r10.currentProgressTime = r0
             int r0 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1))
-            if (r0 < 0) goto L_0x0076
+            if (r0 < 0) goto L_0x0075
             r10.currentProgressTime = r9
-        L_0x0076:
+        L_0x0075:
             boolean r0 = r10.risingCircleLength
-            if (r0 == 0) goto L_0x0089
+            if (r0 == 0) goto L_0x0088
             android.view.animation.AccelerateInterpolator r0 = r10.accelerateInterpolator
             float r1 = r10.currentProgressTime
             float r1 = r1 / r9
@@ -156,8 +156,8 @@ public class RadialProgressView extends View {
             float r0 = r0 * r7
             float r0 = r0 + r6
             r10.currentCircleLength = r0
-            goto L_0x0098
-        L_0x0089:
+            goto L_0x0097
+        L_0x0088:
             android.view.animation.DecelerateInterpolator r0 = r10.decelerateInterpolator
             float r1 = r10.currentProgressTime
             float r1 = r1 / r9
@@ -166,25 +166,25 @@ public class RadialProgressView extends View {
             float r4 = r4 * r8
             float r6 = r6 - r4
             r10.currentCircleLength = r6
-        L_0x0098:
+        L_0x0097:
             float r0 = r10.currentProgressTime
             int r0 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1))
-            if (r0 != 0) goto L_0x0139
+            if (r0 != 0) goto L_0x0138
             boolean r0 = r10.risingCircleLength
-            if (r0 == 0) goto L_0x00ab
+            if (r0 == 0) goto L_0x00aa
             float r1 = r10.radOffset
             float r1 = r1 + r8
             r10.radOffset = r1
             r1 = -1014693888(0xffffffffCLASSNAME, float:-266.0)
             r10.currentCircleLength = r1
-        L_0x00ab:
+        L_0x00aa:
             r0 = r0 ^ 1
             r10.risingCircleLength = r0
             r10.currentProgressTime = r5
-            goto L_0x0139
-        L_0x00b3:
+            goto L_0x0138
+        L_0x00b2:
             boolean r0 = r10.risingCircleLength
-            if (r0 == 0) goto L_0x00db
+            if (r0 == 0) goto L_0x00da
             float r0 = r10.currentCircleLength
             android.view.animation.AccelerateInterpolator r2 = r10.accelerateInterpolator
             float r3 = r10.currentProgressTime
@@ -199,13 +199,13 @@ public class RadialProgressView extends View {
             r10.currentCircleLength = r2
             float r1 = r0 - r2
             int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0139
+            if (r1 <= 0) goto L_0x0138
             float r1 = r10.radOffset
             float r0 = r0 - r2
             float r1 = r1 + r0
             r10.radOffset = r1
-            goto L_0x0139
-        L_0x00db:
+            goto L_0x0138
+        L_0x00da:
             float r0 = r10.currentCircleLength
             android.view.animation.DecelerateInterpolator r1 = r10.decelerateInterpolator
             float r2 = r10.currentProgressTime
@@ -222,18 +222,18 @@ public class RadialProgressView extends View {
             r10.currentCircleLength = r6
             float r1 = r0 - r6
             int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0139
+            if (r1 <= 0) goto L_0x0138
             float r1 = r10.radOffset
             float r0 = r0 - r6
             float r1 = r1 + r0
             r10.radOffset = r1
-            goto L_0x0139
-        L_0x0102:
+            goto L_0x0138
+        L_0x0101:
             float r0 = r10.currentProgress
             float r4 = r10.progressAnimationStart
             float r7 = r0 - r4
             int r5 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1))
-            if (r5 <= 0) goto L_0x012f
+            if (r5 <= 0) goto L_0x012e
             int r5 = r10.progressTime
             long r8 = (long) r5
             long r8 = r8 + r2
@@ -242,13 +242,13 @@ public class RadialProgressView extends View {
             float r3 = (float) r2
             r5 = 1128792064(0x43480000, float:200.0)
             int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r3 < 0) goto L_0x0122
+            if (r3 < 0) goto L_0x0121
             r10.progressAnimationStart = r0
             r10.animatedProgress = r0
             r0 = 0
             r10.progressTime = r0
-            goto L_0x012f
-        L_0x0122:
+            goto L_0x012e
+        L_0x0121:
             android.view.animation.DecelerateInterpolator r0 = org.telegram.messenger.AndroidUtilities.decelerateInterpolator
             float r2 = (float) r2
             float r2 = r2 / r5
@@ -256,12 +256,12 @@ public class RadialProgressView extends View {
             float r7 = r7 * r0
             float r4 = r4 + r7
             r10.animatedProgress = r4
-        L_0x012f:
+        L_0x012e:
             float r0 = r10.animatedProgress
             float r0 = r0 * r1
             float r0 = java.lang.Math.max(r6, r0)
             r10.currentCircleLength = r0
-        L_0x0139:
+        L_0x0138:
             r10.invalidate()
             return
         */

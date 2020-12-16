@@ -7,7 +7,6 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -219,8 +218,12 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     public TextView[] muteLabel = new TextView[2];
     /* access modifiers changed from: private */
     public TextView[] muteSubLabel = new TextView[2];
+    int newAudioColor;
+    int newColor2;
     /* access modifiers changed from: private */
     public int oldAddMemberRow;
+    int oldAudioColor;
+    int oldColor2;
     /* access modifiers changed from: private */
     public int oldCount;
     /* access modifiers changed from: private */
@@ -2209,58 +2212,88 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     /* access modifiers changed from: private */
     public void updateMuteButton(int i, boolean z) {
         String str;
-        int i2;
-        int i3;
         String str2;
-        int color;
-        if (this.muteButtonState != i || !z) {
+        String str3;
+        int i2 = i;
+        boolean z2 = z;
+        if (this.muteButtonState != i2 || !z2) {
             ValueAnimator valueAnimator = this.muteButtonAnimator;
             if (valueAnimator != null) {
                 valueAnimator.cancel();
                 this.muteButtonAnimator = null;
             }
-            String str3 = "";
-            if (i == 0) {
-                int color2 = Theme.getColor("voipgroup_unmuteButton2");
+            String str4 = "";
+            if (i2 == 0) {
+                this.newColor2 = Theme.getColor("voipgroup_unmuteButton2");
                 if (this.soundButton.isChecked()) {
-                    i2 = Theme.getColor("voipgroup_soundButtonActive");
+                    this.newAudioColor = Theme.getColor("voipgroup_soundButtonActive");
                 } else {
-                    i2 = Theme.getColor("voipgroup_soundButton");
+                    this.newAudioColor = Theme.getColor("voipgroup_soundButton");
                 }
-                str = LocaleController.getString("VoipGroupUnmute", NUM);
-                String string = LocaleController.getString("VoipHoldAndTalk", NUM);
+                String string = LocaleController.getString("VoipGroupUnmute", NUM);
+                String string2 = LocaleController.getString("VoipHoldAndTalk", NUM);
                 this.bigMicDrawable.setCustomEndFrame(12);
-                i3 = color2;
-                str3 = string;
-            } else if (i == 1) {
-                i3 = Theme.getColor("voipgroup_muteButton2");
+                String str5 = string;
+                str4 = string2;
+                str = str5;
+            } else if (i2 == 1) {
+                this.newColor2 = Theme.getColor("voipgroup_muteButton2");
                 if (this.soundButton.isChecked()) {
-                    color = Theme.getColor("voipgroup_soundButtonActive2");
+                    this.newAudioColor = Theme.getColor("voipgroup_soundButtonActive2");
                 } else {
-                    color = Theme.getColor("voipgroup_soundButton2");
+                    this.newAudioColor = Theme.getColor("voipgroup_soundButton2");
                 }
                 str = LocaleController.getString("VoipTapToMute", NUM);
                 this.bigMicDrawable.setCustomEndFrame(0);
             } else {
-                if (i == 3) {
-                    str = LocaleController.getString("Connecting", NUM);
+                if (i2 == 3) {
+                    str3 = LocaleController.getString("Connecting", NUM);
                 } else {
-                    str = LocaleController.getString("VoipMutedByAdmin", NUM);
-                    str3 = LocaleController.getString("VoipMutedByAdminInfo", NUM);
+                    str3 = LocaleController.getString("VoipMutedByAdmin", NUM);
+                    str4 = LocaleController.getString("VoipMutedByAdminInfo", NUM);
                 }
-                int offsetColor = AndroidUtilities.getOffsetColor(Theme.getColor("voipgroup_listViewBackgroundUnscrolled"), Theme.getColor("voipgroup_disabledButton"), this.colorProgress, 1.0f);
-                int color3 = this.soundButton.isChecked() ? Theme.getColor("voipgroup_disabledButtonActive") : offsetColor;
+                String str6 = str4;
+                String str7 = str3;
+                this.newColor2 = AndroidUtilities.getOffsetColor(Theme.getColor("voipgroup_listViewBackgroundUnscrolled"), Theme.getColor("voipgroup_disabledButton"), this.colorProgress, 1.0f);
+                if (this.soundButton.isChecked()) {
+                    this.newAudioColor = Theme.getColor("voipgroup_disabledButtonActive");
+                } else {
+                    this.newAudioColor = this.newColor2;
+                }
                 this.bigMicDrawable.setCustomEndFrame(12);
-                i3 = offsetColor;
-                i2 = color3;
+                str4 = str6;
+                str = str7;
             }
-            if (!TextUtils.isEmpty(str3)) {
-                str2 = str + " " + str3;
+            if (!TextUtils.isEmpty(str4)) {
+                str2 = str + " " + str4;
             } else {
                 str2 = str;
             }
             this.muteButton.setContentDescription(str2);
-            if (z) {
+            if (z2) {
+                int i3 = this.muteButtonState;
+                if (i3 == 0) {
+                    this.oldColor2 = Theme.getColor("voipgroup_unmuteButton2");
+                    if (this.soundButton.isChecked()) {
+                        this.oldAudioColor = Theme.getColor("voipgroup_soundButtonActive");
+                    } else {
+                        this.oldAudioColor = Theme.getColor("voipgroup_soundButton");
+                    }
+                } else if (i3 == 1) {
+                    this.oldColor2 = Theme.getColor("voipgroup_muteButton2");
+                    if (this.soundButton.isChecked()) {
+                        this.oldAudioColor = Theme.getColor("voipgroup_soundButtonActive2");
+                    } else {
+                        this.oldAudioColor = Theme.getColor("voipgroup_soundButton2");
+                    }
+                } else {
+                    this.oldColor2 = Theme.getColor("voipgroup_disabledButton");
+                    if (this.soundButton.isChecked()) {
+                        this.oldAudioColor = Theme.getColor("voipgroup_disabledButtonActive");
+                    } else {
+                        this.oldAudioColor = AndroidUtilities.getOffsetColor(Theme.getColor("voipgroup_listViewBackgroundUnscrolled"), Theme.getColor("voipgroup_disabledButton"), this.colorProgress, 1.0f);
+                    }
+                }
                 this.muteButton.playAnimation();
                 this.muteLabel[1].setVisibility(0);
                 this.muteLabel[1].setAlpha(0.0f);
@@ -2269,7 +2302,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 this.muteSubLabel[1].setVisibility(0);
                 this.muteSubLabel[1].setAlpha(0.0f);
                 this.muteSubLabel[1].setTranslationY((float) (-AndroidUtilities.dp(5.0f)));
-                this.muteSubLabel[1].setText(str3);
+                this.muteSubLabel[1].setText(str4);
                 ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                 this.muteButtonAnimator = ofFloat;
                 ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -2296,15 +2329,15 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 });
                 this.muteButtonAnimator.setDuration(180);
                 this.muteButtonAnimator.start();
-                this.muteButtonState = i;
+                this.muteButtonState = i2;
             } else {
-                this.muteButtonState = i;
+                this.muteButtonState = i2;
                 RLottieDrawable rLottieDrawable = this.bigMicDrawable;
                 rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame(), false, true);
                 this.muteLabel[0].setText(str);
-                this.muteSubLabel[0].setText(str3);
+                this.muteSubLabel[0].setText(str4);
             }
-            setColors(i3, i2, z);
+            setColors(z2);
         }
     }
 
@@ -2324,37 +2357,30 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         this.muteSubLabel[1].setTranslationY((float) AndroidUtilities.dp(f2));
     }
 
-    private void setColors(int i, int i2, boolean z) {
-        int red = Color.red(i);
-        int green = Color.green(i);
-        int blue = Color.blue(i);
-        RadialGradient radialGradient2 = new RadialGradient(0.0f, 0.0f, (float) AndroidUtilities.dp(100.0f), new int[]{Color.argb(50, red, green, blue), Color.argb(0, red, green, blue)}, (float[]) null, Shader.TileMode.CLAMP);
-        this.radialGradient = radialGradient2;
-        this.radialPaint.setShader(radialGradient2);
+    private void setColors(boolean z) {
         this.muteButton.invalidate();
-        this.soundButton.setBackgroundColor(i2);
         WeavingState[] weavingStateArr = this.states;
-        int i3 = this.muteButtonState;
-        if (weavingStateArr[i3] == null) {
-            weavingStateArr[i3] = new WeavingState(i3);
-            int i4 = this.muteButtonState;
-            if (i4 == 3) {
-                Shader unused = this.states[i4].shader = null;
-            } else if (i4 == 2) {
-                Shader unused2 = this.states[i4].shader = new LinearGradient(0.0f, 400.0f, 400.0f, 0.0f, new int[]{Theme.getColor("voipgroup_mutedByAdminGradient"), Theme.getColor("voipgroup_mutedByAdminGradient3"), Theme.getColor("voipgroup_mutedByAdminGradient2")}, (float[]) null, Shader.TileMode.CLAMP);
-            } else if (i4 == 1) {
-                Shader unused3 = this.states[i4].shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{Theme.getColor("voipgroup_muteButton"), Theme.getColor("voipgroup_unmuteButton")}, (float[]) null, Shader.TileMode.CLAMP);
+        int i = this.muteButtonState;
+        if (weavingStateArr[i] == null) {
+            weavingStateArr[i] = new WeavingState(i);
+            int i2 = this.muteButtonState;
+            if (i2 == 3) {
+                Shader unused = this.states[i2].shader = null;
+            } else if (i2 == 2) {
+                Shader unused2 = this.states[i2].shader = new LinearGradient(0.0f, 400.0f, 400.0f, 0.0f, new int[]{Theme.getColor("voipgroup_mutedByAdminGradient"), Theme.getColor("voipgroup_mutedByAdminGradient3"), Theme.getColor("voipgroup_mutedByAdminGradient2")}, (float[]) null, Shader.TileMode.CLAMP);
+            } else if (i2 == 1) {
+                Shader unused3 = this.states[i2].shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{Theme.getColor("voipgroup_muteButton"), Theme.getColor("voipgroup_unmuteButton")}, (float[]) null, Shader.TileMode.CLAMP);
             } else {
-                Shader unused4 = this.states[i4].shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{Theme.getColor("voipgroup_unmuteButton2"), Theme.getColor("voipgroup_unmuteButton")}, (float[]) null, Shader.TileMode.CLAMP);
+                Shader unused4 = this.states[i2].shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{Theme.getColor("voipgroup_unmuteButton2"), Theme.getColor("voipgroup_unmuteButton")}, (float[]) null, Shader.TileMode.CLAMP);
             }
         }
         WeavingState[] weavingStateArr2 = this.states;
-        int i5 = this.muteButtonState;
-        WeavingState weavingState = weavingStateArr2[i5];
+        int i3 = this.muteButtonState;
+        WeavingState weavingState = weavingStateArr2[i3];
         WeavingState weavingState2 = this.currentState;
         if (weavingState != weavingState2) {
             this.prevState = weavingState2;
-            this.currentState = weavingStateArr2[i5];
+            this.currentState = weavingStateArr2[i3];
             if (weavingState2 == null || !z) {
                 this.switchProgress = 1.0f;
                 this.prevState = null;
