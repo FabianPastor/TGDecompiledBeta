@@ -151,7 +151,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             }
 
             /* JADX WARNING: Code restructure failed: missing block: B:8:0x0022, code lost:
-                if (r4 != 3) goto L_0x02f5;
+                if (r4 != 3) goto L_0x02ec;
              */
             /* JADX WARNING: Removed duplicated region for block: B:19:0x0064  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -175,7 +175,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     if (r4 == r5) goto L_0x011b
                     if (r4 == r8) goto L_0x0026
                     if (r4 == r6) goto L_0x011b
-                    goto L_0x02f5
+                    goto L_0x02ec
                 L_0x0026:
                     float r13 = r12.startX
                     float r13 = r0 - r13
@@ -210,7 +210,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                 L_0x005e:
                     org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
                     boolean r3 = r13.moving
-                    if (r3 == 0) goto L_0x02f5
+                    if (r3 == 0) goto L_0x02ec
                     float r3 = r13.windowX
                     float r3 = r3 + r7
                     r13.windowX = r3
@@ -308,7 +308,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     r0.pinnedToCenter(r1)
                     org.telegram.ui.Components.GroupCallPip r0 = org.telegram.ui.Components.GroupCallPip.this
                     r0.prepareToRemove(r13)
-                    goto L_0x02f5
+                    goto L_0x02ec
                 L_0x011b:
                     java.lang.Runnable r0 = r12.micRunnable
                     org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
@@ -501,7 +501,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
                     r13.moving = r1
                     r13.showRemoveTooltip(r1)
-                    goto L_0x02f5
+                    goto L_0x02ec
                 L_0x02ae:
                     org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
                     int[] r13 = r13.location
@@ -522,12 +522,8 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     r12.startX = r0
                     r12.startY = r2
                     java.lang.System.currentTimeMillis()
-                    int r13 = android.view.ViewConfiguration.getTapTimeout()
-                    float r13 = (float) r13
-                    r0 = 1068708659(0x3fb33333, float:1.4)
-                    float r13 = r13 * r0
-                    long r0 = (long) r13
                     java.lang.Runnable r13 = r12.pressedRunnable
+                    r0 = 300(0x12c, double:1.48E-321)
                     org.telegram.messenger.AndroidUtilities.runOnUIThread(r13, r0)
                     org.telegram.ui.Components.GroupCallPip r13 = org.telegram.ui.Components.GroupCallPip.this
                     android.view.WindowManager$LayoutParams r0 = r13.windowLayoutParams
@@ -539,7 +535,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     r13.windowY = r0
                     r13.pressedState = r5
                     r13.checkButtonAlpha()
-                L_0x02f5:
+                L_0x02ec:
                     return r5
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupCallPip.AnonymousClass3.onTouchEvent(android.view.MotionEvent):boolean");
@@ -704,17 +700,17 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     }
 
     public static boolean isShowing() {
-        if (!AndroidUtilities.checkInlinePermissions(ApplicationLoader.applicationContext)) {
+        if (instance != null) {
+            return true;
+        }
+        if (!checkInlinePermissions()) {
             return false;
         }
         VoIPService sharedInstance = VoIPService.getSharedInstance();
-        if (!((sharedInstance == null || sharedInstance.groupCall == null || sharedInstance.isHangingUp()) ? false : true) || forceRemoved) {
+        if (!((sharedInstance == null || sharedInstance.groupCall == null || sharedInstance.isHangingUp()) ? false : true) || forceRemoved || (!ApplicationLoader.mainInterfaceStopped && GroupCallActivity.groupCallUiVisible)) {
             return false;
         }
-        if (ApplicationLoader.mainInterfaceStopped || !GroupCallActivity.groupCallUiVisible) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     public static boolean onBackPressed() {
@@ -808,6 +804,10 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             }
             this.button.setPressedState(z);
         }
+    }
+
+    public static GroupCallPip getInstance() {
+        return instance;
     }
 
     /* access modifiers changed from: private */
@@ -1283,5 +1283,9 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
 
     public static void clearForce() {
         forceRemoved = false;
+    }
+
+    public static boolean checkInlinePermissions() {
+        return Build.VERSION.SDK_INT < 23 || ApplicationLoader.canDrawOverlays;
     }
 }

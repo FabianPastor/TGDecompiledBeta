@@ -1019,7 +1019,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131624908(0x7f0e03cc, float:1.887701E38)
+                r0 = 2131624910(0x7f0e03ce, float:1.8877013E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1031,12 +1031,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131624909(0x7f0e03cd, float:1.8877011E38)
+                r0 = 2131624911(0x7f0e03cf, float:1.8877015E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131624910(0x7f0e03ce, float:1.8877013E38)
+                r0 = 2131624912(0x7f0e03d0, float:1.8877017E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1154,27 +1154,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131626671(0x7f0e0aaf, float:1.8880585E38)
+                r0 = 2131626673(0x7f0e0ab1, float:1.8880589E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131626672(0x7f0e0ab0, float:1.8880587E38)
+                r0 = 2131626674(0x7f0e0ab2, float:1.888059E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131626663(0x7f0e0aa7, float:1.8880569E38)
+                r0 = 2131626665(0x7f0e0aa9, float:1.8880573E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131626662(0x7f0e0aa6, float:1.8880567E38)
+                r0 = 2131626664(0x7f0e0aa8, float:1.888057E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131626664(0x7f0e0aa8, float:1.888057E38)
+                r0 = 2131626666(0x7f0e0aaa, float:1.8880575E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -3344,21 +3344,21 @@ public class AndroidUtilities {
             if (r9 != 0) goto L_0x00ca
             org.telegram.ui.ActionBar.AlertDialog$Builder r9 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r9.<init>((android.content.Context) r10)
-            r0 = 2131624258(0x7f0e0142, float:1.887569E38)
+            r0 = 2131624260(0x7f0e0144, float:1.8875695E38)
             java.lang.String r1 = "AppName"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r9.setTitle(r0)
-            r0 = 2131624256(0x7f0e0140, float:1.8875687E38)
+            r0 = 2131624258(0x7f0e0142, float:1.887569E38)
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r9.setMessage(r0)
-            r0 = 2131626656(0x7f0e0aa0, float:1.8880554E38)
+            r0 = 2131626658(0x7f0e0aa2, float:1.8880558E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY
             r1.<init>(r10)
             r9.setPositiveButton(r0, r1)
-            r10 = 2131624584(0x7f0e0288, float:1.8876352E38)
+            r10 = 2131624586(0x7f0e028a, float:1.8876356E38)
             java.lang.String r0 = "Cancel"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
             r9.setNegativeButton(r10, r3)

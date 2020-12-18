@@ -198,7 +198,7 @@ public class DrawerProfileCell extends FrameLayout {
             int r2 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
             if (r2 == 0) goto L_0x0095
             android.content.Context r2 = r6.getContext()
-            r3 = 2131624445(0x7f0e01fd, float:1.887607E38)
+            r3 = 2131624447(0x7f0e01ff, float:1.8876074E38)
             java.lang.String r4 = "AutoNightModeOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.widget.Toast r2 = android.widget.Toast.makeText(r2, r3, r1)

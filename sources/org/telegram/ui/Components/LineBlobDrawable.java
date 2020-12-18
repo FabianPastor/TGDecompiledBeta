@@ -9,7 +9,7 @@ public class LineBlobDrawable {
     private final float N;
     public float maxRadius;
     public float minRadius;
-    private Path path = new Path();
+    public Path path = new Path();
     private float[] progress;
     private float[] radius;
     private float[] radiusNext;

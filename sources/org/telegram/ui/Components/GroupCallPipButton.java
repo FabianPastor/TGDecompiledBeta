@@ -6,9 +6,11 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
 import android.graphics.Shader;
+import android.os.Build;
 import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import java.util.Random;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.VoIPBaseService;
@@ -85,9 +88,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
         this.blobDrawable2.minRadius = (float) AndroidUtilities.dp(32.0f);
         this.blobDrawable.generateBlob();
         this.blobDrawable2.generateBlob();
-        RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(22.0f), AndroidUtilities.dp(30.0f), true, (int[]) null);
-        this.bigMicDrawable = rLottieDrawable;
-        rLottieDrawable.setPlayInDirectionOfCustomEndFrame(true);
+        this.bigMicDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(22.0f), AndroidUtilities.dp(30.0f), true, (int[]) null);
         setWillNotDraw(false);
         RLottieImageView rLottieImageView = new RLottieImageView(context);
         this.muteButton = rLottieImageView;
@@ -672,7 +673,32 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
                 }
                 this.wavesEnter = f;
             }
+            String string = LocaleController.getString("VoipGroupVoiceChat", NUM);
+            if (i == 0) {
+                string = string + ", " + LocaleController.getString("VoipTapToMute", NUM);
+            } else if (i == 2) {
+                string = string + ", " + LocaleController.getString("Connecting", NUM);
+            } else if (i == 3) {
+                string = string + ", " + LocaleController.getString("VoipMutedByAdmin", NUM);
+            }
+            setContentDescription(string);
             invalidate();
+        }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        String str;
+        int i;
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        if (Build.VERSION.SDK_INT >= 21) {
+            if (GroupCallPip.getInstance().showAlert) {
+                i = NUM;
+                str = "AccDescrCloseMenu";
+            } else {
+                i = NUM;
+                str = "AccDescrOpenMenu2";
+            }
+            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, LocaleController.getString(str, i)));
         }
     }
 
@@ -687,9 +713,9 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
             if (VoIPService.getSharedInstance() != null) {
                 VoIPService.getSharedInstance().registerStateListener(this);
             }
-            this.bigMicDrawable.setCustomEndFrame(z ? 12 : 0);
+            this.bigMicDrawable.setCustomEndFrame(z ? 13 : 24);
             RLottieDrawable rLottieDrawable = this.bigMicDrawable;
-            rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame(), false, true);
+            rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame() - 1, false, true);
             updateButtonState();
         }
     }
@@ -739,13 +765,13 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
     }
 
     public void onAudioSettingsChanged() {
-        int i = 0;
         boolean z = VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().isMicMute();
-        RLottieDrawable rLottieDrawable = this.bigMicDrawable;
+        this.bigMicDrawable.setCustomEndFrame(z ? 13 : 24);
         if (z) {
-            i = 12;
+            this.bigMicDrawable.setCurrentFrame(0);
+        } else {
+            this.bigMicDrawable.setCurrentFrame(12);
         }
-        rLottieDrawable.setCustomEndFrame(i);
         this.muteButton.playAnimation();
         updateButtonState();
     }

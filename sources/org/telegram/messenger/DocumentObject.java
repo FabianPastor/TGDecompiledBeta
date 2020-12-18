@@ -80,32 +80,35 @@ public class DocumentObject {
 
     public static SvgHelper.SvgDrawable getSvgThumb(TLRPC$Document tLRPC$Document, String str, float f) {
         int i;
+        int i2;
         int size = tLRPC$Document.thumbs.size();
-        int i2 = 0;
         int i3 = 0;
+        int i4 = 0;
         while (true) {
-            if (i3 >= size) {
+            if (i4 >= size) {
                 break;
             }
-            TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$Document.thumbs.get(i3);
+            TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$Document.thumbs.get(i4);
             if (tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize) {
                 int size2 = tLRPC$Document.attributes.size();
-                int i4 = 0;
                 while (true) {
-                    if (i4 >= size2) {
-                        i = 0;
+                    i = 512;
+                    if (i3 >= size2) {
+                        i2 = 512;
                         break;
                     }
-                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i4);
+                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute = tLRPC$Document.attributes.get(i3);
                     if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeImageSize) {
-                        i2 = tLRPC$DocumentAttribute.w;
-                        i = tLRPC$DocumentAttribute.h;
+                        int i5 = tLRPC$DocumentAttribute.w;
+                        int i6 = tLRPC$DocumentAttribute.h;
+                        i = i5;
+                        i2 = i6;
                         break;
                     }
-                    i4++;
+                    i3++;
                 }
-                if (i2 != 0 && i != 0) {
-                    SvgHelper.SvgDrawable drawableByPath = SvgHelper.getDrawableByPath(SvgHelper.decompress(tLRPC$PhotoSize.bytes), i2, i);
+                if (i != 0 && i2 != 0) {
+                    SvgHelper.SvgDrawable drawableByPath = SvgHelper.getDrawableByPath(SvgHelper.decompress(tLRPC$PhotoSize.bytes), i, i2);
                     if (drawableByPath == null) {
                         return drawableByPath;
                     }
@@ -113,7 +116,7 @@ public class DocumentObject {
                     return drawableByPath;
                 }
             } else {
-                i3++;
+                i4++;
             }
         }
         return null;

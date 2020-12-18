@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 4.1.1
 
 Name: AndroidManifest.xml
-SHA1-Digest: Yw7ZgRWpnVEdgczz2unZPnVdR30=
+SHA1-Digest: 29H7Ss3aeYZ7R7TzC5lwDI6wx/A=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9879,13 +9879,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: OJvv53TEMvE3swf4as/KO/yoZag=
+SHA1-Digest: PLb2oqppsA5kkVAyybANto+XE9Y=
 
 Name: classes2.dex
 SHA1-Digest: GQNky92ExRcYASorLeQ9ZA9MVVY=
 
 Name: classes3.dex
-SHA1-Digest: m8H4HWP6aTtDSj1mzgXZpzfOZMc=
+SHA1-Digest: Z/1h1cIXjL8N9MQgWyfoyisJSTI=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -20327,10 +20327,10 @@ Name: res/raw/tsv_setup_monkey_tracking.tgs
 SHA1-Digest: DSZMiXV8CLWUQRdex6QbEialj3I=
 
 Name: res/raw/voice_muted.json
-SHA1-Digest: r1prQRNVCbClvPnSJGKpXVaqRKE=
+SHA1-Digest: kQ48WwxkrnOT4VcgJNQWfzc8azU=
 
 Name: res/raw/voice_outlined.json
-SHA1-Digest: VrQNytRnRyiogm/V0QjeD5Hf+TI=
+SHA1-Digest: HLDw4O9aZEpQMv1AaG6HEenr/MA=
 
 Name: res/raw/voicechat_connecting.mp3
 SHA1-Digest: OGenILkPEvV5WCHTCK0hbyzugdc=
@@ -20387,10 +20387,10 @@ Name: res/xml/actions.xml
 SHA1-Digest: 38LrwmuS5eCh9laJoYtewek7vTk=
 
 Name: res/xml/auth.xml
-SHA1-Digest: mNbfAADvnM6BikUihMHrWpqV3s0=
+SHA1-Digest: 96PZHzI2GL3A6aki82mmNiwOh7M=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: Pr7EBvwgPV0zu7jx6odqtsjSaLg=
+SHA1-Digest: 72KcD8uiJJeMDX7daemX9o7tT9w=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: vNxeRePtnY64Hxd7k8wXLkWhqV0=
@@ -20408,7 +20408,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: 4nwVUSfdxtfjQbTp4EXbL2Ru/oA=
+SHA1-Digest: 68wFare+SPMTMR9Yso5NL0xCU2I=
 
 Name: transport-api.properties
 SHA1-Digest: Jz4dPszpGdGJqctaJoPe9Lpu55k=

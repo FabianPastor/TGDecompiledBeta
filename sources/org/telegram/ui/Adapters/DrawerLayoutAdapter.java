@@ -257,7 +257,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         L_0x00c0:
             java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r9 = r13.items
             org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r10 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
-            r11 = 2131626030(0x7f0e082e, float:1.8879285E38)
+            r11 = 2131626032(0x7f0e0830, float:1.8879289E38)
             java.lang.String r12 = "NewGroup"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r10.<init>(r2, r11, r0)
@@ -265,7 +265,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
             org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r2 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
             r9 = 6
-            r10 = 2131624920(0x7f0e03d8, float:1.8877033E38)
+            r10 = 2131624922(0x7f0e03da, float:1.8877037E38)
             java.lang.String r11 = "Contacts"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r2.<init>(r9, r10, r1)
@@ -273,7 +273,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
             org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r1 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
             r2 = 10
-            r9 = 2131624580(0x7f0e0284, float:1.8876344E38)
+            r9 = 2131624582(0x7f0e0286, float:1.8876348E38)
             java.lang.String r10 = "Calls"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r1.<init>(r2, r9, r4)
@@ -283,7 +283,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
             org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r1 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
             r2 = 12
-            r4 = 2131626637(0x7f0e0a8d, float:1.8880516E38)
+            r4 = 2131626639(0x7f0e0a8f, float:1.888052E38)
             java.lang.String r9 = "PeopleNearby"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
             r1.<init>(r2, r4, r8)
@@ -292,7 +292,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
             org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r1 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
             r2 = 11
-            r4 = 2131626994(0x7f0e0bf2, float:1.888124E38)
+            r4 = 2131626996(0x7f0e0bf4, float:1.8881244E38)
             java.lang.String r8 = "SavedMessages"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
             r1.<init>(r2, r4, r5)
@@ -300,7 +300,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
             org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r1 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
             r2 = 8
-            r4 = 2131627147(0x7f0e0c8b, float:1.888155E38)
+            r4 = 2131627149(0x7f0e0c8d, float:1.8881554E38)
             java.lang.String r5 = "Settings"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.<init>(r2, r4, r6)
@@ -311,7 +311,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
             org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r1 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
             r2 = 7
-            r4 = 2131625678(0x7f0e06ce, float:1.887857E38)
+            r4 = 2131625680(0x7f0e06d0, float:1.8878575E38)
             java.lang.String r5 = "InviteFriends"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.<init>(r2, r4, r7)
@@ -319,7 +319,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
             org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r1 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
             r2 = 9
-            r4 = 2131627361(0x7f0e0d61, float:1.8881984E38)
+            r4 = 2131627363(0x7f0e0d63, float:1.8881988E38)
             java.lang.String r5 = "TelegramFAQ"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.<init>(r2, r4, r3)

@@ -21,6 +21,7 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$ChannelParticipant;
 import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatParticipant;
 import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$TL_channelParticipantsAdmins;
 import org.telegram.tgnet.TLRPC$TL_channelParticipantsBanned;
@@ -530,6 +531,21 @@ public class SearchAdapterHelper {
             return 1;
         }
         return i > i2 ? -1 : 0;
+    }
+
+    public void addGroupMembers(ArrayList<TLObject> arrayList) {
+        this.groupSearch.clear();
+        this.groupSearch.addAll(arrayList);
+        int size = arrayList.size();
+        for (int i = 0; i < size; i++) {
+            TLObject tLObject = arrayList.get(i);
+            if (tLObject instanceof TLRPC$ChatParticipant) {
+                this.groupSearchMap.put(((TLRPC$ChatParticipant) tLObject).user_id, tLObject);
+            } else if (tLObject instanceof TLRPC$ChannelParticipant) {
+                this.groupSearchMap.put(((TLRPC$ChannelParticipant) tLObject).user_id, tLObject);
+            }
+        }
+        removeGroupSearchFromGlobal();
     }
 
     public void mergeResults(ArrayList<TLObject> arrayList) {

@@ -3,10 +3,16 @@ package org.telegram.ui.Components;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RadialGradient;
+import android.graphics.RectF;
 import android.graphics.Shader;
+import android.os.Build;
 import android.os.SystemClock;
 import android.view.View;
+import androidx.core.graphics.ColorUtils;
 import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -29,49 +35,70 @@ public class FragmentContextViewWavesDrawable {
     LineBlobDrawable lineBlobDrawable2 = new LineBlobDrawable(8);
     Paint paint = new Paint(1);
     ArrayList<View> parents = new ArrayList<>();
+    Path path = new Path();
     WeavingState pausedState;
+    float pressedProgress;
+    float pressedRemoveProgress;
     WeavingState previousState;
     float progressToState = 1.0f;
+    RectF rect = new RectF();
+    private final Paint selectedPaint;
     WeavingState[] states = new WeavingState[4];
+    private final Paint xRefP;
 
     public FragmentContextViewWavesDrawable() {
+        Paint paint2 = new Paint(1);
+        this.xRefP = paint2;
+        this.selectedPaint = new Paint(1);
+        paint2.setColor(0);
+        paint2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         for (int i = 0; i < 4; i++) {
             this.states[i] = new WeavingState(i);
         }
     }
 
-    public void draw(float f, float f2, float f3, float f4, Canvas canvas, View view, float f5) {
+    public void draw(float f, float f2, float f3, float f4, Canvas canvas, FragmentContextView fragmentContextView, float f5) {
         boolean z;
-        int i;
         float f6;
-        View view2 = view;
+        float f7;
+        int i;
+        float f8;
+        float f9 = f;
+        float var_ = f3;
+        float var_ = f4;
+        Canvas canvas2 = canvas;
+        FragmentContextView fragmentContextView2 = fragmentContextView;
         checkColors();
-        if (view2 == null) {
+        if (fragmentContextView2 == null) {
             z = false;
         } else {
-            z = this.parents.size() > 0 && view2 == this.parents.get(0);
+            z = this.parents.size() > 0 && fragmentContextView2 == this.parents.get(0);
         }
-        if (f2 <= f4) {
+        if (f2 <= var_) {
             long j = 0;
+            WeavingState weavingState = this.currentState;
+            boolean z2 = (weavingState == null || this.previousState == null || ((weavingState.currentState != 1 || this.previousState.currentState != 0) && (this.previousState.currentState != 1 || this.currentState.currentState != 0))) ? false : true;
+            float var_ = 1.0f;
+            float var_ = 0.0f;
             if (z) {
                 long elapsedRealtime = SystemClock.elapsedRealtime();
                 long j2 = elapsedRealtime - this.lastUpdateTime;
                 this.lastUpdateTime = elapsedRealtime;
                 j = j2 > 20 ? 17 : j2;
-                float f7 = this.animateToAmplitude;
-                float f8 = this.amplitude;
-                if (f7 != f8) {
-                    float f9 = this.animateAmplitudeDiff;
-                    float var_ = f8 + (((float) j) * f9);
+                float var_ = this.animateToAmplitude;
+                float var_ = this.amplitude;
+                if (var_ != var_) {
+                    float var_ = this.animateAmplitudeDiff;
+                    float var_ = var_ + (((float) j) * var_);
                     this.amplitude = var_;
-                    if (f9 > 0.0f) {
-                        if (var_ > f7) {
-                            this.amplitude = f7;
+                    if (var_ > 0.0f) {
+                        if (var_ > var_) {
+                            this.amplitude = var_;
                         }
-                    } else if (var_ < f7) {
-                        this.amplitude = f7;
+                    } else if (var_ < var_) {
+                        this.amplitude = var_;
                     }
-                    view.invalidate();
+                    fragmentContextView.invalidate();
                 }
                 float var_ = this.animateToAmplitude;
                 float var_ = this.amplitude2;
@@ -86,7 +113,7 @@ public class FragmentContextViewWavesDrawable {
                     } else if (var_ < var_) {
                         this.amplitude2 = var_;
                     }
-                    view.invalidate();
+                    fragmentContextView.invalidate();
                 }
                 if (this.previousState != null) {
                     float var_ = this.progressToState + (((float) j) / 250.0f);
@@ -95,7 +122,7 @@ public class FragmentContextViewWavesDrawable {
                         this.progressToState = 1.0f;
                         this.previousState = null;
                     }
-                    view.invalidate();
+                    fragmentContextView.invalidate();
                 }
             }
             long j3 = j;
@@ -105,56 +132,111 @@ public class FragmentContextViewWavesDrawable {
                     i = i2;
                 } else {
                     if (i2 == 0) {
-                        f6 = 1.0f - this.progressToState;
-                        if (z) {
-                            this.previousState.update((int) (f4 - f2), (int) (f3 - f), j3, this.amplitude);
-                        }
                         this.previousState.setToPaint(this.paint);
+                        f8 = var_ - this.progressToState;
                     } else {
-                        WeavingState weavingState = this.currentState;
-                        if (weavingState != null) {
-                            f6 = this.previousState != null ? this.progressToState : 1.0f;
+                        WeavingState weavingState2 = this.currentState;
+                        if (weavingState2 != null) {
+                            float var_ = this.previousState != null ? this.progressToState : 1.0f;
                             if (z) {
-                                weavingState.update((int) (f4 - f2), (int) (f3 - f), j3, this.amplitude);
+                                weavingState2.update((int) (var_ - f2), (int) (var_ - f9), j3, this.amplitude);
                             }
                             this.currentState.setToPaint(this.paint);
+                            f8 = var_;
                         } else {
                             return;
                         }
                     }
-                    float var_ = f6;
                     LineBlobDrawable lineBlobDrawable3 = this.lineBlobDrawable;
-                    lineBlobDrawable3.minRadius = 0.0f;
+                    lineBlobDrawable3.minRadius = var_;
                     lineBlobDrawable3.maxRadius = ((float) AndroidUtilities.dp(2.0f)) + (((float) AndroidUtilities.dp(2.0f)) * this.amplitude);
-                    this.lineBlobDrawable1.minRadius = (float) AndroidUtilities.dp(0.0f);
+                    this.lineBlobDrawable1.minRadius = (float) AndroidUtilities.dp(var_);
                     this.lineBlobDrawable1.maxRadius = ((float) AndroidUtilities.dp(3.0f)) + (((float) AndroidUtilities.dp(9.0f)) * this.amplitude);
-                    this.lineBlobDrawable2.minRadius = (float) AndroidUtilities.dp(0.0f);
+                    this.lineBlobDrawable2.minRadius = (float) AndroidUtilities.dp(var_);
                     LineBlobDrawable lineBlobDrawable4 = this.lineBlobDrawable2;
                     float var_ = this.amplitude;
                     lineBlobDrawable4.maxRadius = ((float) AndroidUtilities.dp(3.0f)) + (((float) AndroidUtilities.dp(9.0f)) * var_);
                     this.lineBlobDrawable.update(var_, 0.3f);
                     this.lineBlobDrawable1.update(this.amplitude, 0.7f);
                     this.lineBlobDrawable2.update(this.amplitude, 0.7f);
-                    if (i2 == 1) {
-                        this.paint.setAlpha((int) (255.0f * var_));
+                    this.paint.setAlpha((int) (76.0f * f8));
+                    float dp = ((float) AndroidUtilities.dp(6.0f)) * this.amplitude2;
+                    float dp2 = ((float) AndroidUtilities.dp(6.0f)) * this.amplitude2;
+                    float var_ = f2 - dp;
+                    float var_ = f;
+                    float var_ = f3;
+                    float var_ = f4;
+                    Canvas canvas3 = canvas;
+                    i = i2;
+                    float var_ = f2;
+                    float var_ = f5;
+                    this.lineBlobDrawable1.draw(var_, var_, var_, var_, canvas3, this.paint, var_, var_);
+                    this.lineBlobDrawable2.draw(var_, f2 - dp2, var_, var_, canvas3, this.paint, var_, var_);
+                    if (i == 1 && z2) {
+                        this.paint.setAlpha(255);
+                    } else if (i == 1) {
+                        this.paint.setAlpha((int) (255.0f * f8));
                     } else {
                         this.paint.setAlpha(255);
                     }
-                    float var_ = f3;
-                    float var_ = f4;
-                    Canvas canvas2 = canvas;
-                    float var_ = f2;
-                    i = i2;
-                    float var_ = f5;
-                    this.lineBlobDrawable.draw(f, f2, var_, var_, canvas2, this.paint, var_, var_);
-                    this.paint.setAlpha((int) (var_ * 76.0f));
-                    float dp = ((float) AndroidUtilities.dp(6.0f)) * this.amplitude2;
-                    float dp2 = ((float) AndroidUtilities.dp(6.0f)) * this.amplitude2;
-                    float var_ = f;
-                    this.lineBlobDrawable1.draw(var_, f2 - dp, var_, var_, canvas2, this.paint, var_, var_);
-                    this.lineBlobDrawable2.draw(var_, f2 - dp2, var_, var_, canvas2, this.paint, var_, var_);
+                    if (i != 1 || !z2) {
+                        this.lineBlobDrawable.draw(f, f2, f3, f4, canvas, this.paint, f2, f5);
+                    } else {
+                        this.path.reset();
+                        this.path.addCircle(var_ - ((float) AndroidUtilities.dp(18.0f)), f2 + ((var_ - f2) / 2.0f), (var_ - f9) * 1.1f * f8, Path.Direction.CW);
+                        canvas.save();
+                        canvas2.clipPath(this.path);
+                        this.lineBlobDrawable.draw(f, f2, f3, f4, canvas, this.paint, f2, f5);
+                        canvas.restore();
+                    }
                 }
                 i2 = i + 1;
+                var_ = 0.0f;
+                var_ = 1.0f;
+            }
+            if (Build.VERSION.SDK_INT > 21 && fragmentContextView2 != null) {
+                if (!fragmentContextView.isPressed()) {
+                    f6 = 0.0f;
+                    if (this.pressedRemoveProgress == 0.0f) {
+                        return;
+                    }
+                } else {
+                    f6 = 0.0f;
+                }
+                if (fragmentContextView.isPressed()) {
+                    f7 = 1.0f;
+                    this.pressedRemoveProgress = 1.0f;
+                } else {
+                    f7 = 1.0f;
+                }
+                float var_ = this.pressedProgress;
+                if (var_ != f7) {
+                    float var_ = var_ + 0.10666667f;
+                    this.pressedProgress = var_;
+                    if (var_ > f7) {
+                        this.pressedProgress = f7;
+                    }
+                } else if (!fragmentContextView.isPressed()) {
+                    float var_ = this.pressedRemoveProgress;
+                    if (var_ != f6) {
+                        float var_ = var_ - 0.10666667f;
+                        this.pressedRemoveProgress = var_;
+                        if (var_ < f6) {
+                            this.pressedRemoveProgress = f6;
+                            this.pressedProgress = f6;
+                        }
+                    }
+                }
+                this.rect.set(f9, f2 - ((float) AndroidUtilities.dp(20.0f)), var_, var_);
+                canvas2.saveLayerAlpha(this.rect, 255, 31);
+                Theme.getColor("listSelectorSDK21");
+                this.selectedPaint.setColor(ColorUtils.setAlphaComponent(-16777216, (int) (this.pressedRemoveProgress * 16.0f)));
+                float var_ = fragmentContextView2.hotspotX + f9;
+                canvas2.drawCircle(var_, f2 + fragmentContextView2.hotspotY, Math.max(var_ - var_, var_ - f9) * 0.8f * 1.3f * CubicBezierInterpolator.DEFAULT.getInterpolation(this.pressedProgress), this.selectedPaint);
+                this.lineBlobDrawable.path.toggleInverseFillType();
+                canvas2.drawPath(this.lineBlobDrawable.path, this.xRefP);
+                this.lineBlobDrawable.path.toggleInverseFillType();
+                canvas.restore();
             }
         }
     }
@@ -172,7 +254,7 @@ public class FragmentContextViewWavesDrawable {
         }
     }
 
-    private void setState(int i) {
+    private void setState(int i, boolean z) {
         WeavingState weavingState = this.currentState;
         if (weavingState != null && weavingState.currentState == i) {
             return;
@@ -181,7 +263,7 @@ public class FragmentContextViewWavesDrawable {
             this.currentState = this.pausedState;
             return;
         }
-        WeavingState weavingState2 = this.currentState;
+        WeavingState weavingState2 = z ? this.currentState : null;
         this.previousState = weavingState2;
         this.currentState = this.states[i];
         if (weavingState2 != null) {
@@ -213,21 +295,29 @@ public class FragmentContextViewWavesDrawable {
         }
     }
 
-    public void updateState() {
+    public void updateState(boolean z) {
         if (VoIPService.getSharedInstance() != null) {
             int callState = VoIPService.getSharedInstance().getCallState();
             if (callState == 1 || callState == 2 || callState == 6 || callState == 5) {
-                setState(2);
+                setState(2, z);
                 return;
             }
             TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = VoIPService.getSharedInstance().groupCall.participants.get(AccountInstance.getInstance(VoIPService.getSharedInstance().getAccount()).getUserConfig().getClientUserId());
             if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(VoIPService.getSharedInstance().getChat())) {
-                setState(VoIPService.getSharedInstance().isMicMute() ? 1 : 0);
+                setState(VoIPService.getSharedInstance().isMicMute() ? 1 : 0, z);
                 return;
             }
             VoIPService.getSharedInstance().setMicMute(true, false, false);
-            setState(3);
+            setState(3, z);
         }
+    }
+
+    public long getRippleFinishedDelay() {
+        float f = this.pressedProgress;
+        if (f == 0.0f || f == 1.0f) {
+            return 0;
+        }
+        return (long) ((1.0f - f) * 150.0f);
     }
 
     public static class WeavingState {

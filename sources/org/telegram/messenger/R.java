@@ -1555,6 +1555,7 @@ public final class R {
         public static final int AccDescrChanSilentOn = NUM;
         public static final int AccDescrChangeProfilePicture = NUM;
         public static final int AccDescrChannel = NUM;
+        public static final int AccDescrCloseMenu = NUM;
         public static final int AccDescrClosePlayer = NUM;
         public static final int AccDescrCollapsePanel = NUM;
         public static final int AccDescrContactSorting = NUM;
@@ -1590,6 +1591,7 @@ public final class R {
         public static final int AccDescrNumberOfViews_two = NUM;
         public static final int AccDescrOpenChat = NUM;
         public static final int AccDescrOpenMenu = NUM;
+        public static final int AccDescrOpenMenu2 = NUM;
         public static final int AccDescrPageDown = NUM;
         public static final int AccDescrPasscodeLock = NUM;
         public static final int AccDescrPasscodeUnlock = NUM;
@@ -5324,6 +5326,7 @@ public final class R {
         public static final int VoipGroupOffline = NUM;
         public static final int VoipGroupOfflineAirplane = NUM;
         public static final int VoipGroupOnlyAdminsCanSpeak = NUM;
+        public static final int VoipGroupOpenVoiceChat = NUM;
         public static final int VoipGroupRemoveMemberAlertText = NUM;
         public static final int VoipGroupRemoveMemberAlertTitle = NUM;
         public static final int VoipGroupRemovedFromGroup = NUM;

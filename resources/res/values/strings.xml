@@ -29,6 +29,7 @@
     <string name="AccDescrChanSilentOn">Send silently</string>
     <string name="AccDescrChangeProfilePicture">Change profile picture</string>
     <string name="AccDescrChannel">Channel</string>
+    <string name="AccDescrCloseMenu">Close menu</string>
     <string name="AccDescrClosePlayer">Close audio player</string>
     <string name="AccDescrCollapsePanel">Collapse panel</string>
     <string name="AccDescrContactSorting">Change sorting</string>
@@ -64,6 +65,7 @@
     <string name="AccDescrNumberOfViews_two">Viewed %1$d times</string>
     <string name="AccDescrOpenChat">Open chat</string>
     <string name="AccDescrOpenMenu">Open navigation menu</string>
+    <string name="AccDescrOpenMenu2">Open menu</string>
     <string name="AccDescrPageDown">Go to bottom</string>
     <string name="AccDescrPasscodeLock">Lock application</string>
     <string name="AccDescrPasscodeUnlock">Unlock application</string>
@@ -3798,6 +3800,7 @@
     <string name="VoipGroupOffline">You\'re currently offline. Please connect to the Internet to join voice chats.</string>
     <string name="VoipGroupOfflineAirplane">You currently have airplane mode enabled. Please turn it off or connect to Wi-Fi to join voice chats.</string>
     <string name="VoipGroupOnlyAdminsCanSpeak">New paricipants are muted</string>
+    <string name="VoipGroupOpenVoiceChat">Open voice chat</string>
     <string name="VoipGroupRemoveMemberAlertText">Do you want to remove %1$s from the group chat?</string>
     <string name="VoipGroupRemoveMemberAlertTitle">Remove member</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s** removed from the group.</string>

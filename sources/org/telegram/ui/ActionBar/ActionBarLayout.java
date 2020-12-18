@@ -1198,6 +1198,9 @@ public class ActionBarLayout extends FrameLayout {
                     startLayoutAnimation(true, true, z7);
                 }
             } else {
+                if (this.containerView.isKeyboardVisible || (this.containerViewBack.isKeyboardVisible && baseFragment2 != null)) {
+                    baseFragment2.saveKeyboardPositionBeforeTransition();
+                }
                 this.currentAnimation = onCustomTransitionAnimation;
             }
         } else {

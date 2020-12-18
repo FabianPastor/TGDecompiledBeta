@@ -25,10 +25,17 @@ import org.telegram.ui.Components.LayoutHelper;
 public class VoIPToggleButton extends FrameLayout {
     int animateToBackgroundColor;
     public int animationDelay;
+    /* access modifiers changed from: private */
+    public int backgroundCheck1;
+    /* access modifiers changed from: private */
+    public int backgroundCheck2;
     int backgroundColor;
     private Paint bitmapPaint;
+    private ValueAnimator checkAnimator;
     private boolean checkable;
     private boolean checked;
+    /* access modifiers changed from: private */
+    public float checkedProgress;
     Paint circlePaint;
     private float crossOffset;
     private Paint crossPaint;
@@ -510,8 +517,10 @@ public class VoIPToggleButton extends FrameLayout {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPToggleButton.onDraw(android.graphics.Canvas):void");
     }
 
-    public void setBackgroundColor(int i) {
-        this.backgroundColor = i;
+    public void setBackgroundColor(int i, int i2) {
+        this.backgroundCheck1 = i;
+        this.backgroundCheck2 = i2;
+        this.backgroundColor = ColorUtils.blendARGB(i, i2, this.checkedProgress);
         invalidate();
     }
 
@@ -525,7 +534,7 @@ public class VoIPToggleButton extends FrameLayout {
             setVisibility(0);
             z3 = false;
         }
-        if (this.currentIconRes != i || this.currentIconColor != i2 || this.currentBackgroundColor != i3 || (str2 = this.currentText) == null || !str2.equals(str)) {
+        if (this.currentIconRes != i || this.currentIconColor != i2 || ((!this.checkable && this.currentBackgroundColor != i3) || (str2 = this.currentText) == null || !str2.equals(str))) {
             if (this.rippleDrawable == null || z) {
                 if (Color.alpha(i3) != 255 || ((double) AndroidUtilities.computePerceivedBrightness(i3)) <= 0.5d) {
                     Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(this.radius), 0, ColorUtils.setAlphaComponent(-1, (int) (f * 76.5f)));
@@ -537,6 +546,10 @@ public class VoIPToggleButton extends FrameLayout {
                     createSimpleSelectorCircleDrawable2.setCallback(this);
                 }
             }
+            ValueAnimator valueAnimator = this.replaceAnimator;
+            if (valueAnimator != null) {
+                valueAnimator.cancel();
+            }
             boolean z4 = this.currentIconRes == i;
             this.iconChangeColor = z4;
             if (z4) {
@@ -547,15 +560,13 @@ public class VoIPToggleButton extends FrameLayout {
             this.currentBackgroundColor = i3;
             this.currentText = str;
             this.drawCross = z2;
-            ValueAnimator valueAnimator = this.replaceAnimator;
-            if (valueAnimator != null) {
-                valueAnimator.cancel();
-            }
             if (!z3) {
                 this.icon[0] = ContextCompat.getDrawable(getContext(), i).mutate();
                 this.icon[0].setColorFilter(new PorterDuffColorFilter(i2, PorterDuff.Mode.MULTIPLY));
                 this.crossPaint.setColor(i2);
-                this.backgroundColor = i3;
+                if (!this.checkable) {
+                    this.backgroundColor = i3;
+                }
                 this.textView[0].setText(str);
                 this.crossProgress = this.drawCross ? 1.0f : 0.0f;
                 this.iconChangeColor = false;
@@ -563,11 +574,13 @@ public class VoIPToggleButton extends FrameLayout {
                 invalidate();
                 return;
             }
-            if (!this.iconChangeColor) {
+            if (!z4) {
                 this.icon[1] = ContextCompat.getDrawable(getContext(), i).mutate();
                 this.icon[1].setColorFilter(new PorterDuffColorFilter(i2, PorterDuff.Mode.MULTIPLY));
             }
-            this.animateToBackgroundColor = i3;
+            if (!this.checkable) {
+                this.animateToBackgroundColor = i3;
+            }
             final boolean z5 = !this.textView[0].getText().toString().equals(str);
             if (!z5) {
                 this.textView[0].setText(str);
@@ -593,8 +606,10 @@ public class VoIPToggleButton extends FrameLayout {
             });
             this.replaceAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
+                    VoIPToggleButton voIPToggleButton = VoIPToggleButton.this;
+                    voIPToggleButton.replaceAnimator = null;
                     if (z5) {
-                        TextView[] textViewArr = VoIPToggleButton.this.textView;
+                        TextView[] textViewArr = voIPToggleButton.textView;
                         TextView textView = textViewArr[0];
                         textViewArr[0] = textViewArr[1];
                         textViewArr[1] = textView;
@@ -608,10 +623,10 @@ public class VoIPToggleButton extends FrameLayout {
                         }
                     }
                     boolean unused = VoIPToggleButton.this.iconChangeColor = false;
-                    VoIPToggleButton voIPToggleButton = VoIPToggleButton.this;
-                    voIPToggleButton.backgroundColor = voIPToggleButton.animateToBackgroundColor;
-                    voIPToggleButton.replaceProgress = 0.0f;
-                    voIPToggleButton.invalidate();
+                    VoIPToggleButton voIPToggleButton2 = VoIPToggleButton.this;
+                    voIPToggleButton2.backgroundColor = voIPToggleButton2.animateToBackgroundColor;
+                    voIPToggleButton2.replaceProgress = 0.0f;
+                    voIPToggleButton2.invalidate();
                 }
             });
             this.replaceAnimator.setDuration(150).start();
@@ -663,12 +678,51 @@ public class VoIPToggleButton extends FrameLayout {
         this.checkable = z;
     }
 
-    public void setChecked(boolean z) {
+    public void setChecked(final boolean z, boolean z2) {
         this.checked = z;
+        float f = 1.0f;
+        if (z2) {
+            ValueAnimator valueAnimator = this.checkAnimator;
+            if (valueAnimator != null) {
+                valueAnimator.removeAllListeners();
+                this.checkAnimator.cancel();
+            }
+            float[] fArr = new float[2];
+            fArr[0] = this.checkedProgress;
+            if (!z) {
+                f = 0.0f;
+            }
+            fArr[1] = f;
+            ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
+            this.checkAnimator = ofFloat;
+            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    VoIPToggleButton.this.lambda$setChecked$1$VoIPToggleButton(valueAnimator);
+                }
+            });
+            this.checkAnimator.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    float unused = VoIPToggleButton.this.checkedProgress = z ? 1.0f : 0.0f;
+                    VoIPToggleButton voIPToggleButton = VoIPToggleButton.this;
+                    voIPToggleButton.setBackgroundColor(voIPToggleButton.backgroundCheck1, VoIPToggleButton.this.backgroundCheck2);
+                }
+            });
+            this.checkAnimator.setDuration(150);
+            this.checkAnimator.start();
+            return;
+        }
+        if (!z) {
+            f = 0.0f;
+        }
+        this.checkedProgress = f;
+        setBackgroundColor(this.backgroundCheck1, this.backgroundCheck2);
     }
 
-    public boolean isChecked() {
-        return this.checked;
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setChecked$1 */
+    public /* synthetic */ void lambda$setChecked$1$VoIPToggleButton(ValueAnimator valueAnimator) {
+        this.checkedProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        setBackgroundColor(this.backgroundCheck1, this.backgroundCheck2);
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {

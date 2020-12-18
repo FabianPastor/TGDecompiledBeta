@@ -1416,6 +1416,7 @@
     <public type="string" name="AccDescrChanSilentOn" id="NUM" />
     <public type="string" name="AccDescrChangeProfilePicture" id="NUM" />
     <public type="string" name="AccDescrChannel" id="NUM" />
+    <public type="string" name="AccDescrCloseMenu" id="NUM" />
     <public type="string" name="AccDescrClosePlayer" id="NUM" />
     <public type="string" name="AccDescrCollapsePanel" id="NUM" />
     <public type="string" name="AccDescrContactSorting" id="NUM" />
@@ -1451,6 +1452,7 @@
     <public type="string" name="AccDescrNumberOfViews_two" id="NUM" />
     <public type="string" name="AccDescrOpenChat" id="NUM" />
     <public type="string" name="AccDescrOpenMenu" id="NUM" />
+    <public type="string" name="AccDescrOpenMenu2" id="NUM" />
     <public type="string" name="AccDescrPageDown" id="NUM" />
     <public type="string" name="AccDescrPasscodeLock" id="NUM" />
     <public type="string" name="AccDescrPasscodeUnlock" id="NUM" />
@@ -5185,6 +5187,7 @@
     <public type="string" name="VoipGroupOffline" id="NUM" />
     <public type="string" name="VoipGroupOfflineAirplane" id="NUM" />
     <public type="string" name="VoipGroupOnlyAdminsCanSpeak" id="NUM" />
+    <public type="string" name="VoipGroupOpenVoiceChat" id="NUM" />
     <public type="string" name="VoipGroupRemoveMemberAlertText" id="NUM" />
     <public type="string" name="VoipGroupRemoveMemberAlertTitle" id="NUM" />
     <public type="string" name="VoipGroupRemovedFromGroup" id="NUM" />

@@ -19,7 +19,6 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Button;
@@ -89,6 +88,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private boolean firstLocationsLoaded;
     private BaseFragment fragment;
     private FrameLayout frameLayout;
+    public float hotspotX;
+    public float hotspotY;
     private boolean isLocation;
     private boolean isMusic;
     /* access modifiers changed from: private */
@@ -114,6 +115,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private float topPadding;
     /* access modifiers changed from: private */
     public boolean visible;
+    boolean wasDraw;
 
     public interface FragmentContextViewDelegate {
         void onAnimation(boolean z, boolean z2);
@@ -143,11 +145,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         boolean z = VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().isMicMute();
         if (this.isMuted != z) {
             this.isMuted = z;
-            this.muteDrawable.setCustomEndFrame(z ? 0 : 14);
+            this.muteDrawable.setCustomEndFrame(z ? 15 : 29);
             RLottieDrawable rLottieDrawable = this.muteDrawable;
             rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame(), false, true);
             this.muteButton.invalidate();
-            Theme.getFragmentContextViewWavesDrawable().updateState();
+            Theme.getFragmentContextViewWavesDrawable().updateState(this.visible);
         }
         if (this.isMuted) {
             this.micAmplitude = 0.0f;
@@ -285,9 +287,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         });
         this.avatars.setVisibility(8);
         addView(this.avatars, LayoutHelper.createFrame(108, 36, 51));
-        RLottieDrawable rLottieDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(16.0f), AndroidUtilities.dp(20.0f), true, (int[]) null);
-        this.muteDrawable = rLottieDrawable;
-        rLottieDrawable.setPlayInDirectionOfCustomEndFrame(true);
+        this.muteDrawable = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(16.0f), AndroidUtilities.dp(20.0f), true, (int[]) null);
         AnonymousClass4 r3 = new RLottieImageView(context2) {
             private final Runnable pressRunnable = new Runnable() {
                 public final void run() {
@@ -306,15 +306,15 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             /* renamed from: lambda$$0 */
             public /* synthetic */ void lambda$$0$FragmentContextView$4() {
                 if (VoIPService.getSharedInstance() != null) {
-                    int i = 0;
                     VoIPService.getSharedInstance().setMicMute(false, true, false);
-                    RLottieDrawable access$500 = FragmentContextView.this.muteDrawable;
-                    if (!FragmentContextView.this.isMuted) {
-                        i = 15;
+                    FragmentContextView.this.muteDrawable.setCustomEndFrame(FragmentContextView.this.isMuted ? 15 : 29);
+                    if (FragmentContextView.this.isMuted) {
+                        FragmentContextView.this.muteDrawable.setCurrentFrame(0);
+                    } else {
+                        FragmentContextView.this.muteDrawable.setCurrentFrame(14);
                     }
-                    access$500.setCustomEndFrame(i);
                     FragmentContextView.this.muteButton.playAnimation();
-                    Theme.getFragmentContextViewWavesDrawable().updateState();
+                    Theme.getFragmentContextViewWavesDrawable().updateState(true);
                 }
             }
 
@@ -343,7 +343,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     return true;
                 }
                 if (motionEvent.getAction() == 0 && sharedInstance.isMicMute()) {
-                    AndroidUtilities.runOnUIThread(this.pressRunnable, (long) ViewConfiguration.getTapTimeout());
+                    AndroidUtilities.runOnUIThread(this.pressRunnable, 300);
                     this.scheduled = true;
                 } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
                     AndroidUtilities.cancelRunOnUIThread(this.toggleMicRunnable);
@@ -352,14 +352,19 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                         this.scheduled = false;
                     } else if (this.pressed) {
                         boolean unused = FragmentContextView.this.isMuted = true;
-                        FragmentContextView.this.muteDrawable.setCustomEndFrame(FragmentContextView.this.isMuted ? 0 : 15);
+                        FragmentContextView.this.muteDrawable.setCustomEndFrame(FragmentContextView.this.isMuted ? 15 : 29);
+                        if (FragmentContextView.this.isMuted) {
+                            FragmentContextView.this.muteDrawable.setCurrentFrame(0);
+                        } else {
+                            FragmentContextView.this.muteDrawable.setCurrentFrame(14);
+                        }
                         FragmentContextView.this.muteButton.playAnimation();
                         if (VoIPService.getSharedInstance() != null) {
                             VoIPService.getSharedInstance().setMicMute(true, true, false);
                             FragmentContextView.this.muteButton.performHapticFeedback(3, 2);
                         }
                         this.pressed = false;
-                        Theme.getFragmentContextViewWavesDrawable().updateState();
+                        Theme.getFragmentContextViewWavesDrawable().updateState(true);
                         MotionEvent obtain = MotionEvent.obtain(0, 0, 3, 0.0f, 0.0f, 0);
                         super.onTouchEvent(obtain);
                         obtain.recycle();
@@ -414,7 +419,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         });
         setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                FragmentContextView.this.lambda$new$7$FragmentContextView(view);
+                FragmentContextView.this.lambda$new$8$FragmentContextView(view);
             }
         });
     }
@@ -466,15 +471,15 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(chat)) {
                 boolean z = !sharedInstance.isMicMute();
                 this.isMuted = z;
-                int i = 0;
                 sharedInstance.setMicMute(z, false, true);
-                RLottieDrawable rLottieDrawable = this.muteDrawable;
-                if (!this.isMuted) {
-                    i = 15;
+                this.muteDrawable.setCustomEndFrame(this.isMuted ? 15 : 29);
+                if (this.isMuted) {
+                    this.muteDrawable.setCurrentFrame(0);
+                } else {
+                    this.muteDrawable.setCurrentFrame(14);
                 }
-                rLottieDrawable.setCustomEndFrame(i);
                 this.muteButton.playAnimation();
-                Theme.getFragmentContextViewWavesDrawable().updateState();
+                Theme.getFragmentContextViewWavesDrawable().updateState(true);
                 this.muteButton.performHapticFeedback(3, 2);
             }
         }
@@ -533,8 +538,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$7 */
-    public /* synthetic */ void lambda$new$7$FragmentContextView(View view) {
+    /* renamed from: lambda$new$8 */
+    public /* synthetic */ void lambda$new$8$FragmentContextView(View view) {
         ChatActivity chatActivity;
         ChatObject.Call groupCall;
         long j;
@@ -605,11 +610,21 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }));
             }
         } else if (i == 3) {
-            if (VoIPService.getSharedInstance() != null && (getContext() instanceof LaunchActivity)) {
-                GroupCallActivity.create((LaunchActivity) getContext(), AccountInstance.getInstance(VoIPService.getSharedInstance().getAccount()));
-            }
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    FragmentContextView.this.lambda$null$7$FragmentContextView();
+                }
+            }, Theme.getFragmentContextViewWavesDrawable().getRippleFinishedDelay());
         } else if (i == 4 && this.fragment.getParentActivity() != null && (groupCall = chatActivity.getGroupCall()) != null) {
-            VoIPHelper.startCall((chatActivity = (ChatActivity) this.fragment).getMessagesController().getChat(Integer.valueOf(groupCall.chatId)), 0, this.fragment.getParentActivity());
+            VoIPHelper.startCall((chatActivity = (ChatActivity) this.fragment).getMessagesController().getChat(Integer.valueOf(groupCall.chatId)), false, this.fragment.getParentActivity());
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$7 */
+    public /* synthetic */ void lambda$null$7$FragmentContextView() {
+        if (VoIPService.getSharedInstance() != null && (getContext() instanceof LaunchActivity)) {
+            GroupCallActivity.create((LaunchActivity) getContext(), AccountInstance.getInstance(VoIPService.getSharedInstance().getAccount()));
         }
     }
 
@@ -751,18 +766,19 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     private void updateStyle(int i) {
-        int i2 = this.currentStyle;
-        if (i2 != i) {
-            if (i2 == 3) {
+        int i2 = i;
+        int i3 = this.currentStyle;
+        if (i3 != i2) {
+            if (i3 == 3) {
                 Theme.getFragmentContextViewWavesDrawable().removeParent(this);
                 if (VoIPService.getSharedInstance() != null) {
                     VoIPService.getSharedInstance().unregisterStateListener(this);
                 }
             }
-            this.currentStyle = i;
+            this.currentStyle = i2;
             AvatarsImageView avatarsImageView = this.avatars;
             if (avatarsImageView != null) {
-                avatarsImageView.setStyle(i);
+                avatarsImageView.setStyle(i2);
                 this.avatars.setLayoutParams(LayoutHelper.createFrame(108, getStyleHeight(), 51));
             }
             this.frameLayout.setLayoutParams(LayoutHelper.createFrame(-1, (float) getStyleHeight(), 51, 0.0f, 0.0f, 0.0f, 0.0f));
@@ -772,7 +788,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 updatePaddings();
                 setTopPadding((float) AndroidUtilities.dp2((float) getStyleHeight()));
             }
-            if (i == 0 || i == 2) {
+            if (i2 == 0 || i2 == 2) {
                 this.selector.setBackground(Theme.getSelectorDrawable(false));
                 this.frameLayout.setBackgroundColor(Theme.getColor("inappPlayerBackground"));
                 this.frameLayout.setTag("inappPlayerBackground");
@@ -787,7 +803,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.avatars.setVisibility(8);
                 this.titleTextView.setTypeface(Typeface.DEFAULT);
                 this.titleTextView.setTextSize(1, 15.0f);
-                if (i == 0) {
+                if (i2 == 0) {
                     this.playButton.setLayoutParams(LayoutHelper.createFrame(36, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
                     this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
                     ImageView imageView = this.playbackSpeedButton;
@@ -800,15 +816,15 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.playButton.setLayoutParams(LayoutHelper.createFrame(36, 36.0f, 51, 8.0f, 0.0f, 0.0f, 0.0f));
                 this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 51.0f, 0.0f, 36.0f, 0.0f));
                 this.closeButton.setContentDescription(LocaleController.getString("AccDescrStopLiveLocation", NUM));
-            } else if (i == 4) {
+            } else if (i2 == 4) {
                 this.selector.setBackground(Theme.getSelectorDrawable(false));
                 this.frameLayout.setBackgroundColor(Theme.getColor("inappPlayerBackground"));
                 this.frameLayout.setTag("inappPlayerBackground");
                 this.muteButton.setVisibility(8);
                 this.subtitleTextView.setVisibility(0);
                 this.joinButton.setVisibility(0);
-                this.titleTextView.setTextColor(Theme.getColor("inappPlayerTitle"));
-                this.titleTextView.setTag("inappPlayerTitle");
+                this.titleTextView.setTextColor(Theme.getColor("inappPlayerPerformer"));
+                this.titleTextView.setTag("inappPlayerPerformer");
                 this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.titleTextView.setTextSize(1, 15.0f);
                 this.titleTextView.setPadding(0, 0, 0, 0);
@@ -822,18 +838,18 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 if (imageView2 != null) {
                     imageView2.setVisibility(8);
                 }
-            } else if (i == 1 || i == 3) {
+            } else if (i2 == 1 || i2 == 3) {
                 this.selector.setBackground((Drawable) null);
-                if (i == 3) {
+                if (i2 == 3) {
                     updateGroupCallTitle();
                     this.muteButton.setVisibility(0);
                     this.avatars.setVisibility(0);
                     updateAvatars(false);
                     boolean z = VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().isMicMute();
                     this.isMuted = z;
-                    this.muteDrawable.setCustomEndFrame(z ? 0 : 14);
+                    this.muteDrawable.setCustomEndFrame(z ? 15 : 29);
                     RLottieDrawable rLottieDrawable = this.muteDrawable;
-                    rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame(), false, true);
+                    rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame() - 1, false, true);
                     this.muteButton.invalidate();
                     this.frameLayout.setBackground((Drawable) null);
                     Theme.getFragmentContextViewWavesDrawable().addParent(this);
@@ -902,11 +918,13 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().unregisterStateListener(this);
         }
+        this.wasDraw = false;
     }
 
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
+        int i = 15;
         if (this.isLocation) {
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsChanged);
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.liveLocationsCacheChanged);
@@ -916,12 +934,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             checkLiveLocation(true);
         } else {
-            for (int i = 0; i < 3; i++) {
-                NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingDidReset);
-                NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-                NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingDidStart);
-                NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.groupCallUpdated);
-                NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.groupCallTypingsUpdated);
+            for (int i2 = 0; i2 < 3; i2++) {
+                NotificationCenter.getInstance(i2).addObserver(this, NotificationCenter.messagePlayingDidReset);
+                NotificationCenter.getInstance(i2).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+                NotificationCenter.getInstance(i2).addObserver(this, NotificationCenter.messagePlayingDidStart);
+                NotificationCenter.getInstance(i2).addObserver(this, NotificationCenter.groupCallUpdated);
+                NotificationCenter.getInstance(i2).addObserver(this, NotificationCenter.groupCallTypingsUpdated);
             }
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.messagePlayingSpeedChanged);
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didStartedCall);
@@ -953,9 +971,13 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             boolean z = VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().isMicMute();
             if (this.isMuted != z) {
                 this.isMuted = z;
-                this.muteDrawable.setCustomEndFrame(z ? 0 : 14);
                 RLottieDrawable rLottieDrawable = this.muteDrawable;
-                rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame(), false, true);
+                if (!z) {
+                    i = 29;
+                }
+                rLottieDrawable.setCustomEndFrame(i);
+                RLottieDrawable rLottieDrawable2 = this.muteDrawable;
+                rLottieDrawable2.setCurrentFrame(rLottieDrawable2.getCustomEndFrame() - 1, false, true);
                 this.muteButton.invalidate();
             }
         }
@@ -1598,7 +1620,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r3 = r3.participants_count
             if (r3 != 0) goto L_0x01a7
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r3 = r13.subtitleTextView
-            r6 = 2131625907(0x7f0e07b3, float:1.8879035E38)
+            r6 = 2131625909(0x7f0e07b5, float:1.887904E38)
             java.lang.String r8 = "MembersTalkingNobody"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
             r3.setText(r6)
@@ -1903,10 +1925,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (this.currentStyle != 3 || !this.drawOverlay) {
                 Canvas canvas2 = canvas;
             } else {
-                Theme.getFragmentContextViewWavesDrawable().updateState();
+                Theme.getFragmentContextViewWavesDrawable().updateState(this.wasDraw);
                 float dp = this.topPadding / ((float) AndroidUtilities.dp((float) getStyleHeight()));
                 if (this.collapseTransition) {
-                    Theme.getFragmentContextViewWavesDrawable().draw(0.0f, (((float) AndroidUtilities.dp((float) getStyleHeight())) - this.topPadding) + this.extraHeight, (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.dp(2.0f)), canvas, (View) null, Math.min(dp, 1.0f - this.collapseProgress));
+                    Theme.getFragmentContextViewWavesDrawable().draw(0.0f, (((float) AndroidUtilities.dp((float) getStyleHeight())) - this.topPadding) + this.extraHeight, (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.dp(2.0f)), canvas, (FragmentContextView) null, Math.min(dp, 1.0f - this.collapseProgress));
                 } else {
                     Theme.getFragmentContextViewWavesDrawable().draw(0.0f, ((float) AndroidUtilities.dp((float) getStyleHeight())) - this.topPadding, (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.dp(2.0f)), canvas, this, dp);
                 }
@@ -1927,6 +1949,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             if (z) {
                 canvas.restore();
             }
+            this.wasDraw = true;
         }
     }
 
@@ -1949,6 +1972,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         super.setVisibility(i);
         updatePaddings();
         setTopPadding(this.topPadding);
+        if (i == 8) {
+            this.wasDraw = false;
+        }
     }
 
     private void updatePaddings() {
@@ -1985,5 +2011,13 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }
             }
         }
+    }
+
+    public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+        if (motionEvent.getAction() == 0) {
+            this.hotspotX = motionEvent.getX();
+            this.hotspotY = motionEvent.getY();
+        }
+        return super.onInterceptTouchEvent(motionEvent);
     }
 }

@@ -30,6 +30,7 @@ public class ApplicationLoader extends Application {
     public static volatile Context applicationContext = null;
     public static volatile Handler applicationHandler = null;
     private static volatile boolean applicationInited = false;
+    public static boolean canDrawOverlays = false;
     /* access modifiers changed from: private */
     public static ConnectivityManager connectivityManager = null;
     public static volatile NetworkInfo currentNetworkInfo = null;

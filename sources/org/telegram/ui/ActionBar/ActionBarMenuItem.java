@@ -730,7 +730,6 @@ public class ActionBarMenuItem extends FrameLayout {
         }
         ActionBarMenuItemSearchListener actionBarMenuItemSearchListener2 = this.listener;
         if (actionBarMenuItemSearchListener2 != null && (customToggleTransition = actionBarMenuItemSearchListener2.getCustomToggleTransition()) != null) {
-            this.searchField.setText("");
             customToggleTransition.start();
             return true;
         } else if (this.searchContainer.getVisibility() == 0) {

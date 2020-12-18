@@ -373,19 +373,30 @@ public class ChatObject {
         }
 
         public void processParticipantsUpdate(AccountInstance accountInstance, TLRPC$TL_updateGroupCallParticipants tLRPC$TL_updateGroupCallParticipants) {
-            int i = this.call.version;
-            int i2 = i + 1;
-            int i3 = tLRPC$TL_updateGroupCallParticipants.version;
-            if (i2 < i3) {
+            boolean z;
+            int size = tLRPC$TL_updateGroupCallParticipants.participants.size();
+            int i = 0;
+            while (true) {
+                if (i >= size) {
+                    z = false;
+                    break;
+                } else if (tLRPC$TL_updateGroupCallParticipants.participants.get(i).versioned) {
+                    z = true;
+                    break;
+                } else {
+                    i++;
+                }
+            }
+            if (z && this.call.version + 1 < tLRPC$TL_updateGroupCallParticipants.version) {
                 this.nextLoadOffset = null;
                 loadMembers(true);
-            } else if (i3 >= i) {
+            } else if (tLRPC$TL_updateGroupCallParticipants.version >= this.call.version) {
                 int clientUserId = accountInstance.getUserConfig().getClientUserId();
-                int size = tLRPC$TL_updateGroupCallParticipants.participants.size();
-                boolean z = false;
+                int size2 = tLRPC$TL_updateGroupCallParticipants.participants.size();
                 boolean z2 = false;
-                for (int i4 = 0; i4 < size; i4++) {
-                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = tLRPC$TL_updateGroupCallParticipants.participants.get(i4);
+                boolean z3 = false;
+                for (int i2 = 0; i2 < size2; i2++) {
+                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = tLRPC$TL_updateGroupCallParticipants.participants.get(i2);
                     TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = this.participants.get(tLRPC$TL_groupCallParticipant.user_id);
                     if (!tLRPC$TL_groupCallParticipant.left) {
                         if (this.invitedUsersMap.contains(Integer.valueOf(tLRPC$TL_groupCallParticipant.user_id))) {
@@ -399,18 +410,18 @@ public class ChatObject {
                             tLRPC$TL_groupCallParticipant2.can_self_unmute = tLRPC$TL_groupCallParticipant.can_self_unmute;
                             tLRPC$TL_groupCallParticipant2.date = tLRPC$TL_groupCallParticipant.date;
                             tLRPC$TL_groupCallParticipant2.active_date = Math.max(tLRPC$TL_groupCallParticipant2.active_date, tLRPC$TL_groupCallParticipant.active_date);
-                            int i5 = tLRPC$TL_groupCallParticipant2.source;
-                            if (i5 != tLRPC$TL_groupCallParticipant.source) {
-                                this.participantsBySources.remove(i5);
-                                int i6 = tLRPC$TL_groupCallParticipant.source;
-                                tLRPC$TL_groupCallParticipant2.source = i6;
-                                this.participantsBySources.put(i6, tLRPC$TL_groupCallParticipant2);
+                            int i3 = tLRPC$TL_groupCallParticipant2.source;
+                            if (i3 != tLRPC$TL_groupCallParticipant.source) {
+                                this.participantsBySources.remove(i3);
+                                int i4 = tLRPC$TL_groupCallParticipant.source;
+                                tLRPC$TL_groupCallParticipant2.source = i4;
+                                this.participantsBySources.put(i4, tLRPC$TL_groupCallParticipant2);
                             }
                         } else {
                             if (tLRPC$TL_groupCallParticipant.just_joined) {
-                                int i7 = tLRPC$TL_updateGroupCallParticipants.version;
+                                int i5 = tLRPC$TL_updateGroupCallParticipants.version;
                                 TLRPC$GroupCall tLRPC$GroupCall = this.call;
-                                if (i7 != tLRPC$GroupCall.version) {
+                                if (i5 != tLRPC$GroupCall.version) {
                                     tLRPC$GroupCall.participants_count++;
                                 }
                             }
@@ -428,30 +439,30 @@ public class ChatObject {
                             this.sortedParticipants.remove(tLRPC$TL_groupCallParticipant2);
                         }
                         TLRPC$GroupCall tLRPC$GroupCall2 = this.call;
-                        int i8 = tLRPC$GroupCall2.participants_count - 1;
-                        tLRPC$GroupCall2.participants_count = i8;
-                        if (i8 < 0) {
+                        int i6 = tLRPC$GroupCall2.participants_count - 1;
+                        tLRPC$GroupCall2.participants_count = i6;
+                        if (i6 < 0) {
                             tLRPC$GroupCall2.participants_count = 0;
                         }
                     }
                     if (tLRPC$TL_groupCallParticipant.user_id == clientUserId) {
-                        z = true;
                         z2 = true;
+                        z3 = true;
                     } else {
-                        z = true;
+                        z2 = true;
                     }
                 }
-                int i9 = tLRPC$TL_updateGroupCallParticipants.version;
+                int i7 = tLRPC$TL_updateGroupCallParticipants.version;
                 TLRPC$GroupCall tLRPC$GroupCall3 = this.call;
-                if (i9 > tLRPC$GroupCall3.version) {
-                    tLRPC$GroupCall3.version = i9;
+                if (i7 > tLRPC$GroupCall3.version) {
+                    tLRPC$GroupCall3.version = i7;
                 }
                 if (tLRPC$GroupCall3.participants_count < this.participants.size()) {
                     this.call.participants_count = this.participants.size();
                 }
-                if (z) {
+                if (z2) {
                     sortParticipants();
-                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.groupCallUpdated, Integer.valueOf(this.chatId), Long.valueOf(this.call.id), Boolean.valueOf(z2));
+                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.groupCallUpdated, Integer.valueOf(this.chatId), Long.valueOf(this.call.id), Boolean.valueOf(z3));
                 }
             }
         }

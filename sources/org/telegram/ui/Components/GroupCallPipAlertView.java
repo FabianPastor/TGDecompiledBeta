@@ -11,6 +11,7 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -75,9 +76,16 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
         setOrientation(1);
         this.currentAccount = i;
         this.paint.setAlpha(234);
-        FrameLayout frameLayout = new FrameLayout(context2);
-        this.groupInfoContainer = frameLayout;
-        frameLayout.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
+        AnonymousClass1 r2 = new FrameLayout(this, context2) {
+            public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+                super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+                if (Build.VERSION.SDK_INT >= 21) {
+                    accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, LocaleController.getString("VoipGroupOpenVoiceChat", NUM)));
+                }
+            }
+        };
+        this.groupInfoContainer = r2;
+        r2.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
         BackupImageView backupImageView = new BackupImageView(context2);
         this.avatarImageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(22.0f));
@@ -119,6 +127,8 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
                 GroupCallPipAlertView.this.lambda$new$1$GroupCallPipAlertView(this.f$1, view);
             }
         });
+        this.soundButton.setCheckable(true);
+        this.soundButton.setBackgroundColor(ColorUtils.setAlphaComponent(-1, 38), ColorUtils.setAlphaComponent(-1, 76));
         VoIPToggleButton voIPToggleButton2 = new VoIPToggleButton(context2, 44.0f);
         this.muteButton = voIPToggleButton2;
         voIPToggleButton2.setTextSize(12);
@@ -633,27 +643,20 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
 
     private void updateButtons(boolean z) {
         VoIPService sharedInstance;
-        int i;
         String str;
-        int i2;
+        int i;
         if (this.soundButton != null && this.muteButton != null && (sharedInstance = VoIPService.getSharedInstance()) != null) {
             boolean isBluetoothOn = sharedInstance.isBluetoothOn();
             boolean z2 = !isBluetoothOn && sharedInstance.isSpeakerphoneOn();
-            this.soundButton.setChecked(z2);
-            if (z2) {
-                i = ColorUtils.setAlphaComponent(-1, 76);
-            } else {
-                i = ColorUtils.setAlphaComponent(-1, 38);
-            }
-            int i3 = i;
+            this.soundButton.setChecked(z2, z);
             if (isBluetoothOn) {
-                this.soundButton.setData(NUM, -1, i3, 0.1f, true, LocaleController.getString("VoipAudioRoutingBluetooth", NUM), false, z);
+                this.soundButton.setData(NUM, -1, 0, 0.1f, true, LocaleController.getString("VoipAudioRoutingBluetooth", NUM), false, z);
             } else if (z2) {
-                this.soundButton.setData(NUM, -1, i3, 0.3f, true, LocaleController.getString("VoipSpeaker", NUM), false, z);
+                this.soundButton.setData(NUM, -1, 0, 0.3f, true, LocaleController.getString("VoipSpeaker", NUM), false, z);
             } else if (sharedInstance.isHeadsetPlugged()) {
-                this.soundButton.setData(NUM, -1, i3, 0.1f, true, LocaleController.getString("VoipAudioRoutingHeadset", NUM), false, z);
+                this.soundButton.setData(NUM, -1, 0, 0.1f, true, LocaleController.getString("VoipAudioRoutingHeadset", NUM), false, z);
             } else {
-                this.soundButton.setData(NUM, -1, i3, 0.1f, true, LocaleController.getString("VoipSpeaker", NUM), false, z);
+                this.soundButton.setData(NUM, -1, 0, 0.1f, true, LocaleController.getString("VoipSpeaker", NUM), false, z);
             }
             if (sharedInstance.mutedByAdmin()) {
                 this.muteButton.setData(NUM, -1, ColorUtils.setAlphaComponent(-1, 76), 0.1f, true, LocaleController.getString("VoipMutedByAdminShort", NUM), true, z);
@@ -661,13 +664,13 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
                 VoIPToggleButton voIPToggleButton = this.muteButton;
                 int alphaComponent = ColorUtils.setAlphaComponent(-1, (int) ((sharedInstance.isMicMute() ? 0.3f : 0.15f) * 255.0f));
                 if (sharedInstance.isMicMute()) {
-                    i2 = NUM;
+                    i = NUM;
                     str = "VoipUnmute";
                 } else {
-                    i2 = NUM;
+                    i = NUM;
                     str = "VoipMute";
                 }
-                voIPToggleButton.setData(NUM, -1, alphaComponent, 0.1f, true, LocaleController.getString(str, i2), sharedInstance.isMicMute(), z);
+                voIPToggleButton.setData(NUM, -1, alphaComponent, 0.1f, true, LocaleController.getString(str, i), sharedInstance.isMicMute(), z);
             }
             invalidate();
         }

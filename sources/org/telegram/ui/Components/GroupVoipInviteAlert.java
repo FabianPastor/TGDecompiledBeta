@@ -133,8 +133,6 @@ public class GroupVoipInviteAlert extends BottomSheet {
     public SearchAdapter searchListViewAdapter;
     private SearchField searchView;
     /* access modifiers changed from: private */
-    public boolean searching;
-    /* access modifiers changed from: private */
     public View shadow;
     /* access modifiers changed from: private */
     public AnimatorSet shadowAnimation;
@@ -396,13 +394,13 @@ public class GroupVoipInviteAlert extends BottomSheet {
             org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
             android.widget.TextView r3 = r3.title
             java.lang.String r9 = "NoResult"
-            r10 = 2131626097(0x7f0e0871, float:1.887942E38)
+            r10 = 2131626099(0x7f0e0873, float:1.8879425E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r3.setText(r9)
             org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
             android.widget.TextView r3 = r3.subtitle
             java.lang.String r9 = "SearchEmptyViewFilteredSubtitle2"
-            r10 = 2131627011(0x7f0e0CLASSNAME, float:1.8881274E38)
+            r10 = 2131627013(0x7f0e0CLASSNAME, float:1.8881278E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r3.setText(r9)
             org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
@@ -1139,9 +1137,11 @@ public class GroupVoipInviteAlert extends BottomSheet {
                     }
                 });
             } else {
+                String str2 = str;
+                int i2 = i;
                 this.searchInProgress = false;
             }
-            this.searchAdapterHelper.queryServerSearch(str, ChatObject.canAddUsers(GroupVoipInviteAlert.this.currentChat), false, true, false, false, GroupVoipInviteAlert.this.currentChat.id, false, 2, i);
+            this.searchAdapterHelper.queryServerSearch(str, ChatObject.canAddUsers(GroupVoipInviteAlert.this.currentChat), false, true, false, false, ChatObject.isChannel(GroupVoipInviteAlert.this.currentChat) ? GroupVoipInviteAlert.this.currentChat.id : 0, false, 2, i);
         }
 
         /* access modifiers changed from: private */
@@ -1304,15 +1304,16 @@ public class GroupVoipInviteAlert extends BottomSheet {
         /* access modifiers changed from: private */
         /* renamed from: lambda$updateSearchResults$3 */
         public /* synthetic */ void lambda$updateSearchResults$3$GroupVoipInviteAlert$SearchAdapter(int i, ArrayList arrayList) {
-            if (GroupVoipInviteAlert.this.searching && i == this.lastSearchId) {
+            if (i == this.lastSearchId) {
                 this.searchInProgress = false;
                 if (!ChatObject.isChannel(GroupVoipInviteAlert.this.currentChat)) {
-                    ArrayList<TLObject> groupSearch = this.searchAdapterHelper.getGroupSearch();
-                    groupSearch.clear();
-                    groupSearch.addAll(arrayList);
+                    this.searchAdapterHelper.addGroupMembers(arrayList);
                 }
-                int itemCount = getItemCount();
-                boolean z = GroupVoipInviteAlert.this.emptyView.getVisibility() == 0;
+                boolean z = true;
+                int itemCount = getItemCount() - 1;
+                if (GroupVoipInviteAlert.this.emptyView.getVisibility() != 0) {
+                    z = false;
+                }
                 notifyDataSetChanged();
                 if (getItemCount() > itemCount) {
                     GroupVoipInviteAlert.this.showItemsAnimated(itemCount);
@@ -1459,7 +1460,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 org.telegram.ui.Cells.GraySectionCell r14 = (org.telegram.ui.Cells.GraySectionCell) r14
                 int r0 = r13.groupStartRow
                 if (r15 != r0) goto L_0x0021
-                r15 = 2131624661(0x7f0e02d5, float:1.8876508E38)
+                r15 = 2131624663(0x7f0e02d7, float:1.8876512E38)
                 java.lang.String r0 = "ChannelMembers"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -1467,7 +1468,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
             L_0x0021:
                 int r0 = r13.globalStartRow
                 if (r15 != r0) goto L_0x012f
-                r15 = 2131625572(0x7f0e0664, float:1.8878356E38)
+                r15 = 2131625574(0x7f0e0666, float:1.887836E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)

@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 4.1.1
-SHA1-Digest-Manifest: BctZ02REqVW758wJhsYYgXmy/AM=
+SHA1-Digest-Manifest: cYUbwc+/NC3oZKHysiw37Mgzzs4=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: 8PDHsEF5cs5p7J60atOAMqv8OGc=
+SHA1-Digest: uFs3Kh09ScPJHT6LpRwn7NBKP3Y=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9880,13 +9880,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: l+iUvyks91o9N7RRuN76tGoWpB4=
+SHA1-Digest: uBjp9a4Bc2n1yannpQMrYsotS68=
 
 Name: classes2.dex
 SHA1-Digest: XTIq0AhHhp7Eo+YytesJ9taX0Yw=
 
 Name: classes3.dex
-SHA1-Digest: 0w2yq4y2MnMh8jya/0Sz28WcQjk=
+SHA1-Digest: K9odzmqvQXHFdrabxij+6RHhoOw=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -20328,10 +20328,10 @@ Name: res/raw/tsv_setup_monkey_tracking.tgs
 SHA1-Digest: 0gvFZ7Y8LKD8vp9J97vcK61MObQ=
 
 Name: res/raw/voice_muted.json
-SHA1-Digest: 8KoQCQ0guqCdmAtnGEEh3tSV+84=
+SHA1-Digest: vg7esUfvLrhU3x7G9IgWY0FOF/U=
 
 Name: res/raw/voice_outlined.json
-SHA1-Digest: ePDHIIE8amBbL09bJjKSyw2W+5M=
+SHA1-Digest: MfYcK5kX1wognv3d/c7xwlQFYos=
 
 Name: res/raw/voicechat_connecting.mp3
 SHA1-Digest: JA3JZoCQUHNTHX7u6ENwJjrgpwc=
@@ -20388,10 +20388,10 @@ Name: res/xml/actions.xml
 SHA1-Digest: palKfEavl4uVfXbAHUseWMl+pfU=
 
 Name: res/xml/auth.xml
-SHA1-Digest: vjkQu52BhCKoR9nCmq5xHjBbZD8=
+SHA1-Digest: 28Yh9d2qfdpMh4++szyJfLGYUCo=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: Sbz0piUUWKnSYAdFuaDAPltGPdo=
+SHA1-Digest: eDuUF59+BOmviARxsr1Sx3UvjX0=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -20409,7 +20409,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: ffkKQxHZVLPcLFWj2Hj8ndtW2BA=
+SHA1-Digest: jqMzyxu5OxMP7fbVemDpH8KfTZs=
 
 Name: transport-api.properties
 SHA1-Digest: OrUd0dvMYm2tlcfDVrGNApZLT1M=
