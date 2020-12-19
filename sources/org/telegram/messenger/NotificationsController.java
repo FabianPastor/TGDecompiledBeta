@@ -10015,7 +10015,7 @@ public class NotificationsController extends BaseController {
             android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0a74 }
             r12.<init>(r1)     // Catch:{ Exception -> 0x0a74 }
             r12.setContentTitle(r3)     // Catch:{ Exception -> 0x0a74 }
-            r1 = 2131165831(0x7var_, float:1.794589E38)
+            r1 = 2131165832(0x7var_, float:1.7945892E38)
             r12.setSmallIcon(r1)     // Catch:{ Exception -> 0x0a74 }
             r1 = 1
             r12.setAutoCancel(r1)     // Catch:{ Exception -> 0x0a74 }
@@ -12029,7 +12029,7 @@ public class NotificationsController extends BaseController {
             r9 = 134217728(0x8000000, float:3.85186E-34)
             android.app.PendingIntent r6 = android.app.PendingIntent.getBroadcast(r10, r15, r6, r9)
             androidx.core.app.NotificationCompat$Action$Builder r9 = new androidx.core.app.NotificationCompat$Action$Builder
-            r10 = 2131165675(0x7var_eb, float:1.7945574E38)
+            r10 = 2131165676(0x7var_ec, float:1.7945576E38)
             r15 = 2131625854(0x7f0e077e, float:1.8878928E38)
             r53 = r5
             java.lang.String r5 = "MarkAsRead"
@@ -12120,7 +12120,7 @@ public class NotificationsController extends BaseController {
             r6 = r62
             r15.setContentTitle(r6)
             r32 = r9
-            r9 = 2131165831(0x7var_, float:1.794589E38)
+            r9 = 2131165832(0x7var_, float:1.7945892E38)
             r15.setSmallIcon(r9)
             java.lang.String r9 = r40.toString()
             r15.setContentText(r9)

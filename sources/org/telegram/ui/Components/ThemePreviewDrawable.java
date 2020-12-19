@@ -25,7 +25,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
         super(createPreview(file, themeDocument));
     }
 
-    /* JADX WARNING: type inference failed for: r12v5, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r12v5, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r12v6 */
     /* JADX WARNING: type inference failed for: r12v21 */
     private static Bitmap createPreview(File file, DocumentObject.ThemeDocument themeDocument) {

@@ -325,7 +325,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0118:
         L_0x0119:
             android.view.Window r6 = r13.getWindow()
-            r7 = 2131166055(0x7var_, float:1.7946345E38)
+            r7 = 2131166056(0x7var_, float:1.7946347E38)
             r6.setBackgroundDrawableResource(r7)
             java.lang.String r6 = org.telegram.messenger.SharedConfig.passcodeHash
             int r6 = r6.length()
@@ -2338,7 +2338,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX WARNING: Code restructure failed: missing block: B:998:0x1acf, code lost:
         if ((r0.get(r0.size() - r14) instanceof org.telegram.ui.DialogsActivity) != false) goto L_0x1ad1;
      */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r14v6, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r14v6, types: [boolean, int] */
     /* JADX WARNING: Missing exception handler attribute for start block: B:760:0x13c5 */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:1005:0x1af3  */

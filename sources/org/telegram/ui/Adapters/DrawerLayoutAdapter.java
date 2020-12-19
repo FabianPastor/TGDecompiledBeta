@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.ui.ActionBar.Theme;
@@ -168,165 +169,75 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:22:0x0100  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     private void resetItems() {
-        /*
-            r13 = this;
-            java.util.ArrayList<java.lang.Integer> r0 = r13.accountNumbers
-            r0.clear()
-            r0 = 0
-        L_0x0006:
-            r1 = 3
-            if (r0 >= r1) goto L_0x001f
-            org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r0)
-            boolean r1 = r1.isClientActivated()
-            if (r1 == 0) goto L_0x001c
-            java.util.ArrayList<java.lang.Integer> r1 = r13.accountNumbers
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r0)
-            r1.add(r2)
-        L_0x001c:
-            int r0 = r0 + 1
-            goto L_0x0006
-        L_0x001f:
-            java.util.ArrayList<java.lang.Integer> r0 = r13.accountNumbers
-            org.telegram.ui.Adapters.-$$Lambda$DrawerLayoutAdapter$pyljm01qtLl0BbFoRFh7-svzDDE r1 = org.telegram.ui.Adapters.$$Lambda$DrawerLayoutAdapter$pyljm01qtLl0BbFoRFh7svzDDE.INSTANCE
-            java.util.Collections.sort(r0, r1)
-            java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
-            r0.clear()
-            int r0 = org.telegram.messenger.UserConfig.selectedAccount
-            org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
-            boolean r0 = r0.isClientActivated()
-            if (r0 != 0) goto L_0x0038
-            return
-        L_0x0038:
-            int r0 = org.telegram.ui.ActionBar.Theme.getEventType()
-            r1 = 2131165654(0x7var_d6, float:1.7945531E38)
-            r2 = 2
-            r3 = 2131165665(0x7var_e1, float:1.7945554E38)
-            if (r0 != 0) goto L_0x0061
-            r0 = 2131165653(0x7var_d5, float:1.794553E38)
-            r1 = 2131165643(0x7var_cb, float:1.7945509E38)
-            r4 = 2131165632(0x7var_c0, float:1.7945487E38)
-            r5 = 2131165624(0x7var_b8, float:1.794547E38)
-            r6 = 2131165688(0x7var_f8, float:1.79456E38)
-            r7 = 2131165660(0x7var_dc, float:1.7945543E38)
-            r8 = 2131165656(0x7var_d8, float:1.7945535E38)
-            r3 = 2131165656(0x7var_d8, float:1.7945535E38)
-        L_0x005d:
-            r8 = 2131165665(0x7var_e1, float:1.7945554E38)
-            goto L_0x00c0
-        L_0x0061:
-            r4 = 1
-            if (r0 != r4) goto L_0x0080
-            r0 = 2131165651(0x7var_d3, float:1.7945525E38)
-            r3 = 2131165641(0x7var_c9, float:1.7945505E38)
-            r4 = 2131165630(0x7var_be, float:1.7945483E38)
-            r5 = 2131165622(0x7var_b6, float:1.7945466E38)
-            r6 = 2131165684(0x7var_f4, float:1.7945592E38)
-            r7 = 2131165682(0x7var_f2, float:1.7945588E38)
-            r8 = 2131165680(0x7var_f0, float:1.7945584E38)
-            r1 = 2131165641(0x7var_c9, float:1.7945505E38)
-            r3 = 2131165654(0x7var_d6, float:1.7945531E38)
-            goto L_0x00c0
-        L_0x0080:
-            if (r0 != r2) goto L_0x009b
-            r0 = 2131165652(0x7var_d4, float:1.7945527E38)
-            r1 = 2131165642(0x7var_ca, float:1.7945507E38)
-            r4 = 2131165631(0x7var_bf, float:1.7945485E38)
-            r5 = 2131165623(0x7var_b7, float:1.7945468E38)
-            r6 = 2131165687(0x7var_f7, float:1.7945598E38)
-            r7 = 2131165659(0x7var_db, float:1.7945541E38)
-            r3 = 2131165655(0x7var_d7, float:1.7945533E38)
-            r8 = 2131165681(0x7var_f1, float:1.7945586E38)
-            goto L_0x00c0
-        L_0x009b:
-            r0 = 2131165650(0x7var_d2, float:1.7945523E38)
-            r4 = 2131165640(0x7var_c8, float:1.7945503E38)
-            r5 = 2131165629(0x7var_bd, float:1.794548E38)
-            r6 = 2131165677(0x7var_ed, float:1.7945578E38)
-            r7 = 2131165683(0x7var_f3, float:1.794559E38)
-            r8 = 2131165658(0x7var_da, float:1.794554E38)
-            r1 = 2131165640(0x7var_c8, float:1.7945503E38)
-            r3 = 2131165654(0x7var_d6, float:1.7945531E38)
-            r4 = 2131165629(0x7var_bd, float:1.794548E38)
-            r5 = 2131165677(0x7var_ed, float:1.7945578E38)
-            r6 = 2131165683(0x7var_f3, float:1.794559E38)
-            r7 = 2131165658(0x7var_da, float:1.794554E38)
-            goto L_0x005d
-        L_0x00c0:
-            java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r9 = r13.items
-            org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r10 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
-            r11 = 2131626032(0x7f0e0830, float:1.8879289E38)
-            java.lang.String r12 = "NewGroup"
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-            r10.<init>(r2, r11, r0)
-            r9.add(r10)
-            java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
-            org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r2 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
-            r9 = 6
-            r10 = 2131624922(0x7f0e03da, float:1.8877037E38)
-            java.lang.String r11 = "Contacts"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r2.<init>(r9, r10, r1)
-            r0.add(r2)
-            java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
-            org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r1 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
-            r2 = 10
-            r9 = 2131624582(0x7f0e0286, float:1.8876348E38)
-            java.lang.String r10 = "Calls"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r1.<init>(r2, r9, r4)
-            r0.add(r1)
-            boolean r0 = r13.hasGps
-            if (r0 == 0) goto L_0x0115
-            java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
-            org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r1 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
-            r2 = 12
-            r4 = 2131626639(0x7f0e0a8f, float:1.888052E38)
-            java.lang.String r9 = "PeopleNearby"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
-            r1.<init>(r2, r4, r8)
-            r0.add(r1)
-        L_0x0115:
-            java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
-            org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r1 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
-            r2 = 11
-            r4 = 2131626996(0x7f0e0bf4, float:1.8881244E38)
-            java.lang.String r8 = "SavedMessages"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
-            r1.<init>(r2, r4, r5)
-            r0.add(r1)
-            java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
-            org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r1 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
-            r2 = 8
-            r4 = 2131627149(0x7f0e0c8d, float:1.8881554E38)
-            java.lang.String r5 = "Settings"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r1.<init>(r2, r4, r6)
-            r0.add(r1)
-            java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
-            r1 = 0
-            r0.add(r1)
-            java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
-            org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r1 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
-            r2 = 7
-            r4 = 2131625680(0x7f0e06d0, float:1.8878575E38)
-            java.lang.String r5 = "InviteFriends"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r1.<init>(r2, r4, r7)
-            r0.add(r1)
-            java.util.ArrayList<org.telegram.ui.Adapters.DrawerLayoutAdapter$Item> r0 = r13.items
-            org.telegram.ui.Adapters.DrawerLayoutAdapter$Item r1 = new org.telegram.ui.Adapters.DrawerLayoutAdapter$Item
-            r2 = 9
-            r4 = 2131627363(0x7f0e0d63, float:1.8881988E38)
-            java.lang.String r5 = "TelegramFAQ"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r1.<init>(r2, r4, r3)
-            r0.add(r1)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DrawerLayoutAdapter.resetItems():void");
+        int i;
+        int i2;
+        int i3;
+        int i4;
+        int i5;
+        int i6;
+        int i7;
+        int i8;
+        this.accountNumbers.clear();
+        for (int i9 = 0; i9 < 3; i9++) {
+            if (UserConfig.getInstance(i9).isClientActivated()) {
+                this.accountNumbers.add(Integer.valueOf(i9));
+            }
+        }
+        Collections.sort(this.accountNumbers, $$Lambda$DrawerLayoutAdapter$pyljm01qtLl0BbFoRFh7svzDDE.INSTANCE);
+        this.items.clear();
+        if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
+            int eventType = Theme.getEventType();
+            if (eventType == 0) {
+                i8 = NUM;
+                i7 = NUM;
+                i6 = NUM;
+                i5 = NUM;
+                i4 = NUM;
+                i3 = NUM;
+                i2 = NUM;
+                i = NUM;
+            } else {
+                if (eventType == 1) {
+                    i8 = NUM;
+                    i = NUM;
+                    i7 = NUM;
+                    i6 = NUM;
+                    i5 = NUM;
+                    i4 = NUM;
+                    i3 = NUM;
+                } else if (eventType == 2) {
+                    i8 = NUM;
+                    i7 = NUM;
+                    i6 = NUM;
+                    i5 = NUM;
+                    i4 = NUM;
+                    i3 = NUM;
+                    i2 = NUM;
+                    i = NUM;
+                } else {
+                    i8 = NUM;
+                    i = NUM;
+                    i7 = NUM;
+                    i6 = NUM;
+                    i5 = NUM;
+                    i4 = NUM;
+                    i3 = NUM;
+                }
+                i2 = NUM;
+            }
+            this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), i8));
+            this.items.add(new Item(6, LocaleController.getString("Contacts", NUM), i7));
+            this.items.add(new Item(10, LocaleController.getString("Calls", NUM), i6));
+            if (this.hasGps) {
+                this.items.add(new Item(12, LocaleController.getString("PeopleNearby", NUM), i));
+            }
+            this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), i5));
+            this.items.add(new Item(8, LocaleController.getString("Settings", NUM), i4));
+            this.items.add((Object) null);
+            this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), i3));
+            this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), i2));
+        }
     }
 
     static /* synthetic */ int lambda$resetItems$0(Integer num, Integer num2) {

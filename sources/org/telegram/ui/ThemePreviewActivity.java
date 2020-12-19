@@ -950,7 +950,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.graphics.Rect r3 = new android.graphics.Rect
             r3.<init>()
             android.content.res.Resources r6 = r33.getResources()
-            r12 = 2131165980(0x7var_c, float:1.7946192E38)
+            r12 = 2131165981(0x7var_d, float:1.7946194E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r12)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.sheetDrawable = r6

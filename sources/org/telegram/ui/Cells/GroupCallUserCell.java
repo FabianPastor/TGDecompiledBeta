@@ -265,11 +265,11 @@ public class GroupCallUserCell extends FrameLayout {
     /* JADX WARNING: Removed duplicated region for block: B:123:0x02d8  */
     /* JADX WARNING: Removed duplicated region for block: B:124:0x02da  */
     /* JADX WARNING: Removed duplicated region for block: B:127:0x02e0  */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x0308  */
-    /* JADX WARNING: Removed duplicated region for block: B:133:0x0310  */
-    /* JADX WARNING: Removed duplicated region for block: B:135:0x0319  */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x032e  */
-    /* JADX WARNING: Removed duplicated region for block: B:143:0x0343  */
+    /* JADX WARNING: Removed duplicated region for block: B:133:0x030a  */
+    /* JADX WARNING: Removed duplicated region for block: B:134:0x030d  */
+    /* JADX WARNING: Removed duplicated region for block: B:137:0x0315  */
+    /* JADX WARNING: Removed duplicated region for block: B:142:0x032c  */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x0341  */
     /* JADX WARNING: Removed duplicated region for block: B:65:0x0101  */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x011a  */
     /* JADX WARNING: Removed duplicated region for block: B:74:0x012e  */
@@ -675,47 +675,46 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x0300:
             if (r11 == 0) goto L_0x0306
             boolean r0 = r10.lastMuted
-            if (r0 == r12) goto L_0x033f
+            if (r0 == r12) goto L_0x033d
         L_0x0306:
-            if (r12 == 0) goto L_0x0310
             org.telegram.ui.Components.RLottieDrawable r0 = r10.muteDrawable
+            if (r12 == 0) goto L_0x030d
             r1 = 13
-            r0.setCustomEndFrame(r1)
-            goto L_0x0317
-        L_0x0310:
-            org.telegram.ui.Components.RLottieDrawable r0 = r10.muteDrawable
+            goto L_0x030f
+        L_0x030d:
             r1 = 24
-            r0.setCustomEndFrame(r1)
-        L_0x0317:
-            if (r11 == 0) goto L_0x032e
-            if (r12 == 0) goto L_0x0321
+        L_0x030f:
+            boolean r0 = r0.setCustomEndFrame(r1)
+            if (r11 == 0) goto L_0x032c
+            if (r0 == 0) goto L_0x0326
+            if (r12 == 0) goto L_0x031f
             org.telegram.ui.Components.RLottieDrawable r11 = r10.muteDrawable
             r11.setCurrentFrame(r3)
-            goto L_0x0328
-        L_0x0321:
+            goto L_0x0326
+        L_0x031f:
             org.telegram.ui.Components.RLottieDrawable r11 = r10.muteDrawable
             r0 = 12
             r11.setCurrentFrame(r0)
-        L_0x0328:
+        L_0x0326:
             org.telegram.ui.Components.RLottieImageView r11 = r10.muteButton
             r11.playAnimation()
-            goto L_0x033d
-        L_0x032e:
+            goto L_0x033b
+        L_0x032c:
             org.telegram.ui.Components.RLottieDrawable r11 = r10.muteDrawable
             int r0 = r11.getCustomEndFrame()
             int r0 = r0 - r2
             r11.setCurrentFrame(r0, r3, r2)
             org.telegram.ui.Components.RLottieImageView r11 = r10.muteButton
             r11.invalidate()
-        L_0x033d:
+        L_0x033b:
             r10.lastMuted = r12
-        L_0x033f:
+        L_0x033d:
             boolean r11 = r10.isSpeaking
-            if (r11 != 0) goto L_0x034a
+            if (r11 != 0) goto L_0x0348
             org.telegram.ui.Cells.GroupCallUserCell$AvatarWavesDrawable r11 = r10.avatarWavesDrawable
             r0 = 0
             r11.setAmplitude(r0)
-        L_0x034a:
+        L_0x0348:
             org.telegram.ui.Cells.GroupCallUserCell$AvatarWavesDrawable r11 = r10.avatarWavesDrawable
             boolean r12 = r10.isSpeaking
             r11.setShowWaves(r12, r10)

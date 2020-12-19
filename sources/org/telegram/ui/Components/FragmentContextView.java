@@ -307,11 +307,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             public /* synthetic */ void lambda$$0$FragmentContextView$4() {
                 if (VoIPService.getSharedInstance() != null) {
                     VoIPService.getSharedInstance().setMicMute(false, true, false);
-                    FragmentContextView.this.muteDrawable.setCustomEndFrame(FragmentContextView.this.isMuted ? 15 : 29);
-                    if (FragmentContextView.this.isMuted) {
-                        FragmentContextView.this.muteDrawable.setCurrentFrame(0);
-                    } else {
-                        FragmentContextView.this.muteDrawable.setCurrentFrame(14);
+                    if (FragmentContextView.this.muteDrawable.setCustomEndFrame(FragmentContextView.this.isMuted ? 15 : 29)) {
+                        if (FragmentContextView.this.isMuted) {
+                            FragmentContextView.this.muteDrawable.setCurrentFrame(0);
+                        } else {
+                            FragmentContextView.this.muteDrawable.setCurrentFrame(14);
+                        }
                     }
                     FragmentContextView.this.muteButton.playAnimation();
                     Theme.getFragmentContextViewWavesDrawable().updateState(true);
@@ -352,11 +353,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                         this.scheduled = false;
                     } else if (this.pressed) {
                         boolean unused = FragmentContextView.this.isMuted = true;
-                        FragmentContextView.this.muteDrawable.setCustomEndFrame(FragmentContextView.this.isMuted ? 15 : 29);
-                        if (FragmentContextView.this.isMuted) {
-                            FragmentContextView.this.muteDrawable.setCurrentFrame(0);
-                        } else {
-                            FragmentContextView.this.muteDrawable.setCurrentFrame(14);
+                        if (FragmentContextView.this.muteDrawable.setCustomEndFrame(FragmentContextView.this.isMuted ? 15 : 29)) {
+                            if (FragmentContextView.this.isMuted) {
+                                FragmentContextView.this.muteDrawable.setCurrentFrame(0);
+                            } else {
+                                FragmentContextView.this.muteDrawable.setCurrentFrame(14);
+                            }
                         }
                         FragmentContextView.this.muteButton.playAnimation();
                         if (VoIPService.getSharedInstance() != null) {
@@ -472,11 +474,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 boolean z = !sharedInstance.isMicMute();
                 this.isMuted = z;
                 sharedInstance.setMicMute(z, false, true);
-                this.muteDrawable.setCustomEndFrame(this.isMuted ? 15 : 29);
-                if (this.isMuted) {
-                    this.muteDrawable.setCurrentFrame(0);
-                } else {
-                    this.muteDrawable.setCurrentFrame(14);
+                if (this.muteDrawable.setCustomEndFrame(this.isMuted ? 15 : 29)) {
+                    if (this.isMuted) {
+                        this.muteDrawable.setCurrentFrame(0);
+                    } else {
+                        this.muteDrawable.setCurrentFrame(14);
+                    }
                 }
                 this.muteButton.playAnimation();
                 Theme.getFragmentContextViewWavesDrawable().updateState(true);

@@ -13617,7 +13617,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r2 == 0) goto L_0x3d75
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             android.content.res.Resources r3 = r69.getResources()
-            r4 = 2131166039(0x7var_, float:1.7946312E38)
+            r4 = 2131166040(0x7var_, float:1.7946314E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             r2.setImageBitmap((android.graphics.drawable.Drawable) r3)
         L_0x3d71:
@@ -22977,7 +22977,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v4, resolved type: android.text.StaticLayout[]} */
-    /* JADX WARNING: type inference failed for: r4v1, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r4v1, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r3v3, types: [org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$User, java.lang.String] */
     /* JADX WARNING: type inference failed for: r14v2, types: [java.lang.CharSequence] */
     /* JADX WARNING: type inference failed for: r3v155 */
@@ -27734,7 +27734,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                     if (z3) {
                         var_ = 6.0f;
                     }
-                    float dp = var_ - ((float) AndroidUtilities.dp(var_));
+                    float dp = (var_ - ((float) AndroidUtilities.dp(var_))) + ((float) this.transitionParams.deltaRight);
                     float imageY2 = this.photoImage.getImageY2() + ((float) this.additionalTimeOffsetY);
                     float dp2 = imageY2 - ((float) AndroidUtilities.dp(23.0f));
                     this.rect.set(dp, dp2, dp + f3 + ((float) AndroidUtilities.dp((float) ((z3 ? 12 : 8) + (this.currentMessageObject.isOutOwner() ? 20 : 0)))), ((float) AndroidUtilities.dp(17.0f)) + dp2);

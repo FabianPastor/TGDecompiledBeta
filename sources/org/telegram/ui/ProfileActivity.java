@@ -2097,7 +2097,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r1.setVisibility(r2)
         L_0x00db:
             r1 = 16
-            r3 = 2131165936(0x7var_f0, float:1.7946103E38)
+            r3 = 2131165937(0x7var_f1, float:1.7946105E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r1, (int) r3)
             r11.videoCallItem = r1
             r3 = 2131627629(0x7f0e0e6d, float:1.8882528E38)
@@ -2684,7 +2684,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             goto L_0x064a
         L_0x061d:
             android.widget.ImageView r1 = r11.writeButton
-            r7 = 2131165933(0x7var_ed, float:1.7946097E38)
+            r7 = 2131165934(0x7var_ee, float:1.79461E38)
             r1.setImageResource(r7)
             android.widget.ImageView r1 = r11.writeButton
             r7 = 2131623999(0x7f0e003f, float:1.8875165E38)
@@ -2694,7 +2694,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             goto L_0x064a
         L_0x0634:
             android.widget.ImageView r1 = r11.writeButton
-            r7 = 2131165929(0x7var_e9, float:1.7946089E38)
+            r7 = 2131165930(0x7var_ea, float:1.794609E38)
             r1.setImageResource(r7)
             android.widget.ImageView r1 = r11.writeButton
             r7 = 2131627659(0x7f0e0e8b, float:1.8882589E38)
@@ -9259,7 +9259,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r1 = 2131626250(0x7f0e090a, float:1.887973E38)
                 java.lang.String r2 = "NotificationsAndSounds"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                r2 = 2131165669(0x7var_e5, float:1.7945562E38)
+                r2 = 2131165670(0x7var_e6, float:1.7945564E38)
                 r0.setTextAndIcon((java.lang.String) r1, (int) r2, (boolean) r10)
                 goto L_0x0a0e
             L_0x059e:
@@ -9269,7 +9269,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r1 = 2131626796(0x7f0e0b2c, float:1.8880838E38)
                 java.lang.String r2 = "PrivacySettings"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                r2 = 2131165679(0x7var_ef, float:1.7945582E38)
+                r2 = 2131165680(0x7var_f0, float:1.7945584E38)
                 r0.setTextAndIcon((java.lang.String) r1, (int) r2, (boolean) r10)
                 goto L_0x0a0e
             L_0x05b7:
@@ -9309,7 +9309,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r1 = 2131624346(0x7f0e019a, float:1.887587E38)
                 java.lang.String r2 = "AskAQuestion"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                r2 = 2131165691(0x7var_fb, float:1.7945606E38)
+                r2 = 2131165692(0x7var_fc, float:1.7945608E38)
                 r0.setTextAndIcon((java.lang.String) r1, (int) r2, (boolean) r10)
                 goto L_0x0a0e
             L_0x061b:
@@ -9329,7 +9329,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r1 = 2131626789(0x7f0e0b25, float:1.8880824E38)
                 java.lang.String r2 = "PrivacyPolicy"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                r2 = 2131165673(0x7var_e9, float:1.794557E38)
+                r2 = 2131165674(0x7var_ea, float:1.7945572E38)
                 r0.setTextAndIcon((java.lang.String) r1, (int) r2, (boolean) r9)
                 goto L_0x0a0e
             L_0x064d:
@@ -9382,7 +9382,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r1 = 2131627137(0x7f0e0CLASSNAME, float:1.888153E38)
                 java.lang.String r2 = "SetProfilePhoto"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                r2 = 2131165709(0x7var_d, float:1.7945643E38)
+                r2 = 2131165710(0x7var_e, float:1.7945645E38)
                 r0.setTextAndIcon((java.lang.String) r1, (int) r2, (boolean) r9)
                 goto L_0x0a0e
             L_0x06cc:

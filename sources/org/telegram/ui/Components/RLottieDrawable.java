@@ -1100,10 +1100,13 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.playInDirectionOfCustomEndFrame = z;
     }
 
-    public void setCustomEndFrame(int i) {
-        if (this.customEndFrame <= this.metaData[0]) {
-            this.customEndFrame = i;
+    public boolean setCustomEndFrame(int i) {
+        int i2 = this.customEndFrame;
+        if (i2 == i || i2 > this.metaData[0]) {
+            return false;
         }
+        this.customEndFrame = i;
+        return true;
     }
 
     public void addParentView(View view) {

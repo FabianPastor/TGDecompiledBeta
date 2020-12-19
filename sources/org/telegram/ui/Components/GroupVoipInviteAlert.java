@@ -339,7 +339,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
             r3 = r23
             r0.invitedUsers = r3
             android.content.res.Resources r3 = r18.getResources()
-            r5 = 2131165980(0x7var_c, float:1.7946192E38)
+            r5 = 2131165981(0x7var_d, float:1.7946194E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r5)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             r0.shadowDrawable = r3
@@ -1418,7 +1418,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 android.content.Context r0 = r2.mContext
                 r1 = 0
                 r4.<init>(r0, r3, r3, r1)
-                r3 = 2131165744(0x7var_, float:1.7945714E38)
+                r3 = 2131165745(0x7var_, float:1.7945716E38)
                 r4.setCustomRightImage(r3)
                 java.lang.String r3 = "voipgroup_nameText"
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
@@ -1706,7 +1706,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 android.content.Context r3 = r5.mContext
                 r4 = 0
                 r7.<init>(r3, r0, r1, r4)
-                r0 = 2131165744(0x7var_, float:1.7945714E38)
+                r0 = 2131165745(0x7var_, float:1.7945716E38)
                 r7.setCustomRightImage(r0)
                 java.lang.String r0 = "voipgroup_nameText"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)

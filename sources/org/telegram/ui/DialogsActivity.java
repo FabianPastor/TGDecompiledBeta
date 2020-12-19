@@ -5430,7 +5430,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r8 = 2
             int[] r10 = new int[r8]
             if (r7 == 0) goto L_0x0186
-            r11 = 2131165675(0x7var_eb, float:1.7945574E38)
+            r11 = 2131165676(0x7var_ec, float:1.7945576E38)
             goto L_0x0187
         L_0x0186:
             r11 = 0

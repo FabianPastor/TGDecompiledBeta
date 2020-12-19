@@ -766,11 +766,12 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
 
     public void onAudioSettingsChanged() {
         boolean z = VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().isMicMute();
-        this.bigMicDrawable.setCustomEndFrame(z ? 13 : 24);
-        if (z) {
-            this.bigMicDrawable.setCurrentFrame(0);
-        } else {
-            this.bigMicDrawable.setCurrentFrame(12);
+        if (this.bigMicDrawable.setCustomEndFrame(z ? 13 : 24)) {
+            if (z) {
+                this.bigMicDrawable.setCurrentFrame(0);
+            } else {
+                this.bigMicDrawable.setCurrentFrame(12);
+            }
         }
         this.muteButton.playAnimation();
         updateButtonState();
