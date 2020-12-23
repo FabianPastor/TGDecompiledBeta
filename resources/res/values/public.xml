@@ -3222,6 +3222,7 @@
     <public type="string" name="LinkChecking" id="NUM" />
     <public type="string" name="LinkCopied" id="NUM" />
     <public type="string" name="LinkCopiedPrivate" id="NUM" />
+    <public type="string" name="LinkCopiedPrivateInfo" id="NUM" />
     <public type="string" name="LinkInUse" id="NUM" />
     <public type="string" name="LinkInfo" id="NUM" />
     <public type="string" name="LinkInvalid" id="NUM" />

@@ -690,7 +690,7 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
         String str;
         int i;
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21 && GroupCallPip.getInstance() != null) {
             if (GroupCallPip.getInstance().showAlert) {
                 i = NUM;
                 str = "AccDescrCloseMenu";

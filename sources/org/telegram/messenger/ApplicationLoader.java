@@ -15,6 +15,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import androidx.multidex.MultiDex;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -41,6 +42,7 @@ public class ApplicationLoader extends Application {
     public static volatile boolean mainInterfacePausedStageQueue = true;
     public static volatile long mainInterfacePausedStageQueueTime = 0;
     public static volatile boolean mainInterfaceStopped = true;
+    public static long startTime;
 
     /* access modifiers changed from: protected */
     public void attachBaseContext(Context context) {
@@ -140,6 +142,14 @@ public class ApplicationLoader extends Application {
         } catch (Throwable unused) {
         }
         super.onCreate();
+        if (BuildVars.LOGS_ENABLED) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("app start time = ");
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            startTime = elapsedRealtime;
+            sb.append(elapsedRealtime);
+            FileLog.d(sb.toString());
+        }
         if (applicationContext == null) {
             applicationContext = getApplicationContext();
         }
@@ -154,6 +164,9 @@ public class ApplicationLoader extends Application {
                 }
             }
         };
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("load libs time = " + (SystemClock.elapsedRealtime() - startTime));
+        }
         applicationHandler = new Handler(applicationContext.getMainLooper());
         AndroidUtilities.runOnUIThread($$Lambda$6var_mOFSl8nO3HAcLKG9VPMoeQg.INSTANCE);
     }

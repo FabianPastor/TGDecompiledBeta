@@ -1313,10 +1313,10 @@ public class FileRefController extends BaseController {
     /* JADX WARNING: type inference failed for: r8v0 */
     /* JADX WARNING: type inference failed for: r8v2 */
     /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r8v1, types: [boolean, int] */
-    /* JADX WARNING: Removed duplicated region for block: B:202:0x0422  */
-    /* JADX WARNING: Removed duplicated region for block: B:207:0x042f  */
-    /* JADX WARNING: Removed duplicated region for block: B:221:0x0127 A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x016c A[LOOP:2: B:50:0x00ba->B:87:0x016c, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x03ee  */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x03fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:209:0x0127 A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x0138 A[LOOP:2: B:50:0x00ba->B:75:0x0138, LOOP_END] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean onRequestComplete(java.lang.String r26, java.lang.String r27, org.telegram.tgnet.TLObject r28, boolean r29) {
         /*
@@ -1401,7 +1401,7 @@ public class FileRefController extends BaseController {
             r13 = r11
             r9 = 0
         L_0x007d:
-            if (r9 >= r5) goto L_0x0443
+            if (r9 >= r5) goto L_0x040f
             java.lang.Object r14 = r2.get(r9)
             org.telegram.messenger.FileRefController$Requester r14 = (org.telegram.messenger.FileRefController.Requester) r14
             boolean r15 = r14.completed
@@ -1411,7 +1411,7 @@ public class FileRefController extends BaseController {
             r16 = r5
             r2 = 0
             r5 = 1
-            goto L_0x0438
+            goto L_0x0404
         L_0x0095:
             org.telegram.tgnet.TLRPC$InputFileLocation r15 = r14.location
             boolean r15 = r15 instanceof org.telegram.tgnet.TLRPC$TL_inputFileLocation
@@ -1421,17 +1421,17 @@ public class FileRefController extends BaseController {
         L_0x00a1:
             boolean unused = r14.completed = r8
             boolean r15 = r3 instanceof org.telegram.tgnet.TLRPC$messages_Messages
-            if (r15 == 0) goto L_0x019f
+            if (r15 == 0) goto L_0x016b
             r15 = r3
             org.telegram.tgnet.TLRPC$messages_Messages r15 = (org.telegram.tgnet.TLRPC$messages_Messages) r15
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r6 = r15.messages
             boolean r6 = r6.isEmpty()
-            if (r6 != 0) goto L_0x019a
+            if (r6 != 0) goto L_0x0166
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r6 = r15.messages
             int r6 = r6.size()
             r8 = 0
         L_0x00ba:
-            if (r8 >= r6) goto L_0x0175
+            if (r8 >= r6) goto L_0x0141
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r7 = r15.messages
             java.lang.Object r7 = r7.get(r8)
             org.telegram.tgnet.TLRPC$Message r7 = (org.telegram.tgnet.TLRPC$Message) r7
@@ -1480,58 +1480,29 @@ public class FileRefController extends BaseController {
         L_0x0124:
             r13 = r2
         L_0x0125:
-            if (r13 == 0) goto L_0x016c
-            if (r29 == 0) goto L_0x016a
-            org.telegram.tgnet.TLRPC$Peer r2 = r7.peer_id
-            if (r2 == 0) goto L_0x015d
-            int r2 = r2.channel_id
-            if (r2 == 0) goto L_0x015d
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r2 = r15.chats
-            int r2 = r2.size()
-            r5 = 0
-        L_0x0138:
-            if (r5 >= r2) goto L_0x015d
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r6 = r15.chats
-            java.lang.Object r6 = r6.get(r5)
-            org.telegram.tgnet.TLRPC$Chat r6 = (org.telegram.tgnet.TLRPC$Chat) r6
-            int r8 = r6.id
-            r17 = r2
-            org.telegram.tgnet.TLRPC$Peer r2 = r7.peer_id
-            int r2 = r2.channel_id
-            if (r8 != r2) goto L_0x0158
-            boolean r2 = r6.megagroup
-            if (r2 == 0) goto L_0x015d
-            int r2 = r7.flags
-            r5 = -2147483648(0xfffffffvar_, float:-0.0)
-            r2 = r2 | r5
-            r7.flags = r2
-            goto L_0x015d
-        L_0x0158:
-            int r5 = r5 + 1
-            r2 = r17
-            goto L_0x0138
-        L_0x015d:
+            if (r13 == 0) goto L_0x0138
+            if (r29 == 0) goto L_0x0136
             org.telegram.messenger.MessagesStorage r2 = r25.getMessagesStorage()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r5 = r15.users
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r6 = r15.chats
             r8 = 0
             r2.replaceMessageIfExists(r7, r5, r6, r8)
-            goto L_0x0179
-        L_0x016a:
+            goto L_0x0145
+        L_0x0136:
             r8 = 0
-            goto L_0x0179
-        L_0x016c:
+            goto L_0x0145
+        L_0x0138:
             r2 = 0
             int r8 = r8 + 1
             r2 = r27
             r5 = r16
             goto L_0x00ba
-        L_0x0175:
+        L_0x0141:
             r27 = r2
             r16 = r5
-        L_0x0179:
+        L_0x0145:
             r2 = 0
-            if (r13 != 0) goto L_0x01b3
+            if (r13 != 0) goto L_0x017f
             org.telegram.messenger.MessagesStorage r5 = r25.getMessagesStorage()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r6 = r15.messages
             java.lang.Object r6 = r6.get(r2)
@@ -1541,113 +1512,113 @@ public class FileRefController extends BaseController {
             r8 = 1
             r5.replaceMessageIfExists(r6, r2, r7, r8)
             boolean r2 = org.telegram.messenger.BuildVars.DEBUG_VERSION
-            if (r2 == 0) goto L_0x01b3
+            if (r2 == 0) goto L_0x017f
             java.lang.String r2 = "file ref not found in messages, replacing message"
             org.telegram.messenger.FileLog.d(r2)
-            goto L_0x01b3
-        L_0x019a:
+            goto L_0x017f
+        L_0x0166:
             r27 = r2
             r16 = r5
-            goto L_0x01b3
-        L_0x019f:
+            goto L_0x017f
+        L_0x016b:
             r27 = r2
             r16 = r5
             boolean r2 = r3 instanceof org.telegram.tgnet.TLRPC$WebPage
-            if (r2 == 0) goto L_0x01b8
+            if (r2 == 0) goto L_0x0184
             r2 = r3
             org.telegram.tgnet.TLRPC$WebPage r2 = (org.telegram.tgnet.TLRPC$WebPage) r2
             org.telegram.tgnet.TLRPC$InputFileLocation r5 = r14.location
             byte[] r2 = r0.getFileReference((org.telegram.tgnet.TLRPC$WebPage) r2, (org.telegram.tgnet.TLRPC$InputFileLocation) r5, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
             r13 = r2
-        L_0x01b3:
+        L_0x017f:
             r18 = r4
-        L_0x01b5:
+        L_0x0181:
             r6 = 0
-            goto L_0x0420
-        L_0x01b8:
-            if (r4 == 0) goto L_0x01ed
+            goto L_0x03ec
+        L_0x0184:
+            if (r4 == 0) goto L_0x01b9
             r2 = r3
             org.telegram.tgnet.TLRPC$TL_account_wallPapers r2 = (org.telegram.tgnet.TLRPC$TL_account_wallPapers) r2
             java.util.ArrayList<org.telegram.tgnet.TLRPC$WallPaper> r5 = r2.wallpapers
             int r5 = r5.size()
             r6 = 0
-        L_0x01c4:
-            if (r6 >= r5) goto L_0x01de
+        L_0x0190:
+            if (r6 >= r5) goto L_0x01aa
             java.util.ArrayList<org.telegram.tgnet.TLRPC$WallPaper> r7 = r2.wallpapers
             java.lang.Object r7 = r7.get(r6)
             org.telegram.tgnet.TLRPC$TL_wallPaper r7 = (org.telegram.tgnet.TLRPC$TL_wallPaper) r7
             org.telegram.tgnet.TLRPC$Document r7 = r7.document
             org.telegram.tgnet.TLRPC$InputFileLocation r8 = r14.location
             byte[] r13 = r0.getFileReference((org.telegram.tgnet.TLRPC$Document) r7, (org.telegram.tgnet.TLRPC$InputFileLocation) r8, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
-            if (r13 == 0) goto L_0x01db
-            goto L_0x01de
-        L_0x01db:
+            if (r13 == 0) goto L_0x01a7
+            goto L_0x01aa
+        L_0x01a7:
             int r6 = r6 + 1
-            goto L_0x01c4
-        L_0x01de:
-            if (r13 == 0) goto L_0x01b3
-            if (r29 == 0) goto L_0x01b3
+            goto L_0x0190
+        L_0x01aa:
+            if (r13 == 0) goto L_0x017f
+            if (r29 == 0) goto L_0x017f
             org.telegram.messenger.MessagesStorage r5 = r25.getMessagesStorage()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$WallPaper> r2 = r2.wallpapers
             r6 = 1
             r5.putWallpapers(r2, r6)
-            goto L_0x01b3
-        L_0x01ed:
+            goto L_0x017f
+        L_0x01b9:
             boolean r2 = r3 instanceof org.telegram.tgnet.TLRPC$TL_wallPaper
-            if (r2 == 0) goto L_0x0216
+            if (r2 == 0) goto L_0x01e2
             r2 = r3
             org.telegram.tgnet.TLRPC$TL_wallPaper r2 = (org.telegram.tgnet.TLRPC$TL_wallPaper) r2
             org.telegram.tgnet.TLRPC$Document r5 = r2.document
             org.telegram.tgnet.TLRPC$InputFileLocation r6 = r14.location
             byte[] r5 = r0.getFileReference((org.telegram.tgnet.TLRPC$Document) r5, (org.telegram.tgnet.TLRPC$InputFileLocation) r6, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
-            if (r5 == 0) goto L_0x0212
-            if (r29 == 0) goto L_0x0212
+            if (r5 == 0) goto L_0x01de
+            if (r29 == 0) goto L_0x01de
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
             r6.add(r2)
             org.telegram.messenger.MessagesStorage r2 = r25.getMessagesStorage()
             r7 = 0
             r2.putWallpapers(r6, r7)
-        L_0x0212:
+        L_0x01de:
             r18 = r4
             r13 = r5
-            goto L_0x01b5
-        L_0x0216:
+            goto L_0x0181
+        L_0x01e2:
             boolean r2 = r3 instanceof org.telegram.tgnet.TLRPC$TL_theme
-            if (r2 == 0) goto L_0x0234
+            if (r2 == 0) goto L_0x0200
             r2 = r3
             org.telegram.tgnet.TLRPC$TL_theme r2 = (org.telegram.tgnet.TLRPC$TL_theme) r2
             org.telegram.tgnet.TLRPC$Document r5 = r2.document
             org.telegram.tgnet.TLRPC$InputFileLocation r6 = r14.location
             byte[] r5 = r0.getFileReference((org.telegram.tgnet.TLRPC$Document) r5, (org.telegram.tgnet.TLRPC$InputFileLocation) r6, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
-            if (r5 == 0) goto L_0x0212
-            if (r29 == 0) goto L_0x0212
+            if (r5 == 0) goto L_0x01de
+            if (r29 == 0) goto L_0x01de
             org.telegram.messenger.-$$Lambda$FileRefController$YoivrI2jLCLASSNAME-9Uc3u7XDwNRgmQ r6 = new org.telegram.messenger.-$$Lambda$FileRefController$YoivrI2jLCLASSNAME-9Uc3u7XDwNRgmQ
             r6.<init>()
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r6)
-            goto L_0x0212
-        L_0x0234:
+            goto L_0x01de
+        L_0x0200:
             boolean r2 = r3 instanceof org.telegram.tgnet.TLRPC$Vector
-            if (r2 == 0) goto L_0x02c3
+            if (r2 == 0) goto L_0x028f
             r2 = r3
             org.telegram.tgnet.TLRPC$Vector r2 = (org.telegram.tgnet.TLRPC$Vector) r2
             java.util.ArrayList<java.lang.Object> r5 = r2.objects
             boolean r5 = r5.isEmpty()
-            if (r5 != 0) goto L_0x01b3
+            if (r5 != 0) goto L_0x017f
             java.util.ArrayList<java.lang.Object> r5 = r2.objects
             int r5 = r5.size()
             r8 = 0
-        L_0x024a:
-            if (r8 >= r5) goto L_0x01b3
+        L_0x0216:
+            if (r8 >= r5) goto L_0x017f
             java.util.ArrayList<java.lang.Object> r6 = r2.objects
             java.lang.Object r6 = r6.get(r8)
             boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$User
-            if (r7 == 0) goto L_0x0288
+            if (r7 == 0) goto L_0x0254
             org.telegram.tgnet.TLRPC$User r6 = (org.telegram.tgnet.TLRPC$User) r6
             org.telegram.tgnet.TLRPC$InputFileLocation r7 = r14.location
             byte[] r7 = r0.getFileReference((org.telegram.tgnet.TLRPC$User) r6, (org.telegram.tgnet.TLRPC$InputFileLocation) r7, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
-            if (r29 == 0) goto L_0x0282
-            if (r7 == 0) goto L_0x0282
+            if (r29 == 0) goto L_0x024e
+            if (r7 == 0) goto L_0x024e
             java.util.ArrayList r13 = new java.util.ArrayList
             r13.<init>()
             r13.add(r6)
@@ -1660,23 +1631,23 @@ public class FileRefController extends BaseController {
             org.telegram.messenger.-$$Lambda$FileRefController$RDXaiJgBNoBRXHvdRyp25gAbrhI r2 = new org.telegram.messenger.-$$Lambda$FileRefController$RDXaiJgBNoBRXHvdRyp25gAbrhI
             r2.<init>(r6)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
-            goto L_0x0286
-        L_0x0282:
+            goto L_0x0252
+        L_0x024e:
             r17 = r2
             r18 = r4
-        L_0x0286:
+        L_0x0252:
             r13 = r7
-            goto L_0x02b8
-        L_0x0288:
+            goto L_0x0284
+        L_0x0254:
             r17 = r2
             r18 = r4
             boolean r2 = r6 instanceof org.telegram.tgnet.TLRPC$Chat
-            if (r2 == 0) goto L_0x02b8
+            if (r2 == 0) goto L_0x0284
             org.telegram.tgnet.TLRPC$Chat r6 = (org.telegram.tgnet.TLRPC$Chat) r6
             org.telegram.tgnet.TLRPC$InputFileLocation r2 = r14.location
             byte[] r2 = r0.getFileReference((org.telegram.tgnet.TLRPC$Chat) r6, (org.telegram.tgnet.TLRPC$InputFileLocation) r2, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
-            if (r29 == 0) goto L_0x02b7
-            if (r2 == 0) goto L_0x02b7
+            if (r29 == 0) goto L_0x0283
+            if (r2 == 0) goto L_0x0283
             java.util.ArrayList r4 = new java.util.ArrayList
             r4.<init>()
             r4.add(r6)
@@ -1687,37 +1658,37 @@ public class FileRefController extends BaseController {
             org.telegram.messenger.-$$Lambda$FileRefController$A-1O8Y7O6I_bfsQ6FpcKXatHfmg r4 = new org.telegram.messenger.-$$Lambda$FileRefController$A-1O8Y7O6I_bfsQ6FpcKXatHfmg
             r4.<init>(r6)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r4)
-        L_0x02b7:
+        L_0x0283:
             r13 = r2
-        L_0x02b8:
-            if (r13 == 0) goto L_0x02bc
-            goto L_0x01b5
-        L_0x02bc:
+        L_0x0284:
+            if (r13 == 0) goto L_0x0288
+            goto L_0x0181
+        L_0x0288:
             int r8 = r8 + 1
             r2 = r17
             r4 = r18
-            goto L_0x024a
-        L_0x02c3:
+            goto L_0x0216
+        L_0x028f:
             r18 = r4
             boolean r2 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messages_chats
-            if (r2 == 0) goto L_0x0310
+            if (r2 == 0) goto L_0x02dc
             r2 = r3
             org.telegram.tgnet.TLRPC$TL_messages_chats r2 = (org.telegram.tgnet.TLRPC$TL_messages_chats) r2
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r4 = r2.chats
             boolean r4 = r4.isEmpty()
-            if (r4 != 0) goto L_0x01b5
+            if (r4 != 0) goto L_0x0181
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r4 = r2.chats
             int r4 = r4.size()
             r8 = 0
-        L_0x02db:
-            if (r8 >= r4) goto L_0x01b5
+        L_0x02a7:
+            if (r8 >= r4) goto L_0x0181
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r5 = r2.chats
             java.lang.Object r5 = r5.get(r8)
             org.telegram.tgnet.TLRPC$Chat r5 = (org.telegram.tgnet.TLRPC$Chat) r5
             org.telegram.tgnet.TLRPC$InputFileLocation r6 = r14.location
             byte[] r13 = r0.getFileReference((org.telegram.tgnet.TLRPC$Chat) r5, (org.telegram.tgnet.TLRPC$InputFileLocation) r6, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
-            if (r13 == 0) goto L_0x030c
-            if (r29 == 0) goto L_0x01b5
+            if (r13 == 0) goto L_0x02d8
+            if (r29 == 0) goto L_0x0181
             java.util.ArrayList r2 = new java.util.ArrayList
             r2.<init>()
             r2.add(r5)
@@ -1728,34 +1699,34 @@ public class FileRefController extends BaseController {
             org.telegram.messenger.-$$Lambda$FileRefController$u1mwiWyTs-DxgRFVI1cxA8UQzdY r2 = new org.telegram.messenger.-$$Lambda$FileRefController$u1mwiWyTs-DxgRFVI1cxA8UQzdY
             r2.<init>(r5)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
-            goto L_0x0420
-        L_0x030c:
+            goto L_0x03ec
+        L_0x02d8:
             r6 = 0
             int r8 = r8 + 1
-            goto L_0x02db
-        L_0x0310:
+            goto L_0x02a7
+        L_0x02dc:
             r6 = 0
             boolean r2 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messages_savedGifs
-            if (r2 == 0) goto L_0x034e
+            if (r2 == 0) goto L_0x031a
             r2 = r3
             org.telegram.tgnet.TLRPC$TL_messages_savedGifs r2 = (org.telegram.tgnet.TLRPC$TL_messages_savedGifs) r2
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r4 = r2.gifs
             int r4 = r4.size()
             r8 = 0
-        L_0x031f:
-            if (r8 >= r4) goto L_0x0337
+        L_0x02eb:
+            if (r8 >= r4) goto L_0x0303
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r5 = r2.gifs
             java.lang.Object r5 = r5.get(r8)
             org.telegram.tgnet.TLRPC$Document r5 = (org.telegram.tgnet.TLRPC$Document) r5
             org.telegram.tgnet.TLRPC$InputFileLocation r7 = r14.location
             byte[] r13 = r0.getFileReference((org.telegram.tgnet.TLRPC$Document) r5, (org.telegram.tgnet.TLRPC$InputFileLocation) r7, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
-            if (r13 == 0) goto L_0x0334
-            goto L_0x0337
-        L_0x0334:
+            if (r13 == 0) goto L_0x0300
+            goto L_0x0303
+        L_0x0300:
             int r8 = r8 + 1
-            goto L_0x031f
-        L_0x0337:
-            if (r29 == 0) goto L_0x0420
+            goto L_0x02eb
+        L_0x0303:
+            if (r29 == 0) goto L_0x03ec
             org.telegram.messenger.MediaDataController r19 = r25.getMediaDataController()
             r20 = 0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r2 = r2.gifs
@@ -1764,56 +1735,56 @@ public class FileRefController extends BaseController {
             r24 = 1
             r21 = r2
             r19.processLoadedRecentDocuments(r20, r21, r22, r23, r24)
-            goto L_0x0420
-        L_0x034e:
+            goto L_0x03ec
+        L_0x031a:
             boolean r2 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messages_stickerSet
-            if (r2 == 0) goto L_0x0382
+            if (r2 == 0) goto L_0x034e
             r2 = r3
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r2 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r2
-            if (r13 != 0) goto L_0x0376
+            if (r13 != 0) goto L_0x0342
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r4 = r2.documents
             int r4 = r4.size()
             r8 = 0
-        L_0x035e:
-            if (r8 >= r4) goto L_0x0376
+        L_0x032a:
+            if (r8 >= r4) goto L_0x0342
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r5 = r2.documents
             java.lang.Object r5 = r5.get(r8)
             org.telegram.tgnet.TLRPC$Document r5 = (org.telegram.tgnet.TLRPC$Document) r5
             org.telegram.tgnet.TLRPC$InputFileLocation r7 = r14.location
             byte[] r13 = r0.getFileReference((org.telegram.tgnet.TLRPC$Document) r5, (org.telegram.tgnet.TLRPC$InputFileLocation) r7, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
-            if (r13 == 0) goto L_0x0373
-            goto L_0x0376
-        L_0x0373:
+            if (r13 == 0) goto L_0x033f
+            goto L_0x0342
+        L_0x033f:
             int r8 = r8 + 1
-            goto L_0x035e
-        L_0x0376:
-            if (r29 == 0) goto L_0x0420
+            goto L_0x032a
+        L_0x0342:
+            if (r29 == 0) goto L_0x03ec
             org.telegram.messenger.-$$Lambda$FileRefController$yZaY4zEXCY1VeTQK1827Wf1GbaU r4 = new org.telegram.messenger.-$$Lambda$FileRefController$yZaY4zEXCY1VeTQK1827Wf1GbaU
             r4.<init>(r2)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r4)
-            goto L_0x0420
-        L_0x0382:
+            goto L_0x03ec
+        L_0x034e:
             boolean r2 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messages_recentStickers
-            if (r2 == 0) goto L_0x03be
+            if (r2 == 0) goto L_0x038a
             r2 = r3
             org.telegram.tgnet.TLRPC$TL_messages_recentStickers r2 = (org.telegram.tgnet.TLRPC$TL_messages_recentStickers) r2
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r4 = r2.stickers
             int r4 = r4.size()
             r8 = 0
-        L_0x0390:
-            if (r8 >= r4) goto L_0x03a8
+        L_0x035c:
+            if (r8 >= r4) goto L_0x0374
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r5 = r2.stickers
             java.lang.Object r5 = r5.get(r8)
             org.telegram.tgnet.TLRPC$Document r5 = (org.telegram.tgnet.TLRPC$Document) r5
             org.telegram.tgnet.TLRPC$InputFileLocation r7 = r14.location
             byte[] r13 = r0.getFileReference((org.telegram.tgnet.TLRPC$Document) r5, (org.telegram.tgnet.TLRPC$InputFileLocation) r7, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
-            if (r13 == 0) goto L_0x03a5
-            goto L_0x03a8
-        L_0x03a5:
+            if (r13 == 0) goto L_0x0371
+            goto L_0x0374
+        L_0x0371:
             int r8 = r8 + 1
-            goto L_0x0390
-        L_0x03a8:
-            if (r29 == 0) goto L_0x0420
+            goto L_0x035c
+        L_0x0374:
+            if (r29 == 0) goto L_0x03ec
             org.telegram.messenger.MediaDataController r19 = r25.getMediaDataController()
             r20 = 0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r2 = r2.stickers
@@ -1822,29 +1793,29 @@ public class FileRefController extends BaseController {
             r24 = 1
             r21 = r2
             r19.processLoadedRecentDocuments(r20, r21, r22, r23, r24)
-            goto L_0x0420
-        L_0x03be:
+            goto L_0x03ec
+        L_0x038a:
             boolean r2 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messages_favedStickers
-            if (r2 == 0) goto L_0x03fa
+            if (r2 == 0) goto L_0x03c6
             r2 = r3
             org.telegram.tgnet.TLRPC$TL_messages_favedStickers r2 = (org.telegram.tgnet.TLRPC$TL_messages_favedStickers) r2
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r4 = r2.stickers
             int r4 = r4.size()
             r8 = 0
-        L_0x03cc:
-            if (r8 >= r4) goto L_0x03e4
+        L_0x0398:
+            if (r8 >= r4) goto L_0x03b0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r5 = r2.stickers
             java.lang.Object r5 = r5.get(r8)
             org.telegram.tgnet.TLRPC$Document r5 = (org.telegram.tgnet.TLRPC$Document) r5
             org.telegram.tgnet.TLRPC$InputFileLocation r7 = r14.location
             byte[] r13 = r0.getFileReference((org.telegram.tgnet.TLRPC$Document) r5, (org.telegram.tgnet.TLRPC$InputFileLocation) r7, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
-            if (r13 == 0) goto L_0x03e1
-            goto L_0x03e4
-        L_0x03e1:
+            if (r13 == 0) goto L_0x03ad
+            goto L_0x03b0
+        L_0x03ad:
             int r8 = r8 + 1
-            goto L_0x03cc
-        L_0x03e4:
-            if (r29 == 0) goto L_0x0420
+            goto L_0x0398
+        L_0x03b0:
+            if (r29 == 0) goto L_0x03ec
             org.telegram.messenger.MediaDataController r19 = r25.getMediaDataController()
             r20 = 2
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r2 = r2.stickers
@@ -1853,58 +1824,58 @@ public class FileRefController extends BaseController {
             r24 = 1
             r21 = r2
             r19.processLoadedRecentDocuments(r20, r21, r22, r23, r24)
-            goto L_0x0420
-        L_0x03fa:
+            goto L_0x03ec
+        L_0x03c6:
             boolean r2 = r3 instanceof org.telegram.tgnet.TLRPC$photos_Photos
-            if (r2 == 0) goto L_0x0420
+            if (r2 == 0) goto L_0x03ec
             r2 = r3
             org.telegram.tgnet.TLRPC$photos_Photos r2 = (org.telegram.tgnet.TLRPC$photos_Photos) r2
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r4 = r2.photos
             int r4 = r4.size()
             r8 = 0
-        L_0x0408:
-            if (r8 >= r4) goto L_0x0420
+        L_0x03d4:
+            if (r8 >= r4) goto L_0x03ec
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r5 = r2.photos
             java.lang.Object r5 = r5.get(r8)
             org.telegram.tgnet.TLRPC$Photo r5 = (org.telegram.tgnet.TLRPC$Photo) r5
             org.telegram.tgnet.TLRPC$InputFileLocation r7 = r14.location
             byte[] r13 = r0.getFileReference((org.telegram.tgnet.TLRPC$Photo) r5, (org.telegram.tgnet.TLRPC$InputFileLocation) r7, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
-            if (r13 == 0) goto L_0x041d
-            goto L_0x0420
-        L_0x041d:
+            if (r13 == 0) goto L_0x03e9
+            goto L_0x03ec
+        L_0x03e9:
             int r8 = r8 + 1
-            goto L_0x0408
-        L_0x0420:
-            if (r13 == 0) goto L_0x042f
+            goto L_0x03d4
+        L_0x03ec:
+            if (r13 == 0) goto L_0x03fb
             r2 = 0
-            if (r11 == 0) goto L_0x0428
+            if (r11 == 0) goto L_0x03f4
             r4 = r11[r2]
-            goto L_0x0429
-        L_0x0428:
+            goto L_0x03f5
+        L_0x03f4:
             r4 = r6
-        L_0x0429:
+        L_0x03f5:
             r0.onUpdateObjectReference(r14, r13, r4)
             r5 = 1
             r12 = 1
-            goto L_0x0438
-        L_0x042f:
+            goto L_0x0404
+        L_0x03fb:
             r2 = 0
             java.lang.Object[] r4 = r14.args
             r5 = 1
             r0.sendErrorToObject(r4, r5)
-        L_0x0438:
+        L_0x0404:
             int r9 = r9 + 1
             r2 = r27
             r5 = r16
             r4 = r18
             r8 = 1
             goto L_0x007d
-        L_0x0443:
+        L_0x040f:
             java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.messenger.FileRefController$Requester>> r2 = r0.locationRequester
             r2.remove(r1)
-            if (r12 == 0) goto L_0x044d
+            if (r12 == 0) goto L_0x0419
             r0.putReponseToCache(r1, r3)
-        L_0x044d:
+        L_0x0419:
             return r12
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileRefController.onRequestComplete(java.lang.String, java.lang.String, org.telegram.tgnet.TLObject, boolean):boolean");

@@ -88,8 +88,6 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private boolean firstLocationsLoaded;
     private BaseFragment fragment;
     private FrameLayout frameLayout;
-    public float hotspotX;
-    public float hotspotY;
     private boolean isLocation;
     private boolean isMusic;
     /* access modifiers changed from: private */
@@ -421,7 +419,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         });
         setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                FragmentContextView.this.lambda$new$8$FragmentContextView(view);
+                FragmentContextView.this.lambda$new$7$FragmentContextView(view);
             }
         });
     }
@@ -541,8 +539,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$8 */
-    public /* synthetic */ void lambda$new$8$FragmentContextView(View view) {
+    /* renamed from: lambda$new$7 */
+    public /* synthetic */ void lambda$new$7$FragmentContextView(View view) {
         ChatActivity chatActivity;
         ChatObject.Call groupCall;
         long j;
@@ -613,21 +611,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }));
             }
         } else if (i == 3) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    FragmentContextView.this.lambda$null$7$FragmentContextView();
-                }
-            }, Theme.getFragmentContextViewWavesDrawable().getRippleFinishedDelay());
+            if (VoIPService.getSharedInstance() != null && (getContext() instanceof LaunchActivity)) {
+                GroupCallActivity.create((LaunchActivity) getContext(), AccountInstance.getInstance(VoIPService.getSharedInstance().getAccount()));
+            }
         } else if (i == 4 && this.fragment.getParentActivity() != null && (groupCall = chatActivity.getGroupCall()) != null) {
             VoIPHelper.startCall((chatActivity = (ChatActivity) this.fragment).getMessagesController().getChat(Integer.valueOf(groupCall.chatId)), false, this.fragment.getParentActivity());
-        }
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$FragmentContextView() {
-        if (VoIPService.getSharedInstance() != null && (getContext() instanceof LaunchActivity)) {
-            GroupCallActivity.create((LaunchActivity) getContext(), AccountInstance.getInstance(VoIPService.getSharedInstance().getAccount()));
         }
     }
 
@@ -1623,7 +1611,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r3 = r3.participants_count
             if (r3 != 0) goto L_0x01a7
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r3 = r13.subtitleTextView
-            r6 = 2131625909(0x7f0e07b5, float:1.887904E38)
+            r6 = 2131625910(0x7f0e07b6, float:1.8879041E38)
             java.lang.String r8 = "MembersTalkingNobody"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
             r3.setText(r6)
@@ -2018,8 +2006,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
         if (motionEvent.getAction() == 0) {
-            this.hotspotX = motionEvent.getX();
-            this.hotspotY = motionEvent.getY();
+            motionEvent.getX();
+            motionEvent.getY();
         }
         return super.onInterceptTouchEvent(motionEvent);
     }

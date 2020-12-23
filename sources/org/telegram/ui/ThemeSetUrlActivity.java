@@ -22,7 +22,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -51,6 +50,7 @@ import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Cells.ThemePreviewMessagesCell;
 import org.telegram.ui.Cells.ThemesHorizontalListCell;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -109,7 +109,9 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         public void onClick(View view) {
             try {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.url));
-                Toast.makeText(ThemeSetUrlActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", NUM), 0).show();
+                if (BulletinFactory.canShowBulletin(ThemeSetUrlActivity.this)) {
+                    BulletinFactory.createCopyLinkBulletin((BaseFragment) ThemeSetUrlActivity.this).show();
+                }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }

@@ -453,7 +453,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r1 = r0.self
             if (r1 == 0) goto L_0x0081
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131626996(0x7f0e0bf4, float:1.8881244E38)
+            r1 = 2131626997(0x7f0e0bf5, float:1.8881246E38)
             java.lang.String r3 = "SavedMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
@@ -503,7 +503,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = android.text.TextUtils.isEmpty(r0)
             if (r0 == 0) goto L_0x00f7
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131627181(0x7f0e0cad, float:1.888162E38)
+            r1 = 2131627182(0x7f0e0cae, float:1.8881621E38)
             java.lang.String r3 = "SharedContentTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
@@ -574,7 +574,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r0.setActionBarMenuItemSearchListener(r1)
             r6.searchItem = r0
             java.lang.String r1 = "Search"
-            r3 = 2131627008(0x7f0e0CLASSNAME, float:1.8881268E38)
+            r3 = 2131627009(0x7f0e0CLASSNAME, float:1.888127E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r1, r3)
             r0.setSearchFieldHint(r4)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
@@ -900,7 +900,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1 = r1[r14]
             org.telegram.ui.Components.StickerEmptyView r1 = r1.emptyView
             android.widget.TextView r1 = r1.title
-            r2 = 2131626099(0x7f0e0873, float:1.8879425E38)
+            r2 = 2131626100(0x7f0e0874, float:1.8879427E38)
             java.lang.String r4 = "NoResult"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r1.setText(r2)
@@ -908,7 +908,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1 = r1[r14]
             org.telegram.ui.Components.StickerEmptyView r1 = r1.emptyView
             android.widget.TextView r1 = r1.subtitle
-            r2 = 2131627013(0x7f0e0CLASSNAME, float:1.8881278E38)
+            r2 = 2131627014(0x7f0e0CLASSNAME, float:1.888128E38)
             java.lang.String r4 = "SearchEmptyViewFilteredSubtitle2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r1.setText(r2)
@@ -1783,7 +1783,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r2)
             if (r0 != 0) goto L_0x00cd
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r1 = 2131627188(0x7f0e0cb4, float:1.8881633E38)
+            r1 = 2131627189(0x7f0e0cb5, float:1.8881635E38)
             java.lang.String r9 = "SharedMediaTab2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r0.addTextTab(r2, r1)
@@ -1795,14 +1795,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r7)
             if (r0 != 0) goto L_0x00e9
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r1 = 2131627182(0x7f0e0cae, float:1.8881621E38)
+            r1 = 2131627183(0x7f0e0caf, float:1.8881623E38)
             java.lang.String r9 = "SharedFilesTab2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r0.addTextTab(r7, r1)
         L_0x00e9:
             long r0 = r12.dialog_id
             int r1 = (int) r0
-            r0 = 2131627190(0x7f0e0cb6, float:1.8881637E38)
+            r0 = 2131627191(0x7f0e0cb7, float:1.888164E38)
             java.lang.String r9 = "SharedMusicTab2"
             if (r1 == 0) goto L_0x0127
             int[] r1 = r12.hasMedia
@@ -1812,7 +1812,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r1 = r1.hasTab(r4)
             if (r1 != 0) goto L_0x010f
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r1 = r12.scrollSlidingTextTabStrip
-            r3 = 2131627186(0x7f0e0cb2, float:1.888163E38)
+            r3 = 2131627187(0x7f0e0cb3, float:1.8881631E38)
             java.lang.String r8 = "SharedLinksTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r3)
             r1.addTextTab(r4, r3)
@@ -1856,7 +1856,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r5)
             if (r0 != 0) goto L_0x0176
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r1 = 2131627194(0x7f0e0cba, float:1.8881646E38)
+            r1 = 2131627195(0x7f0e0cbb, float:1.8881648E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.addTextTab(r5, r1)

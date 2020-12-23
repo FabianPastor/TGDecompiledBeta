@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -37,6 +36,7 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.TextBlockCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -143,7 +143,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                 if (this.invite != null) {
                     try {
                         ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.invite.link));
-                        Toast.makeText(getParentActivity(), LocaleController.getString("LinkCopied", NUM), 0).show();
+                        BulletinFactory.createCopyLinkBulletin((BaseFragment) this).show();
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);
                     }

@@ -801,7 +801,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         public long getItemId(int i) {
-            if (i >= this.recentPostsStartRow && i <= this.recentPostsEndRow) {
+            if (i >= this.recentPostsStartRow && i < this.recentPostsEndRow) {
                 return (long) ((RecentPostInfo) StatisticActivity.this.recentPostsLoaded.get(i - this.recentPostsStartRow)).counters.msg_id;
             }
             if (i == this.growCell) {
@@ -3443,7 +3443,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r11 = r6
                 r12 = r11
             L_0x0064:
-                r9 = 2131627270(0x7f0e0d06, float:1.88818E38)
+                r9 = 2131627271(0x7f0e0d07, float:1.8881802E38)
                 java.lang.String r10 = "StatisticOpenProfile"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
@@ -3453,7 +3453,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r9 = 2
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r2.add(r9)
-                r9 = 2131627272(0x7f0e0d08, float:1.8881804E38)
+                r9 = 2131627273(0x7f0e0d09, float:1.8881806E38)
                 java.lang.String r10 = "StatisticSearchUserHistory"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
@@ -3570,7 +3570,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r9 = 0
             L_0x017e:
                 if (r9 == 0) goto L_0x0186
-                r0 = 2131627131(0x7f0e0c7b, float:1.8881518E38)
+                r0 = 2131627132(0x7f0e0c7c, float:1.888152E38)
                 java.lang.String r6 = "SetAsAdmin"
                 goto L_0x018b
             L_0x0186:

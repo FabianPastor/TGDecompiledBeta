@@ -246,29 +246,29 @@ public class AvatarsImageView extends FrameLayout {
             org.telegram.messenger.UserConfig r7 = r7.getUserConfig()
             int r7 = r7.getClientUserId()
             if (r6 != r7) goto L_0x006c
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
-            r1 = r1[r15]
-            r6 = 0
-            long unused = r1.lastSpeakTime = r6
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r6 = r0.animatingStates
+            r6 = r6[r15]
+            r7 = 0
+            long unused = r6.lastSpeakTime = r7
             goto L_0x0081
         L_0x006c:
             org.telegram.ui.Components.AvatarsImageView$DrawingState[] r6 = r0.animatingStates
             r6 = r6[r15]
-            int r1 = r1.active_date
-            long r7 = (long) r1
+            int r7 = r1.active_date
+            long r7 = (long) r7
             long unused = r6.lastSpeakTime = r7
             goto L_0x0081
         L_0x0077:
             org.telegram.ui.Components.AvatarsImageView$DrawingState[] r6 = r0.animatingStates
             r6 = r6[r15]
-            int r1 = r1.active_date
-            long r7 = (long) r1
+            int r7 = r1.active_date
+            long r7 = (long) r7
             long unused = r6.lastSpeakTime = r7
         L_0x0081:
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
-            r1 = r1[r15]
-            int r6 = r2.id
-            int unused = r1.id = r6
+            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r6 = r0.animatingStates
+            r6 = r6[r15]
+            int r1 = r1.user_id
+            int unused = r6.id = r1
             r12 = r2
             goto L_0x00a7
         L_0x008c:

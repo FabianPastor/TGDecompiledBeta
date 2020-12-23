@@ -3361,6 +3361,7 @@ public final class R {
         public static final int LinkChecking = NUM;
         public static final int LinkCopied = NUM;
         public static final int LinkCopiedPrivate = NUM;
+        public static final int LinkCopiedPrivateInfo = NUM;
         public static final int LinkInUse = NUM;
         public static final int LinkInfo = NUM;
         public static final int LinkInvalid = NUM;

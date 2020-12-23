@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Toast;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -51,6 +50,7 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextBlockCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -494,7 +494,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         if (this.invite != null) {
             try {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.invite.link));
-                Toast.makeText(getParentActivity(), LocaleController.getString("LinkCopied", NUM), 0).show();
+                BulletinFactory.createCopyLinkBulletin((BaseFragment) this).show();
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
@@ -507,7 +507,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         if (this.invite != null) {
             try {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.invite.link));
-                Toast.makeText(getParentActivity(), LocaleController.getString("LinkCopied", NUM), 0).show();
+                BulletinFactory.createCopyLinkBulletin((BaseFragment) this).show();
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }

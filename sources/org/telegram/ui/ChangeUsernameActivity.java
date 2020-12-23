@@ -20,7 +20,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -45,6 +44,7 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -82,7 +82,9 @@ public class ChangeUsernameActivity extends BaseFragment {
         public void onClick(View view) {
             try {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.url));
-                Toast.makeText(ChangeUsernameActivity.this.getParentActivity(), LocaleController.getString("LinkCopied", NUM), 0).show();
+                if (BulletinFactory.canShowBulletin(ChangeUsernameActivity.this)) {
+                    BulletinFactory.createCopyLinkBulletin((BaseFragment) ChangeUsernameActivity.this).show();
+                }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }

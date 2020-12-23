@@ -89,6 +89,7 @@ public class SvgHelper {
         private float colorAlpha;
         /* access modifiers changed from: private */
         public ArrayList<Object> commands = new ArrayList<>();
+        private float crossfadeAlpha;
         private int currentColor;
         private String currentColorKey;
         /* access modifiers changed from: private */
@@ -103,9 +104,6 @@ public class SvgHelper {
 
         public int getOpacity() {
             return -2;
-        }
-
-        public void setAlpha(int i) {
         }
 
         public void setColorFilter(ColorFilter colorFilter) {
@@ -131,6 +129,8 @@ public class SvgHelper {
                     canvas.restore();
                 } else {
                     Paint paint = this.paints.get(obj);
+                    int alpha = paint.getAlpha();
+                    paint.setAlpha((int) (this.crossfadeAlpha * ((float) alpha)));
                     if (obj instanceof Path) {
                         canvas.drawPath((Path) obj, paint);
                     } else if (obj instanceof Rect) {
@@ -151,6 +151,7 @@ public class SvgHelper {
                         float f = roundRect.rx;
                         canvas.drawRoundRect(rectF, f, f, paint);
                     }
+                    paint.setAlpha(alpha);
                 }
             }
             canvas.restore();
@@ -176,9 +177,9 @@ public class SvgHelper {
                     if (runnable != null) {
                         AndroidUtilities.cancelRunOnUIThread(runnable);
                     }
-                    $$Lambda$SvgHelper$SvgDrawable$V3AQlaeus1WjtJE7XfMxnsHItw r14 = $$Lambda$SvgHelper$SvgDrawable$V3AQlaeus1WjtJE7XfMxnsHItw.INSTANCE;
-                    shiftRunnable = r14;
-                    AndroidUtilities.runOnUIThread(r14, (long) (((int) (1000.0f / AndroidUtilities.screenRefreshRate)) - 1));
+                    $$Lambda$SvgHelper$SvgDrawable$V3AQlaeus1WjtJE7XfMxnsHItw r15 = $$Lambda$SvgHelper$SvgDrawable$V3AQlaeus1WjtJE7XfMxnsHItw.INSTANCE;
+                    shiftRunnable = r15;
+                    AndroidUtilities.runOnUIThread(r15, (long) (((int) (1000.0f / AndroidUtilities.screenRefreshRate)) - 1));
                 }
                 ImageReceiver imageReceiver = this.parentImageReceiver;
                 if (imageReceiver != null) {
@@ -194,6 +195,10 @@ public class SvgHelper {
                     imageReceiver2.invalidate();
                 }
             }
+        }
+
+        public void setAlpha(int i) {
+            this.crossfadeAlpha = ((float) i) / 255.0f;
         }
 
         /* access modifiers changed from: private */

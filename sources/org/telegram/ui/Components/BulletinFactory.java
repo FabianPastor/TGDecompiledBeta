@@ -66,9 +66,9 @@ public final class BulletinFactory {
         }
 
         private enum Icon {
-            SAVED_TO_DOWNLOADS(NUM, 1, "Box", "Arrow"),
+            SAVED_TO_DOWNLOADS(NUM, 2, "Box", "Arrow"),
             SAVED_TO_GALLERY(NUM, 0, "Box", "Arrow", "Mask", "Arrow 2", "Splash"),
-            SAVED_TO_MUSIC(NUM, 1, "Box", "Arrow");
+            SAVED_TO_MUSIC(NUM, 2, "Box", "Arrow");
             
             /* access modifiers changed from: private */
             public final String[] layers;
@@ -118,6 +118,24 @@ public final class BulletinFactory {
         return create(lottieLayout, 1500);
     }
 
+    public Bulletin createCopyLinkBulletin() {
+        return createCopyLinkBulletin(false);
+    }
+
+    public Bulletin createCopyLinkBulletin(boolean z) {
+        if (z) {
+            Bulletin.TwoLineLottieLayout twoLineLottieLayout = new Bulletin.TwoLineLottieLayout(getContext());
+            twoLineLottieLayout.setAnimation(NUM, 36, 36, "Wibe", "Circle");
+            twoLineLottieLayout.titleTextView.setText(LocaleController.getString("LinkCopied", NUM));
+            twoLineLottieLayout.subtitleTextView.setText(LocaleController.getString("LinkCopiedPrivateInfo", NUM));
+            return create(twoLineLottieLayout, 2750);
+        }
+        Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext());
+        lottieLayout.setAnimation(NUM, 36, 36, "Wibe", "Circle");
+        lottieLayout.textView.setText(LocaleController.getString("LinkCopied", NUM));
+        return create(lottieLayout, 1500);
+    }
+
     private Bulletin create(Bulletin.Layout layout, int i) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment != null) {
@@ -140,7 +158,7 @@ public final class BulletinFactory {
             android.app.Activity r1 = r10.getParentActivity()
             r0.<init>(r1)
             java.lang.String r1 = "Hours"
-            r2 = 2131626277(0x7f0e0925, float:1.8879786E38)
+            r2 = 2131626278(0x7f0e0926, float:1.8879788E38)
             java.lang.String r3 = "NotificationsMutedForHint"
             r4 = 4
             r5 = 3
@@ -152,7 +170,7 @@ public final class BulletinFactory {
             if (r11 == r6) goto L_0x003a
             if (r11 == r5) goto L_0x0030
             if (r11 != r4) goto L_0x002a
-            r11 = 2131626298(0x7f0e093a, float:1.8879828E38)
+            r11 = 2131626299(0x7f0e093b, float:1.887983E38)
             java.lang.String r1 = "NotificationsUnmutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r1, r11)
             r1 = 0
@@ -162,7 +180,7 @@ public final class BulletinFactory {
             r10.<init>()
             throw r10
         L_0x0030:
-            r11 = 2131626278(0x7f0e0926, float:1.8879788E38)
+            r11 = 2131626279(0x7f0e0927, float:1.887979E38)
             java.lang.String r1 = "NotificationsMutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r1, r11)
             goto L_0x0064
@@ -230,13 +248,13 @@ public final class BulletinFactory {
         return createMuteBulletin(baseFragment, z ? 3 : 4);
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v1, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v3, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v4, resolved type: org.telegram.ui.Components.Bulletin$TwoLineLottieLayout} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v5, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v1, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v3, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v4, resolved type: org.telegram.ui.Components.Bulletin$TwoLineLottieLayout} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v5, resolved type: org.telegram.ui.Components.Bulletin$LottieLayout} */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static org.telegram.ui.Components.Bulletin createUnpinAllMessagesBulletin(org.telegram.ui.ActionBar.BaseFragment r7, int r8, boolean r9, java.lang.Runnable r10, java.lang.Runnable r11) {
+    public static org.telegram.ui.Components.Bulletin createUnpinAllMessagesBulletin(org.telegram.ui.ActionBar.BaseFragment r8, int r9, boolean r10, java.lang.Runnable r11, java.lang.Runnable r12) {
         /*
             java.lang.String r0 = "Line"
             java.lang.String r1 = "Pin"
@@ -244,48 +262,49 @@ public final class BulletinFactory {
             r3 = 2
             r4 = 2131558433(0x7f0d0021, float:1.8742182E38)
             r5 = 1
-            if (r9 == 0) goto L_0x003b
-            org.telegram.ui.Components.Bulletin$TwoLineLottieLayout r8 = new org.telegram.ui.Components.Bulletin$TwoLineLottieLayout
-            android.app.Activity r9 = r7.getParentActivity()
-            r8.<init>(r9)
-            java.lang.String[] r9 = new java.lang.String[r3]
-            r9[r2] = r1
-            r9[r5] = r0
-            r8.setAnimation(r4, r9)
-            android.widget.TextView r9 = r8.titleTextView
-            r0 = 2131626719(0x7f0e0adf, float:1.8880682E38)
+            r6 = 28
+            if (r10 == 0) goto L_0x003d
+            org.telegram.ui.Components.Bulletin$TwoLineLottieLayout r9 = new org.telegram.ui.Components.Bulletin$TwoLineLottieLayout
+            android.app.Activity r10 = r8.getParentActivity()
+            r9.<init>(r10)
+            java.lang.String[] r10 = new java.lang.String[r3]
+            r10[r2] = r1
+            r10[r5] = r0
+            r9.setAnimation(r4, r6, r6, r10)
+            android.widget.TextView r10 = r9.titleTextView
+            r0 = 2131626720(0x7f0e0ae0, float:1.8880684E38)
             java.lang.String r1 = "PinnedMessagesHidden"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r9.setText(r0)
-            android.widget.TextView r9 = r8.subtitleTextView
-            r0 = 2131626720(0x7f0e0ae0, float:1.8880684E38)
+            r10.setText(r0)
+            android.widget.TextView r10 = r9.subtitleTextView
+            r0 = 2131626721(0x7f0e0ae1, float:1.8880686E38)
             java.lang.String r1 = "PinnedMessagesHiddenInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r9.setText(r0)
-            goto L_0x0059
-        L_0x003b:
-            org.telegram.ui.Components.Bulletin$LottieLayout r9 = new org.telegram.ui.Components.Bulletin$LottieLayout
-            android.app.Activity r6 = r7.getParentActivity()
-            r9.<init>(r6)
+            r10.setText(r0)
+            goto L_0x005b
+        L_0x003d:
+            org.telegram.ui.Components.Bulletin$LottieLayout r10 = new org.telegram.ui.Components.Bulletin$LottieLayout
+            android.app.Activity r7 = r8.getParentActivity()
+            r10.<init>(r7)
             java.lang.String[] r3 = new java.lang.String[r3]
             r3[r2] = r1
             r3[r5] = r0
-            r9.setAnimation(r4, r3)
-            android.widget.TextView r0 = r9.textView
+            r10.setAnimation(r4, r6, r6, r3)
+            android.widget.TextView r0 = r10.textView
             java.lang.String r1 = "MessagesUnpinned"
-            java.lang.String r8 = org.telegram.messenger.LocaleController.formatPluralString(r1, r8)
-            r0.setText(r8)
-            r8 = r9
-        L_0x0059:
-            org.telegram.ui.Components.Bulletin$UndoButton r9 = new org.telegram.ui.Components.Bulletin$UndoButton
-            android.app.Activity r0 = r7.getParentActivity()
-            r9.<init>(r0, r5)
-            r9.setUndoAction(r10)
-            r9.setDelayedAction(r11)
-            r8.setButton(r9)
-            r9 = 5000(0x1388, float:7.006E-42)
-            org.telegram.ui.Components.Bulletin r7 = org.telegram.ui.Components.Bulletin.make((org.telegram.ui.ActionBar.BaseFragment) r7, (org.telegram.ui.Components.Bulletin.Layout) r8, (int) r9)
-            return r7
+            java.lang.String r9 = org.telegram.messenger.LocaleController.formatPluralString(r1, r9)
+            r0.setText(r9)
+            r9 = r10
+        L_0x005b:
+            org.telegram.ui.Components.Bulletin$UndoButton r10 = new org.telegram.ui.Components.Bulletin$UndoButton
+            android.app.Activity r0 = r8.getParentActivity()
+            r10.<init>(r0, r5)
+            r10.setUndoAction(r11)
+            r10.setDelayedAction(r12)
+            r9.setButton(r10)
+            r10 = 5000(0x1388, float:7.006E-42)
+            org.telegram.ui.Components.Bulletin r8 = org.telegram.ui.Components.Bulletin.make((org.telegram.ui.ActionBar.BaseFragment) r8, (org.telegram.ui.Components.Bulletin.Layout) r9, (int) r10)
+            return r8
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.BulletinFactory.createUnpinAllMessagesBulletin(org.telegram.ui.ActionBar.BaseFragment, int, boolean, java.lang.Runnable, java.lang.Runnable):org.telegram.ui.Components.Bulletin");
     }
@@ -326,6 +345,10 @@ public final class BulletinFactory {
         return Bulletin.make(baseFragment, (Bulletin.Layout) lottieLayout, 1500);
     }
 
+    public static Bulletin createCopyLinkBulletin(BaseFragment baseFragment) {
+        return of(baseFragment).createCopyLinkBulletin();
+    }
+
     public static Bulletin createPinMessageBulletin(BaseFragment baseFragment) {
         return createPinMessageBulletin(baseFragment, true, (Runnable) null, (Runnable) null);
     }
@@ -336,7 +359,7 @@ public final class BulletinFactory {
 
     private static Bulletin createPinMessageBulletin(BaseFragment baseFragment, boolean z, Runnable runnable, Runnable runnable2) {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(baseFragment.getParentActivity());
-        lottieLayout.setAnimation(z ? NUM : NUM, "Pin", "Line");
+        lottieLayout.setAnimation(z ? NUM : NUM, 28, 28, "Pin", "Line");
         lottieLayout.textView.setText(LocaleController.getString(z ? "MessagePinnedHint" : "MessageUnpinnedHint", z ? NUM : NUM));
         if (!z) {
             Bulletin.UndoButton undoButton = new Bulletin.UndoButton(baseFragment.getParentActivity(), true);

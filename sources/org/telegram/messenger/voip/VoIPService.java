@@ -267,8 +267,7 @@ public class VoIPService extends VoIPBaseService {
                         setAudioOutput(0);
                     }
                 }
-                TLRPC$User tLRPC$User = this.user;
-                if (tLRPC$User == null && this.chat == null) {
+                if (this.user == null && this.chat == null) {
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.w("VoIPService: user == null AND chat == null");
                     }
@@ -276,8 +275,14 @@ public class VoIPService extends VoIPBaseService {
                     return 2;
                 }
                 VoIPBaseService.sharedInstance = this;
+                synchronized (VoIPBaseService.sync) {
+                    if (VoIPBaseService.setModeRunnable != null) {
+                        Utilities.globalQueue.cancelRunnable(VoIPBaseService.setModeRunnable);
+                        VoIPBaseService.setModeRunnable = null;
+                    }
+                }
                 if (this.isOutgoing) {
-                    if (tLRPC$User != null) {
+                    if (this.user != null) {
                         dispatchStateChanged(14);
                         if (VoIPBaseService.USE_CONNECTION_SERVICE) {
                             Bundle bundle = new Bundle();
@@ -286,8 +291,8 @@ public class VoIPService extends VoIPBaseService {
                             bundle2.putInt("call_type", 1);
                             bundle.putBundle("android.telecom.extra.OUTGOING_CALL_EXTRAS", bundle2);
                             ContactsController instance = ContactsController.getInstance(this.currentAccount);
-                            TLRPC$User tLRPC$User2 = this.user;
-                            instance.createOrUpdateConnectionServiceContact(tLRPC$User2.id, tLRPC$User2.first_name, tLRPC$User2.last_name);
+                            TLRPC$User tLRPC$User = this.user;
+                            instance.createOrUpdateConnectionServiceContact(tLRPC$User.id, tLRPC$User.first_name, tLRPC$User.last_name);
                             ((TelecomManager) getSystemService("telecom")).placeCall(Uri.fromParts("tel", "+99084" + this.user.id, (String) null), bundle);
                         } else {
                             $$Lambda$VoIPService$cnIW_wfBChuvGeQZ5_THjfGbn8I r9 = new Runnable() {

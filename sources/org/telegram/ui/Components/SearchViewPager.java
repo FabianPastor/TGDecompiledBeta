@@ -51,6 +51,7 @@ import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.FilteredSearchView;
 
 public class SearchViewPager extends ViewPagerFixed implements FilteredSearchView.UiCallback {
+    boolean attached;
     int currentAccount = UserConfig.selectedAccount;
     ArrayList<SearchResultsEnterAnimator> currentAnimators = new ArrayList<>();
     private ArrayList<FiltersView.MediaFilterData> currentSearchFilters = new ArrayList<>();
@@ -223,7 +224,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
 
     public void onTextChanged(String str) {
         this.lastSearchString = str;
-        search(getCurrentView(), getCurrentPosition(), str, false);
+        search(getCurrentView(), getCurrentPosition(), str, !this.attached);
     }
 
     /* access modifiers changed from: private */
@@ -262,6 +263,8 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 if (z) {
                     this.emptyView.showProgress(!this.dialogsSearchAdapter.isSearching(), false);
                     this.emptyView.showProgress(this.dialogsSearchAdapter.isSearching(), false);
+                } else {
+                    this.emptyView.showProgress(this.dialogsSearchAdapter.isSearching(), true);
                 }
                 if (z) {
                     this.noMediaFiltersSearchView.setVisibility(8);
@@ -844,5 +847,17 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             view.setAlpha(this.progress);
             return true;
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.attached = true;
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        this.attached = false;
     }
 }

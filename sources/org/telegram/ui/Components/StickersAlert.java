@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
@@ -108,7 +107,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     private Activity parentActivity;
     /* access modifiers changed from: private */
     public BaseFragment parentFragment;
-    private TextView pickerBottomLayout;
+    /* access modifiers changed from: private */
+    public TextView pickerBottomLayout;
     /* access modifiers changed from: private */
     public ContentPreviewViewer.ContentPreviewViewerDelegate previewDelegate = new ContentPreviewViewer.ContentPreviewViewerDelegate() {
         public /* synthetic */ String getQuery(boolean z) {
@@ -1066,20 +1066,28 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
     /* access modifiers changed from: private */
     public void onSubItemClick(int i) {
+        BaseFragment baseFragment;
         if (this.stickerSet != null) {
             String str = "https://" + MessagesController.getInstance(this.currentAccount).linkPrefix + "/addstickers/" + this.stickerSet.set.short_name;
             if (i == 1) {
-                ShareAlert shareAlert = new ShareAlert(getContext(), (ArrayList<MessageObject>) null, str, false, str, false);
-                BaseFragment baseFragment = this.parentFragment;
-                if (baseFragment != null) {
-                    baseFragment.showDialog(shareAlert);
+                Context context = this.parentActivity;
+                if (context == null && (baseFragment = this.parentFragment) != null) {
+                    context = baseFragment.getParentActivity();
+                }
+                if (context == null) {
+                    context = getContext();
+                }
+                ShareAlert shareAlert = new ShareAlert(context, (ArrayList<MessageObject>) null, str, false, str, false);
+                BaseFragment baseFragment2 = this.parentFragment;
+                if (baseFragment2 != null) {
+                    baseFragment2.showDialog(shareAlert);
                 } else {
                     shareAlert.show();
                 }
             } else if (i == 2) {
                 try {
                     AndroidUtilities.addToClipboard(str);
-                    Toast.makeText(ApplicationLoader.applicationContext, LocaleController.getString("LinkCopied", NUM), 0).show();
+                    BulletinFactory.of((FrameLayout) this.containerView).createCopyLinkBulletin().show();
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }
@@ -1195,7 +1203,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r1 = r0.set
             boolean r1 = r1.masks
-            r6 = 2131626886(0x7f0e0b86, float:1.888102E38)
+            r6 = 2131626887(0x7f0e0b87, float:1.8881023E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r1 == 0) goto L_0x00d1
             java.lang.Object[] r1 = new java.lang.Object[r5]
@@ -1464,6 +1472,37 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         }
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onStart() {
+        super.onStart();
+        Bulletin.addDelegate((FrameLayout) this.containerView, (Bulletin.Delegate) new Bulletin.Delegate() {
+            public /* synthetic */ void onHide(Bulletin bulletin) {
+                Bulletin.Delegate.CC.$default$onHide(this, bulletin);
+            }
+
+            public /* synthetic */ void onOffsetChange(float f) {
+                Bulletin.Delegate.CC.$default$onOffsetChange(this, f);
+            }
+
+            public /* synthetic */ void onShow(Bulletin bulletin) {
+                Bulletin.Delegate.CC.$default$onShow(this, bulletin);
+            }
+
+            public int getBottomOffset() {
+                if (StickersAlert.this.pickerBottomLayout != null) {
+                    return StickersAlert.this.pickerBottomLayout.getHeight();
+                }
+                return 0;
+            }
+        });
+    }
+
+    /* access modifiers changed from: protected */
+    public void onStop() {
+        super.onStop();
+        Bulletin.removeDelegate((FrameLayout) this.containerView);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {

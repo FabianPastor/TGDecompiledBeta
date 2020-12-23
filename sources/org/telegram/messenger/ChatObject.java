@@ -687,6 +687,11 @@ public class ChatObject {
         return ((tLRPC$Chat instanceof TLRPC$TL_channel) || (tLRPC$Chat instanceof TLRPC$TL_channelForbidden)) && tLRPC$Chat.megagroup;
     }
 
+    public static boolean isMegagroup(int i, int i2) {
+        TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Integer.valueOf(i2));
+        return isChannel(chat) && chat.megagroup;
+    }
+
     /* JADX WARNING: Code restructure failed: missing block: B:3:0x0006, code lost:
         r1 = r1.admin_rights;
      */

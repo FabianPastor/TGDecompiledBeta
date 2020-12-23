@@ -17,7 +17,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -449,7 +448,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r13 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            r0 = 2131627848(0x7f0e0var_, float:1.8882972E38)
+            r0 = 2131627849(0x7f0e0var_, float:1.8882974E38)
             java.lang.String r1 = "YourContacts"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r13.setText(r0)
@@ -492,7 +491,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r13 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            r0 = 2131626866(0x7f0e0b72, float:1.888098E38)
+            r0 = 2131626867(0x7f0e0b73, float:1.8880982E38)
             java.lang.String r1 = "RecentlyViewed"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r13.setText(r0)
@@ -507,7 +506,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             java.lang.String r1 = "windowBackgroundWhiteBlueHeader"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setTextColor(r1)
-            r1 = 2131626867(0x7f0e0b73, float:1.8880982E38)
+            r1 = 2131626868(0x7f0e0b74, float:1.8880984E38)
             java.lang.String r4 = "RecentlyViewedHide"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setText(r1)
@@ -728,6 +727,10 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         HashSet<Long> preloadedErrorMap = new HashSet<>();
         boolean resumed;
 
+        private boolean preloadIsAvilable() {
+            return false;
+        }
+
         public void updateList() {
         }
 
@@ -747,7 +750,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
         /* access modifiers changed from: private */
         public void start() {
-            if (preloadidAvilable() && this.resumed && !this.preloadDialogsPool.isEmpty() && this.currentRequestCount < 4 && this.networkRequestCount <= 6) {
+            if (preloadIsAvilable() && this.resumed && !this.preloadDialogsPool.isEmpty() && this.currentRequestCount < 4 && this.networkRequestCount <= 6) {
                 final long longValue = this.preloadDialogsPool.remove(0).longValue();
                 this.currentRequestCount++;
                 this.loadingDialogs.add(Long.valueOf(longValue));
@@ -1041,10 +1044,6 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                     }
                 });
             }
-        }
-
-        private boolean preloadidAvilable() {
-            return DownloadController.getInstance(UserConfig.selectedAccount).getCurrentDownloadMask() != 0;
         }
 
         public boolean isReady(long j) {

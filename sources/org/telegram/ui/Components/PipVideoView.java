@@ -31,6 +31,8 @@ import org.telegram.ui.PhotoViewer;
 
 public class PipVideoView {
     /* access modifiers changed from: private */
+    public AnimatorSet animatorSet;
+    /* access modifiers changed from: private */
     public View controlsView;
     private DecelerateInterpolator decelerateInterpolator;
     private boolean isInAppOnly;
@@ -343,8 +345,13 @@ public class PipVideoView {
                 return true;
             }
 
-            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-                return super.onInterceptTouchEvent(motionEvent);
+            /* access modifiers changed from: protected */
+            public void onDetachedFromWindow() {
+                super.onDetachedFromWindow();
+                if (PipVideoView.this.animatorSet != null) {
+                    PipVideoView.this.animatorSet.cancel();
+                    AnimatorSet unused = PipVideoView.this.animatorSet = null;
+                }
             }
         };
         if (f > 1.0f) {
@@ -679,7 +686,7 @@ public class PipVideoView {
         L_0x0176:
             r8.commit()
         L_0x0179:
-            if (r1 == 0) goto L_0x01b5
+            if (r1 == 0) goto L_0x01bf
             android.view.animation.DecelerateInterpolator r5 = r0.decelerateInterpolator
             if (r5 != 0) goto L_0x0186
             android.view.animation.DecelerateInterpolator r5 = new android.view.animation.DecelerateInterpolator
@@ -688,25 +695,30 @@ public class PipVideoView {
         L_0x0186:
             android.animation.AnimatorSet r5 = new android.animation.AnimatorSet
             r5.<init>()
+            r0.animatorSet = r5
             android.view.animation.DecelerateInterpolator r6 = r0.decelerateInterpolator
             r5.setInterpolator(r6)
+            android.animation.AnimatorSet r5 = r0.animatorSet
             r6 = 150(0x96, double:7.4E-322)
             r5.setDuration(r6)
-            if (r4 == 0) goto L_0x01af
+            if (r4 == 0) goto L_0x01b5
             android.widget.FrameLayout r4 = r0.windowView
-            android.util.Property r6 = android.view.View.ALPHA
+            android.util.Property r5 = android.view.View.ALPHA
             float[] r2 = new float[r2]
-            r7 = 0
-            r2[r3] = r7
-            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r4, r6, r2)
+            r6 = 0
+            r2[r3] = r6
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r4, r5, r2)
             r1.add(r2)
-            org.telegram.ui.Components.PipVideoView$2 r2 = new org.telegram.ui.Components.PipVideoView$2
-            r2.<init>()
-            r5.addListener(r2)
-        L_0x01af:
-            r5.playTogether(r1)
-            r5.start()
+            android.animation.AnimatorSet r2 = r0.animatorSet
+            org.telegram.ui.Components.PipVideoView$2 r3 = new org.telegram.ui.Components.PipVideoView$2
+            r3.<init>()
+            r2.addListener(r3)
         L_0x01b5:
+            android.animation.AnimatorSet r2 = r0.animatorSet
+            r2.playTogether(r1)
+            android.animation.AnimatorSet r1 = r0.animatorSet
+            r1.start()
+        L_0x01bf:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PipVideoView.animateToBoundsMaybe():void");

@@ -3,6 +3,7 @@ package org.telegram.ui.Components.Paint.Views;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
@@ -80,9 +81,10 @@ public class ColorPicker extends FrameLayout {
                 ColorPicker.this.lambda$new$1$ColorPicker(view);
             }
         });
-        float f = context.getSharedPreferences("paint", 0).getFloat("last_color_location", 1.0f);
-        this.location = f;
-        setLocation(f);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("paint", 0);
+        this.location = sharedPreferences.getFloat("last_color_location", 1.0f);
+        setWeight(sharedPreferences.getFloat("last_color_weight", 0.016773745f));
+        setLocation(this.location);
     }
 
     /* access modifiers changed from: private */
@@ -202,7 +204,10 @@ public class ColorPicker extends FrameLayout {
         if (actionMasked == 3 || actionMasked == 1 || actionMasked == 6) {
             if (this.interacting && (colorPickerDelegate = this.delegate) != null) {
                 colorPickerDelegate.onFinishedColorPicking();
-                getContext().getSharedPreferences("paint", 0).edit().putFloat("last_color_location", this.location).commit();
+                SharedPreferences.Editor edit = getContext().getSharedPreferences("paint", 0).edit();
+                edit.putFloat("last_color_location", this.location);
+                edit.putFloat("last_color_weight", this.weight);
+                edit.commit();
             }
             this.interacting = false;
             this.wasChangingWeight = this.changingWeight;

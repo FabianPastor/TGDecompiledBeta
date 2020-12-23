@@ -220,7 +220,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                     DialogsSearchAdapter.this.searchResultHashtags.add(arrayList.get(i).hashtag);
                 }
                 if (DialogsSearchAdapter.this.delegate != null) {
-                    DialogsSearchAdapter.this.delegate.searchStateChanged(false, false);
+                    DialogsSearchAdapter.this.delegate.searchStateChanged(DialogsSearchAdapter.this.waitingResponseCount > 0, false);
                 }
                 DialogsSearchAdapter.this.notifyDataSetChanged();
             }
@@ -328,8 +328,18 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         ArrayList arrayList = new ArrayList();
         if (tLRPC$TL_error == null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
-            for (int i3 = 0; i3 < tLRPC$messages_Messages.messages.size(); i3++) {
-                MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$messages_Messages.messages.get(i3), false, true);
+            SparseArray sparseArray = new SparseArray();
+            SparseArray sparseArray2 = new SparseArray();
+            for (int i3 = 0; i3 < tLRPC$messages_Messages.chats.size(); i3++) {
+                TLRPC$Chat tLRPC$Chat = tLRPC$messages_Messages.chats.get(i3);
+                sparseArray.put(tLRPC$Chat.id, tLRPC$Chat);
+            }
+            for (int i4 = 0; i4 < tLRPC$messages_Messages.users.size(); i4++) {
+                TLRPC$User tLRPC$User = tLRPC$messages_Messages.users.get(i4);
+                sparseArray2.put(tLRPC$User.id, tLRPC$User);
+            }
+            for (int i5 = 0; i5 < tLRPC$messages_Messages.messages.size(); i5++) {
+                MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$messages_Messages.messages.get(i5), (SparseArray<TLRPC$User>) sparseArray2, (SparseArray<TLRPC$Chat>) sparseArray, false, true);
                 arrayList.add(messageObject);
                 String str2 = str;
                 messageObject.setQuery(str);
@@ -890,7 +900,6 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     public void searchDialogs(String str) {
-        DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate;
         String str2 = str;
         if (str2 == null || !str2.equals(this.lastSearchText)) {
             this.lastSearchText = str2;
@@ -910,17 +919,15 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 this.searchResultNames.clear();
                 this.searchResultHashtags.clear();
                 this.searchAdapterHelper.mergeResults((ArrayList<TLObject>) null);
-                if (this.needMessagesSearch != 2) {
-                    SearchAdapterHelper searchAdapterHelper2 = this.searchAdapterHelper;
-                    int i = this.dialogsType;
-                    searchAdapterHelper2.queryServerSearch((String) null, true, true, true, true, i == 2, 0, i == 0, 0, 0);
-                }
+                SearchAdapterHelper searchAdapterHelper2 = this.searchAdapterHelper;
+                int i = this.dialogsType;
+                searchAdapterHelper2.queryServerSearch((String) null, true, true, true, true, i == 2, 0, i == 0, 0, 0);
                 this.searchWas = false;
                 this.lastSearchId = 0;
                 this.waitingResponseCount = 0;
-                DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate2 = this.delegate;
-                if (dialogsSearchAdapterDelegate2 != null) {
-                    dialogsSearchAdapterDelegate2.searchStateChanged(false, true);
+                DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate = this.delegate;
+                if (dialogsSearchAdapterDelegate != null) {
+                    dialogsSearchAdapterDelegate.searchStateChanged(false, true);
                 }
                 searchMessagesInternal((String) null, 0);
                 notifyDataSetChanged();
@@ -945,9 +952,9 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                     }
                     this.waitingResponseCount = 0;
                     notifyDataSetChanged();
-                    DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate3 = this.delegate;
-                    if (dialogsSearchAdapterDelegate3 != null) {
-                        dialogsSearchAdapterDelegate3.searchStateChanged(false, false);
+                    DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate2 = this.delegate;
+                    if (dialogsSearchAdapterDelegate2 != null) {
+                        dialogsSearchAdapterDelegate2.searchStateChanged(false, false);
                     }
                 }
             }
@@ -955,10 +962,9 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             this.lastSearchId = i3;
             this.waitingResponseCount = 3;
             notifyDataSetChanged();
-            if (this.needMessagesSearch == 2 || (dialogsSearchAdapterDelegate = this.delegate) == null) {
-                this.waitingResponseCount--;
-            } else {
-                dialogsSearchAdapterDelegate.searchStateChanged(true, false);
+            DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate3 = this.delegate;
+            if (dialogsSearchAdapterDelegate3 != null) {
+                dialogsSearchAdapterDelegate3.searchStateChanged(true, false);
             }
             DispatchQueue dispatchQueue = Utilities.searchQueue;
             $$Lambda$DialogsSearchAdapter$YlnFrFLpPMokv3Qe1sTTYbNe5I r5 = new Runnable(trim, i3, str2) {
@@ -1016,7 +1022,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 int i3 = this.dialogsType;
                 searchAdapterHelper2.queryServerSearch(str, true, i3 != 4, true, i3 != 4, i3 == 2, 0, i3 == 0, 0, i);
             } else {
-                this.waitingResponseCount--;
+                this.waitingResponseCount -= 2;
             }
             if (this.needMessagesSearch == 0) {
                 this.waitingResponseCount--;
@@ -1411,7 +1417,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             r0.setText(r2)
             goto L_0x0370
         L_0x00d9:
-            r2 = 2131626861(0x7f0e0b6d, float:1.888097E38)
+            r2 = 2131626862(0x7f0e0b6e, float:1.8880972E38)
             java.lang.String r3 = "Recent"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r4)
@@ -1461,7 +1467,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r2 = r2 - r4
             if (r2 < 0) goto L_0x015e
             if (r2 >= r8) goto L_0x015e
-            r2 = 2131626672(0x7f0e0ab0, float:1.8880587E38)
+            r2 = 2131626673(0x7f0e0ab1, float:1.8880589E38)
             java.lang.String r3 = "PhoneNumberSearch"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -1476,7 +1482,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             r0.setText(r2)
             goto L_0x0370
         L_0x0171:
-            r2 = 2131627032(0x7f0e0CLASSNAME, float:1.8881317E38)
+            r2 = 2131627033(0x7f0e0CLASSNAME, float:1.888132E38)
             java.lang.String r3 = "SearchMessages"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -1701,7 +1707,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r0 = r3.id
             int r2 = r1.selfUserId
             if (r0 != r2) goto L_0x031d
-            r0 = 2131626996(0x7f0e0bf4, float:1.8881244E38)
+            r0 = 2131626997(0x7f0e0bf5, float:1.8881246E38)
             java.lang.String r2 = "SavedMessages"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r5 = 0

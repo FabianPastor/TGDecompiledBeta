@@ -3779,6 +3779,8 @@ public class ImageLoader {
     }
 
     public SparseArray<File> createMediaPaths() {
+        ArrayList<File> dataDirs;
+        int i = Build.VERSION.SDK_INT;
         SparseArray<File> sparseArray = new SparseArray<>();
         File cacheDir = AndroidUtilities.getCacheDir();
         if (!cacheDir.isDirectory()) {
@@ -3796,71 +3798,88 @@ public class ImageLoader {
         try {
             if ("mounted".equals(Environment.getExternalStorageState())) {
                 File externalStorageDirectory = Environment.getExternalStorageDirectory();
-                if (Build.VERSION.SDK_INT >= 19 && !TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
+                if (i >= 19 && !TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
                     ArrayList<File> rootDirs = AndroidUtilities.getRootDirs();
                     int size = rootDirs.size();
-                    int i = 0;
+                    int i2 = 0;
                     while (true) {
-                        if (i >= size) {
+                        if (i2 >= size) {
                             break;
                         }
-                        File file = rootDirs.get(i);
+                        File file = rootDirs.get(i2);
                         if (file.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
                             externalStorageDirectory = file;
                             break;
                         }
-                        i++;
+                        i2++;
                     }
                 }
                 File file2 = new File(externalStorageDirectory, "Telegram");
                 this.telegramPath = file2;
                 file2.mkdirs();
+                if (i >= 19 && !this.telegramPath.isDirectory() && (dataDirs = AndroidUtilities.getDataDirs()) != null) {
+                    int size2 = dataDirs.size();
+                    int i3 = 0;
+                    while (true) {
+                        if (i3 >= size2) {
+                            break;
+                        }
+                        File file3 = dataDirs.get(i3);
+                        if (file3.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
+                            File file4 = new File(file3, "Telegram");
+                            this.telegramPath = file4;
+                            file4.mkdirs();
+                            break;
+                        }
+                        i3++;
+                    }
+                }
                 if (this.telegramPath.isDirectory()) {
                     try {
-                        File file3 = new File(this.telegramPath, "Telegram Images");
-                        file3.mkdir();
-                        if (file3.isDirectory() && canMoveFiles(cacheDir, file3, 0)) {
-                            sparseArray.put(0, file3);
+                        File file5 = new File(this.telegramPath, "Telegram Images");
+                        file5.mkdir();
+                        if (file5.isDirectory() && canMoveFiles(cacheDir, file5, 0)) {
+                            sparseArray.put(0, file5);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("image path = " + file3);
+                                FileLog.d("image path = " + file5);
                             }
                         }
                     } catch (Exception e2) {
                         FileLog.e((Throwable) e2);
                     }
                     try {
-                        File file4 = new File(this.telegramPath, "Telegram Video");
-                        file4.mkdir();
-                        if (file4.isDirectory() && canMoveFiles(cacheDir, file4, 2)) {
-                            sparseArray.put(2, file4);
+                        File file6 = new File(this.telegramPath, "Telegram Video");
+                        file6.mkdir();
+                        if (file6.isDirectory() && canMoveFiles(cacheDir, file6, 2)) {
+                            sparseArray.put(2, file6);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("video path = " + file4);
+                                FileLog.d("video path = " + file6);
                             }
                         }
                     } catch (Exception e3) {
                         FileLog.e((Throwable) e3);
                     }
                     try {
-                        File file5 = new File(this.telegramPath, "Telegram Audio");
-                        file5.mkdir();
-                        if (file5.isDirectory() && canMoveFiles(cacheDir, file5, 1)) {
-                            AndroidUtilities.createEmptyFile(new File(file5, ".nomedia"));
-                            sparseArray.put(1, file5);
+                        File file7 = new File(this.telegramPath, "Telegram Audio");
+                        file7.mkdir();
+                        if (file7.isDirectory() && canMoveFiles(cacheDir, file7, 1)) {
+                            AndroidUtilities.createEmptyFile(new File(file7, ".nomedia"));
+                            sparseArray.put(1, file7);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("audio path = " + file5);
+                                FileLog.d("audio path = " + file7);
                             }
                         }
                     } catch (Exception e4) {
                         FileLog.e((Throwable) e4);
                     }
                     try {
-                        File file6 = new File(this.telegramPath, "Telegram Documents");
-                        file6.mkdir();
-                        if (file6.isDirectory() && canMoveFiles(cacheDir, file6, 3)) {
-                            AndroidUtilities.createEmptyFile(new File(file6, ".nomedia"));
-                            sparseArray.put(3, file6);
+                        File file8 = new File(this.telegramPath, "Telegram Documents");
+                        file8.mkdir();
+                        if (file8.isDirectory() && canMoveFiles(cacheDir, file8, 3)) {
+                            AndroidUtilities.createEmptyFile(new File(file8, ".nomedia"));
+                            sparseArray.put(3, file8);
                             if (BuildVars.LOGS_ENABLED) {
-                                FileLog.d("documents path = " + file6);
+                                FileLog.d("documents path = " + file8);
                             }
                         }
                     } catch (Exception e5) {
@@ -5963,9 +5982,11 @@ public class ImageLoader {
         CacheImage cacheImage = this.imageLoadingByUrl.get(str);
         if (cacheImage != null) {
             HttpImageTask httpImageTask = cacheImage.httpTask;
-            HttpImageTask httpImageTask2 = new HttpImageTask(httpImageTask.cacheImage, httpImageTask.imageSize);
-            cacheImage.httpTask = httpImageTask2;
-            this.httpTasks.add(httpImageTask2);
+            if (httpImageTask != null) {
+                HttpImageTask httpImageTask2 = new HttpImageTask(httpImageTask.cacheImage, httpImageTask.imageSize);
+                cacheImage.httpTask = httpImageTask2;
+                this.httpTasks.add(httpImageTask2);
+            }
             runHttpTasks(false);
         }
     }
@@ -5990,9 +6011,12 @@ public class ImageLoader {
     public /* synthetic */ void lambda$artworkLoadError$8$ImageLoader(String str) {
         CacheImage cacheImage = this.imageLoadingByUrl.get(str);
         if (cacheImage != null) {
-            ArtworkLoadTask artworkLoadTask = new ArtworkLoadTask(cacheImage.artworkTask.cacheImage);
-            cacheImage.artworkTask = artworkLoadTask;
-            this.artworkTasks.add(artworkLoadTask);
+            ArtworkLoadTask artworkLoadTask = cacheImage.artworkTask;
+            if (artworkLoadTask != null) {
+                ArtworkLoadTask artworkLoadTask2 = new ArtworkLoadTask(artworkLoadTask.cacheImage);
+                cacheImage.artworkTask = artworkLoadTask2;
+                this.artworkTasks.add(artworkLoadTask2);
+            }
             runArtworkTasks(false);
         }
     }

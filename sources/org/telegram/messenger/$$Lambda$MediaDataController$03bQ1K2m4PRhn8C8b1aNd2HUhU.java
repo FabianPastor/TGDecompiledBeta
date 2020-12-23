@@ -6,18 +6,18 @@ import j$.util.function.ToDoubleFunction;
 import j$.util.function.ToIntFunction;
 import j$.util.function.ToLongFunction;
 import java.util.Comparator;
-import org.telegram.tgnet.TLRPC$MessageEntity;
+import org.telegram.tgnet.TLRPC$TL_topPeer;
 
-/* renamed from: org.telegram.messenger.-$$Lambda$MediaDataController$-4vpB9CMzHCfOZjC8NZee57pcH0  reason: invalid class name */
+/* renamed from: org.telegram.messenger.-$$Lambda$MediaDataController$03bQ1K2m4-PRhn8C8b1aNd2HUhU  reason: invalid class name */
 /* compiled from: lambda */
-public final /* synthetic */ class $$Lambda$MediaDataController$4vpB9CMzHCfOZjC8NZee57pcH0 implements Comparator, j$.util.Comparator {
-    public static final /* synthetic */ $$Lambda$MediaDataController$4vpB9CMzHCfOZjC8NZee57pcH0 INSTANCE = new $$Lambda$MediaDataController$4vpB9CMzHCfOZjC8NZee57pcH0();
+public final /* synthetic */ class $$Lambda$MediaDataController$03bQ1K2m4PRhn8C8b1aNd2HUhU implements Comparator, j$.util.Comparator {
+    public static final /* synthetic */ $$Lambda$MediaDataController$03bQ1K2m4PRhn8C8b1aNd2HUhU INSTANCE = new $$Lambda$MediaDataController$03bQ1K2m4PRhn8C8b1aNd2HUhU();
 
-    private /* synthetic */ $$Lambda$MediaDataController$4vpB9CMzHCfOZjC8NZee57pcH0() {
+    private /* synthetic */ $$Lambda$MediaDataController$03bQ1K2m4PRhn8C8b1aNd2HUhU() {
     }
 
     public final int compare(Object obj, Object obj2) {
-        return MediaDataController.lambda$getTextStyleRuns$121((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
+        return MediaDataController.lambda$increaseInlineRaiting$95((TLRPC$TL_topPeer) obj, (TLRPC$TL_topPeer) obj2);
     }
 
     public /* synthetic */ Comparator reversed() {

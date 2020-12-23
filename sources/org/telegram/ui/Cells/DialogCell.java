@@ -1587,7 +1587,7 @@ public class DialogCell extends BaseCell {
             org.telegram.tgnet.TLRPC$User r0 = r1.user
             boolean r0 = org.telegram.messenger.UserObject.isUserSelf(r0)
             if (r0 == 0) goto L_0x07a4
-            r0 = 2131626997(0x7f0e0bf5, float:1.8881246E38)
+            r0 = 2131626998(0x7f0e0bf6, float:1.8881248E38)
             java.lang.String r2 = "SavedMessagesInfo"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r9 = r16
@@ -1625,7 +1625,7 @@ public class DialogCell extends BaseCell {
             org.telegram.tgnet.TLRPC$User r8 = r1.user
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r8)
             if (r8 == 0) goto L_0x07f1
-            r0 = 2131626997(0x7f0e0bf5, float:1.8881246E38)
+            r0 = 2131626998(0x7f0e0bf6, float:1.8881248E38)
             java.lang.String r2 = "SavedMessagesInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r3 = r0
@@ -2649,7 +2649,7 @@ public class DialogCell extends BaseCell {
             r1.promoDialog = r5
             int r6 = r10.promoDialogType
             if (r6 != 0) goto L_0x0f9b
-            r6 = 2131627549(0x7f0e0e1d, float:1.8882366E38)
+            r6 = 2131627550(0x7f0e0e1e, float:1.8882368E38)
             java.lang.String r7 = "UseProxySponsor"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x0fd2
@@ -2665,7 +2665,7 @@ public class DialogCell extends BaseCell {
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6)
             boolean r7 = android.text.TextUtils.isEmpty(r6)
             if (r7 == 0) goto L_0x0fc3
-            r6 = 2131626823(0x7f0e0b47, float:1.8880893E38)
+            r6 = 2131626824(0x7f0e0b48, float:1.8880895E38)
             java.lang.String r7 = "PsaTypeDefault"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
         L_0x0fc3:
@@ -2702,7 +2702,7 @@ public class DialogCell extends BaseCell {
             if (r7 == 0) goto L_0x1030
             boolean r7 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r7)
             if (r7 == 0) goto L_0x1002
-            r7 = 2131626902(0x7f0e0b96, float:1.8881053E38)
+            r7 = 2131626903(0x7f0e0b97, float:1.8881055E38)
             java.lang.String r10 = "RepliesTitle"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
             goto L_0x0fec
@@ -2722,7 +2722,7 @@ public class DialogCell extends BaseCell {
             if (r7 != r10) goto L_0x101f
             r1.drawPinBackground = r5
         L_0x101f:
-            r7 = 2131626996(0x7f0e0bf4, float:1.8881244E38)
+            r7 = 2131626997(0x7f0e0bf5, float:1.8881246E38)
             java.lang.String r10 = "SavedMessages"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
             goto L_0x0fec
@@ -3859,7 +3859,7 @@ public class DialogCell extends BaseCell {
     }
 
     private void drawCheckStatus(Canvas canvas, boolean z, boolean z2, boolean z3, boolean z4, float f) {
-        if (f != 0.0f) {
+        if (f != 0.0f || z4) {
             float f2 = (f * 0.5f) + 0.5f;
             if (z) {
                 BaseCell.setDrawableBounds(Theme.dialogs_clockDrawable, this.clockDrawLeft, this.checkDrawTop);
@@ -3967,6 +3967,13 @@ public class DialogCell extends BaseCell {
                 this.currentDialogId = j2;
                 if (z3) {
                     this.lastDialogChangedTime = System.currentTimeMillis();
+                    ValueAnimator valueAnimator = this.statusDrawableAnimator;
+                    if (valueAnimator != null) {
+                        valueAnimator.removeAllListeners();
+                        this.statusDrawableAnimator.cancel();
+                    }
+                    this.statusDrawableAnimationInProgress = false;
+                    this.lastStatusDrawableParams = -1;
                 }
                 boolean z4 = tLRPC$Dialog instanceof TLRPC$TL_dialogFolder;
                 if (z4) {
@@ -4901,7 +4908,7 @@ public class DialogCell extends BaseCell {
             if (r0 == 0) goto L_0x00bd
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r16)
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r17)
-            r2 = 2131627502(0x7f0e0dee, float:1.888227E38)
+            r2 = 2131627503(0x7f0e0def, float:1.8882272E38)
             java.lang.String r3 = "UnhideFromTop"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             org.telegram.ui.Components.RLottieDrawable r3 = org.telegram.ui.ActionBar.Theme.dialogs_unpinArchiveDrawable
@@ -4921,7 +4928,7 @@ public class DialogCell extends BaseCell {
             if (r0 == 0) goto L_0x00ef
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r17)
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r16)
-            r2 = 2131626814(0x7f0e0b3e, float:1.8880875E38)
+            r2 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
             java.lang.String r3 = "PsaHide"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             org.telegram.ui.Components.RLottieDrawable r3 = org.telegram.ui.ActionBar.Theme.dialogs_hidePsaDrawable
@@ -4944,7 +4951,7 @@ public class DialogCell extends BaseCell {
         L_0x0109:
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r16)
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r17)
-            r2 = 2131627493(0x7f0e0de5, float:1.8882252E38)
+            r2 = 2131627494(0x7f0e0de6, float:1.8882254E38)
             java.lang.String r3 = "Unarchive"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             org.telegram.ui.Components.RLottieDrawable r3 = org.telegram.ui.ActionBar.Theme.dialogs_unarchiveDrawable

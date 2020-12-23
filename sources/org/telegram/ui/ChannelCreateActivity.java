@@ -27,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -68,6 +67,7 @@ import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.ChannelCreateActivity;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.EditTextEmoji;
 import org.telegram.ui.Components.ImageUpdater;
@@ -870,7 +870,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         if (this.invite != null) {
             try {
                 ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", this.invite.link));
-                Toast.makeText(getParentActivity(), LocaleController.getString("LinkCopied", NUM), 0).show();
+                if (BulletinFactory.canShowBulletin(this)) {
+                    BulletinFactory.createCopyLinkBulletin((BaseFragment) this).show();
+                }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }

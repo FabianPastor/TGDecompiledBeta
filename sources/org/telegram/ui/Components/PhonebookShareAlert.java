@@ -39,6 +39,7 @@ import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
 
 public class PhonebookShareAlert extends BottomSheet {
@@ -747,8 +748,8 @@ public class PhonebookShareAlert extends BottomSheet {
             org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$o6UUiUcuxgbZ9ViFHXa2xYmtVbI r9 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$o6UUiUcuxgbZ9ViFHXa2xYmtVbI
             r9.<init>(r6, r7)
             r7.setOnClickListener(r9)
-            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$cI7ExqCggnboUqU9yaEacWJbFIk r9 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$cI7ExqCggnboUqU9yaEacWJbFIk
-            r9.<init>(r6)
+            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$uMgz-fwLgAOcnO1_Ret_ysSyTyI r9 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$uMgz-fwLgAOcnO1_Ret_ysSyTyI
+            r9.<init>(r6, r1)
             r7.setOnLongClickListener(r9)
         L_0x01cd:
             int r6 = r6 + 1
@@ -782,7 +783,7 @@ public class PhonebookShareAlert extends BottomSheet {
             boolean r3 = r0.isImport
             r7 = 2131624176(0x7f0e00f0, float:1.8875524E38)
             java.lang.String r9 = "AddContactPhonebookTitle"
-            r10 = 2131627160(0x7f0e0CLASSNAME, float:1.8881577E38)
+            r10 = 2131627161(0x7f0e0CLASSNAME, float:1.8881579E38)
             java.lang.String r11 = "ShareContactTitle"
             if (r3 == 0) goto L_0x022a
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
@@ -1002,7 +1003,7 @@ public class PhonebookShareAlert extends BottomSheet {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$3 */
-    public /* synthetic */ boolean lambda$new$3$PhonebookShareAlert(int i, View view) {
+    public /* synthetic */ boolean lambda$new$3$PhonebookShareAlert(int i, Context context, View view) {
         AndroidUtilities.VcardItem vcardItem;
         int i2 = this.phoneStartRow;
         if (i < i2 || i >= this.phoneEndRow) {
@@ -1015,15 +1016,24 @@ public class PhonebookShareAlert extends BottomSheet {
             return false;
         }
         ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", vcardItem.getValue(false)));
-        int i4 = vcardItem.type;
-        if (i4 == 0) {
-            Toast.makeText(this.parentFragment.getParentActivity(), LocaleController.getString("PhoneCopied", NUM), 0).show();
-        } else if (i4 == 1) {
-            Toast.makeText(this.parentFragment.getParentActivity(), LocaleController.getString("EmailCopied", NUM), 0).show();
-        } else if (i4 == 3) {
-            Toast.makeText(this.parentFragment.getParentActivity(), LocaleController.getString("LinkCopied", NUM), 0).show();
-        } else {
-            Toast.makeText(this.parentFragment.getParentActivity(), LocaleController.getString("TextCopied", NUM), 0).show();
+        if (BulletinFactory.canShowBulletin(this.parentFragment)) {
+            if (vcardItem.type == 3) {
+                BulletinFactory.of((FrameLayout) this.containerView).createCopyLinkBulletin().show();
+            } else {
+                Bulletin.SimpleLayout simpleLayout = new Bulletin.SimpleLayout(context);
+                int i4 = vcardItem.type;
+                if (i4 == 0) {
+                    simpleLayout.textView.setText(LocaleController.getString("PhoneCopied", NUM));
+                    simpleLayout.imageView.setImageResource(NUM);
+                } else if (i4 == 1) {
+                    simpleLayout.textView.setText(LocaleController.getString("EmailCopied", NUM));
+                    simpleLayout.imageView.setImageResource(NUM);
+                } else {
+                    simpleLayout.textView.setText(LocaleController.getString("TextCopied", NUM));
+                    simpleLayout.imageView.setImageResource(NUM);
+                }
+                Bulletin.make((FrameLayout) this.containerView, (Bulletin.Layout) simpleLayout, 1500).show();
+            }
         }
         return true;
     }
@@ -1351,6 +1361,34 @@ public class PhonebookShareAlert extends BottomSheet {
     public /* synthetic */ void lambda$null$4$PhonebookShareAlert(boolean z, int i) {
         this.delegate.didSelectContact(this.currentUser, z, i);
         dismiss();
+    }
+
+    /* access modifiers changed from: protected */
+    public void onStart() {
+        super.onStart();
+        Bulletin.addDelegate((FrameLayout) this.containerView, (Bulletin.Delegate) new Bulletin.Delegate(this) {
+            public /* synthetic */ void onHide(Bulletin bulletin) {
+                Bulletin.Delegate.CC.$default$onHide(this, bulletin);
+            }
+
+            public /* synthetic */ void onOffsetChange(float f) {
+                Bulletin.Delegate.CC.$default$onOffsetChange(this, f);
+            }
+
+            public /* synthetic */ void onShow(Bulletin bulletin) {
+                Bulletin.Delegate.CC.$default$onShow(this, bulletin);
+            }
+
+            public int getBottomOffset() {
+                return AndroidUtilities.dp(74.0f);
+            }
+        });
+    }
+
+    /* access modifiers changed from: protected */
+    public void onStop() {
+        super.onStop();
+        Bulletin.removeDelegate((FrameLayout) this.containerView);
     }
 
     public void setDelegate(ChatAttachAlertContactsLayout.PhonebookShareAlertDelegate phonebookShareAlertDelegate) {

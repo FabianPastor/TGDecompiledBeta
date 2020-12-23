@@ -1154,27 +1154,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131626673(0x7f0e0ab1, float:1.8880589E38)
+                r0 = 2131626674(0x7f0e0ab2, float:1.888059E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131626674(0x7f0e0ab2, float:1.888059E38)
+                r0 = 2131626675(0x7f0e0ab3, float:1.8880593E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131626665(0x7f0e0aa9, float:1.8880573E38)
+                r0 = 2131626666(0x7f0e0aaa, float:1.8880575E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131626664(0x7f0e0aa8, float:1.888057E38)
+                r0 = 2131626665(0x7f0e0aa9, float:1.8880573E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131626666(0x7f0e0aaa, float:1.8880575E38)
+                r0 = 2131626667(0x7f0e0aab, float:1.8880577E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -1889,6 +1889,29 @@ public class AndroidUtilities {
                 FileLog.e((Throwable) e);
             }
         }
+    }
+
+    public static ArrayList<File> getDataDirs() {
+        File[] externalFilesDirs;
+        ArrayList<File> arrayList = null;
+        if (Build.VERSION.SDK_INT >= 19 && (externalFilesDirs = ApplicationLoader.applicationContext.getExternalFilesDirs((String) null)) != null) {
+            for (int i = 0; i < externalFilesDirs.length; i++) {
+                if (externalFilesDirs[i] != null) {
+                    externalFilesDirs[i].getAbsolutePath();
+                    if (arrayList == null) {
+                        arrayList = new ArrayList<>();
+                    }
+                    arrayList.add(externalFilesDirs[i]);
+                }
+            }
+        }
+        if (arrayList == null) {
+            arrayList = new ArrayList<>();
+        }
+        if (arrayList.isEmpty()) {
+            arrayList.add(Environment.getExternalStorageDirectory());
+        }
+        return arrayList;
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:9:0x0019, code lost:
@@ -3352,7 +3375,7 @@ public class AndroidUtilities {
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r9.setMessage(r0)
-            r0 = 2131626658(0x7f0e0aa2, float:1.8880558E38)
+            r0 = 2131626659(0x7f0e0aa3, float:1.888056E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY

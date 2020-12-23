@@ -25,16 +25,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BringAppForegroundService;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.Components.EmbedBottomSheet;
+import org.telegram.ui.LaunchActivity;
 
 public class EmbedBottomSheet extends BottomSheet {
     /* access modifiers changed from: private */
@@ -635,7 +634,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r2.setPadding(r1, r5, r3, r5)
-            r1 = 2131626323(0x7f0e0953, float:1.8879879E38)
+            r1 = 2131626324(0x7f0e0954, float:1.887988E38)
             java.lang.String r3 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -762,7 +761,10 @@ public class EmbedBottomSheet extends BottomSheet {
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        Toast.makeText(getContext(), LocaleController.getString("LinkCopied", NUM), 0).show();
+        Activity activity = this.parentActivity;
+        if (activity instanceof LaunchActivity) {
+            ((LaunchActivity) activity).showBulletin($$Lambda$jSCpt6qlbPOl03gEFikkUBgidwI.INSTANCE);
+        }
         dismiss();
     }
 
