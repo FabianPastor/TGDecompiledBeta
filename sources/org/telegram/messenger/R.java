@@ -1591,6 +1591,7 @@ public final class R {
         public static final int AccDescrNumberOfViews_other = NUM;
         public static final int AccDescrNumberOfViews_two = NUM;
         public static final int AccDescrOpenChat = NUM;
+        public static final int AccDescrOpenInPhotoViewer = NUM;
         public static final int AccDescrOpenMenu = NUM;
         public static final int AccDescrOpenMenu2 = NUM;
         public static final int AccDescrPageDown = NUM;
@@ -5074,6 +5075,7 @@ public final class R {
         public static final int TwoStepVerificationPasswordSet = NUM;
         public static final int TwoStepVerificationPasswordSetInfo = NUM;
         public static final int TwoStepVerificationSetPassword = NUM;
+        public static final int TwoStepVerificationShowPassword = NUM;
         public static final int TwoStepVerificationTitle = NUM;
         public static final int TypeLocationGroup = NUM;
         public static final int TypeLocationGroupEdit = NUM;

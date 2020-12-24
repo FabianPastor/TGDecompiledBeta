@@ -374,7 +374,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 boolean unused = ChannelCreateActivity.this.donePressed = false;
             }
         });
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
         int i = this.currentStep;
         if (i == 0) {
             this.actionBar.setTitle(LocaleController.getString("NewChannel", NUM));

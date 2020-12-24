@@ -153,7 +153,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 }
             }
         });
-        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
+        this.doneItem = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
         ContextProgressView contextProgressView = new ContextProgressView(context2, 1);
         this.progressView = contextProgressView;
         contextProgressView.setAlpha(0.0f);

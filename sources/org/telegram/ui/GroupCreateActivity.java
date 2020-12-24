@@ -135,7 +135,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     public GroupCreateDividerItemDecoration itemDecoration;
     /* access modifiers changed from: private */
     public RecyclerListView listView;
-    private int maxCount = MessagesController.getInstance(this.currentAccount).maxMegagroupCount;
+    private int maxCount = getMessagesController().maxMegagroupCount;
     int maxSize;
     /* access modifiers changed from: private */
     public int measuredContainerHeight;
@@ -277,11 +277,11 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     GroupCreateActivity.this.currentAnimation.playTogether(this.animators);
                     GroupCreateActivity.this.currentAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
-                            NotificationCenter.getInstance(GroupCreateActivity.this.currentAccount).onAnimationFinish(SpansContainer.this.animationIndex);
+                            GroupCreateActivity.this.getNotificationCenter().onAnimationFinish(SpansContainer.this.animationIndex);
                             SpansContainer.this.requestLayout();
                         }
                     });
-                    this.animationIndex = NotificationCenter.getInstance(GroupCreateActivity.this.currentAccount).setAnimationInProgress(this.animationIndex, (int[]) null);
+                    this.animationIndex = GroupCreateActivity.this.getNotificationCenter().setAnimationInProgress(this.animationIndex, (int[]) null);
                     GroupCreateActivity.this.currentAnimation.start();
                     this.animationStarted = true;
                 } else {
@@ -382,22 +382,22 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         if (this.isAlwaysShare || this.isNeverShare || this.addToGroup) {
             this.maxCount = 0;
         } else {
-            this.maxCount = this.chatType == 0 ? MessagesController.getInstance(this.currentAccount).maxMegagroupCount : MessagesController.getInstance(this.currentAccount).maxBroadcastCount;
+            this.maxCount = this.chatType == 0 ? getMessagesController().maxMegagroupCount : getMessagesController().maxBroadcastCount;
         }
     }
 
     public boolean onFragmentCreate() {
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.contactsDidLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatDidCreated);
+        getNotificationCenter().addObserver(this, NotificationCenter.contactsDidLoad);
+        getNotificationCenter().addObserver(this, NotificationCenter.updateInterfaces);
+        getNotificationCenter().addObserver(this, NotificationCenter.chatDidCreated);
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.contactsDidLoad);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatDidCreated);
+        getNotificationCenter().removeObserver(this, NotificationCenter.contactsDidLoad);
+        getNotificationCenter().removeObserver(this, NotificationCenter.updateInterfaces);
+        getNotificationCenter().removeObserver(this, NotificationCenter.chatDidCreated);
     }
 
     public void onClick(View view) {
@@ -531,9 +531,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             /* access modifiers changed from: protected */
             public void dispatchDraw(Canvas canvas) {
                 super.dispatchDraw(canvas);
-                ActionBarLayout access$1900 = GroupCreateActivity.this.parentLayout;
+                ActionBarLayout access$1700 = GroupCreateActivity.this.parentLayout;
                 GroupCreateActivity groupCreateActivity = GroupCreateActivity.this;
-                access$1900.drawHeaderShadow(canvas, Math.min(groupCreateActivity.maxSize, (groupCreateActivity.measuredContainerHeight + GroupCreateActivity.this.containerHeight) - GroupCreateActivity.this.measuredContainerHeight));
+                access$1700.drawHeaderShadow(canvas, Math.min(groupCreateActivity.maxSize, (groupCreateActivity.measuredContainerHeight + GroupCreateActivity.this.containerHeight) - GroupCreateActivity.this.measuredContainerHeight));
             }
 
             /* access modifiers changed from: protected */
@@ -825,7 +825,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 } else if (this.maxCount != 0 && this.selectedContacts.size() == this.maxCount) {
                     return;
                 } else {
-                    if (this.chatType == 0 && this.selectedContacts.size() == MessagesController.getInstance(this.currentAccount).maxGroupCount) {
+                    if (this.chatType == 0 && this.selectedContacts.size() == getMessagesController().maxGroupCount) {
                         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setMessage(LocaleController.getString("SoftUserLimitAlert", NUM));
@@ -846,7 +846,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                                     return;
                                 }
                             } else if (i4 != 0) {
-                                TLRPC$Chat chat2 = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.channelId));
+                                TLRPC$Chat chat2 = getMessagesController().getChat(Integer.valueOf(this.channelId));
                                 AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
                                 if (ChatObject.canAddAdmins(chat2)) {
                                     builder2.setTitle(LocaleController.getString("AppName", NUM));
@@ -871,9 +871,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                                 return;
                             }
                         }
-                        MessagesController.getInstance(this.currentAccount).putUser(tLRPC$User, !this.searching);
+                        getMessagesController().putUser(tLRPC$User, !this.searching);
                     } else {
-                        MessagesController.getInstance(this.currentAccount).putChat((TLRPC$Chat) object, !this.searching);
+                        getMessagesController().putChat((TLRPC$Chat) object, !this.searching);
                     }
                     GroupCreateSpan groupCreateSpan = new GroupCreateSpan(this.editText.getContext(), object);
                     this.spansContainer.addSpan(groupCreateSpan);
@@ -1056,13 +1056,13 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             if (this.chatType == 2) {
                 ArrayList arrayList = new ArrayList();
                 for (int i = 0; i < this.selectedContacts.size(); i++) {
-                    TLRPC$InputUser inputUser = MessagesController.getInstance(this.currentAccount).getInputUser(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.selectedContacts.keyAt(i))));
+                    TLRPC$InputUser inputUser = getMessagesController().getInputUser(getMessagesController().getUser(Integer.valueOf(this.selectedContacts.keyAt(i))));
                     if (inputUser != null) {
                         arrayList.add(inputUser);
                     }
                 }
-                MessagesController.getInstance(this.currentAccount).addUsersToChannel(this.chatId, arrayList, (BaseFragment) null);
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                getMessagesController().addUsersToChannel(this.chatId, arrayList, (BaseFragment) null);
+                getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
                 Bundle bundle = new Bundle();
                 bundle.putInt("chat_id", this.chatId);
                 presentFragment(new ChatActivity(bundle), true);
@@ -1272,9 +1272,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         public GroupCreateAdapter(Context context2) {
             TLRPC$Chat chat;
             this.context = context2;
-            ArrayList<TLRPC$TL_contact> arrayList = ContactsController.getInstance(GroupCreateActivity.this.currentAccount).contacts;
+            ArrayList<TLRPC$TL_contact> arrayList = GroupCreateActivity.this.getContactsController().contacts;
             for (int i = 0; i < arrayList.size(); i++) {
-                TLRPC$User user = MessagesController.getInstance(GroupCreateActivity.this.currentAccount).getUser(Integer.valueOf(arrayList.get(i).user_id));
+                TLRPC$User user = GroupCreateActivity.this.getMessagesController().getUser(Integer.valueOf(arrayList.get(i).user_id));
                 if (user != null && !user.self && !user.deleted) {
                     this.contacts.add(user);
                 }
@@ -1425,9 +1425,9 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             int size4 = this.contacts.size();
             if (GroupCreateActivity.this.addToGroup) {
                 if (GroupCreateActivity.this.chatId != 0) {
-                    this.inviteViaLink = ChatObject.canUserDoAdminAction(MessagesController.getInstance(GroupCreateActivity.this.currentAccount).getChat(Integer.valueOf(GroupCreateActivity.this.chatId)), 3) ? 1 : 0;
+                    this.inviteViaLink = ChatObject.canUserDoAdminAction(GroupCreateActivity.this.getMessagesController().getChat(Integer.valueOf(GroupCreateActivity.this.chatId)), 3) ? 1 : 0;
                 } else if (GroupCreateActivity.this.channelId != 0) {
-                    TLRPC$Chat chat = MessagesController.getInstance(GroupCreateActivity.this.currentAccount).getChat(Integer.valueOf(GroupCreateActivity.this.channelId));
+                    TLRPC$Chat chat = GroupCreateActivity.this.getMessagesController().getChat(Integer.valueOf(GroupCreateActivity.this.channelId));
                     this.inviteViaLink = (!ChatObject.canUserDoAdminAction(chat, 3) || !TextUtils.isEmpty(chat.username)) ? 0 : 2;
                 } else {
                     this.inviteViaLink = 0;
@@ -1475,7 +1475,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 r1 = 8
                 r4.setVisibility(r1)
                 android.widget.TextView r4 = r5.title
-                r1 = 2131626067(0x7f0e0853, float:1.887936E38)
+                r1 = 2131626068(0x7f0e0854, float:1.8879362E38)
                 java.lang.String r2 = "NoContacts"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r4.setText(r1)

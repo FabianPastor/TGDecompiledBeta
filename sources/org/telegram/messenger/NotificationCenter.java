@@ -1,10 +1,11 @@
 package org.telegram.messenger;
 
+import android.os.SystemClock;
 import android.util.SparseArray;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.Map;
 
 public class NotificationCenter {
     public static final int FileDidFailUpload;
@@ -45,8 +46,8 @@ public class NotificationCenter {
     public static final int dialogsUnreadCounterChanged;
     public static final int diceStickersDidLoad;
     public static final int didApplyNewTheme;
+    public static final int didClearDatabase;
     public static final int didCreatedNewDeleteTask;
-    public static final int didDatabaseCleared;
     public static final int didEndCall;
     public static final int didLoadChatAdmins;
     public static final int didLoadChatInviter;
@@ -184,10 +185,11 @@ public class NotificationCenter {
     public static final int webRtcMicAmplitudeEvent;
     public static final int webRtcSpeakerAmplitudeEvent;
     private SparseArray<ArrayList<NotificationCenterDelegate>> addAfterBroadcast = new SparseArray<>();
-    private final HashMap<Integer, int[]> allowedNotifications = new HashMap<>();
+    private final HashMap<Integer, AllowedNotifications> allowedNotifications = new HashMap<>();
     private int animationInProgressCount;
     private int animationInProgressPointer = 1;
     private int broadcasting = 0;
+    private Runnable checkForExpiredNotifications;
     private int currentAccount;
     private int currentHeavyOperationFlags;
     private ArrayList<DelayedPost> delayedPosts = new ArrayList<>(10);
@@ -715,7 +717,7 @@ public class NotificationCenter {
         screenStateChanged = i168;
         int i169 = totalEvents;
         totalEvents = i169 + 1;
-        didDatabaseCleared = i169;
+        didClearDatabase = i169;
         int i170 = totalEvents;
         totalEvents = i170 + 1;
         voipServiceCreated = i170;
@@ -788,19 +790,68 @@ public class NotificationCenter {
         if (z) {
             this.heavyOperationsCounter.add(Integer.valueOf(i2));
         }
-        if (iArr == null) {
-            iArr = new int[0];
+        AllowedNotifications allowedNotifications2 = new AllowedNotifications();
+        allowedNotifications2.allowedIds = iArr;
+        this.allowedNotifications.put(Integer.valueOf(this.animationInProgressPointer), allowedNotifications2);
+        if (this.checkForExpiredNotifications == null) {
+            $$Lambda$NotificationCenter$qfLoSVnI6RSAMmhz7SoulpZLung r6 = new Runnable() {
+                public final void run() {
+                    NotificationCenter.this.checkForExpiredNotifications();
+                }
+            };
+            this.checkForExpiredNotifications = r6;
+            AndroidUtilities.runOnUIThread(r6, 1017);
         }
-        this.allowedNotifications.put(Integer.valueOf(this.animationInProgressPointer), iArr);
         return this.animationInProgressPointer;
     }
 
-    public void updateAllowedNotifications(int i, int[] iArr) {
-        if (this.allowedNotifications.containsKey(Integer.valueOf(i))) {
-            if (iArr == null) {
-                iArr = new int[0];
+    /* access modifiers changed from: private */
+    public void checkForExpiredNotifications() {
+        ArrayList arrayList = null;
+        this.checkForExpiredNotifications = null;
+        if (!this.allowedNotifications.isEmpty()) {
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            long j = Long.MAX_VALUE;
+            for (Map.Entry next : this.allowedNotifications.entrySet()) {
+                long j2 = ((AllowedNotifications) next.getValue()).time;
+                if (elapsedRealtime - j2 > 1000) {
+                    if (arrayList == null) {
+                        arrayList = new ArrayList();
+                    }
+                    arrayList.add(next.getKey());
+                } else {
+                    j = Math.min(j2, j);
+                }
             }
-            this.allowedNotifications.put(Integer.valueOf(i), iArr);
+            if (arrayList != null) {
+                for (int i = 0; i < arrayList.size(); i++) {
+                    onAnimationFinish(((Integer) arrayList.get(i)).intValue());
+                }
+            }
+            if (j != Long.MAX_VALUE) {
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public final void run() {
+                        NotificationCenter.this.lambda$checkForExpiredNotifications$0$NotificationCenter();
+                    }
+                }, Math.max(17, 1017 - (elapsedRealtime - j)));
+            }
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$checkForExpiredNotifications$0 */
+    public /* synthetic */ void lambda$checkForExpiredNotifications$0$NotificationCenter() {
+        this.checkForExpiredNotifications = new Runnable() {
+            public final void run() {
+                NotificationCenter.this.checkForExpiredNotifications();
+            }
+        };
+    }
+
+    public void updateAllowedNotifications(int i, int[] iArr) {
+        AllowedNotifications allowedNotifications2 = this.allowedNotifications.get(Integer.valueOf(i));
+        if (allowedNotifications2 != null) {
+            allowedNotifications2.allowedIds = iArr;
         }
     }
 
@@ -816,6 +867,10 @@ public class NotificationCenter {
             if (this.animationInProgressCount == 0) {
                 runDelayedNotifications();
             }
+        }
+        if (this.checkForExpiredNotifications != null && this.allowedNotifications.isEmpty()) {
+            AndroidUtilities.cancelRunOnUIThread(this.checkForExpiredNotifications);
+            this.checkForExpiredNotifications = null;
         }
     }
 
@@ -850,37 +905,55 @@ public class NotificationCenter {
     }
 
     public void postNotificationName(int i, Object... objArr) {
-        int[] iArr;
+        int i2 = i;
+        Object[] objArr2 = objArr;
         boolean z = true;
-        boolean z2 = i == startAllHeavyOperations || i == stopAllHeavyOperations || i == didReplacedPhotoInMemCache;
+        boolean z2 = i2 == startAllHeavyOperations || i2 == stopAllHeavyOperations || i2 == didReplacedPhotoInMemCache;
+        ArrayList arrayList = null;
         if (!z2 && !this.allowedNotifications.isEmpty()) {
             int size = this.allowedNotifications.size();
-            Iterator<Integer> it = this.allowedNotifications.keySet().iterator();
-            int i2 = 0;
-            while (it.hasNext() && (iArr = this.allowedNotifications.get(it.next())) != null) {
-                int i3 = 0;
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            int i3 = 0;
+            for (Map.Entry next : this.allowedNotifications.entrySet()) {
+                AllowedNotifications allowedNotifications2 = (AllowedNotifications) next.getValue();
+                if (elapsedRealtime - allowedNotifications2.time > 1000) {
+                    if (arrayList == null) {
+                        arrayList = new ArrayList();
+                    }
+                    arrayList.add(next.getKey());
+                }
+                int[] iArr = allowedNotifications2.allowedIds;
+                if (iArr == null) {
+                    break;
+                }
+                int i4 = 0;
                 while (true) {
-                    if (i3 >= iArr.length) {
+                    if (i4 >= iArr.length) {
                         break;
-                    } else if (iArr[i3] == i) {
-                        i2++;
+                    } else if (iArr[i4] == i2) {
+                        i3++;
                         break;
                     } else {
-                        i3++;
+                        i4++;
                     }
                 }
             }
-            if (size != i2) {
+            if (size != i3) {
                 z = false;
             }
             z2 = z;
         }
-        if (i == startAllHeavyOperations) {
-            this.currentHeavyOperationFlags = (objArr[0].intValue() ^ -1) & this.currentHeavyOperationFlags;
-        } else if (i == stopAllHeavyOperations) {
-            this.currentHeavyOperationFlags = objArr[0].intValue() | this.currentHeavyOperationFlags;
+        if (i2 == startAllHeavyOperations) {
+            this.currentHeavyOperationFlags = (((Integer) objArr2[0]).intValue() ^ -1) & this.currentHeavyOperationFlags;
+        } else if (i2 == stopAllHeavyOperations) {
+            this.currentHeavyOperationFlags = ((Integer) objArr2[0]).intValue() | this.currentHeavyOperationFlags;
         }
-        postNotificationNameInternal(i, z2, objArr);
+        postNotificationNameInternal(i2, z2, objArr2);
+        if (arrayList != null) {
+            for (int i5 = 0; i5 < arrayList.size(); i5++) {
+                onAnimationFinish(((Integer) arrayList.get(i5)).intValue());
+            }
+        }
     }
 
     public void postNotificationNameInternal(int i, boolean z, Object... objArr) {
@@ -1001,6 +1074,15 @@ public class NotificationCenter {
             this.delayedRunnables.add(runnable);
         } else {
             runnable.run();
+        }
+    }
+
+    private static class AllowedNotifications {
+        int[] allowedIds;
+        final long time;
+
+        private AllowedNotifications() {
+            this.time = SystemClock.elapsedRealtime();
         }
     }
 }

@@ -350,6 +350,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetNewWallpapper);
+        getNotificationCenter().onAnimationFinish(this.allowAnimationIndex);
     }
 
     private void updateEmptyPlaceholder() {
@@ -1766,7 +1767,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r3.putExtra(r5, r0)
         L_0x01f8:
             android.app.Activity r0 = r10.getParentActivity()
-            r1 = 2131627162(0x7f0e0c9a, float:1.888158E38)
+            r1 = 2131627163(0x7f0e0c9b, float:1.8881583E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             android.content.Intent r1 = android.content.Intent.createChooser(r3, r1)
@@ -1802,9 +1803,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131626303(0x7f0e093f, float:1.8879838E38)
+            r2 = 2131626304(0x7f0e0940, float:1.887984E38)
             java.lang.String r3 = "OK"
-            r4 = 2131624260(0x7f0e0144, float:1.8875695E38)
+            r4 = 2131624261(0x7f0e0145, float:1.8875697E38)
             java.lang.String r5 = "AppName"
             if (r1 == 0) goto L_0x02d9
             androidx.recyclerview.widget.LinearLayoutManager r1 = r10.chatLayoutManager
@@ -1852,7 +1853,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625659(0x7f0e06bb, float:1.8878532E38)
+            r1 = 2131625660(0x7f0e06bc, float:1.8878534E38)
             java.lang.String r4 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -1881,7 +1882,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625658(0x7f0e06ba, float:1.887853E38)
+            r1 = 2131625659(0x7f0e06bb, float:1.8878532E38)
             java.lang.String r4 = "IncorrectLocalization"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -2980,7 +2981,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                 org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                                 org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
                                                 android.app.Activity r5 = r5.getParentActivity()
-                                                r6 = 2131627387(0x7f0e0d7b, float:1.8882037E38)
+                                                r6 = 2131627388(0x7f0e0d7c, float:1.888204E38)
                                                 java.lang.String r7 = "TextCopied"
                                                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                                                 android.widget.Toast r5 = android.widget.Toast.makeText(r5, r6, r1)
@@ -3045,11 +3046,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                 r5.setTitle(r0)
                                                 r6 = 2
                                                 java.lang.CharSequence[] r6 = new java.lang.CharSequence[r6]
-                                                r7 = 2131626317(0x7f0e094d, float:1.8879867E38)
+                                                r7 = 2131626318(0x7f0e094e, float:1.8879869E38)
                                                 java.lang.String r2 = "Open"
                                                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r2, r7)
                                                 r6[r1] = r7
-                                                r7 = 2131624936(0x7f0e03e8, float:1.8877066E38)
+                                                r7 = 2131624937(0x7f0e03e9, float:1.8877068E38)
                                                 java.lang.String r1 = "Copy"
                                                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r7)
                                                 r6[r3] = r7

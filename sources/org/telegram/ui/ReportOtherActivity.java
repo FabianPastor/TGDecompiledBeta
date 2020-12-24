@@ -126,7 +126,7 @@ public class ReportOtherActivity extends BaseFragment {
                     if (r4 == 0) goto L_0x00c5
                     org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
                     android.app.Activity r4 = r4.getParentActivity()
-                    r0 = 2131626918(0x7f0e0ba6, float:1.8881086E38)
+                    r0 = 2131626919(0x7f0e0ba7, float:1.8881088E38)
                     java.lang.String r1 = "ReportChatSent"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     r1 = 0
@@ -141,7 +141,7 @@ public class ReportOtherActivity extends BaseFragment {
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ReportOtherActivity.AnonymousClass1.onItemClick(int):void");
             }
         });
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
         LinearLayout linearLayout = new LinearLayout(context);
         this.fragmentView = linearLayout;
         linearLayout.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));

@@ -121,6 +121,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     public void onOpenCloseStickersAlert(boolean z) {
     }
 
+    /* access modifiers changed from: protected */
+    public void onTextAdd() {
+    }
+
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v37, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v40, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v41, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
@@ -291,7 +295,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r14, r7, r15, r7)
             android.widget.TextView r2 = r0.cancelTextView
             java.lang.String r14 = "Cancel"
-            r15 = 2131624586(0x7f0e028a, float:1.8876356E38)
+            r15 = 2131624587(0x7f0e028b, float:1.8876358E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r14, r15)
             java.lang.String r14 = r14.toUpperCase()
             r2.setText(r14)
@@ -323,7 +327,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r5, r7, r10, r7)
             android.widget.TextView r2 = r0.doneTextView
             java.lang.String r5 = "Done"
-            r10 = 2131625126(0x7f0e04a6, float:1.8877451E38)
+            r10 = 2131625127(0x7f0e04a7, float:1.8877453E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r10)
             java.lang.String r5 = r5.toUpperCase()
             r2.setText(r5)
@@ -1333,6 +1337,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
     private TextPaintView createText(boolean z) {
         Swatch swatch;
+        onTextAdd();
         Swatch swatch2 = this.colorPicker.getSwatch();
         int i = this.selectedTextType;
         if (i == 0) {

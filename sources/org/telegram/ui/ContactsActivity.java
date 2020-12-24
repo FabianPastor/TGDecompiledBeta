@@ -183,6 +183,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.closeChats);
         this.delegate = null;
         AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid);
+        getNotificationCenter().onAnimationFinish(this.animationIndex);
     }
 
     /* access modifiers changed from: protected */
@@ -229,7 +230,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r11.returnAsResult
             if (r0 == 0) goto L_0x002e
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131627068(0x7f0e0c3c, float:1.888139E38)
+            r1 = 2131627069(0x7f0e0c3d, float:1.8881392E38)
             java.lang.String r2 = "SelectContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -238,21 +239,21 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r11.createSecretChat
             if (r0 == 0) goto L_0x0041
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131626044(0x7f0e083c, float:1.8879313E38)
+            r1 = 2131626045(0x7f0e083d, float:1.8879315E38)
             java.lang.String r2 = "NewSecretChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0041:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131626035(0x7f0e0833, float:1.8879295E38)
+            r1 = 2131626036(0x7f0e0834, float:1.8879297E38)
             java.lang.String r2 = "NewMessageTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0050:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131624922(0x7f0e03da, float:1.8877037E38)
+            r1 = 2131624923(0x7f0e03db, float:1.887704E38)
             java.lang.String r2 = "Contacts"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -270,7 +271,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r2.<init>()
             r1.setActionBarMenuItemSearchListener(r2)
             java.lang.String r2 = "Search"
-            r3 = 2131627009(0x7f0e0CLASSNAME, float:1.888127E38)
+            r3 = 2131627010(0x7f0e0CLASSNAME, float:1.8881272E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setSearchFieldHint(r4)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
@@ -396,13 +397,13 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r1.showProgress(r14, r13)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.title
-            r2 = 2131626100(0x7f0e0874, float:1.8879427E38)
+            r2 = 2131626101(0x7f0e0875, float:1.8879429E38)
             java.lang.String r3 = "NoResult"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.subtitle
-            r2 = 2131627014(0x7f0e0CLASSNAME, float:1.888128E38)
+            r2 = 2131627015(0x7f0e0CLASSNAME, float:1.8881282E38)
             java.lang.String r3 = "SearchEmptyViewFilteredSubtitle2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -540,7 +541,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r6 = 52
             r0.setAnimation(r1, r6, r6)
             android.widget.FrameLayout r0 = r11.floatingButtonContainer
-            r1 = 2131624951(0x7f0e03f7, float:1.8877096E38)
+            r1 = 2131624952(0x7f0e03f8, float:1.8877098E38)
             java.lang.String r6 = "CreateNewContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             r0.setContentDescription(r1)
@@ -1158,15 +1159,15 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 
     /* access modifiers changed from: protected */
     /* JADX WARNING: Code restructure failed: missing block: B:14:0x0044, code lost:
-        r11 = r0.getFloatingButton();
+        r0 = r0.getFloatingButton();
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public android.animation.AnimatorSet onCustomTransitionAnimation(final boolean r13, final java.lang.Runnable r14) {
+    public android.animation.AnimatorSet onCustomTransitionAnimation(final boolean r9, final java.lang.Runnable r10) {
         /*
-            r12 = this;
+            r8 = this;
             r0 = 2
             float[] r1 = new float[r0]
-            if (r13 == 0) goto L_0x000d
+            if (r9 == 0) goto L_0x000d
             r1 = {NUM, 0} // fill-array
             android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
             goto L_0x0014
@@ -1174,16 +1175,16 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r1 = {0, NUM} // fill-array
             android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
         L_0x0014:
-            android.view.View r2 = r12.fragmentView
+            android.view.View r2 = r8.fragmentView
             android.view.ViewParent r2 = r2.getParent()
             android.view.ViewGroup r2 = (android.view.ViewGroup) r2
-            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.parentLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r8.parentLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
             int r3 = r3.size()
             r4 = 1
             r5 = 0
             if (r3 <= r4) goto L_0x0038
-            org.telegram.ui.ActionBar.ActionBarLayout r3 = r12.parentLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r3 = r8.parentLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
             int r6 = r3.size()
             int r6 = r6 - r0
@@ -1203,73 +1204,68 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             if (r0 != 0) goto L_0x0044
             return r5
         L_0x0044:
-            org.telegram.ui.Components.RLottieImageView r11 = r0.getFloatingButton()
-            if (r11 == 0) goto L_0x00d9
-            android.widget.FrameLayout r0 = r12.floatingButtonContainer
-            if (r0 == 0) goto L_0x00d9
-            int r0 = r11.getVisibility()
-            if (r0 != 0) goto L_0x00d9
-            float r0 = r11.getTranslationY()
-            float r0 = java.lang.Math.abs(r0)
-            r3 = 1082130432(0x40800000, float:4.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            org.telegram.ui.Components.RLottieImageView r0 = r0.getFloatingButton()
+            if (r0 == 0) goto L_0x00d3
+            android.widget.FrameLayout r3 = r8.floatingButtonContainer
+            if (r3 == 0) goto L_0x00d3
+            int r3 = r0.getVisibility()
+            if (r3 != 0) goto L_0x00d3
+            float r3 = r0.getTranslationY()
+            float r3 = java.lang.Math.abs(r3)
+            r6 = 1082130432(0x40800000, float:4.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r7 = (float) r7
+            int r3 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1))
+            if (r3 > 0) goto L_0x00d3
+            android.widget.FrameLayout r3 = r8.floatingButtonContainer
+            float r3 = r3.getTranslationY()
+            float r3 = java.lang.Math.abs(r3)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             float r6 = (float) r6
-            int r0 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
-            if (r0 > 0) goto L_0x00d9
-            android.widget.FrameLayout r0 = r12.floatingButtonContainer
-            float r0 = r0.getTranslationY()
-            float r0 = java.lang.Math.abs(r0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r3 = (float) r3
-            int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r0 <= 0) goto L_0x007b
-            goto L_0x00d9
+            int r3 = (r3 > r6 ? 1 : (r3 == r6 ? 0 : -1))
+            if (r3 <= 0) goto L_0x007b
+            goto L_0x00d3
         L_0x007b:
-            r0 = 8
-            r11.setVisibility(r0)
-            if (r13 == 0) goto L_0x0086
-            r0 = 0
-            r2.setAlpha(r0)
+            r3 = 8
+            r0.setVisibility(r3)
+            if (r9 == 0) goto L_0x0086
+            r3 = 0
+            r2.setAlpha(r3)
         L_0x0086:
-            org.telegram.ui.-$$Lambda$ContactsActivity$eWXKwOQWj6CiQRgK9xn-hx5U5KA r0 = new org.telegram.ui.-$$Lambda$ContactsActivity$eWXKwOQWj6CiQRgK9xn-hx5U5KA
-            r0.<init>(r1, r2)
-            r1.addUpdateListener(r0)
-            android.widget.FrameLayout r0 = r12.floatingButtonContainer
-            if (r0 == 0) goto L_0x00a4
-            android.view.View r3 = r12.fragmentView
-            android.view.ViewGroup r3 = (android.view.ViewGroup) r3
-            r3.removeView(r0)
-            android.view.ViewParent r0 = r2.getParent()
-            android.widget.FrameLayout r0 = (android.widget.FrameLayout) r0
-            android.widget.FrameLayout r2 = r12.floatingButtonContainer
-            r0.addView(r2)
+            org.telegram.ui.-$$Lambda$ContactsActivity$eWXKwOQWj6CiQRgK9xn-hx5U5KA r3 = new org.telegram.ui.-$$Lambda$ContactsActivity$eWXKwOQWj6CiQRgK9xn-hx5U5KA
+            r3.<init>(r1, r2)
+            r1.addUpdateListener(r3)
+            android.widget.FrameLayout r3 = r8.floatingButtonContainer
+            if (r3 == 0) goto L_0x00a4
+            android.view.View r5 = r8.fragmentView
+            android.view.ViewGroup r5 = (android.view.ViewGroup) r5
+            r5.removeView(r3)
+            android.view.ViewParent r2 = r2.getParent()
+            android.widget.FrameLayout r2 = (android.widget.FrameLayout) r2
+            android.widget.FrameLayout r3 = r8.floatingButtonContainer
+            r2.addView(r3)
         L_0x00a4:
             r2 = 150(0x96, double:7.4E-322)
             r1.setDuration(r2)
-            android.view.animation.DecelerateInterpolator r0 = new android.view.animation.DecelerateInterpolator
-            r2 = 1069547520(0x3fCLASSNAME, float:1.5)
-            r0.<init>(r2)
-            r1.setInterpolator(r0)
-            int r8 = r12.currentAccount
-            android.animation.AnimatorSet r0 = new android.animation.AnimatorSet
-            r0.<init>()
-            org.telegram.ui.ContactsActivity$12 r2 = new org.telegram.ui.ContactsActivity$12
-            r2.<init>(r11, r13, r14)
-            r0.addListener(r2)
-            android.animation.Animator[] r14 = new android.animation.Animator[r4]
-            r2 = 0
-            r14[r2] = r1
-            r0.playTogether(r14)
-            org.telegram.ui.-$$Lambda$ContactsActivity$Ascmf0NFzIoGUoQPVAOGsx81eAY r14 = new org.telegram.ui.-$$Lambda$ContactsActivity$Ascmf0NFzIoGUoQPVAOGsx81eAY
-            r6 = r14
-            r7 = r12
-            r9 = r0
-            r10 = r13
-            r6.<init>(r8, r9, r10, r11)
-            r1 = 50
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r14, r1)
-            return r0
-        L_0x00d9:
+            android.view.animation.DecelerateInterpolator r2 = new android.view.animation.DecelerateInterpolator
+            r3 = 1069547520(0x3fCLASSNAME, float:1.5)
+            r2.<init>(r3)
+            r1.setInterpolator(r2)
+            android.animation.AnimatorSet r2 = new android.animation.AnimatorSet
+            r2.<init>()
+            org.telegram.ui.ContactsActivity$12 r3 = new org.telegram.ui.ContactsActivity$12
+            r3.<init>(r0, r9, r10)
+            r2.addListener(r3)
+            android.animation.Animator[] r10 = new android.animation.Animator[r4]
+            r3 = 0
+            r10[r3] = r1
+            r2.playTogether(r10)
+            org.telegram.ui.-$$Lambda$ContactsActivity$sFggcU9gVcBQonI9bNP5ZBexOvk r10 = new org.telegram.ui.-$$Lambda$ContactsActivity$sFggcU9gVcBQonI9bNP5ZBexOvk
+            r10.<init>(r2, r9, r0)
+            r0 = 50
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r10, r0)
+            return r2
+        L_0x00d3:
             return r5
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContactsActivity.onCustomTransitionAnimation(boolean, java.lang.Runnable):android.animation.AnimatorSet");
@@ -1283,9 +1279,9 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$onCustomTransitionAnimation$8 */
-    public /* synthetic */ void lambda$onCustomTransitionAnimation$8$ContactsActivity(int i, AnimatorSet animatorSet, boolean z, RLottieImageView rLottieImageView) {
+    public /* synthetic */ void lambda$onCustomTransitionAnimation$8$ContactsActivity(AnimatorSet animatorSet, boolean z, RLottieImageView rLottieImageView) {
         final RLottieImageView rLottieImageView2 = rLottieImageView;
-        this.animationIndex = NotificationCenter.getInstance(i).setAnimationInProgress(this.animationIndex, (int[]) null);
+        this.animationIndex = getNotificationCenter().setAnimationInProgress(this.animationIndex, (int[]) null);
         animatorSet.start();
         if (z) {
             this.floatingButton.setAnimation(NUM, 52, 52);
@@ -1301,27 +1297,27 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         this.bounceIconAnimator = new AnimatorSet();
         float duration = (float) this.floatingButton.getAnimatedDrawable().getDuration();
         long j = 0;
-        int i2 = 4;
+        int i = 4;
         if (z) {
-            for (int i3 = 0; i3 < 6; i3++) {
+            for (int i2 = 0; i2 < 6; i2++) {
                 AnimatorSet animatorSet3 = new AnimatorSet();
-                if (i3 == 0) {
+                if (i2 == 0) {
                     animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.0f, 0.9f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.0f, 0.9f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{1.0f, 0.9f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{1.0f, 0.9f})});
                     animatorSet3.setDuration((long) (0.12765957f * duration));
                     animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-                } else if (i3 == 1) {
+                } else if (i2 == 1) {
                     animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{0.9f, 1.06f})});
                     animatorSet3.setDuration((long) (0.3617021f * duration));
                     animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
-                } else if (i3 == 2) {
+                } else if (i2 == 2) {
                     animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.06f, 0.9f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.06f, 0.9f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{1.06f, 0.9f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{1.06f, 0.9f})});
                     animatorSet3.setDuration((long) (0.21276596f * duration));
                     animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
-                } else if (i3 == 3) {
+                } else if (i2 == 3) {
                     animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.9f, 1.03f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.9f, 1.03f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{0.9f, 1.03f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{0.9f, 1.03f})});
                     animatorSet3.setDuration((long) (duration * 0.10638298f));
                     animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
-                } else if (i3 == 4) {
+                } else if (i2 == 4) {
                     animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.03f, 0.98f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.03f, 0.98f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{1.03f, 0.98f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{1.03f, 0.98f})});
                     animatorSet3.setDuration((long) (duration * 0.10638298f));
                     animatorSet3.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
@@ -1335,10 +1331,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 this.bounceIconAnimator.playTogether(new Animator[]{animatorSet3});
             }
         } else {
-            for (int i4 = 0; i4 < 5; i4++) {
+            for (int i3 = 0; i3 < 5; i3++) {
                 AnimatorSet animatorSet4 = new AnimatorSet();
-                if (i4 == 0) {
-                    Animator[] animatorArr = new Animator[i2];
+                if (i3 == 0) {
+                    Animator[] animatorArr = new Animator[i];
                     animatorArr[0] = ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.0f, 0.9f});
                     animatorArr[1] = ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.0f, 0.9f});
                     animatorArr[2] = ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{1.0f, 0.9f});
@@ -1346,20 +1342,20 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     animatorSet4.playTogether(animatorArr);
                     animatorSet4.setDuration((long) (0.19444445f * duration));
                     animatorSet4.setInterpolator(CubicBezierInterpolator.EASE_OUT);
-                } else if (i4 == 1) {
+                } else if (i3 == 1) {
                     animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{0.9f, 1.06f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{0.9f, 1.06f})});
                     animatorSet4.setDuration((long) (0.22222222f * duration));
                     animatorSet4.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
-                } else if (i4 == 2) {
+                } else if (i3 == 2) {
                     animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.06f, 0.92f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.06f, 0.92f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{1.06f, 0.92f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{1.06f, 0.92f})});
                     animatorSet4.setDuration((long) (0.19444445f * duration));
                     animatorSet4.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
-                } else if (i4 == 3) {
+                } else if (i3 == 3) {
                     animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{0.92f, 1.02f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{0.92f, 1.02f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{0.92f, 1.02f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{0.92f, 1.02f})});
                     animatorSet4.setDuration((long) (0.25f * duration));
                     animatorSet4.setInterpolator(CubicBezierInterpolator.EASE_BOTH);
                 } else {
-                    i2 = 4;
+                    i = 4;
                     animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_X, new float[]{1.02f, 1.0f}), ObjectAnimator.ofFloat(this.floatingButton, View.SCALE_Y, new float[]{1.02f, 1.0f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_X, new float[]{1.02f, 1.0f}), ObjectAnimator.ofFloat(rLottieImageView2, View.SCALE_Y, new float[]{1.02f, 1.0f})});
                     animatorSet4.setDuration((long) (duration * 0.10638298f));
                     animatorSet4.setInterpolator(CubicBezierInterpolator.EASE_IN);
@@ -1367,13 +1363,12 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     j += animatorSet4.getDuration();
                     this.bounceIconAnimator.playTogether(new Animator[]{animatorSet4});
                 }
-                i2 = 4;
+                i = 4;
                 animatorSet4.setStartDelay(j);
                 j += animatorSet4.getDuration();
                 this.bounceIconAnimator.playTogether(new Animator[]{animatorSet4});
             }
         }
-        final int i5 = i;
         this.bounceIconAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 ContactsActivity.this.floatingButton.setScaleX(1.0f);
@@ -1381,7 +1376,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 rLottieImageView2.setScaleX(1.0f);
                 rLottieImageView2.setScaleY(1.0f);
                 AnimatorSet unused = ContactsActivity.this.bounceIconAnimator = null;
-                NotificationCenter.getInstance(i5).onAnimationFinish(ContactsActivity.this.animationIndex);
+                ContactsActivity.this.getNotificationCenter().onAnimationFinish(ContactsActivity.this.animationIndex);
             }
         });
         this.bounceIconAnimator.start();

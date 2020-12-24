@@ -7892,7 +7892,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r3 = 2131165538(0x7var_, float:1.7945296E38)
             r0.setIcon((int) r3, (boolean) r1)
             android.widget.ImageView r0 = r4.botButton
-            r1 = 2131624047(0x7f0e006f, float:1.8875263E38)
+            r1 = 2131624048(0x7f0e0070, float:1.8875265E38)
             java.lang.String r3 = "AccDescrShowKeyboard"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setContentDescription(r1)

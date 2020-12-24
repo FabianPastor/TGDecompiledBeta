@@ -1,6 +1,7 @@
 package org.telegram.messenger;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -14,6 +15,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.SystemClock;
 import java.io.StringReader;
 import java.lang.ref.WeakReference;
@@ -85,7 +87,9 @@ public class SvgHelper {
         /* access modifiers changed from: private */
         public static Runnable shiftRunnable;
         private static float totalTranslation;
-        private LinearGradient backgroundGradient;
+        private Bitmap backgroundBitmap;
+        private Canvas backgroundCanvas;
+        private Shader backgroundGradient;
         private float colorAlpha;
         /* access modifiers changed from: private */
         public ArrayList<Object> commands = new ArrayList<>();
@@ -228,7 +232,18 @@ public class SvgHelper {
                 float f2 = (1.0f - dp) / 2.0f;
                 float f3 = dp / 2.0f;
                 this.placeholderGradient = new LinearGradient(0.0f, 0.0f, gradientWidth, 0.0f, new int[]{0, 0, argb, 0, 0}, new float[]{0.0f, f2 - f3, f2, f2 + f3, 1.0f}, Shader.TileMode.REPEAT);
-                this.backgroundGradient = new LinearGradient(0.0f, 0.0f, gradientWidth, 0.0f, new int[]{argb, argb}, (float[]) null, Shader.TileMode.REPEAT);
+                if (Build.VERSION.SDK_INT >= 28) {
+                    this.backgroundGradient = new LinearGradient(0.0f, 0.0f, gradientWidth, 0.0f, new int[]{argb, argb}, (float[]) null, Shader.TileMode.REPEAT);
+                } else {
+                    if (this.backgroundBitmap == null) {
+                        this.backgroundBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+                        this.backgroundCanvas = new Canvas(this.backgroundBitmap);
+                    }
+                    this.backgroundCanvas.drawColor(argb);
+                    Bitmap bitmap = this.backgroundBitmap;
+                    Shader.TileMode tileMode = Shader.TileMode.REPEAT;
+                    this.backgroundGradient = new BitmapShader(bitmap, tileMode, tileMode);
+                }
                 Matrix matrix = new Matrix();
                 this.placeholderMatrix = matrix;
                 this.placeholderGradient.setLocalMatrix(matrix);

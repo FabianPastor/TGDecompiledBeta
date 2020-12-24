@@ -1030,7 +1030,7 @@ public class CacheControlActivity extends BaseFragment {
             this.databaseSize = MessagesStorage.getInstance(this.currentAccount).getDatabaseSize();
             this.listAdapter.notifyDataSetChanged();
         }
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didDatabaseCleared, new Object[0]);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didClearDatabase, new Object[0]);
     }
 
     public void onResume() {

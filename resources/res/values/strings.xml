@@ -64,6 +64,7 @@
     <string name="AccDescrNumberOfViews_other">Viewed %1$d times</string>
     <string name="AccDescrNumberOfViews_two">Viewed %1$d times</string>
     <string name="AccDescrOpenChat">Open chat</string>
+    <string name="AccDescrOpenInPhotoViewer">Open in photo viewer</string>
     <string name="AccDescrOpenMenu">Open navigation menu</string>
     <string name="AccDescrOpenMenu2">Open menu</string>
     <string name="AccDescrPageDown">Go to bottom</string>
@@ -3547,6 +3548,7 @@
     <string name="TwoStepVerificationPasswordSet">Password Set!</string>
     <string name="TwoStepVerificationPasswordSetInfo">This password will be required when you log in on a new device in addition to the code you get in the SMS.</string>
     <string name="TwoStepVerificationSetPassword">Set Password</string>
+    <string name="TwoStepVerificationShowPassword">Show password</string>
     <string name="TwoStepVerificationTitle">Two-Step Verification</string>
     <string name="TypeLocationGroup">Link</string>
     <string name="TypeLocationGroupEdit">Tap to add a permanent link</string>

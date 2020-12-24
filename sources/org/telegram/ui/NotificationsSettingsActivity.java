@@ -808,21 +808,21 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             goto L_0x0428
         L_0x0078:
             int r13 = r10.resetNotificationsRow
-            r3 = 2131624586(0x7f0e028a, float:1.8876356E38)
+            r3 = 2131624587(0x7f0e028b, float:1.8876358E38)
             java.lang.String r4 = "Cancel"
             if (r12 != r13) goto L_0x00d5
             org.telegram.ui.ActionBar.AlertDialog$Builder r12 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r13 = r10.getParentActivity()
             r12.<init>((android.content.Context) r13)
-            r13 = 2131626955(0x7f0e0bcb, float:1.888116E38)
+            r13 = 2131626956(0x7f0e0bcc, float:1.8881163E38)
             java.lang.String r0 = "ResetNotificationsAlertTitle"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
             r12.setTitle(r13)
-            r13 = 2131626954(0x7f0e0bca, float:1.8881159E38)
+            r13 = 2131626955(0x7f0e0bcb, float:1.888116E38)
             java.lang.String r0 = "ResetNotificationsAlert"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
             r12.setMessage(r13)
-            r13 = 2131626935(0x7f0e0bb7, float:1.888112E38)
+            r13 = 2131626936(0x7f0e0bb8, float:1.8881122E38)
             java.lang.String r0 = "Reset"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
             org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$lfo6urI-OFL_gux_iA976sAoSgk r0 = new org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$lfo6urI-OFL_gux_iA976sAoSgk
@@ -1108,13 +1108,13 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             org.telegram.ui.ActionBar.AlertDialog$Builder r13 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r6 = r10.getParentActivity()
             r13.<init>((android.content.Context) r6)
-            r6 = 2131626898(0x7f0e0b92, float:1.8881045E38)
+            r6 = 2131626899(0x7f0e0b93, float:1.8881047E38)
             java.lang.String r7 = "RepeatNotifications"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r13.setTitle(r6)
             r6 = 7
             java.lang.CharSequence[] r6 = new java.lang.CharSequence[r6]
-            r7 = 2131626896(0x7f0e0b90, float:1.8881041E38)
+            r7 = 2131626897(0x7f0e0b91, float:1.8881043E38)
             java.lang.String r8 = "RepeatDisabled"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6[r1] = r7
@@ -1356,7 +1356,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             r4 = 0
             r5 = 1
             if (r3 != r5) goto L_0x0072
-            r3 = 2131626266(0x7f0e091a, float:1.8879763E38)
+            r3 = 2131626267(0x7f0e091b, float:1.8879765E38)
             java.lang.Object[] r5 = new java.lang.Object[r5]
             r5[r4] = r0
             java.lang.String r0 = "NotificationsExceptionsSingleAlert"
@@ -1365,7 +1365,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             r2.setMessage(r0)
             goto L_0x0086
         L_0x0072:
-            r3 = 2131626265(0x7f0e0919, float:1.8879761E38)
+            r3 = 2131626266(0x7f0e091a, float:1.8879763E38)
             java.lang.Object[] r5 = new java.lang.Object[r5]
             r5[r4] = r0
             java.lang.String r0 = "NotificationsExceptionsAlert"
@@ -1373,17 +1373,17 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             r2.setMessage(r0)
         L_0x0086:
-            r0 = 2131626264(0x7f0e0918, float:1.887976E38)
+            r0 = 2131626265(0x7f0e0919, float:1.8879761E38)
             java.lang.String r3 = "NotificationsExceptions"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             r2.setTitle(r0)
-            r0 = 2131627661(0x7f0e0e8d, float:1.8882593E38)
+            r0 = 2131627663(0x7f0e0e8f, float:1.8882597E38)
             java.lang.String r3 = "ViewExceptions"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$3sGDxKY1IZSiGaMHfUpVydO6tKg r3 = new org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$3sGDxKY1IZSiGaMHfUpVydO6tKg
             r3.<init>(r7)
             r2.setNeutralButton(r0, r3)
-            r7 = 2131626303(0x7f0e093f, float:1.8879838E38)
+            r7 = 2131626304(0x7f0e0940, float:1.887984E38)
             java.lang.String r0 = "OK"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r2.setNegativeButton(r7, r1)

@@ -267,7 +267,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                 }
             }
         });
-        this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
+        this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
         AnonymousClass2 r0 = new ScrollView(this, context) {
             public boolean requestChildRectangleOnScreen(View view, Rect rect, boolean z) {
                 rect.bottom += AndroidUtilities.dp(60.0f);

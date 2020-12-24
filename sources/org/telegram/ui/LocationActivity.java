@@ -2298,10 +2298,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             circleOptions.center(new LatLng(this.myLocation.getLatitude(), this.myLocation.getLongitude()));
             circleOptions.radius((double) i);
             if (isActiveThemeDark()) {
-                circleOptions.strokeColor(-1);
+                circleOptions.strokeColor(-NUM);
                 circleOptions.fillColor(NUM);
             } else {
-                circleOptions.strokeColor(-16777216);
+                circleOptions.strokeColor(-NUM);
                 circleOptions.fillColor(NUM);
             }
             circleOptions.strokePattern(asList);
@@ -2422,7 +2422,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
             org.telegram.ui.Components.HintView r1 = r7.hintView
-            r3 = 2131626810(0x7f0e0b3a, float:1.8880867E38)
+            r3 = 2131626811(0x7f0e0b3b, float:1.8880869E38)
             java.lang.Object[] r5 = new java.lang.Object[r4]
             java.lang.String r0 = org.telegram.messenger.UserObject.getFirstName(r0)
             r5[r2] = r0
@@ -2432,7 +2432,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             goto L_0x0063
         L_0x0055:
             org.telegram.ui.Components.HintView r0 = r7.hintView
-            r1 = 2131626809(0x7f0e0b39, float:1.8880865E38)
+            r1 = 2131626810(0x7f0e0b3a, float:1.8880867E38)
             java.lang.String r2 = "ProximityTooltioGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setOverrideText(r1)
@@ -3160,7 +3160,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         arrayList.add(new ThemeDescription((View) this.searchListView, 0, new Class[]{LocationCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.searchListView, 0, new Class[]{LocationCell.class}, new String[]{"addressTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText3"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{SharingLiveLocationCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{SharingLiveLocationCell.class}, new String[]{"distanceTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{SharingLiveLocationCell.class}, new String[]{"distanceTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText3"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{LocationLoadingCell.class}, new String[]{"progressBar"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{LocationLoadingCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText3"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{LocationLoadingCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText3"));

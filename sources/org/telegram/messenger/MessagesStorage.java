@@ -348,7 +348,7 @@ public class MessagesStorage extends BaseController {
             sQLiteDatabase.executeFast("PRAGMA secure_delete = ON").stepThis().dispose();
             this.database.executeFast("PRAGMA temp_store = MEMORY").stepThis().dispose();
             this.database.executeFast("PRAGMA journal_mode = WAL").stepThis().dispose();
-            this.database.executeFast("PRAGMA journal_size_limit = 52428800").stepThis().dispose();
+            this.database.executeFast("PRAGMA journal_size_limit = 10485760").stepThis().dispose();
             if (z) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("create new database");
@@ -25303,7 +25303,7 @@ public class MessagesStorage extends BaseController {
             org.telegram.messenger.UserConfig r4 = org.telegram.messenger.UserConfig.getInstance(r4)
             int r4 = r4.getClientUserId()
             java.lang.String r5 = "SavedMessages"
-            r6 = 2131626997(0x7f0e0bf5, float:1.8881246E38)
+            r6 = 2131626998(0x7f0e0bf6, float:1.8881248E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)     // Catch:{ Exception -> 0x0651 }
             java.lang.String r5 = r5.toLowerCase()     // Catch:{ Exception -> 0x0651 }
             java.lang.String r6 = r25.trim()     // Catch:{ Exception -> 0x0651 }

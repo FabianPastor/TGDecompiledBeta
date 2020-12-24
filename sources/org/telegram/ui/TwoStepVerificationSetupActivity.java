@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -504,10 +505,21 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         return false;
                     }
                 });
-                ImageView imageView2 = new ImageView(context2);
-                this.showPasswordButton = imageView2;
-                imageView2.setImageResource(NUM);
+                AnonymousClass6 r4 = new ImageView(context2) {
+                    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+                        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+                        boolean z = true;
+                        accessibilityNodeInfo.setCheckable(true);
+                        if (TwoStepVerificationSetupActivity.this.passwordEditText.getTransformationMethod() != null) {
+                            z = false;
+                        }
+                        accessibilityNodeInfo.setChecked(z);
+                    }
+                };
+                this.showPasswordButton = r4;
+                r4.setImageResource(NUM);
                 this.showPasswordButton.setScaleType(ImageView.ScaleType.CENTER);
+                this.showPasswordButton.setContentDescription(LocaleController.getString("TwoStepVerificationShowPassword", NUM));
                 if (Build.VERSION.SDK_INT >= 21) {
                     this.showPasswordButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
                 }
@@ -540,7 +552,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     });
                 }
                 this.fragmentView = r2;
-                AnonymousClass6 r4 = new View(context2) {
+                AnonymousClass7 r42 = new View(context2) {
                     private Paint paint = new Paint();
 
                     /* access modifiers changed from: protected */
@@ -551,8 +563,8 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         TwoStepVerificationSetupActivity.this.parentLayout.drawHeaderShadow(canvas, measuredHeight);
                     }
                 };
-                this.actionBarBackground = r4;
-                r4.setAlpha(0.0f);
+                this.actionBarBackground = r42;
+                r42.setAlpha(0.0f);
                 r2.addView(this.actionBarBackground);
                 r2.addView(this.actionBar);
                 break;
@@ -1763,7 +1775,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r2 = r10.getParentActivity()
             r1.<init>((android.content.Context) r2)
-            r2 = 2131626303(0x7f0e093f, float:1.8879838E38)
+            r2 = 2131626304(0x7f0e0940, float:1.887984E38)
             java.lang.String r4 = "OK"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             org.telegram.ui.-$$Lambda$TwoStepVerificationSetupActivity$bZv0DYEKs3Ss9yRD6mF-EsdrNww r4 = new org.telegram.ui.-$$Lambda$TwoStepVerificationSetupActivity$bZv0DYEKs3Ss9yRD6mF-EsdrNww
@@ -1774,18 +1786,18 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (r2 == 0) goto L_0x00a9
             boolean r2 = r2.has_password
             if (r2 == 0) goto L_0x00a9
-            r2 = 2131627860(0x7f0e0var_, float:1.8882996E38)
+            r2 = 2131627862(0x7f0e0var_, float:1.8883E38)
             java.lang.String r3 = "YourEmailSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
             goto L_0x00b5
         L_0x00a9:
-            r2 = 2131627864(0x7f0e0var_, float:1.8883004E38)
+            r2 = 2131627866(0x7f0e0f5a, float:1.8883009E38)
             java.lang.String r3 = "YourPasswordChangedSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
         L_0x00b5:
-            r2 = 2131627865(0x7f0e0var_, float:1.8883006E38)
+            r2 = 2131627867(0x7f0e0f5b, float:1.888301E38)
             java.lang.String r3 = "YourPasswordSuccess"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setTitle(r2)
@@ -1869,11 +1881,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             java.lang.String r2 = r1.text
             java.lang.String r3 = "EMAIL_INVALID"
             boolean r2 = r3.equals(r2)
-            r3 = 2131624260(0x7f0e0144, float:1.8875695E38)
+            r3 = 2131624261(0x7f0e0145, float:1.8875697E38)
             java.lang.String r4 = "AppName"
             if (r2 == 0) goto L_0x017a
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r2 = 2131626571(0x7f0e0a4b, float:1.8880382E38)
+            r2 = 2131626572(0x7f0e0a4c, float:1.8880384E38)
             java.lang.String r3 = "PasswordEmailInvalid"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r10.showAlertWithText(r1, r2)
@@ -1897,7 +1909,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1)
         L_0x01a0:
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r3 = 2131625462(0x7f0e05f6, float:1.8878133E38)
+            r3 = 2131625463(0x7f0e05f7, float:1.8878135E38)
             java.lang.Object[] r4 = new java.lang.Object[r6]
             r4[r7] = r1
             java.lang.String r1 = "FloodWaitTime"

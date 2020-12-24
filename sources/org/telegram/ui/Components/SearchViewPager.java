@@ -342,8 +342,8 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 this.selectedMessagesCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
                 createActionMode.addView(this.selectedMessagesCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
                 this.selectedMessagesCountTextView.setOnTouchListener($$Lambda$SearchViewPager$TDsWTBkeEmn4ywq1WEkaayHK0U.INSTANCE);
-                this.gotoItem = createActionMode.addItemWithWidth(200, NUM, AndroidUtilities.dp(54.0f));
-                this.forwardItem = createActionMode.addItemWithWidth(201, NUM, AndroidUtilities.dp(54.0f));
+                this.gotoItem = createActionMode.addItemWithWidth(200, NUM, AndroidUtilities.dp(54.0f), LocaleController.getString("AccDescrGoToMessage", NUM));
+                this.forwardItem = createActionMode.addItemWithWidth(201, NUM, AndroidUtilities.dp(54.0f), LocaleController.getString("Forward", NUM));
             }
             if (this.parent.getActionBar().getBackButton().getDrawable() instanceof MenuDrawable) {
                 this.parent.getActionBar().setBackButtonDrawable(new BackDrawable(false));

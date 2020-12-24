@@ -74,7 +74,8 @@ import org.telegram.ui.PhotoViewer;
 public class FilteredSearchView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     private static SpannableStringBuilder arrowSpan;
     RecyclerView.Adapter adapter;
-    int animationIndex = -1;
+    /* access modifiers changed from: private */
+    public int animationIndex = -1;
     /* access modifiers changed from: private */
     public SearchViewPager.ChatPreviewDelegate chatPreviewDelegate;
     Runnable clearCurrentResultsRunnable = new Runnable() {
@@ -1098,10 +1099,9 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         animatorSet.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
                                 NotificationCenter.getInstance(i10).onAnimationFinish(FilteredSearchView.this.animationIndex);
-                                super.onAnimationEnd(animator);
                             }
                         });
-                        FilteredSearchView.this.animationIndex = NotificationCenter.getInstance(i10).setAnimationInProgress(FilteredSearchView.this.animationIndex, (int[]) null);
+                        int unused = FilteredSearchView.this.animationIndex = NotificationCenter.getInstance(i10).setAnimationInProgress(FilteredSearchView.this.animationIndex, (int[]) null);
                         animatorSet.start();
                         View view = view;
                         if (view != null && view.getParent() == null) {
@@ -1536,12 +1536,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         r0 = 2
                         java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
                         r1 = 0
-                        r2 = 2131626317(0x7f0e094d, float:1.8879867E38)
+                        r2 = 2131626318(0x7f0e094e, float:1.8879869E38)
                         java.lang.String r3 = "Open"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
                         r1 = 1
-                        r2 = 2131624936(0x7f0e03e8, float:1.8877066E38)
+                        r2 = 2131624937(0x7f0e03e9, float:1.8877068E38)
                         java.lang.String r3 = "Copy"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
@@ -2025,7 +2025,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
                     android.content.Context r3 = r3.getContext()
                     r4.<init>(r3)
-                    r3 = 2131627033(0x7f0e0CLASSNAME, float:1.888132E38)
+                    r3 = 2131627034(0x7f0e0c1a, float:1.8881321E38)
                     java.lang.String r0 = "SearchMessages"
                     java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r0, r3)
                     r4.setText(r3)

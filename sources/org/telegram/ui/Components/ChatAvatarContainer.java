@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
@@ -59,17 +60,30 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     public ChatAvatarContainer(Context context, ChatActivity chatActivity, boolean z) {
         super(context);
         this.parentFragment = chatActivity;
-        this.avatarImageView = new BackupImageView(context);
+        final boolean z2 = chatActivity != null && chatActivity.getChatMode() == 0 && !UserObject.isReplyUser(this.parentFragment.getCurrentUser());
+        this.avatarImageView = new BackupImageView(this, context) {
+            public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+                super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+                if (!z2 || !getImageReceiver().hasNotThumb()) {
+                    accessibilityNodeInfo.setVisibleToUser(false);
+                    return;
+                }
+                accessibilityNodeInfo.setText(LocaleController.getString("AccDescrProfilePicture", NUM));
+                if (Build.VERSION.SDK_INT >= 21) {
+                    accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, LocaleController.getString("Open", NUM)));
+                }
+            }
+        };
         if (this.parentFragment != null) {
             this.sharedMediaPreloader = new SharedMediaLayout.SharedMediaPreloader(chatActivity);
             if (this.parentFragment.isThreadChat() || this.parentFragment.getChatMode() == 2) {
                 this.avatarImageView.setVisibility(8);
             }
         }
+        this.avatarImageView.setContentDescription(LocaleController.getString("AccDescrProfilePicture", NUM));
         this.avatarImageView.setRoundRadius(AndroidUtilities.dp(21.0f));
         addView(this.avatarImageView);
-        ChatActivity chatActivity2 = this.parentFragment;
-        if (chatActivity2 != null && chatActivity2.getChatMode() == 0 && !UserObject.isReplyUser(this.parentFragment.getCurrentUser())) {
+        if (z2) {
             this.avatarImageView.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
                     ChatAvatarContainer.this.lambda$new$0$ChatAvatarContainer(view);
@@ -108,8 +122,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             });
             this.timeItem.setContentDescription(LocaleController.getString("SetTimer", NUM));
         }
-        ChatActivity chatActivity3 = this.parentFragment;
-        if (chatActivity3 != null && chatActivity3.getChatMode() == 0) {
+        ChatActivity chatActivity2 = this.parentFragment;
+        if (chatActivity2 != null && chatActivity2.getChatMode() == 0) {
             if (!this.parentFragment.isThreadChat() && !UserObject.isReplyUser(this.parentFragment.getCurrentUser())) {
                 setOnClickListener(new View.OnClickListener() {
                     public final void onClick(View view) {
@@ -758,5 +772,12 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         this.subtitleTextView.setText(str);
         this.subtitleTextView.setTextColor(Theme.getColor("actionBarDefaultSubtitle"));
         this.subtitleTextView.setTag("actionBarDefaultSubtitle");
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        if (accessibilityNodeInfo.isClickable() && Build.VERSION.SDK_INT >= 21) {
+            accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, LocaleController.getString("OpenProfile", NUM)));
+        }
     }
 }

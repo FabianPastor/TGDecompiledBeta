@@ -122,10 +122,11 @@ public class VoIPWindowView extends FrameLayout {
                 } catch (Exception unused) {
                 }
             } else {
-                this.animationIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(this.animationIndex, (int[]) null);
+                final int i = UserConfig.selectedAccount;
+                this.animationIndex = NotificationCenter.getInstance(i).setAnimationInProgress(this.animationIndex, (int[]) null);
                 animate().translationX((float) getMeasuredWidth()).setListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
-                        NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(VoIPWindowView.this.animationIndex);
+                        NotificationCenter.getInstance(i).onAnimationFinish(VoIPWindowView.this.animationIndex);
                         if (VoIPWindowView.this.getParent() != null) {
                             VoIPWindowView voIPWindowView = VoIPWindowView.this;
                             voIPWindowView.activity.setRequestedOrientation(voIPWindowView.orientationBefore);

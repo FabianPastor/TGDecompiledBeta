@@ -394,13 +394,13 @@ public class GroupVoipInviteAlert extends BottomSheet {
             org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
             android.widget.TextView r3 = r3.title
             java.lang.String r9 = "NoResult"
-            r10 = 2131626100(0x7f0e0874, float:1.8879427E38)
+            r10 = 2131626101(0x7f0e0875, float:1.8879429E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r3.setText(r9)
             org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
             android.widget.TextView r3 = r3.subtitle
             java.lang.String r9 = "SearchEmptyViewFilteredSubtitle2"
-            r10 = 2131627014(0x7f0e0CLASSNAME, float:1.888128E38)
+            r10 = 2131627015(0x7f0e0CLASSNAME, float:1.8881282E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r3.setText(r9)
             org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
@@ -1460,7 +1460,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 org.telegram.ui.Cells.GraySectionCell r14 = (org.telegram.ui.Cells.GraySectionCell) r14
                 int r0 = r13.groupStartRow
                 if (r15 != r0) goto L_0x0021
-                r15 = 2131624663(0x7f0e02d7, float:1.8876512E38)
+                r15 = 2131624664(0x7f0e02d8, float:1.8876514E38)
                 java.lang.String r0 = "ChannelMembers"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -1468,7 +1468,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
             L_0x0021:
                 int r0 = r13.globalStartRow
                 if (r15 != r0) goto L_0x012f
-                r15 = 2131625574(0x7f0e0666, float:1.887836E38)
+                r15 = 2131625575(0x7f0e0667, float:1.8878362E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)

@@ -661,7 +661,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                     ChatLinkActivity.this.lambda$linkChat$13$ChatLinkActivity(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
                 }
-            })) {
+            }, 64)) {
                 public final /* synthetic */ AlertDialog[] f$1;
                 public final /* synthetic */ int f$2;
 

@@ -5652,7 +5652,7 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02e0 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02e0 }
-            r10 = 2131626031(0x7f0e082f, float:1.8879287E38)
+            r10 = 2131626032(0x7f0e0830, float:1.8879289E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e0 }
             r9.setShortLabel(r11)     // Catch:{ all -> 0x02e0 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e0 }
@@ -6513,7 +6513,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0247 }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131626903(0x7f0e0b97, float:1.8881055E38)
+            r9 = 2131626904(0x7f0e0b98, float:1.8881057E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
         L_0x0067:
             r9 = r4
@@ -6523,7 +6523,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0247 }
             if (r8 == 0) goto L_0x007a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626997(0x7f0e0bf5, float:1.8881246E38)
+            r9 = 2131626998(0x7f0e0bf6, float:1.8881248E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
             goto L_0x0067
         L_0x007a:
@@ -7605,6 +7605,7 @@ public class MediaDataController extends BaseController {
     /* renamed from: lambda$loadReplyMessagesForMessages$114 */
     public /* synthetic */ void lambda$loadReplyMessagesForMessages$114$MediaDataController(ArrayList arrayList, long j, LongSparseArray longSparseArray, Runnable runnable) {
         try {
+            ArrayList arrayList2 = new ArrayList();
             SQLiteCursor queryFinalized = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT m.data, m.mid, m.date, r.random_id FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE r.random_id IN(%s)", new Object[]{TextUtils.join(",", arrayList)}), new Object[0]);
             while (queryFinalized.next()) {
                 NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(0);
@@ -7616,12 +7617,13 @@ public class MediaDataController extends BaseController {
                     TLdeserialize.date = queryFinalized.intValue(2);
                     TLdeserialize.dialog_id = j;
                     long longValue = queryFinalized.longValue(3);
-                    ArrayList arrayList2 = (ArrayList) longSparseArray.get(longValue);
+                    ArrayList arrayList3 = (ArrayList) longSparseArray.get(longValue);
                     longSparseArray.remove(longValue);
-                    if (arrayList2 != null) {
+                    if (arrayList3 != null) {
                         MessageObject messageObject = new MessageObject(this.currentAccount, TLdeserialize, false, false);
-                        for (int i = 0; i < arrayList2.size(); i++) {
-                            MessageObject messageObject2 = (MessageObject) arrayList2.get(i);
+                        arrayList2.add(messageObject);
+                        for (int i = 0; i < arrayList3.size(); i++) {
+                            MessageObject messageObject2 = (MessageObject) arrayList3.get(i);
                             messageObject2.replyMessageObject = messageObject;
                             messageObject2.messageOwner.reply_to = new TLRPC$TL_messageReplyHeader();
                             messageObject2.messageOwner.reply_to.reply_to_msg_id = messageObject.getId();
@@ -7632,24 +7634,26 @@ public class MediaDataController extends BaseController {
             queryFinalized.dispose();
             if (longSparseArray.size() != 0) {
                 for (int i2 = 0; i2 < longSparseArray.size(); i2++) {
-                    ArrayList arrayList3 = (ArrayList) longSparseArray.valueAt(i2);
-                    for (int i3 = 0; i3 < arrayList3.size(); i3++) {
-                        TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = ((MessageObject) arrayList3.get(i3)).messageOwner.reply_to;
+                    ArrayList arrayList4 = (ArrayList) longSparseArray.valueAt(i2);
+                    for (int i3 = 0; i3 < arrayList4.size(); i3++) {
+                        TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = ((MessageObject) arrayList4.get(i3)).messageOwner.reply_to;
                         if (tLRPC$TL_messageReplyHeader != null) {
                             tLRPC$TL_messageReplyHeader.reply_to_random_id = 0;
                         }
                     }
                 }
             }
-            AndroidUtilities.runOnUIThread(new Runnable(j) {
+            AndroidUtilities.runOnUIThread(new Runnable(j, arrayList2) {
                 public final /* synthetic */ long f$1;
+                public final /* synthetic */ ArrayList f$2;
 
                 {
                     this.f$1 = r2;
+                    this.f$2 = r4;
                 }
 
                 public final void run() {
-                    MediaDataController.this.lambda$null$113$MediaDataController(this.f$1);
+                    MediaDataController.this.lambda$null$113$MediaDataController(this.f$1, this.f$2);
                 }
             });
             if (runnable != null) {
@@ -7662,8 +7666,8 @@ public class MediaDataController extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$113 */
-    public /* synthetic */ void lambda$null$113$MediaDataController(long j) {
-        getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, Long.valueOf(j));
+    public /* synthetic */ void lambda$null$113$MediaDataController(long j, ArrayList arrayList) {
+        getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, Long.valueOf(j), arrayList);
     }
 
     /* access modifiers changed from: private */
@@ -7925,7 +7929,7 @@ public class MediaDataController extends BaseController {
             }
         }
         if (z2) {
-            getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, Long.valueOf(j));
+            getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, Long.valueOf(j), arrayList3);
         }
     }
 

@@ -6559,9 +6559,9 @@ public class ImageLoader {
     /* JADX WARNING: Removed duplicated region for block: B:29:0x00a6  */
     /* JADX WARNING: Removed duplicated region for block: B:30:0x00ab  */
     /* JADX WARNING: Removed duplicated region for block: B:36:0x00c3 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x00f2  */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x0102  */
-    /* JADX WARNING: Removed duplicated region for block: B:45:0x0118  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x00f6  */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x0106  */
+    /* JADX WARNING: Removed duplicated region for block: B:47:0x011c  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private static org.telegram.tgnet.TLRPC$PhotoSize scaleAndSaveImageInternal(org.telegram.tgnet.TLRPC$PhotoSize r13, android.graphics.Bitmap r14, android.graphics.Bitmap.CompressFormat r15, boolean r16, int r17, int r18, float r19, float r20, float r21, int r22, boolean r23, boolean r24, boolean r25) throws java.lang.Exception {
         /*
@@ -6669,8 +6669,10 @@ public class ImageLoader {
             java.io.File r6 = new java.io.File
             r6.<init>(r5, r9)
             android.graphics.Bitmap$CompressFormat r5 = android.graphics.Bitmap.CompressFormat.JPEG
-            if (r2 != r5) goto L_0x00e8
-            if (r16 == 0) goto L_0x00e8
+            if (r2 != r5) goto L_0x00ec
+            if (r16 == 0) goto L_0x00ec
+            boolean r5 = org.telegram.messenger.BuildVars.DEBUG_VERSION
+            if (r5 == 0) goto L_0x00ec
             int r5 = r4.getWidth()
             int r7 = r4.getHeight()
             int r8 = r4.getRowBytes()
@@ -6683,20 +6685,20 @@ public class ImageLoader {
             r21 = r6
             int r5 = org.telegram.messenger.Utilities.saveProgressiveJpeg(r16, r17, r18, r19, r20, r21)
             r0.size = r5
-            goto L_0x0100
-        L_0x00e8:
+            goto L_0x0104
+        L_0x00ec:
             java.io.FileOutputStream r5 = new java.io.FileOutputStream
             r5.<init>(r6)
             r4.compress(r15, r3, r5)
-            if (r23 != 0) goto L_0x00fd
+            if (r23 != 0) goto L_0x0101
             java.nio.channels.FileChannel r6 = r5.getChannel()
             long r6 = r6.size()
             int r7 = (int) r6
             r0.size = r7
-        L_0x00fd:
+        L_0x0101:
             r5.close()
-        L_0x0100:
-            if (r23 == 0) goto L_0x0116
+        L_0x0104:
+            if (r23 == 0) goto L_0x011a
             java.io.ByteArrayOutputStream r5 = new java.io.ByteArrayOutputStream
             r5.<init>()
             r4.compress(r15, r3, r5)
@@ -6705,10 +6707,10 @@ public class ImageLoader {
             int r2 = r2.length
             r0.size = r2
             r5.close()
-        L_0x0116:
-            if (r4 == r1) goto L_0x011b
+        L_0x011a:
+            if (r4 == r1) goto L_0x011f
             r4.recycle()
-        L_0x011b:
+        L_0x011f:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.scaleAndSaveImageInternal(org.telegram.tgnet.TLRPC$PhotoSize, android.graphics.Bitmap, android.graphics.Bitmap$CompressFormat, boolean, int, int, float, float, float, int, boolean, boolean, boolean):org.telegram.tgnet.TLRPC$PhotoSize");

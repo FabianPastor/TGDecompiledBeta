@@ -143,7 +143,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         FrameLayout frameLayout2 = frameLayout;
         if (this.type != 0) {
             ActionBarMenu createMenu = this.actionBar.createMenu();
-            createMenu.addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
+            createMenu.addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
             TextView textView = new TextView(context2);
             this.titleTextView = textView;
             textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText6"));

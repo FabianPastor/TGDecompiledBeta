@@ -1452,6 +1452,7 @@
     <public type="string" name="AccDescrNumberOfViews_other" id="NUM" />
     <public type="string" name="AccDescrNumberOfViews_two" id="NUM" />
     <public type="string" name="AccDescrOpenChat" id="NUM" />
+    <public type="string" name="AccDescrOpenInPhotoViewer" id="NUM" />
     <public type="string" name="AccDescrOpenMenu" id="NUM" />
     <public type="string" name="AccDescrOpenMenu2" id="NUM" />
     <public type="string" name="AccDescrPageDown" id="NUM" />
@@ -4935,6 +4936,7 @@
     <public type="string" name="TwoStepVerificationPasswordSet" id="NUM" />
     <public type="string" name="TwoStepVerificationPasswordSetInfo" id="NUM" />
     <public type="string" name="TwoStepVerificationSetPassword" id="NUM" />
+    <public type="string" name="TwoStepVerificationShowPassword" id="NUM" />
     <public type="string" name="TwoStepVerificationTitle" id="NUM" />
     <public type="string" name="TypeLocationGroup" id="NUM" />
     <public type="string" name="TypeLocationGroupEdit" id="NUM" />

@@ -25,7 +25,6 @@ public class AdjustPanLayoutHelper {
     ValueAnimator animator;
     /* access modifiers changed from: private */
     public ViewGroup contentView;
-    private ViewGroup decorView;
     protected float keyboardSize;
     int notificationsIndex;
     ViewTreeObserver.OnPreDrawListener onPreDrawListener = new ViewTreeObserver.OnPreDrawListener() {
@@ -181,7 +180,7 @@ public class AdjustPanLayoutHelper {
     /* renamed from: lambda$animateHeight$0 */
     public /* synthetic */ void lambda$animateHeight$0$AdjustPanLayoutHelper(float f, float f2, boolean z, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-        float f3 = (f * floatValue) + (f2 * (1.0f - floatValue));
+        float f3 = (float) ((int) ((f * floatValue) + (f2 * (1.0f - floatValue))));
         this.parent.setTranslationY(f3);
         onPanTranslationUpdate(-f3, floatValue, z);
     }
@@ -216,9 +215,7 @@ public class AdjustPanLayoutHelper {
             onDetach();
             Activity activity = getActivity(this.parent.getContext());
             if (activity != null) {
-                ViewGroup viewGroup = (ViewGroup) activity.getWindow().getDecorView();
-                this.decorView = viewGroup;
-                this.contentView = (ViewGroup) viewGroup.findViewById(16908290);
+                this.contentView = (ViewGroup) ((ViewGroup) activity.getWindow().getDecorView()).findViewById(16908290);
             }
             View findResizableView = findResizableView(this.parent);
             this.resizableView = findResizableView;
