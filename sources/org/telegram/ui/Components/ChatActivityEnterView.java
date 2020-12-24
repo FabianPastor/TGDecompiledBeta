@@ -5483,7 +5483,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 return;
             }
-            CharSequence[] charSequenceArr = {this.messageEditText.getText()};
+            CharSequence[] charSequenceArr = {AndroidUtilities.getTrimmedString(this.messageEditText.getText())};
             ArrayList<TLRPC$MessageEntity> entities = MediaDataController.getInstance(this.currentAccount).getEntities(charSequenceArr, supportsSendingNewEntities());
             if (!TextUtils.equals(charSequenceArr[0], this.editingMessageObject.messageText) || ((entities != null && !entities.isEmpty()) || (this.editingMessageObject.messageOwner.media instanceof TLRPC$TL_messageMediaWebPage))) {
                 MessageObject messageObject = this.editingMessageObject;

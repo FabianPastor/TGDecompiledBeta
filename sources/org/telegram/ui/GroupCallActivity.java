@@ -2050,6 +2050,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 animatorSet.cancel();
                 this.actionBarAnimation = null;
             }
+            setUseLightStatusBar(this.actionBar.getTag() == null);
             ViewPropertyAnimator scaleY = this.actionBar.getBackButton().animate().scaleX(z2 ? 1.0f : 0.9f).scaleY(z2 ? 1.0f : 0.9f);
             if (z2) {
                 f = 0.0f;

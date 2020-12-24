@@ -9160,20 +9160,19 @@ public class MessageObject {
 
     public boolean isOutOwner() {
         TLRPC$Peer tLRPC$Peer;
-        TLRPC$Peer tLRPC$Peer2;
         int i;
-        TLRPC$Peer tLRPC$Peer3 = this.messageOwner.peer_id;
+        TLRPC$Peer tLRPC$Peer2 = this.messageOwner.peer_id;
         TLRPC$Chat tLRPC$Chat = null;
-        if (!(tLRPC$Peer3 == null || (i = tLRPC$Peer3.channel_id) == 0)) {
+        if (!(tLRPC$Peer2 == null || (i = tLRPC$Peer2.channel_id) == 0)) {
             tLRPC$Chat = getChat((AbstractMap<Integer, TLRPC$Chat>) null, (SparseArray<TLRPC$Chat>) null, i);
         }
         TLRPC$Message tLRPC$Message = this.messageOwner;
         if (!tLRPC$Message.out) {
             return false;
         }
-        TLRPC$Peer tLRPC$Peer4 = tLRPC$Message.from_id;
-        if (!(tLRPC$Peer4 instanceof TLRPC$TL_peerUser)) {
-            if (!(tLRPC$Peer4 instanceof TLRPC$TL_peerChannel)) {
+        TLRPC$Peer tLRPC$Peer3 = tLRPC$Message.from_id;
+        if (!(tLRPC$Peer3 instanceof TLRPC$TL_peerUser)) {
+            if (!(tLRPC$Peer3 instanceof TLRPC$TL_peerChannel)) {
                 return false;
             }
             if (ChatObject.isChannel(tLRPC$Chat) && !tLRPC$Chat.megagroup) {
@@ -9190,8 +9189,15 @@ public class MessageObject {
         int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
         if (getDialogId() == ((long) clientUserId)) {
             TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader = this.messageOwner.fwd_from;
-            TLRPC$Peer tLRPC$Peer5 = tLRPC$MessageFwdHeader.from_id;
-            if ((!(tLRPC$Peer5 instanceof TLRPC$TL_peerUser) || tLRPC$Peer5.user_id != clientUserId || ((tLRPC$Peer2 = tLRPC$MessageFwdHeader.saved_from_peer) != null && tLRPC$Peer2.user_id != clientUserId)) && ((tLRPC$Peer = tLRPC$MessageFwdHeader.saved_from_peer) == null || tLRPC$Peer.user_id != clientUserId)) {
+            TLRPC$Peer tLRPC$Peer4 = tLRPC$MessageFwdHeader.from_id;
+            if (!((tLRPC$Peer4 instanceof TLRPC$TL_peerUser) && tLRPC$Peer4.user_id == clientUserId && ((tLRPC$Peer = tLRPC$MessageFwdHeader.saved_from_peer) == null || tLRPC$Peer.user_id == clientUserId))) {
+                TLRPC$Peer tLRPC$Peer5 = tLRPC$MessageFwdHeader.saved_from_peer;
+                if (tLRPC$Peer5 == null || tLRPC$Peer5.user_id != clientUserId) {
+                    return false;
+                }
+                if (tLRPC$Peer4 == null || tLRPC$Peer4.user_id == clientUserId) {
+                    return true;
+                }
                 return false;
             }
             return true;

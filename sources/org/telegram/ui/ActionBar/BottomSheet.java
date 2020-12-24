@@ -1216,6 +1216,15 @@ public class BottomSheet extends Dialog {
         dismissWithButtonClick(((Integer) view.getTag()).intValue());
     }
 
+    public void setUseLightStatusBar(boolean z) {
+        this.useLightStatusBar = z;
+        if (Build.VERSION.SDK_INT >= 23) {
+            int color = Theme.getColor("actionBarDefault", (boolean[]) null, true);
+            int systemUiVisibility = this.container.getSystemUiVisibility();
+            this.container.setSystemUiVisibility((!this.useLightStatusBar || color != -1) ? systemUiVisibility & -8193 : systemUiVisibility | 8192);
+        }
+    }
+
     public void setFocusable(boolean z) {
         if (this.focusable != z) {
             this.focusable = z;
