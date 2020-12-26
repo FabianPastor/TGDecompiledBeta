@@ -13506,8 +13506,8 @@ public class MessagesController extends BaseController implements NotificationCe
             goto L_0x01bf
         L_0x015d:
             if (r14 != 0) goto L_0x0165
-            boolean r4 = r15.isSent()
-            if (r4 != 0) goto L_0x0171
+            int r4 = r15.getId()
+            if (r4 > 0) goto L_0x0171
         L_0x0165:
             if (r14 == 0) goto L_0x0223
             org.telegram.tgnet.TLRPC$Message r4 = r14.messageOwner

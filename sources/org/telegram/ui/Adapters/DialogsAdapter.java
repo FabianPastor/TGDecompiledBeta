@@ -109,7 +109,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         int size = DialogsActivity.getDialogsArray(this.currentAccount, this.dialogsType, this.folderId, this.dialogsListFrozen).size();
         int i = this.dialogsType;
         boolean z = false;
-        if (i == 7 || i == 8 || size != 0 || (this.folderId == 0 && !MessagesController.getInstance(this.currentAccount).isLoadingDialogs(this.folderId))) {
+        if (i == 7 || i == 8 || size != 0 || (this.folderId == 0 && !MessagesController.getInstance(this.currentAccount).isLoadingDialogs(this.folderId) && MessagesController.getInstance(this.currentAccount).isDialogsEndReached(this.folderId))) {
             int i2 = this.dialogsType;
             int i3 = (i2 == 7 || i2 == 8 ? size != 0 : MessagesController.getInstance(this.currentAccount).isDialogsEndReached(this.folderId) && size != 0) ? size : size + 1;
             if (this.hasHints) {
