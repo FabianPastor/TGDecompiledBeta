@@ -48,7 +48,7 @@ public class SQLitePreparedStatement {
 
     public SQLitePreparedStatement(SQLiteDatabase sQLiteDatabase, String str) throws SQLiteException {
         this.sqliteStatementHandle = prepare(sQLiteDatabase.getSQLiteHandle(), str);
-        if (BuildVars.DEBUG_VERSION) {
+        if (BuildVars.LOGS_ENABLED) {
             this.query = str;
             this.startTime = SystemClock.elapsedRealtime();
         }
@@ -107,7 +107,7 @@ public class SQLitePreparedStatement {
 
     public void finalizeQuery() {
         if (!this.isFinalized) {
-            if (BuildVars.DEBUG_VERSION) {
+            if (BuildVars.LOGS_ENABLED) {
                 long elapsedRealtime = SystemClock.elapsedRealtime() - this.startTime;
                 if (elapsedRealtime > 500) {
                     FileLog.d("sqlite query " + this.query + " took " + elapsedRealtime + "ms");

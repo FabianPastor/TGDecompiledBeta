@@ -1108,6 +1108,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 }
             }
         }
+        if (SharedConfig.noStatusBar) {
+            getWindow().setStatusBarColor(0);
+        }
     }
 
     public void switchToAccount(int i, boolean z) {

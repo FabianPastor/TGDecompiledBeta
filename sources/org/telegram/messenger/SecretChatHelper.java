@@ -1108,7 +1108,7 @@ public class SecretChatHelper extends BaseController {
         if (isSecretInvisibleMessage(tLRPC$Message)) {
             tLRPC$messages_SentEncryptedMessage.date = 0;
         }
-        getMessagesStorage().updateMessageStateAndId(tLRPC$Message.random_id, Integer.valueOf(tLRPC$Message.id), tLRPC$Message.id, tLRPC$messages_SentEncryptedMessage.date, false, 0, 0);
+        getMessagesStorage().updateMessageStateAndId(tLRPC$Message.random_id, Long.valueOf((long) tLRPC$Message.id), tLRPC$Message.id, tLRPC$messages_SentEncryptedMessage.date, false, 0, 0);
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Message, i, str) {
             public final /* synthetic */ TLRPC$Message f$1;
             public final /* synthetic */ int f$2;

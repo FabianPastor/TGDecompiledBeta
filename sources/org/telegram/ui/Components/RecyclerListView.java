@@ -89,6 +89,10 @@ public class RecyclerListView extends RecyclerView {
 
         public void onItemRangeInserted(int i, int i2) {
             RecyclerListView.this.checkIfEmpty(true);
+            if (RecyclerListView.this.pinnedHeader != null && RecyclerListView.this.pinnedHeader.getAlpha() == 0.0f) {
+                int unused = RecyclerListView.this.currentFirst = -1;
+                RecyclerListView.this.invalidateViews();
+            }
         }
 
         public void onItemRangeRemoved(int i, int i2) {
@@ -109,7 +113,8 @@ public class RecyclerListView extends RecyclerView {
     /* access modifiers changed from: private */
     public FrameLayout overlayContainer;
     private IntReturnCallback pendingHighlightPosition;
-    private View pinnedHeader;
+    /* access modifiers changed from: private */
+    public View pinnedHeader;
     private float pinnedHeaderShadowAlpha;
     private Drawable pinnedHeaderShadowDrawable;
     private float pinnedHeaderShadowTargetAlpha;

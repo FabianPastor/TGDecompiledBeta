@@ -4260,11 +4260,15 @@ public class AndroidUtilities {
             if (z) {
                 if ((systemUiVisibility & 8192) == 0) {
                     decorView.setSystemUiVisibility(systemUiVisibility | 8192);
-                    window.setStatusBarColor(NUM);
+                    if (!SharedConfig.noStatusBar) {
+                        window.setStatusBarColor(NUM);
+                    }
                 }
             } else if ((systemUiVisibility & 8192) != 0) {
                 decorView.setSystemUiVisibility(systemUiVisibility & -8193);
-                window.setStatusBarColor(NUM);
+                if (!SharedConfig.noStatusBar) {
+                    window.setStatusBarColor(NUM);
+                }
             }
         }
     }

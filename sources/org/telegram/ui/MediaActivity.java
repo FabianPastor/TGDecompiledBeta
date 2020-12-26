@@ -2559,7 +2559,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                 view = new GraySectionCell(this.mContext);
                 view.setBackgroundColor(Theme.getColor("graySection") & -NUM);
             }
-            if (MediaActivity.this.sharedMediaData[3].sections.size() == 0 && !MediaActivity.this.sharedMediaData[3].loading) {
+            if (MediaActivity.this.sharedMediaData[3].sections.size() == 0) {
                 view.setAlpha(0.0f);
             } else if (i < MediaActivity.this.sharedMediaData[3].sections.size()) {
                 view.setAlpha(1.0f);
@@ -2703,7 +2703,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                 view = new GraySectionCell(this.mContext);
                 view.setBackgroundColor(Theme.getColor("graySection") & -NUM);
             }
-            if (MediaActivity.this.sharedMediaData[this.currentType].sections.size() == 0 && !MediaActivity.this.sharedMediaData[this.currentType].loading) {
+            if (MediaActivity.this.sharedMediaData[this.currentType].sections.size() == 0) {
                 view.setAlpha(0.0f);
             } else if (i < MediaActivity.this.sharedMediaData[this.currentType].sections.size()) {
                 view.setAlpha(1.0f);
@@ -2847,7 +2847,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                 view = new SharedMediaSectionCell(this.mContext);
                 view.setBackgroundColor(Theme.getColor("windowBackgroundWhite") & -NUM);
             }
-            if (MediaActivity.this.sharedMediaData[0].sections.size() == 0 && !MediaActivity.this.sharedMediaData[0].loading) {
+            if (MediaActivity.this.sharedMediaData[0].sections.size() == 0) {
                 view.setAlpha(0.0f);
             } else if (i < MediaActivity.this.sharedMediaData[0].sections.size()) {
                 view.setAlpha(1.0f);

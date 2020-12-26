@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -1658,7 +1659,7 @@ public class VoIPService extends VoIPBaseService {
                 tLRPC$GroupCall.version = 1;
                 tLRPC$GroupCall.can_change_join_muted = true;
                 call2.chatId = this.chat.id;
-                call2.currentAccount = this.currentAccount;
+                call2.currentAccount = AccountInstance.getInstance(this.currentAccount);
                 dispatchStateChanged(6);
                 TLRPC$TL_phone_createGroupCall tLRPC$TL_phone_createGroupCall = new TLRPC$TL_phone_createGroupCall();
                 tLRPC$TL_phone_createGroupCall.peer = MessagesController.getInputPeer(this.chat);

@@ -485,7 +485,7 @@ abstract class CLASSNAMEz1<E_IN> extends CLASSNAMEh1<E_IN, Integer, C1> implemen
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m27iterator() {
+    public Iterator m28iterator() {
         return j$.util.v.g(spliterator());
     }
 

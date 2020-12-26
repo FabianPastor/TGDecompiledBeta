@@ -9,16 +9,16 @@ import java.util.Comparator;
 import org.telegram.messenger.ChatObject;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 
-/* renamed from: org.telegram.messenger.-$$Lambda$ChatObject$Call$Z-iPFd3zAjqc0CQFKbZZqYn4tSM  reason: invalid class name */
+/* renamed from: org.telegram.messenger.-$$Lambda$ChatObject$Call$pEUnGLfTv7izabDhbw_GRqZb_aQ  reason: invalid class name */
 /* compiled from: lambda */
-public final /* synthetic */ class $$Lambda$ChatObject$Call$ZiPFd3zAjqc0CQFKbZZqYn4tSM implements Comparator, j$.util.Comparator {
-    public static final /* synthetic */ $$Lambda$ChatObject$Call$ZiPFd3zAjqc0CQFKbZZqYn4tSM INSTANCE = new $$Lambda$ChatObject$Call$ZiPFd3zAjqc0CQFKbZZqYn4tSM();
+public final /* synthetic */ class $$Lambda$ChatObject$Call$pEUnGLfTv7izabDhbw_GRqZb_aQ implements Comparator, j$.util.Comparator {
+    public static final /* synthetic */ $$Lambda$ChatObject$Call$pEUnGLfTv7izabDhbw_GRqZb_aQ INSTANCE = new $$Lambda$ChatObject$Call$pEUnGLfTv7izabDhbw_GRqZb_aQ();
 
-    private /* synthetic */ $$Lambda$ChatObject$Call$ZiPFd3zAjqc0CQFKbZZqYn4tSM() {
+    private /* synthetic */ $$Lambda$ChatObject$Call$pEUnGLfTv7izabDhbw_GRqZb_aQ() {
     }
 
     public final int compare(Object obj, Object obj2) {
-        return ChatObject.Call.lambda$sortParticipants$5((TLRPC$TL_groupCallParticipant) obj, (TLRPC$TL_groupCallParticipant) obj2);
+        return ChatObject.Call.lambda$sortParticipants$6((TLRPC$TL_groupCallParticipant) obj, (TLRPC$TL_groupCallParticipant) obj2);
     }
 
     public /* synthetic */ Comparator reversed() {

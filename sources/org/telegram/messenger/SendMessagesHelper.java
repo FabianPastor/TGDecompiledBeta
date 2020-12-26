@@ -3140,7 +3140,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* renamed from: lambda$null$11 */
     public /* synthetic */ void lambda$null$11$SendMessagesHelper(TLRPC$Message tLRPC$Message, int i, TLRPC$Peer tLRPC$Peer, int i2, ArrayList arrayList, long j, TLRPC$Message tLRPC$Message2, int i3) {
         TLRPC$Message tLRPC$Message3 = tLRPC$Message;
-        getMessagesStorage().updateMessageStateAndId(tLRPC$Message3.random_id, Integer.valueOf(i), tLRPC$Message3.id, 0, false, tLRPC$Peer.channel_id, i2 != 0 ? 1 : 0);
+        getMessagesStorage().updateMessageStateAndId(tLRPC$Message3.random_id, Long.valueOf((long) i), tLRPC$Message3.id, 0, false, tLRPC$Peer.channel_id, i2 != 0 ? 1 : 0);
         getMessagesStorage().putMessages((ArrayList<TLRPC$Message>) arrayList, true, false, false, 0, i2 != 0);
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Message, j, i, tLRPC$Message2, i3, i2) {
             public final /* synthetic */ TLRPC$Message f$1;
@@ -10928,7 +10928,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* renamed from: lambda$null$42 */
     public /* synthetic */ void lambda$null$42$SendMessagesHelper(TLRPC$Message tLRPC$Message, int i, boolean z, ArrayList arrayList, long j, int i2) {
         TLRPC$Message tLRPC$Message2 = tLRPC$Message;
-        getMessagesStorage().updateMessageStateAndId(tLRPC$Message2.random_id, Integer.valueOf(i), tLRPC$Message2.id, 0, false, tLRPC$Message2.peer_id.channel_id, z ? 1 : 0);
+        getMessagesStorage().updateMessageStateAndId(tLRPC$Message2.random_id, Long.valueOf((long) i), tLRPC$Message2.id, 0, false, tLRPC$Message2.peer_id.channel_id, z ? 1 : 0);
         getMessagesStorage().putMessages((ArrayList<TLRPC$Message>) arrayList, true, false, false, 0, z);
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Message, i, j, i2, z) {
             public final /* synthetic */ TLRPC$Message f$1;
@@ -11790,7 +11790,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* renamed from: lambda$null$57 */
     public /* synthetic */ void lambda$null$57$SendMessagesHelper(TLRPC$Message tLRPC$Message, int i, boolean z, ArrayList arrayList, int i2, String str) {
         TLRPC$Message tLRPC$Message2 = tLRPC$Message;
-        getMessagesStorage().updateMessageStateAndId(tLRPC$Message2.random_id, Integer.valueOf(i), tLRPC$Message2.id, 0, false, tLRPC$Message2.peer_id.channel_id, z ? 1 : 0);
+        getMessagesStorage().updateMessageStateAndId(tLRPC$Message2.random_id, Long.valueOf((long) i), tLRPC$Message2.id, 0, false, tLRPC$Message2.peer_id.channel_id, z ? 1 : 0);
         getMessagesStorage().putMessages((ArrayList<TLRPC$Message>) arrayList, true, false, false, 0, z);
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Message, i, i2, z) {
             public final /* synthetic */ TLRPC$Message f$1;

@@ -43,7 +43,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.VoIPBaseService;
@@ -2474,7 +2473,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             VoIPService.getSharedInstance().hangUp(z ? 1 : 0);
         }
         if (!(call2 == null || (tLRPC$TL_groupCallParticipant = call2.participants.get(i)) == null)) {
-            call2.participants.delete((i = UserConfig.getInstance(call2.currentAccount).clientUserId));
+            call2.participants.delete((i = call2.currentAccount.getUserConfig().clientUserId));
             call2.sortedParticipants.remove(tLRPC$TL_groupCallParticipant);
             TLRPC$GroupCall tLRPC$GroupCall = call2.call;
             tLRPC$GroupCall.participants_count--;
