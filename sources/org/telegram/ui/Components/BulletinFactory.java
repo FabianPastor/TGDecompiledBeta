@@ -29,12 +29,12 @@ public final class BulletinFactory {
         VIDEO("VideoSavedHint", NUM, r5),
         VIDEOS("VideosSavedHint", r7),
         MEDIA("MediaSavedHint", r7),
-        PHOTO_TO_DOWNLOADS("PhotoSavedToDownloadsHint", r5),
-        VIDEO_TO_DOWNLOADS("VideoSavedToDownloadsHint", NUM, r5),
+        PHOTO_TO_DOWNLOADS("PhotoSavedToDownloadsHint", NUM, r16),
+        VIDEO_TO_DOWNLOADS("VideoSavedToDownloadsHint", NUM, r16),
         GIF("GifSavedToDownloadsHint", r5),
-        AUDIO("AudioSavedHint", r14),
-        AUDIOS("AudiosSavedHint", r14),
-        UNKNOWN("FileSavedHint", r5),
+        AUDIO("AudioSavedHint", NUM, r11),
+        AUDIOS("AudiosSavedHint", r11),
+        UNKNOWN("FileSavedHint", NUM, r5),
         UNKNOWNS("FilesSavedHint", r5);
         
         /* access modifiers changed from: private */

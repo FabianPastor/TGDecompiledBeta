@@ -644,7 +644,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
     /* access modifiers changed from: private */
     public void openSharingLocation(LocationController.SharingLocationInfo sharingLocationInfo) {
-        if (sharingLocationInfo != null && this.fragment.getParentActivity() != null) {
+        if (sharingLocationInfo != null && (this.fragment.getParentActivity() instanceof LaunchActivity)) {
             LaunchActivity launchActivity = (LaunchActivity) this.fragment.getParentActivity();
             launchActivity.switchToAccount(sharingLocationInfo.messageObject.currentAccount, true);
             LocationActivity locationActivity = new LocationActivity(2);

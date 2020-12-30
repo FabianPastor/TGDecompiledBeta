@@ -212,6 +212,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         r7.setWindowView(this.windowView);
         this.messageEditText.setHint(LocaleController.getString("AddCaption", NUM));
         this.messageEditText.setImeOptions(NUM);
+        this.messageEditText.setLinkTextColor(-8994063);
         EditTextCaption editTextCaption = this.messageEditText;
         editTextCaption.setInputType(editTextCaption.getInputType() | 16384);
         this.messageEditText.setMaxLines(4);

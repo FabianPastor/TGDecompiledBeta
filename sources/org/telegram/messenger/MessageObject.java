@@ -6804,6 +6804,7 @@ public class MessageObject {
         ArrayList<TLRPC$PhotoSize> arrayList4;
         ArrayList<TLRPC$PhotoSize> arrayList5;
         ArrayList<TLRPC$PhotoSize> arrayList6;
+        ArrayList<TLRPC$PhotoSize> arrayList7;
         TLRPC$Message tLRPC$Message = this.messageOwner;
         if (tLRPC$Message instanceof TLRPC$TL_messageService) {
             TLRPC$MessageAction tLRPC$MessageAction = tLRPC$Message.action;
@@ -6812,8 +6813,8 @@ public class MessageObject {
                 if (!z) {
                     this.photoThumbs = new ArrayList<>(tLRPC$Photo.sizes);
                 } else {
-                    ArrayList<TLRPC$PhotoSize> arrayList7 = this.photoThumbs;
-                    if (arrayList7 != null && !arrayList7.isEmpty()) {
+                    ArrayList<TLRPC$PhotoSize> arrayList8 = this.photoThumbs;
+                    if (arrayList8 != null && !arrayList8.isEmpty()) {
                         for (int i = 0; i < this.photoThumbs.size(); i++) {
                             TLRPC$PhotoSize tLRPC$PhotoSize = this.photoThumbs.get(i);
                             int i2 = 0;
@@ -6831,8 +6832,8 @@ public class MessageObject {
                         }
                     }
                 }
-                if (tLRPC$Photo.dc_id != 0) {
-                    int size = this.photoThumbs.size();
+                if (!(tLRPC$Photo.dc_id == 0 || (arrayList7 = this.photoThumbs) == null)) {
+                    int size = arrayList7.size();
                     for (int i3 = 0; i3 < size; i3++) {
                         TLRPC$FileLocation tLRPC$FileLocation = this.photoThumbs.get(i3).location;
                         if (tLRPC$FileLocation != null) {
@@ -6851,8 +6852,8 @@ public class MessageObject {
                     if (!z || !((arrayList5 = this.photoThumbs) == null || arrayList5.size() == tLRPC$Photo2.sizes.size())) {
                         this.photoThumbs = new ArrayList<>(tLRPC$Photo2.sizes);
                     } else {
-                        ArrayList<TLRPC$PhotoSize> arrayList8 = this.photoThumbs;
-                        if (arrayList8 != null && !arrayList8.isEmpty()) {
+                        ArrayList<TLRPC$PhotoSize> arrayList9 = this.photoThumbs;
+                        if (arrayList9 != null && !arrayList9.isEmpty()) {
                             for (int i4 = 0; i4 < this.photoThumbs.size(); i4++) {
                                 TLRPC$PhotoSize tLRPC$PhotoSize3 = this.photoThumbs.get(i4);
                                 if (tLRPC$PhotoSize3 != null) {
@@ -6878,9 +6879,9 @@ public class MessageObject {
                     TLRPC$Document document = getDocument();
                     if (isDocumentHasThumb(document)) {
                         if (!z || (arrayList4 = this.photoThumbs) == null) {
-                            ArrayList<TLRPC$PhotoSize> arrayList9 = new ArrayList<>();
-                            this.photoThumbs = arrayList9;
-                            arrayList9.addAll(document.thumbs);
+                            ArrayList<TLRPC$PhotoSize> arrayList10 = new ArrayList<>();
+                            this.photoThumbs = arrayList10;
+                            arrayList10.addAll(document.thumbs);
                         } else if (!arrayList4.isEmpty()) {
                             updatePhotoSizeLocations(this.photoThumbs, document.thumbs);
                         }
@@ -6890,12 +6891,12 @@ public class MessageObject {
                     TLRPC$Document tLRPC$Document = tLRPC$MessageMedia.game.document;
                     if (tLRPC$Document != null && isDocumentHasThumb(tLRPC$Document)) {
                         if (!z) {
-                            ArrayList<TLRPC$PhotoSize> arrayList10 = new ArrayList<>();
-                            this.photoThumbs = arrayList10;
-                            arrayList10.addAll(tLRPC$Document.thumbs);
+                            ArrayList<TLRPC$PhotoSize> arrayList11 = new ArrayList<>();
+                            this.photoThumbs = arrayList11;
+                            arrayList11.addAll(tLRPC$Document.thumbs);
                         } else {
-                            ArrayList<TLRPC$PhotoSize> arrayList11 = this.photoThumbs;
-                            if (arrayList11 != null && !arrayList11.isEmpty()) {
+                            ArrayList<TLRPC$PhotoSize> arrayList12 = this.photoThumbs;
+                            if (arrayList12 != null && !arrayList12.isEmpty()) {
                                 updatePhotoSizeLocations(this.photoThumbs, tLRPC$Document.thumbs);
                             }
                         }
@@ -6929,12 +6930,12 @@ public class MessageObject {
                         this.photoThumbsObject = tLRPC$Photo4;
                     } else if (tLRPC$Document2 != null && isDocumentHasThumb(tLRPC$Document2)) {
                         if (!z) {
-                            ArrayList<TLRPC$PhotoSize> arrayList12 = new ArrayList<>();
-                            this.photoThumbs = arrayList12;
-                            arrayList12.addAll(tLRPC$Document2.thumbs);
+                            ArrayList<TLRPC$PhotoSize> arrayList13 = new ArrayList<>();
+                            this.photoThumbs = arrayList13;
+                            arrayList13.addAll(tLRPC$Document2.thumbs);
                         } else {
-                            ArrayList<TLRPC$PhotoSize> arrayList13 = this.photoThumbs;
-                            if (arrayList13 != null && !arrayList13.isEmpty()) {
+                            ArrayList<TLRPC$PhotoSize> arrayList14 = this.photoThumbs;
+                            if (arrayList14 != null && !arrayList14.isEmpty()) {
                                 updatePhotoSizeLocations(this.photoThumbs, tLRPC$Document2.thumbs);
                             }
                         }
@@ -6944,9 +6945,9 @@ public class MessageObject {
             }
         } else if (TextUtils.isEmpty(this.emojiAnimatedStickerColor) && isDocumentHasThumb(this.emojiAnimatedSticker)) {
             if (!z || (arrayList6 = this.photoThumbs) == null) {
-                ArrayList<TLRPC$PhotoSize> arrayList14 = new ArrayList<>();
-                this.photoThumbs = arrayList14;
-                arrayList14.addAll(this.emojiAnimatedSticker.thumbs);
+                ArrayList<TLRPC$PhotoSize> arrayList15 = new ArrayList<>();
+                this.photoThumbs = arrayList15;
+                arrayList15.addAll(this.emojiAnimatedSticker.thumbs);
             } else if (!arrayList6.isEmpty()) {
                 updatePhotoSizeLocations(this.photoThumbs, this.emojiAnimatedSticker.thumbs);
             }
@@ -7257,31 +7258,31 @@ public class MessageObject {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.generateLinkDescription():void");
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:39:0x0095, code lost:
-        if (r10.messageOwner.send_state == 0) goto L_0x0097;
+    /* JADX WARNING: Code restructure failed: missing block: B:32:0x0079, code lost:
+        if (r10.messageOwner.send_state == 0) goto L_0x007b;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:41:0x009b, code lost:
-        if (r10.messageOwner.id >= 0) goto L_0x009e;
+    /* JADX WARNING: Code restructure failed: missing block: B:34:0x007f, code lost:
+        if (r10.messageOwner.id >= 0) goto L_0x0082;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void generateCaption() {
         /*
             r10 = this;
             java.lang.CharSequence r0 = r10.caption
-            if (r0 != 0) goto L_0x00fa
+            if (r0 != 0) goto L_0x00de
             boolean r0 = r10.isRoundVideo()
             if (r0 == 0) goto L_0x000c
-            goto L_0x00fa
+            goto L_0x00de
         L_0x000c:
             boolean r0 = r10.isMediaEmpty()
-            if (r0 != 0) goto L_0x00fa
+            if (r0 != 0) goto L_0x00de
             org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r0.media
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaGame
-            if (r1 != 0) goto L_0x00fa
+            if (r1 != 0) goto L_0x00de
             java.lang.String r0 = r0.message
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x00fa
+            if (r0 != 0) goto L_0x00de
             org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             java.lang.String r0 = r0.message
             android.text.TextPaint r1 = org.telegram.ui.ActionBar.Theme.chat_msgTextPaint
@@ -7294,75 +7295,58 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             int r1 = r0.send_state
             r2 = 1
-            if (r1 == 0) goto L_0x005e
+            if (r1 == 0) goto L_0x0042
             r0 = 0
-        L_0x0041:
-            org.telegram.tgnet.TLRPC$Message r1 = r10.messageOwner
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r1 = r1.entities
-            int r1 = r1.size()
-            if (r0 >= r1) goto L_0x005c
-            org.telegram.tgnet.TLRPC$Message r1 = r10.messageOwner
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r1 = r1.entities
-            java.lang.Object r1 = r1.get(r0)
-            boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName
-            if (r1 != 0) goto L_0x0059
-            r0 = 1
-            goto L_0x0065
-        L_0x0059:
-            int r0 = r0 + 1
-            goto L_0x0041
-        L_0x005c:
-            r0 = 0
-            goto L_0x0065
-        L_0x005e:
+            goto L_0x0049
+        L_0x0042:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r0 = r0.entities
             boolean r0 = r0.isEmpty()
             r0 = r0 ^ r2
-        L_0x0065:
-            if (r0 != 0) goto L_0x009e
+        L_0x0049:
+            if (r0 != 0) goto L_0x0082
             long r0 = r10.eventId
             r4 = 0
             int r6 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r6 != 0) goto L_0x009d
+            if (r6 != 0) goto L_0x0081
             org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto_old
-            if (r1 != 0) goto L_0x009d
+            if (r1 != 0) goto L_0x0081
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto_layer68
-            if (r1 != 0) goto L_0x009d
+            if (r1 != 0) goto L_0x0081
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaPhoto_layer74
-            if (r1 != 0) goto L_0x009d
+            if (r1 != 0) goto L_0x0081
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument_old
-            if (r1 != 0) goto L_0x009d
+            if (r1 != 0) goto L_0x0081
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument_layer68
-            if (r1 != 0) goto L_0x009d
+            if (r1 != 0) goto L_0x0081
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaDocument_layer74
-            if (r0 != 0) goto L_0x009d
+            if (r0 != 0) goto L_0x0081
             boolean r0 = r10.isOut()
-            if (r0 == 0) goto L_0x0097
+            if (r0 == 0) goto L_0x007b
             org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             int r0 = r0.send_state
-            if (r0 != 0) goto L_0x009d
-        L_0x0097:
+            if (r0 != 0) goto L_0x0081
+        L_0x007b:
             org.telegram.tgnet.TLRPC$Message r0 = r10.messageOwner
             int r0 = r0.id
-            if (r0 >= 0) goto L_0x009e
-        L_0x009d:
+            if (r0 >= 0) goto L_0x0082
+        L_0x0081:
             r3 = 1
-        L_0x009e:
-            if (r3 == 0) goto L_0x00c2
+        L_0x0082:
+            if (r3 == 0) goto L_0x00a6
             java.lang.CharSequence r0 = r10.caption
             boolean r0 = containsUrls(r0)
-            if (r0 == 0) goto L_0x00b5
-            java.lang.CharSequence r0 = r10.caption     // Catch:{ Exception -> 0x00b1 }
-            android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x00b1 }
+            if (r0 == 0) goto L_0x0099
+            java.lang.CharSequence r0 = r10.caption     // Catch:{ Exception -> 0x0095 }
+            android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x0095 }
             r1 = 5
-            org.telegram.messenger.AndroidUtilities.addLinks(r0, r1)     // Catch:{ Exception -> 0x00b1 }
-            goto L_0x00b5
-        L_0x00b1:
+            org.telegram.messenger.AndroidUtilities.addLinks(r0, r1)     // Catch:{ Exception -> 0x0095 }
+            goto L_0x0099
+        L_0x0095:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00b5:
+        L_0x0099:
             boolean r4 = r10.isOutOwner()
             java.lang.CharSequence r5 = r10.caption
             r6 = 1
@@ -7370,11 +7354,11 @@ public class MessageObject {
             r8 = 0
             r9 = 1
             addUrlsByPattern(r4, r5, r6, r7, r8, r9)
-        L_0x00c2:
+        L_0x00a6:
             java.lang.CharSequence r0 = r10.caption
             r10.addEntitiesToText(r0, r3)
             boolean r0 = r10.isVideo()
-            if (r0 == 0) goto L_0x00de
+            if (r0 == 0) goto L_0x00c2
             boolean r1 = r10.isOutOwner()
             java.lang.CharSequence r2 = r10.caption
             r3 = 1
@@ -7382,13 +7366,13 @@ public class MessageObject {
             int r5 = r10.getDuration()
             r6 = 0
             addUrlsByPattern(r1, r2, r3, r4, r5, r6)
-            goto L_0x00fa
-        L_0x00de:
+            goto L_0x00de
+        L_0x00c2:
             boolean r0 = r10.isMusic()
-            if (r0 != 0) goto L_0x00ea
+            if (r0 != 0) goto L_0x00ce
             boolean r0 = r10.isVoice()
-            if (r0 == 0) goto L_0x00fa
-        L_0x00ea:
+            if (r0 == 0) goto L_0x00de
+        L_0x00ce:
             boolean r1 = r10.isOutOwner()
             java.lang.CharSequence r2 = r10.caption
             r3 = 1
@@ -7396,7 +7380,7 @@ public class MessageObject {
             int r5 = r10.getDuration()
             r6 = 0
             addUrlsByPattern(r1, r2, r3, r4, r5, r6)
-        L_0x00fa:
+        L_0x00de:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.generateCaption():void");
@@ -8366,7 +8350,7 @@ public class MessageObject {
                     if (!(tLRPC$Peer == null || (i2 = tLRPC$Peer.channel_id) == 0)) {
                         tLRPC$Chat = getChat((AbstractMap<Integer, TLRPC$Chat>) null, (SparseArray<TLRPC$Chat>) null, i2);
                     }
-                    if (!ChatObject.isChannel(tLRPC$Chat) || !tLRPC$Chat.megagroup || tLRPC$Chat == null || (str = tLRPC$Chat.username) == null || str.length() <= 0) {
+                    if (!ChatObject.isChannel(tLRPC$Chat) || !tLRPC$Chat.megagroup || (str = tLRPC$Chat.username) == null || str.length() <= 0) {
                         return false;
                     }
                     TLRPC$MessageMedia tLRPC$MessageMedia3 = this.messageOwner.media;
@@ -11040,9 +11024,7 @@ public class MessageObject {
                     return false;
                 }
                 return true;
-            }
-            boolean z2 = tLRPC$Chat.megagroup;
-            if ((z2 && tLRPC$Message.out) || (!z2 && ((tLRPC$Chat.creator || ((tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights) != null && (tLRPC$TL_chatAdminRights.edit_messages || (tLRPC$Message.out && tLRPC$TL_chatAdminRights.post_messages)))) && tLRPC$Message.post))) {
+            } else if ((tLRPC$Chat != null && tLRPC$Chat.megagroup && tLRPC$Message.out) || (tLRPC$Chat != null && !tLRPC$Chat.megagroup && ((tLRPC$Chat.creator || ((tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights) != null && (tLRPC$TL_chatAdminRights.edit_messages || (tLRPC$Message.out && tLRPC$TL_chatAdminRights.post_messages)))) && tLRPC$Message.post))) {
                 TLRPC$MessageMedia tLRPC$MessageMedia5 = tLRPC$Message.media;
                 if (!(tLRPC$MessageMedia5 instanceof TLRPC$TL_messageMediaPhoto) && (!(tLRPC$MessageMedia5 instanceof TLRPC$TL_messageMediaDocument) || isStickerMessage(tLRPC$Message) || isAnimatedStickerMessage(tLRPC$Message))) {
                     TLRPC$MessageMedia tLRPC$MessageMedia6 = tLRPC$Message.media;

@@ -1060,7 +1060,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         return i;
     }
 
-    static /* synthetic */ int access$27804(ChatActivity chatActivity) {
+    static /* synthetic */ int access$27904(ChatActivity chatActivity) {
         int i = chatActivity.pinBullerinTag + 1;
         chatActivity.pinBullerinTag = i;
         return i;
@@ -6642,11 +6642,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         } else {
                             ChatActivity.this.getNotificationCenter().postNotificationName(NotificationCenter.didLoadPinnedMessages, Long.valueOf(ChatActivity.this.dialog_id), arrayList, Boolean.FALSE, null, null, 0, 0, Boolean.TRUE);
                         }
+                        if (ChatActivity.this.pinBulletin != null) {
+                            ChatActivity.this.pinBulletin.hide();
+                        }
                         boolean unused = ChatActivity.this.showPinBulletin = true;
-                        int access$27804 = ChatActivity.access$27804(ChatActivity.this);
-                        int access$27900 = ChatActivity.this.getPinnedMessagesCount();
+                        int access$27904 = ChatActivity.access$27904(ChatActivity.this);
+                        int access$28000 = ChatActivity.this.getPinnedMessagesCount();
                         ChatActivity chatActivity = ChatActivity.this;
-                        Bulletin unused2 = chatActivity.pinBulletin = BulletinFactory.createUnpinAllMessagesBulletin(chatActivity, access$27900, z2, new Runnable(z2, arrayList, arrayList2, access$27900, access$27804) {
+                        Bulletin unused2 = chatActivity.pinBulletin = BulletinFactory.createUnpinAllMessagesBulletin(chatActivity, access$28000, z2, new Runnable(z2, arrayList, arrayList2, access$28000, access$27904) {
                             public final /* synthetic */ boolean f$1;
                             public final /* synthetic */ ArrayList f$2;
                             public final /* synthetic */ ArrayList f$3;
@@ -6664,7 +6667,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             public final void run() {
                                 ChatActivity.AnonymousClass46.this.lambda$onUnpin$0$ChatActivity$46(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                             }
-                        }, new Runnable(z2, access$27804) {
+                        }, new Runnable(z2, access$27904) {
                             public final /* synthetic */ boolean f$1;
                             public final /* synthetic */ int f$2;
 
@@ -10254,12 +10257,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         int indexOf;
         int i2;
         int i3;
-        int i4;
         boolean z3;
+        float f;
+        int i4;
         int i5;
         MessageObject messageObject2;
         int i6;
-        int i7;
         MessageObject messageObject3;
         TLRPC$Chat tLRPC$Chat;
         RecyclerListView recyclerListView = this.chatListView;
@@ -10267,7 +10270,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int childCount = recyclerListView.getChildCount();
             int measuredHeight = this.chatListView.getMeasuredHeight();
             boolean z4 = this.threadMessageVisible;
-            int i8 = this.currentPinnedMessageId;
+            int i7 = this.currentPinnedMessageId;
             this.threadMessageVisible = this.firstLoading;
             long j = (long) this.threadMessageId;
             if (j == 0 || (tLRPC$Chat = this.currentChat) == null) {
@@ -10284,56 +10287,52 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 heightWithKeyboard -= this.chatActivityEnterView.getEmojiPadding();
             }
             this.pollsToCheck.clear();
-            float f = this.chatListViewPaddingTop;
+            float f2 = this.chatListViewPaddingTop;
             long j2 = j;
-            int i9 = Integer.MIN_VALUE;
+            int i8 = Integer.MIN_VALUE;
+            int i9 = Integer.MAX_VALUE;
             int i10 = Integer.MAX_VALUE;
             int i11 = Integer.MAX_VALUE;
-            int i12 = Integer.MAX_VALUE;
-            int i13 = 0;
+            int i12 = 0;
+            int i13 = Integer.MIN_VALUE;
             int i14 = Integer.MIN_VALUE;
-            int i15 = Integer.MIN_VALUE;
             boolean z5 = false;
             MessageObject messageObject4 = null;
             View view = null;
             View view2 = null;
             ChatActionCell chatActionCell = null;
-            while (i13 < childCount) {
-                View childAt = this.chatListView.getChildAt(i13);
-                int i16 = childCount;
+            while (i12 < childCount) {
+                View childAt = this.chatListView.getChildAt(i12);
+                int i15 = childCount;
                 int y = (int) childAt.getY();
-                int i17 = i8;
+                int i16 = i7;
                 float measuredHeight2 = (float) (y + childAt.getMeasuredHeight());
                 boolean z6 = z4;
-                if (measuredHeight2 <= f - ((float) this.chatListViewPaddingVisibleOffset) || y > this.chatListView.getMeasuredHeight()) {
+                if (measuredHeight2 <= f2 - ((float) this.chatListViewPaddingVisibleOffset) || y > this.chatListView.getMeasuredHeight()) {
                     i2 = measuredHeight;
-                    i4 = i11;
-                    i3 = i13;
+                    i3 = i12;
+                    i10 = i10;
+                    i9 = i9;
                 } else {
                     boolean z7 = childAt instanceof ChatMessageCell;
                     if (z7) {
-                        i3 = i13;
+                        i3 = i12;
                         ChatMessageCell chatMessageCell = (ChatMessageCell) childAt;
-                        i5 = i11;
+                        i4 = i10;
                         MessageObject messageObject5 = chatMessageCell.getMessageObject();
                         z3 = z7;
-                        if (messageObject5.getId() > i15) {
-                            i15 = messageObject5.getId();
+                        f = measuredHeight2;
+                        if (messageObject5.getDialogId() == this.dialog_id && messageObject5.getId() > i14) {
+                            i14 = messageObject5.getId();
                             messageObject4 = messageObject5;
                         }
-                        if (y >= 0) {
-                            i6 = i15;
-                            i7 = 0;
-                        } else {
-                            i7 = -y;
-                            i6 = i15;
-                        }
+                        int i17 = y >= 0 ? 0 : -y;
                         int measuredHeight3 = chatMessageCell.getMeasuredHeight();
                         if (measuredHeight3 > measuredHeight) {
-                            measuredHeight3 = i7 + measuredHeight;
+                            measuredHeight3 = i17 + measuredHeight;
                         }
                         i2 = measuredHeight;
-                        chatMessageCell.setVisiblePart(i7, measuredHeight3 - i7, heightWithKeyboard, (float) this.contentView.getKeyboardHeight());
+                        chatMessageCell.setVisiblePart(i17, measuredHeight3 - i17, heightWithKeyboard, (float) this.contentView.getKeyboardHeight());
                         if (!this.threadMessageVisible && (messageObject3 = this.threadMessageObject) != null && messageObject5 == messageObject3 && ((float) chatMessageCell.getBottom()) > this.chatListViewPaddingTop) {
                             this.threadMessageVisible = true;
                         }
@@ -10349,19 +10348,26 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 z5 = true;
                             }
                         }
+                        i5 = i9;
                         messageObject2 = messageObject5;
-                        i15 = i6;
                     } else {
                         i2 = measuredHeight;
                         z3 = z7;
-                        i5 = i11;
-                        i3 = i13;
+                        f = measuredHeight2;
+                        i4 = i10;
+                        i3 = i12;
                         if (childAt instanceof ChatActionCell) {
                             messageObject2 = ((ChatActionCell) childAt).getMessageObject();
                             if (messageObject2 != null) {
-                                i15 = Math.max(i15, messageObject2.getId());
+                                i5 = i9;
+                                if (messageObject2.getDialogId() == this.dialog_id && messageObject2.getId() > i14) {
+                                    i14 = Math.max(i14, messageObject2.getId());
+                                }
+                            } else {
+                                i5 = i9;
                             }
                         } else {
+                            i5 = i9;
                             if (childAt instanceof BotHelpCell) {
                                 childAt.invalidate();
                             }
@@ -10372,70 +10378,68 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         int id = messageObject2.getId();
                         if ((!isThreadChat() && ((!messageObject2.isOut() && messageObject2.isUnread()) || (messageObject2.messageOwner.from_scheduled && id > num.intValue()))) || (id > 0 && isThreadChat() && id > num.intValue() && id > this.replyMaxReadId)) {
                             if (id > 0) {
-                                i9 = Math.max(i9, messageObject2.getId());
+                                i8 = Math.max(i8, messageObject2.getId());
                             }
                             if (id < 0 && !isThreadChat()) {
-                                i12 = Math.min(i12, messageObject2.getId());
+                                i11 = Math.min(i11, messageObject2.getId());
                             }
-                            i14 = Math.max(i14, messageObject2.messageOwner.date);
+                            i13 = Math.max(i13, messageObject2.messageOwner.date);
                         }
                         if (messageObject2.type == 17 && messageObject2.getId() > 0) {
                             this.pollsToCheck.add(messageObject2);
                         }
                     }
-                    if (measuredHeight2 <= f) {
+                    if (f <= f2) {
                         if ((childAt instanceof ChatActionCell) && messageObject2.isDateObject) {
                             childAt.setAlpha(0.0f);
                         }
-                        i11 = i5;
+                        i9 = i5;
+                        i10 = i4;
                     } else {
                         int bottom = childAt.getBottom();
-                        if (bottom < i10) {
+                        if (bottom < i5) {
                             if (z3 || (childAt instanceof ChatActionCell)) {
                                 chatActionCell = childAt;
                             }
-                            i10 = bottom;
+                            i9 = bottom;
                             view2 = childAt;
+                        } else {
+                            i9 = i5;
                         }
                         ChatListItemAnimator chatListItemAnimator = this.chatListItemAniamtor;
                         if ((chatListItemAnimator == null || (!chatListItemAnimator.willRemoved(childAt) && !this.chatListItemAniamtor.willAddedFromAlpha(childAt))) && (childAt instanceof ChatActionCell) && messageObject2.isDateObject) {
                             if (childAt.getAlpha() != 1.0f) {
                                 childAt.setAlpha(1.0f);
                             }
-                            i4 = i5;
-                            if (bottom < i4) {
-                                i11 = bottom;
+                            i6 = i4;
+                            if (bottom < i6) {
+                                i10 = bottom;
                                 view = childAt;
                             }
                         } else {
-                            i4 = i5;
+                            i6 = i4;
                         }
+                        i10 = i6;
                     }
-                    i13 = i3 + 1;
-                    childCount = i16;
-                    z4 = z6;
-                    i8 = i17;
-                    measuredHeight = i2;
                 }
-                i11 = i4;
-                i13 = i3 + 1;
-                childCount = i16;
+                i12 = i3 + 1;
+                childCount = i15;
                 z4 = z6;
-                i8 = i17;
+                i7 = i16;
                 measuredHeight = i2;
             }
             boolean z8 = z4;
-            int i18 = i8;
+            int i18 = i7;
             this.currentPinnedMessageId = 0;
             if (!this.pinnedMessageIds.isEmpty()) {
-                if (i15 == Integer.MIN_VALUE) {
+                if (i14 == Integer.MIN_VALUE) {
                     int i19 = this.startLoadFromMessageId;
                     if (i19 != 0) {
-                        i15 = i19;
+                        i14 = i19;
                     } else if (!this.pinnedMessageIds.isEmpty()) {
-                        i15 = this.pinnedMessageIds.get(0).intValue() + 1;
+                        i14 = this.pinnedMessageIds.get(0).intValue() + 1;
                     }
-                } else if (i15 < 0 && (indexOf = this.messages.indexOf(messageObject4)) >= 0) {
+                } else if (i14 < 0 && (indexOf = this.messages.indexOf(messageObject4)) >= 0) {
                     int i20 = indexOf - 1;
                     while (true) {
                         if (i20 < 0) {
@@ -10443,12 +10447,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
                         MessageObject messageObject6 = this.messages.get(i20);
                         if (messageObject6.getId() > 0) {
-                            i15 = messageObject6.getId();
+                            i14 = messageObject6.getId();
                             break;
                         }
                         i20--;
                     }
-                    if (i15 < 0) {
+                    if (i14 < 0) {
                         int i21 = indexOf + 1;
                         int size = this.messages.size();
                         while (true) {
@@ -10457,7 +10461,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
                             MessageObject messageObject7 = this.messages.get(i21);
                             if (messageObject7.getId() > 0) {
-                                i15 = messageObject7.getId();
+                                i14 = messageObject7.getId();
                                 break;
                             }
                             i21++;
@@ -10467,9 +10471,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 ArrayList<Integer> arrayList = this.pinnedMessageIds;
                 int i22 = this.forceNextPinnedMessageId;
                 if (i22 != 0) {
-                    i15 = i22;
+                    i14 = i22;
                 }
-                this.currentPinnedMessageId = findClosest(arrayList, i15, this.currentPinnedMessageIndex).intValue();
+                this.currentPinnedMessageId = findClosest(arrayList, i14, this.currentPinnedMessageIndex).intValue();
                 if (!this.loadingPinnedMessagesList && !this.pinnedEndReached && !this.pinnedMessageIds.isEmpty() && this.currentPinnedMessageIndex[0] > this.pinnedMessageIds.size() - 2) {
                     MediaDataController mediaDataController = getMediaDataController();
                     long j3 = this.dialog_id;
@@ -10511,7 +10515,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             this.currentFloatingTopIsNotMessage = !(view3 instanceof ChatMessageCell) && !(view3 instanceof ChatActionCell);
             View view4 = view;
             if (view4 != null) {
-                if (view4.getY() > f || this.currentFloatingTopIsNotMessage) {
+                if (view4.getY() > f2 || this.currentFloatingTopIsNotMessage) {
                     if (view4.getAlpha() != 1.0f) {
                         view4.setAlpha(1.0f);
                     }
@@ -10540,7 +10544,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     z2 = true;
                 }
-                float y2 = (view4.getY() + ((float) view4.getMeasuredHeight())) - f;
+                float y2 = (view4.getY() + ((float) view4.getMeasuredHeight())) - f2;
                 if (y2 <= ((float) this.floatingDateView.getMeasuredHeight()) || y2 >= ((float) (this.floatingDateView.getMeasuredHeight() * 2))) {
                     this.floatingDateViewOffset = 0.0f;
                 } else if (this.chatListView.getChildAdapterPosition(view4) == (this.chatAdapter.messagesStartRow + this.messages.size()) - 1) {
@@ -10621,13 +10625,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (!this.firstLoading && !this.paused && !this.inPreviewMode) {
                 if ((this.fragmentOpened || this.inBubbleMode) && this.chatMode == 0 && !getMessagesController().ignoreSetOnline) {
                     int i25 = 0;
-                    if (i9 != Integer.MIN_VALUE || i12 != Integer.MAX_VALUE) {
+                    if (i8 != Integer.MIN_VALUE || i11 != Integer.MAX_VALUE) {
                         c = 0;
                         int i26 = 0;
                         for (int i27 = 0; i27 < this.messages.size(); i27++) {
                             MessageObject messageObject9 = this.messages.get(i27);
                             int id2 = messageObject9.getId();
-                            if (i9 != Integer.MIN_VALUE && id2 > 0 && id2 <= i9 && ((messageObject9.messageOwner.from_scheduled && id2 > num.intValue()) || (messageObject9.isUnread() && !messageObject9.isOut()))) {
+                            if (i8 != Integer.MIN_VALUE && id2 > 0 && id2 <= i8 && ((messageObject9.messageOwner.from_scheduled && id2 > num.intValue()) || (messageObject9.isUnread() && !messageObject9.isOut()))) {
                                 if (messageObject9.messageOwner.from_scheduled) {
                                     i25++;
                                 } else {
@@ -10635,13 +10639,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 }
                                 i26++;
                             }
-                            if (i12 != Integer.MAX_VALUE && id2 < 0 && id2 >= i12 && messageObject9.isUnread()) {
+                            if (i11 != Integer.MAX_VALUE && id2 < 0 && id2 >= i11 && messageObject9.isUnread()) {
                                 messageObject9.setIsRead();
                                 i26++;
                             }
                         }
                         if (!isThreadChat()) {
-                            if ((!this.forwardEndReached[0] || i9 != this.minMessageId[0]) && i12 != this.minMessageId[0]) {
+                            if ((!this.forwardEndReached[0] || i8 != this.minMessageId[0]) && i11 != this.minMessageId[0]) {
                                 int i28 = this.newUnreadMessageCount - i26;
                                 this.newUnreadMessageCount = i28;
                                 if (i28 < 0) {
@@ -10663,7 +10667,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         MessagesController messagesController = getMessagesController();
                         long j4 = this.dialog_id;
                         int[] iArr = this.minMessageId;
-                        messagesController.markDialogAsRead(j4, i9, i12, i14, false, j2, i26, i9 == iArr[0] || i12 == iArr[0], i25);
+                        messagesController.markDialogAsRead(j4, i8, i11, i13, false, j2, i26, i8 == iArr[0] || i11 == iArr[0], i25);
                         this.firstUnreadSent = true;
                     } else if (!this.firstUnreadSent && this.currentEncryptedChat == null && this.chatLayoutManager.findFirstVisibleItemPosition() == 0) {
                         c = 0;
@@ -10685,8 +10689,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     } else {
                         c = 0;
                     }
-                    if (j2 != 0 && i9 > 0 && this.replyMaxReadId != i9) {
-                        this.replyMaxReadId = i9;
+                    if (j2 != 0 && i8 > 0 && this.replyMaxReadId != i8) {
+                        this.replyMaxReadId = i8;
                         getMessagesStorage().updateRepliesMaxReadId(this.replyOriginalChat.id, this.replyOriginalMessageId, this.replyMaxReadId, true);
                         NotificationCenter notificationCenter = getNotificationCenter();
                         int i29 = NotificationCenter.commentsRead;
@@ -27749,6 +27753,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     /* access modifiers changed from: private */
     public void unpinMessage(MessageObject messageObject) {
         if (messageObject != null) {
+            Bulletin bulletin = this.pinBulletin;
+            if (bulletin != null) {
+                bulletin.hide(false);
+            }
             ArrayList arrayList = new ArrayList();
             arrayList.add(this.selectedObject);
             ArrayList arrayList2 = new ArrayList();
@@ -30731,7 +30739,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
             }
-            ProfileActivity profileActivity = new ProfileActivity(bundle);
+            ProfileActivity profileActivity = new ProfileActivity(bundle, this.avatarContainer.getSharedMediaPreloader());
             profileActivity.setPlayProfileAnimation(1);
             profileActivity.setChatInfo(this.chatInfo);
             profileActivity.setUserInfo(this.userInfo);

@@ -1045,12 +1045,10 @@ public class VoIPService extends VoIPBaseService {
         return this.currentState == 10;
     }
 
-    public void declineIncomingCall(int i, final Runnable runnable) {
-        AnonymousClass1 r8;
+    public void declineIncomingCall(int i, Runnable runnable) {
         stopRinging();
         this.callDiscardReason = i;
         int i2 = this.currentState;
-        boolean z = true;
         if (i2 == 14) {
             Runnable runnable2 = this.delayedStartOutgoingCall;
             if (runnable2 != null) {
@@ -1095,47 +1093,13 @@ public class VoIPService extends VoIPBaseService {
             } else {
                 tLRPC$TL_phone_discardCall.reason = new TLRPC$TL_phoneCallDiscardReasonBusy();
             }
-            if (ConnectionsManager.getInstance(this.currentAccount).getConnectionState() == 3) {
-                z = false;
-            }
-            if (z) {
-                if (runnable != null) {
-                    runnable.run();
-                }
-                callEnded();
-                r8 = null;
-            } else {
-                r8 = new Runnable() {
-                    private boolean done = false;
-
-                    public void run() {
-                        if (!this.done) {
-                            this.done = true;
-                            Runnable runnable = runnable;
-                            if (runnable != null) {
-                                runnable.run();
-                            }
-                            VoIPService.this.callEnded();
-                        }
-                    }
-                };
-                AndroidUtilities.runOnUIThread(r8, (long) ((int) (Instance.getGlobalServerConfig().hangupUiTimeout * 1000.0d)));
-            }
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_discardCall, new RequestDelegate(z, r8, runnable) {
-                public final /* synthetic */ boolean f$1;
-                public final /* synthetic */ Runnable f$2;
-                public final /* synthetic */ Runnable f$3;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                }
-
+            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_phone_discardCall, new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    VoIPService.this.lambda$declineIncomingCall$19$VoIPService(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+                    VoIPService.this.lambda$declineIncomingCall$19$VoIPService(tLObject, tLRPC$TL_error);
                 }
             }, 2);
+            this.onDestroyRunnable = runnable;
+            callEnded();
         }
     }
 
@@ -1149,7 +1113,7 @@ public class VoIPService extends VoIPBaseService {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$declineIncomingCall$19 */
-    public /* synthetic */ void lambda$declineIncomingCall$19$VoIPService(boolean z, Runnable runnable, Runnable runnable2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$declineIncomingCall$19$VoIPService(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             if (tLObject instanceof TLRPC$TL_updates) {
                 MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC$TL_updates) tLObject, false);
@@ -1159,12 +1123,6 @@ public class VoIPService extends VoIPBaseService {
             }
         } else if (BuildVars.LOGS_ENABLED) {
             FileLog.e("error on phone.discardCall: " + tLRPC$TL_error);
-        }
-        if (!z) {
-            AndroidUtilities.cancelRunOnUIThread(runnable);
-            if (runnable2 != null) {
-                runnable2.run();
-            }
         }
     }
 
@@ -2370,7 +2328,7 @@ public class VoIPService extends VoIPBaseService {
             goto L_0x02ae
         L_0x02c6:
             r1.videoCapturer = r5     // Catch:{ Exception -> 0x02d3 }
-            org.telegram.messenger.voip.VoIPService$2 r0 = new org.telegram.messenger.voip.VoIPService$2     // Catch:{ Exception -> 0x02d3 }
+            org.telegram.messenger.voip.VoIPService$1 r0 = new org.telegram.messenger.voip.VoIPService$1     // Catch:{ Exception -> 0x02d3 }
             r0.<init>()     // Catch:{ Exception -> 0x02d3 }
             r2 = 5000(0x1388, double:2.4703E-320)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r2)     // Catch:{ Exception -> 0x02d3 }
@@ -2424,12 +2382,12 @@ public class VoIPService extends VoIPBaseService {
         int play = this.soundPool.play(this.spConnectingId, 1.0f, 1.0f, 0, -1, 1.0f);
         this.spPlayID = play;
         if (play == 0) {
-            AnonymousClass3 r0 = new Runnable() {
+            AnonymousClass2 r0 = new Runnable() {
                 public void run() {
                     if (VoIPBaseService.sharedInstance != null) {
                         Utilities.globalQueue.postRunnable(new Runnable() {
                             public final void run() {
-                                VoIPService.AnonymousClass3.this.lambda$run$0$VoIPService$3();
+                                VoIPService.AnonymousClass2.this.lambda$run$0$VoIPService$2();
                             }
                         });
                     }
@@ -2437,7 +2395,7 @@ public class VoIPService extends VoIPBaseService {
 
                 /* access modifiers changed from: private */
                 /* renamed from: lambda$run$0 */
-                public /* synthetic */ void lambda$run$0$VoIPService$3() {
+                public /* synthetic */ void lambda$run$0$VoIPService$2() {
                     VoIPService voIPService = VoIPService.this;
                     if (voIPService.spPlayID == 0) {
                         voIPService.spPlayID = voIPService.soundPool.play(voIPService.spConnectingId, 1.0f, 1.0f, 0, -1, 1.0f);
