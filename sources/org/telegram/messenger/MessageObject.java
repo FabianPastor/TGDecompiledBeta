@@ -1686,6 +1686,7 @@ public class MessageObject {
         SparseArray<TLRPC$Chat> sparseArray3;
         AbstractMap<Integer, TLRPC$Chat> abstractMap3;
         TextPaint textPaint;
+        int i2;
         TLRPC$Message tLRPC$Message2 = tLRPC$Message;
         AbstractMap<Integer, TLRPC$User> abstractMap4 = abstractMap;
         SparseArray<TLRPC$User> sparseArray4 = sparseArray;
@@ -1719,11 +1720,11 @@ public class MessageObject {
         measureInlineBotButtons();
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.setTimeInMillis(((long) this.messageOwner.date) * 1000);
-        int i2 = gregorianCalendar.get(6);
-        int i3 = gregorianCalendar.get(1);
-        int i4 = gregorianCalendar.get(2);
-        this.dateKey = String.format("%d_%02d_%02d", new Object[]{Integer.valueOf(i3), Integer.valueOf(i4), Integer.valueOf(i2)});
-        this.monthKey = String.format("%d_%02d", new Object[]{Integer.valueOf(i3), Integer.valueOf(i4)});
+        int i3 = gregorianCalendar.get(6);
+        int i4 = gregorianCalendar.get(1);
+        int i5 = gregorianCalendar.get(2);
+        this.dateKey = String.format("%d_%02d_%02d", new Object[]{Integer.valueOf(i4), Integer.valueOf(i5), Integer.valueOf(i3)});
+        this.monthKey = String.format("%d_%02d", new Object[]{Integer.valueOf(i4), Integer.valueOf(i5)});
         createMessageSendInfo();
         generateCaption();
         boolean z4 = z;
@@ -1746,31 +1747,38 @@ public class MessageObject {
                         this.emojiAnimatedStickerColor = "_c1";
                         charSequence = charSequence.subSequence(0, indexOf);
                     } else {
-                        int indexOf2 = TextUtils.indexOf(charSequence, "🏼");
-                        if (indexOf2 >= 0) {
+                        indexOf = TextUtils.indexOf(charSequence, "🏼");
+                        if (indexOf >= 0) {
                             this.emojiAnimatedStickerColor = "_c2";
-                            charSequence = charSequence.subSequence(0, indexOf2);
+                            charSequence = charSequence.subSequence(0, indexOf);
                         } else {
-                            int indexOf3 = TextUtils.indexOf(charSequence, "🏽");
-                            if (indexOf3 >= 0) {
+                            indexOf = TextUtils.indexOf(charSequence, "🏽");
+                            if (indexOf >= 0) {
                                 this.emojiAnimatedStickerColor = "_c3";
-                                charSequence = charSequence.subSequence(0, indexOf3);
+                                charSequence = charSequence.subSequence(0, indexOf);
                             } else {
-                                int indexOf4 = TextUtils.indexOf(charSequence, "🏾");
-                                if (indexOf4 >= 0) {
+                                indexOf = TextUtils.indexOf(charSequence, "🏾");
+                                if (indexOf >= 0) {
                                     this.emojiAnimatedStickerColor = "_c4";
-                                    charSequence = charSequence.subSequence(0, indexOf4);
+                                    charSequence = charSequence.subSequence(0, indexOf);
                                 } else {
-                                    int indexOf5 = TextUtils.indexOf(charSequence, "🏿");
-                                    if (indexOf5 >= 0) {
+                                    indexOf = TextUtils.indexOf(charSequence, "🏿");
+                                    if (indexOf >= 0) {
                                         this.emojiAnimatedStickerColor = "_c5";
-                                        charSequence = charSequence.subSequence(0, indexOf5);
+                                        charSequence = charSequence.subSequence(0, indexOf);
                                     } else {
                                         this.emojiAnimatedStickerColor = "";
                                     }
                                 }
                             }
                         }
+                    }
+                    if (!TextUtils.isEmpty(this.emojiAnimatedStickerColor) && (i2 = indexOf + 2) < this.messageText.length()) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(charSequence.toString());
+                        CharSequence charSequence2 = this.messageText;
+                        sb.append(charSequence2.subSequence(i2, charSequence2.length()).toString());
+                        charSequence = sb.toString();
                     }
                     if (TextUtils.isEmpty(this.emojiAnimatedStickerColor) || EmojiData.emojiColoredMap.contains(charSequence.toString())) {
                         this.emojiAnimatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(charSequence);

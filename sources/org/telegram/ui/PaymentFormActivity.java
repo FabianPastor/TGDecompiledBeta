@@ -37,7 +37,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wallet.AutoResolveHelper;
 import com.google.android.gms.wallet.IsReadyToPayRequest;
 import com.google.android.gms.wallet.PaymentData;
-import com.google.android.gms.wallet.PaymentDataRequest;
 import com.google.android.gms.wallet.PaymentsClient;
 import com.google.android.gms.wallet.Wallet;
 import com.stripe.android.Stripe;
@@ -58,7 +57,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
@@ -3782,68 +3780,97 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x004b A[Catch:{ JSONException -> 0x00b2 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0068 A[Catch:{ JSONException -> 0x00b2 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x00a2 A[Catch:{ JSONException -> 0x00b2 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:22:? A[RETURN, SYNTHETIC] */
     /* renamed from: lambda$createGooglePayButton$22 */
-    public /* synthetic */ void lambda$createGooglePayButton$22$PaymentFormActivity(View view) {
-        this.googlePayButton.setClickable(false);
-        try {
-            JSONObject baseRequest = getBaseRequest();
-            JSONObject baseCardPaymentMethod = getBaseCardPaymentMethod();
-            if (this.googlePayPublicKey != null) {
-                baseCardPaymentMethod.put("tokenizationSpecification", new JSONObject() {
-                    {
-                        put("type", "DIRECT");
-                        put("parameters", new JSONObject() {
-                            {
-                                put("protocolVersion", "ECv2");
-                                put("publicKey", PaymentFormActivity.this.googlePayPublicKey);
-                            }
-                        });
-                    }
-                });
-            } else {
-                baseCardPaymentMethod.put("tokenizationSpecification", new JSONObject() {
-                    {
-                        put("type", "PAYMENT_GATEWAY");
-                        if (PaymentFormActivity.this.googlePayParameters != null) {
-                            if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                                Toast.makeText(PaymentFormActivity.this.getParentActivity(), "use params", 0).show();
-                            }
-                            put("parameters", PaymentFormActivity.this.googlePayParameters);
-                            return;
-                        }
-                        put("parameters", new JSONObject() {
-                            {
-                                put("gateway", "stripe");
-                                put("stripe:publishableKey", PaymentFormActivity.this.stripeApiKey);
-                                put("stripe:version", "3.5.0");
-                            }
-                        });
-                    }
-                });
-            }
-            baseRequest.put("allowedPaymentMethods", new JSONArray().put(baseCardPaymentMethod));
-            JSONObject jSONObject = new JSONObject();
-            ArrayList arrayList = new ArrayList(this.paymentForm.invoice.prices);
-            TLRPC$TL_shippingOption tLRPC$TL_shippingOption = this.shippingOption;
-            if (tLRPC$TL_shippingOption != null) {
-                arrayList.addAll(tLRPC$TL_shippingOption.prices);
-            }
-            jSONObject.put("totalPrice", getTotalPriceDecimalString(arrayList));
-            jSONObject.put("totalPriceStatus", "FINAL");
-            if (!TextUtils.isEmpty(this.googlePayCountryCode)) {
-                jSONObject.put("countryCode", this.googlePayCountryCode);
-            }
-            jSONObject.put("currencyCode", this.paymentForm.invoice.currency);
-            jSONObject.put("checkoutOption", "COMPLETE_IMMEDIATE_PURCHASE");
-            baseRequest.put("transactionInfo", jSONObject);
-            baseRequest.put("merchantInfo", new JSONObject().put("merchantName", this.currentBotName));
-            PaymentDataRequest fromJson = PaymentDataRequest.fromJson(baseRequest.toString());
-            if (fromJson != null) {
-                AutoResolveHelper.resolveTask(this.paymentsClient.loadPaymentData(fromJson), getParentActivity(), 991);
-            }
-        } catch (JSONException unused) {
-            throw new RuntimeException("The price cannot be deserialized from the JSON object.");
-        }
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$createGooglePayButton$22$PaymentFormActivity(android.view.View r5) {
+        /*
+            r4 = this;
+            android.widget.FrameLayout r5 = r4.googlePayButton
+            r0 = 0
+            r5.setClickable(r0)
+            org.json.JSONObject r5 = r4.getBaseRequest()     // Catch:{ JSONException -> 0x00b2 }
+            org.json.JSONObject r0 = r4.getBaseCardPaymentMethod()     // Catch:{ JSONException -> 0x00b2 }
+            java.lang.String r1 = r4.googlePayPublicKey     // Catch:{ JSONException -> 0x00b2 }
+            java.lang.String r2 = "tokenizationSpecification"
+            if (r1 == 0) goto L_0x0021
+            org.json.JSONObject r1 = r4.googlePayParameters     // Catch:{ JSONException -> 0x00b2 }
+            if (r1 != 0) goto L_0x0021
+            org.telegram.ui.PaymentFormActivity$17 r1 = new org.telegram.ui.PaymentFormActivity$17     // Catch:{ JSONException -> 0x00b2 }
+            r1.<init>()     // Catch:{ JSONException -> 0x00b2 }
+            r0.put(r2, r1)     // Catch:{ JSONException -> 0x00b2 }
+            goto L_0x0029
+        L_0x0021:
+            org.telegram.ui.PaymentFormActivity$18 r1 = new org.telegram.ui.PaymentFormActivity$18     // Catch:{ JSONException -> 0x00b2 }
+            r1.<init>()     // Catch:{ JSONException -> 0x00b2 }
+            r0.put(r2, r1)     // Catch:{ JSONException -> 0x00b2 }
+        L_0x0029:
+            java.lang.String r1 = "allowedPaymentMethods"
+            org.json.JSONArray r2 = new org.json.JSONArray     // Catch:{ JSONException -> 0x00b2 }
+            r2.<init>()     // Catch:{ JSONException -> 0x00b2 }
+            org.json.JSONArray r0 = r2.put(r0)     // Catch:{ JSONException -> 0x00b2 }
+            r5.put(r1, r0)     // Catch:{ JSONException -> 0x00b2 }
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x00b2 }
+            r0.<init>()     // Catch:{ JSONException -> 0x00b2 }
+            java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ JSONException -> 0x00b2 }
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r2 = r4.paymentForm     // Catch:{ JSONException -> 0x00b2 }
+            org.telegram.tgnet.TLRPC$TL_invoice r2 = r2.invoice     // Catch:{ JSONException -> 0x00b2 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r2 = r2.prices     // Catch:{ JSONException -> 0x00b2 }
+            r1.<init>(r2)     // Catch:{ JSONException -> 0x00b2 }
+            org.telegram.tgnet.TLRPC$TL_shippingOption r2 = r4.shippingOption     // Catch:{ JSONException -> 0x00b2 }
+            if (r2 == 0) goto L_0x0050
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r2 = r2.prices     // Catch:{ JSONException -> 0x00b2 }
+            r1.addAll(r2)     // Catch:{ JSONException -> 0x00b2 }
+        L_0x0050:
+            java.lang.String r2 = "totalPrice"
+            java.lang.String r1 = r4.getTotalPriceDecimalString(r1)     // Catch:{ JSONException -> 0x00b2 }
+            r0.put(r2, r1)     // Catch:{ JSONException -> 0x00b2 }
+            java.lang.String r1 = "totalPriceStatus"
+            java.lang.String r2 = "FINAL"
+            r0.put(r1, r2)     // Catch:{ JSONException -> 0x00b2 }
+            java.lang.String r1 = r4.googlePayCountryCode     // Catch:{ JSONException -> 0x00b2 }
+            boolean r1 = android.text.TextUtils.isEmpty(r1)     // Catch:{ JSONException -> 0x00b2 }
+            if (r1 != 0) goto L_0x006f
+            java.lang.String r1 = "countryCode"
+            java.lang.String r2 = r4.googlePayCountryCode     // Catch:{ JSONException -> 0x00b2 }
+            r0.put(r1, r2)     // Catch:{ JSONException -> 0x00b2 }
+        L_0x006f:
+            java.lang.String r1 = "currencyCode"
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r2 = r4.paymentForm     // Catch:{ JSONException -> 0x00b2 }
+            org.telegram.tgnet.TLRPC$TL_invoice r2 = r2.invoice     // Catch:{ JSONException -> 0x00b2 }
+            java.lang.String r2 = r2.currency     // Catch:{ JSONException -> 0x00b2 }
+            r0.put(r1, r2)     // Catch:{ JSONException -> 0x00b2 }
+            java.lang.String r1 = "checkoutOption"
+            java.lang.String r2 = "COMPLETE_IMMEDIATE_PURCHASE"
+            r0.put(r1, r2)     // Catch:{ JSONException -> 0x00b2 }
+            java.lang.String r1 = "transactionInfo"
+            r5.put(r1, r0)     // Catch:{ JSONException -> 0x00b2 }
+            java.lang.String r0 = "merchantInfo"
+            org.json.JSONObject r1 = new org.json.JSONObject     // Catch:{ JSONException -> 0x00b2 }
+            r1.<init>()     // Catch:{ JSONException -> 0x00b2 }
+            java.lang.String r2 = "merchantName"
+            java.lang.String r3 = r4.currentBotName     // Catch:{ JSONException -> 0x00b2 }
+            org.json.JSONObject r1 = r1.put(r2, r3)     // Catch:{ JSONException -> 0x00b2 }
+            r5.put(r0, r1)     // Catch:{ JSONException -> 0x00b2 }
+            java.lang.String r5 = r5.toString()     // Catch:{ JSONException -> 0x00b2 }
+            com.google.android.gms.wallet.PaymentDataRequest r5 = com.google.android.gms.wallet.PaymentDataRequest.fromJson(r5)     // Catch:{ JSONException -> 0x00b2 }
+            if (r5 == 0) goto L_0x00b6
+            com.google.android.gms.wallet.PaymentsClient r0 = r4.paymentsClient     // Catch:{ JSONException -> 0x00b2 }
+            com.google.android.gms.tasks.Task r5 = r0.loadPaymentData(r5)     // Catch:{ JSONException -> 0x00b2 }
+            android.app.Activity r0 = r4.getParentActivity()     // Catch:{ JSONException -> 0x00b2 }
+            r1 = 991(0x3df, float:1.389E-42)
+            com.google.android.gms.wallet.AutoResolveHelper.resolveTask(r5, r0, r1)     // Catch:{ JSONException -> 0x00b2 }
+            goto L_0x00b6
+        L_0x00b2:
+            r5 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)
+        L_0x00b6:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PaymentFormActivity.lambda$createGooglePayButton$22$PaymentFormActivity(android.view.View):void");
     }
 
     private void updatePasswordFields() {
@@ -4207,26 +4234,28 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                     JSONObject jSONObject2 = jSONObject.getJSONObject("tokenizationData");
                     jSONObject2.getString("type");
                     String string = jSONObject2.getString("token");
-                    if (this.googlePayPublicKey != null) {
-                        TLRPC$TL_inputPaymentCredentialsGooglePay tLRPC$TL_inputPaymentCredentialsGooglePay = new TLRPC$TL_inputPaymentCredentialsGooglePay();
-                        this.googlePayCredentials = tLRPC$TL_inputPaymentCredentialsGooglePay;
-                        tLRPC$TL_inputPaymentCredentialsGooglePay.payment_token = new TLRPC$TL_dataJSON();
-                        this.googlePayCredentials.payment_token.data = jSONObject2.toString();
-                        String optString = jSONObject.optString("description");
-                        if (!TextUtils.isEmpty(optString)) {
-                            this.cardName = optString;
-                        } else {
-                            this.cardName = "Android Pay";
+                    if (this.googlePayPublicKey == null) {
+                        if (this.googlePayParameters == null) {
+                            Token parseToken = TokenParser.parseToken(string);
+                            this.paymentJson = String.format(Locale.US, "{\"type\":\"%1$s\", \"id\":\"%2$s\"}", new Object[]{parseToken.getType(), parseToken.getId()});
+                            Card card = parseToken.getCard();
+                            this.cardName = card.getType() + " *" + card.getLast4();
+                            goToNextStep();
                         }
+                    }
+                    TLRPC$TL_inputPaymentCredentialsGooglePay tLRPC$TL_inputPaymentCredentialsGooglePay = new TLRPC$TL_inputPaymentCredentialsGooglePay();
+                    this.googlePayCredentials = tLRPC$TL_inputPaymentCredentialsGooglePay;
+                    tLRPC$TL_inputPaymentCredentialsGooglePay.payment_token = new TLRPC$TL_dataJSON();
+                    this.googlePayCredentials.payment_token.data = jSONObject2.toString();
+                    String optString = jSONObject.optString("description");
+                    if (!TextUtils.isEmpty(optString)) {
+                        this.cardName = optString;
                     } else {
-                        Token parseToken = TokenParser.parseToken(string);
-                        this.paymentJson = String.format(Locale.US, "{\"type\":\"%1$s\", \"id\":\"%2$s\"}", new Object[]{parseToken.getType(), parseToken.getId()});
-                        Card card = parseToken.getCard();
-                        this.cardName = card.getType() + " *" + card.getLast4();
+                        this.cardName = "Android Pay";
                     }
                     goToNextStep();
-                } catch (JSONException unused) {
-                    throw new RuntimeException("The selected garment cannot be parsed from the list of elements");
+                } catch (JSONException e) {
+                    FileLog.e((Throwable) e);
                 }
             } else {
                 return;
