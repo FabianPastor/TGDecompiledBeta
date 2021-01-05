@@ -369,14 +369,14 @@ public class ManageChatUserCell extends FrameLayout {
             goto L_0x00d2
         L_0x00c3:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131624544(0x7f0e0260, float:1.887627E38)
+            r4 = 2131624546(0x7f0e0262, float:1.8876275E38)
             java.lang.String r5 = "BotStatusCantRead"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
             goto L_0x013e
         L_0x00d2:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131624545(0x7f0e0261, float:1.8876273E38)
+            r4 = 2131624547(0x7f0e0263, float:1.8876277E38)
             java.lang.String r5 = "BotStatusRead"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
@@ -417,7 +417,7 @@ public class ManageChatUserCell extends FrameLayout {
             int r4 = r12.statusOnlineColor
             r13.setTextColor(r4)
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131626308(0x7f0e0944, float:1.8879849E38)
+            r4 = 2131626310(0x7f0e0946, float:1.8879853E38)
             java.lang.String r5 = "Online"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
@@ -537,7 +537,7 @@ public class ManageChatUserCell extends FrameLayout {
             boolean r13 = r0.has_geo
             if (r13 == 0) goto L_0x020f
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131625895(0x7f0e07a7, float:1.887901E38)
+            r4 = 2131625897(0x7f0e07a9, float:1.8879015E38)
             java.lang.String r5 = "MegaLocation"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
@@ -547,14 +547,14 @@ public class ManageChatUserCell extends FrameLayout {
             boolean r13 = android.text.TextUtils.isEmpty(r13)
             if (r13 == 0) goto L_0x0226
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131625896(0x7f0e07a8, float:1.8879013E38)
+            r4 = 2131625898(0x7f0e07aa, float:1.8879017E38)
             java.lang.String r5 = "MegaPrivate"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
             goto L_0x0234
         L_0x0226:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131625899(0x7f0e07ab, float:1.8879019E38)
+            r4 = 2131625901(0x7f0e07ad, float:1.8879023E38)
             java.lang.String r5 = "MegaPublic"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)

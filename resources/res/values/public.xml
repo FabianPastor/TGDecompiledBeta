@@ -1506,6 +1506,8 @@
     <public type="string" name="AccDescrStickers" id="NUM" />
     <public type="string" name="AccDescrStopLiveLocation" id="NUM" />
     <public type="string" name="AccDescrSwitchCamera" id="NUM" />
+    <public type="string" name="AccDescrSwitchToDayTheme" id="NUM" />
+    <public type="string" name="AccDescrSwitchToNightTheme" id="NUM" />
     <public type="string" name="AccDescrTakeMorePics" id="NUM" />
     <public type="string" name="AccDescrUploadProgress" id="NUM" />
     <public type="string" name="AccDescrUserOptions" id="NUM" />

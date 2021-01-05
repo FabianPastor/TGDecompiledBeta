@@ -1250,10 +1250,34 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         } else {
             Canvas canvas5 = canvas2;
             int i19 = i6;
-            RectF rectvar_ = this.drawRegion;
-            float var_ = this.imageX;
-            float var_ = this.imageY;
-            rectvar_.set(var_, var_, this.imageW + var_, this.imageH + var_);
+            float var_ = 1.0f;
+            if (this.isAspectFit) {
+                int intrinsicWidth = drawable.getIntrinsicWidth();
+                int intrinsicHeight = drawable.getIntrinsicHeight();
+                float var_ = this.imageW;
+                float var_ = this.sideClip;
+                float var_ = var_ - (var_ * 2.0f);
+                float var_ = this.imageH;
+                float var_ = var_ - (var_ * 2.0f);
+                float var_ = var_ == 0.0f ? 1.0f : ((float) intrinsicWidth) / var_;
+                if (var_ != 0.0f) {
+                    var_ = ((float) intrinsicHeight) / var_;
+                }
+                float max3 = Math.max(var_, var_);
+                RectF rectvar_ = this.drawRegion;
+                float var_ = this.imageX;
+                float var_ = this.imageW;
+                float var_ = (float) ((int) (((float) intrinsicWidth) / max3));
+                float var_ = this.imageY;
+                float var_ = this.imageH;
+                float var_ = (float) ((int) (((float) intrinsicHeight) / max3));
+                rectvar_.set(((var_ - var_) / 2.0f) + var_, ((var_ - var_) / 2.0f) + var_, var_ + ((var_ + var_) / 2.0f), var_ + ((var_ + var_) / 2.0f));
+            } else {
+                RectF rectvar_ = this.drawRegion;
+                float var_ = this.imageX;
+                float var_ = this.imageY;
+                rectvar_.set(var_, var_, this.imageW + var_, this.imageH + var_);
+            }
             RectF rectvar_ = this.drawRegion;
             drawable2.setBounds((int) rectvar_.left, (int) rectvar_.top, (int) rectvar_.right, (int) rectvar_.bottom);
             if (this.isVisible) {

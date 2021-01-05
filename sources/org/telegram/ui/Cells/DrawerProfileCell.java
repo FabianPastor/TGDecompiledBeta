@@ -16,6 +16,7 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,7 +54,8 @@ public class DrawerProfileCell extends FrameLayout {
     private ImageView shadowView;
     private SnowflakesEffect snowflakesEffect;
     private Rect srcRect = new Rect();
-    private RLottieDrawable sunDrawable;
+    /* access modifiers changed from: private */
+    public RLottieDrawable sunDrawable;
 
     public DrawerProfileCell(Context context) {
         super(context);
@@ -99,7 +101,16 @@ public class DrawerProfileCell extends FrameLayout {
             this.sunDrawable.setCurrentFrame(36);
         }
         this.sunDrawable.setPlayInDirectionOfCustomEndFrame(true);
-        this.darkThemeView = new RLottieImageView(context);
+        this.darkThemeView = new RLottieImageView(context) {
+            public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+                super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+                if (DrawerProfileCell.this.sunDrawable.getCustomEndFrame() == 0) {
+                    accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToNightTheme", NUM));
+                } else {
+                    accessibilityNodeInfo.setText(LocaleController.getString("AccDescrSwitchToDayTheme", NUM));
+                }
+            }
+        };
         this.sunDrawable.beginApplyLayerColors();
         int color = Theme.getColor("chats_menuName");
         this.sunDrawable.setLayerColor("Sunny.**", color);
@@ -198,7 +209,7 @@ public class DrawerProfileCell extends FrameLayout {
             int r2 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
             if (r2 == 0) goto L_0x0095
             android.content.Context r2 = r6.getContext()
-            r3 = 2131624448(0x7f0e0200, float:1.8876076E38)
+            r3 = 2131624450(0x7f0e0202, float:1.887608E38)
             java.lang.String r4 = "AutoNightModeOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.widget.Toast r2 = android.widget.Toast.makeText(r2, r3, r1)

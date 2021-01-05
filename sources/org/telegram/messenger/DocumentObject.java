@@ -85,6 +85,10 @@ public class DocumentObject {
     public static SvgHelper.SvgDrawable getSvgThumb(TLRPC$Document tLRPC$Document, String str, float f, float f2) {
         int i;
         int i2;
+        SvgHelper.SvgDrawable svgDrawable = null;
+        if (tLRPC$Document == null) {
+            return null;
+        }
         int size = tLRPC$Document.thumbs.size();
         int i3 = 0;
         int i4 = 0;
@@ -111,18 +115,13 @@ public class DocumentObject {
                     }
                     i3++;
                 }
-                if (i != 0 && i2 != 0) {
-                    SvgHelper.SvgDrawable drawableByPath = SvgHelper.getDrawableByPath(SvgHelper.decompress(tLRPC$PhotoSize.bytes), (int) (((float) i) * f2), (int) (((float) i2) * f2));
-                    if (drawableByPath == null) {
-                        return drawableByPath;
-                    }
-                    drawableByPath.setupGradient(str, f);
-                    return drawableByPath;
+                if (i != 0 && i2 != 0 && (svgDrawable = SvgHelper.getDrawableByPath(SvgHelper.decompress(tLRPC$PhotoSize.bytes), (int) (((float) i) * f2), (int) (((float) i2) * f2))) != null) {
+                    svgDrawable.setupGradient(str, f);
                 }
             } else {
                 i4++;
             }
         }
-        return null;
+        return svgDrawable;
     }
 }

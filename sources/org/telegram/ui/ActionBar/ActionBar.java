@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.Adapters.FiltersView;
 import org.telegram.ui.Components.EllipsizeSpanAnimator;
 import org.telegram.ui.Components.FireworksEffect;
@@ -31,11 +33,13 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SnowflakesEffect;
 
 public class ActionBar extends FrameLayout {
+    private int actionBarColor;
     public ActionBarMenuOnItemClick actionBarMenuOnItemClick;
     /* access modifiers changed from: private */
     public ActionBarMenu actionMode;
     /* access modifiers changed from: private */
     public AnimatorSet actionModeAnimation;
+    private int actionModeColor;
     /* access modifiers changed from: private */
     public View actionModeExtraView;
     /* access modifiers changed from: private */
@@ -232,28 +236,39 @@ public class ActionBar extends FrameLayout {
             canvas.clipRect(0.0f, (-getTranslationY()) + ((float) (this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0)), (float) getMeasuredWidth(), (float) getMeasuredHeight());
         }
         boolean drawChild = super.drawChild(canvas, view, j);
-        if (this.supportsHolidayImage && !this.titleOverlayShown && !LocaleController.isRTL && view == this.titleTextView[0] && (currentHolidayDrawable = Theme.getCurrentHolidayDrawable()) != null) {
-            TextPaint textPaint = this.titleTextView[0].getTextPaint();
-            textPaint.getFontMetricsInt(this.fontMetricsInt);
-            textPaint.getTextBounds((String) this.titleTextView[0].getText(), 0, 1, this.rect);
-            int textStartX = this.titleTextView[0].getTextStartX() + Theme.getCurrentHolidayDrawableXOffset() + ((this.rect.width() - (currentHolidayDrawable.getIntrinsicWidth() + Theme.getCurrentHolidayDrawableXOffset())) / 2);
-            int textStartY = this.titleTextView[0].getTextStartY() + Theme.getCurrentHolidayDrawableYOffset() + ((int) Math.ceil((double) (((float) (this.titleTextView[0].getTextHeight() - this.rect.height())) / 2.0f)));
-            currentHolidayDrawable.setBounds(textStartX, textStartY - currentHolidayDrawable.getIntrinsicHeight(), currentHolidayDrawable.getIntrinsicWidth() + textStartX, textStartY);
-            currentHolidayDrawable.draw(canvas);
-            if (Theme.canStartHolidayAnimation()) {
-                if (this.snowflakesEffect == null) {
-                    this.snowflakesEffect = new SnowflakesEffect();
+        if (this.supportsHolidayImage && !this.titleOverlayShown && !LocaleController.isRTL) {
+            SimpleTextView[] simpleTextViewArr = this.titleTextView;
+            if ((view == simpleTextViewArr[0] || view == simpleTextViewArr[1]) && (currentHolidayDrawable = Theme.getCurrentHolidayDrawable()) != null) {
+                SimpleTextView simpleTextView = (SimpleTextView) view;
+                if (simpleTextView.getVisibility() == 0 && (simpleTextView.getText() instanceof String)) {
+                    TextPaint textPaint = simpleTextView.getTextPaint();
+                    textPaint.getFontMetricsInt(this.fontMetricsInt);
+                    textPaint.getTextBounds((String) simpleTextView.getText(), 0, 1, this.rect);
+                    int textStartX = simpleTextView.getTextStartX() + Theme.getCurrentHolidayDrawableXOffset() + ((this.rect.width() - (currentHolidayDrawable.getIntrinsicWidth() + Theme.getCurrentHolidayDrawableXOffset())) / 2);
+                    int textStartY = simpleTextView.getTextStartY() + Theme.getCurrentHolidayDrawableYOffset() + ((int) Math.ceil((double) (((float) (simpleTextView.getTextHeight() - this.rect.height())) / 2.0f)));
+                    currentHolidayDrawable.setBounds(textStartX, textStartY - currentHolidayDrawable.getIntrinsicHeight(), currentHolidayDrawable.getIntrinsicWidth() + textStartX, textStartY);
+                    currentHolidayDrawable.setAlpha((int) (simpleTextView.getAlpha() * 255.0f));
+                    currentHolidayDrawable.draw(canvas);
+                    if (this.overlayTitleAnimationInProgress) {
+                        view.invalidate();
+                        invalidate();
+                    }
                 }
-            } else if (!this.manualStart && this.snowflakesEffect != null) {
-                this.snowflakesEffect = null;
-            }
-            SnowflakesEffect snowflakesEffect2 = this.snowflakesEffect;
-            if (snowflakesEffect2 != null) {
-                snowflakesEffect2.onDraw(this, canvas);
-            } else {
-                FireworksEffect fireworksEffect2 = this.fireworksEffect;
-                if (fireworksEffect2 != null) {
-                    fireworksEffect2.onDraw(this, canvas);
+                if (Theme.canStartHolidayAnimation()) {
+                    if (this.snowflakesEffect == null) {
+                        this.snowflakesEffect = new SnowflakesEffect();
+                    }
+                } else if (!this.manualStart && this.snowflakesEffect != null) {
+                    this.snowflakesEffect = null;
+                }
+                SnowflakesEffect snowflakesEffect2 = this.snowflakesEffect;
+                if (snowflakesEffect2 != null) {
+                    snowflakesEffect2.onDraw(this, canvas);
+                } else {
+                    FireworksEffect fireworksEffect2 = this.fireworksEffect;
+                    if (fireworksEffect2 != null) {
+                        fireworksEffect2.onDraw(this, canvas);
+                    }
                 }
             }
         }
@@ -475,7 +490,10 @@ public class ActionBar extends FrameLayout {
         this.actionMode = actionBarMenu2;
         actionBarMenu2.isActionMode = true;
         actionBarMenu2.setClickable(true);
-        this.actionMode.setBackgroundColor(Theme.getColor("actionBarActionModeDefault"));
+        ActionBarMenu actionBarMenu3 = this.actionMode;
+        int color = Theme.getColor("actionBarActionModeDefault");
+        this.actionModeColor = color;
+        actionBarMenu3.setBackgroundColor(color);
         addView(this.actionMode, indexOfChild(this.backButtonImageView));
         this.actionMode.setPadding(0, this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0, 0, 0);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.actionMode.getLayoutParams();
@@ -527,8 +545,15 @@ public class ActionBar extends FrameLayout {
             this.actionModeExtraView = view;
             this.actionModeShowingView = view2;
             this.actionModeHidingViews = viewArr;
-            if (this.occupyStatusBar && (view4 = this.actionModeTop) != null) {
+            if (this.occupyStatusBar && (view4 = this.actionModeTop) != null && !SharedConfig.noStatusBar) {
                 arrayList.add(ObjectAnimator.ofFloat(view4, View.ALPHA, new float[]{0.0f, 1.0f}));
+            }
+            if (SharedConfig.noStatusBar) {
+                if (AndroidUtilities.computePerceivedBrightness(this.actionModeColor) < 0.721f) {
+                    AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), false);
+                } else {
+                    AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), true);
+                }
             }
             AnimatorSet animatorSet = this.actionModeAnimation;
             if (animatorSet != null) {
@@ -541,7 +566,7 @@ public class ActionBar extends FrameLayout {
             this.actionModeAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationStart(Animator animator) {
                     ActionBar.this.actionMode.setVisibility(0);
-                    if (ActionBar.this.occupyStatusBar && ActionBar.this.actionModeTop != null) {
+                    if (ActionBar.this.occupyStatusBar && ActionBar.this.actionModeTop != null && !SharedConfig.noStatusBar) {
                         ActionBar.this.actionModeTop.setVisibility(0);
                     }
                 }
@@ -618,8 +643,15 @@ public class ActionBar extends FrameLayout {
             if (view3 != null) {
                 arrayList.add(ObjectAnimator.ofFloat(view3, View.ALPHA, new float[]{0.0f}));
             }
-            if (this.occupyStatusBar && (view = this.actionModeTop) != null) {
+            if (this.occupyStatusBar && (view = this.actionModeTop) != null && !SharedConfig.noStatusBar) {
                 arrayList.add(ObjectAnimator.ofFloat(view, View.ALPHA, new float[]{0.0f}));
+            }
+            if (SharedConfig.noStatusBar) {
+                if (AndroidUtilities.computePerceivedBrightness(this.actionBarColor) < 0.721f) {
+                    AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), false);
+                } else {
+                    AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), true);
+                }
             }
             AnimatorSet animatorSet = this.actionModeAnimation;
             if (animatorSet != null) {
@@ -634,7 +666,7 @@ public class ActionBar extends FrameLayout {
                     if (ActionBar.this.actionModeAnimation != null && ActionBar.this.actionModeAnimation.equals(animator)) {
                         AnimatorSet unused = ActionBar.this.actionModeAnimation = null;
                         ActionBar.this.actionMode.setVisibility(4);
-                        if (ActionBar.this.occupyStatusBar && ActionBar.this.actionModeTop != null) {
+                        if (ActionBar.this.occupyStatusBar && ActionBar.this.actionModeTop != null && !SharedConfig.noStatusBar) {
                             ActionBar.this.actionModeTop.setVisibility(4);
                         }
                         if (ActionBar.this.actionModeExtraView != null) {
@@ -706,8 +738,14 @@ public class ActionBar extends FrameLayout {
     public void setActionModeColor(int i) {
         ActionBarMenu actionBarMenu = this.actionMode;
         if (actionBarMenu != null) {
+            this.actionModeColor = i;
             actionBarMenu.setBackgroundColor(i);
         }
+    }
+
+    public void setBackgroundColor(int i) {
+        this.actionBarColor = i;
+        super.setBackgroundColor(i);
     }
 
     public boolean isActionModeShowed() {
@@ -1558,12 +1596,26 @@ public class ActionBar extends FrameLayout {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.ellipsizeSpanAnimator.onAttachedToWindow();
+        if (SharedConfig.noStatusBar && this.actionModeVisible) {
+            if (AndroidUtilities.computePerceivedBrightness(this.actionModeColor) < 0.721f) {
+                AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), false);
+            } else {
+                AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), true);
+            }
+        }
     }
 
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.ellipsizeSpanAnimator.onDetachedFromWindow();
+        if (SharedConfig.noStatusBar && this.actionModeVisible) {
+            if (AndroidUtilities.computePerceivedBrightness(this.actionBarColor) < 0.721f) {
+                AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), false);
+            } else {
+                AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), true);
+            }
+        }
     }
 
     public ActionBarMenu getActionMode() {
