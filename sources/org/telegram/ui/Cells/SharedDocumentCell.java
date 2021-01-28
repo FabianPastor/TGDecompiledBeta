@@ -3,13 +3,16 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.ReplacementSpan;
+import android.transition.ChangeBounds;
+import android.transition.Fade;
+import android.transition.TransitionManager;
+import android.transition.TransitionSet;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
@@ -37,8 +40,12 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.CombinedDrawable;
+import org.telegram.ui.Components.CubicBezierInterpolator;
+import org.telegram.ui.Components.DotDividerSpan;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
+import org.telegram.ui.Components.RLottieDrawable;
+import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.FilteredSearchView;
 
 public class SharedDocumentCell extends FrameLayout implements DownloadController.FileDownloadProgressListener {
@@ -61,7 +68,8 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     public ImageView placeholderImageView;
     private LineProgressView progressView;
     private TextView rightDateTextView;
-    private ImageView statusImageView;
+    private RLottieDrawable statusDrawable;
+    private RLottieImageView statusImageView;
     /* access modifiers changed from: private */
     public BackupImageView thumbImageView;
     private int viewType;
@@ -185,18 +193,20 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             boolean z10 = LocaleController.isRTL;
             addView(textView9, LayoutHelper.createFrame(-1, -2.0f, (z10 ? 5 : 3) | 48, z10 ? 8.0f : 72.0f, 5.0f, z10 ? 72.0f : 8.0f, 0.0f));
         }
-        ImageView imageView2 = new ImageView(context2);
-        this.statusImageView = imageView2;
-        imageView2.setVisibility(4);
+        this.statusDrawable = new RLottieDrawable(NUM, "download_arrow", AndroidUtilities.dp(14.0f), AndroidUtilities.dp(14.0f), true, (int[]) null);
+        RLottieImageView rLottieImageView = new RLottieImageView(context2);
+        this.statusImageView = rLottieImageView;
+        rLottieImageView.setAnimation(this.statusDrawable);
+        this.statusImageView.setVisibility(4);
         this.statusImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("sharedMedia_startStopLoadIcon"), PorterDuff.Mode.MULTIPLY));
         if (i2 == 1) {
-            ImageView imageView3 = this.statusImageView;
+            RLottieImageView rLottieImageView2 = this.statusImageView;
             boolean z11 = LocaleController.isRTL;
-            addView(imageView3, LayoutHelper.createFrame(-2, -2.0f, (z11 ? 5 : 3) | 48, z11 ? 8.0f : 72.0f, 39.0f, z11 ? 72.0f : 8.0f, 0.0f));
+            addView(rLottieImageView2, LayoutHelper.createFrame(14, 14.0f, (z11 ? 5 : 3) | 48, z11 ? 8.0f : 70.0f, 37.0f, z11 ? 72.0f : 8.0f, 0.0f));
         } else {
-            ImageView imageView4 = this.statusImageView;
+            RLottieImageView rLottieImageView3 = this.statusImageView;
             boolean z12 = LocaleController.isRTL;
-            addView(imageView4, LayoutHelper.createFrame(-2, -2.0f, (z12 ? 5 : 3) | 48, z12 ? 8.0f : 72.0f, 35.0f, z12 ? 72.0f : 8.0f, 0.0f));
+            addView(rLottieImageView3, LayoutHelper.createFrame(14, 14.0f, (z12 ? 5 : 3) | 48, z12 ? 8.0f : 70.0f, 33.0f, z12 ? 72.0f : 8.0f, 0.0f));
         }
         TextView textView10 = new TextView(context2);
         this.dateTextView = textView10;
@@ -241,22 +251,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         if (i2 == 2) {
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(".");
             this.dotSpan = spannableStringBuilder;
-            spannableStringBuilder.setSpan(new ReplacementSpan(this) {
-                int color;
-                Paint p = new Paint(1);
-
-                public int getSize(Paint paint, CharSequence charSequence, int i, int i2, Paint.FontMetricsInt fontMetricsInt) {
-                    return AndroidUtilities.dp(3.0f);
-                }
-
-                public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
-                    if (this.color != paint.getColor()) {
-                        this.p.setColor(paint.getColor());
-                    }
-                    float dpf2 = AndroidUtilities.dpf2(3.0f) / 2.0f;
-                    canvas.drawCircle(f + dpf2, (float) ((i5 - i3) / 2), dpf2, this.p);
-                }
-            }, 0, 1, 0);
+            spannableStringBuilder.setSpan(new DotDividerSpan(), 0, 1, 0);
         }
     }
 
@@ -375,7 +370,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         if (this.progressView.getVisibility() == 0) {
-            updateFileExistIcon();
+            updateFileExistIcon(false);
         }
     }
 
@@ -387,10 +382,20 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     }
 
     public void setDocument(MessageObject messageObject, boolean z) {
+        boolean z2;
+        boolean z3;
         String str;
         String str2;
         MessageObject messageObject2 = messageObject;
-        this.needDivider = z;
+        MessageObject messageObject3 = this.message;
+        if (messageObject3 == null || messageObject2 == null || messageObject3.getId() == messageObject.getId()) {
+            z3 = z;
+            z2 = false;
+        } else {
+            z3 = z;
+            z2 = true;
+        }
+        this.needDivider = z3;
         this.message = messageObject2;
         this.loaded = false;
         this.loading = false;
@@ -483,18 +488,37 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         }
         setWillNotDraw(!this.needDivider);
         this.progressView.setProgress(0.0f, false);
-        updateFileExistIcon();
+        updateFileExistIcon(z2);
     }
 
-    public void updateFileExistIcon() {
+    public void updateFileExistIcon(boolean z) {
+        if (z && Build.VERSION.SDK_INT >= 19) {
+            TransitionSet transitionSet = new TransitionSet();
+            ChangeBounds changeBounds = new ChangeBounds();
+            changeBounds.setDuration(150);
+            transitionSet.addTransition(new Fade().setDuration(150)).addTransition(changeBounds);
+            transitionSet.setOrdering(0);
+            transitionSet.setInterpolator(CubicBezierInterpolator.DEFAULT);
+            TransitionManager.beginDelayedTransition(this, transitionSet);
+        }
         MessageObject messageObject = this.message;
+        float f = 72.0f;
+        float f2 = 8.0f;
         if (messageObject == null || messageObject.messageOwner.media == null) {
             this.loading = false;
             this.loaded = true;
             this.progressView.setVisibility(4);
             this.progressView.setProgress(0.0f, false);
             this.statusImageView.setVisibility(4);
-            this.dateTextView.setPadding(0, 0, 0, 0);
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.dateTextView.getLayoutParams();
+            if (layoutParams != null) {
+                layoutParams.leftMargin = AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : 72.0f);
+                if (!LocaleController.isRTL) {
+                    f = 8.0f;
+                }
+                layoutParams.rightMargin = AndroidUtilities.dp(f);
+                this.dateTextView.requestLayout();
+            }
             DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
             return;
         }
@@ -502,7 +526,15 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         if (messageObject.attachPathExists || messageObject.mediaExists) {
             this.statusImageView.setVisibility(4);
             this.progressView.setVisibility(4);
-            this.dateTextView.setPadding(0, 0, 0, 0);
+            FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.dateTextView.getLayoutParams();
+            if (layoutParams2 != null) {
+                layoutParams2.leftMargin = AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : 72.0f);
+                if (!LocaleController.isRTL) {
+                    f = 8.0f;
+                }
+                layoutParams2.rightMargin = AndroidUtilities.dp(f);
+                this.dateTextView.requestLayout();
+            }
             this.loading = false;
             this.loaded = true;
             DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
@@ -512,8 +544,28 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(attachFileName, this.message, this);
         this.loading = FileLoader.getInstance(this.currentAccount).isLoadingFile(attachFileName);
         this.statusImageView.setVisibility(0);
-        this.statusImageView.setImageResource(this.loading ? NUM : NUM);
-        this.dateTextView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(14.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(14.0f) : 0, 0);
+        int i = 15;
+        this.statusDrawable.setCustomEndFrame(this.loading ? 15 : 0);
+        this.statusDrawable.setPlayInDirectionOfCustomEndFrame(true);
+        if (z) {
+            this.statusImageView.playAnimation();
+        } else {
+            RLottieDrawable rLottieDrawable = this.statusDrawable;
+            if (!this.loading) {
+                i = 0;
+            }
+            rLottieDrawable.setCurrentFrame(i);
+            this.statusImageView.invalidate();
+        }
+        FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) this.dateTextView.getLayoutParams();
+        if (layoutParams3 != null) {
+            layoutParams3.leftMargin = AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : 86.0f);
+            if (LocaleController.isRTL) {
+                f2 = 86.0f;
+            }
+            layoutParams3.rightMargin = AndroidUtilities.dp(f2);
+            this.dateTextView.requestLayout();
+        }
         if (this.loading) {
             this.progressView.setVisibility(0);
             Float fileProgress = ImageLoader.getInstance().getFileProgress(attachFileName);
@@ -581,8 +633,8 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         }
         TextView textView4 = this.dateTextView;
         textView4.layout(textView4.getLeft(), this.dateTextView.getTop() + measuredHeight, this.dateTextView.getRight(), this.dateTextView.getBottom() + measuredHeight);
-        ImageView imageView = this.statusImageView;
-        imageView.layout(imageView.getLeft(), this.statusImageView.getTop() + measuredHeight, this.statusImageView.getRight(), measuredHeight + this.statusImageView.getBottom());
+        RLottieImageView rLottieImageView = this.statusImageView;
+        rLottieImageView.layout(rLottieImageView.getLeft(), this.statusImageView.getTop() + measuredHeight, this.statusImageView.getRight(), measuredHeight + this.statusImageView.getBottom());
         LineProgressView lineProgressView = this.progressView;
         lineProgressView.layout(lineProgressView.getLeft(), (getMeasuredHeight() - this.progressView.getMeasuredHeight()) - (this.needDivider ? 1 : 0), this.progressView.getRight(), getMeasuredHeight() - (this.needDivider ? 1 : 0));
     }
@@ -595,17 +647,17 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     }
 
     public void onFailedDownload(String str, boolean z) {
-        updateFileExistIcon();
+        updateFileExistIcon(true);
     }
 
     public void onSuccessDownload(String str) {
         this.progressView.setProgress(1.0f, true);
-        updateFileExistIcon();
+        updateFileExistIcon(true);
     }
 
     public void onProgressDownload(String str, long j, long j2) {
         if (this.progressView.getVisibility() != 0) {
-            updateFileExistIcon();
+            updateFileExistIcon(true);
         }
         this.progressView.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
     }

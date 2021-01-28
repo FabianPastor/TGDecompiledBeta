@@ -444,7 +444,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131165954(0x7var_, float:1.794614E38)
+            r3 = 2131165966(0x7var_e, float:1.7946164E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>(r2)
@@ -1374,10 +1374,10 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         AndroidUtilities.openDocument(messageObject, this.parentActivity, this.parentFragment);
                     } else if (!sharedDocumentCell.isLoading()) {
                         AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().loadFile(document, sharedDocumentCell.getMessage(), 0, 0);
-                        sharedDocumentCell.updateFileExistIcon();
+                        sharedDocumentCell.updateFileExistIcon(true);
                     } else {
                         AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().cancelLoadFile(document);
-                        sharedDocumentCell.updateFileExistIcon();
+                        sharedDocumentCell.updateFileExistIcon(true);
                     }
                 }
             } else if (i3 == 2) {
@@ -1536,12 +1536,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         r0 = 2
                         java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
                         r1 = 0
-                        r2 = 2131626320(0x7f0e0950, float:1.8879873E38)
+                        r2 = 2131626397(0x7f0e099d, float:1.888003E38)
                         java.lang.String r3 = "Open"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
                         r1 = 1
-                        r2 = 2131624939(0x7f0e03eb, float:1.8877072E38)
+                        r2 = 2131624944(0x7f0e03f0, float:1.8877082E38)
                         java.lang.String r3 = "Copy"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
@@ -2007,50 +2007,51 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             OnlyUserFiltersAdapter() {
             }
 
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v1, resolved type: org.telegram.ui.Cells.DialogCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v3, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v4, resolved type: org.telegram.ui.Cells.GraySectionCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v5, resolved type: org.telegram.ui.Cells.DialogCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v6, resolved type: org.telegram.ui.Cells.DialogCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v7, resolved type: org.telegram.ui.Cells.DialogCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v1, resolved type: org.telegram.ui.Cells.DialogCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v3, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v4, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v5, resolved type: org.telegram.ui.Cells.DialogCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v6, resolved type: org.telegram.ui.Cells.DialogCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v7, resolved type: org.telegram.ui.Cells.DialogCell} */
             /* JADX WARNING: Multi-variable type inference failed */
             /* Code decompiled incorrectly, please refer to instructions dump. */
-            public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r3, int r4) {
+            public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r4, int r5) {
                 /*
-                    r2 = this;
+                    r3 = this;
                     r0 = 1
-                    if (r4 == 0) goto L_0x002c
+                    if (r5 == 0) goto L_0x002c
                     r1 = 3
-                    if (r4 == r1) goto L_0x001c
-                    org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
-                    android.content.Context r3 = r3.getContext()
-                    r4.<init>(r3)
-                    r3 = 2131627036(0x7f0e0c1c, float:1.8881325E38)
+                    if (r5 == r1) goto L_0x001c
+                    org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
+                    android.content.Context r4 = r4.getContext()
+                    r5.<init>(r4)
+                    r4 = 2131627126(0x7f0e0CLASSNAME, float:1.8881508E38)
                     java.lang.String r0 = "SearchMessages"
-                    java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r0, r3)
-                    r4.setText(r3)
-                    goto L_0x0036
+                    java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
+                    r5.setText(r4)
+                    goto L_0x0037
                 L_0x001c:
-                    org.telegram.ui.Components.FlickerLoadingView r4 = new org.telegram.ui.Components.FlickerLoadingView
-                    android.content.Context r3 = r3.getContext()
-                    r4.<init>(r3)
-                    r4.setIsSingleCell(r0)
-                    r4.setViewType(r0)
-                    goto L_0x0036
+                    org.telegram.ui.Components.FlickerLoadingView r5 = new org.telegram.ui.Components.FlickerLoadingView
+                    android.content.Context r4 = r4.getContext()
+                    r5.<init>(r4)
+                    r5.setIsSingleCell(r0)
+                    r5.setViewType(r0)
+                    goto L_0x0037
                 L_0x002c:
-                    org.telegram.ui.Cells.DialogCell r4 = new org.telegram.ui.Cells.DialogCell
-                    android.content.Context r3 = r3.getContext()
+                    org.telegram.ui.Cells.DialogCell r5 = new org.telegram.ui.Cells.DialogCell
                     r1 = 0
-                    r4.<init>(r3, r0, r1)
-                L_0x0036:
-                    androidx.recyclerview.widget.RecyclerView$LayoutParams r3 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                    android.content.Context r4 = r4.getContext()
+                    r2 = 0
+                    r5.<init>(r1, r4, r0, r2)
+                L_0x0037:
+                    androidx.recyclerview.widget.RecyclerView$LayoutParams r4 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                     r0 = -1
                     r1 = -2
-                    r3.<init>((int) r0, (int) r1)
-                    r4.setLayoutParams(r3)
-                    org.telegram.ui.Components.RecyclerListView$Holder r3 = new org.telegram.ui.Components.RecyclerListView$Holder
-                    r3.<init>(r4)
-                    return r3
+                    r4.<init>((int) r0, (int) r1)
+                    r5.setLayoutParams(r4)
+                    org.telegram.ui.Components.RecyclerListView$Holder r4 = new org.telegram.ui.Components.RecyclerListView$Holder
+                    r4.<init>(r5)
+                    return r4
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.OnlyUserFiltersAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
             }
@@ -2219,7 +2220,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countTextPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_unreadCounterText"));
             arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_lockDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_secretIcon"));
             arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_groupDrawable, Theme.dialogs_broadcastDrawable, Theme.dialogs_botDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_nameIcon"));
-            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_scamDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_draft"));
+            arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_scamDrawable, Theme.dialogs_fakeDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_draft"));
             arrayList.add(new ThemeDescription(this.recyclerListView, 0, new Class[]{DialogCell.class}, (Paint) null, new Drawable[]{Theme.dialogs_pinnedDrawable, Theme.dialogs_reorderDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_pinnedIcon"));
             TextPaint[] textPaintArr = Theme.dialogs_namePaint;
             arrayList.add(new ThemeDescription((View) this.recyclerListView, 0, new Class[]{DialogCell.class, ProfileSearchCell.class}, (String[]) null, new Paint[]{textPaintArr[0], textPaintArr[1], Theme.dialogs_searchNamePaint}, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_name"));

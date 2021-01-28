@@ -8,6 +8,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.Adapters.FiltersView;
+import org.telegram.ui.Components.RLottieDrawable;
 
 public class ActionBarMenu extends LinearLayout {
     protected boolean isActionMode;
@@ -80,7 +81,11 @@ public class ActionBarMenu extends LinearLayout {
             addView(actionBarMenuItem, layoutParams);
         } else {
             if (drawable != null) {
-                actionBarMenuItem.iconView.setImageDrawable(drawable);
+                if (drawable instanceof RLottieDrawable) {
+                    actionBarMenuItem.iconView.setAnimation((RLottieDrawable) drawable);
+                } else {
+                    actionBarMenuItem.iconView.setImageDrawable(drawable);
+                }
             } else if (i2 != 0) {
                 actionBarMenuItem.iconView.setImageResource(i2);
             }

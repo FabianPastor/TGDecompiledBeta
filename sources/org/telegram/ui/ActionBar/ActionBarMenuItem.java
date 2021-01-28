@@ -57,6 +57,8 @@ import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RLottieDrawable;
+import org.telegram.ui.Components.RLottieImageView;
 
 public class ActionBarMenuItem extends FrameLayout {
     private int additionalXOffset;
@@ -71,7 +73,7 @@ public class ActionBarMenuItem extends FrameLayout {
     public ArrayList<FiltersView.MediaFilterData> currentSearchFilters;
     private ActionBarMenuItemDelegate delegate;
     private boolean forceSmoothKeyboard;
-    protected ImageView iconView;
+    protected RLottieImageView iconView;
     /* access modifiers changed from: private */
     public boolean ignoreOnTextChange;
     private boolean isSearchField;
@@ -195,9 +197,9 @@ public class ActionBarMenuItem extends FrameLayout {
             addView(this.textView, LayoutHelper.createFrame(-2, -1.0f));
             return;
         }
-        ImageView imageView = new ImageView(context);
-        this.iconView = imageView;
-        imageView.setScaleType(ImageView.ScaleType.CENTER);
+        RLottieImageView rLottieImageView = new RLottieImageView(context);
+        this.iconView = rLottieImageView;
+        rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
         this.iconView.setImportantForAccessibility(2);
         addView(this.iconView, LayoutHelper.createFrame(-1, -1.0f));
         if (i2 != 0) {
@@ -319,17 +321,17 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void setIconColor(int i) {
-        ImageView imageView = this.iconView;
-        if (imageView != null) {
-            imageView.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+        RLottieImageView rLottieImageView = this.iconView;
+        if (rLottieImageView != null) {
+            rLottieImageView.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
         }
         TextView textView2 = this.textView;
         if (textView2 != null) {
             textView2.setTextColor(i);
         }
-        ImageView imageView2 = this.clearButton;
-        if (imageView2 != null) {
-            imageView2.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+        ImageView imageView = this.clearButton;
+        if (imageView != null) {
+            imageView.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
         }
     }
 
@@ -498,13 +500,17 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public ActionBarMenuSubItem addSubItem(int i, int i2, CharSequence charSequence) {
-        return addSubItem(i, i2, charSequence, false);
+        return addSubItem(i, i2, (Drawable) null, charSequence, false);
     }
 
     public ActionBarMenuSubItem addSubItem(int i, int i2, CharSequence charSequence, boolean z) {
+        return addSubItem(i, i2, (Drawable) null, charSequence, z);
+    }
+
+    public ActionBarMenuSubItem addSubItem(int i, int i2, Drawable drawable, CharSequence charSequence, boolean z) {
         createPopupLayout();
         ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(getContext(), z, false, false);
-        actionBarMenuSubItem.setTextAndIcon(charSequence, i2);
+        actionBarMenuSubItem.setTextAndIcon(charSequence, i2, drawable);
         actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
         actionBarMenuSubItem.setTag(Integer.valueOf(i));
         this.popupLayout.addView(actionBarMenuSubItem);
@@ -941,13 +947,17 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void setIcon(Drawable drawable) {
-        ImageView imageView = this.iconView;
-        if (imageView != null) {
-            imageView.setImageDrawable(drawable);
+        RLottieImageView rLottieImageView = this.iconView;
+        if (rLottieImageView != null) {
+            if (drawable instanceof RLottieDrawable) {
+                rLottieImageView.setAnimation((RLottieDrawable) drawable);
+            } else {
+                rLottieImageView.setImageDrawable(drawable);
+            }
         }
     }
 
-    public ImageView getIconView() {
+    public RLottieImageView getIconView() {
         return this.iconView;
     }
 
@@ -956,9 +966,9 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void setIcon(int i) {
-        ImageView imageView = this.iconView;
-        if (imageView != null) {
-            imageView.setImageResource(i);
+        RLottieImageView rLottieImageView = this.iconView;
+        if (rLottieImageView != null) {
+            rLottieImageView.setImageResource(i);
         }
     }
 
@@ -970,8 +980,8 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public View getContentView() {
-        ImageView imageView = this.iconView;
-        return imageView != null ? imageView : this.textView;
+        RLottieImageView rLottieImageView = this.iconView;
+        return rLottieImageView != null ? rLottieImageView : this.textView;
     }
 
     public void setSearchFieldHint(CharSequence charSequence) {

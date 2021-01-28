@@ -371,14 +371,14 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     }
 
     public void setTitle(CharSequence charSequence) {
-        setTitle(charSequence, false);
+        setTitle(charSequence, false, false);
     }
 
-    public void setTitle(CharSequence charSequence, boolean z) {
+    public void setTitle(CharSequence charSequence, boolean z, boolean z2) {
         this.titleTextView.setText(charSequence);
-        if (z) {
+        if (z || z2) {
             if (!(this.titleTextView.getRightDrawable() instanceof ScamDrawable)) {
-                ScamDrawable scamDrawable = new ScamDrawable(11);
+                ScamDrawable scamDrawable = new ScamDrawable(11, z ^ true ? 1 : 0);
                 scamDrawable.setColor(Theme.getColor("actionBarDefaultSubtitle"));
                 this.titleTextView.setRightDrawable((Drawable) scamDrawable);
             }

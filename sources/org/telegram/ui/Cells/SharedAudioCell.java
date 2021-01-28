@@ -2,12 +2,10 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
-import android.text.style.ReplacementSpan;
 import android.view.MotionEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
@@ -27,6 +25,7 @@ import org.telegram.tgnet.TLRPC$TL_photoSize;
 import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox2;
+import org.telegram.ui.Components.DotDividerSpan;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgress2;
 
@@ -99,22 +98,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
             textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(".");
             this.dotSpan = spannableStringBuilder;
-            spannableStringBuilder.setSpan(new ReplacementSpan(this) {
-                int color;
-                Paint p = new Paint(1);
-
-                public int getSize(Paint paint, CharSequence charSequence, int i, int i2, Paint.FontMetricsInt fontMetricsInt) {
-                    return AndroidUtilities.dp(3.0f);
-                }
-
-                public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
-                    if (this.color != paint.getColor()) {
-                        this.p.setColor(paint.getColor());
-                    }
-                    float dpf2 = AndroidUtilities.dpf2(3.0f) / 2.0f;
-                    canvas.drawCircle(f + dpf2, (float) ((i5 - i3) / 2), dpf2, this.p);
-                }
-            }, 0, 1, 0);
+            spannableStringBuilder.setSpan(new DotDividerSpan(), 0, 1, 0);
         }
         TextPaint textPaint2 = new TextPaint(1);
         this.captionTextPaint = textPaint2;

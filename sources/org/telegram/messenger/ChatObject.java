@@ -232,6 +232,8 @@ public class ChatObject {
                     tLRPC$GroupCall.version = tLRPC$TL_phone_groupParticipants.version;
                     tLRPC$GroupCall.participants_count = tLRPC$TL_phone_groupParticipants.count;
                 }
+                long elapsedRealtime = SystemClock.elapsedRealtime();
+                this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.applyGroupCallVisibleParticipants, Long.valueOf(elapsedRealtime));
                 int size = tLRPC$TL_phone_groupParticipants.participants.size();
                 for (int i = 0; i < size; i++) {
                     TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = tLRPC$TL_phone_groupParticipants.participants.get(i);
@@ -239,9 +241,19 @@ public class ChatObject {
                     if (tLRPC$TL_groupCallParticipant3 != null) {
                         this.sortedParticipants.remove(tLRPC$TL_groupCallParticipant3);
                         this.participantsBySources.remove(tLRPC$TL_groupCallParticipant3.source);
-                        tLRPC$TL_groupCallParticipant2.active_date = Math.max(tLRPC$TL_groupCallParticipant2.active_date, tLRPC$TL_groupCallParticipant3.active_date);
+                        int max = Math.max(tLRPC$TL_groupCallParticipant2.active_date, tLRPC$TL_groupCallParticipant3.active_date);
+                        tLRPC$TL_groupCallParticipant2.lastTypingDate = max;
+                        if (elapsedRealtime != tLRPC$TL_groupCallParticipant2.lastVisibleDate) {
+                            tLRPC$TL_groupCallParticipant2.active_date = max;
+                        }
                     } else if (!(sparseArray == null || (tLRPC$TL_groupCallParticipant = sparseArray.get(tLRPC$TL_groupCallParticipant2.user_id)) == null)) {
-                        tLRPC$TL_groupCallParticipant2.active_date = Math.max(tLRPC$TL_groupCallParticipant2.active_date, tLRPC$TL_groupCallParticipant.active_date);
+                        int max2 = Math.max(tLRPC$TL_groupCallParticipant2.active_date, tLRPC$TL_groupCallParticipant.active_date);
+                        tLRPC$TL_groupCallParticipant2.lastTypingDate = max2;
+                        if (elapsedRealtime != tLRPC$TL_groupCallParticipant2.lastVisibleDate) {
+                            tLRPC$TL_groupCallParticipant2.active_date = max2;
+                        } else {
+                            tLRPC$TL_groupCallParticipant2.active_date = tLRPC$TL_groupCallParticipant.active_date;
+                        }
                     }
                     this.participants.put(tLRPC$TL_groupCallParticipant2.user_id, tLRPC$TL_groupCallParticipant2);
                     this.sortedParticipants.add(tLRPC$TL_groupCallParticipant2);
@@ -263,20 +275,25 @@ public class ChatObject {
         }
 
         public void processTypingsUpdate(AccountInstance accountInstance, ArrayList<Integer> arrayList, int i) {
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.applyGroupCallVisibleParticipants, Long.valueOf(elapsedRealtime));
             int size = arrayList.size();
             ArrayList arrayList2 = null;
             boolean z = false;
             for (int i2 = 0; i2 < size; i2++) {
                 Integer num = arrayList.get(i2);
                 TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.participants.get(num.intValue());
-                if (tLRPC$TL_groupCallParticipant != null) {
-                    tLRPC$TL_groupCallParticipant.active_date = i;
-                    z = true;
-                } else {
+                if (tLRPC$TL_groupCallParticipant == null) {
                     if (arrayList2 == null) {
                         arrayList2 = new ArrayList();
                     }
                     arrayList2.add(num);
+                } else if (i - tLRPC$TL_groupCallParticipant.lastTypingDate > 10) {
+                    if (tLRPC$TL_groupCallParticipant.lastVisibleDate != ((long) i)) {
+                        tLRPC$TL_groupCallParticipant.active_date = i;
+                    }
+                    tLRPC$TL_groupCallParticipant.lastTypingDate = i;
+                    z = true;
                 }
             }
             if (arrayList2 != null) {
@@ -370,6 +387,8 @@ public class ChatObject {
         public void processVoiceLevelsUpdate(int[] iArr, float[] fArr, boolean[] zArr) {
             TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant;
             int currentTime = this.currentAccount.getConnectionsManager().getCurrentTime();
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.applyGroupCallVisibleParticipants, Long.valueOf(elapsedRealtime));
             ArrayList arrayList = null;
             boolean z = false;
             for (int i = 0; i < iArr.length; i++) {
@@ -381,8 +400,11 @@ public class ChatObject {
                 if (tLRPC$TL_groupCallParticipant != null) {
                     tLRPC$TL_groupCallParticipant.hasVoice = zArr[i];
                     if (fArr[i] > 0.1f) {
-                        if (zArr[i] && tLRPC$TL_groupCallParticipant.active_date + 1 < currentTime) {
-                            tLRPC$TL_groupCallParticipant.active_date = currentTime;
+                        if (zArr[i] && tLRPC$TL_groupCallParticipant.lastTypingDate + 1 < currentTime) {
+                            if (elapsedRealtime != tLRPC$TL_groupCallParticipant.lastVisibleDate) {
+                                tLRPC$TL_groupCallParticipant.active_date = currentTime;
+                            }
+                            tLRPC$TL_groupCallParticipant.lastTypingDate = currentTime;
                             z = true;
                         }
                         tLRPC$TL_groupCallParticipant.lastSpeakTime = SystemClock.uptimeMillis();
@@ -480,22 +502,23 @@ public class ChatObject {
 
         public void processParticipantsUpdate(TLRPC$TL_updateGroupCallParticipants tLRPC$TL_updateGroupCallParticipants, boolean z) {
             boolean z2;
+            TLRPC$TL_updateGroupCallParticipants tLRPC$TL_updateGroupCallParticipants2 = tLRPC$TL_updateGroupCallParticipants;
             if (!z) {
-                int size = tLRPC$TL_updateGroupCallParticipants.participants.size();
+                int size = tLRPC$TL_updateGroupCallParticipants2.participants.size();
                 int i = 0;
                 while (true) {
                     if (i >= size) {
                         z2 = false;
                         break;
-                    } else if (tLRPC$TL_updateGroupCallParticipants.participants.get(i).versioned) {
+                    } else if (tLRPC$TL_updateGroupCallParticipants2.participants.get(i).versioned) {
                         z2 = true;
                         break;
                     } else {
                         i++;
                     }
                 }
-                if (!z2 || this.call.version + 1 >= tLRPC$TL_updateGroupCallParticipants.version) {
-                    if (z2 && tLRPC$TL_updateGroupCallParticipants.version < this.call.version) {
+                if (!z2 || this.call.version + 1 >= tLRPC$TL_updateGroupCallParticipants2.version) {
+                    if (z2 && tLRPC$TL_updateGroupCallParticipants2.version < this.call.version) {
                         return;
                     }
                 } else if (this.reloadingMembers || this.updatesStartWaitTime == 0 || Math.abs(System.currentTimeMillis() - this.updatesStartWaitTime) <= 1500) {
@@ -503,17 +526,17 @@ public class ChatObject {
                         this.updatesStartWaitTime = System.currentTimeMillis();
                     }
                     if (BuildVars.LOGS_ENABLED) {
-                        FileLog.d("add TL_updateGroupCallParticipants to queue " + tLRPC$TL_updateGroupCallParticipants.version);
+                        FileLog.d("add TL_updateGroupCallParticipants to queue " + tLRPC$TL_updateGroupCallParticipants2.version);
                     }
-                    this.updatesQueue.add(tLRPC$TL_updateGroupCallParticipants);
+                    this.updatesQueue.add(tLRPC$TL_updateGroupCallParticipants2);
                     if (this.checkQueueRunnable == null) {
-                        $$Lambda$ChatObject$Call$A9Iyjy8qm5XwdmVhsjek1P93bY r12 = new Runnable() {
+                        $$Lambda$ChatObject$Call$A9Iyjy8qm5XwdmVhsjek1P93bY r1 = new Runnable() {
                             public final void run() {
                                 ChatObject.Call.this.checkQueue();
                             }
                         };
-                        this.checkQueueRunnable = r12;
-                        AndroidUtilities.runOnUIThread(r12, 1500);
+                        this.checkQueueRunnable = r1;
+                        AndroidUtilities.runOnUIThread(r1, 1500);
                         return;
                     }
                     return;
@@ -524,11 +547,13 @@ public class ChatObject {
                 }
             }
             int clientUserId = this.currentAccount.getUserConfig().getClientUserId();
-            int size2 = tLRPC$TL_updateGroupCallParticipants.participants.size();
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.applyGroupCallVisibleParticipants, Long.valueOf(elapsedRealtime));
+            int size2 = tLRPC$TL_updateGroupCallParticipants2.participants.size();
             boolean z3 = false;
             boolean z4 = false;
             for (int i2 = 0; i2 < size2; i2++) {
-                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = tLRPC$TL_updateGroupCallParticipants.participants.get(i2);
+                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = tLRPC$TL_updateGroupCallParticipants2.participants.get(i2);
                 TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = this.participants.get(tLRPC$TL_groupCallParticipant.user_id);
                 if (!tLRPC$TL_groupCallParticipant.left) {
                     if (this.invitedUsersMap.contains(Integer.valueOf(tLRPC$TL_groupCallParticipant.user_id))) {
@@ -539,9 +564,15 @@ public class ChatObject {
                     if (tLRPC$TL_groupCallParticipant2 != null) {
                         tLRPC$TL_groupCallParticipant2.flags = tLRPC$TL_groupCallParticipant.flags;
                         tLRPC$TL_groupCallParticipant2.muted = tLRPC$TL_groupCallParticipant.muted;
+                        tLRPC$TL_groupCallParticipant2.muted_by_you = tLRPC$TL_groupCallParticipant.muted_by_you;
+                        tLRPC$TL_groupCallParticipant2.volume = tLRPC$TL_groupCallParticipant.volume;
                         tLRPC$TL_groupCallParticipant2.can_self_unmute = tLRPC$TL_groupCallParticipant.can_self_unmute;
                         tLRPC$TL_groupCallParticipant2.date = tLRPC$TL_groupCallParticipant.date;
-                        tLRPC$TL_groupCallParticipant2.active_date = Math.max(tLRPC$TL_groupCallParticipant2.active_date, tLRPC$TL_groupCallParticipant.active_date);
+                        int max = Math.max(tLRPC$TL_groupCallParticipant2.active_date, tLRPC$TL_groupCallParticipant.active_date);
+                        tLRPC$TL_groupCallParticipant2.lastTypingDate = max;
+                        if (elapsedRealtime != tLRPC$TL_groupCallParticipant2.lastVisibleDate) {
+                            tLRPC$TL_groupCallParticipant2.active_date = max;
+                        }
                         int i3 = tLRPC$TL_groupCallParticipant2.source;
                         if (i3 != tLRPC$TL_groupCallParticipant.source) {
                             this.participantsBySources.remove(i3);
@@ -551,7 +582,7 @@ public class ChatObject {
                         }
                     } else {
                         if (tLRPC$TL_groupCallParticipant.just_joined) {
-                            int i5 = tLRPC$TL_updateGroupCallParticipants.version;
+                            int i5 = tLRPC$TL_updateGroupCallParticipants2.version;
                             TLRPC$GroupCall tLRPC$GroupCall = this.call;
                             if (i5 != tLRPC$GroupCall.version) {
                                 tLRPC$GroupCall.participants_count++;
@@ -564,7 +595,7 @@ public class ChatObject {
                     if (tLRPC$TL_groupCallParticipant.user_id == clientUserId && tLRPC$TL_groupCallParticipant.active_date == 0) {
                         tLRPC$TL_groupCallParticipant.active_date = this.currentAccount.getConnectionsManager().getCurrentTime();
                     }
-                } else if (tLRPC$TL_updateGroupCallParticipants.version != this.call.version) {
+                } else if (tLRPC$TL_updateGroupCallParticipants2.version != this.call.version) {
                     if (tLRPC$TL_groupCallParticipant2 != null) {
                         this.participants.remove(tLRPC$TL_groupCallParticipant.user_id);
                         this.participantsBySources.remove(tLRPC$TL_groupCallParticipant.source);
@@ -584,7 +615,7 @@ public class ChatObject {
                     z3 = true;
                 }
             }
-            int i7 = tLRPC$TL_updateGroupCallParticipants.version;
+            int i7 = tLRPC$TL_updateGroupCallParticipants2.version;
             TLRPC$GroupCall tLRPC$GroupCall3 = this.call;
             if (i7 > tLRPC$GroupCall3.version) {
                 tLRPC$GroupCall3.version = i7;
@@ -638,6 +669,14 @@ public class ChatObject {
             return 1;
         }
 
+        public void saveActiveDates() {
+            int size = this.sortedParticipants.size();
+            for (int i = 0; i < size; i++) {
+                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.sortedParticipants.get(i);
+                tLRPC$TL_groupCallParticipant.lastActiveDate = (long) tLRPC$TL_groupCallParticipant.active_date;
+            }
+        }
+
         private void checkOnlineParticipants() {
             if (this.typingUpdateRunnableScheduled) {
                 AndroidUtilities.cancelRunOnUIThread(this.typingUpdateRunnable);
@@ -663,6 +702,13 @@ public class ChatObject {
                 this.typingUpdateRunnableScheduled = true;
             }
         }
+    }
+
+    public static int getParticipantVolume(TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant) {
+        if ((tLRPC$TL_groupCallParticipant.flags & 128) != 0) {
+            return tLRPC$TL_groupCallParticipant.volume;
+        }
+        return 10000;
     }
 
     private static boolean getBannedRight(TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, int i) {

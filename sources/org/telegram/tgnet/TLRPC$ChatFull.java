@@ -17,13 +17,14 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public boolean can_view_participants;
     public boolean can_view_stats;
     public TLRPC$Photo chat_photo;
-    public TLRPC$ExportedChatInvite exported_invite;
+    public TLRPC$TL_chatInviteExported exported_invite;
     public int flags;
     public int folder_id;
     public boolean has_scheduled;
     public boolean hidden_prehistory;
     public int id;
     public int inviterId;
+    public int invitesCount;
     public int kicked_count;
     public int linked_chat_id;
     public TLRPC$ChannelLocation location;
@@ -69,10 +70,13 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer92();
                 break;
             case -281384243:
-                tLRPC$ChatFull = new TLRPC$TL_channelFull();
+                tLRPC$ChatFull = new TLRPC$TL_channelFull_layer122();
                 break;
             case -253335766:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer121();
+                break;
+            case -213431562:
+                tLRPC$ChatFull = new TLRPC$TL_chatFull();
                 break;
             case -88925533:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_old();
@@ -81,7 +85,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer99();
                 break;
             case 231260545:
-                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                tLRPC$ChatFull = new TLRPC$TL_chatFull_layer122();
                 break;
             case 277964371:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer103();
@@ -106,6 +110,9 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 break;
             case 1991201921:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer72();
+                break;
+            case 2055070967:
+                tLRPC$ChatFull = new TLRPC$TL_channelFull();
                 break;
             default:
                 tLRPC$ChatFull = null;

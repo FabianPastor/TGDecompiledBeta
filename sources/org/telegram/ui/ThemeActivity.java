@@ -60,6 +60,7 @@ import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.NotificationsCheckCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
+import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
@@ -1640,7 +1641,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             int itemViewType = viewHolder.getItemViewType();
-            return itemViewType == 0 || itemViewType == 1 || itemViewType == 4 || itemViewType == 7 || itemViewType == 10 || itemViewType == 11 || itemViewType == 12;
+            return itemViewType == 0 || itemViewType == 1 || itemViewType == 4 || itemViewType == 7 || itemViewType == 10 || itemViewType == 11 || itemViewType == 12 || itemViewType == 14;
         }
 
         /* access modifiers changed from: private */
@@ -1887,7 +1888,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0164:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x017a }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131627165(0x7f0e0c9d, float:1.8881587E38)
+                r0 = 2131627257(0x7f0e0cf9, float:1.8881773E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x017a }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x017a }
                 r10 = 500(0x1f4, float:7.0E-43)
@@ -1930,21 +1931,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131625067(0x7f0e046b, float:1.8877331E38)
+                r10 = 2131625085(0x7f0e047d, float:1.8877368E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131625066(0x7f0e046a, float:1.887733E38)
+                r10 = 2131625084(0x7f0e047c, float:1.8877366E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131625019(0x7f0e043b, float:1.8877234E38)
+                r10 = 2131625027(0x7f0e0443, float:1.887725E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$gl_JCjakwPx0TsvL6FtpACBSXUc r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$gl_JCjakwPx0TsvL6FtpACBSXUc
                 r0.<init>(r8)
                 r9.setPositiveButton(r10, r0)
-                r8 = 2131624589(0x7f0e028d, float:1.8876362E38)
+                r8 = 2131624594(0x7f0e0292, float:1.8876372E38)
                 java.lang.String r10 = "Cancel"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r9.setNegativeButton(r8, r1)
@@ -2128,33 +2129,30 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            BubbleRadiusCell bubbleRadiusCell;
+            View view;
+            RecyclerListView recyclerListView;
             switch (i) {
                 case 1:
-                    TextSettingsCell textSettingsCell = new TextSettingsCell(this.mContext);
-                    textSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    bubbleRadiusCell = textSettingsCell;
+                    view = new TextSettingsCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 2:
-                    TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);
-                    textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                    bubbleRadiusCell = textInfoPrivacyCell;
+                    view = new TextInfoPrivacyCell(this.mContext);
+                    view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     break;
                 case 3:
-                    bubbleRadiusCell = new ShadowSectionCell(this.mContext);
+                    view = new ShadowSectionCell(this.mContext);
                     break;
                 case 4:
-                    ThemeTypeCell themeTypeCell = new ThemeTypeCell(this.mContext);
-                    themeTypeCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    bubbleRadiusCell = themeTypeCell;
+                    view = new ThemeTypeCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 5:
-                    HeaderCell headerCell = new HeaderCell(this.mContext);
-                    headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    bubbleRadiusCell = headerCell;
+                    view = new HeaderCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 6:
-                    AnonymousClass1 r10 = new BrightnessControlCell(this.mContext) {
+                    view = new BrightnessControlCell(this.mContext) {
                         /* access modifiers changed from: protected */
                         public void didChangedValue(float f) {
                             int i = (int) (Theme.autoNightBrighnessThreshold * 100.0f);
@@ -2169,33 +2167,28 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                             }
                         }
                     };
-                    r10.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    bubbleRadiusCell = r10;
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 7:
-                    TextCheckCell textCheckCell = new TextCheckCell(this.mContext);
-                    textCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    bubbleRadiusCell = textCheckCell;
+                    view = new TextCheckCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 8:
-                    TextSizeCell textSizeCell = new TextSizeCell(this.mContext);
-                    textSizeCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    bubbleRadiusCell = textSizeCell;
+                    view = new TextSizeCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 9:
-                    AnonymousClass2 r102 = new ChatListCell(this, this.mContext) {
+                    view = new ChatListCell(this, this.mContext) {
                         /* access modifiers changed from: protected */
                         public void didSelectChatType(boolean z) {
                             SharedConfig.setUseThreeLinesLayout(z);
                         }
                     };
-                    r102.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    bubbleRadiusCell = r102;
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 10:
-                    NotificationsCheckCell notificationsCheckCell = new NotificationsCheckCell(this.mContext, 21, 64, false);
-                    notificationsCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    bubbleRadiusCell = notificationsCheckCell;
+                    view = new NotificationsCheckCell(this.mContext, 21, 64, false);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 11:
                     this.first = true;
@@ -2217,12 +2210,11 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     };
                     ThemeActivity.this.themesHorizontalListCell.setDrawDivider(ThemeActivity.this.hasThemeAccents);
                     ThemeActivity.this.themesHorizontalListCell.setFocusable(false);
-                    ThemesHorizontalListCell access$1900 = ThemeActivity.this.themesHorizontalListCell;
-                    access$1900.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(148.0f)));
-                    bubbleRadiusCell = access$1900;
+                    recyclerListView = ThemeActivity.this.themesHorizontalListCell;
+                    recyclerListView.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(148.0f)));
                     break;
                 case 12:
-                    AnonymousClass4 r103 = new TintRecyclerListView(this, this.mContext) {
+                    recyclerListView = new TintRecyclerListView(this, this.mContext) {
                         public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                             if (!(getParent() == null || getParent().getParent() == null)) {
                                 getParent().getParent().requestDisallowInterceptTouchEvent(canScrollHorizontally(-1));
@@ -2230,18 +2222,18 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                             return super.onInterceptTouchEvent(motionEvent);
                         }
                     };
-                    r103.setFocusable(false);
-                    r103.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    r103.setItemAnimator((RecyclerView.ItemAnimator) null);
-                    r103.setLayoutAnimation((LayoutAnimationController) null);
-                    r103.setPadding(AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(11.0f), 0);
-                    r103.setClipToPadding(false);
+                    recyclerListView.setFocusable(false);
+                    recyclerListView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                    recyclerListView.setItemAnimator((RecyclerView.ItemAnimator) null);
+                    recyclerListView.setLayoutAnimation((LayoutAnimationController) null);
+                    recyclerListView.setPadding(AndroidUtilities.dp(11.0f), 0, AndroidUtilities.dp(11.0f), 0);
+                    recyclerListView.setClipToPadding(false);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.mContext);
                     linearLayoutManager.setOrientation(0);
-                    r103.setLayoutManager(linearLayoutManager);
+                    recyclerListView.setLayoutManager(linearLayoutManager);
                     ThemeAccentsListAdapter themeAccentsListAdapter = new ThemeAccentsListAdapter(this.mContext);
-                    r103.setAdapter(themeAccentsListAdapter);
-                    r103.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(themeAccentsListAdapter, r103) {
+                    recyclerListView.setAdapter(themeAccentsListAdapter);
+                    recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(themeAccentsListAdapter, recyclerListView) {
                         public final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$1;
                         public final /* synthetic */ RecyclerListView f$2;
 
@@ -2254,7 +2246,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                             ThemeActivity.ListAdapter.this.lambda$onCreateViewHolder$2$ThemeActivity$ListAdapter(this.f$1, this.f$2, view, i);
                         }
                     });
-                    r103.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener(themeAccentsListAdapter) {
+                    recyclerListView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener(themeAccentsListAdapter) {
                         public final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$1;
 
                         {
@@ -2265,16 +2257,19 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                             return ThemeActivity.ListAdapter.this.lambda$onCreateViewHolder$5$ThemeActivity$ListAdapter(this.f$1, view, i);
                         }
                     });
-                    r103.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(62.0f)));
-                    bubbleRadiusCell = r103;
+                    recyclerListView.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(62.0f)));
+                    break;
+                case 13:
+                    view = new BubbleRadiusCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 default:
-                    BubbleRadiusCell bubbleRadiusCell2 = new BubbleRadiusCell(this.mContext);
-                    bubbleRadiusCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    bubbleRadiusCell = bubbleRadiusCell2;
+                    view = new TextCell(this.mContext);
+                    view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
             }
-            return new RecyclerListView.Holder(bubbleRadiusCell);
+            view = recyclerListView;
+            return new RecyclerListView.Holder(view);
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
@@ -2319,9 +2314,6 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                             str2 = LocaleController.getString("LastName", NUM);
                         }
                         textSettingsCell.setTextAndValue(LocaleController.getString("SortBy", NUM), str2, true);
-                        return;
-                    } else if (i2 == ThemeActivity.this.backgroundRow) {
-                        textSettingsCell.setText(LocaleController.getString("ChangeChatBackground", NUM), false);
                         return;
                     } else if (i2 == ThemeActivity.this.contactsReimportRow) {
                         textSettingsCell.setText(LocaleController.getString("ImportContacts", NUM), true);
@@ -2490,12 +2482,20 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     RecyclerListView recyclerListView = (RecyclerListView) viewHolder2.itemView;
                     ThemeAccentsListAdapter themeAccentsListAdapter = (ThemeAccentsListAdapter) recyclerListView.getAdapter();
                     themeAccentsListAdapter.notifyDataSetChanged();
-                    int access$6300 = themeAccentsListAdapter.findCurrentAccent();
-                    if (access$6300 == -1) {
-                        access$6300 = themeAccentsListAdapter.getItemCount() - 1;
+                    int access$6200 = themeAccentsListAdapter.findCurrentAccent();
+                    if (access$6200 == -1) {
+                        access$6200 = themeAccentsListAdapter.getItemCount() - 1;
                     }
-                    if (access$6300 != -1) {
-                        ((LinearLayoutManager) recyclerListView.getLayoutManager()).scrollToPositionWithOffset(access$6300, (ThemeActivity.this.listView.getMeasuredWidth() / 2) - AndroidUtilities.dp(42.0f));
+                    if (access$6200 != -1) {
+                        ((LinearLayoutManager) recyclerListView.getLayoutManager()).scrollToPositionWithOffset(access$6200, (ThemeActivity.this.listView.getMeasuredWidth() / 2) - AndroidUtilities.dp(42.0f));
+                        return;
+                    }
+                    return;
+                case 14:
+                    TextCell textCell = (TextCell) viewHolder2.itemView;
+                    if (i2 == ThemeActivity.this.backgroundRow) {
+                        textCell.setTextAndIcon(LocaleController.getString("ChangeChatBackground", NUM), NUM, false);
+                        textCell.setColors("windowBackgroundWhiteBlueText4", "windowBackgroundWhiteBlueText4");
                         return;
                     }
                     return;
@@ -2515,7 +2515,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
 
         public int getItemViewType(int i) {
-            if (i == ThemeActivity.this.scheduleFromRow || i == ThemeActivity.this.distanceRow || i == ThemeActivity.this.scheduleToRow || i == ThemeActivity.this.scheduleUpdateLocationRow || i == ThemeActivity.this.backgroundRow || i == ThemeActivity.this.contactsReimportRow || i == ThemeActivity.this.contactsSortRow || i == ThemeActivity.this.stickersRow) {
+            if (i == ThemeActivity.this.scheduleFromRow || i == ThemeActivity.this.distanceRow || i == ThemeActivity.this.scheduleToRow || i == ThemeActivity.this.scheduleUpdateLocationRow || i == ThemeActivity.this.contactsReimportRow || i == ThemeActivity.this.contactsSortRow || i == ThemeActivity.this.stickersRow) {
                 return 1;
             }
             if (i == ThemeActivity.this.automaticBrightnessInfoRow || i == ThemeActivity.this.scheduleLocationInfoRow) {
@@ -2554,6 +2554,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             if (i == ThemeActivity.this.bubbleRadiusRow) {
                 return 13;
             }
+            if (i == ThemeActivity.this.backgroundRow) {
+                return 14;
+            }
             return 1;
         }
     }
@@ -2584,6 +2587,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextSettingsCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteValueText"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
@@ -2599,6 +2604,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{BubbleRadiusCell.class}, new String[]{"sizeBar"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_progressBackground"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatListCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackground"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ChatListCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "radioBackgroundChecked"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+        arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{NotificationsCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"));

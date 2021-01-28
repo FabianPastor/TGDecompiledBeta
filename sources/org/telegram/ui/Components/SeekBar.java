@@ -156,6 +156,10 @@ public class SeekBar {
         this.height = i2;
     }
 
+    public int getWidth() {
+        return this.width - thumbWidth;
+    }
+
     public void draw(Canvas canvas) {
         RectF rectF = this.rect;
         int i = thumbWidth;

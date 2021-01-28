@@ -10,6 +10,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 
 public class ScamDrawable extends Drawable {
+    private int currentType;
     private Paint paint = new Paint(1);
     private RectF rect = new RectF();
     private String text;
@@ -26,23 +27,32 @@ public class ScamDrawable extends Drawable {
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
-    public ScamDrawable(int i) {
+    public ScamDrawable(int i, int i2) {
         TextPaint textPaint2 = new TextPaint(1);
         this.textPaint = textPaint2;
+        this.currentType = i2;
         textPaint2.setTextSize((float) AndroidUtilities.dp((float) i));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));
-        String string = LocaleController.getString("ScamMessage", NUM);
-        this.text = string;
-        this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(string));
+        if (i2 == 0) {
+            this.text = LocaleController.getString("ScamMessage", NUM);
+        } else {
+            this.text = LocaleController.getString("FakeMessage", NUM);
+        }
+        this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(this.text));
     }
 
     public void checkText() {
-        String string = LocaleController.getString("ScamMessage", NUM);
-        if (!string.equals(this.text)) {
-            this.text = string;
-            this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(string));
+        String str;
+        if (this.currentType == 0) {
+            str = LocaleController.getString("ScamMessage", NUM);
+        } else {
+            str = LocaleController.getString("FakeMessage", NUM);
+        }
+        if (!str.equals(this.text)) {
+            this.text = str;
+            this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(str));
         }
     }
 

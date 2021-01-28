@@ -14,7 +14,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class EmptyTextProgressView extends FrameLayout {
     private boolean inLayout;
-    private RadialProgressView progressBar;
+    private View progressView;
     private int showAtPos;
     private TextView textView;
 
@@ -27,10 +27,18 @@ public class EmptyTextProgressView extends FrameLayout {
     }
 
     public EmptyTextProgressView(Context context) {
+        this(context, (View) null);
+    }
+
+    public EmptyTextProgressView(Context context, View view) {
         super(context);
-        RadialProgressView radialProgressView = new RadialProgressView(context);
-        this.progressBar = radialProgressView;
-        addView(radialProgressView, LayoutHelper.createFrame(-2, -2.0f));
+        if (view == null) {
+            view = new RadialProgressView(context);
+            addView(view, LayoutHelper.createFrame(-2, -2.0f));
+        } else {
+            addView(view, LayoutHelper.createFrame(-1, -1.0f));
+        }
+        this.progressView = view;
         TextView textView2 = new TextView(context);
         this.textView = textView2;
         textView2.setTextSize(1, 20.0f);
@@ -39,19 +47,19 @@ public class EmptyTextProgressView extends FrameLayout {
         this.textView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         this.textView.setText(LocaleController.getString("NoResult", NUM));
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f));
-        this.progressBar.setAlpha(0.0f);
+        view.setAlpha(0.0f);
         this.textView.setAlpha(0.0f);
         setOnTouchListener($$Lambda$EmptyTextProgressView$8nH8zAnzG_iOQz8u5LEx8EcAeaI.INSTANCE);
     }
 
     public void showProgress() {
         this.textView.animate().alpha(0.0f).setDuration(150).start();
-        this.progressBar.animate().alpha(1.0f).setDuration(150).start();
+        this.progressView.animate().alpha(1.0f).setDuration(150).start();
     }
 
     public void showTextView() {
         this.textView.animate().alpha(1.0f).setDuration(150).start();
-        this.progressBar.animate().alpha(0.0f).setDuration(150).start();
+        this.progressView.animate().alpha(0.0f).setDuration(150).start();
     }
 
     public void setText(String str) {
@@ -63,7 +71,10 @@ public class EmptyTextProgressView extends FrameLayout {
     }
 
     public void setProgressBarColor(int i) {
-        this.progressBar.setProgressColor(i);
+        View view = this.progressView;
+        if (view instanceof RadialProgressView) {
+            ((RadialProgressView) view).setProgressColor(i);
+        }
     }
 
     public void setTopImage(int i) {

@@ -11,6 +11,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Cells.LoadingCell;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.DialogsActivity;
 
 public class MessagesSearchAdapter extends RecyclerListView.SelectionAdapter {
     private int currentAccount = UserConfig.selectedAccount;
@@ -46,11 +47,11 @@ public class MessagesSearchAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view;
-        if (i != 0) {
-            view = i != 1 ? null : new LoadingCell(this.mContext);
-        } else {
-            view = new DialogCell(this.mContext, false, true);
+        View view = null;
+        if (i == 0) {
+            view = new DialogCell((DialogsActivity) null, this.mContext, false, true);
+        } else if (i == 1) {
+            view = new LoadingCell(this.mContext);
         }
         view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
         return new RecyclerListView.Holder(view);

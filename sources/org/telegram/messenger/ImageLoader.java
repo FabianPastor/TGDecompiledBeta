@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import j$.util.concurrent.ConcurrentHashMap;
@@ -98,8 +99,6 @@ public class ImageLoader {
     public volatile long lastCacheOutTime;
     private int lastImageNum;
     /* access modifiers changed from: private */
-    public long lastProgressUpdateTime;
-    /* access modifiers changed from: private */
     public LruCache<RLottieDrawable> lottieMemCache;
     /* access modifiers changed from: private */
     public LruCache<BitmapDrawable> memCache;
@@ -162,14 +161,14 @@ public class ImageLoader {
         }
 
         private void reportProgress(long j, long j2) {
-            long currentTimeMillis = System.currentTimeMillis();
+            long elapsedRealtime = SystemClock.elapsedRealtime();
             if (j != j2) {
                 long j3 = this.lastProgressTime;
-                if (j3 != 0 && j3 >= currentTimeMillis - 100) {
+                if (j3 != 0 && j3 >= elapsedRealtime - 100) {
                     return;
                 }
             }
-            this.lastProgressTime = currentTimeMillis;
+            this.lastProgressTime = elapsedRealtime;
             Utilities.stageQueue.postRunnable(new Runnable(j, j2) {
                 public final /* synthetic */ long f$1;
                 public final /* synthetic */ long f$2;
@@ -767,14 +766,14 @@ public class ImageLoader {
         }
 
         private void reportProgress(long j, long j2) {
-            long currentTimeMillis = System.currentTimeMillis();
+            long elapsedRealtime = SystemClock.elapsedRealtime();
             if (j != j2) {
                 long j3 = this.lastProgressTime;
-                if (j3 != 0 && j3 >= currentTimeMillis - 100) {
+                if (j3 != 0 && j3 >= elapsedRealtime - 100) {
                     return;
                 }
             }
-            this.lastProgressTime = currentTimeMillis;
+            this.lastProgressTime = elapsedRealtime;
             Utilities.stageQueue.postRunnable(new Runnable(j, j2) {
                 public final /* synthetic */ long f$1;
                 public final /* synthetic */ long f$2;
@@ -2264,7 +2263,7 @@ public class ImageLoader {
                 r8 = 1
                 if (r10 != r8) goto L_0x07b6
                 org.telegram.messenger.ImageLoader r2 = org.telegram.messenger.ImageLoader.this     // Catch:{ all -> 0x07ab }
-                long r14 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x07ab }
+                long r14 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x07ab }
                 long unused = r2.lastCacheOutTime = r14     // Catch:{ all -> 0x07ab }
                 java.lang.Object r2 = r1.sync     // Catch:{ all -> 0x07ab }
                 monitor-enter(r2)     // Catch:{ all -> 0x07ab }
@@ -2572,7 +2571,7 @@ public class ImageLoader {
                 if (r10 == 0) goto L_0x07ea
                 org.telegram.messenger.ImageLoader r10 = org.telegram.messenger.ImageLoader.this     // Catch:{ all -> 0x07e5 }
                 long r31 = r10.lastCacheOutTime     // Catch:{ all -> 0x07e5 }
-                long r33 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x07e5 }
+                long r33 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x07e5 }
                 r27 = r6
                 r10 = r7
                 long r6 = (long) r8     // Catch:{ all -> 0x07e5 }
@@ -2593,7 +2592,7 @@ public class ImageLoader {
                 r10 = r7
             L_0x07ed:
                 org.telegram.messenger.ImageLoader r2 = org.telegram.messenger.ImageLoader.this     // Catch:{ all -> 0x0a53 }
-                long r6 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x0a53 }
+                long r6 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x0a53 }
                 long unused = r2.lastCacheOutTime = r6     // Catch:{ all -> 0x0a53 }
                 java.lang.Object r2 = r1.sync     // Catch:{ all -> 0x0a53 }
                 monitor-enter(r2)     // Catch:{ all -> 0x0a53 }
@@ -3442,7 +3441,6 @@ public class ImageLoader {
         this.ignoreRemoval = null;
         this.lastCacheOutTime = 0;
         this.lastImageNum = 0;
-        this.lastProgressUpdateTime = 0;
         this.telegramPath = null;
         boolean z = true;
         this.thumbGeneratingQueue.setPriority(1);
@@ -3495,12 +3493,14 @@ public class ImageLoader {
         sparseArray.put(4, cacheDir);
         for (final int i = 0; i < 3; i++) {
             FileLoader.getInstance(i).setDelegate(new FileLoader.FileLoaderDelegate() {
-                public void fileUploadProgressChanged(String str, long j, long j2, boolean z) {
+                public void fileUploadProgressChanged(FileUploadOperation fileUploadOperation, String str, long j, long j2, boolean z) {
+                    FileUploadOperation fileUploadOperation2 = fileUploadOperation;
                     String str2 = str;
                     ImageLoader.this.fileProgresses.put(str, new long[]{j, j2});
-                    long currentTimeMillis = System.currentTimeMillis();
-                    if (ImageLoader.this.lastProgressUpdateTime == 0 || ImageLoader.this.lastProgressUpdateTime < currentTimeMillis - 500) {
-                        long unused = ImageLoader.this.lastProgressUpdateTime = currentTimeMillis;
+                    long elapsedRealtime = SystemClock.elapsedRealtime();
+                    long j3 = fileUploadOperation2.lastProgressUpdateTime;
+                    if (j3 == 0 || j3 < elapsedRealtime - 100 || j == j2) {
+                        fileUploadOperation2.lastProgressUpdateTime = elapsedRealtime;
                         AndroidUtilities.runOnUIThread(new Runnable(i, str, j, j2, z) {
                             public final /* synthetic */ int f$0;
                             public final /* synthetic */ String f$1;
@@ -3674,11 +3674,14 @@ public class ImageLoader {
                     NotificationCenter.getInstance(i2).postNotificationName(NotificationCenter.fileDidFailToLoad, str, Integer.valueOf(i));
                 }
 
-                public void fileLoadProgressChanged(String str, long j, long j2) {
+                public void fileLoadProgressChanged(FileLoadOperation fileLoadOperation, String str, long j, long j2) {
+                    FileLoadOperation fileLoadOperation2 = fileLoadOperation;
+                    String str2 = str;
                     ImageLoader.this.fileProgresses.put(str, new long[]{j, j2});
-                    long currentTimeMillis = System.currentTimeMillis();
-                    if (ImageLoader.this.lastProgressUpdateTime == 0 || ImageLoader.this.lastProgressUpdateTime < currentTimeMillis - 500 || j == 0) {
-                        long unused = ImageLoader.this.lastProgressUpdateTime = currentTimeMillis;
+                    long elapsedRealtime = SystemClock.elapsedRealtime();
+                    long j3 = fileLoadOperation2.lastProgressUpdateTime;
+                    if (j3 == 0 || j3 < elapsedRealtime - 500 || j == 0) {
+                        fileLoadOperation2.lastProgressUpdateTime = elapsedRealtime;
                         AndroidUtilities.runOnUIThread(new Runnable(i, str, j, j2) {
                             public final /* synthetic */ int f$0;
                             public final /* synthetic */ String f$1;

@@ -85,6 +85,7 @@ import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.GroupCreateDividerItemDecoration;
 import org.telegram.ui.Components.GroupCreateSpan;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.PermanentLinkBottomSheet;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.StickerEmptyView;
 import org.telegram.ui.Components.TypefaceSpan;
@@ -122,6 +123,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     public int fieldY;
     /* access modifiers changed from: private */
     public ImageView floatingButton;
+    private boolean forImport;
     /* access modifiers changed from: private */
     public boolean ignoreScrollEvent;
     /* access modifiers changed from: private */
@@ -147,6 +149,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     public boolean searching;
     /* access modifiers changed from: private */
     public SparseArray<GroupCreateSpan> selectedContacts = new SparseArray<>();
+    private PermanentLinkBottomSheet sharedLinkBottomSheet;
     /* access modifiers changed from: private */
     public SpansContainer spansContainer;
 
@@ -373,6 +376,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     public GroupCreateActivity(Bundle bundle) {
         super(bundle);
         this.chatType = bundle.getInt("chatType", 0);
+        this.forImport = bundle.getBoolean("forImport", false);
         this.isAlwaysShare = bundle.getBoolean("isAlwaysShare", false);
         this.isNeverShare = bundle.getBoolean("isNeverShare", false);
         this.addToGroup = bundle.getBoolean("addToGroup", false);
@@ -711,9 +715,15 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         this.itemDecoration = groupCreateDividerItemDecoration;
         recyclerListView3.addItemDecoration(groupCreateDividerItemDecoration);
         viewGroup.addView(this.listView);
-        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(context) {
+            public final /* synthetic */ Context f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
             public final void onItemClick(View view, int i) {
-                GroupCreateActivity.this.lambda$createView$3$GroupCreateActivity(view, i);
+                GroupCreateActivity.this.lambda$createView$3$GroupCreateActivity(this.f$1, view, i);
             }
         });
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -791,21 +801,12 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$GroupCreateActivity(View view, int i) {
+    public /* synthetic */ void lambda$createView$3$GroupCreateActivity(Context context, View view, int i) {
         int i2;
         if (i == 0 && this.adapter.inviteViaLink != 0 && !this.adapter.searching) {
-            int i3 = this.chatId;
-            if (i3 == 0) {
-                i3 = this.channelId;
-            }
-            TLRPC$Chat chat = getMessagesController().getChat(Integer.valueOf(i3));
-            if (chat == null || !chat.has_geo || TextUtils.isEmpty(chat.username)) {
-                presentFragment(new GroupInviteActivity(i3));
-                return;
-            }
-            ChatEditTypeActivity chatEditTypeActivity = new ChatEditTypeActivity(i3, true);
-            chatEditTypeActivity.setInfo(this.info);
-            presentFragment(chatEditTypeActivity);
+            PermanentLinkBottomSheet permanentLinkBottomSheet = new PermanentLinkBottomSheet(context, false, this, this.info, this.chatId);
+            this.sharedLinkBottomSheet = permanentLinkBottomSheet;
+            showDialog(permanentLinkBottomSheet);
         } else if (view instanceof GroupCreateUserCell) {
             GroupCreateUserCell groupCreateUserCell = (GroupCreateUserCell) view;
             Object object = groupCreateUserCell.getObject();
@@ -836,8 +837,8 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     if (z) {
                         TLRPC$User tLRPC$User = (TLRPC$User) object;
                         if (this.addToGroup && tLRPC$User.bot) {
-                            int i4 = this.channelId;
-                            if (i4 == 0 && tLRPC$User.bot_nochats) {
+                            int i3 = this.channelId;
+                            if (i3 == 0 && tLRPC$User.bot_nochats) {
                                 try {
                                     Toast.makeText(getParentActivity(), LocaleController.getString("BotCantJoinGroups", NUM), 0).show();
                                     return;
@@ -845,10 +846,10 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                                     FileLog.e((Throwable) e);
                                     return;
                                 }
-                            } else if (i4 != 0) {
-                                TLRPC$Chat chat2 = getMessagesController().getChat(Integer.valueOf(this.channelId));
+                            } else if (i3 != 0) {
+                                TLRPC$Chat chat = getMessagesController().getChat(Integer.valueOf(this.channelId));
                                 AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
-                                if (ChatObject.canAddAdmins(chat2)) {
+                                if (ChatObject.canAddAdmins(chat)) {
                                     builder2.setTitle(LocaleController.getString("AppName", NUM));
                                     builder2.setMessage(LocaleController.getString("AddBotAsAdmin", NUM));
                                     builder2.setPositiveButton(LocaleController.getString("MakeAdmin", NUM), new DialogInterface.OnClickListener(tLRPC$User) {
@@ -1086,6 +1087,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                         Bundle bundle2 = new Bundle();
                         bundle2.putIntegerArrayList("result", arrayList2);
                         bundle2.putInt("chatType", this.chatType);
+                        bundle2.putBoolean("forImport", this.forImport);
                         presentFragment(new GroupCreateFinalActivity(bundle2));
                     }
                 }
@@ -1475,7 +1477,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 r1 = 8
                 r4.setVisibility(r1)
                 android.widget.TextView r4 = r5.title
-                r1 = 2131626070(0x7f0e0856, float:1.8879366E38)
+                r1 = 2131626143(0x7f0e089f, float:1.8879514E38)
                 java.lang.String r2 = "NoContacts"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r4.setText(r1)
@@ -1968,6 +1970,10 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         arrayList.add(new ThemeDescription(this.spansContainer, 0, new Class[]{GroupCreateSpan.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_backgroundBlue"));
         arrayList.add(new ThemeDescription(this.emptyView.title, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription(this.emptyView.subtitle, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
+        PermanentLinkBottomSheet permanentLinkBottomSheet = this.sharedLinkBottomSheet;
+        if (permanentLinkBottomSheet != null) {
+            arrayList.addAll(permanentLinkBottomSheet.getThemeDescriptions());
+        }
         return arrayList;
     }
 

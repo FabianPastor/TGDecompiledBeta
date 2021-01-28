@@ -20,7 +20,8 @@ public class TLRPC$TL_user extends TLRPC$User {
         this.bot_inline_geo = (2097152 & readInt32) != 0;
         this.support = (8388608 & readInt32) != 0;
         this.scam = (16777216 & readInt32) != 0;
-        int i2 = readInt32 & 33554432;
+        this.apply_min_photo = (33554432 & readInt32) != 0;
+        this.fake = (readInt32 & 67108864) != 0;
         this.id = abstractSerializedData.readInt32(z);
         if ((this.flags & 1) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);
@@ -101,7 +102,11 @@ public class TLRPC$TL_user extends TLRPC$User {
         this.flags = i12;
         int i13 = this.scam ? i12 | 16777216 : i12 & -16777217;
         this.flags = i13;
-        abstractSerializedData.writeInt32(i13);
+        int i14 = this.apply_min_photo ? i13 | 33554432 : i13 & -33554433;
+        this.flags = i14;
+        int i15 = this.fake ? i14 | 67108864 : i14 & -67108865;
+        this.flags = i15;
+        abstractSerializedData.writeInt32(i15);
         abstractSerializedData.writeInt32(this.id);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt64(this.access_hash);
@@ -131,8 +136,8 @@ public class TLRPC$TL_user extends TLRPC$User {
             abstractSerializedData.writeInt32(NUM);
             int size = this.restriction_reason.size();
             abstractSerializedData.writeInt32(size);
-            for (int i14 = 0; i14 < size; i14++) {
-                this.restriction_reason.get(i14).serializeToStream(abstractSerializedData);
+            for (int i16 = 0; i16 < size; i16++) {
+                this.restriction_reason.get(i16).serializeToStream(abstractSerializedData);
             }
         }
         if ((this.flags & 524288) != 0) {

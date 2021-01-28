@@ -20,6 +20,8 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class LoadingStickerDrawable extends Drawable {
     private Bitmap bitmap;
+    int currentColor0;
+    int currentColor1;
     private float gradientWidth;
     private long lastUpdateTime;
     private View parentView;
@@ -42,26 +44,30 @@ public class LoadingStickerDrawable extends Drawable {
         this.bitmap = SvgHelper.getBitmapByPathOnly(str, 512, 512, i, i2);
         this.parentView = view;
         this.placeholderMatrix = new Matrix();
-        setColors("dialogBackground", "dialogBackgroundGray");
     }
 
     public void setColors(String str, String str2) {
         int color = Theme.getColor(str);
         int color2 = Theme.getColor(str2);
-        int averageColor = AndroidUtilities.getAverageColor(color2, color);
-        this.placeholderPaint.setColor(color2);
-        float dp = (float) AndroidUtilities.dp(500.0f);
-        this.gradientWidth = dp;
-        LinearGradient linearGradient = new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color2, averageColor, color2}, new float[]{0.0f, 0.18f, 0.36f}, Shader.TileMode.REPEAT);
-        this.placeholderGradient = linearGradient;
-        linearGradient.setLocalMatrix(this.placeholderMatrix);
-        Bitmap bitmap2 = this.bitmap;
-        Shader.TileMode tileMode = Shader.TileMode.CLAMP;
-        this.placeholderPaint.setShader(new ComposeShader(this.placeholderGradient, new BitmapShader(bitmap2, tileMode, tileMode), PorterDuff.Mode.MULTIPLY));
+        if (this.currentColor0 != color || this.currentColor1 != color2) {
+            this.currentColor0 = color;
+            this.currentColor1 = color2;
+            int averageColor = AndroidUtilities.getAverageColor(color2, color);
+            this.placeholderPaint.setColor(color2);
+            float dp = (float) AndroidUtilities.dp(500.0f);
+            this.gradientWidth = dp;
+            LinearGradient linearGradient = new LinearGradient(0.0f, 0.0f, dp, 0.0f, new int[]{color2, averageColor, color2}, new float[]{0.0f, 0.18f, 0.36f}, Shader.TileMode.REPEAT);
+            this.placeholderGradient = linearGradient;
+            linearGradient.setLocalMatrix(this.placeholderMatrix);
+            Bitmap bitmap2 = this.bitmap;
+            Shader.TileMode tileMode = Shader.TileMode.CLAMP;
+            this.placeholderPaint.setShader(new ComposeShader(this.placeholderGradient, new BitmapShader(bitmap2, tileMode, tileMode), PorterDuff.Mode.MULTIPLY));
+        }
     }
 
     public void draw(Canvas canvas) {
         if (this.bitmap != null) {
+            setColors("dialogBackground", "dialogBackgroundGray");
             Rect bounds = getBounds();
             canvas.drawRect((float) bounds.left, (float) bounds.top, (float) bounds.right, (float) bounds.bottom, this.placeholderPaint);
             long elapsedRealtime = SystemClock.elapsedRealtime();

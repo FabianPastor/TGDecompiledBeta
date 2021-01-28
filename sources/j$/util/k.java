@@ -62,10 +62,10 @@ public final /* synthetic */ class k {
         } else if (collection instanceof SortedSet) {
             SortedSet sortedSet = (SortedSet) collection;
             return new u(sortedSet, sortedSet, 21);
-        } else if (collection instanceof Set) {
-            return Set.CC.$default$spliterator((java.util.Set) collection);
+        } else if (collection instanceof java.util.List) {
+            return List.CC.$default$spliterator((java.util.List) collection);
         } else {
-            return collection instanceof java.util.List ? List.CC.$default$spliterator((java.util.List) collection) : Collection.CC.$default$spliterator(collection);
+            return collection instanceof Set ? Set.CC.$default$spliterator((java.util.Set) collection) : Collection.CC.$default$spliterator(collection);
         }
     }
 

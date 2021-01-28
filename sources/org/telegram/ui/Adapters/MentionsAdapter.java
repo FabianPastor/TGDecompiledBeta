@@ -1705,11 +1705,11 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
     public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r5, int r6) {
         /*
             r4 = this;
-            if (r6 == 0) goto L_0x004c
+            if (r6 == 0) goto L_0x004b
             r5 = 1
-            if (r6 == r5) goto L_0x003c
+            if (r6 == r5) goto L_0x003b
             r0 = 2
-            if (r6 == r0) goto L_0x0034
+            if (r6 == r0) goto L_0x0033
             android.widget.TextView r6 = new android.widget.TextView
             android.content.Context r0 = r4.mContext
             r6.<init>(r0)
@@ -1724,27 +1724,27 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
             java.lang.String r5 = "windowBackgroundWhiteGrayText2"
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
             r6.setTextColor(r5)
-            goto L_0x0058
-        L_0x0034:
+            goto L_0x0057
+        L_0x0033:
             org.telegram.ui.Cells.BotSwitchCell r6 = new org.telegram.ui.Cells.BotSwitchCell
             android.content.Context r5 = r4.mContext
             r6.<init>(r5)
-            goto L_0x0058
-        L_0x003c:
+            goto L_0x0057
+        L_0x003b:
             org.telegram.ui.Cells.ContextLinkCell r6 = new org.telegram.ui.Cells.ContextLinkCell
             android.content.Context r5 = r4.mContext
             r6.<init>(r5)
             org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$Rs_gCeAnt0gqLkmAQV_mZgJj8Js r5 = new org.telegram.ui.Adapters.-$$Lambda$MentionsAdapter$Rs_gCeAnt0gqLkmAQV_mZgJj8Js
             r5.<init>()
             r6.setDelegate(r5)
-            goto L_0x0058
-        L_0x004c:
+            goto L_0x0057
+        L_0x004b:
             org.telegram.ui.Cells.MentionCell r6 = new org.telegram.ui.Cells.MentionCell
             android.content.Context r5 = r4.mContext
             r6.<init>(r5)
             boolean r5 = r4.isDarkTheme
             r6.setIsDarkTheme(r5)
-        L_0x0058:
+        L_0x0057:
             org.telegram.ui.Components.RecyclerListView$Holder r5 = new org.telegram.ui.Components.RecyclerListView$Holder
             r5.<init>(r6)
             return r5

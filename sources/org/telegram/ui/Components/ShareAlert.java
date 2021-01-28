@@ -163,6 +163,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         return false;
     }
 
+    /* access modifiers changed from: protected */
+    public void onSend(LongSparseArray<TLRPC$Dialog> longSparseArray, int i) {
+    }
+
     private class SearchField extends FrameLayout {
         /* access modifiers changed from: private */
         public ImageView clearSearchImageView;
@@ -359,7 +363,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r6 = r26
             r0.parentFragment = r6
             android.content.res.Resources r6 = r25.getResources()
-            r7 = 2131165981(0x7var_d, float:1.7946194E38)
+            r7 = 2131165993(0x7var_, float:1.7946219E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.shadowDrawable = r6
@@ -517,7 +521,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
             r3.showTextView()
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r6 = 2131626066(0x7f0e0852, float:1.8879358E38)
+            r6 = 2131626139(0x7f0e089b, float:1.8879506E38)
             java.lang.String r12 = "NoChats"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r12, r6)
             r3.setText(r6)
@@ -618,7 +622,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r14 = 17
             r3.setGravity(r14)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r14 = 2131624941(0x7f0e03ed, float:1.8877076E38)
+            r14 = 2131624946(0x7f0e03f2, float:1.8877086E38)
             java.lang.String r15 = "CopyLink"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             java.lang.String r14 = r14.toUpperCase()
@@ -679,7 +683,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r5.setOnClickListener(r11)
             android.widget.ImageView r5 = new android.widget.ImageView
             r5.<init>(r1)
-            r11 = 2131165979(0x7var_b, float:1.794619E38)
+            r11 = 2131165991(0x7var_, float:1.7946215E38)
             r5.setImageResource(r11)
             android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
             int r14 = org.telegram.ui.ActionBar.Theme.getColor(r8)
@@ -746,7 +750,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r31 = r8
             r26.<init>(r28, r29, r30, r31)
             r0.commentTextView = r3
-            r2 = 2131627162(0x7f0e0c9a, float:1.888158E38)
+            r2 = 2131627254(0x7f0e0cf6, float:1.8881767E38)
             java.lang.String r5 = "ShareComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r3.setHint(r2)
@@ -809,7 +813,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r8, r10, r9)
             if (r11 >= r12) goto L_0x04b7
             android.content.res.Resources r9 = r25.getResources()
-            r10 = 2131165416(0x7var_e8, float:1.7945048E38)
+            r10 = 2131165418(0x7var_ea, float:1.7945053E38)
             android.graphics.drawable.Drawable r9 = r9.getDrawable(r10)
             android.graphics.drawable.Drawable r9 = r9.mutate()
             android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -825,7 +829,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r8 = r10
         L_0x04b7:
             r2.setBackgroundDrawable(r8)
-            r8 = 2131165267(0x7var_, float:1.7944746E38)
+            r8 = 2131165269(0x7var_, float:1.794475E38)
             r2.setImageResource(r8)
             r8 = 2
             r2.setImportantForAccessibility(r8)
@@ -1071,6 +1075,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt, true, 0);
                 i++;
             }
+            onSend(this.selectedDialogs, this.sendingMessageObjects.size());
         } else if (this.sendingText != null) {
             while (i < this.selectedDialogs.size()) {
                 long keyAt2 = this.selectedDialogs.keyAt(i);

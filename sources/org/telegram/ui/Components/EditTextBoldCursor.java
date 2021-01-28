@@ -70,6 +70,7 @@ public class EditTextBoldCursor extends EditText {
     private AnimatorSet headerTransformAnimation;
     private CharSequence hint;
     private float hintAlpha = 1.0f;
+    private SubstringLayoutAnimator hintAnimator;
     private int hintColor;
     private StaticLayout hintLayout;
     private boolean hintVisible = true;
@@ -259,7 +260,7 @@ public class EditTextBoldCursor extends EditText {
         L_0x00a9:
             java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00b7 }
             if (r0 == 0) goto L_0x00b7
-            r1 = 2131165398(0x7var_d6, float:1.7945012E38)
+            r1 = 2131165400(0x7var_d8, float:1.7945016E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00b7 }
             r0.set(r8, r1)     // Catch:{ all -> 0x00b7 }
         L_0x00b7:
@@ -427,8 +428,26 @@ public class EditTextBoldCursor extends EditText {
     }
 
     public void setHintText(CharSequence charSequence) {
+        setHintText(charSequence, false);
+    }
+
+    public void setHintText(CharSequence charSequence, boolean z) {
         if (charSequence == null) {
             charSequence = "";
+        }
+        if (getMeasuredWidth() == 0) {
+            z = false;
+        }
+        if (z) {
+            if (this.hintAnimator == null) {
+                this.hintAnimator = new SubstringLayoutAnimator(this);
+            }
+            this.hintAnimator.create(this.hintLayout, this.hint, charSequence, getPaint());
+        } else {
+            SubstringLayoutAnimator substringLayoutAnimator = this.hintAnimator;
+            if (substringLayoutAnimator != null) {
+                substringLayoutAnimator.cancel();
+            }
         }
         this.hint = charSequence;
         if (getMeasuredWidth() != 0) {
@@ -623,7 +642,15 @@ public class EditTextBoldCursor extends EditText {
                 getPaint().setColor(this.hintColor);
                 getPaint().setAlpha((int) (this.hintAlpha * 255.0f * (((float) Color.alpha(this.hintColor)) / 255.0f)));
             }
-            this.hintLayout.draw(canvas2);
+            SubstringLayoutAnimator substringLayoutAnimator = this.hintAnimator;
+            if (substringLayoutAnimator == null || !substringLayoutAnimator.animateTextChange) {
+                this.hintLayout.draw(canvas2);
+            } else {
+                canvas.save();
+                canvas2.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                this.hintAnimator.draw(canvas2, getPaint());
+                canvas.restore();
+            }
             getPaint().setColor(color);
             canvas.restore();
         }

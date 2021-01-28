@@ -14,6 +14,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
@@ -31,6 +32,7 @@ public class VoIPToggleButton extends FrameLayout {
     private Paint bitmapPaint;
     private ValueAnimator checkAnimator;
     private boolean checkable;
+    private boolean checkableForAccessibility;
     private boolean checked;
     /* access modifiers changed from: private */
     public float checkedProgress;
@@ -639,6 +641,10 @@ public class VoIPToggleButton extends FrameLayout {
         }
     }
 
+    public void setCheckableForAccessibility(boolean z) {
+        this.checkableForAccessibility = z;
+    }
+
     public void setCheckable(boolean z) {
         this.checkable = z;
     }
@@ -695,11 +701,13 @@ public class VoIPToggleButton extends FrameLayout {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setText(this.currentText);
-        accessibilityNodeInfo.setClassName(Button.class.getName());
-        if (this.checkable) {
+        if (this.checkable || this.checkableForAccessibility) {
+            accessibilityNodeInfo.setClassName(ToggleButton.class.getName());
             accessibilityNodeInfo.setCheckable(true);
             accessibilityNodeInfo.setChecked(this.checked);
+            return;
         }
+        accessibilityNodeInfo.setClassName(Button.class.getName());
     }
 
     public void shakeView() {

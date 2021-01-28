@@ -7,6 +7,7 @@ public class TLRPC$TL_peerSettings extends TLObject {
     public boolean block_contact;
     public int flags;
     public int geo_distance;
+    public boolean invite_members;
     public boolean need_contacts_exception;
     public boolean report_geo;
     public boolean report_spam;
@@ -34,10 +35,11 @@ public class TLRPC$TL_peerSettings extends TLObject {
         this.share_contact = (readInt32 & 8) != 0;
         this.need_contacts_exception = (readInt32 & 16) != 0;
         this.report_geo = (readInt32 & 32) != 0;
-        if ((readInt32 & 128) != 0) {
+        this.autoarchived = (readInt32 & 128) != 0;
+        if ((readInt32 & 256) != 0) {
             z2 = true;
         }
-        this.autoarchived = z2;
+        this.invite_members = z2;
         if ((readInt32 & 64) != 0) {
             this.geo_distance = abstractSerializedData.readInt32(z);
         }
@@ -59,7 +61,9 @@ public class TLRPC$TL_peerSettings extends TLObject {
         this.flags = i6;
         int i7 = this.autoarchived ? i6 | 128 : i6 & -129;
         this.flags = i7;
-        abstractSerializedData.writeInt32(i7);
+        int i8 = this.invite_members ? i7 | 256 : i7 & -257;
+        this.flags = i8;
+        abstractSerializedData.writeInt32(i8);
         if ((this.flags & 64) != 0) {
             abstractSerializedData.writeInt32(this.geo_distance);
         }

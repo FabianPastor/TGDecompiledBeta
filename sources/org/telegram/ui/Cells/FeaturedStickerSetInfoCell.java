@@ -48,6 +48,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     private TLRPC$StickerSetCovered set;
     private int stickerSetNameSearchIndex;
     private int stickerSetNameSearchLength;
+    float unreadProgress;
     private CharSequence url;
     private int urlSearchLength;
 
@@ -166,6 +167,11 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
             animatorSet2.cancel();
             this.animatorSet = null;
         }
+        float f = 1.0f;
+        if (this.set != tLRPC$StickerSetCovered) {
+            this.unreadProgress = z ? 1.0f : 0.0f;
+            invalidate();
+        }
         this.set = tLRPC$StickerSetCovered;
         this.stickerSetNameSearchIndex = i;
         this.stickerSetNameSearchLength = i2;
@@ -183,7 +189,6 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
             this.addButton.setVisibility(0);
             boolean z4 = z3 || MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(tLRPC$StickerSetCovered.set.id);
             this.isInstalled = z4;
-            float f = 0.0f;
             if (z2) {
                 if (z4) {
                     this.delButton.setVisibility(0);
@@ -223,8 +228,8 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
                 ProgressButton progressButton3 = this.addButton;
                 Property property6 = View.SCALE_Y;
                 float[] fArr6 = new float[1];
-                if (!this.isInstalled) {
-                    f = 1.0f;
+                if (this.isInstalled) {
+                    f = 0.0f;
                 }
                 fArr6[0] = f;
                 animatorArr[5] = ObjectAnimator.ofFloat(progressButton3, property6, fArr6);
@@ -309,9 +314,36 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        if (this.isUnread) {
+        boolean z = this.isUnread;
+        if (z || this.unreadProgress != 0.0f) {
+            if (z) {
+                float f = this.unreadProgress;
+                if (f != 1.0f) {
+                    float f2 = f + 0.16f;
+                    this.unreadProgress = f2;
+                    if (f2 > 1.0f) {
+                        this.unreadProgress = 1.0f;
+                    } else {
+                        invalidate();
+                    }
+                    this.paint.setColor(Theme.getColor("featuredStickers_unread"));
+                    canvas.drawCircle((float) (this.nameTextView.getRight() + AndroidUtilities.dp(12.0f)), (float) AndroidUtilities.dp(20.0f), ((float) AndroidUtilities.dp(4.0f)) * this.unreadProgress, this.paint);
+                }
+            }
+            if (!z) {
+                float f3 = this.unreadProgress;
+                if (f3 != 0.0f) {
+                    float f4 = f3 - 0.16f;
+                    this.unreadProgress = f4;
+                    if (f4 < 0.0f) {
+                        this.unreadProgress = 0.0f;
+                    } else {
+                        invalidate();
+                    }
+                }
+            }
             this.paint.setColor(Theme.getColor("featuredStickers_unread"));
-            canvas.drawCircle((float) (this.nameTextView.getRight() + AndroidUtilities.dp(12.0f)), (float) AndroidUtilities.dp(20.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
+            canvas.drawCircle((float) (this.nameTextView.getRight() + AndroidUtilities.dp(12.0f)), (float) AndroidUtilities.dp(20.0f), ((float) AndroidUtilities.dp(4.0f)) * this.unreadProgress, this.paint);
         }
         if (this.needDivider) {
             canvas.drawLine(0.0f, 0.0f, (float) getWidth(), 0.0f, Theme.dividerPaint);

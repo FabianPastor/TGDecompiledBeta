@@ -34,6 +34,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -1494,6 +1495,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                         }
                         return getItemCount();
                     }
+
+                    public void onInitializeAccessibilityNodeInfoForItem(RecyclerView.Recycler recycler, RecyclerView.State state, View view, AccessibilityNodeInfoCompat accessibilityNodeInfoCompat) {
+                        super.onInitializeAccessibilityNodeInfoForItem(recycler, state, view, accessibilityNodeInfoCompat);
+                        AccessibilityNodeInfoCompat.CollectionItemInfoCompat collectionItemInfo = accessibilityNodeInfoCompat.getCollectionItemInfo();
+                        if (collectionItemInfo != null && collectionItemInfo.isHeading()) {
+                            accessibilityNodeInfoCompat.setCollectionItemInfo(AccessibilityNodeInfoCompat.CollectionItemInfoCompat.obtain(collectionItemInfo.getRowIndex(), collectionItemInfo.getRowSpan(), collectionItemInfo.getColumnIndex(), collectionItemInfo.getColumnSpan(), false));
+                        }
+                    }
                 };
                 ExtendedGridLayoutManager unused3 = mediaPage.layoutManager = r8;
                 r8.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -1824,7 +1833,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     public void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         FragmentContextView fragmentContextView2 = this.fragmentContextView;
-        if (fragmentContextView2 != null && fragmentContextView2.getCurrentStyle() == 3) {
+        if (fragmentContextView2 != null && fragmentContextView2.isCallStyle()) {
             canvas.save();
             canvas.translate(this.fragmentContextView.getX(), this.fragmentContextView.getY());
             this.fragmentContextView.setDrawOverlay(true);
@@ -3426,23 +3435,23 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         this.mergeDialogId = j;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:42:0x0075, code lost:
-        if ((r14.hasMedia[4] <= 0) == r14.scrollSlidingTextTabStrip.hasTab(4)) goto L_0x00a5;
+    /* JADX WARNING: Code restructure failed: missing block: B:42:0x0078, code lost:
+        if ((r14.hasMedia[4] <= 0) == r14.scrollSlidingTextTabStrip.hasTab(4)) goto L_0x00a8;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:52:0x00a3, code lost:
-        if ((r14.hasMedia[4] <= 0) == r14.scrollSlidingTextTabStrip.hasTab(4)) goto L_0x00a5;
+    /* JADX WARNING: Code restructure failed: missing block: B:52:0x00a6, code lost:
+        if ((r14.hasMedia[4] <= 0) == r14.scrollSlidingTextTabStrip.hasTab(4)) goto L_0x00a8;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:148:0x026f  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x00ad  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x00af  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x00b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x00c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x00c2  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00de  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00e1 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:151:0x0279  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x00b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x00b3  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x00bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x00c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x00c7  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00d0  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00d9  */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00db  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00e8 A[ADDED_TO_REGION] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void updateTabs(boolean r15) {
         /*
@@ -3485,55 +3494,55 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         L_0x002e:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r5 = r14.scrollSlidingTextTabStrip
             boolean r5 = r5.hasTab(r1)
-            if (r3 != r5) goto L_0x0037
-            r0 = 1
-        L_0x0037:
+            if (r3 != r5) goto L_0x0038
+            int r0 = r0 + 1
+        L_0x0038:
             int[] r3 = r14.hasMedia
             r3 = r3[r2]
-            if (r3 > 0) goto L_0x003f
+            if (r3 > 0) goto L_0x0040
             r3 = 1
-            goto L_0x0040
-        L_0x003f:
-            r3 = 0
+            goto L_0x0041
         L_0x0040:
+            r3 = 0
+        L_0x0041:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r5 = r14.scrollSlidingTextTabStrip
             boolean r5 = r5.hasTab(r2)
-            if (r3 != r5) goto L_0x0049
-            r0 = 1
-        L_0x0049:
+            if (r3 != r5) goto L_0x004b
+            int r0 = r0 + 1
+        L_0x004b:
             long r5 = r14.dialog_id
             int r3 = (int) r5
             r5 = 46
             r6 = 32
             r7 = 3
             r8 = 4
-            if (r3 == 0) goto L_0x0078
+            if (r3 == 0) goto L_0x007b
             int[] r3 = r14.hasMedia
             r3 = r3[r7]
-            if (r3 > 0) goto L_0x005c
+            if (r3 > 0) goto L_0x005e
             r3 = 1
-            goto L_0x005d
-        L_0x005c:
+            goto L_0x005f
+        L_0x005e:
             r3 = 0
-        L_0x005d:
+        L_0x005f:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r9 = r14.scrollSlidingTextTabStrip
             boolean r9 = r9.hasTab(r7)
-            if (r3 != r9) goto L_0x0066
-            r0 = 1
-        L_0x0066:
+            if (r3 != r9) goto L_0x0069
+            int r0 = r0 + 1
+        L_0x0069:
             int[] r3 = r14.hasMedia
             r3 = r3[r8]
-            if (r3 > 0) goto L_0x006e
+            if (r3 > 0) goto L_0x0071
             r3 = 1
-            goto L_0x006f
-        L_0x006e:
+            goto L_0x0072
+        L_0x0071:
             r3 = 0
-        L_0x006f:
+        L_0x0072:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r9 = r14.scrollSlidingTextTabStrip
             boolean r9 = r9.hasTab(r8)
-            if (r3 != r9) goto L_0x00a6
-            goto L_0x00a5
-        L_0x0078:
+            if (r3 != r9) goto L_0x00aa
+            goto L_0x00a8
+        L_0x007b:
             org.telegram.ui.ProfileActivity r3 = r14.profileActivity
             org.telegram.messenger.MessagesController r3 = r3.getMessagesController()
             long r9 = r14.dialog_id
@@ -3541,177 +3550,180 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             int r10 = (int) r9
             java.lang.Integer r9 = java.lang.Integer.valueOf(r10)
             org.telegram.tgnet.TLRPC$EncryptedChat r3 = r3.getEncryptedChat(r9)
-            if (r3 == 0) goto L_0x00a6
+            if (r3 == 0) goto L_0x00aa
             int r3 = r3.layer
             int r3 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r3)
-            if (r3 < r5) goto L_0x00a6
+            if (r3 < r5) goto L_0x00aa
             int[] r3 = r14.hasMedia
             r3 = r3[r8]
-            if (r3 > 0) goto L_0x009c
+            if (r3 > 0) goto L_0x009f
             r3 = 1
-            goto L_0x009d
-        L_0x009c:
+            goto L_0x00a0
+        L_0x009f:
             r3 = 0
-        L_0x009d:
+        L_0x00a0:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r9 = r14.scrollSlidingTextTabStrip
             boolean r9 = r9.hasTab(r8)
-            if (r3 != r9) goto L_0x00a6
-        L_0x00a5:
-            r0 = 1
-        L_0x00a6:
+            if (r3 != r9) goto L_0x00aa
+        L_0x00a8:
+            int r0 = r0 + 1
+        L_0x00aa:
             int[] r3 = r14.hasMedia
             r9 = 2
             r3 = r3[r9]
-            if (r3 > 0) goto L_0x00af
+            if (r3 > 0) goto L_0x00b3
             r3 = 1
-            goto L_0x00b0
-        L_0x00af:
+            goto L_0x00b4
+        L_0x00b3:
             r3 = 0
-        L_0x00b0:
+        L_0x00b4:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r10 = r14.scrollSlidingTextTabStrip
             boolean r10 = r10.hasTab(r9)
-            if (r3 != r10) goto L_0x00b9
-            r0 = 1
-        L_0x00b9:
+            if (r3 != r10) goto L_0x00be
+            int r0 = r0 + 1
+        L_0x00be:
             int[] r3 = r14.hasMedia
             r10 = 5
             r3 = r3[r10]
-            if (r3 > 0) goto L_0x00c2
+            if (r3 > 0) goto L_0x00c7
             r3 = 1
-            goto L_0x00c3
-        L_0x00c2:
+            goto L_0x00c8
+        L_0x00c7:
             r3 = 0
-        L_0x00c3:
+        L_0x00c8:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r11 = r14.scrollSlidingTextTabStrip
             boolean r11 = r11.hasTab(r10)
-            if (r3 != r11) goto L_0x00cc
-            r0 = 1
-        L_0x00cc:
+            if (r3 != r11) goto L_0x00d2
+            int r0 = r0 + 1
+        L_0x00d2:
             int[] r3 = r14.hasMedia
             r11 = 6
             r3 = r3[r11]
-            if (r3 > 0) goto L_0x00d5
+            if (r3 > 0) goto L_0x00db
             r3 = 1
-            goto L_0x00d6
-        L_0x00d5:
+            goto L_0x00dc
+        L_0x00db:
             r3 = 0
-        L_0x00d6:
+        L_0x00dc:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r12 = r14.scrollSlidingTextTabStrip
             boolean r12 = r12.hasTab(r11)
-            if (r3 != r12) goto L_0x00df
-            r0 = 1
-        L_0x00df:
-            if (r0 == 0) goto L_0x0267
-            if (r15 == 0) goto L_0x0114
+            if (r3 != r12) goto L_0x00e6
+            int r0 = r0 + 1
+        L_0x00e6:
+            if (r0 <= 0) goto L_0x0271
+            if (r15 == 0) goto L_0x011b
             int r15 = android.os.Build.VERSION.SDK_INT
-            r0 = 19
-            if (r15 < r0) goto L_0x0114
+            r3 = 19
+            if (r15 < r3) goto L_0x011b
             android.transition.TransitionSet r15 = new android.transition.TransitionSet
             r15.<init>()
             r15.setOrdering(r1)
-            android.transition.ChangeBounds r0 = new android.transition.ChangeBounds
-            r0.<init>()
-            r15.addTransition(r0)
-            org.telegram.ui.Components.SharedMediaLayout$19 r0 = new org.telegram.ui.Components.SharedMediaLayout$19
-            r0.<init>(r14)
-            r15.addTransition(r0)
+            android.transition.ChangeBounds r3 = new android.transition.ChangeBounds
+            r3.<init>()
+            r15.addTransition(r3)
+            org.telegram.ui.Components.SharedMediaLayout$19 r3 = new org.telegram.ui.Components.SharedMediaLayout$19
+            r3.<init>(r14)
+            r15.addTransition(r3)
             r12 = 200(0xc8, double:9.9E-322)
             r15.setDuration(r12)
-            org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            android.view.ViewGroup r0 = r0.getTabsContainer()
-            android.transition.TransitionManager.beginDelayedTransition(r0, r15)
+            org.telegram.ui.Components.ScrollSlidingTextTabStrip r3 = r14.scrollSlidingTextTabStrip
+            android.view.ViewGroup r3 = r3.getTabsContainer()
+            android.transition.TransitionManager.beginDelayedTransition(r3, r15)
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r15 = r14.scrollSlidingTextTabStrip
             r15.recordIndicatorParams()
-        L_0x0114:
+        L_0x011b:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r15 = r14.scrollSlidingTextTabStrip
             android.util.SparseArray r15 = r15.removeTabs()
+            if (r0 <= r7) goto L_0x0124
+            r15 = 0
+        L_0x0124:
             org.telegram.ui.Components.SharedMediaLayout$ChatUsersAdapter r0 = r14.chatUsersAdapter
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.chatInfo
-            if (r0 == 0) goto L_0x0138
+            if (r0 == 0) goto L_0x0142
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r4)
-            if (r0 != 0) goto L_0x0138
+            if (r0 != 0) goto L_0x0142
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131625595(0x7f0e067b, float:1.8878402E38)
+            r3 = 2131625626(0x7f0e069a, float:1.8878465E38)
             java.lang.String r12 = "GroupMembers"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r12, r3)
             r0.addTextTab(r4, r3, r15)
-        L_0x0138:
+        L_0x0142:
             int[] r0 = r14.hasMedia
             r0 = r0[r1]
-            if (r0 <= 0) goto L_0x0185
+            if (r0 <= 0) goto L_0x018f
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r1)
-            if (r0 != 0) goto L_0x0185
+            if (r0 != 0) goto L_0x018f
             int[] r0 = r14.hasMedia
             r3 = r0[r2]
-            if (r3 != 0) goto L_0x0177
+            if (r3 != 0) goto L_0x0181
             r3 = r0[r9]
-            if (r3 != 0) goto L_0x0177
+            if (r3 != 0) goto L_0x0181
             r3 = r0[r7]
-            if (r3 != 0) goto L_0x0177
+            if (r3 != 0) goto L_0x0181
             r3 = r0[r8]
-            if (r3 != 0) goto L_0x0177
+            if (r3 != 0) goto L_0x0181
             r3 = r0[r10]
-            if (r3 != 0) goto L_0x0177
+            if (r3 != 0) goto L_0x0181
             r0 = r0[r11]
-            if (r0 != 0) goto L_0x0177
+            if (r0 != 0) goto L_0x0181
             org.telegram.ui.Components.SharedMediaLayout$ChatUsersAdapter r0 = r14.chatUsersAdapter
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.chatInfo
-            if (r0 != 0) goto L_0x0177
+            if (r0 != 0) goto L_0x0181
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131627193(0x7f0e0cb9, float:1.8881644E38)
+            r3 = 2131627286(0x7f0e0d16, float:1.8881832E38)
             java.lang.String r4 = "SharedMediaTabFull2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3, r15)
-            goto L_0x0185
-        L_0x0177:
+            goto L_0x018f
+        L_0x0181:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131627192(0x7f0e0cb8, float:1.8881641E38)
+            r3 = 2131627285(0x7f0e0d15, float:1.888183E38)
             java.lang.String r4 = "SharedMediaTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3, r15)
-        L_0x0185:
+        L_0x018f:
             int[] r0 = r14.hasMedia
             r0 = r0[r2]
-            if (r0 <= 0) goto L_0x01a1
+            if (r0 <= 0) goto L_0x01ab
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r2)
-            if (r0 != 0) goto L_0x01a1
+            if (r0 != 0) goto L_0x01ab
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131627186(0x7f0e0cb2, float:1.888163E38)
+            r3 = 2131627279(0x7f0e0d0f, float:1.8881818E38)
             java.lang.String r4 = "SharedFilesTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r2, r3, r15)
-        L_0x01a1:
+        L_0x01ab:
             long r2 = r14.dialog_id
             int r0 = (int) r2
-            r2 = 2131627194(0x7f0e0cba, float:1.8881646E38)
+            r2 = 2131627287(0x7f0e0d17, float:1.8881834E38)
             java.lang.String r3 = "SharedMusicTab2"
-            if (r0 == 0) goto L_0x01df
+            if (r0 == 0) goto L_0x01e9
             int[] r0 = r14.hasMedia
             r0 = r0[r7]
-            if (r0 <= 0) goto L_0x01c7
+            if (r0 <= 0) goto L_0x01d1
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r7)
-            if (r0 != 0) goto L_0x01c7
+            if (r0 != 0) goto L_0x01d1
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r4 = 2131627190(0x7f0e0cb6, float:1.8881637E38)
+            r4 = 2131627283(0x7f0e0d13, float:1.8881826E38)
             java.lang.String r5 = "SharedLinksTab2"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.addTextTab(r7, r4, r15)
-        L_0x01c7:
+        L_0x01d1:
             int[] r0 = r14.hasMedia
             r0 = r0[r8]
-            if (r0 <= 0) goto L_0x0213
+            if (r0 <= 0) goto L_0x021d
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r8)
-            if (r0 != 0) goto L_0x0213
+            if (r0 != 0) goto L_0x021d
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r8, r2, r15)
-            goto L_0x0213
-        L_0x01df:
+            goto L_0x021d
+        L_0x01e9:
             org.telegram.ui.ProfileActivity r0 = r14.profileActivity
             org.telegram.messenger.MessagesController r0 = r0.getMessagesController()
             long r12 = r14.dialog_id
@@ -3719,63 +3731,63 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             int r4 = (int) r6
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             org.telegram.tgnet.TLRPC$EncryptedChat r0 = r0.getEncryptedChat(r4)
-            if (r0 == 0) goto L_0x0213
+            if (r0 == 0) goto L_0x021d
             int r0 = r0.layer
             int r0 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r0)
-            if (r0 < r5) goto L_0x0213
+            if (r0 < r5) goto L_0x021d
             int[] r0 = r14.hasMedia
             r0 = r0[r8]
-            if (r0 <= 0) goto L_0x0213
+            if (r0 <= 0) goto L_0x021d
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r8)
-            if (r0 != 0) goto L_0x0213
+            if (r0 != 0) goto L_0x021d
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r8, r2, r15)
-        L_0x0213:
+        L_0x021d:
             int[] r0 = r14.hasMedia
             r0 = r0[r9]
-            if (r0 <= 0) goto L_0x022f
+            if (r0 <= 0) goto L_0x0239
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r9)
-            if (r0 != 0) goto L_0x022f
+            if (r0 != 0) goto L_0x0239
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r2 = 2131627198(0x7f0e0cbe, float:1.8881654E38)
+            r2 = 2131627291(0x7f0e0d1b, float:1.8881842E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r9, r2, r15)
-        L_0x022f:
+        L_0x0239:
             int[] r0 = r14.hasMedia
             r0 = r0[r10]
-            if (r0 <= 0) goto L_0x024b
+            if (r0 <= 0) goto L_0x0255
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r10)
-            if (r0 != 0) goto L_0x024b
+            if (r0 != 0) goto L_0x0255
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r2 = 2131627187(0x7f0e0cb3, float:1.8881631E38)
+            r2 = 2131627280(0x7f0e0d10, float:1.888182E38)
             java.lang.String r3 = "SharedGIFsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r10, r2, r15)
-        L_0x024b:
+        L_0x0255:
             int[] r0 = r14.hasMedia
             r0 = r0[r11]
-            if (r0 <= 0) goto L_0x0267
+            if (r0 <= 0) goto L_0x0271
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
             boolean r0 = r0.hasTab(r11)
-            if (r0 != 0) goto L_0x0267
+            if (r0 != 0) goto L_0x0271
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r2 = 2131627188(0x7f0e0cb4, float:1.8881633E38)
+            r2 = 2131627281(0x7f0e0d11, float:1.8881822E38)
             java.lang.String r3 = "SharedGroupsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r11, r2, r15)
-        L_0x0267:
+        L_0x0271:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r15 = r14.scrollSlidingTextTabStrip
             int r15 = r15.getCurrentTabId()
-            if (r15 < 0) goto L_0x0276
+            if (r15 < 0) goto L_0x0280
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r0 = r14.mediaPages
             r0 = r0[r1]
             int unused = r0.selectedType = r15
-        L_0x0276:
+        L_0x0280:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r15 = r14.scrollSlidingTextTabStrip
             r15.finishAddingTabs()
             return
@@ -4465,10 +4477,10 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                         AndroidUtilities.openDocument(messageObject2, this.profileActivity.getParentActivity(), this.profileActivity);
                     } else if (!sharedDocumentCell2.isLoading()) {
                         this.profileActivity.getFileLoader().loadFile(document, sharedDocumentCell2.getMessage(), 0, 0);
-                        sharedDocumentCell2.updateFileExistIcon();
+                        sharedDocumentCell2.updateFileExistIcon(true);
                     } else {
                         this.profileActivity.getFileLoader().cancelLoadFile(document);
-                        sharedDocumentCell2.updateFileExistIcon();
+                        sharedDocumentCell2.updateFileExistIcon(true);
                     }
                 }
             } else if (i5 == 3) {
@@ -5650,6 +5662,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         /* access modifiers changed from: private */
         /* renamed from: lambda$null$0 */
         public /* synthetic */ void lambda$null$0$SharedMediaLayout$CommonGroupsAdapter(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i) {
+            int itemCount = getItemCount();
             if (tLRPC$TL_error == null) {
                 TLRPC$messages_Chats tLRPC$messages_Chats = (TLRPC$messages_Chats) tLObject;
                 SharedMediaLayout.this.profileActivity.getMessagesController().putChats(tLRPC$messages_Chats.chats, false);
@@ -5661,7 +5674,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             for (int i2 = 0; i2 < SharedMediaLayout.this.mediaPages.length; i2++) {
                 if (SharedMediaLayout.this.mediaPages[i2].selectedType == 6 && SharedMediaLayout.this.mediaPages[i2].listView != null) {
                     RecyclerListView access$200 = SharedMediaLayout.this.mediaPages[i2].listView;
-                    if (this.firstLoaded) {
+                    if (this.firstLoaded || itemCount == 0) {
                         SharedMediaLayout.this.animateItemsEnter(access$200, 0);
                     }
                 }

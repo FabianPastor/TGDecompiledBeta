@@ -56,7 +56,7 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
                 r1.<init>(r2)
                 r5 = 0
                 r1.setOrientation(r5)
-                r6 = 2131165260(0x7var_c, float:1.7944732E38)
+                r6 = 2131165261(0x7var_d, float:1.7944734E38)
                 r1.setBackgroundResource(r6)
                 r6 = 60
                 r7 = 83

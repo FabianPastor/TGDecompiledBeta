@@ -72,6 +72,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import com.android.internal.telephony.ITelephony;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
@@ -1019,7 +1020,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131624913(0x7f0e03d1, float:1.887702E38)
+                r0 = 2131624918(0x7f0e03d6, float:1.887703E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1031,12 +1032,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131624914(0x7f0e03d2, float:1.8877021E38)
+                r0 = 2131624919(0x7f0e03d7, float:1.8877031E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131624915(0x7f0e03d3, float:1.8877023E38)
+                r0 = 2131624920(0x7f0e03d8, float:1.8877033E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1154,27 +1155,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131626677(0x7f0e0ab5, float:1.8880597E38)
+                r0 = 2131626760(0x7f0e0b08, float:1.8880765E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131626678(0x7f0e0ab6, float:1.8880599E38)
+                r0 = 2131626761(0x7f0e0b09, float:1.8880767E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131626669(0x7f0e0aad, float:1.888058E38)
+                r0 = 2131626752(0x7f0e0b00, float:1.888075E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131626668(0x7f0e0aac, float:1.8880579E38)
+                r0 = 2131626751(0x7f0e0aff, float:1.8880747E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131626670(0x7f0e0aae, float:1.8880583E38)
+                r0 = 2131626753(0x7f0e0b01, float:1.8880751E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -2215,16 +2216,16 @@ public class AndroidUtilities {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:25:0x006f, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:25:0x0070, code lost:
         r10 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:26:0x0070, code lost:
-        if (r0 != null) goto L_0x0072;
+    /* JADX WARNING: Code restructure failed: missing block: B:26:0x0071, code lost:
+        if (r0 != null) goto L_0x0073;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:28:?, code lost:
         r0.close();
      */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:29:0x0075 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:29:0x0076 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.lang.String obtainLoginPhoneCall(java.lang.String r10) {
         /*
@@ -2233,67 +2234,67 @@ public class AndroidUtilities {
             if (r0 != 0) goto L_0x0006
             return r1
         L_0x0006:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0076 }
-            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0076 }
-            android.net.Uri r3 = android.provider.CallLog.Calls.CONTENT_URI     // Catch:{ Exception -> 0x0076 }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0077 }
+            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0077 }
+            android.net.Uri r3 = android.provider.CallLog.Calls.CONTENT_URI     // Catch:{ Exception -> 0x0077 }
             r0 = 2
-            java.lang.String[] r4 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0076 }
+            java.lang.String[] r4 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0077 }
             java.lang.String r0 = "number"
             r8 = 0
-            r4[r8] = r0     // Catch:{ Exception -> 0x0076 }
+            r4[r8] = r0     // Catch:{ Exception -> 0x0077 }
             java.lang.String r0 = "date"
             r9 = 1
-            r4[r9] = r0     // Catch:{ Exception -> 0x0076 }
+            r4[r9] = r0     // Catch:{ Exception -> 0x0077 }
             java.lang.String r5 = "type IN (3,1,5)"
             r6 = 0
             java.lang.String r7 = "date DESC LIMIT 5"
-            android.database.Cursor r0 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0076 }
-        L_0x0024:
-            boolean r2 = r0.moveToNext()     // Catch:{ all -> 0x006d }
-            if (r2 == 0) goto L_0x0067
-            java.lang.String r2 = r0.getString(r8)     // Catch:{ all -> 0x006d }
-            long r3 = r0.getLong(r9)     // Catch:{ all -> 0x006d }
-            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ all -> 0x006d }
-            if (r5 == 0) goto L_0x004a
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x006d }
-            r5.<init>()     // Catch:{ all -> 0x006d }
+            android.database.Cursor r0 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0077 }
+        L_0x0025:
+            boolean r2 = r0.moveToNext()     // Catch:{ all -> 0x006e }
+            if (r2 == 0) goto L_0x0068
+            java.lang.String r2 = r0.getString(r8)     // Catch:{ all -> 0x006e }
+            long r3 = r0.getLong(r9)     // Catch:{ all -> 0x006e }
+            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ all -> 0x006e }
+            if (r5 == 0) goto L_0x004b
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x006e }
+            r5.<init>()     // Catch:{ all -> 0x006e }
             java.lang.String r6 = "number = "
-            r5.append(r6)     // Catch:{ all -> 0x006d }
-            r5.append(r2)     // Catch:{ all -> 0x006d }
-            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x006d }
-            org.telegram.messenger.FileLog.e((java.lang.String) r5)     // Catch:{ all -> 0x006d }
-        L_0x004a:
-            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x006d }
+            r5.append(r6)     // Catch:{ all -> 0x006e }
+            r5.append(r2)     // Catch:{ all -> 0x006e }
+            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x006e }
+            org.telegram.messenger.FileLog.e((java.lang.String) r5)     // Catch:{ all -> 0x006e }
+        L_0x004b:
+            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x006e }
             long r5 = r5 - r3
-            long r3 = java.lang.Math.abs(r5)     // Catch:{ all -> 0x006d }
+            long r3 = java.lang.Math.abs(r5)     // Catch:{ all -> 0x006e }
             r5 = 3600000(0x36ee80, double:1.7786363E-317)
             int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r7 < 0) goto L_0x005b
-            goto L_0x0024
-        L_0x005b:
-            boolean r3 = checkPhonePattern(r10, r2)     // Catch:{ all -> 0x006d }
-            if (r3 == 0) goto L_0x0024
-            if (r0 == 0) goto L_0x0066
-            r0.close()     // Catch:{ Exception -> 0x0076 }
-        L_0x0066:
-            return r2
+            if (r7 < 0) goto L_0x005c
+            goto L_0x0025
+        L_0x005c:
+            boolean r3 = checkPhonePattern(r10, r2)     // Catch:{ all -> 0x006e }
+            if (r3 == 0) goto L_0x0025
+            if (r0 == 0) goto L_0x0067
+            r0.close()     // Catch:{ Exception -> 0x0077 }
         L_0x0067:
-            if (r0 == 0) goto L_0x007a
-            r0.close()     // Catch:{ Exception -> 0x0076 }
-            goto L_0x007a
-        L_0x006d:
+            return r2
+        L_0x0068:
+            if (r0 == 0) goto L_0x007b
+            r0.close()     // Catch:{ Exception -> 0x0077 }
+            goto L_0x007b
+        L_0x006e:
             r10 = move-exception
-            throw r10     // Catch:{ all -> 0x006f }
-        L_0x006f:
+            throw r10     // Catch:{ all -> 0x0070 }
+        L_0x0070:
             r10 = move-exception
-            if (r0 == 0) goto L_0x0075
-            r0.close()     // Catch:{ all -> 0x0075 }
-        L_0x0075:
-            throw r10     // Catch:{ Exception -> 0x0076 }
+            if (r0 == 0) goto L_0x0076
+            r0.close()     // Catch:{ all -> 0x0076 }
         L_0x0076:
+            throw r10     // Catch:{ Exception -> 0x0077 }
+        L_0x0077:
             r10 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)
-        L_0x007a:
+        L_0x007b:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.obtainLoginPhoneCall(java.lang.String):java.lang.String");
@@ -3367,21 +3368,21 @@ public class AndroidUtilities {
             if (r9 != 0) goto L_0x00ca
             org.telegram.ui.ActionBar.AlertDialog$Builder r9 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r9.<init>((android.content.Context) r10)
-            r0 = 2131624263(0x7f0e0147, float:1.88757E38)
+            r0 = 2131624266(0x7f0e014a, float:1.8875707E38)
             java.lang.String r1 = "AppName"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r9.setTitle(r0)
-            r0 = 2131624261(0x7f0e0145, float:1.8875697E38)
+            r0 = 2131624264(0x7f0e0148, float:1.8875703E38)
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r9.setMessage(r0)
-            r0 = 2131626662(0x7f0e0aa6, float:1.8880567E38)
+            r0 = 2131626745(0x7f0e0af9, float:1.8880735E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY
             r1.<init>(r10)
             r9.setPositiveButton(r0, r1)
-            r10 = 2131624589(0x7f0e028d, float:1.8876362E38)
+            r10 = 2131624594(0x7f0e0292, float:1.8876372E38)
             java.lang.String r0 = "Cancel"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
             r9.setNegativeButton(r10, r3)
@@ -4395,5 +4396,19 @@ public class AndroidUtilities {
 
     public static boolean checkInlinePermissions(Context context) {
         return Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(context);
+    }
+
+    public static void updateVisibleRows(RecyclerListView recyclerListView) {
+        RecyclerView.Adapter adapter;
+        RecyclerView.ViewHolder childViewHolder;
+        if (recyclerListView != null && (adapter = recyclerListView.getAdapter()) != null) {
+            for (int i = 0; i < recyclerListView.getChildCount(); i++) {
+                View childAt = recyclerListView.getChildAt(i);
+                int childAdapterPosition = recyclerListView.getChildAdapterPosition(childAt);
+                if (childAdapterPosition >= 0 && (childViewHolder = recyclerListView.getChildViewHolder(childAt)) != null && !childViewHolder.shouldIgnore()) {
+                    adapter.onBindViewHolder(childViewHolder, childAdapterPosition);
+                }
+            }
+        }
     }
 }

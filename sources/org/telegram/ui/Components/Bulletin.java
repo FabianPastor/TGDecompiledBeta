@@ -3,12 +3,13 @@ package org.telegram.ui.Components;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.drawable.InsetDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.view.GestureDetector;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import androidx.core.util.Consumer;
 import androidx.core.view.ViewCompat;
 import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.FloatPropertyCompat;
 import androidx.dynamicanimation.animation.SpringAnimation;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +35,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.DialogsActivity;
 
@@ -44,7 +47,6 @@ public final class Bulletin {
     private boolean canHide;
     /* access modifiers changed from: private */
     public final FrameLayout containerLayout;
-    /* access modifiers changed from: private */
     public int currentBottomOffset;
     /* access modifiers changed from: private */
     public Delegate currentDelegate;
@@ -58,8 +60,7 @@ public final class Bulletin {
     public final Layout layout;
     /* access modifiers changed from: private */
     public Layout.Transition layoutTransition;
-    /* access modifiers changed from: private */
-    public final ParentLayout parentLayout;
+    private final ParentLayout parentLayout;
     /* access modifiers changed from: private */
     public boolean showing;
 
@@ -146,6 +147,10 @@ public final class Bulletin {
         this.duration = i;
     }
 
+    public static Bulletin getVisibleBulletin() {
+        return visibleBulletin;
+    }
+
     public Bulletin show() {
         if (!this.showing) {
             this.showing = true;
@@ -163,22 +168,20 @@ public final class Bulletin {
                             Bulletin.this.layout.onShow();
                             Delegate unused = Bulletin.this.currentDelegate = (Delegate) Bulletin.delegates.get(Bulletin.this.containerLayout);
                             Bulletin bulletin = Bulletin.this;
-                            int unused2 = bulletin.currentBottomOffset = bulletin.currentDelegate != null ? Bulletin.this.currentDelegate.getBottomOffset() : 0;
+                            bulletin.currentBottomOffset = bulletin.currentDelegate != null ? Bulletin.this.currentDelegate.getBottomOffset() : 0;
                             if (Bulletin.this.currentDelegate != null) {
                                 Bulletin.this.currentDelegate.onShow(Bulletin.this);
                             }
                             if (Bulletin.isTransitionsEnabled()) {
-                                if (Bulletin.this.currentBottomOffset != 0) {
-                                    ViewCompat.setClipBounds(Bulletin.this.parentLayout, new Rect(i, i2 - Bulletin.this.currentBottomOffset, i3, i4 - Bulletin.this.currentBottomOffset));
-                                } else {
-                                    ViewCompat.setClipBounds(Bulletin.this.parentLayout, (Rect) null);
-                                }
                                 Bulletin.this.ensureLayoutTransitionCreated();
-                                Layout.Transition access$1100 = Bulletin.this.layoutTransition;
+                                Bulletin.this.layout.transitionRunning = true;
+                                Bulletin.this.layout.delegate = Bulletin.this.currentDelegate;
+                                Bulletin.this.layout.invalidate();
+                                Layout.Transition access$900 = Bulletin.this.layoutTransition;
                                 Layout access$200 = Bulletin.this.layout;
                                 Layout access$2002 = Bulletin.this.layout;
                                 access$2002.getClass();
-                                access$1100.animateEnter(access$200, new Runnable() {
+                                access$900.animateEnter(access$200, new Runnable() {
                                     public final void run() {
                                         Bulletin.Layout.this.onEnterTransitionStart();
                                     }
@@ -196,7 +199,7 @@ public final class Bulletin {
                             if (Bulletin.this.currentDelegate != null) {
                                 Bulletin.this.currentDelegate.onOffsetChange((float) (Bulletin.this.layout.getHeight() - Bulletin.this.currentBottomOffset));
                             }
-                            Bulletin.this.layout.setTranslationY((float) (-Bulletin.this.currentBottomOffset));
+                            Bulletin.this.updatePosition();
                             Bulletin.this.layout.onEnterTransitionStart();
                             Bulletin.this.layout.onEnterTransitionEnd();
                             Bulletin.this.setCanHide(true);
@@ -206,7 +209,7 @@ public final class Bulletin {
                     /* access modifiers changed from: private */
                     /* renamed from: lambda$onLayoutChange$0 */
                     public /* synthetic */ void lambda$onLayoutChange$0$Bulletin$2() {
-                        ViewCompat.setClipBounds(Bulletin.this.parentLayout, (Rect) null);
+                        Bulletin.this.layout.transitionRunning = false;
                         Bulletin.this.layout.onEnterTransitionEnd();
                         Bulletin.this.setCanHide(true);
                     }
@@ -270,16 +273,15 @@ public final class Bulletin {
             if (ViewCompat.isLaidOut(this.layout)) {
                 this.layout.removeCallbacks(this.hideRunnable);
                 if (z) {
-                    if (i != 0) {
-                        ViewCompat.setClipBounds(this.parentLayout, new Rect(this.layout.getLeft(), this.layout.getTop() - i, this.layout.getRight(), this.layout.getBottom() - i));
-                    } else {
-                        ViewCompat.setClipBounds(this.parentLayout, (Rect) null);
-                    }
+                    Layout layout2 = this.layout;
+                    layout2.transitionRunning = true;
+                    layout2.delegate = this.currentDelegate;
+                    layout2.invalidate();
                     ensureLayoutTransitionCreated();
                     Layout.Transition transition = this.layoutTransition;
-                    Layout layout2 = this.layout;
-                    layout2.getClass();
-                    transition.animateExit(layout2, new Runnable() {
+                    Layout layout3 = this.layout;
+                    layout3.getClass();
+                    transition.animateExit(layout3, new Runnable() {
                         public final void run() {
                             Bulletin.Layout.this.onExitTransitionStart();
                         }
@@ -319,8 +321,9 @@ public final class Bulletin {
             delegate.onOffsetChange(0.0f);
             this.currentDelegate.onHide(this);
         }
-        ViewCompat.setClipBounds(this.parentLayout, (Rect) null);
-        this.layout.onExitTransitionEnd();
+        Layout layout2 = this.layout;
+        layout2.transitionRunning = false;
+        layout2.onExitTransitionEnd();
         this.layout.onHide();
         this.containerLayout.removeView(this.parentLayout);
         this.layout.onDetach();
@@ -338,6 +341,10 @@ public final class Bulletin {
     /* access modifiers changed from: private */
     public static boolean isTransitionsEnabled() {
         return MessagesController.getGlobalMainSettings().getBoolean("view_animations", true) && Build.VERSION.SDK_INT >= 18;
+    }
+
+    public void updatePosition() {
+        this.layout.updatePosition();
     }
 
     private static abstract class ParentLayout extends FrameLayout {
@@ -376,9 +383,9 @@ public final class Bulletin {
                 public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
                     Layout layout = layout2;
                     ParentLayout parentLayout = ParentLayout.this;
-                    float access$1600 = parentLayout.translationX - f;
-                    float unused = parentLayout.translationX = access$1600;
-                    layout.setTranslationX(access$1600);
+                    float access$1400 = parentLayout.translationX - f;
+                    float unused = parentLayout.translationX = access$1400;
+                    layout.setTranslationX(access$1400);
                     if (ParentLayout.this.translationX != 0.0f && ((ParentLayout.this.translationX >= 0.0f || !ParentLayout.this.needLeftAlphaAnimation) && (ParentLayout.this.translationX <= 0.0f || !ParentLayout.this.needRightAlphaAnimation))) {
                         return true;
                     }
@@ -697,8 +704,21 @@ public final class Bulletin {
         }
 
         public static abstract class Layout extends FrameLayout {
+            public static final FloatPropertyCompat<Layout> IN_OUT_OFFSET_Y = new FloatPropertyCompat<Layout>("offsetY") {
+                public float getValue(Layout layout) {
+                    return layout.inOutOffset;
+                }
+
+                public void setValue(Layout layout, float f) {
+                    layout.setInOutOffset(f);
+                }
+            };
+            Drawable background;
             protected Bulletin bulletin;
             private final List<Callback> callbacks;
+            Delegate delegate;
+            public float inOutOffset;
+            public boolean transitionRunning;
             private int wideScreenGravity;
             private int wideScreenWidth;
 
@@ -736,8 +756,22 @@ public final class Bulletin {
                 this.wideScreenWidth = -2;
                 this.wideScreenGravity = 1;
                 setMinimumHeight(AndroidUtilities.dp(48.0f));
-                setBackground(new InsetDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(6.0f), i), AndroidUtilities.dp(8.0f)));
+                this.background = Theme.createRoundRectDrawable(AndroidUtilities.dp(6.0f), i);
                 updateSize();
+                setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
+                setWillNotDraw(false);
+            }
+
+            static {
+                new AnimationProperties.FloatProperty<Layout>("offsetY") {
+                    public Float get(Layout layout) {
+                        return Float.valueOf(layout.inOutOffset);
+                    }
+
+                    public void setValue(Layout layout, float f) {
+                        layout.setInOutOffset(f);
+                    }
+                };
             }
 
             /* access modifiers changed from: protected */
@@ -883,26 +917,37 @@ public final class Bulletin {
                 this.callbacks.remove(callback);
             }
 
+            public void updatePosition() {
+                Delegate delegate2 = this.delegate;
+                float f = 0.0f;
+                if (delegate2 != null) {
+                    f = 0.0f + ((float) delegate2.getBottomOffset());
+                }
+                setTranslationY((-f) + this.inOutOffset);
+            }
+
             public Transition createTransition() {
                 return new SpringTransition();
             }
 
             public static class SpringTransition implements Transition {
                 public void animateEnter(Layout layout, Runnable runnable, Runnable runnable2, Consumer<Float> consumer, int i) {
-                    float height = (float) (layout.getHeight() - i);
-                    layout.setTranslationY(height);
+                    layout.setInOutOffset((float) layout.getMeasuredHeight());
                     if (consumer != null) {
-                        consumer.accept(Float.valueOf(height));
+                        consumer.accept(Float.valueOf(layout.getTranslationY()));
                     }
-                    SpringAnimation springAnimation = new SpringAnimation(layout, DynamicAnimation.TRANSLATION_Y, (float) (-i));
+                    SpringAnimation springAnimation = new SpringAnimation(layout, Layout.IN_OUT_OFFSET_Y, 0.0f);
                     springAnimation.getSpring().setDampingRatio(0.8f);
                     springAnimation.getSpring().setStiffness(400.0f);
                     if (runnable2 != null) {
                         springAnimation.addEndListener(
                         /*  JADX ERROR: Method code generation error
-                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0035: INVOKE  
-                              (r0v3 'springAnimation' androidx.dynamicanimation.animation.SpringAnimation)
-                              (wrap: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU : 0x0032: CONSTRUCTOR  (r3v4 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU) = (r5v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU.<init>(java.lang.Runnable):void type: CONSTRUCTOR)
+                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0037: INVOKE  
+                              (r7v3 'springAnimation' androidx.dynamicanimation.animation.SpringAnimation)
+                              (wrap: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw : 0x0034: CONSTRUCTOR  (r0v3 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw) = 
+                              (r3v0 'layout' org.telegram.ui.Components.Bulletin$Layout)
+                              (r5v0 'runnable2' java.lang.Runnable)
+                             call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw.<init>(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable):void type: CONSTRUCTOR)
                              androidx.dynamicanimation.animation.DynamicAnimation.addEndListener(androidx.dynamicanimation.animation.DynamicAnimation$OnAnimationEndListener):androidx.dynamicanimation.animation.DynamicAnimation type: VIRTUAL in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -969,7 +1014,10 @@ public final class Bulletin {
                             	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                             	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0032: CONSTRUCTOR  (r3v4 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU) = (r5v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU.<init>(java.lang.Runnable):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
+                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0034: CONSTRUCTOR  (r0v3 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw) = 
+                              (r3v0 'layout' org.telegram.ui.Components.Bulletin$Layout)
+                              (r5v0 'runnable2' java.lang.Runnable)
+                             call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw.<init>(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -978,7 +1026,7 @@ public final class Bulletin {
                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                             	... 64 more
-                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU, state: NOT_LOADED
+                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw, state: NOT_LOADED
                             	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                             	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -987,60 +1035,60 @@ public final class Bulletin {
                             */
                         /*
                             this = this;
-                            int r0 = r3.getHeight()
-                            int r0 = r0 - r7
-                            float r0 = (float) r0
-                            r3.setTranslationY(r0)
-                            if (r6 == 0) goto L_0x0012
-                            java.lang.Float r0 = java.lang.Float.valueOf(r0)
-                            r6.accept(r0)
-                        L_0x0012:
-                            androidx.dynamicanimation.animation.SpringAnimation r0 = new androidx.dynamicanimation.animation.SpringAnimation
-                            androidx.dynamicanimation.animation.DynamicAnimation$ViewProperty r1 = androidx.dynamicanimation.animation.DynamicAnimation.TRANSLATION_Y
-                            int r7 = -r7
+                            int r7 = r3.getMeasuredHeight()
                             float r7 = (float) r7
-                            r0.<init>(r3, r1, r7)
-                            androidx.dynamicanimation.animation.SpringForce r3 = r0.getSpring()
-                            r7 = 1061997773(0x3f4ccccd, float:0.8)
-                            r3.setDampingRatio(r7)
-                            androidx.dynamicanimation.animation.SpringForce r3 = r0.getSpring()
-                            r7 = 1137180672(0x43CLASSNAME, float:400.0)
-                            r3.setStiffness(r7)
-                            if (r5 == 0) goto L_0x0038
-                            org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU r3 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$2Pc9D8px-PbkM4NQCBWeYRI_LcU
-                            r3.<init>(r5)
-                            r0.addEndListener(r3)
-                        L_0x0038:
-                            if (r6 == 0) goto L_0x0042
-                            org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$yAIzcIUeM0Hya8bGgnNWpp7S4UI r3 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$yAIzcIUeM0Hya8bGgnNWpp7S4UI
-                            r3.<init>(r6)
-                            r0.addUpdateListener(r3)
-                        L_0x0042:
-                            r0.start()
-                            if (r4 == 0) goto L_0x004a
+                            r3.setInOutOffset(r7)
+                            if (r6 == 0) goto L_0x0015
+                            float r7 = r3.getTranslationY()
+                            java.lang.Float r7 = java.lang.Float.valueOf(r7)
+                            r6.accept(r7)
+                        L_0x0015:
+                            androidx.dynamicanimation.animation.SpringAnimation r7 = new androidx.dynamicanimation.animation.SpringAnimation
+                            androidx.dynamicanimation.animation.FloatPropertyCompat<org.telegram.ui.Components.Bulletin$Layout> r0 = org.telegram.ui.Components.Bulletin.Layout.IN_OUT_OFFSET_Y
+                            r1 = 0
+                            r7.<init>(r3, r0, r1)
+                            androidx.dynamicanimation.animation.SpringForce r0 = r7.getSpring()
+                            r1 = 1061997773(0x3f4ccccd, float:0.8)
+                            r0.setDampingRatio(r1)
+                            androidx.dynamicanimation.animation.SpringForce r0 = r7.getSpring()
+                            r1 = 1137180672(0x43CLASSNAME, float:400.0)
+                            r0.setStiffness(r1)
+                            if (r5 == 0) goto L_0x003a
+                            org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw r0 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw
+                            r0.<init>(r3, r5)
+                            r7.addEndListener(r0)
+                        L_0x003a:
+                            if (r6 == 0) goto L_0x0044
+                            org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$HB-DLkVbAMzVF4W_tAjCIwsxtGw r5 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$HB-DLkVbAMzVF4W_tAjCIwsxtGw
+                            r5.<init>(r6, r3)
+                            r7.addUpdateListener(r5)
+                        L_0x0044:
+                            r7.start()
+                            if (r4 == 0) goto L_0x004c
                             r4.run()
-                        L_0x004a:
+                        L_0x004c:
                             return
                         */
                         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void");
                     }
 
-                    static /* synthetic */ void lambda$animateEnter$0(Runnable runnable, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+                    static /* synthetic */ void lambda$animateEnter$0(Layout layout, Runnable runnable, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+                        layout.setInOutOffset(0.0f);
                         if (!z) {
                             runnable.run();
                         }
                     }
 
                     public void animateExit(Layout layout, Runnable runnable, Runnable runnable2, Consumer<Float> consumer, int i) {
-                        SpringAnimation springAnimation = new SpringAnimation(layout, DynamicAnimation.TRANSLATION_Y, (float) (layout.getHeight() - i));
+                        SpringAnimation springAnimation = new SpringAnimation(layout, Layout.IN_OUT_OFFSET_Y, (float) layout.getHeight());
                         springAnimation.getSpring().setDampingRatio(0.8f);
                         springAnimation.getSpring().setStiffness(400.0f);
                         if (runnable2 != null) {
                             springAnimation.addEndListener(
                             /*  JADX ERROR: Method code generation error
-                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0027: INVOKE  
-                                  (r0v0 'springAnimation' androidx.dynamicanimation.animation.SpringAnimation)
-                                  (wrap: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI : 0x0024: CONSTRUCTOR  (r4v4 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI) = (r6v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI.<init>(java.lang.Runnable):void type: CONSTRUCTOR)
+                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0026: INVOKE  
+                                  (r7v1 'springAnimation' androidx.dynamicanimation.animation.SpringAnimation)
+                                  (wrap: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI : 0x0023: CONSTRUCTOR  (r0v3 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI) = (r5v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI.<init>(java.lang.Runnable):void type: CONSTRUCTOR)
                                  androidx.dynamicanimation.animation.DynamicAnimation.addEndListener(androidx.dynamicanimation.animation.DynamicAnimation$OnAnimationEndListener):androidx.dynamicanimation.animation.DynamicAnimation type: VIRTUAL in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -1107,7 +1155,7 @@ public final class Bulletin {
                                 	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                 	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                 	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0024: CONSTRUCTOR  (r4v4 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI) = (r6v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI.<init>(java.lang.Runnable):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
+                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0023: CONSTRUCTOR  (r0v3 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI) = (r5v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI.<init>(java.lang.Runnable):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                 	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1125,32 +1173,31 @@ public final class Bulletin {
                                 */
                             /*
                                 this = this;
-                                androidx.dynamicanimation.animation.SpringAnimation r0 = new androidx.dynamicanimation.animation.SpringAnimation
-                                androidx.dynamicanimation.animation.DynamicAnimation$ViewProperty r1 = androidx.dynamicanimation.animation.DynamicAnimation.TRANSLATION_Y
-                                int r2 = r4.getHeight()
-                                int r2 = r2 - r8
-                                float r8 = (float) r2
-                                r0.<init>(r4, r1, r8)
-                                androidx.dynamicanimation.animation.SpringForce r4 = r0.getSpring()
-                                r8 = 1061997773(0x3f4ccccd, float:0.8)
-                                r4.setDampingRatio(r8)
-                                androidx.dynamicanimation.animation.SpringForce r4 = r0.getSpring()
-                                r8 = 1137180672(0x43CLASSNAME, float:400.0)
-                                r4.setStiffness(r8)
-                                if (r6 == 0) goto L_0x002a
-                                org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI r4 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI
-                                r4.<init>(r6)
-                                r0.addEndListener(r4)
-                            L_0x002a:
-                                if (r7 == 0) goto L_0x0034
-                                org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$nU9LcFRMmlWxNVTPxWrA096Aif0 r4 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$nU9LcFRMmlWxNVTPxWrA096Aif0
-                                r4.<init>(r7)
-                                r0.addUpdateListener(r4)
-                            L_0x0034:
-                                r0.start()
-                                if (r5 == 0) goto L_0x003c
-                                r5.run()
-                            L_0x003c:
+                                androidx.dynamicanimation.animation.SpringAnimation r7 = new androidx.dynamicanimation.animation.SpringAnimation
+                                androidx.dynamicanimation.animation.FloatPropertyCompat<org.telegram.ui.Components.Bulletin$Layout> r0 = org.telegram.ui.Components.Bulletin.Layout.IN_OUT_OFFSET_Y
+                                int r1 = r3.getHeight()
+                                float r1 = (float) r1
+                                r7.<init>(r3, r0, r1)
+                                androidx.dynamicanimation.animation.SpringForce r0 = r7.getSpring()
+                                r1 = 1061997773(0x3f4ccccd, float:0.8)
+                                r0.setDampingRatio(r1)
+                                androidx.dynamicanimation.animation.SpringForce r0 = r7.getSpring()
+                                r1 = 1137180672(0x43CLASSNAME, float:400.0)
+                                r0.setStiffness(r1)
+                                if (r5 == 0) goto L_0x0029
+                                org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI r0 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI
+                                r0.<init>(r5)
+                                r7.addEndListener(r0)
+                            L_0x0029:
+                                if (r6 == 0) goto L_0x0033
+                                org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$FPrD8PSlb9yjsdgcvdjmlotjRV0 r5 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$FPrD8PSlb9yjsdgcvdjmlotjRV0
+                                r5.<init>(r6, r3)
+                                r7.addUpdateListener(r5)
+                            L_0x0033:
+                                r7.start()
+                                if (r4 == 0) goto L_0x003b
+                                r4.run()
+                            L_0x003b:
                                 return
                             */
                             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void");
@@ -1161,6 +1208,29 @@ public final class Bulletin {
                                 runnable.run();
                             }
                         }
+                    }
+
+                    /* access modifiers changed from: private */
+                    public void setInOutOffset(float f) {
+                        this.inOutOffset = f;
+                        updatePosition();
+                    }
+
+                    /* access modifiers changed from: protected */
+                    public void dispatchDraw(Canvas canvas) {
+                        this.background.setBounds(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), getMeasuredWidth() - AndroidUtilities.dp(8.0f), getMeasuredHeight() - AndroidUtilities.dp(8.0f));
+                        if (!this.transitionRunning || this.delegate == null) {
+                            this.background.draw(canvas);
+                            super.dispatchDraw(canvas);
+                            return;
+                        }
+                        int measuredHeight = ((View) getParent()).getMeasuredHeight() - this.delegate.getBottomOffset();
+                        canvas.save();
+                        canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - (((int) (getY() + ((float) getMeasuredHeight()))) - measuredHeight));
+                        this.background.draw(canvas);
+                        super.dispatchDraw(canvas);
+                        canvas.restore();
+                        invalidate();
                     }
                 }
 

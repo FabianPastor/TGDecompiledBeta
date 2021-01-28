@@ -97,10 +97,14 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         this.dialogsSearchAdapter = new DialogsSearchAdapter(context, i, i2, i3) {
             public void notifyDataSetChanged() {
                 RecyclerListView recyclerListView;
+                int currentItemCount = getCurrentItemCount();
                 super.notifyDataSetChanged();
                 if (!SearchViewPager.this.lastSearchScrolledToTop && (recyclerListView = SearchViewPager.this.searchListView) != null) {
                     recyclerListView.scrollToPosition(0);
                     boolean unused = SearchViewPager.this.lastSearchScrolledToTop = true;
+                }
+                if (getItemCount() == 0 && currentItemCount != 0 && !isSearching()) {
+                    SearchViewPager.this.emptyView.showProgress(false, false);
                 }
             }
         };
@@ -611,6 +615,16 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         this.viewsByType.clear();
     }
 
+    public void setPosition(int i) {
+        super.setPosition(i);
+        this.viewsByType.clear();
+        ViewPagerFixed.TabsView tabsView = this.tabsView;
+        if (tabsView != null) {
+            tabsView.selectTabWithId(i, 1.0f);
+        }
+        invalidate();
+    }
+
     public void setKeyboardHeight(int i) {
         this.keyboardSize = i;
         boolean z = getVisibility() == 0 && getAlpha() > 0.0f;
@@ -809,6 +823,10 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             searchResultsEnterAnimator.valueAnimator.cancel();
             this.currentAnimators.remove(searchResultsEnterAnimator);
         }
+    }
+
+    public ViewPagerFixed.TabsView getTabsView() {
+        return this.tabsView;
     }
 
     private class SearchResultsEnterAnimator {
