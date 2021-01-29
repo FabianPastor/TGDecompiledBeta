@@ -26,6 +26,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import androidx.core.graphics.ColorUtils;
@@ -896,6 +897,11 @@ public class ViewPagerFixed extends FrameLayout {
                     canvas.restore();
                 }
             }
+
+            public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+                super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+                accessibilityNodeInfo.setSelected((this.currentTab == null || TabsView.this.selectedTabId == -1 || this.currentTab.id != TabsView.this.selectedTabId) ? false : true);
+            }
         }
 
         public TabsView(Context context) {
@@ -1025,7 +1031,7 @@ public class ViewPagerFixed extends FrameLayout {
             return this.animatingIndicator;
         }
 
-        private void scrollToTab(int i, int i2) {
+        public void scrollToTab(int i, int i2) {
             int i3 = this.currentPosition;
             boolean z = i3 < i2;
             this.scrollingToChild = -1;
@@ -1402,6 +1408,34 @@ public class ViewPagerFixed extends FrameLayout {
                 this.manualScrollingToId = -1;
                 this.currentPosition = i2;
                 this.selectedTabId = this.positionToId.get(i2);
+            }
+        }
+
+        public void selectTabWithId(int i, float f) {
+            int i2 = this.idToPosition.get(i, -1);
+            if (i2 >= 0) {
+                if (f < 0.0f) {
+                    f = 0.0f;
+                } else if (f > 1.0f) {
+                    f = 1.0f;
+                }
+                if (f > 0.0f) {
+                    this.manualScrollingToPosition = i2;
+                    this.manualScrollingToId = i;
+                } else {
+                    this.manualScrollingToPosition = -1;
+                    this.manualScrollingToId = -1;
+                }
+                this.animatingIndicatorProgress = f;
+                this.listView.invalidateViews();
+                invalidate();
+                scrollToChild(i2);
+                if (f >= 1.0f) {
+                    this.manualScrollingToPosition = -1;
+                    this.manualScrollingToId = -1;
+                    this.currentPosition = i2;
+                    this.selectedTabId = i;
+                }
             }
         }
 

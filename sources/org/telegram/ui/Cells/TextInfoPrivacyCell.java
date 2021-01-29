@@ -3,6 +3,7 @@ package org.telegram.ui.Cells;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -25,6 +26,10 @@ public class TextInfoPrivacyCell extends FrameLayout {
     private TextView textView;
     private int topPadding;
 
+    /* access modifiers changed from: protected */
+    public void onTextDraw() {
+    }
+
     public TextInfoPrivacyCell(Context context) {
         this(context, 21);
     }
@@ -34,9 +39,15 @@ public class TextInfoPrivacyCell extends FrameLayout {
         this.linkTextColorKey = "windowBackgroundWhiteLinkText";
         this.topPadding = 10;
         this.bottomPadding = 17;
-        TextView textView2 = new TextView(context);
-        this.textView = textView2;
-        textView2.setTextSize(1, 14.0f);
+        AnonymousClass1 r0 = new TextView(context) {
+            /* access modifiers changed from: protected */
+            public void onDraw(Canvas canvas) {
+                TextInfoPrivacyCell.this.onTextDraw();
+                super.onDraw(canvas);
+            }
+        };
+        this.textView = r0;
+        r0.setTextSize(1, 14.0f);
         int i2 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.textView.setPadding(0, AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(17.0f));

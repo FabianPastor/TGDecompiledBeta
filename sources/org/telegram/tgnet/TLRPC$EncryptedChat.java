@@ -13,6 +13,7 @@ public abstract class TLRPC$EncryptedChat extends TLObject {
     public long future_key_fingerprint;
     public byte[] g_a;
     public byte[] g_a_or_b;
+    public boolean history_deleted;
     public int id;
     public int in_seq_no;
     public int key_create_date;
@@ -45,6 +46,9 @@ public abstract class TLRPC$EncryptedChat extends TLObject {
                 tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatRequested_old();
                 break;
             case 332848423:
+                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatDiscarded_layer122();
+                break;
+            case 505183301:
                 tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatDiscarded();
                 break;
             case 1006044124:

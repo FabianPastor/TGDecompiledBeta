@@ -1101,8 +1101,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public boolean setCustomEndFrame(int i) {
-        int i2 = this.customEndFrame;
-        if (i2 == i || i2 > this.metaData[0]) {
+        if (this.customEndFrame == i || i > this.metaData[0]) {
             return false;
         }
         this.customEndFrame = i;

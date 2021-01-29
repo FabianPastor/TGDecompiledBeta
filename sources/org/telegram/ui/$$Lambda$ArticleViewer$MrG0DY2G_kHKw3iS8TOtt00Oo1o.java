@@ -12,6 +12,6 @@ public final /* synthetic */ class $$Lambda$ArticleViewer$MrG0DY2G_kHKw3iS8TOtt0
     }
 
     public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-        return windowInsets.consumeSystemWindowInsets();
+        return ArticleViewer.lambda$setParentActivity$7(view, windowInsets);
     }
 }

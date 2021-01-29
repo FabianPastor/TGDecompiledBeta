@@ -642,26 +642,26 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     /* JADX INFO: this call moved to the top of the method (can break code semantics) */
     /* JADX WARNING: Can't fix incorrect switch cases order */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x0148 A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x015a A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x015f A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x0164 A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x016f A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0170 A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x017a A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x0184 A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x018e A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x0198 A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x01a2 A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x01ab A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x01b9 A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x01bb A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x01c0 A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x01d3 A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x01e6 A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x0201 A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x0214 A[Catch:{ Exception -> 0x023d }] */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x022f A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x0149 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x015b A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x0160 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x0165 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0170 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0171 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x017b A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x0185 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x018f A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x0199 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x01a3 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x01ac A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x01ba A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x01bc A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x01c1 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x01d4 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x01e7 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x0203 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x0216 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x0231 A[Catch:{ Exception -> 0x023f }] */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public PassportActivity(int r20, int r21, java.lang.String r22, java.lang.String r23, java.lang.String r24, java.lang.String r25, java.lang.String r26, org.telegram.tgnet.TLRPC$TL_account_authorizationForm r27, org.telegram.tgnet.TLRPC$TL_account_password r28) {
@@ -692,23 +692,23 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r10.currentPublicKey = r0
             r0 = r26
             r10.currentCallbackUrl = r0
-            if (r20 != 0) goto L_0x023d
+            if (r20 != 0) goto L_0x023f
             java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r0 = r11.errors
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x023d
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r0 = r11.errors     // Catch:{ Exception -> 0x023d }
-            org.telegram.ui.PassportActivity$2 r1 = new org.telegram.ui.PassportActivity$2     // Catch:{ Exception -> 0x023d }
-            r1.<init>()     // Catch:{ Exception -> 0x023d }
-            java.util.Collections.sort(r0, r1)     // Catch:{ Exception -> 0x023d }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r0 = r11.errors     // Catch:{ Exception -> 0x023d }
-            int r0 = r0.size()     // Catch:{ Exception -> 0x023d }
+            if (r0 != 0) goto L_0x023f
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r0 = r11.errors     // Catch:{ Exception -> 0x023f }
+            org.telegram.ui.PassportActivity$2 r1 = new org.telegram.ui.PassportActivity$2     // Catch:{ Exception -> 0x023f }
+            r1.<init>()     // Catch:{ Exception -> 0x023f }
+            java.util.Collections.sort(r0, r1)     // Catch:{ Exception -> 0x023f }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r0 = r11.errors     // Catch:{ Exception -> 0x023f }
+            int r0 = r0.size()     // Catch:{ Exception -> 0x023f }
             r2 = 0
         L_0x0048:
-            if (r2 >= r0) goto L_0x023d
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r3 = r11.errors     // Catch:{ Exception -> 0x023d }
-            java.lang.Object r3 = r3.get(r2)     // Catch:{ Exception -> 0x023d }
-            org.telegram.tgnet.TLRPC$SecureValueError r3 = (org.telegram.tgnet.TLRPC$SecureValueError) r3     // Catch:{ Exception -> 0x023d }
-            boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorFrontSide     // Catch:{ Exception -> 0x023d }
+            if (r2 >= r0) goto L_0x023f
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r3 = r11.errors     // Catch:{ Exception -> 0x023f }
+            java.lang.Object r3 = r3.get(r2)     // Catch:{ Exception -> 0x023f }
+            org.telegram.tgnet.TLRPC$SecureValueError r3 = (org.telegram.tgnet.TLRPC$SecureValueError) r3     // Catch:{ Exception -> 0x023f }
+            boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorFrontSide     // Catch:{ Exception -> 0x023f }
             java.lang.String r5 = "data"
             r6 = 0
             java.lang.String r7 = "error_all"
@@ -717,281 +717,281 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r12 = "front"
             java.lang.String r14 = "files"
             java.lang.String r15 = "translation"
-            if (r4 == 0) goto L_0x007a
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorFrontSide r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorFrontSide) r3     // Catch:{ Exception -> 0x023d }
-            org.telegram.tgnet.TLRPC$SecureValueType r4 = r3.type     // Catch:{ Exception -> 0x023d }
-            java.lang.String r4 = r10.getNameForType(r4)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
-            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023d }
+            if (r4 == 0) goto L_0x007b
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorFrontSide r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorFrontSide) r3     // Catch:{ Exception -> 0x023f }
+            org.telegram.tgnet.TLRPC$SecureValueType r4 = r3.type     // Catch:{ Exception -> 0x023f }
+            java.lang.String r4 = r10.getNameForType(r4)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
+            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023f }
             r21 = r12
-        L_0x0073:
+        L_0x0074:
             r18 = r6
             r6 = r3
             r3 = r18
-            goto L_0x013e
-        L_0x007a:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorReverseSide     // Catch:{ Exception -> 0x023d }
-            if (r1 == 0) goto L_0x008d
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorReverseSide r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorReverseSide) r3     // Catch:{ Exception -> 0x023d }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
-            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023d }
+            goto L_0x013f
+        L_0x007b:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorReverseSide     // Catch:{ Exception -> 0x023f }
+            if (r1 == 0) goto L_0x008e
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorReverseSide r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorReverseSide) r3     // Catch:{ Exception -> 0x023f }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
+            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023f }
             r21 = r9
-            goto L_0x0073
-        L_0x008d:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorSelfie     // Catch:{ Exception -> 0x023d }
-            if (r1 == 0) goto L_0x00a0
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorSelfie r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorSelfie) r3     // Catch:{ Exception -> 0x023d }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
-            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023d }
+            goto L_0x0074
+        L_0x008e:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorSelfie     // Catch:{ Exception -> 0x023f }
+            if (r1 == 0) goto L_0x00a1
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorSelfie r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorSelfie) r3     // Catch:{ Exception -> 0x023f }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
+            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023f }
             r21 = r8
-            goto L_0x0073
-        L_0x00a0:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFile     // Catch:{ Exception -> 0x023d }
-            if (r1 == 0) goto L_0x00b3
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFile r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFile) r3     // Catch:{ Exception -> 0x023d }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
-            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023d }
+            goto L_0x0074
+        L_0x00a1:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFile     // Catch:{ Exception -> 0x023f }
+            if (r1 == 0) goto L_0x00b4
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFile r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFile) r3     // Catch:{ Exception -> 0x023f }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
+            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023f }
             r21 = r15
-            goto L_0x0073
-        L_0x00b3:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFiles     // Catch:{ Exception -> 0x023d }
-            if (r1 == 0) goto L_0x00c6
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFiles r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFiles) r3     // Catch:{ Exception -> 0x023d }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
+            goto L_0x0074
+        L_0x00b4:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFiles     // Catch:{ Exception -> 0x023f }
+            if (r1 == 0) goto L_0x00c7
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFiles r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFiles) r3     // Catch:{ Exception -> 0x023f }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
             r3 = r6
             r21 = r15
-            goto L_0x013e
-        L_0x00c6:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorFile     // Catch:{ Exception -> 0x023d }
-            if (r1 == 0) goto L_0x00d9
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorFile r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorFile) r3     // Catch:{ Exception -> 0x023d }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
-            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023d }
+            goto L_0x013f
+        L_0x00c7:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorFile     // Catch:{ Exception -> 0x023f }
+            if (r1 == 0) goto L_0x00da
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorFile r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorFile) r3     // Catch:{ Exception -> 0x023f }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
+            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023f }
             r21 = r14
-            goto L_0x0073
-        L_0x00d9:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorFiles     // Catch:{ Exception -> 0x023d }
-            if (r1 == 0) goto L_0x00eb
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorFiles r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorFiles) r3     // Catch:{ Exception -> 0x023d }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
+            goto L_0x0074
+        L_0x00da:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorFiles     // Catch:{ Exception -> 0x023f }
+            if (r1 == 0) goto L_0x00ec
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorFiles r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorFiles) r3     // Catch:{ Exception -> 0x023f }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
             r3 = r6
             r21 = r14
-            goto L_0x013e
-        L_0x00eb:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueError     // Catch:{ Exception -> 0x023d }
-            if (r1 == 0) goto L_0x00ff
-            org.telegram.tgnet.TLRPC$TL_secureValueError r3 = (org.telegram.tgnet.TLRPC$TL_secureValueError) r3     // Catch:{ Exception -> 0x023d }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
-            byte[] r3 = r3.hash     // Catch:{ Exception -> 0x023d }
+            goto L_0x013f
+        L_0x00ec:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueError     // Catch:{ Exception -> 0x023f }
+            if (r1 == 0) goto L_0x0100
+            org.telegram.tgnet.TLRPC$TL_secureValueError r3 = (org.telegram.tgnet.TLRPC$TL_secureValueError) r3     // Catch:{ Exception -> 0x023f }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
+            byte[] r3 = r3.hash     // Catch:{ Exception -> 0x023f }
             r21 = r7
-            goto L_0x0073
-        L_0x00ff:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorData     // Catch:{ Exception -> 0x023d }
-            if (r1 == 0) goto L_0x0235
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorData r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorData) r3     // Catch:{ Exception -> 0x023d }
+            goto L_0x0074
+        L_0x0100:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorData     // Catch:{ Exception -> 0x023f }
+            if (r1 == 0) goto L_0x0237
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorData r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorData) r3     // Catch:{ Exception -> 0x023f }
             r1 = 0
-        L_0x0106:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_secureValue> r4 = r11.values     // Catch:{ Exception -> 0x023d }
-            int r4 = r4.size()     // Catch:{ Exception -> 0x023d }
-            if (r1 >= r4) goto L_0x0129
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_secureValue> r4 = r11.values     // Catch:{ Exception -> 0x023d }
-            java.lang.Object r4 = r4.get(r1)     // Catch:{ Exception -> 0x023d }
-            org.telegram.tgnet.TLRPC$TL_secureValue r4 = (org.telegram.tgnet.TLRPC$TL_secureValue) r4     // Catch:{ Exception -> 0x023d }
-            org.telegram.tgnet.TLRPC$TL_secureData r4 = r4.data     // Catch:{ Exception -> 0x023d }
-            if (r4 == 0) goto L_0x0126
-            byte[] r4 = r4.data_hash     // Catch:{ Exception -> 0x023d }
-            byte[] r6 = r3.data_hash     // Catch:{ Exception -> 0x023d }
-            boolean r4 = java.util.Arrays.equals(r4, r6)     // Catch:{ Exception -> 0x023d }
-            if (r4 == 0) goto L_0x0126
+        L_0x0107:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_secureValue> r4 = r11.values     // Catch:{ Exception -> 0x023f }
+            int r4 = r4.size()     // Catch:{ Exception -> 0x023f }
+            if (r1 >= r4) goto L_0x012a
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_secureValue> r4 = r11.values     // Catch:{ Exception -> 0x023f }
+            java.lang.Object r4 = r4.get(r1)     // Catch:{ Exception -> 0x023f }
+            org.telegram.tgnet.TLRPC$TL_secureValue r4 = (org.telegram.tgnet.TLRPC$TL_secureValue) r4     // Catch:{ Exception -> 0x023f }
+            org.telegram.tgnet.TLRPC$TL_secureData r4 = r4.data     // Catch:{ Exception -> 0x023f }
+            if (r4 == 0) goto L_0x0127
+            byte[] r4 = r4.data_hash     // Catch:{ Exception -> 0x023f }
+            byte[] r6 = r3.data_hash     // Catch:{ Exception -> 0x023f }
+            boolean r4 = java.util.Arrays.equals(r4, r6)     // Catch:{ Exception -> 0x023f }
+            if (r4 == 0) goto L_0x0127
             r1 = 1
-            goto L_0x012a
-        L_0x0126:
+            goto L_0x012b
+        L_0x0127:
             int r1 = r1 + 1
-            goto L_0x0106
-        L_0x0129:
-            r1 = 0
+            goto L_0x0107
         L_0x012a:
-            if (r1 != 0) goto L_0x012e
-            goto L_0x0235
-        L_0x012e:
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
-            java.lang.String r6 = r3.field     // Catch:{ Exception -> 0x023d }
-            byte[] r3 = r3.data_hash     // Catch:{ Exception -> 0x023d }
+            r1 = 0
+        L_0x012b:
+            if (r1 != 0) goto L_0x012f
+            goto L_0x0237
+        L_0x012f:
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
+            java.lang.String r6 = r3.field     // Catch:{ Exception -> 0x023f }
+            byte[] r3 = r3.data_hash     // Catch:{ Exception -> 0x023f }
             r21 = r5
-            goto L_0x0073
-        L_0x013e:
-            java.util.HashMap<java.lang.String, java.util.HashMap<java.lang.String, java.lang.String>> r13 = r10.errorsMap     // Catch:{ Exception -> 0x023d }
-            java.lang.Object r13 = r13.get(r4)     // Catch:{ Exception -> 0x023d }
-            java.util.HashMap r13 = (java.util.HashMap) r13     // Catch:{ Exception -> 0x023d }
-            if (r13 != 0) goto L_0x015a
-            java.util.HashMap r13 = new java.util.HashMap     // Catch:{ Exception -> 0x023d }
-            r13.<init>()     // Catch:{ Exception -> 0x023d }
+            goto L_0x0074
+        L_0x013f:
+            java.util.HashMap<java.lang.String, java.util.HashMap<java.lang.String, java.lang.String>> r13 = r10.errorsMap     // Catch:{ Exception -> 0x023f }
+            java.lang.Object r13 = r13.get(r4)     // Catch:{ Exception -> 0x023f }
+            java.util.HashMap r13 = (java.util.HashMap) r13     // Catch:{ Exception -> 0x023f }
+            if (r13 != 0) goto L_0x015b
+            java.util.HashMap r13 = new java.util.HashMap     // Catch:{ Exception -> 0x023f }
+            r13.<init>()     // Catch:{ Exception -> 0x023f }
             r23 = r0
-            java.util.HashMap<java.lang.String, java.util.HashMap<java.lang.String, java.lang.String>> r0 = r10.errorsMap     // Catch:{ Exception -> 0x023d }
-            r0.put(r4, r13)     // Catch:{ Exception -> 0x023d }
-            java.util.HashMap<java.lang.String, java.lang.String> r0 = r10.mainErrorsMap     // Catch:{ Exception -> 0x023d }
-            r0.put(r4, r1)     // Catch:{ Exception -> 0x023d }
-            goto L_0x015c
-        L_0x015a:
+            java.util.HashMap<java.lang.String, java.util.HashMap<java.lang.String, java.lang.String>> r0 = r10.errorsMap     // Catch:{ Exception -> 0x023f }
+            r0.put(r4, r13)     // Catch:{ Exception -> 0x023f }
+            java.util.HashMap<java.lang.String, java.lang.String> r0 = r10.mainErrorsMap     // Catch:{ Exception -> 0x023f }
+            r0.put(r4, r1)     // Catch:{ Exception -> 0x023f }
+            goto L_0x015d
+        L_0x015b:
             r23 = r0
-        L_0x015c:
+        L_0x015d:
             r0 = 2
-            if (r6 == 0) goto L_0x0164
-            java.lang.String r4 = android.util.Base64.encodeToString(r6, r0)     // Catch:{ Exception -> 0x023d }
-            goto L_0x0166
-        L_0x0164:
+            if (r6 == 0) goto L_0x0165
+            java.lang.String r4 = android.util.Base64.encodeToString(r6, r0)     // Catch:{ Exception -> 0x023f }
+            goto L_0x0167
+        L_0x0165:
             java.lang.String r4 = ""
-        L_0x0166:
+        L_0x0167:
             r16 = -1
-            int r17 = r21.hashCode()     // Catch:{ Exception -> 0x023d }
+            int r17 = r21.hashCode()     // Catch:{ Exception -> 0x023f }
             switch(r17) {
-                case -1840647503: goto L_0x01ab;
-                case -906020504: goto L_0x01a2;
-                case 3076010: goto L_0x0198;
-                case 97434231: goto L_0x018e;
-                case 97705513: goto L_0x0184;
-                case 329856746: goto L_0x017a;
-                case 1099846370: goto L_0x0170;
-                default: goto L_0x016f;
-            }     // Catch:{ Exception -> 0x023d }
-        L_0x016f:
-            goto L_0x01b5
+                case -1840647503: goto L_0x01ac;
+                case -906020504: goto L_0x01a3;
+                case 3076010: goto L_0x0199;
+                case 97434231: goto L_0x018f;
+                case 97705513: goto L_0x0185;
+                case 329856746: goto L_0x017b;
+                case 1099846370: goto L_0x0171;
+                default: goto L_0x0170;
+            }     // Catch:{ Exception -> 0x023f }
         L_0x0170:
+            goto L_0x01b6
+        L_0x0171:
             r0 = r21
-            boolean r0 = r0.equals(r9)     // Catch:{ Exception -> 0x023d }
-            if (r0 == 0) goto L_0x01b5
+            boolean r0 = r0.equals(r9)     // Catch:{ Exception -> 0x023f }
+            if (r0 == 0) goto L_0x01b6
             r0 = 5
-            goto L_0x01b6
-        L_0x017a:
+            goto L_0x01b7
+        L_0x017b:
             r0 = r21
-            boolean r0 = r0.equals(r7)     // Catch:{ Exception -> 0x023d }
-            if (r0 == 0) goto L_0x01b5
+            boolean r0 = r0.equals(r7)     // Catch:{ Exception -> 0x023f }
+            if (r0 == 0) goto L_0x01b6
             r0 = 6
-            goto L_0x01b6
-        L_0x0184:
+            goto L_0x01b7
+        L_0x0185:
             r0 = r21
-            boolean r0 = r0.equals(r12)     // Catch:{ Exception -> 0x023d }
-            if (r0 == 0) goto L_0x01b5
+            boolean r0 = r0.equals(r12)     // Catch:{ Exception -> 0x023f }
+            if (r0 == 0) goto L_0x01b6
             r0 = 4
-            goto L_0x01b6
-        L_0x018e:
+            goto L_0x01b7
+        L_0x018f:
             r0 = r21
-            boolean r0 = r0.equals(r14)     // Catch:{ Exception -> 0x023d }
-            if (r0 == 0) goto L_0x01b5
+            boolean r0 = r0.equals(r14)     // Catch:{ Exception -> 0x023f }
+            if (r0 == 0) goto L_0x01b6
             r0 = 1
-            goto L_0x01b6
-        L_0x0198:
+            goto L_0x01b7
+        L_0x0199:
             r0 = r21
-            boolean r0 = r0.equals(r5)     // Catch:{ Exception -> 0x023d }
-            if (r0 == 0) goto L_0x01b5
+            boolean r0 = r0.equals(r5)     // Catch:{ Exception -> 0x023f }
+            if (r0 == 0) goto L_0x01b6
             r0 = 0
-            goto L_0x01b6
-        L_0x01a2:
+            goto L_0x01b7
+        L_0x01a3:
             r5 = r21
-            boolean r5 = r5.equals(r8)     // Catch:{ Exception -> 0x023d }
-            if (r5 == 0) goto L_0x01b5
-            goto L_0x01b6
-        L_0x01ab:
+            boolean r5 = r5.equals(r8)     // Catch:{ Exception -> 0x023f }
+            if (r5 == 0) goto L_0x01b6
+            goto L_0x01b7
+        L_0x01ac:
             r5 = r21
-            boolean r0 = r5.equals(r15)     // Catch:{ Exception -> 0x023d }
-            if (r0 == 0) goto L_0x01b5
+            boolean r0 = r5.equals(r15)     // Catch:{ Exception -> 0x023f }
+            if (r0 == 0) goto L_0x01b6
             r0 = 3
-            goto L_0x01b6
-        L_0x01b5:
-            r0 = -1
+            goto L_0x01b7
         L_0x01b6:
+            r0 = -1
+        L_0x01b7:
             switch(r0) {
-                case 0: goto L_0x022f;
-                case 1: goto L_0x0214;
-                case 2: goto L_0x0201;
-                case 3: goto L_0x01e6;
-                case 4: goto L_0x01d3;
-                case 5: goto L_0x01c0;
-                case 6: goto L_0x01bb;
-                default: goto L_0x01b9;
-            }     // Catch:{ Exception -> 0x023d }
-        L_0x01b9:
-            goto L_0x0237
-        L_0x01bb:
-            r13.put(r7, r1)     // Catch:{ Exception -> 0x023d }
-            goto L_0x0237
-        L_0x01c0:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023d }
-            r0.<init>()     // Catch:{ Exception -> 0x023d }
-            r0.append(r9)     // Catch:{ Exception -> 0x023d }
-            r0.append(r4)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023d }
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
-            goto L_0x0237
-        L_0x01d3:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023d }
-            r0.<init>()     // Catch:{ Exception -> 0x023d }
-            r0.append(r12)     // Catch:{ Exception -> 0x023d }
-            r0.append(r4)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023d }
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
-            goto L_0x0237
-        L_0x01e6:
-            if (r6 == 0) goto L_0x01fb
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023d }
-            r0.<init>()     // Catch:{ Exception -> 0x023d }
-            r0.append(r15)     // Catch:{ Exception -> 0x023d }
-            r0.append(r4)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023d }
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
-            goto L_0x0237
-        L_0x01fb:
+                case 0: goto L_0x0231;
+                case 1: goto L_0x0216;
+                case 2: goto L_0x0203;
+                case 3: goto L_0x01e7;
+                case 4: goto L_0x01d4;
+                case 5: goto L_0x01c1;
+                case 6: goto L_0x01bc;
+                default: goto L_0x01ba;
+            }     // Catch:{ Exception -> 0x023f }
+        L_0x01ba:
+            goto L_0x0239
+        L_0x01bc:
+            r13.put(r7, r1)     // Catch:{ Exception -> 0x023f }
+            goto L_0x0239
+        L_0x01c1:
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023f }
+            r0.<init>()     // Catch:{ Exception -> 0x023f }
+            r0.append(r9)     // Catch:{ Exception -> 0x023f }
+            r0.append(r4)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023f }
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
+            goto L_0x0239
+        L_0x01d4:
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023f }
+            r0.<init>()     // Catch:{ Exception -> 0x023f }
+            r0.append(r12)     // Catch:{ Exception -> 0x023f }
+            r0.append(r4)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023f }
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
+            goto L_0x0239
+        L_0x01e7:
+            if (r6 == 0) goto L_0x01fc
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023f }
+            r0.<init>()     // Catch:{ Exception -> 0x023f }
+            r0.append(r15)     // Catch:{ Exception -> 0x023f }
+            r0.append(r4)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023f }
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
+            goto L_0x0239
+        L_0x01fc:
             java.lang.String r0 = "translation_all"
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
-            goto L_0x0237
-        L_0x0201:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023d }
-            r0.<init>()     // Catch:{ Exception -> 0x023d }
-            r0.append(r8)     // Catch:{ Exception -> 0x023d }
-            r0.append(r4)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023d }
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
-            goto L_0x0237
-        L_0x0214:
-            if (r6 == 0) goto L_0x0229
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023d }
-            r0.<init>()     // Catch:{ Exception -> 0x023d }
-            r0.append(r14)     // Catch:{ Exception -> 0x023d }
-            r0.append(r4)     // Catch:{ Exception -> 0x023d }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023d }
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
-            goto L_0x0237
-        L_0x0229:
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
+            goto L_0x0239
+        L_0x0203:
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023f }
+            r0.<init>()     // Catch:{ Exception -> 0x023f }
+            r0.append(r8)     // Catch:{ Exception -> 0x023f }
+            r0.append(r4)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023f }
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
+            goto L_0x0239
+        L_0x0216:
+            if (r6 == 0) goto L_0x022b
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023f }
+            r0.<init>()     // Catch:{ Exception -> 0x023f }
+            r0.append(r14)     // Catch:{ Exception -> 0x023f }
+            r0.append(r4)     // Catch:{ Exception -> 0x023f }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023f }
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
+            goto L_0x0239
+        L_0x022b:
             java.lang.String r0 = "files_all"
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
-            goto L_0x0237
-        L_0x022f:
-            if (r3 == 0) goto L_0x0237
-            r13.put(r3, r1)     // Catch:{ Exception -> 0x023d }
-            goto L_0x0237
-        L_0x0235:
-            r23 = r0
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
+            goto L_0x0239
+        L_0x0231:
+            if (r3 == 0) goto L_0x0239
+            r13.put(r3, r1)     // Catch:{ Exception -> 0x023f }
+            goto L_0x0239
         L_0x0237:
+            r23 = r0
+        L_0x0239:
             int r2 = r2 + 1
             r0 = r23
             goto L_0x0048
-        L_0x023d:
+        L_0x023f:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.<init>(int, int, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.telegram.tgnet.TLRPC$TL_account_authorizationForm, org.telegram.tgnet.TLRPC$TL_account_password):void");
@@ -1277,7 +1277,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r1 = org.telegram.ui.PassportActivity.this
                     org.telegram.ui.Components.EditTextBoldCursor[] r1 = r1.inputFields
                     r1 = r1[r12]
-                    r2 = 2131626570(0x7f0e0a4a, float:1.888038E38)
+                    r2 = 2131626648(0x7f0e0a98, float:1.8880538E38)
                     java.lang.String r3 = "PassportUseLatinOnly"
                     java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                     r1.setErrorText(r2)
@@ -1349,7 +1349,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r0 = org.telegram.ui.PassportActivity.this
                     android.app.Activity r0 = r0.getParentActivity()
                     r13.<init>((android.content.Context) r0)
-                    r0 = 2131626516(0x7f0e0a14, float:1.888027E38)
+                    r0 = 2131626594(0x7f0e0a62, float:1.8880429E38)
                     java.lang.Object[] r1 = new java.lang.Object[r9]
                     r1[r8] = r2
                     r1[r11] = r3
@@ -1357,11 +1357,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     java.lang.String r5 = "PassportNameCheckAlert"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r5, r0, r1)
                     r13.setMessage(r0)
-                    r0 = 2131624263(0x7f0e0147, float:1.88757E38)
+                    r0 = 2131624266(0x7f0e014a, float:1.8875707E38)
                     java.lang.String r1 = "AppName"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     r13.setTitle(r0)
-                    r0 = 2131625129(0x7f0e04a9, float:1.8877457E38)
+                    r0 = 2131625147(0x7f0e04bb, float:1.8877494E38)
                     java.lang.String r1 = "Done"
                     java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     org.telegram.ui.-$$Lambda$PassportActivity$3$ncxI1nQh6qvD1Chi9RgN1WB6iuI r15 = new org.telegram.ui.-$$Lambda$PassportActivity$3$ncxI1nQh6qvD1Chi9RgN1WB6iuI
@@ -1371,7 +1371,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     r6 = r27
                     r0.<init>(r2, r3, r4, r5, r6)
                     r13.setPositiveButton(r14, r15)
-                    r0 = 2131625131(0x7f0e04ab, float:1.8877461E38)
+                    r0 = 2131625149(0x7f0e04bd, float:1.8877498E38)
                     java.lang.String r1 = "Edit"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     org.telegram.ui.-$$Lambda$PassportActivity$3$KwVL_83qCsZr-goHF2MdOvo6dKk r1 = new org.telegram.ui.-$$Lambda$PassportActivity$3$KwVL_83qCsZr-goHF2MdOvo6dKk
@@ -1738,7 +1738,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r2 = org.telegram.ui.PassportActivity.this
                     android.app.Activity r2 = r2.getParentActivity()
                     r1.<init>(r2)
-                    r2 = 2131626460(0x7f0e09dc, float:1.8880157E38)
+                    r2 = 2131626538(0x7f0e0a2a, float:1.8880315E38)
                     java.lang.String r7 = "PassportInfo2"
                     java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r7, r2)
                     android.text.SpannableStringBuilder r7 = new android.text.SpannableStringBuilder
@@ -1754,7 +1754,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     int r3 = r9 + 1
                     r7.replace(r9, r3, r8)
                     org.telegram.ui.PassportActivity$3$1 r3 = new org.telegram.ui.PassportActivity$3$1
-                    r8 = 2131626462(0x7f0e09de, float:1.888016E38)
+                    r8 = 2131626540(0x7f0e0a2c, float:1.888032E38)
                     java.lang.String r10 = "PassportInfoUrl"
                     java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                     r3.<init>(r8)
@@ -1786,11 +1786,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     android.app.Activity r3 = r3.getParentActivity()
                     r2.<init>((android.content.Context) r3)
                     r2.setView(r1)
-                    r1 = 2131626461(0x7f0e09dd, float:1.8880159E38)
+                    r1 = 2131626539(0x7f0e0a2b, float:1.8880317E38)
                     java.lang.String r3 = "PassportInfoTitle"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                     r2.setTitle(r1)
-                    r1 = 2131624856(0x7f0e0398, float:1.8876904E38)
+                    r1 = 2131624861(0x7f0e039d, float:1.8876914E38)
                     java.lang.String r3 = "Close"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                     r2.setNegativeButton(r1, r5)
@@ -3441,19 +3441,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.FrameLayout r0 = (android.widget.FrameLayout) r0
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r1 = "TelegramPassport"
-            r2 = 2131627370(0x7f0e0d6a, float:1.8882003E38)
+            r2 = 2131627465(0x7f0e0dc9, float:1.8882195E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setTitle(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
             r8 = 1
-            r1 = 2131165932(0x7var_ec, float:1.7946095E38)
+            r1 = 2131165944(0x7var_f8, float:1.794612E38)
             r0.addItem((int) r8, (int) r1)
             org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
             r0.<init>(r7)
             r6.headerCell = r0
             java.lang.String r1 = "PassportProvidedInformation"
-            r2 = 2131626540(0x7f0e0a2c, float:1.888032E38)
+            r2 = 2131626618(0x7f0e0a7a, float:1.8880477E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setText(r1)
             org.telegram.ui.Cells.HeaderCell r0 = r6.headerCell
@@ -3469,7 +3469,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.ShadowSectionCell r0 = new org.telegram.ui.Cells.ShadowSectionCell
             r0.<init>(r7)
             r6.sectionCell = r0
-            r1 = 2131165446(0x7var_, float:1.794511E38)
+            r1 = 2131165448(0x7var_, float:1.7945113E38)
             java.lang.String r4 = "windowBackgroundGrayShadow"
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r1, (java.lang.String) r4)
             r0.setBackgroundDrawable(r1)
@@ -3484,7 +3484,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r1)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.addDocumentCell
             java.lang.String r1 = "PassportNoDocumentsAdd"
-            r5 = 2131626523(0x7f0e0a1b, float:1.8880285E38)
+            r5 = 2131626601(0x7f0e0a69, float:1.8880443E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r1, r5)
             r0.setText(r9, r8)
             android.widget.LinearLayout r0 = r6.linearLayout2
@@ -3506,7 +3506,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r9)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.deletePassportCell
             java.lang.String r9 = "TelegramPassportDelete"
-            r10 = 2131627373(0x7f0e0d6d, float:1.8882009E38)
+            r10 = 2131627468(0x7f0e0dcc, float:1.8882201E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r10 = 0
             r0.setText(r9, r10)
@@ -3521,7 +3521,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.ShadowSectionCell r0 = new org.telegram.ui.Cells.ShadowSectionCell
             r0.<init>(r7)
             r6.addDocumentSectionCell = r0
-            r9 = 2131165447(0x7var_, float:1.7945111E38)
+            r9 = 2131165449(0x7var_, float:1.7945115E38)
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r9, (java.lang.String) r4)
             r0.setBackgroundDrawable(r11)
             android.widget.LinearLayout r0 = r6.linearLayout2
@@ -3564,7 +3564,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.emptyImageView = r0
-            r2 = 2131165826(0x7var_, float:1.794588E38)
+            r2 = 2131165838(0x7var_e, float:1.7945904E38)
             r0.setImageResource(r2)
             android.widget.ImageView r0 = r6.emptyImageView
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -3593,7 +3593,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.graphics.Typeface r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r0.setTypeface(r9)
             android.widget.TextView r0 = r6.emptyTextView1
-            r9 = 2131626522(0x7f0e0a1a, float:1.8880283E38)
+            r9 = 2131626600(0x7f0e0a68, float:1.888044E38)
             java.lang.String r12 = "PassportNoDocuments"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r12, r9)
             r0.setText(r9)
@@ -3624,7 +3624,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r0.setPadding(r9, r10, r2, r10)
             android.widget.TextView r0 = r6.emptyTextView2
-            r2 = 2131626524(0x7f0e0a1c, float:1.8880287E38)
+            r2 = 2131626602(0x7f0e0a6a, float:1.8880445E38)
             java.lang.String r9 = "PassportNoDocumentsInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r2)
             r0.setText(r2)
@@ -4132,7 +4132,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r2 = r25
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
             java.lang.String r3 = "PassportPhone"
-            r4 = 2131626531(0x7f0e0a23, float:1.88803E38)
+            r4 = 2131626609(0x7f0e0a71, float:1.888046E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r0.setTitle(r3)
             java.util.HashMap r0 = new java.util.HashMap
@@ -4199,7 +4199,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setTextColor(r8)
             android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
             r7.setBackgroundDrawable(r8)
-            r8 = 2131626535(0x7f0e0a27, float:1.8880309E38)
+            r8 = 2131626613(0x7f0e0a75, float:1.8880467E38)
             java.lang.Object[] r9 = new java.lang.Object[r5]
             org.telegram.PhoneFormat.PhoneFormat r10 = org.telegram.PhoneFormat.PhoneFormat.getInstance()
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -4224,12 +4224,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r0.<init>(r2)
             r1.bottomCell = r0
-            r7 = 2131165447(0x7var_, float:1.7945111E38)
+            r7 = 2131165449(0x7var_, float:1.7945115E38)
             java.lang.String r10 = "windowBackgroundGrayShadow"
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r7, (java.lang.String) r10)
             r0.setBackgroundDrawable(r11)
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r1.bottomCell
-            r11 = 2131626537(0x7f0e0a29, float:1.8880313E38)
+            r11 = 2131626615(0x7f0e0a77, float:1.8880471E38)
             java.lang.String r13 = "PassportPhoneUseSameInfo"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
             r0.setText(r11)
@@ -4240,7 +4240,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
             r0.<init>(r2)
             r1.headerCell = r0
-            r11 = 2131626534(0x7f0e0a26, float:1.8880307E38)
+            r11 = 2131626612(0x7f0e0a74, float:1.8880465E38)
             java.lang.String r13 = "PassportPhoneUseOther"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
             r0.setText(r11)
@@ -4340,7 +4340,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setOnTouchListener(r8)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r8 = 2131624814(0x7f0e036e, float:1.8876818E38)
+            r8 = 2131624819(0x7f0e0373, float:1.8876828E38)
             java.lang.String r13 = "ChooseCountry"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r13, r8)
             r7.setText(r8)
@@ -4435,7 +4435,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setHintText(r8)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r8 = 2131626629(0x7f0e0a85, float:1.88805E38)
+            r8 = 2131626707(0x7f0e0ad3, float:1.8880658E38)
             java.lang.String r9 = "PaymentShippingPhoneNumber"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r7.setHint(r8)
@@ -4509,7 +4509,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r15.addView(r7, r8)
         L_0x036f:
             int r0 = r0 + 1
-            r7 = 2131165447(0x7var_, float:1.7945111E38)
+            r7 = 2131165449(0x7var_, float:1.7945115E38)
             r8 = -1
             r9 = -2
             goto L_0x0139
@@ -4549,11 +4549,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r0.<init>(r2)
             r1.bottomCell = r0
-            r3 = 2131165447(0x7var_, float:1.7945111E38)
+            r3 = 2131165449(0x7var_, float:1.7945115E38)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r10)
             r0.setBackgroundDrawable(r2)
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r1.bottomCell
-            r2 = 2131626533(0x7f0e0a25, float:1.8880305E38)
+            r2 = 2131626611(0x7f0e0a73, float:1.8880463E38)
             java.lang.String r3 = "PassportPhoneUploadInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -5236,22 +5236,22 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:126:0x0216, code lost:
-        if (r6 != 5) goto L_0x0228;
+    /* JADX WARNING: Code restructure failed: missing block: B:126:0x0218, code lost:
+        if (r6 != 5) goto L_0x022a;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:167:0x028c, code lost:
-        if (r8 > 24) goto L_0x0298;
+    /* JADX WARNING: Code restructure failed: missing block: B:167:0x028e, code lost:
+        if (r8 > 24) goto L_0x029a;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:171:0x0296, code lost:
-        if (r8 < 2) goto L_0x0298;
+    /* JADX WARNING: Code restructure failed: missing block: B:171:0x0298, code lost:
+        if (r8 < 2) goto L_0x029a;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:176:0x02a6, code lost:
-        if (r8 < 2) goto L_0x0298;
+    /* JADX WARNING: Code restructure failed: missing block: B:176:0x02a8, code lost:
+        if (r8 < 2) goto L_0x029a;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:180:0x02af, code lost:
-        if (r8 > 10) goto L_0x0298;
+    /* JADX WARNING: Code restructure failed: missing block: B:180:0x02b1, code lost:
+        if (r8 > 10) goto L_0x029a;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:134:0x022b  */
+    /* JADX WARNING: Removed duplicated region for block: B:134:0x022d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean checkFieldsForError() {
         /*
@@ -5259,16 +5259,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r0 = r13.currentDocumentsType
             r1 = 0
             r2 = 1
-            if (r0 == 0) goto L_0x019f
+            if (r0 == 0) goto L_0x01a1
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r13.errorsValues
             java.lang.String r3 = "error_all"
             boolean r0 = r0.containsKey(r3)
-            if (r0 != 0) goto L_0x0199
+            if (r0 != 0) goto L_0x019b
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r13.errorsValues
             java.lang.String r3 = "error_document_all"
             boolean r0 = r0.containsKey(r3)
             if (r0 == 0) goto L_0x001c
-            goto L_0x0199
+            goto L_0x019b
         L_0x001c:
             org.telegram.ui.Cells.TextSettingsCell r0 = r13.uploadDocumentCell
             if (r0 == 0) goto L_0x006d
@@ -5310,20 +5310,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r13.errorsValues
             java.lang.String r3 = "files_all"
             boolean r0 = r0.containsKey(r3)
-            if (r0 != 0) goto L_0x0193
+            if (r0 != 0) goto L_0x0195
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r13.errorsValues
             java.lang.String r3 = "translation_all"
             boolean r0 = r0.containsKey(r3)
-            if (r0 == 0) goto L_0x0083
-            goto L_0x0193
-        L_0x0083:
+            if (r0 == 0) goto L_0x0084
+            goto L_0x0195
+        L_0x0084:
             org.telegram.ui.Cells.TextDetailSettingsCell r0 = r13.uploadFrontCell
-            if (r0 == 0) goto L_0x00bc
+            if (r0 == 0) goto L_0x00bd
             org.telegram.messenger.SecureDocument r3 = r13.frontDocument
-            if (r3 != 0) goto L_0x008f
+            if (r3 != 0) goto L_0x0090
             r13.onFieldError(r0)
             return r2
-        L_0x008f:
+        L_0x0090:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r3 = "front"
@@ -5334,28 +5334,28 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r0 = r0.toString()
             java.util.HashMap<java.lang.String, java.lang.String> r3 = r13.errorsValues
             boolean r0 = r3.containsKey(r0)
-            if (r0 == 0) goto L_0x00bc
+            if (r0 == 0) goto L_0x00bd
             java.util.HashMap<org.telegram.messenger.SecureDocument, org.telegram.ui.PassportActivity$SecureDocumentCell> r0 = r13.documentsCells
             org.telegram.messenger.SecureDocument r1 = r13.frontDocument
             java.lang.Object r0 = r0.get(r1)
             android.view.View r0 = (android.view.View) r0
             r13.onFieldError(r0)
             return r2
-        L_0x00bc:
+        L_0x00bd:
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r0 = r13.currentDocumentsType
             org.telegram.tgnet.TLRPC$SecureValueType r0 = r0.type
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeIdentityCard
-            if (r3 != 0) goto L_0x00c8
+            if (r3 != 0) goto L_0x00c9
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeDriverLicense
-            if (r0 == 0) goto L_0x0101
-        L_0x00c8:
+            if (r0 == 0) goto L_0x0102
+        L_0x00c9:
             org.telegram.ui.Cells.TextDetailSettingsCell r0 = r13.uploadReverseCell
-            if (r0 == 0) goto L_0x0101
+            if (r0 == 0) goto L_0x0102
             org.telegram.messenger.SecureDocument r3 = r13.reverseDocument
-            if (r3 != 0) goto L_0x00d4
+            if (r3 != 0) goto L_0x00d5
             r13.onFieldError(r0)
             return r2
-        L_0x00d4:
+        L_0x00d5:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r3 = "reverse"
@@ -5366,23 +5366,23 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r0 = r0.toString()
             java.util.HashMap<java.lang.String, java.lang.String> r3 = r13.errorsValues
             boolean r0 = r3.containsKey(r0)
-            if (r0 == 0) goto L_0x0101
+            if (r0 == 0) goto L_0x0102
             java.util.HashMap<org.telegram.messenger.SecureDocument, org.telegram.ui.PassportActivity$SecureDocumentCell> r0 = r13.documentsCells
             org.telegram.messenger.SecureDocument r1 = r13.reverseDocument
             java.lang.Object r0 = r0.get(r1)
             android.view.View r0 = (android.view.View) r0
             r13.onFieldError(r0)
             return r2
-        L_0x0101:
+        L_0x0102:
             org.telegram.ui.Cells.TextDetailSettingsCell r0 = r13.uploadSelfieCell
-            if (r0 == 0) goto L_0x013e
+            if (r0 == 0) goto L_0x013f
             int r3 = r13.currentBotId
-            if (r3 == 0) goto L_0x013e
+            if (r3 == 0) goto L_0x013f
             org.telegram.messenger.SecureDocument r3 = r13.selfieDocument
-            if (r3 != 0) goto L_0x0111
+            if (r3 != 0) goto L_0x0112
             r13.onFieldError(r0)
             return r2
-        L_0x0111:
+        L_0x0112:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r3 = "selfie"
@@ -5393,30 +5393,30 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r0 = r0.toString()
             java.util.HashMap<java.lang.String, java.lang.String> r3 = r13.errorsValues
             boolean r0 = r3.containsKey(r0)
-            if (r0 == 0) goto L_0x013e
+            if (r0 == 0) goto L_0x013f
             java.util.HashMap<org.telegram.messenger.SecureDocument, org.telegram.ui.PassportActivity$SecureDocumentCell> r0 = r13.documentsCells
             org.telegram.messenger.SecureDocument r1 = r13.selfieDocument
             java.lang.Object r0 = r0.get(r1)
             android.view.View r0 = (android.view.View) r0
             r13.onFieldError(r0)
             return r2
-        L_0x013e:
+        L_0x013f:
             org.telegram.ui.Cells.TextSettingsCell r0 = r13.uploadTranslationCell
-            if (r0 == 0) goto L_0x019f
+            if (r0 == 0) goto L_0x01a1
             int r0 = r13.currentBotId
-            if (r0 == 0) goto L_0x019f
+            if (r0 == 0) goto L_0x01a1
             java.util.ArrayList<org.telegram.messenger.SecureDocument> r0 = r13.translationDocuments
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x0154
+            if (r0 == 0) goto L_0x0155
             org.telegram.ui.Cells.TextSettingsCell r0 = r13.uploadTranslationCell
             r13.onFieldError(r0)
             return r2
-        L_0x0154:
+        L_0x0155:
             java.util.ArrayList<org.telegram.messenger.SecureDocument> r0 = r13.translationDocuments
             int r0 = r0.size()
             r3 = 0
-        L_0x015b:
-            if (r3 >= r0) goto L_0x019f
+        L_0x015c:
+            if (r3 >= r0) goto L_0x01a1
             java.util.ArrayList<org.telegram.messenger.SecureDocument> r4 = r13.translationDocuments
             java.lang.Object r4 = r4.get(r3)
             org.telegram.messenger.SecureDocument r4 = (org.telegram.messenger.SecureDocument) r4
@@ -5427,246 +5427,246 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r6 = r13.getDocumentHash(r4)
             r5.append(r6)
             java.lang.String r5 = r5.toString()
-            if (r5 == 0) goto L_0x0190
+            if (r5 == 0) goto L_0x0192
             java.util.HashMap<java.lang.String, java.lang.String> r6 = r13.errorsValues
             boolean r5 = r6.containsKey(r5)
-            if (r5 == 0) goto L_0x0190
+            if (r5 == 0) goto L_0x0192
             java.util.HashMap<org.telegram.messenger.SecureDocument, org.telegram.ui.PassportActivity$SecureDocumentCell> r0 = r13.documentsCells
             java.lang.Object r0 = r0.get(r4)
             android.view.View r0 = (android.view.View) r0
             r13.onFieldError(r0)
             return r2
-        L_0x0190:
+        L_0x0192:
             int r3 = r3 + 1
-            goto L_0x015b
-        L_0x0193:
+            goto L_0x015c
+        L_0x0195:
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r13.bottomCell
             r13.onFieldError(r0)
             return r2
-        L_0x0199:
+        L_0x019b:
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r13.topErrorCell
             r13.onFieldError(r0)
             return r2
-        L_0x019f:
+        L_0x01a1:
             r0 = 0
-        L_0x01a0:
+        L_0x01a2:
             r3 = 2
-            if (r0 >= r3) goto L_0x02ca
+            if (r0 >= r3) goto L_0x02cc
             r4 = 0
-            if (r0 != 0) goto L_0x01a9
+            if (r0 != 0) goto L_0x01ab
             org.telegram.ui.Components.EditTextBoldCursor[] r5 = r13.inputFields
-            goto L_0x01b7
-        L_0x01a9:
+            goto L_0x01b9
+        L_0x01ab:
             org.telegram.ui.Cells.TextInfoPrivacyCell r5 = r13.nativeInfoCell
-            if (r5 == 0) goto L_0x01b6
+            if (r5 == 0) goto L_0x01b8
             int r5 = r5.getVisibility()
-            if (r5 != 0) goto L_0x01b6
+            if (r5 != 0) goto L_0x01b8
             org.telegram.ui.Components.EditTextBoldCursor[] r5 = r13.inputExtraFields
-            goto L_0x01b7
-        L_0x01b6:
+            goto L_0x01b9
+        L_0x01b8:
             r5 = r4
-        L_0x01b7:
-            if (r5 != 0) goto L_0x01bb
-            goto L_0x02c6
-        L_0x01bb:
+        L_0x01b9:
+            if (r5 != 0) goto L_0x01bd
+            goto L_0x02c8
+        L_0x01bd:
             r6 = 0
-        L_0x01bc:
+        L_0x01be:
             int r7 = r5.length
-            if (r6 >= r7) goto L_0x02c6
+            if (r6 >= r7) goto L_0x02c8
             r7 = r5[r6]
             boolean r7 = r7.hasErrorText()
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r13.errorsValues
             boolean r8 = r8.isEmpty()
             r9 = 4
             r10 = 3
-            if (r8 != 0) goto L_0x024a
+            if (r8 != 0) goto L_0x024c
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r8 = r13.currentType
             org.telegram.tgnet.TLRPC$SecureValueType r8 = r8.type
             boolean r11 = r8 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
             java.lang.String r12 = "country_code"
-            if (r11 == 0) goto L_0x0207
-            if (r0 != 0) goto L_0x01f7
+            if (r11 == 0) goto L_0x0209
+            if (r0 != 0) goto L_0x01f9
             switch(r6) {
-                case 0: goto L_0x01f4;
-                case 1: goto L_0x01f1;
-                case 2: goto L_0x01ee;
-                case 3: goto L_0x01eb;
-                case 4: goto L_0x01e8;
-                case 5: goto L_0x0229;
-                case 6: goto L_0x01e5;
-                case 7: goto L_0x01e2;
-                case 8: goto L_0x01df;
-                default: goto L_0x01de;
+                case 0: goto L_0x01f6;
+                case 1: goto L_0x01f3;
+                case 2: goto L_0x01f0;
+                case 3: goto L_0x01ed;
+                case 4: goto L_0x01ea;
+                case 5: goto L_0x022b;
+                case 6: goto L_0x01e7;
+                case 7: goto L_0x01e4;
+                case 8: goto L_0x01e1;
+                default: goto L_0x01e0;
             }
-        L_0x01de:
-            goto L_0x0228
-        L_0x01df:
+        L_0x01e0:
+            goto L_0x022a
+        L_0x01e1:
             java.lang.String r12 = "expiry_date"
-            goto L_0x0229
-        L_0x01e2:
+            goto L_0x022b
+        L_0x01e4:
             java.lang.String r12 = "document_no"
-            goto L_0x0229
-        L_0x01e5:
+            goto L_0x022b
+        L_0x01e7:
             java.lang.String r12 = "residence_country_code"
-            goto L_0x0229
-        L_0x01e8:
+            goto L_0x022b
+        L_0x01ea:
             java.lang.String r12 = "gender"
-            goto L_0x0229
-        L_0x01eb:
+            goto L_0x022b
+        L_0x01ed:
             java.lang.String r12 = "birth_date"
-            goto L_0x0229
-        L_0x01ee:
+            goto L_0x022b
+        L_0x01f0:
             java.lang.String r12 = "last_name"
-            goto L_0x0229
-        L_0x01f1:
+            goto L_0x022b
+        L_0x01f3:
             java.lang.String r12 = "middle_name"
-            goto L_0x0229
-        L_0x01f4:
+            goto L_0x022b
+        L_0x01f6:
             java.lang.String r12 = "first_name"
-            goto L_0x0229
-        L_0x01f7:
-            if (r6 == 0) goto L_0x0204
-            if (r6 == r2) goto L_0x0201
-            if (r6 == r3) goto L_0x01fe
-            goto L_0x0228
-        L_0x01fe:
+            goto L_0x022b
+        L_0x01f9:
+            if (r6 == 0) goto L_0x0206
+            if (r6 == r2) goto L_0x0203
+            if (r6 == r3) goto L_0x0200
+            goto L_0x022a
+        L_0x0200:
             java.lang.String r12 = "last_name_native"
-            goto L_0x0229
-        L_0x0201:
+            goto L_0x022b
+        L_0x0203:
             java.lang.String r12 = "middle_name_native"
-            goto L_0x0229
-        L_0x0204:
+            goto L_0x022b
+        L_0x0206:
             java.lang.String r12 = "first_name_native"
-            goto L_0x0229
-        L_0x0207:
+            goto L_0x022b
+        L_0x0209:
             boolean r8 = r8 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress
-            if (r8 == 0) goto L_0x0228
-            if (r6 == 0) goto L_0x0225
-            if (r6 == r2) goto L_0x0222
-            if (r6 == r3) goto L_0x021f
-            if (r6 == r10) goto L_0x021c
-            if (r6 == r9) goto L_0x0219
+            if (r8 == 0) goto L_0x022a
+            if (r6 == 0) goto L_0x0227
+            if (r6 == r2) goto L_0x0224
+            if (r6 == r3) goto L_0x0221
+            if (r6 == r10) goto L_0x021e
+            if (r6 == r9) goto L_0x021b
             r8 = 5
-            if (r6 == r8) goto L_0x0229
-            goto L_0x0228
-        L_0x0219:
+            if (r6 == r8) goto L_0x022b
+            goto L_0x022a
+        L_0x021b:
             java.lang.String r12 = "state"
-            goto L_0x0229
-        L_0x021c:
+            goto L_0x022b
+        L_0x021e:
             java.lang.String r12 = "city"
-            goto L_0x0229
-        L_0x021f:
+            goto L_0x022b
+        L_0x0221:
             java.lang.String r12 = "post_code"
-            goto L_0x0229
-        L_0x0222:
+            goto L_0x022b
+        L_0x0224:
             java.lang.String r12 = "street_line2"
-            goto L_0x0229
-        L_0x0225:
+            goto L_0x022b
+        L_0x0227:
             java.lang.String r12 = "street_line1"
-            goto L_0x0229
-        L_0x0228:
+            goto L_0x022b
+        L_0x022a:
             r12 = r4
-        L_0x0229:
-            if (r12 == 0) goto L_0x024a
+        L_0x022b:
+            if (r12 == 0) goto L_0x024c
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r13.errorsValues
             java.lang.Object r8 = r8.get(r12)
             java.lang.String r8 = (java.lang.String) r8
             boolean r11 = android.text.TextUtils.isEmpty(r8)
-            if (r11 != 0) goto L_0x024a
+            if (r11 != 0) goto L_0x024c
             r11 = r5[r6]
             android.text.Editable r11 = r11.getText()
             java.lang.String r11 = r11.toString()
             boolean r8 = r8.equals(r11)
-            if (r8 == 0) goto L_0x024a
+            if (r8 == 0) goto L_0x024c
             r7 = 1
-        L_0x024a:
+        L_0x024c:
             boolean r8 = r13.documentOnly
             r11 = 7
-            if (r8 == 0) goto L_0x0257
+            if (r8 == 0) goto L_0x0259
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r8 = r13.currentDocumentsType
-            if (r8 == 0) goto L_0x0257
-            if (r6 >= r11) goto L_0x0257
-            goto L_0x02c2
-        L_0x0257:
-            if (r7 != 0) goto L_0x02ba
+            if (r8 == 0) goto L_0x0259
+            if (r6 >= r11) goto L_0x0259
+            goto L_0x02c4
+        L_0x0259:
+            if (r7 != 0) goto L_0x02bc
             r8 = r5[r6]
             int r8 = r8.length()
             int r12 = r13.currentActivityType
-            if (r12 != r2) goto L_0x028f
+            if (r12 != r2) goto L_0x0291
             r9 = 8
-            if (r6 != r9) goto L_0x0269
-            goto L_0x02c2
-        L_0x0269:
-            if (r0 != 0) goto L_0x0271
-            if (r6 == 0) goto L_0x0279
-            if (r6 == r3) goto L_0x0279
-            if (r6 == r2) goto L_0x0279
-        L_0x0271:
-            if (r0 != r2) goto L_0x0288
-            if (r6 == 0) goto L_0x0279
-            if (r6 == r2) goto L_0x0279
-            if (r6 != r3) goto L_0x0288
-        L_0x0279:
+            if (r6 != r9) goto L_0x026b
+            goto L_0x02c4
+        L_0x026b:
+            if (r0 != 0) goto L_0x0273
+            if (r6 == 0) goto L_0x027b
+            if (r6 == r3) goto L_0x027b
+            if (r6 == r2) goto L_0x027b
+        L_0x0273:
+            if (r0 != r2) goto L_0x028a
+            if (r6 == 0) goto L_0x027b
+            if (r6 == r2) goto L_0x027b
+            if (r6 != r3) goto L_0x028a
+        L_0x027b:
             r9 = 255(0xff, float:3.57E-43)
-            if (r8 <= r9) goto L_0x027e
+            if (r8 <= r9) goto L_0x0280
             r7 = 1
-        L_0x027e:
-            if (r0 != 0) goto L_0x0282
-            if (r6 == r2) goto L_0x0286
-        L_0x0282:
-            if (r0 != r2) goto L_0x02b2
-            if (r6 != r2) goto L_0x02b2
-        L_0x0286:
-            r9 = 1
-            goto L_0x02b3
+        L_0x0280:
+            if (r0 != 0) goto L_0x0284
+            if (r6 == r2) goto L_0x0288
+        L_0x0284:
+            if (r0 != r2) goto L_0x02b4
+            if (r6 != r2) goto L_0x02b4
         L_0x0288:
-            if (r6 != r11) goto L_0x02b2
+            r9 = 1
+            goto L_0x02b5
+        L_0x028a:
+            if (r6 != r11) goto L_0x02b4
             r9 = 24
-            if (r8 <= r9) goto L_0x02b2
-            goto L_0x0298
-        L_0x028f:
-            if (r12 != r3) goto L_0x02b2
-            if (r6 != r2) goto L_0x0294
-            goto L_0x02c2
-        L_0x0294:
-            if (r6 != r10) goto L_0x029a
-            if (r8 >= r3) goto L_0x02b2
-        L_0x0298:
-            r7 = 1
-            goto L_0x02b2
+            if (r8 <= r9) goto L_0x02b4
+            goto L_0x029a
+        L_0x0291:
+            if (r12 != r3) goto L_0x02b4
+            if (r6 != r2) goto L_0x0296
+            goto L_0x02c4
+        L_0x0296:
+            if (r6 != r10) goto L_0x029c
+            if (r8 >= r3) goto L_0x02b4
         L_0x029a:
-            if (r6 != r9) goto L_0x02a9
+            r7 = 1
+            goto L_0x02b4
+        L_0x029c:
+            if (r6 != r9) goto L_0x02ab
             java.lang.String r9 = r13.currentCitizeship
             java.lang.String r10 = "US"
             boolean r9 = r10.equals(r9)
-            if (r9 == 0) goto L_0x02c2
-            if (r8 >= r3) goto L_0x02b2
-            goto L_0x0298
-        L_0x02a9:
-            if (r6 != r3) goto L_0x02b2
-            if (r8 < r3) goto L_0x0298
+            if (r9 == 0) goto L_0x02c4
+            if (r8 >= r3) goto L_0x02b4
+            goto L_0x029a
+        L_0x02ab:
+            if (r6 != r3) goto L_0x02b4
+            if (r8 < r3) goto L_0x029a
             r9 = 10
-            if (r8 <= r9) goto L_0x02b2
-            goto L_0x0298
-        L_0x02b2:
+            if (r8 <= r9) goto L_0x02b4
+            goto L_0x029a
+        L_0x02b4:
             r9 = 0
-        L_0x02b3:
-            if (r7 != 0) goto L_0x02ba
-            if (r9 != 0) goto L_0x02ba
-            if (r8 != 0) goto L_0x02ba
+        L_0x02b5:
+            if (r7 != 0) goto L_0x02bc
+            if (r9 != 0) goto L_0x02bc
+            if (r8 != 0) goto L_0x02bc
             r7 = 1
-        L_0x02ba:
-            if (r7 == 0) goto L_0x02c2
+        L_0x02bc:
+            if (r7 == 0) goto L_0x02c4
             r0 = r5[r6]
             r13.onFieldError(r0)
             return r2
-        L_0x02c2:
+        L_0x02c4:
             int r6 = r6 + 1
-            goto L_0x01bc
-        L_0x02c6:
+            goto L_0x01be
+        L_0x02c8:
             int r0 = r0 + 1
-            goto L_0x01a0
-        L_0x02ca:
+            goto L_0x01a2
+        L_0x02cc:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.checkFieldsForError():boolean");
@@ -6588,9 +6588,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     public void updateUploadText(int r9) {
         /*
             r8 = this;
-            r0 = 2131626566(0x7f0e0a46, float:1.8880372E38)
+            r0 = 2131626644(0x7f0e0a94, float:1.888053E38)
             java.lang.String r1 = "PassportUploadAdditinalDocument"
-            r2 = 2131626567(0x7f0e0a47, float:1.8880374E38)
+            r2 = 2131626645(0x7f0e0a95, float:1.8880532E38)
             java.lang.String r3 = "PassportUploadDocument"
             r4 = 1
             r5 = 0
@@ -6670,19 +6670,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r0 == 0) goto L_0x0092
             goto L_0x00a8
         L_0x0092:
-            r0 = 2131626451(0x7f0e09d3, float:1.8880139E38)
+            r0 = 2131626529(0x7f0e0a21, float:1.8880297E38)
             java.lang.String r1 = "PassportFrontSide"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r1 = 2131626452(0x7f0e09d4, float:1.888014E38)
+            r1 = 2131626530(0x7f0e0a22, float:1.8880299E38)
             java.lang.String r2 = "PassportFrontSideInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r9.setTextAndValue(r0, r1, r4)
             goto L_0x00bd
         L_0x00a8:
-            r0 = 2131626509(0x7f0e0a0d, float:1.8880256E38)
+            r0 = 2131626587(0x7f0e0a5b, float:1.8880414E38)
             java.lang.String r1 = "PassportMainPage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r1 = 2131626510(0x7f0e0a0e, float:1.8880258E38)
+            r1 = 2131626588(0x7f0e0a5c, float:1.8880416E38)
             java.lang.String r2 = "PassportMainPageInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r9.setTextAndValue(r0, r1, r4)
@@ -6893,7 +6893,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7[r3] = r5
             r7[r4] = r5
             r7[r5] = r5
-            r7 = 2131626525(0x7f0e0a1d, float:1.8880289E38)
+            r7 = 2131626603(0x7f0e0a6b, float:1.8880447E38)
             java.lang.String r0 = "PassportNoExpireDate"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -6903,7 +6903,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.equals(r7)
             if (r0 == 0) goto L_0x00c9
             r6.currentGender = r7
-            r7 = 2131626511(0x7f0e0a0f, float:1.888026E38)
+            r7 = 2131626589(0x7f0e0a5d, float:1.8880418E38)
             java.lang.String r0 = "PassportMale"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -6913,7 +6913,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.equals(r7)
             if (r0 == 0) goto L_0x00ef
             r6.currentGender = r7
-            r7 = 2131626450(0x7f0e09d2, float:1.8880137E38)
+            r7 = 2131626528(0x7f0e0a20, float:1.8880295E38)
             java.lang.String r0 = "PassportFemale"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -7389,7 +7389,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r3 = 0
             r7.languageMap = r3
         L_0x00cb:
-            r5 = 2131626443(0x7f0e09cb, float:1.8880122E38)
+            r5 = 2131626521(0x7f0e0a19, float:1.888028E38)
             java.lang.String r14 = "PassportDocuments"
             if (r9 == 0) goto L_0x010b
             org.telegram.tgnet.TLRPC$SecureValueType r0 = r8.type
@@ -7758,7 +7758,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0395 }
             if (r2 == 0) goto L_0x0360
             java.lang.String r2 = "PassportMale"
-            r4 = 2131626511(0x7f0e0a0f, float:1.888026E38)
+            r4 = 2131626589(0x7f0e0a5d, float:1.8880418E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r4)     // Catch:{ Exception -> 0x0395 }
             r12.append(r2)     // Catch:{ Exception -> 0x0395 }
             goto L_0x0392
@@ -7767,7 +7767,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0395 }
             if (r2 == 0) goto L_0x0392
             java.lang.String r2 = "PassportFemale"
-            r4 = 2131626450(0x7f0e09d2, float:1.8880137E38)
+            r4 = 2131626528(0x7f0e0a20, float:1.8880295E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r4)     // Catch:{ Exception -> 0x0395 }
             r12.append(r2)     // Catch:{ Exception -> 0x0395 }
             goto L_0x0392
@@ -7913,7 +7913,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x04c5
             if (r11 != 0) goto L_0x046c
-            r0 = 2131626529(0x7f0e0a21, float:1.8880297E38)
+            r0 = 2131626607(0x7f0e0a6f, float:1.8880455E38)
             java.lang.String r1 = "PassportPersonalDetailsInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x0467:
@@ -7925,7 +7925,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r2 = 8
             if (r1 != r2) goto L_0x047c
             r2 = r26
-            r1 = 2131626443(0x7f0e09cb, float:1.8880122E38)
+            r1 = 2131626521(0x7f0e0a19, float:1.888028E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x0467
         L_0x047c:
@@ -7935,33 +7935,33 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$SecureValueType r1 = r11.type
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePassport
             if (r2 == 0) goto L_0x0491
-            r0 = 2131626459(0x7f0e09db, float:1.8880155E38)
+            r0 = 2131626537(0x7f0e0a29, float:1.8880313E38)
             java.lang.String r1 = "PassportIdentityPassport"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x0491:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeInternalPassport
             if (r2 == 0) goto L_0x049f
-            r0 = 2131626458(0x7f0e09da, float:1.8880153E38)
+            r0 = 2131626536(0x7f0e0a28, float:1.888031E38)
             java.lang.String r1 = "PassportIdentityInternalPassport"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x049f:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeDriverLicense
             if (r2 == 0) goto L_0x04ad
-            r0 = 2131626456(0x7f0e09d8, float:1.8880149E38)
+            r0 = 2131626534(0x7f0e0a26, float:1.8880307E38)
             java.lang.String r1 = "PassportIdentityDriverLicence"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x04ad:
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeIdentityCard
             if (r1 == 0) goto L_0x04c5
-            r0 = 2131626457(0x7f0e09d9, float:1.888015E38)
+            r0 = 2131626535(0x7f0e0a27, float:1.8880309E38)
             java.lang.String r1 = "PassportIdentityID"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x04bb:
-            r0 = 2131626455(0x7f0e09d7, float:1.8880147E38)
+            r0 = 2131626533(0x7f0e0a25, float:1.8880305E38)
             java.lang.String r1 = "PassportIdentityDocumentInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
@@ -7976,7 +7976,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x04c5
             if (r11 != 0) goto L_0x04e2
-            r0 = 2131626419(0x7f0e09b3, float:1.8880074E38)
+            r0 = 2131626497(0x7f0e0a01, float:1.8880232E38)
             java.lang.String r1 = "PassportAddressNoUploadInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
@@ -7984,7 +7984,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             int r1 = r7.currentActivityType
             r4 = 8
             if (r1 != r4) goto L_0x04f1
-            r1 = 2131626443(0x7f0e09cb, float:1.8880122E38)
+            r1 = 2131626521(0x7f0e0a19, float:1.888028E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x0467
         L_0x04f1:
@@ -7993,40 +7993,40 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$SecureValueType r1 = r11.type
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeRentalAgreement
             if (r3 == 0) goto L_0x0505
-            r0 = 2131626393(0x7f0e0999, float:1.888002E38)
+            r0 = 2131626471(0x7f0e09e7, float:1.888018E38)
             java.lang.String r1 = "PassportAddAgreementInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x0505:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeUtilityBill
             if (r3 == 0) goto L_0x0513
-            r0 = 2131626397(0x7f0e099d, float:1.888003E38)
+            r0 = 2131626475(0x7f0e09eb, float:1.8880187E38)
             java.lang.String r1 = "PassportAddBillInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x0513:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePassportRegistration
             if (r3 == 0) goto L_0x0521
-            r0 = 2131626407(0x7f0e09a7, float:1.888005E38)
+            r0 = 2131626485(0x7f0e09f5, float:1.8880208E38)
             java.lang.String r1 = "PassportAddPassportRegistrationInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x0521:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeTemporaryRegistration
             if (r3 == 0) goto L_0x052f
-            r0 = 2131626409(0x7f0e09a9, float:1.8880053E38)
+            r0 = 2131626487(0x7f0e09f7, float:1.8880212E38)
             java.lang.String r1 = "PassportAddTemporaryRegistrationInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x052f:
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeBankStatement
             if (r1 == 0) goto L_0x056f
-            r0 = 2131626395(0x7f0e099b, float:1.8880025E38)
+            r0 = 2131626473(0x7f0e09e9, float:1.8880183E38)
             java.lang.String r1 = "PassportAddBankInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x053d:
-            r0 = 2131626418(0x7f0e09b2, float:1.8880072E38)
+            r0 = 2131626496(0x7f0e0a00, float:1.888023E38)
             java.lang.String r1 = "PassportAddressInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
@@ -8036,7 +8036,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r3 == 0) goto L_0x055c
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x056f
-            r0 = 2131626532(0x7f0e0a24, float:1.8880303E38)
+            r0 = 2131626610(0x7f0e0a72, float:1.8880461E38)
             java.lang.String r1 = "PassportPhoneInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
@@ -8045,7 +8045,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r1 == 0) goto L_0x056f
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x056f
-            r0 = 2131626446(0x7f0e09ce, float:1.8880128E38)
+            r0 = 2131626524(0x7f0e0a1c, float:1.8880287E38)
             java.lang.String r1 = "PassportEmailInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x056f:
@@ -8744,7 +8744,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r9.setBackgroundDrawable(r4)
             org.telegram.tgnet.TLRPC$SecureValueType r4 = r1.type
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
-            r10 = 2131626565(0x7f0e0a45, float:1.888037E38)
+            r10 = 2131626643(0x7f0e0a93, float:1.8880528E38)
             java.lang.String r11 = "PassportTwoDocuments"
             r12 = 2
             java.lang.String r13 = ""
@@ -8780,12 +8780,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4)
             goto L_0x008b
         L_0x0078:
-            r4 = 2131626454(0x7f0e09d6, float:1.8880145E38)
+            r4 = 2131626532(0x7f0e0a24, float:1.8880303E38)
             java.lang.String r5 = "PassportIdentityDocument"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x008b
         L_0x0082:
-            r4 = 2131626528(0x7f0e0a20, float:1.8880295E38)
+            r4 = 2131626606(0x7f0e0a6e, float:1.8880453E38)
             java.lang.String r5 = "PassportPersonalDetails"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x008b:
@@ -8826,12 +8826,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4)
             goto L_0x00f2
         L_0x00df:
-            r4 = 2131626546(0x7f0e0a32, float:1.8880331E38)
+            r4 = 2131626624(0x7f0e0a80, float:1.888049E38)
             java.lang.String r5 = "PassportResidentialAddress"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x00f2
         L_0x00e9:
-            r4 = 2131626416(0x7f0e09b0, float:1.8880068E38)
+            r4 = 2131626494(0x7f0e09fe, float:1.8880226E38)
             java.lang.String r5 = "PassportAddress"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x00f2:
@@ -8841,7 +8841,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x00f8:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePhone
             if (r5 == 0) goto L_0x010b
-            r4 = 2131626531(0x7f0e0a23, float:1.88803E38)
+            r4 = 2131626609(0x7f0e0a71, float:1.888046E38)
             java.lang.String r5 = "PassportPhone"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = r21 ^ 1
@@ -8850,7 +8850,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x010b:
             boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeEmail
             if (r4 == 0) goto L_0x011d
-            r4 = 2131626444(0x7f0e09cc, float:1.8880124E38)
+            r4 = 2131626522(0x7f0e0a1a, float:1.8880283E38)
             java.lang.String r5 = "PassportEmail"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = r21 ^ 1
@@ -10587,7 +10587,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165869(0x7var_ad, float:1.7945967E38)
+                r14 = 2131165881(0x7var_b9, float:1.7945992E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
                 if (r14 == 0) goto L_0x00fb
@@ -10655,7 +10655,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131166014(0x7var_e, float:1.7946261E38)
+                r11 = 2131166027(0x7var_b, float:1.7946288E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -10676,7 +10676,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166012(0x7var_c, float:1.7946257E38)
+                r10 = 2131166025(0x7var_, float:1.7946284E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -10688,7 +10688,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627122(0x7f0e0CLASSNAME, float:1.88815E38)
+                r8 = 2131627214(0x7f0e0cce, float:1.8881686E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -10697,7 +10697,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166013(0x7var_d, float:1.794626E38)
+                r10 = 2131166026(0x7var_a, float:1.7946286E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -10716,7 +10716,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627126(0x7f0e0CLASSNAME, float:1.8881508E38)
+                r8 = 2131627218(0x7f0e0cd2, float:1.8881694E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -10834,14 +10834,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 int r1 = r0.verificationType
                 if (r1 != r3) goto L_0x02f8
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625088(0x7f0e0480, float:1.8877374E38)
+                r2 = 2131625106(0x7f0e0492, float:1.887741E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
                 goto L_0x0306
             L_0x02f8:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625087(0x7f0e047f, float:1.8877372E38)
+                r2 = 2131625105(0x7f0e0491, float:1.8877409E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -11739,7 +11739,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         if (r2 != r6) goto L_0x007e
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131627254(0x7f0e0cf6, float:1.8881767E38)
+                                        r3 = 2131627348(0x7f0e0d54, float:1.8881958E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -11752,7 +11752,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                     L_0x005e:
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131624582(0x7f0e0286, float:1.8876348E38)
+                                        r3 = 2131624587(0x7f0e028b, float:1.8876358E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -11839,7 +11839,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         if (r0 != r4) goto L_0x0140
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131624584(0x7f0e0288, float:1.8876352E38)
+                                        r1 = 2131624589(0x7f0e028d, float:1.8876362E38)
                                         java.lang.String r2 = "Calling"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -11847,7 +11847,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                     L_0x0140:
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131627118(0x7f0e0c6e, float:1.8881491E38)
+                                        r1 = 2131627210(0x7f0e0cca, float:1.8881678E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)

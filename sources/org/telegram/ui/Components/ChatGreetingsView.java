@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -9,11 +10,13 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -55,8 +58,13 @@ public class ChatGreetingsView extends LinearLayout {
         addView(this.descriptionView, LayoutHelper.createLinear(-1, -2, 20.0f, 12.0f, 20.0f, 0.0f));
         addView(this.stickerToSendView, LayoutHelper.createLinear(112, 112, 1, 0, 16, 0, 16));
         updateColors();
-        this.titleView.setText(LocaleController.formatString("NearbyPeopleGreetingsMessage", NUM, tLRPC$User.first_name, LocaleController.formatDistance((float) i, 1)));
-        this.descriptionView.setText(LocaleController.getString("NearbyPeopleGreetingsDescription", NUM));
+        if (i <= 0) {
+            this.titleView.setText(LocaleController.getString("NoMessages", NUM));
+            this.descriptionView.setText(LocaleController.getString("NoMessagesGreetingsDescription", NUM));
+        } else {
+            this.titleView.setText(LocaleController.formatString("NearbyPeopleGreetingsMessage", NUM, tLRPC$User.first_name, LocaleController.formatDistance((float) i, 1)));
+            this.descriptionView.setText(LocaleController.getString("NearbyPeopleGreetingsDescription", NUM));
+        }
         if (tLRPC$Document == null) {
             TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers = new TLRPC$TL_messages_getStickers();
             tLRPC$TL_messages_getStickers.emoticon = "👋" + Emoji.fixEmoji("⭐");
@@ -94,7 +102,12 @@ public class ChatGreetingsView extends LinearLayout {
     /* access modifiers changed from: private */
     /* renamed from: setSticker */
     public void lambda$null$0(TLRPC$Document tLRPC$Document) {
-        this.stickerToSendView.setImage(ImageLocation.getForDocument(tLRPC$Document), createFilter(tLRPC$Document), ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document), (String) null, 0, (Object) tLRPC$Document);
+        SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document, "chat_serviceBackground", 1.0f);
+        if (svgThumb != null) {
+            this.stickerToSendView.setImage(ImageLocation.getForDocument(tLRPC$Document), createFilter(tLRPC$Document), (Drawable) svgThumb, 0, (Object) tLRPC$Document);
+        } else {
+            this.stickerToSendView.setImage(ImageLocation.getForDocument(tLRPC$Document), createFilter(tLRPC$Document), ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document), (String) null, 0, (Object) tLRPC$Document);
+        }
         this.stickerToSendView.setOnClickListener(new View.OnClickListener(tLRPC$Document) {
             public final /* synthetic */ TLRPC$Document f$1;
 

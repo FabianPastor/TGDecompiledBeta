@@ -98,7 +98,8 @@ public class DrawerLayoutContainer extends FrameLayout {
         this.firstLayout = false;
         this.lastInsets = windowInsets;
         drawerLayoutContainer.setWillNotDraw(windowInsets.getSystemWindowInsetTop() <= 0 && getBackground() == null);
-        if (Build.VERSION.SDK_INT >= 28) {
+        int i = Build.VERSION.SDK_INT;
+        if (i >= 28) {
             DisplayCutout displayCutout = windowInsets.getDisplayCutout();
             if (!(displayCutout == null || displayCutout.getBoundingRects().size() == 0)) {
                 z = true;
@@ -106,6 +107,9 @@ public class DrawerLayoutContainer extends FrameLayout {
             this.hasCutout = z;
         }
         invalidate();
+        if (i >= 30) {
+            return WindowInsets.CONSUMED;
+        }
         return windowInsets.consumeSystemWindowInsets();
     }
 

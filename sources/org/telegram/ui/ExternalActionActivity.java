@@ -47,12 +47,11 @@ import org.telegram.ui.Components.PasscodeView;
 public class ExternalActionActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate {
     private static ArrayList<BaseFragment> layerFragmentsStack = new ArrayList<>();
     private static ArrayList<BaseFragment> mainFragmentsStack = new ArrayList<>();
-    /* access modifiers changed from: private */
-    public ActionBarLayout actionBarLayout;
-    private View backgroundTablet;
+    protected ActionBarLayout actionBarLayout;
+    protected View backgroundTablet;
     protected DrawerLayoutContainer drawerLayoutContainer;
     private boolean finished;
-    private ActionBarLayout layersActionBarLayout;
+    protected ActionBarLayout layersActionBarLayout;
     /* access modifiers changed from: private */
     public Runnable lockRunnable;
     private Intent passcodeSaveIntent;
@@ -239,145 +238,155 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         }
     }
 
-    private boolean handleIntent(Intent intent, boolean z, boolean z2, boolean z3, int i, int i2) {
-        Intent intent2 = intent;
-        boolean z4 = z;
-        boolean z5 = z2;
-        int i3 = i;
-        int i4 = i2;
+    /* access modifiers changed from: protected */
+    public boolean checkPasscode(Intent intent, boolean z, boolean z2, boolean z3, int i, int i2) {
         if (z3 || (!AndroidUtilities.needShowPasscode(true) && !SharedConfig.isWaitingForPasscodeEnter)) {
-            if ("org.telegram.passport.AUTHORIZE".equals(intent.getAction())) {
-                if (i4 == 0) {
-                    int activatedAccountsCount = UserConfig.getActivatedAccountsCount();
-                    if (activatedAccountsCount == 0) {
-                        this.passcodeSaveIntent = intent2;
-                        this.passcodeSaveIntentIsNew = z4;
-                        this.passcodeSaveIntentIsRestore = z5;
-                        this.passcodeSaveIntentAccount = i3;
-                        this.passcodeSaveIntentState = i4;
-                        LoginActivity loginActivity = new LoginActivity();
-                        if (AndroidUtilities.isTablet()) {
-                            this.layersActionBarLayout.addFragmentToStack(loginActivity);
-                        } else {
-                            this.actionBarLayout.addFragmentToStack(loginActivity);
-                        }
-                        if (!AndroidUtilities.isTablet()) {
-                            this.backgroundTablet.setVisibility(8);
-                        }
-                        this.actionBarLayout.showLastFragment();
-                        if (AndroidUtilities.isTablet()) {
-                            this.layersActionBarLayout.showLastFragment();
-                        }
-                        AlertDialog.Builder builder = new AlertDialog.Builder((Context) this);
-                        builder.setTitle(LocaleController.getString("AppName", NUM));
-                        builder.setMessage(LocaleController.getString("PleaseLoginPassport", NUM));
-                        builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-                        builder.show();
-                        return true;
-                    } else if (activatedAccountsCount >= 2) {
-                        AlertDialog createAccountSelectDialog = AlertsCreator.createAccountSelectDialog(this, new AlertsCreator.AccountSelectDelegate(i, intent, z, z2, z3) {
-                            public final /* synthetic */ int f$1;
-                            public final /* synthetic */ Intent f$2;
-                            public final /* synthetic */ boolean f$3;
-                            public final /* synthetic */ boolean f$4;
-                            public final /* synthetic */ boolean f$5;
-
-                            {
-                                this.f$1 = r2;
-                                this.f$2 = r3;
-                                this.f$3 = r4;
-                                this.f$4 = r5;
-                                this.f$5 = r6;
-                            }
-
-                            public final void didSelectAccount(int i) {
-                                ExternalActionActivity.this.lambda$handleIntent$3$ExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, i);
-                            }
-                        });
-                        createAccountSelectDialog.show();
-                        createAccountSelectDialog.setCanceledOnTouchOutside(false);
-                        createAccountSelectDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                            public final void onDismiss(DialogInterface dialogInterface) {
-                                ExternalActionActivity.this.lambda$handleIntent$4$ExternalActionActivity(dialogInterface);
-                            }
-                        });
-                        return true;
-                    }
-                }
-                int intExtra = intent2.getIntExtra("bot_id", 0);
-                String stringExtra = intent2.getStringExtra("nonce");
-                String stringExtra2 = intent2.getStringExtra("payload");
-                TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm = new TLRPC$TL_account_getAuthorizationForm();
-                tLRPC$TL_account_getAuthorizationForm.bot_id = intExtra;
-                tLRPC$TL_account_getAuthorizationForm.scope = intent2.getStringExtra("scope");
-                tLRPC$TL_account_getAuthorizationForm.public_key = intent2.getStringExtra("public_key");
-                if (intExtra == 0 || ((TextUtils.isEmpty(stringExtra2) && TextUtils.isEmpty(stringExtra)) || TextUtils.isEmpty(tLRPC$TL_account_getAuthorizationForm.scope) || TextUtils.isEmpty(tLRPC$TL_account_getAuthorizationForm.public_key))) {
-                    finish();
-                    return false;
-                }
-                int[] iArr = {0};
-                AlertDialog alertDialog = new AlertDialog(this, 3);
-                alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener(i3, iArr) {
-                    public final /* synthetic */ int f$0;
-                    public final /* synthetic */ int[] f$1;
-
-                    {
-                        this.f$0 = r1;
-                        this.f$1 = r2;
-                    }
-
-                    public final void onCancel(DialogInterface dialogInterface) {
-                        ConnectionsManager.getInstance(this.f$0).cancelRequest(this.f$1[0], true);
-                    }
-                });
-                alertDialog.show();
-                iArr[0] = ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_account_getAuthorizationForm, new RequestDelegate(iArr, i, alertDialog, tLRPC$TL_account_getAuthorizationForm, stringExtra2, stringExtra) {
-                    public final /* synthetic */ int[] f$1;
-                    public final /* synthetic */ int f$2;
-                    public final /* synthetic */ AlertDialog f$3;
-                    public final /* synthetic */ TLRPC$TL_account_getAuthorizationForm f$4;
-                    public final /* synthetic */ String f$5;
-                    public final /* synthetic */ String f$6;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                        this.f$3 = r4;
-                        this.f$4 = r5;
-                        this.f$5 = r6;
-                        this.f$6 = r7;
-                    }
-
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        ExternalActionActivity.this.lambda$handleIntent$10$ExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tLRPC$TL_error);
-                    }
-                }, 10);
-            } else {
-                if (AndroidUtilities.isTablet()) {
-                    if (this.layersActionBarLayout.fragmentsStack.isEmpty()) {
-                        this.layersActionBarLayout.addFragmentToStack(new CacheControlActivity());
-                    }
-                } else if (this.actionBarLayout.fragmentsStack.isEmpty()) {
-                    this.actionBarLayout.addFragmentToStack(new CacheControlActivity());
-                }
-                if (!AndroidUtilities.isTablet()) {
-                    this.backgroundTablet.setVisibility(8);
-                }
-                this.actionBarLayout.showLastFragment();
-                if (AndroidUtilities.isTablet()) {
-                    this.layersActionBarLayout.showLastFragment();
-                }
-                intent2.setAction((String) null);
-            }
-            return false;
+            return true;
         }
         showPasscodeActivity();
-        this.passcodeSaveIntent = intent2;
-        this.passcodeSaveIntentIsNew = z4;
-        this.passcodeSaveIntentIsRestore = z5;
-        this.passcodeSaveIntentAccount = i3;
-        this.passcodeSaveIntentState = i4;
+        this.passcodeSaveIntent = intent;
+        this.passcodeSaveIntentIsNew = z;
+        this.passcodeSaveIntentIsRestore = z2;
+        this.passcodeSaveIntentAccount = i;
+        this.passcodeSaveIntentState = i2;
         UserConfig.getInstance(i).saveConfig(false);
+        return false;
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean handleIntent(Intent intent, boolean z, boolean z2, boolean z3, int i, int i2) {
+        Intent intent2 = intent;
+        int i3 = i;
+        int i4 = i2;
+        if (!checkPasscode(intent, z, z2, z3, i, i2)) {
+            return false;
+        }
+        if ("org.telegram.passport.AUTHORIZE".equals(intent.getAction())) {
+            if (i4 == 0) {
+                int activatedAccountsCount = UserConfig.getActivatedAccountsCount();
+                if (activatedAccountsCount == 0) {
+                    this.passcodeSaveIntent = intent2;
+                    this.passcodeSaveIntentIsNew = z;
+                    this.passcodeSaveIntentIsRestore = z2;
+                    this.passcodeSaveIntentAccount = i3;
+                    this.passcodeSaveIntentState = i4;
+                    LoginActivity loginActivity = new LoginActivity();
+                    if (AndroidUtilities.isTablet()) {
+                        this.layersActionBarLayout.addFragmentToStack(loginActivity);
+                    } else {
+                        this.actionBarLayout.addFragmentToStack(loginActivity);
+                    }
+                    if (!AndroidUtilities.isTablet()) {
+                        this.backgroundTablet.setVisibility(8);
+                    }
+                    this.actionBarLayout.showLastFragment();
+                    if (AndroidUtilities.isTablet()) {
+                        this.layersActionBarLayout.showLastFragment();
+                    }
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) this);
+                    builder.setTitle(LocaleController.getString("AppName", NUM));
+                    builder.setMessage(LocaleController.getString("PleaseLoginPassport", NUM));
+                    builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+                    builder.show();
+                    return true;
+                }
+                boolean z4 = z;
+                boolean z5 = z2;
+                if (activatedAccountsCount >= 2) {
+                    AlertDialog createAccountSelectDialog = AlertsCreator.createAccountSelectDialog(this, new AlertsCreator.AccountSelectDelegate(i, intent, z, z2, z3) {
+                        public final /* synthetic */ int f$1;
+                        public final /* synthetic */ Intent f$2;
+                        public final /* synthetic */ boolean f$3;
+                        public final /* synthetic */ boolean f$4;
+                        public final /* synthetic */ boolean f$5;
+
+                        {
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                            this.f$3 = r4;
+                            this.f$4 = r5;
+                            this.f$5 = r6;
+                        }
+
+                        public final void didSelectAccount(int i) {
+                            ExternalActionActivity.this.lambda$handleIntent$3$ExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, i);
+                        }
+                    });
+                    createAccountSelectDialog.show();
+                    createAccountSelectDialog.setCanceledOnTouchOutside(false);
+                    createAccountSelectDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        public final void onDismiss(DialogInterface dialogInterface) {
+                            ExternalActionActivity.this.lambda$handleIntent$4$ExternalActionActivity(dialogInterface);
+                        }
+                    });
+                    return true;
+                }
+            }
+            int intExtra = intent2.getIntExtra("bot_id", 0);
+            String stringExtra = intent2.getStringExtra("nonce");
+            String stringExtra2 = intent2.getStringExtra("payload");
+            TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm = new TLRPC$TL_account_getAuthorizationForm();
+            tLRPC$TL_account_getAuthorizationForm.bot_id = intExtra;
+            tLRPC$TL_account_getAuthorizationForm.scope = intent2.getStringExtra("scope");
+            tLRPC$TL_account_getAuthorizationForm.public_key = intent2.getStringExtra("public_key");
+            if (intExtra == 0 || ((TextUtils.isEmpty(stringExtra2) && TextUtils.isEmpty(stringExtra)) || TextUtils.isEmpty(tLRPC$TL_account_getAuthorizationForm.scope) || TextUtils.isEmpty(tLRPC$TL_account_getAuthorizationForm.public_key))) {
+                finish();
+                return false;
+            }
+            int[] iArr = {0};
+            AlertDialog alertDialog = new AlertDialog(this, 3);
+            alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener(i3, iArr) {
+                public final /* synthetic */ int f$0;
+                public final /* synthetic */ int[] f$1;
+
+                {
+                    this.f$0 = r1;
+                    this.f$1 = r2;
+                }
+
+                public final void onCancel(DialogInterface dialogInterface) {
+                    ConnectionsManager.getInstance(this.f$0).cancelRequest(this.f$1[0], true);
+                }
+            });
+            alertDialog.show();
+            iArr[0] = ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_account_getAuthorizationForm, new RequestDelegate(iArr, i, alertDialog, tLRPC$TL_account_getAuthorizationForm, stringExtra2, stringExtra) {
+                public final /* synthetic */ int[] f$1;
+                public final /* synthetic */ int f$2;
+                public final /* synthetic */ AlertDialog f$3;
+                public final /* synthetic */ TLRPC$TL_account_getAuthorizationForm f$4;
+                public final /* synthetic */ String f$5;
+                public final /* synthetic */ String f$6;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                    this.f$4 = r5;
+                    this.f$5 = r6;
+                    this.f$6 = r7;
+                }
+
+                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    ExternalActionActivity.this.lambda$handleIntent$10$ExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tLRPC$TL_error);
+                }
+            }, 10);
+        } else {
+            if (AndroidUtilities.isTablet()) {
+                if (this.layersActionBarLayout.fragmentsStack.isEmpty()) {
+                    this.layersActionBarLayout.addFragmentToStack(new CacheControlActivity());
+                }
+            } else if (this.actionBarLayout.fragmentsStack.isEmpty()) {
+                this.actionBarLayout.addFragmentToStack(new CacheControlActivity());
+            }
+            if (!AndroidUtilities.isTablet()) {
+                this.backgroundTablet.setVisibility(8);
+            }
+            this.actionBarLayout.showLastFragment();
+            if (AndroidUtilities.isTablet()) {
+                this.layersActionBarLayout.showLastFragment();
+            }
+            intent2.setAction((String) null);
+        }
         return false;
     }
 
@@ -609,8 +618,9 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             actionBarLayout2.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 public void onGlobalLayout() {
                     ExternalActionActivity.this.needLayout();
-                    if (ExternalActionActivity.this.actionBarLayout != null) {
-                        ExternalActionActivity.this.actionBarLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    ActionBarLayout actionBarLayout = ExternalActionActivity.this.actionBarLayout;
+                    if (actionBarLayout != null) {
+                        actionBarLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
                 }
             });

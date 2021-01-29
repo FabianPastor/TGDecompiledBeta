@@ -99,9 +99,9 @@ public class FileLoader extends BaseController {
 
         void fileDidUploaded(String str, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2, long j);
 
-        void fileLoadProgressChanged(String str, long j, long j2);
+        void fileLoadProgressChanged(FileLoadOperation fileLoadOperation, String str, long j, long j2);
 
-        void fileUploadProgressChanged(String str, long j, long j2, boolean z);
+        void fileUploadProgressChanged(FileUploadOperation fileUploadOperation, String str, long j, long j2, boolean z);
     }
 
     static /* synthetic */ int access$608(FileLoader fileLoader) {
@@ -383,17 +383,18 @@ public class FileLoader extends BaseController {
     }
 
     public void uploadFile(String str, boolean z, boolean z2, int i) {
-        uploadFile(str, z, z2, 0, i);
+        uploadFile(str, z, z2, 0, i, false);
     }
 
-    public void uploadFile(String str, boolean z, boolean z2, int i, int i2) {
+    public void uploadFile(String str, boolean z, boolean z2, int i, int i2, boolean z3) {
         if (str != null) {
-            fileLoaderQueue.postRunnable(new Runnable(z, str, i, i2, z2) {
+            fileLoaderQueue.postRunnable(new Runnable(z, str, i, i2, z3, z2) {
                 public final /* synthetic */ boolean f$1;
                 public final /* synthetic */ String f$2;
                 public final /* synthetic */ int f$3;
                 public final /* synthetic */ int f$4;
                 public final /* synthetic */ boolean f$5;
+                public final /* synthetic */ boolean f$6;
 
                 {
                     this.f$1 = r2;
@@ -401,10 +402,11 @@ public class FileLoader extends BaseController {
                     this.f$3 = r4;
                     this.f$4 = r5;
                     this.f$5 = r6;
+                    this.f$6 = r7;
                 }
 
                 public final void run() {
-                    FileLoader.this.lambda$uploadFile$5$FileLoader(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    FileLoader.this.lambda$uploadFile$5$FileLoader(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
                 }
             });
         }
@@ -412,13 +414,13 @@ public class FileLoader extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$uploadFile$5 */
-    public /* synthetic */ void lambda$uploadFile$5$FileLoader(final boolean z, final String str, int i, int i2, boolean z2) {
+    public /* synthetic */ void lambda$uploadFile$5$FileLoader(final boolean z, final String str, int i, int i2, boolean z2, boolean z3) {
         int i3;
-        boolean z3 = z;
+        boolean z4 = z;
         String str2 = str;
         int i4 = i;
-        final boolean z4 = z2;
-        if (z3) {
+        final boolean z5 = z3;
+        if (z4) {
             if (this.uploadOperationPathsEnc.containsKey(str)) {
                 return;
             }
@@ -431,19 +433,22 @@ public class FileLoader extends BaseController {
             this.uploadSizes.remove(str);
             i3 = 0;
         }
+        FileUploadOperation fileUploadOperation = new FileUploadOperation(this.currentAccount, str, z, i3, i2);
         FileLoaderDelegate fileLoaderDelegate = this.delegate;
         if (!(fileLoaderDelegate == null || i4 == 0)) {
-            fileLoaderDelegate.fileUploadProgressChanged(str, 0, (long) i4, z);
+            fileLoaderDelegate.fileUploadProgressChanged(fileUploadOperation, str, 0, (long) i4, z);
         }
-        FileUploadOperation fileUploadOperation = new FileUploadOperation(this.currentAccount, str, z, i3, i2);
-        if (z3) {
+        if (z4) {
             this.uploadOperationPathsEnc.put(str, fileUploadOperation);
         } else {
             this.uploadOperationPaths.put(str, fileUploadOperation);
         }
+        if (z2) {
+            fileUploadOperation.setForceSmallFile();
+        }
         fileUploadOperation.setDelegate(new FileUploadOperation.FileUploadOperationDelegate() {
             public void didFinishUploadingFile(FileUploadOperation fileUploadOperation, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2) {
-                FileLoader.fileLoaderQueue.postRunnable(new Runnable(z, str, z4, tLRPC$InputFile, tLRPC$InputEncryptedFile, bArr, bArr2, fileUploadOperation) {
+                FileLoader.fileLoaderQueue.postRunnable(new Runnable(z, str, z5, tLRPC$InputFile, tLRPC$InputEncryptedFile, bArr, bArr2, fileUploadOperation) {
                     public final /* synthetic */ boolean f$1;
                     public final /* synthetic */ String f$2;
                     public final /* synthetic */ boolean f$3;
@@ -500,7 +505,7 @@ public class FileLoader extends BaseController {
             }
 
             public void didFailedUploadingFile(FileUploadOperation fileUploadOperation) {
-                FileLoader.fileLoaderQueue.postRunnable(new Runnable(z, str, z4) {
+                FileLoader.fileLoaderQueue.postRunnable(new Runnable(z, str, z5) {
                     public final /* synthetic */ boolean f$1;
                     public final /* synthetic */ String f$2;
                     public final /* synthetic */ boolean f$3;
@@ -548,11 +553,11 @@ public class FileLoader extends BaseController {
 
             public void didChangedUploadProgress(FileUploadOperation fileUploadOperation, long j, long j2) {
                 if (FileLoader.this.delegate != null) {
-                    FileLoader.this.delegate.fileUploadProgressChanged(str, j, j2, z);
+                    FileLoader.this.delegate.fileUploadProgressChanged(fileUploadOperation, str, j, j2, z);
                 }
             }
         });
-        if (z4) {
+        if (z5) {
             int i5 = this.currentUploadSmallOperationsCount;
             if (i5 < 1) {
                 this.currentUploadSmallOperationsCount = i5 + 1;

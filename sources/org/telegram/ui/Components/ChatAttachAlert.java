@@ -696,7 +696,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r14)
             r0.setBackgroundColor(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131165466(0x7var_a, float:1.794515E38)
+            r1 = 2131165468(0x7var_c, float:1.7945154E38)
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r15 = "dialogTextBlack"
@@ -725,7 +725,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.selectedMenuItem = r0
             r0.setLongClickEnabled(r8)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
-            r1 = 2131165473(0x7var_, float:1.7945164E38)
+            r1 = 2131165475(0x7var_, float:1.7945168E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             r1 = 2131623985(0x7f0e0031, float:1.8875137E38)
@@ -780,7 +780,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.doneItem = r13
             r13.setLongClickEnabled(r8)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.doneItem
-            r1 = 2131624950(0x7f0e03f6, float:1.8877094E38)
+            r1 = 2131624955(0x7f0e03fb, float:1.8877104E38)
             java.lang.String r2 = "Create"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -810,10 +810,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.searchItem = r0
             r0.setLongClickEnabled(r8)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
-            r1 = 2131165476(0x7var_, float:1.794517E38)
+            r1 = 2131165478(0x7var_, float:1.7945174E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
-            r1 = 2131627012(0x7f0e0CLASSNAME, float:1.8881276E38)
+            r1 = 2131627103(0x7f0e0c5f, float:1.888146E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -917,7 +917,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.view.View r0 = new android.view.View
             r0.<init>(r7)
             r6.shadow = r0
-            r1 = 2131165268(0x7var_, float:1.7944748E38)
+            r1 = 2131165270(0x7var_, float:1.7944752E38)
             r0.setBackgroundResource(r1)
             android.view.View r0 = r6.shadow
             android.graphics.drawable.Drawable r0 = r0.getBackground()
@@ -1029,7 +1029,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r2 = r29
             r0.<init>(r2, r3, r4, r5)
             r6.commentTextView = r12
-            r0 = 2131624174(0x7f0e00ee, float:1.887552E38)
+            r0 = 2131624177(0x7f0e00f1, float:1.8875526E38)
             java.lang.String r1 = "AddCaption"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r12.setHint(r0)
@@ -1099,7 +1099,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.writeButtonDrawable = r2
             if (r4 >= r5) goto L_0x04d9
             android.content.res.Resources r2 = r29.getResources()
-            r3 = 2131165416(0x7var_e8, float:1.7945048E38)
+            r3 = 2131165418(0x7var_ea, float:1.7945053E38)
             android.graphics.drawable.Drawable r2 = r2.getDrawable(r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
@@ -1118,7 +1118,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.graphics.drawable.Drawable r3 = r6.writeButtonDrawable
             r2.setBackgroundDrawable(r3)
             android.widget.ImageView r2 = r6.writeButton
-            r3 = 2131165267(0x7var_, float:1.7944746E38)
+            r3 = 2131165269(0x7var_, float:1.794475E38)
             r2.setImageResource(r3)
             android.widget.ImageView r2 = r6.writeButton
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter

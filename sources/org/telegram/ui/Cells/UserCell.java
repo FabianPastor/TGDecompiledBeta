@@ -355,10 +355,10 @@ public class UserCell extends FrameLayout {
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v1, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v13, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v15, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v17, resolved type: org.telegram.tgnet.TLRPC$Chat} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v19, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-    /* JADX WARNING: type inference failed for: r2v20 */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v23, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+    /* JADX WARNING: type inference failed for: r2v24 */
     /* JADX WARNING: Can't fix incorrect switch cases order */
     /* JADX WARNING: Code restructure failed: missing block: B:18:0x0034, code lost:
         r7 = r0.lastAvatar;
@@ -375,6 +375,8 @@ public class UserCell extends FrameLayout {
     /* JADX WARNING: Removed duplicated region for block: B:166:0x02d6  */
     /* JADX WARNING: Removed duplicated region for block: B:167:0x02e3  */
     /* JADX WARNING: Removed duplicated region for block: B:16:0x0030  */
+    /* JADX WARNING: Removed duplicated region for block: B:173:0x0308  */
+    /* JADX WARNING: Removed duplicated region for block: B:175:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:58:0x008d  */
     /* JADX WARNING: Removed duplicated region for block: B:61:0x009c  */
     /* JADX WARNING: Removed duplicated region for block: B:97:0x0157  */
@@ -647,7 +649,7 @@ public class UserCell extends FrameLayout {
             boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r1)
             if (r6 == 0) goto L_0x01a1
             org.telegram.ui.ActionBar.SimpleTextView r2 = r0.nameTextView
-            r4 = 2131627000(0x7f0e0bf8, float:1.8881252E38)
+            r4 = 2131627091(0x7f0e0CLASSNAME, float:1.8881437E38)
             java.lang.String r6 = "SavedMessages"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             r2.setText(r4, r5)
@@ -747,14 +749,14 @@ public class UserCell extends FrameLayout {
             goto L_0x023c
         L_0x022d:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r5 = 2131624546(0x7f0e0262, float:1.8876275E38)
+            r5 = 2131624551(0x7f0e0267, float:1.8876285E38)
             java.lang.String r6 = "BotStatusCantRead"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r3.setText(r5)
             goto L_0x02a8
         L_0x023c:
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r5 = 2131624547(0x7f0e0263, float:1.8876277E38)
+            r5 = 2131624552(0x7f0e0268, float:1.8876287E38)
             java.lang.String r6 = "BotStatusRead"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r3.setText(r5)
@@ -795,7 +797,7 @@ public class UserCell extends FrameLayout {
             int r5 = r0.statusOnlineColor
             r3.setTextColor(r5)
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.statusTextView
-            r5 = 2131626310(0x7f0e0946, float:1.8879853E38)
+            r5 = 2131626388(0x7f0e0994, float:1.888001E38)
             java.lang.String r6 = "Online"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r3.setText(r5)
@@ -845,6 +847,16 @@ public class UserCell extends FrameLayout {
             org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
             r1.setImageDrawable(r2)
         L_0x02f9:
+            org.telegram.ui.ActionBar.SimpleTextView r1 = r0.nameTextView
+            java.lang.String r2 = "windowBackgroundWhiteBlackText"
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r1.setTextColor(r2)
+            android.widget.TextView r1 = r0.adminTextView
+            if (r1 == 0) goto L_0x0311
+            java.lang.String r2 = "profile_creatorIcon"
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r1.setTextColor(r2)
+        L_0x0311:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.UserCell.update(int):void");

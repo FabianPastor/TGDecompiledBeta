@@ -82,8 +82,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
     /* access modifiers changed from: private */
     public String searchQuery;
     private Runnable searchRunnable = new Runnable() {
-        /* access modifiers changed from: private */
-        public void clear() {
+        private void clear() {
             StickersSearchAdapter stickersSearchAdapter = StickersSearchAdapter.this;
             if (!stickersSearchAdapter.cleared) {
                 stickersSearchAdapter.cleared = true;
@@ -256,7 +255,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
                 java.lang.String[] r7 = r7.getLastSearchKeyboardLanguage()
                 org.telegram.ui.Adapters.StickersSearchAdapter r9 = org.telegram.ui.Adapters.StickersSearchAdapter.this
                 java.lang.String r9 = r9.searchQuery
-                org.telegram.ui.Adapters.StickersSearchAdapter$1$1 r10 = new org.telegram.ui.Adapters.StickersSearchAdapter$1$1
+                org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$4h3Cj8g9h07lNQujGLY9v7blH7I r10 = new org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$4h3Cj8g9h07lNQujGLY9v7blH7I
                 r10.<init>(r1, r5)
                 r6.getEmojiSuggestions(r7, r9, r2, r10)
             L_0x017c:
@@ -399,7 +398,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
                 org.telegram.ui.Adapters.StickersSearchAdapter r1 = org.telegram.ui.Adapters.StickersSearchAdapter.this
                 int r5 = r1.currentAccount
                 org.telegram.tgnet.ConnectionsManager r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r5)
-                org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$T9wIgOROhZYp6Q_hCmzzf-FMAj8 r6 = new org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$T9wIgOROhZYp6Q_hCmzzf-FMAj8
+                org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$7AgvQv-K2jX3H-bHvKWAz4lcGxQ r6 = new org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$7AgvQv-K2jX3H-bHvKWAz4lcGxQ
                 r6.<init>(r0)
                 int r0 = r5.sendRequest(r0, r6)
                 int unused = r1.reqId = r0
@@ -416,7 +415,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
                 org.telegram.ui.Adapters.StickersSearchAdapter r1 = org.telegram.ui.Adapters.StickersSearchAdapter.this
                 int r2 = r1.currentAccount
                 org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2)
-                org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$aGi7495tc8XrpT3daum2kxmnrUI r5 = new org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$aGi7495tc8XrpT3daum2kxmnrUI
+                org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$FeOQofW2PVJRuHhUkJ6BkzEUsJo r5 = new org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$FeOQofW2PVJRuHhUkJ6BkzEUsJo
                 r5.<init>(r0, r3, r4)
                 int r0 = r2.sendRequest(r0, r5)
                 int unused = r1.reqId2 = r0
@@ -429,8 +428,32 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$run$1 */
-        public /* synthetic */ void lambda$run$1$StickersSearchAdapter$1(TLRPC$TL_messages_searchStickerSets tLRPC$TL_messages_searchStickerSets, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        /* renamed from: lambda$run$0 */
+        public /* synthetic */ void lambda$run$0$StickersSearchAdapter$1(int i, HashMap hashMap, ArrayList arrayList, String str) {
+            if (i == StickersSearchAdapter.this.emojiSearchId) {
+                int size = arrayList.size();
+                boolean z = false;
+                for (int i2 = 0; i2 < size; i2++) {
+                    String str2 = ((MediaDataController.KeywordResult) arrayList.get(i2)).emoji;
+                    ArrayList arrayList2 = hashMap != null ? (ArrayList) hashMap.get(str2) : null;
+                    if (arrayList2 != null && !arrayList2.isEmpty()) {
+                        clear();
+                        if (!StickersSearchAdapter.this.emojiStickers.containsKey(arrayList2)) {
+                            StickersSearchAdapter.this.emojiStickers.put(arrayList2, str2);
+                            StickersSearchAdapter.this.emojiArrays.add(arrayList2);
+                            z = true;
+                        }
+                    }
+                }
+                if (z) {
+                    StickersSearchAdapter.this.notifyDataSetChanged();
+                }
+            }
+        }
+
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$run$2 */
+        public /* synthetic */ void lambda$run$2$StickersSearchAdapter$1(TLRPC$TL_messages_searchStickerSets tLRPC$TL_messages_searchStickerSets, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             if (tLObject instanceof TLRPC$TL_messages_foundStickerSets) {
                 AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_messages_searchStickerSets, tLObject) {
                     public final /* synthetic */ TLRPC$TL_messages_searchStickerSets f$1;
@@ -442,15 +465,15 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
                     }
 
                     public final void run() {
-                        StickersSearchAdapter.AnonymousClass1.this.lambda$null$0$StickersSearchAdapter$1(this.f$1, this.f$2);
+                        StickersSearchAdapter.AnonymousClass1.this.lambda$null$1$StickersSearchAdapter$1(this.f$1, this.f$2);
                     }
                 });
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$StickersSearchAdapter$1(TLRPC$TL_messages_searchStickerSets tLRPC$TL_messages_searchStickerSets, TLObject tLObject) {
+        /* renamed from: lambda$null$1 */
+        public /* synthetic */ void lambda$null$1$StickersSearchAdapter$1(TLRPC$TL_messages_searchStickerSets tLRPC$TL_messages_searchStickerSets, TLObject tLObject) {
             if (tLRPC$TL_messages_searchStickerSets.q.equals(StickersSearchAdapter.this.searchQuery)) {
                 clear();
                 StickersSearchAdapter.this.delegate.onSearchStop();
@@ -462,8 +485,8 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$run$3 */
-        public /* synthetic */ void lambda$run$3$StickersSearchAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, ArrayList arrayList, LongSparseArray longSparseArray, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        /* renamed from: lambda$run$4 */
+        public /* synthetic */ void lambda$run$4$StickersSearchAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, ArrayList arrayList, LongSparseArray longSparseArray, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_messages_getStickers, tLObject, arrayList, longSparseArray) {
                 public final /* synthetic */ TLRPC$TL_messages_getStickers f$1;
                 public final /* synthetic */ TLObject f$2;
@@ -478,14 +501,14 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
                 }
 
                 public final void run() {
-                    StickersSearchAdapter.AnonymousClass1.this.lambda$null$2$StickersSearchAdapter$1(this.f$1, this.f$2, this.f$3, this.f$4);
+                    StickersSearchAdapter.AnonymousClass1.this.lambda$null$3$StickersSearchAdapter$1(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$StickersSearchAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
+        /* renamed from: lambda$null$3 */
+        public /* synthetic */ void lambda$null$3$StickersSearchAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
             if (tLRPC$TL_messages_getStickers.emoticon.equals(StickersSearchAdapter.this.searchQuery)) {
                 int unused = StickersSearchAdapter.this.reqId2 = 0;
                 if (tLObject instanceof TLRPC$TL_messages_stickers) {
@@ -694,9 +717,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i, List list) {
-        if (!list.contains(0)) {
-            super.onBindViewHolder(viewHolder, i, list);
-        } else if (viewHolder.getItemViewType() == 3) {
+        if (list.contains(0) && viewHolder.getItemViewType() == 3) {
             bindFeaturedStickerSetInfoCell((FeaturedStickerSetInfoCell) viewHolder.itemView, i, true);
         }
     }

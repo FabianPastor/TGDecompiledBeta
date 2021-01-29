@@ -3,6 +3,7 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
@@ -18,6 +19,7 @@ public class LineProgressView extends View {
     private long currentProgressTime;
     private long lastUpdateTime;
     private int progressColor;
+    private RectF rect = new RectF();
 
     public LineProgressView(Context context) {
         super(context);
@@ -101,11 +103,14 @@ public class LineProgressView extends View {
         if (!(i == 0 || this.animatedProgressValue == 1.0f)) {
             progressPaint.setColor(i);
             progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
-            canvas.drawRect((float) ((int) (((float) getWidth()) * this.animatedProgressValue)), 0.0f, (float) getWidth(), (float) getHeight(), progressPaint);
+            getWidth();
+            this.rect.set(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
+            canvas.drawRoundRect(this.rect, (float) (getHeight() / 2), (float) (getHeight() / 2), progressPaint);
         }
         progressPaint.setColor(this.progressColor);
         progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f));
-        canvas.drawRect(0.0f, 0.0f, ((float) getWidth()) * this.animatedProgressValue, (float) getHeight(), progressPaint);
+        this.rect.set(0.0f, 0.0f, ((float) getWidth()) * this.animatedProgressValue, (float) getHeight());
+        canvas.drawRoundRect(this.rect, (float) (getHeight() / 2), (float) (getHeight() / 2), progressPaint);
         updateAnimation();
     }
 }

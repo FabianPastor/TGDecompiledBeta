@@ -72,6 +72,7 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$Dialog;
 import org.telegram.tgnet.TLRPC$EncryptedChat;
+import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$TL_account_changePhone;
 import org.telegram.tgnet.TLRPC$TL_account_confirmPhone;
@@ -97,8 +98,10 @@ import org.telegram.tgnet.TLRPC$TL_contacts_importContacts;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_help_getSupport;
 import org.telegram.tgnet.TLRPC$TL_help_support;
+import org.telegram.tgnet.TLRPC$TL_inputPeerUser;
 import org.telegram.tgnet.TLRPC$TL_langPackLanguage;
 import org.telegram.tgnet.TLRPC$TL_messages_addChatUser;
+import org.telegram.tgnet.TLRPC$TL_messages_checkHistoryImport;
 import org.telegram.tgnet.TLRPC$TL_messages_createChat;
 import org.telegram.tgnet.TLRPC$TL_messages_editChatAdmin;
 import org.telegram.tgnet.TLRPC$TL_messages_editChatDefaultBannedRights;
@@ -106,6 +109,7 @@ import org.telegram.tgnet.TLRPC$TL_messages_editMessage;
 import org.telegram.tgnet.TLRPC$TL_messages_forwardMessages;
 import org.telegram.tgnet.TLRPC$TL_messages_getAttachedStickers;
 import org.telegram.tgnet.TLRPC$TL_messages_importChatInvite;
+import org.telegram.tgnet.TLRPC$TL_messages_initHistoryImport;
 import org.telegram.tgnet.TLRPC$TL_messages_migrateChat;
 import org.telegram.tgnet.TLRPC$TL_messages_sendInlineBotResult;
 import org.telegram.tgnet.TLRPC$TL_messages_sendMedia;
@@ -113,6 +117,7 @@ import org.telegram.tgnet.TLRPC$TL_messages_sendMessage;
 import org.telegram.tgnet.TLRPC$TL_messages_sendMultiMedia;
 import org.telegram.tgnet.TLRPC$TL_messages_sendScheduledMessages;
 import org.telegram.tgnet.TLRPC$TL_messages_startBot;
+import org.telegram.tgnet.TLRPC$TL_messages_startHistoryImport;
 import org.telegram.tgnet.TLRPC$TL_payments_sendPaymentForm;
 import org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo;
 import org.telegram.tgnet.TLRPC$TL_peerNotifySettings;
@@ -163,25 +168,30 @@ public class AlertsCreator {
         void didSelectDate(boolean z, int i);
     }
 
-    static /* synthetic */ boolean lambda$createCalendarPickerDialog$37(View view, MotionEvent motionEvent) {
+    static /* synthetic */ boolean lambda$createCalendarPickerDialog$44(View view, MotionEvent motionEvent) {
         return true;
     }
 
-    static /* synthetic */ boolean lambda$createScheduleDatePickerDialog$28(View view, MotionEvent motionEvent) {
+    static /* synthetic */ boolean lambda$createDatePickerDialog$38(View view, MotionEvent motionEvent) {
         return true;
     }
 
-    static /* synthetic */ void lambda$createThemeCreateDialog$78(DialogInterface dialogInterface, int i) {
+    static /* synthetic */ boolean lambda$createScheduleDatePickerDialog$29(View view, MotionEvent motionEvent) {
+        return true;
     }
 
-    static /* synthetic */ void lambda$null$44(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    static /* synthetic */ void lambda$createThemeCreateDialog$85(DialogInterface dialogInterface, int i) {
     }
 
-    static /* synthetic */ void lambda$null$76(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    static /* synthetic */ void lambda$null$51(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    }
+
+    static /* synthetic */ void lambda$null$83(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
 
     public static Dialog processError(int i, TLRPC$TL_error tLRPC$TL_error, BaseFragment baseFragment, TLObject tLObject, Object... objArr) {
         String str;
+        TLRPC$InputPeer tLRPC$InputPeer;
         TLRPC$TL_error tLRPC$TL_error2 = tLRPC$TL_error;
         BaseFragment baseFragment2 = baseFragment;
         TLObject tLObject2 = tLObject;
@@ -190,197 +200,224 @@ public class AlertsCreator {
         if (i2 == 406 || (str = tLRPC$TL_error2.text) == null) {
             return null;
         }
-        if (!(tLObject2 instanceof TLRPC$TL_account_saveSecureValue) && !(tLObject2 instanceof TLRPC$TL_account_getAuthorizationForm)) {
-            boolean z = tLObject2 instanceof TLRPC$TL_channels_joinChannel;
-            if (z || (tLObject2 instanceof TLRPC$TL_channels_editAdmin) || (tLObject2 instanceof TLRPC$TL_channels_inviteToChannel) || (tLObject2 instanceof TLRPC$TL_messages_addChatUser) || (tLObject2 instanceof TLRPC$TL_messages_startBot) || (tLObject2 instanceof TLRPC$TL_channels_editBanned) || (tLObject2 instanceof TLRPC$TL_messages_editChatDefaultBannedRights) || (tLObject2 instanceof TLRPC$TL_messages_editChatAdmin) || (tLObject2 instanceof TLRPC$TL_messages_migrateChat) || (tLObject2 instanceof TLRPC$TL_phone_inviteToGroupCall)) {
-                if (baseFragment2 == null || !str.equals("CHANNELS_TOO_MUCH")) {
-                    if (baseFragment2 != null) {
-                        showAddUserAlert(tLRPC$TL_error2.text, baseFragment2, (objArr2 == null || objArr2.length <= 0) ? false : ((Boolean) objArr2[0]).booleanValue(), tLObject2);
-                    } else if (tLRPC$TL_error2.text.equals("PEER_FLOOD")) {
-                        NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, 1);
-                    }
-                } else if (z || (tLObject2 instanceof TLRPC$TL_channels_inviteToChannel)) {
-                    baseFragment2.presentFragment(new TooManyCommunitiesActivity(0));
-                    return null;
+        boolean z = tLObject2 instanceof TLRPC$TL_messages_initHistoryImport;
+        if (z || (tLObject2 instanceof TLRPC$TL_messages_checkHistoryImport) || (tLObject2 instanceof TLRPC$TL_messages_startHistoryImport)) {
+            if (z) {
+                tLRPC$InputPeer = ((TLRPC$TL_messages_initHistoryImport) tLObject2).peer;
+            } else {
+                tLRPC$InputPeer = tLObject2 instanceof TLRPC$TL_messages_startHistoryImport ? ((TLRPC$TL_messages_startHistoryImport) tLObject2).peer : null;
+            }
+            if (str.contains("USER_IS_BLOCKED")) {
+                showSimpleAlert(baseFragment2, LocaleController.getString("ImportErrorTitle", NUM), LocaleController.getString("ImportErrorUserBlocked", NUM));
+            } else if (tLRPC$TL_error2.text.contains("USER_NOT_MUTUAL_CONTACT")) {
+                showSimpleAlert(baseFragment2, LocaleController.getString("ImportErrorTitle", NUM), LocaleController.getString("ImportMutualError", NUM));
+            } else if (tLRPC$TL_error2.text.contains("IMPORT_PEER_TYPE_INVALID")) {
+                if (tLRPC$InputPeer instanceof TLRPC$TL_inputPeerUser) {
+                    showSimpleAlert(baseFragment2, LocaleController.getString("ImportErrorTitle", NUM), LocaleController.getString("ImportErrorChatInvalidUser", NUM));
                 } else {
-                    baseFragment2.presentFragment(new TooManyCommunitiesActivity(1));
-                    return null;
+                    showSimpleAlert(baseFragment2, LocaleController.getString("ImportErrorTitle", NUM), LocaleController.getString("ImportErrorChatInvalidGroup", NUM));
                 }
-            } else if (tLObject2 instanceof TLRPC$TL_messages_createChat) {
-                if (str.equals("CHANNELS_TOO_MUCH")) {
-                    baseFragment2.presentFragment(new TooManyCommunitiesActivity(2));
-                    return null;
-                } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
-                    showFloodWaitAlert(tLRPC$TL_error2.text, baseFragment2);
-                } else {
-                    showAddUserAlert(tLRPC$TL_error2.text, baseFragment2, false, tLObject2);
-                }
-            } else if (tLObject2 instanceof TLRPC$TL_channels_createChannel) {
-                if (str.equals("CHANNELS_TOO_MUCH")) {
-                    baseFragment2.presentFragment(new TooManyCommunitiesActivity(2));
-                    return null;
-                } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
-                    showFloodWaitAlert(tLRPC$TL_error2.text, baseFragment2);
-                } else {
-                    showAddUserAlert(tLRPC$TL_error2.text, baseFragment2, false, tLObject2);
-                }
-            } else if (tLObject2 instanceof TLRPC$TL_messages_editMessage) {
-                if (!str.equals("MESSAGE_NOT_MODIFIED")) {
-                    if (baseFragment2 != null) {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("EditMessageError", NUM));
-                    } else {
-                        showSimpleToast((BaseFragment) null, LocaleController.getString("EditMessageError", NUM));
+            } else if (tLRPC$TL_error2.text.contains("CHAT_ADMIN_REQUIRED")) {
+                showSimpleAlert(baseFragment2, LocaleController.getString("ImportErrorTitle", NUM), LocaleController.getString("ImportErrorNotAdmin", NUM));
+            } else if (tLRPC$TL_error2.text.startsWith("IMPORT_FORMAT")) {
+                showSimpleAlert(baseFragment2, LocaleController.getString("ImportErrorTitle", NUM), LocaleController.getString("ImportErrorFileFormatInvalid", NUM));
+            } else if (tLRPC$TL_error2.text.contains("IMPORT_LANG_NOT_FOUND")) {
+                showSimpleAlert(baseFragment2, LocaleController.getString("ImportErrorTitle", NUM), LocaleController.getString("ImportErrorFileLang", NUM));
+            } else {
+                String string = LocaleController.getString("ImportErrorTitle", NUM);
+                showSimpleAlert(baseFragment2, string, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text);
+            }
+        } else if (!(tLObject2 instanceof TLRPC$TL_account_saveSecureValue) && !(tLObject2 instanceof TLRPC$TL_account_getAuthorizationForm)) {
+            boolean z2 = tLObject2 instanceof TLRPC$TL_channels_joinChannel;
+            if (!z2 && !(tLObject2 instanceof TLRPC$TL_channels_editAdmin) && !(tLObject2 instanceof TLRPC$TL_channels_inviteToChannel) && !(tLObject2 instanceof TLRPC$TL_messages_addChatUser) && !(tLObject2 instanceof TLRPC$TL_messages_startBot) && !(tLObject2 instanceof TLRPC$TL_channels_editBanned) && !(tLObject2 instanceof TLRPC$TL_messages_editChatDefaultBannedRights) && !(tLObject2 instanceof TLRPC$TL_messages_editChatAdmin) && !(tLObject2 instanceof TLRPC$TL_messages_migrateChat) && !(tLObject2 instanceof TLRPC$TL_phone_inviteToGroupCall)) {
+                if (tLObject2 instanceof TLRPC$TL_messages_createChat) {
+                    if (str.equals("CHANNELS_TOO_MUCH")) {
+                        baseFragment2.presentFragment(new TooManyCommunitiesActivity(2));
                         return null;
-                    }
-                }
-            } else if ((tLObject2 instanceof TLRPC$TL_messages_sendMessage) || (tLObject2 instanceof TLRPC$TL_messages_sendMedia) || (tLObject2 instanceof TLRPC$TL_messages_sendInlineBotResult) || (tLObject2 instanceof TLRPC$TL_messages_forwardMessages) || (tLObject2 instanceof TLRPC$TL_messages_sendMultiMedia) || (tLObject2 instanceof TLRPC$TL_messages_sendScheduledMessages)) {
-                str.hashCode();
-                char c = 65535;
-                switch (str.hashCode()) {
-                    case -1809401834:
-                        if (str.equals("USER_BANNED_IN_CHANNEL")) {
-                            c = 0;
-                            break;
-                        }
-                        break;
-                    case -454039871:
-                        if (str.equals("PEER_FLOOD")) {
-                            c = 1;
-                            break;
-                        }
-                        break;
-                    case 1169786080:
-                        if (str.equals("SCHEDULE_TOO_MUCH")) {
-                            c = 2;
-                            break;
-                        }
-                        break;
-                }
-                switch (c) {
-                    case 0:
-                        NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, 5);
-                        break;
-                    case 1:
-                        NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, 0);
-                        break;
-                    case 2:
-                        showSimpleToast(baseFragment2, LocaleController.getString("MessageScheduledLimitReached", NUM));
-                        break;
-                }
-            } else if (tLObject2 instanceof TLRPC$TL_messages_importChatInvite) {
-                if (str.startsWith("FLOOD_WAIT")) {
-                    showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
-                } else if (tLRPC$TL_error2.text.equals("USERS_TOO_MUCH")) {
-                    showSimpleAlert(baseFragment2, LocaleController.getString("JoinToGroupErrorFull", NUM));
-                } else if (tLRPC$TL_error2.text.equals("CHANNELS_TOO_MUCH")) {
-                    baseFragment2.presentFragment(new TooManyCommunitiesActivity(0));
-                } else {
-                    showSimpleAlert(baseFragment2, LocaleController.getString("JoinToGroupErrorNotExist", NUM));
-                }
-            } else if (!(tLObject2 instanceof TLRPC$TL_messages_getAttachedStickers)) {
-                int i3 = i2;
-                if ((tLObject2 instanceof TLRPC$TL_account_confirmPhone) || (tLObject2 instanceof TLRPC$TL_account_verifyPhone) || (tLObject2 instanceof TLRPC$TL_account_verifyEmail)) {
-                    if (str.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error2.text.contains("PHONE_CODE_INVALID") || tLRPC$TL_error2.text.contains("CODE_INVALID") || tLRPC$TL_error2.text.contains("CODE_EMPTY")) {
-                        return showSimpleAlert(baseFragment2, LocaleController.getString("InvalidCode", NUM));
-                    }
-                    if (tLRPC$TL_error2.text.contains("PHONE_CODE_EXPIRED") || tLRPC$TL_error2.text.contains("EMAIL_VERIFY_EXPIRED")) {
-                        return showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
-                    }
-                    if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
-                        return showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
-                    }
-                    return showSimpleAlert(baseFragment2, tLRPC$TL_error2.text);
-                } else if (tLObject2 instanceof TLRPC$TL_auth_resendCode) {
-                    if (str.contains("PHONE_NUMBER_INVALID")) {
-                        return showSimpleAlert(baseFragment2, LocaleController.getString("InvalidPhoneNumber", NUM));
-                    }
-                    if (tLRPC$TL_error2.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error2.text.contains("PHONE_CODE_INVALID")) {
-                        return showSimpleAlert(baseFragment2, LocaleController.getString("InvalidCode", NUM));
-                    }
-                    if (tLRPC$TL_error2.text.contains("PHONE_CODE_EXPIRED")) {
-                        return showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
-                    }
-                    if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
-                        return showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
-                    }
-                    if (tLRPC$TL_error2.code != -1000) {
-                        return showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text);
-                    }
-                } else if (tLObject2 instanceof TLRPC$TL_account_sendConfirmPhoneCode) {
-                    if (i3 == 400) {
-                        return showSimpleAlert(baseFragment2, LocaleController.getString("CancelLinkExpired", NUM));
-                    }
-                    if (str.startsWith("FLOOD_WAIT")) {
-                        return showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
-                    }
-                    return showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM));
-                } else if (tLObject2 instanceof TLRPC$TL_account_changePhone) {
-                    if (str.contains("PHONE_NUMBER_INVALID")) {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("InvalidPhoneNumber", NUM));
-                    } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error2.text.contains("PHONE_CODE_INVALID")) {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("InvalidCode", NUM));
-                    } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EXPIRED")) {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
                     } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
+                        showFloodWaitAlert(tLRPC$TL_error2.text, baseFragment2);
                     } else {
-                        showSimpleAlert(baseFragment2, tLRPC$TL_error2.text);
+                        showAddUserAlert(tLRPC$TL_error2.text, baseFragment2, false, tLObject2);
                     }
-                } else if (tLObject2 instanceof TLRPC$TL_account_sendChangePhoneCode) {
-                    if (str.contains("PHONE_NUMBER_INVALID")) {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("InvalidPhoneNumber", NUM));
-                    } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error2.text.contains("PHONE_CODE_INVALID")) {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("InvalidCode", NUM));
-                    } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EXPIRED")) {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
+                } else if (tLObject2 instanceof TLRPC$TL_channels_createChannel) {
+                    if (str.equals("CHANNELS_TOO_MUCH")) {
+                        baseFragment2.presentFragment(new TooManyCommunitiesActivity(2));
+                        return null;
                     } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
-                    } else if (tLRPC$TL_error2.text.startsWith("PHONE_NUMBER_OCCUPIED")) {
-                        showSimpleAlert(baseFragment2, LocaleController.formatString("ChangePhoneNumberOccupied", NUM, objArr[0]));
+                        showFloodWaitAlert(tLRPC$TL_error2.text, baseFragment2);
                     } else {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM));
+                        showAddUserAlert(tLRPC$TL_error2.text, baseFragment2, false, tLObject2);
                     }
-                } else if (tLObject2 instanceof TLRPC$TL_updateUserName) {
+                } else if (tLObject2 instanceof TLRPC$TL_messages_editMessage) {
+                    if (!str.equals("MESSAGE_NOT_MODIFIED")) {
+                        if (baseFragment2 != null) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("EditMessageError", NUM));
+                        } else {
+                            showSimpleToast((BaseFragment) null, LocaleController.getString("EditMessageError", NUM));
+                        }
+                    }
+                } else if ((tLObject2 instanceof TLRPC$TL_messages_sendMessage) || (tLObject2 instanceof TLRPC$TL_messages_sendMedia) || (tLObject2 instanceof TLRPC$TL_messages_sendInlineBotResult) || (tLObject2 instanceof TLRPC$TL_messages_forwardMessages) || (tLObject2 instanceof TLRPC$TL_messages_sendMultiMedia) || (tLObject2 instanceof TLRPC$TL_messages_sendScheduledMessages)) {
                     str.hashCode();
-                    if (str.equals("USERNAME_INVALID")) {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("UsernameInvalid", NUM));
-                    } else if (!str.equals("USERNAME_OCCUPIED")) {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM));
-                    } else {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("UsernameInUse", NUM));
+                    char c = 65535;
+                    switch (str.hashCode()) {
+                        case -1809401834:
+                            if (str.equals("USER_BANNED_IN_CHANNEL")) {
+                                c = 0;
+                                break;
+                            }
+                            break;
+                        case -454039871:
+                            if (str.equals("PEER_FLOOD")) {
+                                c = 1;
+                                break;
+                            }
+                            break;
+                        case 1169786080:
+                            if (str.equals("SCHEDULE_TOO_MUCH")) {
+                                c = 2;
+                                break;
+                            }
+                            break;
                     }
-                } else if (tLObject2 instanceof TLRPC$TL_contacts_importContacts) {
+                    switch (c) {
+                        case 0:
+                            NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, 5);
+                            break;
+                        case 1:
+                            NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, 0);
+                            break;
+                        case 2:
+                            showSimpleToast(baseFragment2, LocaleController.getString("MessageScheduledLimitReached", NUM));
+                            break;
+                    }
+                } else if (tLObject2 instanceof TLRPC$TL_messages_importChatInvite) {
                     if (str.startsWith("FLOOD_WAIT")) {
                         showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
+                    } else if (tLRPC$TL_error2.text.equals("USERS_TOO_MUCH")) {
+                        showSimpleAlert(baseFragment2, LocaleController.getString("JoinToGroupErrorFull", NUM));
+                    } else if (tLRPC$TL_error2.text.equals("CHANNELS_TOO_MUCH")) {
+                        baseFragment2.presentFragment(new TooManyCommunitiesActivity(0));
                     } else {
-                        showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text);
+                        showSimpleAlert(baseFragment2, LocaleController.getString("JoinToGroupErrorNotExist", NUM));
                     }
-                } else if ((tLObject2 instanceof TLRPC$TL_account_getPassword) || (tLObject2 instanceof TLRPC$TL_account_getTmpPassword)) {
-                    if (str.startsWith("FLOOD_WAIT")) {
-                        showSimpleToast(baseFragment2, getFloodWaitString(tLRPC$TL_error2.text));
-                    } else {
-                        showSimpleToast(baseFragment2, tLRPC$TL_error2.text);
+                } else if (!(tLObject2 instanceof TLRPC$TL_messages_getAttachedStickers)) {
+                    int i3 = i2;
+                    if ((tLObject2 instanceof TLRPC$TL_account_confirmPhone) || (tLObject2 instanceof TLRPC$TL_account_verifyPhone) || (tLObject2 instanceof TLRPC$TL_account_verifyEmail)) {
+                        if (str.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error2.text.contains("PHONE_CODE_INVALID") || tLRPC$TL_error2.text.contains("CODE_INVALID") || tLRPC$TL_error2.text.contains("CODE_EMPTY")) {
+                            return showSimpleAlert(baseFragment2, LocaleController.getString("InvalidCode", NUM));
+                        }
+                        if (tLRPC$TL_error2.text.contains("PHONE_CODE_EXPIRED") || tLRPC$TL_error2.text.contains("EMAIL_VERIFY_EXPIRED")) {
+                            return showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
+                        }
+                        if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
+                            return showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
+                        }
+                        return showSimpleAlert(baseFragment2, tLRPC$TL_error2.text);
+                    } else if (tLObject2 instanceof TLRPC$TL_auth_resendCode) {
+                        if (str.contains("PHONE_NUMBER_INVALID")) {
+                            return showSimpleAlert(baseFragment2, LocaleController.getString("InvalidPhoneNumber", NUM));
+                        }
+                        if (tLRPC$TL_error2.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error2.text.contains("PHONE_CODE_INVALID")) {
+                            return showSimpleAlert(baseFragment2, LocaleController.getString("InvalidCode", NUM));
+                        }
+                        if (tLRPC$TL_error2.text.contains("PHONE_CODE_EXPIRED")) {
+                            return showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
+                        }
+                        if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
+                            return showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
+                        }
+                        if (tLRPC$TL_error2.code != -1000) {
+                            return showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text);
+                        }
+                    } else if (tLObject2 instanceof TLRPC$TL_account_sendConfirmPhoneCode) {
+                        if (i3 == 400) {
+                            return showSimpleAlert(baseFragment2, LocaleController.getString("CancelLinkExpired", NUM));
+                        }
+                        if (str.startsWith("FLOOD_WAIT")) {
+                            return showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
+                        }
+                        return showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM));
+                    } else if (tLObject2 instanceof TLRPC$TL_account_changePhone) {
+                        if (str.contains("PHONE_NUMBER_INVALID")) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("InvalidPhoneNumber", NUM));
+                        } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error2.text.contains("PHONE_CODE_INVALID")) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("InvalidCode", NUM));
+                        } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EXPIRED")) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
+                        } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
+                        } else {
+                            showSimpleAlert(baseFragment2, tLRPC$TL_error2.text);
+                        }
+                    } else if (tLObject2 instanceof TLRPC$TL_account_sendChangePhoneCode) {
+                        if (str.contains("PHONE_NUMBER_INVALID")) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("InvalidPhoneNumber", NUM));
+                        } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error2.text.contains("PHONE_CODE_INVALID")) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("InvalidCode", NUM));
+                        } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EXPIRED")) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
+                        } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
+                        } else if (tLRPC$TL_error2.text.startsWith("PHONE_NUMBER_OCCUPIED")) {
+                            showSimpleAlert(baseFragment2, LocaleController.formatString("ChangePhoneNumberOccupied", NUM, objArr[0]));
+                        } else {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM));
+                        }
+                    } else if (tLObject2 instanceof TLRPC$TL_updateUserName) {
+                        str.hashCode();
+                        if (str.equals("USERNAME_INVALID")) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("UsernameInvalid", NUM));
+                        } else if (!str.equals("USERNAME_OCCUPIED")) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM));
+                        } else {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("UsernameInUse", NUM));
+                        }
+                    } else if (tLObject2 instanceof TLRPC$TL_contacts_importContacts) {
+                        if (str.startsWith("FLOOD_WAIT")) {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
+                        } else {
+                            showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text);
+                        }
+                    } else if ((tLObject2 instanceof TLRPC$TL_account_getPassword) || (tLObject2 instanceof TLRPC$TL_account_getTmpPassword)) {
+                        if (str.startsWith("FLOOD_WAIT")) {
+                            showSimpleToast(baseFragment2, getFloodWaitString(tLRPC$TL_error2.text));
+                        } else {
+                            showSimpleToast(baseFragment2, tLRPC$TL_error2.text);
+                        }
+                    } else if (tLObject2 instanceof TLRPC$TL_payments_sendPaymentForm) {
+                        str.hashCode();
+                        if (str.equals("BOT_PRECHECKOUT_FAILED")) {
+                            showSimpleToast(baseFragment2, LocaleController.getString("PaymentPrecheckoutFailed", NUM));
+                        } else if (!str.equals("PAYMENT_FAILED")) {
+                            showSimpleToast(baseFragment2, tLRPC$TL_error2.text);
+                        } else {
+                            showSimpleToast(baseFragment2, LocaleController.getString("PaymentFailed", NUM));
+                        }
+                    } else if (tLObject2 instanceof TLRPC$TL_payments_validateRequestedInfo) {
+                        str.hashCode();
+                        if (!str.equals("SHIPPING_NOT_AVAILABLE")) {
+                            showSimpleToast(baseFragment2, tLRPC$TL_error2.text);
+                        } else {
+                            showSimpleToast(baseFragment2, LocaleController.getString("PaymentNoShippingMethod", NUM));
+                        }
                     }
-                } else if (tLObject2 instanceof TLRPC$TL_payments_sendPaymentForm) {
-                    str.hashCode();
-                    if (str.equals("BOT_PRECHECKOUT_FAILED")) {
-                        showSimpleToast(baseFragment2, LocaleController.getString("PaymentPrecheckoutFailed", NUM));
-                    } else if (!str.equals("PAYMENT_FAILED")) {
-                        showSimpleToast(baseFragment2, tLRPC$TL_error2.text);
-                    } else {
-                        showSimpleToast(baseFragment2, LocaleController.getString("PaymentFailed", NUM));
-                    }
-                } else if (tLObject2 instanceof TLRPC$TL_payments_validateRequestedInfo) {
-                    str.hashCode();
-                    if (!str.equals("SHIPPING_NOT_AVAILABLE")) {
-                        showSimpleToast(baseFragment2, tLRPC$TL_error2.text);
-                    } else {
-                        showSimpleToast(baseFragment2, LocaleController.getString("PaymentNoShippingMethod", NUM));
-                    }
+                } else if (!(baseFragment2 == null || baseFragment.getParentActivity() == null)) {
+                    Activity parentActivity = baseFragment.getParentActivity();
+                    Toast.makeText(parentActivity, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text, 0).show();
                 }
-            } else if (!(baseFragment2 == null || baseFragment.getParentActivity() == null)) {
-                Activity parentActivity = baseFragment.getParentActivity();
-                Toast.makeText(parentActivity, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text, 0).show();
+                return null;
+            } else if (baseFragment2 == null || !str.equals("CHANNELS_TOO_MUCH")) {
+                if (baseFragment2 != null) {
+                    showAddUserAlert(tLRPC$TL_error2.text, baseFragment2, (objArr2 == null || objArr2.length <= 0) ? false : ((Boolean) objArr2[0]).booleanValue(), tLObject2);
+                } else if (tLRPC$TL_error2.text.equals("PEER_FLOOD")) {
+                    NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, 1);
+                }
+            } else if (z2 || (tLObject2 instanceof TLRPC$TL_channels_inviteToChannel)) {
+                baseFragment2.presentFragment(new TooManyCommunitiesActivity(0));
+                return null;
+            } else {
+                baseFragment2.presentFragment(new TooManyCommunitiesActivity(1));
+                return null;
             }
         } else if (str.contains("PHONE_NUMBER_INVALID")) {
             showSimpleAlert(baseFragment2, LocaleController.getString("InvalidPhoneNumber", NUM));
@@ -452,7 +489,7 @@ public class AlertsCreator {
             builder.setNegativeButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             builder.setNeutralButton(LocaleController.getString("SETTINGS", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    LaunchActivity.this.lambda$runLinkRequest$38(new LanguageSelectActivity());
+                    LaunchActivity.this.lambda$runLinkRequest$41(new LanguageSelectActivity());
                 }
             });
         } else if (tLRPC$TL_langPackLanguage.strings_count == 0) {
@@ -731,14 +768,14 @@ public class AlertsCreator {
             r2 = 1
         L_0x0048:
             if (r21 == 0) goto L_0x0133
-            r1 = 2131624515(0x7f0e0243, float:1.8876212E38)
+            r1 = 2131624520(0x7f0e0248, float:1.8876222E38)
             java.lang.Object[] r6 = new java.lang.Object[r4]
             java.lang.String r10 = org.telegram.messenger.UserObject.getFirstName(r21)
             r6[r5] = r10
             java.lang.String r10 = "BlockUserTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r10, r1, r6)
             r11.setTitle(r1)
-            r1 = 2131624509(0x7f0e023d, float:1.88762E38)
+            r1 = 2131624514(0x7f0e0242, float:1.887621E38)
             java.lang.Object[] r6 = new java.lang.Object[r4]
             java.lang.String r10 = org.telegram.messenger.UserObject.getFirstName(r21)
             r6[r5] = r10
@@ -746,7 +783,7 @@ public class AlertsCreator {
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r10, r1, r6)
             android.text.SpannableStringBuilder r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1)
             r11.setMessage(r1)
-            r1 = 2131624507(0x7f0e023b, float:1.8876196E38)
+            r1 = 2131624512(0x7f0e0240, float:1.8876206E38)
             java.lang.String r6 = "BlockContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             r6 = 2
@@ -777,7 +814,7 @@ public class AlertsCreator {
             java.lang.String r6 = ""
             if (r15 != 0) goto L_0x00cf
             r13 = r10[r15]
-            r12 = 2131625061(0x7f0e0465, float:1.887732E38)
+            r12 = 2131625078(0x7f0e0476, float:1.8877354E38)
             r16 = r1
             java.lang.String r1 = "DeleteReportSpam"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r12)
@@ -787,7 +824,7 @@ public class AlertsCreator {
         L_0x00cf:
             r16 = r1
             r1 = r10[r15]
-            r12 = 2131625069(0x7f0e046d, float:1.8877336E38)
+            r12 = 2131625087(0x7f0e047f, float:1.8877372E38)
             java.lang.Object[] r13 = new java.lang.Object[r5]
             r17 = r2
             java.lang.String r2 = "DeleteThisChat"
@@ -838,7 +875,7 @@ public class AlertsCreator {
         L_0x0133:
             if (r7 == 0) goto L_0x0171
             if (r24 == 0) goto L_0x0171
-            r2 = 2131626932(0x7f0e0bb4, float:1.8881114E38)
+            r2 = 2131627019(0x7f0e0c0b, float:1.888129E38)
             java.lang.String r6 = "ReportUnrelatedGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r11.setTitle(r2)
@@ -847,7 +884,7 @@ public class AlertsCreator {
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelLocation
             if (r2 == 0) goto L_0x0164
             org.telegram.tgnet.TLRPC$TL_channelLocation r1 = (org.telegram.tgnet.TLRPC$TL_channelLocation) r1
-            r2 = 2131626933(0x7f0e0bb5, float:1.8881116E38)
+            r2 = 2131627020(0x7f0e0c0c, float:1.8881293E38)
             java.lang.Object[] r4 = new java.lang.Object[r4]
             java.lang.String r1 = r1.address
             r4[r5] = r1
@@ -857,13 +894,13 @@ public class AlertsCreator {
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0164:
-            r1 = 2131626934(0x7f0e0bb6, float:1.8881118E38)
+            r1 = 2131627021(0x7f0e0c0d, float:1.8881295E38)
             java.lang.String r2 = "ReportUnrelatedGroupTextNoAddress"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0171:
-            r1 = 2131626930(0x7f0e0bb2, float:1.888111E38)
+            r1 = 2131627017(0x7f0e0CLASSNAME, float:1.8881287E38)
             java.lang.String r2 = "ReportSpamTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setTitle(r1)
@@ -871,18 +908,18 @@ public class AlertsCreator {
             if (r1 == 0) goto L_0x0194
             boolean r1 = r7.megagroup
             if (r1 != 0) goto L_0x0194
-            r1 = 2131626926(0x7f0e0bae, float:1.8881102E38)
+            r1 = 2131627013(0x7f0e0CLASSNAME, float:1.8881278E38)
             java.lang.String r2 = "ReportSpamAlertChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0194:
-            r1 = 2131626927(0x7f0e0baf, float:1.8881104E38)
+            r1 = 2131627014(0x7f0e0CLASSNAME, float:1.888128E38)
             java.lang.String r2 = "ReportSpamAlertGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
         L_0x01a0:
-            r1 = 2131626916(0x7f0e0ba4, float:1.8881082E38)
+            r1 = 2131627002(0x7f0e0bfa, float:1.8881256E38)
             java.lang.String r2 = "ReportChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r12 = r1
@@ -898,7 +935,7 @@ public class AlertsCreator {
             r10 = r26
             r1.<init>(r3, r4, r5, r7, r8, r9, r10)
             r11.setPositiveButton(r12, r13)
-            r1 = 2131624589(0x7f0e028d, float:1.8876362E38)
+            r1 = 2131624594(0x7f0e0292, float:1.8876372E38)
             java.lang.String r2 = "Cancel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r2 = 0
@@ -1304,11 +1341,11 @@ public class AlertsCreator {
             org.telegram.ui.ActionBar.AlertDialog$Builder r15 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r11.getParentActivity()
             r15.<init>((android.content.Context) r1)
-            r1 = 2131626336(0x7f0e0960, float:1.8879905E38)
+            r1 = 2131626414(0x7f0e09ae, float:1.8880064E38)
             java.lang.String r2 = "OpenUrlTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r15.setTitle(r1)
-            r1 = 2131626333(0x7f0e095d, float:1.88799E38)
+            r1 = 2131626411(0x7f0e09ab, float:1.8880057E38)
             java.lang.String r2 = "OpenUrlAlert2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r2 = "%"
@@ -1328,7 +1365,7 @@ public class AlertsCreator {
         L_0x009c:
             r15.setMessage(r3)
             r15.setMessageTextViewClickable(r5)
-            r13 = 2131626320(0x7f0e0950, float:1.8879873E38)
+            r13 = 2131626398(0x7f0e099e, float:1.8880031E38)
             java.lang.String r1 = "Open"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r1, r13)
             org.telegram.ui.Components.-$$Lambda$AlertsCreator$U2MmMIxSeP3iUonn2jcMXTz4tUI r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$U2MmMIxSeP3iUonn2jcMXTz4tUI
@@ -1338,7 +1375,7 @@ public class AlertsCreator {
             r10 = r14
             r5.<init>(r7, r8, r10)
             r15.setPositiveButton(r13, r1)
-            r12 = 2131624589(0x7f0e028d, float:1.8876362E38)
+            r12 = 2131624594(0x7f0e0292, float:1.8876372E38)
             java.lang.String r13 = "Cancel"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             r15.setNegativeButton(r12, r0)
@@ -1517,49 +1554,27 @@ public class AlertsCreator {
         }
     }
 
-    public static void createClearOrDeleteDialogAlert(BaseFragment baseFragment, boolean z, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, boolean z2, MessagesStorage.BooleanCallback booleanCallback) {
-        createClearOrDeleteDialogAlert(baseFragment, z, false, false, tLRPC$Chat, tLRPC$User, z2, booleanCallback);
-    }
-
-    public static void createClearOrDeleteDialogAlert(BaseFragment baseFragment, boolean z, boolean z2, boolean z3, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, boolean z4, MessagesStorage.BooleanCallback booleanCallback) {
-        AvatarDrawable avatarDrawable;
-        boolean z5;
-        int i;
-        boolean z6;
-        int i2;
-        String string;
-        char c;
-        int i3;
-        float f;
-        TLRPC$Chat tLRPC$Chat2 = tLRPC$Chat;
+    public static void createImportDialogAlert(BaseFragment baseFragment, String str, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, Runnable runnable) {
+        BaseFragment baseFragment2 = baseFragment;
         TLRPC$User tLRPC$User2 = tLRPC$User;
-        if (baseFragment != null && baseFragment.getParentActivity() != null) {
+        TLRPC$Chat tLRPC$Chat2 = tLRPC$Chat;
+        if (baseFragment2 != null && baseFragment.getParentActivity() != null) {
             if (tLRPC$Chat2 != null || tLRPC$User2 != null) {
                 int currentAccount = baseFragment.getCurrentAccount();
                 Activity parentActivity = baseFragment.getParentActivity();
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) parentActivity);
                 int clientUserId = UserConfig.getInstance(currentAccount).getClientUserId();
-                final CheckBoxCell[] checkBoxCellArr = new CheckBoxCell[1];
                 TextView textView = new TextView(parentActivity);
                 textView.setTextColor(Theme.getColor("dialogTextBlack"));
                 textView.setTextSize(1, 16.0f);
                 textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-                boolean z7 = ChatObject.isChannel(tLRPC$Chat) && !TextUtils.isEmpty(tLRPC$Chat2.username);
-                AnonymousClass3 r15 = new FrameLayout(parentActivity) {
-                    /* access modifiers changed from: protected */
-                    public void onMeasure(int i, int i2) {
-                        super.onMeasure(i, i2);
-                        if (checkBoxCellArr[0] != null) {
-                            setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight() + checkBoxCellArr[0].getMeasuredHeight() + AndroidUtilities.dp(7.0f));
-                        }
-                    }
-                };
-                builder.setView(r15);
-                AvatarDrawable avatarDrawable2 = new AvatarDrawable();
-                avatarDrawable2.setTextSize(AndroidUtilities.dp(12.0f));
+                FrameLayout frameLayout = new FrameLayout(parentActivity);
+                builder.setView(frameLayout);
+                AvatarDrawable avatarDrawable = new AvatarDrawable();
+                avatarDrawable.setTextSize(AndroidUtilities.dp(12.0f));
                 BackupImageView backupImageView = new BackupImageView(parentActivity);
                 backupImageView.setRoundRadius(AndroidUtilities.dp(20.0f));
-                r15.addView(backupImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, 22.0f, 5.0f, 22.0f, 0.0f));
+                frameLayout.addView(backupImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, 22.0f, 5.0f, 22.0f, 0.0f));
                 TextView textView2 = new TextView(parentActivity);
                 textView2.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
                 textView2.setTextSize(1, 20.0f);
@@ -1569,242 +1584,796 @@ public class AlertsCreator {
                 textView2.setSingleLine(true);
                 textView2.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
                 textView2.setEllipsize(TextUtils.TruncateAt.END);
-                AlertDialog.Builder builder2 = builder;
-                BackupImageView backupImageView2 = backupImageView;
+                textView2.setText(LocaleController.formatString("ImportMessages", NUM, new Object[0]));
+                boolean z = LocaleController.isRTL;
+                int i = (z ? 5 : 3) | 48;
+                int i2 = 76;
+                float f = (float) (z ? 21 : 76);
                 if (!z) {
-                    z5 = z7;
-                    avatarDrawable = avatarDrawable2;
-                    if (z2) {
-                        if (!ChatObject.isChannel(tLRPC$Chat)) {
-                            textView2.setText(LocaleController.getString("DeleteMegaMenu", NUM));
-                        } else if (tLRPC$Chat2.megagroup) {
-                            textView2.setText(LocaleController.getString("DeleteMegaMenu", NUM));
-                        } else {
-                            textView2.setText(LocaleController.getString("ChannelDeleteMenu", NUM));
-                        }
-                    } else if (tLRPC$Chat2 == null) {
-                        textView2.setText(LocaleController.getString("DeleteChatUser", NUM));
-                    } else if (!ChatObject.isChannel(tLRPC$Chat)) {
-                        textView2.setText(LocaleController.getString("LeaveMegaMenu", NUM));
-                    } else if (tLRPC$Chat2.megagroup) {
-                        textView2.setText(LocaleController.getString("LeaveMegaMenu", NUM));
-                    } else {
-                        textView2.setText(LocaleController.getString("LeaveChannelMenu", NUM));
-                    }
-                } else if (z7) {
-                    z5 = z7;
-                    avatarDrawable = avatarDrawable2;
-                    textView2.setText(LocaleController.getString("ClearHistoryCache", NUM));
-                } else {
-                    z5 = z7;
-                    avatarDrawable = avatarDrawable2;
-                    textView2.setText(LocaleController.getString("ClearHistory", NUM));
+                    i2 = 21;
                 }
-                boolean z8 = LocaleController.isRTL;
-                r15.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, (z8 ? 5 : 3) | 48, (float) (z8 ? 21 : 76), 11.0f, (float) (z8 ? 76 : 21), 0.0f));
-                r15.addView(textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 24.0f, 57.0f, 24.0f, 9.0f));
-                boolean z9 = tLRPC$User2 != null && !tLRPC$User2.bot && tLRPC$User2.id != clientUserId && MessagesController.getInstance(currentAccount).canRevokePmInbox;
-                if (tLRPC$User2 != null) {
-                    i = MessagesController.getInstance(currentAccount).revokeTimePmLimit;
-                } else {
-                    i = MessagesController.getInstance(currentAccount).revokeTimeLimit;
-                }
-                if (z4 || tLRPC$User2 == null || !z9 || i != Integer.MAX_VALUE) {
-                    i2 = 1;
-                    z6 = false;
-                } else {
-                    i2 = 1;
-                    z6 = true;
-                }
-                boolean[] zArr = new boolean[i2];
-                if (!z3 && z6 && !UserObject.isDeleted(tLRPC$User)) {
-                    checkBoxCellArr[0] = new CheckBoxCell(parentActivity, i2);
-                    checkBoxCellArr[0].setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                    if (z) {
-                        CheckBoxCell checkBoxCell = checkBoxCellArr[0];
-                        Object[] objArr = new Object[i2];
-                        objArr[0] = UserObject.getFirstName(tLRPC$User);
-                        String formatString = LocaleController.formatString("ClearHistoryOptionAlso", NUM, objArr);
-                        c = 0;
-                        checkBoxCell.setText(formatString, "", false, false);
-                    } else {
-                        c = 0;
-                        checkBoxCellArr[0].setText(LocaleController.formatString("DeleteMessagesOptionAlso", NUM, UserObject.getFirstName(tLRPC$User)), "", false, false);
-                    }
-                    CheckBoxCell checkBoxCell2 = checkBoxCellArr[c];
-                    if (LocaleController.isRTL) {
-                        f = 16.0f;
-                        i3 = AndroidUtilities.dp(16.0f);
-                    } else {
-                        f = 16.0f;
-                        i3 = AndroidUtilities.dp(8.0f);
-                    }
-                    if (LocaleController.isRTL) {
-                        f = 8.0f;
-                    }
-                    checkBoxCell2.setPadding(i3, 0, AndroidUtilities.dp(f), 0);
-                    r15.addView(checkBoxCellArr[0], LayoutHelper.createFrame(-1, 48.0f, 83, 0.0f, 0.0f, 0.0f, 0.0f));
-                    checkBoxCellArr[0].setOnClickListener(new View.OnClickListener(zArr) {
-                        public final /* synthetic */ boolean[] f$0;
-
-                        {
-                            this.f$0 = r1;
-                        }
-
-                        public final void onClick(View view) {
-                            AlertsCreator.lambda$createClearOrDeleteDialogAlert$15(this.f$0, view);
-                        }
-                    });
-                }
+                frameLayout.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, i, f, 11.0f, (float) i2, 0.0f));
+                frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 24.0f, 57.0f, 24.0f, 9.0f));
                 if (tLRPC$User2 == null) {
-                    AvatarDrawable avatarDrawable3 = avatarDrawable;
-                    avatarDrawable3.setInfo(tLRPC$Chat2);
-                    backupImageView2.setImage(ImageLocation.getForChat(tLRPC$Chat2, false), "50_50", (Drawable) avatarDrawable3, (Object) tLRPC$Chat2);
+                    avatarDrawable.setInfo(tLRPC$Chat2);
+                    backupImageView.setImage(ImageLocation.getForChat(tLRPC$Chat2, false), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$Chat2);
                 } else if (UserObject.isReplyUser(tLRPC$User)) {
-                    AvatarDrawable avatarDrawable4 = avatarDrawable;
-                    avatarDrawable4.setSmallSize(true);
-                    avatarDrawable4.setAvatarType(12);
-                    backupImageView2.setImage((ImageLocation) null, (String) null, (Drawable) avatarDrawable4, (Object) tLRPC$User2);
+                    avatarDrawable.setSmallSize(true);
+                    avatarDrawable.setAvatarType(12);
+                    backupImageView.setImage((ImageLocation) null, (String) null, (Drawable) avatarDrawable, (Object) tLRPC$User2);
+                } else if (tLRPC$User2.id == clientUserId) {
+                    avatarDrawable.setSmallSize(true);
+                    avatarDrawable.setAvatarType(1);
+                    backupImageView.setImage((ImageLocation) null, (String) null, (Drawable) avatarDrawable, (Object) tLRPC$User2);
                 } else {
-                    BackupImageView backupImageView3 = backupImageView2;
-                    AvatarDrawable avatarDrawable5 = avatarDrawable;
-                    if (tLRPC$User2.id == clientUserId) {
-                        avatarDrawable5.setSmallSize(true);
-                        avatarDrawable5.setAvatarType(1);
-                        backupImageView3.setImage((ImageLocation) null, (String) null, (Drawable) avatarDrawable5, (Object) tLRPC$User2);
-                    } else {
-                        avatarDrawable5.setSmallSize(false);
-                        avatarDrawable5.setInfo(tLRPC$User2);
-                        backupImageView3.setImage(ImageLocation.getForUser(tLRPC$User2, false), "50_50", (Drawable) avatarDrawable5, (Object) tLRPC$User2);
-                    }
+                    avatarDrawable.setSmallSize(false);
+                    avatarDrawable.setInfo(tLRPC$User2);
+                    backupImageView.setImage(ImageLocation.getForUser(tLRPC$User2, false), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$User2);
                 }
-                if (z3) {
-                    if (UserObject.isUserSelf(tLRPC$User)) {
-                        textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DeleteAllMessagesSavedAlert", NUM)));
+                if (tLRPC$Chat2 != null) {
+                    if (TextUtils.isEmpty(str)) {
+                        textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ImportToChatNoTitle", NUM, tLRPC$Chat2.title)));
                     } else {
-                        textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("DeleteAllMessagesAlert", NUM)));
+                        textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ImportToChat", NUM, str, tLRPC$Chat2.title)));
                     }
-                } else if (z) {
-                    if (tLRPC$User2 != null) {
-                        if (z4) {
-                            textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithSecretUser", NUM, UserObject.getUserName(tLRPC$User))));
-                        } else if (tLRPC$User2.id == clientUserId) {
-                            textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("AreYouSureClearHistorySavedMessages", NUM)));
-                        } else {
-                            textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithUser", NUM, UserObject.getUserName(tLRPC$User))));
-                        }
-                    } else if (!ChatObject.isChannel(tLRPC$Chat) || (tLRPC$Chat2.megagroup && TextUtils.isEmpty(tLRPC$Chat2.username))) {
-                        textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithChat", NUM, tLRPC$Chat2.title)));
-                    } else if (tLRPC$Chat2.megagroup) {
-                        textView.setText(LocaleController.getString("AreYouSureClearHistoryGroup", NUM));
-                    } else {
-                        textView.setText(LocaleController.getString("AreYouSureClearHistoryChannel", NUM));
-                    }
-                } else if (z2) {
-                    if (!ChatObject.isChannel(tLRPC$Chat)) {
-                        textView.setText(LocaleController.getString("AreYouSureDeleteAndExit", NUM));
-                    } else if (tLRPC$Chat2.megagroup) {
-                        textView.setText(LocaleController.getString("MegaDeleteAlert", NUM));
-                    } else {
-                        textView.setText(LocaleController.getString("ChannelDeleteAlert", NUM));
-                    }
-                } else if (tLRPC$User2 != null) {
-                    if (z4) {
-                        textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteThisChatWithSecretUser", NUM, UserObject.getUserName(tLRPC$User))));
-                    } else if (tLRPC$User2.id == clientUserId) {
-                        textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("AreYouSureDeleteThisChatSavedMessages", NUM)));
-                    } else if (!tLRPC$User2.bot || tLRPC$User2.support) {
-                        textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteThisChatWithUser", NUM, UserObject.getUserName(tLRPC$User))));
-                    } else {
-                        textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteThisChatWithBot", NUM, UserObject.getUserName(tLRPC$User))));
-                    }
-                } else if (!ChatObject.isChannel(tLRPC$Chat)) {
-                    textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureDeleteAndExitName", NUM, tLRPC$Chat2.title)));
-                } else if (tLRPC$Chat2.megagroup) {
-                    textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("MegaLeaveAlertWithName", NUM, tLRPC$Chat2.title)));
+                } else if (TextUtils.isEmpty(str)) {
+                    textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ImportToUserNoTitle", NUM, ContactsController.formatName(tLRPC$User2.first_name, tLRPC$User2.last_name))));
                 } else {
-                    textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ChannelLeaveAlertWithName", NUM, tLRPC$Chat2.title)));
+                    textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("ImportToUser", NUM, str, ContactsController.formatName(tLRPC$User2.first_name, tLRPC$User2.last_name))));
                 }
-                if (z3) {
-                    string = LocaleController.getString("DeleteAll", NUM);
-                } else if (z) {
-                    if (z5) {
-                        string = LocaleController.getString("ClearHistoryCache", NUM);
-                    } else {
-                        string = LocaleController.getString("ClearHistory", NUM);
-                    }
-                } else if (z2) {
-                    if (!ChatObject.isChannel(tLRPC$Chat)) {
-                        string = LocaleController.getString("DeleteMega", NUM);
-                    } else if (tLRPC$Chat2.megagroup) {
-                        string = LocaleController.getString("DeleteMega", NUM);
-                    } else {
-                        string = LocaleController.getString("ChannelDelete", NUM);
-                    }
-                } else if (!ChatObject.isChannel(tLRPC$Chat)) {
-                    string = LocaleController.getString("DeleteChatUser", NUM);
-                } else if (tLRPC$Chat2.megagroup) {
-                    string = LocaleController.getString("LeaveMegaMenu", NUM);
-                } else {
-                    string = LocaleController.getString("LeaveChannelMenu", NUM);
-                }
-                String str = string;
-                AlertDialog.Builder builder3 = builder2;
-                builder3.setPositiveButton(str, new DialogInterface.OnClickListener(z5, z3, tLRPC$User, baseFragment, z, z2, tLRPC$Chat, z4, booleanCallback, zArr) {
-                    public final /* synthetic */ boolean f$0;
-                    public final /* synthetic */ boolean f$1;
-                    public final /* synthetic */ TLRPC$User f$2;
-                    public final /* synthetic */ BaseFragment f$3;
-                    public final /* synthetic */ boolean f$4;
-                    public final /* synthetic */ boolean f$5;
-                    public final /* synthetic */ TLRPC$Chat f$6;
-                    public final /* synthetic */ boolean f$7;
-                    public final /* synthetic */ MessagesStorage.BooleanCallback f$8;
-                    public final /* synthetic */ boolean[] f$9;
+                builder.setPositiveButton(LocaleController.getString("Import", NUM), new DialogInterface.OnClickListener(runnable) {
+                    public final /* synthetic */ Runnable f$0;
 
                     {
                         this.f$0 = r1;
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                        this.f$3 = r4;
-                        this.f$4 = r5;
-                        this.f$5 = r6;
-                        this.f$6 = r7;
-                        this.f$7 = r8;
-                        this.f$8 = r9;
-                        this.f$9 = r10;
                     }
 
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        AlertsCreator.lambda$createClearOrDeleteDialogAlert$17(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, dialogInterface, i);
+                        AlertsCreator.lambda$createImportDialogAlert$15(this.f$0, dialogInterface, i);
                     }
                 });
-                builder3.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-                AlertDialog create = builder3.create();
-                baseFragment.showDialog(create);
-                TextView textView3 = (TextView) create.getButton(-1);
-                if (textView3 != null) {
-                    textView3.setTextColor(Theme.getColor("dialogTextRed2"));
-                }
+                builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+                baseFragment2.showDialog(builder.create());
             }
         }
     }
 
-    static /* synthetic */ void lambda$createClearOrDeleteDialogAlert$15(boolean[] zArr, View view) {
+    static /* synthetic */ void lambda$createImportDialogAlert$15(Runnable runnable, DialogInterface dialogInterface, int i) {
+        if (runnable != null) {
+            runnable.run();
+        }
+    }
+
+    public static void createClearOrDeleteDialogAlert(BaseFragment baseFragment, boolean z, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, boolean z2, boolean z3, MessagesStorage.BooleanCallback booleanCallback) {
+        createClearOrDeleteDialogAlert(baseFragment, z, tLRPC$Chat != null && tLRPC$Chat.creator, false, tLRPC$Chat, tLRPC$User, z2, z3, booleanCallback);
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:122:0x02da  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x0315  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0328  */
+    /* JADX WARNING: Removed duplicated region for block: B:135:0x0352  */
+    /* JADX WARNING: Removed duplicated region for block: B:182:0x04f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:184:0x04ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:205:0x05a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:209:? A[RETURN, SYNTHETIC] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static void createClearOrDeleteDialogAlert(org.telegram.ui.ActionBar.BaseFragment r36, boolean r37, boolean r38, boolean r39, org.telegram.tgnet.TLRPC$Chat r40, org.telegram.tgnet.TLRPC$User r41, boolean r42, boolean r43, org.telegram.messenger.MessagesStorage.BooleanCallback r44) {
+        /*
+            r12 = r36
+            r8 = r40
+            r4 = r41
+            if (r12 == 0) goto L_0x05aa
+            android.app.Activity r0 = r36.getParentActivity()
+            if (r0 == 0) goto L_0x05aa
+            if (r8 != 0) goto L_0x0014
+            if (r4 != 0) goto L_0x0014
+            goto L_0x05aa
+        L_0x0014:
+            int r0 = r36.getCurrentAccount()
+            android.app.Activity r1 = r36.getParentActivity()
+            org.telegram.ui.ActionBar.AlertDialog$Builder r13 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            r13.<init>((android.content.Context) r1)
+            org.telegram.messenger.UserConfig r2 = org.telegram.messenger.UserConfig.getInstance(r0)
+            int r2 = r2.getClientUserId()
+            r3 = 1
+            org.telegram.ui.Cells.CheckBoxCell[] r5 = new org.telegram.ui.Cells.CheckBoxCell[r3]
+            android.widget.TextView r6 = new android.widget.TextView
+            r6.<init>(r1)
+            java.lang.String r7 = "dialogTextBlack"
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+            r6.setTextColor(r7)
+            r7 = 1098907648(0x41800000, float:16.0)
+            r6.setTextSize(r3, r7)
+            boolean r9 = org.telegram.messenger.LocaleController.isRTL
+            if (r9 == 0) goto L_0x0045
+            r9 = 5
+            goto L_0x0046
+        L_0x0045:
+            r9 = 3
+        L_0x0046:
+            r9 = r9 | 48
+            r6.setGravity(r9)
+            boolean r9 = org.telegram.messenger.ChatObject.isChannel(r40)
+            if (r9 == 0) goto L_0x005b
+            java.lang.String r9 = r8.username
+            boolean r9 = android.text.TextUtils.isEmpty(r9)
+            if (r9 != 0) goto L_0x005b
+            r9 = 1
+            goto L_0x005c
+        L_0x005b:
+            r9 = 0
+        L_0x005c:
+            org.telegram.ui.Components.AlertsCreator$3 r15 = new org.telegram.ui.Components.AlertsCreator$3
+            r15.<init>(r1, r5)
+            r13.setView(r15)
+            org.telegram.ui.Components.AvatarDrawable r10 = new org.telegram.ui.Components.AvatarDrawable
+            r10.<init>()
+            r17 = 1094713344(0x41400000, float:12.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            r10.setTextSize(r11)
+            org.telegram.ui.Components.BackupImageView r11 = new org.telegram.ui.Components.BackupImageView
+            r11.<init>(r1)
+            r7 = 1101004800(0x41a00000, float:20.0)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r11.setRoundRadius(r14)
+            r19 = 40
+            r20 = 1109393408(0x42200000, float:40.0)
+            boolean r14 = org.telegram.messenger.LocaleController.isRTL
+            if (r14 == 0) goto L_0x008a
+            r14 = 5
+            goto L_0x008b
+        L_0x008a:
+            r14 = 3
+        L_0x008b:
+            r21 = r14 | 48
+            r22 = 1102053376(0x41b00000, float:22.0)
+            r23 = 1084227584(0x40a00000, float:5.0)
+            r24 = 1102053376(0x41b00000, float:22.0)
+            r25 = 0
+            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
+            r15.addView(r11, r14)
+            android.widget.TextView r14 = new android.widget.TextView
+            r14.<init>(r1)
+            java.lang.String r19 = "actionBarDefaultSubmenuItem"
+            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r19)
+            r14.setTextColor(r12)
+            r14.setTextSize(r3, r7)
+            java.lang.String r7 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
+            r14.setTypeface(r7)
+            r14.setLines(r3)
+            r14.setMaxLines(r3)
+            r14.setSingleLine(r3)
+            boolean r7 = org.telegram.messenger.LocaleController.isRTL
+            if (r7 == 0) goto L_0x00c5
+            r7 = 5
+            goto L_0x00c6
+        L_0x00c5:
+            r7 = 3
+        L_0x00c6:
+            r7 = r7 | 16
+            r14.setGravity(r7)
+            android.text.TextUtils$TruncateAt r7 = android.text.TextUtils.TruncateAt.END
+            r14.setEllipsize(r7)
+            java.lang.String r12 = "LeaveChannelMenu"
+            java.lang.String r3 = "DeleteChatUser"
+            java.lang.String r7 = "ClearHistoryCache"
+            r23 = r13
+            java.lang.String r13 = "ClearHistory"
+            r25 = r11
+            java.lang.String r11 = "LeaveMegaMenu"
+            if (r37 == 0) goto L_0x0102
+            if (r9 == 0) goto L_0x00f2
+            r26 = r9
+            r27 = r10
+            r9 = 2131624845(0x7f0e038d, float:1.8876881E38)
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r9)
+            r14.setText(r10)
+            goto L_0x016e
+        L_0x00f2:
+            r26 = r9
+            r27 = r10
+            r9 = 2131624844(0x7f0e038c, float:1.887688E38)
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r13, r9)
+            r14.setText(r10)
+            goto L_0x016e
+        L_0x0102:
+            r26 = r9
+            r27 = r10
+            if (r38 == 0) goto L_0x0137
+            boolean r9 = org.telegram.messenger.ChatObject.isChannel(r40)
+            java.lang.String r10 = "DeleteMegaMenu"
+            if (r9 == 0) goto L_0x012c
+            boolean r9 = r8.megagroup
+            if (r9 == 0) goto L_0x011f
+            r9 = 2131625068(0x7f0e046c, float:1.8877334E38)
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            r14.setText(r9)
+            goto L_0x016e
+        L_0x011f:
+            r9 = 2131624656(0x7f0e02d0, float:1.8876498E38)
+            java.lang.String r10 = "ChannelDeleteMenu"
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            r14.setText(r9)
+            goto L_0x016e
+        L_0x012c:
+            r9 = 2131625068(0x7f0e046c, float:1.8877334E38)
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            r14.setText(r9)
+            goto L_0x016e
+        L_0x0137:
+            if (r8 == 0) goto L_0x0164
+            boolean r9 = org.telegram.messenger.ChatObject.isChannel(r40)
+            if (r9 == 0) goto L_0x0159
+            boolean r9 = r8.megagroup
+            if (r9 == 0) goto L_0x014e
+            r9 = 2131625828(0x7f0e0764, float:1.8878875E38)
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r9)
+            r14.setText(r10)
+            goto L_0x016e
+        L_0x014e:
+            r10 = 2131625826(0x7f0e0762, float:1.887887E38)
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r12, r10)
+            r14.setText(r9)
+            goto L_0x016e
+        L_0x0159:
+            r9 = 2131625828(0x7f0e0764, float:1.8878875E38)
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r9)
+            r14.setText(r10)
+            goto L_0x016e
+        L_0x0164:
+            r9 = 2131625054(0x7f0e045e, float:1.8877305E38)
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r3, r9)
+            r14.setText(r10)
+        L_0x016e:
+            r28 = -1
+            r29 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            boolean r9 = org.telegram.messenger.LocaleController.isRTL
+            if (r9 == 0) goto L_0x0178
+            r10 = 5
+            goto L_0x0179
+        L_0x0178:
+            r10 = 3
+        L_0x0179:
+            r30 = r10 | 48
+            if (r9 == 0) goto L_0x0182
+            r31 = 21
+            r10 = 21
+            goto L_0x0184
+        L_0x0182:
+            r10 = 76
+        L_0x0184:
+            float r10 = (float) r10
+            r32 = 1093664768(0x41300000, float:11.0)
+            if (r9 == 0) goto L_0x018c
+            r9 = 76
+            goto L_0x018e
+        L_0x018c:
+            r9 = 21
+        L_0x018e:
+            float r9 = (float) r9
+            r34 = 0
+            r31 = r10
+            r33 = r9
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r28, r29, r30, r31, r32, r33, r34)
+            r15.addView(r14, r9)
+            r28 = -2
+            r29 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            boolean r9 = org.telegram.messenger.LocaleController.isRTL
+            if (r9 == 0) goto L_0x01a6
+            r10 = 5
+            goto L_0x01a7
+        L_0x01a6:
+            r10 = 3
+        L_0x01a7:
+            r30 = r10 | 48
+            r31 = 1103101952(0x41CLASSNAME, float:24.0)
+            r32 = 1113849856(0x42640000, float:57.0)
+            r33 = 1103101952(0x41CLASSNAME, float:24.0)
+            r34 = 1091567616(0x41100000, float:9.0)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r28, r29, r30, r31, r32, r33, r34)
+            r15.addView(r6, r9)
+            if (r4 == 0) goto L_0x01cc
+            boolean r9 = r4.bot
+            if (r9 != 0) goto L_0x01cc
+            int r9 = r4.id
+            if (r9 == r2) goto L_0x01cc
+            org.telegram.messenger.MessagesController r9 = org.telegram.messenger.MessagesController.getInstance(r0)
+            boolean r9 = r9.canRevokePmInbox
+            if (r9 == 0) goto L_0x01cc
+            r9 = 1
+            goto L_0x01cd
+        L_0x01cc:
+            r9 = 0
+        L_0x01cd:
+            if (r4 == 0) goto L_0x01d6
+            org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
+            int r0 = r0.revokeTimePmLimit
+            goto L_0x01dc
+        L_0x01d6:
+            org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
+            int r0 = r0.revokeTimeLimit
+        L_0x01dc:
+            if (r42 != 0) goto L_0x01e9
+            if (r4 == 0) goto L_0x01e9
+            if (r9 == 0) goto L_0x01e9
+            r9 = 2147483647(0x7fffffff, float:NaN)
+            if (r0 != r9) goto L_0x01e9
+            r0 = 1
+            goto L_0x01ea
+        L_0x01e9:
+            r0 = 0
+        L_0x01ea:
+            r9 = 1
+            boolean[] r14 = new boolean[r9]
+            if (r39 != 0) goto L_0x01fc
+            if (r42 != 0) goto L_0x01f3
+            if (r0 == 0) goto L_0x01fc
+        L_0x01f3:
+            boolean r0 = org.telegram.messenger.UserObject.isDeleted(r41)
+            if (r0 == 0) goto L_0x01fa
+            goto L_0x01fc
+        L_0x01fa:
+            r0 = 0
+            goto L_0x0215
+        L_0x01fc:
+            if (r43 == 0) goto L_0x0212
+            if (r37 != 0) goto L_0x0212
+            if (r8 == 0) goto L_0x0212
+            boolean r0 = r8.creator
+            if (r0 == 0) goto L_0x0212
+            boolean r0 = org.telegram.messenger.ChatObject.isChannel(r40)
+            if (r0 == 0) goto L_0x0210
+            boolean r0 = r8.megagroup
+            if (r0 == 0) goto L_0x0212
+        L_0x0210:
+            r0 = 1
+            goto L_0x0213
+        L_0x0212:
+            r0 = 0
+        L_0x0213:
+            if (r0 == 0) goto L_0x02d3
+        L_0x0215:
+            org.telegram.ui.Cells.CheckBoxCell r9 = new org.telegram.ui.Cells.CheckBoxCell
+            r10 = 1
+            r9.<init>(r1, r10)
+            r1 = 0
+            r5[r1] = r9
+            r9 = r5[r1]
+            android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
+            r9.setBackgroundDrawable(r10)
+            java.lang.String r9 = ""
+            if (r42 == 0) goto L_0x0247
+            r0 = r5[r1]
+            r18 = r3
+            r10 = 1
+            java.lang.Object[] r3 = new java.lang.Object[r10]
+            java.lang.String r10 = org.telegram.messenger.UserObject.getFirstName(r41)
+            r3[r1] = r10
+            java.lang.String r10 = "DeleteForUser"
+            r28 = r12
+            r12 = 2131625058(0x7f0e0462, float:1.8877313E38)
+            java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r10, r12, r3)
+            r0.setText(r3, r9, r1, r1)
+            goto L_0x028d
+        L_0x0247:
+            r18 = r3
+            r28 = r12
+            if (r0 == 0) goto L_0x025c
+            r0 = r5[r1]
+            r3 = 2131625062(0x7f0e0466, float:1.8877321E38)
+            java.lang.String r10 = "DeleteGroupForAll"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r3)
+            r0.setText(r3, r9, r1, r1)
+            goto L_0x028d
+        L_0x025c:
+            if (r37 == 0) goto L_0x0276
+            r0 = r5[r1]
+            r3 = 2131624846(0x7f0e038e, float:1.8876883E38)
+            r10 = 1
+            java.lang.Object[] r12 = new java.lang.Object[r10]
+            java.lang.String r16 = org.telegram.messenger.UserObject.getFirstName(r41)
+            r12[r1] = r16
+            java.lang.String r10 = "ClearHistoryOptionAlso"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r10, r3, r12)
+            r0.setText(r3, r9, r1, r1)
+            goto L_0x028d
+        L_0x0276:
+            r0 = r5[r1]
+            r3 = 2131625070(0x7f0e046e, float:1.8877338E38)
+            r10 = 1
+            java.lang.Object[] r12 = new java.lang.Object[r10]
+            java.lang.String r10 = org.telegram.messenger.UserObject.getFirstName(r41)
+            r12[r1] = r10
+            java.lang.String r10 = "DeleteMessagesOptionAlso"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r10, r3, r12)
+            r0.setText(r3, r9, r1, r1)
+        L_0x028d:
+            r0 = r5[r1]
+            boolean r1 = org.telegram.messenger.LocaleController.isRTL
+            if (r1 == 0) goto L_0x029a
+            r1 = 1098907648(0x41800000, float:16.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            goto L_0x02a2
+        L_0x029a:
+            r1 = 1098907648(0x41800000, float:16.0)
+            r3 = 1090519040(0x41000000, float:8.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+        L_0x02a2:
+            boolean r9 = org.telegram.messenger.LocaleController.isRTL
+            if (r9 == 0) goto L_0x02a8
+            r1 = 1090519040(0x41000000, float:8.0)
+        L_0x02a8:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            r9 = 0
+            r0.setPadding(r3, r9, r1, r9)
+            r0 = r5[r9]
+            r29 = -1
+            r30 = 1111490560(0x42400000, float:48.0)
+            r31 = 83
+            r32 = 0
+            r33 = 0
+            r34 = 0
+            r35 = 0
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r29, r30, r31, r32, r33, r34, r35)
+            r15.addView(r0, r1)
+            r0 = 0
+            r1 = r5[r0]
+            org.telegram.ui.Components.-$$Lambda$AlertsCreator$FvEsDKI58ORotZu0OBVVOMj-LIY r0 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$FvEsDKI58ORotZu0OBVVOMj-LIY
+            r0.<init>(r14)
+            r1.setOnClickListener(r0)
+            goto L_0x02d7
+        L_0x02d3:
+            r18 = r3
+            r28 = r12
+        L_0x02d7:
+            r12 = 0
+            if (r4 == 0) goto L_0x0315
+            boolean r0 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r41)
+            if (r0 == 0) goto L_0x02f1
+            r0 = r27
+            r1 = 1
+            r0.setSmallSize(r1)
+            r3 = 12
+            r0.setAvatarType(r3)
+            r3 = r25
+            r3.setImage((org.telegram.messenger.ImageLocation) r12, (java.lang.String) r12, (android.graphics.drawable.Drawable) r0, (java.lang.Object) r4)
+            goto L_0x0326
+        L_0x02f1:
+            r3 = r25
+            r0 = r27
+            r1 = 1
+            int r5 = r4.id
+            if (r5 != r2) goto L_0x0304
+            r0.setSmallSize(r1)
+            r0.setAvatarType(r1)
+            r3.setImage((org.telegram.messenger.ImageLocation) r12, (java.lang.String) r12, (android.graphics.drawable.Drawable) r0, (java.lang.Object) r4)
+            goto L_0x0326
+        L_0x0304:
+            r1 = 0
+            r0.setSmallSize(r1)
+            r0.setInfo((org.telegram.tgnet.TLRPC$User) r4)
+            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForUser(r4, r1)
+            java.lang.String r9 = "50_50"
+            r3.setImage((org.telegram.messenger.ImageLocation) r5, (java.lang.String) r9, (android.graphics.drawable.Drawable) r0, (java.lang.Object) r4)
+            goto L_0x0326
+        L_0x0315:
+            r3 = r25
+            r0 = r27
+            r1 = 0
+            r0.setInfo((org.telegram.tgnet.TLRPC$Chat) r8)
+            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForChat(r8, r1)
+            java.lang.String r1 = "50_50"
+            r3.setImage((org.telegram.messenger.ImageLocation) r5, (java.lang.String) r1, (android.graphics.drawable.Drawable) r0, (java.lang.Object) r8)
+        L_0x0326:
+            if (r39 == 0) goto L_0x0352
+            boolean r0 = org.telegram.messenger.UserObject.isUserSelf(r41)
+            if (r0 == 0) goto L_0x0340
+            r0 = 2131625037(0x7f0e044d, float:1.887727E38)
+            java.lang.String r1 = "DeleteAllMessagesSavedAlert"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x0340:
+            r0 = 2131625036(0x7f0e044c, float:1.8877269E38)
+            java.lang.String r1 = "DeleteAllMessagesAlert"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x0352:
+            if (r37 == 0) goto L_0x03f3
+            if (r4 == 0) goto L_0x03a6
+            if (r42 == 0) goto L_0x0374
+            r0 = 2131624313(0x7f0e0179, float:1.8875802E38)
+            r1 = 1
+            java.lang.Object[] r1 = new java.lang.Object[r1]
+            java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r41)
+            r3 = 0
+            r1[r3] = r2
+            java.lang.String r2 = "AreYouSureClearHistoryWithSecretUser"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x0374:
+            int r0 = r4.id
+            if (r0 != r2) goto L_0x038a
+            r0 = 2131624311(0x7f0e0177, float:1.8875798E38)
+            java.lang.String r1 = "AreYouSureClearHistorySavedMessages"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x038a:
+            r0 = 2131624314(0x7f0e017a, float:1.8875804E38)
+            r1 = 1
+            java.lang.Object[] r1 = new java.lang.Object[r1]
+            java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r41)
+            r3 = 0
+            r1[r3] = r2
+            java.lang.String r2 = "AreYouSureClearHistoryWithUser"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x03a6:
+            boolean r0 = org.telegram.messenger.ChatObject.isChannel(r40)
+            if (r0 == 0) goto L_0x03d9
+            boolean r0 = r8.megagroup
+            if (r0 == 0) goto L_0x03b9
+            java.lang.String r0 = r8.username
+            boolean r0 = android.text.TextUtils.isEmpty(r0)
+            if (r0 == 0) goto L_0x03b9
+            goto L_0x03d9
+        L_0x03b9:
+            boolean r0 = r8.megagroup
+            if (r0 == 0) goto L_0x03cb
+            r0 = 2131624310(0x7f0e0176, float:1.8875796E38)
+            java.lang.String r1 = "AreYouSureClearHistoryGroup"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x03cb:
+            r0 = 2131624308(0x7f0e0174, float:1.8875792E38)
+            java.lang.String r1 = "AreYouSureClearHistoryChannel"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x03d9:
+            r0 = 2131624312(0x7f0e0178, float:1.88758E38)
+            r1 = 1
+            java.lang.Object[] r1 = new java.lang.Object[r1]
+            java.lang.String r2 = r8.title
+            r3 = 0
+            r1[r3] = r2
+            java.lang.String r2 = "AreYouSureClearHistoryWithChat"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x03f3:
+            if (r38 == 0) goto L_0x0429
+            boolean r0 = org.telegram.messenger.ChatObject.isChannel(r40)
+            if (r0 == 0) goto L_0x041b
+            boolean r0 = r8.megagroup
+            if (r0 == 0) goto L_0x040d
+            r0 = 2131624315(0x7f0e017b, float:1.8875806E38)
+            java.lang.String r1 = "AreYouSureDeleteAndExit"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x040d:
+            r0 = 2131624653(0x7f0e02cd, float:1.8876492E38)
+            java.lang.String r1 = "ChannelDeleteAlert"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x041b:
+            r0 = 2131624315(0x7f0e017b, float:1.8875806E38)
+            java.lang.String r1 = "AreYouSureDeleteAndExit"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x0429:
+            if (r4 == 0) goto L_0x049d
+            if (r42 == 0) goto L_0x0449
+            r0 = 2131624333(0x7f0e018d, float:1.8875843E38)
+            r1 = 1
+            java.lang.Object[] r1 = new java.lang.Object[r1]
+            java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r41)
+            r3 = 0
+            r1[r3] = r2
+            java.lang.String r2 = "AreYouSureDeleteThisChatWithSecretUser"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x0449:
+            int r0 = r4.id
+            if (r0 != r2) goto L_0x045f
+            r0 = 2131624330(0x7f0e018a, float:1.8875837E38)
+            java.lang.String r1 = "AreYouSureDeleteThisChatSavedMessages"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x045f:
+            boolean r0 = r4.bot
+            if (r0 == 0) goto L_0x0482
+            boolean r0 = r4.support
+            if (r0 != 0) goto L_0x0482
+            r0 = 2131624331(0x7f0e018b, float:1.8875839E38)
+            r1 = 1
+            java.lang.Object[] r1 = new java.lang.Object[r1]
+            java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r41)
+            r3 = 0
+            r1[r3] = r2
+            java.lang.String r2 = "AreYouSureDeleteThisChatWithBot"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x0482:
+            r1 = 1
+            r3 = 0
+            r0 = 2131624334(0x7f0e018e, float:1.8875845E38)
+            java.lang.Object[] r1 = new java.lang.Object[r1]
+            java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r41)
+            r1[r3] = r2
+            java.lang.String r2 = "AreYouSureDeleteThisChatWithUser"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x049d:
+            boolean r0 = org.telegram.messenger.ChatObject.isChannel(r40)
+            if (r0 == 0) goto L_0x04d9
+            boolean r0 = r8.megagroup
+            if (r0 == 0) goto L_0x04c0
+            r0 = 2131625968(0x7f0e07f0, float:1.8879159E38)
+            r1 = 1
+            java.lang.Object[] r1 = new java.lang.Object[r1]
+            java.lang.String r2 = r8.title
+            r3 = 0
+            r1[r3] = r2
+            java.lang.String r2 = "MegaLeaveAlertWithName"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x04c0:
+            r1 = 1
+            r3 = 0
+            r0 = 2131624667(0x7f0e02db, float:1.887652E38)
+            java.lang.Object[] r1 = new java.lang.Object[r1]
+            java.lang.String r2 = r8.title
+            r1[r3] = r2
+            java.lang.String r2 = "ChannelLeaveAlertWithName"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+            goto L_0x04f1
+        L_0x04d9:
+            r1 = 1
+            r3 = 0
+            r0 = 2131624316(0x7f0e017c, float:1.8875808E38)
+            java.lang.Object[] r1 = new java.lang.Object[r1]
+            java.lang.String r2 = r8.title
+            r1[r3] = r2
+            java.lang.String r2 = "AreYouSureDeleteAndExitName"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r0, r1)
+            android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
+            r6.setText(r0)
+        L_0x04f1:
+            if (r39 == 0) goto L_0x04ff
+            r0 = 2131625032(0x7f0e0448, float:1.887726E38)
+            java.lang.String r1 = "DeleteAll"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+        L_0x04fc:
+            r13 = r0
+            goto L_0x0563
+        L_0x04ff:
+            if (r37 == 0) goto L_0x0513
+            if (r26 == 0) goto L_0x050b
+            r0 = 2131624845(0x7f0e038d, float:1.8876881E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r7, r0)
+            goto L_0x04fc
+        L_0x050b:
+            r0 = 2131624844(0x7f0e038c, float:1.887688E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r13, r0)
+            goto L_0x04fc
+        L_0x0513:
+            if (r38 == 0) goto L_0x053d
+            boolean r0 = org.telegram.messenger.ChatObject.isChannel(r40)
+            if (r0 == 0) goto L_0x0533
+            boolean r0 = r8.megagroup
+            if (r0 == 0) goto L_0x0529
+            r0 = 2131625067(0x7f0e046b, float:1.8877331E38)
+            java.lang.String r1 = "DeleteMega"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            goto L_0x04fc
+        L_0x0529:
+            r0 = 2131624652(0x7f0e02cc, float:1.887649E38)
+            java.lang.String r1 = "ChannelDelete"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            goto L_0x04fc
+        L_0x0533:
+            r0 = 2131625067(0x7f0e046b, float:1.8877331E38)
+            java.lang.String r1 = "DeleteMega"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            goto L_0x04fc
+        L_0x053d:
+            boolean r0 = org.telegram.messenger.ChatObject.isChannel(r40)
+            if (r0 == 0) goto L_0x0559
+            boolean r0 = r8.megagroup
+            if (r0 == 0) goto L_0x054f
+            r0 = 2131625828(0x7f0e0764, float:1.8878875E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r11, r0)
+            goto L_0x04fc
+        L_0x054f:
+            r1 = r28
+            r0 = 2131625826(0x7f0e0762, float:1.887887E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            goto L_0x04fc
+        L_0x0559:
+            r1 = r18
+            r0 = 2131625054(0x7f0e045e, float:1.8877305E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            goto L_0x04fc
+        L_0x0563:
+            org.telegram.ui.Components.-$$Lambda$AlertsCreator$mZe7goBwfhpKMDcF_xi5W8fzpd8 r15 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$mZe7goBwfhpKMDcF_xi5W8fzpd8
+            r0 = r15
+            r1 = r26
+            r2 = r39
+            r3 = r42
+            r4 = r41
+            r5 = r36
+            r6 = r37
+            r7 = r38
+            r8 = r40
+            r9 = r43
+            r10 = r44
+            r11 = r14
+            r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
+            r0 = r23
+            r0.setPositiveButton(r13, r15)
+            r1 = 2131624594(0x7f0e0292, float:1.8876372E38)
+            java.lang.String r2 = "Cancel"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setNegativeButton(r1, r12)
+            org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
+            r1 = r36
+            r1.showDialog(r0)
+            r1 = -1
+            android.view.View r0 = r0.getButton(r1)
+            android.widget.TextView r0 = (android.widget.TextView) r0
+            if (r0 == 0) goto L_0x05aa
+            java.lang.String r1 = "dialogTextRed2"
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r0.setTextColor(r1)
+        L_0x05aa:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.createClearOrDeleteDialogAlert(org.telegram.ui.ActionBar.BaseFragment, boolean, boolean, boolean, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$User, boolean, boolean, org.telegram.messenger.MessagesStorage$BooleanCallback):void");
+    }
+
+    static /* synthetic */ void lambda$createClearOrDeleteDialogAlert$16(boolean[] zArr, View view) {
         zArr[0] = !zArr[0];
         ((CheckBoxCell) view).setChecked(zArr[0], true);
     }
 
-    static /* synthetic */ void lambda$createClearOrDeleteDialogAlert$17(boolean z, boolean z2, TLRPC$User tLRPC$User, BaseFragment baseFragment, boolean z3, boolean z4, TLRPC$Chat tLRPC$Chat, boolean z5, MessagesStorage.BooleanCallback booleanCallback, boolean[] zArr, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createClearOrDeleteDialogAlert$18(boolean z, boolean z2, boolean z3, TLRPC$User tLRPC$User, BaseFragment baseFragment, boolean z4, boolean z5, TLRPC$Chat tLRPC$Chat, boolean z6, MessagesStorage.BooleanCallback booleanCallback, boolean[] zArr, DialogInterface dialogInterface, int i) {
         TLRPC$User tLRPC$User2 = tLRPC$User;
         MessagesStorage.BooleanCallback booleanCallback2 = booleanCallback;
-        boolean z6 = false;
-        if (!z && !z2) {
+        boolean z7 = false;
+        if (!z && !z2 && !z3) {
             if (UserObject.isUserSelf(tLRPC$User)) {
-                createClearOrDeleteDialogAlert(baseFragment, z3, z4, true, tLRPC$Chat, tLRPC$User, z5, booleanCallback);
+                createClearOrDeleteDialogAlert(baseFragment, z4, z5, true, tLRPC$Chat, tLRPC$User, false, z6, booleanCallback);
                 return;
             } else if (tLRPC$User2 != null && zArr[0]) {
-                MessagesStorage.getInstance(baseFragment.getCurrentAccount()).getMessagesCount((long) tLRPC$User2.id, new MessagesStorage.IntCallback(z3, z4, tLRPC$Chat, tLRPC$User, z5, booleanCallback, zArr) {
+                MessagesStorage.getInstance(baseFragment.getCurrentAccount()).getMessagesCount((long) tLRPC$User2.id, new MessagesStorage.IntCallback(z4, z5, tLRPC$Chat, tLRPC$User, z6, booleanCallback, zArr) {
                     public final /* synthetic */ boolean f$1;
                     public final /* synthetic */ boolean f$2;
                     public final /* synthetic */ TLRPC$Chat f$3;
@@ -1824,7 +2393,7 @@ public class AlertsCreator {
                     }
 
                     public final void run(int i) {
-                        AlertsCreator.lambda$null$16(BaseFragment.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, i);
+                        AlertsCreator.lambda$null$17(BaseFragment.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, i);
                     }
                 });
                 return;
@@ -1832,16 +2401,16 @@ public class AlertsCreator {
         }
         if (booleanCallback2 != null) {
             if (z2 || zArr[0]) {
-                z6 = true;
+                z7 = true;
             }
-            booleanCallback2.run(z6);
+            booleanCallback2.run(z7);
         }
     }
 
-    static /* synthetic */ void lambda$null$16(BaseFragment baseFragment, boolean z, boolean z2, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, boolean z3, MessagesStorage.BooleanCallback booleanCallback, boolean[] zArr, int i) {
+    static /* synthetic */ void lambda$null$17(BaseFragment baseFragment, boolean z, boolean z2, TLRPC$Chat tLRPC$Chat, TLRPC$User tLRPC$User, boolean z3, MessagesStorage.BooleanCallback booleanCallback, boolean[] zArr, int i) {
         MessagesStorage.BooleanCallback booleanCallback2 = booleanCallback;
         if (i >= 50) {
-            createClearOrDeleteDialogAlert(baseFragment, z, z2, true, tLRPC$Chat, tLRPC$User, z3, booleanCallback);
+            createClearOrDeleteDialogAlert(baseFragment, z, z2, true, tLRPC$Chat, tLRPC$User, false, z3, booleanCallback);
         } else if (booleanCallback2 != null) {
             booleanCallback.run(zArr[0]);
         }
@@ -1912,7 +2481,7 @@ public class AlertsCreator {
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    AlertsCreator.lambda$createCallDialogAlert$18(BaseFragment.this, this.f$1, this.f$2, dialogInterface, i);
+                    AlertsCreator.lambda$createCallDialogAlert$19(BaseFragment.this, this.f$1, this.f$2, dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -1920,7 +2489,7 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$createCallDialogAlert$18(BaseFragment baseFragment, TLRPC$User tLRPC$User, boolean z, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createCallDialogAlert$19(BaseFragment baseFragment, TLRPC$User tLRPC$User, boolean z, DialogInterface dialogInterface, int i) {
         TLRPC$UserFull userFull = baseFragment.getMessagesController().getUserFull(tLRPC$User.id);
         VoIPHelper.startCall(tLRPC$User, z, userFull != null && userFull.video_calls_available, baseFragment.getParentActivity(), userFull);
     }
@@ -1981,7 +2550,7 @@ public class AlertsCreator {
                             }
 
                             public final void onClick(View view) {
-                                AlertsCreator.lambda$createBlockDialogAlert$19(this.f$0, this.f$1, view);
+                                AlertsCreator.lambda$createBlockDialogAlert$20(this.f$0, this.f$1, view);
                             }
                         });
                     }
@@ -2009,7 +2578,7 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$createBlockDialogAlert$19(boolean[] zArr, int i, View view) {
+    static /* synthetic */ void lambda$createBlockDialogAlert$20(boolean[] zArr, int i, View view) {
         zArr[i] = !zArr[i];
         ((CheckBoxCell) view).setChecked(zArr[i], true);
     }
@@ -2041,13 +2610,13 @@ public class AlertsCreator {
             }
 
             public final void onScrollStateChange(NumberPicker numberPicker, int i) {
-                AlertsCreator.lambda$createDatePickerDialog$21(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i);
+                AlertsCreator.lambda$createDatePickerDialog$22(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i);
             }
         });
         numberPicker.setMinValue(0);
         numberPicker.setMaxValue(11);
         linearLayout.addView(numberPicker, LayoutHelper.createLinear(0, -2, 0.3f));
-        numberPicker.setFormatter($$Lambda$AlertsCreator$UvOTaOUcRrdCENC_RndmXYBIc.INSTANCE);
+        numberPicker.setFormatter($$Lambda$AlertsCreator$S6skNgpa4FblsESNpYE039NR8xI.INSTANCE);
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener(numberPicker, numberPicker3) {
             public final /* synthetic */ NumberPicker f$1;
             public final /* synthetic */ NumberPicker f$2;
@@ -2075,7 +2644,7 @@ public class AlertsCreator {
             }
 
             public final void onScrollStateChange(NumberPicker numberPicker, int i) {
-                AlertsCreator.lambda$createDatePickerDialog$24(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i);
+                AlertsCreator.lambda$createDatePickerDialog$25(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i);
             }
         });
         Calendar instance = Calendar.getInstance();
@@ -2112,7 +2681,7 @@ public class AlertsCreator {
             }
 
             public final void onScrollStateChange(NumberPicker numberPicker, int i) {
-                AlertsCreator.lambda$createDatePickerDialog$26(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i);
+                AlertsCreator.lambda$createDatePickerDialog$27(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i);
             }
         });
         updateDayPicker(numberPicker2, numberPicker, numberPicker3);
@@ -2143,39 +2712,39 @@ public class AlertsCreator {
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                AlertsCreator.lambda$createDatePickerDialog$27(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
+                AlertsCreator.lambda$createDatePickerDialog$28(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         return builder;
     }
 
-    static /* synthetic */ void lambda$createDatePickerDialog$21(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i) {
+    static /* synthetic */ void lambda$createDatePickerDialog$22(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i) {
         if (z && i == 0) {
             checkPickerDate(numberPicker, numberPicker2, numberPicker3);
         }
     }
 
-    static /* synthetic */ String lambda$createDatePickerDialog$22(int i) {
+    static /* synthetic */ String lambda$createDatePickerDialog$23(int i) {
         Calendar instance = Calendar.getInstance();
         instance.set(5, 1);
         instance.set(2, i);
         return instance.getDisplayName(2, 1, Locale.getDefault());
     }
 
-    static /* synthetic */ void lambda$createDatePickerDialog$24(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i) {
+    static /* synthetic */ void lambda$createDatePickerDialog$25(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i) {
         if (z && i == 0) {
             checkPickerDate(numberPicker, numberPicker2, numberPicker3);
         }
     }
 
-    static /* synthetic */ void lambda$createDatePickerDialog$26(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i) {
+    static /* synthetic */ void lambda$createDatePickerDialog$27(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i) {
         if (z && i == 0) {
             checkPickerDate(numberPicker, numberPicker2, numberPicker3);
         }
     }
 
-    static /* synthetic */ void lambda$createDatePickerDialog$27(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, DatePickerDelegate datePickerDelegate, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createDatePickerDialog$28(boolean z, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, DatePickerDelegate datePickerDelegate, DialogInterface dialogInterface, int i) {
         if (z) {
             checkPickerDate(numberPicker, numberPicker2, numberPicker3);
         }
@@ -2347,7 +2916,7 @@ public class AlertsCreator {
         textView.setTextSize(1, 20.0f);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 12.0f, 0.0f, 0.0f));
-        textView.setOnTouchListener($$Lambda$AlertsCreator$ZUy4sw0mlWGsxH3mMpSLAd5F_bA.INSTANCE);
+        textView.setOnTouchListener($$Lambda$AlertsCreator$MzEdS54Zrst6JPMuXiKdPiKW1r0.INSTANCE);
         int i = (int) j3;
         if (i <= 0 || j3 == j4 || (user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(Integer.valueOf(i))) == null || user.bot || (tLRPC$UserStatus = user.status) == null || tLRPC$UserStatus.expires <= 0) {
             r22 = r7;
@@ -2379,7 +2948,7 @@ public class AlertsCreator {
                 }
 
                 public final void onClick(View view) {
-                    AlertsCreator.lambda$createScheduleDatePickerDialog$29(ActionBarMenuItem.this, this.f$1, view);
+                    AlertsCreator.lambda$createScheduleDatePickerDialog$30(ActionBarMenuItem.this, this.f$1, view);
                 }
             });
             actionBarMenuItem.setDelegate(new ActionBarMenuItem.ActionBarMenuItemDelegate(builder) {
@@ -2390,7 +2959,7 @@ public class AlertsCreator {
                 }
 
                 public final void onItemClick(int i) {
-                    AlertsCreator.lambda$createScheduleDatePickerDialog$30(AlertsCreator.ScheduleDatePickerDelegate.this, this.f$1, i);
+                    AlertsCreator.lambda$createScheduleDatePickerDialog$31(AlertsCreator.ScheduleDatePickerDelegate.this, this.f$1, i);
                 }
             });
             actionBarMenuItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
@@ -2426,7 +2995,7 @@ public class AlertsCreator {
             }
 
             public final String format(int i) {
-                return AlertsCreator.lambda$createScheduleDatePickerDialog$31(this.f$0, this.f$1, this.f$2, i);
+                return AlertsCreator.lambda$createScheduleDatePickerDialog$32(this.f$0, this.f$1, this.f$2, i);
             }
         });
         AnonymousClass7 r2 = r13;
@@ -2436,9 +3005,9 @@ public class AlertsCreator {
         LinearLayout linearLayout2 = linearLayout;
         Calendar calendar = instance;
         AnonymousClass6 r30 = r6;
-        $$Lambda$AlertsCreator$LJb0j0Vgz5sxzo6NbL8syoZ4 r9 = r0;
+        $$Lambda$AlertsCreator$AlA0HG3tYN_yG9O9_DltNK9i0DU r9 = r0;
         AnonymousClass4 r10 = r8;
-        $$Lambda$AlertsCreator$LJb0j0Vgz5sxzo6NbL8syoZ4 r0 = new NumberPicker.OnValueChangeListener(r6, r2, i3, j, numberPicker3, r8, r22) {
+        $$Lambda$AlertsCreator$AlA0HG3tYN_yG9O9_DltNK9i0DU r0 = new NumberPicker.OnValueChangeListener(r6, r2, i3, j, numberPicker3, r8, r22) {
             public final /* synthetic */ LinearLayout f$0;
             public final /* synthetic */ TextView f$1;
             public final /* synthetic */ int f$2;
@@ -2458,20 +3027,20 @@ public class AlertsCreator {
             }
 
             public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-                AlertsCreator.lambda$createScheduleDatePickerDialog$32(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, numberPicker, i, i2);
+                AlertsCreator.lambda$createScheduleDatePickerDialog$33(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, numberPicker, i, i2);
             }
         };
         numberPicker3.setOnValueChangedListener(r9);
         r10.setMinValue(0);
         r10.setMaxValue(23);
         linearLayout2.addView(r10, LayoutHelper.createLinear(0, 270, 0.2f));
-        r10.setFormatter($$Lambda$AlertsCreator$fb0Eahp85lkSLx1OaUvRKfeIbtQ.INSTANCE);
+        r10.setFormatter($$Lambda$AlertsCreator$ykDZfNOULoUGB44VDx8puUnM3X4.INSTANCE);
         r10.setOnValueChangedListener(r9);
         AnonymousClass5 r72 = r22;
         r72.setMinValue(0);
         r72.setMaxValue(59);
         r72.setValue(0);
-        r72.setFormatter($$Lambda$AlertsCreator$ykDZfNOULoUGB44VDx8puUnM3X4.INSTANCE);
+        r72.setFormatter($$Lambda$AlertsCreator$Zeki5ZRznKGalIJrBmnPZlmZ8.INSTANCE);
         linearLayout2.addView(r72, LayoutHelper.createLinear(0, 270, 0.3f));
         r72.setOnValueChangedListener(r9);
         if (j2 > 0 && j2 != NUM) {
@@ -2502,8 +3071,8 @@ public class AlertsCreator {
         r14.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), scheduleDatePickerColors3.buttonBackgroundColor, scheduleDatePickerColors3.buttonBackgroundPressedColor));
         AnonymousClass6 r92 = r30;
         r92.addView(r14, LayoutHelper.createLinear(-1, 48, 83, 16, 15, 16, 16));
-        $$Lambda$AlertsCreator$SoYStVxFxYAdOLMCD0eheP_ED9s r11 = r0;
-        $$Lambda$AlertsCreator$SoYStVxFxYAdOLMCD0eheP_ED9s r02 = new View.OnClickListener(zArr, i4, j, numberPicker3, r10, r72, calendar, scheduleDatePickerDelegate, builder2) {
+        $$Lambda$AlertsCreator$Ws2hBxXDw23OLIzPXstADIGpiXE r11 = r0;
+        $$Lambda$AlertsCreator$Ws2hBxXDw23OLIzPXstADIGpiXE r02 = new View.OnClickListener(zArr, i4, j, numberPicker3, r10, r72, calendar, scheduleDatePickerDelegate, builder2) {
             public final /* synthetic */ boolean[] f$0;
             public final /* synthetic */ int f$1;
             public final /* synthetic */ long f$2;
@@ -2527,7 +3096,7 @@ public class AlertsCreator {
             }
 
             public final void onClick(View view) {
-                AlertsCreator.lambda$createScheduleDatePickerDialog$35(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, view);
+                AlertsCreator.lambda$createScheduleDatePickerDialog$36(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, view);
             }
         };
         r14.setOnClickListener(r11);
@@ -2544,28 +3113,28 @@ public class AlertsCreator {
             }
 
             public final void onDismiss(DialogInterface dialogInterface) {
-                AlertsCreator.lambda$createScheduleDatePickerDialog$36(this.f$0, this.f$1, dialogInterface);
+                AlertsCreator.lambda$createScheduleDatePickerDialog$37(this.f$0, this.f$1, dialogInterface);
             }
         });
         show.setBackgroundColor(scheduleDatePickerColors3.backgroundColor);
         return builder3;
     }
 
-    static /* synthetic */ void lambda$createScheduleDatePickerDialog$29(ActionBarMenuItem actionBarMenuItem, ScheduleDatePickerColors scheduleDatePickerColors, View view) {
+    static /* synthetic */ void lambda$createScheduleDatePickerDialog$30(ActionBarMenuItem actionBarMenuItem, ScheduleDatePickerColors scheduleDatePickerColors, View view) {
         actionBarMenuItem.toggleSubMenu();
         actionBarMenuItem.setPopupItemsColor(scheduleDatePickerColors.subMenuTextColor, false);
         actionBarMenuItem.setupPopupRadialSelectors(scheduleDatePickerColors.subMenuSelectorColor);
         actionBarMenuItem.redrawPopup(scheduleDatePickerColors.subMenuBackgroundColor);
     }
 
-    static /* synthetic */ void lambda$createScheduleDatePickerDialog$30(ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, int i) {
+    static /* synthetic */ void lambda$createScheduleDatePickerDialog$31(ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, int i) {
         if (i == 1) {
             scheduleDatePickerDelegate.didSelectDate(true, NUM);
             builder.getDismissRunnable().run();
         }
     }
 
-    static /* synthetic */ String lambda$createScheduleDatePickerDialog$31(long j, Calendar calendar, int i, int i2) {
+    static /* synthetic */ String lambda$createScheduleDatePickerDialog$32(long j, Calendar calendar, int i, int i2) {
         if (i2 == 0) {
             return LocaleController.getString("MessageScheduleToday", NUM);
         }
@@ -2577,7 +3146,7 @@ public class AlertsCreator {
         return LocaleController.getInstance().formatterScheduleYear.format(j2);
     }
 
-    static /* synthetic */ void lambda$createScheduleDatePickerDialog$32(LinearLayout linearLayout, TextView textView, int i, long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i2, int i3) {
+    static /* synthetic */ void lambda$createScheduleDatePickerDialog$33(LinearLayout linearLayout, TextView textView, int i, long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i2, int i3) {
         try {
             linearLayout.performHapticFeedback(3, 2);
         } catch (Exception unused) {
@@ -2585,7 +3154,7 @@ public class AlertsCreator {
         checkScheduleDate(textView, ((long) i) == j, numberPicker, numberPicker2, numberPicker3);
     }
 
-    static /* synthetic */ void lambda$createScheduleDatePickerDialog$35(boolean[] zArr, int i, long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, View view) {
+    static /* synthetic */ void lambda$createScheduleDatePickerDialog$36(boolean[] zArr, int i, long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, View view) {
         zArr[0] = false;
         boolean checkScheduleDate = checkScheduleDate((TextView) null, ((long) i) == j, numberPicker, numberPicker2, numberPicker3);
         calendar.setTimeInMillis(System.currentTimeMillis() + (((long) numberPicker.getValue()) * 24 * 3600 * 1000));
@@ -2598,10 +3167,225 @@ public class AlertsCreator {
         builder.getDismissRunnable().run();
     }
 
-    static /* synthetic */ void lambda$createScheduleDatePickerDialog$36(Runnable runnable, boolean[] zArr, DialogInterface dialogInterface) {
+    static /* synthetic */ void lambda$createScheduleDatePickerDialog$37(Runnable runnable, boolean[] zArr, DialogInterface dialogInterface) {
         if (runnable != null && zArr[0]) {
             runnable.run();
         }
+    }
+
+    public static BottomSheet.Builder createDatePickerDialog(Context context, long j, ScheduleDatePickerDelegate scheduleDatePickerDelegate) {
+        AnonymousClass11 r23;
+        Context context2 = context;
+        if (context2 == null) {
+            return null;
+        }
+        ScheduleDatePickerColors scheduleDatePickerColors = new ScheduleDatePickerColors();
+        BottomSheet.Builder builder = new BottomSheet.Builder(context2, false);
+        builder.setApplyBottomPadding(false);
+        final NumberPicker numberPicker = new NumberPicker(context2);
+        numberPicker.setTextColor(scheduleDatePickerColors.textColor);
+        numberPicker.setTextOffset(AndroidUtilities.dp(10.0f));
+        numberPicker.setItemCount(5);
+        final AnonymousClass8 r7 = new NumberPicker(context2) {
+            /* access modifiers changed from: protected */
+            public CharSequence getContentDescription(int i) {
+                return LocaleController.formatPluralString("Hours", i);
+            }
+        };
+        r7.setItemCount(5);
+        r7.setTextColor(scheduleDatePickerColors.textColor);
+        r7.setTextOffset(-AndroidUtilities.dp(10.0f));
+        final AnonymousClass9 r8 = new NumberPicker(context2) {
+            /* access modifiers changed from: protected */
+            public CharSequence getContentDescription(int i) {
+                return LocaleController.formatPluralString("Minutes", i);
+            }
+        };
+        r8.setItemCount(5);
+        r8.setTextColor(scheduleDatePickerColors.textColor);
+        r8.setTextOffset(-AndroidUtilities.dp(34.0f));
+        AnonymousClass10 r12 = new LinearLayout(context2) {
+            boolean ignoreLayout = false;
+
+            /* access modifiers changed from: protected */
+            public void onMeasure(int i, int i2) {
+                this.ignoreLayout = true;
+                Point point = AndroidUtilities.displaySize;
+                int i3 = point.x > point.y ? 3 : 5;
+                numberPicker.setItemCount(i3);
+                r7.setItemCount(i3);
+                r8.setItemCount(i3);
+                numberPicker.getLayoutParams().height = AndroidUtilities.dp(54.0f) * i3;
+                r7.getLayoutParams().height = AndroidUtilities.dp(54.0f) * i3;
+                r8.getLayoutParams().height = AndroidUtilities.dp(54.0f) * i3;
+                this.ignoreLayout = false;
+                super.onMeasure(i, i2);
+            }
+
+            public void requestLayout() {
+                if (!this.ignoreLayout) {
+                    super.requestLayout();
+                }
+            }
+        };
+        r12.setOrientation(1);
+        FrameLayout frameLayout = new FrameLayout(context2);
+        r12.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 51, 22, 0, 0, 4));
+        TextView textView = new TextView(context2);
+        textView.setText(LocaleController.getString("ExpireAfter", NUM));
+        textView.setTextColor(scheduleDatePickerColors.textColor);
+        textView.setTextSize(1, 20.0f);
+        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 12.0f, 0.0f, 0.0f));
+        textView.setOnTouchListener($$Lambda$AlertsCreator$Rr8FwQkuTcbgD39jecLUattSqUc.INSTANCE);
+        LinearLayout linearLayout = new LinearLayout(context2);
+        linearLayout.setOrientation(0);
+        linearLayout.setWeightSum(1.0f);
+        r12.addView(linearLayout, LayoutHelper.createLinear(-1, -2));
+        long currentTimeMillis = System.currentTimeMillis();
+        Calendar instance = Calendar.getInstance();
+        instance.setTimeInMillis(currentTimeMillis);
+        int i = instance.get(1);
+        AnonymousClass11 r1 = new TextView(context2) {
+            public CharSequence getAccessibilityClassName() {
+                return Button.class.getName();
+            }
+        };
+        linearLayout.addView(numberPicker, LayoutHelper.createLinear(0, 270, 0.5f));
+        numberPicker.setMinValue(0);
+        numberPicker.setMaxValue(365);
+        numberPicker.setWrapSelectorWheel(false);
+        numberPicker.setFormatter(new NumberPicker.Formatter(currentTimeMillis, instance, i) {
+            public final /* synthetic */ long f$0;
+            public final /* synthetic */ Calendar f$1;
+            public final /* synthetic */ int f$2;
+
+            {
+                this.f$0 = r1;
+                this.f$1 = r3;
+                this.f$2 = r4;
+            }
+
+            public final String format(int i) {
+                return AlertsCreator.lambda$createDatePickerDialog$39(this.f$0, this.f$1, this.f$2, i);
+            }
+        });
+        $$Lambda$AlertsCreator$jpV_eTzB28JxOngTp2g2NRxxLAQ r0 = new NumberPicker.OnValueChangeListener(r12, numberPicker, r7, r8) {
+            public final /* synthetic */ LinearLayout f$0;
+            public final /* synthetic */ NumberPicker f$1;
+            public final /* synthetic */ NumberPicker f$2;
+            public final /* synthetic */ NumberPicker f$3;
+
+            {
+                this.f$0 = r1;
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
+            }
+
+            public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
+                AlertsCreator.lambda$createDatePickerDialog$40(this.f$0, this.f$1, this.f$2, this.f$3, numberPicker, i, i2);
+            }
+        };
+        numberPicker.setOnValueChangedListener(r0);
+        r7.setMinValue(0);
+        r7.setMaxValue(23);
+        linearLayout.addView(r7, LayoutHelper.createLinear(0, 270, 0.2f));
+        r7.setFormatter($$Lambda$AlertsCreator$jnZF7CWVze9fcNGBVlyQNuDd6_U.INSTANCE);
+        r7.setOnValueChangedListener(r0);
+        r8.setMinValue(0);
+        r8.setMaxValue(59);
+        r8.setValue(0);
+        r8.setFormatter($$Lambda$AlertsCreator$57MQ7afBqfxjhRDkvz4IwSoLZbQ.INSTANCE);
+        linearLayout.addView(r8, LayoutHelper.createLinear(0, 270, 0.3f));
+        r8.setOnValueChangedListener(r0);
+        if (j <= 0 || j == NUM) {
+            r23 = r1;
+        } else {
+            long j2 = 1000 * j;
+            instance.setTimeInMillis(System.currentTimeMillis());
+            instance.set(12, 0);
+            instance.set(13, 0);
+            instance.set(14, 0);
+            instance.set(11, 0);
+            r23 = r1;
+            int timeInMillis = (int) ((j2 - instance.getTimeInMillis()) / 86400000);
+            instance.setTimeInMillis(j2);
+            if (timeInMillis >= 0) {
+                r8.setValue(instance.get(12));
+                r7.setValue(instance.get(11));
+                numberPicker.setValue(timeInMillis);
+            }
+        }
+        checkScheduleDate((TextView) null, false, numberPicker, r7, r8);
+        AnonymousClass11 r14 = r23;
+        r14.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
+        r14.setGravity(17);
+        r14.setTextColor(scheduleDatePickerColors.buttonTextColor);
+        r14.setTextSize(1, 14.0f);
+        r14.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        r14.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), scheduleDatePickerColors.buttonBackgroundColor, scheduleDatePickerColors.buttonBackgroundPressedColor));
+        r14.setText(LocaleController.getString("SetTimeLimit", NUM));
+        r12.addView(r14, LayoutHelper.createLinear(-1, 48, 83, 16, 15, 16, 16));
+        r14.setOnClickListener(new View.OnClickListener(new boolean[]{true}, numberPicker, r7, r8, instance, scheduleDatePickerDelegate, builder) {
+            public final /* synthetic */ boolean[] f$0;
+            public final /* synthetic */ NumberPicker f$1;
+            public final /* synthetic */ NumberPicker f$2;
+            public final /* synthetic */ NumberPicker f$3;
+            public final /* synthetic */ Calendar f$4;
+            public final /* synthetic */ AlertsCreator.ScheduleDatePickerDelegate f$5;
+            public final /* synthetic */ BottomSheet.Builder f$6;
+
+            {
+                this.f$0 = r1;
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
+                this.f$4 = r5;
+                this.f$5 = r6;
+                this.f$6 = r7;
+            }
+
+            public final void onClick(View view) {
+                AlertsCreator.lambda$createDatePickerDialog$43(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, view);
+            }
+        });
+        builder.setCustomView(r12);
+        builder.show().setBackgroundColor(scheduleDatePickerColors.backgroundColor);
+        return builder;
+    }
+
+    static /* synthetic */ String lambda$createDatePickerDialog$39(long j, Calendar calendar, int i, int i2) {
+        if (i2 == 0) {
+            return LocaleController.getString("MessageScheduleToday", NUM);
+        }
+        long j2 = j + (((long) i2) * 86400000);
+        calendar.setTimeInMillis(j2);
+        if (calendar.get(1) == i) {
+            return LocaleController.getInstance().formatterScheduleDay.format(j2);
+        }
+        return LocaleController.getInstance().formatterScheduleYear.format(j2);
+    }
+
+    static /* synthetic */ void lambda$createDatePickerDialog$40(LinearLayout linearLayout, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i, int i2) {
+        try {
+            linearLayout.performHapticFeedback(3, 2);
+        } catch (Exception unused) {
+        }
+        checkScheduleDate((TextView) null, false, numberPicker, numberPicker2, numberPicker3);
+    }
+
+    static /* synthetic */ void lambda$createDatePickerDialog$43(boolean[] zArr, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, ScheduleDatePickerDelegate scheduleDatePickerDelegate, BottomSheet.Builder builder, View view) {
+        zArr[0] = false;
+        boolean checkScheduleDate = checkScheduleDate((TextView) null, false, numberPicker, numberPicker2, numberPicker3);
+        calendar.setTimeInMillis(System.currentTimeMillis() + (((long) numberPicker.getValue()) * 24 * 3600 * 1000));
+        calendar.set(11, numberPicker2.getValue());
+        calendar.set(12, numberPicker3.getValue());
+        if (checkScheduleDate) {
+            calendar.set(13, 0);
+        }
+        scheduleDatePickerDelegate.didSelectDate(true, (int) (calendar.getTimeInMillis() / 1000));
+        builder.getDismissRunnable().run();
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:20:0x0071  */
@@ -2684,7 +3468,7 @@ public class AlertsCreator {
         final NumberPicker numberPicker3 = new NumberPicker(context2);
         numberPicker3.setItemCount(5);
         numberPicker3.setTextOffset(-AndroidUtilities.dp(24.0f));
-        AnonymousClass8 r14 = new LinearLayout(context2) {
+        AnonymousClass12 r14 = new LinearLayout(context2) {
             boolean ignoreLayout = false;
 
             /* access modifiers changed from: protected */
@@ -2717,13 +3501,13 @@ public class AlertsCreator {
         textView.setTextSize(1, 20.0f);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 51, 0.0f, 12.0f, 0.0f, 0.0f));
-        textView.setOnTouchListener($$Lambda$AlertsCreator$g1YD_KlxddeCVPa27NqgQwwX8mM.INSTANCE);
+        textView.setOnTouchListener($$Lambda$AlertsCreator$sgYhOcrZK6Ufu9QIxr3_sJx7LA.INSTANCE);
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(0);
         linearLayout.setWeightSum(1.0f);
         r14.addView(linearLayout, LayoutHelper.createLinear(-1, -2));
         System.currentTimeMillis();
-        AnonymousClass9 r5 = new TextView(context2) {
+        AnonymousClass13 r5 = new TextView(context2) {
             public CharSequence getAccessibilityClassName() {
                 return Button.class.getName();
             }
@@ -2732,9 +3516,9 @@ public class AlertsCreator {
         numberPicker.setMinValue(1);
         numberPicker.setMaxValue(31);
         numberPicker.setWrapSelectorWheel(false);
-        numberPicker.setFormatter($$Lambda$AlertsCreator$mLc7LVCdLSNZWFkXR2HK3KV0ExY.INSTANCE);
-        $$Lambda$AlertsCreator$cDbMTfSEsX3aPsrupDbxeTz5Fo r15 = r0;
-        $$Lambda$AlertsCreator$cDbMTfSEsX3aPsrupDbxeTz5Fo r0 = new NumberPicker.OnValueChangeListener(r14, j, numberPicker, numberPicker2, numberPicker3) {
+        numberPicker.setFormatter($$Lambda$AlertsCreator$VIyrQVTAsgaTaIGqgMAT66R8jnU.INSTANCE);
+        $$Lambda$AlertsCreator$PCJdqDToswyONUj_CDmFvA9OuM r15 = r0;
+        $$Lambda$AlertsCreator$PCJdqDToswyONUj_CDmFvA9OuM r0 = new NumberPicker.OnValueChangeListener(r14, j, numberPicker, numberPicker2, numberPicker3) {
             public final /* synthetic */ LinearLayout f$0;
             public final /* synthetic */ long f$1;
             public final /* synthetic */ NumberPicker f$2;
@@ -2750,7 +3534,7 @@ public class AlertsCreator {
             }
 
             public final void onValueChange(NumberPicker numberPicker, int i, int i2) {
-                AlertsCreator.lambda$createCalendarPickerDialog$39(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, numberPicker, i, i2);
+                AlertsCreator.lambda$createCalendarPickerDialog$46(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, numberPicker, i, i2);
             }
         };
         numberPicker.setOnValueChangedListener(r15);
@@ -2759,7 +3543,7 @@ public class AlertsCreator {
         numberPicker2.setWrapSelectorWheel(false);
         LinearLayout linearLayout2 = linearLayout;
         linearLayout2.addView(numberPicker2, LayoutHelper.createLinear(0, 270, 0.5f));
-        numberPicker2.setFormatter($$Lambda$AlertsCreator$EsG7JxC4xItzkSnq12uSkp1L2Kg.INSTANCE);
+        numberPicker2.setFormatter($$Lambda$AlertsCreator$PSC7sMrY0dIJA887FQV3mTZW_cU.INSTANCE);
         numberPicker2.setOnValueChangedListener(r15);
         Calendar instance = Calendar.getInstance();
         instance.setTimeInMillis(j2);
@@ -2769,14 +3553,14 @@ public class AlertsCreator {
         numberPicker3.setMinValue(i);
         numberPicker3.setMaxValue(i2);
         numberPicker3.setWrapSelectorWheel(false);
-        numberPicker3.setFormatter($$Lambda$AlertsCreator$NG2d1NgvaxIDBfcHQ05jzusZ9k.INSTANCE);
+        numberPicker3.setFormatter($$Lambda$AlertsCreator$IJWODl7pqsJyDv2nGWbgpcCwoH4.INSTANCE);
         linearLayout2.addView(numberPicker3, LayoutHelper.createLinear(0, 270, 0.25f));
         numberPicker3.setOnValueChangedListener(r15);
         numberPicker.setValue(31);
         numberPicker2.setValue(12);
         numberPicker3.setValue(i2);
         checkCalendarDate(j2, numberPicker, numberPicker2, numberPicker3);
-        AnonymousClass9 r152 = r5;
+        AnonymousClass13 r152 = r5;
         r152.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
         r152.setGravity(17);
         r152.setTextColor(Theme.getColor("featuredStickers_buttonText"));
@@ -2805,18 +3589,18 @@ public class AlertsCreator {
             }
 
             public final void onClick(View view) {
-                AlertsCreator.lambda$createCalendarPickerDialog$42(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, view);
+                AlertsCreator.lambda$createCalendarPickerDialog$49(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, view);
             }
         });
         builder.setCustomView(r14);
         return builder;
     }
 
-    static /* synthetic */ String lambda$createCalendarPickerDialog$38(int i) {
+    static /* synthetic */ String lambda$createCalendarPickerDialog$45(int i) {
         return "" + i;
     }
 
-    static /* synthetic */ void lambda$createCalendarPickerDialog$39(LinearLayout linearLayout, long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i, int i2) {
+    static /* synthetic */ void lambda$createCalendarPickerDialog$46(LinearLayout linearLayout, long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, NumberPicker numberPicker4, int i, int i2) {
         try {
             linearLayout.performHapticFeedback(3, 2);
         } catch (Exception unused) {
@@ -2824,7 +3608,7 @@ public class AlertsCreator {
         checkCalendarDate(j, numberPicker, numberPicker2, numberPicker3);
     }
 
-    static /* synthetic */ String lambda$createCalendarPickerDialog$40(int i) {
+    static /* synthetic */ String lambda$createCalendarPickerDialog$47(int i) {
         switch (i) {
             case 0:
                 return LocaleController.getString("January", NUM);
@@ -2853,7 +3637,7 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$createCalendarPickerDialog$42(long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, MessagesStorage.IntCallback intCallback, BottomSheet.Builder builder, View view) {
+    static /* synthetic */ void lambda$createCalendarPickerDialog$49(long j, NumberPicker numberPicker, NumberPicker numberPicker2, NumberPicker numberPicker3, Calendar calendar, MessagesStorage.IntCallback intCallback, BottomSheet.Builder builder, View view) {
         checkCalendarDate(j, numberPicker, numberPicker2, numberPicker3);
         calendar.set(1, numberPicker3.getValue());
         calendar.set(2, numberPicker2.getValue());
@@ -2881,13 +3665,13 @@ public class AlertsCreator {
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                AlertsCreator.lambda$createMuteAlert$43(this.f$0, this.f$1, dialogInterface, i);
+                AlertsCreator.lambda$createMuteAlert$50(this.f$0, this.f$1, dialogInterface, i);
             }
         });
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createMuteAlert$43(long j, BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createMuteAlert$50(long j, BaseFragment baseFragment, DialogInterface dialogInterface, int i) {
         int i2 = 2;
         if (i == 0) {
             i2 = 0;
@@ -2903,10 +3687,12 @@ public class AlertsCreator {
     }
 
     public static void createReportAlert(Context context, long j, int i, BaseFragment baseFragment) {
-        if (context != null && baseFragment != null) {
-            BottomSheet.Builder builder = new BottomSheet.Builder(context);
+        Context context2 = context;
+        BaseFragment baseFragment2 = baseFragment;
+        if (context2 != null && baseFragment2 != null) {
+            BottomSheet.Builder builder = new BottomSheet.Builder(context2);
             builder.setTitle(LocaleController.getString("ReportChat", NUM), true);
-            builder.setItems(new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)}, new DialogInterface.OnClickListener(j, i, baseFragment, context) {
+            builder.setItems(i != 0 ? new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)} : new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatFakeAccount", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)}, new DialogInterface.OnClickListener(j, i, baseFragment, context) {
                 public final /* synthetic */ long f$0;
                 public final /* synthetic */ int f$1;
                 public final /* synthetic */ BaseFragment f$2;
@@ -2920,42 +3706,31 @@ public class AlertsCreator {
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    AlertsCreator.lambda$createReportAlert$45(this.f$0, this.f$1, this.f$2, this.f$3, dialogInterface, i);
+                    AlertsCreator.lambda$createReportAlert$52(this.f$0, this.f$1, this.f$2, this.f$3, dialogInterface, i);
                 }
             });
-            baseFragment.showDialog(builder.create());
+            baseFragment2.showDialog(builder.create());
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v0, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v2, resolved type: org.telegram.tgnet.TLRPC$TL_messages_report} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v3, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v4, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v5, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v6, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v7, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v8, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v9, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v10, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v11, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v12, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v2, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v3, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v4, resolved type: org.telegram.tgnet.TLRPC$TL_messages_report} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v6, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v7, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v8, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v9, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v10, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
     /* JADX WARNING: Code restructure failed: missing block: B:13:0x005a, code lost:
-        if (r7 != 3) goto L_0x0092;
+        if (r7 != 3) goto L_0x009d;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:14:0x005c, code lost:
-        r0.reason = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography();
-        r0 = r0;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:22:0x0089, code lost:
-        if (r7 != 3) goto L_0x0092;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:23:0x008b, code lost:
-        r0.reason = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography();
-        r0 = r0;
+        r6.reason = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography();
+        r6 = r6;
      */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ void lambda$createReportAlert$45(long r1, int r3, org.telegram.ui.ActionBar.BaseFragment r4, android.content.Context r5, android.content.DialogInterface r6, int r7) {
+    static /* synthetic */ void lambda$createReportAlert$52(long r1, int r3, org.telegram.ui.ActionBar.BaseFragment r4, android.content.Context r5, android.content.DialogInterface r6, int r7) {
         /*
             r6 = 4
             if (r7 != r6) goto L_0x001c
@@ -2977,69 +3752,77 @@ public class AlertsCreator {
             org.telegram.tgnet.TLRPC$InputPeer r1 = r4.getInputPeer((int) r2)
             r2 = 3
             r4 = 2
-            r6 = 1
+            r0 = 1
             if (r3 == 0) goto L_0x0064
-            org.telegram.tgnet.TLRPC$TL_messages_report r0 = new org.telegram.tgnet.TLRPC$TL_messages_report
-            r0.<init>()
-            r0.peer = r1
-            java.util.ArrayList<java.lang.Integer> r1 = r0.id
+            org.telegram.tgnet.TLRPC$TL_messages_report r6 = new org.telegram.tgnet.TLRPC$TL_messages_report
+            r6.<init>()
+            r6.peer = r1
+            java.util.ArrayList<java.lang.Integer> r1 = r6.id
             java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
             r1.add(r3)
             if (r7 != 0) goto L_0x0046
             org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam r1 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam
             r1.<init>()
-            r0.reason = r1
-            goto L_0x0092
+            r6.reason = r1
+            goto L_0x009d
         L_0x0046:
-            if (r7 != r6) goto L_0x0050
+            if (r7 != r0) goto L_0x0050
             org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence r1 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence
             r1.<init>()
-            r0.reason = r1
-            goto L_0x0092
+            r6.reason = r1
+            goto L_0x009d
         L_0x0050:
             if (r7 != r4) goto L_0x005a
             org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse r1 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse
             r1.<init>()
-            r0.reason = r1
-            goto L_0x0092
+            r6.reason = r1
+            goto L_0x009d
         L_0x005a:
-            if (r7 != r2) goto L_0x0092
+            if (r7 != r2) goto L_0x009d
             org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography r1 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography
             r1.<init>()
-            r0.reason = r1
-            goto L_0x0092
+            r6.reason = r1
+            goto L_0x009d
         L_0x0064:
-            org.telegram.tgnet.TLRPC$TL_account_reportPeer r0 = new org.telegram.tgnet.TLRPC$TL_account_reportPeer
-            r0.<init>()
-            r0.peer = r1
+            org.telegram.tgnet.TLRPC$TL_account_reportPeer r3 = new org.telegram.tgnet.TLRPC$TL_account_reportPeer
+            r3.<init>()
+            r3.peer = r1
             if (r7 != 0) goto L_0x0075
             org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam r1 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam
             r1.<init>()
-            r0.reason = r1
-            goto L_0x0092
+            r3.reason = r1
+            goto L_0x009c
         L_0x0075:
-            if (r7 != r6) goto L_0x007f
-            org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence r1 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence
+            if (r7 != r0) goto L_0x007f
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonFake r1 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonFake
             r1.<init>()
-            r0.reason = r1
-            goto L_0x0092
+            r3.reason = r1
+            goto L_0x009c
         L_0x007f:
             if (r7 != r4) goto L_0x0089
+            org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence r1 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence
+            r1.<init>()
+            r3.reason = r1
+            goto L_0x009c
+        L_0x0089:
+            if (r7 != r2) goto L_0x0093
             org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse r1 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse
             r1.<init>()
-            r0.reason = r1
-            goto L_0x0092
-        L_0x0089:
-            if (r7 != r2) goto L_0x0092
+            r3.reason = r1
+            goto L_0x009c
+        L_0x0093:
+            if (r7 != r6) goto L_0x009c
             org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography r1 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography
             r1.<init>()
-            r0.reason = r1
-        L_0x0092:
+            r3.reason = r1
+        L_0x009c:
+            r6 = r3
+        L_0x009d:
             int r1 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
-            org.telegram.ui.Components.-$$Lambda$AlertsCreator$0RXwUTdI77ZTQTxncld97m8cCLASSNAME r2 = org.telegram.ui.Components.$$Lambda$AlertsCreator$0RXwUTdI77ZTQTxncld97m8cCLASSNAME.INSTANCE
-            r1.sendRequest(r0, r2)
-            r1 = 2131626921(0x7f0e0ba9, float:1.8881092E38)
+            org.telegram.ui.Components.-$$Lambda$AlertsCreator$9uhzij2w5QhSqJTe7szZX70Yy_w r2 = org.telegram.ui.Components.$$Lambda$AlertsCreator$9uhzij2w5QhSqJTe7szZX70Yy_w.INSTANCE
+            r1.sendRequest(r6, r2)
+            r1 = 2131627008(0x7f0e0CLASSNAME, float:1.8881268E38)
             java.lang.String r2 = "ReportChatSent"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r2 = 0
@@ -3047,7 +3830,7 @@ public class AlertsCreator {
             r1.show()
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$createReportAlert$45(long, int, org.telegram.ui.ActionBar.BaseFragment, android.content.Context, android.content.DialogInterface, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$createReportAlert$52(long, int, org.telegram.ui.ActionBar.BaseFragment, android.content.Context, android.content.DialogInterface, int):void");
     }
 
     private static String getFloodWaitString(String str) {
@@ -3394,7 +4177,7 @@ public class AlertsCreator {
                 }
 
                 public final void onClick(View view) {
-                    AlertsCreator.lambda$createColorSelectDialog$47(this.f$0, this.f$1, view);
+                    AlertsCreator.lambda$createColorSelectDialog$54(this.f$0, this.f$1, view);
                 }
             });
             i4++;
@@ -3416,7 +4199,7 @@ public class AlertsCreator {
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                AlertsCreator.lambda$createColorSelectDialog$48(this.f$0, this.f$1, this.f$2, this.f$3, dialogInterface, i);
+                AlertsCreator.lambda$createColorSelectDialog$55(this.f$0, this.f$1, this.f$2, this.f$3, dialogInterface, i);
             }
         });
         builder.setNeutralButton(LocaleController.getString("LedDisabled", NUM), new DialogInterface.OnClickListener(j2, i3, runnable2) {
@@ -3431,7 +4214,7 @@ public class AlertsCreator {
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                AlertsCreator.lambda$createColorSelectDialog$49(this.f$0, this.f$1, this.f$2, dialogInterface, i);
+                AlertsCreator.lambda$createColorSelectDialog$56(this.f$0, this.f$1, this.f$2, dialogInterface, i);
             }
         });
         if (j2 != 0) {
@@ -3445,14 +4228,14 @@ public class AlertsCreator {
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    AlertsCreator.lambda$createColorSelectDialog$50(this.f$0, this.f$1, dialogInterface, i);
+                    AlertsCreator.lambda$createColorSelectDialog$57(this.f$0, this.f$1, dialogInterface, i);
                 }
             });
         }
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createColorSelectDialog$47(LinearLayout linearLayout, int[] iArr, View view) {
+    static /* synthetic */ void lambda$createColorSelectDialog$54(LinearLayout linearLayout, int[] iArr, View view) {
         int childCount = linearLayout.getChildCount();
         for (int i = 0; i < childCount; i++) {
             RadioColorCell radioColorCell = (RadioColorCell) linearLayout.getChildAt(i);
@@ -3461,7 +4244,7 @@ public class AlertsCreator {
         iArr[0] = TextColorCell.colorsToSave[((Integer) view.getTag()).intValue()];
     }
 
-    static /* synthetic */ void lambda$createColorSelectDialog$48(long j, int[] iArr, int i, Runnable runnable, DialogInterface dialogInterface, int i2) {
+    static /* synthetic */ void lambda$createColorSelectDialog$55(long j, int[] iArr, int i, Runnable runnable, DialogInterface dialogInterface, int i2) {
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (j != 0) {
             edit.putInt("color_" + j, iArr[0]);
@@ -3482,7 +4265,7 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$createColorSelectDialog$49(long j, int i, Runnable runnable, DialogInterface dialogInterface, int i2) {
+    static /* synthetic */ void lambda$createColorSelectDialog$56(long j, int i, Runnable runnable, DialogInterface dialogInterface, int i2) {
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (j != 0) {
             edit.putInt("color_" + j, 0);
@@ -3499,7 +4282,7 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$createColorSelectDialog$50(long j, Runnable runnable, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createColorSelectDialog$57(long j, Runnable runnable, DialogInterface dialogInterface, int i) {
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         edit.remove("color_" + j);
         edit.commit();
@@ -3556,8 +4339,8 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr2[i2], iArr[i] == i2);
             linearLayout.addView(radioColorCell);
-            $$Lambda$AlertsCreator$uuFBMl7PkFJq6YG2GFYmXUO7M4 r9 = r1;
-            $$Lambda$AlertsCreator$uuFBMl7PkFJq6YG2GFYmXUO7M4 r1 = new View.OnClickListener(iArr, j, str, builder, runnable) {
+            $$Lambda$AlertsCreator$Dx1Ul85yT6p_MhqSXJ4pc8Hi3vM r9 = r1;
+            $$Lambda$AlertsCreator$Dx1Ul85yT6p_MhqSXJ4pc8Hi3vM r1 = new View.OnClickListener(iArr, j, str, builder, runnable) {
                 public final /* synthetic */ int[] f$0;
                 public final /* synthetic */ long f$1;
                 public final /* synthetic */ String f$2;
@@ -3573,7 +4356,7 @@ public class AlertsCreator {
                 }
 
                 public final void onClick(View view) {
-                    AlertsCreator.lambda$createVibrationSelectDialog$51(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, view);
+                    AlertsCreator.lambda$createVibrationSelectDialog$58(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, view);
                 }
             };
             radioColorCell.setOnClickListener(r9);
@@ -3586,7 +4369,7 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createVibrationSelectDialog$51(int[] iArr, long j, String str, AlertDialog.Builder builder, Runnable runnable, View view) {
+    static /* synthetic */ void lambda$createVibrationSelectDialog$58(int[] iArr, long j, String str, AlertDialog.Builder builder, Runnable runnable, View view) {
         iArr[0] = ((Integer) view.getTag()).intValue();
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (j != 0) {
@@ -3665,7 +4448,7 @@ public class AlertsCreator {
                 }
 
                 public final void onClick(View view) {
-                    AlertsCreator.lambda$createLocationUpdateDialog$52(this.f$0, this.f$1, view);
+                    AlertsCreator.lambda$createLocationUpdateDialog$59(this.f$0, this.f$1, view);
                 }
             });
             i2++;
@@ -3683,14 +4466,14 @@ public class AlertsCreator {
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                AlertsCreator.lambda$createLocationUpdateDialog$53(this.f$0, this.f$1, dialogInterface, i);
+                AlertsCreator.lambda$createLocationUpdateDialog$60(this.f$0, this.f$1, dialogInterface, i);
             }
         });
         builder.setNeutralButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createLocationUpdateDialog$52(int[] iArr, LinearLayout linearLayout, View view) {
+    static /* synthetic */ void lambda$createLocationUpdateDialog$59(int[] iArr, LinearLayout linearLayout, View view) {
         iArr[0] = ((Integer) view.getTag()).intValue();
         int childCount = linearLayout.getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -3701,7 +4484,7 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$createLocationUpdateDialog$53(int[] iArr, MessagesStorage.IntCallback intCallback, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createLocationUpdateDialog$60(int[] iArr, MessagesStorage.IntCallback intCallback, DialogInterface dialogInterface, int i) {
         int i2;
         if (iArr[0] == 0) {
             i2 = 900;
@@ -3745,7 +4528,7 @@ public class AlertsCreator {
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                AlertsCreator.lambda$createBackgroundLocationPermissionDialog$54(this.f$0, dialogInterface, i);
+                AlertsCreator.lambda$createBackgroundLocationPermissionDialog$61(this.f$0, dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new DialogInterface.OnClickListener(runnable) {
@@ -3762,7 +4545,7 @@ public class AlertsCreator {
         return builder;
     }
 
-    static /* synthetic */ void lambda$createBackgroundLocationPermissionDialog$54(Activity activity, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createBackgroundLocationPermissionDialog$61(Activity activity, DialogInterface dialogInterface, int i) {
         if (activity.checkSelfPermission("android.permission.ACCESS_BACKGROUND_LOCATION") != 0) {
             activity.requestPermissions(new String[]{"android.permission.ACCESS_BACKGROUND_LOCATION"}, 30);
         }
@@ -3793,7 +4576,7 @@ public class AlertsCreator {
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                AlertsCreator.lambda$createDrawOverlayPermissionDialog$56(this.f$0, dialogInterface, i);
+                AlertsCreator.lambda$createDrawOverlayPermissionDialog$63(this.f$0, dialogInterface, i);
             }
         });
         builder.notDrawBackgroundOnTopView(true);
@@ -3802,7 +4585,7 @@ public class AlertsCreator {
         return builder;
     }
 
-    static /* synthetic */ void lambda$createDrawOverlayPermissionDialog$56(Activity activity, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createDrawOverlayPermissionDialog$63(Activity activity, DialogInterface dialogInterface, int i) {
         if (activity != null && Build.VERSION.SDK_INT >= 23) {
             activity.startActivity(new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse("package:" + activity.getPackageName())));
         }
@@ -3814,7 +4597,7 @@ public class AlertsCreator {
         String readRes = RLottieDrawable.readRes((File) null, NUM);
         final GroupCallPipButton groupCallPipButton = new GroupCallPipButton(context2, 0, true);
         groupCallPipButton.setImportantForAccessibility(2);
-        AnonymousClass12 r8 = new FrameLayout(context2) {
+        AnonymousClass16 r8 = new FrameLayout(context2) {
             /* access modifiers changed from: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                 super.onLayout(z, i, i2, i3, i4);
@@ -3844,7 +4627,7 @@ public class AlertsCreator {
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                AlertsCreator.lambda$createDrawOverlayGroupCallPermissionDialog$57(this.f$0, dialogInterface, i);
+                AlertsCreator.lambda$createDrawOverlayGroupCallPermissionDialog$64(this.f$0, dialogInterface, i);
             }
         });
         builder.notDrawBackgroundOnTopView(true);
@@ -3853,7 +4636,7 @@ public class AlertsCreator {
         return builder;
     }
 
-    static /* synthetic */ void lambda$createDrawOverlayGroupCallPermissionDialog$57(Context context, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createDrawOverlayGroupCallPermissionDialog$64(Context context, DialogInterface dialogInterface, int i) {
         if (context != null) {
             try {
                 if (Build.VERSION.SDK_INT >= 23) {
@@ -3933,7 +4716,7 @@ public class AlertsCreator {
                 }
 
                 public final void onClick(View view) {
-                    AlertsCreator.lambda$createFreeSpaceDialog$60(this.f$0, this.f$1, view);
+                    AlertsCreator.lambda$createFreeSpaceDialog$67(this.f$0, this.f$1, view);
                 }
             });
             i3++;
@@ -3955,13 +4738,13 @@ public class AlertsCreator {
         });
         builder.setNeutralButton(LocaleController.getString("ClearMediaCache", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                LaunchActivity.this.lambda$runLinkRequest$38(new CacheControlActivity());
+                LaunchActivity.this.lambda$runLinkRequest$41(new CacheControlActivity());
             }
         });
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createFreeSpaceDialog$60(int[] iArr, LinearLayout linearLayout, View view) {
+    static /* synthetic */ void lambda$createFreeSpaceDialog$67(int[] iArr, LinearLayout linearLayout, View view) {
         int intValue = ((Integer) view.getTag()).intValue();
         if (intValue == 0) {
             iArr[0] = 3;
@@ -4068,9 +4851,9 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr[i5], iArr[i4] == i5);
             linearLayout.addView(radioColorCell);
-            $$Lambda$AlertsCreator$xbISDMZH0yvar_oKF5vEebZp0Wg r0 = r1;
+            $$Lambda$AlertsCreator$8MRaV7WhGGqS60nXXYRZ9tnpyE r0 = r1;
             AlertDialog.Builder builder2 = builder;
-            $$Lambda$AlertsCreator$xbISDMZH0yvar_oKF5vEebZp0Wg r1 = new View.OnClickListener(iArr, j, i, notificationsSettings, builder2, runnable) {
+            $$Lambda$AlertsCreator$8MRaV7WhGGqS60nXXYRZ9tnpyE r1 = new View.OnClickListener(iArr, j, i, notificationsSettings, builder2, runnable) {
                 public final /* synthetic */ int[] f$0;
                 public final /* synthetic */ long f$1;
                 public final /* synthetic */ int f$2;
@@ -4088,7 +4871,7 @@ public class AlertsCreator {
                 }
 
                 public final void onClick(View view) {
-                    AlertsCreator.lambda$createPrioritySelectDialog$63(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
+                    AlertsCreator.lambda$createPrioritySelectDialog$70(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
                 }
             };
             radioColorCell.setOnClickListener(r0);
@@ -4106,7 +4889,7 @@ public class AlertsCreator {
         return builder3.create();
     }
 
-    static /* synthetic */ void lambda$createPrioritySelectDialog$63(int[] iArr, long j, int i, SharedPreferences sharedPreferences, AlertDialog.Builder builder, Runnable runnable, View view) {
+    static /* synthetic */ void lambda$createPrioritySelectDialog$70(int[] iArr, long j, int i, SharedPreferences sharedPreferences, AlertDialog.Builder builder, Runnable runnable, View view) {
         int i2 = 0;
         iArr[0] = ((Integer) view.getTag()).intValue();
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
@@ -4184,7 +4967,7 @@ public class AlertsCreator {
                 }
 
                 public final void onClick(View view) {
-                    AlertsCreator.lambda$createPopupSelectDialog$64(this.f$0, this.f$1, this.f$2, this.f$3, view);
+                    AlertsCreator.lambda$createPopupSelectDialog$71(this.f$0, this.f$1, this.f$2, this.f$3, view);
                 }
             });
             i2++;
@@ -4195,7 +4978,7 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createPopupSelectDialog$64(int[] iArr, int i, AlertDialog.Builder builder, Runnable runnable, View view) {
+    static /* synthetic */ void lambda$createPopupSelectDialog$71(int[] iArr, int i, AlertDialog.Builder builder, Runnable runnable, View view) {
         iArr[0] = ((Integer) view.getTag()).intValue();
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(UserConfig.selectedAccount).edit();
         if (i == 1) {
@@ -4232,7 +5015,7 @@ public class AlertsCreator {
                 }
 
                 public final void onClick(View view) {
-                    AlertsCreator.lambda$createSingleChoiceDialog$65(AlertDialog.Builder.this, this.f$1, view);
+                    AlertsCreator.lambda$createSingleChoiceDialog$72(AlertDialog.Builder.this, this.f$1, view);
                 }
             });
             i2++;
@@ -4243,7 +5026,7 @@ public class AlertsCreator {
         return builder.create();
     }
 
-    static /* synthetic */ void lambda$createSingleChoiceDialog$65(AlertDialog.Builder builder, DialogInterface.OnClickListener onClickListener, View view) {
+    static /* synthetic */ void lambda$createSingleChoiceDialog$72(AlertDialog.Builder builder, DialogInterface.OnClickListener onClickListener, View view) {
         int intValue = ((Integer) view.getTag()).intValue();
         builder.getDismissRunnable().run();
         onClickListener.onClick((DialogInterface) null, intValue);
@@ -4271,7 +5054,7 @@ public class AlertsCreator {
         } else if (i == 0) {
             numberPicker.setValue(0);
         }
-        numberPicker.setFormatter($$Lambda$AlertsCreator$var_fM6a35OM1BhYeXXKTYElTJS8.INSTANCE);
+        numberPicker.setFormatter($$Lambda$AlertsCreator$AEnSjtbOhFogcvxyT88f9e5RiU.INSTANCE);
         builder.setView(numberPicker);
         builder.setNegativeButton(LocaleController.getString("Done", NUM), new DialogInterface.OnClickListener(numberPicker) {
             public final /* synthetic */ NumberPicker f$1;
@@ -4281,13 +5064,13 @@ public class AlertsCreator {
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                AlertsCreator.lambda$createTTLAlert$67(TLRPC$EncryptedChat.this, this.f$1, dialogInterface, i);
+                AlertsCreator.lambda$createTTLAlert$74(TLRPC$EncryptedChat.this, this.f$1, dialogInterface, i);
             }
         });
         return builder;
     }
 
-    static /* synthetic */ String lambda$createTTLAlert$66(int i) {
+    static /* synthetic */ String lambda$createTTLAlert$73(int i) {
         if (i == 0) {
             return LocaleController.getString("ShortMessageLifetimeForever", NUM);
         }
@@ -4309,7 +5092,7 @@ public class AlertsCreator {
         return i == 20 ? LocaleController.formatTTLString(604800) : "";
     }
 
-    static /* synthetic */ void lambda$createTTLAlert$67(TLRPC$EncryptedChat tLRPC$EncryptedChat, NumberPicker numberPicker, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createTTLAlert$74(TLRPC$EncryptedChat tLRPC$EncryptedChat, NumberPicker numberPicker, DialogInterface dialogInterface, int i) {
         int i2 = tLRPC$EncryptedChat.ttl;
         int value = numberPicker.getValue();
         if (value >= 0 && value < 16) {
@@ -4359,7 +5142,7 @@ public class AlertsCreator {
                     }
 
                     public final void onClick(View view) {
-                        AlertsCreator.lambda$createAccountSelectDialog$68(this.f$0, this.f$1, this.f$2, view);
+                        AlertsCreator.lambda$createAccountSelectDialog$75(this.f$0, this.f$1, this.f$2, view);
                     }
                 });
             }
@@ -4372,7 +5155,7 @@ public class AlertsCreator {
         return create;
     }
 
-    static /* synthetic */ void lambda$createAccountSelectDialog$68(AlertDialog[] alertDialogArr, Runnable runnable, AccountSelectDelegate accountSelectDelegate, View view) {
+    static /* synthetic */ void lambda$createAccountSelectDialog$75(AlertDialog[] alertDialogArr, Runnable runnable, AccountSelectDelegate accountSelectDelegate, View view) {
         if (alertDialogArr[0] != null) {
             alertDialogArr[0].setOnDismissListener((DialogInterface.OnDismissListener) null);
         }
@@ -4714,7 +5497,7 @@ public class AlertsCreator {
             org.telegram.tgnet.TLRPC$InputUser r0 = r0.getInputUser((org.telegram.tgnet.TLRPC$User) r5)
             r12.user_id = r0
             org.telegram.tgnet.ConnectionsManager r11 = org.telegram.tgnet.ConnectionsManager.getInstance(r15)
-            org.telegram.ui.Components.-$$Lambda$AlertsCreator$qfCgpJOtFDNqf9WGvL_U75goNDg r10 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$qfCgpJOtFDNqf9WGvL_U75goNDg
+            org.telegram.ui.Components.-$$Lambda$AlertsCreator$yL-5C8rqhB2TGxmA8--UVJMreao r10 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$yL-5C8rqhB2TGxmA8--UVJMreao
             r0 = r10
             r1 = r13
             r2 = r41
@@ -4737,7 +5520,7 @@ public class AlertsCreator {
             r0.<init>(r1, r2, r3, r4, r5, r6, r7, r9, r10, r11, r12, r13)
             r0 = r16
             int r0 = r15.sendRequest(r14, r0)
-            org.telegram.ui.Components.-$$Lambda$AlertsCreator$7kbKiKiNQQc3TcmSP9MKD6DzATo r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$7kbKiKiNQQc3TcmSP9MKD6DzATo
+            org.telegram.ui.Components.-$$Lambda$AlertsCreator$LbVdQ9I-H3j8FVfxluQ-s3ulkUc r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$LbVdQ9I-H3j8FVfxluQ-s3ulkUc
             r7 = r41
             r8 = r24
             r2 = r33
@@ -4772,7 +5555,7 @@ public class AlertsCreator {
             java.lang.Integer r14 = java.lang.Integer.valueOf(r10)
             r15.setTag(r14)
             if (r10 != 0) goto L_0x02aa
-            r14 = 2131625037(0x7f0e044d, float:1.887727E38)
+            r14 = 2131625049(0x7f0e0459, float:1.8877295E38)
             java.lang.String r2 = "DeleteBanUser"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r14)
             r14 = 0
@@ -4783,7 +5566,7 @@ public class AlertsCreator {
         L_0x02aa:
             r14 = 0
             if (r10 != r2) goto L_0x02ba
-            r2 = 2131625061(0x7f0e0465, float:1.887732E38)
+            r2 = 2131625078(0x7f0e0476, float:1.8877354E38)
             java.lang.String r0 = "DeleteReportSpam"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)
             r15.setText(r0, r13, r14, r14)
@@ -4797,7 +5580,7 @@ public class AlertsCreator {
             java.lang.String r2 = org.telegram.messenger.ContactsController.formatName(r2, r3)
             r0[r14] = r2
             java.lang.String r2 = "DeleteAllFrom"
-            r3 = 2131625025(0x7f0e0441, float:1.8877246E38)
+            r3 = 2131625035(0x7f0e044b, float:1.8877267E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r2, r3, r0)
             r15.setText(r0, r13, r14, r14)
         L_0x02d5:
@@ -4828,7 +5611,7 @@ public class AlertsCreator {
             r37 = r0
             android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r33, r34, r35, r36, r37, r38, r39)
             r9.addView(r15, r0)
-            org.telegram.ui.Components.-$$Lambda$AlertsCreator$xbhjQq3vQRj7TYbHT8ZQznMIIEk r0 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$xbhjQq3vQRj7TYbHT8ZQznMIIEk
+            org.telegram.ui.Components.-$$Lambda$AlertsCreator$71o_MkxyVMYak8-BcQ-nbZI2DpI r0 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$71o_MkxyVMYak8-BcQ-nbZI2DpI
             r0.<init>(r12)
             r15.setOnClickListener(r0)
             int r11 = r11 + 1
@@ -4859,7 +5642,7 @@ public class AlertsCreator {
             android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
             r3.setBackgroundDrawable(r9)
             r14 = r26
-            r9 = 2131625052(0x7f0e045c, float:1.8877301E38)
+            r9 = 2131625069(0x7f0e046d, float:1.8877336E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r14, r9)
             r3.setText(r9, r13, r1, r1)
             boolean r1 = org.telegram.messenger.LocaleController.isRTL
@@ -4887,7 +5670,7 @@ public class AlertsCreator {
             r38 = 0
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r32, r33, r34, r35, r36, r37, r38)
             r2.addView(r3, r1)
-            org.telegram.ui.Components.-$$Lambda$AlertsCreator$ZLvwg9XvFrEJneJrATqomil_FLo r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$ZLvwg9XvFrEJneJrATqomil_FLo
+            org.telegram.ui.Components.-$$Lambda$AlertsCreator$h82GDm7GyPGm09FSnGoFoNJR7sw r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$h82GDm7GyPGm09FSnGoFoNJR7sw
             r9 = r25
             r1.<init>(r9)
             r3.setOnClickListener(r1)
@@ -5050,7 +5833,7 @@ public class AlertsCreator {
             android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
             r5.setBackgroundDrawable(r8)
             if (r31 == 0) goto L_0x04ba
-            r8 = 2131625053(0x7f0e045d, float:1.8877303E38)
+            r8 = 2131625070(0x7f0e046e, float:1.8877338E38)
             java.lang.Object[] r11 = new java.lang.Object[r7]
             java.lang.String r7 = org.telegram.messenger.UserObject.getFirstName(r42)
             r11[r1] = r7
@@ -5065,13 +5848,13 @@ public class AlertsCreator {
             if (r10 != 0) goto L_0x04c2
             if (r6 != r8) goto L_0x04cf
         L_0x04c2:
-            r7 = 2131625043(0x7f0e0453, float:1.8877283E38)
+            r7 = 2131625057(0x7f0e0461, float:1.8877311E38)
             java.lang.String r11 = "DeleteForAll"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
             r5.setText(r7, r13, r1, r1)
             goto L_0x04d9
         L_0x04cf:
-            r7 = 2131625052(0x7f0e045c, float:1.8877301E38)
+            r7 = 2131625069(0x7f0e046d, float:1.8877336E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r14, r7)
             r5.setText(r7, r13, r1, r1)
         L_0x04d9:
@@ -5100,7 +5883,7 @@ public class AlertsCreator {
             r39 = 0
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r33, r34, r35, r36, r37, r38, r39)
             r3.addView(r5, r1)
-            org.telegram.ui.Components.-$$Lambda$AlertsCreator$2VOr3mC1fUW3ZQ5hX19WYgFufoE r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$2VOr3mC1fUW3ZQ5hX19WYgFufoE
+            org.telegram.ui.Components.-$$Lambda$AlertsCreator$naQxLHY0va5jqqtfh5sO2IzsQKk r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$naQxLHY0va5jqqtfh5sO2IzsQKk
             r1.<init>(r9)
             r5.setOnClickListener(r1)
             r0.setView(r3)
@@ -5122,10 +5905,10 @@ public class AlertsCreator {
         L_0x052b:
             r25 = 0
         L_0x052d:
-            r3 = 2131625019(0x7f0e043b, float:1.8877234E38)
+            r3 = 2131625027(0x7f0e0443, float:1.887725E38)
             java.lang.String r5 = "Delete"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
-            org.telegram.ui.Components.-$$Lambda$AlertsCreator$W21BNDsH87W0-Jt4uYZ2DUJQLLU r5 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$W21BNDsH87W0-Jt4uYZ2DUJQLLU
+            org.telegram.ui.Components.-$$Lambda$AlertsCreator$sKsvC1OERFM2fHAv6EYh3qAvWqI r5 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$sKsvC1OERFM2fHAv6EYh3qAvWqI
             r7 = r24
             r15 = r5
             r16 = r48
@@ -5144,13 +5927,13 @@ public class AlertsCreator {
             java.lang.String r3 = "messages"
             r5 = 1
             if (r8 != r5) goto L_0x0569
-            r7 = 2131625062(0x7f0e0466, float:1.8877321E38)
+            r7 = 2131625080(0x7f0e0478, float:1.8877358E38)
             java.lang.String r9 = "DeleteSingleMessagesTitle"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r0.setTitle(r7)
             goto L_0x057e
         L_0x0569:
-            r7 = 2131625057(0x7f0e0461, float:1.8877311E38)
+            r7 = 2131625074(0x7f0e0472, float:1.8877346E38)
             java.lang.Object[] r9 = new java.lang.Object[r5]
             java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r3, r8)
             r11 = 0
@@ -5159,15 +5942,15 @@ public class AlertsCreator {
             java.lang.String r5 = org.telegram.messenger.LocaleController.formatString(r5, r7, r9)
             r0.setTitle(r5)
         L_0x057e:
-            r5 = 2131624324(0x7f0e0184, float:1.8875824E38)
+            r5 = 2131624327(0x7f0e0187, float:1.887583E38)
             java.lang.String r7 = "AreYouSureDeleteSingleMessage"
-            r9 = 2131624316(0x7f0e017c, float:1.8875808E38)
+            r9 = 2131624319(0x7f0e017f, float:1.8875814E38)
             java.lang.String r11 = "AreYouSureDeleteFewMessages"
             if (r4 == 0) goto L_0x05bd
             if (r10 == 0) goto L_0x05bd
             if (r1 == 0) goto L_0x05a8
             if (r6 == r8) goto L_0x05a8
-            r1 = 2131625056(0x7f0e0460, float:1.887731E38)
+            r1 = 2131625073(0x7f0e0471, float:1.8877344E38)
             r2 = 1
             java.lang.Object[] r2 = new java.lang.Object[r2]
             java.lang.String r3 = org.telegram.messenger.LocaleController.formatPluralString(r3, r6)
@@ -5192,7 +5975,7 @@ public class AlertsCreator {
             if (r31 != 0) goto L_0x05fe
             if (r6 == r8) goto L_0x05fe
             if (r4 == 0) goto L_0x05dc
-            r1 = 2131625055(0x7f0e045f, float:1.8877307E38)
+            r1 = 2131625072(0x7f0e0470, float:1.8877342E38)
             r2 = 1
             java.lang.Object[] r2 = new java.lang.Object[r2]
             java.lang.String r3 = org.telegram.messenger.LocaleController.formatPluralString(r3, r6)
@@ -5204,7 +5987,7 @@ public class AlertsCreator {
             goto L_0x0635
         L_0x05dc:
             r4 = 0
-            r1 = 2131625054(0x7f0e045e, float:1.8877305E38)
+            r1 = 2131625071(0x7f0e046f, float:1.887734E38)
             r5 = 2
             java.lang.Object[] r5 = new java.lang.Object[r5]
             java.lang.String r3 = org.telegram.messenger.LocaleController.formatPluralString(r3, r6)
@@ -5224,13 +6007,13 @@ public class AlertsCreator {
             if (r51 != 0) goto L_0x0623
             r1 = 1
             if (r8 != r1) goto L_0x0616
-            r1 = 2131624325(0x7f0e0185, float:1.8875827E38)
+            r1 = 2131624328(0x7f0e0188, float:1.8875833E38)
             java.lang.String r2 = "AreYouSureDeleteSingleMessageMega"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
             goto L_0x0635
         L_0x0616:
-            r1 = 2131624317(0x7f0e017d, float:1.887581E38)
+            r1 = 2131624320(0x7f0e0180, float:1.8875816E38)
             java.lang.String r2 = "AreYouSureDeleteFewMessagesMega"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
@@ -5245,7 +6028,7 @@ public class AlertsCreator {
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r0.setMessage(r1)
         L_0x0635:
-            r1 = 2131624589(0x7f0e028d, float:1.8876362E38)
+            r1 = 2131624594(0x7f0e0292, float:1.8876372E38)
             java.lang.String r2 = "Cancel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r2 = 0
@@ -5266,7 +6049,7 @@ public class AlertsCreator {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.createDeleteMessagesAlert(org.telegram.ui.ActionBar.BaseFragment, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$EncryptedChat, org.telegram.tgnet.TLRPC$ChatFull, long, org.telegram.messenger.MessageObject, android.util.SparseArray[], org.telegram.messenger.MessageObject$GroupedMessages, boolean, int, java.lang.Runnable):void");
     }
 
-    static /* synthetic */ void lambda$null$69(AlertDialog[] alertDialogArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, BaseFragment baseFragment, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$ChatFull tLRPC$ChatFull, long j, MessageObject messageObject, SparseArray[] sparseArrayArr, MessageObject.GroupedMessages groupedMessages, boolean z, Runnable runnable) {
+    static /* synthetic */ void lambda$null$76(AlertDialog[] alertDialogArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, BaseFragment baseFragment, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$ChatFull tLRPC$ChatFull, long j, MessageObject messageObject, SparseArray[] sparseArrayArr, MessageObject.GroupedMessages groupedMessages, boolean z, Runnable runnable) {
         int i;
         TLRPC$TL_error tLRPC$TL_error2 = tLRPC$TL_error;
         int i2 = 0;
@@ -5287,7 +6070,7 @@ public class AlertsCreator {
         createDeleteMessagesAlert(baseFragment, tLRPC$User, tLRPC$Chat, tLRPC$EncryptedChat, tLRPC$ChatFull, j, messageObject, sparseArrayArr, groupedMessages, z, i, runnable);
     }
 
-    static /* synthetic */ void lambda$createDeleteMessagesAlert$72(AlertDialog[] alertDialogArr, int i, int i2, BaseFragment baseFragment) {
+    static /* synthetic */ void lambda$createDeleteMessagesAlert$79(AlertDialog[] alertDialogArr, int i, int i2, BaseFragment baseFragment) {
         if (alertDialogArr[0] != null) {
             alertDialogArr[0].setOnCancelListener(new DialogInterface.OnCancelListener(i, i2) {
                 public final /* synthetic */ int f$0;
@@ -5306,7 +6089,7 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$createDeleteMessagesAlert$73(boolean[] zArr, View view) {
+    static /* synthetic */ void lambda$createDeleteMessagesAlert$80(boolean[] zArr, View view) {
         if (view.isEnabled()) {
             CheckBoxCell checkBoxCell = (CheckBoxCell) view;
             Integer num = (Integer) checkBoxCell.getTag();
@@ -5315,12 +6098,12 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$createDeleteMessagesAlert$74(boolean[] zArr, View view) {
+    static /* synthetic */ void lambda$createDeleteMessagesAlert$81(boolean[] zArr, View view) {
         zArr[0] = !zArr[0];
         ((CheckBoxCell) view).setChecked(zArr[0], true);
     }
 
-    static /* synthetic */ void lambda$createDeleteMessagesAlert$75(boolean[] zArr, View view) {
+    static /* synthetic */ void lambda$createDeleteMessagesAlert$82(boolean[] zArr, View view) {
         zArr[0] = !zArr[0];
         ((CheckBoxCell) view).setChecked(zArr[0], true);
     }
@@ -5329,7 +6112,7 @@ public class AlertsCreator {
         r0 = ((org.telegram.messenger.MessageObject) r27[r16].get(r7.get(r8).intValue())).messageOwner.peer_id.channel_id;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ void lambda$createDeleteMessagesAlert$77(org.telegram.messenger.MessageObject r19, org.telegram.messenger.MessageObject.GroupedMessages r20, org.telegram.tgnet.TLRPC$EncryptedChat r21, int r22, long r23, boolean[] r25, boolean r26, android.util.SparseArray[] r27, org.telegram.tgnet.TLRPC$User r28, boolean[] r29, org.telegram.tgnet.TLRPC$Chat r30, org.telegram.tgnet.TLRPC$ChatFull r31, java.lang.Runnable r32, android.content.DialogInterface r33, int r34) {
+    static /* synthetic */ void lambda$createDeleteMessagesAlert$84(org.telegram.messenger.MessageObject r19, org.telegram.messenger.MessageObject.GroupedMessages r20, org.telegram.tgnet.TLRPC$EncryptedChat r21, int r22, long r23, boolean[] r25, boolean r26, android.util.SparseArray[] r27, org.telegram.tgnet.TLRPC$User r28, boolean[] r29, org.telegram.tgnet.TLRPC$Chat r30, org.telegram.tgnet.TLRPC$ChatFull r31, java.lang.Runnable r32, android.content.DialogInterface r33, int r34) {
         /*
             r0 = r19
             r1 = r20
@@ -5514,7 +6297,7 @@ public class AlertsCreator {
             r0.user_id = r1
             r0.id = r7
             org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r22)
-            org.telegram.ui.Components.-$$Lambda$AlertsCreator$bSCCckApo0O6TTVgA3n9J-kmdEw r2 = org.telegram.ui.Components.$$Lambda$AlertsCreator$bSCCckApo0O6TTVgA3n9JkmdEw.INSTANCE
+            org.telegram.ui.Components.-$$Lambda$AlertsCreator$JTKzZvRwCVJgfL_TygGUap0ct68 r2 = org.telegram.ui.Components.$$Lambda$AlertsCreator$JTKzZvRwCVJgfL_TygGUap0ct68.INSTANCE
             r1.sendRequest(r0, r2)
         L_0x0170:
             r0 = 2
@@ -5528,7 +6311,7 @@ public class AlertsCreator {
         L_0x0181:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$createDeleteMessagesAlert$77(org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject$GroupedMessages, org.telegram.tgnet.TLRPC$EncryptedChat, int, long, boolean[], boolean, android.util.SparseArray[], org.telegram.tgnet.TLRPC$User, boolean[], org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$ChatFull, java.lang.Runnable, android.content.DialogInterface, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$createDeleteMessagesAlert$84(org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject$GroupedMessages, org.telegram.tgnet.TLRPC$EncryptedChat, int, long, boolean[], boolean, android.util.SparseArray[], org.telegram.tgnet.TLRPC$User, boolean[], org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$ChatFull, java.lang.Runnable, android.content.DialogInterface, int):void");
     }
 
     public static void createThemeCreateDialog(BaseFragment baseFragment, int i, Theme.ThemeInfo themeInfo, Theme.ThemeAccent themeAccent) {
@@ -5540,7 +6323,7 @@ public class AlertsCreator {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) parentActivity);
             builder.setTitle(LocaleController.getString("NewTheme", NUM));
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-            builder.setPositiveButton(LocaleController.getString("Create", NUM), $$Lambda$AlertsCreator$e8bm8DIZEHr1vmv0P4oAypCHuiM.INSTANCE);
+            builder.setPositiveButton(LocaleController.getString("Create", NUM), $$Lambda$AlertsCreator$_oodNHqqBXbiM3njGy3tA5oZGBA.INSTANCE);
             LinearLayout linearLayout = new LinearLayout(parentActivity);
             linearLayout.setOrientation(1);
             builder.setView(linearLayout);
@@ -5567,7 +6350,7 @@ public class AlertsCreator {
             editTextBoldCursor.setCursorWidth(1.5f);
             editTextBoldCursor.setPadding(0, AndroidUtilities.dp(4.0f), 0, 0);
             linearLayout.addView(editTextBoldCursor, LayoutHelper.createLinear(-1, 36, 51, 24, 6, 24, 0));
-            editTextBoldCursor.setOnEditorActionListener($$Lambda$AlertsCreator$MDmCQPpO0aO01IpqquLwzp0_Q8Y.INSTANCE);
+            editTextBoldCursor.setOnEditorActionListener($$Lambda$AlertsCreator$D4F1Dg4zQUL97CipHOoSUzTdgQ.INSTANCE);
             editTextBoldCursor.setText(generateThemeName(themeAccent));
             editTextBoldCursor.setSelection(editTextBoldCursor.length());
             AlertDialog create = builder.create();
@@ -5575,7 +6358,7 @@ public class AlertsCreator {
                 public final void onShow(DialogInterface dialogInterface) {
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public final void run() {
-                            AlertsCreator.lambda$null$80(EditTextBoldCursor.this);
+                            AlertsCreator.lambda$null$87(EditTextBoldCursor.this);
                         }
                     });
                 }
@@ -5596,18 +6379,18 @@ public class AlertsCreator {
                 }
 
                 public final void onClick(View view) {
-                    AlertsCreator.lambda$createThemeCreateDialog$84(BaseFragment.this, this.f$1, this.f$2, this.f$3, this.f$4, view);
+                    AlertsCreator.lambda$createThemeCreateDialog$91(BaseFragment.this, this.f$1, this.f$2, this.f$3, this.f$4, view);
                 }
             });
         }
     }
 
-    static /* synthetic */ void lambda$null$80(EditTextBoldCursor editTextBoldCursor) {
+    static /* synthetic */ void lambda$null$87(EditTextBoldCursor editTextBoldCursor) {
         editTextBoldCursor.requestFocus();
         AndroidUtilities.showKeyboard(editTextBoldCursor);
     }
 
-    static /* synthetic */ void lambda$createThemeCreateDialog$84(BaseFragment baseFragment, EditTextBoldCursor editTextBoldCursor, Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, AlertDialog alertDialog, View view) {
+    static /* synthetic */ void lambda$createThemeCreateDialog$91(BaseFragment baseFragment, EditTextBoldCursor editTextBoldCursor, Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, AlertDialog alertDialog, View view) {
         if (baseFragment.getParentActivity() != null) {
             if (editTextBoldCursor.length() == 0) {
                 Vibrator vibrator = (Vibrator) ApplicationLoader.applicationContext.getSystemService("vibrator");

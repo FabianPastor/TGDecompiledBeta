@@ -922,6 +922,10 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.VideoPlayer.isPlaying():boolean");
     }
 
+    public boolean isBuffering() {
+        return this.player != null && this.lastReportedPlaybackState == 2;
+    }
+
     public void setStreamType(int i) {
         SimpleExoPlayer simpleExoPlayer = this.player;
         if (simpleExoPlayer != null) {

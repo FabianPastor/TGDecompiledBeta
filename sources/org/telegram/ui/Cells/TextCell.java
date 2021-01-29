@@ -19,6 +19,7 @@ import org.telegram.ui.ActionBar.Theme;
 public class TextCell extends FrameLayout {
     private int imageLeft;
     private ImageView imageView;
+    private boolean inDialogs;
     private int leftPadding;
     private boolean needDivider;
     private int offsetFromImage;
@@ -60,6 +61,10 @@ public class TextCell extends FrameLayout {
         imageView3.setScaleType(ImageView.ScaleType.CENTER);
         addView(this.valueImageView);
         setFocusable(true);
+    }
+
+    public void setIsInDialogs() {
+        this.inDialogs = true;
     }
 
     public SimpleTextView getTextView() {
@@ -212,20 +217,30 @@ public class TextCell extends FrameLayout {
     public void onDraw(Canvas canvas) {
         float f;
         int i;
+        float f2;
         if (this.needDivider) {
-            float f2 = 68.0f;
+            int i2 = 72;
+            float f3 = 20.0f;
             if (LocaleController.isRTL) {
                 f = 0.0f;
             } else {
-                f = (float) AndroidUtilities.dp(this.imageView.getVisibility() == 0 ? 68.0f : 20.0f);
+                if (this.imageView.getVisibility() == 0) {
+                    f2 = (float) (this.inDialogs ? 72 : 68);
+                } else {
+                    f2 = 20.0f;
+                }
+                f = (float) AndroidUtilities.dp(f2);
             }
             float measuredHeight = (float) (getMeasuredHeight() - 1);
             int measuredWidth = getMeasuredWidth();
             if (LocaleController.isRTL) {
-                if (this.imageView.getVisibility() != 0) {
-                    f2 = 20.0f;
+                if (this.imageView.getVisibility() == 0) {
+                    if (!this.inDialogs) {
+                        i2 = 68;
+                    }
+                    f3 = (float) i2;
                 }
-                i = AndroidUtilities.dp(f2);
+                i = AndroidUtilities.dp(f3);
             } else {
                 i = 0;
             }

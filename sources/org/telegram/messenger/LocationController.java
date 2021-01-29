@@ -1487,7 +1487,7 @@ public class LocationController extends BaseController implements NotificationCe
                 String thoroughfare = address.getThoroughfare();
                 if (!TextUtils.isEmpty(thoroughfare)) {
                     if (sb.length() > 0) {
-                        sb.append(", ");
+                        sb.append(" ");
                     }
                     sb.append(thoroughfare);
                     z = true;

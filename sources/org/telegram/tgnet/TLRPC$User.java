@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public abstract class TLRPC$User extends TLObject {
     public long access_hash;
+    public boolean apply_min_photo;
     public boolean bot;
     public boolean bot_chat_history;
     public int bot_info_version;
@@ -13,6 +14,7 @@ public abstract class TLRPC$User extends TLObject {
     public boolean contact;
     public boolean deleted;
     public boolean explicit_content;
+    public boolean fake;
     public String first_name;
     public int flags;
     public int id;

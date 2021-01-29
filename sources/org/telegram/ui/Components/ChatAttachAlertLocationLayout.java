@@ -1860,7 +1860,6 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
 
     /* access modifiers changed from: package-private */
     public void onShow() {
-        Activity parentActivity;
         this.parentAlert.actionBar.setTitle(LocaleController.getString("ShareLocation", NUM));
         if (this.mapView.getParent() == null) {
             this.mapViewClip.addView(this.mapView, 0, LayoutHelper.createFrame(-1, this.overScrollHeight + AndroidUtilities.dp(10.0f), 51));
@@ -1886,14 +1885,25 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             }
         }
         fixLayoutInternal(true);
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public final void run() {
+                ChatAttachAlertLocationLayout.this.lambda$onShow$24$ChatAttachAlertLocationLayout();
+            }
+        }, this.parentAlert.delegate.needEnterComment() ? 200 : 0);
+        this.layoutManager.scrollToPositionWithOffset(0, 0);
+        updateClipView();
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onShow$24 */
+    public /* synthetic */ void lambda$onShow$24$ChatAttachAlertLocationLayout() {
+        Activity parentActivity;
         if (this.checkPermission && Build.VERSION.SDK_INT >= 23 && (parentActivity = getParentActivity()) != null) {
             this.checkPermission = false;
             if (parentActivity.checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") != 0) {
                 parentActivity.requestPermissions(new String[]{"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, 2);
             }
         }
-        this.layoutManager.scrollToPositionWithOffset(0, 0);
-        updateClipView();
     }
 
     public void setDelegate(LocationActivityDelegate locationActivityDelegate) {
@@ -1902,9 +1912,9 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$ChatAttachAlertLocationLayout$khioUQTkG6Kx_iPJmZ7xnSPulg4 r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$ChatAttachAlertLocationLayout$eZKGgmBwOpYms3ulZ977R8Kydo r10 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
-                ChatAttachAlertLocationLayout.this.lambda$getThemeDescriptions$24$ChatAttachAlertLocationLayout();
+                ChatAttachAlertLocationLayout.this.lambda$getThemeDescriptions$25$ChatAttachAlertLocationLayout();
             }
         };
         arrayList.add(new ThemeDescription(this.mapViewClip, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
@@ -1920,7 +1930,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         arrayList.add(new ThemeDescription(this.locationButton, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_CHECKTAG, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "location_actionActiveIcon"));
         arrayList.add(new ThemeDescription(this.locationButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "location_actionBackground"));
         arrayList.add(new ThemeDescription(this.locationButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "location_actionPressedBackground"));
-        $$Lambda$ChatAttachAlertLocationLayout$khioUQTkG6Kx_iPJmZ7xnSPulg4 r8 = r10;
+        $$Lambda$ChatAttachAlertLocationLayout$eZKGgmBwOpYms3ulZ977R8Kydo r8 = r10;
         arrayList.add(new ThemeDescription(this.mapTypeButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "location_actionIcon"));
         arrayList.add(new ThemeDescription(this.mapTypeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "location_actionBackground"));
         arrayList.add(new ThemeDescription(this.mapTypeButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "location_actionPressedBackground"));
@@ -1969,8 +1979,8 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$24 */
-    public /* synthetic */ void lambda$getThemeDescriptions$24$ChatAttachAlertLocationLayout() {
+    /* renamed from: lambda$getThemeDescriptions$25 */
+    public /* synthetic */ void lambda$getThemeDescriptions$25$ChatAttachAlertLocationLayout() {
         this.mapTypeButton.setIconColor(Theme.getColor("location_actionIcon"));
         this.mapTypeButton.redrawPopup(Theme.getColor("actionBarDefaultSubmenuBackground"));
         this.mapTypeButton.setPopupItemsColor(Theme.getColor("actionBarDefaultSubmenuItemIcon"), true);

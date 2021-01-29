@@ -87,11 +87,13 @@ public class NativeInstance {
 
     public native void setVideoState(int i);
 
+    public native void setVolume(int i, double d);
+
     public native void setupOutgoingVideo(VideoSink videoSink, boolean z);
 
     public native void switchCamera(boolean z);
 
-    public static NativeInstance make(String str, Instance.Config config, String str2, Instance.Endpoint[] endpointArr, Instance.Proxy proxy, int i, Instance.EncryptionKey encryptionKey, VideoSink videoSink, long j) {
+    public static NativeInstance make(String str, Instance.Config config, String str2, Instance.Endpoint[] endpointArr, Instance.Proxy proxy, int i, Instance.EncryptionKey encryptionKey, VideoSink videoSink, long j, AudioLevelsCallback audioLevelsCallback2) {
         if (BuildVars.LOGS_ENABLED) {
             StringBuilder sb = new StringBuilder();
             sb.append("create new tgvoip instance, version ");
@@ -104,6 +106,7 @@ public class NativeInstance {
         NativeInstance nativeInstance = new NativeInstance();
         String str5 = str2;
         nativeInstance.persistentStateFilePath = str5;
+        nativeInstance.audioLevelsCallback = audioLevelsCallback2;
         Point point = AndroidUtilities.displaySize;
         Point point2 = AndroidUtilities.displaySize;
         nativeInstance.nativePtr = makeNativeInstance(str, nativeInstance, config, str5, endpointArr, proxy, i, encryptionKey, videoSink, j, ((float) Math.min(point.x, point.y)) / ((float) Math.max(point2.x, point2.y)));
@@ -191,7 +194,7 @@ public class NativeInstance {
     }
 
     private void onAudioLevelsUpdated(int[] iArr, float[] fArr, boolean[] zArr) {
-        if (iArr.length != 0) {
+        if (!this.isGroup || iArr == null || iArr.length != 0) {
             AndroidUtilities.runOnUIThread(new Runnable(iArr, fArr, zArr) {
                 public final /* synthetic */ int[] f$1;
                 public final /* synthetic */ float[] f$2;

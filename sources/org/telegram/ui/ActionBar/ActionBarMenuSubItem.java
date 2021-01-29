@@ -3,6 +3,7 @@ package org.telegram.ui.ActionBar;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -18,6 +19,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
     private int iconColor;
     private ImageView imageView;
     private int selectorColor;
+    private TextView subtextView;
     private int textColor;
     private TextView textView;
     boolean top;
@@ -77,13 +79,21 @@ public class ActionBarMenuSubItem extends FrameLayout {
     }
 
     public void setTextAndIcon(CharSequence charSequence, int i) {
+        setTextAndIcon(charSequence, i, (Drawable) null);
+    }
+
+    public void setTextAndIcon(CharSequence charSequence, int i, Drawable drawable) {
         this.textView.setText(charSequence);
-        if (i == 0 && this.checkView == null) {
+        if (i == 0 && drawable == null && this.checkView == null) {
             this.imageView.setVisibility(4);
             this.textView.setPadding(0, 0, 0, 0);
             return;
         }
-        this.imageView.setImageResource(i);
+        if (drawable != null) {
+            this.imageView.setImageDrawable(drawable);
+        } else {
+            this.imageView.setImageResource(i);
+        }
         this.imageView.setVisibility(0);
         this.textView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(43.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(43.0f) : 0, 0);
     }
@@ -117,8 +127,54 @@ public class ActionBarMenuSubItem extends FrameLayout {
         this.textView.setText(str);
     }
 
+    public void setSubtext(String str) {
+        int i = 8;
+        boolean z = true;
+        int i2 = 0;
+        if (this.subtextView == null) {
+            TextView textView2 = new TextView(getContext());
+            this.subtextView = textView2;
+            textView2.setLines(1);
+            this.subtextView.setSingleLine(true);
+            int i3 = 3;
+            this.subtextView.setGravity(3);
+            this.subtextView.setEllipsize(TextUtils.TruncateAt.END);
+            this.subtextView.setTextColor(-8617338);
+            this.subtextView.setVisibility(8);
+            this.subtextView.setTextSize(1, 13.0f);
+            this.subtextView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(43.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(43.0f) : 0, 0);
+            TextView textView3 = this.subtextView;
+            if (LocaleController.isRTL) {
+                i3 = 5;
+            }
+            addView(textView3, LayoutHelper.createFrame(-2, -2.0f, i3 | 16, 0.0f, 10.0f, 0.0f, 0.0f));
+        }
+        boolean z2 = !TextUtils.isEmpty(str);
+        if (this.subtextView.getVisibility() != 0) {
+            z = false;
+        }
+        if (z2 != z) {
+            TextView textView4 = this.subtextView;
+            if (z2) {
+                i = 0;
+            }
+            textView4.setVisibility(i);
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.textView.getLayoutParams();
+            if (z2) {
+                i2 = AndroidUtilities.dp(10.0f);
+            }
+            layoutParams.bottomMargin = i2;
+            this.textView.setLayoutParams(layoutParams);
+        }
+        this.subtextView.setText(str);
+    }
+
     public TextView getTextView() {
         return this.textView;
+    }
+
+    public ImageView getImageView() {
+        return this.imageView;
     }
 
     public void setSelectorColor(int i) {

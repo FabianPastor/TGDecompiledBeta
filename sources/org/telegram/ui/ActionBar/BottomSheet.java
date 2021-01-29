@@ -118,6 +118,7 @@ public class BottomSheet extends Dialog {
     protected View nestedScrollChild;
     /* access modifiers changed from: private */
     public DialogInterface.OnClickListener onClickListener;
+    private DialogInterface.OnDismissListener onHideListener;
     protected Interpolator openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
     protected boolean scrollNavBar;
     /* access modifiers changed from: protected */
@@ -1094,6 +1095,9 @@ public class BottomSheet extends Dialog {
     public /* synthetic */ WindowInsets lambda$new$0$BottomSheet(View view, WindowInsets windowInsets) {
         this.lastInsets = windowInsets;
         view.requestLayout();
+        if (Build.VERSION.SDK_INT >= 30) {
+            return WindowInsets.CONSUMED;
+        }
         return windowInsets.consumeSystemWindowInsets();
     }
 
@@ -1335,6 +1339,10 @@ public class BottomSheet extends Dialog {
         this.applyBottomPadding = z;
     }
 
+    public TextView getTitleView() {
+        return this.titleView;
+    }
+
     private void cancelSheetAnimation() {
         AnimatorSet animatorSet = this.currentSheetAnimation;
         if (animatorSet != null) {
@@ -1342,6 +1350,10 @@ public class BottomSheet extends Dialog {
             this.currentSheetAnimation = null;
             this.currentSheetAnimationType = 0;
         }
+    }
+
+    public void setOnHideListener(DialogInterface.OnDismissListener onDismissListener) {
+        this.onHideListener = onDismissListener;
     }
 
     /* access modifiers changed from: private */
@@ -1509,6 +1521,10 @@ public class BottomSheet extends Dialog {
         BottomSheetDelegateInterface bottomSheetDelegateInterface = this.delegate;
         if ((bottomSheetDelegateInterface == null || bottomSheetDelegateInterface.canDismiss()) && !this.dismissed) {
             this.dismissed = true;
+            DialogInterface.OnDismissListener onDismissListener = this.onHideListener;
+            if (onDismissListener != null) {
+                onDismissListener.onDismiss(this);
+            }
             cancelSheetAnimation();
             if (!this.allowCustomAnimation || !onCustomCloseAnimation()) {
                 this.currentSheetAnimationType = 2;

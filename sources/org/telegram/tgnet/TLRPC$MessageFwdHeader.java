@@ -6,6 +6,7 @@ public abstract class TLRPC$MessageFwdHeader extends TLObject {
     public int flags;
     public TLRPC$Peer from_id;
     public String from_name;
+    public boolean imported;
     public String post_author;
     public String psa_type;
     public int saved_from_msg_id;

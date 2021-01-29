@@ -135,11 +135,11 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         this.delegate = imageUpdaterDelegate;
     }
 
-    public void openMenu(boolean z, Runnable runnable) {
+    public void openMenu(boolean z, Runnable runnable, DialogInterface.OnDismissListener onDismissListener) {
         BaseFragment baseFragment = this.parentFragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
             if (this.useAttachMenu) {
-                openAttachMenu();
+                openAttachMenu(onDismissListener);
                 return;
             }
             BottomSheet.Builder builder = new BottomSheet.Builder(this.parentFragment.getParentActivity());
@@ -187,6 +187,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
             });
             BottomSheet create = builder.create();
+            create.setOnHideListener(onDismissListener);
             this.parentFragment.showDialog(create);
             if (z) {
                 create.setItemColor(arrayList.size() - 1, Theme.getColor("dialogTextRed2"), Theme.getColor("dialogRedIcon"));
@@ -302,7 +303,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         }
     }
 
-    private void openAttachMenu() {
+    private void openAttachMenu(DialogInterface.OnDismissListener onDismissListener) {
         BaseFragment baseFragment = this.parentFragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
             createChatAttachView();
@@ -314,6 +315,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 AndroidUtilities.hideKeyboard(this.parentFragment.getFragmentView().findFocus());
             }
             this.chatAttachAlert.init();
+            this.chatAttachAlert.setOnHideListener(onDismissListener);
             this.parentFragment.showDialog(this.chatAttachAlert);
         }
     }
@@ -599,7 +601,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
                 PhotoCropActivity photoCropActivity = new PhotoCropActivity(bundle);
                 photoCropActivity.setDelegate(this);
-                launchActivity.lambda$runLinkRequest$38(photoCropActivity);
+                launchActivity.lambda$runLinkRequest$41(photoCropActivity);
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -867,7 +869,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     }
                 } else if (i3 == NotificationCenter.filePreparingStarted && objArr[0] == this.convertingVideo && (baseFragment = this.parentFragment) != null) {
                     this.uploadingVideo = objArr[1];
-                    baseFragment.getFileLoader().uploadFile(this.uploadingVideo, false, false, (int) this.convertingVideo.videoEditedInfo.estimatedSize, 33554432);
+                    baseFragment.getFileLoader().uploadFile(this.uploadingVideo, false, false, (int) this.convertingVideo.videoEditedInfo.estimatedSize, 33554432, false);
                 }
             } else if (objArr[0].equals(this.uploadingImage)) {
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, i5);

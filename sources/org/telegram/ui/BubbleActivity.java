@@ -286,7 +286,9 @@ public class BubbleActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     public void onBackPressed() {
-        if (this.passcodeView.getVisibility() == 0) {
+        if (this.mainFragmentsStack.size() == 1) {
+            super.onBackPressed();
+        } else if (this.passcodeView.getVisibility() == 0) {
             finish();
         } else if (PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().closePhoto(true, false);

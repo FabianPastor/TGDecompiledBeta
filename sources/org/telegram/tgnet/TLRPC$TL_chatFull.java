@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -16,7 +16,9 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
             this.chat_photo = TLRPC$Photo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         this.notify_settings = TLRPC$PeerNotifySettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        this.exported_invite = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        if ((this.flags & 8192) != 0) {
+            this.exported_invite = (TLRPC$TL_chatInviteExported) TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
         if ((this.flags & 8) != 0) {
             int readInt322 = abstractSerializedData.readInt32(z);
             if (readInt322 == NUM) {
@@ -61,7 +63,9 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
             this.chat_photo.serializeToStream(abstractSerializedData);
         }
         this.notify_settings.serializeToStream(abstractSerializedData);
-        this.exported_invite.serializeToStream(abstractSerializedData);
+        if ((this.flags & 8192) != 0) {
+            this.exported_invite.serializeToStream(abstractSerializedData);
+        }
         if ((this.flags & 8) != 0) {
             abstractSerializedData.writeInt32(NUM);
             int size = this.bot_info.size();

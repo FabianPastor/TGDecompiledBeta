@@ -394,8 +394,8 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             int r3 = r3.size()
             if (r15 != r3) goto L_0x0242
             java.util.ArrayList<java.lang.Object> r3 = r0.currentObjects
-            int r3 = r3.indexOf(r11)
-            if (r3 != r2) goto L_0x01ed
+            boolean r3 = r3.contains(r11)
+            if (r3 != 0) goto L_0x01ed
             goto L_0x0242
         L_0x01ed:
             java.util.ArrayList<java.lang.Object> r3 = r0.currentObjects

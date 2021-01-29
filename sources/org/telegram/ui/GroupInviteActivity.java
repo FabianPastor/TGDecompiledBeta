@@ -24,7 +24,6 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$ExportedChatInvite;
 import org.telegram.tgnet.TLRPC$TL_chatInviteExported;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messages_exportChatInvite;
@@ -48,7 +47,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     public int copyLinkRow;
     private EmptyTextProgressView emptyView;
     /* access modifiers changed from: private */
-    public TLRPC$ExportedChatInvite invite;
+    public TLRPC$TL_chatInviteExported invite;
     /* access modifiers changed from: private */
     public int linkInfoRow;
     /* access modifiers changed from: private */
@@ -184,9 +183,9 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         if (i == NotificationCenter.chatInfoDidLoad) {
             int intValue = objArr[1].intValue();
             if (objArr[0].id == this.chat_id && intValue == this.classGuid) {
-                TLRPC$ExportedChatInvite exportedInvite = MessagesController.getInstance(this.currentAccount).getExportedInvite(this.chat_id);
+                TLRPC$TL_chatInviteExported exportedInvite = MessagesController.getInstance(this.currentAccount).getExportedInvite(this.chat_id);
                 this.invite = exportedInvite;
-                if (!(exportedInvite instanceof TLRPC$TL_chatInviteExported)) {
+                if (exportedInvite == null) {
                     generateLink(false);
                     return;
                 }
@@ -252,7 +251,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$GroupInviteActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
         if (tLRPC$TL_error == null) {
-            this.invite = (TLRPC$ExportedChatInvite) tLObject;
+            this.invite = (TLRPC$TL_chatInviteExported) tLObject;
             if (z) {
                 if (getParentActivity() != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());

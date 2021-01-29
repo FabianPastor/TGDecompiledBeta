@@ -16,6 +16,7 @@ public abstract class TLRPC$Chat extends TLObject {
     public boolean deactivated;
     public TLRPC$TL_chatBannedRights default_banned_rights;
     public boolean explicit_content;
+    public boolean fake;
     public int flags;
     public boolean has_geo;
     public boolean has_link;

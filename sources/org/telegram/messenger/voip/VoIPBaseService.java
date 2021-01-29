@@ -214,6 +214,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected boolean playedConnectedSound;
     protected boolean playingSound;
     protected Instance.TrafficStats prevTrafficStats;
+    protected int previousAudioOutput;
     public TLRPC$PhoneCall privateCall;
     protected PowerManager.WakeLock proximityWakelock;
     protected BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -222,14 +223,28 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             boolean z = true;
             int i = 0;
             if ("android.intent.action.HEADSET_PLUG".equals(intent.getAction())) {
+                VoIPBaseService.this.isHeadsetPlugged = intent.getIntExtra("state", 0) == 1;
                 VoIPBaseService voIPBaseService = VoIPBaseService.this;
-                if (intent.getIntExtra("state", 0) != 1) {
-                    z = false;
-                }
-                voIPBaseService.isHeadsetPlugged = z;
-                VoIPBaseService voIPBaseService2 = VoIPBaseService.this;
-                if (voIPBaseService2.isHeadsetPlugged && (wakeLock = voIPBaseService2.proximityWakelock) != null && wakeLock.isHeld()) {
+                if (voIPBaseService.isHeadsetPlugged && (wakeLock = voIPBaseService.proximityWakelock) != null && wakeLock.isHeld()) {
                     VoIPBaseService.this.proximityWakelock.release();
+                }
+                VoIPBaseService voIPBaseService2 = VoIPBaseService.this;
+                if (voIPBaseService2.isHeadsetPlugged) {
+                    AudioManager audioManager = (AudioManager) voIPBaseService2.getSystemService("audio");
+                    if (audioManager.isSpeakerphoneOn()) {
+                        VoIPBaseService.this.previousAudioOutput = 0;
+                    } else if (audioManager.isBluetoothScoOn()) {
+                        VoIPBaseService.this.previousAudioOutput = 2;
+                    } else {
+                        VoIPBaseService.this.previousAudioOutput = 1;
+                    }
+                    VoIPBaseService.this.setAudioOutput(1);
+                } else {
+                    int i2 = voIPBaseService2.previousAudioOutput;
+                    if (i2 >= 0) {
+                        voIPBaseService2.setAudioOutput(i2);
+                        VoIPBaseService.this.previousAudioOutput = -1;
+                    }
                 }
                 VoIPBaseService voIPBaseService3 = VoIPBaseService.this;
                 voIPBaseService3.isProximityNear = false;
@@ -265,9 +280,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                     VoIPBaseService voIPBaseService7 = VoIPBaseService.this;
                     if (voIPBaseService7.needSwitchToBluetoothAfterScoActivates) {
                         voIPBaseService7.needSwitchToBluetoothAfterScoActivates = false;
-                        AudioManager audioManager = (AudioManager) voIPBaseService7.getSystemService("audio");
-                        audioManager.setSpeakerphoneOn(false);
-                        audioManager.setBluetoothScoOn(true);
+                        AudioManager audioManager2 = (AudioManager) voIPBaseService7.getSystemService("audio");
+                        audioManager2.setSpeakerphoneOn(false);
+                        audioManager2.setBluetoothScoOn(true);
                     }
                 }
                 Iterator<StateListener> it = VoIPBaseService.this.stateListeners.iterator();
@@ -515,7 +530,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                     z3 = true;
                 }
                 if (z3) {
-                    editCallMember(UserConfig.getInstance(this.currentAccount).getCurrentUser(), z);
+                    editCallMember(UserConfig.getInstance(this.currentAccount).getCurrentUser(), z, -1);
                     DispatchQueue dispatchQueue = Utilities.globalQueue;
                     $$Lambda$VoIPBaseService$2g4fCttj150miIvar_fb9pscys r0 = new Runnable() {
                         public final void run() {
@@ -551,7 +566,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         }
     }
 
-    public void editCallMember(TLObject tLObject, boolean z) {
+    public void editCallMember(TLObject tLObject, boolean z, int i) {
         if (this.groupCall != null) {
             TLRPC$TL_phone_editGroupCallMember tLRPC$TL_phone_editGroupCallMember = new TLRPC$TL_phone_editGroupCallMember();
             tLRPC$TL_phone_editGroupCallMember.call = this.groupCall.getInputGroupCall();
@@ -567,8 +582,12 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 }
             }
             tLRPC$TL_phone_editGroupCallMember.muted = z;
-            int i = this.currentAccount;
-            AccountInstance.getInstance(i).getConnectionsManager().sendRequest(tLRPC$TL_phone_editGroupCallMember, new RequestDelegate(i) {
+            if (i >= 0) {
+                tLRPC$TL_phone_editGroupCallMember.volume = i;
+                tLRPC$TL_phone_editGroupCallMember.flags |= 2;
+            }
+            int i2 = this.currentAccount;
+            AccountInstance.getInstance(i2).getConnectionsManager().sendRequest(tLRPC$TL_phone_editGroupCallMember, new RequestDelegate(i2) {
                 public final /* synthetic */ int f$0;
 
                 {
@@ -1561,9 +1580,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r4.setAction(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r1)
-            r6 = 2131627757(0x7f0e0eed, float:1.8882787E38)
+            r6 = 2131627865(0x7f0e0var_, float:1.8883006E38)
             java.lang.String r7 = "VoipInVideoCallBranding"
-            r8 = 2131627755(0x7f0e0eeb, float:1.8882783E38)
+            r8 = 2131627863(0x7f0e0var_, float:1.8883002E38)
             java.lang.String r9 = "VoipInCallBranding"
             if (r22 == 0) goto L_0x002b
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -1573,7 +1592,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         L_0x002f:
             android.app.Notification$Builder r5 = r5.setContentTitle(r10)
             android.app.Notification$Builder r5 = r5.setContentText(r0)
-            r10 = 2131165832(0x7var_, float:1.7945892E38)
+            r10 = 2131165844(0x7var_, float:1.7945917E38)
             android.app.Notification$Builder r5 = r5.setSmallIcon(r10)
             android.app.Notification$Builder r5 = r5.setSubText(r2)
             r10 = 0
@@ -1655,7 +1674,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r9.append(r10)
             r9.append(r14)
             java.lang.String r9 = r9.toString()
-            r13 = 2131625660(0x7f0e06bc, float:1.8878534E38)
+            r13 = 2131625721(0x7f0e06f9, float:1.8878658E38)
             r17 = r7
             java.lang.String r7 = "IncomingCalls"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r13)
@@ -1707,7 +1726,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             java.lang.String r8 = "call_id"
             r2.putExtra(r8, r6)
             java.lang.String r6 = "VoipDeclineCall"
-            r7 = 2131627704(0x7f0e0eb8, float:1.888268E38)
+            r7 = 2131627803(0x7f0e0f1b, float:1.888288E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10 = 24
             if (r12 < r10) goto L_0x01a0
@@ -1726,7 +1745,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         L_0x01a1:
             r11 = 268435456(0x10000000, float:2.5243549E-29)
             android.app.PendingIntent r2 = android.app.PendingIntent.getBroadcast(r1, r14, r2, r11)
-            r13 = 2131165487(0x7var_f, float:1.7945193E38)
+            r13 = 2131165489(0x7var_, float:1.7945197E38)
             r5.addAction(r13, r9, r2)
             android.content.Intent r9 = new android.content.Intent
             java.lang.Class<org.telegram.messenger.voip.VoIPActionsReceiver> r13 = org.telegram.messenger.voip.VoIPActionsReceiver.class
@@ -1742,7 +1761,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             long r13 = r18.getCallID()
             r9.putExtra(r8, r13)
             java.lang.String r8 = "VoipAnswerCall"
-            r13 = 2131627694(0x7f0e0eae, float:1.888266E38)
+            r13 = 2131627793(0x7f0e0var_, float:1.888286E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r8, r13)
             if (r12 < r10) goto L_0x01f5
             android.text.SpannableString r10 = new android.text.SpannableString
@@ -1759,7 +1778,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r7 = 0
         L_0x01f6:
             android.app.PendingIntent r9 = android.app.PendingIntent.getBroadcast(r1, r7, r9, r11)
-            r10 = 2131165486(0x7var_e, float:1.794519E38)
+            r10 = 2131165488(0x7var_, float:1.7945195E38)
             r5.addAction(r10, r14, r9)
             r10 = 2
             r5.setPriority(r10)
@@ -1807,12 +1826,12 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r11 = 2131427328(0x7f0b0000, float:1.847627E38)
         L_0x0264:
             r7.<init>(r10, r11)
-            r10 = 2131230845(0x7var_d, float:1.8077754E38)
+            r10 = 2131230849(0x7var_, float:1.8077762E38)
             r7.setTextViewText(r10, r0)
             boolean r0 = android.text.TextUtils.isEmpty(r20)
             r10 = 8
-            r11 = 2131230909(0x7var_bd, float:1.8077884E38)
-            r12 = 2131230891(0x7var_ab, float:1.8077848E38)
+            r11 = 2131230920(0x7var_c8, float:1.8077906E38)
+            r12 = 2131230902(0x7var_b6, float:1.807787E38)
             if (r0 == 0) goto L_0x02d7
             r7.setViewVisibility(r12, r10)
             int r0 = org.telegram.messenger.UserConfig.getActivatedAccountsCount()
@@ -1822,7 +1841,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             if (r22 == 0) goto L_0x02a8
-            r12 = 2131627758(0x7f0e0eee, float:1.888279E38)
+            r12 = 2131627866(0x7f0e0f5a, float:1.8883009E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r14 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1834,7 +1853,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             goto L_0x02be
         L_0x02a8:
             r14 = 0
-            r12 = 2131627756(0x7f0e0eec, float:1.8882785E38)
+            r12 = 2131627864(0x7f0e0var_, float:1.8883004E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1848,11 +1867,11 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         L_0x02c2:
             if (r22 == 0) goto L_0x02ca
             r10 = r17
-            r0 = 2131627757(0x7f0e0eed, float:1.8882787E38)
+            r0 = 2131627865(0x7f0e0var_, float:1.8883006E38)
             goto L_0x02cf
         L_0x02ca:
             r10 = r16
-            r0 = 2131627755(0x7f0e0eeb, float:1.8882783E38)
+            r0 = 2131627863(0x7f0e0var_, float:1.8883002E38)
         L_0x02cf:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r10, r0)
             r7.setTextViewText(r11, r0)
@@ -1864,7 +1883,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             int r0 = r1.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
-            r10 = 2131627695(0x7f0e0eaf, float:1.8882662E38)
+            r10 = 2131627794(0x7f0e0var_, float:1.8882862E38)
             java.lang.Object[] r14 = new java.lang.Object[r14]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1886,10 +1905,10 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r13)
             r7.setTextViewText(r3, r8)
             r3 = 2131230792(0x7var_, float:1.8077647E38)
-            r8 = 2131627704(0x7f0e0eb8, float:1.888268E38)
+            r8 = 2131627803(0x7f0e0f1b, float:1.888288E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r8)
             r7.setTextViewText(r3, r6)
-            r3 = 2131230867(0x7var_, float:1.8077799E38)
+            r3 = 2131230871(0x7var_, float:1.8077807E38)
             r7.setImageViewBitmap(r3, r0)
             r3 = 2131230768(0x7var_, float:1.8077598E38)
             r7.setOnClickPendingIntent(r3, r9)
@@ -2127,8 +2146,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                     public final void run() {
                         VoIPBaseService.this.lambda$callEnded$19$VoIPBaseService();
                     }
-                });
-                i = 400;
+                }, 100);
+                i = 500;
             }
             AndroidUtilities.runOnUIThread(this.afterSoundRunnable, (long) i);
         }

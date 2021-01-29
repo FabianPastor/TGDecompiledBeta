@@ -24,14 +24,17 @@ public class TLRPC$TL_channelFull_layer48 extends TLRPC$TL_channelFull {
         this.unread_important_count = abstractSerializedData.readInt32(z);
         this.chat_photo = TLRPC$Photo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.notify_settings = TLRPC$PeerNotifySettings.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        this.exported_invite = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        TLRPC$ExportedChatInvite TLdeserialize = TLRPC$ExportedChatInvite.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        if (TLdeserialize instanceof TLRPC$TL_chatInviteExported) {
+            this.exported_invite = (TLRPC$TL_chatInviteExported) TLdeserialize;
+        }
         int readInt322 = abstractSerializedData.readInt32(z);
         if (readInt322 == NUM) {
             int readInt323 = abstractSerializedData.readInt32(z);
             while (i < readInt323) {
-                TLRPC$BotInfo TLdeserialize = TLRPC$BotInfo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-                if (TLdeserialize != null) {
-                    this.bot_info.add(TLdeserialize);
+                TLRPC$BotInfo TLdeserialize2 = TLRPC$BotInfo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                if (TLdeserialize2 != null) {
+                    this.bot_info.add(TLdeserialize2);
                     i++;
                 } else {
                     return;

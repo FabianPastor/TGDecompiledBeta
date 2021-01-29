@@ -21,6 +21,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -98,7 +99,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
                 this.stickersToLoad.remove(objArr[0]);
                 if (this.stickersToLoad.isEmpty()) {
                     ArrayList<StickerResult> arrayList2 = this.stickers;
-                    if (arrayList2 != null && !arrayList2.isEmpty() && this.stickersToLoad.isEmpty()) {
+                    if (arrayList2 != null && !arrayList2.isEmpty()) {
                         z = true;
                     }
                     if (z) {
@@ -332,100 +333,102 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.lastReqId, true);
             this.lastReqId = 0;
         }
+        boolean z4 = MessagesController.getInstance(this.currentAccount).suggestStickersApiOnly;
         this.delayLocalResults = false;
-        final ArrayList<TLRPC$Document> recentStickersNoCopy = MediaDataController.getInstance(this.currentAccount).getRecentStickersNoCopy(0);
-        final ArrayList<TLRPC$Document> recentStickersNoCopy2 = MediaDataController.getInstance(this.currentAccount).getRecentStickersNoCopy(2);
-        int min = Math.min(20, recentStickersNoCopy.size());
-        int i3 = 0;
-        for (int i4 = 0; i4 < min; i4++) {
-            TLRPC$Document tLRPC$Document = recentStickersNoCopy.get(i4);
-            if (isValidSticker(tLRPC$Document, this.lastSticker)) {
-                addStickerToResult(tLRPC$Document, "recent");
-                i3++;
-                if (i3 >= 5) {
-                    break;
+        if (!z4) {
+            final ArrayList<TLRPC$Document> recentStickersNoCopy = MediaDataController.getInstance(this.currentAccount).getRecentStickersNoCopy(0);
+            final ArrayList<TLRPC$Document> recentStickersNoCopy2 = MediaDataController.getInstance(this.currentAccount).getRecentStickersNoCopy(2);
+            int min = Math.min(20, recentStickersNoCopy.size());
+            int i3 = 0;
+            for (int i4 = 0; i4 < min; i4++) {
+                TLRPC$Document tLRPC$Document = recentStickersNoCopy.get(i4);
+                if (isValidSticker(tLRPC$Document, this.lastSticker)) {
+                    addStickerToResult(tLRPC$Document, "recent");
+                    i3++;
+                    if (i3 >= 5) {
+                        break;
+                    }
                 }
             }
-        }
-        int size = recentStickersNoCopy2.size();
-        for (int i5 = 0; i5 < size; i5++) {
-            TLRPC$Document tLRPC$Document2 = recentStickersNoCopy2.get(i5);
-            if (isValidSticker(tLRPC$Document2, this.lastSticker)) {
-                addStickerToResult(tLRPC$Document2, "fav");
+            int size = recentStickersNoCopy2.size();
+            for (int i5 = 0; i5 < size; i5++) {
+                TLRPC$Document tLRPC$Document2 = recentStickersNoCopy2.get(i5);
+                if (isValidSticker(tLRPC$Document2, this.lastSticker)) {
+                    addStickerToResult(tLRPC$Document2, "fav");
+                }
             }
-        }
-        HashMap<String, ArrayList<TLRPC$Document>> allStickers = MediaDataController.getInstance(this.currentAccount).getAllStickers();
-        ArrayList arrayList2 = allStickers != null ? allStickers.get(this.lastSticker) : null;
-        if (arrayList2 != null && !arrayList2.isEmpty()) {
-            addStickersToResult(arrayList2, (Object) null);
-        }
-        ArrayList<StickerResult> arrayList3 = this.stickers;
-        if (arrayList3 != null) {
-            Collections.sort(arrayList3, new Object(this) {
-                public /* synthetic */ Comparator reversed() {
-                    return Comparator.CC.$default$reversed(this);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparing(Function function) {
-                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
-                    return Comparator.CC.$default$thenComparing(this, function, comparator);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
-                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
-                    return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
-                    return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
-                }
-
-                public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
-                    return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
-                }
-
-                private int getIndex(StickerResult stickerResult) {
-                    for (int i = 0; i < recentStickersNoCopy2.size(); i++) {
-                        if (((TLRPC$Document) recentStickersNoCopy2.get(i)).id == stickerResult.sticker.id) {
-                            return i + 2000000;
-                        }
+            HashMap<String, ArrayList<TLRPC$Document>> allStickers = MediaDataController.getInstance(this.currentAccount).getAllStickers();
+            ArrayList arrayList2 = allStickers != null ? allStickers.get(this.lastSticker) : null;
+            if (arrayList2 != null && !arrayList2.isEmpty()) {
+                addStickersToResult(arrayList2, (Object) null);
+            }
+            ArrayList<StickerResult> arrayList3 = this.stickers;
+            if (arrayList3 != null) {
+                Collections.sort(arrayList3, new Object(this) {
+                    public /* synthetic */ Comparator reversed() {
+                        return Comparator.CC.$default$reversed(this);
                     }
-                    for (int i2 = 0; i2 < Math.min(20, recentStickersNoCopy.size()); i2++) {
-                        if (((TLRPC$Document) recentStickersNoCopy.get(i2)).id == stickerResult.sticker.id) {
-                            return (recentStickersNoCopy.size() - i2) + 1000000;
-                        }
-                    }
-                    return -1;
-                }
 
-                public int compare(StickerResult stickerResult, StickerResult stickerResult2) {
-                    boolean isAnimatedStickerDocument = MessageObject.isAnimatedStickerDocument(stickerResult.sticker, true);
-                    boolean isAnimatedStickerDocument2 = MessageObject.isAnimatedStickerDocument(stickerResult2.sticker, true);
-                    if (isAnimatedStickerDocument == isAnimatedStickerDocument2) {
-                        int index = getIndex(stickerResult);
-                        int index2 = getIndex(stickerResult2);
-                        if (index > index2) {
-                            return -1;
+                    public /* synthetic */ java.util.Comparator thenComparing(Function function) {
+                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
+                    }
+
+                    public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
+                        return Comparator.CC.$default$thenComparing(this, function, comparator);
+                    }
+
+                    public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
+                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
+                    }
+
+                    public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
+                        return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
+                    }
+
+                    public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
+                        return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
+                    }
+
+                    public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
+                        return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
+                    }
+
+                    private int getIndex(StickerResult stickerResult) {
+                        for (int i = 0; i < recentStickersNoCopy2.size(); i++) {
+                            if (((TLRPC$Document) recentStickersNoCopy2.get(i)).id == stickerResult.sticker.id) {
+                                return i + 2000000;
+                            }
                         }
-                        if (index < index2) {
-                            return 1;
+                        for (int i2 = 0; i2 < Math.min(20, recentStickersNoCopy.size()); i2++) {
+                            if (((TLRPC$Document) recentStickersNoCopy.get(i2)).id == stickerResult.sticker.id) {
+                                return (recentStickersNoCopy.size() - i2) + 1000000;
+                            }
                         }
-                        return 0;
-                    } else if (!isAnimatedStickerDocument || isAnimatedStickerDocument2) {
-                        return 1;
-                    } else {
                         return -1;
                     }
-                }
-            });
+
+                    public int compare(StickerResult stickerResult, StickerResult stickerResult2) {
+                        boolean isAnimatedStickerDocument = MessageObject.isAnimatedStickerDocument(stickerResult.sticker, true);
+                        if (isAnimatedStickerDocument == MessageObject.isAnimatedStickerDocument(stickerResult2.sticker, true)) {
+                            int index = getIndex(stickerResult);
+                            int index2 = getIndex(stickerResult2);
+                            if (index > index2) {
+                                return -1;
+                            }
+                            if (index < index2) {
+                                return 1;
+                            }
+                            return 0;
+                        } else if (isAnimatedStickerDocument) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }
+                });
+            }
         }
-        if (SharedConfig.suggestStickers == 0) {
+        if (SharedConfig.suggestStickers == 0 || z4) {
             searchServerStickers(this.lastSticker, str);
         }
         ArrayList<StickerResult> arrayList4 = this.stickers;

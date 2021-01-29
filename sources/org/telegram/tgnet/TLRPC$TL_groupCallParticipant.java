@@ -9,12 +9,17 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
     public int flags;
     public boolean hasVoice;
     public boolean just_joined;
+    public long lastActiveDate;
     public long lastSpeakTime;
+    public int lastTypingDate;
+    public long lastVisibleDate;
     public boolean left;
     public boolean muted;
+    public boolean muted_by_you;
     public int source;
     public int user_id;
     public boolean versioned;
+    public int volume;
 
     public static TLRPC$TL_groupCallParticipant TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         if (constructor == i) {
@@ -36,16 +41,20 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         this.left = (readInt32 & 2) != 0;
         this.can_self_unmute = (readInt32 & 4) != 0;
         this.just_joined = (readInt32 & 16) != 0;
-        if ((readInt32 & 32) != 0) {
+        this.versioned = (readInt32 & 32) != 0;
+        if ((readInt32 & 512) != 0) {
             z2 = true;
         }
-        this.versioned = z2;
+        this.muted_by_you = z2;
         this.user_id = abstractSerializedData.readInt32(z);
         this.date = abstractSerializedData.readInt32(z);
         if ((this.flags & 8) != 0) {
             this.active_date = abstractSerializedData.readInt32(z);
         }
         this.source = abstractSerializedData.readInt32(z);
+        if ((this.flags & 128) != 0) {
+            this.volume = abstractSerializedData.readInt32(z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -60,12 +69,17 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         this.flags = i4;
         int i5 = this.versioned ? i4 | 32 : i4 & -33;
         this.flags = i5;
-        abstractSerializedData.writeInt32(i5);
+        int i6 = this.muted_by_you ? i5 | 512 : i5 & -513;
+        this.flags = i6;
+        abstractSerializedData.writeInt32(i6);
         abstractSerializedData.writeInt32(this.user_id);
         abstractSerializedData.writeInt32(this.date);
         if ((this.flags & 8) != 0) {
             abstractSerializedData.writeInt32(this.active_date);
         }
         abstractSerializedData.writeInt32(this.source);
+        if ((this.flags & 128) != 0) {
+            abstractSerializedData.writeInt32(this.volume);
+        }
     }
 }

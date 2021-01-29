@@ -34,7 +34,6 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$ChannelLocation;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -178,6 +177,9 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         return true;
     }
 
+    private void loadLinksCount() {
+    }
+
     public ChatEditActivity(Bundle bundle) {
         super(bundle);
         this.chatId = bundle.getInt("chat_id", 0);
@@ -257,6 +259,10 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
             int r1 = org.telegram.messenger.NotificationCenter.updateInterfaces
             r0.addObserver(r9, r1)
+            org.telegram.tgnet.TLRPC$ChatFull r0 = r9.info
+            if (r0 == 0) goto L_0x009a
+            r9.loadLinksCount()
+        L_0x009a:
             boolean r0 = super.onFragmentCreate()
             return r0
         */
@@ -862,8 +868,6 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             this.deleteCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));
             if (this.isChannel) {
                 this.deleteCell.setText(LocaleController.getString("ChannelDelete", NUM), false);
-            } else if (this.currentChat.megagroup) {
-                this.deleteCell.setText(LocaleController.getString("DeleteMega", NUM), false);
             } else {
                 this.deleteCell.setText(LocaleController.getString("DeleteAndExitButton", NUM), false);
             }
@@ -970,7 +974,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             public final void run() {
                 ChatEditActivity.this.lambda$null$2$ChatEditActivity();
             }
-        });
+        }, (DialogInterface.OnDismissListener) null);
     }
 
     /* access modifiers changed from: private */
@@ -1164,7 +1168,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     /* access modifiers changed from: private */
     /* renamed from: lambda$createView$18 */
     public /* synthetic */ void lambda$createView$18$ChatEditActivity(View view) {
-        AlertsCreator.createClearOrDeleteDialogAlert(this, false, true, false, this.currentChat, (TLRPC$User) null, false, new MessagesStorage.BooleanCallback() {
+        AlertsCreator.createClearOrDeleteDialogAlert(this, false, true, false, this.currentChat, (TLRPC$User) null, false, true, new MessagesStorage.BooleanCallback() {
             public final void run(boolean z) {
                 ChatEditActivity.this.lambda$null$17$ChatEditActivity(z);
             }
@@ -1175,12 +1179,12 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     /* renamed from: lambda$null$17 */
     public /* synthetic */ void lambda$null$17$ChatEditActivity(boolean z) {
         if (AndroidUtilities.isTablet()) {
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, Long.valueOf(-((long) this.chatId)));
+            getNotificationCenter().postNotificationName(NotificationCenter.closeChats, Long.valueOf(-((long) this.chatId)));
         } else {
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
+            getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
         }
-        MessagesController.getInstance(this.currentAccount).deleteUserFromChat(this.chatId, MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId())), this.info, true, false);
         finishFragment();
+        getNotificationCenter().postNotificationName(NotificationCenter.needDeleteDialog, Long.valueOf((long) (-this.currentChat.id)), null, this.currentChat, Boolean.valueOf(z));
     }
 
     private void setAvatar() {
@@ -1220,9 +1224,17 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 if (this.info == null && (editTextBoldCursor = this.descriptionTextView) != null) {
                     editTextBoldCursor.setText(tLRPC$ChatFull.about);
                 }
+                boolean z = true;
+                boolean z2 = this.info == null;
                 this.info = tLRPC$ChatFull;
-                this.historyHidden = !ChatObject.isChannel(this.currentChat) || this.info.hidden_prehistory;
+                if (ChatObject.isChannel(this.currentChat) && !this.info.hidden_prehistory) {
+                    z = false;
+                }
+                this.historyHidden = z;
                 updateFields(false);
+                if (z2) {
+                    loadLinksCount();
+                }
             }
         } else if (i == NotificationCenter.updateInterfaces && (objArr[0].intValue() & 2) != 0) {
             setAvatar();

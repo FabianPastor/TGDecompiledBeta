@@ -137,10 +137,6 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                 }
             }
 
-            public void setImeOptions(int i) {
-                super.setImeOptions(i);
-            }
-
             /* access modifiers changed from: protected */
             public void onLineCountChanged(int i, int i2) {
                 EditTextEmoji.this.onLineCountChanged(i, i2);

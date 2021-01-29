@@ -12,6 +12,7 @@ import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
@@ -78,7 +79,8 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
     private int prevLayoutWidth;
     private int previousPosition;
     private int scrollingToChild = -1;
-    private int selectedTabId = -1;
+    /* access modifiers changed from: private */
+    public int selectedTabId = -1;
     private String selectorColorKey = "actionBarTabSelector";
     private GradientDrawable selectorDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, (int[]) null);
     private int tabCount;
@@ -195,13 +197,17 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
     }
 
     public SparseArray<View> removeTabs() {
+        SparseArray<View> sparseArray = new SparseArray<>();
+        for (int i = 0; i < getChildCount(); i++) {
+            sparseArray.get(this.positionToId.get(i), getChildAt(i));
+        }
         this.positionToId.clear();
         this.idToPosition.clear();
         this.positionToWidth.clear();
         this.tabsContainer.removeAllViews();
         this.allTextWidth = 0;
         this.tabCount = 0;
-        return null;
+        return sparseArray;
     }
 
     public int getTabsCount() {
@@ -216,7 +222,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         addTextTab(i, charSequence, (SparseArray<View>) null);
     }
 
-    public void addTextTab(int i, CharSequence charSequence, SparseArray<View> sparseArray) {
+    public void addTextTab(final int i, CharSequence charSequence, SparseArray<View> sparseArray) {
         int i2 = this.tabCount;
         this.tabCount = i2 + 1;
         if (i2 == 0 && this.selectedTabId == -1) {
@@ -235,7 +241,12 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
             sparseArray.delete(i);
         }
         if (textView == null) {
-            textView = new TextView(getContext());
+            textView = new TextView(getContext()) {
+                public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+                    super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+                    accessibilityNodeInfo.setSelected(ScrollSlidingTextTabStrip.this.selectedTabId == i);
+                }
+            };
             textView.setWillNotDraw(false);
             textView.setGravity(17);
             textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor(this.selectorColorKey), 3));

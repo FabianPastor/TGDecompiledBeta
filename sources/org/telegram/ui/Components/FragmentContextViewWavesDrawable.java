@@ -245,15 +245,17 @@ public class FragmentContextViewWavesDrawable {
             int callState = VoIPService.getSharedInstance().getCallState();
             if (callState == 1 || callState == 2 || callState == 6 || callState == 5) {
                 setState(2, z);
-                return;
-            }
-            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = VoIPService.getSharedInstance().groupCall.participants.get(AccountInstance.getInstance(VoIPService.getSharedInstance().getAccount()).getUserConfig().getClientUserId());
-            if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(VoIPService.getSharedInstance().getChat())) {
+            } else if (VoIPService.getSharedInstance().groupCall != null) {
+                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = VoIPService.getSharedInstance().groupCall.participants.get(AccountInstance.getInstance(VoIPService.getSharedInstance().getAccount()).getUserConfig().getClientUserId());
+                if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(VoIPService.getSharedInstance().getChat())) {
+                    setState(VoIPService.getSharedInstance().isMicMute() ? 1 : 0, z);
+                    return;
+                }
+                VoIPService.getSharedInstance().setMicMute(true, false, false);
+                setState(3, z);
+            } else {
                 setState(VoIPService.getSharedInstance().isMicMute() ? 1 : 0, z);
-                return;
             }
-            VoIPService.getSharedInstance().setMicMute(true, false, false);
-            setState(3, z);
         }
     }
 

@@ -1,28 +1,10 @@
 package org.telegram.ui.Components;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.Property;
 import android.util.SparseArray;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewPropertyAnimator;
-import android.view.ViewTreeObserver;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import j$.util.Comparator;
 import j$.util.function.Function;
@@ -56,50 +38,36 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserStatus;
-import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.SearchAdapterHelper;
 import org.telegram.ui.Cells.GraySectionCell;
-import org.telegram.ui.Cells.GroupCallTextCell;
-import org.telegram.ui.Cells.GroupCallUserCell;
 import org.telegram.ui.Cells.ManageChatTextCell;
 import org.telegram.ui.Cells.ManageChatUserCell;
-import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.GroupVoipInviteAlert;
 import org.telegram.ui.Components.RecyclerListView;
 
-public class GroupVoipInviteAlert extends BottomSheet {
+public class GroupVoipInviteAlert extends UsersAlertBase {
     /* access modifiers changed from: private */
     public int addNewRow;
     /* access modifiers changed from: private */
-    public int backgroundColor;
-    private float colorProgress;
-    /* access modifiers changed from: private */
-    public ArrayList<TLObject> contacts;
+    public ArrayList<TLObject> contacts = new ArrayList<>();
     private boolean contactsEndReached;
     /* access modifiers changed from: private */
     public int contactsEndRow;
     /* access modifiers changed from: private */
     public int contactsHeaderRow;
-    private SparseArray<TLObject> contactsMap;
+    private SparseArray<TLObject> contactsMap = new SparseArray<>();
     /* access modifiers changed from: private */
     public int contactsStartRow;
     /* access modifiers changed from: private */
     public TLRPC$Chat currentChat;
     private int delayResults;
-    /* access modifiers changed from: private */
-    public GroupVoipInviteAlertDelegate delegate;
+    private GroupVoipInviteAlertDelegate delegate;
     /* access modifiers changed from: private */
     public int emptyRow;
     /* access modifiers changed from: private */
-    public StickerEmptyView emptyView;
-    /* access modifiers changed from: private */
     public boolean firstLoaded;
     /* access modifiers changed from: private */
-    public FlickerLoadingView flickerLoadingView;
-    /* access modifiers changed from: private */
     public int flickerProgressRow;
-    private FrameLayout frameLayout;
     /* access modifiers changed from: private */
     public SparseArray<TLRPC$TL_groupCallParticipant> ignoredUsers;
     /* access modifiers changed from: private */
@@ -109,35 +77,19 @@ public class GroupVoipInviteAlert extends BottomSheet {
     /* access modifiers changed from: private */
     public int lastRow;
     /* access modifiers changed from: private */
-    public RecyclerListView listView;
-    /* access modifiers changed from: private */
-    public ListAdapter listViewAdapter;
-    /* access modifiers changed from: private */
     public boolean loadingUsers;
     /* access modifiers changed from: private */
     public int membersHeaderRow;
     /* access modifiers changed from: private */
-    public ArrayList<TLObject> participants;
+    public ArrayList<TLObject> participants = new ArrayList<>();
     /* access modifiers changed from: private */
     public int participantsEndRow;
-    private SparseArray<TLObject> participantsMap;
+    private SparseArray<TLObject> participantsMap = new SparseArray<>();
     /* access modifiers changed from: private */
     public int participantsStartRow;
     /* access modifiers changed from: private */
-    public RectF rect = new RectF();
-    /* access modifiers changed from: private */
     public int rowCount;
-    /* access modifiers changed from: private */
-    public int scrollOffsetY;
-    /* access modifiers changed from: private */
-    public SearchAdapter searchListViewAdapter;
-    private SearchField searchView;
-    /* access modifiers changed from: private */
-    public View shadow;
-    /* access modifiers changed from: private */
-    public AnimatorSet shadowAnimation;
-    /* access modifiers changed from: private */
-    public Drawable shadowDrawable;
+    private final SearchAdapter searchAdapter;
 
     public interface GroupVoipInviteAlertDelegate {
         void copyInviteLink();
@@ -148,380 +100,48 @@ public class GroupVoipInviteAlert extends BottomSheet {
     }
 
     /* access modifiers changed from: protected */
-    public boolean canDismissWithSwipe() {
-        return false;
+    public void updateColorKeys() {
+        this.keyScrollUp = "voipgroup_scrollUp";
+        this.keyListSelector = "voipgroup_listSelector";
+        this.keySearchBackground = "voipgroup_searchBackground";
+        this.keyInviteMembersBackground = "voipgroup_inviteMembersBackground";
+        this.keyListViewBackground = "voipgroup_listViewBackground";
+        this.keyActionBarUnscrolled = "voipgroup_actionBarUnscrolled";
+        this.keyNameText = "voipgroup_nameText";
+        this.keyLastSeenText = "voipgroup_lastSeenText";
+        this.keyLastSeenTextUnscrolled = "voipgroup_lastSeenTextUnscrolled";
+        this.keySearchPlaceholder = "voipgroup_searchPlaceholder";
+        this.keySearchText = "voipgroup_searchText";
+        this.keySearchIcon = "voipgroup_mutedIcon";
+        this.keySearchIconUnscrolled = "voipgroup_mutedIconUnscrolled";
     }
 
-    private class SearchField extends FrameLayout {
-        /* access modifiers changed from: private */
-        public ImageView clearSearchImageView;
-        private CloseProgressDrawable2 progressDrawable;
-        private View searchBackground;
-        /* access modifiers changed from: private */
-        public EditTextBoldCursor searchEditText;
-        private ImageView searchIconImageView;
-
-        public SearchField(Context context) {
-            super(context);
-            View view = new View(context);
-            this.searchBackground = view;
-            view.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("voipgroup_searchBackground")));
-            addView(this.searchBackground, LayoutHelper.createFrame(-1, 36.0f, 51, 14.0f, 11.0f, 14.0f, 0.0f));
-            ImageView imageView = new ImageView(context);
-            this.searchIconImageView = imageView;
-            imageView.setScaleType(ImageView.ScaleType.CENTER);
-            this.searchIconImageView.setImageResource(NUM);
-            this.searchIconImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("voipgroup_searchPlaceholder"), PorterDuff.Mode.MULTIPLY));
-            addView(this.searchIconImageView, LayoutHelper.createFrame(36, 36.0f, 51, 16.0f, 11.0f, 0.0f, 0.0f));
-            ImageView imageView2 = new ImageView(context);
-            this.clearSearchImageView = imageView2;
-            imageView2.setScaleType(ImageView.ScaleType.CENTER);
-            ImageView imageView3 = this.clearSearchImageView;
-            CloseProgressDrawable2 closeProgressDrawable2 = new CloseProgressDrawable2();
-            this.progressDrawable = closeProgressDrawable2;
-            imageView3.setImageDrawable(closeProgressDrawable2);
-            this.progressDrawable.setSide(AndroidUtilities.dp(7.0f));
-            this.clearSearchImageView.setScaleX(0.1f);
-            this.clearSearchImageView.setScaleY(0.1f);
-            this.clearSearchImageView.setAlpha(0.0f);
-            this.clearSearchImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("voipgroup_searchPlaceholder"), PorterDuff.Mode.MULTIPLY));
-            addView(this.clearSearchImageView, LayoutHelper.createFrame(36, 36.0f, 53, 14.0f, 11.0f, 14.0f, 0.0f));
-            this.clearSearchImageView.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    GroupVoipInviteAlert.SearchField.this.lambda$new$0$GroupVoipInviteAlert$SearchField(view);
-                }
-            });
-            AnonymousClass1 r0 = new EditTextBoldCursor(context, GroupVoipInviteAlert.this) {
-                public boolean dispatchTouchEvent(MotionEvent motionEvent) {
-                    MotionEvent obtain = MotionEvent.obtain(motionEvent);
-                    obtain.setLocation(obtain.getRawX(), obtain.getRawY() - GroupVoipInviteAlert.this.containerView.getTranslationY());
-                    if (obtain.getAction() == 1) {
-                        obtain.setAction(3);
-                    }
-                    GroupVoipInviteAlert.this.listView.dispatchTouchEvent(obtain);
-                    obtain.recycle();
-                    return super.dispatchTouchEvent(motionEvent);
-                }
-            };
-            this.searchEditText = r0;
-            r0.setTextSize(1, 16.0f);
-            this.searchEditText.setHintTextColor(Theme.getColor("voipgroup_searchPlaceholder"));
-            this.searchEditText.setTextColor(Theme.getColor("voipgroup_searchText"));
-            this.searchEditText.setBackgroundDrawable((Drawable) null);
-            this.searchEditText.setPadding(0, 0, 0, 0);
-            this.searchEditText.setMaxLines(1);
-            this.searchEditText.setLines(1);
-            this.searchEditText.setSingleLine(true);
-            this.searchEditText.setImeOptions(NUM);
-            this.searchEditText.setHint(LocaleController.getString("VoipGroupSearchMembers", NUM));
-            this.searchEditText.setCursorColor(Theme.getColor("voipgroup_searchText"));
-            this.searchEditText.setCursorSize(AndroidUtilities.dp(20.0f));
-            this.searchEditText.setCursorWidth(1.5f);
-            addView(this.searchEditText, LayoutHelper.createFrame(-1, 40.0f, 51, 54.0f, 9.0f, 46.0f, 0.0f));
-            this.searchEditText.addTextChangedListener(new TextWatcher(GroupVoipInviteAlert.this) {
-                public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                }
-
-                public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
-                }
-
-                public void afterTextChanged(Editable editable) {
-                    boolean z = SearchField.this.searchEditText.length() > 0;
-                    float f = 0.0f;
-                    if (z != (SearchField.this.clearSearchImageView.getAlpha() != 0.0f)) {
-                        ViewPropertyAnimator animate = SearchField.this.clearSearchImageView.animate();
-                        float f2 = 1.0f;
-                        if (z) {
-                            f = 1.0f;
-                        }
-                        ViewPropertyAnimator scaleX = animate.alpha(f).setDuration(150).scaleX(z ? 1.0f : 0.1f);
-                        if (!z) {
-                            f2 = 0.1f;
-                        }
-                        scaleX.scaleY(f2).start();
-                    }
-                    String obj = SearchField.this.searchEditText.getText().toString();
-                    int itemCount = GroupVoipInviteAlert.this.listView.getAdapter() == null ? 0 : GroupVoipInviteAlert.this.listView.getAdapter().getItemCount();
-                    GroupVoipInviteAlert.this.searchListViewAdapter.searchUsers(obj);
-                    if (!(!TextUtils.isEmpty(obj) || GroupVoipInviteAlert.this.listView == null || GroupVoipInviteAlert.this.listView.getAdapter() == GroupVoipInviteAlert.this.listViewAdapter)) {
-                        GroupVoipInviteAlert.this.listView.setAnimateEmptyView(false, 0);
-                        GroupVoipInviteAlert.this.listView.setAdapter(GroupVoipInviteAlert.this.listViewAdapter);
-                        GroupVoipInviteAlert.this.listView.setAnimateEmptyView(true, 0);
-                        if (itemCount == 0) {
-                            GroupVoipInviteAlert.this.showItemsAnimated(0);
-                        }
-                    }
-                    GroupVoipInviteAlert.this.flickerLoadingView.setVisibility(0);
-                }
-            });
-            this.searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                    return GroupVoipInviteAlert.SearchField.this.lambda$new$1$GroupVoipInviteAlert$SearchField(textView, i, keyEvent);
-                }
-            });
-        }
-
-        /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$GroupVoipInviteAlert$SearchField(View view) {
-            this.searchEditText.setText("");
-            AndroidUtilities.showKeyboard(this.searchEditText);
-        }
-
-        /* access modifiers changed from: private */
-        /* renamed from: lambda$new$1 */
-        public /* synthetic */ boolean lambda$new$1$GroupVoipInviteAlert$SearchField(TextView textView, int i, KeyEvent keyEvent) {
-            if (keyEvent == null) {
-                return false;
+    public GroupVoipInviteAlert(Context context, int i, TLRPC$Chat tLRPC$Chat, TLRPC$ChatFull tLRPC$ChatFull, SparseArray<TLRPC$TL_groupCallParticipant> sparseArray, HashSet<Integer> hashSet) {
+        super(context, false, i);
+        setDimBehindAlpha(75);
+        this.currentChat = tLRPC$Chat;
+        this.info = tLRPC$ChatFull;
+        this.ignoredUsers = sparseArray;
+        this.invitedUsers = hashSet;
+        this.currentChat = tLRPC$Chat;
+        this.info = tLRPC$ChatFull;
+        this.ignoredUsers = sparseArray;
+        this.invitedUsers = hashSet;
+        this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
+            public final void onItemClick(View view, int i) {
+                GroupVoipInviteAlert.this.lambda$new$0$GroupVoipInviteAlert(view, i);
             }
-            if ((keyEvent.getAction() != 1 || keyEvent.getKeyCode() != 84) && (keyEvent.getAction() != 0 || keyEvent.getKeyCode() != 66)) {
-                return false;
-            }
-            AndroidUtilities.hideKeyboard(this.searchEditText);
-            return false;
-        }
-
-        public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
-            GroupVoipInviteAlert.this.delegate.needOpenSearch(motionEvent, this.searchEditText);
-            return super.onInterceptTouchEvent(motionEvent);
-        }
-    }
-
-    static {
-        new AnimationProperties.FloatProperty<GroupVoipInviteAlert>("colorProgress") {
-            public void setValue(GroupVoipInviteAlert groupVoipInviteAlert, float f) {
-                groupVoipInviteAlert.setColorProgress(f);
-            }
-
-            public Float get(GroupVoipInviteAlert groupVoipInviteAlert) {
-                return Float.valueOf(groupVoipInviteAlert.getColorProgress());
-            }
-        };
-    }
-
-    /* JADX WARNING: Illegal instructions before constructor call */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public GroupVoipInviteAlert(android.content.Context r18, int r19, org.telegram.tgnet.TLRPC$Chat r20, org.telegram.tgnet.TLRPC$ChatFull r21, android.util.SparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r22, java.util.HashSet<java.lang.Integer> r23) {
-        /*
-            r17 = this;
-            r0 = r17
-            r1 = r18
-            r2 = 0
-            r0.<init>(r1, r2)
-            android.graphics.RectF r3 = new android.graphics.RectF
-            r3.<init>()
-            r0.rect = r3
-            android.graphics.Paint r3 = new android.graphics.Paint
-            r4 = 1
-            r3.<init>(r4)
-            java.util.ArrayList r3 = new java.util.ArrayList
-            r3.<init>()
-            r0.participants = r3
-            java.util.ArrayList r3 = new java.util.ArrayList
-            r3.<init>()
-            r0.contacts = r3
-            android.util.SparseArray r3 = new android.util.SparseArray
-            r3.<init>()
-            r0.participantsMap = r3
-            android.util.SparseArray r3 = new android.util.SparseArray
-            r3.<init>()
-            r0.contactsMap = r3
-            r3 = 75
-            r0.setDimBehindAlpha(r3)
-            r3 = r19
-            r0.currentAccount = r3
-            r3 = r20
-            r0.currentChat = r3
-            r3 = r21
-            r0.info = r3
-            r3 = r22
-            r0.ignoredUsers = r3
-            r3 = r23
-            r0.invitedUsers = r3
-            android.content.res.Resources r3 = r18.getResources()
-            r5 = 2131165981(0x7var_d, float:1.7946194E38)
-            android.graphics.drawable.Drawable r3 = r3.getDrawable(r5)
-            android.graphics.drawable.Drawable r3 = r3.mutate()
-            r0.shadowDrawable = r3
-            org.telegram.ui.Components.GroupVoipInviteAlert$2 r3 = new org.telegram.ui.Components.GroupVoipInviteAlert$2
-            r3.<init>(r1)
-            r0.containerView = r3
-            r3.setWillNotDraw(r2)
-            android.view.ViewGroup r3 = r0.containerView
-            r3.setClipChildren(r2)
-            android.view.ViewGroup r3 = r0.containerView
-            int r5 = r0.backgroundPaddingLeft
-            r3.setPadding(r5, r2, r5, r2)
-            android.widget.FrameLayout r3 = new android.widget.FrameLayout
-            r3.<init>(r1)
-            r0.frameLayout = r3
-            org.telegram.ui.Components.GroupVoipInviteAlert$SearchField r3 = new org.telegram.ui.Components.GroupVoipInviteAlert$SearchField
-            r3.<init>(r1)
-            r0.searchView = r3
-            android.widget.FrameLayout r5 = r0.frameLayout
-            r6 = -1
-            r7 = 51
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r6, r7)
-            r5.addView(r3, r8)
-            org.telegram.ui.Components.FlickerLoadingView r3 = new org.telegram.ui.Components.FlickerLoadingView
-            r3.<init>(r1)
-            r0.flickerLoadingView = r3
-            r5 = 6
-            r3.setViewType(r5)
-            org.telegram.ui.Components.FlickerLoadingView r3 = r0.flickerLoadingView
-            r3.showDate(r2)
-            org.telegram.ui.Components.FlickerLoadingView r3 = r0.flickerLoadingView
-            r3.setUseHeaderOffset(r4)
-            org.telegram.ui.Components.FlickerLoadingView r3 = r0.flickerLoadingView
-            java.lang.String r5 = "voipgroup_inviteMembersBackground"
-            java.lang.String r8 = "voipgroup_searchBackground"
-            java.lang.String r9 = "voipgroup_actionBarUnscrolled"
-            r3.setColors(r5, r8, r9)
-            org.telegram.ui.Components.StickerEmptyView r3 = new org.telegram.ui.Components.StickerEmptyView
-            org.telegram.ui.Components.FlickerLoadingView r9 = r0.flickerLoadingView
-            r3.<init>(r1, r9, r4)
-            r0.emptyView = r3
-            org.telegram.ui.Components.FlickerLoadingView r9 = r0.flickerLoadingView
-            r10 = -1
-            r11 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r12 = 0
-            r13 = 0
-            r14 = 1073741824(0x40000000, float:2.0)
-            r15 = 0
-            r16 = 0
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
-            r3.addView(r9, r2, r10)
-            org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
-            android.widget.TextView r3 = r3.title
-            java.lang.String r9 = "NoResult"
-            r10 = 2131626103(0x7f0e0877, float:1.8879433E38)
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
-            r3.setText(r9)
-            org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
-            android.widget.TextView r3 = r3.subtitle
-            java.lang.String r9 = "SearchEmptyViewFilteredSubtitle2"
-            r10 = 2131627017(0x7f0e0CLASSNAME, float:1.8881287E38)
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
-            r3.setText(r9)
-            org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
-            r9 = 8
-            r3.setVisibility(r9)
-            org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
-            r3.setAnimateLayoutChange(r4)
-            org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
-            r3.showProgress(r4, r2)
-            org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
-            java.lang.String r9 = "voipgroup_nameText"
-            java.lang.String r10 = "voipgroup_lastSeenText"
-            r3.setColors(r9, r10, r5, r8)
-            android.view.ViewGroup r3 = r0.containerView
-            org.telegram.ui.Components.StickerEmptyView r5 = r0.emptyView
-            r8 = -1
-            r9 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r10 = 51
-            r11 = 0
-            r12 = 1115160576(0x42780000, float:62.0)
-            r14 = 0
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
-            r3.addView(r5, r8)
-            org.telegram.ui.Components.GroupVoipInviteAlert$SearchAdapter r3 = new org.telegram.ui.Components.GroupVoipInviteAlert$SearchAdapter
-            r3.<init>(r1)
-            r0.searchListViewAdapter = r3
-            org.telegram.ui.Components.GroupVoipInviteAlert$3 r3 = new org.telegram.ui.Components.GroupVoipInviteAlert$3
-            r3.<init>(r1)
-            r0.listView = r3
-            r5 = 13
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
-            r3.setTag(r5)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            r5 = 1111490560(0x42400000, float:48.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r3.setPadding(r2, r2, r2, r5)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            r3.setClipToPadding(r2)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            r3.setHideIfEmpty(r2)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            java.lang.String r5 = "voipgroup_listSelector"
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-            r3.setSelectorDrawableColor(r5)
-            org.telegram.ui.Components.FillLastLinearLayoutManager r3 = new org.telegram.ui.Components.FillLastLinearLayoutManager
-            android.content.Context r9 = r17.getContext()
-            r5 = 1090519040(0x41000000, float:8.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            org.telegram.ui.Components.RecyclerListView r13 = r0.listView
-            r10 = 1
-            r11 = 0
-            r8 = r3
-            r8.<init>(r9, r10, r11, r12, r13)
-            r3.setBind(r2)
-            org.telegram.ui.Components.RecyclerListView r5 = r0.listView
-            r5.setLayoutManager(r3)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            r3.setHorizontalScrollBarEnabled(r2)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            r3.setVerticalScrollBarEnabled(r2)
-            android.view.ViewGroup r3 = r0.containerView
-            org.telegram.ui.Components.RecyclerListView r5 = r0.listView
-            r8 = -1
-            r9 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r10 = 51
-            r11 = 0
-            r12 = 0
-            r13 = 0
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
-            r3.addView(r5, r8)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            org.telegram.ui.Components.GroupVoipInviteAlert$ListAdapter r5 = new org.telegram.ui.Components.GroupVoipInviteAlert$ListAdapter
-            r5.<init>(r1)
-            r0.listViewAdapter = r5
-            r3.setAdapter(r5)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            org.telegram.ui.Components.-$$Lambda$GroupVoipInviteAlert$6LuHPYYv5S7g_rtjCPTRmKTogW4 r5 = new org.telegram.ui.Components.-$$Lambda$GroupVoipInviteAlert$6LuHPYYv5S7g_rtjCPTRmKTogW4
-            r5.<init>()
-            r3.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r5)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            org.telegram.ui.Components.GroupVoipInviteAlert$4 r5 = new org.telegram.ui.Components.GroupVoipInviteAlert$4
-            r5.<init>()
-            r3.setOnScrollListener(r5)
-            android.widget.FrameLayout$LayoutParams r3 = new android.widget.FrameLayout$LayoutParams
-            int r5 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r3.<init>(r6, r5, r7)
-            r5 = 1114112000(0x42680000, float:58.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r3.topMargin = r5
-            android.view.View r5 = new android.view.View
-            r5.<init>(r1)
-            r0.shadow = r5
-            java.lang.String r1 = "dialogShadowLine"
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-            r5.setBackgroundColor(r1)
-            android.view.View r1 = r0.shadow
-            r5 = 0
-            r1.setAlpha(r5)
-            android.view.View r1 = r0.shadow
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r4)
-            r1.setTag(r8)
-            android.view.ViewGroup r1 = r0.containerView
-            android.view.View r8 = r0.shadow
-            r1.addView(r8, r3)
-            android.view.ViewGroup r1 = r0.containerView
-            android.widget.FrameLayout r3 = r0.frameLayout
-            r8 = 58
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r8, r7)
-            r1.addView(r3, r6)
-            r0.setColorProgress(r5)
-            r1 = 200(0xc8, float:2.8E-43)
-            r0.loadChatParticipants(r2, r1)
-            r17.updateRows()
-            org.telegram.ui.Components.RecyclerListView r1 = r0.listView
-            org.telegram.ui.Components.StickerEmptyView r3 = r0.emptyView
-            r1.setEmptyView(r3)
-            org.telegram.ui.Components.RecyclerListView r1 = r0.listView
-            r1.setAnimateEmptyView(r4, r2)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.<init>(android.content.Context, int, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$ChatFull, android.util.SparseArray, java.util.HashSet):void");
+        });
+        SearchAdapter searchAdapter2 = new SearchAdapter(context);
+        this.searchAdapter = searchAdapter2;
+        this.searchListViewAdapter = searchAdapter2;
+        RecyclerListView recyclerListView = this.listView;
+        ListAdapter listAdapter = new ListAdapter(context);
+        this.listViewAdapter = listAdapter;
+        recyclerListView.setAdapter(listAdapter);
+        loadChatParticipants(0, 200);
+        updateRows();
+        setColorProgress(0.0f);
     }
 
     /* access modifiers changed from: private */
@@ -536,43 +156,6 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 this.delegate.inviteUser(manageChatUserCell.getUserId());
             }
         }
-    }
-
-    /* access modifiers changed from: private */
-    public float getColorProgress() {
-        return this.colorProgress;
-    }
-
-    /* access modifiers changed from: private */
-    public void setColorProgress(float f) {
-        String str;
-        this.colorProgress = f;
-        this.backgroundColor = AndroidUtilities.getOffsetColor(Theme.getColor("voipgroup_inviteMembersBackground"), Theme.getColor("voipgroup_listViewBackground"), f, 1.0f);
-        this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(this.backgroundColor, PorterDuff.Mode.MULTIPLY));
-        this.frameLayout.setBackgroundColor(this.backgroundColor);
-        int i = this.backgroundColor;
-        this.navBarColor = i;
-        this.listView.setGlowColor(i);
-        int offsetColor = AndroidUtilities.getOffsetColor(Theme.getColor("voipgroup_lastSeenTextUnscrolled"), Theme.getColor("voipgroup_lastSeenText"), f, 1.0f);
-        int offsetColor2 = AndroidUtilities.getOffsetColor(Theme.getColor("voipgroup_mutedIconUnscrolled"), Theme.getColor("voipgroup_mutedIcon"), f, 1.0f);
-        int childCount = this.listView.getChildCount();
-        for (int i2 = 0; i2 < childCount; i2++) {
-            View childAt = this.listView.getChildAt(i2);
-            if (childAt instanceof GroupCallTextCell) {
-                ((GroupCallTextCell) childAt).setColors(offsetColor, offsetColor);
-            } else if (childAt instanceof GroupCallUserCell) {
-                GroupCallUserCell groupCallUserCell = (GroupCallUserCell) childAt;
-                if (this.shadow.getTag() != null) {
-                    str = "voipgroup_mutedIcon";
-                } else {
-                    str = "voipgroup_mutedIconUnscrolled";
-                }
-                groupCallUserCell.setGrayIconColor(str, offsetColor2);
-            }
-        }
-        this.containerView.invalidate();
-        this.listView.invalidate();
-        this.container.invalidate();
     }
 
     public void setDelegate(GroupVoipInviteAlertDelegate groupVoipInviteAlertDelegate) {
@@ -633,105 +216,6 @@ public class GroupVoipInviteAlert extends BottomSheet {
         this.lastRow = i7;
     }
 
-    public void dismiss() {
-        AndroidUtilities.hideKeyboard(this.searchView.searchEditText);
-        super.dismiss();
-    }
-
-    /* access modifiers changed from: private */
-    @SuppressLint({"NewApi"})
-    public void updateLayout() {
-        if (this.listView.getChildCount() > 0) {
-            View childAt = this.listView.getChildAt(0);
-            RecyclerListView.Holder holder = (RecyclerListView.Holder) this.listView.findContainingViewHolder(childAt);
-            int top = childAt.getTop() - AndroidUtilities.dp(8.0f);
-            int i = (top <= 0 || holder == null || holder.getAdapterPosition() != 0) ? 0 : top;
-            if (top < 0 || holder == null || holder.getAdapterPosition() != 0) {
-                runShadowAnimation(true);
-                top = i;
-            } else {
-                runShadowAnimation(false);
-            }
-            if (this.scrollOffsetY != top) {
-                RecyclerListView recyclerListView = this.listView;
-                this.scrollOffsetY = top;
-                recyclerListView.setTopGlowOffset(top);
-                this.frameLayout.setTranslationY((float) this.scrollOffsetY);
-                this.emptyView.setTranslationY((float) this.scrollOffsetY);
-                this.containerView.invalidate();
-            }
-        }
-    }
-
-    private void runShadowAnimation(final boolean z) {
-        if ((z && this.shadow.getTag() != null) || (!z && this.shadow.getTag() == null)) {
-            this.shadow.setTag(z ? null : 1);
-            if (z) {
-                this.shadow.setVisibility(0);
-            }
-            AnimatorSet animatorSet = this.shadowAnimation;
-            if (animatorSet != null) {
-                animatorSet.cancel();
-            }
-            AnimatorSet animatorSet2 = new AnimatorSet();
-            this.shadowAnimation = animatorSet2;
-            Animator[] animatorArr = new Animator[1];
-            View view = this.shadow;
-            Property property = View.ALPHA;
-            float[] fArr = new float[1];
-            fArr[0] = z ? 1.0f : 0.0f;
-            animatorArr[0] = ObjectAnimator.ofFloat(view, property, fArr);
-            animatorSet2.playTogether(animatorArr);
-            this.shadowAnimation.setDuration(150);
-            this.shadowAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    if (GroupVoipInviteAlert.this.shadowAnimation != null && GroupVoipInviteAlert.this.shadowAnimation.equals(animator)) {
-                        if (!z) {
-                            GroupVoipInviteAlert.this.shadow.setVisibility(4);
-                        }
-                        AnimatorSet unused = GroupVoipInviteAlert.this.shadowAnimation = null;
-                    }
-                }
-
-                public void onAnimationCancel(Animator animator) {
-                    if (GroupVoipInviteAlert.this.shadowAnimation != null && GroupVoipInviteAlert.this.shadowAnimation.equals(animator)) {
-                        AnimatorSet unused = GroupVoipInviteAlert.this.shadowAnimation = null;
-                    }
-                }
-            });
-            this.shadowAnimation.start();
-        }
-    }
-
-    /* access modifiers changed from: private */
-    public void showItemsAnimated(final int i) {
-        if (isShowing()) {
-            this.listView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                public boolean onPreDraw() {
-                    GroupVoipInviteAlert.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    int childCount = GroupVoipInviteAlert.this.listView.getChildCount();
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    for (int i = 0; i < childCount; i++) {
-                        View childAt = GroupVoipInviteAlert.this.listView.getChildAt(i);
-                        int childAdapterPosition = GroupVoipInviteAlert.this.listView.getChildAdapterPosition(childAt);
-                        if (childAdapterPosition >= i) {
-                            if (childAdapterPosition == 1 && GroupVoipInviteAlert.this.listView.getAdapter() == GroupVoipInviteAlert.this.searchListViewAdapter && (childAt instanceof GraySectionCell)) {
-                                childAt = ((GraySectionCell) childAt).getTextView();
-                            }
-                            childAt.setAlpha(0.0f);
-                            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(childAt, View.ALPHA, new float[]{0.0f, 1.0f});
-                            ofFloat.setStartDelay((long) ((int) ((((float) Math.min(GroupVoipInviteAlert.this.listView.getMeasuredHeight(), Math.max(0, childAt.getTop()))) / ((float) GroupVoipInviteAlert.this.listView.getMeasuredHeight())) * 100.0f)));
-                            ofFloat.setDuration(200);
-                            animatorSet.playTogether(new Animator[]{ofFloat});
-                        }
-                    }
-                    animatorSet.start();
-                    return true;
-                }
-            });
-        }
-    }
-
     private void loadChatParticipants(int i, int i2) {
         if (!this.loadingUsers) {
             this.contactsEndReached = false;
@@ -739,7 +223,8 @@ public class GroupVoipInviteAlert extends BottomSheet {
         }
     }
 
-    private void loadChatParticipants(int i, int i2, boolean z) {
+    /* access modifiers changed from: protected */
+    public void loadChatParticipants(int i, int i2, boolean z) {
         SparseArray<TLRPC$TL_groupCallParticipant> sparseArray;
         TLRPC$User user;
         if (!ChatObject.isChannel(this.currentChat)) {
@@ -761,9 +246,9 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 }
             }
             updateRows();
-            ListAdapter listAdapter = this.listViewAdapter;
-            if (listAdapter != null) {
-                listAdapter.notifyDataSetChanged();
+            RecyclerListView.SelectionAdapter selectionAdapter = this.listViewAdapter;
+            if (selectionAdapter != null) {
+                selectionAdapter.notifyDataSetChanged();
                 return;
             }
             return;
@@ -773,9 +258,9 @@ public class GroupVoipInviteAlert extends BottomSheet {
         if (stickerEmptyView != null) {
             stickerEmptyView.showProgress(true, false);
         }
-        ListAdapter listAdapter2 = this.listViewAdapter;
-        if (listAdapter2 != null) {
-            listAdapter2.notifyDataSetChanged();
+        RecyclerListView.SelectionAdapter selectionAdapter2 = this.listViewAdapter;
+        if (selectionAdapter2 != null) {
+            selectionAdapter2.notifyDataSetChanged();
         }
         TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants = new TLRPC$TL_channels_getParticipants();
         tLRPC$TL_channels_getParticipants.channel = MessagesController.getInputChannel(this.currentChat);
@@ -933,13 +418,13 @@ public class GroupVoipInviteAlert extends BottomSheet {
         if (this.delayResults <= 0) {
             this.loadingUsers = false;
             this.firstLoaded = true;
-            ListAdapter listAdapter = this.listViewAdapter;
-            showItemsAnimated(listAdapter != null ? listAdapter.getItemCount() - 1 : 0);
+            RecyclerListView.SelectionAdapter selectionAdapter = this.listViewAdapter;
+            showItemsAnimated(selectionAdapter != null ? selectionAdapter.getItemCount() - 1 : 0);
         }
         updateRows();
-        ListAdapter listAdapter2 = this.listViewAdapter;
-        if (listAdapter2 != null) {
-            listAdapter2.notifyDataSetChanged();
+        RecyclerListView.SelectionAdapter selectionAdapter2 = this.listViewAdapter;
+        if (selectionAdapter2 != null) {
+            selectionAdapter2.notifyDataSetChanged();
             if (this.emptyView != null && this.listViewAdapter.getItemCount() == 0 && this.firstLoaded) {
                 this.emptyView.showProgress(false, true);
             }
@@ -1078,8 +563,11 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 };
                 this.searchRunnable = r1;
                 AndroidUtilities.runOnUIThread(r1, 300);
-                if (GroupVoipInviteAlert.this.listView.getAdapter() != GroupVoipInviteAlert.this.searchListViewAdapter) {
-                    GroupVoipInviteAlert.this.listView.setAdapter(GroupVoipInviteAlert.this.searchListViewAdapter);
+                RecyclerView.Adapter adapter = GroupVoipInviteAlert.this.listView.getAdapter();
+                GroupVoipInviteAlert groupVoipInviteAlert = GroupVoipInviteAlert.this;
+                RecyclerListView.SelectionAdapter selectionAdapter = groupVoipInviteAlert.searchListViewAdapter;
+                if (adapter != selectionAdapter) {
+                    groupVoipInviteAlert.listView.setAdapter(selectionAdapter);
                     return;
                 }
                 return;
@@ -1418,7 +906,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 android.content.Context r0 = r2.mContext
                 r1 = 0
                 r4.<init>(r0, r3, r3, r1)
-                r3 = 2131165745(0x7var_, float:1.7945716E38)
+                r3 = 2131165750(0x7var_, float:1.7945726E38)
                 r4.setCustomRightImage(r3)
                 java.lang.String r3 = "voipgroup_nameText"
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
@@ -1460,7 +948,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 org.telegram.ui.Cells.GraySectionCell r14 = (org.telegram.ui.Cells.GraySectionCell) r14
                 int r0 = r13.groupStartRow
                 if (r15 != r0) goto L_0x0021
-                r15 = 2131624666(0x7f0e02da, float:1.8876518E38)
+                r15 = 2131624671(0x7f0e02df, float:1.8876528E38)
                 java.lang.String r0 = "ChannelMembers"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -1468,7 +956,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
             L_0x0021:
                 int r0 = r13.globalStartRow
                 if (r15 != r0) goto L_0x012f
-                r15 = 2131625577(0x7f0e0669, float:1.8878366E38)
+                r15 = 2131625608(0x7f0e0688, float:1.8878429E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -1706,7 +1194,7 @@ public class GroupVoipInviteAlert extends BottomSheet {
                 android.content.Context r3 = r5.mContext
                 r4 = 0
                 r7.<init>(r3, r0, r1, r4)
-                r0 = 2131165745(0x7var_, float:1.7945716E38)
+                r0 = 2131165750(0x7var_, float:1.7945726E38)
                 r7.setCustomRightImage(r0)
                 java.lang.String r0 = "voipgroup_nameText"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
@@ -1806,5 +1294,15 @@ public class GroupVoipInviteAlert extends BottomSheet {
             }
             return (TLObject) GroupVoipInviteAlert.this.contacts.get(i - GroupVoipInviteAlert.this.contactsStartRow);
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public void search(String str) {
+        this.searchAdapter.searchUsers(str);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onSearchViewTouched(MotionEvent motionEvent, EditTextBoldCursor editTextBoldCursor) {
+        this.delegate.needOpenSearch(motionEvent, editTextBoldCursor);
     }
 }

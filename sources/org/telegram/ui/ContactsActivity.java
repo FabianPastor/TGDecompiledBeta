@@ -19,6 +19,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextPaint;
@@ -113,6 +114,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     public boolean needPhonebook;
     private boolean onlyUsers;
     private AlertDialog permissionDialog;
+    private long permissionRequestTime;
     /* access modifiers changed from: private */
     public int prevPosition;
     /* access modifiers changed from: private */
@@ -222,7 +224,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r11.searching = r13
             r11.searchWas = r13
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131165466(0x7var_a, float:1.794515E38)
+            r1 = 2131165468(0x7var_c, float:1.7945154E38)
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
             r14 = 1
@@ -232,7 +234,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r11.returnAsResult
             if (r0 == 0) goto L_0x002e
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131627071(0x7f0e0c3f, float:1.8881396E38)
+            r1 = 2131627163(0x7f0e0c9b, float:1.8881583E38)
             java.lang.String r2 = "SelectContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -241,21 +243,21 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r11.createSecretChat
             if (r0 == 0) goto L_0x0041
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131626047(0x7f0e083f, float:1.887932E38)
+            r1 = 2131626121(0x7f0e0889, float:1.887947E38)
             java.lang.String r2 = "NewSecretChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0041:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131626038(0x7f0e0836, float:1.88793E38)
+            r1 = 2131626112(0x7f0e0880, float:1.887945E38)
             java.lang.String r2 = "NewMessageTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0050:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131624925(0x7f0e03dd, float:1.8877043E38)
+            r1 = 2131624930(0x7f0e03e2, float:1.8877054E38)
             java.lang.String r2 = "Contacts"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -266,14 +268,14 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r0.setActionBarMenuOnItemClick(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
-            r1 = 2131165476(0x7var_, float:1.794517E38)
+            r1 = 2131165478(0x7var_, float:1.7945174E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r13, (int) r1)
             r1.setIsSearchField(r14)
             org.telegram.ui.ContactsActivity$2 r2 = new org.telegram.ui.ContactsActivity$2
             r2.<init>()
             r1.setActionBarMenuItemSearchListener(r2)
             java.lang.String r2 = "Search"
-            r3 = 2131627012(0x7f0e0CLASSNAME, float:1.8881276E38)
+            r3 = 2131627103(0x7f0e0c5f, float:1.888146E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setSearchFieldHint(r4)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
@@ -284,10 +286,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             if (r1 != 0) goto L_0x00b8
             boolean r1 = r11.sortByName
             if (r1 == 0) goto L_0x00a3
-            r1 = 2131165381(0x7var_c5, float:1.7944978E38)
+            r1 = 2131165383(0x7var_c7, float:1.7944982E38)
             goto L_0x00a6
         L_0x00a3:
-            r1 = 2131165380(0x7var_c4, float:1.7944975E38)
+            r1 = 2131165382(0x7var_c6, float:1.794498E38)
         L_0x00a6:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r14, (int) r1)
             r11.sortItem = r0
@@ -399,13 +401,13 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r1.showProgress(r14, r13)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.title
-            r2 = 2131626103(0x7f0e0877, float:1.8879433E38)
+            r2 = 2131626181(0x7f0e08c5, float:1.887959E38)
             java.lang.String r3 = "NoResult"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.subtitle
-            r2 = 2131627017(0x7f0e0CLASSNAME, float:1.8881287E38)
+            r2 = 2131627108(0x7f0e0CLASSNAME, float:1.8881471E38)
             java.lang.String r3 = "SearchEmptyViewFilteredSubtitle2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -514,7 +516,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r1, r6, r7)
             if (r2 >= r5) goto L_0x029b
             android.content.res.Resources r6 = r24.getResources()
-            r7 = 2131165415(0x7var_e7, float:1.7945046E38)
+            r7 = 2131165417(0x7var_e9, float:1.794505E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
@@ -543,15 +545,15 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.getBoolean(r1, r14)
             org.telegram.ui.Components.RLottieImageView r1 = r11.floatingButton
             if (r0 == 0) goto L_0x02c5
-            r0 = 2131558475(0x7f0d004b, float:1.8742267E38)
+            r0 = 2131558497(0x7f0d0061, float:1.8742311E38)
             goto L_0x02c8
         L_0x02c5:
-            r0 = 2131558476(0x7f0d004c, float:1.8742269E38)
+            r0 = 2131558498(0x7f0d0062, float:1.8742314E38)
         L_0x02c8:
             r6 = 52
             r1.setAnimation(r0, r6, r6)
             android.widget.FrameLayout r0 = r11.floatingButtonContainer
-            r1 = 2131624954(0x7f0e03fa, float:1.8877102E38)
+            r1 = 2131624960(0x7f0e0400, float:1.8877114E38)
             java.lang.String r6 = "CreateNewContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             r0.setContentDescription(r1)
@@ -643,28 +645,26 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             Object item = searchAdapter.getItem(i2);
             if (item instanceof TLRPC$User) {
                 TLRPC$User tLRPC$User = (TLRPC$User) item;
-                if (tLRPC$User != null) {
-                    if (this.searchListViewAdapter.isGlobalSearch(i2)) {
-                        ArrayList arrayList = new ArrayList();
-                        arrayList.add(tLRPC$User);
-                        MessagesController.getInstance(this.currentAccount).putUsers(arrayList, false);
-                        MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(arrayList, (ArrayList<TLRPC$Chat>) null, false, true);
+                if (this.searchListViewAdapter.isGlobalSearch(i2)) {
+                    ArrayList arrayList = new ArrayList();
+                    arrayList.add(tLRPC$User);
+                    MessagesController.getInstance(this.currentAccount).putUsers(arrayList, false);
+                    MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(arrayList, (ArrayList<TLRPC$Chat>) null, false, true);
+                }
+                if (this.returnAsResult) {
+                    SparseArray<TLRPC$User> sparseArray = this.ignoreUsers;
+                    if (sparseArray == null || sparseArray.indexOfKey(tLRPC$User.id) < 0) {
+                        didSelectResult(tLRPC$User, true, (String) null);
                     }
-                    if (this.returnAsResult) {
-                        SparseArray<TLRPC$User> sparseArray = this.ignoreUsers;
-                        if (sparseArray == null || sparseArray.indexOfKey(tLRPC$User.id) < 0) {
-                            didSelectResult(tLRPC$User, true, (String) null);
-                        }
-                    } else if (!this.createSecretChat) {
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("user_id", tLRPC$User.id);
-                        if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(bundle, this)) {
-                            presentFragment(new ChatActivity(bundle), true);
-                        }
-                    } else if (tLRPC$User.id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                        this.creatingChat = true;
-                        SecretChatHelper.getInstance(this.currentAccount).startSecretChat(getParentActivity(), tLRPC$User);
+                } else if (!this.createSecretChat) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("user_id", tLRPC$User.id);
+                    if (MessagesController.getInstance(this.currentAccount).checkCanOpenChat(bundle, this)) {
+                        presentFragment(new ChatActivity(bundle), true);
                     }
+                } else if (tLRPC$User.id != UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+                    this.creatingChat = true;
+                    SecretChatHelper.getInstance(this.currentAccount).startSecretChat(getParentActivity(), tLRPC$User);
                 }
             } else if (item instanceof String) {
                 String str = (String) item;
@@ -1019,6 +1019,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         Activity parentActivity = getParentActivity();
         if (parentActivity != null && UserConfig.getInstance(this.currentAccount).syncContacts && parentActivity.checkSelfPermission("android.permission.READ_CONTACTS") != 0) {
             if (!z || !this.askAboutContacts) {
+                this.permissionRequestTime = SystemClock.elapsedRealtime();
                 ArrayList arrayList = new ArrayList();
                 arrayList.add("android.permission.READ_CONTACTS");
                 arrayList.add("android.permission.WRITE_CONTACTS");
@@ -1049,14 +1050,29 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
 
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
         if (i == 1) {
-            for (int i2 = 0; i2 < strArr.length; i2++) {
-                if (iArr.length > i2 && "android.permission.READ_CONTACTS".equals(strArr[i2])) {
-                    if (iArr[i2] == 0) {
-                        ContactsController.getInstance(this.currentAccount).forceImportContacts();
+            int i2 = 0;
+            while (i2 < strArr.length) {
+                if (iArr.length <= i2 || !"android.permission.READ_CONTACTS".equals(strArr[i2])) {
+                    i2++;
+                } else if (iArr[i2] == 0) {
+                    ContactsController.getInstance(this.currentAccount).forceImportContacts();
+                    return;
+                } else {
+                    SharedPreferences.Editor edit = MessagesController.getGlobalNotificationsSettings().edit();
+                    this.askAboutContacts = false;
+                    edit.putBoolean("askAboutContacts", false).commit();
+                    if (SystemClock.elapsedRealtime() - this.permissionRequestTime < 200) {
+                        try {
+                            Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
+                            intent.setData(Uri.fromParts("package", ApplicationLoader.applicationContext.getPackageName(), (String) null));
+                            getParentActivity().startActivity(intent);
+                            return;
+                        } catch (Exception e) {
+                            FileLog.e((Throwable) e);
+                            return;
+                        }
                     } else {
-                        SharedPreferences.Editor edit = MessagesController.getGlobalNotificationsSettings().edit();
-                        this.askAboutContacts = false;
-                        edit.putBoolean("askAboutContacts", false).commit();
+                        return;
                     }
                 }
             }

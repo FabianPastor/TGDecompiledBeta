@@ -588,6 +588,19 @@ public class AcceptDeclineView extends View {
                         rect.setEmpty();
                     }
                 }
+
+                /* access modifiers changed from: protected */
+                public void onVirtualViewClick(int i) {
+                    Listener listener = AcceptDeclineView.this.listener;
+                    if (listener == null) {
+                        return;
+                    }
+                    if (i == 0) {
+                        listener.onAccept();
+                    } else if (i == 1) {
+                        listener.onDicline();
+                    }
+                }
             };
         }
         return this.accessibilityNodeProvider;
@@ -612,6 +625,9 @@ public class AcceptDeclineView extends View {
 
         /* access modifiers changed from: protected */
         public abstract CharSequence getVirtualViewText(int i);
+
+        /* access modifiers changed from: protected */
+        public abstract void onVirtualViewClick(int i);
 
         private AcceptDeclineAccessibilityNodeProvider(View view, int i) {
             this.rect = new Rect();
@@ -654,11 +670,15 @@ public class AcceptDeclineView extends View {
             if (i == -1) {
                 return this.hostView.performAccessibilityAction(i2, bundle);
             }
-            if (i2 != 64) {
+            if (i2 == 64) {
+                sendAccessibilityEventForVirtualView(i, 32768);
                 return false;
+            } else if (i2 != 16) {
+                return false;
+            } else {
+                onVirtualViewClick(i);
+                return true;
             }
-            sendAccessibilityEventForVirtualView(i, 32768);
-            return false;
         }
 
         public boolean onHoverEvent(MotionEvent motionEvent) {
