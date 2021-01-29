@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.SystemClock;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
@@ -20,6 +21,7 @@ import android.util.Property;
 import android.util.SparseIntArray;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -291,6 +293,7 @@ public class FilterTabsView extends FrameLayout {
         public void setTab(Tab tab, int i) {
             this.currentTab = tab;
             this.currentPosition = i;
+            setContentDescription(tab.title);
             requestLayout();
         }
 
@@ -1375,6 +1378,16 @@ public class FilterTabsView extends FrameLayout {
             this.animateFromTabWidth = this.lastTabWidth;
             this.animateFromWidth = this.lastWidth;
             return true;
+        }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            accessibilityNodeInfo.addAction(16);
+            if (Build.VERSION.SDK_INT >= 21) {
+                accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(32, LocaleController.getString("AccDescrOpenMenu2", NUM)));
+            } else {
+                accessibilityNodeInfo.addAction(32);
+            }
         }
     }
 

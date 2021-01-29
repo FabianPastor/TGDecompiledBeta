@@ -1065,7 +1065,7 @@ public class SharedConfig {
             } else {
                 devicePerformanceClass = 2;
             }
-            if (BuildVars.DEBUG_VERSION) {
+            if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("device performance info (cpu_count = " + i3 + ", freq = " + i + ", memoryClass = " + memoryClass + ", android version " + i2 + ")");
             }
         }

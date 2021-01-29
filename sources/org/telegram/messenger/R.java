@@ -1645,6 +1645,8 @@ public final class R {
         public static final int AccDescrStickers = NUM;
         public static final int AccDescrStopLiveLocation = NUM;
         public static final int AccDescrSwitchCamera = NUM;
+        public static final int AccDescrSwitchToDayTheme = NUM;
+        public static final int AccDescrSwitchToNightTheme = NUM;
         public static final int AccDescrTakeMorePics = NUM;
         public static final int AccDescrUploadProgress = NUM;
         public static final int AccDescrUserOptions = NUM;

@@ -29,12 +29,12 @@ public final class BulletinFactory {
         VIDEO("VideoSavedHint", NUM, r5),
         VIDEOS("VideosSavedHint", r7),
         MEDIA("MediaSavedHint", r7),
-        PHOTO_TO_DOWNLOADS("PhotoSavedToDownloadsHint", r5),
-        VIDEO_TO_DOWNLOADS("VideoSavedToDownloadsHint", NUM, r5),
+        PHOTO_TO_DOWNLOADS("PhotoSavedToDownloadsHint", NUM, r16),
+        VIDEO_TO_DOWNLOADS("VideoSavedToDownloadsHint", NUM, r16),
         GIF("GifSavedToDownloadsHint", r5),
-        AUDIO("AudioSavedHint", r14),
-        AUDIOS("AudiosSavedHint", r14),
-        UNKNOWN("FileSavedHint", r5),
+        AUDIO("AudioSavedHint", NUM, r11),
+        AUDIOS("AudiosSavedHint", r11),
+        UNKNOWN("FileSavedHint", NUM, r5),
         UNKNOWNS("FilesSavedHint", r5);
         
         /* access modifiers changed from: private */
@@ -158,7 +158,7 @@ public final class BulletinFactory {
             android.app.Activity r1 = r10.getParentActivity()
             r0.<init>(r1)
             java.lang.String r1 = "Hours"
-            r2 = 2131626279(0x7f0e0927, float:1.887979E38)
+            r2 = 2131626281(0x7f0e0929, float:1.8879794E38)
             java.lang.String r3 = "NotificationsMutedForHint"
             r4 = 4
             r5 = 3
@@ -170,7 +170,7 @@ public final class BulletinFactory {
             if (r11 == r6) goto L_0x003a
             if (r11 == r5) goto L_0x0030
             if (r11 != r4) goto L_0x002a
-            r11 = 2131626300(0x7f0e093c, float:1.8879832E38)
+            r11 = 2131626302(0x7f0e093e, float:1.8879836E38)
             java.lang.String r1 = "NotificationsUnmutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r1, r11)
             r1 = 0
@@ -180,7 +180,7 @@ public final class BulletinFactory {
             r10.<init>()
             throw r10
         L_0x0030:
-            r11 = 2131626280(0x7f0e0928, float:1.8879792E38)
+            r11 = 2131626282(0x7f0e092a, float:1.8879796E38)
             java.lang.String r1 = "NotificationsMutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r1, r11)
             goto L_0x0064
@@ -272,12 +272,12 @@ public final class BulletinFactory {
             r10[r5] = r0
             r9.setAnimation(r4, r6, r6, r10)
             android.widget.TextView r10 = r9.titleTextView
-            r0 = 2131626721(0x7f0e0ae1, float:1.8880686E38)
+            r0 = 2131626723(0x7f0e0ae3, float:1.888069E38)
             java.lang.String r1 = "PinnedMessagesHidden"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setText(r0)
             android.widget.TextView r10 = r9.subtitleTextView
-            r0 = 2131626722(0x7f0e0ae2, float:1.8880688E38)
+            r0 = 2131626724(0x7f0e0ae4, float:1.8880692E38)
             java.lang.String r1 = "PinnedMessagesHiddenInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setText(r0)

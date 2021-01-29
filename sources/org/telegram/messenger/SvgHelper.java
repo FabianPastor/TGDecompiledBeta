@@ -113,6 +113,14 @@ public class SvgHelper {
         public void setColorFilter(ColorFilter colorFilter) {
         }
 
+        public int getIntrinsicHeight() {
+            return this.width;
+        }
+
+        public int getIntrinsicWidth() {
+            return this.height;
+        }
+
         public void draw(Canvas canvas) {
             String str = this.currentColorKey;
             if (str != null) {
