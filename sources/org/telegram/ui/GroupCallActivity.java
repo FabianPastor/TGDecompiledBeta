@@ -448,6 +448,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         private int currentColor;
         private TLRPC$TL_groupCallParticipant currentParticipant;
         private double currentProgress;
+        private boolean dragging;
         private RLottieImageView imageView;
         private long lastUpdateTime;
         private int oldColor;
@@ -720,10 +721,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         } else if (x > getMeasuredWidth()) {
                             this.thumbX = getMeasuredWidth();
                         }
-                        boolean unused = this.this$0.pressed = true;
+                        this.dragging = true;
                     }
                 }
-                if (this.this$0.pressed) {
+                if (this.dragging) {
                     if (motionEvent.getAction() == 1) {
                         double d = (double) this.thumbX;
                         double measuredWidth = (double) getMeasuredWidth();
@@ -731,7 +732,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         Double.isNaN(measuredWidth);
                         onSeekBarDrag(d / measuredWidth, true);
                     }
-                    boolean unused2 = this.this$0.pressed = false;
+                    this.dragging = false;
                     invalidate();
                     return true;
                 }
@@ -749,12 +750,12 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                             } else if (x2 > getMeasuredWidth()) {
                                 this.thumbX = getMeasuredWidth();
                             }
-                            boolean unused3 = this.this$0.pressed = true;
+                            this.dragging = true;
                             invalidate();
                             return true;
                         }
                     }
-                } else if (this.this$0.pressed) {
+                } else if (this.dragging) {
                     int x3 = (int) motionEvent.getX();
                     this.thumbX = x3;
                     if (x3 < 0) {
@@ -965,10 +966,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     setTarget();
                 }
                 float f2 = (float) j;
-                float access$700 = this.time + ((BlobDrawable.GRADIENT_SPEED_MIN + 0.5f) * f2) + (f2 * BlobDrawable.GRADIENT_SPEED_MAX * 2.0f * GroupCallActivity.this.amplitude);
-                this.time = access$700;
+                float access$600 = this.time + ((BlobDrawable.GRADIENT_SPEED_MIN + 0.5f) * f2) + (f2 * BlobDrawable.GRADIENT_SPEED_MAX * 2.0f * GroupCallActivity.this.amplitude);
+                this.time = access$600;
                 float f3 = this.duration;
-                if (access$700 > f3) {
+                if (access$600 > f3) {
                     this.time = f3;
                 }
                 float interpolation = CubicBezierInterpolator.EASE_OUT.getInterpolation(this.time / f3);

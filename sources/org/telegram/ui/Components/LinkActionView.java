@@ -127,7 +127,7 @@ public class LinkActionView extends LinearLayout {
         textView2.setTextSize(1, 14.0f);
         textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView2.setLines(1);
-        linearLayout.addView(textView2, LayoutHelper.createLinear(0, -2, 1.0f, 0, 4, 0, 4, 0));
+        linearLayout.addView(textView2, LayoutHelper.createLinear(0, 40, 1.0f, 0, 4, 0, 4, 0));
         TextView textView3 = new TextView(context2);
         this.shareView = textView3;
         textView3.setGravity(1);
@@ -141,7 +141,7 @@ public class LinkActionView extends LinearLayout {
         textView3.setTextSize(1, 14.0f);
         textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView3.setLines(1);
-        linearLayout.addView(textView3, LayoutHelper.createLinear(0, -2, 1.0f, 4, 0, 4, 0));
+        linearLayout.addView(textView3, LayoutHelper.createLinear(0, 40, 1.0f, 4, 0, 4, 0));
         TextView textView4 = new TextView(context2);
         this.removeView = textView4;
         textView4.setGravity(1);
