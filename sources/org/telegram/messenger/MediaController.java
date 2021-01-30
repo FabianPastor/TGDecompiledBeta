@@ -4038,8 +4038,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                                         return;
                                     }
                                     MediaController.this.playNextMessageWithoutOrder(true);
-                                } else if (MediaController.this.seekToProgressPending == 0.0f) {
-                                } else {
+                                } else if (MediaController.this.audioPlayer != null && MediaController.this.seekToProgressPending != 0.0f) {
                                     if (i == 3 || i == 1) {
                                         long duration = (long) ((int) (((float) MediaController.this.audioPlayer.getDuration()) * MediaController.this.seekToProgressPending));
                                         MediaController.this.audioPlayer.seekTo(duration);
@@ -5469,7 +5468,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r5 = 2
             r4.<init>(r14, r5)     // Catch:{ Exception -> 0x0066 }
             java.lang.String r1 = "Loading"
-            r5 = 2131625867(0x7f0e078b, float:1.8878954E38)
+            r5 = 2131625870(0x7f0e078e, float:1.887896E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)     // Catch:{ Exception -> 0x0066 }
             r4.setMessage(r1)     // Catch:{ Exception -> 0x0066 }
             r4.setCanceledOnTouchOutside(r2)     // Catch:{ Exception -> 0x0066 }
@@ -5950,68 +5949,76 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:15:0x003a, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:21:0x003f, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:16:0x003b, code lost:
-        if (r1 != null) goto L_0x003d;
+    /* JADX WARNING: Code restructure failed: missing block: B:22:0x0040, code lost:
+        if (r3 != null) goto L_0x0042;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:18:?, code lost:
-        r1.close();
+    /* JADX WARNING: Code restructure failed: missing block: B:24:?, code lost:
+        r3.close();
      */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:19:0x0040 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:25:0x0045 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static java.lang.String getFileName(android.net.Uri r10) {
+    public static java.lang.String getFileName(android.net.Uri r11) {
         /*
             java.lang.String r0 = "_display_name"
-            java.lang.String r1 = r10.getScheme()
-            java.lang.String r2 = "content"
-            boolean r1 = r1.equals(r2)
-            r2 = 1
+            java.lang.String r1 = ""
+            if (r11 != 0) goto L_0x0007
+            return r1
+        L_0x0007:
+            r2 = 0
+            java.lang.String r3 = r11.getScheme()     // Catch:{ Exception -> 0x005f }
+            java.lang.String r4 = "content"
+            boolean r3 = r3.equals(r4)     // Catch:{ Exception -> 0x005f }
+            r4 = 1
+            if (r3 == 0) goto L_0x004a
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0046 }
+            android.content.ContentResolver r5 = r3.getContentResolver()     // Catch:{ Exception -> 0x0046 }
+            java.lang.String[] r7 = new java.lang.String[r4]     // Catch:{ Exception -> 0x0046 }
             r3 = 0
-            if (r1 == 0) goto L_0x0045
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0041 }
-            android.content.ContentResolver r4 = r1.getContentResolver()     // Catch:{ Exception -> 0x0041 }
-            java.lang.String[] r6 = new java.lang.String[r2]     // Catch:{ Exception -> 0x0041 }
-            r1 = 0
-            r6[r1] = r0     // Catch:{ Exception -> 0x0041 }
-            r7 = 0
+            r7[r3] = r0     // Catch:{ Exception -> 0x0046 }
             r8 = 0
             r9 = 0
-            r5 = r10
-            android.database.Cursor r1 = r4.query(r5, r6, r7, r8, r9)     // Catch:{ Exception -> 0x0041 }
-            boolean r4 = r1.moveToFirst()     // Catch:{ all -> 0x0038 }
-            if (r4 == 0) goto L_0x0032
-            int r0 = r1.getColumnIndex(r0)     // Catch:{ all -> 0x0038 }
-            java.lang.String r0 = r1.getString(r0)     // Catch:{ all -> 0x0038 }
-            r3 = r0
-        L_0x0032:
-            if (r1 == 0) goto L_0x0045
-            r1.close()     // Catch:{ Exception -> 0x0041 }
-            goto L_0x0045
-        L_0x0038:
+            r10 = 0
+            r6 = r11
+            android.database.Cursor r3 = r5.query(r6, r7, r8, r9, r10)     // Catch:{ Exception -> 0x0046 }
+            boolean r5 = r3.moveToFirst()     // Catch:{ all -> 0x003d }
+            if (r5 == 0) goto L_0x0037
+            int r0 = r3.getColumnIndex(r0)     // Catch:{ all -> 0x003d }
+            java.lang.String r0 = r3.getString(r0)     // Catch:{ all -> 0x003d }
+            r2 = r0
+        L_0x0037:
+            if (r3 == 0) goto L_0x004a
+            r3.close()     // Catch:{ Exception -> 0x0046 }
+            goto L_0x004a
+        L_0x003d:
             r0 = move-exception
-            throw r0     // Catch:{ all -> 0x003a }
-        L_0x003a:
+            throw r0     // Catch:{ all -> 0x003f }
+        L_0x003f:
             r0 = move-exception
-            if (r1 == 0) goto L_0x0040
-            r1.close()     // Catch:{ all -> 0x0040 }
-        L_0x0040:
-            throw r0     // Catch:{ Exception -> 0x0041 }
-        L_0x0041:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+            if (r3 == 0) goto L_0x0045
+            r3.close()     // Catch:{ all -> 0x0045 }
         L_0x0045:
-            if (r3 != 0) goto L_0x0059
-            java.lang.String r3 = r10.getPath()
-            r10 = 47
-            int r10 = r3.lastIndexOf(r10)
+            throw r0     // Catch:{ Exception -> 0x0046 }
+        L_0x0046:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x005f }
+        L_0x004a:
+            if (r2 != 0) goto L_0x005e
+            java.lang.String r2 = r11.getPath()     // Catch:{ Exception -> 0x005f }
+            r11 = 47
+            int r11 = r2.lastIndexOf(r11)     // Catch:{ Exception -> 0x005f }
             r0 = -1
-            if (r10 == r0) goto L_0x0059
-            int r10 = r10 + r2
-            java.lang.String r3 = r3.substring(r10)
-        L_0x0059:
-            return r3
+            if (r11 == r0) goto L_0x005e
+            int r11 = r11 + r4
+            java.lang.String r2 = r2.substring(r11)     // Catch:{ Exception -> 0x005f }
+        L_0x005e:
+            return r2
+        L_0x005f:
+            r11 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
+            return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.getFileName(android.net.Uri):java.lang.String");
     }

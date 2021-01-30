@@ -1351,6 +1351,7 @@
     <public type="raw" name="audio_speed" id="NUM" />
     <public type="raw" name="audio_stop_speed" id="NUM" />
     <public type="raw" name="camera" id="NUM" />
+    <public type="raw" name="camera_outline" id="NUM" />
     <public type="raw" name="chat_audio_record_delete" id="NUM" />
     <public type="raw" name="chat_audio_record_delete_2" id="NUM" />
     <public type="raw" name="chats_archive" id="NUM" />
@@ -1821,6 +1822,7 @@
     <public type="string" name="AreYouSureClearHistoryWithSecretUser" id="NUM" />
     <public type="string" name="AreYouSureClearHistoryWithUser" id="NUM" />
     <public type="string" name="AreYouSureDeleteAndExit" id="NUM" />
+    <public type="string" name="AreYouSureDeleteAndExitChannel" id="NUM" />
     <public type="string" name="AreYouSureDeleteAndExitName" id="NUM" />
     <public type="string" name="AreYouSureDeleteContact" id="NUM" />
     <public type="string" name="AreYouSureDeleteFewChats" id="NUM" />
@@ -2557,6 +2559,7 @@
     <public type="string" name="DeleteBanUser" id="NUM" />
     <public type="string" name="DeleteCalls" id="NUM" />
     <public type="string" name="DeleteCallsForEveryone" id="NUM" />
+    <public type="string" name="DeleteChannelForAll" id="NUM" />
     <public type="string" name="DeleteChat" id="NUM" />
     <public type="string" name="DeleteChatBackgroundsAlert" id="NUM" />
     <public type="string" name="DeleteChatUser" id="NUM" />
@@ -3203,6 +3206,7 @@
     <public type="string" name="ImportErrorNotAdmin" id="NUM" />
     <public type="string" name="ImportErrorTitle" id="NUM" />
     <public type="string" name="ImportErrorUserBlocked" id="NUM" />
+    <public type="string" name="ImportFailedToUpload" id="NUM" />
     <public type="string" name="ImportFileTooLarge" id="NUM" />
     <public type="string" name="ImportHeader" id="NUM" />
     <public type="string" name="ImportHeaderContacts" id="NUM" />

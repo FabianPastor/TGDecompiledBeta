@@ -49,8 +49,7 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_inputChannelEmpty;
 import org.telegram.tgnet.TLRPC$TL_inputChatPhoto;
 import org.telegram.tgnet.TLRPC$TL_messages_chats;
-import org.telegram.tgnet.TLRPC$TL_messages_exportedChatInvites;
-import org.telegram.tgnet.TLRPC$TL_messages_getExportedChatInvites;
+import org.telegram.tgnet.TLRPC$TL_messages_exportChatInvite;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -907,15 +906,13 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private void generateLink() {
         if (!this.loadingInvite && this.invite == null) {
             this.loadingInvite = true;
-            TLRPC$TL_messages_getExportedChatInvites tLRPC$TL_messages_getExportedChatInvites = new TLRPC$TL_messages_getExportedChatInvites();
-            tLRPC$TL_messages_getExportedChatInvites.peer = getMessagesController().getInputPeer(-this.chatId);
-            tLRPC$TL_messages_getExportedChatInvites.admin_id = getMessagesController().getInputUser(getUserConfig().getCurrentUser());
-            tLRPC$TL_messages_getExportedChatInvites.limit = 1;
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getExportedChatInvites, new RequestDelegate() {
+            TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
+            tLRPC$TL_messages_exportChatInvite.peer = getMessagesController().getInputPeer(-this.chatId);
+            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                     ChannelCreateActivity.this.lambda$generateLink$11$ChannelCreateActivity(tLObject, tLRPC$TL_error);
                 }
-            });
+            }), this.classGuid);
         }
     }
 
@@ -941,7 +938,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     /* renamed from: lambda$null$10 */
     public /* synthetic */ void lambda$null$10$ChannelCreateActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
-            this.invite = (TLRPC$TL_chatInviteExported) ((TLRPC$TL_messages_exportedChatInvites) tLObject).invites.get(0);
+            this.invite = (TLRPC$TL_chatInviteExported) tLObject;
         }
         this.loadingInvite = false;
         LinkActionView linkActionView = this.permanentLinkView;

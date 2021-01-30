@@ -133,7 +133,6 @@ public class FilterTabsView extends FrameLayout {
     /* access modifiers changed from: private */
     public boolean isEditing;
     DefaultItemAnimator itemAnimator;
-    private final ItemTouchHelper itemTouchHelper;
     /* access modifiers changed from: private */
     public long lastAnimationTime;
     private long lastEditingAnimationTime;
@@ -299,6 +298,24 @@ public class FilterTabsView extends FrameLayout {
 
         public int getId() {
             return this.currentTab.id;
+        }
+
+        /* access modifiers changed from: protected */
+        public void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            this.animateChange = false;
+            this.animateTabCounter = false;
+            this.animateTextChange = false;
+            this.animateTextX = false;
+            this.animateTabWidth = false;
+            ValueAnimator valueAnimator = this.changeAnimator;
+            if (valueAnimator != null) {
+                valueAnimator.removeAllListeners();
+                this.changeAnimator.removeAllUpdateListeners();
+                this.changeAnimator.cancel();
+                this.changeAnimator = null;
+            }
+            invalidate();
         }
 
         /* access modifiers changed from: protected */
@@ -1498,6 +1515,7 @@ public class FilterTabsView extends FrameLayout {
                         ValueAnimator valueAnimator = tabView.changeAnimator;
                         if (valueAnimator != null) {
                             valueAnimator.removeAllListeners();
+                            tabView.changeAnimator.removeAllUpdateListeners();
                             tabView.changeAnimator.cancel();
                         }
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
@@ -1579,9 +1597,7 @@ public class FilterTabsView extends FrameLayout {
         };
         this.layoutManager = r33;
         recyclerListView.setLayoutManager(r33);
-        ItemTouchHelper itemTouchHelper2 = new ItemTouchHelper(new TouchHelperCallback());
-        this.itemTouchHelper = itemTouchHelper2;
-        itemTouchHelper2.attachToRecyclerView(this.listView);
+        new ItemTouchHelper(new TouchHelperCallback()).attachToRecyclerView(this.listView);
         this.listView.setPadding(AndroidUtilities.dp(7.0f), 0, AndroidUtilities.dp(7.0f), 0);
         this.listView.setClipToPadding(false);
         this.listView.setDrawSelectorBehind(true);

@@ -14,6 +14,7 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
     public int lastTypingDate;
     public long lastVisibleDate;
     public boolean left;
+    public boolean min;
     public boolean muted;
     public boolean muted_by_you;
     public int source;
@@ -42,6 +43,7 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         this.can_self_unmute = (readInt32 & 4) != 0;
         this.just_joined = (readInt32 & 16) != 0;
         this.versioned = (readInt32 & 32) != 0;
+        this.min = (readInt32 & 256) != 0;
         if ((readInt32 & 512) != 0) {
             z2 = true;
         }
@@ -69,9 +71,11 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         this.flags = i4;
         int i5 = this.versioned ? i4 | 32 : i4 & -33;
         this.flags = i5;
-        int i6 = this.muted_by_you ? i5 | 512 : i5 & -513;
+        int i6 = this.min ? i5 | 256 : i5 & -257;
         this.flags = i6;
-        abstractSerializedData.writeInt32(i6);
+        int i7 = this.muted_by_you ? i6 | 512 : i6 & -513;
+        this.flags = i7;
+        abstractSerializedData.writeInt32(i7);
         abstractSerializedData.writeInt32(this.user_id);
         abstractSerializedData.writeInt32(this.date);
         if ((this.flags & 8) != 0) {

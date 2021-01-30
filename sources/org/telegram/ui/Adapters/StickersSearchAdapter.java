@@ -621,7 +621,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
     public /* synthetic */ void lambda$onCreateViewHolder$0$StickersSearchAdapter(View view) {
         FeaturedStickerSetInfoCell featuredStickerSetInfoCell = (FeaturedStickerSetInfoCell) view.getParent();
         TLRPC$StickerSetCovered stickerSet = featuredStickerSetInfoCell.getStickerSet();
-        if (this.installingStickerSets.indexOfKey(stickerSet.set.id) < 0 && this.removingStickerSets.indexOfKey(stickerSet.set.id) < 0) {
+        if (stickerSet != null && this.installingStickerSets.indexOfKey(stickerSet.set.id) < 0 && this.removingStickerSets.indexOfKey(stickerSet.set.id) < 0) {
             if (featuredStickerSetInfoCell.isInstalled()) {
                 this.removingStickerSets.put(stickerSet.set.id, stickerSet);
                 this.delegate.onStickerSetRemove(featuredStickerSetInfoCell.getStickerSet());
@@ -717,8 +717,13 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i, List list) {
-        if (list.contains(0) && viewHolder.getItemViewType() == 3) {
+        if (!list.contains(0)) {
+            return;
+        }
+        if (viewHolder.getItemViewType() == 3) {
             bindFeaturedStickerSetInfoCell((FeaturedStickerSetInfoCell) viewHolder.itemView, i, true);
+        } else {
+            super.onBindViewHolder(viewHolder, i, list);
         }
     }
 

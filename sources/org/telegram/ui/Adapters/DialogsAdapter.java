@@ -207,7 +207,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             }
             if (this.hasHints) {
                 i5 += instance.hintDialogs.size() + 2;
-            } else if (this.dialogsType == 0 && this.dialogsCount <= 10 && (i2 = this.folderId) == 0 && instance.isDialogsEndReached(i2)) {
+            } else if (this.dialogsType == 0 && instance.dialogs_dict.size() <= 10 && (i2 = this.folderId) == 0 && instance.isDialogsEndReached(i2)) {
                 if (ContactsController.getInstance(this.currentAccount).contacts.isEmpty() && ContactsController.getInstance(this.currentAccount).isLoadingContacts()) {
                     this.onlineContacts = null;
                     this.currentCount = 0;
@@ -631,7 +631,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            r1 = 2131626956(0x7f0e0bcc, float:1.8881163E38)
+            r1 = 2131626959(0x7f0e0bcf, float:1.8881169E38)
             java.lang.String r2 = "RecentlyViewed"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r5.setText(r1)
@@ -646,7 +646,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             java.lang.String r2 = "windowBackgroundWhiteBlueHeader"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r1.setTextColor(r2)
-            r2 = 2131626957(0x7f0e0bcd, float:1.8881165E38)
+            r2 = 2131626960(0x7f0e0bd0, float:1.888117E38)
             java.lang.String r3 = "RecentlyViewedHide"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
