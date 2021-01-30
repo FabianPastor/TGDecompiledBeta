@@ -134,6 +134,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        Theme.createDialogsResources(this);
         Theme.createChatResources(this, false);
         AndroidUtilities.fillStatusBarHeight(this);
         for (int i = 0; i < 3; i++) {

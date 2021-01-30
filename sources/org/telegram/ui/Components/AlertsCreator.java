@@ -225,6 +225,8 @@ public class AlertsCreator {
                 showSimpleAlert(baseFragment2, LocaleController.getString("ImportErrorTitle", NUM), LocaleController.getString("ImportErrorFileLang", NUM));
             } else if (tLRPC$TL_error2.text.contains("IMPORT_UPLOAD_FAILED")) {
                 showSimpleAlert(baseFragment2, LocaleController.getString("ImportErrorTitle", NUM), LocaleController.getString("ImportFailedToUpload", NUM));
+            } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
+                showFloodWaitAlert(tLRPC$TL_error2.text, baseFragment2);
             } else {
                 String string = LocaleController.getString("ImportErrorTitle", NUM);
                 showSimpleAlert(baseFragment2, string, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text);

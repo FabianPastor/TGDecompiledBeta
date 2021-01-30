@@ -6804,6 +6804,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         boolean z = true;
         if (!this.actionBar.isActionModeShowed()) {
             createActionMode();
+            this.actionBar.setActionModeOverrideColor(Theme.getColor("windowBackgroundWhite"));
             this.actionBar.showActionMode();
             resetScroll();
             if (this.menuDrawable != null) {

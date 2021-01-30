@@ -9561,6 +9561,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     public void onResume() {
         MessageObject playingMessageObject;
         super.onResume();
+        if (Theme.selectedAutoNightType == 3) {
+            Theme.checkAutoNightThemeConditions();
+        }
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4096);
         MediaController.getInstance().setFeedbackView(this.actionBarLayout, true);
         ApplicationLoader.mainInterfacePaused = false;

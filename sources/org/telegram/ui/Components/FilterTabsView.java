@@ -239,7 +239,6 @@ public class FilterTabsView extends FrameLayout {
 
     public class TabView extends View {
         public boolean animateChange;
-        public boolean animateCounterChange;
         private float animateFromCountWidth;
         private float animateFromCounterWidth;
         int animateFromTabCount;
@@ -252,8 +251,7 @@ public class FilterTabsView extends FrameLayout {
         boolean animateTabCounter;
         /* access modifiers changed from: private */
         public boolean animateTabWidth;
-        /* access modifiers changed from: private */
-        public boolean animateTextChange;
+        private boolean animateTextChange;
         private boolean animateTextChangeOut;
         boolean animateTextX;
         public ValueAnimator changeAnimator;
@@ -1407,6 +1405,16 @@ public class FilterTabsView extends FrameLayout {
                 accessibilityNodeInfo.addAction(32);
             }
         }
+
+        public void clearTransitionParams() {
+            this.animateChange = false;
+            this.animateTabCounter = false;
+            this.animateTextChange = false;
+            this.animateTextX = false;
+            this.animateTabWidth = false;
+            this.changeAnimator = null;
+            invalidate();
+        }
     }
 
     public FilterTabsView(Context context) {
@@ -1526,17 +1534,7 @@ public class FilterTabsView extends FrameLayout {
                         });
                         ofFloat.addListener(new AnimatorListenerAdapter(this) {
                             public void onAnimationEnd(Animator animator) {
-                                TabView tabView = tabView;
-                                tabView.animateChange = false;
-                                tabView.animateTabCounter = false;
-                                tabView.animateCounterChange = false;
-                                boolean unused = tabView.animateTextChange = false;
-                                TabView tabView2 = tabView;
-                                tabView2.animateTextX = false;
-                                boolean unused2 = tabView2.animateTabWidth = false;
-                                TabView tabView3 = tabView;
-                                tabView3.changeAnimator = null;
-                                tabView3.invalidate();
+                                tabView.clearTransitionParams();
                             }
                         });
                         tabView.changeAnimator = ofFloat;
@@ -1554,6 +1552,19 @@ public class FilterTabsView extends FrameLayout {
             public void onMoveFinished(RecyclerView.ViewHolder viewHolder) {
                 super.onMoveFinished(viewHolder);
                 viewHolder.itemView.setTranslationX(0.0f);
+                View view = viewHolder.itemView;
+                if (view instanceof TabView) {
+                    ((TabView) view).clearTransitionParams();
+                }
+            }
+
+            public void endAnimation(RecyclerView.ViewHolder viewHolder) {
+                super.endAnimation(viewHolder);
+                viewHolder.itemView.setTranslationX(0.0f);
+                View view = viewHolder.itemView;
+                if (view instanceof TabView) {
+                    ((TabView) view).clearTransitionParams();
+                }
             }
         };
         this.itemAnimator = r32;

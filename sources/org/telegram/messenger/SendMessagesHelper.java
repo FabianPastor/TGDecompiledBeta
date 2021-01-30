@@ -410,7 +410,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     SendMessagesHelper.this.importingHistoryMap.remove(ImportingHistory.this.dialogId);
                     SendMessagesHelper.this.getNotificationCenter().postNotificationName(NotificationCenter.historyImportProgressChanged, Long.valueOf(ImportingHistory.this.dialogId), tLRPC$TL_messages_initHistoryImport, tLRPC$TL_error);
                 }
-            });
+            }, 2);
         }
 
         public long getUploadedCount() {
@@ -634,7 +634,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                         ImportingHistory.this.startImport();
                     }
                 }
-            });
+            }, 2);
         }
 
         /* access modifiers changed from: private */

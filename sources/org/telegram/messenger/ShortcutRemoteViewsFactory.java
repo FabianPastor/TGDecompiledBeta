@@ -14,6 +14,7 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Dialog;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.ActionBar.Theme;
 
 /* compiled from: ShortcutWidgetService */
 class ShortcutRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
@@ -47,6 +48,7 @@ class ShortcutRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
     public ShortcutRemoteViewsFactory(Context context, Intent intent) {
         this.mContext = context;
+        Theme.createDialogsResources(context);
         this.appWidgetId = intent.getIntExtra("appWidgetId", 0);
         SharedPreferences sharedPreferences = context.getSharedPreferences("shortcut_widget", 0);
         int i = sharedPreferences.getInt("account" + this.appWidgetId, -1);
