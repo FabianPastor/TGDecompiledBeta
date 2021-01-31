@@ -1508,8 +1508,13 @@ public class RecyclerListView extends RecyclerView {
                 return;
             }
             this.emptyViewAnimateToVisibility = -1;
-            checkIfEmpty(isAttachedToWindow());
+            checkIfEmpty(updateEmptyViewAnimated());
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public boolean updateEmptyViewAnimated() {
+        return isAttachedToWindow();
     }
 
     public View getEmptyView() {

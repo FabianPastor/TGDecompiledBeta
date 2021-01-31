@@ -4038,8 +4038,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                                         return;
                                     }
                                     MediaController.this.playNextMessageWithoutOrder(true);
-                                } else if (MediaController.this.seekToProgressPending == 0.0f) {
-                                } else {
+                                } else if (MediaController.this.audioPlayer != null && MediaController.this.seekToProgressPending != 0.0f) {
                                     if (i == 3 || i == 1) {
                                         long duration = (long) ((int) (((float) MediaController.this.audioPlayer.getDuration()) * MediaController.this.seekToProgressPending));
                                         MediaController.this.audioPlayer.seekTo(duration);
@@ -5469,7 +5468,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r5 = 2
             r4.<init>(r14, r5)     // Catch:{ Exception -> 0x0066 }
             java.lang.String r1 = "Loading"
-            r5 = 2131625867(0x7f0e078b, float:1.8878954E38)
+            r5 = 2131625870(0x7f0e078e, float:1.887896E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)     // Catch:{ Exception -> 0x0066 }
             r4.setMessage(r1)     // Catch:{ Exception -> 0x0066 }
             r4.setCanceledOnTouchOutside(r2)     // Catch:{ Exception -> 0x0066 }

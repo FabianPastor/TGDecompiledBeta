@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 4.1.1
 
 Name: AndroidManifest.xml
-SHA1-Digest: TExbusQPOZK47GmOk1s04RFqS/E=
+SHA1-Digest: g0ViohXZehUUabWZ+VY6MSuPkIc=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9879,13 +9879,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: b9Y/dsrKKLEoCamkkr6s4yaiD/0=
+SHA1-Digest: VS4mTIGa3EOusslefo7IKzXYjqU=
 
 Name: classes2.dex
 SHA1-Digest: GQNky92ExRcYASorLeQ9ZA9MVVY=
 
 Name: classes3.dex
-SHA1-Digest: whik+dzLxJMok6DWBcseUxzveBU=
+SHA1-Digest: j3HQ56gYRqhigZJYnaN/m50L+/c=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -20392,6 +20392,9 @@ SHA1-Digest: 45fzmmfV70zggE+lFcxWCcdOz7c=
 Name: res/raw/camera.json
 SHA1-Digest: FQ6OoxcRtN7jG3Ixe2tX1PCB8fk=
 
+Name: res/raw/camera_outline.json
+SHA1-Digest: IKZSbXZtXH+qO+ETCqlt9O/OI+g=
+
 Name: res/raw/chat_audio_record_delete.json
 SHA1-Digest: IAfD0hndsApB97GpcyvxeoLIg5c=
 
@@ -20675,7 +20678,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: AEh2GSnuRKT5XCKxomqUkGiyS2s=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: XZOOwIPfvpzpihtMc8XsJsRCw8o=
+SHA1-Digest: eapjqkJJ6b5vewPf0DWYpEQ7hZo=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: vNxeRePtnY64Hxd7k8wXLkWhqV0=
@@ -20699,7 +20702,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: s1q8AVtvIhNoZD0wr33Na3t45Qg=
+SHA1-Digest: 2yeS29GFVi7NtSNsg6bxO60LjrA=
 
 Name: transport-api.properties
 SHA1-Digest: Jz4dPszpGdGJqctaJoPe9Lpu55k=

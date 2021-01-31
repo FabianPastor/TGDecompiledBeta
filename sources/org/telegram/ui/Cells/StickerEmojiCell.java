@@ -220,21 +220,23 @@ public class StickerEmojiCell extends FrameLayout {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         String string = LocaleController.getString("AttachSticker", NUM);
-        int i = 0;
-        while (true) {
-            if (i >= this.sticker.attributes.size()) {
-                break;
-            }
-            TLRPC$DocumentAttribute tLRPC$DocumentAttribute = this.sticker.attributes.get(i);
-            if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
-                String str = tLRPC$DocumentAttribute.alt;
-                if (str != null && str.length() > 0) {
-                    TextView textView = this.emojiTextView;
-                    textView.setText(Emoji.replaceEmoji(tLRPC$DocumentAttribute.alt, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
-                    string = tLRPC$DocumentAttribute.alt + " " + string;
+        if (this.sticker != null) {
+            int i = 0;
+            while (true) {
+                if (i >= this.sticker.attributes.size()) {
+                    break;
                 }
-            } else {
-                i++;
+                TLRPC$DocumentAttribute tLRPC$DocumentAttribute = this.sticker.attributes.get(i);
+                if (tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeSticker) {
+                    String str = tLRPC$DocumentAttribute.alt;
+                    if (str != null && str.length() > 0) {
+                        TextView textView = this.emojiTextView;
+                        textView.setText(Emoji.replaceEmoji(tLRPC$DocumentAttribute.alt, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), false));
+                        string = tLRPC$DocumentAttribute.alt + " " + string;
+                    }
+                } else {
+                    i++;
+                }
             }
         }
         accessibilityNodeInfo.setContentDescription(string);

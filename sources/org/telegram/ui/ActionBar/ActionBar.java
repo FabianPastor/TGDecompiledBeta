@@ -39,7 +39,8 @@ public class ActionBar extends FrameLayout {
     public ActionBarMenu actionMode;
     /* access modifiers changed from: private */
     public AnimatorSet actionModeAnimation;
-    private int actionModeColor;
+    /* access modifiers changed from: private */
+    public int actionModeColor;
     /* access modifiers changed from: private */
     public View actionModeExtraView;
     /* access modifiers changed from: private */
@@ -486,14 +487,16 @@ public class ActionBar extends FrameLayout {
             this.actionMode = null;
         }
         this.actionModeTag = str;
-        ActionBarMenu actionBarMenu2 = new ActionBarMenu(getContext(), this);
-        this.actionMode = actionBarMenu2;
-        actionBarMenu2.isActionMode = true;
-        actionBarMenu2.setClickable(true);
-        ActionBarMenu actionBarMenu3 = this.actionMode;
-        int color = Theme.getColor("actionBarActionModeDefault");
-        this.actionModeColor = color;
-        actionBarMenu3.setBackgroundColor(color);
+        AnonymousClass1 r4 = new ActionBarMenu(getContext(), this) {
+            public void setBackgroundColor(int i) {
+                int unused = ActionBar.this.actionModeColor = i;
+                super.setBackgroundColor(i);
+            }
+        };
+        this.actionMode = r4;
+        r4.isActionMode = true;
+        r4.setClickable(true);
+        this.actionMode.setBackgroundColor(Theme.getColor("actionBarActionModeDefault"));
         addView(this.actionMode, indexOfChild(this.backButtonImageView));
         this.actionMode.setPadding(0, this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0, 0, 0);
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.actionMode.getLayoutParams();
@@ -738,9 +741,12 @@ public class ActionBar extends FrameLayout {
     public void setActionModeColor(int i) {
         ActionBarMenu actionBarMenu = this.actionMode;
         if (actionBarMenu != null) {
-            this.actionModeColor = i;
             actionBarMenu.setBackgroundColor(i);
         }
+    }
+
+    public void setActionModeOverrideColor(int i) {
+        this.actionModeColor = i;
     }
 
     public void setBackgroundColor(int i) {
@@ -1392,7 +1398,7 @@ public class ActionBar extends FrameLayout {
             r0.scaleX(r6)
         L_0x010f:
             android.view.ViewPropertyAnimator r5 = r5.setDuration(r1)
-            org.telegram.ui.ActionBar.ActionBar$3 r6 = new org.telegram.ui.ActionBar.ActionBar$3
+            org.telegram.ui.ActionBar.ActionBar$4 r6 = new org.telegram.ui.ActionBar.ActionBar$4
             r6.<init>()
             android.view.ViewPropertyAnimator r5 = r5.setListener(r6)
             r5.start()

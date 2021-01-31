@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 4.1.1
-SHA1-Digest-Manifest: Ay+DZfZ5FJXpP+lHV/88UGP28Fw=
+SHA1-Digest-Manifest: BV/YmGmToLicVYqWVf4dfQxBszk=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: TMKwxPYi9DcyfGKcw7BcWd8NDMY=
+SHA1-Digest: aEPwN31h+Dx2fep8QGkOX51K0I4=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9880,13 +9880,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: KPpnORztSdabiUvye1l/UVNGqmQ=
+SHA1-Digest: xB63MgMGoGJNbH8y/JYuSLqlxQo=
 
 Name: classes2.dex
 SHA1-Digest: XTIq0AhHhp7Eo+YytesJ9taX0Yw=
 
 Name: classes3.dex
-SHA1-Digest: slo6McluFafZYwKMWE7uaH1r4QU=
+SHA1-Digest: J6ediQiD0qO+dTauPAbPm4BA9QM=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -20393,6 +20393,9 @@ SHA1-Digest: a3lIBGfZkSfXI1J2mJQ39NIMtlI=
 Name: res/raw/camera.json
 SHA1-Digest: kB/7RDqG37hKXsEAjlQaeOuTUmA=
 
+Name: res/raw/camera_outline.json
+SHA1-Digest: IunCaG56Chnu9/kLMInVYyjmtEI=
+
 Name: res/raw/chat_audio_record_delete.json
 SHA1-Digest: VykIKXC/Greg6lhSoPjS50kaYdI=
 
@@ -20676,7 +20679,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: YrSK2LiL9Sgwr3Lkfx3/yNJGR5E=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: hqD21i2REX+bKOW03U+g3c+6e8Y=
+SHA1-Digest: unAEGi68vsVX0Ywno1OZ5zOEaFQ=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -20700,7 +20703,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: T+vuJ2BVySCuU0gxbWGa8xggFZ4=
+SHA1-Digest: W9199B/CgBbe4l77rjs/2moF0iE=
 
 Name: transport-api.properties
 SHA1-Digest: OrUd0dvMYm2tlcfDVrGNApZLT1M=

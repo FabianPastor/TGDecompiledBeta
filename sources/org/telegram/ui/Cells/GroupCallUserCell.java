@@ -471,7 +471,7 @@ public class GroupCallUserCell extends FrameLayout {
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r6 = r0.participant
             int r6 = org.telegram.messenger.ChatObject.getParticipantVolume(r6)
             int r11 = r6 / 100
-            r12 = 2131627359(0x7f0e0d5f, float:1.888198E38)
+            r12 = 2131627362(0x7f0e0d62, float:1.8881986E38)
             java.lang.String r13 = "Speaking"
             r14 = 100
             if (r11 == r14) goto L_0x0190

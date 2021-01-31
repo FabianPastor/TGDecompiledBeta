@@ -713,7 +713,7 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.Cells.TextInfoPrivacyCell r12 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r0 = r10.mContext
                 r12.<init>(r0)
-                r0 = 2131624964(0x7f0e0404, float:1.8877123E38)
+                r0 = 2131624965(0x7f0e0405, float:1.8877125E38)
                 java.lang.String r1 = "CreateNewLinkHelp"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r12.setText(r0)
@@ -727,7 +727,7 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 r12.<init>(r11)
                 int r11 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r12.setBackgroundColor(r11)
-                r11 = 2131625039(0x7f0e044f, float:1.8877275E38)
+                r11 = 2131625040(0x7f0e0450, float:1.8877277E38)
                 java.lang.String r1 = "DeleteAllRevokedLinks"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r1, r11)
                 r12.setText(r11, r0)

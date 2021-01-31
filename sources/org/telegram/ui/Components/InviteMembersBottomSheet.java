@@ -311,7 +311,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase {
             r0.setScaleX(r10)
             r0.setScaleY(r10)
             r0.setAlpha(r10)
-            r2 = 2131626129(0x7f0e0891, float:1.8879485E38)
+            r2 = 2131626132(0x7f0e0894, float:1.8879492E38)
             java.lang.String r4 = "Next"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setContentDescription(r2)
@@ -1078,7 +1078,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase {
             L_0x016a:
                 android.view.View r10 = r10.itemView
                 org.telegram.ui.Cells.GroupCreateSectionCell r10 = (org.telegram.ui.Cells.GroupCreateSectionCell) r10
-                r11 = 2131625608(0x7f0e0688, float:1.8878429E38)
+                r11 = 2131625610(0x7f0e068a, float:1.8878433E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 r10.setText(r11)

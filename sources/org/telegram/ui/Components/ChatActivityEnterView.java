@@ -132,7 +132,6 @@ import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.AlertDialog;
-import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
@@ -3307,7 +3306,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);
                     }
-                    BulletinFactory.of((BaseFragment) chatActivity2).createMembersNotifyInfo(!ChatActivityEnterView.this.silent).show();
+                    chatActivity2.getUndoView().showWithAction(0, !ChatActivityEnterView.this.silent ? 54 : 55, (Runnable) null);
                     ImageView access$8200 = ChatActivityEnterView.this.notifyButton;
                     if (ChatActivityEnterView.this.silent) {
                         i = NUM;

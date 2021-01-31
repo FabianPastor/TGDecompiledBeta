@@ -2454,30 +2454,30 @@ public class MediaDataController extends BaseController {
     /* access modifiers changed from: private */
     /* renamed from: lambda$loadStickersByEmojiOrName$42 */
     public /* synthetic */ void lambda$loadStickersByEmojiOrName$42$MediaDataController(String str, boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLObject, str, z) {
-            public final /* synthetic */ TLObject f$1;
-            public final /* synthetic */ String f$2;
-            public final /* synthetic */ boolean f$3;
+        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, str, z) {
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ String f$3;
+            public final /* synthetic */ boolean f$4;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r3;
                 this.f$3 = r4;
+                this.f$4 = r5;
             }
 
             public final void run() {
-                MediaDataController.this.lambda$null$41$MediaDataController(this.f$1, this.f$2, this.f$3);
+                MediaDataController.this.lambda$null$41$MediaDataController(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$41 */
-    public /* synthetic */ void lambda$null$41$MediaDataController(TLObject tLObject, String str, boolean z) {
+    public /* synthetic */ void lambda$null$41$MediaDataController(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str, boolean z) {
         if (tLObject instanceof TLRPC$TL_messages_stickerSet) {
-            String str2 = str;
-            boolean z2 = z;
-            processLoadedDiceStickers(str2, z2, (TLRPC$TL_messages_stickerSet) tLObject, false, (int) (System.currentTimeMillis() / 1000));
+            processLoadedDiceStickers(str, z, (TLRPC$TL_messages_stickerSet) tLObject, false, (int) (System.currentTimeMillis() / 1000));
             return;
         }
         processLoadedDiceStickers(str, z, (TLRPC$TL_messages_stickerSet) null, false, (int) (System.currentTimeMillis() / 1000));
@@ -5657,7 +5657,7 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02e0 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02e0 }
-            r10 = 2131626107(0x7f0e087b, float:1.887944E38)
+            r10 = 2131626110(0x7f0e087e, float:1.8879447E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e0 }
             r9.setShortLabel(r11)     // Catch:{ all -> 0x02e0 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e0 }
@@ -6518,7 +6518,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0247 }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131626992(0x7f0e0bf0, float:1.8881236E38)
+            r9 = 2131626995(0x7f0e0bf3, float:1.8881242E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
         L_0x0067:
             r9 = r4
@@ -6528,7 +6528,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0247 }
             if (r8 == 0) goto L_0x007a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627091(0x7f0e0CLASSNAME, float:1.8881437E38)
+            r9 = 2131627094(0x7f0e0CLASSNAME, float:1.8881443E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
             goto L_0x0067
         L_0x007a:

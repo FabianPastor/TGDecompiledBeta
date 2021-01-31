@@ -14,6 +14,7 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Dialog;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.ActionBar.Theme;
 
 /* compiled from: ShortcutWidgetService */
 class ShortcutRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
@@ -47,6 +48,7 @@ class ShortcutRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
 
     public ShortcutRemoteViewsFactory(Context context, Intent intent) {
         this.mContext = context;
+        Theme.createDialogsResources(context);
         this.appWidgetId = intent.getIntExtra("appWidgetId", 0);
         SharedPreferences sharedPreferences = context.getSharedPreferences("shortcut_widget", 0);
         int i = sharedPreferences.getInt("account" + this.appWidgetId, -1);
@@ -89,14 +91,14 @@ class ShortcutRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r4)
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r0)
             if (r8 == 0) goto L_0x0032
-            r8 = 2131627091(0x7f0e0CLASSNAME, float:1.8881437E38)
+            r8 = 2131627094(0x7f0e0CLASSNAME, float:1.8881443E38)
             java.lang.String r9 = "SavedMessages"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             goto L_0x004a
         L_0x0032:
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
             if (r8 == 0) goto L_0x0042
-            r8 = 2131626992(0x7f0e0bf0, float:1.8881236E38)
+            r8 = 2131626995(0x7f0e0bf3, float:1.8881242E38)
             java.lang.String r9 = "RepliesTitle"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             goto L_0x004a
@@ -306,7 +308,7 @@ class ShortcutRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
         L_0x01ea:
             boolean r5 = r8.isOutOwner()
             if (r5 == 0) goto L_0x01fb
-            r0 = 2131625580(0x7f0e066c, float:1.8878372E38)
+            r0 = 2131625582(0x7f0e066e, float:1.8878376E38)
             java.lang.String r5 = "FromYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r0)
         L_0x01f9:
@@ -519,7 +521,7 @@ class ShortcutRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             if (r3 == 0) goto L_0x03b3
             int r3 = r0.ttl_seconds
             if (r3 == 0) goto L_0x03b3
-            r0 = 2131624376(0x7f0e01b8, float:1.887593E38)
+            r0 = 2131624377(0x7f0e01b9, float:1.8875932E38)
             java.lang.String r3 = "AttachPhotoExpired"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r3, r0)
         L_0x03ae:
@@ -533,7 +535,7 @@ class ShortcutRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             if (r3 == 0) goto L_0x03cb
             int r3 = r0.ttl_seconds
             if (r3 == 0) goto L_0x03cb
-            r0 = 2131624382(0x7f0e01be, float:1.8875942E38)
+            r0 = 2131624383(0x7f0e01bf, float:1.8875944E38)
             java.lang.String r3 = "AttachVideoExpired"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r3, r0)
             goto L_0x03ae

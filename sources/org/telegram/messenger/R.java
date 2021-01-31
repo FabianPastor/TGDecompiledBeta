@@ -1484,6 +1484,7 @@ public final class R {
         public static final int audio_speed = NUM;
         public static final int audio_stop_speed = NUM;
         public static final int camera = NUM;
+        public static final int camera_outline = NUM;
         public static final int chat_audio_record_delete = NUM;
         public static final int chat_audio_record_delete_2 = NUM;
         public static final int chats_archive = NUM;
@@ -1960,6 +1961,7 @@ public final class R {
         public static final int AreYouSureClearHistoryWithSecretUser = NUM;
         public static final int AreYouSureClearHistoryWithUser = NUM;
         public static final int AreYouSureDeleteAndExit = NUM;
+        public static final int AreYouSureDeleteAndExitChannel = NUM;
         public static final int AreYouSureDeleteAndExitName = NUM;
         public static final int AreYouSureDeleteContact = NUM;
         public static final int AreYouSureDeleteFewChats = NUM;
@@ -2696,6 +2698,7 @@ public final class R {
         public static final int DeleteBanUser = NUM;
         public static final int DeleteCalls = NUM;
         public static final int DeleteCallsForEveryone = NUM;
+        public static final int DeleteChannelForAll = NUM;
         public static final int DeleteChat = NUM;
         public static final int DeleteChatBackgroundsAlert = NUM;
         public static final int DeleteChatUser = NUM;
@@ -3342,6 +3345,7 @@ public final class R {
         public static final int ImportErrorNotAdmin = NUM;
         public static final int ImportErrorTitle = NUM;
         public static final int ImportErrorUserBlocked = NUM;
+        public static final int ImportFailedToUpload = NUM;
         public static final int ImportFileTooLarge = NUM;
         public static final int ImportHeader = NUM;
         public static final int ImportHeaderContacts = NUM;

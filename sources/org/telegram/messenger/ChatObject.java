@@ -562,10 +562,17 @@ public class ChatObject {
                         this.invitedUsers.remove(valueOf);
                     }
                     if (tLRPC$TL_groupCallParticipant2 != null) {
-                        tLRPC$TL_groupCallParticipant2.flags = tLRPC$TL_groupCallParticipant.flags;
                         tLRPC$TL_groupCallParticipant2.muted = tLRPC$TL_groupCallParticipant.muted;
                         tLRPC$TL_groupCallParticipant2.muted_by_you = tLRPC$TL_groupCallParticipant.muted_by_you;
-                        tLRPC$TL_groupCallParticipant2.volume = tLRPC$TL_groupCallParticipant.volume;
+                        if (!tLRPC$TL_groupCallParticipant.min) {
+                            tLRPC$TL_groupCallParticipant2.volume = tLRPC$TL_groupCallParticipant.volume;
+                        } else {
+                            int i3 = tLRPC$TL_groupCallParticipant.flags;
+                            if ((i3 & 128) != 0 && (tLRPC$TL_groupCallParticipant2.flags & 128) == 0) {
+                                tLRPC$TL_groupCallParticipant.flags = i3 & -129;
+                            }
+                        }
+                        tLRPC$TL_groupCallParticipant2.flags = tLRPC$TL_groupCallParticipant.flags;
                         tLRPC$TL_groupCallParticipant2.can_self_unmute = tLRPC$TL_groupCallParticipant.can_self_unmute;
                         tLRPC$TL_groupCallParticipant2.date = tLRPC$TL_groupCallParticipant.date;
                         int max = Math.max(tLRPC$TL_groupCallParticipant2.active_date, tLRPC$TL_groupCallParticipant.active_date);
@@ -573,18 +580,18 @@ public class ChatObject {
                         if (elapsedRealtime != tLRPC$TL_groupCallParticipant2.lastVisibleDate) {
                             tLRPC$TL_groupCallParticipant2.active_date = max;
                         }
-                        int i3 = tLRPC$TL_groupCallParticipant2.source;
-                        if (i3 != tLRPC$TL_groupCallParticipant.source) {
-                            this.participantsBySources.remove(i3);
-                            int i4 = tLRPC$TL_groupCallParticipant.source;
-                            tLRPC$TL_groupCallParticipant2.source = i4;
-                            this.participantsBySources.put(i4, tLRPC$TL_groupCallParticipant2);
+                        int i4 = tLRPC$TL_groupCallParticipant2.source;
+                        if (i4 != tLRPC$TL_groupCallParticipant.source) {
+                            this.participantsBySources.remove(i4);
+                            int i5 = tLRPC$TL_groupCallParticipant.source;
+                            tLRPC$TL_groupCallParticipant2.source = i5;
+                            this.participantsBySources.put(i5, tLRPC$TL_groupCallParticipant2);
                         }
                     } else {
                         if (tLRPC$TL_groupCallParticipant.just_joined) {
-                            int i5 = tLRPC$TL_updateGroupCallParticipants2.version;
+                            int i6 = tLRPC$TL_updateGroupCallParticipants2.version;
                             TLRPC$GroupCall tLRPC$GroupCall = this.call;
-                            if (i5 != tLRPC$GroupCall.version) {
+                            if (i6 != tLRPC$GroupCall.version) {
                                 tLRPC$GroupCall.participants_count++;
                             }
                         }
@@ -602,9 +609,9 @@ public class ChatObject {
                         this.sortedParticipants.remove(tLRPC$TL_groupCallParticipant2);
                     }
                     TLRPC$GroupCall tLRPC$GroupCall2 = this.call;
-                    int i6 = tLRPC$GroupCall2.participants_count - 1;
-                    tLRPC$GroupCall2.participants_count = i6;
-                    if (i6 < 0) {
+                    int i7 = tLRPC$GroupCall2.participants_count - 1;
+                    tLRPC$GroupCall2.participants_count = i7;
+                    if (i7 < 0) {
                         tLRPC$GroupCall2.participants_count = 0;
                     }
                 }
@@ -615,10 +622,10 @@ public class ChatObject {
                     z3 = true;
                 }
             }
-            int i7 = tLRPC$TL_updateGroupCallParticipants2.version;
+            int i8 = tLRPC$TL_updateGroupCallParticipants2.version;
             TLRPC$GroupCall tLRPC$GroupCall3 = this.call;
-            if (i7 > tLRPC$GroupCall3.version) {
-                tLRPC$GroupCall3.version = i7;
+            if (i8 > tLRPC$GroupCall3.version) {
+                tLRPC$GroupCall3.version = i8;
                 if (!z) {
                     processUpdatesQueue();
                 }
