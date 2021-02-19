@@ -25,7 +25,7 @@ public class FeedWidgetProvider extends AppWidgetProvider {
     public void onDeleted(Context context, int[] iArr) {
         super.onDeleted(context, iArr);
         for (int i = 0; i < iArr.length; i++) {
-            SharedPreferences.Editor edit = context.getSharedPreferences("feed_widget", 0).edit();
+            SharedPreferences.Editor edit = context.getSharedPreferences("shortcut_widget", 0).edit();
             SharedPreferences.Editor remove = edit.remove("account" + iArr[i]);
             remove.remove("dialogId" + iArr[i]).commit();
         }

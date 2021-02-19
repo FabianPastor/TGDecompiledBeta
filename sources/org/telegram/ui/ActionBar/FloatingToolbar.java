@@ -1013,7 +1013,7 @@ public final class FloatingToolbar {
                           (wrap: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA : 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA) = 
                           (r1v0 'this' org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13 A[THIS])
                          call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13):void type: CONSTRUCTOR)
-                         android.view.ViewGroup.post(java.lang.Runnable):boolean type: VIRTUAL in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.13.onAnimationEnd(android.view.animation.Animation):void, dex: classes.dex
+                         android.view.ViewGroup.post(java.lang.Runnable):boolean type: VIRTUAL in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.13.onAnimationEnd(android.view.animation.Animation):void, dex: classes3.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                         	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -1091,7 +1091,7 @@ public final class FloatingToolbar {
                         	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
                         Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA) = 
                           (r1v0 'this' org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13 A[THIS])
-                         call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13):void type: CONSTRUCTOR in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.13.onAnimationEnd(android.view.animation.Animation):void, dex: classes.dex
+                         call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13):void type: CONSTRUCTOR in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.13.onAnimationEnd(android.view.animation.Animation):void, dex: classes3.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)

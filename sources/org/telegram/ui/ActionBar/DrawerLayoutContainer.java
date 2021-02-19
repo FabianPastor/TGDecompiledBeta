@@ -720,10 +720,10 @@ public class DrawerLayoutContainer extends FrameLayout {
     /* access modifiers changed from: protected */
     @SuppressLint({"NewApi"})
     public void onMeasure(int i, int i2) {
-        int i3 = Build.VERSION.SDK_INT;
         int size = View.MeasureSpec.getSize(i);
         int size2 = View.MeasureSpec.getSize(i2);
         setMeasuredDimension(size, size2);
+        int i3 = Build.VERSION.SDK_INT;
         if (i3 < 21) {
             this.inLayout = true;
             if (size2 == AndroidUtilities.displaySize.y + AndroidUtilities.statusBarHeight) {
@@ -751,7 +751,7 @@ public class DrawerLayoutContainer extends FrameLayout {
                     if (childAt.getFitsSystemWindows()) {
                         dispatchChildInsets(childAt, this.lastInsets, layoutParams.gravity);
                     } else if (childAt.getTag() == null) {
-                        applyMarginInsets(layoutParams, this.lastInsets, layoutParams.gravity, i3 >= 21);
+                        applyMarginInsets(layoutParams, this.lastInsets, layoutParams.gravity, Build.VERSION.SDK_INT >= 21);
                     }
                 }
                 if (this.drawerLayout != childAt) {
@@ -766,8 +766,6 @@ public class DrawerLayoutContainer extends FrameLayout {
                     childAt.measure(FrameLayout.getChildMeasureSpec(i, this.minDrawerMargin + layoutParams.leftMargin + layoutParams.rightMargin, layoutParams.width), FrameLayout.getChildMeasureSpec(i2, layoutParams.topMargin + layoutParams.bottomMargin, layoutParams.height));
                 }
             }
-            int i7 = i;
-            int i8 = i2;
         }
     }
 

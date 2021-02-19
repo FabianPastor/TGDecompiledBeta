@@ -37,7 +37,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.Keep;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,6 +78,7 @@ import org.telegram.ui.Cells.CheckBoxCell;
 import org.telegram.ui.Cells.GroupCreateSectionCell;
 import org.telegram.ui.Cells.GroupCreateUserCell;
 import org.telegram.ui.Cells.TextCell;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.FlickerLoadingView;
@@ -803,15 +803,16 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
     /* renamed from: lambda$createView$3 */
     public /* synthetic */ void lambda$createView$3$GroupCreateActivity(Context context, View view, int i) {
         int i2;
+        boolean z = false;
         if (i == 0 && this.adapter.inviteViaLink != 0 && !this.adapter.searching) {
-            PermanentLinkBottomSheet permanentLinkBottomSheet = new PermanentLinkBottomSheet(context, false, this, this.info, this.chatId);
+            PermanentLinkBottomSheet permanentLinkBottomSheet = new PermanentLinkBottomSheet(context, false, this, this.info, this.chatId, this.channelId != 0);
             this.sharedLinkBottomSheet = permanentLinkBottomSheet;
             showDialog(permanentLinkBottomSheet);
         } else if (view instanceof GroupCreateUserCell) {
             GroupCreateUserCell groupCreateUserCell = (GroupCreateUserCell) view;
             Object object = groupCreateUserCell.getObject();
-            boolean z = object instanceof TLRPC$User;
-            if (z) {
+            boolean z2 = object instanceof TLRPC$User;
+            if (z2) {
                 i2 = ((TLRPC$User) object).id;
             } else if (object instanceof TLRPC$Chat) {
                 i2 = -((TLRPC$Chat) object).id;
@@ -820,8 +821,10 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             }
             SparseArray<TLObject> sparseArray = this.ignoreUsers;
             if (sparseArray == null || sparseArray.indexOfKey(i2) < 0) {
-                boolean z2 = this.selectedContacts.indexOfKey(i2) >= 0;
-                if (z2) {
+                if (this.selectedContacts.indexOfKey(i2) >= 0) {
+                    z = true;
+                }
+                if (z) {
                     this.spansContainer.removeSpan(this.selectedContacts.get(i2));
                 } else if (this.maxCount != 0 && this.selectedContacts.size() == this.maxCount) {
                     return;
@@ -834,13 +837,13 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                         showDialog(builder.create());
                         return;
                     }
-                    if (z) {
+                    if (z2) {
                         TLRPC$User tLRPC$User = (TLRPC$User) object;
                         if (this.addToGroup && tLRPC$User.bot) {
                             int i3 = this.channelId;
                             if (i3 == 0 && tLRPC$User.bot_nochats) {
                                 try {
-                                    Toast.makeText(getParentActivity(), LocaleController.getString("BotCantJoinGroups", NUM), 0).show();
+                                    BulletinFactory.of((BaseFragment) this).createErrorBulletin(LocaleController.getString("BotCantJoinGroups", NUM)).show();
                                     return;
                                 } catch (Exception e) {
                                     FileLog.e((Throwable) e);
@@ -884,7 +887,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 if (this.searching || this.searchWas) {
                     AndroidUtilities.showKeyboard(this.editText);
                 } else {
-                    groupCreateUserCell.setChecked(!z2, true);
+                    groupCreateUserCell.setChecked(!z, true);
                 }
                 if (this.editText.length() > 0) {
                     this.editText.setText((CharSequence) null);
@@ -1477,7 +1480,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 r1 = 8
                 r4.setVisibility(r1)
                 android.widget.TextView r4 = r5.title
-                r1 = 2131626147(0x7f0e08a3, float:1.8879522E38)
+                r1 = 2131626229(0x7f0e08f5, float:1.8879688E38)
                 java.lang.String r2 = "NoContacts"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r4.setText(r1)

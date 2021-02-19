@@ -21,6 +21,7 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
     public int user_id;
     public boolean versioned;
     public int volume;
+    public boolean volume_by_admin;
 
     public static TLRPC$TL_groupCallParticipant TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         if (constructor == i) {
@@ -44,10 +45,11 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         this.just_joined = (readInt32 & 16) != 0;
         this.versioned = (readInt32 & 32) != 0;
         this.min = (readInt32 & 256) != 0;
-        if ((readInt32 & 512) != 0) {
+        this.muted_by_you = (readInt32 & 512) != 0;
+        if ((readInt32 & 1024) != 0) {
             z2 = true;
         }
-        this.muted_by_you = z2;
+        this.volume_by_admin = z2;
         this.user_id = abstractSerializedData.readInt32(z);
         this.date = abstractSerializedData.readInt32(z);
         if ((this.flags & 8) != 0) {
@@ -75,7 +77,9 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         this.flags = i6;
         int i7 = this.muted_by_you ? i6 | 512 : i6 & -513;
         this.flags = i7;
-        abstractSerializedData.writeInt32(i7);
+        int i8 = this.volume_by_admin ? i7 | 1024 : i7 & -1025;
+        this.flags = i8;
+        abstractSerializedData.writeInt32(i8);
         abstractSerializedData.writeInt32(this.user_id);
         abstractSerializedData.writeInt32(this.date);
         if ((this.flags & 8) != 0) {

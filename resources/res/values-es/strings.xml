@@ -3956,7 +3956,7 @@
     <string name="appcenter_distribute_update_failed_dialog_title">Actualizaciones en la aplicación deshabilitadas</string>
     <string name="chatDate">d \'de\' MMMM</string>
     <string name="chatFullDate">d \'de\' MMMM \'de\' yyyy</string>
-    <string name="common_google_play_services_enable_button">Habilitar</string>
+    <string name="common_google_play_services_enable_button">Activar</string>
     <string name="common_google_play_services_enable_text">%1$s no funcionará hasta que no habilites Servicios de Google Play.</string>
     <string name="common_google_play_services_enable_title">Habilita Servicios de Google Play</string>
     <string name="common_google_play_services_install_button">Instalar</string>

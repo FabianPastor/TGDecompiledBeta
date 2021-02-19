@@ -51,6 +51,8 @@ public class AdminLogFilterAlert extends BottomSheet {
     /* access modifiers changed from: private */
     public int infoRow;
     /* access modifiers changed from: private */
+    public int invitesRow;
+    /* access modifiers changed from: private */
     public boolean isMegagroup;
     /* access modifiers changed from: private */
     public int leavingRow;
@@ -100,6 +102,7 @@ public class AdminLogFilterAlert extends BottomSheet {
             tLRPC$TL_channelAdminLogEventsFilter2.edit = tLRPC$TL_channelAdminLogEventsFilter.edit;
             tLRPC$TL_channelAdminLogEventsFilter2.delete = tLRPC$TL_channelAdminLogEventsFilter.delete;
             tLRPC$TL_channelAdminLogEventsFilter2.group_call = tLRPC$TL_channelAdminLogEventsFilter.group_call;
+            tLRPC$TL_channelAdminLogEventsFilter2.invites = tLRPC$TL_channelAdminLogEventsFilter.invites;
         }
         if (sparseArray != null) {
             this.selectedAdmins = sparseArray.clone();
@@ -117,21 +120,23 @@ public class AdminLogFilterAlert extends BottomSheet {
         int i3 = i2 + 1;
         this.membersRow = i2;
         int i4 = i3 + 1;
-        this.infoRow = i3;
+        this.invitesRow = i3;
         int i5 = i4 + 1;
-        this.deleteRow = i4;
+        this.infoRow = i4;
         int i6 = i5 + 1;
-        this.editRow = i5;
+        this.deleteRow = i5;
+        int i7 = i6 + 1;
+        this.editRow = i6;
         if (z) {
-            this.pinnedRow = i6;
-            i6++;
+            this.pinnedRow = i7;
+            i7++;
         } else {
             this.pinnedRow = -1;
         }
-        int i7 = i6 + 1;
-        this.leavingRow = i6;
-        this.callsRow = i7;
-        this.allAdminsRow = i7 + 2;
+        int i8 = i7 + 1;
+        this.leavingRow = i7;
+        this.callsRow = i8;
+        this.allAdminsRow = i8 + 2;
         Drawable mutate = context.getResources().getDrawable(NUM).mutate();
         this.shadowDrawable = mutate;
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
@@ -196,8 +201,8 @@ public class AdminLogFilterAlert extends BottomSheet {
         this.containerView = r11;
         r11.setWillNotDraw(false);
         ViewGroup viewGroup = this.containerView;
-        int i8 = this.backgroundPaddingLeft;
-        viewGroup.setPadding(i8, 0, i8, 0);
+        int i9 = this.backgroundPaddingLeft;
+        viewGroup.setPadding(i9, 0, i9, 0);
         AnonymousClass2 r112 = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 boolean onInterceptTouchEvent = ContentPreviewViewer.getInstance().onInterceptTouchEvent(motionEvent, AdminLogFilterAlert.this.listView, 0, (ContentPreviewViewer.ContentPreviewViewerDelegate) null);
@@ -254,7 +259,6 @@ public class AdminLogFilterAlert extends BottomSheet {
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$AdminLogFilterAlert(View view, int i) {
-        boolean z;
         if (view instanceof CheckBoxCell) {
             CheckBoxCell checkBoxCell = (CheckBoxCell) view;
             boolean isChecked = checkBoxCell.isChecked();
@@ -263,6 +267,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                 if (isChecked) {
                     TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter = new TLRPC$TL_channelAdminLogEventsFilter();
                     this.currentFilter = tLRPC$TL_channelAdminLogEventsFilter;
+                    tLRPC$TL_channelAdminLogEventsFilter.invites = false;
                     tLRPC$TL_channelAdminLogEventsFilter.group_call = false;
                     tLRPC$TL_channelAdminLogEventsFilter.delete = false;
                     tLRPC$TL_channelAdminLogEventsFilter.edit = false;
@@ -309,6 +314,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                 if (this.currentFilter == null) {
                     TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter2 = new TLRPC$TL_channelAdminLogEventsFilter();
                     this.currentFilter = tLRPC$TL_channelAdminLogEventsFilter2;
+                    tLRPC$TL_channelAdminLogEventsFilter2.invites = true;
                     tLRPC$TL_channelAdminLogEventsFilter2.group_call = true;
                     tLRPC$TL_channelAdminLogEventsFilter2.delete = true;
                     tLRPC$TL_channelAdminLogEventsFilter2.edit = true;
@@ -331,26 +337,26 @@ public class AdminLogFilterAlert extends BottomSheet {
                 }
                 if (i == this.restrictionsRow) {
                     TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter3 = this.currentFilter;
-                    boolean z2 = !tLRPC$TL_channelAdminLogEventsFilter3.kick;
-                    tLRPC$TL_channelAdminLogEventsFilter3.unban = z2;
-                    tLRPC$TL_channelAdminLogEventsFilter3.unkick = z2;
-                    tLRPC$TL_channelAdminLogEventsFilter3.ban = z2;
-                    tLRPC$TL_channelAdminLogEventsFilter3.kick = z2;
+                    boolean z = !tLRPC$TL_channelAdminLogEventsFilter3.kick;
+                    tLRPC$TL_channelAdminLogEventsFilter3.unban = z;
+                    tLRPC$TL_channelAdminLogEventsFilter3.unkick = z;
+                    tLRPC$TL_channelAdminLogEventsFilter3.ban = z;
+                    tLRPC$TL_channelAdminLogEventsFilter3.kick = z;
                 } else if (i == this.adminsRow) {
                     TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter4 = this.currentFilter;
-                    boolean z3 = !tLRPC$TL_channelAdminLogEventsFilter4.demote;
-                    tLRPC$TL_channelAdminLogEventsFilter4.demote = z3;
-                    tLRPC$TL_channelAdminLogEventsFilter4.promote = z3;
+                    boolean z2 = !tLRPC$TL_channelAdminLogEventsFilter4.demote;
+                    tLRPC$TL_channelAdminLogEventsFilter4.demote = z2;
+                    tLRPC$TL_channelAdminLogEventsFilter4.promote = z2;
                 } else if (i == this.membersRow) {
                     TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter5 = this.currentFilter;
-                    boolean z4 = !tLRPC$TL_channelAdminLogEventsFilter5.join;
-                    tLRPC$TL_channelAdminLogEventsFilter5.join = z4;
-                    tLRPC$TL_channelAdminLogEventsFilter5.invite = z4;
+                    boolean z3 = !tLRPC$TL_channelAdminLogEventsFilter5.join;
+                    tLRPC$TL_channelAdminLogEventsFilter5.join = z3;
+                    tLRPC$TL_channelAdminLogEventsFilter5.invite = z3;
                 } else if (i == this.infoRow) {
                     TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter6 = this.currentFilter;
-                    boolean z5 = !tLRPC$TL_channelAdminLogEventsFilter6.info;
-                    tLRPC$TL_channelAdminLogEventsFilter6.settings = z5;
-                    tLRPC$TL_channelAdminLogEventsFilter6.info = z5;
+                    boolean z4 = !tLRPC$TL_channelAdminLogEventsFilter6.info;
+                    tLRPC$TL_channelAdminLogEventsFilter6.settings = z4;
+                    tLRPC$TL_channelAdminLogEventsFilter6.info = z4;
                 } else if (i == this.deleteRow) {
                     TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter7 = this.currentFilter;
                     tLRPC$TL_channelAdminLogEventsFilter7.delete = !tLRPC$TL_channelAdminLogEventsFilter7.delete;
@@ -366,10 +372,13 @@ public class AdminLogFilterAlert extends BottomSheet {
                 } else if (i == this.callsRow) {
                     TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter11 = this.currentFilter;
                     tLRPC$TL_channelAdminLogEventsFilter11.group_call = !tLRPC$TL_channelAdminLogEventsFilter11.group_call;
+                } else if (i == this.invitesRow) {
+                    TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter12 = this.currentFilter;
+                    tLRPC$TL_channelAdminLogEventsFilter12.invites = !tLRPC$TL_channelAdminLogEventsFilter12.invites;
                 }
             }
-            TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter12 = this.currentFilter;
-            if (tLRPC$TL_channelAdminLogEventsFilter12 == null || tLRPC$TL_channelAdminLogEventsFilter12.join || (z = tLRPC$TL_channelAdminLogEventsFilter12.leave) || z || tLRPC$TL_channelAdminLogEventsFilter12.invite || tLRPC$TL_channelAdminLogEventsFilter12.ban || tLRPC$TL_channelAdminLogEventsFilter12.unban || tLRPC$TL_channelAdminLogEventsFilter12.kick || tLRPC$TL_channelAdminLogEventsFilter12.unkick || tLRPC$TL_channelAdminLogEventsFilter12.promote || tLRPC$TL_channelAdminLogEventsFilter12.demote || tLRPC$TL_channelAdminLogEventsFilter12.info || tLRPC$TL_channelAdminLogEventsFilter12.settings || tLRPC$TL_channelAdminLogEventsFilter12.pinned || tLRPC$TL_channelAdminLogEventsFilter12.edit || tLRPC$TL_channelAdminLogEventsFilter12.delete || tLRPC$TL_channelAdminLogEventsFilter12.group_call) {
+            TLRPC$TL_channelAdminLogEventsFilter tLRPC$TL_channelAdminLogEventsFilter13 = this.currentFilter;
+            if (tLRPC$TL_channelAdminLogEventsFilter13 == null || tLRPC$TL_channelAdminLogEventsFilter13.join || tLRPC$TL_channelAdminLogEventsFilter13.leave || tLRPC$TL_channelAdminLogEventsFilter13.invite || tLRPC$TL_channelAdminLogEventsFilter13.ban || tLRPC$TL_channelAdminLogEventsFilter13.invites || tLRPC$TL_channelAdminLogEventsFilter13.unban || tLRPC$TL_channelAdminLogEventsFilter13.kick || tLRPC$TL_channelAdminLogEventsFilter13.unkick || tLRPC$TL_channelAdminLogEventsFilter13.promote || tLRPC$TL_channelAdminLogEventsFilter13.demote || tLRPC$TL_channelAdminLogEventsFilter13.info || tLRPC$TL_channelAdminLogEventsFilter13.settings || tLRPC$TL_channelAdminLogEventsFilter13.pinned || tLRPC$TL_channelAdminLogEventsFilter13.edit || tLRPC$TL_channelAdminLogEventsFilter13.delete || tLRPC$TL_channelAdminLogEventsFilter13.group_call) {
                 this.saveButton.setEnabled(true);
                 this.saveButton.setAlpha(1.0f);
                 return;
@@ -453,7 +462,7 @@ public class AdminLogFilterAlert extends BottomSheet {
         }
 
         public int getItemCount() {
-            return (AdminLogFilterAlert.this.isMegagroup ? 10 : 7) + (AdminLogFilterAlert.this.currentAdmins != null ? AdminLogFilterAlert.this.currentAdmins.size() + 2 : 0);
+            return (AdminLogFilterAlert.this.isMegagroup ? 11 : 8) + (AdminLogFilterAlert.this.currentAdmins != null ? AdminLogFilterAlert.this.currentAdmins.size() + 2 : 0);
         }
 
         public int getItemViewType(int i) {
@@ -543,6 +552,11 @@ public class AdminLogFilterAlert extends BottomSheet {
                     checkBoxCell.setChecked(z, false);
                 } else if (adapterPosition == AdminLogFilterAlert.this.callsRow) {
                     if (AdminLogFilterAlert.this.currentFilter != null && !AdminLogFilterAlert.this.currentFilter.group_call) {
+                        z = false;
+                    }
+                    checkBoxCell.setChecked(z, false);
+                } else if (adapterPosition == AdminLogFilterAlert.this.invitesRow) {
+                    if (AdminLogFilterAlert.this.currentFilter != null && !AdminLogFilterAlert.this.currentFilter.invites) {
                         z = false;
                     }
                     checkBoxCell.setChecked(z, false);
@@ -636,12 +650,18 @@ public class AdminLogFilterAlert extends BottomSheet {
                         z2 = false;
                     }
                     checkBoxCell.setText(string11, "", z2, false);
-                } else if (i == AdminLogFilterAlert.this.allAdminsRow) {
-                    String string12 = LocaleController.getString("EventLogAllAdmins", NUM);
-                    if (AdminLogFilterAlert.this.selectedAdmins == null) {
+                } else if (i == AdminLogFilterAlert.this.invitesRow) {
+                    String string12 = LocaleController.getString("EventLogFilterInvites", NUM);
+                    if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.invites) {
                         z = true;
                     }
                     checkBoxCell.setText(string12, "", z, true);
+                } else if (i == AdminLogFilterAlert.this.allAdminsRow) {
+                    String string13 = LocaleController.getString("EventLogAllAdmins", NUM);
+                    if (AdminLogFilterAlert.this.selectedAdmins == null) {
+                        z = true;
+                    }
+                    checkBoxCell.setText(string13, "", z, true);
                 }
             } else if (itemViewType == 2) {
                 CheckBoxUserCell checkBoxUserCell = (CheckBoxUserCell) viewHolder.itemView;

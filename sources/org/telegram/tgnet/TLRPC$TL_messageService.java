@@ -26,6 +26,9 @@ public class TLRPC$TL_messageService extends TLRPC$Message {
         }
         this.date = abstractSerializedData.readInt32(z);
         this.action = TLRPC$MessageAction.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        if ((this.flags & 33554432) != 0) {
+            this.ttl_period = abstractSerializedData.readInt32(z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -53,6 +56,8 @@ public class TLRPC$TL_messageService extends TLRPC$Message {
         }
         abstractSerializedData.writeInt32(this.date);
         this.action.serializeToStream(abstractSerializedData);
-        writeAttachPath(abstractSerializedData);
+        if ((this.flags & 33554432) != 0) {
+            abstractSerializedData.writeInt32(this.ttl_period);
+        }
     }
 }

@@ -7,9 +7,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -26,56 +23,123 @@ import org.telegram.ui.ActionBar.Theme;
 public class QRCodeBottomSheet extends BottomSheet {
     private final TextView buttonTextView;
     private final TextView help;
+    RLottieImageView iconImage;
+    int imageSize;
     Bitmap qrCode;
 
-    public QRCodeBottomSheet(Context context, String str) {
-        super(context, false);
-        setTitle(LocaleController.getString("InviteByQRCode", NUM), true);
-        AnonymousClass1 r1 = new ImageView(this, context) {
-            /* access modifiers changed from: protected */
-            public void onMeasure(int i, int i2) {
-                int size = View.MeasureSpec.getSize(i);
-                super.onMeasure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size, NUM));
-            }
-        };
-        int dp = AndroidUtilities.dp(54.0f);
-        r1.setPadding(dp, dp, dp, dp);
-        r1.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        LinearLayout linearLayout = new LinearLayout(context);
-        linearLayout.setOrientation(1);
-        Bitmap createQR = createQR(context, str, this.qrCode);
-        this.qrCode = createQR;
-        r1.setImageBitmap(createQR);
-        FrameLayout frameLayout = new FrameLayout(context);
-        frameLayout.addView(r1);
-        linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 30.0f, 0.0f, 30.0f, 0.0f));
-        TextView textView = new TextView(context);
-        this.help = textView;
-        textView.setTextSize(1, 14.0f);
-        textView.setText(LocaleController.getString("QRCodeLinkHelp", NUM));
-        textView.setGravity(1);
-        frameLayout.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 80, 40.0f, 0.0f, 40.0f, 8.0f));
-        TextView textView2 = new TextView(context);
-        this.buttonTextView = textView2;
-        textView2.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-        textView2.setGravity(17);
-        textView2.setTextSize(1, 14.0f);
-        textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView2.setText(LocaleController.getString("ShareQrCode", NUM));
-        textView2.setOnClickListener(new View.OnClickListener(context) {
-            public final /* synthetic */ Context f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                QRCodeBottomSheet.this.lambda$new$0$QRCodeBottomSheet(this.f$1, view);
-            }
-        });
-        linearLayout.addView(textView2, LayoutHelper.createLinear(-1, 48, 80, 16, 15, 16, 16));
-        updateColors();
-        setCustomView(linearLayout);
+    /* JADX WARNING: Illegal instructions before constructor call */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public QRCodeBottomSheet(android.content.Context r17, java.lang.String r18, java.lang.String r19) {
+        /*
+            r16 = this;
+            r0 = r16
+            r1 = r17
+            r2 = 0
+            r0.<init>(r1, r2)
+            java.lang.String r3 = "InviteByQRCode"
+            r4 = 2131625814(0x7f0e0756, float:1.8878847E38)
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
+            r4 = 1
+            r0.setTitle(r3, r4)
+            org.telegram.ui.Components.QRCodeBottomSheet$1 r3 = new org.telegram.ui.Components.QRCodeBottomSheet$1
+            r3.<init>(r0, r1)
+            android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.FIT_XY
+            r3.setScaleType(r5)
+            android.widget.LinearLayout r5 = new android.widget.LinearLayout
+            r5.<init>(r1)
+            r5.setOrientation(r4)
+            r6 = 1098907648(0x41800000, float:16.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r5.setPadding(r2, r6, r2, r2)
+            android.graphics.Bitmap r6 = r0.qrCode
+            r7 = r18
+            android.graphics.Bitmap r6 = r0.createQR(r1, r7, r6)
+            r0.qrCode = r6
+            r3.setImageBitmap(r6)
+            org.telegram.ui.Components.RLottieImageView r6 = new org.telegram.ui.Components.RLottieImageView
+            r6.<init>(r1)
+            r0.iconImage = r6
+            r7 = -1
+            r6.setBackgroundColor(r7)
+            org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
+            r6.setAutoRepeat(r4)
+            org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
+            r8 = 2131558463(0x7f0d003f, float:1.8742243E38)
+            r9 = 60
+            r6.setAnimation(r8, r9, r9)
+            org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
+            r6.playAnimation()
+            org.telegram.ui.Components.QRCodeBottomSheet$2 r6 = new org.telegram.ui.Components.QRCodeBottomSheet$2
+            r6.<init>(r1, r3)
+            r8 = -1082130432(0xffffffffbvar_, float:-1.0)
+            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8)
+            r6.addView(r3, r7)
+            org.telegram.ui.Components.RLottieImageView r3 = r0.iconImage
+            r7 = 17
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r7)
+            r6.addView(r3, r8)
+            r9 = 220(0xdc, float:3.08E-43)
+            r10 = 220(0xdc, float:3.08E-43)
+            r11 = 1
+            r12 = 30
+            r13 = 0
+            r14 = 30
+            r15 = 0
+            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14, (int) r15)
+            r5.addView(r6, r3)
+            android.widget.TextView r3 = new android.widget.TextView
+            r3.<init>(r1)
+            r0.help = r3
+            r6 = 1096810496(0x41600000, float:14.0)
+            r3.setTextSize(r4, r6)
+            r8 = r19
+            r3.setText(r8)
+            r3.setGravity(r4)
+            r8 = -1
+            r9 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r10 = 0
+            r11 = 1109393408(0x42200000, float:40.0)
+            r12 = 1090519040(0x41000000, float:8.0)
+            r13 = 1109393408(0x42200000, float:40.0)
+            r14 = 1090519040(0x41000000, float:8.0)
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r10, r11, r12, r13, r14)
+            r5.addView(r3, r8)
+            android.widget.TextView r3 = new android.widget.TextView
+            r3.<init>(r1)
+            r0.buttonTextView = r3
+            r8 = 1107820544(0x42080000, float:34.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r3.setPadding(r9, r2, r8, r2)
+            r3.setGravity(r7)
+            r3.setTextSize(r4, r6)
+            java.lang.String r2 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
+            r3.setTypeface(r2)
+            java.lang.String r2 = "ShareQrCode"
+            r4 = 2131627376(0x7f0e0d70, float:1.8882015E38)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r4)
+            r3.setText(r2)
+            org.telegram.ui.Components.-$$Lambda$QRCodeBottomSheet$2sIpc-sdD8tZ_UiJm7HWacIETqc r2 = new org.telegram.ui.Components.-$$Lambda$QRCodeBottomSheet$2sIpc-sdD8tZ_UiJm7HWacIETqc
+            r2.<init>(r1)
+            r3.setOnClickListener(r2)
+            r6 = -1
+            r7 = 48
+            r8 = 80
+            r9 = 16
+            r10 = 15
+            r11 = 16
+            r12 = 16
+            android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r6, (int) r7, (int) r8, (int) r9, (int) r10, (int) r11, (int) r12)
+            r5.addView(r3, r2)
+            r16.updateColors()
+            android.widget.ScrollView r2 = new android.widget.ScrollView
+            r2.<init>(r1)
+            r2.addView(r5)
+            r0.setCustomView(r2)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.QRCodeBottomSheet.<init>(android.content.Context, java.lang.String, java.lang.String):void");
     }
 
     /* access modifiers changed from: private */
@@ -101,7 +165,10 @@ public class QRCodeBottomSheet extends BottomSheet {
             HashMap hashMap = new HashMap();
             hashMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
             hashMap.put(EncodeHintType.MARGIN, 0);
-            return new QRCodeWriter().encode(str, BarcodeFormat.QR_CODE, 768, 768, hashMap, bitmap, context);
+            QRCodeWriter qRCodeWriter = new QRCodeWriter();
+            Bitmap encode = qRCodeWriter.encode(str, BarcodeFormat.QR_CODE, 768, 768, hashMap, bitmap, context);
+            this.imageSize = qRCodeWriter.getImageSize();
+            return encode;
         } catch (Exception e) {
             FileLog.e((Throwable) e);
             return null;
@@ -116,6 +183,7 @@ public class QRCodeBottomSheet extends BottomSheet {
         if (getTitleView() != null) {
             getTitleView().setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         }
+        this.iconImage.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         setBackgroundColor(Theme.getColor("dialogBackground"));
     }
 }

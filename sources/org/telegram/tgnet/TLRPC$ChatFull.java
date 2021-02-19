@@ -34,6 +34,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public int online_count;
     public TLRPC$ChatParticipants participants;
     public int participants_count;
+    public ArrayList<String> pending_suggestions = new ArrayList<>();
     public int pinned_msg_id;
     public int pts;
     public int read_inbox_max_id;
@@ -42,6 +43,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public int slowmode_seconds;
     public int stats_dc;
     public TLRPC$StickerSet stickerset;
+    public int ttl_period;
     public int unread_count;
     public int unread_important_count;
 
@@ -72,11 +74,14 @@ public abstract class TLRPC$ChatFull extends TLObject {
             case -281384243:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer122();
                 break;
+            case -261341160:
+                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                break;
             case -253335766:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer121();
                 break;
             case -213431562:
-                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                tLRPC$ChatFull = new TLRPC$TL_chatFull_layer123();
                 break;
             case -88925533:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_old();
@@ -102,6 +107,9 @@ public abstract class TLRPC$ChatFull extends TLObject {
             case 581055962:
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer98();
                 break;
+            case 625524791:
+                tLRPC$ChatFull = new TLRPC$TL_channelFull();
+                break;
             case 763976820:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer110();
                 break;
@@ -112,7 +120,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer72();
                 break;
             case 2055070967:
-                tLRPC$ChatFull = new TLRPC$TL_channelFull();
+                tLRPC$ChatFull = new TLRPC$TL_channelFull_layer123();
                 break;
             default:
                 tLRPC$ChatFull = null;

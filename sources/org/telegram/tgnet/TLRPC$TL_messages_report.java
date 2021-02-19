@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class TLRPC$TL_messages_report extends TLObject {
     public static int constructor = -NUM;
     public ArrayList<Integer> id = new ArrayList<>();
+    public String message;
     public TLRPC$InputPeer peer;
     public TLRPC$ReportReason reason;
 
@@ -22,5 +23,6 @@ public class TLRPC$TL_messages_report extends TLObject {
             abstractSerializedData.writeInt32(this.id.get(i).intValue());
         }
         this.reason.serializeToStream(abstractSerializedData);
+        abstractSerializedData.writeString(this.message);
     }
 }

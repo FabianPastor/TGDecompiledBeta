@@ -151,7 +151,6 @@ public class SeekBarView extends FrameLayout {
         Drawable drawable;
         Drawable drawable2;
         Drawable drawable3;
-        int i = Build.VERSION.SDK_INT;
         if (motionEvent.getAction() == 0) {
             this.sx = motionEvent.getX();
             this.sy = motionEvent.getY();
@@ -179,7 +178,7 @@ public class SeekBarView extends FrameLayout {
                 if (motionEvent.getAction() == 1) {
                     this.delegate.onSeekBarDrag(true, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.selectorWidth)));
                 }
-                if (i >= 21 && (drawable = this.hoverDrawable) != null) {
+                if (Build.VERSION.SDK_INT >= 21 && (drawable = this.hoverDrawable) != null) {
                     drawable.setState(StateSet.NOTHING);
                 }
                 this.delegate.onSeekBarPressed(false);
@@ -207,7 +206,7 @@ public class SeekBarView extends FrameLayout {
                         this.thumbDX = (int) (motionEvent.getX() - ((float) this.thumbX));
                         this.pressed = true;
                         this.delegate.onSeekBarPressed(true);
-                        if (i >= 21 && (drawable3 = this.hoverDrawable) != null) {
+                        if (Build.VERSION.SDK_INT >= 21 && (drawable3 = this.hoverDrawable) != null) {
                             drawable3.setState(this.pressedState);
                             this.hoverDrawable.setHotspot(motionEvent.getX(), motionEvent.getY());
                         }
@@ -226,7 +225,7 @@ public class SeekBarView extends FrameLayout {
                 if (this.reportChanges) {
                     this.delegate.onSeekBarDrag(false, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.selectorWidth)));
                 }
-                if (i >= 21 && (drawable2 = this.hoverDrawable) != null) {
+                if (Build.VERSION.SDK_INT >= 21 && (drawable2 = this.hoverDrawable) != null) {
                     drawable2.setHotspot(motionEvent.getX(), motionEvent.getY());
                 }
                 invalidate();

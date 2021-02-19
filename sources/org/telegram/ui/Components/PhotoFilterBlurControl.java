@@ -304,7 +304,6 @@ public class PhotoFilterBlurControl extends FrameLayout {
     private void handlePan(int i, MotionEvent motionEvent) {
         float f;
         int i2 = i;
-        int i3 = Build.VERSION.SDK_INT;
         float x = motionEvent.getX();
         float y = motionEvent.getY();
         Point actualCenterPoint = getActualCenterPoint();
@@ -327,17 +326,20 @@ public class PhotoFilterBlurControl extends FrameLayout {
         double sin = Math.sin(degreesToRadians2 + 1.5707963267948966d);
         Double.isNaN(d3);
         float abs = (float) Math.abs(d2 + (d3 * sin));
+        int i3 = 0;
         float f6 = 0.0f;
         if (i2 == 1) {
             this.pointerStartX = motionEvent.getX();
             this.pointerStartY = motionEvent.getY();
-            boolean z = Math.abs(f5 - f4) < BlurInsetProximity;
-            if (z) {
+            if (Math.abs(f5 - f4) < BlurInsetProximity) {
+                i3 = 1;
+            }
+            if (i3 != 0) {
                 f = 0.0f;
             } else {
                 f = BlurViewRadiusInset;
             }
-            if (!z) {
+            if (i3 == 0) {
                 f6 = BlurViewRadiusInset;
             }
             int i4 = this.type;
@@ -385,10 +387,12 @@ public class PhotoFilterBlurControl extends FrameLayout {
                     float f9 = x - this.pointerStartX;
                     float var_ = y - this.pointerStartY;
                     float width = (((float) getWidth()) - this.actualAreaSize.width) / 2.0f;
-                    float var_ = (float) ((i3 < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight);
+                    if (Build.VERSION.SDK_INT >= 21 && !this.inBubbleMode) {
+                        i3 = AndroidUtilities.statusBarHeight;
+                    }
                     Size size3 = this.actualAreaSize;
                     float var_ = size3.height;
-                    Rect rect = new Rect(width, var_ + ((((float) getHeight()) - var_) / 2.0f), size3.width, var_);
+                    Rect rect = new Rect(width, ((float) i3) + ((((float) getHeight()) - var_) / 2.0f), size3.width, var_);
                     float var_ = rect.x;
                     float max = Math.max(var_, Math.min(rect.width + var_, this.startCenterPoint.x + f9));
                     float var_ = rect.y;
@@ -404,10 +408,13 @@ public class PhotoFilterBlurControl extends FrameLayout {
                 } else if (i6 == 4) {
                     float var_ = x - this.pointerStartX;
                     float var_ = y - this.pointerStartY;
-                    boolean z2 = x > actualCenterPoint.x;
-                    boolean z3 = y > actualCenterPoint.y;
-                    boolean z4 = Math.abs(var_) > Math.abs(var_);
-                    this.angle += ((((float) Math.sqrt((double) ((var_ * var_) + (var_ * var_)))) * ((float) ((((z2 || z3 ? !z2 || z3 ? !z2 || !z3 ? !z4 ? var_ >= 0.0f : var_ >= 0.0f : !z4 ? var_ >= 0.0f : var_ <= 0.0f : !z4 ? var_ <= 0.0f : var_ <= 0.0f : !z4 ? var_ <= 0.0f : var_ >= 0.0f) ? 0 : 1) * 2) - 1))) / 3.1415927f) / 1.15f;
+                    boolean z = x > actualCenterPoint.x;
+                    boolean z2 = y > actualCenterPoint.y;
+                    boolean z3 = Math.abs(var_) > Math.abs(var_);
+                    if (z || z2 ? !(!z || z2 ? !z || !z2 ? !z3 ? var_ >= 0.0f : var_ >= 0.0f : !z3 ? var_ >= 0.0f : var_ <= 0.0f : !z3 ? var_ <= 0.0f : var_ <= 0.0f) : !(!z3 ? var_ <= 0.0f : var_ >= 0.0f)) {
+                        i3 = 1;
+                    }
+                    this.angle += ((((float) Math.sqrt((double) ((var_ * var_) + (var_ * var_)))) * ((float) ((i3 * 2) - 1))) / 3.1415927f) / 1.15f;
                     this.pointerStartX = x;
                     this.pointerStartY = y;
                 }
@@ -417,10 +424,12 @@ public class PhotoFilterBlurControl extends FrameLayout {
                     float var_ = x - this.pointerStartX;
                     float var_ = y - this.pointerStartY;
                     float width2 = (((float) getWidth()) - this.actualAreaSize.width) / 2.0f;
-                    float var_ = (float) ((i3 < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight);
+                    if (Build.VERSION.SDK_INT >= 21 && !this.inBubbleMode) {
+                        i3 = AndroidUtilities.statusBarHeight;
+                    }
                     Size size5 = this.actualAreaSize;
                     float var_ = size5.height;
-                    Rect rect2 = new Rect(width2, var_ + ((((float) getHeight()) - var_) / 2.0f), size5.width, var_);
+                    Rect rect2 = new Rect(width2, ((float) i3) + ((((float) getHeight()) - var_) / 2.0f), size5.width, var_);
                     float var_ = rect2.x;
                     float max2 = Math.max(var_, Math.min(rect2.width + var_, this.startCenterPoint.x + var_));
                     float var_ = rect2.y;

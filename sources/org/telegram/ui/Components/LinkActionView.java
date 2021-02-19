@@ -47,13 +47,15 @@ public class LinkActionView extends LinearLayout {
     /* access modifiers changed from: private */
     public ActionBarPopupWindow actionBarPopupWindow;
     private final AvatarsContainer avatarsContainer;
+    private boolean canEdit = true;
     /* access modifiers changed from: private */
     public final TextView copyView;
     private Delegate delegate;
     BaseFragment fragment;
     /* access modifiers changed from: private */
     public final FrameLayout frameLayout;
-    private boolean isPublic;
+    private boolean hideRevokeOption;
+    private boolean isChannel;
     String link;
     TextView linkView;
     boolean loadingImporters;
@@ -93,11 +95,12 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public LinkActionView(Context context, BaseFragment baseFragment, BottomSheet bottomSheet, int i, boolean z) {
+    public LinkActionView(Context context, BaseFragment baseFragment, BottomSheet bottomSheet, int i, boolean z, boolean z2) {
         super(context);
         Context context2 = context;
         BaseFragment baseFragment2 = baseFragment;
         this.fragment = baseFragment2;
+        this.isChannel = z2;
         setOrientation(1);
         FrameLayout frameLayout2 = new FrameLayout(context2);
         this.frameLayout = frameLayout2;
@@ -120,27 +123,28 @@ public class LinkActionView extends LinearLayout {
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
         spannableStringBuilder.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context2, NUM)), 0, 1, 0);
         spannableStringBuilder.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8.0f)), 1, 2, 0);
-        spannableStringBuilder.append(LocaleController.getString("CopyLink", NUM));
+        spannableStringBuilder.append(LocaleController.getString("LinkActionCopy", NUM));
         spannableStringBuilder.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5.0f)), spannableStringBuilder.length() - 1, spannableStringBuilder.length(), 0);
         textView2.setText(spannableStringBuilder);
         textView2.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
         textView2.setTextSize(1, 14.0f);
         textView2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView2.setLines(1);
+        textView2.setSingleLine(true);
         linearLayout.addView(textView2, LayoutHelper.createLinear(0, 40, 1.0f, 0, 4, 0, 4, 0));
         TextView textView3 = new TextView(context2);
         this.shareView = textView3;
         textView3.setGravity(1);
         SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder();
         spannableStringBuilder2.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context2, NUM)), 0, 1, 0);
+        FrameLayout frameLayout3 = frameLayout2;
         spannableStringBuilder2.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8.0f)), 1, 2, 0);
-        spannableStringBuilder2.append(LocaleController.getString("ShareLink", NUM));
+        spannableStringBuilder2.append(LocaleController.getString("LinkActionCopy", NUM));
         spannableStringBuilder2.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5.0f)), spannableStringBuilder2.length() - 1, spannableStringBuilder2.length(), 0);
         textView3.setText(spannableStringBuilder2);
         textView3.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
         textView3.setTextSize(1, 14.0f);
         textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView3.setLines(1);
+        textView3.setSingleLine(true);
         linearLayout.addView(textView3, LayoutHelper.createLinear(0, 40, 1.0f, 4, 0, 4, 0));
         TextView textView4 = new TextView(context2);
         this.removeView = textView4;
@@ -154,7 +158,7 @@ public class LinkActionView extends LinearLayout {
         textView4.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
         textView4.setTextSize(1, 14.0f);
         textView4.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        textView4.setLines(1);
+        textView4.setSingleLine(true);
         linearLayout.addView(textView4, LayoutHelper.createLinear(0, -2, 1.0f, 4, 0, 4, 0));
         textView4.setVisibility(8);
         addView(linearLayout, LayoutHelper.createLinear(-1, -2, 0.0f, 20.0f, 0.0f, 0.0f));
@@ -217,10 +221,10 @@ public class LinkActionView extends LinearLayout {
             }
 
             public final void onClick(View view) {
-                LinkActionView.this.lambda$new$8$LinkActionView(this.f$1, this.f$2, this.f$3, this.f$4, view);
+                LinkActionView.this.lambda$new$9$LinkActionView(this.f$1, this.f$2, this.f$3, this.f$4, view);
             }
         });
-        frameLayout2.setOnClickListener(new View.OnClickListener() {
+        frameLayout3.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 LinkActionView.this.copyView.callOnClick();
             }
@@ -291,14 +295,12 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$8 */
-    public /* synthetic */ void lambda$new$8$LinkActionView(Context context, boolean z, BottomSheet bottomSheet, BaseFragment baseFragment, View view) {
+    /* renamed from: lambda$new$9 */
+    public /* synthetic */ void lambda$new$9$LinkActionView(Context context, boolean z, BottomSheet bottomSheet, BaseFragment baseFragment, View view) {
         final FrameLayout frameLayout2;
-        if (this.isPublic) {
-            showQrCode();
-        } else if (this.actionBarPopupWindow == null) {
+        if (this.actionBarPopupWindow == null) {
             ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(context);
-            if (!z) {
+            if (!z && this.canEdit) {
                 ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(context, true, false);
                 actionBarMenuSubItem.setTextAndIcon(LocaleController.getString("Edit", NUM), NUM);
                 actionBarPopupWindowLayout.addView(actionBarMenuSubItem, LayoutHelper.createLinear(-1, 48));
@@ -308,15 +310,25 @@ public class LinkActionView extends LinearLayout {
                     }
                 });
             }
-            ActionBarMenuSubItem actionBarMenuSubItem2 = new ActionBarMenuSubItem(context, false, true);
-            actionBarMenuSubItem2.setTextAndIcon(LocaleController.getString("RevokeLink", NUM), NUM);
-            actionBarMenuSubItem2.setColors(Theme.getColor("windowBackgroundWhiteRedText"), Theme.getColor("windowBackgroundWhiteRedText"));
+            ActionBarMenuSubItem actionBarMenuSubItem2 = new ActionBarMenuSubItem(context, true, false);
+            actionBarMenuSubItem2.setTextAndIcon(LocaleController.getString("GetQRCode", NUM), NUM);
+            actionBarPopupWindowLayout.addView(actionBarMenuSubItem2, LayoutHelper.createLinear(-1, 48));
             actionBarMenuSubItem2.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
                     LinkActionView.this.lambda$null$6$LinkActionView(view);
                 }
             });
-            actionBarPopupWindowLayout.addView(actionBarMenuSubItem2, LayoutHelper.createLinear(-1, 48));
+            if (!this.hideRevokeOption) {
+                ActionBarMenuSubItem actionBarMenuSubItem3 = new ActionBarMenuSubItem(context, false, true);
+                actionBarMenuSubItem3.setTextAndIcon(LocaleController.getString("RevokeLink", NUM), NUM);
+                actionBarMenuSubItem3.setColors(Theme.getColor("windowBackgroundWhiteRedText"), Theme.getColor("windowBackgroundWhiteRedText"));
+                actionBarMenuSubItem3.setOnClickListener(new View.OnClickListener() {
+                    public final void onClick(View view) {
+                        LinkActionView.this.lambda$null$7$LinkActionView(view);
+                    }
+                });
+                actionBarPopupWindowLayout.addView(actionBarMenuSubItem3, LayoutHelper.createLinear(-1, 48));
+            }
             if (bottomSheet == null) {
                 frameLayout2 = baseFragment.getParentLayout();
             } else {
@@ -369,7 +381,7 @@ public class LinkActionView extends LinearLayout {
                 this.actionBarPopupWindow.getContentView().setFocusableInTouchMode(true);
                 actionBarPopupWindowLayout.setDispatchKeyEventListener(new ActionBarPopupWindow.OnDispatchKeyEventListener() {
                     public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-                        LinkActionView.this.lambda$null$7$LinkActionView(keyEvent);
+                        LinkActionView.this.lambda$null$8$LinkActionView(keyEvent);
                     }
                 });
                 if (AndroidUtilities.isTablet()) {
@@ -394,6 +406,12 @@ public class LinkActionView extends LinearLayout {
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$6 */
     public /* synthetic */ void lambda$null$6$LinkActionView(View view) {
+        showQrCode();
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$7 */
+    public /* synthetic */ void lambda$null$7$LinkActionView(View view) {
         revokeLink();
         ActionBarPopupWindow actionBarPopupWindow2 = this.actionBarPopupWindow;
         if (actionBarPopupWindow2 != null) {
@@ -402,8 +420,8 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$LinkActionView(KeyEvent keyEvent) {
+    /* renamed from: lambda$null$8 */
+    public /* synthetic */ void lambda$null$8$LinkActionView(KeyEvent keyEvent) {
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && this.actionBarPopupWindow.isShowing()) {
             this.actionBarPopupWindow.dismiss(true);
         }
@@ -432,7 +450,18 @@ public class LinkActionView extends LinearLayout {
     }
 
     private void showQrCode() {
-        AnonymousClass4 r0 = new QRCodeBottomSheet(getContext(), this.link) {
+        String str;
+        int i;
+        Context context = getContext();
+        String str2 = this.link;
+        if (this.isChannel) {
+            i = NUM;
+            str = "QRCodeLinkHelpChannel";
+        } else {
+            i = NUM;
+            str = "QRCodeLinkHelpGroup";
+        }
+        AnonymousClass4 r0 = new QRCodeBottomSheet(context, str2, LocaleController.getString(str, i)) {
             public void dismiss() {
                 super.dismiss();
                 QRCodeBottomSheet unused = LinkActionView.this.qrCodeBottomSheet = null;
@@ -452,7 +481,7 @@ public class LinkActionView extends LinearLayout {
         this.removeView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         this.copyView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
         this.shareView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
-        this.removeView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("chat_attachAudioBackground"), Theme.getColor("featuredStickers_addButtonPressed")));
+        this.removeView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("chat_attachAudioBackground"), ColorUtils.setAlphaComponent(Theme.getColor("windowBackgroundWhite"), 120)));
         this.frameLayout.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("graySection"), ColorUtils.setAlphaComponent(Theme.getColor("listSelectorSDK21"), 76)));
         this.linkView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.optionsView.setColorFilter(Theme.getColor("dialogTextGray3"));
@@ -489,22 +518,12 @@ public class LinkActionView extends LinearLayout {
         this.removeView.setVisibility(8);
     }
 
-    public void showOptions(boolean z) {
-        this.optionsView.setVisibility(z ? 0 : 8);
-    }
-
-    public void setPublic(boolean z) {
-        if (this.isPublic != z) {
-            this.isPublic = z;
-            if (z) {
-                this.optionsView.setVisibility(8);
-                ImageView imageView = this.optionsView;
-                imageView.setImageDrawable(ContextCompat.getDrawable(imageView.getContext(), NUM));
-                return;
-            }
+    public void showRevokeOption(boolean z) {
+        if (this.hideRevokeOption != z) {
+            this.hideRevokeOption = z;
             this.optionsView.setVisibility(0);
-            ImageView imageView2 = this.optionsView;
-            imageView2.setImageDrawable(ContextCompat.getDrawable(imageView2.getContext(), NUM));
+            ImageView imageView = this.optionsView;
+            imageView.setImageDrawable(ContextCompat.getDrawable(imageView.getContext(), NUM));
         }
     }
 
@@ -541,16 +560,16 @@ public class LinkActionView extends LinearLayout {
         builder.setTitle(LocaleController.getString("RevokeLink", NUM));
         builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                LinkActionView.this.lambda$revokeLink$9$LinkActionView(dialogInterface, i);
+                LinkActionView.this.lambda$revokeLink$10$LinkActionView(dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-        this.fragment.showDialog(builder.create());
+        builder.show();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$revokeLink$9 */
-    public /* synthetic */ void lambda$revokeLink$9$LinkActionView(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$revokeLink$10 */
+    public /* synthetic */ void lambda$revokeLink$10$LinkActionView(DialogInterface dialogInterface, int i) {
         Delegate delegate2 = this.delegate;
         if (delegate2 != null) {
             delegate2.revokeLink();
@@ -606,15 +625,15 @@ public class LinkActionView extends LinearLayout {
                 }
 
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    LinkActionView.this.lambda$loadUsers$11$LinkActionView(this.f$1, tLObject, tLRPC$TL_error);
+                    LinkActionView.this.lambda$loadUsers$12$LinkActionView(this.f$1, tLObject, tLRPC$TL_error);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadUsers$11 */
-    public /* synthetic */ void lambda$loadUsers$11$LinkActionView(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$loadUsers$12 */
+    public /* synthetic */ void lambda$loadUsers$12$LinkActionView(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, tLRPC$TL_chatInviteExported) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -627,14 +646,14 @@ public class LinkActionView extends LinearLayout {
             }
 
             public final void run() {
-                LinkActionView.this.lambda$null$10$LinkActionView(this.f$1, this.f$2, this.f$3);
+                LinkActionView.this.lambda$null$11$LinkActionView(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$LinkActionView(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
+    /* renamed from: lambda$null$11 */
+    public /* synthetic */ void lambda$null$11$LinkActionView(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
         this.loadingImporters = false;
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_chatInviteImporters tLRPC$TL_messages_chatInviteImporters = (TLRPC$TL_messages_chatInviteImporters) tLObject;
@@ -647,5 +666,9 @@ public class LinkActionView extends LinearLayout {
             }
             setUsers(tLRPC$TL_chatInviteExported.usage, tLRPC$TL_chatInviteExported.importers);
         }
+    }
+
+    public void setCanEdit(boolean z) {
+        this.canEdit = z;
     }
 }

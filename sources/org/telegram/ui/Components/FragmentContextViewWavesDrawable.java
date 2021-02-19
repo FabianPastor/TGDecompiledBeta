@@ -146,9 +146,11 @@ public class FragmentContextViewWavesDrawable {
                     LineBlobDrawable lineBlobDrawable4 = this.lineBlobDrawable2;
                     float var_ = this.amplitude;
                     lineBlobDrawable4.maxRadius = ((float) AndroidUtilities.dp(3.0f)) + (((float) AndroidUtilities.dp(9.0f)) * var_);
-                    this.lineBlobDrawable.update(var_, 0.3f);
-                    this.lineBlobDrawable1.update(this.amplitude, 0.7f);
-                    this.lineBlobDrawable2.update(this.amplitude, 0.7f);
+                    if (i2 == 1) {
+                        this.lineBlobDrawable.update(var_, 0.3f);
+                        this.lineBlobDrawable1.update(this.amplitude, 0.7f);
+                        this.lineBlobDrawable2.update(this.amplitude, 0.7f);
+                    }
                     this.paint.setAlpha((int) (76.0f * var_));
                     float dp = ((float) AndroidUtilities.dp(6.0f)) * this.amplitude2;
                     float dp2 = ((float) AndroidUtilities.dp(6.0f)) * this.amplitude2;

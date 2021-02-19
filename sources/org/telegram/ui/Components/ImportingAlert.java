@@ -138,7 +138,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             int r10 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             r6.setTextColor(r10)
             java.lang.String r10 = "ImportImportingTitle"
-            r11 = 2131625705(0x7f0e06e9, float:1.8878625E38)
+            r11 = 2131625772(0x7f0e072c, float:1.8878761E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
             r6.setText(r10)
             r6.setSingleLine(r8)
@@ -157,7 +157,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             r10 = 1123024896(0x42var_, float:120.0)
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r12 = 2131558443(0x7f0d002b, float:1.8742202E38)
+            r12 = 2131558448(0x7f0d0030, float:1.8742212E38)
             java.lang.String r13 = "NUM"
             r16 = 0
             r17 = 0
@@ -170,7 +170,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             r0.imageView = r6
             r6.setAutoRepeat(r8)
             org.telegram.ui.Components.RLottieImageView r6 = r0.imageView
-            r10 = 2131558444(0x7f0d002c, float:1.8742204E38)
+            r10 = 2131558449(0x7f0d0031, float:1.8742214E38)
             r11 = 120(0x78, float:1.68E-43)
             r6.setAnimation(r10, r11, r11)
             org.telegram.ui.Components.RLottieImageView r6 = r0.imageView
@@ -252,7 +252,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             r6.setBackground(r10)
             org.telegram.ui.Components.ImportingAlert$BottomSheetCell r6 = r0.cell
             java.lang.String r10 = "ImportDone"
-            r11 = 2131625690(0x7f0e06da, float:1.8878595E38)
+            r11 = 2131625757(0x7f0e071d, float:1.887873E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
             r6.setText(r10)
             org.telegram.ui.Components.ImportingAlert$BottomSheetCell r6 = r0.cell
@@ -339,13 +339,13 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             if (r6 != 0) goto L_0x0269
             android.widget.TextView[] r10 = r0.infoTextView
             r10 = r10[r6]
-            r11 = 2131625704(0x7f0e06e8, float:1.8878623E38)
+            r11 = 2131625771(0x7f0e072b, float:1.887876E38)
             java.lang.String r12 = "ImportImportingInfo"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r10.setText(r11)
             android.widget.TextView[] r10 = r0.importCountTextView
             r10 = r10[r6]
-            r11 = 2131625689(0x7f0e06d9, float:1.8878593E38)
+            r11 = 2131625756(0x7f0e071c, float:1.8878729E38)
             java.lang.Object[] r12 = new java.lang.Object[r3]
             long r13 = r4.getUploadedCount()
             java.lang.String r13 = org.telegram.messenger.AndroidUtilities.formatFileSize(r13)
@@ -360,13 +360,13 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
         L_0x0269:
             android.widget.TextView[] r10 = r0.infoTextView
             r10 = r10[r6]
-            r11 = 2131625691(0x7f0e06db, float:1.8878597E38)
+            r11 = 2131625758(0x7f0e071e, float:1.8878733E38)
             java.lang.String r12 = "ImportDoneInfo"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r10.setText(r11)
             android.widget.TextView[] r10 = r0.importCountTextView
             r10 = r10[r6]
-            r11 = 2131625692(0x7f0e06dc, float:1.88786E38)
+            r11 = 2131625759(0x7f0e071f, float:1.8878735E38)
             java.lang.String r12 = "ImportDoneTitle"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r10.setText(r11)

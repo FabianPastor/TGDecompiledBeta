@@ -1,5 +1,8 @@
 package org.telegram.ui.Components;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -12,6 +15,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Property;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -123,7 +127,7 @@ public final class Bulletin {
     public static void hide(FrameLayout frameLayout, boolean z) {
         Bulletin find = find(frameLayout);
         if (find != null) {
-            find.hide(z && isTransitionsEnabled());
+            find.hide(z && isTransitionsEnabled(), 0);
         }
     }
 
@@ -228,7 +232,7 @@ public final class Bulletin {
 
                     public void onViewDetachedFromWindow(View view) {
                         Bulletin.this.layout.removeOnAttachStateChangeListener(this);
-                        Bulletin.this.hide(false);
+                        Bulletin.this.hide(false, 0);
                     }
                 });
                 this.containerLayout.addView(this.parentLayout);
@@ -259,10 +263,14 @@ public final class Bulletin {
     }
 
     public void hide() {
-        hide(isTransitionsEnabled());
+        hide(isTransitionsEnabled(), 0);
     }
 
-    public void hide(boolean z) {
+    public void hide(long j) {
+        hide(isTransitionsEnabled(), j);
+    }
+
+    public void hide(boolean z, long j) {
         if (this.showing) {
             this.showing = false;
             if (visibleBulletin == this) {
@@ -277,7 +285,13 @@ public final class Bulletin {
                     layout2.transitionRunning = true;
                     layout2.delegate = this.currentDelegate;
                     layout2.invalidate();
-                    ensureLayoutTransitionCreated();
+                    if (j >= 0) {
+                        Layout.DefaultTransition defaultTransition = new Layout.DefaultTransition();
+                        defaultTransition.duration = j;
+                        this.layoutTransition = defaultTransition;
+                    } else {
+                        ensureLayoutTransitionCreated();
+                    }
                     Layout.Transition transition = this.layoutTransition;
                     Layout layout3 = this.layout;
                     layout3.getClass();
@@ -336,6 +350,10 @@ public final class Bulletin {
         if (delegate != null) {
             delegate.onOffsetChange(((float) this.layout.getHeight()) - f.floatValue());
         }
+    }
+
+    public boolean isShowing() {
+        return this.showing;
     }
 
     /* access modifiers changed from: private */
@@ -713,6 +731,15 @@ public final class Bulletin {
                     layout.setInOutOffset(f);
                 }
             };
+            public static final Property<Layout, Float> IN_OUT_OFFSET_Y2 = new AnimationProperties.FloatProperty<Layout>("offsetY") {
+                public Float get(Layout layout) {
+                    return Float.valueOf(layout.inOutOffset);
+                }
+
+                public void setValue(Layout layout, float f) {
+                    layout.setInOutOffset(f);
+                }
+            };
             Drawable background;
             protected Bulletin bulletin;
             private final List<Callback> callbacks;
@@ -760,18 +787,6 @@ public final class Bulletin {
                 updateSize();
                 setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
                 setWillNotDraw(false);
-            }
-
-            static {
-                new AnimationProperties.FloatProperty<Layout>("offsetY") {
-                    public Float get(Layout layout) {
-                        return Float.valueOf(layout.inOutOffset);
-                    }
-
-                    public void setValue(Layout layout, float f) {
-                        layout.setInOutOffset(f);
-                    }
-                };
             }
 
             /* access modifiers changed from: protected */
@@ -930,25 +945,44 @@ public final class Bulletin {
                 return new SpringTransition();
             }
 
-            public static class SpringTransition implements Transition {
-                public void animateEnter(Layout layout, Runnable runnable, Runnable runnable2, Consumer<Float> consumer, int i) {
+            public static class DefaultTransition implements Transition {
+                long duration = 255;
+
+                public void animateEnter(Layout layout, final Runnable runnable, final Runnable runnable2, Consumer<Float> consumer, int i) {
                     layout.setInOutOffset((float) layout.getMeasuredHeight());
                     if (consumer != null) {
                         consumer.accept(Float.valueOf(layout.getTranslationY()));
                     }
-                    SpringAnimation springAnimation = new SpringAnimation(layout, Layout.IN_OUT_OFFSET_Y, 0.0f);
-                    springAnimation.getSpring().setDampingRatio(0.8f);
-                    springAnimation.getSpring().setStiffness(400.0f);
-                    if (runnable2 != null) {
-                        springAnimation.addEndListener(
+                    ObjectAnimator ofFloat = ObjectAnimator.ofFloat(layout, Layout.IN_OUT_OFFSET_Y2, new float[]{0.0f});
+                    ofFloat.setDuration(this.duration);
+                    ofFloat.setInterpolator(Easings.easeOutQuad);
+                    if (!(runnable == null && runnable2 == null)) {
+                        ofFloat.addListener(new AnimatorListenerAdapter(this) {
+                            public void onAnimationStart(Animator animator) {
+                                Runnable runnable = runnable;
+                                if (runnable != null) {
+                                    runnable.run();
+                                }
+                            }
+
+                            public void onAnimationEnd(Animator animator) {
+                                Runnable runnable = runnable2;
+                                if (runnable != null) {
+                                    runnable.run();
+                                }
+                            }
+                        });
+                    }
+                    if (consumer != null) {
+                        ofFloat.addUpdateListener(
                         /*  JADX ERROR: Method code generation error
-                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0037: INVOKE  
-                              (r7v3 'springAnimation' androidx.dynamicanimation.animation.SpringAnimation)
-                              (wrap: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw : 0x0034: CONSTRUCTOR  (r0v3 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw) = 
-                              (r3v0 'layout' org.telegram.ui.Components.Bulletin$Layout)
-                              (r5v0 'runnable2' java.lang.Runnable)
-                             call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw.<init>(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable):void type: CONSTRUCTOR)
-                             androidx.dynamicanimation.animation.DynamicAnimation.addEndListener(androidx.dynamicanimation.animation.DynamicAnimation$OnAnimationEndListener):androidx.dynamicanimation.animation.DynamicAnimation type: VIRTUAL in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
+                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x003f: INVOKE  
+                              (r8v4 'ofFloat' android.animation.ObjectAnimator)
+                              (wrap: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$A0CEx-wYn1rX0vZEUnXvSh66axQ : 0x003c: CONSTRUCTOR  (r5v1 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$A0CEx-wYn1rX0vZEUnXvSh66axQ) = 
+                              (r7v0 'consumer' androidx.core.util.Consumer<java.lang.Float>)
+                              (r4v0 'layout' org.telegram.ui.Components.Bulletin$Layout)
+                             call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$A0CEx-wYn1rX0vZEUnXvSh66axQ.<init>(androidx.core.util.Consumer, org.telegram.ui.Components.Bulletin$Layout):void type: CONSTRUCTOR)
+                             android.animation.ObjectAnimator.addUpdateListener(android.animation.ValueAnimator$AnimatorUpdateListener):void type: VIRTUAL in method: org.telegram.ui.Components.Bulletin.Layout.DefaultTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -1014,10 +1048,10 @@ public final class Bulletin {
                             	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                             	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0034: CONSTRUCTOR  (r0v3 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw) = 
-                              (r3v0 'layout' org.telegram.ui.Components.Bulletin$Layout)
-                              (r5v0 'runnable2' java.lang.Runnable)
-                             call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw.<init>(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
+                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x003c: CONSTRUCTOR  (r5v1 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$A0CEx-wYn1rX0vZEUnXvSh66axQ) = 
+                              (r7v0 'consumer' androidx.core.util.Consumer<java.lang.Float>)
+                              (r4v0 'layout' org.telegram.ui.Components.Bulletin$Layout)
+                             call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$A0CEx-wYn1rX0vZEUnXvSh66axQ.<init>(androidx.core.util.Consumer, org.telegram.ui.Components.Bulletin$Layout):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Bulletin.Layout.DefaultTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1026,7 +1060,7 @@ public final class Bulletin {
                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                             	... 64 more
-                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw, state: NOT_LOADED
+                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$A0CEx-wYn1rX0vZEUnXvSh66axQ, state: NOT_LOADED
                             	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                             	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -1035,61 +1069,74 @@ public final class Bulletin {
                             */
                         /*
                             this = this;
-                            int r7 = r3.getMeasuredHeight()
-                            float r7 = (float) r7
-                            r3.setInOutOffset(r7)
-                            if (r6 == 0) goto L_0x0015
-                            float r7 = r3.getTranslationY()
-                            java.lang.Float r7 = java.lang.Float.valueOf(r7)
-                            r6.accept(r7)
+                            int r8 = r4.getMeasuredHeight()
+                            float r8 = (float) r8
+                            r4.setInOutOffset(r8)
+                            if (r7 == 0) goto L_0x0015
+                            float r8 = r4.getTranslationY()
+                            java.lang.Float r8 = java.lang.Float.valueOf(r8)
+                            r7.accept(r8)
                         L_0x0015:
-                            androidx.dynamicanimation.animation.SpringAnimation r7 = new androidx.dynamicanimation.animation.SpringAnimation
-                            androidx.dynamicanimation.animation.FloatPropertyCompat<org.telegram.ui.Components.Bulletin$Layout> r0 = org.telegram.ui.Components.Bulletin.Layout.IN_OUT_OFFSET_Y
+                            android.util.Property<org.telegram.ui.Components.Bulletin$Layout, java.lang.Float> r8 = org.telegram.ui.Components.Bulletin.Layout.IN_OUT_OFFSET_Y2
+                            r0 = 1
+                            float[] r0 = new float[r0]
                             r1 = 0
-                            r7.<init>(r3, r0, r1)
-                            androidx.dynamicanimation.animation.SpringForce r0 = r7.getSpring()
-                            r1 = 1061997773(0x3f4ccccd, float:0.8)
-                            r0.setDampingRatio(r1)
-                            androidx.dynamicanimation.animation.SpringForce r0 = r7.getSpring()
-                            r1 = 1137180672(0x43CLASSNAME, float:400.0)
-                            r0.setStiffness(r1)
-                            if (r5 == 0) goto L_0x003a
-                            org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw r0 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw
-                            r0.<init>(r3, r5)
-                            r7.addEndListener(r0)
-                        L_0x003a:
-                            if (r6 == 0) goto L_0x0044
-                            org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$HB-DLkVbAMzVF4W_tAjCIwsxtGw r5 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$HB-DLkVbAMzVF4W_tAjCIwsxtGw
-                            r5.<init>(r6, r3)
-                            r7.addUpdateListener(r5)
-                        L_0x0044:
-                            r7.start()
-                            if (r4 == 0) goto L_0x004c
-                            r4.run()
-                        L_0x004c:
+                            r2 = 0
+                            r0[r1] = r2
+                            android.animation.ObjectAnimator r8 = android.animation.ObjectAnimator.ofFloat(r4, r8, r0)
+                            long r0 = r3.duration
+                            r8.setDuration(r0)
+                            android.view.animation.Interpolator r0 = org.telegram.ui.Components.Easings.easeOutQuad
+                            r8.setInterpolator(r0)
+                            if (r5 != 0) goto L_0x0030
+                            if (r6 == 0) goto L_0x0038
+                        L_0x0030:
+                            org.telegram.ui.Components.Bulletin$Layout$DefaultTransition$1 r0 = new org.telegram.ui.Components.Bulletin$Layout$DefaultTransition$1
+                            r0.<init>(r3, r5, r6)
+                            r8.addListener(r0)
+                        L_0x0038:
+                            if (r7 == 0) goto L_0x0042
+                            org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$A0CEx-wYn1rX0vZEUnXvSh66axQ r5 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$A0CEx-wYn1rX0vZEUnXvSh66axQ
+                            r5.<init>(r7, r4)
+                            r8.addUpdateListener(r5)
+                        L_0x0042:
+                            r8.start()
                             return
                         */
-                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void");
+                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Bulletin.Layout.DefaultTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void");
                     }
 
-                    static /* synthetic */ void lambda$animateEnter$0(Layout layout, Runnable runnable, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-                        layout.setInOutOffset(0.0f);
-                        if (!z) {
-                            runnable.run();
+                    public void animateExit(Layout layout, final Runnable runnable, final Runnable runnable2, Consumer<Float> consumer, int i) {
+                        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(layout, Layout.IN_OUT_OFFSET_Y2, new float[]{(float) layout.getHeight()});
+                        ofFloat.setDuration(175);
+                        ofFloat.setInterpolator(Easings.easeInQuad);
+                        if (!(runnable == null && runnable2 == null)) {
+                            ofFloat.addListener(new AnimatorListenerAdapter(this) {
+                                public void onAnimationStart(Animator animator) {
+                                    Runnable runnable = runnable;
+                                    if (runnable != null) {
+                                        runnable.run();
+                                    }
+                                }
+
+                                public void onAnimationEnd(Animator animator) {
+                                    Runnable runnable = runnable2;
+                                    if (runnable != null) {
+                                        runnable.run();
+                                    }
+                                }
+                            });
                         }
-                    }
-
-                    public void animateExit(Layout layout, Runnable runnable, Runnable runnable2, Consumer<Float> consumer, int i) {
-                        SpringAnimation springAnimation = new SpringAnimation(layout, Layout.IN_OUT_OFFSET_Y, (float) layout.getHeight());
-                        springAnimation.getSpring().setDampingRatio(0.8f);
-                        springAnimation.getSpring().setStiffness(400.0f);
-                        if (runnable2 != null) {
-                            springAnimation.addEndListener(
+                        if (consumer != null) {
+                            ofFloat.addUpdateListener(
                             /*  JADX ERROR: Method code generation error
-                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0026: INVOKE  
-                                  (r7v1 'springAnimation' androidx.dynamicanimation.animation.SpringAnimation)
-                                  (wrap: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI : 0x0023: CONSTRUCTOR  (r0v3 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI) = (r5v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI.<init>(java.lang.Runnable):void type: CONSTRUCTOR)
-                                 androidx.dynamicanimation.animation.DynamicAnimation.addEndListener(androidx.dynamicanimation.animation.DynamicAnimation$OnAnimationEndListener):androidx.dynamicanimation.animation.DynamicAnimation type: VIRTUAL in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
+                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x002e: INVOKE  
+                                  (r8v2 'ofFloat' android.animation.ObjectAnimator)
+                                  (wrap: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$x0-bEmqh8bD08OOIq4iDLiXteYI : 0x002b: CONSTRUCTOR  (r5v1 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$x0-bEmqh8bD08OOIq4iDLiXteYI) = 
+                                  (r7v0 'consumer' androidx.core.util.Consumer<java.lang.Float>)
+                                  (r4v0 'layout' org.telegram.ui.Components.Bulletin$Layout)
+                                 call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$x0-bEmqh8bD08OOIq4iDLiXteYI.<init>(androidx.core.util.Consumer, org.telegram.ui.Components.Bulletin$Layout):void type: CONSTRUCTOR)
+                                 android.animation.ObjectAnimator.addUpdateListener(android.animation.ValueAnimator$AnimatorUpdateListener):void type: VIRTUAL in method: org.telegram.ui.Components.Bulletin.Layout.DefaultTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                                 	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -1155,7 +1202,10 @@ public final class Bulletin {
                                 	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                 	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                 	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0023: CONSTRUCTOR  (r0v3 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI) = (r5v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI.<init>(java.lang.Runnable):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
+                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x002b: CONSTRUCTOR  (r5v1 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$x0-bEmqh8bD08OOIq4iDLiXteYI) = 
+                                  (r7v0 'consumer' androidx.core.util.Consumer<java.lang.Float>)
+                                  (r4v0 'layout' org.telegram.ui.Components.Bulletin$Layout)
+                                 call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$x0-bEmqh8bD08OOIq4iDLiXteYI.<init>(androidx.core.util.Consumer, org.telegram.ui.Components.Bulletin$Layout):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Bulletin.Layout.DefaultTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                 	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1164,7 +1214,7 @@ public final class Bulletin {
                                 	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                 	... 64 more
-                                Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI, state: NOT_LOADED
+                                Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$x0-bEmqh8bD08OOIq4iDLiXteYI, state: NOT_LOADED
                                 	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                 	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                 	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -1173,382 +1223,656 @@ public final class Bulletin {
                                 */
                             /*
                                 this = this;
-                                androidx.dynamicanimation.animation.SpringAnimation r7 = new androidx.dynamicanimation.animation.SpringAnimation
-                                androidx.dynamicanimation.animation.FloatPropertyCompat<org.telegram.ui.Components.Bulletin$Layout> r0 = org.telegram.ui.Components.Bulletin.Layout.IN_OUT_OFFSET_Y
-                                int r1 = r3.getHeight()
+                                android.util.Property<org.telegram.ui.Components.Bulletin$Layout, java.lang.Float> r8 = org.telegram.ui.Components.Bulletin.Layout.IN_OUT_OFFSET_Y2
+                                r0 = 1
+                                float[] r0 = new float[r0]
+                                int r1 = r4.getHeight()
                                 float r1 = (float) r1
-                                r7.<init>(r3, r0, r1)
-                                androidx.dynamicanimation.animation.SpringForce r0 = r7.getSpring()
-                                r1 = 1061997773(0x3f4ccccd, float:0.8)
-                                r0.setDampingRatio(r1)
-                                androidx.dynamicanimation.animation.SpringForce r0 = r7.getSpring()
-                                r1 = 1137180672(0x43CLASSNAME, float:400.0)
-                                r0.setStiffness(r1)
-                                if (r5 == 0) goto L_0x0029
-                                org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI r0 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI
-                                r0.<init>(r5)
-                                r7.addEndListener(r0)
-                            L_0x0029:
-                                if (r6 == 0) goto L_0x0033
-                                org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$FPrD8PSlb9yjsdgcvdjmlotjRV0 r5 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$FPrD8PSlb9yjsdgcvdjmlotjRV0
-                                r5.<init>(r6, r3)
-                                r7.addUpdateListener(r5)
-                            L_0x0033:
-                                r7.start()
-                                if (r4 == 0) goto L_0x003b
-                                r4.run()
-                            L_0x003b:
+                                r2 = 0
+                                r0[r2] = r1
+                                android.animation.ObjectAnimator r8 = android.animation.ObjectAnimator.ofFloat(r4, r8, r0)
+                                r0 = 175(0xaf, double:8.65E-322)
+                                r8.setDuration(r0)
+                                android.view.animation.Interpolator r0 = org.telegram.ui.Components.Easings.easeInQuad
+                                r8.setInterpolator(r0)
+                                if (r5 != 0) goto L_0x001f
+                                if (r6 == 0) goto L_0x0027
+                            L_0x001f:
+                                org.telegram.ui.Components.Bulletin$Layout$DefaultTransition$2 r0 = new org.telegram.ui.Components.Bulletin$Layout$DefaultTransition$2
+                                r0.<init>(r3, r5, r6)
+                                r8.addListener(r0)
+                            L_0x0027:
+                                if (r7 == 0) goto L_0x0031
+                                org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$x0-bEmqh8bD08OOIq4iDLiXteYI r5 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$DefaultTransition$x0-bEmqh8bD08OOIq4iDLiXteYI
+                                r5.<init>(r7, r4)
+                                r8.addUpdateListener(r5)
+                            L_0x0031:
+                                r8.start()
                                 return
                             */
-                            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void");
+                            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Bulletin.Layout.DefaultTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void");
                         }
+                    }
 
-                        static /* synthetic */ void lambda$animateExit$2(Runnable runnable, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
-                            if (!z) {
-                                runnable.run();
+                    public static class SpringTransition implements Transition {
+                        public void animateEnter(Layout layout, Runnable runnable, Runnable runnable2, Consumer<Float> consumer, int i) {
+                            layout.setInOutOffset((float) layout.getMeasuredHeight());
+                            if (consumer != null) {
+                                consumer.accept(Float.valueOf(layout.getTranslationY()));
                             }
-                        }
-                    }
+                            SpringAnimation springAnimation = new SpringAnimation(layout, Layout.IN_OUT_OFFSET_Y, 0.0f);
+                            springAnimation.getSpring().setDampingRatio(0.8f);
+                            springAnimation.getSpring().setStiffness(400.0f);
+                            if (runnable2 != null) {
+                                springAnimation.addEndListener(
+                                /*  JADX ERROR: Method code generation error
+                                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0037: INVOKE  
+                                      (r7v3 'springAnimation' androidx.dynamicanimation.animation.SpringAnimation)
+                                      (wrap: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw : 0x0034: CONSTRUCTOR  (r0v3 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw) = 
+                                      (r3v0 'layout' org.telegram.ui.Components.Bulletin$Layout)
+                                      (r5v0 'runnable2' java.lang.Runnable)
+                                     call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw.<init>(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable):void type: CONSTRUCTOR)
+                                     androidx.dynamicanimation.animation.DynamicAnimation.addEndListener(androidx.dynamicanimation.animation.DynamicAnimation$OnAnimationEndListener):androidx.dynamicanimation.animation.DynamicAnimation type: VIRTUAL in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                    	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                    	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                    	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                                    	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                                    	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                                    	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                                    	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                                    	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0034: CONSTRUCTOR  (r0v3 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw) = 
+                                      (r3v0 'layout' org.telegram.ui.Components.Bulletin$Layout)
+                                      (r5v0 'runnable2' java.lang.Runnable)
+                                     call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw.<init>(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                    	... 64 more
+                                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw, state: NOT_LOADED
+                                    	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                    	... 70 more
+                                    */
+                                /*
+                                    this = this;
+                                    int r7 = r3.getMeasuredHeight()
+                                    float r7 = (float) r7
+                                    r3.setInOutOffset(r7)
+                                    if (r6 == 0) goto L_0x0015
+                                    float r7 = r3.getTranslationY()
+                                    java.lang.Float r7 = java.lang.Float.valueOf(r7)
+                                    r6.accept(r7)
+                                L_0x0015:
+                                    androidx.dynamicanimation.animation.SpringAnimation r7 = new androidx.dynamicanimation.animation.SpringAnimation
+                                    androidx.dynamicanimation.animation.FloatPropertyCompat<org.telegram.ui.Components.Bulletin$Layout> r0 = org.telegram.ui.Components.Bulletin.Layout.IN_OUT_OFFSET_Y
+                                    r1 = 0
+                                    r7.<init>(r3, r0, r1)
+                                    androidx.dynamicanimation.animation.SpringForce r0 = r7.getSpring()
+                                    r1 = 1061997773(0x3f4ccccd, float:0.8)
+                                    r0.setDampingRatio(r1)
+                                    androidx.dynamicanimation.animation.SpringForce r0 = r7.getSpring()
+                                    r1 = 1137180672(0x43CLASSNAME, float:400.0)
+                                    r0.setStiffness(r1)
+                                    if (r5 == 0) goto L_0x003a
+                                    org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw r0 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ACLASSNAMEsbLq3A__eTV-TtpyxS1icfw
+                                    r0.<init>(r3, r5)
+                                    r7.addEndListener(r0)
+                                L_0x003a:
+                                    if (r6 == 0) goto L_0x0044
+                                    org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$HB-DLkVbAMzVF4W_tAjCIwsxtGw r5 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$HB-DLkVbAMzVF4W_tAjCIwsxtGw
+                                    r5.<init>(r6, r3)
+                                    r7.addUpdateListener(r5)
+                                L_0x0044:
+                                    r7.start()
+                                    if (r4 == 0) goto L_0x004c
+                                    r4.run()
+                                L_0x004c:
+                                    return
+                                */
+                                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateEnter(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void");
+                            }
 
-                    /* access modifiers changed from: private */
-                    public void setInOutOffset(float f) {
-                        this.inOutOffset = f;
-                        updatePosition();
-                    }
-
-                    /* access modifiers changed from: protected */
-                    public void dispatchDraw(Canvas canvas) {
-                        this.background.setBounds(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), getMeasuredWidth() - AndroidUtilities.dp(8.0f), getMeasuredHeight() - AndroidUtilities.dp(8.0f));
-                        if (!this.transitionRunning || this.delegate == null) {
-                            this.background.draw(canvas);
-                            super.dispatchDraw(canvas);
-                            return;
-                        }
-                        int measuredHeight = ((View) getParent()).getMeasuredHeight() - this.delegate.getBottomOffset();
-                        canvas.save();
-                        canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - (((int) (getY() + ((float) getMeasuredHeight()))) - measuredHeight));
-                        this.background.draw(canvas);
-                        super.dispatchDraw(canvas);
-                        canvas.restore();
-                        invalidate();
-                    }
-                }
-
-                @SuppressLint({"ViewConstructor"})
-                public static class ButtonLayout extends Layout {
-                    private Button button;
-                    private int childrenMeasuredWidth;
-
-                    public ButtonLayout(Context context) {
-                        super(context);
-                    }
-
-                    public ButtonLayout(Context context, int i) {
-                        super(context, i);
-                    }
-
-                    /* access modifiers changed from: protected */
-                    public void onMeasure(int i, int i2) {
-                        this.childrenMeasuredWidth = 0;
-                        super.onMeasure(i, i2);
-                        if (this.button != null && View.MeasureSpec.getMode(i) == Integer.MIN_VALUE) {
-                            setMeasuredDimension(this.childrenMeasuredWidth + this.button.getMeasuredWidth(), getMeasuredHeight());
-                        }
-                    }
-
-                    /* access modifiers changed from: protected */
-                    public void measureChildWithMargins(View view, int i, int i2, int i3, int i4) {
-                        Button button2 = this.button;
-                        if (!(button2 == null || view == button2)) {
-                            i2 += button2.getMeasuredWidth() - AndroidUtilities.dp(12.0f);
-                        }
-                        super.measureChildWithMargins(view, i, i2, i3, i4);
-                        if (view != this.button) {
-                            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-                            this.childrenMeasuredWidth = Math.max(this.childrenMeasuredWidth, marginLayoutParams.leftMargin + marginLayoutParams.rightMargin + view.getMeasuredWidth());
-                        }
-                    }
-
-                    public Button getButton() {
-                        return this.button;
-                    }
-
-                    public void setButton(Button button2) {
-                        Button button3 = this.button;
-                        if (button3 != null) {
-                            removeCallback(button3);
-                            removeView(this.button);
-                        }
-                        this.button = button2;
-                        if (button2 != null) {
-                            addCallback(button2);
-                            addView(button2, 0, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388629));
-                        }
-                    }
-                }
-
-                public static class SimpleLayout extends ButtonLayout {
-                    public final ImageView imageView;
-                    public final TextView textView;
-
-                    public SimpleLayout(Context context) {
-                        super(context);
-                        int color = Theme.getColor("undo_infoColor");
-                        ImageView imageView2 = new ImageView(context);
-                        this.imageView = imageView2;
-                        imageView2.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                        addView(imageView2, LayoutHelper.createFrameRelatively(24.0f, 24.0f, 8388627, 16.0f, 12.0f, 16.0f, 12.0f));
-                        TextView textView2 = new TextView(context);
-                        this.textView = textView2;
-                        textView2.setSingleLine();
-                        textView2.setTextColor(color);
-                        textView2.setTypeface(Typeface.SANS_SERIF);
-                        textView2.setTextSize(1, 15.0f);
-                        addView(textView2, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
-                    }
-                }
-
-                @SuppressLint({"ViewConstructor"})
-                public static class TwoLineLayout extends ButtonLayout {
-                    public final BackupImageView imageView;
-                    public final TextView subtitleTextView;
-                    public final TextView titleTextView;
-
-                    public TwoLineLayout(Context context) {
-                        super(context);
-                        int color = Theme.getColor("undo_infoColor");
-                        BackupImageView backupImageView = new BackupImageView(context);
-                        this.imageView = backupImageView;
-                        addView(backupImageView, LayoutHelper.createFrameRelatively(29.0f, 29.0f, 8388627, 12.0f, 12.0f, 12.0f, 12.0f));
-                        LinearLayout linearLayout = new LinearLayout(context);
-                        linearLayout.setOrientation(1);
-                        addView(linearLayout, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 54.0f, 8.0f, 12.0f, 8.0f));
-                        TextView textView = new TextView(context);
-                        this.titleTextView = textView;
-                        textView.setSingleLine();
-                        textView.setTextColor(color);
-                        textView.setTextSize(1, 14.0f);
-                        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                        linearLayout.addView(textView);
-                        TextView textView2 = new TextView(context);
-                        this.subtitleTextView = textView2;
-                        textView2.setMaxLines(2);
-                        textView2.setTextColor(color);
-                        textView2.setTypeface(Typeface.SANS_SERIF);
-                        textView2.setTextSize(1, 13.0f);
-                        linearLayout.addView(textView2);
-                    }
-                }
-
-                public static class TwoLineLottieLayout extends ButtonLayout {
-                    public final RLottieImageView imageView;
-                    public final TextView subtitleTextView;
-                    private final int textColor;
-                    public final TextView titleTextView;
-
-                    public TwoLineLottieLayout(Context context) {
-                        this(context, Theme.getColor("undo_background"), Theme.getColor("undo_infoColor"));
-                    }
-
-                    public TwoLineLottieLayout(Context context, int i, int i2) {
-                        super(context, i);
-                        this.textColor = i2;
-                        RLottieImageView rLottieImageView = new RLottieImageView(context);
-                        this.imageView = rLottieImageView;
-                        rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
-                        addView(rLottieImageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 8388627));
-                        int color = Theme.getColor("undo_infoColor");
-                        LinearLayout linearLayout = new LinearLayout(context);
-                        linearLayout.setOrientation(1);
-                        addView(linearLayout, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 8.0f, 12.0f, 8.0f));
-                        TextView textView = new TextView(context);
-                        this.titleTextView = textView;
-                        textView.setSingleLine();
-                        textView.setTextColor(color);
-                        textView.setTextSize(1, 14.0f);
-                        textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                        linearLayout.addView(textView);
-                        TextView textView2 = new TextView(context);
-                        this.subtitleTextView = textView2;
-                        textView2.setTextColor(color);
-                        textView2.setTypeface(Typeface.SANS_SERIF);
-                        textView2.setTextSize(1, 13.0f);
-                        linearLayout.addView(textView2);
-                    }
-
-                    /* access modifiers changed from: protected */
-                    public void onShow() {
-                        super.onShow();
-                        this.imageView.playAnimation();
-                    }
-
-                    public void setAnimation(int i, int i2, int i3, String... strArr) {
-                        this.imageView.setAnimation(i, i2, i3);
-                        for (String str : strArr) {
-                            RLottieImageView rLottieImageView = this.imageView;
-                            rLottieImageView.setLayerColor(str + ".**", this.textColor);
-                        }
-                    }
-                }
-
-                public static class LottieLayout extends ButtonLayout {
-                    public final RLottieImageView imageView;
-                    private final int textColor;
-                    public final TextView textView;
-
-                    public LottieLayout(Context context) {
-                        this(context, Theme.getColor("undo_background"), Theme.getColor("undo_infoColor"));
-                    }
-
-                    public LottieLayout(Context context, int i, int i2) {
-                        super(context, i);
-                        this.textColor = i2;
-                        RLottieImageView rLottieImageView = new RLottieImageView(context);
-                        this.imageView = rLottieImageView;
-                        rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
-                        addView(rLottieImageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 8388627));
-                        TextView textView2 = new TextView(context);
-                        this.textView = textView2;
-                        textView2.setSingleLine();
-                        textView2.setTextColor(i2);
-                        textView2.setTypeface(Typeface.SANS_SERIF);
-                        textView2.setTextSize(1, 15.0f);
-                        textView2.setEllipsize(TextUtils.TruncateAt.END);
-                        addView(textView2, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
-                    }
-
-                    /* access modifiers changed from: protected */
-                    public void onShow() {
-                        super.onShow();
-                        this.imageView.playAnimation();
-                    }
-
-                    public void setAnimation(int i, String... strArr) {
-                        setAnimation(i, 32, 32, strArr);
-                    }
-
-                    public void setAnimation(int i, int i2, int i3, String... strArr) {
-                        this.imageView.setAnimation(i, i2, i3);
-                        for (String str : strArr) {
-                            RLottieImageView rLottieImageView = this.imageView;
-                            rLottieImageView.setLayerColor(str + ".**", this.textColor);
-                        }
-                    }
-
-                    public void setIconPaddingBottom(int i) {
-                        this.imageView.setLayoutParams(LayoutHelper.createFrameRelatively(56.0f, (float) (48 - i), 8388627, 0.0f, 0.0f, 0.0f, (float) i));
-                    }
-                }
-
-                @SuppressLint({"ViewConstructor"})
-                public static abstract class Button extends FrameLayout implements Layout.Callback {
-                    public void onEnterTransitionEnd(Layout layout) {
-                    }
-
-                    public void onEnterTransitionStart(Layout layout) {
-                    }
-
-                    public void onExitTransitionEnd(Layout layout) {
-                    }
-
-                    public void onExitTransitionStart(Layout layout) {
-                    }
-
-                    public void onHide(Layout layout) {
-                    }
-
-                    public void onShow(Layout layout) {
-                    }
-
-                    public Button(Context context) {
-                        super(context);
-                    }
-                }
-
-                @SuppressLint({"ViewConstructor"})
-                public static final class UndoButton extends Button {
-                    private Bulletin bulletin;
-                    private Runnable delayedAction;
-                    private boolean isUndone;
-                    private Runnable undoAction;
-
-                    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-                    public UndoButton(Context context, boolean z) {
-                        super(context);
-                        int color = Theme.getColor("undo_cancelColor");
-                        if (z) {
-                            TextView textView = new TextView(context);
-                            textView.setOnClickListener(new View.OnClickListener() {
-                                public final void onClick(View view) {
-                                    Bulletin.UndoButton.this.lambda$new$0$Bulletin$UndoButton(view);
+                            static /* synthetic */ void lambda$animateEnter$0(Layout layout, Runnable runnable, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+                                layout.setInOutOffset(0.0f);
+                                if (!z) {
+                                    runnable.run();
                                 }
-                            });
-                            textView.setBackground(Theme.createCircleSelectorDrawable(NUM | (16777215 & color), LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0, !LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0));
-                            textView.setTextSize(1, 14.0f);
-                            textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                            textView.setTextColor(color);
-                            textView.setText(LocaleController.getString("Undo", NUM));
-                            textView.setGravity(16);
-                            ViewHelper.setPaddingRelative(textView, 16.0f, 0.0f, 16.0f, 0.0f);
-                            addView(textView, LayoutHelper.createFrameRelatively(-2.0f, 48.0f, 16, 8.0f, 0.0f, 0.0f, 0.0f));
-                            return;
-                        }
-                        ImageView imageView = new ImageView(getContext());
-                        imageView.setOnClickListener(new View.OnClickListener() {
-                            public final void onClick(View view) {
-                                Bulletin.UndoButton.this.lambda$new$1$Bulletin$UndoButton(view);
                             }
-                        });
-                        imageView.setImageResource(NUM);
-                        imageView.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-                        imageView.setBackground(Theme.createSelectorDrawable((color & 16777215) | NUM));
-                        ViewHelper.setPaddingRelative(imageView, 0.0f, 12.0f, 0.0f, 12.0f);
-                        addView(imageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 16));
-                    }
 
-                    /* access modifiers changed from: private */
-                    /* renamed from: lambda$new$0 */
-                    public /* synthetic */ void lambda$new$0$Bulletin$UndoButton(View view) {
-                        undo();
-                    }
+                            public void animateExit(Layout layout, Runnable runnable, Runnable runnable2, Consumer<Float> consumer, int i) {
+                                SpringAnimation springAnimation = new SpringAnimation(layout, Layout.IN_OUT_OFFSET_Y, (float) layout.getHeight());
+                                springAnimation.getSpring().setDampingRatio(0.8f);
+                                springAnimation.getSpring().setStiffness(400.0f);
+                                if (runnable2 != null) {
+                                    springAnimation.addEndListener(
+                                    /*  JADX ERROR: Method code generation error
+                                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0026: INVOKE  
+                                          (r7v1 'springAnimation' androidx.dynamicanimation.animation.SpringAnimation)
+                                          (wrap: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI : 0x0023: CONSTRUCTOR  (r0v3 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI) = (r5v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI.<init>(java.lang.Runnable):void type: CONSTRUCTOR)
+                                         androidx.dynamicanimation.animation.DynamicAnimation.addEndListener(androidx.dynamicanimation.animation.DynamicAnimation$OnAnimationEndListener):androidx.dynamicanimation.animation.DynamicAnimation type: VIRTUAL in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0023: CONSTRUCTOR  (r0v3 org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI) = (r5v0 'runnable2' java.lang.Runnable) call: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI.<init>(java.lang.Runnable):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void, dex: classes3.dex
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                        	... 64 more
+                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI, state: NOT_LOADED
+                                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                        	... 70 more
+                                        */
+                                    /*
+                                        this = this;
+                                        androidx.dynamicanimation.animation.SpringAnimation r7 = new androidx.dynamicanimation.animation.SpringAnimation
+                                        androidx.dynamicanimation.animation.FloatPropertyCompat<org.telegram.ui.Components.Bulletin$Layout> r0 = org.telegram.ui.Components.Bulletin.Layout.IN_OUT_OFFSET_Y
+                                        int r1 = r3.getHeight()
+                                        float r1 = (float) r1
+                                        r7.<init>(r3, r0, r1)
+                                        androidx.dynamicanimation.animation.SpringForce r0 = r7.getSpring()
+                                        r1 = 1061997773(0x3f4ccccd, float:0.8)
+                                        r0.setDampingRatio(r1)
+                                        androidx.dynamicanimation.animation.SpringForce r0 = r7.getSpring()
+                                        r1 = 1137180672(0x43CLASSNAME, float:400.0)
+                                        r0.setStiffness(r1)
+                                        if (r5 == 0) goto L_0x0029
+                                        org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI r0 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$ylZh0_jci79BZjVSNAMl5t5aJlI
+                                        r0.<init>(r5)
+                                        r7.addEndListener(r0)
+                                    L_0x0029:
+                                        if (r6 == 0) goto L_0x0033
+                                        org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$FPrD8PSlb9yjsdgcvdjmlotjRV0 r5 = new org.telegram.ui.Components.-$$Lambda$Bulletin$Layout$SpringTransition$FPrD8PSlb9yjsdgcvdjmlotjRV0
+                                        r5.<init>(r6, r3)
+                                        r7.addUpdateListener(r5)
+                                    L_0x0033:
+                                        r7.start()
+                                        if (r4 == 0) goto L_0x003b
+                                        r4.run()
+                                    L_0x003b:
+                                        return
+                                    */
+                                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Bulletin.Layout.SpringTransition.animateExit(org.telegram.ui.Components.Bulletin$Layout, java.lang.Runnable, java.lang.Runnable, androidx.core.util.Consumer, int):void");
+                                }
 
-                    /* access modifiers changed from: private */
-                    /* renamed from: lambda$new$1 */
-                    public /* synthetic */ void lambda$new$1$Bulletin$UndoButton(View view) {
-                        undo();
-                    }
-
-                    public void undo() {
-                        if (this.bulletin != null) {
-                            this.isUndone = true;
-                            Runnable runnable = this.undoAction;
-                            if (runnable != null) {
-                                runnable.run();
+                                static /* synthetic */ void lambda$animateExit$2(Runnable runnable, DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+                                    if (!z) {
+                                        runnable.run();
+                                    }
+                                }
                             }
-                            this.bulletin.hide();
+
+                            /* access modifiers changed from: private */
+                            public void setInOutOffset(float f) {
+                                this.inOutOffset = f;
+                                updatePosition();
+                            }
+
+                            /* access modifiers changed from: protected */
+                            public void dispatchDraw(Canvas canvas) {
+                                this.background.setBounds(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), getMeasuredWidth() - AndroidUtilities.dp(8.0f), getMeasuredHeight() - AndroidUtilities.dp(8.0f));
+                                if (!this.transitionRunning || this.delegate == null) {
+                                    this.background.draw(canvas);
+                                    super.dispatchDraw(canvas);
+                                    return;
+                                }
+                                int measuredHeight = ((View) getParent()).getMeasuredHeight() - this.delegate.getBottomOffset();
+                                canvas.save();
+                                canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - (((int) (getY() + ((float) getMeasuredHeight()))) - measuredHeight));
+                                this.background.draw(canvas);
+                                super.dispatchDraw(canvas);
+                                canvas.restore();
+                                invalidate();
+                            }
+                        }
+
+                        @SuppressLint({"ViewConstructor"})
+                        public static class ButtonLayout extends Layout {
+                            private Button button;
+                            private int childrenMeasuredWidth;
+
+                            public ButtonLayout(Context context) {
+                                super(context);
+                            }
+
+                            public ButtonLayout(Context context, int i) {
+                                super(context, i);
+                            }
+
+                            /* access modifiers changed from: protected */
+                            public void onMeasure(int i, int i2) {
+                                this.childrenMeasuredWidth = 0;
+                                super.onMeasure(i, i2);
+                                if (this.button != null && View.MeasureSpec.getMode(i) == Integer.MIN_VALUE) {
+                                    setMeasuredDimension(this.childrenMeasuredWidth + this.button.getMeasuredWidth(), getMeasuredHeight());
+                                }
+                            }
+
+                            /* access modifiers changed from: protected */
+                            public void measureChildWithMargins(View view, int i, int i2, int i3, int i4) {
+                                Button button2 = this.button;
+                                if (!(button2 == null || view == button2)) {
+                                    i2 += button2.getMeasuredWidth() - AndroidUtilities.dp(12.0f);
+                                }
+                                super.measureChildWithMargins(view, i, i2, i3, i4);
+                                if (view != this.button) {
+                                    ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+                                    this.childrenMeasuredWidth = Math.max(this.childrenMeasuredWidth, marginLayoutParams.leftMargin + marginLayoutParams.rightMargin + view.getMeasuredWidth());
+                                }
+                            }
+
+                            public Button getButton() {
+                                return this.button;
+                            }
+
+                            public void setButton(Button button2) {
+                                Button button3 = this.button;
+                                if (button3 != null) {
+                                    removeCallback(button3);
+                                    removeView(this.button);
+                                }
+                                this.button = button2;
+                                if (button2 != null) {
+                                    addCallback(button2);
+                                    addView(button2, 0, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388629));
+                                }
+                            }
+                        }
+
+                        public static class SimpleLayout extends ButtonLayout {
+                            public final ImageView imageView;
+                            public final TextView textView;
+
+                            public SimpleLayout(Context context) {
+                                super(context);
+                                int color = Theme.getColor("undo_infoColor");
+                                ImageView imageView2 = new ImageView(context);
+                                this.imageView = imageView2;
+                                imageView2.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                                addView(imageView2, LayoutHelper.createFrameRelatively(24.0f, 24.0f, 8388627, 16.0f, 12.0f, 16.0f, 12.0f));
+                                TextView textView2 = new TextView(context);
+                                this.textView = textView2;
+                                textView2.setSingleLine();
+                                textView2.setTextColor(color);
+                                textView2.setTypeface(Typeface.SANS_SERIF);
+                                textView2.setTextSize(1, 15.0f);
+                                addView(textView2, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
+                            }
+                        }
+
+                        @SuppressLint({"ViewConstructor"})
+                        public static class TwoLineLayout extends ButtonLayout {
+                            public final BackupImageView imageView;
+                            public final TextView subtitleTextView;
+                            public final TextView titleTextView;
+
+                            public TwoLineLayout(Context context) {
+                                super(context);
+                                int color = Theme.getColor("undo_infoColor");
+                                BackupImageView backupImageView = new BackupImageView(context);
+                                this.imageView = backupImageView;
+                                addView(backupImageView, LayoutHelper.createFrameRelatively(29.0f, 29.0f, 8388627, 12.0f, 12.0f, 12.0f, 12.0f));
+                                LinearLayout linearLayout = new LinearLayout(context);
+                                linearLayout.setOrientation(1);
+                                addView(linearLayout, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 54.0f, 8.0f, 12.0f, 8.0f));
+                                TextView textView = new TextView(context);
+                                this.titleTextView = textView;
+                                textView.setSingleLine();
+                                textView.setTextColor(color);
+                                textView.setTextSize(1, 14.0f);
+                                textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                                linearLayout.addView(textView);
+                                TextView textView2 = new TextView(context);
+                                this.subtitleTextView = textView2;
+                                textView2.setMaxLines(2);
+                                textView2.setTextColor(color);
+                                textView2.setTypeface(Typeface.SANS_SERIF);
+                                textView2.setTextSize(1, 13.0f);
+                                linearLayout.addView(textView2);
+                            }
+                        }
+
+                        public static class TwoLineLottieLayout extends ButtonLayout {
+                            public final RLottieImageView imageView;
+                            public final TextView subtitleTextView;
+                            private final int textColor;
+                            public final TextView titleTextView;
+
+                            public TwoLineLottieLayout(Context context) {
+                                this(context, Theme.getColor("undo_background"), Theme.getColor("undo_infoColor"));
+                            }
+
+                            public TwoLineLottieLayout(Context context, int i, int i2) {
+                                super(context, i);
+                                this.textColor = i2;
+                                RLottieImageView rLottieImageView = new RLottieImageView(context);
+                                this.imageView = rLottieImageView;
+                                rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
+                                addView(rLottieImageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 8388627));
+                                int color = Theme.getColor("undo_infoColor");
+                                LinearLayout linearLayout = new LinearLayout(context);
+                                linearLayout.setOrientation(1);
+                                addView(linearLayout, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 8.0f, 12.0f, 8.0f));
+                                TextView textView = new TextView(context);
+                                this.titleTextView = textView;
+                                textView.setSingleLine();
+                                textView.setTextColor(color);
+                                textView.setTextSize(1, 14.0f);
+                                textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                                linearLayout.addView(textView);
+                                TextView textView2 = new TextView(context);
+                                this.subtitleTextView = textView2;
+                                textView2.setTextColor(color);
+                                textView2.setTypeface(Typeface.SANS_SERIF);
+                                textView2.setTextSize(1, 13.0f);
+                                linearLayout.addView(textView2);
+                            }
+
+                            /* access modifiers changed from: protected */
+                            public void onShow() {
+                                super.onShow();
+                                this.imageView.playAnimation();
+                            }
+
+                            public void setAnimation(int i, int i2, int i3, String... strArr) {
+                                this.imageView.setAnimation(i, i2, i3);
+                                for (String str : strArr) {
+                                    RLottieImageView rLottieImageView = this.imageView;
+                                    rLottieImageView.setLayerColor(str + ".**", this.textColor);
+                                }
+                            }
+                        }
+
+                        public static class LottieLayout extends ButtonLayout {
+                            public final RLottieImageView imageView;
+                            private final int textColor;
+                            public final TextView textView;
+
+                            public LottieLayout(Context context) {
+                                this(context, Theme.getColor("undo_background"), Theme.getColor("undo_infoColor"));
+                            }
+
+                            public LottieLayout(Context context, int i, int i2) {
+                                super(context, i);
+                                this.textColor = i2;
+                                RLottieImageView rLottieImageView = new RLottieImageView(context);
+                                this.imageView = rLottieImageView;
+                                rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
+                                addView(rLottieImageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 8388627));
+                                TextView textView2 = new TextView(context);
+                                this.textView = textView2;
+                                textView2.setSingleLine();
+                                textView2.setTextColor(i2);
+                                textView2.setTypeface(Typeface.SANS_SERIF);
+                                textView2.setTextSize(1, 15.0f);
+                                textView2.setEllipsize(TextUtils.TruncateAt.END);
+                                addView(textView2, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
+                            }
+
+                            /* access modifiers changed from: protected */
+                            public void onShow() {
+                                super.onShow();
+                                this.imageView.playAnimation();
+                            }
+
+                            public void setAnimation(int i, String... strArr) {
+                                setAnimation(i, 32, 32, strArr);
+                            }
+
+                            public void setAnimation(int i, int i2, int i3, String... strArr) {
+                                this.imageView.setAnimation(i, i2, i3);
+                                for (String str : strArr) {
+                                    RLottieImageView rLottieImageView = this.imageView;
+                                    rLottieImageView.setLayerColor(str + ".**", this.textColor);
+                                }
+                            }
+
+                            public void setIconPaddingBottom(int i) {
+                                this.imageView.setLayoutParams(LayoutHelper.createFrameRelatively(56.0f, (float) (48 - i), 8388627, 0.0f, 0.0f, 0.0f, (float) i));
+                            }
+                        }
+
+                        @SuppressLint({"ViewConstructor"})
+                        public static abstract class Button extends FrameLayout implements Layout.Callback {
+                            public void onEnterTransitionEnd(Layout layout) {
+                            }
+
+                            public void onEnterTransitionStart(Layout layout) {
+                            }
+
+                            public void onExitTransitionEnd(Layout layout) {
+                            }
+
+                            public void onExitTransitionStart(Layout layout) {
+                            }
+
+                            public void onHide(Layout layout) {
+                            }
+
+                            public void onShow(Layout layout) {
+                            }
+
+                            public Button(Context context) {
+                                super(context);
+                            }
+                        }
+
+                        @SuppressLint({"ViewConstructor"})
+                        public static final class UndoButton extends Button {
+                            private Bulletin bulletin;
+                            private Runnable delayedAction;
+                            private boolean isUndone;
+                            private Runnable undoAction;
+
+                            /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+                            public UndoButton(Context context, boolean z) {
+                                super(context);
+                                int color = Theme.getColor("undo_cancelColor");
+                                if (z) {
+                                    TextView textView = new TextView(context);
+                                    textView.setOnClickListener(new View.OnClickListener() {
+                                        public final void onClick(View view) {
+                                            Bulletin.UndoButton.this.lambda$new$0$Bulletin$UndoButton(view);
+                                        }
+                                    });
+                                    textView.setBackground(Theme.createCircleSelectorDrawable(NUM | (16777215 & color), LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0, !LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0));
+                                    textView.setTextSize(1, 14.0f);
+                                    textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                                    textView.setTextColor(color);
+                                    textView.setText(LocaleController.getString("Undo", NUM));
+                                    textView.setGravity(16);
+                                    ViewHelper.setPaddingRelative(textView, 16.0f, 0.0f, 16.0f, 0.0f);
+                                    addView(textView, LayoutHelper.createFrameRelatively(-2.0f, 48.0f, 16, 8.0f, 0.0f, 0.0f, 0.0f));
+                                    return;
+                                }
+                                ImageView imageView = new ImageView(getContext());
+                                imageView.setOnClickListener(new View.OnClickListener() {
+                                    public final void onClick(View view) {
+                                        Bulletin.UndoButton.this.lambda$new$1$Bulletin$UndoButton(view);
+                                    }
+                                });
+                                imageView.setImageResource(NUM);
+                                imageView.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+                                imageView.setBackground(Theme.createSelectorDrawable((color & 16777215) | NUM));
+                                ViewHelper.setPaddingRelative(imageView, 0.0f, 12.0f, 0.0f, 12.0f);
+                                addView(imageView, LayoutHelper.createFrameRelatively(56.0f, 48.0f, 16));
+                            }
+
+                            /* access modifiers changed from: private */
+                            /* renamed from: lambda$new$0 */
+                            public /* synthetic */ void lambda$new$0$Bulletin$UndoButton(View view) {
+                                undo();
+                            }
+
+                            /* access modifiers changed from: private */
+                            /* renamed from: lambda$new$1 */
+                            public /* synthetic */ void lambda$new$1$Bulletin$UndoButton(View view) {
+                                undo();
+                            }
+
+                            public void undo() {
+                                if (this.bulletin != null) {
+                                    this.isUndone = true;
+                                    Runnable runnable = this.undoAction;
+                                    if (runnable != null) {
+                                        runnable.run();
+                                    }
+                                    this.bulletin.hide();
+                                }
+                            }
+
+                            public void onAttach(Layout layout, Bulletin bulletin2) {
+                                this.bulletin = bulletin2;
+                            }
+
+                            public void onDetach(Layout layout) {
+                                this.bulletin = null;
+                                Runnable runnable = this.delayedAction;
+                                if (runnable != null && !this.isUndone) {
+                                    runnable.run();
+                                }
+                            }
+
+                            public UndoButton setUndoAction(Runnable runnable) {
+                                this.undoAction = runnable;
+                                return this;
+                            }
+
+                            public UndoButton setDelayedAction(Runnable runnable) {
+                                this.delayedAction = runnable;
+                                return this;
+                            }
                         }
                     }
-
-                    public void onAttach(Layout layout, Bulletin bulletin2) {
-                        this.bulletin = bulletin2;
-                    }
-
-                    public void onDetach(Layout layout) {
-                        this.bulletin = null;
-                        Runnable runnable = this.delayedAction;
-                        if (runnable != null && !this.isUndone) {
-                            runnable.run();
-                        }
-                    }
-
-                    public UndoButton setUndoAction(Runnable runnable) {
-                        this.undoAction = runnable;
-                        return this;
-                    }
-
-                    public UndoButton setDelayedAction(Runnable runnable) {
-                        this.delayedAction = runnable;
-                        return this;
-                    }
-                }
-            }

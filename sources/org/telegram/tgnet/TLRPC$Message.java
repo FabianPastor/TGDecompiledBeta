@@ -51,6 +51,7 @@ public abstract class TLRPC$Message extends TLObject {
     public boolean silent;
     public int stickerVerified = 1;
     public int ttl;
+    public int ttl_period;
     public boolean unread;
     public int via_bot_id;
     public String via_bot_name;
@@ -84,6 +85,9 @@ public abstract class TLRPC$Message extends TLObject {
             case -1481959023:
                 tLRPC$Message = new TLRPC$TL_message_old3();
                 break;
+            case -1125940270:
+                tLRPC$Message = new TLRPC$TL_message();
+                break;
             case -1066691065:
                 tLRPC$Message = new TLRPC$TL_messageService_layer48();
                 break;
@@ -115,6 +119,9 @@ public abstract class TLRPC$Message extends TLObject {
                 tLRPC$Message = new TLRPC$TL_message_old();
                 break;
             case 678405636:
+                tLRPC$Message = new TLRPC$TL_messageService_layer123();
+                break;
+            case 721967202:
                 tLRPC$Message = new TLRPC$TL_messageService();
                 break;
             case 736885382:
@@ -139,7 +146,7 @@ public abstract class TLRPC$Message extends TLObject {
                 tLRPC$Message = new TLRPC$TL_message_old2();
                 break;
             case 1487813065:
-                tLRPC$Message = new TLRPC$TL_message();
+                tLRPC$Message = new TLRPC$TL_message_layer123();
                 break;
             case 1537633299:
                 tLRPC$Message = new TLRPC$TL_message_old7();
@@ -355,8 +362,8 @@ public abstract class TLRPC$Message extends TLObject {
             if (this.params == null) {
                 this.params = new HashMap<>();
             }
-            this.layer = 123;
-            this.params.put("legacy_layer", "123");
+            this.layer = 124;
+            this.params.put("legacy_layer", "124");
         }
         if ((this.id < 0 || this.send_state == 3 || this.legacy) && (hashMap2 = this.params) != null && hashMap2.size() > 0) {
             for (Map.Entry next2 : this.params.entrySet()) {

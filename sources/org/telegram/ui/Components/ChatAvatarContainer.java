@@ -28,11 +28,13 @@ import org.telegram.tgnet.TLRPC$ChatParticipants;
 import org.telegram.tgnet.TLRPC$TL_channelFull;
 import org.telegram.tgnet.TLRPC$TL_chatFull;
 import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.tgnet.TLRPC$UserStatus;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.ClearHistoryAlert;
 import org.telegram.ui.Components.SharedMediaLayout;
 
 public class ChatAvatarContainer extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
@@ -46,12 +48,15 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     private int leftPadding = AndroidUtilities.dp(8.0f);
     private boolean occupyStatusBar = true;
     private int onlineCount = -1;
-    private ChatActivity parentFragment;
+    /* access modifiers changed from: private */
+    public ChatActivity parentFragment;
+    private boolean secretChatTimer;
     private SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader;
     private StatusDrawable[] statusDrawables = new StatusDrawable[5];
     /* access modifiers changed from: private */
     public SimpleTextView subtitleTextView;
-    private ImageView timeItem;
+    /* access modifiers changed from: private */
+    public ImageView timeItem;
     private TimerDrawable timerDrawable;
     /* access modifiers changed from: private */
     public AnimatorSet titleAnimation;
@@ -105,22 +110,31 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         this.subtitleTextView.setTextSize(14);
         this.subtitleTextView.setGravity(3);
         addView(this.subtitleTextView);
-        if (z) {
+        if (this.parentFragment != null) {
             ImageView imageView = new ImageView(context);
             this.timeItem = imageView;
             imageView.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(5.0f), AndroidUtilities.dp(5.0f));
             this.timeItem.setScaleType(ImageView.ScaleType.CENTER);
+            this.timeItem.setAlpha(0.0f);
+            this.timeItem.setScaleY(0.0f);
+            this.timeItem.setScaleX(0.0f);
+            this.timeItem.setVisibility(8);
             ImageView imageView2 = this.timeItem;
             TimerDrawable timerDrawable2 = new TimerDrawable(context);
             this.timerDrawable = timerDrawable2;
             imageView2.setImageDrawable(timerDrawable2);
             addView(this.timeItem);
+            this.secretChatTimer = z;
             this.timeItem.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
                     ChatAvatarContainer.this.lambda$new$1$ChatAvatarContainer(view);
                 }
             });
-            this.timeItem.setContentDescription(LocaleController.getString("SetTimer", NUM));
+            if (this.secretChatTimer) {
+                this.timeItem.setContentDescription(LocaleController.getString("SetTimer", NUM));
+            } else {
+                this.timeItem.setContentDescription(LocaleController.getString("AccAutoDeleteTimer", NUM));
+            }
         }
         ChatActivity chatActivity2 = this.parentFragment;
         if (chatActivity2 != null && chatActivity2.getChatMode() == 0) {
@@ -159,13 +173,47 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$ChatAvatarContainer(View view) {
-        this.parentFragment.showDialog(AlertsCreator.createTTLAlert(getContext(), this.parentFragment.getCurrentEncryptedChat()).create());
+        if (this.secretChatTimer) {
+            this.parentFragment.showDialog(AlertsCreator.createTTLAlert(getContext(), this.parentFragment.getCurrentEncryptedChat()).create());
+        } else {
+            openSetTimer();
+        }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$2 */
     public /* synthetic */ void lambda$new$2$ChatAvatarContainer(View view) {
         openProfile(false);
+    }
+
+    public boolean openSetTimer() {
+        if (this.parentFragment.getParentActivity() == null) {
+            return false;
+        }
+        TLRPC$Chat currentChat = this.parentFragment.getCurrentChat();
+        if (currentChat == null || ChatObject.canUserDoAdminAction(currentChat, 13)) {
+            ClearHistoryAlert clearHistoryAlert = new ClearHistoryAlert(this.parentFragment.getParentActivity(), this.parentFragment.getCurrentUser(), this.parentFragment.getCurrentChat(), false);
+            clearHistoryAlert.setDelegate(new ClearHistoryAlert.ClearHistoryAlertDelegate() {
+                public /* synthetic */ void onClearHistory(boolean z) {
+                    ClearHistoryAlert.ClearHistoryAlertDelegate.CC.$default$onClearHistory(this, z);
+                }
+
+                public void onAutoDeleteHistory(int i, int i2) {
+                    ChatAvatarContainer.this.parentFragment.getMessagesController().setDialogHistoryTTL(ChatAvatarContainer.this.parentFragment.getDialogId(), i);
+                    TLRPC$ChatFull currentChatInfo = ChatAvatarContainer.this.parentFragment.getCurrentChatInfo();
+                    TLRPC$UserFull currentUserInfo = ChatAvatarContainer.this.parentFragment.getCurrentUserInfo();
+                    if (currentUserInfo != null || currentChatInfo != null) {
+                        ChatAvatarContainer.this.parentFragment.getUndoView().showWithAction(ChatAvatarContainer.this.parentFragment.getDialogId(), i2, ChatAvatarContainer.this.parentFragment.getCurrentUser(), Integer.valueOf(currentUserInfo != null ? currentUserInfo.ttl_period : currentChatInfo.ttl_period), (Runnable) null, (Runnable) null);
+                    }
+                }
+            });
+            this.parentFragment.showDialog(clearHistoryAlert);
+            return true;
+        }
+        if (this.timeItem.getTag() != null) {
+            this.parentFragment.showTimerHint();
+        }
+        return false;
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:7:0x001b, code lost:
@@ -342,24 +390,49 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         this.leftPadding = i;
     }
 
-    public void showTimeItem() {
+    public void showTimeItem(boolean z) {
         ImageView imageView = this.timeItem;
-        if (imageView != null) {
-            imageView.setVisibility(0);
+        if (imageView != null && imageView.getTag() == null) {
+            this.timeItem.clearAnimation();
+            this.timeItem.setVisibility(0);
+            this.timeItem.setTag(1);
+            if (z) {
+                this.timeItem.animate().setDuration(180).alpha(1.0f).scaleX(1.0f).scaleY(1.0f).setListener((Animator.AnimatorListener) null).start();
+                return;
+            }
+            this.timeItem.setAlpha(1.0f);
+            this.timeItem.setScaleY(1.0f);
+            this.timeItem.setScaleX(1.0f);
         }
     }
 
-    public void hideTimeItem() {
+    public void hideTimeItem(boolean z) {
         ImageView imageView = this.timeItem;
-        if (imageView != null) {
-            imageView.setVisibility(8);
+        if (imageView != null && imageView.getTag() != null) {
+            this.timeItem.clearAnimation();
+            this.timeItem.setTag((Object) null);
+            if (z) {
+                this.timeItem.animate().setDuration(180).alpha(0.0f).scaleX(0.0f).scaleY(0.0f).setListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        ChatAvatarContainer.this.timeItem.setVisibility(8);
+                        super.onAnimationEnd(animator);
+                    }
+                }).start();
+                return;
+            }
+            this.timeItem.setVisibility(8);
+            this.timeItem.setAlpha(0.0f);
+            this.timeItem.setScaleY(0.0f);
+            this.timeItem.setScaleX(0.0f);
         }
     }
 
     public void setTime(int i) {
         TimerDrawable timerDrawable2 = this.timerDrawable;
         if (timerDrawable2 != null) {
-            timerDrawable2.setTime(i);
+            if (i != 0 || this.secretChatTimer) {
+                timerDrawable2.setTime(i);
+            }
         }
     }
 

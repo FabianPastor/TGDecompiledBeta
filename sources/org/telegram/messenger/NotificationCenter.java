@@ -161,6 +161,7 @@ public class NotificationCenter {
     public static final int screenStateChanged;
     public static final int screenshotTook;
     public static final int sendingMessagesChanged;
+    public static final int showBulletin;
     public static final int startAllHeavyOperations;
     public static final int stickersDidLoad;
     public static final int stopAllHeavyOperations;
@@ -739,6 +740,9 @@ public class NotificationCenter {
         int i175 = totalEvents;
         totalEvents = i175 + 1;
         webRtcSpeakerAmplitudeEvent = i175;
+        int i176 = totalEvents;
+        totalEvents = i176 + 1;
+        showBulletin = i176;
     }
 
     private static class DelayedPost {

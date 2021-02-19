@@ -8,6 +8,7 @@ import android.content.Context;
 import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
@@ -23,6 +24,7 @@ public class AdjustPanLayoutHelper {
     /* access modifiers changed from: private */
     public boolean animationInProgress;
     ValueAnimator animator;
+    boolean checkHierarchyHeight;
     /* access modifiers changed from: private */
     public ViewGroup contentView;
     protected float keyboardSize;
@@ -102,7 +104,7 @@ public class AdjustPanLayoutHelper {
     }
 
     /* access modifiers changed from: protected */
-    public void onTransitionStart(boolean z) {
+    public void onTransitionStart(boolean z, int i) {
     }
 
     /* access modifiers changed from: protected */
@@ -118,9 +120,16 @@ public class AdjustPanLayoutHelper {
         }
         int startOffset = startOffset();
         getViewsToSetHeight(this.parent);
-        setViewHeight(Math.max(i, i2));
+        int i3 = 0;
+        if (this.checkHierarchyHeight) {
+            ViewParent parent2 = this.parent.getParent();
+            if (parent2 instanceof View) {
+                i3 = ((View) parent2).getHeight() - i2;
+            }
+        }
+        setViewHeight(Math.max(i, i3 + i2));
         this.resizableView.requestLayout();
-        onTransitionStart(z);
+        onTransitionStart(z, i2);
         float f = (float) (i2 - i);
         this.keyboardSize = Math.abs(f);
         float f2 = 0.0f;
@@ -153,11 +162,11 @@ public class AdjustPanLayoutHelper {
             }
         });
         this.animationInProgress = true;
-        final int i3 = UserConfig.selectedAccount;
+        final int i4 = UserConfig.selectedAccount;
         this.animator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 boolean unused = AdjustPanLayoutHelper.this.animationInProgress = false;
-                NotificationCenter.getInstance(i3).onAnimationFinish(AdjustPanLayoutHelper.this.notificationsIndex);
+                NotificationCenter.getInstance(i4).onAnimationFinish(AdjustPanLayoutHelper.this.notificationsIndex);
                 AdjustPanLayoutHelper adjustPanLayoutHelper = AdjustPanLayoutHelper.this;
                 adjustPanLayoutHelper.animator = null;
                 adjustPanLayoutHelper.setViewHeight(-1);
@@ -172,7 +181,7 @@ public class AdjustPanLayoutHelper {
         });
         this.animator.setDuration(220);
         this.animator.setInterpolator(CubicBezierInterpolator.DEFAULT);
-        this.notificationsIndex = NotificationCenter.getInstance(i3).setAnimationInProgress(this.notificationsIndex, (int[]) null);
+        this.notificationsIndex = NotificationCenter.getInstance(i4).setAnimationInProgress(this.notificationsIndex, (int[]) null);
         this.animator.start();
     }
 
@@ -272,5 +281,9 @@ public class AdjustPanLayoutHelper {
 
     public boolean animationInProgress() {
         return this.animationInProgress;
+    }
+
+    public void setCheckHierarchyHeight(boolean z) {
+        this.checkHierarchyHeight = z;
     }
 }

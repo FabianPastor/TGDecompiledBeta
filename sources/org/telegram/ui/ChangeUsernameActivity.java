@@ -168,8 +168,12 @@ public class ChangeUsernameActivity extends BaseFragment {
             }
 
             public void afterTextChanged(Editable editable) {
-                if (ChangeUsernameActivity.this.firstNameField.length() > 0) {
-                    String str = "https://" + MessagesController.getInstance(ChangeUsernameActivity.this.currentAccount).linkPrefix + "/" + ChangeUsernameActivity.this.firstNameField.getText();
+                String obj = ChangeUsernameActivity.this.firstNameField.getText().toString();
+                if (obj.startsWith("@")) {
+                    obj = obj.substring(1);
+                }
+                if (obj.length() > 0) {
+                    String str = "https://" + MessagesController.getInstance(ChangeUsernameActivity.this.currentAccount).linkPrefix + "/" + obj;
                     String formatString = LocaleController.formatString("UsernameHelpLink", NUM, str);
                     int indexOf = formatString.indexOf(str);
                     SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(formatString);
@@ -233,10 +237,13 @@ public class ChangeUsernameActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public boolean checkUserName(String str, boolean z) {
-        if (str == null || str.length() <= 0) {
-            this.checkTextView.setVisibility(8);
-        } else {
+        if (str != null && str.startsWith("@")) {
+            str = str.substring(1);
+        }
+        if (!TextUtils.isEmpty(str)) {
             this.checkTextView.setVisibility(0);
+        } else {
+            this.checkTextView.setVisibility(8);
         }
         if (z && str.length() == 0) {
             return true;
@@ -393,14 +400,17 @@ public class ChangeUsernameActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public void saveName() {
-        if (checkUserName(this.firstNameField.getText().toString(), true)) {
+        String obj = this.firstNameField.getText().toString();
+        if (obj.startsWith("@")) {
+            obj = obj.substring(1);
+        }
+        if (checkUserName(obj, true)) {
             TLRPC$User currentUser = UserConfig.getInstance(this.currentAccount).getCurrentUser();
             if (getParentActivity() != null && currentUser != null) {
                 String str = currentUser.username;
                 if (str == null) {
                     str = "";
                 }
-                String obj = this.firstNameField.getText().toString();
                 if (str.equals(obj)) {
                     finishFragment();
                     return;

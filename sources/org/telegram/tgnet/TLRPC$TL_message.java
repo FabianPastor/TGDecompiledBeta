@@ -3,7 +3,7 @@ package org.telegram.tgnet;
 import android.text.TextUtils;
 
 public class TLRPC$TL_message extends TLRPC$Message {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -100,7 +100,12 @@ public class TLRPC$TL_message extends TLRPC$Message {
                 }
             } else if (z) {
                 throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
+            } else {
+                return;
             }
+        }
+        if ((this.flags & 33554432) != 0) {
+            this.ttl_period = abstractSerializedData.readInt32(z);
         }
     }
 
@@ -180,6 +185,9 @@ public class TLRPC$TL_message extends TLRPC$Message {
             for (int i11 = 0; i11 < size2; i11++) {
                 this.restriction_reason.get(i11).serializeToStream(abstractSerializedData);
             }
+        }
+        if ((this.flags & 33554432) != 0) {
+            abstractSerializedData.writeInt32(this.ttl_period);
         }
         writeAttachPath(abstractSerializedData);
     }

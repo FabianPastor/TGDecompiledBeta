@@ -522,34 +522,129 @@ public class ActionBar extends FrameLayout {
     }
 
     public void showActionMode() {
-        showActionMode((View) null, (View) null, (View[]) null, (boolean[]) null, (View) null, 0);
+        showActionMode(true, (View) null, (View) null, (View[]) null, (boolean[]) null, (View) null, 0);
     }
 
-    public void showActionMode(View view, View view2, View[] viewArr, final boolean[] zArr, View view3, int i) {
+    public void showActionMode(boolean z, View view, View view2, View[] viewArr, boolean[] zArr, View view3, int i) {
         View view4;
-        if (this.actionMode != null && !this.actionModeVisible) {
+        View view5;
+        View view6;
+        View view7 = view;
+        View view8 = view2;
+        View[] viewArr2 = viewArr;
+        final boolean[] zArr2 = zArr;
+        View view9 = view3;
+        int i2 = i;
+        ActionBarMenu actionBarMenu = this.actionMode;
+        if (actionBarMenu != null && !this.actionModeVisible) {
             this.actionModeVisible = true;
-            ArrayList arrayList = new ArrayList();
-            arrayList.add(ObjectAnimator.ofFloat(this.actionMode, View.ALPHA, new float[]{0.0f, 1.0f}));
-            if (viewArr != null) {
-                for (int i2 = 0; i2 < viewArr.length; i2++) {
-                    if (viewArr[i2] != null) {
-                        arrayList.add(ObjectAnimator.ofFloat(viewArr[i2], View.ALPHA, new float[]{1.0f, 0.0f}));
+            if (z) {
+                ArrayList arrayList = new ArrayList();
+                arrayList.add(ObjectAnimator.ofFloat(this.actionMode, View.ALPHA, new float[]{0.0f, 1.0f}));
+                if (viewArr2 != null) {
+                    for (int i3 = 0; i3 < viewArr2.length; i3++) {
+                        if (viewArr2[i3] != null) {
+                            arrayList.add(ObjectAnimator.ofFloat(viewArr2[i3], View.ALPHA, new float[]{1.0f, 0.0f}));
+                        }
+                    }
+                }
+                if (view8 != null) {
+                    arrayList.add(ObjectAnimator.ofFloat(view8, View.ALPHA, new float[]{0.0f, 1.0f}));
+                }
+                if (view9 != null) {
+                    arrayList.add(ObjectAnimator.ofFloat(view9, View.TRANSLATION_Y, new float[]{(float) i2}));
+                    this.actionModeTranslationView = view9;
+                }
+                this.actionModeExtraView = view7;
+                this.actionModeShowingView = view8;
+                this.actionModeHidingViews = viewArr2;
+                if (this.occupyStatusBar && (view6 = this.actionModeTop) != null && !SharedConfig.noStatusBar) {
+                    arrayList.add(ObjectAnimator.ofFloat(view6, View.ALPHA, new float[]{0.0f, 1.0f}));
+                }
+                if (SharedConfig.noStatusBar) {
+                    if (AndroidUtilities.computePerceivedBrightness(this.actionModeColor) < 0.721f) {
+                        AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), false);
+                    } else {
+                        AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), true);
+                    }
+                }
+                AnimatorSet animatorSet = this.actionModeAnimation;
+                if (animatorSet != null) {
+                    animatorSet.cancel();
+                }
+                AnimatorSet animatorSet2 = new AnimatorSet();
+                this.actionModeAnimation = animatorSet2;
+                animatorSet2.playTogether(arrayList);
+                this.actionModeAnimation.setDuration(200);
+                this.actionModeAnimation.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationStart(Animator animator) {
+                        ActionBar.this.actionMode.setVisibility(0);
+                        if (ActionBar.this.occupyStatusBar && ActionBar.this.actionModeTop != null && !SharedConfig.noStatusBar) {
+                            ActionBar.this.actionModeTop.setVisibility(0);
+                        }
+                    }
+
+                    public void onAnimationEnd(Animator animator) {
+                        boolean[] zArr;
+                        if (ActionBar.this.actionModeAnimation != null && ActionBar.this.actionModeAnimation.equals(animator)) {
+                            AnimatorSet unused = ActionBar.this.actionModeAnimation = null;
+                            if (ActionBar.this.titleTextView[0] != null) {
+                                ActionBar.this.titleTextView[0].setVisibility(4);
+                            }
+                            if (ActionBar.this.subtitleTextView != null && !TextUtils.isEmpty(ActionBar.this.subtitleTextView.getText())) {
+                                ActionBar.this.subtitleTextView.setVisibility(4);
+                            }
+                            if (ActionBar.this.menu != null) {
+                                ActionBar.this.menu.setVisibility(4);
+                            }
+                            if (ActionBar.this.actionModeHidingViews != null) {
+                                for (int i = 0; i < ActionBar.this.actionModeHidingViews.length; i++) {
+                                    if (ActionBar.this.actionModeHidingViews[i] != null && ((zArr = zArr2) == null || i >= zArr.length || zArr[i])) {
+                                        ActionBar.this.actionModeHidingViews[i].setVisibility(4);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    public void onAnimationCancel(Animator animator) {
+                        if (ActionBar.this.actionModeAnimation != null && ActionBar.this.actionModeAnimation.equals(animator)) {
+                            AnimatorSet unused = ActionBar.this.actionModeAnimation = null;
+                        }
+                    }
+                });
+                this.actionModeAnimation.start();
+                ImageView imageView = this.backButtonImageView;
+                if (imageView != null) {
+                    Drawable drawable = imageView.getDrawable();
+                    if (drawable instanceof BackDrawable) {
+                        ((BackDrawable) drawable).setRotation(1.0f, true);
+                    }
+                    this.backButtonImageView.setBackgroundDrawable(Theme.createSelectorDrawable(this.itemsActionModeBackgroundColor));
+                    return;
+                }
+                return;
+            }
+            actionBarMenu.setAlpha(1.0f);
+            if (viewArr2 != null) {
+                for (int i4 = 0; i4 < viewArr2.length; i4++) {
+                    if (viewArr2[i4] != null) {
+                        viewArr2[i4].setAlpha(0.0f);
                     }
                 }
             }
-            if (view2 != null) {
-                arrayList.add(ObjectAnimator.ofFloat(view2, View.ALPHA, new float[]{0.0f, 1.0f}));
+            if (view8 != null) {
+                view8.setAlpha(1.0f);
             }
-            if (view3 != null) {
-                arrayList.add(ObjectAnimator.ofFloat(view3, View.TRANSLATION_Y, new float[]{(float) i}));
-                this.actionModeTranslationView = view3;
+            if (view9 != null) {
+                view9.setTranslationY((float) i2);
+                this.actionModeTranslationView = view9;
             }
-            this.actionModeExtraView = view;
-            this.actionModeShowingView = view2;
-            this.actionModeHidingViews = viewArr;
-            if (this.occupyStatusBar && (view4 = this.actionModeTop) != null && !SharedConfig.noStatusBar) {
-                arrayList.add(ObjectAnimator.ofFloat(view4, View.ALPHA, new float[]{0.0f, 1.0f}));
+            this.actionModeExtraView = view7;
+            this.actionModeShowingView = view8;
+            this.actionModeHidingViews = viewArr2;
+            if (this.occupyStatusBar && (view5 = this.actionModeTop) != null && !SharedConfig.noStatusBar) {
+                view5.setAlpha(1.0f);
             }
             if (SharedConfig.noStatusBar) {
                 if (AndroidUtilities.computePerceivedBrightness(this.actionModeColor) < 0.721f) {
@@ -558,57 +653,40 @@ public class ActionBar extends FrameLayout {
                     AndroidUtilities.setLightStatusBar(((Activity) getContext()).getWindow(), true);
                 }
             }
-            AnimatorSet animatorSet = this.actionModeAnimation;
-            if (animatorSet != null) {
-                animatorSet.cancel();
+            this.actionMode.setVisibility(0);
+            if (this.occupyStatusBar && (view4 = this.actionModeTop) != null && !SharedConfig.noStatusBar) {
+                view4.setVisibility(0);
             }
-            AnimatorSet animatorSet2 = new AnimatorSet();
-            this.actionModeAnimation = animatorSet2;
-            animatorSet2.playTogether(arrayList);
-            this.actionModeAnimation.setDuration(200);
-            this.actionModeAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationStart(Animator animator) {
-                    ActionBar.this.actionMode.setVisibility(0);
-                    if (ActionBar.this.occupyStatusBar && ActionBar.this.actionModeTop != null && !SharedConfig.noStatusBar) {
-                        ActionBar.this.actionModeTop.setVisibility(0);
+            SimpleTextView[] simpleTextViewArr = this.titleTextView;
+            if (simpleTextViewArr[0] != null) {
+                simpleTextViewArr[0].setVisibility(4);
+            }
+            SimpleTextView simpleTextView = this.subtitleTextView;
+            if (simpleTextView != null && !TextUtils.isEmpty(simpleTextView.getText())) {
+                this.subtitleTextView.setVisibility(4);
+            }
+            ActionBarMenu actionBarMenu2 = this.menu;
+            if (actionBarMenu2 != null) {
+                actionBarMenu2.setVisibility(4);
+            }
+            if (this.actionModeHidingViews != null) {
+                int i5 = 0;
+                while (true) {
+                    View[] viewArr3 = this.actionModeHidingViews;
+                    if (i5 >= viewArr3.length) {
+                        break;
                     }
-                }
-
-                public void onAnimationEnd(Animator animator) {
-                    boolean[] zArr;
-                    if (ActionBar.this.actionModeAnimation != null && ActionBar.this.actionModeAnimation.equals(animator)) {
-                        AnimatorSet unused = ActionBar.this.actionModeAnimation = null;
-                        if (ActionBar.this.titleTextView[0] != null) {
-                            ActionBar.this.titleTextView[0].setVisibility(4);
-                        }
-                        if (ActionBar.this.subtitleTextView != null && !TextUtils.isEmpty(ActionBar.this.subtitleTextView.getText())) {
-                            ActionBar.this.subtitleTextView.setVisibility(4);
-                        }
-                        if (ActionBar.this.menu != null) {
-                            ActionBar.this.menu.setVisibility(4);
-                        }
-                        if (ActionBar.this.actionModeHidingViews != null) {
-                            for (int i = 0; i < ActionBar.this.actionModeHidingViews.length; i++) {
-                                if (ActionBar.this.actionModeHidingViews[i] != null && ((zArr = zArr) == null || i >= zArr.length || zArr[i])) {
-                                    ActionBar.this.actionModeHidingViews[i].setVisibility(4);
-                                }
-                            }
-                        }
+                    if (viewArr3[i5] != null && (zArr2 == null || i5 >= zArr2.length || zArr2[i5])) {
+                        viewArr3[i5].setVisibility(4);
                     }
+                    i5++;
                 }
-
-                public void onAnimationCancel(Animator animator) {
-                    if (ActionBar.this.actionModeAnimation != null && ActionBar.this.actionModeAnimation.equals(animator)) {
-                        AnimatorSet unused = ActionBar.this.actionModeAnimation = null;
-                    }
-                }
-            });
-            this.actionModeAnimation.start();
-            ImageView imageView = this.backButtonImageView;
-            if (imageView != null) {
-                Drawable drawable = imageView.getDrawable();
-                if (drawable instanceof BackDrawable) {
-                    ((BackDrawable) drawable).setRotation(1.0f, true);
+            }
+            ImageView imageView2 = this.backButtonImageView;
+            if (imageView2 != null) {
+                Drawable drawable2 = imageView2.getDrawable();
+                if (drawable2 instanceof BackDrawable) {
+                    ((BackDrawable) drawable2).setRotation(1.0f, false);
                 }
                 this.backButtonImageView.setBackgroundDrawable(Theme.createSelectorDrawable(this.itemsActionModeBackgroundColor));
             }
@@ -630,7 +708,7 @@ public class ActionBar extends FrameLayout {
                     if (i >= viewArr.length) {
                         break;
                     }
-                    if (viewArr != null) {
+                    if (viewArr[i] != null) {
                         viewArr[i].setVisibility(0);
                         arrayList.add(ObjectAnimator.ofFloat(this.actionModeHidingViews[i], View.ALPHA, new float[]{1.0f}));
                     }

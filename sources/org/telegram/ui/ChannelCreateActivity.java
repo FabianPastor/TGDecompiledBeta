@@ -28,6 +28,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
@@ -37,6 +38,7 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$InputFile;
 import org.telegram.tgnet.TLRPC$PhotoSize;
@@ -49,7 +51,8 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_inputChannelEmpty;
 import org.telegram.tgnet.TLRPC$TL_inputChatPhoto;
 import org.telegram.tgnet.TLRPC$TL_messages_chats;
-import org.telegram.tgnet.TLRPC$TL_messages_exportChatInvite;
+import org.telegram.tgnet.TLRPC$TL_messages_exportedChatInvites;
+import org.telegram.tgnet.TLRPC$TL_messages_getExportedChatInvites;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -793,9 +796,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.privateContainer = linearLayout8;
             linearLayout8.setOrientation(1);
             this.linkContainer.addView(this.privateContainer, LayoutHelper.createLinear(-1, -2));
-            LinkActionView linkActionView = new LinkActionView(context, this, (BottomSheet) null, this.chatId, true);
+            LinkActionView linkActionView = new LinkActionView(context, this, (BottomSheet) null, this.chatId, true, ChatObject.isChannel(getMessagesController().getChat(Integer.valueOf(this.chatId))));
             this.permanentLinkView = linkActionView;
-            linkActionView.showOptions(false);
+            linkActionView.showRevokeOption(true);
             this.permanentLinkView.setUsers(0, (ArrayList<TLRPC$User>) null);
             this.privateContainer.addView(this.permanentLinkView);
             TextView textView2 = new TextView(context2);
@@ -905,14 +908,22 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     private void generateLink() {
         if (!this.loadingInvite && this.invite == null) {
-            this.loadingInvite = true;
-            TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
-            tLRPC$TL_messages_exportChatInvite.peer = getMessagesController().getInputPeer(-this.chatId);
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ChannelCreateActivity.this.lambda$generateLink$11$ChannelCreateActivity(tLObject, tLRPC$TL_error);
-                }
-            }), this.classGuid);
+            TLRPC$ChatFull chatFull = getMessagesController().getChatFull(this.chatId);
+            if (chatFull != null) {
+                this.invite = chatFull.exported_invite;
+            }
+            if (this.invite == null) {
+                this.loadingInvite = true;
+                TLRPC$TL_messages_getExportedChatInvites tLRPC$TL_messages_getExportedChatInvites = new TLRPC$TL_messages_getExportedChatInvites();
+                tLRPC$TL_messages_getExportedChatInvites.peer = getMessagesController().getInputPeer(-this.chatId);
+                tLRPC$TL_messages_getExportedChatInvites.admin_id = getMessagesController().getInputUser(getUserConfig().getCurrentUser());
+                tLRPC$TL_messages_getExportedChatInvites.limit = 1;
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getExportedChatInvites, new RequestDelegate() {
+                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                        ChannelCreateActivity.this.lambda$generateLink$11$ChannelCreateActivity(tLObject, tLRPC$TL_error);
+                    }
+                });
+            }
         }
     }
 
@@ -938,7 +949,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     /* renamed from: lambda$null$10 */
     public /* synthetic */ void lambda$null$10$ChannelCreateActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
-            this.invite = (TLRPC$TL_chatInviteExported) tLObject;
+            this.invite = (TLRPC$TL_chatInviteExported) ((TLRPC$TL_messages_exportedChatInvites) tLObject).invites.get(0);
         }
         this.loadingInvite = false;
         LinkActionView linkActionView = this.permanentLinkView;

@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_userFull extends TLRPC$UserFull {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -35,6 +35,9 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         if ((this.flags & 2048) != 0) {
             this.folder_id = abstractSerializedData.readInt32(z);
         }
+        if ((this.flags & 16384) != 0) {
+            this.ttl_period = abstractSerializedData.readInt32(z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -49,7 +52,9 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         this.flags = i4;
         int i5 = this.has_scheduled ? i4 | 4096 : i4 & -4097;
         this.flags = i5;
-        abstractSerializedData.writeInt32(i5);
+        int i6 = this.video_calls_available ? i5 | 8192 : i5 & -8193;
+        this.flags = i6;
+        abstractSerializedData.writeInt32(i6);
         this.user.serializeToStream(abstractSerializedData);
         if ((this.flags & 2) != 0) {
             abstractSerializedData.writeString(this.about);
@@ -68,6 +73,9 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         abstractSerializedData.writeInt32(this.common_chats_count);
         if ((this.flags & 2048) != 0) {
             abstractSerializedData.writeInt32(this.folder_id);
+        }
+        if ((this.flags & 16384) != 0) {
+            abstractSerializedData.writeInt32(this.ttl_period);
         }
     }
 }

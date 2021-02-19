@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt" android:versionCode="22279" android:versionName="7.4.2" android:installLocation="auto" android:compileSdkVersion="30" android:compileSdkVersionCodename="11" package="org.telegram.messenger.beta" platformBuildVersionCode="30" platformBuildVersionName="11">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt" android:versionCode="22389" android:versionName="7.5.0" android:installLocation="auto" android:compileSdkVersion="30" android:compileSdkVersionCodename="11" package="org.telegram.messenger.beta" platformBuildVersionCode="30" platformBuildVersionName="11">
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="29"/>
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
     <uses-feature android:name="android.hardware.location.network" android:required="false"/>
@@ -174,6 +174,16 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+        <activity android:name="org.telegram.ui.ChatsWidgetConfigActivity" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
+            <intent-filter android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round">
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+        <activity android:name="org.telegram.ui.ContactsWidgetConfigActivity" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
+            <intent-filter android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round">
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
         <activity android:name="org.telegram.ui.IntroActivity" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"/>
         <activity android:name="org.telegram.messenger.OpenChatReceiver" android:exported="true" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize"/>
         <activity android:theme="@style/Theme.TMessages.PopupNotification" android:name="org.telegram.ui.PopupNotificationActivity" android:taskAffinity="" android:excludeFromRecents="true" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" android:windowSoftInputMode="adjustUnspecified|stateHidden|adjustResize" android:resizeableActivity="false"/>
@@ -293,6 +303,20 @@
         </provider>
         <provider android:name="org.telegram.messenger.NotificationImageProvider" android:exported="false" android:authorities="org.telegram.messenger.beta.notification_image_provider" android:grantUriPermissions="true"/>
         <provider android:name="org.telegram.messenger.voip.CallNotificationSoundProvider" android:exported="true" android:authorities="org.telegram.messenger.beta.call_sound_provider"/>
+        <receiver android:name="org.telegram.messenger.ChatsWidgetProvider">
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/chats_widget_info"/>
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+        </receiver>
+        <service android:name="org.telegram.messenger.ChatsWidgetService" android:permission="android.permission.BIND_REMOTEVIEWS" android:exported="false"/>
+        <receiver android:name="org.telegram.messenger.ContactsWidgetProvider">
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/contacts_widget_info"/>
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+        </receiver>
+        <service android:name="org.telegram.messenger.ContactsWidgetService" android:permission="android.permission.BIND_REMOTEVIEWS" android:exported="false"/>
         <uses-library android:name="com.sec.android.app.multiwindow" android:required="false"/>
         <meta-data android:name="com.sec.android.support.multiwindow" android:value="true"/>
         <meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_W" android:value="632dp"/>
@@ -332,8 +356,8 @@
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <activity android:theme="@style/Theme.Translucent.NoTitleBar" android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity" android:exported="false" android:excludeFromRecents="true"/>
         <service android:name="com.google.android.gms.auth.api.signin.RevocationBoundService" android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION" android:exported="true" android:visibleToInstantApps="true"/>
-        <activity android:theme="@style/Theme.Translucent.NoTitleBar" android:name="com.google.android.gms.common.api.GoogleApiActivity" android:exported="false"/>
         <provider android:name="com.google.firebase.provider.FirebaseInitProvider" android:exported="false" android:authorities="org.telegram.messenger.beta.firebaseinitprovider" android:initOrder="100" android:directBootAware="true"/>
+        <activity android:theme="@style/Theme.Translucent.NoTitleBar" android:name="com.google.android.gms.common.api.GoogleApiActivity" android:exported="false"/>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
         <activity android:theme="@style/Theme.NoDisplay" android:name="com.microsoft.appcenter.distribute.DeepLinkActivity">
             <intent-filter>

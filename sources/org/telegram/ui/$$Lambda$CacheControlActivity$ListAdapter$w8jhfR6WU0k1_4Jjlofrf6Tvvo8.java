@@ -14,4 +14,8 @@ public final /* synthetic */ class $$Lambda$CacheControlActivity$ListAdapter$w8j
     public final void onOptionSelected(int i) {
         CacheControlActivity.ListAdapter.lambda$onCreateViewHolder$0(i);
     }
+
+    public /* synthetic */ void onTouchEnd() {
+        SlideChooseView.Callback.CC.$default$onTouchEnd(this);
+    }
 }

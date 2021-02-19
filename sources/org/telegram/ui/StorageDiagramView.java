@@ -64,7 +64,6 @@ public class StorageDiagramView extends View {
         int i;
         Canvas canvas2;
         Canvas canvas3 = canvas;
-        int i2 = Build.VERSION.SDK_INT;
         if (this.data != null) {
             float f = 1.0f;
             if (this.enabledCount > 1) {
@@ -90,24 +89,24 @@ public class StorageDiagramView extends View {
                     }
                 }
             }
+            int i2 = 0;
             int i3 = 0;
-            int i4 = 0;
             float f6 = 0.0f;
             while (true) {
                 ClearViewData[] clearViewDataArr = this.data;
                 i = 255;
-                if (i4 >= clearViewDataArr.length) {
+                if (i3 >= clearViewDataArr.length) {
                     break;
                 }
-                if (clearViewDataArr[i4] != null) {
+                if (clearViewDataArr[i3] != null) {
                     float[] fArr = this.drawingPercentage;
-                    if (fArr[i4] != 0.0f) {
-                        float f7 = fArr[i4];
-                        if (clearViewDataArr[i4].firstDraw) {
+                    if (fArr[i3] != 0.0f) {
+                        float f7 = fArr[i3];
+                        if (clearViewDataArr[i3].firstDraw) {
                             float f8 = (-360.0f * f7) + ((f - this.singleProgress) * 10.0f);
                             float f9 = f8 > 0.0f ? 0.0f : f8;
-                            clearViewDataArr[i4].paint.setColor(Theme.getColor(clearViewDataArr[i4].color));
-                            this.data[i4].paint.setAlpha(255);
+                            clearViewDataArr[i3].paint.setColor(Theme.getColor(clearViewDataArr[i3].color));
+                            this.data[i3].paint.setAlpha(255);
                             double width = (double) (this.rectF.width() / 2.0f);
                             Double.isNaN(width);
                             double d3 = (double) f9;
@@ -122,38 +121,38 @@ public class StorageDiagramView extends View {
                                 double sin = Math.sin(Math.toRadians(d4));
                                 Double.isNaN(width);
                                 float var_ = centerY + ((float) (width * sin));
-                                if (i2 >= 21) {
-                                    canvas3.drawPoint(var_, var_, this.data[i4].paint);
+                                if (Build.VERSION.SDK_INT >= 21) {
+                                    canvas3.drawPoint(var_, var_, this.data[i3].paint);
                                 } else {
-                                    this.data[i4].paint.setStyle(Paint.Style.FILL);
-                                    canvas3.drawCircle(var_, var_, this.data[i4].paint.getStrokeWidth() / 2.0f, this.data[i4].paint);
+                                    this.data[i3].paint.setStyle(Paint.Style.FILL);
+                                    canvas3.drawCircle(var_, var_, this.data[i3].paint.getStrokeWidth() / 2.0f, this.data[i3].paint);
                                 }
                             } else {
-                                this.data[i4].paint.setStyle(Paint.Style.STROKE);
-                                canvas.drawArc(this.rectF, -90.0f - (360.0f * f6), f9, false, this.data[i4].paint);
+                                this.data[i3].paint.setStyle(Paint.Style.STROKE);
+                                canvas.drawArc(this.rectF, -90.0f - (360.0f * f6), f9, false, this.data[i3].paint);
                             }
                         }
                         f6 += f7;
                     }
                 }
-                i4++;
+                i3++;
                 f = 1.0f;
             }
             float var_ = 0.0f;
             while (true) {
                 ClearViewData[] clearViewDataArr2 = this.data;
-                if (i3 >= clearViewDataArr2.length) {
+                if (i2 >= clearViewDataArr2.length) {
                     break;
                 }
-                if (clearViewDataArr2[i3] != null) {
+                if (clearViewDataArr2[i2] != null) {
                     float[] fArr2 = this.drawingPercentage;
-                    if (fArr2[i3] != 0.0f) {
-                        float var_ = fArr2[i3];
-                        if (!clearViewDataArr2[i3].firstDraw) {
+                    if (fArr2[i2] != 0.0f) {
+                        float var_ = fArr2[i2];
+                        if (!clearViewDataArr2[i2].firstDraw) {
                             float var_ = (var_ * -360.0f) + ((1.0f - this.singleProgress) * 10.0f);
                             float var_ = var_ > 0.0f ? 0.0f : var_;
-                            clearViewDataArr2[i3].paint.setColor(Theme.getColor(clearViewDataArr2[i3].color));
-                            this.data[i3].paint.setAlpha(i);
+                            clearViewDataArr2[i2].paint.setColor(Theme.getColor(clearViewDataArr2[i2].color));
+                            this.data[i2].paint.setAlpha(i);
                             double width2 = (double) (this.rectF.width() / 2.0f);
                             Double.isNaN(width2);
                             double d5 = (double) var_;
@@ -168,20 +167,20 @@ public class StorageDiagramView extends View {
                                 double sin2 = Math.sin(Math.toRadians(d6));
                                 Double.isNaN(width2);
                                 float var_ = centerY2 + ((float) (width2 * sin2));
-                                if (i2 >= 21) {
+                                if (Build.VERSION.SDK_INT >= 21) {
                                     canvas2 = canvas;
-                                    canvas2.drawPoint(var_, var_, this.data[i3].paint);
+                                    canvas2.drawPoint(var_, var_, this.data[i2].paint);
                                 } else {
                                     canvas2 = canvas;
-                                    this.data[i3].paint.setStyle(Paint.Style.FILL);
-                                    canvas2.drawCircle(var_, var_, this.data[i3].paint.getStrokeWidth() / 2.0f, this.data[i3].paint);
+                                    this.data[i2].paint.setStyle(Paint.Style.FILL);
+                                    canvas2.drawCircle(var_, var_, this.data[i2].paint.getStrokeWidth() / 2.0f, this.data[i2].paint);
                                 }
                             } else {
                                 canvas2 = canvas;
-                                this.data[i3].paint.setStyle(Paint.Style.STROKE);
-                                canvas.drawArc(this.rectF, -90.0f - (var_ * 360.0f), var_, false, this.data[i3].paint);
+                                this.data[i2].paint.setStyle(Paint.Style.STROKE);
+                                canvas.drawArc(this.rectF, -90.0f - (var_ * 360.0f), var_, false, this.data[i2].paint);
                                 var_ += var_;
-                                i3++;
+                                i2++;
                                 canvas3 = canvas2;
                                 i = 255;
                             }
@@ -189,13 +188,13 @@ public class StorageDiagramView extends View {
                             canvas2 = canvas3;
                         }
                         var_ += var_;
-                        i3++;
+                        i2++;
                         canvas3 = canvas2;
                         i = 255;
                     }
                 }
                 canvas2 = canvas3;
-                i3++;
+                i2++;
                 canvas3 = canvas2;
                 i = 255;
             }

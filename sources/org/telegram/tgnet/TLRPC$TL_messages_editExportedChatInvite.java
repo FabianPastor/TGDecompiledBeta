@@ -10,7 +10,7 @@ public class TLRPC$TL_messages_editExportedChatInvite extends TLObject {
     public int usage_limit;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        return TLRPC$TL_messages_exportedChatInvite.TLdeserialize(abstractSerializedData, i, z);
+        return TLRPC$messages_ExportedChatInvite.TLdeserialize(abstractSerializedData, i, z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {

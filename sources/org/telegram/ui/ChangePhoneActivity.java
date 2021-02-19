@@ -78,6 +78,8 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.HintEditText;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RLottieDrawable;
+import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.SlideView;
 import org.telegram.ui.CountrySelectActivity;
 
@@ -620,7 +622,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.TextView r0 = new android.widget.TextView
                 r0.<init>(r2)
                 r1.textView2 = r0
-                r2 = 2131624618(0x7f0e02aa, float:1.887642E38)
+                r2 = 2131624658(0x7f0e02d2, float:1.8876502E38)
                 java.lang.String r5 = "ChangePhoneHelp"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
                 r0.setText(r2)
@@ -743,7 +745,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 int r0 = r0.length()
                 if (r0 != 0) goto L_0x0347
                 android.widget.TextView r0 = r1.countryButton
-                r2 = 2131624820(0x7f0e0374, float:1.887683E38)
+                r2 = 2131624860(0x7f0e039c, float:1.8876912E38)
                 java.lang.String r3 = "ChooseCountry"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -1020,7 +1022,7 @@ public class ChangePhoneActivity extends BaseFragment {
         /* access modifiers changed from: private */
         public ImageView blackImageView;
         /* access modifiers changed from: private */
-        public ImageView blueImageView;
+        public RLottieImageView blueImageView;
         /* access modifiers changed from: private */
         public EditTextBoldCursor[] codeField;
         private LinearLayout codeFieldContainer;
@@ -1032,6 +1034,7 @@ public class ChangePhoneActivity extends BaseFragment {
         /* access modifiers changed from: private */
         public int currentType;
         private String emailPhone;
+        RLottieDrawable hintDrawable;
         /* access modifiers changed from: private */
         public boolean ignoreOnTextChange;
         /* access modifiers changed from: private */
@@ -1173,7 +1176,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165881(0x7var_b9, float:1.7945992E38)
+                r14 = 2131165882(0x7var_ba, float:1.7945994E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
                 if (r14 == 0) goto L_0x00fb
@@ -1202,7 +1205,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 r20 = 0
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
                 r4.addView(r8, r14)
-                goto L_0x0210
+                goto L_0x0231
             L_0x00fb:
                 android.widget.TextView r15 = r0.confirmTextView
                 r16 = -1
@@ -1227,7 +1230,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 r22 = 1073741824(0x40000000, float:2.0)
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
                 r4.addView(r8, r14)
-                goto L_0x0210
+                goto L_0x0231
             L_0x012c:
                 android.widget.TextView r4 = r0.confirmTextView
                 r4.setGravity(r10)
@@ -1259,39 +1262,52 @@ public class ChangePhoneActivity extends BaseFragment {
                 r23 = 0
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
-                android.widget.ImageView r8 = new android.widget.ImageView
+                org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
                 r10 = 2131166025(0x7var_, float:1.7946284E38)
                 r8.setImageResource(r10)
-                android.widget.ImageView r8 = r0.blueImageView
+                org.telegram.ui.Components.RLottieImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
                 int r11 = org.telegram.ui.ActionBar.Theme.getColor(r15)
                 android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.MULTIPLY
                 r10.<init>(r11, r14)
                 r8.setColorFilter(r10)
-                android.widget.ImageView r8 = r0.blueImageView
+                org.telegram.ui.Components.RLottieImageView r8 = r0.blueImageView
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627217(0x7f0e0cd1, float:1.8881692E38)
+                r8 = 2131627323(0x7f0e0d3b, float:1.8881907E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-                goto L_0x01ee
+                goto L_0x020f
             L_0x01ac:
-                android.widget.ImageView r8 = new android.widget.ImageView
+                org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166026(0x7var_a, float:1.7946286E38)
-                r8.setImageResource(r10)
-                android.widget.ImageView r8 = r0.blueImageView
-                android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
-                int r11 = org.telegram.ui.ActionBar.Theme.getColor(r15)
-                android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.MULTIPLY
-                r10.<init>(r11, r14)
-                r8.setColorFilter(r10)
-                android.widget.ImageView r8 = r0.blueImageView
+                org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
+                r18 = 2131558471(0x7f0d0047, float:1.8742259E38)
+                r10 = 1115684864(0x42800000, float:64.0)
+                int r20 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                int r21 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                r22 = 1
+                r23 = 0
+                java.lang.String r19 = "NUM"
+                r17 = r8
+                r17.<init>((int) r18, (java.lang.String) r19, (int) r20, (int) r21, (boolean) r22, (int[]) r23)
+                r0.hintDrawable = r8
+                int r10 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+                java.lang.String r11 = "Bubble.**"
+                r8.setLayerColor(r11, r10)
+                org.telegram.ui.Components.RLottieDrawable r8 = r0.hintDrawable
+                int r10 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+                java.lang.String r11 = "Phone.**"
+                r8.setLayerColor(r11, r10)
+                org.telegram.ui.Components.RLottieImageView r8 = r0.blueImageView
+                org.telegram.ui.Components.RLottieDrawable r10 = r0.hintDrawable
+                r8.setAnimation(r10)
+                org.telegram.ui.Components.RLottieImageView r8 = r0.blueImageView
                 r17 = -2
                 r18 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
                 r19 = 51
@@ -1302,11 +1318,11 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627221(0x7f0e0cd5, float:1.88817E38)
+                r8 = 2131627327(0x7f0e0d3f, float:1.8881915E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-            L_0x01ee:
+            L_0x020f:
                 android.widget.TextView r4 = r0.titleTextView
                 r17 = -2
                 r18 = -2
@@ -1321,7 +1337,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 r21 = 17
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
                 r0.addView(r4, r8)
-            L_0x0210:
+            L_0x0231:
                 android.widget.LinearLayout r4 = new android.widget.LinearLayout
                 r4.<init>(r2)
                 r0.codeFieldContainer = r4
@@ -1332,11 +1348,11 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r10, (int) r3)
                 r0.addView(r4, r10)
                 int r4 = r0.currentType
-                if (r4 != r12) goto L_0x0231
+                if (r4 != r12) goto L_0x0252
                 android.widget.LinearLayout r4 = r0.codeFieldContainer
                 r10 = 8
                 r4.setVisibility(r10)
-            L_0x0231:
+            L_0x0252:
                 org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$1 r4 = new org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$1
                 r4.<init>(r0, r2, r1)
                 r0.timeText = r4
@@ -1349,17 +1365,17 @@ public class ChangePhoneActivity extends BaseFragment {
                 int r4 = r0.currentType
                 r5 = 1097859072(0x41700000, float:15.0)
                 r10 = 1092616192(0x41200000, float:10.0)
-                if (r4 != r12) goto L_0x028f
+                if (r4 != r12) goto L_0x02b0
                 android.widget.TextView r4 = r0.timeText
                 r4.setTextSize(r3, r6)
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x025e
+                if (r6 == 0) goto L_0x027f
                 r6 = 5
-                goto L_0x025f
-            L_0x025e:
+                goto L_0x0280
+            L_0x027f:
                 r6 = 3
-            L_0x025f:
+            L_0x0280:
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r6)
                 org.telegram.ui.ChangePhoneActivity$ProgressView r4 = new org.telegram.ui.ChangePhoneActivity$ProgressView
@@ -1367,12 +1383,12 @@ public class ChangePhoneActivity extends BaseFragment {
                 r0.progressView = r4
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x0275
+                if (r6 == 0) goto L_0x0296
                 r11 = 5
-                goto L_0x0276
-            L_0x0275:
+                goto L_0x0297
+            L_0x0296:
                 r11 = 3
-            L_0x0276:
+            L_0x0297:
                 r4.setGravity(r11)
                 org.telegram.ui.ChangePhoneActivity$ProgressView r4 = r0.progressView
                 r17 = -1
@@ -1383,8 +1399,8 @@ public class ChangePhoneActivity extends BaseFragment {
                 r22 = 0
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r17, r18, r19, r20, r21, r22)
                 r0.addView(r4, r6)
-                goto L_0x02b1
-            L_0x028f:
+                goto L_0x02d2
+            L_0x02b0:
                 android.widget.TextView r4 = r0.timeText
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
@@ -1397,7 +1413,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.TextView r4 = r0.timeText
                 android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r11)
-            L_0x02b1:
+            L_0x02d2:
                 org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$2 r4 = new org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView$2
                 r4.<init>(r0, r2, r1)
                 r0.problemText = r4
@@ -1418,20 +1434,20 @@ public class ChangePhoneActivity extends BaseFragment {
                 r2 = 49
                 r1.setGravity(r2)
                 int r1 = r0.currentType
-                if (r1 != r3) goto L_0x02f8
+                if (r1 != r3) goto L_0x0319
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625108(0x7f0e0494, float:1.8877415E38)
+                r2 = 2131625155(0x7f0e04c3, float:1.887751E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x0306
-            L_0x02f8:
+                goto L_0x0327
+            L_0x0319:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625107(0x7f0e0493, float:1.8877413E38)
+                r2 = 2131625154(0x7f0e04c2, float:1.8877508E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-            L_0x0306:
+            L_0x0327:
                 android.widget.TextView r1 = r0.problemText
                 r2 = 49
                 android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r2)
@@ -1471,10 +1487,10 @@ public class ChangePhoneActivity extends BaseFragment {
 
         /* access modifiers changed from: protected */
         public void onMeasure(int i, int i2) {
-            ImageView imageView;
+            RLottieImageView rLottieImageView;
             super.onMeasure(i, i2);
-            if (this.currentType != 3 && (imageView = this.blueImageView) != null) {
-                int measuredHeight = imageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight() + this.confirmTextView.getMeasuredHeight() + AndroidUtilities.dp(35.0f);
+            if (this.currentType != 3 && (rLottieImageView = this.blueImageView) != null) {
+                int measuredHeight = rLottieImageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight() + this.confirmTextView.getMeasuredHeight() + AndroidUtilities.dp(35.0f);
                 int dp = AndroidUtilities.dp(80.0f);
                 int dp2 = AndroidUtilities.dp(291.0f);
                 if (this.this$0.scrollHeight - measuredHeight < dp) {
@@ -2342,7 +2358,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                         if (r2 != r6) goto L_0x00a2
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131627351(0x7f0e0d57, float:1.8881964E38)
+                                        r3 = 2131627457(0x7f0e0dc1, float:1.8882179E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -2355,7 +2371,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                     L_0x0082:
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131624588(0x7f0e028c, float:1.887636E38)
+                                        r3 = 2131624622(0x7f0e02ae, float:1.8876429E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -2442,7 +2458,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                         if (r0 != r4) goto L_0x0164
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131624590(0x7f0e028e, float:1.8876364E38)
+                                        r1 = 2131624624(0x7f0e02b0, float:1.8876433E38)
                                         java.lang.String r2 = "Calling"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -2450,7 +2466,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                     L_0x0164:
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131627213(0x7f0e0ccd, float:1.8881684E38)
+                                        r1 = 2131627319(0x7f0e0d37, float:1.88819E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -2825,6 +2841,10 @@ public class ChangePhoneActivity extends BaseFragment {
                         public void onShow() {
                             super.onShow();
                             if (this.currentType != 3) {
+                                RLottieDrawable rLottieDrawable = this.hintDrawable;
+                                if (rLottieDrawable != null) {
+                                    rLottieDrawable.setCurrentFrame(0);
+                                }
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public final void run() {
                                         ChangePhoneActivity.LoginActivitySmsView.this.lambda$onShow$10$ChangePhoneActivity$LoginActivitySmsView();
@@ -2838,15 +2858,27 @@ public class ChangePhoneActivity extends BaseFragment {
                         public /* synthetic */ void lambda$onShow$10$ChangePhoneActivity$LoginActivitySmsView() {
                             EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
                             if (editTextBoldCursorArr != null) {
-                                for (int length2 = editTextBoldCursorArr.length - 1; length2 >= 0; length2--) {
-                                    if (length2 == 0 || this.codeField[length2].length() != 0) {
+                                int length2 = editTextBoldCursorArr.length - 1;
+                                while (true) {
+                                    if (length2 < 0) {
+                                        break;
+                                    } else if (length2 == 0 || this.codeField[length2].length() != 0) {
                                         this.codeField[length2].requestFocus();
                                         EditTextBoldCursor[] editTextBoldCursorArr2 = this.codeField;
                                         editTextBoldCursorArr2[length2].setSelection(editTextBoldCursorArr2[length2].length());
                                         AndroidUtilities.showKeyboard(this.codeField[length2]);
-                                        return;
+                                    } else {
+                                        length2--;
                                     }
                                 }
+                                this.codeField[length2].requestFocus();
+                                EditTextBoldCursor[] editTextBoldCursorArr22 = this.codeField;
+                                editTextBoldCursorArr22[length2].setSelection(editTextBoldCursorArr22[length2].length());
+                                AndroidUtilities.showKeyboard(this.codeField[length2]);
+                            }
+                            RLottieDrawable rLottieDrawable = this.hintDrawable;
+                            if (rLottieDrawable != null) {
+                                rLottieDrawable.start();
                             }
                         }
 
@@ -2877,9 +2909,12 @@ public class ChangePhoneActivity extends BaseFragment {
                         LoginActivitySmsView loginActivitySmsView3 = (LoginActivitySmsView) slideViewArr[3];
                         LoginActivitySmsView loginActivitySmsView4 = (LoginActivitySmsView) slideViewArr[4];
                         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-                        ThemeDescription themeDescription = r9;
-                        ThemeDescription themeDescription2 = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite");
-                        arrayList.add(themeDescription);
+                        $$Lambda$ChangePhoneActivity$vYXfF2LbQ54DHqseO18Kk1JC_aE r15 = new ThemeDescription.ThemeDescriptionDelegate() {
+                            public final void didSetColor() {
+                                ChangePhoneActivity.this.lambda$getThemeDescriptions$0$ChangePhoneActivity();
+                            }
+                        };
+                        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
                         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
                         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
                         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
@@ -2891,11 +2926,11 @@ public class ChangePhoneActivity extends BaseFragment {
                         arrayList.add(new ThemeDescription(phoneView.textView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
                         arrayList.add(new ThemeDescription(phoneView.codeField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
                         arrayList.add(new ThemeDescription(phoneView.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
-                        arrayList.add(new ThemeDescription(phoneView.codeField, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                        arrayList.add(new ThemeDescription(phoneView.codeField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
                         arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
                         arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_HINTTEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteHintText"));
                         arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
-                        arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_DRAWABLESELECTEDSTATE | ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                        arrayList.add(new ThemeDescription(phoneView.phoneField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
                         arrayList.add(new ThemeDescription(phoneView.textView2, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
                         arrayList.add(new ThemeDescription(loginActivitySmsView.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
                         arrayList.add(new ThemeDescription(loginActivitySmsView.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
@@ -2953,6 +2988,45 @@ public class ChangePhoneActivity extends BaseFragment {
                         arrayList.add(new ThemeDescription((View) loginActivitySmsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
                         arrayList.add(new ThemeDescription(loginActivitySmsView4.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
                         arrayList.add(new ThemeDescription(loginActivitySmsView4.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.blueImageView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r15, "chats_actionBackground"));
                         return arrayList;
+                    }
+
+                    /* access modifiers changed from: private */
+                    /* JADX WARNING: Code restructure failed: missing block: B:5:0x000c, code lost:
+                        r1 = (org.telegram.ui.LoginActivity.LoginActivitySmsView) r1[r0];
+                     */
+                    /* renamed from: lambda$getThemeDescriptions$0 */
+                    /* Code decompiled incorrectly, please refer to instructions dump. */
+                    public /* synthetic */ void lambda$getThemeDescriptions$0$ChangePhoneActivity() {
+                        /*
+                            r6 = this;
+                            r0 = 0
+                        L_0x0001:
+                            org.telegram.ui.Components.SlideView[] r1 = r6.views
+                            int r2 = r1.length
+                            if (r0 >= r2) goto L_0x002d
+                            r2 = r1[r0]
+                            boolean r2 = r2 instanceof org.telegram.ui.LoginActivity.LoginActivitySmsView
+                            if (r2 == 0) goto L_0x002a
+                            r1 = r1[r0]
+                            org.telegram.ui.LoginActivity$LoginActivitySmsView r1 = (org.telegram.ui.LoginActivity.LoginActivitySmsView) r1
+                            org.telegram.ui.Components.RLottieDrawable r2 = r1.hintDrawable
+                            if (r2 == 0) goto L_0x002a
+                            java.lang.String r3 = "chats_actionBackground"
+                            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+                            java.lang.String r5 = "Bubble.**"
+                            r2.setLayerColor(r5, r4)
+                            org.telegram.ui.Components.RLottieDrawable r1 = r1.hintDrawable
+                            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+                            java.lang.String r3 = "Phone.**"
+                            r1.setLayerColor(r3, r2)
+                        L_0x002a:
+                            int r0 = r0 + 1
+                            goto L_0x0001
+                        L_0x002d:
+                            return
+                        */
+                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChangePhoneActivity.lambda$getThemeDescriptions$0$ChangePhoneActivity():void");
                     }
                 }

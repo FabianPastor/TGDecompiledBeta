@@ -21,10 +21,13 @@ public class CrossOutDrawable extends Drawable {
     final Paint xRefPaint;
 
     public int getOpacity() {
-        return -3;
+        return -2;
     }
 
     public void setAlpha(int i) {
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
     }
 
     public CrossOutDrawable(Context context, int i, String str) {
@@ -58,8 +61,9 @@ public class CrossOutDrawable extends Drawable {
         invalidateSelf();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x003b  */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x0041  */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x003f  */
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x005e  */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0064  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void draw(android.graphics.Canvas r13) {
         /*
@@ -93,21 +97,28 @@ public class CrossOutDrawable extends Drawable {
             if (r0 >= 0) goto L_0x0035
             r12.progress = r2
         L_0x0035:
-            float r0 = r12.progress
-            int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 != 0) goto L_0x0041
-            android.graphics.drawable.Drawable r0 = r12.iconDrawable
-            r0.draw(r13)
-            return
-        L_0x0041:
             java.lang.String r0 = r12.colorKey
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
             int r1 = r12.color
-            if (r1 == r0) goto L_0x0052
+            if (r1 == r0) goto L_0x0058
             r12.color = r0
             android.graphics.Paint r1 = r12.paint
             r1.setColor(r0)
-        L_0x0052:
+            android.graphics.drawable.Drawable r0 = r12.iconDrawable
+            android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r4 = r12.colorKey
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r1.<init>(r4, r5)
+            r0.setColorFilter(r1)
+        L_0x0058:
+            float r0 = r12.progress
+            int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+            if (r0 != 0) goto L_0x0064
+            android.graphics.drawable.Drawable r0 = r12.iconDrawable
+            r0.draw(r13)
+            return
+        L_0x0064:
             android.graphics.RectF r0 = r12.rectF
             android.graphics.drawable.Drawable r1 = r12.iconDrawable
             android.graphics.Rect r1 = r1.getBounds()
@@ -145,7 +156,7 @@ public class CrossOutDrawable extends Drawable {
             float r4 = (float) r4
             float r5 = r5 - r4
             boolean r4 = r12.cross
-            if (r4 == 0) goto L_0x00b0
+            if (r4 == 0) goto L_0x00c2
             float r1 = r1 - r0
             float r3 = r12.progress
             float r1 = r1 * r3
@@ -153,8 +164,8 @@ public class CrossOutDrawable extends Drawable {
             float r5 = r5 - r2
             float r5 = r5 * r3
             float r5 = r5 + r2
-            goto L_0x00bf
-        L_0x00b0:
+            goto L_0x00d1
+        L_0x00c2:
             float r4 = r1 - r0
             float r6 = r12.progress
             float r7 = r3 - r6
@@ -164,7 +175,7 @@ public class CrossOutDrawable extends Drawable {
             float r3 = r3 - r6
             float r4 = r4 * r3
             float r2 = r2 + r4
-        L_0x00bf:
+        L_0x00d1:
             android.graphics.Paint r3 = r12.paint
             float r3 = r3.getStrokeWidth()
             float r8 = r2 - r3
@@ -189,10 +200,6 @@ public class CrossOutDrawable extends Drawable {
     public void setBounds(int i, int i2, int i3, int i4) {
         super.setBounds(i, i2, i3, i4);
         this.iconDrawable.setBounds(i, i2, i3, i4);
-    }
-
-    public void setColorFilter(ColorFilter colorFilter) {
-        this.iconDrawable.setColorFilter(colorFilter);
     }
 
     public int getIntrinsicHeight() {

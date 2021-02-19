@@ -50,13 +50,11 @@ public class BaseFragment {
     /* access modifiers changed from: protected */
     public View fragmentView;
     protected boolean hasOwnBackground;
-    /* access modifiers changed from: protected */
-    public boolean inBubbleMode;
+    protected boolean inBubbleMode;
     /* access modifiers changed from: protected */
     public boolean inPreviewMode;
     private boolean isFinished;
-    /* access modifiers changed from: protected */
-    public boolean isPaused;
+    protected boolean isPaused;
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
     protected Dialog visibleDialog;

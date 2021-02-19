@@ -21,7 +21,8 @@ public class TLRPC$TL_channel extends TLRPC$Chat {
         this.slowmode_enabled = (4194304 & readInt32) != 0;
         this.call_active = (8388608 & readInt32) != 0;
         this.call_not_empty = (16777216 & readInt32) != 0;
-        this.fake = (readInt32 & 33554432) != 0;
+        this.fake = (33554432 & readInt32) != 0;
+        this.gigagroup = (readInt32 & 67108864) != 0;
         this.id = abstractSerializedData.readInt32(z);
         if ((this.flags & 8192) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);
@@ -98,7 +99,9 @@ public class TLRPC$TL_channel extends TLRPC$Chat {
         this.flags = i14;
         int i15 = this.fake ? i14 | 33554432 : i14 & -33554433;
         this.flags = i15;
-        abstractSerializedData.writeInt32(i15);
+        int i16 = this.gigagroup ? i15 | 67108864 : i15 & -67108865;
+        this.flags = i16;
+        abstractSerializedData.writeInt32(i16);
         abstractSerializedData.writeInt32(this.id);
         if ((this.flags & 8192) != 0) {
             abstractSerializedData.writeInt64(this.access_hash);
@@ -114,8 +117,8 @@ public class TLRPC$TL_channel extends TLRPC$Chat {
             abstractSerializedData.writeInt32(NUM);
             int size = this.restriction_reason.size();
             abstractSerializedData.writeInt32(size);
-            for (int i16 = 0; i16 < size; i16++) {
-                this.restriction_reason.get(i16).serializeToStream(abstractSerializedData);
+            for (int i17 = 0; i17 < size; i17++) {
+                this.restriction_reason.get(i17).serializeToStream(abstractSerializedData);
             }
         }
         if ((this.flags & 16384) != 0) {

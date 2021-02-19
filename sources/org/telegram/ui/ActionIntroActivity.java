@@ -518,11 +518,12 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         });
         int i10 = this.currentType;
         if (i10 == 0) {
-            this.imageView.setImageResource(NUM);
             this.imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            this.imageView.setAnimation(NUM, 200, 200);
             this.titleTextView.setText(LocaleController.getString("ChannelAlertTitle", NUM));
             this.descriptionText.setText(LocaleController.getString("ChannelAlertText", NUM));
             this.buttonTextView.setText(LocaleController.getString("ChannelAlertCreate2", NUM));
+            this.imageView.playAnimation();
         } else if (i10 == 1) {
             this.imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(100.0f), Theme.getColor("chats_archiveBackground")));
             this.imageView.setImageDrawable(new ShareLocationDrawable(context2, 3));

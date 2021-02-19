@@ -42,7 +42,12 @@ public class TLRPC$TL_updateShortChatMessage extends TLRPC$Updates {
                 }
             } else if (z) {
                 throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
+            } else {
+                return;
             }
+        }
+        if ((this.flags & 33554432) != 0) {
+            this.ttl_period = abstractSerializedData.readInt32(z);
         }
     }
 }

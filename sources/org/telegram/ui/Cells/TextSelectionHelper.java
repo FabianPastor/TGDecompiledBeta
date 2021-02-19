@@ -76,6 +76,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
     public Interpolator interpolator = new OvershootInterpolator();
     /* access modifiers changed from: private */
     public boolean isOneTouch;
+    int keyboardSize;
     /* access modifiers changed from: private */
     public int lastX;
     /* access modifiers changed from: private */
@@ -758,652 +759,650 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             return false;
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:12:0x0051, code lost:
-            if (r5 != 3) goto L_0x05fd;
+        /* JADX WARNING: Code restructure failed: missing block: B:12:0x004f, code lost:
+            if (r4 != 3) goto L_0x05f6;
          */
-        /* JADX WARNING: Removed duplicated region for block: B:43:0x010d  */
-        /* JADX WARNING: Removed duplicated region for block: B:50:0x0120 A[ADDED_TO_REGION] */
-        /* JADX WARNING: Removed duplicated region for block: B:57:0x0144  */
-        /* JADX WARNING: Removed duplicated region for block: B:60:0x0159  */
-        /* JADX WARNING: Removed duplicated region for block: B:61:0x0170  */
-        /* JADX WARNING: Removed duplicated region for block: B:65:0x0199  */
+        /* JADX WARNING: Removed duplicated region for block: B:43:0x010b  */
+        /* JADX WARNING: Removed duplicated region for block: B:50:0x011e A[ADDED_TO_REGION] */
+        /* JADX WARNING: Removed duplicated region for block: B:57:0x0142  */
+        /* JADX WARNING: Removed duplicated region for block: B:60:0x0157  */
+        /* JADX WARNING: Removed duplicated region for block: B:61:0x016e  */
+        /* JADX WARNING: Removed duplicated region for block: B:65:0x0195  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public boolean onTouchEvent(android.view.MotionEvent r23) {
+        public boolean onTouchEvent(android.view.MotionEvent r22) {
             /*
-                r22 = this;
-                r0 = r22
-                int r1 = android.os.Build.VERSION.SDK_INT
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean r2 = r2.isSelectionMode()
-                r3 = 0
-                if (r2 != 0) goto L_0x000e
-                return r3
-            L_0x000e:
-                int r2 = r23.getPointerCount()
-                r4 = 1
-                if (r2 <= r4) goto L_0x001c
+                r21 = this;
+                r0 = r21
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean r1 = r1.isSelectionMode()
+                r2 = 0
+                if (r1 != 0) goto L_0x000c
+                return r2
+            L_0x000c:
+                int r1 = r22.getPointerCount()
+                r3 = 1
+                if (r1 <= r3) goto L_0x001a
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 boolean r1 = r1.movingHandle
                 return r1
-            L_0x001c:
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r2 = r2.lastX
-                float r2 = (float) r2
-                float r5 = r23.getX()
-                float r2 = r2 - r5
-                int r2 = (int) r2
-                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int unused = r5.lastY
-                r23.getY()
-                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                float r6 = r23.getX()
-                int r6 = (int) r6
-                int unused = r5.lastX = r6
-                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                float r6 = r23.getY()
-                int r6 = (int) r6
-                int unused = r5.lastY = r6
-                int r5 = r23.getAction()
-                r6 = 2
-                if (r5 == 0) goto L_0x0525
-                if (r5 == r4) goto L_0x04e8
-                if (r5 == r6) goto L_0x0055
-                r1 = 3
-                if (r5 == r1) goto L_0x04e8
-                goto L_0x05fd
-            L_0x0055:
-                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean r5 = r5.movingHandle
-                if (r5 == 0) goto L_0x05fd
-                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean r6 = r5.movingHandleStart
-                if (r6 == 0) goto L_0x0067
-                r5.pickStartView()
-                goto L_0x006a
-            L_0x0067:
-                r5.pickEndView()
-            L_0x006a:
-                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                Cell r6 = r5.selectedView
-                if (r6 != 0) goto L_0x0075
-                boolean r1 = r5.movingHandle
-                return r1
-            L_0x0075:
-                float r5 = r23.getY()
-                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
-                float r6 = r6.movingOffsetY
-                float r5 = r5 + r6
+            L_0x001a:
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r1 = r1.lastX
+                float r1 = (float) r1
+                float r4 = r22.getX()
+                float r1 = r1 - r4
+                int r1 = (int) r1
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int unused = r4.lastY
+                r22.getY()
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                float r5 = r22.getX()
                 int r5 = (int) r5
-                float r6 = r23.getX()
-                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                float r8 = r7.movingOffsetX
-                float r6 = r6 + r8
-                int r6 = (int) r6
-                boolean r11 = r7.selectLayout(r6, r5)
-                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                Cell r8 = r7.selectedView
-                if (r8 != 0) goto L_0x0094
-                return r4
-            L_0x0094:
-                boolean r8 = r7.movingHandleStart
-                if (r8 == 0) goto L_0x00a0
-                int r8 = r7.selectionStart
-                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r9 = r7.layoutBlock
-                r7.fillLayoutForOffset(r8, r9)
-                goto L_0x00a7
-            L_0x00a0:
-                int r8 = r7.selectionEnd
-                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r9 = r7.layoutBlock
-                r7.fillLayoutForOffset(r8, r9)
-            L_0x00a7:
-                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r8 = r7.layoutBlock
-                android.text.StaticLayout r9 = r8.layout
-                if (r9 != 0) goto L_0x00b0
-                return r4
-            L_0x00b0:
-                float r13 = r8.yOffset
-                Cell r14 = r7.selectedView
-                int r7 = r14.getTop()
-                int r5 = r5 - r7
+                int unused = r4.lastX = r5
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                float r5 = r22.getY()
+                int r5 = (int) r5
+                int unused = r4.lastY = r5
+                int r4 = r22.getAction()
+                r5 = 2
+                if (r4 == 0) goto L_0x0523
+                if (r4 == r3) goto L_0x04e8
+                if (r4 == r5) goto L_0x0053
+                r1 = 3
+                if (r4 == r1) goto L_0x04e8
+                goto L_0x05f6
+            L_0x0053:
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean r4 = r4.movingHandle
+                if (r4 == 0) goto L_0x05f6
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean r5 = r4.movingHandleStart
+                if (r5 == 0) goto L_0x0065
+                r4.pickStartView()
+                goto L_0x0068
+            L_0x0065:
+                r4.pickEndView()
+            L_0x0068:
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                Cell r5 = r4.selectedView
+                if (r5 != 0) goto L_0x0073
+                boolean r1 = r4.movingHandle
+                return r1
+            L_0x0073:
+                float r4 = r22.getY()
+                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
+                float r5 = r5.movingOffsetY
+                float r4 = r4 + r5
+                int r4 = (int) r4
+                float r5 = r22.getX()
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                float r7 = r6.movingOffsetX
+                float r5 = r5 + r7
+                int r5 = (int) r5
+                boolean r10 = r6.selectLayout(r5, r4)
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                Cell r7 = r6.selectedView
+                if (r7 != 0) goto L_0x0092
+                return r3
+            L_0x0092:
+                boolean r7 = r6.movingHandleStart
+                if (r7 == 0) goto L_0x009e
+                int r7 = r6.selectionStart
+                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r8 = r6.layoutBlock
+                r6.fillLayoutForOffset(r7, r8)
+                goto L_0x00a5
+            L_0x009e:
+                int r7 = r6.selectionEnd
+                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r8 = r6.layoutBlock
+                r6.fillLayoutForOffset(r7, r8)
+            L_0x00a5:
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r7 = r6.layoutBlock
+                android.text.StaticLayout r8 = r7.layout
+                if (r8 != 0) goto L_0x00ae
+                return r3
+            L_0x00ae:
+                float r12 = r7.yOffset
+                Cell r13 = r6.selectedView
+                int r6 = r13.getTop()
+                int r4 = r4 - r6
+                float r5 = (float) r5
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                Cell r6 = r6.selectedView
+                float r6 = r6.getX()
+                float r5 = r5 - r6
+                int r15 = (int) r5
+                float r5 = r22.getY()
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r6 = r6.touchSlop
                 float r6 = (float) r6
-                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                Cell r7 = r7.selectedView
-                float r7 = r7.getX()
-                float r6 = r6 - r7
-                int r6 = (int) r6
-                float r7 = r23.getY()
-                org.telegram.ui.Cells.TextSelectionHelper r8 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r8 = r8.touchSlop
-                float r8 = (float) r8
-                float r7 = r7 - r8
-                org.telegram.ui.Cells.TextSelectionHelper r8 = org.telegram.ui.Cells.TextSelectionHelper.this
-                android.view.ViewGroup r8 = r8.parentView
-                int r8 = r8.getMeasuredHeight()
-                float r8 = (float) r8
-                int r7 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
-                if (r7 <= 0) goto L_0x00f5
-                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean r8 = r7.multiselect
-                if (r8 != 0) goto L_0x00f3
-                Cell r7 = r7.selectedView
-                int r7 = r7.getBottom()
-                org.telegram.ui.Cells.TextSelectionHelper r8 = org.telegram.ui.Cells.TextSelectionHelper.this
-                android.view.ViewGroup r8 = r8.parentView
-                int r8 = r8.getMeasuredHeight()
-                if (r7 <= r8) goto L_0x00f5
+                float r5 = r5 - r6
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                android.view.ViewGroup r6 = r6.parentView
+                int r6 = r6.getMeasuredHeight()
+                float r6 = (float) r6
+                int r5 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
+                if (r5 <= 0) goto L_0x00f3
+                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean r6 = r5.multiselect
+                if (r6 != 0) goto L_0x00f1
+                Cell r5 = r5.selectedView
+                int r5 = r5.getBottom()
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                android.view.ViewGroup r6 = r6.parentView
+                int r6 = r6.getMeasuredHeight()
+                if (r5 <= r6) goto L_0x00f3
+            L_0x00f1:
+                r5 = 1
+                goto L_0x00f4
             L_0x00f3:
-                r7 = 1
-                goto L_0x00f6
-            L_0x00f5:
-                r7 = 0
-            L_0x00f6:
-                float r8 = r23.getY()
-                org.telegram.ui.Cells.TextSelectionHelper r9 = org.telegram.ui.Cells.TextSelectionHelper.this
-                android.view.ViewGroup r9 = r9.parentView
-                android.view.ViewParent r9 = r9.getParent()
-                android.view.View r9 = (android.view.View) r9
-                int r9 = r9.getTop()
-                float r9 = (float) r9
-                int r8 = (r8 > r9 ? 1 : (r8 == r9 ? 0 : -1))
-                if (r8 >= 0) goto L_0x011d
-                org.telegram.ui.Cells.TextSelectionHelper r8 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean r9 = r8.multiselect
-                if (r9 != 0) goto L_0x011b
-                Cell r8 = r8.selectedView
-                int r8 = r8.getTop()
-                if (r8 >= 0) goto L_0x011d
+                r5 = 0
+            L_0x00f4:
+                float r6 = r22.getY()
+                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
+                android.view.ViewGroup r7 = r7.parentView
+                android.view.ViewParent r7 = r7.getParent()
+                android.view.View r7 = (android.view.View) r7
+                int r7 = r7.getTop()
+                float r7 = (float) r7
+                int r6 = (r6 > r7 ? 1 : (r6 == r7 ? 0 : -1))
+                if (r6 >= 0) goto L_0x011b
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean r7 = r6.multiselect
+                if (r7 != 0) goto L_0x0119
+                Cell r6 = r6.selectedView
+                int r6 = r6.getTop()
+                if (r6 >= 0) goto L_0x011b
+            L_0x0119:
+                r6 = 1
+                goto L_0x011c
             L_0x011b:
-                r8 = 1
-                goto L_0x011e
-            L_0x011d:
-                r8 = 0
-            L_0x011e:
-                if (r7 != 0) goto L_0x013c
-                if (r8 == 0) goto L_0x0123
-                goto L_0x013c
-            L_0x0123:
-                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean r7 = r7.scrolling
-                if (r7 == 0) goto L_0x0139
-                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean unused = r7.scrolling = r3
-                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                java.lang.Runnable r7 = r7.scrollRunnable
-                org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r7)
-            L_0x0139:
-                r17 = r5
-                goto L_0x0181
-            L_0x013c:
+                r6 = 0
+            L_0x011c:
+                if (r5 != 0) goto L_0x013a
+                if (r6 == 0) goto L_0x0121
+                goto L_0x013a
+            L_0x0121:
                 org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
                 boolean r5 = r5.scrolling
-                if (r5 != 0) goto L_0x0152
+                if (r5 == 0) goto L_0x0137
                 org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean unused = r5.scrolling = r4
+                boolean unused = r5.scrolling = r2
                 org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
                 java.lang.Runnable r5 = r5.scrollRunnable
-                org.telegram.messenger.AndroidUtilities.runOnUIThread(r5)
-            L_0x0152:
-                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean unused = r5.scrollDown = r7
-                if (r7 == 0) goto L_0x0170
-                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                android.view.ViewGroup r5 = r5.parentView
-                int r5 = r5.getMeasuredHeight()
-                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                Cell r7 = r7.selectedView
-                int r7 = r7.getTop()
-                int r5 = r5 - r7
-                float r5 = (float) r5
-                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                float r7 = r7.movingOffsetY
-                goto L_0x017e
-            L_0x0170:
+                org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r5)
+            L_0x0137:
+                r16 = r4
+                goto L_0x017f
+            L_0x013a:
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean r4 = r4.scrolling
+                if (r4 != 0) goto L_0x0150
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean unused = r4.scrolling = r3
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                java.lang.Runnable r4 = r4.scrollRunnable
+                org.telegram.messenger.AndroidUtilities.runOnUIThread(r4)
+            L_0x0150:
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean unused = r4.scrollDown = r5
+                if (r5 == 0) goto L_0x016e
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                android.view.ViewGroup r4 = r4.parentView
+                int r4 = r4.getMeasuredHeight()
                 org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
                 Cell r5 = r5.selectedView
                 int r5 = r5.getTop()
-                int r5 = -r5
-                float r5 = (float) r5
-                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                float r7 = r7.movingOffsetY
-            L_0x017e:
-                float r5 = r5 + r7
-                int r5 = (int) r5
-                goto L_0x0139
-            L_0x0181:
-                org.telegram.ui.Cells.TextSelectionHelper r15 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r5 = r15.textX
-                int r7 = r15.textY
-                Cell r8 = r15.selectedView
-                r21 = 0
-                r16 = r6
+                int r4 = r4 - r5
+                float r4 = (float) r4
+                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
+                float r5 = r5.movingOffsetY
+                goto L_0x017c
+            L_0x016e:
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                Cell r4 = r4.selectedView
+                int r4 = r4.getTop()
+                int r4 = -r4
+                float r4 = (float) r4
+                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
+                float r5 = r5.movingOffsetY
+            L_0x017c:
+                float r4 = r4 + r5
+                int r4 = (int) r4
+                goto L_0x0137
+            L_0x017f:
+                org.telegram.ui.Cells.TextSelectionHelper r14 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r4 = r14.textX
+                int r5 = r14.textY
+                Cell r6 = r14.selectedView
+                r20 = 0
+                r17 = r4
                 r18 = r5
-                r19 = r7
-                r20 = r8
-                int r9 = r15.getCharOffsetFromCord(r16, r17, r18, r19, r20, r21)
-                if (r9 < 0) goto L_0x04dd
+                r19 = r6
+                int r8 = r14.getCharOffsetFromCord(r15, r16, r17, r18, r19, r20)
+                if (r8 < 0) goto L_0x04dd
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean r5 = r4.movingDirectionSettling
+                if (r5 == 0) goto L_0x01b7
+                if (r10 == 0) goto L_0x019e
+                return r3
+            L_0x019e:
+                int r5 = r4.selectionStart
+                if (r8 >= r5) goto L_0x01aa
+                r4.movingDirectionSettling = r2
+                r4.movingHandleStart = r3
+                r4.hideActions()
+                goto L_0x01b7
+            L_0x01aa:
+                int r5 = r4.selectionEnd
+                if (r8 <= r5) goto L_0x01b6
+                r4.movingDirectionSettling = r2
+                r4.movingHandleStart = r2
+                r4.hideActions()
+                goto L_0x01b7
+            L_0x01b6:
+                return r3
+            L_0x01b7:
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean r5 = r4.movingHandleStart
+                r6 = -1
+                if (r5 == 0) goto L_0x036b
+                int r5 = r4.selectionStart
+                if (r5 == r8) goto L_0x04d8
+                boolean r4 = r4.canSelect(r8)
+                if (r4 == 0) goto L_0x04d8
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                Cell r5 = r4.selectedView
+                java.lang.CharSequence r4 = r4.getText(r5, r2)
                 org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean r6 = r5.movingDirectionSettling
-                if (r6 == 0) goto L_0x01bb
-                if (r11 == 0) goto L_0x01a2
-                return r4
-            L_0x01a2:
-                int r6 = r5.selectionStart
-                if (r9 >= r6) goto L_0x01ae
-                r5.movingDirectionSettling = r3
-                r5.movingHandleStart = r4
-                r5.hideActions()
-                goto L_0x01bb
-            L_0x01ae:
-                int r6 = r5.selectionEnd
-                if (r9 <= r6) goto L_0x01ba
-                r5.movingDirectionSettling = r3
-                r5.movingHandleStart = r3
-                r5.hideActions()
-                goto L_0x01bb
-            L_0x01ba:
-                return r4
-            L_0x01bb:
+                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r7 = r5.layoutBlock
+                r5.fillLayoutForOffset(r8, r7)
                 org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean r6 = r5.movingHandleStart
-                r7 = -1
-                if (r6 == 0) goto L_0x036a
-                int r6 = r5.selectionStart
-                if (r6 == r9) goto L_0x04d8
-                boolean r5 = r5.canSelect(r9)
-                if (r5 == 0) goto L_0x04d8
+                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r7 = r5.layoutBlock
+                android.text.StaticLayout r9 = r7.layout
+                int r11 = r5.selectionStart
+                r5.fillLayoutForOffset(r11, r7)
                 org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                Cell r6 = r5.selectedView
-                java.lang.CharSequence r5 = r5.getText(r6, r3)
-                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
-                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r8 = r6.layoutBlock
-                r6.fillLayoutForOffset(r9, r8)
-                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
-                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r8 = r6.layoutBlock
-                android.text.StaticLayout r10 = r8.layout
-                int r15 = r6.selectionStart
-                r6.fillLayoutForOffset(r15, r8)
-                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
-                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r6 = r6.layoutBlock
-                android.text.StaticLayout r6 = r6.layout
-                if (r10 == 0) goto L_0x0369
-                if (r6 != 0) goto L_0x01f2
-                goto L_0x0369
-            L_0x01f2:
-                r15 = r9
-            L_0x01f3:
-                int r8 = r15 + -1
-                if (r8 < 0) goto L_0x0204
-                char r8 = r5.charAt(r8)
-                boolean r8 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r8)
-                if (r8 == 0) goto L_0x0204
-                int r15 = r15 + -1
-                goto L_0x01f3
-            L_0x0204:
-                int r8 = r6.getLineForOffset(r15)
-                org.telegram.ui.Cells.TextSelectionHelper r12 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r12 = r12.selectionStart
-                int r12 = r6.getLineForOffset(r12)
-                int r3 = r6.getLineForOffset(r9)
-                if (r11 != 0) goto L_0x034b
-                if (r10 != r6) goto L_0x034b
-                org.telegram.ui.Cells.TextSelectionHelper r10 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r10 = r10.selectionStart
-                int r10 = r6.getLineForOffset(r10)
-                if (r3 == r10) goto L_0x0226
-                if (r3 != r8) goto L_0x0226
-                goto L_0x034b
-            L_0x0226:
-                int r10 = r6.getLineForOffset(r9)
-                int r10 = r6.getParagraphDirection(r10)
-                if (r7 == r10) goto L_0x032a
-                boolean r6 = r6.isRtlCharAt(r9)
-                if (r6 != 0) goto L_0x032a
-                if (r8 != r12) goto L_0x032a
-                if (r3 == r8) goto L_0x023c
-                goto L_0x032a
-            L_0x023c:
-                r3 = r9
-            L_0x023d:
-                int r6 = r3 + 1
-                int r7 = r5.length()
-                if (r6 >= r7) goto L_0x0251
-                char r7 = r5.charAt(r6)
+                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r5 = r5.layoutBlock
+                android.text.StaticLayout r5 = r5.layout
+                if (r9 == 0) goto L_0x036a
+                if (r5 != 0) goto L_0x01ee
+                goto L_0x036a
+            L_0x01ee:
+                r11 = r8
+            L_0x01ef:
+                int r7 = r11 + -1
+                if (r7 < 0) goto L_0x0200
+                char r7 = r4.charAt(r7)
                 boolean r7 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r7)
-                if (r7 == 0) goto L_0x0251
-                r3 = r6
-                goto L_0x023d
-            L_0x0251:
-                int r6 = r9 - r15
+                if (r7 == 0) goto L_0x0200
+                int r11 = r11 + -1
+                goto L_0x01ef
+            L_0x0200:
+                int r7 = r5.getLineForOffset(r11)
+                org.telegram.ui.Cells.TextSelectionHelper r14 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r14 = r14.selectionStart
+                int r14 = r5.getLineForOffset(r14)
+                int r15 = r5.getLineForOffset(r8)
+                if (r10 != 0) goto L_0x0349
+                if (r9 != r5) goto L_0x0349
+                org.telegram.ui.Cells.TextSelectionHelper r9 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r9 = r9.selectionStart
+                int r9 = r5.getLineForOffset(r9)
+                if (r15 == r9) goto L_0x0222
+                if (r15 != r7) goto L_0x0222
+                goto L_0x0349
+            L_0x0222:
+                int r9 = r5.getLineForOffset(r8)
+                int r9 = r5.getParagraphDirection(r9)
+                if (r6 == r9) goto L_0x0327
+                boolean r5 = r5.isRtlCharAt(r8)
+                if (r5 != 0) goto L_0x0327
+                if (r7 != r14) goto L_0x0327
+                if (r15 == r7) goto L_0x0238
+                goto L_0x0327
+            L_0x0238:
+                r5 = r8
+            L_0x0239:
+                int r6 = r5 + 1
+                int r7 = r4.length()
+                if (r6 >= r7) goto L_0x024d
+                char r7 = r4.charAt(r6)
+                boolean r7 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r7)
+                if (r7 == 0) goto L_0x024d
+                r5 = r6
+                goto L_0x0239
+            L_0x024d:
+                int r6 = r8 - r11
                 int r6 = java.lang.Math.abs(r6)
-                int r3 = r9 - r3
-                int r3 = java.lang.Math.abs(r3)
+                int r5 = r8 - r5
+                int r5 = java.lang.Math.abs(r5)
                 org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
                 boolean r7 = r7.snap
-                if (r7 == 0) goto L_0x026f
+                if (r7 == 0) goto L_0x026b
                 org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                if (r2 < 0) goto L_0x026b
-                r8 = 1
-                goto L_0x026c
+                if (r1 < 0) goto L_0x0267
+                r9 = 1
+                goto L_0x0268
+            L_0x0267:
+                r9 = 0
+            L_0x0268:
+                boolean unused = r7.snap = r9
             L_0x026b:
-                r8 = 0
-            L_0x026c:
-                boolean unused = r7.snap = r8
-            L_0x026f:
-                int r7 = r9 + -1
-                if (r7 <= 0) goto L_0x027f
-                char r7 = r5.charAt(r7)
+                int r7 = r8 + -1
+                if (r7 <= 0) goto L_0x027b
+                char r7 = r4.charAt(r7)
                 boolean r7 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r7)
-                if (r7 == 0) goto L_0x027f
+                if (r7 == 0) goto L_0x027b
                 r7 = 1
-                goto L_0x0280
-            L_0x027f:
+                goto L_0x027c
+            L_0x027b:
                 r7 = 0
-            L_0x0280:
-                int r8 = r5.length()
+            L_0x027c:
+                int r9 = r4.length()
                 r10 = 10
-                if (r9 < r8) goto L_0x028f
-                int r9 = r5.length()
-                r8 = 10
-                goto L_0x0293
+                if (r8 < r9) goto L_0x028b
+                int r8 = r4.length()
+                r9 = 10
+                goto L_0x028f
+            L_0x028b:
+                char r9 = r4.charAt(r8)
             L_0x028f:
-                char r8 = r5.charAt(r9)
-            L_0x0293:
-                org.telegram.ui.Cells.TextSelectionHelper r11 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r11 = r11.selectionStart
-                int r12 = r5.length()
-                if (r11 < r12) goto L_0x02a8
-                org.telegram.ui.Cells.TextSelectionHelper r11 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r5 = r5.length()
-                r11.selectionStart = r5
-                r5 = 10
-                goto L_0x02b0
-            L_0x02a8:
-                org.telegram.ui.Cells.TextSelectionHelper r11 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r11 = r11.selectionStart
-                char r5 = r5.charAt(r11)
-            L_0x02b0:
-                org.telegram.ui.Cells.TextSelectionHelper r11 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r11 = r11.selectionStart
-                if (r9 >= r11) goto L_0x02b8
-                if (r6 < r3) goto L_0x02d6
+                org.telegram.ui.Cells.TextSelectionHelper r12 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r12 = r12.selectionStart
+                int r13 = r4.length()
+                if (r12 < r13) goto L_0x02a4
+                org.telegram.ui.Cells.TextSelectionHelper r12 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r4 = r4.length()
+                r12.selectionStart = r4
+                r4 = 10
+                goto L_0x02ac
+            L_0x02a4:
+                org.telegram.ui.Cells.TextSelectionHelper r12 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r12 = r12.selectionStart
+                char r4 = r4.charAt(r12)
+            L_0x02ac:
+                org.telegram.ui.Cells.TextSelectionHelper r12 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r12 = r12.selectionStart
+                if (r8 >= r12) goto L_0x02b4
+                if (r6 < r5) goto L_0x02d2
+            L_0x02b4:
+                if (r8 <= r12) goto L_0x02b8
+                if (r1 < 0) goto L_0x02d2
             L_0x02b8:
-                if (r9 <= r11) goto L_0x02bc
-                if (r2 < 0) goto L_0x02d6
-            L_0x02bc:
-                boolean r2 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r8)
-                if (r2 == 0) goto L_0x02d6
-                boolean r2 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r5)
-                if (r2 == 0) goto L_0x02d0
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean r2 = r2.snap
-                if (r2 == 0) goto L_0x02d6
-            L_0x02d0:
-                if (r9 == 0) goto L_0x02d6
-                if (r7 == 0) goto L_0x02d6
-                if (r5 != r10) goto L_0x04d8
-            L_0x02d6:
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean r2 = r2.snap
-                if (r2 == 0) goto L_0x02e1
-                if (r9 != r4) goto L_0x02e1
-                return r4
-            L_0x02e1:
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r2 = r2.selectionStart
-                if (r9 >= r2) goto L_0x0305
-                boolean r2 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r8)
-                if (r2 == 0) goto L_0x0305
-                boolean r2 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r5)
-                if (r2 == 0) goto L_0x02fb
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean r2 = r2.snap
-                if (r2 == 0) goto L_0x0305
-            L_0x02fb:
-                if (r5 == r10) goto L_0x0305
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r2.selectionStart = r15
-                boolean unused = r2.snap = r4
-                goto L_0x0309
+                boolean r1 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r9)
+                if (r1 == 0) goto L_0x02d2
+                boolean r1 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r4)
+                if (r1 == 0) goto L_0x02cc
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean r1 = r1.snap
+                if (r1 == 0) goto L_0x02d2
+            L_0x02cc:
+                if (r8 == 0) goto L_0x02d2
+                if (r7 == 0) goto L_0x02d2
+                if (r4 != r10) goto L_0x04d8
+            L_0x02d2:
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean r1 = r1.snap
+                if (r1 == 0) goto L_0x02dd
+                if (r8 != r3) goto L_0x02dd
+                return r3
+            L_0x02dd:
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r1 = r1.selectionStart
+                if (r8 >= r1) goto L_0x0301
+                boolean r1 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r9)
+                if (r1 == 0) goto L_0x0301
+                boolean r1 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r4)
+                if (r1 == 0) goto L_0x02f7
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean r1 = r1.snap
+                if (r1 == 0) goto L_0x0301
+            L_0x02f7:
+                if (r4 == r10) goto L_0x0301
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                r1.selectionStart = r11
+                boolean unused = r1.snap = r3
+                goto L_0x0305
+            L_0x0301:
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                r1.selectionStart = r8
             L_0x0305:
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r2.selectionStart = r9
-            L_0x0309:
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r3 = r2.selectionStart
-                int r4 = r2.selectionEnd
-                if (r3 <= r4) goto L_0x0318
-                r2.selectionEnd = r3
-                r2.selectionStart = r4
-                r3 = 0
-                r2.movingHandleStart = r3
-            L_0x0318:
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r3 = r1.selectionStart
+                int r4 = r1.selectionEnd
+                if (r3 <= r4) goto L_0x0313
+                r1.selectionEnd = r3
+                r1.selectionStart = r4
+                r1.movingHandleStart = r2
+            L_0x0313:
+                int r2 = android.os.Build.VERSION.SDK_INT
                 r3 = 27
-                if (r1 < r3) goto L_0x0323
-                org.telegram.ui.Cells.TextSelectionHelper<Cell>$TextSelectionOverlay r1 = r2.textSelectionOverlay
+                if (r2 < r3) goto L_0x0320
+                org.telegram.ui.Cells.TextSelectionHelper<Cell>$TextSelectionOverlay r1 = r1.textSelectionOverlay
                 r2 = 9
                 r1.performHapticFeedback(r2)
-            L_0x0323:
+            L_0x0320:
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 r1.invalidate()
                 goto L_0x04d8
-            L_0x032a:
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r2.selectionStart = r9
-                int r3 = r2.selectionEnd
-                if (r9 <= r3) goto L_0x0339
-                r2.selectionEnd = r9
-                r2.selectionStart = r3
-                r3 = 0
-                r2.movingHandleStart = r3
-            L_0x0339:
+            L_0x0327:
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                r1.selectionStart = r8
+                int r3 = r1.selectionEnd
+                if (r8 <= r3) goto L_0x0335
+                r1.selectionEnd = r8
+                r1.selectionStart = r3
+                r1.movingHandleStart = r2
+            L_0x0335:
+                int r2 = android.os.Build.VERSION.SDK_INT
                 r3 = 27
-                if (r1 < r3) goto L_0x0344
-                org.telegram.ui.Cells.TextSelectionHelper<Cell>$TextSelectionOverlay r1 = r2.textSelectionOverlay
+                if (r2 < r3) goto L_0x0342
+                org.telegram.ui.Cells.TextSelectionHelper<Cell>$TextSelectionOverlay r1 = r1.textSelectionOverlay
                 r2 = 9
                 r1.performHapticFeedback(r2)
-            L_0x0344:
+            L_0x0342:
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 r1.invalidate()
                 goto L_0x04d8
-            L_0x034b:
-                r3 = 27
-                org.telegram.ui.Cells.TextSelectionHelper r8 = org.telegram.ui.Cells.TextSelectionHelper.this
-                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r2 = r8.layoutBlock
-                float r12 = r2.yOffset
-                r10 = r15
-                r8.jumpToLine(r9, r10, r11, r12, r13, r14)
-                if (r1 < r3) goto L_0x0362
+            L_0x0349:
+                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
+                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r1 = r7.layoutBlock
+                float r1 = r1.yOffset
+                r9 = r11
+                r11 = r1
+                r7.jumpToLine(r8, r9, r10, r11, r12, r13)
+                int r1 = android.os.Build.VERSION.SDK_INT
+                r2 = 27
+                if (r1 < r2) goto L_0x0363
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 org.telegram.ui.Cells.TextSelectionHelper<Cell>$TextSelectionOverlay r1 = r1.textSelectionOverlay
                 r2 = 9
                 r1.performHapticFeedback(r2)
-            L_0x0362:
+            L_0x0363:
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 r1.invalidate()
                 goto L_0x04d8
-            L_0x0369:
-                return r4
             L_0x036a:
-                r3 = 27
-                int r6 = r5.selectionEnd
-                if (r9 == r6) goto L_0x04d8
-                boolean r5 = r5.canSelect(r9)
-                if (r5 == 0) goto L_0x04d8
-                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                Cell r6 = r5.selectedView
-                r8 = 0
-                java.lang.CharSequence r5 = r5.getText(r6, r8)
-                r10 = r9
-            L_0x0380:
-                int r6 = r5.length()
-                if (r10 >= r6) goto L_0x0393
-                char r6 = r5.charAt(r10)
-                boolean r6 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r6)
-                if (r6 == 0) goto L_0x0393
-                int r10 = r10 + 1
-                goto L_0x0380
-            L_0x0393:
-                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
-                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r8 = r6.layoutBlock
-                r6.fillLayoutForOffset(r9, r8)
-                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
-                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r8 = r6.layoutBlock
-                android.text.StaticLayout r12 = r8.layout
-                int r15 = r6.selectionEnd
-                r6.fillLayoutForOffset(r15, r8)
-                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
-                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r6 = r6.layoutBlock
-                android.text.StaticLayout r6 = r6.layout
-                if (r12 == 0) goto L_0x04d7
-                if (r6 != 0) goto L_0x03b1
-                goto L_0x04d7
-            L_0x03b1:
-                int r8 = r5.length()
-                if (r9 <= r8) goto L_0x03bc
-                int r8 = r5.length()
+                return r3
+            L_0x036b:
+                int r5 = r4.selectionEnd
+                if (r8 == r5) goto L_0x04d8
+                boolean r4 = r4.canSelect(r8)
+                if (r4 == 0) goto L_0x04d8
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                Cell r5 = r4.selectedView
+                java.lang.CharSequence r4 = r4.getText(r5, r2)
                 r9 = r8
-            L_0x03bc:
-                int r8 = r6.getLineForOffset(r10)
-                org.telegram.ui.Cells.TextSelectionHelper r15 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r15 = r15.selectionEnd
-                int r15 = r6.getLineForOffset(r15)
-                int r3 = r6.getLineForOffset(r9)
-                if (r11 != 0) goto L_0x04bb
-                if (r12 != r6) goto L_0x04bb
-                org.telegram.ui.Cells.TextSelectionHelper r12 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r12 = r12.selectionEnd
-                int r12 = r6.getLineForOffset(r12)
-                if (r3 == r12) goto L_0x03de
-                if (r3 != r8) goto L_0x03de
-                goto L_0x04bb
-            L_0x03de:
-                int r11 = r6.getLineForOffset(r9)
-                int r11 = r6.getParagraphDirection(r11)
-                if (r7 == r11) goto L_0x049c
-                boolean r6 = r6.isRtlCharAt(r9)
-                if (r6 != 0) goto L_0x049c
-                if (r15 != r8) goto L_0x049c
-                if (r3 == r8) goto L_0x03f4
-                goto L_0x049c
-            L_0x03f4:
-                r3 = r9
-            L_0x03f5:
-                int r6 = r3 + -1
-                if (r6 < 0) goto L_0x0406
-                char r6 = r5.charAt(r6)
-                boolean r6 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r6)
-                if (r6 == 0) goto L_0x0406
-                int r3 = r3 + -1
-                goto L_0x03f5
-            L_0x0406:
-                int r6 = r9 - r10
-                int r6 = java.lang.Math.abs(r6)
-                int r3 = r9 - r3
-                int r3 = java.lang.Math.abs(r3)
-                int r7 = r9 + -1
-                if (r7 <= 0) goto L_0x0422
-                char r7 = r5.charAt(r7)
-                boolean r7 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r7)
-                if (r7 == 0) goto L_0x0422
-                r7 = 1
-                goto L_0x0423
-            L_0x0422:
-                r7 = 0
-            L_0x0423:
-                org.telegram.ui.Cells.TextSelectionHelper r8 = org.telegram.ui.Cells.TextSelectionHelper.this
-                boolean r8 = r8.snap
-                if (r8 == 0) goto L_0x0435
-                org.telegram.ui.Cells.TextSelectionHelper r8 = org.telegram.ui.Cells.TextSelectionHelper.this
-                if (r2 > 0) goto L_0x0431
-                r11 = 1
-                goto L_0x0432
-            L_0x0431:
-                r11 = 0
-            L_0x0432:
-                boolean unused = r8.snap = r11
-            L_0x0435:
-                org.telegram.ui.Cells.TextSelectionHelper r8 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r8 = r8.selectionEnd
-                if (r8 <= 0) goto L_0x0449
-                int r8 = r8 - r4
-                char r5 = r5.charAt(r8)
+            L_0x037e:
+                int r5 = r4.length()
+                if (r9 >= r5) goto L_0x0391
+                char r5 = r4.charAt(r9)
                 boolean r5 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r5)
-                if (r5 == 0) goto L_0x0449
-                r17 = 1
-                goto L_0x044b
-            L_0x0449:
-                r17 = 0
-            L_0x044b:
+                if (r5 == 0) goto L_0x0391
+                int r9 = r9 + 1
+                goto L_0x037e
+            L_0x0391:
                 org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r8 = r5.selectionEnd
-                if (r9 <= r8) goto L_0x0453
-                if (r6 <= r3) goto L_0x0461
-            L_0x0453:
-                if (r9 >= r8) goto L_0x0457
-                if (r2 > 0) goto L_0x0461
-            L_0x0457:
-                if (r7 == 0) goto L_0x0461
-                if (r17 == 0) goto L_0x04d8
-                boolean r2 = r5.snap
-                if (r2 != 0) goto L_0x04d8
-            L_0x0461:
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r3 = r2.selectionEnd
-                if (r9 <= r3) goto L_0x0479
-                if (r7 == 0) goto L_0x0479
-                if (r17 == 0) goto L_0x0471
-                boolean r2 = r2.snap
-                if (r2 == 0) goto L_0x0479
-            L_0x0471:
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r2.selectionEnd = r10
-                boolean unused = r2.snap = r4
-                goto L_0x047d
-            L_0x0479:
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r2.selectionEnd = r9
-            L_0x047d:
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                int r3 = r2.selectionStart
-                int r5 = r2.selectionEnd
-                if (r3 <= r5) goto L_0x048b
-                r2.selectionEnd = r3
-                r2.selectionStart = r5
-                r2.movingHandleStart = r4
-            L_0x048b:
+                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r7 = r5.layoutBlock
+                r5.fillLayoutForOffset(r8, r7)
+                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
+                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r7 = r5.layoutBlock
+                android.text.StaticLayout r11 = r7.layout
+                int r14 = r5.selectionEnd
+                r5.fillLayoutForOffset(r14, r7)
+                org.telegram.ui.Cells.TextSelectionHelper r5 = org.telegram.ui.Cells.TextSelectionHelper.this
+                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r5 = r5.layoutBlock
+                android.text.StaticLayout r5 = r5.layout
+                if (r11 == 0) goto L_0x04d7
+                if (r5 != 0) goto L_0x03af
+                goto L_0x04d7
+            L_0x03af:
+                int r7 = r4.length()
+                if (r8 <= r7) goto L_0x03ba
+                int r7 = r4.length()
+                r8 = r7
+            L_0x03ba:
+                int r7 = r5.getLineForOffset(r9)
+                org.telegram.ui.Cells.TextSelectionHelper r14 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r14 = r14.selectionEnd
+                int r14 = r5.getLineForOffset(r14)
+                int r15 = r5.getLineForOffset(r8)
+                if (r10 != 0) goto L_0x04b9
+                if (r11 != r5) goto L_0x04b9
+                org.telegram.ui.Cells.TextSelectionHelper r11 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r11 = r11.selectionEnd
+                int r11 = r5.getLineForOffset(r11)
+                if (r15 == r11) goto L_0x03dc
+                if (r15 != r7) goto L_0x03dc
+                goto L_0x04b9
+            L_0x03dc:
+                int r10 = r5.getLineForOffset(r8)
+                int r10 = r5.getParagraphDirection(r10)
+                if (r6 == r10) goto L_0x0498
+                boolean r5 = r5.isRtlCharAt(r8)
+                if (r5 != 0) goto L_0x0498
+                if (r14 != r7) goto L_0x0498
+                if (r15 == r7) goto L_0x03f2
+                goto L_0x0498
+            L_0x03f2:
+                r5 = r8
+            L_0x03f3:
+                int r6 = r5 + -1
+                if (r6 < 0) goto L_0x0404
+                char r6 = r4.charAt(r6)
+                boolean r6 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r6)
+                if (r6 == 0) goto L_0x0404
+                int r5 = r5 + -1
+                goto L_0x03f3
+            L_0x0404:
+                int r6 = r8 - r9
+                int r6 = java.lang.Math.abs(r6)
+                int r5 = r8 - r5
+                int r5 = java.lang.Math.abs(r5)
+                int r7 = r8 + -1
+                if (r7 <= 0) goto L_0x0420
+                char r7 = r4.charAt(r7)
+                boolean r7 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r7)
+                if (r7 == 0) goto L_0x0420
+                r7 = 1
+                goto L_0x0421
+            L_0x0420:
+                r7 = 0
+            L_0x0421:
+                org.telegram.ui.Cells.TextSelectionHelper r10 = org.telegram.ui.Cells.TextSelectionHelper.this
+                boolean r10 = r10.snap
+                if (r10 == 0) goto L_0x0433
+                org.telegram.ui.Cells.TextSelectionHelper r10 = org.telegram.ui.Cells.TextSelectionHelper.this
+                if (r1 > 0) goto L_0x042f
+                r11 = 1
+                goto L_0x0430
+            L_0x042f:
+                r11 = 0
+            L_0x0430:
+                boolean unused = r10.snap = r11
+            L_0x0433:
+                org.telegram.ui.Cells.TextSelectionHelper r10 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r10 = r10.selectionEnd
+                if (r10 <= 0) goto L_0x0445
+                int r10 = r10 - r3
+                char r4 = r4.charAt(r10)
+                boolean r4 = org.telegram.ui.Cells.TextSelectionHelper.isInterruptedCharacter(r4)
+                if (r4 == 0) goto L_0x0445
+                r2 = 1
+            L_0x0445:
+                org.telegram.ui.Cells.TextSelectionHelper r4 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r10 = r4.selectionEnd
+                if (r8 <= r10) goto L_0x044d
+                if (r6 <= r5) goto L_0x045b
+            L_0x044d:
+                if (r8 >= r10) goto L_0x0451
+                if (r1 > 0) goto L_0x045b
+            L_0x0451:
+                if (r7 == 0) goto L_0x045b
+                if (r2 == 0) goto L_0x04d8
+                boolean r1 = r4.snap
+                if (r1 != 0) goto L_0x04d8
+            L_0x045b:
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r4 = r1.selectionEnd
+                if (r8 <= r4) goto L_0x0473
+                if (r7 == 0) goto L_0x0473
+                if (r2 == 0) goto L_0x046b
+                boolean r1 = r1.snap
+                if (r1 == 0) goto L_0x0473
+            L_0x046b:
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                r1.selectionEnd = r9
+                boolean unused = r1.snap = r3
+                goto L_0x0477
+            L_0x0473:
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                r1.selectionEnd = r8
+            L_0x0477:
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                int r2 = r1.selectionStart
+                int r4 = r1.selectionEnd
+                if (r2 <= r4) goto L_0x0485
+                r1.selectionEnd = r2
+                r1.selectionStart = r4
+                r1.movingHandleStart = r3
+            L_0x0485:
+                int r2 = android.os.Build.VERSION.SDK_INT
                 r3 = 27
-                if (r1 < r3) goto L_0x0496
-                org.telegram.ui.Cells.TextSelectionHelper<Cell>$TextSelectionOverlay r1 = r2.textSelectionOverlay
+                if (r2 < r3) goto L_0x0492
+                org.telegram.ui.Cells.TextSelectionHelper<Cell>$TextSelectionOverlay r1 = r1.textSelectionOverlay
                 r2 = 9
                 r1.performHapticFeedback(r2)
-            L_0x0496:
+            L_0x0492:
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 r1.invalidate()
                 goto L_0x04d8
-            L_0x049c:
-                org.telegram.ui.Cells.TextSelectionHelper r2 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r2.selectionEnd = r9
-                int r3 = r2.selectionStart
-                if (r3 <= r9) goto L_0x04aa
-                r2.selectionEnd = r3
-                r2.selectionStart = r9
-                r2.movingHandleStart = r4
-            L_0x04aa:
+            L_0x0498:
+                org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
+                r1.selectionEnd = r8
+                int r2 = r1.selectionStart
+                if (r2 <= r8) goto L_0x04a6
+                r1.selectionEnd = r2
+                r1.selectionStart = r8
+                r1.movingHandleStart = r3
+            L_0x04a6:
+                int r2 = android.os.Build.VERSION.SDK_INT
                 r3 = 27
-                if (r1 < r3) goto L_0x04b5
-                org.telegram.ui.Cells.TextSelectionHelper<Cell>$TextSelectionOverlay r1 = r2.textSelectionOverlay
+                if (r2 < r3) goto L_0x04b3
+                org.telegram.ui.Cells.TextSelectionHelper<Cell>$TextSelectionOverlay r1 = r1.textSelectionOverlay
                 r2 = 9
                 r1.performHapticFeedback(r2)
-            L_0x04b5:
+            L_0x04b3:
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 r1.invalidate()
                 goto L_0x04d8
-            L_0x04bb:
-                org.telegram.ui.Cells.TextSelectionHelper r8 = org.telegram.ui.Cells.TextSelectionHelper.this
-                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r2 = r8.layoutBlock
-                float r12 = r2.yOffset
-                r8.jumpToLine(r9, r10, r11, r12, r13, r14)
+            L_0x04b9:
+                org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
+                org.telegram.ui.Cells.TextSelectionHelper$LayoutBlock r1 = r7.layoutBlock
+                float r11 = r1.yOffset
+                r7.jumpToLine(r8, r9, r10, r11, r12, r13)
+                int r1 = android.os.Build.VERSION.SDK_INT
                 r2 = 27
                 if (r1 < r2) goto L_0x04d1
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
@@ -1415,7 +1414,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 r1.invalidate()
                 goto L_0x04d8
             L_0x04d7:
-                return r4
+                return r3
             L_0x04d8:
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 r1.onOffsetChanged()
@@ -1423,147 +1422,140 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 int r2 = r1.lastX
                 r1.showMagnifier(r2)
-                goto L_0x05fd
+                goto L_0x05f6
             L_0x04e8:
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 r1.hideMagnifier()
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r2 = 0
                 boolean unused = r1.movingHandle = r2
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 r1.movingDirectionSettling = r2
                 boolean unused = r1.isOneTouch = r2
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 boolean r1 = r1.isSelectionMode()
-                if (r1 == 0) goto L_0x050c
+                if (r1 == 0) goto L_0x050b
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 r1.showActions()
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 r1.showHandleViews()
-            L_0x050c:
+            L_0x050b:
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 boolean r1 = r1.scrolling
-                if (r1 == 0) goto L_0x05fd
+                if (r1 == 0) goto L_0x05f6
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r2 = 0
                 boolean unused = r1.scrolling = r2
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 java.lang.Runnable r1 = r1.scrollRunnable
                 org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r1)
-                goto L_0x05fd
-            L_0x0525:
+                goto L_0x05f6
+            L_0x0523:
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 boolean r1 = r1.movingHandle
-                if (r1 == 0) goto L_0x052e
-                return r4
-            L_0x052e:
-                float r1 = r23.getX()
+                if (r1 == 0) goto L_0x052c
+                return r3
+            L_0x052c:
+                float r1 = r22.getX()
                 int r1 = (int) r1
-                float r2 = r23.getY()
-                int r2 = (int) r2
-                org.telegram.ui.Cells.TextSelectionHelper r3 = org.telegram.ui.Cells.TextSelectionHelper.this
-                android.graphics.RectF r3 = r3.startArea
+                float r4 = r22.getY()
+                int r4 = (int) r4
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                android.graphics.RectF r6 = r6.startArea
                 float r1 = (float) r1
-                float r5 = (float) r2
-                boolean r3 = r3.contains(r1, r5)
-                if (r3 == 0) goto L_0x0594
-                org.telegram.ui.Cells.TextSelectionHelper r3 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r3.pickStartView()
-                org.telegram.ui.Cells.TextSelectionHelper r3 = org.telegram.ui.Cells.TextSelectionHelper.this
-                Cell r5 = r3.selectedView
-                if (r5 != 0) goto L_0x0553
-                r5 = 0
-                return r5
-            L_0x0553:
-                r5 = 0
-                boolean unused = r3.movingHandle = r4
-                org.telegram.ui.Cells.TextSelectionHelper r3 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r3.movingHandleStart = r4
-                int r7 = r3.selectionStart
-                int[] r3 = r3.offsetToCord(r7)
+                float r7 = (float) r4
+                boolean r6 = r6.contains(r1, r7)
+                if (r6 == 0) goto L_0x0590
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                r6.pickStartView()
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                Cell r7 = r6.selectedView
+                if (r7 != 0) goto L_0x0550
+                return r2
+            L_0x0550:
+                boolean unused = r6.movingHandle = r3
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                r6.movingHandleStart = r3
+                int r7 = r6.selectionStart
+                int[] r6 = r6.offsetToCord(r7)
                 org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
                 int r7 = r7.getLineHeight()
-                int r7 = r7 / r6
-                float r6 = (float) r7
+                int r7 = r7 / r5
+                float r5 = (float) r7
                 org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r5 = r3[r5]
+                r2 = r6[r2]
                 int r8 = r7.textX
-                int r5 = r5 + r8
-                float r5 = (float) r5
+                int r2 = r2 + r8
+                float r2 = (float) r2
                 Cell r8 = r7.selectedView
                 float r8 = r8.getX()
-                float r5 = r5 + r8
-                float r5 = r5 - r1
-                r7.movingOffsetX = r5
+                float r2 = r2 + r8
+                float r2 = r2 - r1
+                r7.movingOffsetX = r2
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r3 = r3[r4]
-                int r5 = r1.textY
-                int r3 = r3 + r5
-                Cell r5 = r1.selectedView
-                int r5 = r5.getTop()
-                int r3 = r3 + r5
-                int r3 = r3 - r2
-                float r2 = (float) r3
-                float r2 = r2 - r6
+                r2 = r6[r3]
+                int r6 = r1.textY
+                int r2 = r2 + r6
+                Cell r6 = r1.selectedView
+                int r6 = r6.getTop()
+                int r2 = r2 + r6
+                int r2 = r2 - r4
+                float r2 = (float) r2
+                float r2 = r2 - r5
                 r1.movingOffsetY = r2
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 r1.hideActions()
-                return r4
-            L_0x0594:
-                org.telegram.ui.Cells.TextSelectionHelper r3 = org.telegram.ui.Cells.TextSelectionHelper.this
-                android.graphics.RectF r3 = r3.endArea
-                boolean r3 = r3.contains(r1, r5)
-                if (r3 == 0) goto L_0x05f7
-                org.telegram.ui.Cells.TextSelectionHelper r3 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r3.pickEndView()
-                org.telegram.ui.Cells.TextSelectionHelper r3 = org.telegram.ui.Cells.TextSelectionHelper.this
-                Cell r5 = r3.selectedView
-                if (r5 != 0) goto L_0x05ad
-                r5 = 0
-                return r5
-            L_0x05ad:
-                r5 = 0
-                boolean unused = r3.movingHandle = r4
-                org.telegram.ui.Cells.TextSelectionHelper r3 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r3.movingHandleStart = r5
-                int r7 = r3.selectionEnd
-                int[] r3 = r3.offsetToCord(r7)
+                return r3
+            L_0x0590:
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                android.graphics.RectF r6 = r6.endArea
+                boolean r6 = r6.contains(r1, r7)
+                if (r6 == 0) goto L_0x05f1
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                r6.pickEndView()
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                Cell r7 = r6.selectedView
+                if (r7 != 0) goto L_0x05a8
+                return r2
+            L_0x05a8:
+                boolean unused = r6.movingHandle = r3
+                org.telegram.ui.Cells.TextSelectionHelper r6 = org.telegram.ui.Cells.TextSelectionHelper.this
+                r6.movingHandleStart = r2
+                int r7 = r6.selectionEnd
+                int[] r6 = r6.offsetToCord(r7)
                 org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
                 int r7 = r7.getLineHeight()
-                int r7 = r7 / r6
-                float r6 = (float) r7
+                int r7 = r7 / r5
+                float r5 = (float) r7
                 org.telegram.ui.Cells.TextSelectionHelper r7 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r5 = r3[r5]
+                r2 = r6[r2]
                 int r8 = r7.textX
-                int r5 = r5 + r8
-                float r5 = (float) r5
+                int r2 = r2 + r8
+                float r2 = (float) r2
                 Cell r8 = r7.selectedView
                 float r8 = r8.getX()
-                float r5 = r5 + r8
-                float r5 = r5 - r1
-                r7.movingOffsetX = r5
+                float r2 = r2 + r8
+                float r2 = r2 - r1
+                r7.movingOffsetX = r2
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r3 = r3[r4]
-                int r5 = r1.textY
-                int r3 = r3 + r5
-                Cell r5 = r1.selectedView
-                int r5 = r5.getTop()
-                int r3 = r3 + r5
-                int r3 = r3 - r2
-                float r2 = (float) r3
-                float r2 = r2 - r6
+                r2 = r6[r3]
+                int r6 = r1.textY
+                int r2 = r2 + r6
+                Cell r6 = r1.selectedView
+                int r6 = r6.getTop()
+                int r2 = r2 + r6
+                int r2 = r2 - r4
+                float r2 = (float) r2
+                float r2 = r2 - r5
                 r1.movingOffsetY = r2
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 int r2 = r1.lastX
                 r1.showMagnifier(r2)
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 r1.hideActions()
-                return r4
-            L_0x05f7:
+                return r3
+            L_0x05f1:
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
-                r2 = 0
                 boolean unused = r1.movingHandle = r2
-            L_0x05fd:
+            L_0x05f6:
                 org.telegram.ui.Cells.TextSelectionHelper r1 = org.telegram.ui.Cells.TextSelectionHelper.this
                 boolean r1 = r1.movingHandle
                 return r1
@@ -1608,7 +1600,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                             float f2 = primaryHorizontal + layoutBlock.xOffset;
                             float lineBottom = (float) ((int) (((float) staticLayout.getLineBottom(lineForOffset)) + layoutBlock.yOffset));
                             float f3 = f + lineBottom;
-                            if (f3 <= ((float) access$2100) || f3 >= ((float) textSelectionHelper5.parentView.getMeasuredHeight())) {
+                            if (f3 <= ((float) (textSelectionHelper5.keyboardSize + access$2100)) || f3 >= ((float) textSelectionHelper5.parentView.getMeasuredHeight())) {
                                 TextSelectionHelper.this.endArea.setEmpty();
                             } else if (!staticLayout.isRtlCharAt(TextSelectionHelper.this.selectionEnd)) {
                                 canvas.save();
@@ -1675,7 +1667,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                             float var_ = primaryHorizontal2 + layoutBlock2.xOffset;
                             float lineBottom2 = (float) ((int) (((float) staticLayout2.getLineBottom(lineForOffset2)) + layoutBlock2.yOffset));
                             float var_ = var_ + lineBottom2;
-                            if (var_ <= ((float) access$2100) || var_ >= ((float) textSelectionHelper10.parentView.getMeasuredHeight())) {
+                            if (var_ <= ((float) (access$2100 + textSelectionHelper10.keyboardSize)) || var_ >= ((float) textSelectionHelper10.parentView.getMeasuredHeight())) {
                                 if (var_ > 0.0f && var_ - ((float) TextSelectionHelper.this.getLineHeight()) < ((float) TextSelectionHelper.this.parentView.getMeasuredHeight())) {
                                     i++;
                                 }
@@ -3143,5 +3135,10 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 this.lastBottom = f4;
             }
         }
+    }
+
+    public void setKeyboardSize(int i) {
+        this.keyboardSize = i;
+        invalidate();
     }
 }
