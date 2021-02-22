@@ -2166,7 +2166,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             int i4 = this.backgroundState;
             if (i4 >= 0 && i4 < PhotoViewer.progressDrawables.length + 2) {
                 if (this.backgroundState < PhotoViewer.progressDrawables.length) {
-                    drawable = PhotoViewer.progressDrawables[this.previousBackgroundState];
+                    drawable = PhotoViewer.progressDrawables[this.backgroundState];
                 } else {
                     drawable = this.playDrawable;
                 }

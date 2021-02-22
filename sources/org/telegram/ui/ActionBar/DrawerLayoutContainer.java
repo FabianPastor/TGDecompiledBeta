@@ -266,6 +266,13 @@ public class DrawerLayoutContainer extends FrameLayout {
         this.parentActionBarLayout = actionBarLayout;
     }
 
+    public void closeDrawer() {
+        if (this.drawerPosition != 0.0f) {
+            setDrawerPosition(0.0f);
+            onDrawerAnimationEnd(false);
+        }
+    }
+
     public void setAllowOpenDrawer(boolean z, boolean z2) {
         this.allowOpenDrawer = z;
         if (!z && this.drawerPosition != 0.0f) {

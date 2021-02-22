@@ -4909,29 +4909,42 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         float f2 = this.extraHeight > ((float) AndroidUtilities.dp(88.0f)) ? 1.67f : 1.12f;
         if (this.extraHeight <= ((float) AndroidUtilities.dp(88.0f)) || scaleX == f2) {
             int dp = AndroidUtilities.isTablet() ? AndroidUtilities.dp(490.0f) : AndroidUtilities.displaySize.x;
-            ActionBarMenuItem access$12400 = this.avatarsViewPagerIndicatorView.getSecondaryMenuItem();
-            int dp2 = AndroidUtilities.dp(126.0f + (access$12400 != null ? (1.0f - this.mediaHeaderAnimationProgress) * 48.0f : 0.0f) + 40.0f + ((this.videoCallItemVisible || !(access$12400 == this.callItem || this.chat_id == 0 || !this.callItemVisible)) ? (1.0f - this.mediaHeaderAnimationProgress) * 48.0f : 0.0f));
-            int i = dp - dp2;
+            ActionBarMenuItem unused = this.avatarsViewPagerIndicatorView.getSecondaryMenuItem();
+            int i = 0;
+            if (this.editItemVisible) {
+                i = 48;
+            }
+            if (this.callItemVisible) {
+                i += 48;
+            }
+            if (this.videoCallItemVisible) {
+                i += 48;
+            }
+            if (this.searchItem != null) {
+                i += 48;
+            }
+            int dp2 = AndroidUtilities.dp((((float) i) * (1.0f - this.mediaHeaderAnimationProgress)) + 40.0f + 126.0f);
+            int i2 = dp - dp2;
             float f3 = (float) dp;
             int max = (int) ((f3 - (((float) dp2) * Math.max(0.0f, 1.0f - (f != 1.0f ? (0.15f * f) / (1.0f - f) : 1.0f)))) - this.nameTextView[1].getTranslationX());
             float measureText = (this.nameTextView[1].getPaint().measureText(this.nameTextView[1].getText().toString()) * scaleX) + ((float) this.nameTextView[1].getSideDrawablesSize());
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.nameTextView[1].getLayoutParams();
-            int i2 = layoutParams.width;
+            int i3 = layoutParams.width;
             float f4 = (float) max;
             if (f4 < measureText) {
-                layoutParams.width = Math.max(i, (int) Math.ceil((double) (((float) (max - AndroidUtilities.dp(24.0f))) / (((f2 - scaleX) * 7.0f) + scaleX))));
+                layoutParams.width = Math.max(i2, (int) Math.ceil((double) (((float) (max - AndroidUtilities.dp(24.0f))) / (((f2 - scaleX) * 7.0f) + scaleX))));
             } else {
                 layoutParams.width = (int) Math.ceil((double) measureText);
             }
             int min = (int) Math.min(((f3 - this.nameTextView[1].getX()) / scaleX) - ((float) AndroidUtilities.dp(8.0f)), (float) layoutParams.width);
             layoutParams.width = min;
-            if (min != i2) {
+            if (min != i3) {
                 this.nameTextView[1].requestLayout();
             }
             float measureText2 = this.onlineTextView[1].getPaint().measureText(this.onlineTextView[1].getText().toString());
             FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.onlineTextView[1].getLayoutParams();
             FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) this.mediaCounterTextView.getLayoutParams();
-            int i3 = layoutParams2.width;
+            int i4 = layoutParams2.width;
             int ceil = (int) Math.ceil((double) (this.onlineTextView[1].getTranslationX() + ((float) AndroidUtilities.dp(8.0f)) + (((float) AndroidUtilities.dp(40.0f)) * (1.0f - f))));
             layoutParams2.rightMargin = ceil;
             layoutParams3.rightMargin = ceil;
@@ -4943,7 +4956,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 layoutParams2.width = -2;
                 layoutParams3.width = -2;
             }
-            if (i3 != layoutParams2.width) {
+            if (i4 != layoutParams2.width) {
                 this.onlineTextView[1].requestLayout();
                 this.mediaCounterTextView.requestLayout();
             }
