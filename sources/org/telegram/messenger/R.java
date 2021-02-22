@@ -1820,6 +1820,7 @@ public final class R {
         public static final int ActionCreatedInviteLink = NUM;
         public static final int ActionDeletedInviteLink = NUM;
         public static final int ActionEditedInviteLink = NUM;
+        public static final int ActionEditedInviteLinkToSame = NUM;
         public static final int ActionGroupCallEnded = NUM;
         public static final int ActionGroupCallInvited = NUM;
         public static final int ActionGroupCallInvitedYou = NUM;
@@ -1850,6 +1851,7 @@ public final class R {
         public static final int ActionPinnedVideo = NUM;
         public static final int ActionPinnedVoice = NUM;
         public static final int ActionRemovedPhoto = NUM;
+        public static final int ActionRevokedInviteLink = NUM;
         public static final int ActionTTLChanged = NUM;
         public static final int ActionTTLChannelChanged = NUM;
         public static final int ActionTTLChannelDisabled = NUM;
@@ -3131,6 +3133,7 @@ public final class R {
         public static final int Exception_zero = NUM;
         public static final int ExpireAfter = NUM;
         public static final int Expired = NUM;
+        public static final int ExpiredLink = NUM;
         public static final int ExportTheme = NUM;
         public static final int Exposure = NUM;
         public static final int ExternalFolderInfo = NUM;
@@ -3467,6 +3470,7 @@ public final class R {
         public static final int ImportErrorFileFormatInvalid = NUM;
         public static final int ImportErrorFileLang = NUM;
         public static final int ImportErrorNotAdmin = NUM;
+        public static final int ImportErrorPeerInvalid = NUM;
         public static final int ImportErrorTitle = NUM;
         public static final int ImportErrorUserBlocked = NUM;
         public static final int ImportFailedToUpload = NUM;
@@ -3521,12 +3525,12 @@ public final class R {
         public static final int InviteFriends = NUM;
         public static final int InviteFriendsHelp = NUM;
         public static final int InviteLink = NUM;
-        public static final int InviteLink_few = NUM;
-        public static final int InviteLink_many = NUM;
-        public static final int InviteLink_one = NUM;
-        public static final int InviteLink_other = NUM;
-        public static final int InviteLink_two = NUM;
-        public static final int InviteLink_zero = NUM;
+        public static final int InviteLinkCount_few = NUM;
+        public static final int InviteLinkCount_many = NUM;
+        public static final int InviteLinkCount_one = NUM;
+        public static final int InviteLinkCount_other = NUM;
+        public static final int InviteLinkCount_two = NUM;
+        public static final int InviteLinkCount_zero = NUM;
         public static final int InviteLinks = NUM;
         public static final int InviteRevokedHint = NUM;
         public static final int InviteText2 = NUM;
@@ -4509,7 +4513,11 @@ public final class R {
         public static final int PaymentTransactionTotal = NUM;
         public static final int PaymentWarning = NUM;
         public static final int PaymentWarningText = NUM;
-        public static final int PeopleCanJoinViaLink = NUM;
+        public static final int PeopleCanJoinViaLink_few = NUM;
+        public static final int PeopleCanJoinViaLink_many = NUM;
+        public static final int PeopleCanJoinViaLink_one = NUM;
+        public static final int PeopleCanJoinViaLink_other = NUM;
+        public static final int PeopleCanJoinViaLink_two = NUM;
         public static final int PeopleJoinedRemaining_few = NUM;
         public static final int PeopleJoinedRemaining_many = NUM;
         public static final int PeopleJoinedRemaining_one = NUM;
@@ -4530,6 +4538,7 @@ public final class R {
         public static final int PeopleNearbyGpsInfo = NUM;
         public static final int PeopleNearbyHeader = NUM;
         public static final int PeopleNearbyInfo2 = NUM;
+        public static final int Permanent = NUM;
         public static final int PermanentLinkForThisAdmin = NUM;
         public static final int PermissionBackgroundLocation = NUM;
         public static final int PermissionContacts = NUM;
@@ -5665,6 +5674,7 @@ public final class R {
         public static final int VoipGroupSearchMembers = NUM;
         public static final int VoipGroupShareInviteLink = NUM;
         public static final int VoipGroupStopRecordCall = NUM;
+        public static final int VoipGroupTooMuch = NUM;
         public static final int VoipGroupUnmute = NUM;
         public static final int VoipGroupUnmuteForMe = NUM;
         public static final int VoipGroupUserCanNowSpeak = NUM;
@@ -5756,6 +5766,8 @@ public final class R {
         public static final int WhoCanCallMeInfo = NUM;
         public static final int WidgetChats = NUM;
         public static final int WidgetLoggedOff = NUM;
+        public static final int WidgetPasscode = NUM;
+        public static final int WidgetPasscodeEnable = NUM;
         public static final int WidgetPreview = NUM;
         public static final int WidgetShortcuts = NUM;
         public static final int WillUnmuteIn = NUM;

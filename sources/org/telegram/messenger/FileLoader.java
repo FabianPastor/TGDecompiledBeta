@@ -1386,7 +1386,7 @@ public class FileLoader extends BaseController {
             }
             if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaPhoto) {
                 ArrayList<TLRPC$PhotoSize> arrayList2 = tLRPC$MessageMedia.photo.sizes;
-                if (arrayList2.size() > 0 && (closestPhotoSizeWithSize2 = getClosestPhotoSizeWithSize(arrayList2, AndroidUtilities.getPhotoSize())) != null) {
+                if (arrayList2.size() > 0 && (closestPhotoSizeWithSize2 = getClosestPhotoSizeWithSize(arrayList2, AndroidUtilities.getPhotoSize(), false, (TLRPC$PhotoSize) null, true)) != null) {
                     return getAttachFileName(closestPhotoSizeWithSize2);
                 }
             } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaWebPage) {
@@ -1435,7 +1435,7 @@ public class FileLoader extends BaseController {
                 return getPathToAttach(tLRPC$Document, z);
             } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaPhoto) {
                 ArrayList<TLRPC$PhotoSize> arrayList2 = tLRPC$MessageMedia.photo.sizes;
-                if (arrayList2.size() > 0 && (closestPhotoSizeWithSize2 = getClosestPhotoSizeWithSize(arrayList2, AndroidUtilities.getPhotoSize())) != null) {
+                if (arrayList2.size() > 0 && (closestPhotoSizeWithSize2 = getClosestPhotoSizeWithSize(arrayList2, AndroidUtilities.getPhotoSize(), false, (TLRPC$PhotoSize) null, true)) != null) {
                     if (tLRPC$Message.media.ttl_seconds != 0) {
                         z = true;
                     }
@@ -1542,82 +1542,85 @@ public class FileLoader extends BaseController {
     }
 
     public static TLRPC$PhotoSize getClosestPhotoSizeWithSize(ArrayList<TLRPC$PhotoSize> arrayList, int i, boolean z) {
-        return getClosestPhotoSizeWithSize(arrayList, i, z, (TLRPC$PhotoSize) null);
+        return getClosestPhotoSizeWithSize(arrayList, i, z, (TLRPC$PhotoSize) null, false);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:22:0x003e, code lost:
-        if (r5.dc_id != Integer.MIN_VALUE) goto L_0x0040;
+    /* JADX WARNING: Code restructure failed: missing block: B:25:0x0044, code lost:
+        if (r5.dc_id != Integer.MIN_VALUE) goto L_0x0046;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:33:0x005b, code lost:
-        if (r5.dc_id != Integer.MIN_VALUE) goto L_0x005d;
+    /* JADX WARNING: Code restructure failed: missing block: B:36:0x0061, code lost:
+        if (r5.dc_id != Integer.MIN_VALUE) goto L_0x0063;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static org.telegram.tgnet.TLRPC$PhotoSize getClosestPhotoSizeWithSize(java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r8, int r9, boolean r10, org.telegram.tgnet.TLRPC$PhotoSize r11) {
+    public static org.telegram.tgnet.TLRPC$PhotoSize getClosestPhotoSizeWithSize(java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r8, int r9, boolean r10, org.telegram.tgnet.TLRPC$PhotoSize r11, boolean r12) {
         /*
             r0 = 0
-            if (r8 == 0) goto L_0x006a
+            if (r8 == 0) goto L_0x0070
             boolean r1 = r8.isEmpty()
             if (r1 == 0) goto L_0x000b
-            goto L_0x006a
+            goto L_0x0070
         L_0x000b:
             r1 = 0
             r2 = 0
         L_0x000d:
             int r3 = r8.size()
-            if (r1 >= r3) goto L_0x006a
+            if (r1 >= r3) goto L_0x0070
             java.lang.Object r3 = r8.get(r1)
             org.telegram.tgnet.TLRPC$PhotoSize r3 = (org.telegram.tgnet.TLRPC$PhotoSize) r3
-            if (r3 == 0) goto L_0x0067
-            if (r3 == r11) goto L_0x0067
+            if (r3 == 0) goto L_0x006d
+            if (r3 == r11) goto L_0x006d
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_photoSizeEmpty
-            if (r4 != 0) goto L_0x0067
+            if (r4 != 0) goto L_0x006d
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_photoPathSize
-            if (r4 == 0) goto L_0x0026
-            goto L_0x0067
-        L_0x0026:
+            if (r4 != 0) goto L_0x006d
+            if (r12 == 0) goto L_0x002c
+            boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
+            if (r4 == 0) goto L_0x002c
+            goto L_0x006d
+        L_0x002c:
             r4 = -2147483648(0xfffffffvar_, float:-0.0)
             r5 = 100
-            if (r10 == 0) goto L_0x0049
+            if (r10 == 0) goto L_0x004f
             int r6 = r3.h
             int r7 = r3.w
             int r6 = java.lang.Math.min(r6, r7)
-            if (r0 == 0) goto L_0x0065
-            if (r9 <= r5) goto L_0x0040
+            if (r0 == 0) goto L_0x006b
+            if (r9 <= r5) goto L_0x0046
             org.telegram.tgnet.TLRPC$FileLocation r5 = r0.location
-            if (r5 == 0) goto L_0x0040
+            if (r5 == 0) goto L_0x0046
             int r5 = r5.dc_id
-            if (r5 == r4) goto L_0x0065
-        L_0x0040:
+            if (r5 == r4) goto L_0x006b
+        L_0x0046:
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_photoCachedSize
-            if (r4 != 0) goto L_0x0065
-            if (r9 <= r2) goto L_0x0067
-            if (r2 >= r6) goto L_0x0067
-            goto L_0x0065
-        L_0x0049:
+            if (r4 != 0) goto L_0x006b
+            if (r9 <= r2) goto L_0x006d
+            if (r2 >= r6) goto L_0x006d
+            goto L_0x006b
+        L_0x004f:
             int r6 = r3.w
             int r7 = r3.h
             int r6 = java.lang.Math.max(r6, r7)
-            if (r0 == 0) goto L_0x0065
-            if (r9 <= r5) goto L_0x005d
+            if (r0 == 0) goto L_0x006b
+            if (r9 <= r5) goto L_0x0063
             org.telegram.tgnet.TLRPC$FileLocation r5 = r0.location
-            if (r5 == 0) goto L_0x005d
+            if (r5 == 0) goto L_0x0063
             int r5 = r5.dc_id
-            if (r5 == r4) goto L_0x0065
-        L_0x005d:
+            if (r5 == r4) goto L_0x006b
+        L_0x0063:
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_photoCachedSize
-            if (r4 != 0) goto L_0x0065
-            if (r6 > r9) goto L_0x0067
-            if (r2 >= r6) goto L_0x0067
-        L_0x0065:
+            if (r4 != 0) goto L_0x006b
+            if (r6 > r9) goto L_0x006d
+            if (r2 >= r6) goto L_0x006d
+        L_0x006b:
             r0 = r3
             r2 = r6
-        L_0x0067:
+        L_0x006d:
             int r1 = r1 + 1
             goto L_0x000d
-        L_0x006a:
+        L_0x0070:
             return r0
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(java.util.ArrayList, int, boolean, org.telegram.tgnet.TLRPC$PhotoSize):org.telegram.tgnet.TLRPC$PhotoSize");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(java.util.ArrayList, int, boolean, org.telegram.tgnet.TLRPC$PhotoSize, boolean):org.telegram.tgnet.TLRPC$PhotoSize");
     }
 
     public static TLRPC$TL_photoPathSize getPathPhotoSize(ArrayList<TLRPC$PhotoSize> arrayList) {

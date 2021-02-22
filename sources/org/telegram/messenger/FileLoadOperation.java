@@ -2114,7 +2114,11 @@ public class FileLoadOperation {
                                 FileLog.e((Throwable) e);
                             }
                         } else {
-                            z2 = this.cacheFileTemp.renameTo(this.cacheFileFinal);
+                            try {
+                                z2 = this.cacheFileTemp.renameTo(this.cacheFileFinal);
+                            } catch (Exception e2) {
+                                FileLog.e((Throwable) e2);
+                            }
                         }
                         if (!z2) {
                             if (BuildVars.LOGS_ENABLED) {

@@ -491,7 +491,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$PhotoViewerCaptionEnterView(View view) {
-        if (this.keyboardVisible) {
+        if (this.keyboardVisible || ((AndroidUtilities.isInMultiwindow || AndroidUtilities.usingHardwareInput) && !isPopupShowing())) {
             showPopup(1, false);
         } else {
             openKeyboardInternal();
@@ -519,7 +519,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     /* renamed from: lambda$new$2 */
     public /* synthetic */ void lambda$new$2$PhotoViewerCaptionEnterView(View view) {
         if (isPopupShowing()) {
-            showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2, false);
+            showPopup((AndroidUtilities.isInMultiwindow || AndroidUtilities.usingHardwareInput) ? 0 : 2, false);
         }
     }
 
@@ -962,7 +962,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     private void openKeyboardInternal() {
-        showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2, false);
+        showPopup((AndroidUtilities.isInMultiwindow || AndroidUtilities.usingHardwareInput) ? 0 : 2, false);
         openKeyboard();
     }
 
@@ -1004,7 +1004,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     public boolean isKeyboardVisible() {
-        return (AndroidUtilities.usingHardwareInput && getTag() != null) || this.keyboardVisible;
+        return ((AndroidUtilities.usingHardwareInput || AndroidUtilities.isInMultiwindow) && getTag() != null) || this.keyboardVisible;
     }
 
     public void onSizeChanged(int i, boolean z) {

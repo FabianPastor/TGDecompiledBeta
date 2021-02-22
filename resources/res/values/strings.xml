@@ -182,6 +182,7 @@
     <string name="ActionCreatedInviteLink">un1 created invite link %1$s</string>
     <string name="ActionDeletedInviteLink">un1 deleted invite link %1$s</string>
     <string name="ActionEditedInviteLink">un1 edited invite link %1$s to %2$s</string>
+    <string name="ActionEditedInviteLinkToSame">un1 edited invite link %1$s</string>
     <string name="ActionGroupCallEnded">Voice chat finished (%s)</string>
     <string name="ActionGroupCallInvited">un1 invited un2 to the voice chat</string>
     <string name="ActionGroupCallInvitedYou">un1 invited you to the voice chat</string>
@@ -212,9 +213,10 @@
     <string name="ActionPinnedVideo">un1 pinned a video</string>
     <string name="ActionPinnedVoice">un1 pinned a voice message</string>
     <string name="ActionRemovedPhoto">un1 removed the group photo</string>
+    <string name="ActionRevokedInviteLink">un1 revoked invite link %1$s</string>
     <string name="ActionTTLChanged">un1 has set messages to auto-delete in %1$s</string>
     <string name="ActionTTLChannelChanged">Messages in this channel will be automatically deleted after %1$s</string>
-    <string name="ActionTTLChannelDisabled">Messages in this channel will no longer automatically deleted</string>
+    <string name="ActionTTLChannelDisabled">Messages in this channel will no longer be automatically deleted</string>
     <string name="ActionTTLDisabled">un1 disabled the auto-delete timer</string>
     <string name="ActionTTLYouChanged">You set messages to auto-delete in %1$s</string>
     <string name="ActionTTLYouDisabled">You disabled the auto-delete timer</string>
@@ -498,7 +500,7 @@
     <string name="AutoDeleteInfo">Automatically delete new messages sent in this chat after a certain period of time.</string>
     <string name="AutoDeleteNever">Off</string>
     <string name="AutoDeleteSet">Set for this chat</string>
-    <string name="AutoDeleteSetInfo">Messages in this chat are automatically\10deleted after %1$s they have been sent.</string>
+    <string name="AutoDeleteSetInfo">Messages in this chat are automatically\10deleted %1$s after they are sent.</string>
     <string name="AutoDeleteSetTimer">Set auto-delete timer</string>
     <string name="AutoDownloadAudioInfo">Voice messages are tiny, so they\'re always downloaded automatically.</string>
     <string name="AutoDownloadChannels">Channels</string>
@@ -652,7 +654,7 @@
     <string name="BroadcastGroup">Broadcast Group</string>
     <string name="BroadcastGroupConvert">Convert to Broadcast Group</string>
     <string name="BroadcastGroupConvertInfo">Broadcast groups can have over 200,000 members, but only admins can send messages in them.</string>
-    <string name="BroadcastGroupConvertSuccess">You group can now have more than 200,000 members.</string>
+    <string name="BroadcastGroupConvertSuccess">Your group can now have more than 200,000 members.</string>
     <string name="BroadcastGroupInfo">Only admins can send messages in this group.</string>
     <string name="Brown">Brown</string>
     <string name="BubbleRadius">Message corners</string>
@@ -1069,7 +1071,7 @@
     <string name="CreateNewFilter">Create New Folder</string>
     <string name="CreateNewFilterInfo">Create folders for different groups of chats and quickly switch between them.</string>
     <string name="CreateNewLink">Create a New Link</string>
-    <string name="CreateNewLinkHelp">You can generate invite links that will expire after they\'ve been used.</string>
+    <string name="CreateNewLinkHelp">You can generate invite links that expire after they are used.</string>
     <string name="CreateNewThemeAlert">You can create your own theme by changing colors within the app.\10\10You can always switch back to the default Telegram theme here.</string>
     <string name="CreateNewThemeHelp">Tap on the palette icon to view the list of elements on each screen - and edit them.</string>
     <string name="CreateNewThemeMenu">Create new theme</string>
@@ -1316,8 +1318,8 @@
     <string name="EditThemeColors">Edit colors</string>
     <string name="EditThemeTitle">Edit Theme</string>
     <string name="EditWidget">Edit Widget</string>
-    <string name="EditWidgetChatsInfo">Display the latest message from the most important chats.\10\10If no specific chats are selected, your most recent chats will be shown in this widget.</string>
-    <string name="EditWidgetContactsInfo">Display shortcuts of your most important chats to always have a quick access to them.\10\10If nobody is selected, your most frequent contacts will be shown in this widget.</string>
+    <string name="EditWidgetChatsInfo">Display the latest message from the chats you choose.\10\10If no specific chats are selected, your most recent chats will be shown in this widget.</string>
+    <string name="EditWidgetContactsInfo">Display shortcuts to your most important chats for quick access.\10\10If nobody is selected, your most frequent contacts will be shown in this widget.</string>
     <string name="EditedMessage">edited</string>
     <string name="EmailCopied">Email copied to clipboard</string>
     <string name="EmailPasswordConfirmText2">To complete Two-Step Verification Setup, check your email (don\'t forget the spam folder) and enter the code we just sent you.</string>
@@ -1493,6 +1495,7 @@
     <string name="Exception_zero">%1$d exceptions</string>
     <string name="ExpireAfter">Expire after</string>
     <string name="Expired">Expired</string>
+    <string name="ExpiredLink">Expired Link</string>
     <string name="ExportTheme">Export</string>
     <string name="Exposure">Exposure</string>
     <string name="ExternalFolderInfo">Browse your external storage</string>
@@ -1724,7 +1727,7 @@
     <string name="GifSavedToDownloadsHint">GIF saved to downloads</string>
     <string name="GifsTab2">GIFs</string>
     <string name="GigagroupAlertLearnMore">LEARN MORE</string>
-    <string name="GigagroupAlertText">Your group has reached a limit of **200,000** members.\10\10You can increase this limit by converting the group to a **broadcast group** where only admins can post.\10Interested?</string>
+    <string name="GigagroupAlertText">Your group has reached the limit of **200,000** members.\10\10You can increase this limit by converting the group to a **broadcast group** where only admins can post.\10Interested?</string>
     <string name="GigagroupAlertTitle">Limit reached</string>
     <string name="GigagroupConvertAlertConver">CONVERT</string>
     <string name="GigagroupConvertAlertText">Regular members of the group (non-admins) will **irrevocably** lose their right to post messages in the group.\10\10This action **can\'t** be undone.</string>
@@ -1829,6 +1832,7 @@
     <string name="ImportErrorFileFormatInvalid">Invalid file format.</string>
     <string name="ImportErrorFileLang">Unknown file language.</string>
     <string name="ImportErrorNotAdmin">You must be an admin in the group to import messages.</string>
+    <string name="ImportErrorPeerInvalid">Unable to import history to selected chat.</string>
     <string name="ImportErrorTitle">Import Error</string>
     <string name="ImportErrorUserBlocked">Unable to import messages due to privacy settings.</string>
     <string name="ImportFailedToUpload">Failed to upload file.</string>
@@ -1883,12 +1887,12 @@
     <string name="InviteFriends">Invite Friends</string>
     <string name="InviteFriendsHelp">Select contacts to invite them to Telegram</string>
     <string name="InviteLink">Invite Link</string>
-    <string name="InviteLink_few">%1$d invite links</string>
-    <string name="InviteLink_many">%1$d invite links</string>
-    <string name="InviteLink_one">%1$d invite link</string>
-    <string name="InviteLink_other">%1$d invite links</string>
-    <string name="InviteLink_two">%1$d invite links</string>
-    <string name="InviteLink_zero">%1$d invite links</string>
+    <string name="InviteLinkCount_few">%1$d invite links</string>
+    <string name="InviteLinkCount_many">%1$d invite links</string>
+    <string name="InviteLinkCount_one">%1$d invite link</string>
+    <string name="InviteLinkCount_other">%1$d invite links</string>
+    <string name="InviteLinkCount_two">%1$d invite links</string>
+    <string name="InviteLinkCount_zero">%1$d invite links</string>
     <string name="InviteLinks">Invite Links</string>
     <string name="InviteRevokedHint">The invite link has been revoked.</string>
     <string name="InviteText2">Hey, I\'m using Telegram to chat. Join me! Download it here: %1$s</string>
@@ -2069,7 +2073,7 @@
     <string name="ManageGroup">Manage Group</string>
     <string name="ManageGroupMenu">Manage group</string>
     <string name="ManageInviteLinks">Manage Invite Links</string>
-    <string name="ManageLinksInfoHelp">You can create additional invite links that have limited time or number of usages</string>
+    <string name="ManageLinksInfoHelp">You can create additional invite links that have a limited time or number of uses</string>
     <string name="Map">Map</string>
     <string name="MapPreviewProvider">Map Preview Provider</string>
     <string name="MapPreviewProviderGoogle">Google</string>
@@ -2871,7 +2875,11 @@
     <string name="PaymentTransactionTotal">Total</string>
     <string name="PaymentWarning">Warning</string>
     <string name="PaymentWarningText">Neither Telegram, nor %1$s will have access to your credit card information. Credit card details will be handled only by the payment system, %2$s.\10\10Payments will go directly to the developer of %1$s. Telegram cannot provide any guarantees, so proceed at your own risk. In case of problems, please contact the developer of %1$s or your bank.</string>
-    <string name="PeopleCanJoinViaLink">%s people can join via this link</string>
+    <string name="PeopleCanJoinViaLink_few">%s peoples can join via this link</string>
+    <string name="PeopleCanJoinViaLink_many">%s peoples can join via this link</string>
+    <string name="PeopleCanJoinViaLink_one">%s people can join via this link</string>
+    <string name="PeopleCanJoinViaLink_other">%s peoples can join via this link</string>
+    <string name="PeopleCanJoinViaLink_two">%s peoples can join via this link</string>
     <string name="PeopleJoinedRemaining_few">%1$d remaining</string>
     <string name="PeopleJoinedRemaining_many">%1$d remaining</string>
     <string name="PeopleJoinedRemaining_one">%1$d remaining</string>
@@ -2892,6 +2900,7 @@
     <string name="PeopleNearbyGpsInfo">Quickly add people nearby who are also viewing this section and discover local group chats.\10\10Please turn on location services to enable this feature.</string>
     <string name="PeopleNearbyHeader">People nearby</string>
     <string name="PeopleNearbyInfo2">Exchange contact info with people nearby and find new friends.</string>
+    <string name="Permanent">Permanent</string>
     <string name="PermanentLinkForThisAdmin">Invite link for this admin</string>
     <string name="PermissionBackgroundLocation">To share your live location in this chat, Telegram needs access to your location all the time, including while the app is in the background.\10\10We will access your location only for the duration you choose, and you can stop sharing it any time. We won\'t use your location for any purpose other than sharing it in this chat.</string>
     <string name="PermissionContacts">To let you connect with friends across all your devices, your contacts will be continuously synced with Telegram\'s heavily encrypted cloud servers.</string>
@@ -3085,8 +3094,8 @@
     <string name="PublicSharesCount_two">%1$s public shares</string>
     <string name="PublicSharesCount_zero">%1$s public shares</string>
     <string name="Purple">Purple</string>
-    <string name="QRCodeLinkHelpChannel">Everyone on Telegram can scan this code to join your channel</string>
-    <string name="QRCodeLinkHelpGroup">Everyone on Telegram can scan this code to join your group</string>
+    <string name="QRCodeLinkHelpChannel">Everyone on Telegram can scan this code to join your channel.</string>
+    <string name="QRCodeLinkHelpGroup">Everyone on Telegram can scan this code to join your group.</string>
     <string name="QRCodePermissionNoCamera">Telegram needs access to your camera so that you can scan QR codes.</string>
     <string name="QuestionHint">Ask a question</string>
     <string name="QuickReplyCustom">Custom Message...</string>
@@ -3715,7 +3724,7 @@
     <string name="ThemeSetUrl">Set link</string>
     <string name="ThemeSetUrlHelp">You can use a-z, 0-9 and underscores.\10Minimum length is 5 characters.</string>
     <string name="ThemeUrl">Theme Link</string>
-    <string name="TimeLimitHelp">Your can make the link expire after a certain time.</string>
+    <string name="TimeLimitHelp">You can make the link expire after a certain time.</string>
     <string name="TimeLimitHint">Set custom duration</string>
     <string name="TimeToEdit">%1$s</string>
     <string name="TimeToEditExpired">Sorry, editing time expired.</string>
@@ -4027,6 +4036,7 @@
     <string name="VoipGroupSearchMembers">Search members to invite...</string>
     <string name="VoipGroupShareInviteLink">Share invite link</string>
     <string name="VoipGroupStopRecordCall">Stop recording</string>
+    <string name="VoipGroupTooMuch">Sorry, this voice chat is full.</string>
     <string name="VoipGroupUnmute">Unmute</string>
     <string name="VoipGroupUnmuteForMe">Unmute for me</string>
     <string name="VoipGroupUserCanNowSpeak">**%1$s** can now speak.</string>
@@ -4118,6 +4128,8 @@
     <string name="WhoCanCallMeInfo">You can restrict who can call you.</string>
     <string name="WidgetChats">Chats</string>
     <string name="WidgetLoggedOff">Account was logged off.</string>
+    <string name="WidgetPasscode">\10\10Note: passcode will be **ignored** for widgets.</string>
+    <string name="WidgetPasscodeEnable">\10\10Passcode **will not affect** widgets added to homescreen.</string>
     <string name="WidgetPreview">Preview of the widget</string>
     <string name="WidgetShortcuts">Shortcuts</string>
     <string name="WillUnmuteIn">In %1$s</string>

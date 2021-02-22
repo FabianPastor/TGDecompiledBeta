@@ -509,7 +509,9 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         textCheckCell2.setChecked(textCheckCell2.isChecked() ^ true);
                     } else if (i == ProfileNotificationsActivity.this.callsVibrateRow) {
                         ProfileNotificationsActivity profileNotificationsActivity4 = ProfileNotificationsActivity.this;
-                        profileNotificationsActivity4.showDialog(AlertsCreator.createVibrationSelectDialog(profileNotificationsActivity4.getParentActivity(), ProfileNotificationsActivity.this.dialog_id, "calls_vibrate_", new Runnable() {
+                        Activity parentActivity = profileNotificationsActivity4.getParentActivity();
+                        long access$400 = ProfileNotificationsActivity.this.dialog_id;
+                        profileNotificationsActivity4.showDialog(AlertsCreator.createVibrationSelectDialog(parentActivity, access$400, "calls_vibrate_" + ProfileNotificationsActivity.this.dialog_id, new Runnable() {
                             public final void run() {
                                 ProfileNotificationsActivity.AnonymousClass3.this.lambda$onItemClick$1$ProfileNotificationsActivity$3();
                             }
@@ -523,7 +525,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                         }));
                     } else if (i == ProfileNotificationsActivity.this.smartRow) {
                         if (ProfileNotificationsActivity.this.getParentActivity() != null) {
-                            final Activity parentActivity = ProfileNotificationsActivity.this.getParentActivity();
+                            final Activity parentActivity2 = ProfileNotificationsActivity.this.getParentActivity();
                             SharedPreferences notificationsSettings4 = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
                             int i3 = notificationsSettings4.getInt("smart_max_count_" + ProfileNotificationsActivity.this.dialog_id, 2);
                             int i4 = notificationsSettings4.getInt("smart_delay_" + ProfileNotificationsActivity.this.dialog_id, 180);
@@ -544,7 +546,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 }
 
                                 public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                                    AnonymousClass1 r3 = new TextView(this, parentActivity) {
+                                    AnonymousClass1 r3 = new TextView(this, parentActivity2) {
                                         /* access modifiers changed from: protected */
                                         public void onMeasure(int i, int i2) {
                                             super.onMeasure(View.MeasureSpec.makeMeasureSpec(i, NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));

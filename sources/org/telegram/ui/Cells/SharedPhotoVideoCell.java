@@ -203,7 +203,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 }
                 this.videoInfoContainer.setVisibility(4);
                 TLRPC$PhotoSize closestPhotoSizeWithSize3 = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 50);
-                TLRPC$PhotoSize closestPhotoSizeWithSize4 = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 320, false, closestPhotoSizeWithSize3);
+                TLRPC$PhotoSize closestPhotoSizeWithSize4 = FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, 320, false, closestPhotoSizeWithSize3, false);
                 if (messageObject.mediaExists || DownloadController.getInstance(SharedPhotoVideoCell.this.currentAccount).canDownloadMedia(messageObject)) {
                     if (closestPhotoSizeWithSize4 != closestPhotoSizeWithSize3) {
                         tLRPC$PhotoSize = closestPhotoSizeWithSize3;

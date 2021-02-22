@@ -691,7 +691,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
         return windowInsets.consumeSystemWindowInsets();
     }
 
-    public void openMedia(MessageObject messageObject, PhotoViewer.PhotoViewerProvider photoViewerProvider) {
+    public void openMedia(MessageObject messageObject, PhotoViewer.PhotoViewerProvider photoViewerProvider, Runnable runnable) {
         PhotoViewer.PlaceProviderObject placeForPhoto;
         int i;
         MessageObject messageObject2 = messageObject;
@@ -865,9 +865,15 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             animatorArr[4] = ObjectAnimator.ofFloat(this, "animationValue", fArr4);
             animatorSet.playTogether(animatorArr);
             this.photoAnimationInProgress = 3;
-            this.photoAnimationEndRunnable = new Runnable() {
+            this.photoAnimationEndRunnable = new Runnable(runnable) {
+                public final /* synthetic */ Runnable f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
                 public final void run() {
-                    SecretMediaViewer.this.lambda$openMedia$1$SecretMediaViewer();
+                    SecretMediaViewer.this.lambda$openMedia$1$SecretMediaViewer(this.f$1);
                 }
             };
             this.imageMoveAnimation.setDuration(250);
@@ -902,9 +908,12 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$openMedia$1 */
-    public /* synthetic */ void lambda$openMedia$1$SecretMediaViewer() {
+    public /* synthetic */ void lambda$openMedia$1$SecretMediaViewer(Runnable runnable) {
         this.photoAnimationInProgress = 0;
         this.imageMoveAnimation = null;
+        if (runnable != null) {
+            runnable.run();
+        }
         FrameLayoutDrawer frameLayoutDrawer = this.containerView;
         if (frameLayoutDrawer != null) {
             if (Build.VERSION.SDK_INT >= 18) {

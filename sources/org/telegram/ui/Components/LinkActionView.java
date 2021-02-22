@@ -8,13 +8,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
@@ -60,6 +63,7 @@ public class LinkActionView extends LinearLayout {
     TextView linkView;
     boolean loadingImporters;
     ImageView optionsView;
+    private boolean permanent;
     float[] point = new float[2];
     /* access modifiers changed from: private */
     public QRCodeBottomSheet qrCodeBottomSheet;
@@ -91,15 +95,14 @@ public class LinkActionView extends LinearLayout {
         void showUsersForPermanentLink();
     }
 
-    public void setPermanent(boolean z) {
-    }
-
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public LinkActionView(Context context, BaseFragment baseFragment, BottomSheet bottomSheet, int i, boolean z, boolean z2) {
         super(context);
         Context context2 = context;
         BaseFragment baseFragment2 = baseFragment;
+        BottomSheet bottomSheet2 = bottomSheet;
         this.fragment = baseFragment2;
+        this.permanent = z;
         this.isChannel = z2;
         setOrientation(1);
         FrameLayout frameLayout2 = new FrameLayout(context2);
@@ -108,6 +111,8 @@ public class LinkActionView extends LinearLayout {
         this.linkView = textView;
         textView.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(18.0f), AndroidUtilities.dp(40.0f), AndroidUtilities.dp(18.0f));
         this.linkView.setTextSize(1, 16.0f);
+        this.linkView.setEllipsize(TextUtils.TruncateAt.MIDDLE);
+        this.linkView.setSingleLine(true);
         frameLayout2.addView(this.linkView);
         ImageView imageView = new ImageView(context2);
         this.optionsView = imageView;
@@ -135,10 +140,10 @@ public class LinkActionView extends LinearLayout {
         this.shareView = textView3;
         textView3.setGravity(1);
         SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder();
-        spannableStringBuilder2.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context2, NUM)), 0, 1, 0);
         FrameLayout frameLayout3 = frameLayout2;
+        spannableStringBuilder2.append("..").setSpan(new ColoredImageSpan(ContextCompat.getDrawable(context2, NUM)), 0, 1, 0);
         spannableStringBuilder2.setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(8.0f)), 1, 2, 0);
-        spannableStringBuilder2.append(LocaleController.getString("LinkActionCopy", NUM));
+        spannableStringBuilder2.append(LocaleController.getString("LinkActionShare", NUM));
         spannableStringBuilder2.append(".").setSpan(new DialogCell.FixedWidthSpan(AndroidUtilities.dp(5.0f)), spannableStringBuilder2.length() - 1, spannableStringBuilder2.length(), 0);
         textView3.setText(spannableStringBuilder2);
         textView3.setPadding(AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
@@ -165,7 +170,7 @@ public class LinkActionView extends LinearLayout {
         AvatarsContainer avatarsContainer2 = new AvatarsContainer(context2);
         this.avatarsContainer = avatarsContainer2;
         addView(avatarsContainer2, LayoutHelper.createLinear(-1, 44, 0.0f, 12.0f, 0.0f, 0.0f));
-        textView2.setOnClickListener(new View.OnClickListener(bottomSheet, baseFragment2) {
+        textView2.setOnClickListener(new View.OnClickListener(bottomSheet2, baseFragment2) {
             public final /* synthetic */ BottomSheet f$1;
             public final /* synthetic */ BaseFragment f$2;
 
@@ -207,21 +212,19 @@ public class LinkActionView extends LinearLayout {
                 LinkActionView.this.lambda$new$4$LinkActionView(this.f$1, view);
             }
         });
-        this.optionsView.setOnClickListener(new View.OnClickListener(context, z, bottomSheet, baseFragment) {
+        this.optionsView.setOnClickListener(new View.OnClickListener(context2, bottomSheet2, baseFragment2) {
             public final /* synthetic */ Context f$1;
-            public final /* synthetic */ boolean f$2;
-            public final /* synthetic */ BottomSheet f$3;
-            public final /* synthetic */ BaseFragment f$4;
+            public final /* synthetic */ BottomSheet f$2;
+            public final /* synthetic */ BaseFragment f$3;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r3;
                 this.f$3 = r4;
-                this.f$4 = r5;
             }
 
             public final void onClick(View view) {
-                LinkActionView.this.lambda$new$9$LinkActionView(this.f$1, this.f$2, this.f$3, this.f$4, view);
+                LinkActionView.this.lambda$new$9$LinkActionView(this.f$1, this.f$2, this.f$3, view);
             }
         });
         frameLayout3.setOnClickListener(new View.OnClickListener() {
@@ -296,11 +299,11 @@ public class LinkActionView extends LinearLayout {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$9 */
-    public /* synthetic */ void lambda$new$9$LinkActionView(Context context, boolean z, BottomSheet bottomSheet, BaseFragment baseFragment, View view) {
+    public /* synthetic */ void lambda$new$9$LinkActionView(Context context, BottomSheet bottomSheet, BaseFragment baseFragment, View view) {
         final FrameLayout frameLayout2;
         if (this.actionBarPopupWindow == null) {
             ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(context);
-            if (!z && this.canEdit) {
+            if (!this.permanent && this.canEdit) {
                 ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(context, true, false);
                 actionBarMenuSubItem.setTextAndIcon(LocaleController.getString("Edit", NUM), NUM);
                 actionBarPopupWindowLayout.addView(actionBarMenuSubItem, LayoutHelper.createLinear(-1, 48));
@@ -337,7 +340,7 @@ public class LinkActionView extends LinearLayout {
             if (frameLayout2 != null) {
                 getPointOnScreen(this.frameLayout, frameLayout2, this.point);
                 float f = this.point[1];
-                final AnonymousClass1 r5 = new View(context) {
+                final AnonymousClass1 r0 = new View(context) {
                     /* access modifiers changed from: protected */
                     public void onDraw(Canvas canvas) {
                         canvas.drawColor(NUM);
@@ -350,35 +353,32 @@ public class LinkActionView extends LinearLayout {
                         canvas.restore();
                     }
                 };
-                frameLayout2.addView(r5, LayoutHelper.createFrame(-1, -1.0f));
+                frameLayout2.addView(r0, LayoutHelper.createFrame(-1, -1.0f));
                 float f2 = 0.0f;
-                r5.setAlpha(0.0f);
-                r5.animate().alpha(1.0f).setDuration(150);
+                r0.setAlpha(0.0f);
+                r0.animate().alpha(1.0f).setDuration(150);
                 actionBarPopupWindowLayout.measure(View.MeasureSpec.makeMeasureSpec(frameLayout2.getMeasuredWidth(), 0), View.MeasureSpec.makeMeasureSpec(frameLayout2.getMeasuredHeight(), 0));
-                final FrameLayout frameLayout3 = frameLayout2;
-                AnonymousClass2 r0 = new ActionBarPopupWindow(actionBarPopupWindowLayout, -2, -2) {
-                    public void dismiss() {
-                        super.dismiss();
+                ActionBarPopupWindow actionBarPopupWindow2 = new ActionBarPopupWindow(actionBarPopupWindowLayout, -2, -2);
+                this.actionBarPopupWindow = actionBarPopupWindow2;
+                actionBarPopupWindow2.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                    public void onDismiss() {
                         ActionBarPopupWindow unused = LinkActionView.this.actionBarPopupWindow = null;
-                        r5.animate().cancel();
-                        r5.animate().alpha(0.0f).setDuration(150).setListener(new AnimatorListenerAdapter() {
+                        r0.animate().cancel();
+                        r0.animate().alpha(0.0f).setDuration(150).setListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
-                                if (r5.getParent() != null) {
+                                if (r0.getParent() != null) {
                                     AnonymousClass2 r2 = AnonymousClass2.this;
-                                    frameLayout3.removeView(r5);
+                                    frameLayout2.removeView(r0);
                                 }
                             }
                         });
                     }
-                };
-                this.actionBarPopupWindow = r0;
-                r0.setOutsideTouchable(true);
-                this.actionBarPopupWindow.setClippingEnabled(true);
+                });
+                this.actionBarPopupWindow.setOutsideTouchable(true);
+                this.actionBarPopupWindow.setBackgroundDrawable(new ColorDrawable(0));
                 this.actionBarPopupWindow.setAnimationStyle(NUM);
-                this.actionBarPopupWindow.setFocusable(true);
                 this.actionBarPopupWindow.setInputMethodMode(2);
                 this.actionBarPopupWindow.setSoftInputMode(0);
-                this.actionBarPopupWindow.getContentView().setFocusableInTouchMode(true);
                 actionBarPopupWindowLayout.setDispatchKeyEventListener(new ActionBarPopupWindow.OnDispatchKeyEventListener() {
                     public final void onDispatchKeyEvent(KeyEvent keyEvent) {
                         LinkActionView.this.lambda$null$8$LinkActionView(keyEvent);
@@ -396,11 +396,11 @@ public class LinkActionView extends LinearLayout {
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$5 */
     public /* synthetic */ void lambda$null$5$LinkActionView(View view) {
-        this.delegate.editLink();
         ActionBarPopupWindow actionBarPopupWindow2 = this.actionBarPopupWindow;
         if (actionBarPopupWindow2 != null) {
             actionBarPopupWindow2.dismiss();
         }
+        this.delegate.editLink();
     }
 
     /* access modifiers changed from: private */
@@ -412,11 +412,11 @@ public class LinkActionView extends LinearLayout {
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$7 */
     public /* synthetic */ void lambda$null$7$LinkActionView(View view) {
-        revokeLink();
         ActionBarPopupWindow actionBarPopupWindow2 = this.actionBarPopupWindow;
         if (actionBarPopupWindow2 != null) {
             actionBarPopupWindow2.dismiss();
         }
+        revokeLink();
     }
 
     /* access modifiers changed from: private */
@@ -666,6 +666,10 @@ public class LinkActionView extends LinearLayout {
             }
             setUsers(tLRPC$TL_chatInviteExported.usage, tLRPC$TL_chatInviteExported.importers);
         }
+    }
+
+    public void setPermanent(boolean z) {
+        this.permanent = z;
     }
 
     public void setCanEdit(boolean z) {

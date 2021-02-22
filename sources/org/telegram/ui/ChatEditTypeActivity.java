@@ -443,7 +443,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                 TLRPC$TL_chatInviteExported access$600 = ChatEditTypeActivity.this.invite;
                 TLRPC$ChatFull access$700 = ChatEditTypeActivity.this.info;
                 ChatEditTypeActivity chatEditTypeActivity2 = ChatEditTypeActivity.this;
-                InviteLinkBottomSheet unused = chatEditTypeActivity.inviteLinkBottomSheet = new InviteLinkBottomSheet(context, access$600, access$700, chatEditTypeActivity2.usersMap, chatEditTypeActivity2, chatEditTypeActivity2.chatId, true, true, ChatObject.isChannel(ChatEditTypeActivity.this.currentChat));
+                InviteLinkBottomSheet unused = chatEditTypeActivity.inviteLinkBottomSheet = new InviteLinkBottomSheet(context, access$600, access$700, chatEditTypeActivity2.usersMap, chatEditTypeActivity2, chatEditTypeActivity2.chatId, true, ChatObject.isChannel(ChatEditTypeActivity.this.currentChat));
                 ChatEditTypeActivity.this.inviteLinkBottomSheet.show();
             }
         });

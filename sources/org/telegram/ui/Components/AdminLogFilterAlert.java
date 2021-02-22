@@ -109,8 +109,8 @@ public class AdminLogFilterAlert extends BottomSheet {
         }
         this.isMegagroup = z;
         if (z) {
-            this.restrictionsRow = 1;
             i = 2;
+            this.restrictionsRow = 1;
         } else {
             this.restrictionsRow = -1;
             i = 1;
@@ -135,12 +135,17 @@ public class AdminLogFilterAlert extends BottomSheet {
         }
         int i8 = i7 + 1;
         this.leavingRow = i7;
-        this.callsRow = i8;
-        this.allAdminsRow = i8 + 2;
+        if (z) {
+            this.callsRow = i8;
+            i8++;
+        } else {
+            this.callsRow = -1;
+        }
+        this.allAdminsRow = i8 + 1;
         Drawable mutate = context.getResources().getDrawable(NUM).mutate();
         this.shadowDrawable = mutate;
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
-        AnonymousClass1 r11 = new FrameLayout(context) {
+        AnonymousClass1 r13 = new FrameLayout(context) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() != 0 || AdminLogFilterAlert.this.scrollOffsetY == 0 || motionEvent.getY() >= ((float) AdminLogFilterAlert.this.scrollOffsetY)) {
                     return super.onInterceptTouchEvent(motionEvent);
@@ -160,7 +165,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                     size -= AndroidUtilities.statusBarHeight;
                 }
                 getMeasuredWidth();
-                int dp = AndroidUtilities.dp(48.0f) + ((AdminLogFilterAlert.this.isMegagroup ? 10 : 7) * AndroidUtilities.dp(48.0f)) + AdminLogFilterAlert.this.backgroundPaddingTop;
+                int dp = AndroidUtilities.dp(48.0f) + ((AdminLogFilterAlert.this.isMegagroup ? 11 : 7) * AndroidUtilities.dp(48.0f)) + AdminLogFilterAlert.this.backgroundPaddingTop + AndroidUtilities.dp(17.0f);
                 if (AdminLogFilterAlert.this.currentAdmins != null) {
                     dp += ((AdminLogFilterAlert.this.currentAdmins.size() + 1) * AndroidUtilities.dp(48.0f)) + AndroidUtilities.dp(20.0f);
                 }
@@ -198,12 +203,12 @@ public class AdminLogFilterAlert extends BottomSheet {
                 AdminLogFilterAlert.this.shadowDrawable.draw(canvas);
             }
         };
-        this.containerView = r11;
-        r11.setWillNotDraw(false);
+        this.containerView = r13;
+        r13.setWillNotDraw(false);
         ViewGroup viewGroup = this.containerView;
         int i9 = this.backgroundPaddingLeft;
         viewGroup.setPadding(i9, 0, i9, 0);
-        AnonymousClass2 r112 = new RecyclerListView(context) {
+        AnonymousClass2 r132 = new RecyclerListView(context) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 boolean onInterceptTouchEvent = ContentPreviewViewer.getInstance().onInterceptTouchEvent(motionEvent, AdminLogFilterAlert.this.listView, 0, (ContentPreviewViewer.ContentPreviewViewerDelegate) null);
                 if (super.onInterceptTouchEvent(motionEvent) || onInterceptTouchEvent) {
@@ -218,8 +223,8 @@ public class AdminLogFilterAlert extends BottomSheet {
                 }
             }
         };
-        this.listView = r112;
-        r112.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
+        this.listView = r132;
+        r132.setLayoutManager(new LinearLayoutManager(getContext(), 1, false));
         RecyclerListView recyclerListView = this.listView;
         ListAdapter listAdapter = new ListAdapter(context);
         this.adapter = listAdapter;
@@ -462,7 +467,7 @@ public class AdminLogFilterAlert extends BottomSheet {
         }
 
         public int getItemCount() {
-            return (AdminLogFilterAlert.this.isMegagroup ? 11 : 8) + (AdminLogFilterAlert.this.currentAdmins != null ? AdminLogFilterAlert.this.currentAdmins.size() + 2 : 0);
+            return (AdminLogFilterAlert.this.isMegagroup ? 11 : 7) + (AdminLogFilterAlert.this.currentAdmins != null ? AdminLogFilterAlert.this.currentAdmins.size() + 2 : 0);
         }
 
         public int getItemViewType(int i) {
@@ -640,10 +645,11 @@ public class AdminLogFilterAlert extends BottomSheet {
                     checkBoxCell.setText(string9, "", z, true);
                 } else if (i == AdminLogFilterAlert.this.leavingRow) {
                     String string10 = LocaleController.getString("EventLogFilterLeavingMembers", NUM);
-                    if (AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.leave) {
+                    boolean z3 = AdminLogFilterAlert.this.currentFilter == null || AdminLogFilterAlert.this.currentFilter.leave;
+                    if (AdminLogFilterAlert.this.callsRow != -1) {
                         z = true;
                     }
-                    checkBoxCell.setText(string10, "", z, true);
+                    checkBoxCell.setText(string10, "", z3, z);
                 } else if (i == AdminLogFilterAlert.this.callsRow) {
                     String string11 = LocaleController.getString("EventLogFilterCalls", NUM);
                     if (AdminLogFilterAlert.this.currentFilter != null && !AdminLogFilterAlert.this.currentFilter.group_call) {
@@ -667,11 +673,11 @@ public class AdminLogFilterAlert extends BottomSheet {
                 CheckBoxUserCell checkBoxUserCell = (CheckBoxUserCell) viewHolder.itemView;
                 int i2 = ((TLRPC$ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((i - AdminLogFilterAlert.this.allAdminsRow) - 1)).user_id;
                 TLRPC$User user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Integer.valueOf(i2));
-                boolean z3 = AdminLogFilterAlert.this.selectedAdmins == null || AdminLogFilterAlert.this.selectedAdmins.indexOfKey(i2) >= 0;
+                boolean z4 = AdminLogFilterAlert.this.selectedAdmins == null || AdminLogFilterAlert.this.selectedAdmins.indexOfKey(i2) >= 0;
                 if (i != getItemCount() - 1) {
                     z = true;
                 }
-                checkBoxUserCell.setUser(user, z3, z);
+                checkBoxUserCell.setUser(user, z4, z);
             }
         }
     }

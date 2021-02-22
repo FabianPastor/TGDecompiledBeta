@@ -5,14 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.TextView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
@@ -37,7 +35,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             r2 = 0
             r0.<init>(r1, r2)
             java.lang.String r3 = "InviteByQRCode"
-            r4 = 2131625814(0x7f0e0756, float:1.8878847E38)
+            r4 = 2131625818(0x7f0e075a, float:1.8878855E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r4 = 1
             r0.setTitle(r3, r4)
@@ -45,6 +43,14 @@ public class QRCodeBottomSheet extends BottomSheet {
             r3.<init>(r0, r1)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.FIT_XY
             r3.setScaleType(r5)
+            int r5 = android.os.Build.VERSION.SDK_INT
+            r6 = 21
+            if (r5 < r6) goto L_0x0030
+            org.telegram.ui.Components.QRCodeBottomSheet$2 r5 = new org.telegram.ui.Components.QRCodeBottomSheet$2
+            r5.<init>(r0)
+            r3.setOutlineProvider(r5)
+            r3.setClipToOutline(r4)
+        L_0x0030:
             android.widget.LinearLayout r5 = new android.widget.LinearLayout
             r5.<init>(r1)
             r5.setOrientation(r4)
@@ -69,7 +75,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             r6.setAnimation(r8, r9, r9)
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
             r6.playAnimation()
-            org.telegram.ui.Components.QRCodeBottomSheet$2 r6 = new org.telegram.ui.Components.QRCodeBottomSheet$2
+            org.telegram.ui.Components.QRCodeBottomSheet$3 r6 = new org.telegram.ui.Components.QRCodeBottomSheet$3
             r6.<init>(r1, r3)
             r8 = -1082130432(0xffffffffbvar_, float:-1.0)
             android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8)
@@ -116,9 +122,9 @@ public class QRCodeBottomSheet extends BottomSheet {
             java.lang.String r2 = "fonts/rmedium.ttf"
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r3.setTypeface(r2)
-            java.lang.String r2 = "ShareQrCode"
-            r4 = 2131627376(0x7f0e0d70, float:1.8882015E38)
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r4)
+            r2 = 2131627385(0x7f0e0d79, float:1.8882033E38)
+            java.lang.String r4 = "ShareQrCode"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r3.setText(r2)
             org.telegram.ui.Components.-$$Lambda$QRCodeBottomSheet$2sIpc-sdD8tZ_UiJm7HWacIETqc r2 = new org.telegram.ui.Components.-$$Lambda$QRCodeBottomSheet$2sIpc-sdD8tZ_UiJm7HWacIETqc
             r2.<init>(r1)
@@ -145,19 +151,73 @@ public class QRCodeBottomSheet extends BottomSheet {
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$QRCodeBottomSheet(Context context, View view) {
-        Intent intent = new Intent("android.intent.action.SEND");
-        intent.setType("image/*");
-        intent.putExtra("android.intent.extra.STREAM", getImageUri(context, this.qrCode));
-        try {
-            AndroidUtilities.findActivity(context).startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteByQRCode", NUM)), 500);
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
+        Uri imageUri = getImageUri(this.qrCode);
+        if (imageUri != null) {
+            Intent intent = new Intent("android.intent.action.SEND");
+            intent.setType("image/*");
+            intent.putExtra("android.intent.extra.STREAM", imageUri);
+            try {
+                AndroidUtilities.findActivity(context).startActivityForResult(Intent.createChooser(intent, LocaleController.getString("InviteByQRCode", NUM)), 500);
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public Uri getImageUri(Context context, Bitmap bitmap) {
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, new ByteArrayOutputStream());
-        return Uri.parse(MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, "group_invite_qr", (String) null));
+    /* JADX WARNING: Code restructure failed: missing block: B:18:0x0042, code lost:
+        r6 = move-exception;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:20:?, code lost:
+        r0.close();
+     */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:21:0x0046 */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public android.net.Uri getImageUri(android.graphics.Bitmap r6) {
+        /*
+            r5 = this;
+            java.io.ByteArrayOutputStream r0 = new java.io.ByteArrayOutputStream
+            r0.<init>()
+            android.graphics.Bitmap$CompressFormat r1 = android.graphics.Bitmap.CompressFormat.JPEG
+            r2 = 100
+            r6.compress(r1, r2, r0)
+            java.io.File r0 = org.telegram.messenger.AndroidUtilities.getCacheDir()
+            boolean r1 = r0.isDirectory()
+            r3 = 0
+            if (r1 != 0) goto L_0x0020
+            r0.mkdirs()     // Catch:{ Exception -> 0x001b }
+            goto L_0x0020
+        L_0x001b:
+            r6 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)
+            return r3
+        L_0x0020:
+            java.io.File r1 = new java.io.File
+            java.lang.String r4 = "qr_tmp.png"
+            r1.<init>(r0, r4)
+            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ IOException -> 0x0047 }
+            r0.<init>(r1)     // Catch:{ IOException -> 0x0047 }
+            android.graphics.Bitmap$CompressFormat r4 = android.graphics.Bitmap.CompressFormat.PNG     // Catch:{ all -> 0x0040 }
+            r6.compress(r4, r2, r0)     // Catch:{ all -> 0x0040 }
+            r0.close()     // Catch:{ all -> 0x0040 }
+            android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0040 }
+            java.lang.String r2 = "org.telegram.messenger.beta.provider"
+            android.net.Uri r6 = androidx.core.content.FileProvider.getUriForFile(r6, r2, r1)     // Catch:{ all -> 0x0040 }
+            r0.close()     // Catch:{ IOException -> 0x0047 }
+            return r6
+        L_0x0040:
+            r6 = move-exception
+            throw r6     // Catch:{ all -> 0x0042 }
+        L_0x0042:
+            r6 = move-exception
+            r0.close()     // Catch:{ all -> 0x0046 }
+        L_0x0046:
+            throw r6     // Catch:{ IOException -> 0x0047 }
+        L_0x0047:
+            r6 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)
+            return r3
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.QRCodeBottomSheet.getImageUri(android.graphics.Bitmap):android.net.Uri");
     }
 
     public Bitmap createQR(Context context, String str, Bitmap bitmap) {
@@ -183,7 +243,6 @@ public class QRCodeBottomSheet extends BottomSheet {
         if (getTitleView() != null) {
             getTitleView().setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         }
-        this.iconImage.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         setBackgroundColor(Theme.getColor("dialogBackground"));
     }
 }

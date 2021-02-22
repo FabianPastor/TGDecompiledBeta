@@ -5468,7 +5468,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r5 = 2
             r4.<init>(r14, r5)     // Catch:{ Exception -> 0x0066 }
             java.lang.String r1 = "Loading"
-            r5 = 2131625952(0x7f0e07e0, float:1.8879126E38)
+            r5 = 2131625956(0x7f0e07e4, float:1.8879135E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)     // Catch:{ Exception -> 0x0066 }
             r4.setMessage(r1)     // Catch:{ Exception -> 0x0066 }
             r4.setCanceledOnTouchOutside(r2)     // Catch:{ Exception -> 0x0066 }
@@ -6408,7 +6408,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r37 = r4
             java.lang.String r4 = "AllPhotos"
             r38 = r5
-            r5 = 2131624236(0x7f0e012c, float:1.8875646E38)
+            r5 = 2131624238(0x7f0e012e, float:1.887565E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)     // Catch:{ all -> 0x0206 }
             r5 = 0
             r3.<init>(r5, r4, r0)     // Catch:{ all -> 0x0206 }
@@ -6423,7 +6423,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (r32 != 0) goto L_0x0181
             org.telegram.messenger.MediaController$AlbumEntry r4 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x017c }
             r39 = r7
-            r5 = 2131624235(0x7f0e012b, float:1.8875644E38)
+            r5 = 2131624237(0x7f0e012d, float:1.8875648E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r5)     // Catch:{ all -> 0x017c }
             r5 = 0
             r4.<init>(r5, r7, r0)     // Catch:{ all -> 0x017c }
@@ -6718,7 +6718,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             org.telegram.messenger.MediaController$AlbumEntry r4 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0433 }
             java.lang.String r5 = "AllVideos"
             r21 = r6
-            r6 = 2131624237(0x7f0e012d, float:1.8875648E38)
+            r6 = 2131624239(0x7f0e012f, float:1.8875652E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)     // Catch:{ all -> 0x0433 }
             r6 = 0
             r4.<init>(r6, r5, r0)     // Catch:{ all -> 0x0433 }
@@ -6741,7 +6741,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (r32 != 0) goto L_0x03d3
             org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x03ce }
             r20 = r7
-            r6 = 2131624235(0x7f0e012b, float:1.8875644E38)
+            r6 = 2131624237(0x7f0e012d, float:1.8875648E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r6)     // Catch:{ all -> 0x03ce }
             r6 = 0
             r5.<init>(r6, r7, r0)     // Catch:{ all -> 0x03ce }

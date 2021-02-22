@@ -521,7 +521,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
             r3.showTextView()
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r6 = 2131626225(0x7f0e08f1, float:1.887968E38)
+            r6 = 2131626229(0x7f0e08f5, float:1.8879688E38)
             java.lang.String r12 = "NoChats"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r12, r6)
             r3.setText(r6)
@@ -622,7 +622,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r14 = 17
             r3.setGravity(r14)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r14 = 2131624987(0x7f0e041b, float:1.887717E38)
+            r14 = 2131624989(0x7f0e041d, float:1.8877173E38)
             java.lang.String r15 = "CopyLink"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             java.lang.String r14 = r14.toUpperCase()
@@ -750,7 +750,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r31 = r8
             r26.<init>(r28, r29, r30, r31)
             r0.commentTextView = r3
-            r2 = 2131627364(0x7f0e0d64, float:1.888199E38)
+            r2 = 2131627373(0x7f0e0d6d, float:1.8882009E38)
             java.lang.String r5 = "ShareComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r3.setHint(r2)
@@ -1442,74 +1442,79 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 java.util.ArrayList r3 = r3.getAllDialogs()
             L_0x005a:
                 int r4 = r3.size()
-                if (r2 >= r4) goto L_0x00da
+                if (r2 >= r4) goto L_0x00e6
                 java.lang.Object r4 = r3.get(r2)
                 org.telegram.tgnet.TLRPC$Dialog r4 = (org.telegram.tgnet.TLRPC$Dialog) r4
                 boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_dialog
                 if (r5 != 0) goto L_0x006c
-                goto L_0x00d7
+                goto L_0x00e2
             L_0x006c:
                 long r5 = r4.id
                 int r7 = (int) r5
-                if (r7 != r0) goto L_0x0072
-                goto L_0x00d7
-            L_0x0072:
+                if (r7 != r0) goto L_0x0073
+                goto L_0x00e2
+            L_0x0073:
                 r8 = 32
                 long r5 = r5 >> r8
                 int r6 = (int) r5
-                if (r7 == 0) goto L_0x00d7
+                if (r7 == 0) goto L_0x00e2
                 r5 = 1
-                if (r6 == r5) goto L_0x00d7
-                if (r7 <= 0) goto L_0x0092
+                if (r6 == r5) goto L_0x00e2
+                if (r7 <= 0) goto L_0x0093
                 int r6 = r4.folder_id
-                if (r6 != r5) goto L_0x0085
+                if (r6 != r5) goto L_0x0086
                 r1.add(r4)
-                goto L_0x008a
-            L_0x0085:
+                goto L_0x008b
+            L_0x0086:
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r5 = r9.dialogs
                 r5.add(r4)
-            L_0x008a:
+            L_0x008b:
                 android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r5 = r9.dialogsMap
                 long r6 = r4.id
                 r5.put(r6, r4)
-                goto L_0x00d7
-            L_0x0092:
+                goto L_0x00e2
+            L_0x0093:
                 org.telegram.ui.Components.ShareAlert r6 = org.telegram.ui.Components.ShareAlert.this
                 int r6 = r6.currentAccount
                 org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
                 int r7 = -r7
                 java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
                 org.telegram.tgnet.TLRPC$Chat r6 = r6.getChat(r7)
-                if (r6 == 0) goto L_0x00d7
+                if (r6 == 0) goto L_0x00e2
                 boolean r7 = org.telegram.messenger.ChatObject.isNotInChat(r6)
-                if (r7 != 0) goto L_0x00d7
+                if (r7 != 0) goto L_0x00e2
+                boolean r7 = r6.gigagroup
+                if (r7 == 0) goto L_0x00b8
+                boolean r7 = org.telegram.messenger.ChatObject.hasAdminRights(r6)
+                if (r7 == 0) goto L_0x00e2
+            L_0x00b8:
                 boolean r7 = org.telegram.messenger.ChatObject.isChannel(r6)
-                if (r7 == 0) goto L_0x00c3
+                if (r7 == 0) goto L_0x00ce
                 boolean r7 = r6.creator
-                if (r7 != 0) goto L_0x00c3
+                if (r7 != 0) goto L_0x00ce
                 org.telegram.tgnet.TLRPC$TL_chatAdminRights r7 = r6.admin_rights
-                if (r7 == 0) goto L_0x00bf
+                if (r7 == 0) goto L_0x00ca
                 boolean r7 = r7.post_messages
-                if (r7 != 0) goto L_0x00c3
-            L_0x00bf:
+                if (r7 != 0) goto L_0x00ce
+            L_0x00ca:
                 boolean r6 = r6.megagroup
-                if (r6 == 0) goto L_0x00d7
-            L_0x00c3:
+                if (r6 == 0) goto L_0x00e2
+            L_0x00ce:
                 int r6 = r4.folder_id
-                if (r6 != r5) goto L_0x00cb
+                if (r6 != r5) goto L_0x00d6
                 r1.add(r4)
-                goto L_0x00d0
-            L_0x00cb:
+                goto L_0x00db
+            L_0x00d6:
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r5 = r9.dialogs
                 r5.add(r4)
-            L_0x00d0:
+            L_0x00db:
                 android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r5 = r9.dialogsMap
                 long r6 = r4.id
                 r5.put(r6, r4)
-            L_0x00d7:
+            L_0x00e2:
                 int r2 = r2 + 1
                 goto L_0x005a
-            L_0x00da:
+            L_0x00e6:
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r9.dialogs
                 r0.addAll(r1)
                 r9.notifyDataSetChanged()

@@ -622,7 +622,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.TextView r0 = new android.widget.TextView
                 r0.<init>(r2)
                 r1.textView2 = r0
-                r2 = 2131624658(0x7f0e02d2, float:1.8876502E38)
+                r2 = 2131624660(0x7f0e02d4, float:1.8876506E38)
                 java.lang.String r5 = "ChangePhoneHelp"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
                 r0.setText(r2)
@@ -745,7 +745,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 int r0 = r0.length()
                 if (r0 != 0) goto L_0x0347
                 android.widget.TextView r0 = r1.countryButton
-                r2 = 2131624860(0x7f0e039c, float:1.8876912E38)
+                r2 = 2131624862(0x7f0e039e, float:1.8876916E38)
                 java.lang.String r3 = "ChooseCountry"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -1277,7 +1277,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627323(0x7f0e0d3b, float:1.8881907E38)
+                r8 = 2131627332(0x7f0e0d44, float:1.8881925E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -1318,7 +1318,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627327(0x7f0e0d3f, float:1.8881915E38)
+                r8 = 2131627336(0x7f0e0d48, float:1.8881934E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -1436,14 +1436,14 @@ public class ChangePhoneActivity extends BaseFragment {
                 int r1 = r0.currentType
                 if (r1 != r3) goto L_0x0319
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625155(0x7f0e04c3, float:1.887751E38)
+                r2 = 2131625157(0x7f0e04c5, float:1.8877514E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
                 goto L_0x0327
             L_0x0319:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625154(0x7f0e04c2, float:1.8877508E38)
+                r2 = 2131625156(0x7f0e04c4, float:1.8877512E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -2358,7 +2358,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                         if (r2 != r6) goto L_0x00a2
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131627457(0x7f0e0dc1, float:1.8882179E38)
+                                        r3 = 2131627466(0x7f0e0dca, float:1.8882197E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -2371,7 +2371,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                     L_0x0082:
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131624622(0x7f0e02ae, float:1.8876429E38)
+                                        r3 = 2131624624(0x7f0e02b0, float:1.8876433E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -2458,7 +2458,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                         if (r0 != r4) goto L_0x0164
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131624624(0x7f0e02b0, float:1.8876433E38)
+                                        r1 = 2131624626(0x7f0e02b2, float:1.8876437E38)
                                         java.lang.String r2 = "Calling"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -2466,7 +2466,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                     L_0x0164:
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131627319(0x7f0e0d37, float:1.88819E38)
+                                        r1 = 2131627328(0x7f0e0d40, float:1.8881917E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)

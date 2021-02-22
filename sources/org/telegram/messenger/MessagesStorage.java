@@ -26698,7 +26698,7 @@ public class MessagesStorage extends BaseController {
             org.telegram.messenger.UserConfig r4 = org.telegram.messenger.UserConfig.getInstance(r4)
             int r4 = r4.getClientUserId()
             java.lang.String r5 = "SavedMessages"
-            r6 = 2131627199(0x7f0e0cbf, float:1.8881656E38)
+            r6 = 2131627208(0x7f0e0cc8, float:1.8881674E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)     // Catch:{ Exception -> 0x0651 }
             java.lang.String r5 = r5.toLowerCase()     // Catch:{ Exception -> 0x0651 }
             java.lang.String r6 = r25.trim()     // Catch:{ Exception -> 0x0651 }

@@ -951,7 +951,7 @@ public class ConnectionsManager extends BaseController {
                                 if (!address2.isMulticastAddress()) {
                                     if (address2 instanceof Inet6Address) {
                                         z2 = true;
-                                    } else if (address2 instanceof Inet4Address) {
+                                    } else if ((address2 instanceof Inet4Address) && !address2.getHostAddress().startsWith("192.0.0.")) {
                                         z = true;
                                     }
                                 }

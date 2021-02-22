@@ -1015,7 +1015,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131624959(0x7f0e03ff, float:1.8877112E38)
+                r0 = 2131624961(0x7f0e0401, float:1.8877116E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1027,12 +1027,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131624960(0x7f0e0400, float:1.8877114E38)
+                r0 = 2131624962(0x7f0e0402, float:1.8877119E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131624961(0x7f0e0401, float:1.8877116E38)
+                r0 = 2131624963(0x7f0e0403, float:1.887712E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1150,27 +1150,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131626855(0x7f0e0b67, float:1.8880958E38)
+                r0 = 2131626864(0x7f0e0b70, float:1.8880976E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131626856(0x7f0e0b68, float:1.888096E38)
+                r0 = 2131626865(0x7f0e0b71, float:1.8880978E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131626847(0x7f0e0b5f, float:1.8880942E38)
+                r0 = 2131626856(0x7f0e0b68, float:1.888096E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131626846(0x7f0e0b5e, float:1.888094E38)
+                r0 = 2131626855(0x7f0e0b67, float:1.8880958E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131626848(0x7f0e0b60, float:1.8880944E38)
+                r0 = 2131626857(0x7f0e0b69, float:1.8880962E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -3255,9 +3255,9 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0159
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0159
-            r7 = 2131626469(0x7f0e09e5, float:1.8880175E38)
+            r7 = 2131626473(0x7f0e09e9, float:1.8880183E38)
             java.lang.String r8 = "OK"
-            r9 = 2131624278(0x7f0e0156, float:1.8875731E38)
+            r9 = 2131624280(0x7f0e0158, float:1.8875735E38)
             java.lang.String r10 = "AppName"
             r11 = 1
             if (r2 == 0) goto L_0x00a6
@@ -3278,7 +3278,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625793(0x7f0e0741, float:1.8878804E38)
+            r1 = 2131625797(0x7f0e0745, float:1.8878812E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3362,7 +3362,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626242(0x7f0e0902, float:1.8879715E38)
+            r1 = 2131626246(0x7f0e0906, float:1.8879723E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3461,21 +3461,21 @@ public class AndroidUtilities {
             if (r5 != 0) goto L_0x00ca
             org.telegram.ui.ActionBar.AlertDialog$Builder r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r8.<init>((android.content.Context) r9)
-            r0 = 2131624278(0x7f0e0156, float:1.8875731E38)
+            r0 = 2131624280(0x7f0e0158, float:1.8875735E38)
             java.lang.String r1 = "AppName"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setTitle(r0)
-            r0 = 2131624276(0x7f0e0154, float:1.8875727E38)
+            r0 = 2131624278(0x7f0e0156, float:1.8875731E38)
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setMessage(r0)
-            r0 = 2131626840(0x7f0e0b58, float:1.8880928E38)
+            r0 = 2131626849(0x7f0e0b61, float:1.8880946E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY
             r1.<init>(r9)
             r8.setPositiveButton(r0, r1)
-            r9 = 2131624635(0x7f0e02bb, float:1.8876455E38)
+            r9 = 2131624637(0x7f0e02bd, float:1.887646E38)
             java.lang.String r0 = "Cancel"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
             r8.setNegativeButton(r9, r2)
@@ -3726,154 +3726,163 @@ public class AndroidUtilities {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:30:0x0062, code lost:
-        if (r15.startsWith("tg://socks") == false) goto L_0x00e8;
+    /* JADX WARNING: Code restructure failed: missing block: B:30:0x0064, code lost:
+        if (r3.startsWith("tg://socks") == false) goto L_0x00ff;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x00fc  */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x00fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x0101  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x0103  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0106  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x0108  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0113  */
+    /* JADX WARNING: Removed duplicated region for block: B:61:0x0115  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x0118  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x011a  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x011d  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x011f  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static boolean handleProxyIntent(android.app.Activity r14, android.content.Intent r15) {
+    public static boolean handleProxyIntent(android.app.Activity r16, android.content.Intent r17) {
         /*
             java.lang.String r0 = "tg:proxy"
             java.lang.String r1 = "tg://telegram.org"
             r2 = 0
-            if (r15 != 0) goto L_0x0008
+            if (r17 != 0) goto L_0x0008
             return r2
         L_0x0008:
-            int r3 = r15.getFlags()     // Catch:{ Exception -> 0x010f }
+            int r3 = r17.getFlags()     // Catch:{ Exception -> 0x0126 }
             r4 = 1048576(0x100000, float:1.469368E-39)
             r3 = r3 & r4
             if (r3 == 0) goto L_0x0012
             return r2
         L_0x0012:
-            android.net.Uri r15 = r15.getData()     // Catch:{ Exception -> 0x010f }
-            if (r15 == 0) goto L_0x010f
-            java.lang.String r3 = r15.getScheme()     // Catch:{ Exception -> 0x010f }
-            r4 = 0
-            if (r3 == 0) goto L_0x00e8
-            java.lang.String r5 = "http"
-            boolean r5 = r3.equals(r5)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r6 = "secret"
-            java.lang.String r7 = "pass"
-            java.lang.String r8 = "user"
-            java.lang.String r9 = "port"
-            java.lang.String r10 = "server"
-            if (r5 != 0) goto L_0x0091
-            java.lang.String r5 = "https"
-            boolean r5 = r3.equals(r5)     // Catch:{ Exception -> 0x010f }
-            if (r5 == 0) goto L_0x003a
-            goto L_0x0091
-        L_0x003a:
-            java.lang.String r5 = "tg"
-            boolean r3 = r3.equals(r5)     // Catch:{ Exception -> 0x010f }
-            if (r3 == 0) goto L_0x00e8
-            java.lang.String r15 = r15.toString()     // Catch:{ Exception -> 0x010f }
-            boolean r3 = r15.startsWith(r0)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r5 = "tg://socks"
-            java.lang.String r11 = "tg:socks"
-            java.lang.String r12 = "tg://proxy"
-            if (r3 != 0) goto L_0x0064
-            boolean r3 = r15.startsWith(r12)     // Catch:{ Exception -> 0x010f }
-            if (r3 != 0) goto L_0x0064
-            boolean r3 = r15.startsWith(r11)     // Catch:{ Exception -> 0x010f }
-            if (r3 != 0) goto L_0x0064
-            boolean r3 = r15.startsWith(r5)     // Catch:{ Exception -> 0x010f }
-            if (r3 == 0) goto L_0x00e8
-        L_0x0064:
-            java.lang.String r15 = r15.replace(r0, r1)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r15 = r15.replace(r12, r1)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r15 = r15.replace(r5, r1)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r15 = r15.replace(r11, r1)     // Catch:{ Exception -> 0x010f }
-            android.net.Uri r15 = android.net.Uri.parse(r15)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r4 = r15.getQueryParameter(r10)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r0 = r15.getQueryParameter(r9)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r1 = r15.getQueryParameter(r8)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r3 = r15.getQueryParameter(r7)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r15 = r15.getQueryParameter(r6)     // Catch:{ Exception -> 0x010f }
-            r7 = r0
-            r6 = r4
-            r4 = r1
-            goto L_0x00ec
-        L_0x0091:
-            java.lang.String r0 = r15.getHost()     // Catch:{ Exception -> 0x010f }
-            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x010f }
+            android.net.Uri r3 = r17.getData()     // Catch:{ Exception -> 0x0126 }
+            if (r3 == 0) goto L_0x0126
+            java.lang.String r4 = r3.getScheme()     // Catch:{ Exception -> 0x0126 }
+            r5 = 1
+            r6 = 0
+            if (r4 == 0) goto L_0x00ff
+            java.lang.String r7 = "http"
+            boolean r7 = r4.equals(r7)     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r8 = "secret"
+            java.lang.String r9 = "pass"
+            java.lang.String r10 = "user"
+            java.lang.String r11 = "port"
+            java.lang.String r12 = "server"
+            if (r7 != 0) goto L_0x009e
+            java.lang.String r7 = "https"
+            boolean r7 = r4.equals(r7)     // Catch:{ Exception -> 0x0126 }
+            if (r7 == 0) goto L_0x003c
+            goto L_0x009e
+        L_0x003c:
+            java.lang.String r7 = "tg"
+            boolean r4 = r4.equals(r7)     // Catch:{ Exception -> 0x0126 }
+            if (r4 == 0) goto L_0x00ff
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0126 }
+            boolean r4 = r3.startsWith(r0)     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r7 = "tg://socks"
+            java.lang.String r13 = "tg:socks"
+            java.lang.String r14 = "tg://proxy"
+            if (r4 != 0) goto L_0x0066
+            boolean r4 = r3.startsWith(r14)     // Catch:{ Exception -> 0x0126 }
+            if (r4 != 0) goto L_0x0066
+            boolean r4 = r3.startsWith(r13)     // Catch:{ Exception -> 0x0126 }
+            if (r4 != 0) goto L_0x0066
+            boolean r4 = r3.startsWith(r7)     // Catch:{ Exception -> 0x0126 }
+            if (r4 == 0) goto L_0x00ff
+        L_0x0066:
+            java.lang.String r0 = r3.replace(r0, r1)     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r0 = r0.replace(r14, r1)     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r0 = r0.replace(r7, r1)     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r0 = r0.replace(r13, r1)     // Catch:{ Exception -> 0x0126 }
+            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r1 = r0.getQueryParameter(r12)     // Catch:{ Exception -> 0x0126 }
+            boolean r3 = checkHostForPunycode(r1)     // Catch:{ Exception -> 0x0126 }
+            if (r3 == 0) goto L_0x0088
+            java.lang.String r1 = java.net.IDN.toASCII(r1, r5)     // Catch:{ Exception -> 0x0126 }
+        L_0x0088:
+            r6 = r1
+            java.lang.String r1 = r0.getQueryParameter(r11)     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r3 = r0.getQueryParameter(r10)     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r4 = r0.getQueryParameter(r9)     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r0 = r0.getQueryParameter(r8)     // Catch:{ Exception -> 0x0126 }
+            r9 = r1
+            r8 = r6
+            r6 = r3
+            goto L_0x0103
+        L_0x009e:
+            java.lang.String r0 = r3.getHost()     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0126 }
             java.lang.String r1 = "telegram.me"
-            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x010f }
-            if (r1 != 0) goto L_0x00b1
+            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x0126 }
+            if (r1 != 0) goto L_0x00be
             java.lang.String r1 = "t.me"
-            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x010f }
-            if (r1 != 0) goto L_0x00b1
+            boolean r1 = r0.equals(r1)     // Catch:{ Exception -> 0x0126 }
+            if (r1 != 0) goto L_0x00be
             java.lang.String r1 = "telegram.dog"
-            boolean r0 = r0.equals(r1)     // Catch:{ Exception -> 0x010f }
-            if (r0 == 0) goto L_0x00e0
-        L_0x00b1:
-            java.lang.String r0 = r15.getPath()     // Catch:{ Exception -> 0x010f }
-            if (r0 == 0) goto L_0x00e0
+            boolean r0 = r0.equals(r1)     // Catch:{ Exception -> 0x0126 }
+            if (r0 == 0) goto L_0x00f7
+        L_0x00be:
+            java.lang.String r0 = r3.getPath()     // Catch:{ Exception -> 0x0126 }
+            if (r0 == 0) goto L_0x00f7
             java.lang.String r1 = "/socks"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x010f }
-            if (r1 != 0) goto L_0x00c7
+            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x0126 }
+            if (r1 != 0) goto L_0x00d4
             java.lang.String r1 = "/proxy"
-            boolean r0 = r0.startsWith(r1)     // Catch:{ Exception -> 0x010f }
-            if (r0 == 0) goto L_0x00e0
-        L_0x00c7:
-            java.lang.String r4 = r15.getQueryParameter(r10)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r0 = r15.getQueryParameter(r9)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r1 = r15.getQueryParameter(r8)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r3 = r15.getQueryParameter(r7)     // Catch:{ Exception -> 0x010f }
-            java.lang.String r15 = r15.getQueryParameter(r6)     // Catch:{ Exception -> 0x010f }
-            r13 = r1
+            boolean r0 = r0.startsWith(r1)     // Catch:{ Exception -> 0x0126 }
+            if (r0 == 0) goto L_0x00f7
+        L_0x00d4:
+            java.lang.String r0 = r3.getQueryParameter(r12)     // Catch:{ Exception -> 0x0126 }
+            boolean r1 = checkHostForPunycode(r0)     // Catch:{ Exception -> 0x0126 }
+            if (r1 == 0) goto L_0x00e2
+            java.lang.String r0 = java.net.IDN.toASCII(r0, r5)     // Catch:{ Exception -> 0x0126 }
+        L_0x00e2:
+            r6 = r0
+            java.lang.String r0 = r3.getQueryParameter(r11)     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r1 = r3.getQueryParameter(r10)     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r4 = r3.getQueryParameter(r9)     // Catch:{ Exception -> 0x0126 }
+            java.lang.String r3 = r3.getQueryParameter(r8)     // Catch:{ Exception -> 0x0126 }
+            r15 = r6
+            r6 = r1
             r1 = r15
-            r15 = r4
-            r4 = r13
-            goto L_0x00e4
-        L_0x00e0:
-            r15 = r4
-            r0 = r15
+            goto L_0x00fb
+        L_0x00f7:
+            r0 = r6
             r1 = r0
             r3 = r1
-        L_0x00e4:
-            r6 = r15
-            r7 = r0
-            r15 = r1
-            goto L_0x00ec
-        L_0x00e8:
-            r15 = r4
-            r3 = r15
-            r6 = r3
-            r7 = r6
-        L_0x00ec:
-            boolean r0 = android.text.TextUtils.isEmpty(r6)     // Catch:{ Exception -> 0x010f }
-            if (r0 != 0) goto L_0x010f
-            boolean r0 = android.text.TextUtils.isEmpty(r7)     // Catch:{ Exception -> 0x010f }
-            if (r0 != 0) goto L_0x010f
-            java.lang.String r0 = ""
-            if (r4 != 0) goto L_0x00fe
-            r8 = r0
-            goto L_0x00ff
-        L_0x00fe:
-            r8 = r4
-        L_0x00ff:
-            if (r3 != 0) goto L_0x0103
+            r4 = r3
+        L_0x00fb:
             r9 = r0
-            goto L_0x0104
+            r8 = r1
+            r0 = r3
+            goto L_0x0103
+        L_0x00ff:
+            r0 = r6
+            r4 = r0
+            r8 = r4
+            r9 = r8
         L_0x0103:
-            r9 = r3
-        L_0x0104:
-            if (r15 != 0) goto L_0x0108
-            r10 = r0
-            goto L_0x0109
-        L_0x0108:
-            r10 = r15
-        L_0x0109:
-            r5 = r14
-            showProxyAlert(r5, r6, r7, r8, r9, r10)     // Catch:{ Exception -> 0x010f }
-            r14 = 1
-            return r14
-        L_0x010f:
+            boolean r1 = android.text.TextUtils.isEmpty(r8)     // Catch:{ Exception -> 0x0126 }
+            if (r1 != 0) goto L_0x0126
+            boolean r1 = android.text.TextUtils.isEmpty(r9)     // Catch:{ Exception -> 0x0126 }
+            if (r1 != 0) goto L_0x0126
+            java.lang.String r1 = ""
+            if (r6 != 0) goto L_0x0115
+            r10 = r1
+            goto L_0x0116
+        L_0x0115:
+            r10 = r6
+        L_0x0116:
+            if (r4 != 0) goto L_0x011a
+            r11 = r1
+            goto L_0x011b
+        L_0x011a:
+            r11 = r4
+        L_0x011b:
+            if (r0 != 0) goto L_0x011f
+            r12 = r1
+            goto L_0x0120
+        L_0x011f:
+            r12 = r0
+        L_0x0120:
+            r7 = r16
+            showProxyAlert(r7, r8, r9, r10, r11, r12)     // Catch:{ Exception -> 0x0126 }
+            return r5
+        L_0x0126:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.handleProxyIntent(android.app.Activity, android.content.Intent):boolean");
@@ -4377,75 +4386,82 @@ public class AndroidUtilities {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x0055 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x004d A[ADDED_TO_REGION] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static boolean shouldShowUrlInAlert(java.lang.String r8) {
+    public static boolean checkHostForPunycode(java.lang.String r8) {
         /*
             r0 = 1
             r1 = 0
-            android.net.Uri r8 = android.net.Uri.parse(r8)     // Catch:{ Exception -> 0x004d }
-            java.lang.String r8 = r8.getHost()     // Catch:{ Exception -> 0x004d }
-            int r2 = r8.length()     // Catch:{ Exception -> 0x004d }
+            int r2 = r8.length()     // Catch:{ Exception -> 0x0045 }
             r3 = 0
             r4 = 0
             r5 = 0
-        L_0x0011:
-            if (r3 >= r2) goto L_0x0053
-            char r6 = r8.charAt(r3)     // Catch:{ Exception -> 0x004b }
+        L_0x0009:
+            if (r3 >= r2) goto L_0x004b
+            char r6 = r8.charAt(r3)     // Catch:{ Exception -> 0x0043 }
             r7 = 46
-            if (r6 == r7) goto L_0x0048
+            if (r6 == r7) goto L_0x0040
             r7 = 45
-            if (r6 == r7) goto L_0x0048
+            if (r6 == r7) goto L_0x0040
             r7 = 47
-            if (r6 == r7) goto L_0x0048
+            if (r6 == r7) goto L_0x0040
             r7 = 43
-            if (r6 == r7) goto L_0x0048
+            if (r6 == r7) goto L_0x0040
             r7 = 48
-            if (r6 < r7) goto L_0x0030
+            if (r6 < r7) goto L_0x0028
             r7 = 57
-            if (r6 > r7) goto L_0x0030
-            goto L_0x0048
-        L_0x0030:
+            if (r6 > r7) goto L_0x0028
+            goto L_0x0040
+        L_0x0028:
             r7 = 97
-            if (r6 < r7) goto L_0x0038
+            if (r6 < r7) goto L_0x0030
             r7 = 122(0x7a, float:1.71E-43)
-            if (r6 <= r7) goto L_0x0040
-        L_0x0038:
+            if (r6 <= r7) goto L_0x0038
+        L_0x0030:
             r7 = 65
-            if (r6 < r7) goto L_0x0042
+            if (r6 < r7) goto L_0x003a
             r7 = 90
-            if (r6 > r7) goto L_0x0042
-        L_0x0040:
+            if (r6 > r7) goto L_0x003a
+        L_0x0038:
             r4 = 1
-            goto L_0x0043
-        L_0x0042:
+            goto L_0x003b
+        L_0x003a:
             r5 = 1
-        L_0x0043:
-            if (r4 == 0) goto L_0x0048
-            if (r5 == 0) goto L_0x0048
-            goto L_0x0053
-        L_0x0048:
+        L_0x003b:
+            if (r4 == 0) goto L_0x0040
+            if (r5 == 0) goto L_0x0040
+            goto L_0x004b
+        L_0x0040:
             int r3 = r3 + 1
-            goto L_0x0011
-        L_0x004b:
+            goto L_0x0009
+        L_0x0043:
             r8 = move-exception
-            goto L_0x0050
-        L_0x004d:
+            goto L_0x0048
+        L_0x0045:
             r8 = move-exception
             r4 = 0
             r5 = 0
-        L_0x0050:
+        L_0x0048:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x0053:
-            if (r4 == 0) goto L_0x0058
-            if (r5 == 0) goto L_0x0058
-            goto L_0x0059
-        L_0x0058:
+        L_0x004b:
+            if (r4 == 0) goto L_0x0050
+            if (r5 == 0) goto L_0x0050
+            goto L_0x0051
+        L_0x0050:
             r0 = 0
-        L_0x0059:
+        L_0x0051:
             return r0
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.shouldShowUrlInAlert(java.lang.String):boolean");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.checkHostForPunycode(java.lang.String):boolean");
+    }
+
+    public static boolean shouldShowUrlInAlert(String str) {
+        try {
+            return checkHostForPunycode(Uri.parse(str).getHost());
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+            return false;
+        }
     }
 
     public static void scrollToFragmentRow(ActionBarLayout actionBarLayout, String str) {

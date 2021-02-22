@@ -1681,6 +1681,7 @@
     <public type="string" name="ActionCreatedInviteLink" id="NUM" />
     <public type="string" name="ActionDeletedInviteLink" id="NUM" />
     <public type="string" name="ActionEditedInviteLink" id="NUM" />
+    <public type="string" name="ActionEditedInviteLinkToSame" id="NUM" />
     <public type="string" name="ActionGroupCallEnded" id="NUM" />
     <public type="string" name="ActionGroupCallInvited" id="NUM" />
     <public type="string" name="ActionGroupCallInvitedYou" id="NUM" />
@@ -1711,6 +1712,7 @@
     <public type="string" name="ActionPinnedVideo" id="NUM" />
     <public type="string" name="ActionPinnedVoice" id="NUM" />
     <public type="string" name="ActionRemovedPhoto" id="NUM" />
+    <public type="string" name="ActionRevokedInviteLink" id="NUM" />
     <public type="string" name="ActionTTLChanged" id="NUM" />
     <public type="string" name="ActionTTLChannelChanged" id="NUM" />
     <public type="string" name="ActionTTLChannelDisabled" id="NUM" />
@@ -2992,6 +2994,7 @@
     <public type="string" name="Exception_zero" id="NUM" />
     <public type="string" name="ExpireAfter" id="NUM" />
     <public type="string" name="Expired" id="NUM" />
+    <public type="string" name="ExpiredLink" id="NUM" />
     <public type="string" name="ExportTheme" id="NUM" />
     <public type="string" name="Exposure" id="NUM" />
     <public type="string" name="ExternalFolderInfo" id="NUM" />
@@ -3328,6 +3331,7 @@
     <public type="string" name="ImportErrorFileFormatInvalid" id="NUM" />
     <public type="string" name="ImportErrorFileLang" id="NUM" />
     <public type="string" name="ImportErrorNotAdmin" id="NUM" />
+    <public type="string" name="ImportErrorPeerInvalid" id="NUM" />
     <public type="string" name="ImportErrorTitle" id="NUM" />
     <public type="string" name="ImportErrorUserBlocked" id="NUM" />
     <public type="string" name="ImportFailedToUpload" id="NUM" />
@@ -3382,12 +3386,12 @@
     <public type="string" name="InviteFriends" id="NUM" />
     <public type="string" name="InviteFriendsHelp" id="NUM" />
     <public type="string" name="InviteLink" id="NUM" />
-    <public type="string" name="InviteLink_few" id="NUM" />
-    <public type="string" name="InviteLink_many" id="NUM" />
-    <public type="string" name="InviteLink_one" id="NUM" />
-    <public type="string" name="InviteLink_other" id="NUM" />
-    <public type="string" name="InviteLink_two" id="NUM" />
-    <public type="string" name="InviteLink_zero" id="NUM" />
+    <public type="string" name="InviteLinkCount_few" id="NUM" />
+    <public type="string" name="InviteLinkCount_many" id="NUM" />
+    <public type="string" name="InviteLinkCount_one" id="NUM" />
+    <public type="string" name="InviteLinkCount_other" id="NUM" />
+    <public type="string" name="InviteLinkCount_two" id="NUM" />
+    <public type="string" name="InviteLinkCount_zero" id="NUM" />
     <public type="string" name="InviteLinks" id="NUM" />
     <public type="string" name="InviteRevokedHint" id="NUM" />
     <public type="string" name="InviteText2" id="NUM" />
@@ -4370,7 +4374,11 @@
     <public type="string" name="PaymentTransactionTotal" id="NUM" />
     <public type="string" name="PaymentWarning" id="NUM" />
     <public type="string" name="PaymentWarningText" id="NUM" />
-    <public type="string" name="PeopleCanJoinViaLink" id="NUM" />
+    <public type="string" name="PeopleCanJoinViaLink_few" id="NUM" />
+    <public type="string" name="PeopleCanJoinViaLink_many" id="NUM" />
+    <public type="string" name="PeopleCanJoinViaLink_one" id="NUM" />
+    <public type="string" name="PeopleCanJoinViaLink_other" id="NUM" />
+    <public type="string" name="PeopleCanJoinViaLink_two" id="NUM" />
     <public type="string" name="PeopleJoinedRemaining_few" id="NUM" />
     <public type="string" name="PeopleJoinedRemaining_many" id="NUM" />
     <public type="string" name="PeopleJoinedRemaining_one" id="NUM" />
@@ -4391,6 +4399,7 @@
     <public type="string" name="PeopleNearbyGpsInfo" id="NUM" />
     <public type="string" name="PeopleNearbyHeader" id="NUM" />
     <public type="string" name="PeopleNearbyInfo2" id="NUM" />
+    <public type="string" name="Permanent" id="NUM" />
     <public type="string" name="PermanentLinkForThisAdmin" id="NUM" />
     <public type="string" name="PermissionBackgroundLocation" id="NUM" />
     <public type="string" name="PermissionContacts" id="NUM" />
@@ -5526,6 +5535,7 @@
     <public type="string" name="VoipGroupSearchMembers" id="NUM" />
     <public type="string" name="VoipGroupShareInviteLink" id="NUM" />
     <public type="string" name="VoipGroupStopRecordCall" id="NUM" />
+    <public type="string" name="VoipGroupTooMuch" id="NUM" />
     <public type="string" name="VoipGroupUnmute" id="NUM" />
     <public type="string" name="VoipGroupUnmuteForMe" id="NUM" />
     <public type="string" name="VoipGroupUserCanNowSpeak" id="NUM" />
@@ -5617,6 +5627,8 @@
     <public type="string" name="WhoCanCallMeInfo" id="NUM" />
     <public type="string" name="WidgetChats" id="NUM" />
     <public type="string" name="WidgetLoggedOff" id="NUM" />
+    <public type="string" name="WidgetPasscode" id="NUM" />
+    <public type="string" name="WidgetPasscodeEnable" id="NUM" />
     <public type="string" name="WidgetPreview" id="NUM" />
     <public type="string" name="WidgetShortcuts" id="NUM" />
     <public type="string" name="WillUnmuteIn" id="NUM" />
