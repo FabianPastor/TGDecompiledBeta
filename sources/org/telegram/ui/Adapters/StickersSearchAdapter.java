@@ -95,331 +95,332 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             }
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:14:0x0075, code lost:
-            if (r6.charAt(r10) <= 57343) goto L_0x0091;
+        /* JADX WARNING: Code restructure failed: missing block: B:14:0x0073, code lost:
+            if (r5.charAt(r9) <= 57343) goto L_0x008f;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:20:0x008f, code lost:
-            if (r6.charAt(r10) != 9794) goto L_0x00ac;
+        /* JADX WARNING: Code restructure failed: missing block: B:20:0x008d, code lost:
+            if (r5.charAt(r9) != 9794) goto L_0x00aa;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void run() {
             /*
-                r14 = this;
-                java.lang.Boolean r0 = java.lang.Boolean.TRUE
-                org.telegram.ui.Adapters.StickersSearchAdapter r1 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.lang.String r1 = r1.searchQuery
-                boolean r1 = android.text.TextUtils.isEmpty(r1)
-                if (r1 == 0) goto L_0x000f
+                r13 = this;
+                org.telegram.ui.Adapters.StickersSearchAdapter r0 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.lang.String r0 = r0.searchQuery
+                boolean r0 = android.text.TextUtils.isEmpty(r0)
+                if (r0 == 0) goto L_0x000d
                 return
-            L_0x000f:
-                org.telegram.ui.Adapters.StickersSearchAdapter r1 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                org.telegram.ui.Adapters.StickersSearchAdapter$Delegate r1 = r1.delegate
-                r1.onSearchStart()
-                org.telegram.ui.Adapters.StickersSearchAdapter r1 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                r2 = 0
-                r1.cleared = r2
-                int r1 = org.telegram.ui.Adapters.StickersSearchAdapter.access$804(r1)
-                java.util.ArrayList r3 = new java.util.ArrayList
-                r3.<init>(r2)
-                android.util.LongSparseArray r4 = new android.util.LongSparseArray
-                r4.<init>(r2)
+            L_0x000d:
+                org.telegram.ui.Adapters.StickersSearchAdapter r0 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                org.telegram.ui.Adapters.StickersSearchAdapter$Delegate r0 = r0.delegate
+                r0.onSearchStart()
+                org.telegram.ui.Adapters.StickersSearchAdapter r0 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                r1 = 0
+                r0.cleared = r1
+                int r0 = org.telegram.ui.Adapters.StickersSearchAdapter.access$804(r0)
+                java.util.ArrayList r2 = new java.util.ArrayList
+                r2.<init>(r1)
+                android.util.LongSparseArray r3 = new android.util.LongSparseArray
+                r3.<init>(r1)
+                org.telegram.ui.Adapters.StickersSearchAdapter r4 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                int r4 = r4.currentAccount
+                org.telegram.messenger.MediaDataController r4 = org.telegram.messenger.MediaDataController.getInstance(r4)
+                java.util.HashMap r4 = r4.getAllStickers()
                 org.telegram.ui.Adapters.StickersSearchAdapter r5 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                int r5 = r5.currentAccount
-                org.telegram.messenger.MediaDataController r5 = org.telegram.messenger.MediaDataController.getInstance(r5)
-                java.util.HashMap r5 = r5.getAllStickers()
-                org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.lang.String r6 = r6.searchQuery
-                int r6 = r6.length()
-                r7 = 14
-                r8 = 1
-                if (r6 > r7) goto L_0x011c
-                org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.lang.String r6 = r6.searchQuery
-                int r7 = r6.length()
-                r9 = 0
-            L_0x0053:
-                if (r9 >= r7) goto L_0x00d3
-                int r10 = r7 + -1
-                r11 = 2
-                if (r9 >= r10) goto L_0x00ac
-                char r10 = r6.charAt(r9)
-                r12 = 55356(0xd83c, float:7.757E-41)
-                if (r10 != r12) goto L_0x0077
-                int r10 = r9 + 1
-                char r12 = r6.charAt(r10)
-                r13 = 57339(0xdffb, float:8.0349E-41)
-                if (r12 < r13) goto L_0x0077
-                char r10 = r6.charAt(r10)
-                r12 = 57343(0xdfff, float:8.0355E-41)
-                if (r10 <= r12) goto L_0x0091
-            L_0x0077:
-                char r10 = r6.charAt(r9)
-                r12 = 8205(0x200d, float:1.1498E-41)
-                if (r10 != r12) goto L_0x00ac
-                int r10 = r9 + 1
-                char r12 = r6.charAt(r10)
-                r13 = 9792(0x2640, float:1.3722E-41)
-                if (r12 == r13) goto L_0x0091
-                char r10 = r6.charAt(r10)
-                r12 = 9794(0x2642, float:1.3724E-41)
-                if (r10 != r12) goto L_0x00ac
-            L_0x0091:
-                java.lang.CharSequence[] r10 = new java.lang.CharSequence[r11]
-                java.lang.CharSequence r11 = r6.subSequence(r2, r9)
-                r10[r2] = r11
-                int r11 = r9 + 2
-                int r12 = r6.length()
-                java.lang.CharSequence r6 = r6.subSequence(r11, r12)
-                r10[r8] = r6
-                java.lang.CharSequence r6 = android.text.TextUtils.concat(r10)
-                int r7 = r7 + -2
-                goto L_0x00cf
-            L_0x00ac:
-                char r10 = r6.charAt(r9)
-                r12 = 65039(0xfe0f, float:9.1139E-41)
-                if (r10 != r12) goto L_0x00d1
-                java.lang.CharSequence[] r10 = new java.lang.CharSequence[r11]
-                java.lang.CharSequence r11 = r6.subSequence(r2, r9)
-                r10[r2] = r11
-                int r11 = r9 + 1
-                int r12 = r6.length()
-                java.lang.CharSequence r6 = r6.subSequence(r11, r12)
-                r10[r8] = r6
-                java.lang.CharSequence r6 = android.text.TextUtils.concat(r10)
-                int r7 = r7 + -1
+                java.lang.String r5 = r5.searchQuery
+                int r5 = r5.length()
+                r6 = 14
+                r7 = 1
+                if (r5 > r6) goto L_0x011a
+                org.telegram.ui.Adapters.StickersSearchAdapter r5 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.lang.String r5 = r5.searchQuery
+                int r6 = r5.length()
+                r8 = 0
+            L_0x0051:
+                if (r8 >= r6) goto L_0x00d1
+                int r9 = r6 + -1
+                r10 = 2
+                if (r8 >= r9) goto L_0x00aa
+                char r9 = r5.charAt(r8)
+                r11 = 55356(0xd83c, float:7.757E-41)
+                if (r9 != r11) goto L_0x0075
+                int r9 = r8 + 1
+                char r11 = r5.charAt(r9)
+                r12 = 57339(0xdffb, float:8.0349E-41)
+                if (r11 < r12) goto L_0x0075
+                char r9 = r5.charAt(r9)
+                r11 = 57343(0xdfff, float:8.0355E-41)
+                if (r9 <= r11) goto L_0x008f
+            L_0x0075:
+                char r9 = r5.charAt(r8)
+                r11 = 8205(0x200d, float:1.1498E-41)
+                if (r9 != r11) goto L_0x00aa
+                int r9 = r8 + 1
+                char r11 = r5.charAt(r9)
+                r12 = 9792(0x2640, float:1.3722E-41)
+                if (r11 == r12) goto L_0x008f
+                char r9 = r5.charAt(r9)
+                r11 = 9794(0x2642, float:1.3724E-41)
+                if (r9 != r11) goto L_0x00aa
+            L_0x008f:
+                java.lang.CharSequence[] r9 = new java.lang.CharSequence[r10]
+                java.lang.CharSequence r10 = r5.subSequence(r1, r8)
+                r9[r1] = r10
+                int r10 = r8 + 2
+                int r11 = r5.length()
+                java.lang.CharSequence r5 = r5.subSequence(r10, r11)
+                r9[r7] = r5
+                java.lang.CharSequence r5 = android.text.TextUtils.concat(r9)
+                int r6 = r6 + -2
+                goto L_0x00cd
+            L_0x00aa:
+                char r9 = r5.charAt(r8)
+                r11 = 65039(0xfe0f, float:9.1139E-41)
+                if (r9 != r11) goto L_0x00cf
+                java.lang.CharSequence[] r9 = new java.lang.CharSequence[r10]
+                java.lang.CharSequence r10 = r5.subSequence(r1, r8)
+                r9[r1] = r10
+                int r10 = r8 + 1
+                int r11 = r5.length()
+                java.lang.CharSequence r5 = r5.subSequence(r10, r11)
+                r9[r7] = r5
+                java.lang.CharSequence r5 = android.text.TextUtils.concat(r9)
+                int r6 = r6 + -1
+            L_0x00cd:
+                int r8 = r8 + -1
             L_0x00cf:
-                int r9 = r9 + -1
+                int r8 = r8 + r7
+                goto L_0x0051
             L_0x00d1:
-                int r9 = r9 + r8
-                goto L_0x0053
-            L_0x00d3:
-                if (r5 == 0) goto L_0x00e0
-                java.lang.String r6 = r6.toString()
-                java.lang.Object r6 = r5.get(r6)
-                java.util.ArrayList r6 = (java.util.ArrayList) r6
-                goto L_0x00e1
-            L_0x00e0:
-                r6 = 0
-            L_0x00e1:
-                if (r6 == 0) goto L_0x011c
-                boolean r7 = r6.isEmpty()
-                if (r7 != 0) goto L_0x011c
-                r14.clear()
-                r3.addAll(r6)
-                int r7 = r6.size()
-                r9 = 0
-            L_0x00f4:
-                if (r9 >= r7) goto L_0x0104
-                java.lang.Object r10 = r6.get(r9)
-                org.telegram.tgnet.TLRPC$Document r10 = (org.telegram.tgnet.TLRPC$Document) r10
-                long r11 = r10.id
-                r4.put(r11, r10)
-                int r9 = r9 + 1
-                goto L_0x00f4
-            L_0x0104:
-                org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.util.HashMap r6 = r6.emojiStickers
-                org.telegram.ui.Adapters.StickersSearchAdapter r7 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.lang.String r7 = r7.searchQuery
-                r6.put(r3, r7)
-                org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.util.ArrayList r6 = r6.emojiArrays
-                r6.add(r3)
-            L_0x011c:
-                if (r5 == 0) goto L_0x017c
+                if (r4 == 0) goto L_0x00de
+                java.lang.String r5 = r5.toString()
+                java.lang.Object r5 = r4.get(r5)
+                java.util.ArrayList r5 = (java.util.ArrayList) r5
+                goto L_0x00df
+            L_0x00de:
+                r5 = 0
+            L_0x00df:
+                if (r5 == 0) goto L_0x011a
                 boolean r6 = r5.isEmpty()
-                if (r6 != 0) goto L_0x017c
+                if (r6 != 0) goto L_0x011a
+                r13.clear()
+                r2.addAll(r5)
+                int r6 = r5.size()
+                r8 = 0
+            L_0x00f2:
+                if (r8 >= r6) goto L_0x0102
+                java.lang.Object r9 = r5.get(r8)
+                org.telegram.tgnet.TLRPC$Document r9 = (org.telegram.tgnet.TLRPC$Document) r9
+                long r10 = r9.id
+                r3.put(r10, r9)
+                int r8 = r8 + 1
+                goto L_0x00f2
+            L_0x0102:
+                org.telegram.ui.Adapters.StickersSearchAdapter r5 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.util.HashMap r5 = r5.emojiStickers
                 org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
                 java.lang.String r6 = r6.searchQuery
-                int r6 = r6.length()
-                if (r6 <= r8) goto L_0x017c
-                java.lang.String[] r6 = org.telegram.messenger.AndroidUtilities.getCurrentKeyboardLanguage()
-                org.telegram.ui.Adapters.StickersSearchAdapter r7 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                org.telegram.ui.Adapters.StickersSearchAdapter$Delegate r7 = r7.delegate
-                java.lang.String[] r7 = r7.getLastSearchKeyboardLanguage()
-                boolean r7 = java.util.Arrays.equals(r7, r6)
-                if (r7 != 0) goto L_0x0151
-                org.telegram.ui.Adapters.StickersSearchAdapter r7 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                int r7 = r7.currentAccount
-                org.telegram.messenger.MediaDataController r7 = org.telegram.messenger.MediaDataController.getInstance(r7)
-                r7.fetchNewEmojiKeywords(r6)
-            L_0x0151:
-                org.telegram.ui.Adapters.StickersSearchAdapter r7 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                org.telegram.ui.Adapters.StickersSearchAdapter$Delegate r7 = r7.delegate
-                r7.setLastSearchKeyboardLanguage(r6)
+                r5.put(r2, r6)
+                org.telegram.ui.Adapters.StickersSearchAdapter r5 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.util.ArrayList r5 = r5.emojiArrays
+                r5.add(r2)
+            L_0x011a:
+                if (r4 == 0) goto L_0x017a
+                boolean r5 = r4.isEmpty()
+                if (r5 != 0) goto L_0x017a
+                org.telegram.ui.Adapters.StickersSearchAdapter r5 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.lang.String r5 = r5.searchQuery
+                int r5 = r5.length()
+                if (r5 <= r7) goto L_0x017a
+                java.lang.String[] r5 = org.telegram.messenger.AndroidUtilities.getCurrentKeyboardLanguage()
+                org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                org.telegram.ui.Adapters.StickersSearchAdapter$Delegate r6 = r6.delegate
+                java.lang.String[] r6 = r6.getLastSearchKeyboardLanguage()
+                boolean r6 = java.util.Arrays.equals(r6, r5)
+                if (r6 != 0) goto L_0x014f
                 org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
                 int r6 = r6.currentAccount
                 org.telegram.messenger.MediaDataController r6 = org.telegram.messenger.MediaDataController.getInstance(r6)
-                org.telegram.ui.Adapters.StickersSearchAdapter r7 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                org.telegram.ui.Adapters.StickersSearchAdapter$Delegate r7 = r7.delegate
-                java.lang.String[] r7 = r7.getLastSearchKeyboardLanguage()
-                org.telegram.ui.Adapters.StickersSearchAdapter r9 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.lang.String r9 = r9.searchQuery
-                org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$4h3Cj8g9h07lNQujGLY9v7blH7I r10 = new org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$4h3Cj8g9h07lNQujGLY9v7blH7I
-                r10.<init>(r1, r5)
-                r6.getEmojiSuggestions(r7, r9, r2, r10)
-            L_0x017c:
-                org.telegram.ui.Adapters.StickersSearchAdapter r1 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                int r1 = r1.currentAccount
-                org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
-                java.util.ArrayList r1 = r1.getStickerSets(r2)
-                int r5 = r1.size()
-                r6 = 0
-            L_0x018f:
-                r7 = 32
-                if (r6 >= r5) goto L_0x0209
-                java.lang.Object r9 = r1.get(r6)
-                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r9 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r9
-                org.telegram.tgnet.TLRPC$StickerSet r10 = r9.set
+                r6.fetchNewEmojiKeywords(r5)
+            L_0x014f:
+                org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                org.telegram.ui.Adapters.StickersSearchAdapter$Delegate r6 = r6.delegate
+                r6.setLastSearchKeyboardLanguage(r5)
+                org.telegram.ui.Adapters.StickersSearchAdapter r5 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                int r5 = r5.currentAccount
+                org.telegram.messenger.MediaDataController r5 = org.telegram.messenger.MediaDataController.getInstance(r5)
+                org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                org.telegram.ui.Adapters.StickersSearchAdapter$Delegate r6 = r6.delegate
+                java.lang.String[] r6 = r6.getLastSearchKeyboardLanguage()
+                org.telegram.ui.Adapters.StickersSearchAdapter r8 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.lang.String r8 = r8.searchQuery
+                org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$4h3Cj8g9h07lNQujGLY9v7blH7I r9 = new org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$4h3Cj8g9h07lNQujGLY9v7blH7I
+                r9.<init>(r0, r4)
+                r5.getEmojiSuggestions(r6, r8, r1, r9)
+            L_0x017a:
+                org.telegram.ui.Adapters.StickersSearchAdapter r0 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                int r0 = r0.currentAccount
+                org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
+                java.util.ArrayList r0 = r0.getStickerSets(r1)
+                int r4 = r0.size()
+                r5 = 0
+            L_0x018d:
+                r6 = 32
+                if (r5 >= r4) goto L_0x0209
+                java.lang.Object r8 = r0.get(r5)
+                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r8 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r8
+                org.telegram.tgnet.TLRPC$StickerSet r9 = r8.set
+                java.lang.String r9 = r9.title
+                org.telegram.ui.Adapters.StickersSearchAdapter r10 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.lang.String r10 = r10.searchQuery
+                int r9 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r9, r10)
+                if (r9 < 0) goto L_0x01cf
+                if (r9 == 0) goto L_0x01b5
+                org.telegram.tgnet.TLRPC$StickerSet r10 = r8.set
                 java.lang.String r10 = r10.title
-                org.telegram.ui.Adapters.StickersSearchAdapter r11 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.lang.String r11 = r11.searchQuery
-                int r10 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r10, r11)
-                if (r10 < 0) goto L_0x01d1
-                if (r10 == 0) goto L_0x01b7
-                org.telegram.tgnet.TLRPC$StickerSet r11 = r9.set
-                java.lang.String r11 = r11.title
-                int r12 = r10 + -1
-                char r11 = r11.charAt(r12)
-                if (r11 != r7) goto L_0x0206
-            L_0x01b7:
-                r14.clear()
-                org.telegram.ui.Adapters.StickersSearchAdapter r7 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.util.ArrayList r7 = r7.localPacks
-                r7.add(r9)
-                org.telegram.ui.Adapters.StickersSearchAdapter r7 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.util.HashMap r7 = r7.localPacksByName
-                java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
-                r7.put(r9, r10)
+                int r11 = r9 + -1
+                char r10 = r10.charAt(r11)
+                if (r10 != r6) goto L_0x0206
+            L_0x01b5:
+                r13.clear()
+                org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.util.ArrayList r6 = r6.localPacks
+                r6.add(r8)
+                org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.util.HashMap r6 = r6.localPacksByName
+                java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+                r6.put(r8, r9)
                 goto L_0x0206
-            L_0x01d1:
-                org.telegram.tgnet.TLRPC$StickerSet r10 = r9.set
+            L_0x01cf:
+                org.telegram.tgnet.TLRPC$StickerSet r9 = r8.set
+                java.lang.String r9 = r9.short_name
+                if (r9 == 0) goto L_0x0206
+                org.telegram.ui.Adapters.StickersSearchAdapter r10 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.lang.String r10 = r10.searchQuery
+                int r9 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r9, r10)
+                if (r9 < 0) goto L_0x0206
+                if (r9 == 0) goto L_0x01ef
+                org.telegram.tgnet.TLRPC$StickerSet r10 = r8.set
                 java.lang.String r10 = r10.short_name
-                if (r10 == 0) goto L_0x0206
-                org.telegram.ui.Adapters.StickersSearchAdapter r11 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.lang.String r11 = r11.searchQuery
-                int r10 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r10, r11)
-                if (r10 < 0) goto L_0x0206
-                if (r10 == 0) goto L_0x01f1
-                org.telegram.tgnet.TLRPC$StickerSet r11 = r9.set
-                java.lang.String r11 = r11.short_name
-                int r10 = r10 + -1
-                char r10 = r11.charAt(r10)
-                if (r10 != r7) goto L_0x0206
-            L_0x01f1:
-                r14.clear()
-                org.telegram.ui.Adapters.StickersSearchAdapter r7 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.util.ArrayList r7 = r7.localPacks
-                r7.add(r9)
-                org.telegram.ui.Adapters.StickersSearchAdapter r7 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.util.HashMap r7 = r7.localPacksByShortName
-                r7.put(r9, r0)
+                int r9 = r9 + -1
+                char r9 = r10.charAt(r9)
+                if (r9 != r6) goto L_0x0206
+            L_0x01ef:
+                r13.clear()
+                org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.util.ArrayList r6 = r6.localPacks
+                r6.add(r8)
+                org.telegram.ui.Adapters.StickersSearchAdapter r6 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.util.HashMap r6 = r6.localPacksByShortName
+                java.lang.Boolean r9 = java.lang.Boolean.TRUE
+                r6.put(r8, r9)
             L_0x0206:
-                int r6 = r6 + 1
-                goto L_0x018f
+                int r5 = r5 + 1
+                goto L_0x018d
             L_0x0209:
-                org.telegram.ui.Adapters.StickersSearchAdapter r1 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                int r1 = r1.currentAccount
-                org.telegram.messenger.MediaDataController r1 = org.telegram.messenger.MediaDataController.getInstance(r1)
-                r5 = 3
-                java.util.ArrayList r1 = r1.getStickerSets(r5)
-                int r5 = r1.size()
-                r6 = 0
+                org.telegram.ui.Adapters.StickersSearchAdapter r0 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                int r0 = r0.currentAccount
+                org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
+                r4 = 3
+                java.util.ArrayList r0 = r0.getStickerSets(r4)
+                int r4 = r0.size()
+                r5 = 0
             L_0x021d:
-                if (r6 >= r5) goto L_0x0295
-                java.lang.Object r9 = r1.get(r6)
-                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r9 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r9
-                org.telegram.tgnet.TLRPC$StickerSet r10 = r9.set
+                if (r5 >= r4) goto L_0x0297
+                java.lang.Object r8 = r0.get(r5)
+                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r8 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r8
+                org.telegram.tgnet.TLRPC$StickerSet r9 = r8.set
+                java.lang.String r9 = r9.title
+                org.telegram.ui.Adapters.StickersSearchAdapter r10 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.lang.String r10 = r10.searchQuery
+                int r9 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r9, r10)
+                if (r9 < 0) goto L_0x025d
+                if (r9 == 0) goto L_0x0243
+                org.telegram.tgnet.TLRPC$StickerSet r10 = r8.set
                 java.lang.String r10 = r10.title
-                org.telegram.ui.Adapters.StickersSearchAdapter r11 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.lang.String r11 = r11.searchQuery
-                int r10 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r10, r11)
-                if (r10 < 0) goto L_0x025d
-                if (r10 == 0) goto L_0x0243
-                org.telegram.tgnet.TLRPC$StickerSet r11 = r9.set
-                java.lang.String r11 = r11.title
-                int r12 = r10 + -1
-                char r11 = r11.charAt(r12)
-                if (r11 != r7) goto L_0x0292
+                int r11 = r9 + -1
+                char r10 = r10.charAt(r11)
+                if (r10 != r6) goto L_0x0294
             L_0x0243:
-                r14.clear()
-                org.telegram.ui.Adapters.StickersSearchAdapter r11 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.util.ArrayList r11 = r11.localPacks
-                r11.add(r9)
-                org.telegram.ui.Adapters.StickersSearchAdapter r11 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.util.HashMap r11 = r11.localPacksByName
-                java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
-                r11.put(r9, r10)
-                goto L_0x0292
-            L_0x025d:
-                org.telegram.tgnet.TLRPC$StickerSet r10 = r9.set
-                java.lang.String r10 = r10.short_name
-                if (r10 == 0) goto L_0x0292
-                org.telegram.ui.Adapters.StickersSearchAdapter r11 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.lang.String r11 = r11.searchQuery
-                int r10 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r10, r11)
-                if (r10 < 0) goto L_0x0292
-                if (r10 == 0) goto L_0x027d
-                org.telegram.tgnet.TLRPC$StickerSet r11 = r9.set
-                java.lang.String r11 = r11.short_name
-                int r10 = r10 + -1
-                char r10 = r11.charAt(r10)
-                if (r10 != r7) goto L_0x0292
-            L_0x027d:
-                r14.clear()
+                r13.clear()
                 org.telegram.ui.Adapters.StickersSearchAdapter r10 = org.telegram.ui.Adapters.StickersSearchAdapter.this
                 java.util.ArrayList r10 = r10.localPacks
-                r10.add(r9)
+                r10.add(r8)
                 org.telegram.ui.Adapters.StickersSearchAdapter r10 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.util.HashMap r10 = r10.localPacksByShortName
-                r10.put(r9, r0)
-            L_0x0292:
-                int r6 = r6 + 1
+                java.util.HashMap r10 = r10.localPacksByName
+                java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+                r10.put(r8, r9)
+                goto L_0x0294
+            L_0x025d:
+                org.telegram.tgnet.TLRPC$StickerSet r9 = r8.set
+                java.lang.String r9 = r9.short_name
+                if (r9 == 0) goto L_0x0294
+                org.telegram.ui.Adapters.StickersSearchAdapter r10 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.lang.String r10 = r10.searchQuery
+                int r9 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r9, r10)
+                if (r9 < 0) goto L_0x0294
+                if (r9 == 0) goto L_0x027d
+                org.telegram.tgnet.TLRPC$StickerSet r10 = r8.set
+                java.lang.String r10 = r10.short_name
+                int r9 = r9 + -1
+                char r9 = r10.charAt(r9)
+                if (r9 != r6) goto L_0x0294
+            L_0x027d:
+                r13.clear()
+                org.telegram.ui.Adapters.StickersSearchAdapter r9 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.util.ArrayList r9 = r9.localPacks
+                r9.add(r8)
+                org.telegram.ui.Adapters.StickersSearchAdapter r9 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.util.HashMap r9 = r9.localPacksByShortName
+                java.lang.Boolean r10 = java.lang.Boolean.TRUE
+                r9.put(r8, r10)
+            L_0x0294:
+                int r5 = r5 + 1
                 goto L_0x021d
-            L_0x0295:
+            L_0x0297:
                 org.telegram.ui.Adapters.StickersSearchAdapter r0 = org.telegram.ui.Adapters.StickersSearchAdapter.this
                 java.util.ArrayList r0 = r0.localPacks
                 boolean r0 = r0.isEmpty()
-                if (r0 == 0) goto L_0x02ad
+                if (r0 == 0) goto L_0x02af
                 org.telegram.ui.Adapters.StickersSearchAdapter r0 = org.telegram.ui.Adapters.StickersSearchAdapter.this
                 java.util.HashMap r0 = r0.emojiStickers
                 boolean r0 = r0.isEmpty()
-                if (r0 != 0) goto L_0x02b6
-            L_0x02ad:
+                if (r0 != 0) goto L_0x02b8
+            L_0x02af:
                 org.telegram.ui.Adapters.StickersSearchAdapter r0 = org.telegram.ui.Adapters.StickersSearchAdapter.this
                 org.telegram.ui.Adapters.StickersSearchAdapter$Delegate r0 = r0.delegate
-                r0.setAdapterVisible(r8)
-            L_0x02b6:
+                r0.setAdapterVisible(r7)
+            L_0x02b8:
                 org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets r0 = new org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets
                 r0.<init>()
-                org.telegram.ui.Adapters.StickersSearchAdapter r1 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.lang.String r1 = r1.searchQuery
-                r0.q = r1
-                org.telegram.ui.Adapters.StickersSearchAdapter r1 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                int r5 = r1.currentAccount
+                org.telegram.ui.Adapters.StickersSearchAdapter r4 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.lang.String r4 = r4.searchQuery
+                r0.q = r4
+                org.telegram.ui.Adapters.StickersSearchAdapter r4 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                int r5 = r4.currentAccount
                 org.telegram.tgnet.ConnectionsManager r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r5)
                 org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$7AgvQv-K2jX3H-bHvKWAz4lcGxQ r6 = new org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$7AgvQv-K2jX3H-bHvKWAz4lcGxQ
                 r6.<init>(r0)
                 int r0 = r5.sendRequest(r0, r6)
-                int unused = r1.reqId = r0
+                int unused = r4.reqId = r0
                 org.telegram.ui.Adapters.StickersSearchAdapter r0 = org.telegram.ui.Adapters.StickersSearchAdapter.this
                 java.lang.String r0 = r0.searchQuery
                 boolean r0 = org.telegram.messenger.Emoji.isValidEmoji(r0)
-                if (r0 == 0) goto L_0x030a
+                if (r0 == 0) goto L_0x030c
                 org.telegram.tgnet.TLRPC$TL_messages_getStickers r0 = new org.telegram.tgnet.TLRPC$TL_messages_getStickers
                 r0.<init>()
+                org.telegram.ui.Adapters.StickersSearchAdapter r4 = org.telegram.ui.Adapters.StickersSearchAdapter.this
+                java.lang.String r4 = r4.searchQuery
+                r0.emoticon = r4
+                r0.hash = r1
                 org.telegram.ui.Adapters.StickersSearchAdapter r1 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                java.lang.String r1 = r1.searchQuery
-                r0.emoticon = r1
-                r0.hash = r2
-                org.telegram.ui.Adapters.StickersSearchAdapter r1 = org.telegram.ui.Adapters.StickersSearchAdapter.this
-                int r2 = r1.currentAccount
-                org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2)
+                int r4 = r1.currentAccount
+                org.telegram.tgnet.ConnectionsManager r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4)
                 org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$FeOQofW2PVJRuHhUkJ6BkzEUsJo r5 = new org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$1$FeOQofW2PVJRuHhUkJ6BkzEUsJo
-                r5.<init>(r0, r3, r4)
-                int r0 = r2.sendRequest(r0, r5)
+                r5.<init>(r0, r2, r3)
+                int r0 = r4.sendRequest(r0, r5)
                 int unused = r1.reqId2 = r0
-            L_0x030a:
+            L_0x030c:
                 org.telegram.ui.Adapters.StickersSearchAdapter r0 = org.telegram.ui.Adapters.StickersSearchAdapter.this
                 r0.notifyDataSetChanged()
                 return
@@ -717,13 +718,10 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i, List list) {
-        if (!list.contains(0)) {
-            return;
-        }
-        if (viewHolder.getItemViewType() == 3) {
-            bindFeaturedStickerSetInfoCell((FeaturedStickerSetInfoCell) viewHolder.itemView, i, true);
-        } else {
+        if (!list.contains(0) || viewHolder.getItemViewType() != 3) {
             super.onBindViewHolder(viewHolder, i, list);
+        } else {
+            bindFeaturedStickerSetInfoCell((FeaturedStickerSetInfoCell) viewHolder.itemView, i, true);
         }
     }
 

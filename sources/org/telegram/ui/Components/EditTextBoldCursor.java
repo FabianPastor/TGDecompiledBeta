@@ -169,104 +169,105 @@ public class EditTextBoldCursor extends EditText {
 
     /* JADX WARNING: Can't wrap try/catch for region: R(20:0|(1:2)|3|4|(1:8)|9|11|12|(7:14|15|16|17|18|20|21)|24|25|(1:27)|28|29|30|(1:32)|33|(1:35)|36|38) */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:29:0x0098 */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x009c A[Catch:{ all -> 0x00b7 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x00ad A[Catch:{ all -> 0x00b7 }] */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:29:0x009a */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x009e A[Catch:{ all -> 0x00b9 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x00af A[Catch:{ all -> 0x00b9 }] */
     @android.annotation.SuppressLint({"PrivateApi"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void init() {
         /*
-            r8 = this;
+            r7 = this;
+            android.graphics.Paint r0 = new android.graphics.Paint
+            r0.<init>()
+            r7.linePaint = r0
+            android.text.TextPaint r0 = new android.text.TextPaint
+            r1 = 1
+            r0.<init>(r1)
+            r7.errorPaint = r0
+            r2 = 1093664768(0x41300000, float:11.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r2 = (float) r2
+            r0.setTextSize(r2)
             int r0 = android.os.Build.VERSION.SDK_INT
-            android.graphics.Paint r1 = new android.graphics.Paint
-            r1.<init>()
-            r8.linePaint = r1
-            android.text.TextPaint r1 = new android.text.TextPaint
-            r2 = 1
-            r1.<init>(r2)
-            r8.errorPaint = r1
-            r3 = 1093664768(0x41300000, float:11.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r3 = (float) r3
-            r1.setTextSize(r3)
-            r1 = 2
+            r2 = 2
             r3 = 26
             if (r0 < r3) goto L_0x0023
-            r8.setImportantForAutofill(r1)
+            r7.setImportantForAutofill(r2)
         L_0x0023:
-            boolean r3 = mScrollYGet     // Catch:{ all -> 0x003a }
-            if (r3 != 0) goto L_0x003a
-            java.lang.reflect.Field r3 = mScrollYField     // Catch:{ all -> 0x003a }
-            if (r3 != 0) goto L_0x003a
-            mScrollYGet = r2     // Catch:{ all -> 0x003a }
-            java.lang.Class<android.view.View> r3 = android.view.View.class
-            java.lang.String r4 = "mScrollY"
-            java.lang.reflect.Field r3 = r3.getDeclaredField(r4)     // Catch:{ all -> 0x003a }
-            mScrollYField = r3     // Catch:{ all -> 0x003a }
-            r3.setAccessible(r2)     // Catch:{ all -> 0x003a }
+            boolean r0 = mScrollYGet     // Catch:{ all -> 0x003a }
+            if (r0 != 0) goto L_0x003a
+            java.lang.reflect.Field r0 = mScrollYField     // Catch:{ all -> 0x003a }
+            if (r0 != 0) goto L_0x003a
+            mScrollYGet = r1     // Catch:{ all -> 0x003a }
+            java.lang.Class<android.view.View> r0 = android.view.View.class
+            java.lang.String r3 = "mScrollY"
+            java.lang.reflect.Field r0 = r0.getDeclaredField(r3)     // Catch:{ all -> 0x003a }
+            mScrollYField = r0     // Catch:{ all -> 0x003a }
+            r0.setAccessible(r1)     // Catch:{ all -> 0x003a }
         L_0x003a:
-            r3 = 0
-            java.lang.Class r4 = editorClass     // Catch:{ all -> 0x0073 }
-            if (r4 != 0) goto L_0x0077
-            java.lang.Class<android.widget.TextView> r4 = android.widget.TextView.class
-            java.lang.String r5 = "mEditor"
-            java.lang.reflect.Field r4 = r4.getDeclaredField(r5)     // Catch:{ all -> 0x0073 }
-            mEditor = r4     // Catch:{ all -> 0x0073 }
-            r4.setAccessible(r2)     // Catch:{ all -> 0x0073 }
-            java.lang.String r4 = "android.widget.Editor"
-            java.lang.Class r4 = java.lang.Class.forName(r4)     // Catch:{ all -> 0x0073 }
-            editorClass = r4     // Catch:{ all -> 0x0073 }
-            java.lang.String r5 = "mShowCursor"
-            java.lang.reflect.Field r4 = r4.getDeclaredField(r5)     // Catch:{ Exception -> 0x005f }
-            mShowCursorField = r4     // Catch:{ Exception -> 0x005f }
-            r4.setAccessible(r2)     // Catch:{ Exception -> 0x005f }
+            r0 = 0
+            java.lang.Class r3 = editorClass     // Catch:{ all -> 0x0073 }
+            if (r3 != 0) goto L_0x0077
+            java.lang.Class<android.widget.TextView> r3 = android.widget.TextView.class
+            java.lang.String r4 = "mEditor"
+            java.lang.reflect.Field r3 = r3.getDeclaredField(r4)     // Catch:{ all -> 0x0073 }
+            mEditor = r3     // Catch:{ all -> 0x0073 }
+            r3.setAccessible(r1)     // Catch:{ all -> 0x0073 }
+            java.lang.String r3 = "android.widget.Editor"
+            java.lang.Class r3 = java.lang.Class.forName(r3)     // Catch:{ all -> 0x0073 }
+            editorClass = r3     // Catch:{ all -> 0x0073 }
+            java.lang.String r4 = "mShowCursor"
+            java.lang.reflect.Field r3 = r3.getDeclaredField(r4)     // Catch:{ Exception -> 0x005f }
+            mShowCursorField = r3     // Catch:{ Exception -> 0x005f }
+            r3.setAccessible(r1)     // Catch:{ Exception -> 0x005f }
         L_0x005f:
-            java.lang.Class<android.widget.TextView> r4 = android.widget.TextView.class
-            java.lang.String r5 = "getVerticalOffset"
-            java.lang.Class[] r6 = new java.lang.Class[r2]     // Catch:{ all -> 0x0073 }
-            java.lang.Class r7 = java.lang.Boolean.TYPE     // Catch:{ all -> 0x0073 }
-            r6[r3] = r7     // Catch:{ all -> 0x0073 }
-            java.lang.reflect.Method r4 = r4.getDeclaredMethod(r5, r6)     // Catch:{ all -> 0x0073 }
-            getVerticalOffsetMethod = r4     // Catch:{ all -> 0x0073 }
-            r4.setAccessible(r2)     // Catch:{ all -> 0x0073 }
+            java.lang.Class<android.widget.TextView> r3 = android.widget.TextView.class
+            java.lang.String r4 = "getVerticalOffset"
+            java.lang.Class[] r5 = new java.lang.Class[r1]     // Catch:{ all -> 0x0073 }
+            java.lang.Class r6 = java.lang.Boolean.TYPE     // Catch:{ all -> 0x0073 }
+            r5[r0] = r6     // Catch:{ all -> 0x0073 }
+            java.lang.reflect.Method r3 = r3.getDeclaredMethod(r4, r5)     // Catch:{ all -> 0x0073 }
+            getVerticalOffsetMethod = r3     // Catch:{ all -> 0x0073 }
+            r3.setAccessible(r1)     // Catch:{ all -> 0x0073 }
             goto L_0x0077
         L_0x0073:
-            r4 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)
+            r3 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
         L_0x0077:
-            android.graphics.drawable.GradientDrawable r4 = new android.graphics.drawable.GradientDrawable     // Catch:{ all -> 0x0098 }
-            android.graphics.drawable.GradientDrawable$Orientation r5 = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM     // Catch:{ all -> 0x0098 }
-            int[] r1 = new int[r1]     // Catch:{ all -> 0x0098 }
-            r6 = -11230757(0xfffffffffvar_a1db, float:-2.8263674E38)
-            r1[r3] = r6     // Catch:{ all -> 0x0098 }
-            r1[r2] = r6     // Catch:{ all -> 0x0098 }
-            r4.<init>(r5, r1)     // Catch:{ all -> 0x0098 }
-            r8.gradientDrawable = r4     // Catch:{ all -> 0x0098 }
-            r1 = 29
-            if (r0 < r1) goto L_0x0090
-            r8.setTextCursorDrawable(r4)     // Catch:{ all -> 0x0098 }
-        L_0x0090:
-            java.lang.reflect.Field r0 = mEditor     // Catch:{ all -> 0x0098 }
-            java.lang.Object r0 = r0.get(r8)     // Catch:{ all -> 0x0098 }
-            r8.editor = r0     // Catch:{ all -> 0x0098 }
-        L_0x0098:
-            java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00b7 }
-            if (r0 != 0) goto L_0x00a9
+            android.graphics.drawable.GradientDrawable r3 = new android.graphics.drawable.GradientDrawable     // Catch:{ all -> 0x009a }
+            android.graphics.drawable.GradientDrawable$Orientation r4 = android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM     // Catch:{ all -> 0x009a }
+            int[] r2 = new int[r2]     // Catch:{ all -> 0x009a }
+            r5 = -11230757(0xfffffffffvar_a1db, float:-2.8263674E38)
+            r2[r0] = r5     // Catch:{ all -> 0x009a }
+            r2[r1] = r5     // Catch:{ all -> 0x009a }
+            r3.<init>(r4, r2)     // Catch:{ all -> 0x009a }
+            r7.gradientDrawable = r3     // Catch:{ all -> 0x009a }
+            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x009a }
+            r2 = 29
+            if (r0 < r2) goto L_0x0092
+            r7.setTextCursorDrawable(r3)     // Catch:{ all -> 0x009a }
+        L_0x0092:
+            java.lang.reflect.Field r0 = mEditor     // Catch:{ all -> 0x009a }
+            java.lang.Object r0 = r0.get(r7)     // Catch:{ all -> 0x009a }
+            r7.editor = r0     // Catch:{ all -> 0x009a }
+        L_0x009a:
+            java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00b9 }
+            if (r0 != 0) goto L_0x00ab
             java.lang.Class<android.widget.TextView> r0 = android.widget.TextView.class
-            java.lang.String r1 = "mCursorDrawableRes"
-            java.lang.reflect.Field r0 = r0.getDeclaredField(r1)     // Catch:{ all -> 0x00b7 }
-            mCursorDrawableResField = r0     // Catch:{ all -> 0x00b7 }
-            r0.setAccessible(r2)     // Catch:{ all -> 0x00b7 }
-        L_0x00a9:
-            java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00b7 }
-            if (r0 == 0) goto L_0x00b7
-            r1 = 2131165400(0x7var_d8, float:1.7945016E38)
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00b7 }
-            r0.set(r8, r1)     // Catch:{ all -> 0x00b7 }
-        L_0x00b7:
+            java.lang.String r2 = "mCursorDrawableRes"
+            java.lang.reflect.Field r0 = r0.getDeclaredField(r2)     // Catch:{ all -> 0x00b9 }
+            mCursorDrawableResField = r0     // Catch:{ all -> 0x00b9 }
+            r0.setAccessible(r1)     // Catch:{ all -> 0x00b9 }
+        L_0x00ab:
+            java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00b9 }
+            if (r0 == 0) goto L_0x00b9
+            r1 = 2131165401(0x7var_d9, float:1.7945018E38)
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00b9 }
+            r0.set(r7, r1)     // Catch:{ all -> 0x00b9 }
+        L_0x00b9:
             r0 = 1103101952(0x41CLASSNAME, float:24.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            r8.cursorSize = r0
+            r7.cursorSize = r0
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EditTextBoldCursor.init():void");

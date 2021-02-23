@@ -22,6 +22,7 @@ public abstract class TLRPC$Updates extends TLObject {
     public int seq;
     public int seq_start;
     public boolean silent;
+    public int ttl_period;
     public TLRPC$Update update;
     public ArrayList<TLRPC$Update> updates = new ArrayList<>();
     public int user_id;
@@ -31,16 +32,16 @@ public abstract class TLRPC$Updates extends TLObject {
     public static TLRPC$Updates TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$Updates tLRPC$Updates;
         switch (i) {
+            case -1877614335:
+                tLRPC$Updates = new TLRPC$TL_updateShortSentMessage();
+                break;
             case -484987010:
                 tLRPC$Updates = new TLRPC$TL_updatesTooLong();
                 break;
-            case 301019932:
-                tLRPC$Updates = new TLRPC$TL_updateShortSentMessage();
-                break;
-            case 580309704:
+            case -84936653:
                 tLRPC$Updates = new TLRPC$TL_updateShortMessage();
                 break;
-            case 1076714939:
+            case 290961496:
                 tLRPC$Updates = new TLRPC$TL_updateShortChatMessage();
                 break;
             case 1918567619:

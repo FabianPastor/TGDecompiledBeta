@@ -241,26 +241,28 @@ public class BackgroundGradientDrawable extends GradientDrawable {
         this.ditheringRunnables.add(runnableArr);
         for (int i = 0; i < intSizeArr.length; i++) {
             IntSize intSize = intSizeArr[i];
-            DispatchQueue dispatchQueue = Utilities.globalQueue;
-            $$Lambda$BackgroundGradientDrawable$uK_xswh5_jx3ACLASSNAMERbSNvP6OYYE r1 = new Runnable(intSize, runnableArr, i, listenerArr) {
-                public final /* synthetic */ IntSize f$1;
-                public final /* synthetic */ Runnable[] f$2;
-                public final /* synthetic */ int f$3;
-                public final /* synthetic */ BackgroundGradientDrawable.Listener[] f$4;
+            if (!(intSize.width == 0 || intSize.height == 0)) {
+                DispatchQueue dispatchQueue = Utilities.globalQueue;
+                $$Lambda$BackgroundGradientDrawable$uK_xswh5_jx3ACLASSNAMERbSNvP6OYYE r1 = new Runnable(intSize, runnableArr, i, listenerArr) {
+                    public final /* synthetic */ IntSize f$1;
+                    public final /* synthetic */ Runnable[] f$2;
+                    public final /* synthetic */ int f$3;
+                    public final /* synthetic */ BackgroundGradientDrawable.Listener[] f$4;
 
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                }
+                    {
+                        this.f$1 = r2;
+                        this.f$2 = r3;
+                        this.f$3 = r4;
+                        this.f$4 = r5;
+                    }
 
-                public final void run() {
-                    BackgroundGradientDrawable.this.lambda$startDitheringInternal$2$BackgroundGradientDrawable(this.f$1, this.f$2, this.f$3, this.f$4);
-                }
-            };
-            runnableArr[i] = r1;
-            dispatchQueue.postRunnable(r1, j);
+                    public final void run() {
+                        BackgroundGradientDrawable.this.lambda$startDitheringInternal$2$BackgroundGradientDrawable(this.f$1, this.f$2, this.f$3, this.f$4);
+                    }
+                };
+                runnableArr[i] = r1;
+                dispatchQueue.postRunnable(r1, j);
+            }
         }
         return new Disposable(listenerArr, runnableArr, intSizeArr) {
             public final /* synthetic */ BackgroundGradientDrawable.Listener[] f$1;

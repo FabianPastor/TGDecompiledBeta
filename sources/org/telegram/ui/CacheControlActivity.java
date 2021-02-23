@@ -140,8 +140,7 @@ public class CacheControlActivity extends BaseFragment {
         long j;
         long j2;
         long j3;
-        int i = Build.VERSION.SDK_INT;
-        int i2 = 0;
+        int i = 0;
         this.cacheSize = getDirectorySize(FileLoader.checkDirectory(4), 0);
         if (!this.canceled) {
             this.photoSize = getDirectorySize(FileLoader.checkDirectory(0), 0);
@@ -157,20 +156,20 @@ public class CacheControlActivity extends BaseFragment {
                                 long directorySize = getDirectorySize(FileLoader.checkDirectory(1), 0);
                                 this.audioSize = directorySize;
                                 this.totalSize = this.cacheSize + this.videoSize + directorySize + this.photoSize + this.documentsSize + this.musicSize + this.stickersSize;
-                                if (i >= 19) {
+                                if (Build.VERSION.SDK_INT >= 19) {
                                     ArrayList<File> rootDirs = AndroidUtilities.getRootDirs();
                                     file = rootDirs.get(0);
                                     file.getAbsolutePath();
                                     if (!TextUtils.isEmpty(SharedConfig.storageCacheDir)) {
                                         int size = rootDirs.size();
                                         while (true) {
-                                            if (i2 < size) {
-                                                File file2 = rootDirs.get(i2);
+                                            if (i < size) {
+                                                File file2 = rootDirs.get(i);
                                                 if (file2.getAbsolutePath().startsWith(SharedConfig.storageCacheDir)) {
                                                     file = file2;
                                                     break;
                                                 }
-                                                i2++;
+                                                i++;
                                             }
                                         }
                                     }
@@ -179,17 +178,18 @@ public class CacheControlActivity extends BaseFragment {
                                 }
                                 try {
                                     StatFs statFs = new StatFs(file.getPath());
-                                    if (i >= 18) {
+                                    int i2 = Build.VERSION.SDK_INT;
+                                    if (i2 >= 18) {
                                         j = statFs.getBlockSizeLong();
                                     } else {
                                         j = (long) statFs.getBlockSize();
                                     }
-                                    if (i >= 18) {
+                                    if (i2 >= 18) {
                                         j2 = statFs.getAvailableBlocksLong();
                                     } else {
                                         j2 = (long) statFs.getAvailableBlocks();
                                     }
-                                    if (i >= 18) {
+                                    if (i2 >= 18) {
                                         j3 = statFs.getBlockCountLong();
                                     } else {
                                         j3 = (long) statFs.getBlockCount();

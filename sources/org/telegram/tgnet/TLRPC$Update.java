@@ -73,6 +73,9 @@ public abstract class TLRPC$Update extends TLObject {
             case -1227598250:
                 tLRPC$Update = new TLRPC$TL_updateChannel();
                 break;
+            case -1147422299:
+                tLRPC$Update = new TLRPC$TL_updatePeerHistoryTTL();
+                break;
             case -1094555409:
                 tLRPC$Update = new TLRPC$TL_updateNotifySettings();
                 break;

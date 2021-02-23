@@ -1216,7 +1216,7 @@ public class SecretChatHelper extends BaseController {
             r2 = r18
             r3 = r19
             r4 = r20
-            if (r4 == 0) goto L_0x0962
+            if (r4 == 0) goto L_0x0961
             int r6 = r1.admin_id
             org.telegram.messenger.UserConfig r7 = r16.getUserConfig()
             int r7 = r7.getClientUserId()
@@ -2079,7 +2079,7 @@ public class SecretChatHelper extends BaseController {
             if (r3 == 0) goto L_0x0694
             java.util.ArrayList<java.lang.Long> r3 = r4.random_ids
             boolean r3 = r3.isEmpty()
-            if (r3 != 0) goto L_0x096c
+            if (r3 != 0) goto L_0x096a
             org.telegram.tgnet.ConnectionsManager r3 = r16.getConnectionsManager()
             int r7 = r3.getCurrentTime()
             org.telegram.messenger.MessagesStorage r4 = r16.getMessagesStorage()
@@ -2089,13 +2089,13 @@ public class SecretChatHelper extends BaseController {
             java.util.ArrayList<java.lang.Long> r9 = r1.random_ids
             r6 = r7
             r4.createTaskForSecretChat(r5, r6, r7, r8, r9)
-            goto L_0x096c
+            goto L_0x096a
         L_0x0694:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionNotifyLayer
             if (r3 == 0) goto L_0x069f
             int r2 = r4.layer
             r0.applyPeerLayer(r1, r2)
-            goto L_0x096c
+            goto L_0x096a
         L_0x069f:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionRequestKey
             if (r3 == 0) goto L_0x0769
@@ -2198,7 +2198,7 @@ public class SecretChatHelper extends BaseController {
             r2.updateEncryptedChat(r1)
             r2 = 0
             r0.sendAcceptKeyMessage(r1, r2)
-            goto L_0x096c
+            goto L_0x096a
         L_0x0769:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionAcceptKey
             if (r3 == 0) goto L_0x0837
@@ -2277,7 +2277,7 @@ public class SecretChatHelper extends BaseController {
             r2.updateEncryptedChat(r1)
             r3 = 0
             r0.sendCommitKeyMessage(r1, r3)
-            goto L_0x096c
+            goto L_0x096a
         L_0x0805:
             r3 = 0
             byte[] r4 = new byte[r12]
@@ -2289,7 +2289,7 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             long r4 = r2.exchange_id
             r0.sendAbortKeyMessage(r1, r3, r4)
-            goto L_0x096c
+            goto L_0x096a
         L_0x081e:
             r3 = 0
             byte[] r4 = new byte[r12]
@@ -2301,7 +2301,7 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             long r4 = r2.exchange_id
             r0.sendAbortKeyMessage(r1, r3, r4)
-            goto L_0x096c
+            goto L_0x096a
         L_0x0837:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionCommitKey
             if (r3 == 0) goto L_0x0890
@@ -2331,7 +2331,7 @@ public class SecretChatHelper extends BaseController {
             r2.updateEncryptedChat(r1)
             r2 = 0
             r0.sendNoopMessage(r1, r2)
-            goto L_0x096c
+            goto L_0x096a
         L_0x0877:
             byte[] r3 = new byte[r12]
             r1.future_auth_key = r3
@@ -2343,25 +2343,25 @@ public class SecretChatHelper extends BaseController {
             long r2 = r2.exchange_id
             r4 = 0
             r0.sendAbortKeyMessage(r1, r4, r2)
-            goto L_0x096c
+            goto L_0x096a
         L_0x0890:
             boolean r2 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionAbortKey
             if (r2 == 0) goto L_0x08ad
             long r2 = r1.exchange_id
             long r4 = r4.exchange_id
             int r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r6 != 0) goto L_0x096c
+            if (r6 != 0) goto L_0x096a
             byte[] r2 = new byte[r12]
             r1.future_auth_key = r2
             r1.future_key_fingerprint = r9
             r1.exchange_id = r9
             org.telegram.messenger.MessagesStorage r2 = r16.getMessagesStorage()
             r2.updateEncryptedChat(r1)
-            goto L_0x096c
+            goto L_0x096a
         L_0x08ad:
             boolean r2 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionNoop
             if (r2 == 0) goto L_0x08b3
-            goto L_0x096c
+            goto L_0x096a
         L_0x08b3:
             boolean r2 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionResend
             if (r2 == 0) goto L_0x08cf
@@ -2377,7 +2377,7 @@ public class SecretChatHelper extends BaseController {
         L_0x08c6:
             int r3 = r4.start_seq_no
             r0.resendMessages(r3, r2, r1)
-            goto L_0x096c
+            goto L_0x096a
         L_0x08cd:
             r1 = 0
             return r1
@@ -2443,7 +2443,7 @@ public class SecretChatHelper extends BaseController {
             return r4
         L_0x0948:
             boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r1 == 0) goto L_0x096c
+            if (r1 == 0) goto L_0x096a
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             java.lang.String r2 = "unknown message "
@@ -2451,13 +2451,13 @@ public class SecretChatHelper extends BaseController {
             r1.append(r4)
             java.lang.String r1 = r1.toString()
             org.telegram.messenger.FileLog.e((java.lang.String) r1)
-            goto L_0x096c
-        L_0x0962:
+            goto L_0x096a
+        L_0x0961:
             boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r1 == 0) goto L_0x096c
+            if (r1 == 0) goto L_0x096a
             java.lang.String r1 = "unknown TLObject"
             org.telegram.messenger.FileLog.e((java.lang.String) r1)
-        L_0x096c:
+        L_0x096a:
             r1 = 0
             return r1
         */

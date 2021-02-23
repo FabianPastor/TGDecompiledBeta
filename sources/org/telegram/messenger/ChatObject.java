@@ -1027,23 +1027,30 @@ public class ChatObject {
     public static boolean canWriteToChat(org.telegram.tgnet.TLRPC$Chat r1) {
         /*
             boolean r0 = isChannel(r1)
-            if (r0 == 0) goto L_0x0019
+            if (r0 == 0) goto L_0x0027
             boolean r0 = r1.creator
-            if (r0 != 0) goto L_0x0019
+            if (r0 != 0) goto L_0x0027
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r1.admin_rights
             if (r0 == 0) goto L_0x0012
             boolean r0 = r0.post_messages
-            if (r0 != 0) goto L_0x0019
+            if (r0 != 0) goto L_0x0027
         L_0x0012:
-            boolean r1 = r1.broadcast
-            if (r1 != 0) goto L_0x0017
-            goto L_0x0019
-        L_0x0017:
-            r1 = 0
-            goto L_0x001a
-        L_0x0019:
-            r1 = 1
+            boolean r0 = r1.broadcast
+            if (r0 != 0) goto L_0x001a
+            boolean r0 = r1.gigagroup
+            if (r0 == 0) goto L_0x0027
         L_0x001a:
+            boolean r0 = r1.gigagroup
+            if (r0 == 0) goto L_0x0025
+            boolean r1 = hasAdminRights(r1)
+            if (r1 == 0) goto L_0x0025
+            goto L_0x0027
+        L_0x0025:
+            r1 = 0
+            goto L_0x0028
+        L_0x0027:
+            r1 = 1
+        L_0x0028:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ChatObject.canWriteToChat(org.telegram.tgnet.TLRPC$Chat):boolean");

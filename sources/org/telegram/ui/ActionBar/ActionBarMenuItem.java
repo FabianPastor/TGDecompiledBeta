@@ -214,7 +214,6 @@ public class ActionBarMenuItem extends FrameLayout {
     public boolean onTouchEvent(MotionEvent motionEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         ActionBarPopupWindow actionBarPopupWindow2;
-        int i = Build.VERSION.SDK_INT;
         if (motionEvent.getActionMasked() == 0) {
             if (this.longClickEnabled && hasSubMenu() && ((actionBarPopupWindow2 = this.popupWindow) == null || !actionBarPopupWindow2.isShowing())) {
                 $$Lambda$ActionBarMenuItem$97ELGBMVBlZJv0MzTuldUHOShYc r0 = new Runnable() {
@@ -264,22 +263,23 @@ public class ActionBarMenuItem extends FrameLayout {
                 float f2 = x - ((float) iArr2[0]);
                 float f3 = f - ((float) iArr2[1]);
                 this.selectedMenuView = null;
-                for (int i2 = 0; i2 < this.popupLayout.getItemsCount(); i2++) {
-                    View itemAt = this.popupLayout.getItemAt(i2);
+                for (int i = 0; i < this.popupLayout.getItemsCount(); i++) {
+                    View itemAt = this.popupLayout.getItemAt(i);
                     itemAt.getHitRect(this.rect);
                     Object tag = itemAt.getTag();
                     if ((tag instanceof Integer) && ((Integer) tag).intValue() < 100) {
                         if (!this.rect.contains((int) f2, (int) f3)) {
                             itemAt.setPressed(false);
                             itemAt.setSelected(false);
-                            if (i == 21) {
+                            if (Build.VERSION.SDK_INT == 21) {
                                 itemAt.getBackground().setVisible(false, false);
                             }
                         } else {
                             itemAt.setPressed(true);
                             itemAt.setSelected(true);
-                            if (i >= 21) {
-                                if (i == 21) {
+                            int i2 = Build.VERSION.SDK_INT;
+                            if (i2 >= 21) {
+                                if (i2 == 21) {
                                     itemAt.getBackground().setVisible(true, false);
                                 }
                                 itemAt.drawableHotspotChanged(f2, f3 - ((float) itemAt.getTop()));

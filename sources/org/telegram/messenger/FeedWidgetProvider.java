@@ -25,7 +25,7 @@ public class FeedWidgetProvider extends AppWidgetProvider {
     public void onDeleted(Context context, int[] iArr) {
         super.onDeleted(context, iArr);
         for (int i = 0; i < iArr.length; i++) {
-            SharedPreferences.Editor edit = context.getSharedPreferences("feed_widget", 0).edit();
+            SharedPreferences.Editor edit = context.getSharedPreferences("shortcut_widget", 0).edit();
             SharedPreferences.Editor remove = edit.remove("account" + iArr[i]);
             remove.remove("dialogId" + iArr[i]).commit();
         }
@@ -40,7 +40,7 @@ public class FeedWidgetProvider extends AppWidgetProvider {
         remoteViews.setEmptyView(NUM, NUM);
         Intent intent2 = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
         intent2.setAction("com.tmessages.openchat" + Math.random() + Integer.MAX_VALUE);
-        intent2.setFlags(32768);
+        intent2.addFlags(67108864);
         intent2.addCategory("android.intent.category.LAUNCHER");
         remoteViews.setPendingIntentTemplate(NUM, PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, NUM));
         appWidgetManager.updateAppWidget(i, remoteViews);

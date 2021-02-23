@@ -20,6 +20,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.WallpaperParallaxEffect;
 
 public class SizeNotifierFrameLayout extends FrameLayout {
+    protected AdjustPanLayoutHelper adjustPanLayoutHelper;
     private Drawable backgroundDrawable;
     private int backgroundTranslationY;
     private int bottomClip;
@@ -61,7 +62,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         this.paused = true;
         setWillNotDraw(false);
         this.parentLayout = actionBarLayout;
-        createAdjustPanLayoutHelper();
+        this.adjustPanLayoutHelper = createAdjustPanLayoutHelper();
     }
 
     public void setBackgroundImage(Drawable drawable, boolean z) {

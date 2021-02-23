@@ -18,6 +18,7 @@ public abstract class TLRPC$Chat extends TLObject {
     public boolean explicit_content;
     public boolean fake;
     public int flags;
+    public boolean gigagroup;
     public boolean has_geo;
     public boolean has_link;
     public int id;

@@ -176,7 +176,6 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
 
     /* access modifiers changed from: private */
     public static WindowManager.LayoutParams createWindowLayoutParams(Context context, int i, int i2, float f) {
-        int i3 = Build.VERSION.SDK_INT;
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         float f2 = (float) i2;
         float f3 = f2 * 0.4f;
@@ -188,12 +187,12 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
         layoutParams.format = -3;
         if (!AndroidUtilities.checkInlinePermissions(context)) {
             layoutParams.type = 99;
-        } else if (i3 >= 26) {
+        } else if (Build.VERSION.SDK_INT >= 26) {
             layoutParams.type = 2038;
         } else {
             layoutParams.type = 2003;
         }
-        if (i3 >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             layoutParams.flags |= Integer.MIN_VALUE;
         }
         layoutParams.flags = 16778120;

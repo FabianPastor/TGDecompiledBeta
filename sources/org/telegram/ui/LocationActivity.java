@@ -523,11 +523,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     public View createView(Context context) {
         FrameLayout.LayoutParams layoutParams;
+        FrameLayout frameLayout;
         String str;
-        String str2;
+        FrameLayout.LayoutParams layoutParams2;
         int i;
+        int i2;
         Context context2 = context;
-        int i2 = Build.VERSION.SDK_INT;
         this.searchWas = false;
         this.searching = false;
         this.searchInProgress = false;
@@ -647,8 +648,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             } else if (messageObject2.isLiveLocation()) {
                 this.actionBar.setTitle(LocaleController.getString("AttachLiveLocation", NUM));
             } else {
-                String str3 = this.messageObject.messageOwner.media.title;
-                if (str3 == null || str3.length() <= 0) {
+                String str2 = this.messageObject.messageOwner.media.title;
+                if (str2 == null || str2.length() <= 0) {
                     this.actionBar.setTitle(LocaleController.getString("ChatLocation", NUM));
                 } else {
                     this.actionBar.setTitle(LocaleController.getString("SharedPlace", NUM));
@@ -686,7 +687,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         };
         this.fragmentView = r0;
-        FrameLayout frameLayout = r0;
+        FrameLayout frameLayout2 = r0;
         r0.setBackgroundColor(Theme.getColor("dialogBackground"));
         Drawable mutate = context.getResources().getDrawable(NUM).mutate();
         this.shadowDrawable = mutate;
@@ -699,8 +700,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         } else {
             layoutParams = new FrameLayout.LayoutParams(-1, AndroidUtilities.dp(6.0f) + rect.top);
         }
-        FrameLayout.LayoutParams layoutParams2 = layoutParams;
-        layoutParams2.gravity = 83;
+        FrameLayout.LayoutParams layoutParams3 = layoutParams;
+        layoutParams3.gravity = 83;
         AnonymousClass4 r02 = new FrameLayout(context2) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
@@ -712,13 +713,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         };
         this.mapViewClip = r02;
         r02.setBackgroundDrawable(new MapPlaceholderDrawable());
-        FrameLayout frameLayout2 = frameLayout;
-        if (this.messageObject == null && ((i = this.locationType) == 0 || i == 1)) {
+        FrameLayout.LayoutParams layoutParams4 = layoutParams3;
+        if (this.messageObject == null && ((i2 = this.locationType) == 0 || i2 == 1)) {
             SearchButton searchButton = new SearchButton(context2);
             this.searchAreaButton = searchButton;
             searchButton.setTranslationX((float) (-AndroidUtilities.dp(80.0f)));
             Drawable createSimpleSelectorRoundRectDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(40.0f), Theme.getColor("location_actionBackground"), Theme.getColor("location_actionPressedBackground"));
-            if (i2 < 21) {
+            int i4 = Build.VERSION.SDK_INT;
+            if (i4 < 21) {
                 Drawable mutate2 = context.getResources().getDrawable(NUM).mutate();
                 mutate2.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
                 CombinedDrawable combinedDrawable = new CombinedDrawable(mutate2, createSimpleSelectorRoundRectDrawable, AndroidUtilities.dp(2.0f), AndroidUtilities.dp(2.0f));
@@ -745,7 +747,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.searchAreaButton.setText(LocaleController.getString("PlacesInThisArea", NUM));
             this.searchAreaButton.setGravity(17);
             this.searchAreaButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-            this.mapViewClip.addView(this.searchAreaButton, LayoutHelper.createFrame(-2, i2 >= 21 ? 40.0f : 44.0f, 49, 80.0f, 12.0f, 80.0f, 0.0f));
+            this.mapViewClip.addView(this.searchAreaButton, LayoutHelper.createFrame(-2, i4 >= 21 ? 40.0f : 44.0f, 49, 80.0f, 12.0f, 80.0f, 0.0f));
             this.searchAreaButton.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
                     LocationActivity.this.lambda$createView$0$LocationActivity(view);
@@ -763,19 +765,22 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.mapTypeButton.addSubItem(4, NUM, LocaleController.getString("Hybrid", NUM));
         this.mapTypeButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), Theme.getColor("location_actionBackground"), Theme.getColor("location_actionPressedBackground"));
-        if (i2 < 21) {
+        int i5 = Build.VERSION.SDK_INT;
+        if (i5 < 21) {
             Drawable mutate3 = context.getResources().getDrawable(NUM).mutate();
             mutate3.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable2 = new CombinedDrawable(mutate3, createSimpleSelectorCircleDrawable, 0, 0);
             combinedDrawable2.setIconSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
             createSimpleSelectorCircleDrawable = combinedDrawable2;
             str = "location_actionIcon";
+            frameLayout = frameLayout2;
         } else {
             StateListAnimator stateListAnimator2 = new StateListAnimator();
             ActionBarMenuItem actionBarMenuItem2 = this.mapTypeButton;
             Property property2 = View.TRANSLATION_Z;
             str = "location_actionIcon";
             stateListAnimator2.addState(new int[]{16842919}, ObjectAnimator.ofFloat(actionBarMenuItem2, property2, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
+            frameLayout = frameLayout2;
             stateListAnimator2.addState(new int[0], ObjectAnimator.ofFloat(this.mapTypeButton, property2, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.mapTypeButton.setStateListAnimator(stateListAnimator2);
             this.mapTypeButton.setOutlineProvider(new ViewOutlineProvider(this) {
@@ -787,7 +792,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
         this.mapTypeButton.setBackgroundDrawable(createSimpleSelectorCircleDrawable);
         this.mapTypeButton.setIcon(NUM);
-        this.mapViewClip.addView(this.mapTypeButton, LayoutHelper.createFrame(i2 >= 21 ? 40 : 44, i2 >= 21 ? 40.0f : 44.0f, 53, 0.0f, 12.0f, 12.0f, 0.0f));
+        this.mapViewClip.addView(this.mapTypeButton, LayoutHelper.createFrame(i5 >= 21 ? 40 : 44, i5 >= 21 ? 40.0f : 44.0f, 53, 0.0f, 12.0f, 12.0f, 0.0f));
         this.mapTypeButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 LocationActivity.this.lambda$createView$1$LocationActivity(view);
@@ -800,20 +805,17 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         });
         this.locationButton = new ImageView(context2);
         Drawable createSimpleSelectorCircleDrawable2 = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), Theme.getColor("location_actionBackground"), Theme.getColor("location_actionPressedBackground"));
-        if (i2 < 21) {
+        if (i5 < 21) {
             Drawable mutate4 = context.getResources().getDrawable(NUM).mutate();
             mutate4.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable3 = new CombinedDrawable(mutate4, createSimpleSelectorCircleDrawable2, 0, 0);
             combinedDrawable3.setIconSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
             createSimpleSelectorCircleDrawable2 = combinedDrawable3;
-            str2 = "location_actionPressedBackground";
         } else {
             StateListAnimator stateListAnimator3 = new StateListAnimator();
             ImageView imageView = this.locationButton;
             Property property3 = View.TRANSLATION_Z;
-            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(imageView, property3, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)});
-            str2 = "location_actionPressedBackground";
-            stateListAnimator3.addState(new int[]{16842919}, ofFloat.setDuration(200));
+            stateListAnimator3.addState(new int[]{16842919}, ObjectAnimator.ofFloat(imageView, property3, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             stateListAnimator3.addState(new int[0], ObjectAnimator.ofFloat(this.locationButton, property3, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.locationButton.setStateListAnimator(stateListAnimator3);
             this.locationButton.setOutlineProvider(new ViewOutlineProvider(this) {
@@ -829,8 +831,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_actionActiveIcon"), PorterDuff.Mode.MULTIPLY));
         this.locationButton.setTag("location_actionActiveIcon");
         this.locationButton.setContentDescription(LocaleController.getString("AccDescrMyLocation", NUM));
-        FrameLayout.LayoutParams createFrame = LayoutHelper.createFrame(i2 >= 21 ? 40 : 44, i2 >= 21 ? 40.0f : 44.0f, 85, 0.0f, 0.0f, 12.0f, 12.0f);
-        createFrame.bottomMargin += layoutParams2.height - rect.top;
+        FrameLayout.LayoutParams createFrame = LayoutHelper.createFrame(i5 >= 21 ? 40 : 44, i5 >= 21 ? 40.0f : 44.0f, 85, 0.0f, 0.0f, 12.0f, 12.0f);
+        FrameLayout.LayoutParams layoutParams5 = layoutParams4;
+        createFrame.bottomMargin += layoutParams5.height - rect.top;
         this.mapViewClip.addView(this.locationButton, createFrame);
         this.locationButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
@@ -838,17 +841,19 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         });
         this.proximityButton = new ImageView(context2);
-        Drawable createSimpleSelectorCircleDrawable3 = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), Theme.getColor("location_actionBackground"), Theme.getColor(str2));
-        if (i2 < 21) {
+        Drawable createSimpleSelectorCircleDrawable3 = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), Theme.getColor("location_actionBackground"), Theme.getColor("location_actionPressedBackground"));
+        if (i5 < 21) {
             Drawable mutate5 = context.getResources().getDrawable(NUM).mutate();
             mutate5.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable4 = new CombinedDrawable(mutate5, createSimpleSelectorCircleDrawable3, 0, 0);
             combinedDrawable4.setIconSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
             createSimpleSelectorCircleDrawable3 = combinedDrawable4;
+            layoutParams2 = layoutParams5;
         } else {
             StateListAnimator stateListAnimator4 = new StateListAnimator();
             ImageView imageView2 = this.proximityButton;
             Property property4 = View.TRANSLATION_Z;
+            layoutParams2 = layoutParams5;
             stateListAnimator4.addState(new int[]{16842919}, ObjectAnimator.ofFloat(imageView2, property4, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             stateListAnimator4.addState(new int[0], ObjectAnimator.ofFloat(this.proximityButton, property4, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.proximityButton.setStateListAnimator(stateListAnimator4);
@@ -863,7 +868,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.proximityButton.setBackgroundDrawable(createSimpleSelectorCircleDrawable3);
         this.proximityButton.setScaleType(ImageView.ScaleType.CENTER);
         this.proximityButton.setContentDescription(LocaleController.getString("AccDescrLocationNotify", NUM));
-        this.mapViewClip.addView(this.proximityButton, LayoutHelper.createFrame(i2 >= 21 ? 40 : 44, i2 >= 21 ? 40.0f : 44.0f, 53, 0.0f, 62.0f, 12.0f, 0.0f));
+        this.mapViewClip.addView(this.proximityButton, LayoutHelper.createFrame(i5 >= 21 ? 40 : 44, i5 >= 21 ? 40.0f : 44.0f, 53, 0.0f, 62.0f, 12.0f, 0.0f));
         this.proximityButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 LocationActivity.this.lambda$createView$6$LocationActivity(view);
@@ -903,7 +908,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.emptyView.setGravity(1);
         this.emptyView.setPadding(0, AndroidUtilities.dp(160.0f), 0, 0);
         this.emptyView.setVisibility(8);
-        FrameLayout frameLayout3 = frameLayout2;
+        FrameLayout frameLayout3 = frameLayout;
         frameLayout3.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.emptyView.setOnTouchListener($$Lambda$LocationActivity$u7MvSmMkgdFfduHBmEIeEkTxpcg.INSTANCE);
         ImageView imageView3 = new ImageView(context2);
@@ -928,7 +933,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.emptyView.addView(this.emptySubtitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 6, 0, 0));
         RecyclerListView recyclerListView = new RecyclerListView(context2);
         this.listView = recyclerListView;
-        FrameLayout.LayoutParams layoutParams3 = layoutParams2;
+        AnonymousClass9 r9 = r0;
         AnonymousClass9 r03 = new LocationActivityAdapter(context, this.locationType, this.dialogId, false) {
             /* access modifiers changed from: protected */
             public void onDirectionClick() {
@@ -950,8 +955,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
             }
         };
-        this.adapter = r03;
-        recyclerListView.setAdapter(r03);
+        this.adapter = r9;
+        recyclerListView.setAdapter(r9);
         this.adapter.setUpdateRunnable(new Runnable() {
             public final void run() {
                 LocationActivity.this.lambda$createView$8$LocationActivity();
@@ -1103,6 +1108,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             RecyclerListView recyclerListView3 = new RecyclerListView(context2);
             this.searchListView = recyclerListView3;
             recyclerListView3.setVisibility(8);
+            i = 0;
             this.searchListView.setLayoutManager(new LinearLayoutManager(context2, 1, false));
             AnonymousClass12 r05 = new LocationActivitySearchAdapter(context2) {
                 public void notifyDataSetChanged() {
@@ -1134,14 +1140,17 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     LocationActivity.this.lambda$createView$20$LocationActivity(view, i);
                 }
             });
-        } else if ((messageObject4 != null && !messageObject4.isLiveLocation()) || this.chatLocation != null) {
-            TLRPC$TL_channelLocation tLRPC$TL_channelLocation = this.chatLocation;
-            if (tLRPC$TL_channelLocation != null) {
-                this.adapter.setChatLocation(tLRPC$TL_channelLocation);
-            } else {
-                MessageObject messageObject5 = this.messageObject;
-                if (messageObject5 != null) {
-                    this.adapter.setMessageObject(messageObject5);
+        } else {
+            i = 0;
+            if ((messageObject4 != null && !messageObject4.isLiveLocation()) || this.chatLocation != null) {
+                TLRPC$TL_channelLocation tLRPC$TL_channelLocation = this.chatLocation;
+                if (tLRPC$TL_channelLocation != null) {
+                    this.adapter.setChatLocation(tLRPC$TL_channelLocation);
+                } else {
+                    MessageObject messageObject5 = this.messageObject;
+                    if (messageObject5 != null) {
+                        this.adapter.setMessageObject(messageObject5);
+                    }
                 }
             }
         }
@@ -1149,13 +1158,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         if (messageObject6 != null && this.locationType == 6) {
             this.adapter.setMessageObject(messageObject6);
         }
-        for (int i4 = 0; i4 < 2; i4++) {
-            this.undoView[i4] = new UndoView(context2);
-            this.undoView[i4].setAdditionalTranslationY((float) AndroidUtilities.dp(10.0f));
-            if (i2 >= 21) {
-                this.undoView[i4].setTranslationZ((float) AndroidUtilities.dp(5.0f));
+        while (i < 2) {
+            this.undoView[i] = new UndoView(context2);
+            this.undoView[i].setAdditionalTranslationY((float) AndroidUtilities.dp(10.0f));
+            if (Build.VERSION.SDK_INT >= 21) {
+                this.undoView[i].setTranslationZ((float) AndroidUtilities.dp(5.0f));
             }
-            this.mapViewClip.addView(this.undoView[i4], LayoutHelper.createFrame(-1, -2.0f, 83, 8.0f, 0.0f, 8.0f, 8.0f));
+            this.mapViewClip.addView(this.undoView[i], LayoutHelper.createFrame(-1, -2.0f, 83, 8.0f, 0.0f, 8.0f, 8.0f));
+            i++;
         }
         AnonymousClass14 r06 = new View(context2) {
             private RectF rect = new RectF();
@@ -1176,10 +1186,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         };
         this.shadow = r06;
-        if (i2 >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             r06.setTranslationZ((float) AndroidUtilities.dp(6.0f));
         }
-        this.mapViewClip.addView(this.shadow, layoutParams3);
+        this.mapViewClip.addView(this.shadow, layoutParams2);
         if (this.messageObject == null && this.chatLocation == null && this.initialLocation != null) {
             this.userLocationMoved = true;
             this.locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), PorterDuff.Mode.MULTIPLY));
@@ -2422,7 +2432,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
             org.telegram.ui.Components.HintView r1 = r7.hintView
-            r3 = 2131626901(0x7f0e0b95, float:1.8881051E38)
+            r3 = 2131627002(0x7f0e0bfa, float:1.8881256E38)
             java.lang.Object[] r5 = new java.lang.Object[r4]
             java.lang.String r0 = org.telegram.messenger.UserObject.getFirstName(r0)
             r5[r2] = r0
@@ -2432,7 +2442,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             goto L_0x0063
         L_0x0055:
             org.telegram.ui.Components.HintView r0 = r7.hintView
-            r1 = 2131626900(0x7f0e0b94, float:1.888105E38)
+            r1 = 2131627001(0x7f0e0bf9, float:1.8881254E38)
             java.lang.String r2 = "ProximityTooltioGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setOverrideText(r1)

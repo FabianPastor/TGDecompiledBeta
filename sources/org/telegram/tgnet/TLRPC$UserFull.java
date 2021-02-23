@@ -16,17 +16,28 @@ public abstract class TLRPC$UserFull extends TLObject {
     public int pinned_msg_id;
     public TLRPC$Photo profile_photo;
     public TLRPC$TL_peerSettings settings;
+    public int ttl_period;
     public TLRPC$User user;
     public boolean video_calls_available;
 
     public static TLRPC$UserFull TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$UserFull tLRPC$UserFull;
-        if (i == -NUM) {
-            tLRPC$UserFull = new TLRPC$TL_userFull_layer98();
-        } else if (i != -NUM) {
-            tLRPC$UserFull = i != NUM ? null : new TLRPC$TL_userFull_layer101();
-        } else {
-            tLRPC$UserFull = new TLRPC$TL_userFull();
+        switch (i) {
+            case -1901811583:
+                tLRPC$UserFull = new TLRPC$TL_userFull_layer98();
+                break;
+            case -302941166:
+                tLRPC$UserFull = new TLRPC$TL_userFull_layer123();
+                break;
+            case 328899191:
+                tLRPC$UserFull = new TLRPC$TL_userFull();
+                break;
+            case 1951750604:
+                tLRPC$UserFull = new TLRPC$TL_userFull_layer101();
+                break;
+            default:
+                tLRPC$UserFull = null;
+                break;
         }
         if (tLRPC$UserFull != null || !z) {
             if (tLRPC$UserFull != null) {

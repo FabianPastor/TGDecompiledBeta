@@ -59,13 +59,14 @@ public final /* synthetic */ class k {
             LinkedHashSet linkedHashSet = (LinkedHashSet) collection;
             linkedHashSet.getClass();
             return new v.i((Collection) linkedHashSet, 17);
-        } else if (collection instanceof SortedSet) {
+        } else if (collection instanceof java.util.List) {
+            return List.CC.$default$spliterator((java.util.List) collection);
+        } else {
+            if (!(collection instanceof SortedSet)) {
+                return collection instanceof Set ? Set.CC.$default$spliterator((java.util.Set) collection) : Collection.CC.$default$spliterator(collection);
+            }
             SortedSet sortedSet = (SortedSet) collection;
             return new u(sortedSet, sortedSet, 21);
-        } else if (collection instanceof Set) {
-            return Set.CC.$default$spliterator((java.util.Set) collection);
-        } else {
-            return collection instanceof java.util.List ? List.CC.$default$spliterator((java.util.List) collection) : Collection.CC.$default$spliterator(collection);
         }
     }
 

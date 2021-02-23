@@ -314,6 +314,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$GroupVoipInviteAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants) {
+        int i;
         SparseArray<TLObject> sparseArray;
         ArrayList<TLObject> arrayList;
         boolean z;
@@ -322,15 +323,15 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             TLRPC$TL_channels_channelParticipants tLRPC$TL_channels_channelParticipants = (TLRPC$TL_channels_channelParticipants) tLObject;
             MessagesController.getInstance(this.currentAccount).putUsers(tLRPC$TL_channels_channelParticipants.users, false);
             int clientUserId = UserConfig.getInstance(this.currentAccount).getClientUserId();
-            int i = 0;
+            int i2 = 0;
             while (true) {
-                if (i >= tLRPC$TL_channels_channelParticipants.participants.size()) {
+                if (i2 >= tLRPC$TL_channels_channelParticipants.participants.size()) {
                     break;
-                } else if (tLRPC$TL_channels_channelParticipants.participants.get(i).user_id == clientUserId) {
-                    tLRPC$TL_channels_channelParticipants.participants.remove(i);
+                } else if (tLRPC$TL_channels_channelParticipants.participants.get(i2).user_id == clientUserId) {
+                    tLRPC$TL_channels_channelParticipants.participants.remove(i2);
                     break;
                 } else {
-                    i++;
+                    i2++;
                 }
             }
             this.delayResults--;
@@ -344,14 +345,14 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             arrayList.clear();
             arrayList.addAll(tLRPC$TL_channels_channelParticipants.participants);
             int size = tLRPC$TL_channels_channelParticipants.participants.size();
-            for (int i2 = 0; i2 < size; i2++) {
-                TLRPC$ChannelParticipant tLRPC$ChannelParticipant = tLRPC$TL_channels_channelParticipants.participants.get(i2);
+            for (int i3 = 0; i3 < size; i3++) {
+                TLRPC$ChannelParticipant tLRPC$ChannelParticipant = tLRPC$TL_channels_channelParticipants.participants.get(i3);
                 sparseArray.put(tLRPC$ChannelParticipant.user_id, tLRPC$ChannelParticipant);
             }
             int size2 = this.participants.size();
-            int i3 = 0;
-            while (i3 < size2) {
-                TLRPC$ChannelParticipant tLRPC$ChannelParticipant2 = (TLRPC$ChannelParticipant) this.participants.get(i3);
+            int i4 = 0;
+            while (i4 < size2) {
+                TLRPC$ChannelParticipant tLRPC$ChannelParticipant2 = (TLRPC$ChannelParticipant) this.participants.get(i4);
                 if (this.contactsMap.get(tLRPC$ChannelParticipant2.user_id) == null && ((sparseArray2 = this.ignoredUsers) == null || sparseArray2.indexOfKey(tLRPC$ChannelParticipant2.user_id) < 0)) {
                     z = false;
                 } else {
@@ -362,12 +363,12 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                     z = true;
                 }
                 if (z) {
-                    this.participants.remove(i3);
+                    this.participants.remove(i4);
                     this.participantsMap.remove(tLRPC$ChannelParticipant2.user_id);
-                    i3--;
+                    i4--;
                     size2--;
                 }
-                i3++;
+                i4++;
             }
             try {
                 if (this.info.participants_count <= 200) {
@@ -418,8 +419,13 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
         if (this.delayResults <= 0) {
             this.loadingUsers = false;
             this.firstLoaded = true;
-            RecyclerListView.SelectionAdapter selectionAdapter = this.listViewAdapter;
-            showItemsAnimated(selectionAdapter != null ? selectionAdapter.getItemCount() - 1 : 0);
+            if (this.flickerProgressRow == 1) {
+                i = 1;
+            } else {
+                RecyclerListView.SelectionAdapter selectionAdapter = this.listViewAdapter;
+                i = selectionAdapter != null ? selectionAdapter.getItemCount() - 1 : 0;
+            }
+            showItemsAnimated(i);
         }
         updateRows();
         RecyclerListView.SelectionAdapter selectionAdapter2 = this.listViewAdapter;
@@ -906,7 +912,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 android.content.Context r0 = r2.mContext
                 r1 = 0
                 r4.<init>(r0, r3, r3, r1)
-                r3 = 2131165750(0x7var_, float:1.7945726E38)
+                r3 = 2131165751(0x7var_, float:1.7945728E38)
                 r4.setCustomRightImage(r3)
                 java.lang.String r3 = "voipgroup_nameText"
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
@@ -948,7 +954,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 org.telegram.ui.Cells.GraySectionCell r14 = (org.telegram.ui.Cells.GraySectionCell) r14
                 int r0 = r13.groupStartRow
                 if (r15 != r0) goto L_0x0021
-                r15 = 2131624672(0x7f0e02e0, float:1.887653E38)
+                r15 = 2131624714(0x7f0e030a, float:1.8876616E38)
                 java.lang.String r0 = "ChannelMembers"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -956,7 +962,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             L_0x0021:
                 int r0 = r13.globalStartRow
                 if (r15 != r0) goto L_0x012f
-                r15 = 2131625610(0x7f0e068a, float:1.8878433E38)
+                r15 = 2131625679(0x7f0e06cf, float:1.8878573E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -1194,7 +1200,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 android.content.Context r3 = r5.mContext
                 r4 = 0
                 r7.<init>(r3, r0, r1, r4)
-                r0 = 2131165750(0x7var_, float:1.7945726E38)
+                r0 = 2131165751(0x7var_, float:1.7945728E38)
                 r7.setCustomRightImage(r0)
                 java.lang.String r0 = "voipgroup_nameText"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)

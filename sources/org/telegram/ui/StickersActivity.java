@@ -614,14 +614,13 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         public void processSelectionMenu(int i) {
             String str;
             TextView textView;
-            Boolean bool = Boolean.FALSE;
             if (i == 0 || i == 1) {
                 ArrayList arrayList = new ArrayList(this.selectedItems.size());
                 int size = this.stickerSets.size();
                 int i2 = 0;
                 for (int i3 = 0; i3 < size; i3++) {
                     TLRPC$StickerSet tLRPC$StickerSet = this.stickerSets.get(i3).set;
-                    if (this.selectedItems.get(tLRPC$StickerSet.id, bool).booleanValue()) {
+                    if (this.selectedItems.get(tLRPC$StickerSet.id, Boolean.FALSE).booleanValue()) {
                         arrayList.add(tLRPC$StickerSet);
                     }
                 }
@@ -668,7 +667,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         break;
                     }
                     TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.stickerSets.get(i2);
-                    if (this.selectedItems.get(tLRPC$TL_messages_stickerSet.set.id, bool).booleanValue()) {
+                    if (this.selectedItems.get(tLRPC$TL_messages_stickerSet.set.id, Boolean.FALSE).booleanValue()) {
                         processSelectionOption(i, tLRPC$TL_messages_stickerSet);
                         break;
                     }

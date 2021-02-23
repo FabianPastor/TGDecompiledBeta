@@ -1613,7 +1613,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     }
                     spannableStringBuilder.setSpan(new TypefaceSpan(AndroidUtilities.getTypeface("fonts/rmedium.ttf"), 0, Theme.getColor("inappPlayerPerformer")), 0, playingMessageObject.getMusicAuthor().length(), 18);
                     AudioPlayerAlert.ClippingTextViewSwitcher clippingTextViewSwitcher3 = this.titleTextView;
-                    if (z || !z3) {
+                    if (z || !z3 || !this.isMusic) {
                         z2 = false;
                     }
                     clippingTextViewSwitcher3.setText(spannableStringBuilder, z2);
@@ -2000,7 +2000,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r3 = r3.participants_count
             if (r3 != 0) goto L_0x01ca
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r3 = r13.subtitleTextView
-            r6 = 2131625988(0x7f0e0804, float:1.88792E38)
+            r6 = 2131626074(0x7f0e085a, float:1.8879374E38)
             java.lang.String r8 = "MembersTalkingNobody"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
             r3.setText(r6, r2)

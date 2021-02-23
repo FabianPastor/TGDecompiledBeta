@@ -53,6 +53,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
             case -1503425638:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatCreate();
                 break;
+            case -1441072131:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionSetMessagesTTL();
+                break;
             case -1410748418:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionBotAllowed();
                 break;

@@ -67,7 +67,7 @@ public class UsersAlertBase extends BottomSheet {
     public RectF rect = new RectF();
     protected int scrollOffsetY;
     protected RecyclerListView.SelectionAdapter searchListViewAdapter;
-    private SearchField searchView;
+    protected SearchField searchView;
     protected View shadow;
     protected AnimatorSet shadowAnimation;
     protected Drawable shadowDrawable;
@@ -188,13 +188,12 @@ public class UsersAlertBase extends BottomSheet {
         return new ContainerView(context);
     }
 
-    private class SearchField extends FrameLayout {
+    protected class SearchField extends FrameLayout {
         /* access modifiers changed from: private */
         public final ImageView clearSearchImageView;
         private final CloseProgressDrawable2 progressDrawable;
         private final View searchBackground;
-        /* access modifiers changed from: private */
-        public EditTextBoldCursor searchEditText;
+        protected EditTextBoldCursor searchEditText;
         private final ImageView searchIconImageView;
 
         public SearchField(Context context) {
@@ -325,6 +324,11 @@ public class UsersAlertBase extends BottomSheet {
         public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
             UsersAlertBase.this.onSearchViewTouched(motionEvent, this.searchEditText);
             return super.onInterceptTouchEvent(motionEvent);
+        }
+
+        public void closeSearch() {
+            this.clearSearchImageView.callOnClick();
+            AndroidUtilities.hideKeyboard(this.searchEditText);
         }
     }
 

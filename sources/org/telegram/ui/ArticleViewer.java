@@ -195,6 +195,7 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimatedArrowDrawable;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.AvatarDrawable;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CloseProgressDrawable2;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.ContextProgressView;
@@ -4478,11 +4479,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
     public void setParentActivity(Activity activity, BaseFragment baseFragment) {
         Activity activity2 = activity;
-        int i = Build.VERSION.SDK_INT;
         this.parentFragment = baseFragment;
-        int i2 = UserConfig.selectedAccount;
-        this.currentAccount = i2;
-        NotificationCenter.getInstance(i2).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        int i = UserConfig.selectedAccount;
+        this.currentAccount = i;
+        NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidStart);
@@ -4623,7 +4623,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         };
         this.containerView = r0;
         this.windowView.addView(r0, LayoutHelper.createFrame(-1, -1, 51));
-        if (i >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             this.windowView.setFitsSystemWindows(true);
             this.containerView.setOnApplyWindowInsetsListener($$Lambda$ArticleViewer$MrG0DY2G_kHKw3iS8TOtt00Oo1o.INSTANCE);
         }
@@ -4640,12 +4640,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.listView = new RecyclerListView[2];
         this.adapter = new WebpageAdapter[2];
         this.layoutManager = new LinearLayoutManager[2];
-        int i3 = 0;
-        while (i3 < this.listView.length) {
+        int i2 = 0;
+        while (i2 < this.listView.length) {
             WebpageAdapter[] webpageAdapterArr = this.adapter;
             final WebpageAdapter webpageAdapter = new WebpageAdapter(this.parentActivity);
-            webpageAdapterArr[i3] = webpageAdapter;
-            this.listView[i3] = new RecyclerListView(activity2) {
+            webpageAdapterArr[i2] = webpageAdapter;
+            this.listView[i2] = new RecyclerListView(activity2) {
                 /* access modifiers changed from: protected */
                 public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                     super.onLayout(z, i, i2, i3, i4);
@@ -4694,24 +4694,24 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
                 }
             };
-            ((DefaultItemAnimator) this.listView[i3].getItemAnimator()).setDelayAnimations(false);
-            RecyclerListView recyclerListView = this.listView[i3];
+            ((DefaultItemAnimator) this.listView[i2].getItemAnimator()).setDelayAnimations(false);
+            RecyclerListView recyclerListView = this.listView[i2];
             LinearLayoutManager[] linearLayoutManagerArr = this.layoutManager;
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.parentActivity, 1, false);
-            linearLayoutManagerArr[i3] = linearLayoutManager;
+            linearLayoutManagerArr[i2] = linearLayoutManager;
             recyclerListView.setLayoutManager(linearLayoutManager);
-            this.listView[i3].setAdapter(webpageAdapter);
-            this.listView[i3].setClipToPadding(false);
-            this.listView[i3].setVisibility(i3 == 0 ? 0 : 8);
-            this.listView[i3].setPadding(0, AndroidUtilities.dp(56.0f), 0, 0);
-            this.listView[i3].setTopGlowOffset(AndroidUtilities.dp(56.0f));
-            this.containerView.addView(this.listView[i3], LayoutHelper.createFrame(-1, -1.0f));
-            this.listView[i3].setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
+            this.listView[i2].setAdapter(webpageAdapter);
+            this.listView[i2].setClipToPadding(false);
+            this.listView[i2].setVisibility(i2 == 0 ? 0 : 8);
+            this.listView[i2].setPadding(0, AndroidUtilities.dp(56.0f), 0, 0);
+            this.listView[i2].setTopGlowOffset(AndroidUtilities.dp(56.0f));
+            this.containerView.addView(this.listView[i2], LayoutHelper.createFrame(-1, -1.0f));
+            this.listView[i2].setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
                 public final boolean onItemClick(View view, int i) {
                     return ArticleViewer.this.lambda$setParentActivity$8$ArticleViewer(view, i);
                 }
             });
-            this.listView[i3].setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended(webpageAdapter) {
+            this.listView[i2].setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended(webpageAdapter) {
                 public final /* synthetic */ ArticleViewer.WebpageAdapter f$1;
 
                 {
@@ -4722,7 +4722,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     ArticleViewer.this.lambda$setParentActivity$11$ArticleViewer(this.f$1, view, i, f, f2);
                 }
             });
-            this.listView[i3].setOnScrollListener(new RecyclerView.OnScrollListener() {
+            this.listView[i2].setOnScrollListener(new RecyclerView.OnScrollListener() {
                 public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                     if (i == 0) {
                         ArticleViewer.this.textSelectionHelper.stopScrolling();
@@ -4737,7 +4737,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
                 }
             });
-            i3++;
+            i2++;
         }
         this.headerPaint.setColor(-16777216);
         this.statusBarPaint.setColor(-16777216);
@@ -4814,7 +4814,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.searchContainer = frameLayout3;
         frameLayout3.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         this.searchContainer.setVisibility(4);
-        if (i < 21) {
+        int i3 = Build.VERSION.SDK_INT;
+        if (i3 < 21) {
             this.searchContainer.setAlpha(0.0f);
         }
         this.headerView.addView(this.searchContainer, LayoutHelper.createFrame(-1, 56.0f));
@@ -4838,7 +4839,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.searchField.setBackgroundResource(0);
         this.searchField.setPadding(0, 0, 0, 0);
         this.searchField.setInputType(this.searchField.getInputType() | 524288);
-        if (i < 23) {
+        if (i3 < 23) {
             this.searchField.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
                 public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                     return false;
@@ -5065,9 +5066,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         layoutParams.type = 98;
         layoutParams.softInputMode = 48;
         layoutParams.flags = 131072;
-        if (i >= 21) {
+        if (i3 >= 21) {
             layoutParams.flags = 131072 | -NUM;
-            if (i >= 28) {
+            if (i3 >= 28) {
                 layoutParams.layoutInDisplayCutoutMode = 1;
             }
         }
@@ -5077,13 +5078,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         TextSelectionHelper.ArticleTextSelectionHelper articleTextSelectionHelper2 = this.textSelectionHelper;
         articleTextSelectionHelper2.layoutManager = this.layoutManager[0];
         articleTextSelectionHelper2.setCallback(new TextSelectionHelper.Callback() {
-            public void onTextCopied() {
-            }
-
             public void onStateChanged(boolean z) {
                 if (z) {
                     ArticleViewer.this.showSearch(false);
                 }
+            }
+
+            public void onTextCopied() {
+                BulletinFactory.of(ArticleViewer.this.containerView).createCopyBulletin(LocaleController.getString("TextCopied", NUM)).show();
             }
         });
         this.containerView.addView(this.textSelectionHelper.getOverlayView(activity2));
@@ -5980,270 +5982,284 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         return open((MessageObject) null, tLRPC$TL_webPage, str, true);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x00de  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x00e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x00ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x012d  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x0166  */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x01f5  */
+    /* JADX WARNING: Can't wrap try/catch for region: R(6:56|(2:58|59)|60|61|(2:63|(1:65))|66) */
+    /* JADX WARNING: Code restructure failed: missing block: B:67:0x0159, code lost:
+        r12 = move-exception;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:68:0x015a, code lost:
+        org.telegram.messenger.FileLog.e((java.lang.Throwable) r12);
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:69:0x015d, code lost:
+        return false;
+     */
+    /* JADX WARNING: Failed to process nested try/catch */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:60:0x0134 */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x00d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00de  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x00e7  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x0123  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x013a A[Catch:{ Exception -> 0x0159 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x015e  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x01ef  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private boolean open(org.telegram.messenger.MessageObject r17, org.telegram.tgnet.TLRPC$WebPage r18, java.lang.String r19, boolean r20) {
+    private boolean open(org.telegram.messenger.MessageObject r12, org.telegram.tgnet.TLRPC$WebPage r13, java.lang.String r14, boolean r15) {
         /*
-            r16 = this;
-            r7 = r16
-            r4 = r17
-            r0 = r19
-            int r8 = android.os.Build.VERSION.SDK_INT
-            android.app.Activity r1 = r7.parentActivity
-            r9 = 0
-            if (r1 == 0) goto L_0x01fb
-            boolean r1 = r7.isVisible
-            if (r1 == 0) goto L_0x0015
-            boolean r1 = r7.collapsed
-            if (r1 == 0) goto L_0x01fb
-        L_0x0015:
-            if (r4 != 0) goto L_0x001b
-            if (r18 != 0) goto L_0x001b
-            goto L_0x01fb
-        L_0x001b:
-            r1 = -1
+            r11 = this;
+            android.app.Activity r0 = r11.parentActivity
+            r1 = 0
+            if (r0 == 0) goto L_0x01f5
+            boolean r0 = r11.isVisible
+            if (r0 == 0) goto L_0x000d
+            boolean r0 = r11.collapsed
+            if (r0 == 0) goto L_0x01f5
+        L_0x000d:
+            if (r12 != 0) goto L_0x0013
+            if (r13 != 0) goto L_0x0013
+            goto L_0x01f5
+        L_0x0013:
+            r0 = -1
             r2 = 35
-            r10 = 0
-            r11 = 1
-            if (r4 == 0) goto L_0x008b
-            org.telegram.tgnet.TLRPC$Message r0 = r4.messageOwner
-            org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
-            org.telegram.tgnet.TLRPC$WebPage r3 = r0.webpage
-            r5 = 0
-        L_0x0029:
-            org.telegram.tgnet.TLRPC$Message r0 = r4.messageOwner
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r0 = r0.entities
-            int r0 = r0.size()
-            if (r5 >= r0) goto L_0x009d
-            org.telegram.tgnet.TLRPC$Message r0 = r4.messageOwner
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r0 = r0.entities
-            java.lang.Object r0 = r0.get(r5)
-            org.telegram.tgnet.TLRPC$MessageEntity r0 = (org.telegram.tgnet.TLRPC$MessageEntity) r0
-            boolean r6 = r0 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityUrl
-            if (r6 == 0) goto L_0x0088
-            org.telegram.tgnet.TLRPC$Message r6 = r4.messageOwner     // Catch:{ Exception -> 0x0084 }
-            java.lang.String r6 = r6.message     // Catch:{ Exception -> 0x0084 }
-            int r12 = r0.offset     // Catch:{ Exception -> 0x0084 }
-            int r0 = r0.length     // Catch:{ Exception -> 0x0084 }
-            int r0 = r0 + r12
-            java.lang.String r0 = r6.substring(r12, r0)     // Catch:{ Exception -> 0x0084 }
-            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0084 }
-            org.telegram.tgnet.TLRPC$Page r6 = r3.cached_page     // Catch:{ Exception -> 0x0084 }
-            java.lang.String r6 = r6.url     // Catch:{ Exception -> 0x0084 }
-            boolean r6 = android.text.TextUtils.isEmpty(r6)     // Catch:{ Exception -> 0x0084 }
-            if (r6 != 0) goto L_0x0065
-            org.telegram.tgnet.TLRPC$Page r6 = r3.cached_page     // Catch:{ Exception -> 0x0084 }
-            java.lang.String r6 = r6.url     // Catch:{ Exception -> 0x0084 }
-            java.lang.String r6 = r6.toLowerCase()     // Catch:{ Exception -> 0x0084 }
-            goto L_0x006b
-        L_0x0065:
-            java.lang.String r6 = r3.url     // Catch:{ Exception -> 0x0084 }
-            java.lang.String r6 = r6.toLowerCase()     // Catch:{ Exception -> 0x0084 }
-        L_0x006b:
-            boolean r12 = r0.contains(r6)     // Catch:{ Exception -> 0x0084 }
-            if (r12 != 0) goto L_0x0077
-            boolean r6 = r6.contains(r0)     // Catch:{ Exception -> 0x0084 }
-            if (r6 == 0) goto L_0x0088
-        L_0x0077:
-            int r6 = r0.lastIndexOf(r2)     // Catch:{ Exception -> 0x0084 }
-            if (r6 == r1) goto L_0x009d
+            r3 = 0
+            r4 = 1
+            if (r12 == 0) goto L_0x0085
+            org.telegram.tgnet.TLRPC$Message r13 = r12.messageOwner
+            org.telegram.tgnet.TLRPC$MessageMedia r13 = r13.media
+            org.telegram.tgnet.TLRPC$WebPage r13 = r13.webpage
+            r14 = 0
+        L_0x0021:
+            org.telegram.tgnet.TLRPC$Message r5 = r12.messageOwner
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r5 = r5.entities
+            int r5 = r5.size()
+            if (r14 >= r5) goto L_0x0083
+            org.telegram.tgnet.TLRPC$Message r5 = r12.messageOwner
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r5 = r5.entities
+            java.lang.Object r5 = r5.get(r14)
+            org.telegram.tgnet.TLRPC$MessageEntity r5 = (org.telegram.tgnet.TLRPC$MessageEntity) r5
+            boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityUrl
+            if (r6 == 0) goto L_0x0080
+            org.telegram.tgnet.TLRPC$Message r6 = r12.messageOwner     // Catch:{ Exception -> 0x007c }
+            java.lang.String r6 = r6.message     // Catch:{ Exception -> 0x007c }
+            int r7 = r5.offset     // Catch:{ Exception -> 0x007c }
+            int r5 = r5.length     // Catch:{ Exception -> 0x007c }
+            int r5 = r5 + r7
+            java.lang.String r5 = r6.substring(r7, r5)     // Catch:{ Exception -> 0x007c }
+            java.lang.String r5 = r5.toLowerCase()     // Catch:{ Exception -> 0x007c }
+            org.telegram.tgnet.TLRPC$Page r6 = r13.cached_page     // Catch:{ Exception -> 0x007c }
+            java.lang.String r6 = r6.url     // Catch:{ Exception -> 0x007c }
+            boolean r6 = android.text.TextUtils.isEmpty(r6)     // Catch:{ Exception -> 0x007c }
+            if (r6 != 0) goto L_0x005d
+            org.telegram.tgnet.TLRPC$Page r6 = r13.cached_page     // Catch:{ Exception -> 0x007c }
+            java.lang.String r6 = r6.url     // Catch:{ Exception -> 0x007c }
+            java.lang.String r6 = r6.toLowerCase()     // Catch:{ Exception -> 0x007c }
+            goto L_0x0063
+        L_0x005d:
+            java.lang.String r6 = r13.url     // Catch:{ Exception -> 0x007c }
+            java.lang.String r6 = r6.toLowerCase()     // Catch:{ Exception -> 0x007c }
+        L_0x0063:
+            boolean r7 = r5.contains(r6)     // Catch:{ Exception -> 0x007c }
+            if (r7 != 0) goto L_0x006f
+            boolean r6 = r6.contains(r5)     // Catch:{ Exception -> 0x007c }
+            if (r6 == 0) goto L_0x0080
+        L_0x006f:
+            int r6 = r5.lastIndexOf(r2)     // Catch:{ Exception -> 0x007c }
+            if (r6 == r0) goto L_0x0083
             int r6 = r6 + 1
-            java.lang.String r0 = r0.substring(r6)     // Catch:{ Exception -> 0x0084 }
-            goto L_0x009e
-        L_0x0084:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0088:
-            int r5 = r5 + 1
-            goto L_0x0029
-        L_0x008b:
-            if (r0 == 0) goto L_0x009b
-            int r2 = r0.lastIndexOf(r2)
-            if (r2 == r1) goto L_0x009b
-            int r2 = r2 + r11
-            java.lang.String r0 = r0.substring(r2)
-            r3 = r18
-            goto L_0x009e
-        L_0x009b:
-            r3 = r18
-        L_0x009d:
-            r0 = r10
-        L_0x009e:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$WebPage> r1 = r7.pagesStack
-            r1.clear()
-            r7.collapsed = r9
-            android.widget.FrameLayout r1 = r7.containerView
-            r12 = 0
-            r1.setTranslationX(r12)
-            android.widget.FrameLayout r1 = r7.containerView
-            r1.setTranslationY(r12)
-            org.telegram.ui.Components.RecyclerListView[] r1 = r7.listView
-            r1 = r1[r9]
-            r1.setTranslationY(r12)
-            org.telegram.ui.Components.RecyclerListView[] r1 = r7.listView
-            r1 = r1[r9]
-            r1.setTranslationX(r12)
-            org.telegram.ui.Components.RecyclerListView[] r1 = r7.listView
-            r1 = r1[r11]
-            r1.setTranslationX(r12)
-            org.telegram.ui.Components.RecyclerListView[] r1 = r7.listView
-            r1 = r1[r9]
+            java.lang.String r14 = r5.substring(r6)     // Catch:{ Exception -> 0x007c }
+            goto L_0x0092
+        L_0x007c:
+            r5 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)
+        L_0x0080:
+            int r14 = r14 + 1
+            goto L_0x0021
+        L_0x0083:
+            r14 = r3
+            goto L_0x0092
+        L_0x0085:
+            if (r14 == 0) goto L_0x0094
+            int r2 = r14.lastIndexOf(r2)
+            if (r2 == r0) goto L_0x0094
+            int r2 = r2 + r4
+            java.lang.String r14 = r14.substring(r2)
+        L_0x0092:
+            r7 = r13
+            goto L_0x0096
+        L_0x0094:
+            r7 = r13
+            r14 = r3
+        L_0x0096:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$WebPage> r13 = r11.pagesStack
+            r13.clear()
+            r11.collapsed = r1
+            android.widget.FrameLayout r13 = r11.containerView
+            r0 = 0
+            r13.setTranslationX(r0)
+            android.widget.FrameLayout r13 = r11.containerView
+            r13.setTranslationY(r0)
+            org.telegram.ui.Components.RecyclerListView[] r13 = r11.listView
+            r13 = r13[r1]
+            r13.setTranslationY(r0)
+            org.telegram.ui.Components.RecyclerListView[] r13 = r11.listView
+            r13 = r13[r1]
+            r13.setTranslationX(r0)
+            org.telegram.ui.Components.RecyclerListView[] r13 = r11.listView
+            r13 = r13[r4]
+            r13.setTranslationX(r0)
+            org.telegram.ui.Components.RecyclerListView[] r13 = r11.listView
+            r13 = r13[r1]
             r2 = 1065353216(0x3var_, float:1.0)
-            r1.setAlpha(r2)
-            org.telegram.ui.ArticleViewer$WindowView r1 = r7.windowView
-            r1.setInnerTranslationX(r12)
-            androidx.recyclerview.widget.LinearLayoutManager[] r1 = r7.layoutManager
-            r1 = r1[r9]
-            r1.scrollToPositionWithOffset(r9, r9)
+            r13.setAlpha(r2)
+            org.telegram.ui.ArticleViewer$WindowView r13 = r11.windowView
+            r13.setInnerTranslationX(r0)
+            androidx.recyclerview.widget.LinearLayoutManager[] r13 = r11.layoutManager
+            r13 = r13[r1]
+            r13.scrollToPositionWithOffset(r1, r1)
             r13 = 1113587712(0x42600000, float:56.0)
-            if (r20 == 0) goto L_0x00e6
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            r7.setCurrentHeaderHeight(r1)
-            goto L_0x00e9
-        L_0x00e6:
-            r16.checkScrollAnimated()
-        L_0x00e9:
-            boolean r1 = r7.addPageToStack(r3, r0, r9)
-            if (r20 == 0) goto L_0x0124
-            if (r1 != 0) goto L_0x00f5
-            if (r0 == 0) goto L_0x00f5
-            r6 = r0
-            goto L_0x00f6
-        L_0x00f5:
-            r6 = r10
-        L_0x00f6:
-            org.telegram.tgnet.TLRPC$TL_messages_getWebPage r0 = new org.telegram.tgnet.TLRPC$TL_messages_getWebPage
-            r0.<init>()
-            java.lang.String r1 = r3.url
-            r0.url = r1
-            org.telegram.tgnet.TLRPC$Page r1 = r3.cached_page
-            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pagePart_layer82
-            if (r2 != 0) goto L_0x010f
-            boolean r1 = r1.part
-            if (r1 == 0) goto L_0x010a
-            goto L_0x010f
-        L_0x010a:
-            int r1 = r3.hash
-            r0.hash = r1
-            goto L_0x0111
-        L_0x010f:
-            r0.hash = r9
-        L_0x0111:
-            int r5 = org.telegram.messenger.UserConfig.selectedAccount
-            org.telegram.tgnet.ConnectionsManager r14 = org.telegram.tgnet.ConnectionsManager.getInstance(r5)
-            org.telegram.ui.-$$Lambda$ArticleViewer$4AfJkJkz0NK508Ebn15gbIP5gKQ r15 = new org.telegram.ui.-$$Lambda$ArticleViewer$4AfJkJkz0NK508Ebn15gbIP5gKQ
-            r1 = r15
-            r2 = r16
-            r4 = r17
-            r1.<init>(r3, r4, r5, r6)
-            r14.sendRequest(r0, r15)
-        L_0x0124:
-            r7.lastInsets = r10
-            boolean r0 = r7.isVisible
-            java.lang.String r1 = "window"
-            if (r0 != 0) goto L_0x0166
-            android.app.Activity r0 = r7.parentActivity
-            java.lang.Object r0 = r0.getSystemService(r1)
-            android.view.WindowManager r0 = (android.view.WindowManager) r0
-            boolean r1 = r7.attachedToWindow
-            if (r1 == 0) goto L_0x013e
-            org.telegram.ui.ArticleViewer$WindowView r1 = r7.windowView     // Catch:{ Exception -> 0x013e }
-            r0.removeView(r1)     // Catch:{ Exception -> 0x013e }
-        L_0x013e:
-            r1 = 21
-            if (r8 < r1) goto L_0x014f
-            android.view.WindowManager$LayoutParams r1 = r7.windowLayoutParams     // Catch:{ Exception -> 0x0161 }
+            if (r15 == 0) goto L_0x00de
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            r11.setCurrentHeaderHeight(r2)
+            goto L_0x00e1
+        L_0x00de:
+            r11.checkScrollAnimated()
+        L_0x00e1:
+            boolean r2 = r11.addPageToStack(r7, r14, r1)
+            if (r15 == 0) goto L_0x011a
+            if (r2 != 0) goto L_0x00ed
+            if (r14 == 0) goto L_0x00ed
+            r10 = r14
+            goto L_0x00ee
+        L_0x00ed:
+            r10 = r3
+        L_0x00ee:
+            org.telegram.tgnet.TLRPC$TL_messages_getWebPage r14 = new org.telegram.tgnet.TLRPC$TL_messages_getWebPage
+            r14.<init>()
+            java.lang.String r15 = r7.url
+            r14.url = r15
+            org.telegram.tgnet.TLRPC$Page r15 = r7.cached_page
+            boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_pagePart_layer82
+            if (r2 != 0) goto L_0x0107
+            boolean r15 = r15.part
+            if (r15 == 0) goto L_0x0102
+            goto L_0x0107
+        L_0x0102:
+            int r15 = r7.hash
+            r14.hash = r15
+            goto L_0x0109
+        L_0x0107:
+            r14.hash = r1
+        L_0x0109:
+            int r9 = org.telegram.messenger.UserConfig.selectedAccount
+            org.telegram.tgnet.ConnectionsManager r15 = org.telegram.tgnet.ConnectionsManager.getInstance(r9)
+            org.telegram.ui.-$$Lambda$ArticleViewer$4AfJkJkz0NK508Ebn15gbIP5gKQ r2 = new org.telegram.ui.-$$Lambda$ArticleViewer$4AfJkJkz0NK508Ebn15gbIP5gKQ
+            r5 = r2
+            r6 = r11
+            r8 = r12
+            r5.<init>(r7, r8, r9, r10)
+            r15.sendRequest(r14, r2)
+        L_0x011a:
+            r11.lastInsets = r3
+            boolean r12 = r11.isVisible
+            java.lang.String r14 = "window"
+            if (r12 != 0) goto L_0x015e
+            android.app.Activity r12 = r11.parentActivity
+            java.lang.Object r12 = r12.getSystemService(r14)
+            android.view.WindowManager r12 = (android.view.WindowManager) r12
+            boolean r14 = r11.attachedToWindow
+            if (r14 == 0) goto L_0x0134
+            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x0134 }
+            r12.removeView(r14)     // Catch:{ Exception -> 0x0134 }
+        L_0x0134:
+            int r14 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0159 }
+            r15 = 21
+            if (r14 < r15) goto L_0x0147
+            android.view.WindowManager$LayoutParams r15 = r11.windowLayoutParams     // Catch:{ Exception -> 0x0159 }
             r2 = -2147417856(0xfffffffvar_, float:-9.2194E-41)
-            r1.flags = r2     // Catch:{ Exception -> 0x0161 }
+            r15.flags = r2     // Catch:{ Exception -> 0x0159 }
             r2 = 28
-            if (r8 < r2) goto L_0x014f
-            r1.layoutInDisplayCutoutMode = r11     // Catch:{ Exception -> 0x0161 }
-        L_0x014f:
-            org.telegram.ui.ArticleViewer$WindowView r1 = r7.windowView     // Catch:{ Exception -> 0x0161 }
-            r1.setFocusable(r9)     // Catch:{ Exception -> 0x0161 }
-            android.widget.FrameLayout r1 = r7.containerView     // Catch:{ Exception -> 0x0161 }
-            r1.setFocusable(r9)     // Catch:{ Exception -> 0x0161 }
-            org.telegram.ui.ArticleViewer$WindowView r1 = r7.windowView     // Catch:{ Exception -> 0x0161 }
-            android.view.WindowManager$LayoutParams r2 = r7.windowLayoutParams     // Catch:{ Exception -> 0x0161 }
-            r0.addView(r1, r2)     // Catch:{ Exception -> 0x0161 }
-            goto L_0x017d
-        L_0x0161:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            return r9
-        L_0x0166:
-            android.view.WindowManager$LayoutParams r0 = r7.windowLayoutParams
-            int r2 = r0.flags
-            r2 = r2 & -17
-            r0.flags = r2
-            android.app.Activity r0 = r7.parentActivity
-            java.lang.Object r0 = r0.getSystemService(r1)
-            android.view.WindowManager r0 = (android.view.WindowManager) r0
-            org.telegram.ui.ArticleViewer$WindowView r1 = r7.windowView
-            android.view.WindowManager$LayoutParams r2 = r7.windowLayoutParams
-            r0.updateViewLayout(r1, r2)
-        L_0x017d:
-            r7.isVisible = r11
-            r7.animationInProgress = r11
-            org.telegram.ui.ArticleViewer$WindowView r0 = r7.windowView
-            r0.setAlpha(r12)
-            android.widget.FrameLayout r0 = r7.containerView
-            r0.setAlpha(r12)
-            android.animation.AnimatorSet r0 = new android.animation.AnimatorSet
-            r0.<init>()
-            r1 = 3
-            android.animation.Animator[] r1 = new android.animation.Animator[r1]
-            org.telegram.ui.ArticleViewer$WindowView r2 = r7.windowView
-            android.util.Property r3 = android.view.View.ALPHA
-            r4 = 2
-            float[] r5 = new float[r4]
-            r5 = {0, NUM} // fill-array
-            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r3, r5)
-            r1[r9] = r2
-            android.widget.FrameLayout r2 = r7.containerView
-            android.util.Property r3 = android.view.View.ALPHA
-            float[] r5 = new float[r4]
-            r5 = {0, NUM} // fill-array
-            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r3, r5)
-            r1[r11] = r2
-            org.telegram.ui.ArticleViewer$WindowView r2 = r7.windowView
-            android.util.Property r3 = android.view.View.TRANSLATION_X
-            float[] r5 = new float[r4]
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            float r6 = (float) r6
-            r5[r9] = r6
-            r5[r11] = r12
-            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r3, r5)
-            r1[r4] = r2
-            r0.playTogether(r1)
-            org.telegram.ui.-$$Lambda$ArticleViewer$I5Tcq0ejNA7CLASSNAMEZOWpwXmOVuVYw r1 = new org.telegram.ui.-$$Lambda$ArticleViewer$I5Tcq0ejNA7CLASSNAMEZOWpwXmOVuVYw
-            r1.<init>()
-            r7.animationEndRunnable = r1
-            r1 = 150(0x96, double:7.4E-322)
-            r0.setDuration(r1)
-            android.view.animation.DecelerateInterpolator r1 = r7.interpolator
-            r0.setInterpolator(r1)
-            org.telegram.ui.ArticleViewer$20 r1 = new org.telegram.ui.ArticleViewer$20
-            r1.<init>()
-            r0.addListener(r1)
-            long r1 = java.lang.System.currentTimeMillis()
-            r7.transitionAnimationStartTime = r1
-            org.telegram.ui.-$$Lambda$ArticleViewer$rsbqU7H-DmovNgxBJ2nvyERXU04 r1 = new org.telegram.ui.-$$Lambda$ArticleViewer$rsbqU7H-DmovNgxBJ2nvyERXU04
-            r1.<init>(r0)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
-            r0 = 18
-            if (r8 < r0) goto L_0x01fa
-            android.widget.FrameLayout r0 = r7.containerView
-            r0.setLayerType(r4, r10)
-        L_0x01fa:
-            return r11
-        L_0x01fb:
-            return r9
+            if (r14 < r2) goto L_0x0147
+            r15.layoutInDisplayCutoutMode = r4     // Catch:{ Exception -> 0x0159 }
+        L_0x0147:
+            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x0159 }
+            r14.setFocusable(r1)     // Catch:{ Exception -> 0x0159 }
+            android.widget.FrameLayout r14 = r11.containerView     // Catch:{ Exception -> 0x0159 }
+            r14.setFocusable(r1)     // Catch:{ Exception -> 0x0159 }
+            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x0159 }
+            android.view.WindowManager$LayoutParams r15 = r11.windowLayoutParams     // Catch:{ Exception -> 0x0159 }
+            r12.addView(r14, r15)     // Catch:{ Exception -> 0x0159 }
+            goto L_0x0175
+        L_0x0159:
+            r12 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)
+            return r1
+        L_0x015e:
+            android.view.WindowManager$LayoutParams r12 = r11.windowLayoutParams
+            int r15 = r12.flags
+            r15 = r15 & -17
+            r12.flags = r15
+            android.app.Activity r12 = r11.parentActivity
+            java.lang.Object r12 = r12.getSystemService(r14)
+            android.view.WindowManager r12 = (android.view.WindowManager) r12
+            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView
+            android.view.WindowManager$LayoutParams r15 = r11.windowLayoutParams
+            r12.updateViewLayout(r14, r15)
+        L_0x0175:
+            r11.isVisible = r4
+            r11.animationInProgress = r4
+            org.telegram.ui.ArticleViewer$WindowView r12 = r11.windowView
+            r12.setAlpha(r0)
+            android.widget.FrameLayout r12 = r11.containerView
+            r12.setAlpha(r0)
+            android.animation.AnimatorSet r12 = new android.animation.AnimatorSet
+            r12.<init>()
+            r14 = 3
+            android.animation.Animator[] r14 = new android.animation.Animator[r14]
+            org.telegram.ui.ArticleViewer$WindowView r15 = r11.windowView
+            android.util.Property r2 = android.view.View.ALPHA
+            r5 = 2
+            float[] r6 = new float[r5]
+            r6 = {0, NUM} // fill-array
+            android.animation.ObjectAnimator r15 = android.animation.ObjectAnimator.ofFloat(r15, r2, r6)
+            r14[r1] = r15
+            android.widget.FrameLayout r15 = r11.containerView
+            android.util.Property r2 = android.view.View.ALPHA
+            float[] r6 = new float[r5]
+            r6 = {0, NUM} // fill-array
+            android.animation.ObjectAnimator r15 = android.animation.ObjectAnimator.ofFloat(r15, r2, r6)
+            r14[r4] = r15
+            org.telegram.ui.ArticleViewer$WindowView r15 = r11.windowView
+            android.util.Property r2 = android.view.View.TRANSLATION_X
+            float[] r6 = new float[r5]
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            float r13 = (float) r13
+            r6[r1] = r13
+            r6[r4] = r0
+            android.animation.ObjectAnimator r13 = android.animation.ObjectAnimator.ofFloat(r15, r2, r6)
+            r14[r5] = r13
+            r12.playTogether(r14)
+            org.telegram.ui.-$$Lambda$ArticleViewer$I5Tcq0ejNA7CLASSNAMEZOWpwXmOVuVYw r13 = new org.telegram.ui.-$$Lambda$ArticleViewer$I5Tcq0ejNA7CLASSNAMEZOWpwXmOVuVYw
+            r13.<init>()
+            r11.animationEndRunnable = r13
+            r13 = 150(0x96, double:7.4E-322)
+            r12.setDuration(r13)
+            android.view.animation.DecelerateInterpolator r13 = r11.interpolator
+            r12.setInterpolator(r13)
+            org.telegram.ui.ArticleViewer$20 r13 = new org.telegram.ui.ArticleViewer$20
+            r13.<init>()
+            r12.addListener(r13)
+            long r13 = java.lang.System.currentTimeMillis()
+            r11.transitionAnimationStartTime = r13
+            org.telegram.ui.-$$Lambda$ArticleViewer$rsbqU7H-DmovNgxBJ2nvyERXU04 r13 = new org.telegram.ui.-$$Lambda$ArticleViewer$rsbqU7H-DmovNgxBJ2nvyERXU04
+            r13.<init>(r12)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)
+            int r12 = android.os.Build.VERSION.SDK_INT
+            r13 = 18
+            if (r12 < r13) goto L_0x01f4
+            android.widget.FrameLayout r12 = r11.containerView
+            r12.setLayerType(r5, r3)
+        L_0x01f4:
+            return r4
+        L_0x01f5:
+            return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.open(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$WebPage, java.lang.String, boolean):boolean");
     }
@@ -15585,7 +15601,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (r4 == 0) goto L_0x0060
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
                 if (r4 != 0) goto L_0x0060
-                r4 = 2131624352(0x7f0e01a0, float:1.8875881E38)
+                r4 = 2131624366(0x7f0e01ae, float:1.887591E38)
                 r7 = 2
                 java.lang.Object[] r7 = new java.lang.Object[r7]
                 org.telegram.messenger.LocaleController r8 = org.telegram.messenger.LocaleController.getInstance()
@@ -15603,7 +15619,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             L_0x0060:
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
                 if (r4 != 0) goto L_0x0074
-                r4 = 2131624351(0x7f0e019f, float:1.887588E38)
+                r4 = 2131624365(0x7f0e01ad, float:1.8875908E38)
                 java.lang.Object[] r15 = new java.lang.Object[r15]
                 r15[r3] = r0
                 java.lang.String r5 = "ArticleByAuthor"

@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextPaint;
@@ -14,29 +15,44 @@ public class SlideChooseView extends View {
     private final SeekBarAccessibilityDelegate accessibilityDelegate;
     private Callback callback;
     private int circleSize;
+    private int dashedFrom = -1;
     private int gapSize;
+    private int lastDash;
+    private Paint linePaint;
     private int lineSize;
     private boolean moving;
     private int[] optionsSizes;
     /* access modifiers changed from: private */
     public String[] optionsStr;
     private Paint paint = new Paint(1);
-    int selectedIndex;
+    /* access modifiers changed from: private */
+    public int selectedIndex;
     private int sideSide;
     private boolean startMoving;
     private int startMovingPreset;
     private float startX;
-    private TextPaint textPaint;
+    private TextPaint textPaint = new TextPaint(1);
 
     public interface Callback {
+
+        /* renamed from: org.telegram.ui.Components.SlideChooseView$Callback$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static void $default$onTouchEnd(Callback callback) {
+            }
+        }
+
         void onOptionSelected(int i);
+
+        void onTouchEnd();
     }
 
     public SlideChooseView(Context context) {
         super(context);
-        TextPaint textPaint2 = new TextPaint(1);
-        this.textPaint = textPaint2;
-        textPaint2.setTextSize((float) AndroidUtilities.dp(13.0f));
+        Paint paint2 = new Paint(1);
+        this.linePaint = paint2;
+        paint2.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        this.linePaint.setStrokeCap(Paint.Cap.ROUND);
+        this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
         this.accessibilityDelegate = new IntSeekBarAccessibilityDelegate() {
             /* access modifiers changed from: protected */
             public int getProgress() {
@@ -55,8 +71,7 @@ public class SlideChooseView extends View {
 
             /* access modifiers changed from: protected */
             public CharSequence getContentDescription(View view) {
-                SlideChooseView slideChooseView = SlideChooseView.this;
-                if (slideChooseView.selectedIndex < slideChooseView.optionsStr.length) {
+                if (SlideChooseView.this.selectedIndex < SlideChooseView.this.optionsStr.length) {
                     return SlideChooseView.this.optionsStr[SlideChooseView.this.selectedIndex];
                 }
                 return null;
@@ -85,6 +100,10 @@ public class SlideChooseView extends View {
         }
     }
 
+    public void setDashedFrom(int i) {
+        this.dashedFrom = i;
+    }
+
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v3, resolved type: boolean} */
     /* JADX WARNING: type inference failed for: r3v0 */
     /* JADX WARNING: type inference failed for: r3v1, types: [int] */
@@ -108,7 +127,7 @@ public class SlideChooseView extends View {
         L_0x0017:
             java.lang.String[] r1 = r8.optionsStr
             int r1 = r1.length
-            if (r9 >= r1) goto L_0x00fd
+            if (r9 >= r1) goto L_0x0104
             int r1 = r8.sideSide
             int r6 = r8.lineSize
             int r7 = r8.gapSize
@@ -137,7 +156,7 @@ public class SlideChooseView extends View {
             r8.startMoving = r3
             r8.startX = r0
             r8.startMovingPreset = r1
-            goto L_0x00fd
+            goto L_0x0104
         L_0x004f:
             int r9 = r9 + 1
             goto L_0x0017
@@ -152,17 +171,17 @@ public class SlideChooseView extends View {
             r0 = 1056964608(0x3var_, float:0.5)
             float r0 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r0, r4)
             int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-            if (r9 < 0) goto L_0x00fd
+            if (r9 < 0) goto L_0x0104
             r8.moving = r4
             r8.startMoving = r3
-            goto L_0x00fd
+            goto L_0x0104
         L_0x0073:
             boolean r9 = r8.moving
-            if (r9 == 0) goto L_0x00fd
+            if (r9 == 0) goto L_0x0104
         L_0x0077:
             java.lang.String[] r9 = r8.optionsStr
             int r9 = r9.length
-            if (r3 >= r9) goto L_0x00fd
+            if (r3 >= r9) goto L_0x0104
             int r9 = r8.sideSide
             int r1 = r8.lineSize
             int r2 = r8.gapSize
@@ -187,9 +206,9 @@ public class SlideChooseView extends View {
             int r9 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1))
             if (r9 >= 0) goto L_0x00a7
             int r9 = r8.selectedIndex
-            if (r9 == r3) goto L_0x00fd
+            if (r9 == r3) goto L_0x0104
             r8.setOption(r3)
-            goto L_0x00fd
+            goto L_0x0104
         L_0x00a7:
             int r3 = r3 + 1
             goto L_0x0077
@@ -198,7 +217,7 @@ public class SlideChooseView extends View {
             if (r1 == r4) goto L_0x00b7
             int r9 = r9.getAction()
             r1 = 3
-            if (r9 != r1) goto L_0x00fd
+            if (r9 != r1) goto L_0x0104
         L_0x00b7:
             boolean r9 = r8.moving
             if (r9 != 0) goto L_0x00f0
@@ -240,9 +259,13 @@ public class SlideChooseView extends View {
             if (r9 == r0) goto L_0x00f9
             r8.setOption(r9)
         L_0x00f9:
+            org.telegram.ui.Components.SlideChooseView$Callback r9 = r8.callback
+            if (r9 == 0) goto L_0x0100
+            r9.onTouchEnd()
+        L_0x0100:
             r8.startMoving = r3
             r8.moving = r3
-        L_0x00fd:
+        L_0x0104:
             return r4
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SlideChooseView.onTouchEvent(android.view.MotionEvent):boolean");
@@ -273,6 +296,7 @@ public class SlideChooseView extends View {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        Canvas canvas2 = canvas;
         this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteGrayText"));
         int measuredHeight = (getMeasuredHeight() / 2) + AndroidUtilities.dp(11.0f);
         int i = 0;
@@ -282,33 +306,50 @@ public class SlideChooseView extends View {
             int i4 = this.circleSize;
             int i5 = i2 + ((i3 + i4) * i) + (i4 / 2);
             if (i <= this.selectedIndex) {
-                this.paint.setColor(Theme.getColor("switchTrackChecked"));
+                int color = Theme.getColor("switchTrackChecked");
+                this.paint.setColor(color);
+                this.linePaint.setColor(color);
             } else {
-                this.paint.setColor(Theme.getColor("switchTrack"));
+                int color2 = Theme.getColor("switchTrack");
+                this.paint.setColor(color2);
+                this.linePaint.setColor(color2);
             }
-            canvas.drawCircle((float) i5, (float) measuredHeight, (float) (i == this.selectedIndex ? AndroidUtilities.dp(6.0f) : this.circleSize / 2), this.paint);
+            float f = (float) measuredHeight;
+            canvas2.drawCircle((float) i5, f, (float) (i == this.selectedIndex ? AndroidUtilities.dp(6.0f) : this.circleSize / 2), this.paint);
             if (i != 0) {
                 int i6 = (i5 - (this.circleSize / 2)) - this.gapSize;
                 int i7 = this.lineSize;
                 int i8 = i6 - i7;
-                int i9 = this.selectedIndex;
-                if (i == i9 || i == i9 + 1) {
-                    i7 -= AndroidUtilities.dp(3.0f);
+                int i9 = this.dashedFrom;
+                if (i9 == -1 || i - 1 < i9) {
+                    int i10 = this.selectedIndex;
+                    if (i == i10 || i == i10 + 1) {
+                        i7 -= AndroidUtilities.dp(3.0f);
+                    }
+                    if (i == this.selectedIndex + 1) {
+                        i8 += AndroidUtilities.dp(3.0f);
+                    }
+                    canvas.drawRect((float) i8, (float) (measuredHeight - AndroidUtilities.dp(1.0f)), (float) (i8 + i7), (float) (AndroidUtilities.dp(1.0f) + measuredHeight), this.paint);
+                } else {
+                    int dp = i8 + AndroidUtilities.dp(3.0f);
+                    int dp2 = i7 - AndroidUtilities.dp(3.0f);
+                    int dp3 = dp2 / AndroidUtilities.dp(13.0f);
+                    if (this.lastDash != dp3) {
+                        this.linePaint.setPathEffect(new DashPathEffect(new float[]{(float) AndroidUtilities.dp(6.0f), ((float) (dp2 - (AndroidUtilities.dp(8.0f) * dp3))) / ((float) (dp3 - 1))}, 0.0f));
+                        this.lastDash = dp3;
+                    }
+                    canvas.drawLine((float) (AndroidUtilities.dp(1.0f) + dp), f, (float) ((dp + dp2) - AndroidUtilities.dp(1.0f)), f, this.linePaint);
                 }
-                if (i == this.selectedIndex + 1) {
-                    i8 += AndroidUtilities.dp(3.0f);
-                }
-                canvas.drawRect((float) i8, (float) (measuredHeight - AndroidUtilities.dp(1.0f)), (float) (i8 + i7), (float) (AndroidUtilities.dp(1.0f) + measuredHeight), this.paint);
             }
-            int i10 = this.optionsSizes[i];
+            int i11 = this.optionsSizes[i];
             String[] strArr = this.optionsStr;
             String str = strArr[i];
             if (i == 0) {
-                canvas.drawText(str, (float) AndroidUtilities.dp(22.0f), (float) AndroidUtilities.dp(28.0f), this.textPaint);
+                canvas2.drawText(str, (float) AndroidUtilities.dp(22.0f), (float) AndroidUtilities.dp(28.0f), this.textPaint);
             } else if (i == strArr.length - 1) {
-                canvas.drawText(str, (float) ((getMeasuredWidth() - i10) - AndroidUtilities.dp(22.0f)), (float) AndroidUtilities.dp(28.0f), this.textPaint);
+                canvas2.drawText(str, (float) ((getMeasuredWidth() - i11) - AndroidUtilities.dp(22.0f)), (float) AndroidUtilities.dp(28.0f), this.textPaint);
             } else {
-                canvas.drawText(str, (float) (i5 - (i10 / 2)), (float) AndroidUtilities.dp(28.0f), this.textPaint);
+                canvas2.drawText(str, (float) (i5 - (i11 / 2)), (float) AndroidUtilities.dp(28.0f), this.textPaint);
             }
             i++;
         }

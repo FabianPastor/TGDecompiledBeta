@@ -2507,10 +2507,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         final Activity activity2 = activity;
         SizeNotifierFrameLayout sizeNotifierFrameLayout2 = sizeNotifierFrameLayout;
         final ChatActivity chatActivity2 = chatActivity;
-        int i2 = Build.VERSION.SDK_INT;
-        int i3 = UserConfig.selectedAccount;
-        this.currentAccount = i3;
-        this.accountInstance = AccountInstance.getInstance(i3);
+        int i2 = UserConfig.selectedAccount;
+        this.currentAccount = i2;
+        this.accountInstance = AccountInstance.getInstance(i2);
         this.emojiButton = new ImageView[2];
         this.currentPopupContentType = -1;
         this.currentEmojiIcon = -1;
@@ -2592,7 +2591,6 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         };
         this.recordAudioVideoRunnable = new Runnable() {
             public void run() {
-                int i = Build.VERSION.SDK_INT;
                 if (ChatActivityEnterView.this.delegate != null && ChatActivityEnterView.this.parentActivity != null) {
                     ChatActivityEnterView.this.delegate.onPreAudioVideoRecord();
                     boolean unused = ChatActivityEnterView.this.calledRecordRunnable = true;
@@ -2600,7 +2598,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     ChatActivityEnterView.this.slideText.setAlpha(1.0f);
                     ChatActivityEnterView.this.slideText.setTranslationY(0.0f);
                     if (ChatActivityEnterView.this.videoSendButton != null && ChatActivityEnterView.this.videoSendButton.getTag() != null) {
-                        if (i >= 23) {
+                        if (Build.VERSION.SDK_INT >= 23) {
                             boolean z = ChatActivityEnterView.this.parentActivity.checkSelfPermission("android.permission.RECORD_AUDIO") == 0;
                             boolean z2 = ChatActivityEnterView.this.parentActivity.checkSelfPermission("android.permission.CAMERA") == 0;
                             if (!z || !z2) {
@@ -2628,7 +2626,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             ChatActivityEnterView.this.recordCircle.showWaves(false, false);
                             ChatActivityEnterView.this.recordTimerView.reset();
                         }
-                    } else if (ChatActivityEnterView.this.parentFragment == null || i < 23 || ChatActivityEnterView.this.parentActivity.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
+                    } else if (ChatActivityEnterView.this.parentFragment == null || Build.VERSION.SDK_INT < 23 || ChatActivityEnterView.this.parentActivity.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
                         ChatActivityEnterView.this.delegate.needStartRecordAudio(1);
                         float unused4 = ChatActivityEnterView.this.startedDraggingX = -1.0f;
                         MediaController.getInstance().startRecording(ChatActivityEnterView.this.currentAccount, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), ChatActivityEnterView.this.recordingGuid);
@@ -2716,9 +2714,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         };
         r2.setClipChildren(false);
         this.textFieldContainer.addView(r2, LayoutHelper.createLinear(0, -2, 1.0f, 80));
-        int i4 = 0;
-        for (int i5 = 2; i4 < i5; i5 = 2) {
-            this.emojiButton[i4] = new ImageView(activity2) {
+        int i3 = 0;
+        for (int i4 = 2; i3 < i4; i4 = 2) {
+            this.emojiButton[i3] = new ImageView(activity2) {
                 /* access modifiers changed from: protected */
                 public void onDraw(Canvas canvas) {
                     super.onDraw(canvas);
@@ -2727,28 +2725,28 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 }
             };
-            this.emojiButton[i4].setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
-            this.emojiButton[i4].setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            if (i2 >= 21) {
-                this.emojiButton[i4].setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
+            this.emojiButton[i3].setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
+            this.emojiButton[i3].setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            if (Build.VERSION.SDK_INT >= 21) {
+                this.emojiButton[i3].setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
             }
-            r2.addView(this.emojiButton[i4], LayoutHelper.createFrame(48, 48.0f, 83, 3.0f, 0.0f, 0.0f, 0.0f));
-            this.emojiButton[i4].setOnClickListener(new View.OnClickListener() {
+            r2.addView(this.emojiButton[i3], LayoutHelper.createFrame(48, 48.0f, 83, 3.0f, 0.0f, 0.0f, 0.0f));
+            this.emojiButton[i3].setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
                     ChatActivityEnterView.this.lambda$new$1$ChatActivityEnterView(view);
                 }
             });
-            this.emojiButton[i4].setContentDescription(LocaleController.getString("AccDescrEmojiButton", NUM));
-            if (i4 == 1) {
-                this.emojiButton[i4].setVisibility(4);
-                this.emojiButton[i4].setAlpha(0.0f);
-                this.emojiButton[i4].setScaleX(0.1f);
-                this.emojiButton[i4].setScaleY(0.1f);
-                ImageView imageView = this.emojiButton[i4];
+            this.emojiButton[i3].setContentDescription(LocaleController.getString("AccDescrEmojiButton", NUM));
+            if (i3 == 1) {
+                this.emojiButton[i3].setVisibility(4);
+                this.emojiButton[i3].setAlpha(0.0f);
+                this.emojiButton[i3].setScaleX(0.1f);
+                this.emojiButton[i3].setScaleY(0.1f);
+                ImageView imageView = this.emojiButton[i3];
             } else {
-                ImageView imageView2 = this.emojiButton[i4];
+                ImageView imageView2 = this.emojiButton[i3];
             }
-            i4++;
+            i3++;
         }
         setEmojiButtonImage(false, false);
         NumberTextView numberTextView = new NumberTextView(activity2);
@@ -2759,7 +2757,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.captionLimitView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.captionLimitView.setCenterAlign(true);
         addView(this.captionLimitView, LayoutHelper.createFrame(48, 20.0f, 85, 3.0f, 0.0f, 0.0f, 48.0f));
-        AnonymousClass10 r7 = new EditTextCaption(activity2) {
+        AnonymousClass10 r6 = new EditTextCaption(activity2) {
             /* access modifiers changed from: private */
             /* renamed from: send */
             public void lambda$null$0(InputContentInfoCompat inputContentInfoCompat, boolean z, int i) {
@@ -2896,8 +2894,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 return super.onTextContextMenuItem(i);
             }
         };
-        this.messageEditText = r7;
-        r7.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
+        this.messageEditText = r6;
+        r6.setDelegate(new EditTextCaption.EditTextCaptionDelegate() {
             public final void onSpansChanged() {
                 ChatActivityEnterView.this.lambda$new$2$ChatActivityEnterView();
             }
@@ -3224,7 +3222,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.scheduledButton.setVisibility(8);
                 this.scheduledButton.setContentDescription(LocaleController.getString("ScheduledMessages", NUM));
                 this.scheduledButton.setScaleType(ImageView.ScaleType.CENTER);
-                if (i2 >= 21) {
+                if (Build.VERSION.SDK_INT >= 21) {
                     this.scheduledButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
                 }
                 r2.addView(this.scheduledButton, LayoutHelper.createFrame(48, 48, 85));
@@ -3249,7 +3247,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.botButtonDrawablel.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
             this.botButtonDrawablel.setIcon(NUM, false);
             this.botButton.setScaleType(ImageView.ScaleType.CENTER);
-            if (i2 >= 21) {
+            int i5 = Build.VERSION.SDK_INT;
+            if (i5 >= 21) {
                 this.botButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
             }
             this.botButton.setVisibility(8);
@@ -3275,7 +3274,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             imageView5.setContentDescription(LocaleController.getString(str, i));
             this.notifyButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
             this.notifyButton.setScaleType(ImageView.ScaleType.CENTER);
-            if (i2 >= 21) {
+            if (i5 >= 21) {
                 this.notifyButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
             }
             this.notifyButton.setVisibility((!this.canWriteToChannel || ((chatActivityEnterViewDelegate = this.delegate) != null && chatActivityEnterViewDelegate.hasScheduledMessages())) ? 8 : 0);
@@ -3324,7 +3323,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             imageView6.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
             this.attachButton.setImageResource(NUM);
             this.attachButton.setScaleType(ImageView.ScaleType.CENTER);
-            if (i2 >= 21) {
+            if (i5 >= 21) {
                 this.attachButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
             }
             this.attachLayout.addView(this.attachButton, LayoutHelper.createLinear(48, 48));
@@ -3349,7 +3348,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.recordDeleteImageView.getAnimatedDrawable().setInvalidateOnProgressSet(true);
         updateRecordedDeleteIconColors();
         this.recordDeleteImageView.setContentDescription(LocaleController.getString("Delete", NUM));
-        if (i2 >= 21) {
+        int i6 = Build.VERSION.SDK_INT;
+        if (i6 >= 21) {
             this.recordDeleteImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
         }
         this.recordedAudioPanel.addView(this.recordDeleteImageView, LayoutHelper.createFrame(48, 48.0f));
@@ -3491,7 +3491,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.cancelBotButton.setScaleX(0.1f);
         this.cancelBotButton.setScaleY(0.1f);
         this.cancelBotButton.setAlpha(0.0f);
-        if (i2 >= 21) {
+        if (i6 >= 21) {
             this.cancelBotButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
         }
         this.sendButtonContainer.addView(this.cancelBotButton, LayoutHelper.createFrame(48, 48.0f));
@@ -3623,7 +3623,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.sendButton.setScaleX(0.1f);
         this.sendButton.setScaleY(0.1f);
         this.sendButton.setAlpha(0.0f);
-        if (i2 >= 21) {
+        if (i6 >= 21) {
             this.sendButton.setBackgroundDrawable(Theme.createSelectorDrawable(Color.argb(24, Color.red(color), Color.green(color), Color.blue(color)), 1));
         }
         this.sendButtonContainer.addView(this.sendButton, LayoutHelper.createFrame(48, 48.0f));
@@ -3677,7 +3677,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.expandStickersButton.setScaleX(0.1f);
         this.expandStickersButton.setScaleY(0.1f);
         this.expandStickersButton.setAlpha(0.0f);
-        if (i2 >= 21) {
+        if (i6 >= 21) {
             this.expandStickersButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21")));
         }
         this.sendButtonContainer.addView(this.expandStickersButton, LayoutHelper.createFrame(48, 48.0f));
@@ -7908,7 +7908,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r3 = 2131165540(0x7var_, float:1.79453E38)
             r0.setIcon((int) r3, (boolean) r1)
             android.widget.ImageView r0 = r4.botButton
-            r1 = 2131624049(0x7f0e0071, float:1.8875267E38)
+            r1 = 2131624050(0x7f0e0072, float:1.8875269E38)
             java.lang.String r3 = "AccDescrShowKeyboard"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setContentDescription(r1)
@@ -7918,7 +7918,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r3 = 2131165533(0x7var_d, float:1.7945286E38)
             r0.setIcon((int) r3, (boolean) r1)
             android.widget.ImageView r0 = r4.botButton
-            r1 = 2131623954(0x7f0e0012, float:1.8875074E38)
+            r1 = 2131623955(0x7f0e0013, float:1.8875076E38)
             java.lang.String r3 = "AccDescrBotKeyboard"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setContentDescription(r1)
@@ -7928,7 +7928,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r3 = 2131165532(0x7var_c, float:1.7945284E38)
             r0.setIcon((int) r3, (boolean) r1)
             android.widget.ImageView r0 = r4.botButton
-            r1 = 2131623953(0x7f0e0011, float:1.8875072E38)
+            r1 = 2131623954(0x7f0e0012, float:1.8875074E38)
             java.lang.String r3 = "AccDescrBotCommands"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setContentDescription(r1)

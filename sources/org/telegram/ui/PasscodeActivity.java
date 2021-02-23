@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
@@ -656,6 +657,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
     }
 
     private class ListAdapter extends RecyclerListView.SelectionAdapter {
+        private Boolean hasWidgets;
         private Context mContext;
 
         public ListAdapter(Context context) {
@@ -734,7 +736,14 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             } else if (itemViewType == 2) {
                 TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
                 if (i == PasscodeActivity.this.passcodeDetailRow) {
-                    textInfoPrivacyCell.setText(LocaleController.getString("ChangePasscodeInfo", NUM));
+                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(LocaleController.getString("ChangePasscodeInfo", NUM));
+                    if (this.hasWidgets == null) {
+                        this.hasWidgets = Boolean.valueOf(!this.mContext.getSharedPreferences("shortcut_widget", 0).getAll().isEmpty());
+                    }
+                    if (this.hasWidgets.booleanValue()) {
+                        spannableStringBuilder.append(AndroidUtilities.replaceTags(LocaleController.getString("WidgetPasscodeEnable", NUM)));
+                    }
+                    textInfoPrivacyCell.setText(spannableStringBuilder);
                     if (PasscodeActivity.this.autoLockDetailRow != -1) {
                         textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     } else {

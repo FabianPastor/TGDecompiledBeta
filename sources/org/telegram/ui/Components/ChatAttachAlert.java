@@ -728,7 +728,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = 2131165475(0x7var_, float:1.7945168E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
-            r1 = 2131623985(0x7f0e0031, float:1.8875137E38)
+            r1 = 2131623986(0x7f0e0032, float:1.8875139E38)
             java.lang.String r2 = "AccDescrMoreOptions"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -780,7 +780,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.doneItem = r13
             r13.setLongClickEnabled(r8)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.doneItem
-            r1 = 2131624956(0x7f0e03fc, float:1.8877106E38)
+            r1 = 2131624998(0x7f0e0426, float:1.8877192E38)
             java.lang.String r2 = "Create"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -813,7 +813,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = 2131165478(0x7var_, float:1.7945174E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
-            r1 = 2131627106(0x7f0e0CLASSNAME, float:1.8881467E38)
+            r1 = 2131627221(0x7f0e0cd5, float:1.88817E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -1029,7 +1029,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r2 = r29
             r0.<init>(r2, r3, r4, r5)
             r6.commentTextView = r12
-            r0 = 2131624177(0x7f0e00f1, float:1.8875526E38)
+            r0 = 2131624190(0x7f0e00fe, float:1.8875553E38)
             java.lang.String r1 = "AddCaption"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r12.setHint(r0)
@@ -1099,7 +1099,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.writeButtonDrawable = r2
             if (r4 >= r5) goto L_0x04d9
             android.content.res.Resources r2 = r29.getResources()
-            r3 = 2131165418(0x7var_ea, float:1.7945053E38)
+            r3 = 2131165419(0x7var_eb, float:1.7945055E38)
             android.graphics.drawable.Drawable r2 = r2.getDrawable(r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
@@ -1291,28 +1291,27 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$6 */
     public /* synthetic */ void lambda$new$6$ChatAttachAlert(View view, int i) {
-        int i2 = Build.VERSION.SDK_INT;
         if (this.baseFragment.getParentActivity() != null) {
             if (view instanceof AttachButton) {
                 int intValue = ((Integer) view.getTag()).intValue();
                 if (intValue == 1) {
                     showLayout(this.photoLayout);
                 } else if (intValue == 3) {
-                    if (i2 < 23 || this.baseFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
+                    if (Build.VERSION.SDK_INT < 23 || this.baseFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                         openAudioLayout(true);
                     } else {
                         this.baseFragment.getParentActivity().requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 4);
                         return;
                     }
                 } else if (intValue == 4) {
-                    if (i2 < 23 || this.baseFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
+                    if (Build.VERSION.SDK_INT < 23 || this.baseFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                         openDocumentsLayout(true);
                     } else {
                         this.baseFragment.getParentActivity().requestPermissions(new String[]{"android.permission.READ_EXTERNAL_STORAGE"}, 4);
                         return;
                     }
                 } else if (intValue == 5) {
-                    if (i2 < 23 || this.baseFragment.getParentActivity().checkSelfPermission("android.permission.READ_CONTACTS") == 0) {
+                    if (Build.VERSION.SDK_INT < 23 || this.baseFragment.getParentActivity().checkSelfPermission("android.permission.READ_CONTACTS") == 0) {
                         openContactsLayout();
                     } else {
                         this.baseFragment.getParentActivity().requestPermissions(new String[]{"android.permission.READ_CONTACTS"}, 5);
@@ -1354,15 +1353,15 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 int left = view.getLeft();
                 int right = view.getRight();
                 int dp = AndroidUtilities.dp(10.0f);
-                int i3 = left - dp;
-                if (i3 < 0) {
-                    this.buttonsRecyclerView.smoothScrollBy(i3, 0);
+                int i2 = left - dp;
+                if (i2 < 0) {
+                    this.buttonsRecyclerView.smoothScrollBy(i2, 0);
                     return;
                 }
-                int i4 = right + dp;
-                if (i4 > this.buttonsRecyclerView.getMeasuredWidth()) {
+                int i3 = right + dp;
+                if (i3 > this.buttonsRecyclerView.getMeasuredWidth()) {
                     RecyclerListView recyclerListView = this.buttonsRecyclerView;
-                    recyclerListView.smoothScrollBy(i4 - recyclerListView.getMeasuredWidth(), 0);
+                    recyclerListView.smoothScrollBy(i3 - recyclerListView.getMeasuredWidth(), 0);
                 }
             } else if (view instanceof AttachBotButton) {
                 this.delegate.didSelectBot(((AttachBotButton) view).currentUser);

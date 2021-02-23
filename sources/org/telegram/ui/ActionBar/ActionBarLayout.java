@@ -37,6 +37,7 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.GroupCallPip;
 import org.telegram.ui.Components.LayoutHelper;
 
@@ -981,7 +982,6 @@ public class ActionBarLayout extends FrameLayout {
         boolean z5 = z;
         boolean z6 = z2;
         final boolean z7 = z4;
-        int i = Build.VERSION.SDK_INT;
         if (baseFragment3 == null || checkTransitionAnimation() || (((actionBarLayoutDelegate = this.delegate) != null && z3 && !actionBarLayoutDelegate.needPresentFragment(baseFragment3, z5, z6, this)) || !baseFragment.onFragmentCreate())) {
             return false;
         }
@@ -990,6 +990,7 @@ public class ActionBarLayout extends FrameLayout {
             AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
         }
         boolean z8 = z7 || (!z6 && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true));
+        AnimatorSet animatorSet = null;
         if (!this.fragmentsStack.isEmpty()) {
             ArrayList<BaseFragment> arrayList = this.fragmentsStack;
             baseFragment2 = arrayList.get(arrayList.size() - 1);
@@ -1013,15 +1014,15 @@ public class ActionBarLayout extends FrameLayout {
         layoutParams.height = -1;
         if (z7) {
             int previewHeight = baseFragment.getPreviewHeight();
-            int i2 = i >= 21 ? AndroidUtilities.statusBarHeight : 0;
-            if (previewHeight <= 0 || previewHeight >= getMeasuredHeight() - i2) {
+            int i = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
+            if (previewHeight <= 0 || previewHeight >= getMeasuredHeight() - i) {
                 int dp = AndroidUtilities.dp(46.0f);
                 layoutParams.bottomMargin = dp;
                 layoutParams.topMargin = dp;
                 layoutParams.topMargin = dp + AndroidUtilities.statusBarHeight;
             } else {
                 layoutParams.height = previewHeight;
-                layoutParams.topMargin = i2 + (((getMeasuredHeight() - i2) - previewHeight) / 2);
+                layoutParams.topMargin = i + (((getMeasuredHeight() - i) - previewHeight) / 2);
             }
             int dp2 = AndroidUtilities.dp(8.0f);
             layoutParams.leftMargin = dp2;
@@ -1059,7 +1060,7 @@ public class ActionBarLayout extends FrameLayout {
         setInnerTranslationX(0.0f);
         this.containerView.setTranslationY(0.0f);
         if (z7) {
-            if (i >= 21) {
+            if (Build.VERSION.SDK_INT >= 21) {
                 view.setOutlineProvider(new ViewOutlineProvider(this) {
                     @TargetApi(21)
                     public void getOutline(View view, Outline outline) {
@@ -1130,12 +1131,14 @@ public class ActionBarLayout extends FrameLayout {
             this.delayedAnimationResumed = false;
             this.oldFragment = baseFragment2;
             this.newFragment = baseFragment3;
-            AnimatorSet onCustomTransitionAnimation = !z7 ? baseFragment3.onCustomTransitionAnimation(true, new Runnable() {
-                public final void run() {
-                    ActionBarLayout.this.lambda$presentFragment$2$ActionBarLayout();
-                }
-            }) : null;
-            if (onCustomTransitionAnimation == null) {
+            if (!z7) {
+                animatorSet = baseFragment3.onCustomTransitionAnimation(true, new Runnable() {
+                    public final void run() {
+                        ActionBarLayout.this.lambda$presentFragment$2$ActionBarLayout();
+                    }
+                });
+            }
+            if (animatorSet == null) {
                 this.containerView.setAlpha(0.0f);
                 if (z7) {
                     this.containerView.setTranslationX(0.0f);
@@ -1210,7 +1213,7 @@ public class ActionBarLayout extends FrameLayout {
                 if (this.containerView.isKeyboardVisible || (this.containerViewBack.isKeyboardVisible && baseFragment2 != null)) {
                     baseFragment2.saveKeyboardPositionBeforeTransition();
                 }
-                this.currentAnimation = onCustomTransitionAnimation;
+                this.currentAnimation = animatorSet;
             }
         } else {
             presentFragmentInternalRemoveOld(z5, baseFragment2);
@@ -1238,9 +1241,9 @@ public class ActionBarLayout extends FrameLayout {
                 baseFragment2.onTransitionAnimationStart(false, false);
             }
             baseFragment3.onTransitionAnimationStart(true, false);
-            AnimatorSet animatorSet = new AnimatorSet();
-            this.currentAnimation = animatorSet;
-            animatorSet.playTogether(arrayList2);
+            AnimatorSet animatorSet2 = new AnimatorSet();
+            this.currentAnimation = animatorSet2;
+            animatorSet2.playTogether(arrayList2);
             this.currentAnimation.setInterpolator(this.accelerateDecelerateInterpolator);
             this.currentAnimation.setDuration(200);
             this.currentAnimation.addListener(new AnimatorListenerAdapter() {
@@ -1553,6 +1556,9 @@ public class ActionBarLayout extends FrameLayout {
                     }
                     if (animatorSet != null) {
                         this.currentAnimation = animatorSet;
+                        if (Bulletin.getVisibleBulletin() != null && Bulletin.getVisibleBulletin().isShowing()) {
+                            Bulletin.getVisibleBulletin().hide();
+                        }
                     } else if (this.containerView.isKeyboardVisible || this.containerViewBack.isKeyboardVisible) {
                         AnonymousClass9 r13 = new Runnable() {
                             public void run() {

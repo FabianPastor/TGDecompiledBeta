@@ -30,9 +30,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -67,6 +67,7 @@ import org.telegram.ui.Cells.ProfileSearchCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.RLottieImageView;
@@ -234,7 +235,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r11.returnAsResult
             if (r0 == 0) goto L_0x002e
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131627166(0x7f0e0c9e, float:1.8881589E38)
+            r1 = 2131627282(0x7f0e0d12, float:1.8881824E38)
             java.lang.String r2 = "SelectContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -243,21 +244,21 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r11.createSecretChat
             if (r0 == 0) goto L_0x0041
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131626124(0x7f0e088c, float:1.8879475E38)
+            r1 = 2131626210(0x7f0e08e2, float:1.887965E38)
             java.lang.String r2 = "NewSecretChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0041:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131626115(0x7f0e0883, float:1.8879457E38)
+            r1 = 2131626201(0x7f0e08d9, float:1.8879632E38)
             java.lang.String r2 = "NewMessageTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0050:
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131624931(0x7f0e03e3, float:1.8877056E38)
+            r1 = 2131624973(0x7f0e040d, float:1.887714E38)
             java.lang.String r2 = "Contacts"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -275,7 +276,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r2.<init>()
             r1.setActionBarMenuItemSearchListener(r2)
             java.lang.String r2 = "Search"
-            r3 = 2131627106(0x7f0e0CLASSNAME, float:1.8881467E38)
+            r3 = 2131627221(0x7f0e0cd5, float:1.88817E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setSearchFieldHint(r4)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
@@ -293,7 +294,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
         L_0x00a6:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r14, (int) r1)
             r11.sortItem = r0
-            r1 = 2131623968(0x7f0e0020, float:1.8875102E38)
+            r1 = 2131623969(0x7f0e0021, float:1.8875104E38)
             java.lang.String r2 = "AccDescrContactSorting"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -401,13 +402,13 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r1.showProgress(r14, r13)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.title
-            r2 = 2131626184(0x7f0e08c8, float:1.8879597E38)
+            r2 = 2131626270(0x7f0e091e, float:1.8879771E38)
             java.lang.String r3 = "NoResult"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             org.telegram.ui.Components.StickerEmptyView r1 = r11.emptyView
             android.widget.TextView r1 = r1.subtitle
-            r2 = 2131627111(0x7f0e0CLASSNAME, float:1.8881477E38)
+            r2 = 2131627226(0x7f0e0cda, float:1.888171E38)
             java.lang.String r3 = "SearchEmptyViewFilteredSubtitle2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -516,7 +517,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r1, r6, r7)
             if (r2 >= r5) goto L_0x029b
             android.content.res.Resources r6 = r24.getResources()
-            r7 = 2131165417(0x7var_e9, float:1.794505E38)
+            r7 = 2131165418(0x7var_ea, float:1.7945053E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
@@ -545,15 +546,15 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.getBoolean(r1, r14)
             org.telegram.ui.Components.RLottieImageView r1 = r11.floatingButton
             if (r0 == 0) goto L_0x02c5
-            r0 = 2131558498(0x7f0d0062, float:1.8742314E38)
+            r0 = 2131558509(0x7f0d006d, float:1.8742336E38)
             goto L_0x02c8
         L_0x02c5:
-            r0 = 2131558499(0x7f0d0063, float:1.8742316E38)
+            r0 = 2131558510(0x7f0d006e, float:1.8742338E38)
         L_0x02c8:
             r6 = 52
             r1.setAnimation(r0, r6, r6)
             android.widget.FrameLayout r0 = r11.floatingButtonContainer
-            r1 = 2131624961(0x7f0e0401, float:1.8877116E38)
+            r1 = 2131625003(0x7f0e042b, float:1.8877202E38)
             java.lang.String r6 = "CreateNewContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             r0.setContentDescription(r1)
@@ -814,7 +815,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             if (tLRPC$User.bot) {
                 if (tLRPC$User.bot_nochats) {
                     try {
-                        Toast.makeText(getParentActivity(), LocaleController.getString("BotCantJoinGroups", NUM), 0).show();
+                        BulletinFactory.of((BaseFragment) this).createErrorBulletin(LocaleController.getString("BotCantJoinGroups", NUM)).show();
                         return;
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);
@@ -1184,117 +1185,93 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Code restructure failed: missing block: B:14:0x0044, code lost:
-        r0 = r0.getFloatingButton();
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public android.animation.AnimatorSet onCustomTransitionAnimation(final boolean r9, final java.lang.Runnable r10) {
-        /*
-            r8 = this;
-            r0 = 2
-            float[] r1 = new float[r0]
-            if (r9 == 0) goto L_0x000d
-            r1 = {NUM, 0} // fill-array
-            android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
-            goto L_0x0014
-        L_0x000d:
-            r1 = {0, NUM} // fill-array
-            android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
-        L_0x0014:
-            android.view.View r2 = r8.fragmentView
-            android.view.ViewParent r2 = r2.getParent()
-            android.view.ViewGroup r2 = (android.view.ViewGroup) r2
-            org.telegram.ui.ActionBar.ActionBarLayout r3 = r8.parentLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
-            int r3 = r3.size()
-            r4 = 1
-            r5 = 0
-            if (r3 <= r4) goto L_0x0038
-            org.telegram.ui.ActionBar.ActionBarLayout r3 = r8.parentLayout
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
-            int r6 = r3.size()
-            int r6 = r6 - r0
-            java.lang.Object r0 = r3.get(r6)
-            org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0
-            goto L_0x0039
-        L_0x0038:
-            r0 = r5
-        L_0x0039:
-            boolean r3 = r0 instanceof org.telegram.ui.DialogsActivity
-            if (r3 == 0) goto L_0x0040
-            org.telegram.ui.DialogsActivity r0 = (org.telegram.ui.DialogsActivity) r0
-            goto L_0x0041
-        L_0x0040:
-            r0 = r5
-        L_0x0041:
-            if (r0 != 0) goto L_0x0044
-            return r5
-        L_0x0044:
-            org.telegram.ui.Components.RLottieImageView r0 = r0.getFloatingButton()
-            if (r0 == 0) goto L_0x00d3
-            android.widget.FrameLayout r3 = r8.floatingButtonContainer
-            if (r3 == 0) goto L_0x00d3
-            int r3 = r0.getVisibility()
-            if (r3 != 0) goto L_0x00d3
-            float r3 = r0.getTranslationY()
-            float r3 = java.lang.Math.abs(r3)
-            r6 = 1082130432(0x40800000, float:4.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            float r7 = (float) r7
-            int r3 = (r3 > r7 ? 1 : (r3 == r7 ? 0 : -1))
-            if (r3 > 0) goto L_0x00d3
-            android.widget.FrameLayout r3 = r8.floatingButtonContainer
-            float r3 = r3.getTranslationY()
-            float r3 = java.lang.Math.abs(r3)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            float r6 = (float) r6
-            int r3 = (r3 > r6 ? 1 : (r3 == r6 ? 0 : -1))
-            if (r3 <= 0) goto L_0x007b
-            goto L_0x00d3
-        L_0x007b:
-            r3 = 8
-            r0.setVisibility(r3)
-            if (r9 == 0) goto L_0x0086
-            r3 = 0
-            r2.setAlpha(r3)
-        L_0x0086:
-            org.telegram.ui.-$$Lambda$ContactsActivity$eWXKwOQWj6CiQRgK9xn-hx5U5KA r3 = new org.telegram.ui.-$$Lambda$ContactsActivity$eWXKwOQWj6CiQRgK9xn-hx5U5KA
-            r3.<init>(r1, r2)
-            r1.addUpdateListener(r3)
-            android.widget.FrameLayout r3 = r8.floatingButtonContainer
-            if (r3 == 0) goto L_0x00a4
-            android.view.View r5 = r8.fragmentView
-            android.view.ViewGroup r5 = (android.view.ViewGroup) r5
-            r5.removeView(r3)
-            android.view.ViewParent r2 = r2.getParent()
-            android.widget.FrameLayout r2 = (android.widget.FrameLayout) r2
-            android.widget.FrameLayout r3 = r8.floatingButtonContainer
-            r2.addView(r3)
-        L_0x00a4:
-            r2 = 150(0x96, double:7.4E-322)
-            r1.setDuration(r2)
-            android.view.animation.DecelerateInterpolator r2 = new android.view.animation.DecelerateInterpolator
-            r3 = 1069547520(0x3fCLASSNAME, float:1.5)
-            r2.<init>(r3)
-            r1.setInterpolator(r2)
-            android.animation.AnimatorSet r2 = new android.animation.AnimatorSet
-            r2.<init>()
-            org.telegram.ui.ContactsActivity$12 r3 = new org.telegram.ui.ContactsActivity$12
-            r3.<init>(r0, r9, r10)
-            r2.addListener(r3)
-            android.animation.Animator[] r10 = new android.animation.Animator[r4]
-            r3 = 0
-            r10[r3] = r1
-            r2.playTogether(r10)
-            org.telegram.ui.-$$Lambda$ContactsActivity$sFggcU9gVcBQonI9bNP5ZBexOvk r10 = new org.telegram.ui.-$$Lambda$ContactsActivity$sFggcU9gVcBQonI9bNP5ZBexOvk
-            r10.<init>(r2, r9, r0)
-            r0 = 50
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r10, r0)
-            return r2
-        L_0x00d3:
-            return r5
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContactsActivity.onCustomTransitionAnimation(boolean, java.lang.Runnable):android.animation.AnimatorSet");
+    public AnimatorSet onCustomTransitionAnimation(final boolean z, final Runnable runnable) {
+        ValueAnimator valueAnimator;
+        BaseFragment baseFragment;
+        float[] fArr = {0.0f, 1.0f};
+        if (z) {
+            // fill-array-data instruction
+            fArr[0] = NUM;
+            fArr[1] = 0;
+            valueAnimator = ValueAnimator.ofFloat(fArr);
+        } else {
+            valueAnimator = ValueAnimator.ofFloat(fArr);
+        }
+        ViewGroup viewGroup = (ViewGroup) this.fragmentView.getParent();
+        if (this.parentLayout.fragmentsStack.size() > 1) {
+            ArrayList<BaseFragment> arrayList = this.parentLayout.fragmentsStack;
+            baseFragment = arrayList.get(arrayList.size() - 2);
+        } else {
+            baseFragment = null;
+        }
+        DialogsActivity dialogsActivity = baseFragment instanceof DialogsActivity ? (DialogsActivity) baseFragment : null;
+        if (dialogsActivity == null) {
+            return null;
+        }
+        final RLottieImageView floatingButton2 = dialogsActivity.getFloatingButton();
+        View view = floatingButton2.getParent() != null ? (View) floatingButton2.getParent() : null;
+        if (floatingButton2 == null || this.floatingButtonContainer == null || view == null || floatingButton2.getVisibility() != 0 || Math.abs(view.getTranslationY()) > ((float) AndroidUtilities.dp(4.0f)) || Math.abs(this.floatingButtonContainer.getTranslationY()) > ((float) AndroidUtilities.dp(4.0f))) {
+            return null;
+        }
+        floatingButton2.setVisibility(8);
+        if (z) {
+            viewGroup.setAlpha(0.0f);
+        }
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(valueAnimator, viewGroup) {
+            public final /* synthetic */ ValueAnimator f$0;
+            public final /* synthetic */ ViewGroup f$1;
+
+            {
+                this.f$0 = r1;
+                this.f$1 = r2;
+            }
+
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                ContactsActivity.lambda$onCustomTransitionAnimation$7(this.f$0, this.f$1, valueAnimator);
+            }
+        });
+        FrameLayout frameLayout = this.floatingButtonContainer;
+        if (frameLayout != null) {
+            ((ViewGroup) this.fragmentView).removeView(frameLayout);
+            ((FrameLayout) viewGroup.getParent()).addView(this.floatingButtonContainer);
+        }
+        valueAnimator.setDuration(150);
+        valueAnimator.setInterpolator(new DecelerateInterpolator(1.5f));
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animator) {
+                if (ContactsActivity.this.floatingButtonContainer != null) {
+                    if (ContactsActivity.this.floatingButtonContainer.getParent() instanceof ViewGroup) {
+                        ((ViewGroup) ContactsActivity.this.floatingButtonContainer.getParent()).removeView(ContactsActivity.this.floatingButtonContainer);
+                    }
+                    ((ViewGroup) ContactsActivity.this.fragmentView).addView(ContactsActivity.this.floatingButtonContainer);
+                    floatingButton2.setVisibility(0);
+                    if (!z) {
+                        floatingButton2.setAnimation(NUM, 52, 52);
+                        floatingButton2.getAnimatedDrawable().setCurrentFrame(ContactsActivity.this.floatingButton.getAnimatedDrawable().getCurrentFrame());
+                        floatingButton2.playAnimation();
+                    }
+                }
+                runnable.run();
+            }
+        });
+        animatorSet.playTogether(new Animator[]{valueAnimator});
+        AndroidUtilities.runOnUIThread(new Runnable(animatorSet, z, floatingButton2) {
+            public final /* synthetic */ AnimatorSet f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ RLottieImageView f$3;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
+            }
+
+            public final void run() {
+                ContactsActivity.this.lambda$onCustomTransitionAnimation$8$ContactsActivity(this.f$1, this.f$2, this.f$3);
+            }
+        }, 50);
+        return animatorSet;
     }
 
     static /* synthetic */ void lambda$onCustomTransitionAnimation$7(ValueAnimator valueAnimator, ViewGroup viewGroup, ValueAnimator valueAnimator2) {

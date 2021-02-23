@@ -6,7 +6,6 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        int i = 0;
         this.can_view_participants = (readInt32 & 8) != 0;
         this.can_set_username = (readInt32 & 64) != 0;
         this.can_set_stickers = (readInt32 & 128) != 0;
@@ -43,6 +42,7 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         int readInt322 = abstractSerializedData.readInt32(z);
         if (readInt322 == NUM) {
             int readInt323 = abstractSerializedData.readInt32(z);
+            int i = 0;
             while (i < readInt323) {
                 TLRPC$BotInfo TLdeserialize = TLRPC$BotInfo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize != null) {
@@ -88,6 +88,20 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
             this.pts = abstractSerializedData.readInt32(z);
             if ((this.flags & 2097152) != 0) {
                 this.call = TLRPC$TL_inputGroupCall.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
+            if ((this.flags & 16777216) != 0) {
+                this.ttl_period = abstractSerializedData.readInt32(z);
+            }
+            if ((this.flags & 33554432) != 0) {
+                int readInt324 = abstractSerializedData.readInt32(z);
+                if (readInt324 == NUM) {
+                    int readInt325 = abstractSerializedData.readInt32(z);
+                    for (int i2 = 0; i2 < readInt325; i2++) {
+                        this.pending_suggestions.add(abstractSerializedData.readString(z));
+                    }
+                } else if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
+                }
             }
         } else if (z) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
@@ -180,6 +194,17 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         abstractSerializedData.writeInt32(this.pts);
         if ((this.flags & 2097152) != 0) {
             this.call.serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 16777216) != 0) {
+            abstractSerializedData.writeInt32(this.ttl_period);
+        }
+        if ((this.flags & 33554432) != 0) {
+            abstractSerializedData.writeInt32(NUM);
+            int size2 = this.pending_suggestions.size();
+            abstractSerializedData.writeInt32(size2);
+            for (int i10 = 0; i10 < size2; i10++) {
+                abstractSerializedData.writeString(this.pending_suggestions.get(i10));
+            }
         }
     }
 }

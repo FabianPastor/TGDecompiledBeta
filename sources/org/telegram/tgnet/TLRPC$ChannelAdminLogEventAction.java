@@ -31,6 +31,9 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
             case -421545947:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionChangeTitle();
                 break;
+            case -384910503:
+                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionExportedInviteEdit();
+                break;
             case -370660328:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionUpdatePinned();
                 break;
@@ -58,6 +61,12 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
             case 771095562:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionDefaultBannedRights();
                 break;
+            case 1048537159:
+                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionParticipantVolume();
+                break;
+            case 1091179342:
+                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionExportedInviteRevoke();
+                break;
             case 1121994683:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionDeleteMessage();
                 break;
@@ -73,11 +82,20 @@ public abstract class TLRPC$ChannelAdminLogEventAction extends TLObject {
             case 1456906823:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionToggleGroupCallSetting();
                 break;
+            case 1515256996:
+                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionExportedInviteDelete();
+                break;
+            case 1557846647:
+                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionParticipantJoinByInvite();
+                break;
             case 1599903217:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionTogglePreHistoryHidden();
                 break;
             case 1783299128:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionChangeUsername();
+                break;
+            case 1855199800:
+                tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionChangeHistoryTTL();
                 break;
             case 1889215493:
                 tLRPC$ChannelAdminLogEventAction = new TLRPC$TL_channelAdminLogEventActionEditMessage();

@@ -3043,120 +3043,118 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 ByteBuffer byteBuffer2;
                 ByteBuffer byteBuffer3;
                 ByteBuffer byteBuffer4;
-                int i = Build.VERSION.SDK_INT;
                 if (z) {
                     this.videoEncoder.signalEndOfInputStream();
                 }
-                int i2 = 21;
-                ByteBuffer[] outputBuffers = i < 21 ? this.videoEncoder.getOutputBuffers() : null;
+                int i = 21;
+                ByteBuffer[] outputBuffers = Build.VERSION.SDK_INT < 21 ? this.videoEncoder.getOutputBuffers() : null;
                 while (true) {
                     int dequeueOutputBuffer = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
+                    byte b = 1;
                     if (dequeueOutputBuffer == -1) {
                         if (!z) {
                             break;
                         }
-                        i2 = 21;
-                    } else {
-                        if (dequeueOutputBuffer == -3) {
-                            if (i < i2) {
-                                outputBuffers = this.videoEncoder.getOutputBuffers();
-                            }
-                        } else if (dequeueOutputBuffer == -2) {
-                            MediaFormat outputFormat = this.videoEncoder.getOutputFormat();
-                            if (this.videoTrackIndex == -5) {
-                                this.videoTrackIndex = this.mediaMuxer.addTrack(outputFormat, false);
-                                if (outputFormat.containsKey("prepend-sps-pps-to-idr-frames") && outputFormat.getInteger("prepend-sps-pps-to-idr-frames") == 1) {
-                                    this.prependHeaderSize = outputFormat.getByteBuffer("csd-0").limit() + outputFormat.getByteBuffer("csd-1").limit();
-                                }
-                            }
-                        } else if (dequeueOutputBuffer >= 0) {
-                            if (i < i2) {
-                                byteBuffer = outputBuffers[dequeueOutputBuffer];
-                            } else {
-                                byteBuffer = this.videoEncoder.getOutputBuffer(dequeueOutputBuffer);
-                            }
-                            if (byteBuffer != null) {
-                                MediaCodec.BufferInfo bufferInfo = this.videoBufferInfo;
-                                int i3 = bufferInfo.size;
-                                if (i3 > 1) {
-                                    int i4 = bufferInfo.flags;
-                                    if ((i4 & 2) == 0) {
-                                        int i5 = this.prependHeaderSize;
-                                        if (!(i5 == 0 || (i4 & 1) == 0)) {
-                                            bufferInfo.offset += i5;
-                                            bufferInfo.size = i3 - i5;
-                                        }
-                                        if (this.firstEncode && (i4 & 1) != 0) {
-                                            if (bufferInfo.size > 100) {
-                                                byteBuffer.position(bufferInfo.offset);
-                                                byte[] bArr = new byte[100];
-                                                byteBuffer.get(bArr);
-                                                int i6 = 0;
-                                                int i7 = 0;
-                                                while (true) {
-                                                    if (i6 < 96) {
-                                                        if (bArr[i6] == 0 && bArr[i6 + 1] == 0 && bArr[i6 + 2] == 0 && bArr[i6 + 3] == 1 && (i7 = i7 + 1) > 1) {
-                                                            MediaCodec.BufferInfo bufferInfo2 = this.videoBufferInfo;
-                                                            bufferInfo2.offset += i6;
-                                                            bufferInfo2.size -= i6;
-                                                            break;
-                                                        }
-                                                        i6++;
-                                                    } else {
-                                                        break;
-                                                    }
-                                                }
-                                            }
-                                            this.firstEncode = false;
-                                        }
-                                        long writeSampleData = this.mediaMuxer.writeSampleData(this.videoTrackIndex, byteBuffer, this.videoBufferInfo, true);
-                                        if (writeSampleData != 0) {
-                                            didWriteData(this.videoFile, writeSampleData, false);
-                                        }
-                                    } else if (this.videoTrackIndex == -5) {
-                                        byte[] bArr2 = new byte[i3];
-                                        byteBuffer.limit(bufferInfo.offset + i3);
-                                        byteBuffer.position(this.videoBufferInfo.offset);
-                                        byteBuffer.get(bArr2);
-                                        int i8 = this.videoBufferInfo.size - 1;
-                                        while (true) {
-                                            if (i8 < 0 || i8 <= 3) {
-                                                byteBuffer3 = null;
-                                                byteBuffer2 = null;
-                                            } else {
-                                                if (bArr2[i8] == 1 && bArr2[i8 - 1] == 0 && bArr2[i8 - 2] == 0) {
-                                                    int i9 = i8 - 3;
-                                                    if (bArr2[i9] == 0) {
-                                                        byteBuffer3 = ByteBuffer.allocate(i9);
-                                                        byteBuffer2 = ByteBuffer.allocate(this.videoBufferInfo.size - i9);
-                                                        byteBuffer3.put(bArr2, 0, i9).position(0);
-                                                        byteBuffer2.put(bArr2, i9, this.videoBufferInfo.size - i9).position(0);
-                                                        break;
-                                                    }
-                                                }
-                                                i8--;
-                                            }
-                                        }
-                                        MediaFormat createVideoFormat = MediaFormat.createVideoFormat("video/avc", this.videoWidth, this.videoHeight);
-                                        if (!(byteBuffer3 == null || byteBuffer2 == null)) {
-                                            createVideoFormat.setByteBuffer("csd-0", byteBuffer3);
-                                            createVideoFormat.setByteBuffer("csd-1", byteBuffer2);
-                                        }
-                                        this.videoTrackIndex = this.mediaMuxer.addTrack(createVideoFormat, false);
-                                    }
-                                }
-                                this.videoEncoder.releaseOutputBuffer(dequeueOutputBuffer, false);
-                                if ((this.videoBufferInfo.flags & 4) != 0) {
-                                    break;
-                                }
-                            } else {
-                                throw new RuntimeException("encoderOutputBuffer " + dequeueOutputBuffer + " was null");
+                    } else if (dequeueOutputBuffer == -3) {
+                        if (Build.VERSION.SDK_INT < i) {
+                            outputBuffers = this.videoEncoder.getOutputBuffers();
+                        }
+                    } else if (dequeueOutputBuffer == -2) {
+                        MediaFormat outputFormat = this.videoEncoder.getOutputFormat();
+                        if (this.videoTrackIndex == -5) {
+                            this.videoTrackIndex = this.mediaMuxer.addTrack(outputFormat, false);
+                            if (outputFormat.containsKey("prepend-sps-pps-to-idr-frames") && outputFormat.getInteger("prepend-sps-pps-to-idr-frames") == 1) {
+                                this.prependHeaderSize = outputFormat.getByteBuffer("csd-0").limit() + outputFormat.getByteBuffer("csd-1").limit();
                             }
                         }
-                        i2 = 21;
+                    } else if (dequeueOutputBuffer >= 0) {
+                        if (Build.VERSION.SDK_INT < i) {
+                            byteBuffer2 = outputBuffers[dequeueOutputBuffer];
+                        } else {
+                            byteBuffer2 = this.videoEncoder.getOutputBuffer(dequeueOutputBuffer);
+                        }
+                        if (byteBuffer2 != null) {
+                            MediaCodec.BufferInfo bufferInfo = this.videoBufferInfo;
+                            int i2 = bufferInfo.size;
+                            if (i2 > 1) {
+                                int i3 = bufferInfo.flags;
+                                if ((i3 & 2) == 0) {
+                                    int i4 = this.prependHeaderSize;
+                                    if (!(i4 == 0 || (i3 & 1) == 0)) {
+                                        bufferInfo.offset += i4;
+                                        bufferInfo.size = i2 - i4;
+                                    }
+                                    if (this.firstEncode && (i3 & 1) != 0) {
+                                        if (bufferInfo.size > 100) {
+                                            byteBuffer2.position(bufferInfo.offset);
+                                            byte[] bArr = new byte[100];
+                                            byteBuffer2.get(bArr);
+                                            int i5 = 0;
+                                            int i6 = 0;
+                                            while (true) {
+                                                if (i5 < 96) {
+                                                    if (bArr[i5] == 0 && bArr[i5 + 1] == 0 && bArr[i5 + 2] == 0 && bArr[i5 + 3] == 1 && (i6 = i6 + 1) > 1) {
+                                                        MediaCodec.BufferInfo bufferInfo2 = this.videoBufferInfo;
+                                                        bufferInfo2.offset += i5;
+                                                        bufferInfo2.size -= i5;
+                                                        break;
+                                                    }
+                                                    i5++;
+                                                } else {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        this.firstEncode = false;
+                                    }
+                                    long writeSampleData = this.mediaMuxer.writeSampleData(this.videoTrackIndex, byteBuffer2, this.videoBufferInfo, true);
+                                    if (writeSampleData != 0) {
+                                        didWriteData(this.videoFile, writeSampleData, false);
+                                    }
+                                } else if (this.videoTrackIndex == -5) {
+                                    byte[] bArr2 = new byte[i2];
+                                    byteBuffer2.limit(bufferInfo.offset + i2);
+                                    byteBuffer2.position(this.videoBufferInfo.offset);
+                                    byteBuffer2.get(bArr2);
+                                    int i7 = this.videoBufferInfo.size - 1;
+                                    while (true) {
+                                        if (i7 < 0 || i7 <= 3) {
+                                            byteBuffer4 = null;
+                                            byteBuffer3 = null;
+                                        } else {
+                                            if (bArr2[i7] == b && bArr2[i7 - 1] == 0 && bArr2[i7 - 2] == 0) {
+                                                int i8 = i7 - 3;
+                                                if (bArr2[i8] == 0) {
+                                                    byteBuffer4 = ByteBuffer.allocate(i8);
+                                                    byteBuffer3 = ByteBuffer.allocate(this.videoBufferInfo.size - i8);
+                                                    byteBuffer4.put(bArr2, 0, i8).position(0);
+                                                    byteBuffer3.put(bArr2, i8, this.videoBufferInfo.size - i8).position(0);
+                                                    break;
+                                                }
+                                            }
+                                            i7--;
+                                            b = 1;
+                                        }
+                                    }
+                                    MediaFormat createVideoFormat = MediaFormat.createVideoFormat("video/avc", this.videoWidth, this.videoHeight);
+                                    if (!(byteBuffer4 == null || byteBuffer3 == null)) {
+                                        createVideoFormat.setByteBuffer("csd-0", byteBuffer4);
+                                        createVideoFormat.setByteBuffer("csd-1", byteBuffer3);
+                                    }
+                                    this.videoTrackIndex = this.mediaMuxer.addTrack(createVideoFormat, false);
+                                }
+                            }
+                            this.videoEncoder.releaseOutputBuffer(dequeueOutputBuffer, false);
+                            if ((this.videoBufferInfo.flags & 4) != 0) {
+                                break;
+                            }
+                        } else {
+                            throw new RuntimeException("encoderOutputBuffer " + dequeueOutputBuffer + " was null");
+                        }
                     }
+                    i = 21;
                 }
-                if (i < 21) {
+                if (Build.VERSION.SDK_INT < 21) {
                     outputBuffers = this.audioEncoder.getOutputBuffers();
                 }
                 while (true) {
@@ -3169,7 +3167,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             return;
                         }
                     } else if (dequeueOutputBuffer2 == -3) {
-                        if (i < 21) {
+                        if (Build.VERSION.SDK_INT < 21) {
                             outputBuffers = this.audioEncoder.getOutputBuffers();
                         }
                     } else if (dequeueOutputBuffer2 == -2) {
@@ -3178,18 +3176,18 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             this.audioTrackIndex = this.mediaMuxer.addTrack(outputFormat2, true);
                         }
                     } else if (dequeueOutputBuffer2 >= 0) {
-                        if (i < 21) {
-                            byteBuffer4 = outputBuffers[dequeueOutputBuffer2];
+                        if (Build.VERSION.SDK_INT < 21) {
+                            byteBuffer = outputBuffers[dequeueOutputBuffer2];
                         } else {
-                            byteBuffer4 = this.audioEncoder.getOutputBuffer(dequeueOutputBuffer2);
+                            byteBuffer = this.audioEncoder.getOutputBuffer(dequeueOutputBuffer2);
                         }
-                        if (byteBuffer4 != null) {
+                        if (byteBuffer != null) {
                             MediaCodec.BufferInfo bufferInfo3 = this.audioBufferInfo;
                             if ((bufferInfo3.flags & 2) != 0) {
                                 bufferInfo3.size = 0;
                             }
                             if (bufferInfo3.size != 0) {
-                                long writeSampleData2 = this.mediaMuxer.writeSampleData(this.audioTrackIndex, byteBuffer4, bufferInfo3, false);
+                                long writeSampleData2 = this.mediaMuxer.writeSampleData(this.audioTrackIndex, byteBuffer, bufferInfo3, false);
                                 if (writeSampleData2 != 0) {
                                     didWriteData(this.videoFile, writeSampleData2, false);
                                 }

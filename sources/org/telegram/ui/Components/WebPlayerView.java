@@ -1585,23 +1585,6 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             this.videoId = str;
         }
 
-        private String decodeUrl(String str) {
-            StringBuilder sb = new StringBuilder(str);
-            for (int i = 0; i < sb.length(); i++) {
-                char charAt = sb.charAt(i);
-                char lowerCase = Character.toLowerCase(charAt);
-                if (charAt == lowerCase) {
-                    lowerCase = Character.toUpperCase(charAt);
-                }
-                sb.setCharAt(i, lowerCase);
-            }
-            try {
-                return new String(Base64.decode(sb.toString(), 0), StandardCharsets.UTF_8);
-            } catch (Exception unused) {
-                return null;
-            }
-        }
-
         /* access modifiers changed from: protected */
         public String doInBackground(Void... voidArr) {
             String downloadUrlContent = WebPlayerView.this.downloadUrlContent(this, String.format(Locale.US, "https://coub.com/api/v2/coubs/%s.json", new Object[]{this.videoId}));
@@ -1610,13 +1593,13 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             }
             try {
                 JSONObject jSONObject = new JSONObject(downloadUrlContent).getJSONObject("file_versions").getJSONObject("mobile");
-                String decodeUrl = decodeUrl(jSONObject.getString("gifv"));
-                String string = jSONObject.getJSONArray("audio").getString(0);
-                if (!(decodeUrl == null || string == null)) {
+                String string = jSONObject.getString("video");
+                String string2 = jSONObject.getJSONArray("audio").getString(0);
+                if (!(string == null || string2 == null)) {
                     String[] strArr = this.results;
-                    strArr[0] = decodeUrl;
+                    strArr[0] = string;
                     strArr[1] = "other";
-                    strArr[2] = string;
+                    strArr[2] = string2;
                     strArr[3] = "other";
                 }
             } catch (Exception e) {
@@ -3046,10 +3029,24 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x00a9 A[SYNTHETIC, Splitter:B:40:0x00a9] */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x00c8 A[SYNTHETIC, Splitter:B:52:0x00c8] */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x00e7 A[SYNTHETIC, Splitter:B:64:0x00e7] */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x0106 A[SYNTHETIC, Splitter:B:76:0x0106] */
+    public void willHandle() {
+        this.controlsView.setVisibility(4);
+        this.controlsView.show(false, false);
+        showProgress(true, false);
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0185  */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x018b  */
+    /* JADX WARNING: Removed duplicated region for block: B:106:0x0197  */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x019c  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x01b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x024e A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x00b2 A[SYNTHETIC, Splitter:B:44:0x00b2] */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x00d1 A[SYNTHETIC, Splitter:B:56:0x00d1] */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00f0 A[SYNTHETIC, Splitter:B:68:0x00f0] */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x010f A[SYNTHETIC, Splitter:B:80:0x010f] */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x014a  */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x015d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean loadVideo(java.lang.String r26, org.telegram.tgnet.TLRPC$Photo r27, java.lang.Object r28, java.lang.String r29, boolean r30) {
         /*
@@ -3057,227 +3054,223 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r1 = r25
             r2 = r26
             r3 = r27
-            java.lang.String r0 = "m"
-            r4 = -1
-            r1.seekToTime = r4
-            r4 = 3
-            r5 = 0
-            r6 = 1
+            r0 = r29
+            java.lang.String r4 = "m"
+            java.lang.String r5 = r25.getCoubId(r26)
+            if (r5 != 0) goto L_0x0014
+            java.lang.String r5 = r1.getCoubId(r0)
+        L_0x0014:
+            r6 = -1
+            r1.seekToTime = r6
+            r6 = 3
             r7 = 0
-            if (r2 == 0) goto L_0x0125
-            java.lang.String r8 = ".mp4"
-            boolean r8 = r2.endsWith(r8)
-            if (r8 == 0) goto L_0x0022
-            r13 = r2
-            r0 = r7
-            r8 = r0
-            r9 = r8
-            r10 = r9
-            r11 = r10
-            r12 = r11
-            goto L_0x012c
-        L_0x0022:
-            if (r29 == 0) goto L_0x006b
-            android.net.Uri r8 = android.net.Uri.parse(r29)     // Catch:{ Exception -> 0x0067 }
-            java.lang.String r9 = "t"
-            java.lang.String r9 = r8.getQueryParameter(r9)     // Catch:{ Exception -> 0x0067 }
-            if (r9 != 0) goto L_0x0036
-            java.lang.String r9 = "time_continue"
-            java.lang.String r9 = r8.getQueryParameter(r9)     // Catch:{ Exception -> 0x0067 }
-        L_0x0036:
-            if (r9 == 0) goto L_0x006b
-            boolean r8 = r9.contains(r0)     // Catch:{ Exception -> 0x0067 }
-            if (r8 == 0) goto L_0x005c
-            java.lang.String[] r0 = r9.split(r0)     // Catch:{ Exception -> 0x0067 }
-            r8 = r0[r5]     // Catch:{ Exception -> 0x0067 }
-            java.lang.Integer r8 = org.telegram.messenger.Utilities.parseInt(r8)     // Catch:{ Exception -> 0x0067 }
-            int r8 = r8.intValue()     // Catch:{ Exception -> 0x0067 }
-            int r8 = r8 * 60
-            r0 = r0[r6]     // Catch:{ Exception -> 0x0067 }
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x0067 }
-            int r0 = r0.intValue()     // Catch:{ Exception -> 0x0067 }
-            int r8 = r8 + r0
-            r1.seekToTime = r8     // Catch:{ Exception -> 0x0067 }
-            goto L_0x006b
-        L_0x005c:
-            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r9)     // Catch:{ Exception -> 0x0067 }
-            int r0 = r0.intValue()     // Catch:{ Exception -> 0x0067 }
-            r1.seekToTime = r0     // Catch:{ Exception -> 0x0067 }
-            goto L_0x006b
-        L_0x0067:
+            r8 = 1
+            r9 = 0
+            if (r5 != 0) goto L_0x012b
+            if (r2 == 0) goto L_0x012b
+            java.lang.String r10 = ".mp4"
+            boolean r10 = r2.endsWith(r10)
+            if (r10 == 0) goto L_0x002b
+            r0 = r2
+            r4 = r9
+            goto L_0x012d
+        L_0x002b:
+            if (r0 == 0) goto L_0x0074
+            android.net.Uri r0 = android.net.Uri.parse(r29)     // Catch:{ Exception -> 0x0070 }
+            java.lang.String r10 = "t"
+            java.lang.String r10 = r0.getQueryParameter(r10)     // Catch:{ Exception -> 0x0070 }
+            if (r10 != 0) goto L_0x003f
+            java.lang.String r10 = "time_continue"
+            java.lang.String r10 = r0.getQueryParameter(r10)     // Catch:{ Exception -> 0x0070 }
+        L_0x003f:
+            if (r10 == 0) goto L_0x0074
+            boolean r0 = r10.contains(r4)     // Catch:{ Exception -> 0x0070 }
+            if (r0 == 0) goto L_0x0065
+            java.lang.String[] r0 = r10.split(r4)     // Catch:{ Exception -> 0x0070 }
+            r4 = r0[r7]     // Catch:{ Exception -> 0x0070 }
+            java.lang.Integer r4 = org.telegram.messenger.Utilities.parseInt(r4)     // Catch:{ Exception -> 0x0070 }
+            int r4 = r4.intValue()     // Catch:{ Exception -> 0x0070 }
+            int r4 = r4 * 60
+            r0 = r0[r8]     // Catch:{ Exception -> 0x0070 }
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r0)     // Catch:{ Exception -> 0x0070 }
+            int r0 = r0.intValue()     // Catch:{ Exception -> 0x0070 }
+            int r4 = r4 + r0
+            r1.seekToTime = r4     // Catch:{ Exception -> 0x0070 }
+            goto L_0x0074
+        L_0x0065:
+            java.lang.Integer r0 = org.telegram.messenger.Utilities.parseInt(r10)     // Catch:{ Exception -> 0x0070 }
+            int r0 = r0.intValue()     // Catch:{ Exception -> 0x0070 }
+            r1.seekToTime = r0     // Catch:{ Exception -> 0x0070 }
+            goto L_0x0074
+        L_0x0070:
             r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x0083 }
-        L_0x006b:
-            java.util.regex.Pattern r0 = youtubeIdRegex     // Catch:{ Exception -> 0x0083 }
-            java.util.regex.Matcher r0 = r0.matcher(r2)     // Catch:{ Exception -> 0x0083 }
-            boolean r8 = r0.find()     // Catch:{ Exception -> 0x0083 }
-            if (r8 == 0) goto L_0x007c
-            java.lang.String r0 = r0.group(r6)     // Catch:{ Exception -> 0x0083 }
-            goto L_0x007d
-        L_0x007c:
-            r0 = r7
-        L_0x007d:
-            if (r0 == 0) goto L_0x0080
-            goto L_0x0081
-        L_0x0080:
-            r0 = r7
-        L_0x0081:
-            r8 = r0
-            goto L_0x0088
-        L_0x0083:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x008c }
+        L_0x0074:
+            java.util.regex.Pattern r0 = youtubeIdRegex     // Catch:{ Exception -> 0x008c }
+            java.util.regex.Matcher r0 = r0.matcher(r2)     // Catch:{ Exception -> 0x008c }
+            boolean r4 = r0.find()     // Catch:{ Exception -> 0x008c }
+            if (r4 == 0) goto L_0x0085
+            java.lang.String r0 = r0.group(r8)     // Catch:{ Exception -> 0x008c }
+            goto L_0x0086
+        L_0x0085:
+            r0 = r9
+        L_0x0086:
+            if (r0 == 0) goto L_0x0089
+            goto L_0x008a
+        L_0x0089:
+            r0 = r9
+        L_0x008a:
+            r4 = r0
+            goto L_0x0091
+        L_0x008c:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            r8 = r7
-        L_0x0088:
-            if (r8 != 0) goto L_0x00a6
-            java.util.regex.Pattern r0 = vimeoIdRegex     // Catch:{ Exception -> 0x00a2 }
-            java.util.regex.Matcher r0 = r0.matcher(r2)     // Catch:{ Exception -> 0x00a2 }
-            boolean r9 = r0.find()     // Catch:{ Exception -> 0x00a2 }
-            if (r9 == 0) goto L_0x009b
-            java.lang.String r0 = r0.group(r4)     // Catch:{ Exception -> 0x00a2 }
-            goto L_0x009c
-        L_0x009b:
-            r0 = r7
-        L_0x009c:
-            if (r0 == 0) goto L_0x009f
-            goto L_0x00a0
-        L_0x009f:
-            r0 = r7
-        L_0x00a0:
-            r9 = r0
-            goto L_0x00a7
-        L_0x00a2:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00a6:
-            r9 = r7
-        L_0x00a7:
-            if (r9 != 0) goto L_0x00c5
-            java.util.regex.Pattern r0 = aparatIdRegex     // Catch:{ Exception -> 0x00c1 }
-            java.util.regex.Matcher r0 = r0.matcher(r2)     // Catch:{ Exception -> 0x00c1 }
-            boolean r10 = r0.find()     // Catch:{ Exception -> 0x00c1 }
-            if (r10 == 0) goto L_0x00ba
-            java.lang.String r0 = r0.group(r6)     // Catch:{ Exception -> 0x00c1 }
-            goto L_0x00bb
-        L_0x00ba:
-            r0 = r7
-        L_0x00bb:
-            if (r0 == 0) goto L_0x00be
-            goto L_0x00bf
-        L_0x00be:
-            r0 = r7
-        L_0x00bf:
+            r4 = r9
+        L_0x0091:
+            if (r4 != 0) goto L_0x00af
+            java.util.regex.Pattern r0 = vimeoIdRegex     // Catch:{ Exception -> 0x00ab }
+            java.util.regex.Matcher r0 = r0.matcher(r2)     // Catch:{ Exception -> 0x00ab }
+            boolean r10 = r0.find()     // Catch:{ Exception -> 0x00ab }
+            if (r10 == 0) goto L_0x00a4
+            java.lang.String r0 = r0.group(r6)     // Catch:{ Exception -> 0x00ab }
+            goto L_0x00a5
+        L_0x00a4:
+            r0 = r9
+        L_0x00a5:
+            if (r0 == 0) goto L_0x00a8
+            goto L_0x00a9
+        L_0x00a8:
+            r0 = r9
+        L_0x00a9:
             r10 = r0
-            goto L_0x00c6
-        L_0x00c1:
+            goto L_0x00b0
+        L_0x00ab:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00c5:
-            r10 = r7
-        L_0x00c6:
-            if (r10 != 0) goto L_0x00e4
-            java.util.regex.Pattern r0 = twitchClipIdRegex     // Catch:{ Exception -> 0x00e0 }
-            java.util.regex.Matcher r0 = r0.matcher(r2)     // Catch:{ Exception -> 0x00e0 }
-            boolean r11 = r0.find()     // Catch:{ Exception -> 0x00e0 }
-            if (r11 == 0) goto L_0x00d9
-            java.lang.String r0 = r0.group(r6)     // Catch:{ Exception -> 0x00e0 }
-            goto L_0x00da
-        L_0x00d9:
-            r0 = r7
-        L_0x00da:
-            if (r0 == 0) goto L_0x00dd
-            goto L_0x00de
-        L_0x00dd:
-            r0 = r7
-        L_0x00de:
-            r11 = r0
-            goto L_0x00e5
-        L_0x00e0:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00e4:
-            r11 = r7
-        L_0x00e5:
-            if (r11 != 0) goto L_0x0103
-            java.util.regex.Pattern r0 = twitchStreamIdRegex     // Catch:{ Exception -> 0x00ff }
-            java.util.regex.Matcher r0 = r0.matcher(r2)     // Catch:{ Exception -> 0x00ff }
-            boolean r12 = r0.find()     // Catch:{ Exception -> 0x00ff }
-            if (r12 == 0) goto L_0x00f8
-            java.lang.String r0 = r0.group(r6)     // Catch:{ Exception -> 0x00ff }
-            goto L_0x00f9
-        L_0x00f8:
-            r0 = r7
-        L_0x00f9:
-            if (r0 == 0) goto L_0x00fc
-            goto L_0x00fd
-        L_0x00fc:
-            r0 = r7
-        L_0x00fd:
-            r12 = r0
-            goto L_0x0104
-        L_0x00ff:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0103:
-            r12 = r7
-        L_0x0104:
-            if (r12 != 0) goto L_0x0122
-            java.util.regex.Pattern r0 = coubIdRegex     // Catch:{ Exception -> 0x011e }
-            java.util.regex.Matcher r0 = r0.matcher(r2)     // Catch:{ Exception -> 0x011e }
-            boolean r13 = r0.find()     // Catch:{ Exception -> 0x011e }
-            if (r13 == 0) goto L_0x0117
-            java.lang.String r0 = r0.group(r6)     // Catch:{ Exception -> 0x011e }
-            goto L_0x0118
-        L_0x0117:
-            r0 = r7
-        L_0x0118:
-            if (r0 == 0) goto L_0x011b
-            goto L_0x011c
-        L_0x011b:
-            r0 = r7
-        L_0x011c:
-            r13 = r7
-            goto L_0x012c
-        L_0x011e:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0122:
-            r0 = r7
-            r13 = r0
-            goto L_0x012c
-        L_0x0125:
-            r0 = r7
-            r8 = r0
-            r9 = r8
+        L_0x00af:
             r10 = r9
+        L_0x00b0:
+            if (r10 != 0) goto L_0x00ce
+            java.util.regex.Pattern r0 = aparatIdRegex     // Catch:{ Exception -> 0x00ca }
+            java.util.regex.Matcher r0 = r0.matcher(r2)     // Catch:{ Exception -> 0x00ca }
+            boolean r11 = r0.find()     // Catch:{ Exception -> 0x00ca }
+            if (r11 == 0) goto L_0x00c3
+            java.lang.String r0 = r0.group(r8)     // Catch:{ Exception -> 0x00ca }
+            goto L_0x00c4
+        L_0x00c3:
+            r0 = r9
+        L_0x00c4:
+            if (r0 == 0) goto L_0x00c7
+            goto L_0x00c8
+        L_0x00c7:
+            r0 = r9
+        L_0x00c8:
+            r11 = r0
+            goto L_0x00cf
+        L_0x00ca:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+        L_0x00ce:
+            r11 = r9
+        L_0x00cf:
+            if (r11 != 0) goto L_0x00ed
+            java.util.regex.Pattern r0 = twitchClipIdRegex     // Catch:{ Exception -> 0x00e9 }
+            java.util.regex.Matcher r0 = r0.matcher(r2)     // Catch:{ Exception -> 0x00e9 }
+            boolean r12 = r0.find()     // Catch:{ Exception -> 0x00e9 }
+            if (r12 == 0) goto L_0x00e2
+            java.lang.String r0 = r0.group(r8)     // Catch:{ Exception -> 0x00e9 }
+            goto L_0x00e3
+        L_0x00e2:
+            r0 = r9
+        L_0x00e3:
+            if (r0 == 0) goto L_0x00e6
+            goto L_0x00e7
+        L_0x00e6:
+            r0 = r9
+        L_0x00e7:
+            r12 = r0
+            goto L_0x00ee
+        L_0x00e9:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+        L_0x00ed:
+            r12 = r9
+        L_0x00ee:
+            if (r12 != 0) goto L_0x010c
+            java.util.regex.Pattern r0 = twitchStreamIdRegex     // Catch:{ Exception -> 0x0108 }
+            java.util.regex.Matcher r0 = r0.matcher(r2)     // Catch:{ Exception -> 0x0108 }
+            boolean r13 = r0.find()     // Catch:{ Exception -> 0x0108 }
+            if (r13 == 0) goto L_0x0101
+            java.lang.String r0 = r0.group(r8)     // Catch:{ Exception -> 0x0108 }
+            goto L_0x0102
+        L_0x0101:
+            r0 = r9
+        L_0x0102:
+            if (r0 == 0) goto L_0x0105
+            goto L_0x0106
+        L_0x0105:
+            r0 = r9
+        L_0x0106:
+            r13 = r0
+            goto L_0x010d
+        L_0x0108:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+        L_0x010c:
+            r13 = r9
+        L_0x010d:
+            if (r13 != 0) goto L_0x0129
+            java.util.regex.Pattern r0 = coubIdRegex     // Catch:{ Exception -> 0x0125 }
+            java.util.regex.Matcher r0 = r0.matcher(r2)     // Catch:{ Exception -> 0x0125 }
+            boolean r14 = r0.find()     // Catch:{ Exception -> 0x0125 }
+            if (r14 == 0) goto L_0x0120
+            java.lang.String r0 = r0.group(r8)     // Catch:{ Exception -> 0x0125 }
+            goto L_0x0121
+        L_0x0120:
+            r0 = r9
+        L_0x0121:
+            if (r0 == 0) goto L_0x0129
+            r5 = r0
+            goto L_0x0129
+        L_0x0125:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+        L_0x0129:
+            r0 = r9
+            goto L_0x0131
+        L_0x012b:
+            r0 = r9
+            r4 = r0
+        L_0x012d:
+            r10 = r4
             r11 = r10
             r12 = r11
             r13 = r12
-        L_0x012c:
-            r1.initied = r5
-            r1.isCompleted = r5
+        L_0x0131:
+            r1.initied = r7
+            r1.isCompleted = r7
             r14 = r30
             r1.isAutoplay = r14
-            r1.playVideoUrl = r7
-            r1.playAudioUrl = r7
+            r1.playVideoUrl = r9
+            r1.playAudioUrl = r9
             r25.destroy()
-            r1.firstFrameRendered = r5
+            r1.firstFrameRendered = r7
             r14 = 1065353216(0x3var_, float:1.0)
             r1.currentAlpha = r14
             android.os.AsyncTask r14 = r1.currentTask
-            if (r14 == 0) goto L_0x014a
-            r14.cancel(r6)
-            r1.currentTask = r7
-        L_0x014a:
+            if (r14 == 0) goto L_0x014f
+            r14.cancel(r8)
+            r1.currentTask = r9
+        L_0x014f:
             r25.updateFullscreenButton()
             r25.updateShareButton()
             r25.updateInlineButton()
             r25.updatePlayButton()
-            if (r3 == 0) goto L_0x0180
+            if (r3 == 0) goto L_0x0185
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r14 = r3.sizes
             r15 = 80
-            org.telegram.tgnet.TLRPC$PhotoSize r14 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r14, r15, r6)
-            if (r14 == 0) goto L_0x0182
+            org.telegram.tgnet.TLRPC$PhotoSize r14 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r14, r15, r8)
+            if (r14 == 0) goto L_0x0187
             org.telegram.ui.Components.WebPlayerView$ControlsView r15 = r1.controlsView
             org.telegram.messenger.ImageReceiver r16 = r15.imageReceiver
             r17 = 0
@@ -3289,133 +3282,149 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             java.lang.String r20 = "80_80_b"
             r23 = r28
             r16.setImage(r17, r18, r19, r20, r21, r22, r23, r24)
-            r1.drawImage = r6
-            goto L_0x0182
-        L_0x0180:
-            r1.drawImage = r5
-        L_0x0182:
+            r1.drawImage = r8
+            goto L_0x0187
+        L_0x0185:
+            r1.drawImage = r7
+        L_0x0187:
             android.animation.AnimatorSet r3 = r1.progressAnimation
-            if (r3 == 0) goto L_0x018b
+            if (r3 == 0) goto L_0x0190
             r3.cancel()
-            r1.progressAnimation = r7
-        L_0x018b:
+            r1.progressAnimation = r9
+        L_0x0190:
             org.telegram.ui.Components.WebPlayerView$ControlsView r3 = r1.controlsView
-            r3.setProgress(r5)
-            if (r8 == 0) goto L_0x0195
-            r1.currentYoutubeId = r8
-            r8 = r7
-        L_0x0195:
-            if (r13 == 0) goto L_0x01b0
-            r1.initied = r6
-            r1.playVideoUrl = r13
+            r3.setProgress(r7)
+            if (r4 == 0) goto L_0x019a
+            r1.currentYoutubeId = r4
+            r4 = r9
+        L_0x019a:
+            if (r0 == 0) goto L_0x01b5
+            r1.initied = r8
+            r1.playVideoUrl = r0
             java.lang.String r2 = "other"
             r1.playVideoType = r2
             boolean r2 = r1.isAutoplay
-            if (r2 == 0) goto L_0x01a6
+            if (r2 == 0) goto L_0x01ab
             r25.preparePlayer()
-        L_0x01a6:
-            r1.showProgress(r5, r5)
+        L_0x01ab:
+            r1.showProgress(r7, r7)
             org.telegram.ui.Components.WebPlayerView$ControlsView r2 = r1.controlsView
-            r2.show(r6, r6)
-            goto L_0x0247
-        L_0x01b0:
+            r2.show(r8, r8)
+            goto L_0x024c
+        L_0x01b5:
             r3 = 2
-            if (r8 == 0) goto L_0x01c9
+            if (r4 == 0) goto L_0x01ce
             org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask
-            r2.<init>(r8)
+            r2.<init>(r4)
             java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
-            java.lang.Void[] r4 = new java.lang.Void[r4]
-            r4[r5] = r7
-            r4[r6] = r7
-            r4[r3] = r7
-            r2.executeOnExecutor(r14, r4)
+            java.lang.Void[] r6 = new java.lang.Void[r6]
+            r6[r7] = r9
+            r6[r8] = r9
+            r6[r3] = r9
+            r2.executeOnExecutor(r14, r6)
             r1.currentTask = r2
-            goto L_0x023f
-        L_0x01c9:
-            if (r9 == 0) goto L_0x01e0
+            goto L_0x0244
+        L_0x01ce:
+            if (r10 == 0) goto L_0x01e5
             org.telegram.ui.Components.WebPlayerView$VimeoVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$VimeoVideoTask
-            r2.<init>(r9)
-            java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
-            java.lang.Void[] r4 = new java.lang.Void[r4]
-            r4[r5] = r7
-            r4[r6] = r7
-            r4[r3] = r7
-            r2.executeOnExecutor(r14, r4)
-            r1.currentTask = r2
-            goto L_0x023f
-        L_0x01e0:
-            if (r0 == 0) goto L_0x01f9
-            org.telegram.ui.Components.WebPlayerView$CoubVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$CoubVideoTask
-            r2.<init>(r0)
-            java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
-            java.lang.Void[] r4 = new java.lang.Void[r4]
-            r4[r5] = r7
-            r4[r6] = r7
-            r4[r3] = r7
-            r2.executeOnExecutor(r14, r4)
-            r1.currentTask = r2
-            r1.isStream = r6
-            goto L_0x023f
-        L_0x01f9:
-            if (r10 == 0) goto L_0x0210
-            org.telegram.ui.Components.WebPlayerView$AparatVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$AparatVideoTask
             r2.<init>(r10)
             java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
-            java.lang.Void[] r4 = new java.lang.Void[r4]
-            r4[r5] = r7
-            r4[r6] = r7
-            r4[r3] = r7
-            r2.executeOnExecutor(r14, r4)
+            java.lang.Void[] r6 = new java.lang.Void[r6]
+            r6[r7] = r9
+            r6[r8] = r9
+            r6[r3] = r9
+            r2.executeOnExecutor(r14, r6)
             r1.currentTask = r2
-            goto L_0x023f
-        L_0x0210:
-            if (r11 == 0) goto L_0x0227
+            goto L_0x0244
+        L_0x01e5:
+            if (r5 == 0) goto L_0x01fe
+            org.telegram.ui.Components.WebPlayerView$CoubVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$CoubVideoTask
+            r2.<init>(r5)
+            java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
+            java.lang.Void[] r6 = new java.lang.Void[r6]
+            r6[r7] = r9
+            r6[r8] = r9
+            r6[r3] = r9
+            r2.executeOnExecutor(r14, r6)
+            r1.currentTask = r2
+            r1.isStream = r8
+            goto L_0x0244
+        L_0x01fe:
+            if (r11 == 0) goto L_0x0215
+            org.telegram.ui.Components.WebPlayerView$AparatVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$AparatVideoTask
+            r2.<init>(r11)
+            java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
+            java.lang.Void[] r6 = new java.lang.Void[r6]
+            r6[r7] = r9
+            r6[r8] = r9
+            r6[r3] = r9
+            r2.executeOnExecutor(r14, r6)
+            r1.currentTask = r2
+            goto L_0x0244
+        L_0x0215:
+            if (r12 == 0) goto L_0x022c
             org.telegram.ui.Components.WebPlayerView$TwitchClipVideoTask r14 = new org.telegram.ui.Components.WebPlayerView$TwitchClipVideoTask
-            r14.<init>(r2, r11)
-            java.util.concurrent.Executor r2 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
-            java.lang.Void[] r4 = new java.lang.Void[r4]
-            r4[r5] = r7
-            r4[r6] = r7
-            r4[r3] = r7
-            r14.executeOnExecutor(r2, r4)
-            r1.currentTask = r14
-            goto L_0x023f
-        L_0x0227:
-            if (r12 == 0) goto L_0x023f
-            org.telegram.ui.Components.WebPlayerView$TwitchStreamVideoTask r14 = new org.telegram.ui.Components.WebPlayerView$TwitchStreamVideoTask
             r14.<init>(r2, r12)
             java.util.concurrent.Executor r2 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
-            java.lang.Void[] r4 = new java.lang.Void[r4]
-            r4[r5] = r7
-            r4[r6] = r7
-            r4[r3] = r7
-            r14.executeOnExecutor(r2, r4)
+            java.lang.Void[] r6 = new java.lang.Void[r6]
+            r6[r7] = r9
+            r6[r8] = r9
+            r6[r3] = r9
+            r14.executeOnExecutor(r2, r6)
             r1.currentTask = r14
-            r1.isStream = r6
-        L_0x023f:
+            goto L_0x0244
+        L_0x022c:
+            if (r13 == 0) goto L_0x0244
+            org.telegram.ui.Components.WebPlayerView$TwitchStreamVideoTask r14 = new org.telegram.ui.Components.WebPlayerView$TwitchStreamVideoTask
+            r14.<init>(r2, r13)
+            java.util.concurrent.Executor r2 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
+            java.lang.Void[] r6 = new java.lang.Void[r6]
+            r6[r7] = r9
+            r6[r8] = r9
+            r6[r3] = r9
+            r14.executeOnExecutor(r2, r6)
+            r1.currentTask = r14
+            r1.isStream = r8
+        L_0x0244:
             org.telegram.ui.Components.WebPlayerView$ControlsView r2 = r1.controlsView
-            r2.show(r5, r5)
-            r1.showProgress(r6, r5)
-        L_0x0247:
-            if (r8 != 0) goto L_0x025e
-            if (r9 != 0) goto L_0x025e
-            if (r0 != 0) goto L_0x025e
-            if (r10 != 0) goto L_0x025e
-            if (r13 != 0) goto L_0x025e
-            if (r11 != 0) goto L_0x025e
-            if (r12 == 0) goto L_0x0256
-            goto L_0x025e
-        L_0x0256:
+            r2.show(r7, r7)
+            r1.showProgress(r8, r7)
+        L_0x024c:
+            if (r4 != 0) goto L_0x0263
+            if (r10 != 0) goto L_0x0263
+            if (r5 != 0) goto L_0x0263
+            if (r11 != 0) goto L_0x0263
+            if (r0 != 0) goto L_0x0263
+            if (r12 != 0) goto L_0x0263
+            if (r13 == 0) goto L_0x025b
+            goto L_0x0263
+        L_0x025b:
             org.telegram.ui.Components.WebPlayerView$ControlsView r0 = r1.controlsView
             r2 = 8
             r0.setVisibility(r2)
-            return r5
-        L_0x025e:
+            return r7
+        L_0x0263:
             org.telegram.ui.Components.WebPlayerView$ControlsView r0 = r1.controlsView
-            r0.setVisibility(r5)
-            return r6
+            r0.setVisibility(r7)
+            return r8
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.WebPlayerView.loadVideo(java.lang.String, org.telegram.tgnet.TLRPC$Photo, java.lang.Object, java.lang.String, boolean):boolean");
+    }
+
+    public String getCoubId(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return null;
+        }
+        try {
+            Matcher matcher = coubIdRegex.matcher(str);
+            String group = matcher.find() ? matcher.group(1) : null;
+            if (group != null) {
+                return group;
+            }
+            return null;
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
     }
 
     public View getAspectRatioView() {
