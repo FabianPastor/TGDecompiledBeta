@@ -568,16 +568,18 @@ public class LinkActionView extends LinearLayout {
     }
 
     private void revokeLink() {
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.fragment.getParentActivity());
-        builder.setMessage(LocaleController.getString("RevokeAlert", NUM));
-        builder.setTitle(LocaleController.getString("RevokeLink", NUM));
-        builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                LinkActionView.this.lambda$revokeLink$10$LinkActionView(dialogInterface, i);
-            }
-        });
-        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-        builder.show();
+        if (this.fragment.getParentActivity() != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.fragment.getParentActivity());
+            builder.setMessage(LocaleController.getString("RevokeAlert", NUM));
+            builder.setTitle(LocaleController.getString("RevokeLink", NUM));
+            builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener() {
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    LinkActionView.this.lambda$revokeLink$10$LinkActionView(dialogInterface, i);
+                }
+            });
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+            builder.show();
+        }
     }
 
     /* access modifiers changed from: private */

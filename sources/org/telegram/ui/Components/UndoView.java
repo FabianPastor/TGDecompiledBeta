@@ -11,8 +11,10 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.os.SystemClock;
+import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -53,8 +55,11 @@ public class UndoView extends FrameLayout {
     private TextView subinfoTextView;
     private TextPaint textPaint;
     private int textWidth;
+    StaticLayout timeLayout;
+    StaticLayout timeLayoutOut;
     private long timeLeft;
     private String timeLeftString;
+    float timeReplaceProgress;
     private LinearLayout undoButton;
     private ImageView undoImageView;
     private TextView undoTextView;
@@ -101,6 +106,7 @@ public class UndoView extends FrameLayout {
     public UndoView(Context context, boolean z) {
         super(context);
         this.currentAccount = UserConfig.selectedAccount;
+        this.timeReplaceProgress = 1.0f;
         this.fromTop = z;
         TextView textView = new TextView(context);
         this.infoTextView = textView;
@@ -2260,9 +2266,49 @@ public class UndoView extends FrameLayout {
                 this.prevSeconds = ceil;
                 String format = String.format("%d", new Object[]{Integer.valueOf(Math.max(1, ceil))});
                 this.timeLeftString = format;
+                StaticLayout staticLayout = this.timeLayout;
+                if (staticLayout != null) {
+                    this.timeLayoutOut = staticLayout;
+                    this.timeReplaceProgress = 0.0f;
+                }
                 this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(format));
+                this.timeLayout = new StaticLayout(this.timeLeftString, this.textPaint, Integer.MAX_VALUE, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }
-            canvas.drawText(this.timeLeftString, this.rect.centerX() - ((float) (this.textWidth / 2)), (float) AndroidUtilities.dp(28.2f), this.textPaint);
+            float f = this.timeReplaceProgress;
+            if (f < 1.0f) {
+                float f2 = f + 0.10666667f;
+                this.timeReplaceProgress = f2;
+                if (f2 > 1.0f) {
+                    this.timeReplaceProgress = 1.0f;
+                } else {
+                    invalidate();
+                }
+            }
+            int alpha = this.textPaint.getAlpha();
+            if (this.timeLayoutOut != null) {
+                float f3 = this.timeReplaceProgress;
+                if (f3 < 1.0f) {
+                    this.textPaint.setAlpha((int) (((float) alpha) * (1.0f - f3)));
+                    canvas.save();
+                    canvas.translate(this.rect.centerX() - ((float) (this.textWidth / 2)), ((float) AndroidUtilities.dp(17.2f)) + (((float) AndroidUtilities.dp(10.0f)) * this.timeReplaceProgress));
+                    this.timeLayoutOut.draw(canvas);
+                    this.textPaint.setAlpha(alpha);
+                    canvas.restore();
+                }
+            }
+            if (this.timeLayout != null) {
+                float f4 = this.timeReplaceProgress;
+                if (f4 != 1.0f) {
+                    this.textPaint.setAlpha((int) (((float) alpha) * f4));
+                }
+                canvas.save();
+                canvas.translate(this.rect.centerX() - ((float) (this.textWidth / 2)), ((float) AndroidUtilities.dp(17.2f)) - (((float) AndroidUtilities.dp(10.0f)) * (1.0f - this.timeReplaceProgress)));
+                this.timeLayout.draw(canvas);
+                if (this.timeReplaceProgress != 1.0f) {
+                    this.textPaint.setAlpha(alpha);
+                }
+                canvas.restore();
+            }
             canvas.drawArc(this.rect, -90.0f, (((float) this.timeLeft) / 5000.0f) * -360.0f, false, this.progressPaint);
         }
         long elapsedRealtime = SystemClock.elapsedRealtime();

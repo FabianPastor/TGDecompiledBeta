@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 4.1.2
-SHA1-Digest-Manifest: ihrhRh+SlcL9fFnNwlaJA/QQ7xU=
+SHA1-Digest-Manifest: TcCUEHGG+IX5USctpKc3rBwhDiM=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: XIGobyOHcal+53bvIEvKijdKvL0=
+SHA1-Digest: Xem/r0phVlxcMiBBOh+sT2witrk=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9880,13 +9880,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: Cazb4lUuI7abxU7kKILKBpjmHhg=
+SHA1-Digest: fttG0krlOeK5hRcPsmPvgFP7pVg=
 
 Name: classes2.dex
-SHA1-Digest: N6LCxWG4yKmtilzTzdWq5SS1m/g=
+SHA1-Digest: BxT9JeDKRTdfoqal0g2Um+G7n2I=
 
 Name: classes3.dex
-SHA1-Digest: kZu/P0QNEwhu6h+Prc4M7UhPm08=
+SHA1-Digest: /4tQzIUlki47LLGDJwloaeM96vg=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -9942,17 +9942,17 @@ SHA1-Digest: 0O3mZOvECcbKovN3J8yk5YojrpM=
 Name: isoparser-default.properties
 SHA1-Digest: ix2/FbuQDYdbrL/0Ibd5Tj5OTV0=
 
-Name: lib/arm64-v8a/libtmessages.35.so
-SHA1-Digest: LPsgh34DLLHNHTUBtlbpW951nzg=
+Name: lib/arm64-v8a/libtmessages.36.so
+SHA1-Digest: XF6naznRLKUWZgoGtjT/Kh2b4b0=
 
-Name: lib/armeabi-v7a/libtmessages.35.so
-SHA1-Digest: AdFBdTA9Aul3UGQcBeZu2PaQfqI=
+Name: lib/armeabi-v7a/libtmessages.36.so
+SHA1-Digest: GxERzs1XtZKKM11eVrs8pnoGfJA=
 
-Name: lib/x86/libtmessages.35.so
-SHA1-Digest: Hz7cnj/3USfSuJkjMaPJ3ljUaHs=
+Name: lib/x86/libtmessages.36.so
+SHA1-Digest: eyELc1O5NgXeADucJd0PhXw4HY4=
 
-Name: lib/x86_64/libtmessages.35.so
-SHA1-Digest: rf1rHDTI1BZos/MMEVvGyZof0m4=
+Name: lib/x86_64/libtmessages.36.so
+SHA1-Digest: kaWnyw7bFvx7/5FTykTUeur3aBM=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -20577,7 +20577,7 @@ Name: res/layout-v17/notification_template_custom_big.xml
 SHA1-Digest: iDPkjBHNyNyBoNrONDT1934eqIA=
 
 Name: res/layout-v17/shortcut_widget_item.xml
-SHA1-Digest: ++VTocg2JPOuZpSiT5G5eSJx6g0=
+SHA1-Digest: vIUHutOpbqBf2NWffcaeBx7rEsU=
 
 Name: res/layout-v21/notification_action.xml
 SHA1-Digest: pA31MsaBdv394cGeHfNTuqtZMac=
@@ -20598,7 +20598,7 @@ Name: res/layout/call_notification_rtl.xml
 SHA1-Digest: Y/Uy6mbXYgD+6AkPuwMjheIhTBk=
 
 Name: res/layout/contacts_widget_item.xml
-SHA1-Digest: f08UcX+H9UR2tBGFo4Fp+mQC60M=
+SHA1-Digest: wn1y/HDJ6ji70ZJ65jsTObFdrrQ=
 
 Name: res/layout/contacts_widget_layout_1.xml
 SHA1-Digest: 6Q4QULGCdCWS+YEwykZ/VX1PZyw=
@@ -20643,7 +20643,7 @@ Name: res/layout/player_small_notification.xml
 SHA1-Digest: X911OTlifDoEIZ5YoqAwMox4Vlg=
 
 Name: res/layout/shortcut_widget_item.xml
-SHA1-Digest: CLzrb+GzYrHJl9xGYb0fv0YyXlU=
+SHA1-Digest: fYx/ko1gFR6faFV+aVe0epk4OYg=
 
 Name: res/layout/shortcut_widget_layout_1.xml
 SHA1-Digest: 543ge5e5JOiXnHqBj4dntrHp96o=

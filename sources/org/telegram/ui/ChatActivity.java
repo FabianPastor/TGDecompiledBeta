@@ -31336,14 +31336,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 tLRPC$TL_messages_getReplies.offset_id = i7;
                 int i8 = this.commentMessagesLoadingGuid + 1;
                 this.commentMessagesLoadingGuid = i8;
-                $$Lambda$ChatActivity$_4WTV_b4ZyqdEflqGBtt3Wk8TQk r16 = r0;
+                $$Lambda$ChatActivity$4HoaxiA3rzF2N7ezF3bizUfFbOc r16 = r0;
                 ConnectionsManager connectionsManager = getConnectionsManager();
-                $$Lambda$ChatActivity$_4WTV_b4ZyqdEflqGBtt3Wk8TQk r0 = new RequestDelegate(i8, 30, i4, messageObject2, r15, tLRPC$TL_messages_getDiscussionMessage, chat, i5, messageObject) {
+                $$Lambda$ChatActivity$4HoaxiA3rzF2N7ezF3bizUfFbOc r0 = new RequestDelegate(i8, 30, r15, i4, messageObject2, tLRPC$TL_messages_getDiscussionMessage, chat, i5, messageObject) {
                     public final /* synthetic */ int f$1;
                     public final /* synthetic */ int f$2;
-                    public final /* synthetic */ int f$3;
-                    public final /* synthetic */ MessageObject f$4;
-                    public final /* synthetic */ Runnable f$5;
+                    public final /* synthetic */ Runnable f$3;
+                    public final /* synthetic */ int f$4;
+                    public final /* synthetic */ MessageObject f$5;
                     public final /* synthetic */ TLRPC$TL_messages_getDiscussionMessage f$6;
                     public final /* synthetic */ TLRPC$Chat f$7;
                     public final /* synthetic */ int f$8;
@@ -31420,17 +31420,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$openDiscussionMessageChat$134 */
-    public /* synthetic */ void lambda$openDiscussionMessageChat$134$ChatActivity(int i, int i2, int i3, MessageObject messageObject, Runnable runnable, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i4, MessageObject messageObject2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(new Runnable(i, tLObject, i2, tLRPC$TL_error, i3, messageObject, runnable, tLRPC$TL_messages_getDiscussionMessage, tLRPC$Chat, i4, messageObject2) {
+    public /* synthetic */ void lambda$openDiscussionMessageChat$134$ChatActivity(int i, int i2, Runnable runnable, int i3, MessageObject messageObject, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i4, MessageObject messageObject2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(new Runnable(i, tLObject, i2, tLRPC$TL_error, runnable, i3, messageObject, tLRPC$TL_messages_getDiscussionMessage, tLRPC$Chat, i4, messageObject2) {
             public final /* synthetic */ int f$1;
             public final /* synthetic */ int f$10;
             public final /* synthetic */ MessageObject f$11;
             public final /* synthetic */ TLObject f$2;
             public final /* synthetic */ int f$3;
             public final /* synthetic */ TLRPC$TL_error f$4;
-            public final /* synthetic */ int f$5;
-            public final /* synthetic */ MessageObject f$6;
-            public final /* synthetic */ Runnable f$7;
+            public final /* synthetic */ Runnable f$5;
+            public final /* synthetic */ int f$6;
+            public final /* synthetic */ MessageObject f$7;
             public final /* synthetic */ TLRPC$TL_messages_getDiscussionMessage f$8;
             public final /* synthetic */ TLRPC$Chat f$9;
 
@@ -31466,7 +31466,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$132 */
-    public /* synthetic */ void lambda$null$132$ChatActivity(int i, TLObject tLObject, int i2, TLRPC$TL_error tLRPC$TL_error, int i3, MessageObject messageObject, Runnable runnable, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i4, MessageObject messageObject2) {
+    public /* synthetic */ void lambda$null$132$ChatActivity(int i, TLObject tLObject, int i2, TLRPC$TL_error tLRPC$TL_error, Runnable runnable, int i3, MessageObject messageObject, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i4, MessageObject messageObject2) {
         if (i == this.commentMessagesLoadingGuid) {
             this.commentMessagesRequestId = -1;
             if (tLObject != null) {
@@ -31475,18 +31475,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (tLRPC$messages_Messages.messages.size() > i2) {
                     this.savedHistory.messages.remove(0);
                 }
-            } else if (!"CHANNEL_PRIVATE".equals(tLRPC$TL_error.text)) {
-                this.savedNoHistory = true;
-            } else if (getParentActivity() != null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                builder.setTitle(LocaleController.getString("AppName", NUM));
-                builder.setMessage(LocaleController.getString("JoinByPeekChannelText", NUM));
-                builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-                builder.create();
-                showDialog(builder.create());
+            } else if ("CHANNEL_PRIVATE".equals(tLRPC$TL_error.text)) {
+                if (getParentActivity() != null) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+                    builder.setTitle(LocaleController.getString("AppName", NUM));
+                    builder.setMessage(LocaleController.getString("JoinByPeekChannelText", NUM));
+                    builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+                    builder.create();
+                    showDialog(builder.create());
+                }
+                AndroidUtilities.cancelRunOnUIThread(runnable);
+                this.commentLoadingMessageId = 0;
+                this.chatListView.invalidateViews();
                 return;
             } else {
-                return;
+                this.savedNoHistory = true;
             }
             processLoadedDiscussionMessage(this.savedNoDiscussion, this.savedDiscussionMessage, this.savedNoHistory, this.savedHistory, i3, messageObject, runnable, tLRPC$TL_messages_getDiscussionMessage, tLRPC$Chat, i4, messageObject2);
         }

@@ -308,32 +308,32 @@ public class EditWidgetActivity extends BaseFragment {
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.EditWidgetActivity.WidgetPreviewCell.<init>(org.telegram.ui.EditWidgetActivity, android.content.Context):void");
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v53, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v58, resolved type: org.telegram.tgnet.TLRPC$Chat} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v42, resolved type: org.telegram.tgnet.TLRPC$User} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v66, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v178, resolved type: android.graphics.Bitmap} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v71, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v180, resolved type: android.graphics.Bitmap} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v17, resolved type: org.telegram.tgnet.TLRPC$FileLocation} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v67, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v69, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v18, resolved type: org.telegram.tgnet.TLRPC$FileLocation} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v72, resolved type: org.telegram.tgnet.TLRPC$Chat} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v73, resolved type: android.graphics.Bitmap} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v74, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v18, resolved type: org.telegram.tgnet.TLRPC$FileLocation} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v77, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v78, resolved type: android.graphics.Bitmap} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v19, resolved type: org.telegram.tgnet.TLRPC$FileLocation} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v23, resolved type: org.telegram.tgnet.TLRPC$FileLocation} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v205, resolved type: org.telegram.tgnet.TLRPC$User} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v206, resolved type: org.telegram.tgnet.TLRPC$User} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v208, resolved type: org.telegram.tgnet.TLRPC$TL_dialog} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v207, resolved type: org.telegram.tgnet.TLRPC$User} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v208, resolved type: org.telegram.tgnet.TLRPC$User} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v210, resolved type: org.telegram.tgnet.TLRPC$TL_dialog} */
         /* JADX WARNING: type inference failed for: r14v5, types: [org.telegram.tgnet.TLRPC$Dialog] */
         /* JADX WARNING: type inference failed for: r15v0, types: [org.telegram.tgnet.TLObject] */
-        /* JADX WARNING: type inference failed for: r0v64, types: [org.telegram.tgnet.TLRPC$User] */
+        /* JADX WARNING: type inference failed for: r0v66, types: [org.telegram.tgnet.TLRPC$User] */
         /* JADX WARNING: type inference failed for: r9v26, types: [org.telegram.tgnet.TLRPC$User] */
         /* JADX WARNING: type inference failed for: r9v39 */
-        /* JADX WARNING: type inference failed for: r0v179 */
-        /* JADX WARNING: type inference failed for: r3v76 */
+        /* JADX WARNING: type inference failed for: r0v181 */
+        /* JADX WARNING: type inference failed for: r3v81 */
         /* JADX WARNING: type inference failed for: r14v6 */
         /* JADX WARNING: type inference failed for: r14v7 */
-        /* JADX WARNING: type inference failed for: r0v204 */
-        /* JADX WARNING: type inference failed for: r3v77 */
+        /* JADX WARNING: type inference failed for: r0v206 */
+        /* JADX WARNING: type inference failed for: r3v82 */
         /* JADX WARNING: Code restructure failed: missing block: B:100:0x0271, code lost:
             if ((r0 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChannelMigrateFrom) == false) goto L_0x0274;
          */
@@ -343,7 +343,7 @@ public class EditWidgetActivity extends BaseFragment {
         /* JADX WARNING: Removed duplicated region for block: B:265:0x06f3  */
         /* JADX WARNING: Removed duplicated region for block: B:274:0x071d  */
         /* JADX WARNING: Removed duplicated region for block: B:364:0x08be  */
-        /* JADX WARNING: Removed duplicated region for block: B:373:0x08f9  */
+        /* JADX WARNING: Removed duplicated region for block: B:377:0x090c  */
         /* JADX WARNING: Unknown variable types count: 1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void updateDialogs() {
@@ -1101,19 +1101,19 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.View r0 = r0.findViewById(r2)
                 r2 = 8
                 r0.setVisibility(r2)
-                goto L_0x0922
+                goto L_0x0935
             L_0x064d:
                 r18 = r4
                 org.telegram.ui.EditWidgetActivity r0 = r1.this$0
                 int r0 = r0.widgetType
-                if (r0 != r11) goto L_0x0922
+                if (r0 != r11) goto L_0x0935
                 r2 = 0
             L_0x0658:
                 r3 = 2
-                if (r2 >= r3) goto L_0x0922
+                if (r2 >= r3) goto L_0x0935
                 r4 = 0
             L_0x065c:
-                if (r4 >= r3) goto L_0x0916
+                if (r4 >= r3) goto L_0x0929
                 int r0 = r2 * 2
                 int r0 = r0 + r4
                 org.telegram.ui.EditWidgetActivity r3 = r1.this$0
@@ -1198,7 +1198,7 @@ public class EditWidgetActivity extends BaseFragment {
                 r8 = 0
                 r10 = 1111490560(0x42400000, float:48.0)
                 r16 = 0
-                goto L_0x090f
+                goto L_0x0922
             L_0x071d:
                 android.view.ViewGroup[] r7 = r1.cells
                 r7 = r7[r2]
@@ -1419,55 +1419,65 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x08b5:
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             L_0x08b8:
-                if (r3 == 0) goto L_0x08f9
+                if (r3 == 0) goto L_0x090c
                 int r0 = r3.unread_count
-                if (r0 <= 0) goto L_0x08f9
-                android.view.ViewGroup[] r0 = r1.cells
-                r0 = r0[r2]
-                if (r4 != 0) goto L_0x08c8
-                r5 = 2131230793(0x7var_, float:1.8077649E38)
-                goto L_0x08cb
-            L_0x08c8:
-                r5 = 2131230794(0x7var_a, float:1.807765E38)
-            L_0x08cb:
-                android.view.View r0 = r0.findViewById(r5)
-                android.widget.TextView r0 = (android.widget.TextView) r0
-                java.lang.Object[] r5 = new java.lang.Object[r11]
-                int r3 = r3.unread_count
+                if (r0 <= 0) goto L_0x090c
+                r3 = 99
+                if (r0 <= r3) goto L_0x08d3
+                java.lang.Object[] r0 = new java.lang.Object[r11]
+                r3 = 99
                 java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-                r5[r12] = r3
-                java.lang.String r3 = "%d"
-                java.lang.String r3 = java.lang.String.format(r3, r5)
-                r0.setText(r3)
+                r0[r12] = r3
+                java.lang.String r3 = "%d+"
+                java.lang.String r0 = java.lang.String.format(r3, r0)
+                goto L_0x08e1
+            L_0x08d3:
+                java.lang.Object[] r3 = new java.lang.Object[r11]
+                java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+                r3[r12] = r0
+                java.lang.String r0 = "%d"
+                java.lang.String r0 = java.lang.String.format(r0, r3)
+            L_0x08e1:
+                android.view.ViewGroup[] r3 = r1.cells
+                r3 = r3[r2]
+                if (r4 != 0) goto L_0x08eb
+                r5 = 2131230793(0x7var_, float:1.8077649E38)
+                goto L_0x08ee
+            L_0x08eb:
+                r5 = 2131230794(0x7var_a, float:1.807765E38)
+            L_0x08ee:
+                android.view.View r3 = r3.findViewById(r5)
+                android.widget.TextView r3 = (android.widget.TextView) r3
+                r3.setText(r0)
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r2]
-                if (r4 != 0) goto L_0x08ee
+                if (r4 != 0) goto L_0x0901
                 r3 = 2131230795(0x7var_b, float:1.8077653E38)
-                goto L_0x08f1
-            L_0x08ee:
+                goto L_0x0904
+            L_0x0901:
                 r3 = 2131230796(0x7var_c, float:1.8077655E38)
-            L_0x08f1:
+            L_0x0904:
                 android.view.View r0 = r0.findViewById(r3)
                 r0.setVisibility(r12)
-                goto L_0x090f
-            L_0x08f9:
+                goto L_0x0922
+            L_0x090c:
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r2]
-                if (r4 != 0) goto L_0x0903
+                if (r4 != 0) goto L_0x0916
                 r3 = 2131230795(0x7var_b, float:1.8077653E38)
-                goto L_0x0906
-            L_0x0903:
+                goto L_0x0919
+            L_0x0916:
                 r3 = 2131230796(0x7var_c, float:1.8077655E38)
-            L_0x0906:
+            L_0x0919:
                 android.view.View r0 = r0.findViewById(r3)
                 r3 = 8
                 r0.setVisibility(r3)
-            L_0x090f:
+            L_0x0922:
                 int r4 = r4 + 1
                 r18 = r7
                 r3 = 2
                 goto L_0x065c
-            L_0x0916:
+            L_0x0929:
                 r7 = r18
                 r6 = 0
                 r8 = 0
@@ -1475,21 +1485,21 @@ public class EditWidgetActivity extends BaseFragment {
                 r16 = 0
                 int r2 = r2 + 1
                 goto L_0x0658
-            L_0x0922:
+            L_0x0935:
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r12]
                 int r0 = r0.getVisibility()
-                if (r0 != 0) goto L_0x0938
+                if (r0 != 0) goto L_0x094b
                 org.telegram.ui.EditWidgetActivity r0 = r1.this$0
                 android.widget.ImageView r0 = r0.previewImageView
                 r2 = 8
                 r0.setVisibility(r2)
-                goto L_0x0941
-            L_0x0938:
+                goto L_0x0954
+            L_0x094b:
                 org.telegram.ui.EditWidgetActivity r0 = r1.this$0
                 android.widget.ImageView r0 = r0.previewImageView
                 r0.setVisibility(r12)
-            L_0x0941:
+            L_0x0954:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.EditWidgetActivity.WidgetPreviewCell.updateDialogs():void");

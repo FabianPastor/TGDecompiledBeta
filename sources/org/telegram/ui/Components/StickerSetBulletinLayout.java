@@ -13,8 +13,8 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x004b  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x01ef  */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x0050  */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x006b  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public StickerSetBulletinLayout(android.content.Context r14, org.telegram.tgnet.TLObject r15, int r16, org.telegram.tgnet.TLRPC$Document r17) {
         /*
@@ -64,33 +64,48 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             r1 = r17
             r10 = r2
         L_0x0049:
-            if (r1 == 0) goto L_0x01ef
+            if (r1 != 0) goto L_0x006b
+            boolean r3 = org.telegram.messenger.BuildVars.DEBUG_VERSION
+            if (r3 != 0) goto L_0x0050
+            goto L_0x006b
+        L_0x0050:
+            java.lang.IllegalArgumentException r1 = new java.lang.IllegalArgumentException
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder
+            r2.<init>()
+            java.lang.String r3 = "Invalid type of the given setObject: "
+            r2.append(r3)
+            java.lang.Class r3 = r15.getClass()
+            r2.append(r3)
+            java.lang.String r2 = r2.toString()
+            r1.<init>(r2)
+            throw r1
+        L_0x006b:
             r11 = 1
-            if (r1 == 0) goto L_0x00b1
+            if (r1 == 0) goto L_0x00d1
             r3 = 90
-            if (r10 != 0) goto L_0x0053
-            goto L_0x0059
-        L_0x0053:
+            if (r10 != 0) goto L_0x0073
+            goto L_0x0079
+        L_0x0073:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r10.thumbs
             org.telegram.tgnet.TLRPC$PhotoSize r2 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r2, r3)
-        L_0x0059:
-            if (r2 != 0) goto L_0x005c
+        L_0x0079:
+            if (r2 != 0) goto L_0x007c
             r2 = r1
-        L_0x005c:
+        L_0x007c:
             boolean r4 = r2 instanceof org.telegram.tgnet.TLRPC$Document
-            if (r4 == 0) goto L_0x006b
+            if (r4 == 0) goto L_0x008b
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r1.thumbs
             org.telegram.tgnet.TLRPC$PhotoSize r2 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r2, r3)
             org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Document) r1)
-            goto L_0x0071
-        L_0x006b:
+            goto L_0x0091
+        L_0x008b:
             org.telegram.tgnet.TLRPC$PhotoSize r2 = (org.telegram.tgnet.TLRPC$PhotoSize) r2
             org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForSticker(r2, r1)
-        L_0x0071:
+        L_0x0091:
             r5 = r2
-            if (r4 == 0) goto L_0x008f
+            if (r4 == 0) goto L_0x00af
             boolean r2 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r1, r11)
-            if (r2 == 0) goto L_0x008f
+            if (r2 == 0) goto L_0x00af
             org.telegram.ui.Components.BackupImageView r2 = r0.imageView
             org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForDocument(r1)
             r6 = 0
@@ -104,11 +119,11 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             r6 = r12
             r7 = r15
             r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (org.telegram.messenger.ImageLocation) r4, (java.lang.String) r5, (int) r6, (java.lang.Object) r7)
-            goto L_0x00bc
-        L_0x008f:
-            if (r5 == 0) goto L_0x00a3
+            goto L_0x00dc
+        L_0x00af:
+            if (r5 == 0) goto L_0x00c3
             int r1 = r5.imageType
-            if (r1 != r11) goto L_0x00a3
+            if (r1 != r11) goto L_0x00c3
             org.telegram.ui.Components.BackupImageView r1 = r0.imageView
             r6 = 0
             java.lang.String r3 = "50_50"
@@ -117,8 +132,8 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             r5 = r6
             r6 = r15
             r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (java.lang.String) r4, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r6)
-            goto L_0x00bc
-        L_0x00a3:
+            goto L_0x00dc
+        L_0x00c3:
             org.telegram.ui.Components.BackupImageView r1 = r0.imageView
             r6 = 0
             java.lang.String r3 = "50_50"
@@ -127,8 +142,8 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             r5 = r6
             r6 = r15
             r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (java.lang.String) r4, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r6)
-            goto L_0x00bc
-        L_0x00b1:
+            goto L_0x00dc
+        L_0x00d1:
             org.telegram.ui.Components.BackupImageView r1 = r0.imageView
             r2 = 0
             r3 = 0
@@ -136,20 +151,20 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             java.lang.String r4 = "webp"
             r6 = r15
             r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (java.lang.String) r4, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r6)
-        L_0x00bc:
-            if (r8 == 0) goto L_0x01a5
-            if (r8 == r11) goto L_0x015b
+        L_0x00dc:
+            if (r8 == 0) goto L_0x01c5
+            if (r8 == r11) goto L_0x017b
             r1 = 2
-            if (r8 == r1) goto L_0x010f
+            if (r8 == r1) goto L_0x012f
             r1 = 3
             r2 = 8
-            if (r8 == r1) goto L_0x00fa
+            if (r8 == r1) goto L_0x011a
             r1 = 4
-            if (r8 == r1) goto L_0x00e5
+            if (r8 == r1) goto L_0x0105
             r1 = 5
-            if (r8 == r1) goto L_0x00d0
-            goto L_0x01ee
-        L_0x00d0:
+            if (r8 == r1) goto L_0x00f0
+            goto L_0x020e
+        L_0x00f0:
             android.widget.TextView r1 = r0.titleTextView
             r3 = 2131624231(0x7f0e0127, float:1.8875636E38)
             java.lang.String r4 = "AddedToFavorites"
@@ -157,8 +172,8 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             r1.setText(r3)
             android.widget.TextView r1 = r0.subtitleTextView
             r1.setVisibility(r2)
-            goto L_0x01ee
-        L_0x00e5:
+            goto L_0x020e
+        L_0x0105:
             android.widget.TextView r1 = r0.titleTextView
             r3 = 2131627083(0x7f0e0c4b, float:1.888142E38)
             java.lang.String r4 = "RemovedFromFavorites"
@@ -166,8 +181,8 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             r1.setText(r3)
             android.widget.TextView r1 = r0.subtitleTextView
             r1.setVisibility(r2)
-            goto L_0x01ee
-        L_0x00fa:
+            goto L_0x020e
+        L_0x011a:
             android.widget.TextView r1 = r0.titleTextView
             r3 = 2131627084(0x7f0e0c4c, float:1.8881422E38)
             java.lang.String r4 = "RemovedFromRecent"
@@ -175,10 +190,10 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             r1.setText(r3)
             android.widget.TextView r1 = r0.subtitleTextView
             r1.setVisibility(r2)
-            goto L_0x01ee
-        L_0x010f:
+            goto L_0x020e
+        L_0x012f:
             boolean r1 = r10.masks
-            if (r1 == 0) goto L_0x0137
+            if (r1 == 0) goto L_0x0157
             android.widget.TextView r1 = r0.titleTextView
             r2 = 2131624199(0x7f0e0107, float:1.887557E38)
             java.lang.String r3 = "AddMasksInstalled"
@@ -192,8 +207,8 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             java.lang.String r4 = "AddMasksInstalledInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r4, r2, r3)
             r1.setText(r2)
-            goto L_0x01ee
-        L_0x0137:
+            goto L_0x020e
+        L_0x0157:
             android.widget.TextView r1 = r0.titleTextView
             r2 = 2131624216(0x7f0e0118, float:1.8875605E38)
             java.lang.String r3 = "AddStickersInstalled"
@@ -207,10 +222,10 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             java.lang.String r4 = "AddStickersInstalledInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r4, r2, r3)
             r1.setText(r2)
-            goto L_0x01ee
-        L_0x015b:
+            goto L_0x020e
+        L_0x017b:
             boolean r1 = r10.masks
-            if (r1 == 0) goto L_0x0182
+            if (r1 == 0) goto L_0x01a2
             android.widget.TextView r1 = r0.titleTextView
             r2 = 2131626022(0x7f0e0826, float:1.8879268E38)
             java.lang.String r3 = "MasksArchived"
@@ -224,8 +239,8 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             java.lang.String r4 = "MasksArchivedInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r4, r2, r3)
             r1.setText(r2)
-            goto L_0x01ee
-        L_0x0182:
+            goto L_0x020e
+        L_0x01a2:
             android.widget.TextView r1 = r0.titleTextView
             r2 = 2131627499(0x7f0e0deb, float:1.8882264E38)
             java.lang.String r3 = "StickersArchived"
@@ -239,10 +254,10 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             java.lang.String r4 = "StickersArchivedInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r4, r2, r3)
             r1.setText(r2)
-            goto L_0x01ee
-        L_0x01a5:
+            goto L_0x020e
+        L_0x01c5:
             boolean r1 = r10.masks
-            if (r1 == 0) goto L_0x01cc
+            if (r1 == 0) goto L_0x01ec
             android.widget.TextView r1 = r0.titleTextView
             r2 = 2131626031(0x7f0e082f, float:1.8879287E38)
             java.lang.String r3 = "MasksRemoved"
@@ -256,8 +271,8 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             java.lang.String r4 = "MasksRemovedInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r4, r2, r3)
             r1.setText(r2)
-            goto L_0x01ee
-        L_0x01cc:
+            goto L_0x020e
+        L_0x01ec:
             android.widget.TextView r1 = r0.titleTextView
             r2 = 2131627506(0x7f0e0df2, float:1.8882278E38)
             java.lang.String r3 = "StickersRemoved"
@@ -271,23 +286,8 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
             java.lang.String r4 = "StickersRemovedInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r4, r2, r3)
             r1.setText(r2)
-        L_0x01ee:
+        L_0x020e:
             return
-        L_0x01ef:
-            java.lang.IllegalArgumentException r1 = new java.lang.IllegalArgumentException
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder
-            r2.<init>()
-            java.lang.String r3 = "Invalid type of the given setObject: "
-            r2.append(r3)
-            java.lang.Class r3 = r15.getClass()
-            r2.append(r3)
-            java.lang.String r2 = r2.toString()
-            r1.<init>(r2)
-            goto L_0x020b
-        L_0x020a:
-            throw r1
-        L_0x020b:
-            goto L_0x020a
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickerSetBulletinLayout.<init>(android.content.Context, org.telegram.tgnet.TLObject, int, org.telegram.tgnet.TLRPC$Document):void");
     }

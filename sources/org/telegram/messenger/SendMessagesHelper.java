@@ -2196,7 +2196,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         sendMessage((TLRPC$TL_document) tLRPC$Document, (VideoEditedInfo) null, (String) null, j, messageObject, messageObject2, (String) null, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i, 0, obj);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:253:0x05fe, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:256:0x05fe, code lost:
         if (r5.get(r6 + 1).getDialogId() != r1.getDialogId()) goto L_0x0625;
      */
     /* JADX WARNING: Removed duplicated region for block: B:135:0x032e  */
@@ -2205,42 +2205,43 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:143:0x0351  */
     /* JADX WARNING: Removed duplicated region for block: B:146:0x035d  */
     /* JADX WARNING: Removed duplicated region for block: B:148:0x0367  */
-    /* JADX WARNING: Removed duplicated region for block: B:151:0x039b  */
-    /* JADX WARNING: Removed duplicated region for block: B:180:0x044a  */
-    /* JADX WARNING: Removed duplicated region for block: B:184:0x0457  */
-    /* JADX WARNING: Removed duplicated region for block: B:187:0x0461  */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x047e  */
-    /* JADX WARNING: Removed duplicated region for block: B:196:0x04aa A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:203:0x04c4  */
-    /* JADX WARNING: Removed duplicated region for block: B:204:0x04c7  */
-    /* JADX WARNING: Removed duplicated region for block: B:207:0x04dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x0503  */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x0505  */
-    /* JADX WARNING: Removed duplicated region for block: B:214:0x0515 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:229:0x0552  */
-    /* JADX WARNING: Removed duplicated region for block: B:230:0x0559  */
-    /* JADX WARNING: Removed duplicated region for block: B:233:0x0564  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x0577  */
-    /* JADX WARNING: Removed duplicated region for block: B:237:0x0579  */
-    /* JADX WARNING: Removed duplicated region for block: B:240:0x058e  */
-    /* JADX WARNING: Removed duplicated region for block: B:241:0x0590  */
-    /* JADX WARNING: Removed duplicated region for block: B:244:0x0598  */
-    /* JADX WARNING: Removed duplicated region for block: B:245:0x05cf  */
-    /* JADX WARNING: Removed duplicated region for block: B:248:0x05d9  */
-    /* JADX WARNING: Removed duplicated region for block: B:257:0x0621  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x0638  */
-    /* JADX WARNING: Removed duplicated region for block: B:261:0x063b  */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x064a  */
-    /* JADX WARNING: Removed duplicated region for block: B:265:0x064c  */
-    /* JADX WARNING: Removed duplicated region for block: B:268:0x0670  */
-    /* JADX WARNING: Removed duplicated region for block: B:274:0x0696  */
-    /* JADX WARNING: Removed duplicated region for block: B:277:0x06a6  */
-    /* JADX WARNING: Removed duplicated region for block: B:280:0x06cf  */
-    /* JADX WARNING: Removed duplicated region for block: B:285:0x06ef  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x06f1  */
-    /* JADX WARNING: Removed duplicated region for block: B:289:0x06fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:290:0x0701  */
-    /* JADX WARNING: Removed duplicated region for block: B:293:0x0755  */
+    /* JADX WARNING: Removed duplicated region for block: B:151:0x0389  */
+    /* JADX WARNING: Removed duplicated region for block: B:154:0x03a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:183:0x044c  */
+    /* JADX WARNING: Removed duplicated region for block: B:187:0x0459  */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x0463  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x047e  */
+    /* JADX WARNING: Removed duplicated region for block: B:199:0x04aa A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:206:0x04c4  */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x04c7  */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x04dc  */
+    /* JADX WARNING: Removed duplicated region for block: B:213:0x0503  */
+    /* JADX WARNING: Removed duplicated region for block: B:214:0x0505  */
+    /* JADX WARNING: Removed duplicated region for block: B:217:0x0515 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:232:0x0552  */
+    /* JADX WARNING: Removed duplicated region for block: B:233:0x0559  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x0564  */
+    /* JADX WARNING: Removed duplicated region for block: B:239:0x0577  */
+    /* JADX WARNING: Removed duplicated region for block: B:240:0x0579  */
+    /* JADX WARNING: Removed duplicated region for block: B:243:0x058e  */
+    /* JADX WARNING: Removed duplicated region for block: B:244:0x0590  */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x0598  */
+    /* JADX WARNING: Removed duplicated region for block: B:248:0x05cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:251:0x05d9  */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x0621  */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x0638  */
+    /* JADX WARNING: Removed duplicated region for block: B:264:0x063b  */
+    /* JADX WARNING: Removed duplicated region for block: B:267:0x064a  */
+    /* JADX WARNING: Removed duplicated region for block: B:268:0x064c  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x0670  */
+    /* JADX WARNING: Removed duplicated region for block: B:277:0x0696  */
+    /* JADX WARNING: Removed duplicated region for block: B:280:0x06a6  */
+    /* JADX WARNING: Removed duplicated region for block: B:283:0x06cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:288:0x06ef  */
+    /* JADX WARNING: Removed duplicated region for block: B:289:0x06f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x06fe  */
+    /* JADX WARNING: Removed duplicated region for block: B:293:0x0701  */
+    /* JADX WARNING: Removed duplicated region for block: B:296:0x0755  */
     /* JADX WARNING: Removed duplicated region for block: B:69:0x01a3  */
     /* JADX WARNING: Removed duplicated region for block: B:74:0x01b1  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -2719,16 +2720,20 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             org.telegram.tgnet.TLRPC$Message r0 = r1.messageOwner
             java.lang.String r0 = r0.message
             r6.message = r0
+            java.lang.String r3 = ""
+            if (r0 != 0) goto L_0x038b
+            r6.message = r3
+        L_0x038b:
             int r0 = r1.getId()
             r6.fwd_msg_id = r0
             org.telegram.tgnet.TLRPC$Message r0 = r1.messageOwner
-            java.lang.String r3 = r0.attachPath
-            r6.attachPath = r3
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r3 = r0.entities
-            r6.entities = r3
+            java.lang.String r10 = r0.attachPath
+            r6.attachPath = r10
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r10 = r0.entities
+            r6.entities = r10
             org.telegram.tgnet.TLRPC$ReplyMarkup r0 = r0.reply_markup
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_replyInlineMarkup
-            if (r0 == 0) goto L_0x044a
+            if (r0 == 0) goto L_0x044c
             org.telegram.tgnet.TLRPC$TL_replyInlineMarkup r0 = new org.telegram.tgnet.TLRPC$TL_replyInlineMarkup
             r0.<init>()
             r6.reply_markup = r0
@@ -2736,119 +2741,116 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             org.telegram.tgnet.TLRPC$ReplyMarkup r0 = r0.reply_markup
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_keyboardButtonRow> r0 = r0.rows
             int r0 = r0.size()
-            r3 = 0
             r10 = 0
-        L_0x03ae:
-            if (r3 >= r0) goto L_0x0437
-            org.telegram.tgnet.TLRPC$Message r13 = r1.messageOwner
-            org.telegram.tgnet.TLRPC$ReplyMarkup r13 = r13.reply_markup
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_keyboardButtonRow> r13 = r13.rows
-            java.lang.Object r13 = r13.get(r3)
-            org.telegram.tgnet.TLRPC$TL_keyboardButtonRow r13 = (org.telegram.tgnet.TLRPC$TL_keyboardButtonRow) r13
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$KeyboardButton> r14 = r13.buttons
-            int r14 = r14.size()
-            r15 = 0
-            r31 = 0
-        L_0x03c5:
-            r32 = r0
-            if (r15 >= r14) goto L_0x0426
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$KeyboardButton> r0 = r13.buttons
-            java.lang.Object r0 = r0.get(r15)
-            org.telegram.tgnet.TLRPC$KeyboardButton r0 = (org.telegram.tgnet.TLRPC$KeyboardButton) r0
+            r13 = 0
+        L_0x03b4:
+            if (r10 >= r0) goto L_0x0439
+            org.telegram.tgnet.TLRPC$Message r14 = r1.messageOwner
+            org.telegram.tgnet.TLRPC$ReplyMarkup r14 = r14.reply_markup
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_keyboardButtonRow> r14 = r14.rows
+            java.lang.Object r14 = r14.get(r10)
+            org.telegram.tgnet.TLRPC$TL_keyboardButtonRow r14 = (org.telegram.tgnet.TLRPC$TL_keyboardButtonRow) r14
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$KeyboardButton> r15 = r14.buttons
+            int r15 = r15.size()
+            r31 = r0
+            r0 = 0
+            r32 = 0
+        L_0x03cd:
             r37 = r4
-            boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_keyboardButtonUrlAuth
+            if (r0 >= r15) goto L_0x042a
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$KeyboardButton> r4 = r14.buttons
+            java.lang.Object r4 = r4.get(r0)
+            org.telegram.tgnet.TLRPC$KeyboardButton r4 = (org.telegram.tgnet.TLRPC$KeyboardButton) r4
             r38 = r7
-            if (r4 != 0) goto L_0x03e4
-            boolean r7 = r0 instanceof org.telegram.tgnet.TLRPC$TL_keyboardButtonUrl
-            if (r7 != 0) goto L_0x03e4
-            boolean r7 = r0 instanceof org.telegram.tgnet.TLRPC$TL_keyboardButtonSwitchInline
-            if (r7 == 0) goto L_0x03e2
-            goto L_0x03e4
-        L_0x03e2:
-            r10 = 1
-            goto L_0x042a
-        L_0x03e4:
-            if (r4 == 0) goto L_0x0405
-            org.telegram.tgnet.TLRPC$TL_keyboardButtonUrlAuth r4 = new org.telegram.tgnet.TLRPC$TL_keyboardButtonUrlAuth
-            r4.<init>()
-            int r7 = r0.flags
-            r4.flags = r7
-            java.lang.String r7 = r0.fwd_text
-            if (r7 == 0) goto L_0x03f8
-            r4.fwd_text = r7
-            r4.text = r7
-            goto L_0x03fc
-        L_0x03f8:
-            java.lang.String r7 = r0.text
-            r4.text = r7
-        L_0x03fc:
-            java.lang.String r7 = r0.url
-            r4.url = r7
-            int r0 = r0.button_id
-            r4.button_id = r0
-            r0 = r4
-        L_0x0405:
-            if (r31 != 0) goto L_0x0414
-            org.telegram.tgnet.TLRPC$TL_keyboardButtonRow r4 = new org.telegram.tgnet.TLRPC$TL_keyboardButtonRow
-            r4.<init>()
-            org.telegram.tgnet.TLRPC$ReplyMarkup r7 = r6.reply_markup
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_keyboardButtonRow> r7 = r7.rows
-            r7.add(r4)
-            goto L_0x0416
-        L_0x0414:
-            r4 = r31
-        L_0x0416:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$KeyboardButton> r7 = r4.buttons
-            r7.add(r0)
-            int r15 = r15 + 1
-            r31 = r4
-            r0 = r32
+            boolean r7 = r4 instanceof org.telegram.tgnet.TLRPC$TL_keyboardButtonUrlAuth
+            if (r7 != 0) goto L_0x03ea
+            boolean r8 = r4 instanceof org.telegram.tgnet.TLRPC$TL_keyboardButtonUrl
+            if (r8 != 0) goto L_0x03ea
+            boolean r8 = r4 instanceof org.telegram.tgnet.TLRPC$TL_keyboardButtonSwitchInline
+            if (r8 == 0) goto L_0x03e8
+            goto L_0x03ea
+        L_0x03e8:
+            r13 = 1
+            goto L_0x042c
+        L_0x03ea:
+            if (r7 == 0) goto L_0x040b
+            org.telegram.tgnet.TLRPC$TL_keyboardButtonUrlAuth r7 = new org.telegram.tgnet.TLRPC$TL_keyboardButtonUrlAuth
+            r7.<init>()
+            int r8 = r4.flags
+            r7.flags = r8
+            java.lang.String r8 = r4.fwd_text
+            if (r8 == 0) goto L_0x03fe
+            r7.fwd_text = r8
+            r7.text = r8
+            goto L_0x0402
+        L_0x03fe:
+            java.lang.String r8 = r4.text
+            r7.text = r8
+        L_0x0402:
+            java.lang.String r8 = r4.url
+            r7.url = r8
+            int r4 = r4.button_id
+            r7.button_id = r4
+            r4 = r7
+        L_0x040b:
+            if (r32 != 0) goto L_0x041a
+            org.telegram.tgnet.TLRPC$TL_keyboardButtonRow r7 = new org.telegram.tgnet.TLRPC$TL_keyboardButtonRow
+            r7.<init>()
+            org.telegram.tgnet.TLRPC$ReplyMarkup r8 = r6.reply_markup
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_keyboardButtonRow> r8 = r8.rows
+            r8.add(r7)
+            goto L_0x041c
+        L_0x041a:
+            r7 = r32
+        L_0x041c:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$KeyboardButton> r8 = r7.buttons
+            r8.add(r4)
+            int r0 = r0 + 1
+            r32 = r7
             r4 = r37
             r7 = r38
-            goto L_0x03c5
-        L_0x0426:
-            r37 = r4
-            r38 = r7
+            goto L_0x03cd
         L_0x042a:
-            if (r10 == 0) goto L_0x042d
-            goto L_0x043b
-        L_0x042d:
-            int r3 = r3 + 1
-            r0 = r32
+            r38 = r7
+        L_0x042c:
+            if (r13 == 0) goto L_0x042f
+            goto L_0x043d
+        L_0x042f:
+            int r10 = r10 + 1
+            r0 = r31
             r4 = r37
             r7 = r38
-            goto L_0x03ae
-        L_0x0437:
+            goto L_0x03b4
+        L_0x0439:
             r37 = r4
             r38 = r7
-        L_0x043b:
-            if (r10 != 0) goto L_0x0444
+        L_0x043d:
+            if (r13 != 0) goto L_0x0446
             int r0 = r6.flags
             r0 = r0 | 64
             r6.flags = r0
-            goto L_0x044e
-        L_0x0444:
+            goto L_0x0450
+        L_0x0446:
             org.telegram.tgnet.TLRPC$Message r0 = r1.messageOwner
             r7 = 0
             r0.reply_markup = r7
-            goto L_0x044f
-        L_0x044a:
+            goto L_0x0451
+        L_0x044c:
             r37 = r4
             r38 = r7
-        L_0x044e:
+        L_0x0450:
             r7 = 0
-        L_0x044f:
+        L_0x0451:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r0 = r6.entities
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x045d
+            if (r0 != 0) goto L_0x045f
             int r0 = r6.flags
             r0 = r0 | 128(0x80, float:1.794E-43)
             r6.flags = r0
-        L_0x045d:
+        L_0x045f:
             java.lang.String r0 = r6.attachPath
             if (r0 != 0) goto L_0x0465
-            java.lang.String r0 = ""
-            r6.attachPath = r0
+            r6.attachPath = r3
         L_0x0465:
             org.telegram.messenger.UserConfig r0 = r42.getUserConfig()
             int r0 = r0.getNewMessageId()

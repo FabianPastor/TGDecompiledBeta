@@ -97,6 +97,7 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
     boolean adminsLoaded;
     /* access modifiers changed from: private */
     public int adminsStartRow;
+    int animationIndex;
     /* access modifiers changed from: private */
     public int createLinkHelpRow;
     /* access modifiers changed from: private */
@@ -325,6 +326,7 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 ManageLinksActivity.this.revokeLink(tLRPC$TL_chatInviteExported);
             }
         };
+        this.animationIndex = -1;
         this.currentChatId = i;
         this.invitesCount = i3;
         TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
@@ -1579,8 +1581,8 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 org.telegram.messenger.UserConfig r0 = r0.getUserConfig()
                 int r0 = r0.clientUserId
                 if (r7 != r0) goto L_0x022e
-                r7 = 2131624712(0x7f0e0308, float:1.8876611E38)
-                java.lang.String r0 = "ChannelLinkTitle"
+                r7 = 2131624704(0x7f0e0300, float:1.8876595E38)
+                java.lang.String r0 = "ChannelInviteLinkTitle"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x0279
@@ -1877,7 +1879,7 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                     arrayList.add(LocaleController.getString("Copy", NUM));
                     arrayList2.add(NUM);
                     arrayList3.add(0);
-                    arrayList.add(LocaleController.getString("Share", NUM));
+                    arrayList.add(LocaleController.getString("ShareLink", NUM));
                     arrayList2.add(NUM);
                     arrayList3.add(1);
                     if (!this.invite.permanent) {
@@ -2759,5 +2761,12 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
         if (z) {
             this.isOpened = true;
         }
+        NotificationCenter.getInstance(this.currentAccount).onAnimationFinish(this.animationIndex);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onTransitionAnimationStart(boolean z, boolean z2) {
+        super.onTransitionAnimationStart(z, z2);
+        this.animationIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.animationIndex, (int[]) null);
     }
 }
