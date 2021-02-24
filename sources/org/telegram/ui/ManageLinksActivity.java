@@ -97,6 +97,7 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
     boolean adminsLoaded;
     /* access modifiers changed from: private */
     public int adminsStartRow;
+    int animationIndex;
     /* access modifiers changed from: private */
     public int createLinkHelpRow;
     /* access modifiers changed from: private */
@@ -269,11 +270,11 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
             /* access modifiers changed from: private */
             /* renamed from: lambda$onLinkCreated$0 */
             public /* synthetic */ void lambda$onLinkCreated$0$ManageLinksActivity$6(TLObject tLObject) {
-                DiffCallback access$4300 = ManageLinksActivity.this.saveListState();
+                DiffCallback access$4200 = ManageLinksActivity.this.saveListState();
                 ManageLinksActivity.this.invites.add(0, (TLRPC$TL_chatInviteExported) tLObject);
                 ManageLinksActivity.this.updateRows(false);
-                access$4300.fillPositions(access$4300.newPositionToItem);
-                DiffUtil.calculateDiff(access$4300).dispatchUpdatesTo((RecyclerView.Adapter) ManageLinksActivity.this.listViewAdapter);
+                access$4200.fillPositions(access$4200.newPositionToItem);
+                DiffUtil.calculateDiff(access$4200).dispatchUpdatesTo((RecyclerView.Adapter) ManageLinksActivity.this.listViewAdapter);
                 AndroidUtilities.updateVisibleRows(ManageLinksActivity.this.listView);
                 if (ManageLinksActivity.this.info != null) {
                     ManageLinksActivity.this.info.invitesCount++;
@@ -290,12 +291,12 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                         if (!((TLRPC$TL_chatInviteExported) ManageLinksActivity.this.invites.get(i)).link.equals(tLRPC$TL_chatInviteExported.link)) {
                             i++;
                         } else if (tLRPC$TL_chatInviteExported2.revoked) {
-                            DiffCallback access$4300 = ManageLinksActivity.this.saveListState();
+                            DiffCallback access$4200 = ManageLinksActivity.this.saveListState();
                             ManageLinksActivity.this.invites.remove(i);
                             ManageLinksActivity.this.revokedInvites.add(0, tLRPC$TL_chatInviteExported2);
                             ManageLinksActivity.this.updateRows(false);
-                            access$4300.fillPositions(access$4300.newPositionToItem);
-                            DiffUtil.calculateDiff(access$4300).dispatchUpdatesTo((RecyclerView.Adapter) ManageLinksActivity.this.listViewAdapter);
+                            access$4200.fillPositions(access$4200.newPositionToItem);
+                            DiffUtil.calculateDiff(access$4200).dispatchUpdatesTo((RecyclerView.Adapter) ManageLinksActivity.this.listViewAdapter);
                             AndroidUtilities.updateVisibleRows(ManageLinksActivity.this.listView);
                             return;
                         } else {
@@ -310,11 +311,11 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
             public void onLinkRemoved(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
                 for (int i = 0; i < ManageLinksActivity.this.revokedInvites.size(); i++) {
                     if (((TLRPC$TL_chatInviteExported) ManageLinksActivity.this.revokedInvites.get(i)).link.equals(tLRPC$TL_chatInviteExported.link)) {
-                        DiffCallback access$4300 = ManageLinksActivity.this.saveListState();
+                        DiffCallback access$4200 = ManageLinksActivity.this.saveListState();
                         ManageLinksActivity.this.revokedInvites.remove(i);
                         ManageLinksActivity.this.updateRows(false);
-                        access$4300.fillPositions(access$4300.newPositionToItem);
-                        DiffUtil.calculateDiff(access$4300).dispatchUpdatesTo((RecyclerView.Adapter) ManageLinksActivity.this.listViewAdapter);
+                        access$4200.fillPositions(access$4200.newPositionToItem);
+                        DiffUtil.calculateDiff(access$4200).dispatchUpdatesTo((RecyclerView.Adapter) ManageLinksActivity.this.listViewAdapter);
                         AndroidUtilities.updateVisibleRows(ManageLinksActivity.this.listView);
                         return;
                     }
@@ -325,6 +326,7 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 ManageLinksActivity.this.revokeLink(tLRPC$TL_chatInviteExported);
             }
         };
+        this.animationIndex = -1;
         this.currentChatId = i;
         this.invitesCount = i3;
         TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
@@ -543,10 +545,9 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x0164  */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x017b  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x0154  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0169  */
     /* JADX WARNING: Removed duplicated region for block: B:87:0x0180  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:? A[RETURN, SYNTHETIC] */
     /* renamed from: lambda$null$3 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$null$3$ManageLinksActivity(org.telegram.tgnet.TLRPC$TL_chatInviteExported r6, org.telegram.tgnet.TLRPC$TL_error r7, org.telegram.tgnet.TLObject r8, boolean r9) {
@@ -734,14 +735,17 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
         L_0x014f:
             r5.resumeDelayedFragmentAnimation()
         L_0x0152:
-            if (r7 == 0) goto L_0x017b
+            if (r8 == 0) goto L_0x0157
+            r5.loadLinks()
+        L_0x0157:
+            if (r7 == 0) goto L_0x0180
             boolean r7 = r5.isOpened
-            if (r7 == 0) goto L_0x017b
+            if (r7 == 0) goto L_0x0180
             org.telegram.ui.ManageLinksActivity$ListAdapter r7 = r5.listViewAdapter
-            if (r7 == 0) goto L_0x017b
+            if (r7 == 0) goto L_0x0180
             org.telegram.ui.Components.RecyclerListView r7 = r5.listView
             int r7 = r7.getChildCount()
-            if (r7 <= 0) goto L_0x017b
+            if (r7 <= 0) goto L_0x0180
             r5.updateRows(r0)
             android.util.SparseIntArray r7 = r6.newPositionToItem
             r6.fillPositions(r7)
@@ -750,12 +754,9 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
             r6.dispatchUpdatesTo((androidx.recyclerview.widget.RecyclerView.Adapter) r7)
             org.telegram.ui.Components.RecyclerListView r6 = r5.listView
             org.telegram.messenger.AndroidUtilities.updateVisibleRows(r6)
-            goto L_0x017e
-        L_0x017b:
+            goto L_0x0183
+        L_0x0180:
             r5.updateRows(r1)
-        L_0x017e:
-            if (r8 == 0) goto L_0x0183
-            r5.loadLinks()
         L_0x0183:
             return
         */
@@ -1460,11 +1461,11 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.ManageLinksActivity$TextCell r6 = (org.telegram.ui.ManageLinksActivity.TextCell) r6
                 android.content.Context r7 = r5.mContext
                 android.content.res.Resources r7 = r7.getResources()
-                r0 = 2131165923(0x7var_e3, float:1.7946077E38)
+                r0 = 2131165929(0x7var_e9, float:1.7946089E38)
                 android.graphics.drawable.Drawable r7 = r7.getDrawable(r0)
                 android.content.Context r0 = r5.mContext
                 android.content.res.Resources r0 = r0.getResources()
-                r2 = 2131165924(0x7var_e4, float:1.7946079E38)
+                r2 = 2131165930(0x7var_ea, float:1.794609E38)
                 android.graphics.drawable.Drawable r0 = r0.getDrawable(r2)
                 android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
                 java.lang.String r3 = "switchTrackChecked"
@@ -1580,8 +1581,8 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 org.telegram.messenger.UserConfig r0 = r0.getUserConfig()
                 int r0 = r0.clientUserId
                 if (r7 != r0) goto L_0x022e
-                r7 = 2131624712(0x7f0e0308, float:1.8876611E38)
-                java.lang.String r0 = "ChannelLinkTitle"
+                r7 = 2131624704(0x7f0e0300, float:1.8876595E38)
+                java.lang.String r0 = "ChannelInviteLinkTitle"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x0279
@@ -1595,7 +1596,7 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.revokedHeader
                 if (r7 != r0) goto L_0x0250
-                r7 = 2131627194(0x7f0e0cba, float:1.8881646E38)
+                r7 = 2131627195(0x7f0e0cbb, float:1.8881648E38)
                 java.lang.String r0 = "RevokedLinks"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1683,8 +1684,7 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
             TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported = this.invite;
             this.invite = null;
             this.info.exported_invite = null;
-            this.listViewAdapter.notifyItemChanged(this.permanentLinkRow);
-            getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate(tLRPC$TL_chatInviteExported) {
+            int sendRequest = getConnectionsManager().sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate(tLRPC$TL_chatInviteExported) {
                 public final /* synthetic */ TLRPC$TL_chatInviteExported f$1;
 
                 {
@@ -1694,7 +1694,9 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                     ManageLinksActivity.this.lambda$revokePermanent$12$ManageLinksActivity(this.f$1, tLObject, tLRPC$TL_error);
                 }
-            }), this.classGuid);
+            });
+            AndroidUtilities.updateVisibleRows(this.listView);
+            getConnectionsManager().bindRequestToGuid(sendRequest, this.classGuid);
             return;
         }
         revokeLink(this.invite);
@@ -1731,7 +1733,6 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 tLRPC$ChatFull.exported_invite = tLRPC$TL_chatInviteExported2;
             }
             if (getParentActivity() != null) {
-                this.listViewAdapter.notifyItemChanged(this.permanentLinkRow);
                 tLRPC$TL_chatInviteExported.revoked = true;
                 DiffCallback saveListState = saveListState();
                 this.revokedInvites.add(0, tLRPC$TL_chatInviteExported);
@@ -1878,7 +1879,7 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                     arrayList.add(LocaleController.getString("Copy", NUM));
                     arrayList2.add(NUM);
                     arrayList3.add(0);
-                    arrayList.add(LocaleController.getString("Share", NUM));
+                    arrayList.add(LocaleController.getString("ShareLink", NUM));
                     arrayList2.add(NUM);
                     arrayList3.add(1);
                     if (!this.invite.permanent) {
@@ -1993,13 +1994,13 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Code restructure failed: missing block: B:60:0x0110, code lost:
-            if (r4.revoked == false) goto L_0x0112;
+        /* JADX WARNING: Code restructure failed: missing block: B:57:0x0105, code lost:
+            if (r4.revoked == false) goto L_0x0107;
          */
-        /* JADX WARNING: Removed duplicated region for block: B:81:0x01d7  */
-        /* JADX WARNING: Removed duplicated region for block: B:82:0x01fc  */
-        /* JADX WARNING: Removed duplicated region for block: B:85:0x0224  */
-        /* JADX WARNING: Removed duplicated region for block: B:87:? A[RETURN, SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:78:0x01cc  */
+        /* JADX WARNING: Removed duplicated region for block: B:79:0x01f1  */
+        /* JADX WARNING: Removed duplicated region for block: B:82:0x0219  */
+        /* JADX WARNING: Removed duplicated region for block: B:84:? A[RETURN, SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onDraw(android.graphics.Canvas r16) {
             /*
@@ -2019,23 +2020,23 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 r5 = 0
                 r10 = 1
                 r6 = 1065353216(0x3var_, float:1.0)
-                if (r2 != 0) goto L_0x008e
+                if (r2 != 0) goto L_0x0083
                 boolean r2 = r1.revoked
-                if (r2 == 0) goto L_0x0024
-                goto L_0x008e
-            L_0x0024:
+                if (r2 == 0) goto L_0x0023
+                goto L_0x0083
+            L_0x0023:
                 int r2 = r1.expire_date
-                if (r2 > 0) goto L_0x0032
+                if (r2 > 0) goto L_0x0031
                 int r1 = r1.usage_limit
-                if (r1 <= 0) goto L_0x002d
-                goto L_0x0032
-            L_0x002d:
+                if (r1 <= 0) goto L_0x002c
+                goto L_0x0031
+            L_0x002c:
                 r1 = 1065353216(0x3var_, float:1.0)
                 r2 = 0
                 r3 = 0
-                goto L_0x0098
-            L_0x0032:
-                if (r2 <= 0) goto L_0x0059
+                goto L_0x008d
+            L_0x0031:
+                if (r2 <= 0) goto L_0x0058
                 long r1 = java.lang.System.currentTimeMillis()
                 org.telegram.ui.ManageLinksActivity r11 = org.telegram.ui.ManageLinksActivity.this
                 long r11 = r11.timeDif
@@ -2047,9 +2048,9 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 long r3 = (long) r12
                 long r3 = r3 * r13
                 int r12 = r11.start_date
-                if (r12 > 0) goto L_0x004e
+                if (r12 > 0) goto L_0x004d
                 int r12 = r11.date
-            L_0x004e:
+            L_0x004d:
                 long r11 = (long) r12
                 long r11 = r11 * r13
                 long r1 = r1 - r11
@@ -2058,94 +2059,89 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 float r2 = (float) r3
                 float r1 = r1 / r2
                 float r1 = r6 - r1
-                goto L_0x005b
-            L_0x0059:
+                goto L_0x005a
+            L_0x0058:
                 r1 = 1065353216(0x3var_, float:1.0)
-            L_0x005b:
+            L_0x005a:
                 org.telegram.tgnet.TLRPC$TL_chatInviteExported r2 = r0.invite
                 int r3 = r2.usage_limit
-                if (r3 <= 0) goto L_0x0069
+                if (r3 <= 0) goto L_0x0068
                 int r2 = r2.usage
                 int r2 = r3 - r2
                 float r2 = (float) r2
                 float r3 = (float) r3
                 float r2 = r2 / r3
-                goto L_0x006b
-            L_0x0069:
+                goto L_0x006a
+            L_0x0068:
                 r2 = 1065353216(0x3var_, float:1.0)
-            L_0x006b:
+            L_0x006a:
                 float r2 = java.lang.Math.min(r1, r2)
                 int r3 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
-                if (r3 > 0) goto L_0x008c
+                if (r3 > 0) goto L_0x0081
                 org.telegram.tgnet.TLRPC$TL_chatInviteExported r3 = r0.invite
                 r3.expired = r10
                 org.telegram.ui.ManageLinksActivity r3 = org.telegram.ui.ManageLinksActivity.this
-                org.telegram.ui.ManageLinksActivity$ListAdapter r3 = r3.listViewAdapter
-                if (r3 == 0) goto L_0x008a
-                org.telegram.ui.ManageLinksActivity r3 = org.telegram.ui.ManageLinksActivity.this
-                org.telegram.ui.ManageLinksActivity$ListAdapter r3 = r3.listViewAdapter
-                int r4 = r0.position
-                r3.notifyItemChanged(r4)
-            L_0x008a:
+                org.telegram.ui.Components.RecyclerListView r3 = r3.listView
+                org.telegram.messenger.AndroidUtilities.updateVisibleRows(r3)
                 r3 = 3
-                goto L_0x0098
-            L_0x008c:
+                goto L_0x008d
+            L_0x0081:
                 r3 = 1
-                goto L_0x0098
-            L_0x008e:
+                goto L_0x008d
+            L_0x0083:
                 boolean r1 = r1.revoked
-                if (r1 == 0) goto L_0x0094
+                if (r1 == 0) goto L_0x0089
                 r3 = 4
-                goto L_0x0095
-            L_0x0094:
+                goto L_0x008a
+            L_0x0089:
                 r3 = 3
-            L_0x0095:
+            L_0x008a:
                 r1 = 1065353216(0x3var_, float:1.0)
                 r2 = 0
-            L_0x0098:
+            L_0x008d:
                 int r4 = r0.lastDrawingState
-                if (r3 == r4) goto L_0x00b4
-                if (r4 < 0) goto L_0x00b4
+                if (r3 == r4) goto L_0x00a9
+                if (r4 < 0) goto L_0x00a9
                 r0.animateFromState = r4
                 r0.animateToStateProgress = r5
                 boolean r4 = r15.hasProgress(r4)
-                if (r4 == 0) goto L_0x00b1
+                if (r4 == 0) goto L_0x00a6
                 boolean r4 = r15.hasProgress(r3)
-                if (r4 != 0) goto L_0x00b1
+                if (r4 != 0) goto L_0x00a6
                 r0.animateHideExpiring = r10
-                goto L_0x00b4
-            L_0x00b1:
+                goto L_0x00a9
+            L_0x00a6:
                 r4 = 0
                 r0.animateHideExpiring = r4
-            L_0x00b4:
+            L_0x00a9:
                 r0.lastDrawingState = r3
                 float r4 = r0.animateToStateProgress
                 int r5 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-                if (r5 == 0) goto L_0x00cf
+                if (r5 == 0) goto L_0x00c4
                 r5 = 1032000111(0x3d83126f, float:0.064)
                 float r4 = r4 + r5
                 r0.animateToStateProgress = r4
                 int r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-                if (r4 < 0) goto L_0x00cc
+                if (r4 < 0) goto L_0x00c1
                 r0.animateToStateProgress = r6
                 r4 = 0
                 r0.animateHideExpiring = r4
-                goto L_0x00cf
-            L_0x00cc:
+                goto L_0x00c4
+            L_0x00c1:
                 r15.invalidate()
-            L_0x00cf:
+            L_0x00c4:
                 float r4 = r0.animateToStateProgress
                 int r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-                if (r4 == 0) goto L_0x00e6
+                if (r4 == 0) goto L_0x00db
                 int r4 = r0.animateFromState
                 int r4 = r15.getColor(r4, r2)
                 int r2 = r15.getColor(r3, r2)
                 float r3 = r0.animateToStateProgress
                 int r2 = androidx.core.graphics.ColorUtils.blendARGB(r4, r2, r3)
-                goto L_0x00ea
-            L_0x00e6:
+                goto L_0x00df
+            L_0x00db:
                 int r2 = r15.getColor(r3, r2)
-            L_0x00ea:
+            L_0x00df:
                 android.graphics.Paint r3 = r0.paint
                 r3.setColor(r2)
                 float r3 = (float) r8
@@ -2158,18 +2154,18 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 android.graphics.Paint r11 = r0.paint
                 r7.drawCircle(r3, r4, r5, r11)
                 boolean r3 = r0.animateHideExpiring
-                if (r3 != 0) goto L_0x0112
+                if (r3 != 0) goto L_0x0107
                 org.telegram.tgnet.TLRPC$TL_chatInviteExported r4 = r0.invite
                 boolean r5 = r4.expired
-                if (r5 != 0) goto L_0x01cf
+                if (r5 != 0) goto L_0x01c4
                 int r5 = r4.expire_date
-                if (r5 <= 0) goto L_0x01cf
+                if (r5 <= 0) goto L_0x01c4
                 boolean r4 = r4.revoked
-                if (r4 != 0) goto L_0x01cf
-            L_0x0112:
-                if (r3 == 0) goto L_0x0116
+                if (r4 != 0) goto L_0x01c4
+            L_0x0107:
+                if (r3 == 0) goto L_0x010b
                 float r1 = r0.lastDrawExpringProgress
-            L_0x0116:
+            L_0x010b:
                 r11 = r1
                 android.graphics.Paint r1 = r0.paint2
                 r1.setColor(r2)
@@ -2191,24 +2187,24 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 float r1 = r0.animateToStateProgress
                 r2 = 1135869952(0x43b40000, float:360.0)
                 int r1 = (r1 > r6 ? 1 : (r1 == r6 ? 0 : -1))
-                if (r1 == 0) goto L_0x01a2
+                if (r1 == 0) goto L_0x0197
                 int r1 = r0.animateFromState
                 boolean r1 = r15.hasProgress(r1)
-                if (r1 == 0) goto L_0x0151
+                if (r1 == 0) goto L_0x0146
                 boolean r1 = r0.animateHideExpiring
-                if (r1 == 0) goto L_0x01a2
-            L_0x0151:
+                if (r1 == 0) goto L_0x0197
+            L_0x0146:
                 r16.save()
                 boolean r1 = r0.animateHideExpiring
-                if (r1 == 0) goto L_0x015d
+                if (r1 == 0) goto L_0x0152
                 float r1 = r0.animateToStateProgress
                 float r6 = r6 - r1
                 r12 = r6
-                goto L_0x0160
-            L_0x015d:
+                goto L_0x0155
+            L_0x0152:
                 float r1 = r0.animateToStateProgress
                 r12 = r1
-            L_0x0160:
+            L_0x0155:
                 r3 = 4604480259023595110(0x3feNUM, double:0.7)
                 r1 = 1050253722(0x3e99999a, float:0.3)
                 float r1 = r1 * r12
@@ -2240,8 +2236,8 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 r6 = r12
                 r1.draw(r2, r3, r4, r5, r6)
                 r16.restore()
-                goto L_0x01c2
-            L_0x01a2:
+                goto L_0x01b7
+            L_0x0197:
                 android.graphics.RectF r3 = r0.rectF
                 r4 = -1028390912(0xffffffffc2b40000, float:-90.0)
                 float r1 = -r11
@@ -2260,18 +2256,18 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 r2 = r16
                 r5 = r12
                 r1.draw(r2, r3, r4, r5, r6)
-            L_0x01c2:
+            L_0x01b7:
                 org.telegram.ui.ManageLinksActivity r1 = org.telegram.ui.ManageLinksActivity.this
                 boolean r1 = r1.isPaused
-                if (r1 != 0) goto L_0x01cd
+                if (r1 != 0) goto L_0x01c2
                 r15.invalidate()
-            L_0x01cd:
+            L_0x01c2:
                 r0.lastDrawExpringProgress = r11
-            L_0x01cf:
+            L_0x01c4:
                 org.telegram.tgnet.TLRPC$TL_chatInviteExported r1 = r0.invite
                 boolean r1 = r1.revoked
                 r2 = 1094713344(0x41400000, float:12.0)
-                if (r1 == 0) goto L_0x01fc
+                if (r1 == 0) goto L_0x01f1
                 org.telegram.ui.ManageLinksActivity r1 = org.telegram.ui.ManageLinksActivity.this
                 android.graphics.drawable.Drawable r1 = r1.linkIconRevoked
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
@@ -2286,8 +2282,8 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.ManageLinksActivity r1 = org.telegram.ui.ManageLinksActivity.this
                 android.graphics.drawable.Drawable r1 = r1.linkIconRevoked
                 r1.draw(r7)
-                goto L_0x0220
-            L_0x01fc:
+                goto L_0x0215
+            L_0x01f1:
                 org.telegram.ui.ManageLinksActivity r1 = org.telegram.ui.ManageLinksActivity.this
                 android.graphics.drawable.Drawable r1 = r1.linkIcon
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r2)
@@ -2302,9 +2298,9 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 org.telegram.ui.ManageLinksActivity r1 = org.telegram.ui.ManageLinksActivity.this
                 android.graphics.drawable.Drawable r1 = r1.linkIcon
                 r1.draw(r7)
-            L_0x0220:
+            L_0x0215:
                 boolean r1 = r0.drawDivider
-                if (r1 == 0) goto L_0x0242
+                if (r1 == 0) goto L_0x0237
                 r1 = 1116471296(0x428CLASSNAME, float:70.0)
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                 float r2 = (float) r1
@@ -2318,7 +2314,7 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 android.graphics.Paint r6 = org.telegram.ui.ActionBar.Theme.dividerPaint
                 r1 = r16
                 r1.drawLine(r2, r3, r4, r5, r6)
-            L_0x0242:
+            L_0x0237:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ManageLinksActivity.LinkCell.onDraw(android.graphics.Canvas):void");
@@ -2532,7 +2528,6 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 TLRPC$TL_messages_exportedChatInviteReplaced tLRPC$TL_messages_exportedChatInviteReplaced = (TLRPC$TL_messages_exportedChatInviteReplaced) tLObject;
                 if (!this.isPublic) {
                     this.invite = (TLRPC$TL_chatInviteExported) tLRPC$TL_messages_exportedChatInviteReplaced.new_invite;
-                    this.listViewAdapter.notifyItemChanged(this.permanentLinkRow);
                 }
                 tLRPC$TL_chatInviteExported.revoked = true;
                 DiffCallback saveListState = saveListState();
@@ -2542,13 +2537,13 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
                 }
                 this.revokedInvites.add(0, tLRPC$TL_chatInviteExported);
                 updateRows(false);
-                if (getParentActivity() != null) {
-                    saveListState.fillPositions(saveListState.newPositionToItem);
-                    DiffUtil.calculateDiff(saveListState).dispatchUpdatesTo((RecyclerView.Adapter) this.listViewAdapter);
-                    AndroidUtilities.updateVisibleRows(this.listView);
-                } else {
+                if (getParentActivity() == null) {
+                    this.listViewAdapter.notifyDataSetChanged();
                     return;
                 }
+                saveListState.fillPositions(saveListState.newPositionToItem);
+                DiffUtil.calculateDiff(saveListState).dispatchUpdatesTo((RecyclerView.Adapter) this.listViewAdapter);
+                AndroidUtilities.updateVisibleRows(this.listView);
             } else {
                 this.linkEditActivityCallback.onLinkEdited(tLRPC$TL_chatInviteExported, tLObject);
                 TLRPC$ChatFull tLRPC$ChatFull = this.info;
@@ -2766,5 +2761,12 @@ public class ManageLinksActivity extends BaseFragment implements NotificationCen
         if (z) {
             this.isOpened = true;
         }
+        NotificationCenter.getInstance(this.currentAccount).onAnimationFinish(this.animationIndex);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onTransitionAnimationStart(boolean z, boolean z2) {
+        super.onTransitionAnimationStart(z, z2);
+        this.animationIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.animationIndex, (int[]) null);
     }
 }

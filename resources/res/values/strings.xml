@@ -3197,6 +3197,7 @@
     <string name="ReportSpamTitle">Report spam</string>
     <string name="ReportSpamUser">BLOCK USER</string>
     <string name="ReportTitleChild">Report Child Abuse</string>
+    <string name="ReportTitleFake">Report Fake</string>
     <string name="ReportTitlePornography">Report Pornography</string>
     <string name="ReportTitleSpam">Report Spam</string>
     <string name="ReportTitleViolence">Report Violence</string>
@@ -4128,8 +4129,8 @@
     <string name="WhoCanCallMeInfo">You can restrict who can call you.</string>
     <string name="WidgetChats">Chats</string>
     <string name="WidgetLoggedOff">Account was logged off.</string>
-    <string name="WidgetPasscode">\10\10Note: passcode will be **ignored** for widgets.</string>
-    <string name="WidgetPasscodeEnable">\10\10Passcode **will not affect** widgets added to homescreen.</string>
+    <string name="WidgetPasscode">\10\10Note: Your passcode will be **ignored** for widgets.</string>
+    <string name="WidgetPasscodeEnable">\10\10Your passcode **will not affect** widgets added to homescreen.</string>
     <string name="WidgetPreview">Preview of the widget</string>
     <string name="WidgetShortcuts">Shortcuts</string>
     <string name="WillUnmuteIn">In %1$s</string>

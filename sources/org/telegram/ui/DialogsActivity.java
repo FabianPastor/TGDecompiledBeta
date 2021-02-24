@@ -2178,7 +2178,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1.setClearsTextOnSearchCollapse(r0)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r10.searchItem
             java.lang.String r1 = "Search"
-            r2 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
+            r2 = 2131627221(0x7f0e0cd5, float:1.88817E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setSearchFieldHint(r3)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r10.searchItem
@@ -2205,14 +2205,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x014d:
             if (r0 != r5) goto L_0x015e
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131627278(0x7f0e0d0e, float:1.8881816E38)
+            r1 = 2131627279(0x7f0e0d0f, float:1.8881818E38)
             java.lang.String r2 = "SelectChats"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x016c
         L_0x015e:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131627277(0x7f0e0d0d, float:1.8881814E38)
+            r1 = 2131627278(0x7f0e0d0e, float:1.8881816E38)
             java.lang.String r2 = "SelectChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -5571,7 +5571,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r4 = r4.clientUserId
             if (r8 != r4) goto L_0x009e
             java.lang.Object[] r8 = new java.lang.Object[r0]
-            r2 = 2131627208(0x7f0e0cc8, float:1.8881674E38)
+            r2 = 2131627209(0x7f0e0cc9, float:1.8881676E38)
             java.lang.String r3 = "SavedMessages"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r8[r1] = r2

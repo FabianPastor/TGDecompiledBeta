@@ -567,6 +567,8 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         };
         this.fragmentView = r2;
         ViewGroup viewGroup = r2;
+        viewGroup.setFocusableInTouchMode(true);
+        viewGroup.setDescendantFocusability(131072);
         AnonymousClass3 r5 = new ScrollView(context) {
             public boolean requestChildRectangleOnScreen(View view, Rect rect, boolean z) {
                 if (GroupCreateActivity.this.ignoreScrollEvent) {
@@ -955,10 +957,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
 
     public void onResume() {
         super.onResume();
-        EditTextBoldCursor editTextBoldCursor = this.editText;
-        if (editTextBoldCursor != null) {
-            editTextBoldCursor.requestFocus();
-        }
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
 

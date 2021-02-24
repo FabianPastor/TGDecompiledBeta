@@ -374,7 +374,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r1.<init>(r6)
             r0.setActionBarMenuItemSearchListener(r1)
             java.lang.String r1 = "Search"
-            r2 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
+            r2 = 2131627221(0x7f0e0cd5, float:1.88817E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setSearchFieldHint(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
@@ -385,7 +385,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r0.setAddToContainer(r9)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r1 = "ThemePreview"
-            r2 = 2131627629(0x7f0e0e6d, float:1.8882528E38)
+            r2 = 2131627630(0x7f0e0e6e, float:1.888253E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setTitle(r1)
             org.telegram.ui.ThemePreviewActivity$2 r0 = new org.telegram.ui.ThemePreviewActivity$2
@@ -672,7 +672,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar2
             org.telegram.ui.ActionBar.ActionBarMenu r3 = r0.createMenu()
             r0 = 4
-            r1 = 2131627198(0x7f0e0cbe, float:1.8881654E38)
+            r1 = 2131627199(0x7f0e0cbf, float:1.8881656E38)
             java.lang.String r2 = "Save"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -972,7 +972,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r0.setTextColor(r5)
             android.widget.TextView r0 = r6.bottomOverlayChatText
-            r5 = 2131627347(0x7f0e0d53, float:1.8881956E38)
+            r5 = 2131627348(0x7f0e0d54, float:1.8881958E38)
             java.lang.String r11 = "SetBackground"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r0.setText(r5)
@@ -984,7 +984,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.graphics.Rect r0 = new android.graphics.Rect
             r0.<init>()
             android.content.res.Resources r5 = r34.getResources()
-            r11 = 2131165994(0x7var_a, float:1.794622E38)
+            r11 = 2131166000(0x7var_, float:1.7946233E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r11)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             r6.sheetDrawable = r5
@@ -2671,15 +2671,15 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r7.getParentActivity()
             r0.<init>((android.content.Context) r1)
-            r1 = 2131627200(0x7f0e0cc0, float:1.8881658E38)
+            r1 = 2131627201(0x7f0e0cc1, float:1.888166E38)
             java.lang.String r2 = "SaveChangesAlertTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131627199(0x7f0e0cbf, float:1.8881656E38)
+            r1 = 2131627200(0x7f0e0cc0, float:1.8881658E38)
             java.lang.String r2 = "SaveChangesAlertText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
-            r1 = 2131627198(0x7f0e0cbe, float:1.8881654E38)
+            r1 = 2131627199(0x7f0e0cbf, float:1.8881656E38)
             java.lang.String r2 = "Save"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.-$$Lambda$ThemePreviewActivity$pxBSDL12u1QQRgPR-5x1n5jhGTQ r2 = new org.telegram.ui.-$$Lambda$ThemePreviewActivity$pxBSDL12u1QQRgPR-5x1n5jhGTQ

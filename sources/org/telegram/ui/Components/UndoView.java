@@ -11,8 +11,10 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.os.SystemClock;
+import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
@@ -53,8 +55,11 @@ public class UndoView extends FrameLayout {
     private TextView subinfoTextView;
     private TextPaint textPaint;
     private int textWidth;
+    StaticLayout timeLayout;
+    StaticLayout timeLayoutOut;
     private long timeLeft;
     private String timeLeftString;
+    float timeReplaceProgress;
     private LinearLayout undoButton;
     private ImageView undoImageView;
     private TextView undoTextView;
@@ -101,6 +106,7 @@ public class UndoView extends FrameLayout {
     public UndoView(Context context, boolean z) {
         super(context);
         this.currentAccount = UserConfig.selectedAccount;
+        this.timeReplaceProgress = 1.0f;
         this.fromTop = z;
         TextView textView = new TextView(context);
         this.infoTextView = textView;
@@ -327,7 +333,7 @@ public class UndoView extends FrameLayout {
             long r6 = android.os.SystemClock.elapsedRealtime()
             r0.lastUpdateTime = r6
             android.widget.TextView r6 = r0.undoTextView
-            r7 = 2131627722(0x7f0e0eca, float:1.8882716E38)
+            r7 = 2131627723(0x7f0e0ecb, float:1.8882718E38)
             java.lang.String r8 = "Undo"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -405,7 +411,7 @@ public class UndoView extends FrameLayout {
             if (r3 != r10) goto L_0x011e
             r1 = r4
             org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
-            r2 = 2131627948(0x7f0e0fac, float:1.8883175E38)
+            r2 = 2131627949(0x7f0e0fad, float:1.8883177E38)
             java.lang.Object[] r3 = new java.lang.Object[r5]
             java.lang.String r4 = org.telegram.messenger.UserObject.getFirstName(r1)
             r3[r7] = r4
@@ -431,7 +437,7 @@ public class UndoView extends FrameLayout {
         L_0x011e:
             r10 = 33
             if (r3 != r10) goto L_0x0135
-            r1 = 2131627938(0x7f0e0fa2, float:1.8883155E38)
+            r1 = 2131627939(0x7f0e0fa3, float:1.8883157E38)
             java.lang.String r2 = "VoipGroupCopyInviteLinkCopied"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r2 = 2131558502(0x7f0d0066, float:1.8742322E38)
@@ -442,7 +448,7 @@ public class UndoView extends FrameLayout {
             if (r3 != r12) goto L_0x0159
             r1 = r4
             org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
-            r2 = 2131627977(0x7f0e0fc9, float:1.8883234E38)
+            r2 = 2131627978(0x7f0e0fca, float:1.8883236E38)
             java.lang.Object[] r3 = new java.lang.Object[r5]
             java.lang.String r1 = org.telegram.messenger.UserObject.getFirstName(r1)
             r3[r7] = r1
@@ -459,7 +465,7 @@ public class UndoView extends FrameLayout {
             if (r3 != r10) goto L_0x017b
             r1 = r4
             org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
-            r2 = 2131627978(0x7f0e0fca, float:1.8883236E38)
+            r2 = 2131627979(0x7f0e0fcb, float:1.8883238E38)
             java.lang.Object[] r3 = new java.lang.Object[r5]
             java.lang.String r1 = org.telegram.messenger.UserObject.getFirstName(r1)
             r3[r7] = r1
@@ -474,7 +480,7 @@ public class UndoView extends FrameLayout {
             if (r3 != r10) goto L_0x01a1
             r1 = r4
             org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
-            r2 = 2131627975(0x7f0e0fc7, float:1.888323E38)
+            r2 = 2131627976(0x7f0e0fc8, float:1.8883232E38)
             java.lang.Object[] r3 = new java.lang.Object[r5]
             java.lang.String r1 = org.telegram.messenger.UserObject.getFirstName(r1)
             r3[r7] = r1
@@ -490,7 +496,7 @@ public class UndoView extends FrameLayout {
             if (r3 != r8) goto L_0x01c1
             r1 = r4
             org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
-            r2 = 2131627976(0x7f0e0fc8, float:1.8883232E38)
+            r2 = 2131627977(0x7f0e0fc9, float:1.8883234E38)
             java.lang.Object[] r3 = new java.lang.Object[r5]
             java.lang.String r1 = org.telegram.messenger.UserObject.getFirstName(r1)
             r3[r7] = r1
@@ -505,7 +511,7 @@ public class UndoView extends FrameLayout {
             if (r3 != r10) goto L_0x01e7
             r1 = r4
             org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
-            r2 = 2131627968(0x7f0e0fc0, float:1.8883215E38)
+            r2 = 2131627969(0x7f0e0fc1, float:1.8883217E38)
             java.lang.Object[] r3 = new java.lang.Object[r5]
             java.lang.String r1 = org.telegram.messenger.UserObject.getFirstName(r1)
             r3[r7] = r1
@@ -1113,7 +1119,7 @@ public class UndoView extends FrameLayout {
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             org.telegram.ui.Components.RLottieImageView r1 = r0.leftImageView
-            r2 = 2131166061(0x7var_d, float:1.7946357E38)
+            r2 = 2131166067(0x7var_, float:1.7946369E38)
             r1.setImageResource(r2)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r18)
             r6.leftMargin = r1
@@ -1379,7 +1385,7 @@ public class UndoView extends FrameLayout {
             r10.height = r1
         L_0x09a6:
             android.widget.TextView r1 = r0.undoTextView
-            r2 = 2131627296(0x7f0e0d20, float:1.8881852E38)
+            r2 = 2131627297(0x7f0e0d21, float:1.8881854E38)
             java.lang.String r3 = "SendDice"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -1985,7 +1991,7 @@ public class UndoView extends FrameLayout {
             r2 = 56
             if (r10 != r2) goto L_0x0var_
             android.widget.TextView r2 = r0.infoTextView
-            r4 = 2131627819(0x7f0e0f2b, float:1.8882913E38)
+            r4 = 2131627820(0x7f0e0f2c, float:1.8882915E38)
             java.lang.String r8 = "UsernameCopied"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
             r2.setText(r4)
@@ -2020,7 +2026,7 @@ public class UndoView extends FrameLayout {
             goto L_0x0f8c
         L_0x0f7e:
             android.widget.TextView r2 = r0.infoTextView
-            r4 = 2131627605(0x7f0e0e55, float:1.888248E38)
+            r4 = 2131627606(0x7f0e0e56, float:1.8882481E38)
             java.lang.String r8 = "TextCopied"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
             r2.setText(r4)
@@ -2260,9 +2266,49 @@ public class UndoView extends FrameLayout {
                 this.prevSeconds = ceil;
                 String format = String.format("%d", new Object[]{Integer.valueOf(Math.max(1, ceil))});
                 this.timeLeftString = format;
+                StaticLayout staticLayout = this.timeLayout;
+                if (staticLayout != null) {
+                    this.timeLayoutOut = staticLayout;
+                    this.timeReplaceProgress = 0.0f;
+                }
                 this.textWidth = (int) Math.ceil((double) this.textPaint.measureText(format));
+                this.timeLayout = new StaticLayout(this.timeLeftString, this.textPaint, Integer.MAX_VALUE, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
             }
-            canvas.drawText(this.timeLeftString, this.rect.centerX() - ((float) (this.textWidth / 2)), (float) AndroidUtilities.dp(28.2f), this.textPaint);
+            float f = this.timeReplaceProgress;
+            if (f < 1.0f) {
+                float f2 = f + 0.10666667f;
+                this.timeReplaceProgress = f2;
+                if (f2 > 1.0f) {
+                    this.timeReplaceProgress = 1.0f;
+                } else {
+                    invalidate();
+                }
+            }
+            int alpha = this.textPaint.getAlpha();
+            if (this.timeLayoutOut != null) {
+                float f3 = this.timeReplaceProgress;
+                if (f3 < 1.0f) {
+                    this.textPaint.setAlpha((int) (((float) alpha) * (1.0f - f3)));
+                    canvas.save();
+                    canvas.translate(this.rect.centerX() - ((float) (this.textWidth / 2)), ((float) AndroidUtilities.dp(17.2f)) + (((float) AndroidUtilities.dp(10.0f)) * this.timeReplaceProgress));
+                    this.timeLayoutOut.draw(canvas);
+                    this.textPaint.setAlpha(alpha);
+                    canvas.restore();
+                }
+            }
+            if (this.timeLayout != null) {
+                float f4 = this.timeReplaceProgress;
+                if (f4 != 1.0f) {
+                    this.textPaint.setAlpha((int) (((float) alpha) * f4));
+                }
+                canvas.save();
+                canvas.translate(this.rect.centerX() - ((float) (this.textWidth / 2)), ((float) AndroidUtilities.dp(17.2f)) - (((float) AndroidUtilities.dp(10.0f)) * (1.0f - this.timeReplaceProgress)));
+                this.timeLayout.draw(canvas);
+                if (this.timeReplaceProgress != 1.0f) {
+                    this.textPaint.setAlpha(alpha);
+                }
+                canvas.restore();
+            }
             canvas.drawArc(this.rect, -90.0f, (((float) this.timeLeft) / 5000.0f) * -360.0f, false, this.progressPaint);
         }
         long elapsedRealtime = SystemClock.elapsedRealtime();

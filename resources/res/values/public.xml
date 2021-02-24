@@ -794,6 +794,12 @@
     <public type="drawable" name="msg_reply" id="NUM" />
     <public type="drawable" name="msg_reply_small" id="NUM" />
     <public type="drawable" name="msg_report" id="NUM" />
+    <public type="drawable" name="msg_report_abuse" id="NUM" />
+    <public type="drawable" name="msg_report_fake" id="NUM" />
+    <public type="drawable" name="msg_report_other" id="NUM" />
+    <public type="drawable" name="msg_report_spam" id="NUM" />
+    <public type="drawable" name="msg_report_violence" id="NUM" />
+    <public type="drawable" name="msg_report_xxx" id="NUM" />
     <public type="drawable" name="msg_reset" id="NUM" />
     <public type="drawable" name="msg_retry" id="NUM" />
     <public type="drawable" name="msg_round_cancel_m" id="NUM" />
@@ -1388,6 +1394,12 @@
     <public type="mipmap" name="icon_background_round" id="NUM" />
     <public type="mipmap" name="icon_foreground" id="NUM" />
     <public type="mipmap" name="icon_foreground_round" id="NUM" />
+    <public type="mipmap" name="msg_report_abuse" id="NUM" />
+    <public type="mipmap" name="msg_report_fake" id="NUM" />
+    <public type="mipmap" name="msg_report_other" id="NUM" />
+    <public type="mipmap" name="msg_report_spam" id="NUM" />
+    <public type="mipmap" name="msg_report_violence" id="NUM" />
+    <public type="mipmap" name="msg_report_xxx" id="NUM" />
     <public type="raw" name="attach_contact" id="NUM" />
     <public type="raw" name="attach_file" id="NUM" />
     <public type="raw" name="attach_gallery" id="NUM" />
@@ -4696,6 +4708,7 @@
     <public type="string" name="ReportSpamTitle" id="NUM" />
     <public type="string" name="ReportSpamUser" id="NUM" />
     <public type="string" name="ReportTitleChild" id="NUM" />
+    <public type="string" name="ReportTitleFake" id="NUM" />
     <public type="string" name="ReportTitlePornography" id="NUM" />
     <public type="string" name="ReportTitleSpam" id="NUM" />
     <public type="string" name="ReportTitleViolence" id="NUM" />

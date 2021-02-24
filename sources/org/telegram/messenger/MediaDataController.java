@@ -5662,7 +5662,7 @@ public class MediaDataController extends BaseController {
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e0 }
             r9.setLongLabel(r0)     // Catch:{ all -> 0x02e0 }
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            r10 = 2131165995(0x7var_b, float:1.7946223E38)
+            r10 = 2131166001(0x7var_, float:1.7946235E38)
             androidx.core.graphics.drawable.IconCompat r0 = androidx.core.graphics.drawable.IconCompat.createWithResource(r0, r10)     // Catch:{ all -> 0x02e0 }
             r9.setIcon(r0)     // Catch:{ all -> 0x02e0 }
             r9.setIntent(r2)     // Catch:{ all -> 0x02e0 }
@@ -5889,7 +5889,7 @@ public class MediaDataController extends BaseController {
             goto L_0x02be
         L_0x02b2:
             android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            r8 = 2131165996(0x7var_c, float:1.7946225E38)
+            r8 = 2131166002(0x7var_, float:1.7946237E38)
             androidx.core.graphics.drawable.IconCompat r6 = androidx.core.graphics.drawable.IconCompat.createWithResource(r6, r8)     // Catch:{ all -> 0x02e0 }
             r1.setIcon(r6)     // Catch:{ all -> 0x02e0 }
         L_0x02be:
@@ -6527,7 +6527,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0247 }
             if (r8 == 0) goto L_0x007a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627208(0x7f0e0cc8, float:1.8881674E38)
+            r9 = 2131627209(0x7f0e0cc9, float:1.8881676E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
             goto L_0x0067
         L_0x007a:

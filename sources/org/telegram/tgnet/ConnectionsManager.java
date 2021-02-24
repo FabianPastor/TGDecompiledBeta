@@ -76,6 +76,9 @@ public class ConnectionsManager extends BaseController {
     public static final int RequestFlagNeedQuickAck = 128;
     public static final int RequestFlagTryDifferentDc = 16;
     public static final int RequestFlagWithoutLogin = 8;
+    public static final byte USE_IPV4_IPV6_RANDOM = 2;
+    public static final byte USE_IPV4_ONLY = 0;
+    public static final byte USE_IPV6_ONLY = 1;
     /* access modifiers changed from: private */
     public static AsyncTask currentTask;
     /* access modifiers changed from: private */
@@ -131,6 +134,8 @@ public class ConnectionsManager extends BaseController {
 
     public static native void native_sendRequest(int i, long j, RequestDelegateInternal requestDelegateInternal, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i2, int i3, int i4, boolean z, int i5);
 
+    public static native void native_setIpStrategy(int i, byte b);
+
     public static native void native_setJava(boolean z);
 
     public static native void native_setLangCode(int i, String str);
@@ -144,8 +149,6 @@ public class ConnectionsManager extends BaseController {
     public static native void native_setRegId(int i, String str);
 
     public static native void native_setSystemLangCode(int i, String str);
-
-    public static native void native_setUseIpv6(int i, boolean z);
 
     public static native void native_setUserId(int i, int i2);
 
@@ -461,7 +464,7 @@ public class ConnectionsManager extends BaseController {
     }
 
     public void checkConnection() {
-        native_setUseIpv6(this.currentAccount, useIpv6Address());
+        native_setIpStrategy(this.currentAccount, getIpStrategy());
         native_setNetworkAvailable(this.currentAccount, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType(), ApplicationLoader.isConnectionSlow());
     }
 
@@ -901,9 +904,9 @@ public class ConnectionsManager extends BaseController {
     }
 
     @SuppressLint({"NewApi"})
-    protected static boolean useIpv6Address() {
+    protected static byte getIpStrategy() {
         if (Build.VERSION.SDK_INT < 19) {
-            return false;
+            return 0;
         }
         if (BuildVars.LOGS_ENABLED) {
             try {
@@ -940,6 +943,7 @@ public class ConnectionsManager extends BaseController {
             Enumeration<NetworkInterface> networkInterfaces2 = NetworkInterface.getNetworkInterfaces();
             boolean z = false;
             boolean z2 = false;
+            boolean z3 = false;
             while (networkInterfaces2.hasMoreElements()) {
                 NetworkInterface nextElement2 = networkInterfaces2.nextElement();
                 if (nextElement2.isUp()) {
@@ -950,9 +954,13 @@ public class ConnectionsManager extends BaseController {
                             if (!address2.isLinkLocalAddress() && !address2.isLoopbackAddress()) {
                                 if (!address2.isMulticastAddress()) {
                                     if (address2 instanceof Inet6Address) {
-                                        z2 = true;
-                                    } else if ((address2 instanceof Inet4Address) && !address2.getHostAddress().startsWith("192.0.0.")) {
                                         z = true;
+                                    } else if (address2 instanceof Inet4Address) {
+                                        if (!address2.getHostAddress().startsWith("192.0.0.")) {
+                                            z3 = true;
+                                        } else {
+                                            z2 = true;
+                                        }
                                     }
                                 }
                             }
@@ -960,13 +968,18 @@ public class ConnectionsManager extends BaseController {
                     }
                 }
             }
-            if (z || !z2) {
-                return false;
+            if (z) {
+                if (z2) {
+                    return 2;
+                }
+                if (!z3) {
+                    return 1;
+                }
             }
-            return true;
         } catch (Throwable th2) {
             FileLog.e(th2);
         }
+        return 0;
     }
 
     private static class ResolveHostByNameTask extends AsyncTask<Void, Void, ResolvedDomain> {

@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -347,12 +348,23 @@ public class LinkActionView extends LinearLayout {
                         LinkActionView linkActionView = LinkActionView.this;
                         linkActionView.getPointOnScreen(linkActionView.frameLayout, frameLayout2, LinkActionView.this.point);
                         canvas.save();
+                        float y = ((View) LinkActionView.this.frameLayout.getParent()).getY() + LinkActionView.this.frameLayout.getY();
+                        if (y < 1.0f) {
+                            canvas.clipRect(0.0f, (LinkActionView.this.point[1] - y) + 1.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+                        }
                         float[] fArr = LinkActionView.this.point;
                         canvas.translate(fArr[0], fArr[1]);
                         LinkActionView.this.frameLayout.draw(canvas);
                         canvas.restore();
                     }
                 };
+                final AnonymousClass2 r8 = new ViewTreeObserver.OnPreDrawListener(this) {
+                    public boolean onPreDraw() {
+                        r0.invalidate();
+                        return true;
+                    }
+                };
+                frameLayout2.getViewTreeObserver().addOnPreDrawListener(r8);
                 frameLayout2.addView(r0, LayoutHelper.createFrame(-1, -1.0f));
                 float f2 = 0.0f;
                 r0.setAlpha(0.0f);
@@ -367,9 +379,10 @@ public class LinkActionView extends LinearLayout {
                         r0.animate().alpha(0.0f).setDuration(150).setListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
                                 if (r0.getParent() != null) {
-                                    AnonymousClass2 r2 = AnonymousClass2.this;
+                                    AnonymousClass3 r2 = AnonymousClass3.this;
                                     frameLayout2.removeView(r0);
                                 }
+                                frameLayout2.getViewTreeObserver().removeOnPreDrawListener(r8);
                             }
                         });
                     }
@@ -461,7 +474,7 @@ public class LinkActionView extends LinearLayout {
             i = NUM;
             str = "QRCodeLinkHelpGroup";
         }
-        AnonymousClass4 r0 = new QRCodeBottomSheet(context, str2, LocaleController.getString(str, i)) {
+        AnonymousClass5 r0 = new QRCodeBottomSheet(context, str2, LocaleController.getString(str, i)) {
             public void dismiss() {
                 super.dismiss();
                 QRCodeBottomSheet unused = LinkActionView.this.qrCodeBottomSheet = null;
@@ -555,16 +568,18 @@ public class LinkActionView extends LinearLayout {
     }
 
     private void revokeLink() {
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.fragment.getParentActivity());
-        builder.setMessage(LocaleController.getString("RevokeAlert", NUM));
-        builder.setTitle(LocaleController.getString("RevokeLink", NUM));
-        builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener() {
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                LinkActionView.this.lambda$revokeLink$10$LinkActionView(dialogInterface, i);
-            }
-        });
-        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-        builder.show();
+        if (this.fragment.getParentActivity() != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.fragment.getParentActivity());
+            builder.setMessage(LocaleController.getString("RevokeAlert", NUM));
+            builder.setTitle(LocaleController.getString("RevokeLink", NUM));
+            builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener() {
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    LinkActionView.this.lambda$revokeLink$10$LinkActionView(dialogInterface, i);
+                }
+            });
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+            builder.show();
+        }
     }
 
     /* access modifiers changed from: private */

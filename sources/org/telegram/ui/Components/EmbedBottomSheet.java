@@ -509,7 +509,7 @@ public class EmbedBottomSheet extends BottomSheet {
             android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r13)
             android.widget.ImageView r2 = r0.pipButton
-            r13 = 2131166084(0x7var_, float:1.7946403E38)
+            r13 = 2131166090(0x7var_a, float:1.7946416E38)
             r2.setImageResource(r13)
             android.widget.ImageView r2 = r0.pipButton
             r13 = 2131624010(0x7f0e004a, float:1.8875188E38)
@@ -552,7 +552,7 @@ public class EmbedBottomSheet extends BottomSheet {
             r12.<init>(r1)
             android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
             r12.setScaleType(r13)
-            r13 = 2131166076(0x7var_c, float:1.7946387E38)
+            r13 = 2131166082(0x7var_, float:1.79464E38)
             r12.setImageResource(r13)
             r13 = 2131624989(0x7f0e041d, float:1.8877173E38)
             java.lang.String r15 = "CopyLink"

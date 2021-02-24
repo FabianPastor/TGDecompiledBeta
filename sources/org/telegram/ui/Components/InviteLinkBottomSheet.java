@@ -220,18 +220,32 @@ public class InviteLinkBottomSheet extends BottomSheet {
             r1.setTypeface(r4)
             r1 = 2131625822(0x7f0e075e, float:1.8878863E38)
             java.lang.String r4 = "InviteLink"
-            if (r5 != 0) goto L_0x0131
+            if (r5 != 0) goto L_0x014e
+            boolean r5 = r2.expired
+            if (r5 == 0) goto L_0x012f
+            android.widget.TextView r1 = r0.titleTextView
+            r4 = 2131625431(0x7f0e05d7, float:1.887807E38)
+            java.lang.String r5 = "ExpiredLink"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r1.setText(r4)
+            goto L_0x014b
+        L_0x012f:
+            boolean r5 = r2.revoked
+            if (r5 == 0) goto L_0x0142
+            android.widget.TextView r1 = r0.titleTextView
+            r4 = 2131627194(0x7f0e0cba, float:1.8881646E38)
+            java.lang.String r5 = "RevokedLink"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r1.setText(r4)
+            goto L_0x014b
+        L_0x0142:
             android.widget.TextView r5 = r0.titleTextView
-            boolean r6 = r2.revoked
-            if (r6 == 0) goto L_0x0127
-            r1 = 2131627193(0x7f0e0cb9, float:1.8881644E38)
-            java.lang.String r4 = "RevokedLink"
-        L_0x0127:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r5.setText(r1)
+        L_0x014b:
             r0.titleVisible = r12
-            goto L_0x0146
-        L_0x0131:
+            goto L_0x0163
+        L_0x014e:
             android.widget.TextView r5 = r0.titleTextView
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r5.setText(r1)
@@ -240,7 +254,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             r1.setVisibility(r11)
             android.widget.TextView r1 = r0.titleTextView
             r1.setAlpha(r10)
-        L_0x0146:
+        L_0x0163:
             android.view.ViewGroup r1 = r0.containerView
             org.telegram.ui.Components.RecyclerListView r4 = r0.listView
             r11 = -1
@@ -248,12 +262,12 @@ public class InviteLinkBottomSheet extends BottomSheet {
             r13 = 51
             r14 = 0
             boolean r5 = r0.titleVisible
-            if (r5 != 0) goto L_0x0156
+            if (r5 != 0) goto L_0x0173
             r15 = 0
-            goto L_0x0158
-        L_0x0156:
+            goto L_0x0175
+        L_0x0173:
             r15 = 1111490560(0x42400000, float:48.0)
-        L_0x0158:
+        L_0x0175:
             r16 = 0
             r17 = 0
             android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
@@ -262,13 +276,13 @@ public class InviteLinkBottomSheet extends BottomSheet {
             android.widget.TextView r4 = r0.titleTextView
             r9 = -1
             boolean r5 = r0.titleVisible
-            if (r5 != 0) goto L_0x016f
+            if (r5 != 0) goto L_0x018c
             r10 = 1111490560(0x42400000, float:48.0)
-            goto L_0x0173
-        L_0x016f:
+            goto L_0x0190
+        L_0x018c:
             r8 = 1112014848(0x42480000, float:50.0)
             r10 = 1112014848(0x42480000, float:50.0)
-        L_0x0173:
+        L_0x0190:
             r11 = 51
             r12 = 0
             r13 = 0
@@ -278,14 +292,14 @@ public class InviteLinkBottomSheet extends BottomSheet {
             r1.addView(r4, r5)
             r18.updateRows()
             r18.loadUsers()
-            if (r3 == 0) goto L_0x0194
+            if (r3 == 0) goto L_0x01b1
             int r1 = r2.admin_id
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             java.lang.Object r1 = r3.get(r1)
-            if (r1 != 0) goto L_0x0197
-        L_0x0194:
+            if (r1 != 0) goto L_0x01b4
+        L_0x01b1:
             r18.loadCreator()
-        L_0x0197:
+        L_0x01b4:
             r18.updateColors()
             return
         */

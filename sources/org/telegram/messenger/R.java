@@ -775,6 +775,12 @@ public final class R {
         public static final int msg_reply = NUM;
         public static final int msg_reply_small = NUM;
         public static final int msg_report = NUM;
+        public static final int msg_report_abuse = NUM;
+        public static final int msg_report_fake = NUM;
+        public static final int msg_report_other = NUM;
+        public static final int msg_report_spam = NUM;
+        public static final int msg_report_violence = NUM;
+        public static final int msg_report_xxx = NUM;
         public static final int msg_reset = NUM;
         public static final int msg_retry = NUM;
         public static final int msg_round_cancel_m = NUM;
@@ -1515,6 +1521,12 @@ public final class R {
         public static final int icon_background_round = NUM;
         public static final int icon_foreground = NUM;
         public static final int icon_foreground_round = NUM;
+        public static final int msg_report_abuse = NUM;
+        public static final int msg_report_fake = NUM;
+        public static final int msg_report_other = NUM;
+        public static final int msg_report_spam = NUM;
+        public static final int msg_report_violence = NUM;
+        public static final int msg_report_xxx = NUM;
 
         private mipmap() {
         }
@@ -4835,6 +4847,7 @@ public final class R {
         public static final int ReportSpamTitle = NUM;
         public static final int ReportSpamUser = NUM;
         public static final int ReportTitleChild = NUM;
+        public static final int ReportTitleFake = NUM;
         public static final int ReportTitlePornography = NUM;
         public static final int ReportTitleSpam = NUM;
         public static final int ReportTitleViolence = NUM;

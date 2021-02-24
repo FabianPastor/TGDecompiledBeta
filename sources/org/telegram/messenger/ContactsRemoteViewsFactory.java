@@ -69,20 +69,20 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
         return ((int) Math.ceil((double) (((float) this.dids.size()) / 2.0f))) + 1;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:105:0x0268  */
-    /* JADX WARNING: Removed duplicated region for block: B:111:0x0281  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x028d  */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x02ad  */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x02b1  */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x0162  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0166  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x016e  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x017c A[Catch:{ all -> 0x0225 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x0193 A[Catch:{ all -> 0x0225 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x01c0 A[Catch:{ all -> 0x0225 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x0218 A[Catch:{ all -> 0x0223 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:88:0x021c A[Catch:{ all -> 0x0223 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x0243  */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x0249  */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0282  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x029b  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x02a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:123:0x02c7  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x02cb  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x0168  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x016c  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x0174  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x0182 A[Catch:{ all -> 0x022b }] */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x0199 A[Catch:{ all -> 0x022b }] */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x01c6 A[Catch:{ all -> 0x022b }] */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x021e A[Catch:{ all -> 0x0229 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x0222 A[Catch:{ all -> 0x0229 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.widget.RemoteViews getViewAt(int r19) {
         /*
@@ -97,7 +97,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             r3 = 2131427352(0x7f0b0018, float:1.8476318E38)
             r0.<init>(r2, r3)
             r2 = 2131230935(0x7var_d7, float:1.8077937E38)
-            r3 = 2131628063(0x7f0e101f, float:1.8883408E38)
+            r3 = 2131628064(0x7f0e1020, float:1.888341E38)
             java.lang.String r4 = "WidgetLoggedOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setTextViewText(r2, r3)
@@ -114,7 +114,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             r5 = 2131427353(0x7f0b0019, float:1.847632E38)
             r0.<init>(r2, r5)
             r2 = 2131230937(0x7var_d9, float:1.807794E38)
-            r5 = 2131627570(0x7f0e0e32, float:1.8882408E38)
+            r5 = 2131627571(0x7f0e0e33, float:1.888241E38)
             java.lang.String r6 = "TapToEditWidgetShort"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.setTextViewText(r2, r5)
@@ -144,7 +144,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             r7 = 0
         L_0x0086:
             r0 = 2
-            if (r7 >= r0) goto L_0x02be
+            if (r7 >= r0) goto L_0x02d8
             int r0 = r2 * 2
             int r0 = r0 + r7
             java.util.ArrayList<java.lang.Long> r8 = r1.dids
@@ -161,7 +161,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             r9 = r1
             r3 = r4
             r10 = 1
-            goto L_0x02b7
+            goto L_0x02d1
         L_0x00a6:
             if (r7 != 0) goto L_0x00ac
             r8 = 2131230789(0x7var_, float:1.807764E38)
@@ -177,7 +177,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             long r11 = r8.longValue()
             r13 = 0
             int r15 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1))
-            if (r15 <= 0) goto L_0x0132
+            if (r15 <= 0) goto L_0x0134
             org.telegram.messenger.AccountInstance r11 = r1.accountInstance
             org.telegram.messenger.MessagesController r11 = r11.getMessagesController()
             long r9 = r8.longValue()
@@ -186,7 +186,7 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             org.telegram.tgnet.TLRPC$User r9 = r11.getUser(r9)
             boolean r10 = org.telegram.messenger.UserObject.isUserSelf(r9)
             if (r10 == 0) goto L_0x00e8
-            r10 = 2131627208(0x7f0e0cc8, float:1.8881674E38)
+            r10 = 2131627209(0x7f0e0cc9, float:1.8881676E38)
             java.lang.String r11 = "SavedMessages"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             goto L_0x010c
@@ -208,27 +208,28 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             java.lang.String r10 = org.telegram.messenger.UserObject.getFirstName(r9)
         L_0x010c:
             boolean r11 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r9)
-            if (r11 != 0) goto L_0x012e
+            if (r11 != 0) goto L_0x0130
             boolean r11 = org.telegram.messenger.UserObject.isUserSelf(r9)
-            if (r11 != 0) goto L_0x012e
+            if (r11 != 0) goto L_0x0130
+            if (r9 == 0) goto L_0x0130
             org.telegram.tgnet.TLRPC$UserProfilePhoto r11 = r9.photo
-            if (r11 == 0) goto L_0x012e
+            if (r11 == 0) goto L_0x0130
             org.telegram.tgnet.TLRPC$FileLocation r11 = r11.photo_small
-            if (r11 == 0) goto L_0x012e
+            if (r11 == 0) goto L_0x0130
             r16 = r4
             long r3 = r11.volume_id
             int r17 = (r3 > r13 ? 1 : (r3 == r13 ? 0 : -1))
-            if (r17 == 0) goto L_0x0130
+            if (r17 == 0) goto L_0x0132
             int r3 = r11.local_id
-            if (r3 == 0) goto L_0x0130
+            if (r3 == 0) goto L_0x0132
             r3 = 0
-            goto L_0x0160
-        L_0x012e:
-            r16 = r4
+            goto L_0x0166
         L_0x0130:
-            r3 = 0
-            goto L_0x015f
+            r16 = r4
         L_0x0132:
+            r3 = 0
+            goto L_0x0165
+        L_0x0134:
             r16 = r4
             org.telegram.messenger.AccountInstance r3 = r1.accountInstance
             org.telegram.messenger.MessagesController r3 = r3.getMessagesController()
@@ -237,184 +238,198 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             int r4 = -r4
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r4)
+            if (r3 == 0) goto L_0x0162
             java.lang.String r10 = r3.title
             org.telegram.tgnet.TLRPC$ChatPhoto r4 = r3.photo
-            if (r4 == 0) goto L_0x015e
+            if (r4 == 0) goto L_0x0164
             org.telegram.tgnet.TLRPC$FileLocation r11 = r4.photo_small
-            if (r11 == 0) goto L_0x015e
+            if (r11 == 0) goto L_0x0164
             long r0 = r11.volume_id
             int r9 = (r0 > r13 ? 1 : (r0 == r13 ? 0 : -1))
-            if (r9 == 0) goto L_0x015e
+            if (r9 == 0) goto L_0x0164
             int r0 = r11.local_id
-            if (r0 == 0) goto L_0x015e
+            if (r0 == 0) goto L_0x0164
             r9 = 0
-            goto L_0x0160
-        L_0x015e:
+            goto L_0x0166
+        L_0x0162:
+            java.lang.String r10 = ""
+        L_0x0164:
             r9 = 0
-        L_0x015f:
+        L_0x0165:
             r11 = 0
-        L_0x0160:
-            if (r7 != 0) goto L_0x0166
-            r0 = 2131230797(0x7var_d, float:1.8077657E38)
-            goto L_0x0169
         L_0x0166:
+            if (r7 != 0) goto L_0x016c
+            r0 = 2131230797(0x7var_d, float:1.8077657E38)
+            goto L_0x016f
+        L_0x016c:
             r0 = 2131230798(0x7var_e, float:1.8077659E38)
-        L_0x0169:
+        L_0x016f:
             r5.setTextViewText(r0, r10)
-            if (r11 == 0) goto L_0x017c
+            if (r11 == 0) goto L_0x0182
             r1 = 1
-            java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r11, r1)     // Catch:{ all -> 0x0225 }
-            java.lang.String r0 = r0.toString()     // Catch:{ all -> 0x0225 }
-            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r0)     // Catch:{ all -> 0x0225 }
-            goto L_0x017d
-        L_0x017c:
+            java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r11, r1)     // Catch:{ all -> 0x022b }
+            java.lang.String r0 = r0.toString()     // Catch:{ all -> 0x022b }
+            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r0)     // Catch:{ all -> 0x022b }
+            goto L_0x0183
+        L_0x0182:
             r0 = 0
-        L_0x017d:
+        L_0x0183:
             r1 = 1111490560(0x42400000, float:48.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)     // Catch:{ all -> 0x0225 }
-            android.graphics.Bitmap$Config r10 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0225 }
-            android.graphics.Bitmap r10 = android.graphics.Bitmap.createBitmap(r1, r1, r10)     // Catch:{ all -> 0x0225 }
-            r10.eraseColor(r6)     // Catch:{ all -> 0x0225 }
-            android.graphics.Canvas r11 = new android.graphics.Canvas     // Catch:{ all -> 0x0225 }
-            r11.<init>(r10)     // Catch:{ all -> 0x0225 }
-            if (r0 != 0) goto L_0x01c0
-            if (r9 == 0) goto L_0x01b1
-            org.telegram.ui.Components.AvatarDrawable r0 = new org.telegram.ui.Components.AvatarDrawable     // Catch:{ all -> 0x0225 }
-            r0.<init>((org.telegram.tgnet.TLRPC$User) r9)     // Catch:{ all -> 0x0225 }
-            boolean r3 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r9)     // Catch:{ all -> 0x0225 }
-            if (r3 == 0) goto L_0x01a6
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)     // Catch:{ all -> 0x022b }
+            android.graphics.Bitmap$Config r10 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x022b }
+            android.graphics.Bitmap r10 = android.graphics.Bitmap.createBitmap(r1, r1, r10)     // Catch:{ all -> 0x022b }
+            r10.eraseColor(r6)     // Catch:{ all -> 0x022b }
+            android.graphics.Canvas r11 = new android.graphics.Canvas     // Catch:{ all -> 0x022b }
+            r11.<init>(r10)     // Catch:{ all -> 0x022b }
+            if (r0 != 0) goto L_0x01c6
+            if (r9 == 0) goto L_0x01b7
+            org.telegram.ui.Components.AvatarDrawable r0 = new org.telegram.ui.Components.AvatarDrawable     // Catch:{ all -> 0x022b }
+            r0.<init>((org.telegram.tgnet.TLRPC$User) r9)     // Catch:{ all -> 0x022b }
+            boolean r3 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r9)     // Catch:{ all -> 0x022b }
+            if (r3 == 0) goto L_0x01ac
             r3 = 12
-            r0.setAvatarType(r3)     // Catch:{ all -> 0x0225 }
-            goto L_0x01b6
-        L_0x01a6:
-            boolean r3 = org.telegram.messenger.UserObject.isUserSelf(r9)     // Catch:{ all -> 0x0225 }
-            if (r3 == 0) goto L_0x01b6
+            r0.setAvatarType(r3)     // Catch:{ all -> 0x022b }
+            goto L_0x01bc
+        L_0x01ac:
+            boolean r3 = org.telegram.messenger.UserObject.isUserSelf(r9)     // Catch:{ all -> 0x022b }
+            if (r3 == 0) goto L_0x01bc
             r3 = 1
-            r0.setAvatarType(r3)     // Catch:{ all -> 0x0225 }
-            goto L_0x01b6
-        L_0x01b1:
-            org.telegram.ui.Components.AvatarDrawable r0 = new org.telegram.ui.Components.AvatarDrawable     // Catch:{ all -> 0x0225 }
-            r0.<init>((org.telegram.tgnet.TLRPC$Chat) r3)     // Catch:{ all -> 0x0225 }
-        L_0x01b6:
-            r0.setBounds(r6, r6, r1, r1)     // Catch:{ all -> 0x0225 }
-            r0.draw(r11)     // Catch:{ all -> 0x0225 }
+            r0.setAvatarType(r3)     // Catch:{ all -> 0x022b }
+            goto L_0x01bc
+        L_0x01b7:
+            org.telegram.ui.Components.AvatarDrawable r0 = new org.telegram.ui.Components.AvatarDrawable     // Catch:{ all -> 0x022b }
+            r0.<init>((org.telegram.tgnet.TLRPC$Chat) r3)     // Catch:{ all -> 0x022b }
+        L_0x01bc:
+            r0.setBounds(r6, r6, r1, r1)     // Catch:{ all -> 0x022b }
+            r0.draw(r11)     // Catch:{ all -> 0x022b }
             r0 = 0
             r9 = r18
-            goto L_0x0213
-        L_0x01c0:
-            android.graphics.BitmapShader r3 = new android.graphics.BitmapShader     // Catch:{ all -> 0x0225 }
-            android.graphics.Shader$TileMode r9 = android.graphics.Shader.TileMode.CLAMP     // Catch:{ all -> 0x0225 }
-            r3.<init>(r0, r9, r9)     // Catch:{ all -> 0x0225 }
+            goto L_0x0219
+        L_0x01c6:
+            android.graphics.BitmapShader r3 = new android.graphics.BitmapShader     // Catch:{ all -> 0x022b }
+            android.graphics.Shader$TileMode r9 = android.graphics.Shader.TileMode.CLAMP     // Catch:{ all -> 0x022b }
+            r3.<init>(r0, r9, r9)     // Catch:{ all -> 0x022b }
             r9 = r18
-            android.graphics.Paint r4 = r9.roundPaint     // Catch:{ all -> 0x0223 }
-            if (r4 != 0) goto L_0x01dc
-            android.graphics.Paint r4 = new android.graphics.Paint     // Catch:{ all -> 0x0223 }
+            android.graphics.Paint r4 = r9.roundPaint     // Catch:{ all -> 0x0229 }
+            if (r4 != 0) goto L_0x01e2
+            android.graphics.Paint r4 = new android.graphics.Paint     // Catch:{ all -> 0x0229 }
             r12 = 1
-            r4.<init>(r12)     // Catch:{ all -> 0x0223 }
-            r9.roundPaint = r4     // Catch:{ all -> 0x0223 }
-            android.graphics.RectF r4 = new android.graphics.RectF     // Catch:{ all -> 0x0223 }
-            r4.<init>()     // Catch:{ all -> 0x0223 }
-            r9.bitmapRect = r4     // Catch:{ all -> 0x0223 }
-        L_0x01dc:
-            float r1 = (float) r1     // Catch:{ all -> 0x0223 }
-            int r4 = r0.getWidth()     // Catch:{ all -> 0x0223 }
-            float r4 = (float) r4     // Catch:{ all -> 0x0223 }
+            r4.<init>(r12)     // Catch:{ all -> 0x0229 }
+            r9.roundPaint = r4     // Catch:{ all -> 0x0229 }
+            android.graphics.RectF r4 = new android.graphics.RectF     // Catch:{ all -> 0x0229 }
+            r4.<init>()     // Catch:{ all -> 0x0229 }
+            r9.bitmapRect = r4     // Catch:{ all -> 0x0229 }
+        L_0x01e2:
+            float r1 = (float) r1     // Catch:{ all -> 0x0229 }
+            int r4 = r0.getWidth()     // Catch:{ all -> 0x0229 }
+            float r4 = (float) r4     // Catch:{ all -> 0x0229 }
             float r1 = r1 / r4
-            r11.save()     // Catch:{ all -> 0x0223 }
-            r11.scale(r1, r1)     // Catch:{ all -> 0x0223 }
-            android.graphics.Paint r1 = r9.roundPaint     // Catch:{ all -> 0x0223 }
-            r1.setShader(r3)     // Catch:{ all -> 0x0223 }
-            android.graphics.RectF r1 = r9.bitmapRect     // Catch:{ all -> 0x0223 }
-            int r3 = r0.getWidth()     // Catch:{ all -> 0x0223 }
-            float r3 = (float) r3     // Catch:{ all -> 0x0223 }
-            int r4 = r0.getHeight()     // Catch:{ all -> 0x0223 }
-            float r4 = (float) r4     // Catch:{ all -> 0x0223 }
+            r11.save()     // Catch:{ all -> 0x0229 }
+            r11.scale(r1, r1)     // Catch:{ all -> 0x0229 }
+            android.graphics.Paint r1 = r9.roundPaint     // Catch:{ all -> 0x0229 }
+            r1.setShader(r3)     // Catch:{ all -> 0x0229 }
+            android.graphics.RectF r1 = r9.bitmapRect     // Catch:{ all -> 0x0229 }
+            int r3 = r0.getWidth()     // Catch:{ all -> 0x0229 }
+            float r3 = (float) r3     // Catch:{ all -> 0x0229 }
+            int r4 = r0.getHeight()     // Catch:{ all -> 0x0229 }
+            float r4 = (float) r4     // Catch:{ all -> 0x0229 }
             r12 = 0
-            r1.set(r12, r12, r3, r4)     // Catch:{ all -> 0x0223 }
-            android.graphics.RectF r1 = r9.bitmapRect     // Catch:{ all -> 0x0223 }
-            int r3 = r0.getWidth()     // Catch:{ all -> 0x0223 }
-            float r3 = (float) r3     // Catch:{ all -> 0x0223 }
-            int r0 = r0.getHeight()     // Catch:{ all -> 0x0223 }
-            float r0 = (float) r0     // Catch:{ all -> 0x0223 }
-            android.graphics.Paint r4 = r9.roundPaint     // Catch:{ all -> 0x0223 }
-            r11.drawRoundRect(r1, r3, r0, r4)     // Catch:{ all -> 0x0223 }
-            r11.restore()     // Catch:{ all -> 0x0223 }
+            r1.set(r12, r12, r3, r4)     // Catch:{ all -> 0x0229 }
+            android.graphics.RectF r1 = r9.bitmapRect     // Catch:{ all -> 0x0229 }
+            int r3 = r0.getWidth()     // Catch:{ all -> 0x0229 }
+            float r3 = (float) r3     // Catch:{ all -> 0x0229 }
+            int r0 = r0.getHeight()     // Catch:{ all -> 0x0229 }
+            float r0 = (float) r0     // Catch:{ all -> 0x0229 }
+            android.graphics.Paint r4 = r9.roundPaint     // Catch:{ all -> 0x0229 }
+            r11.drawRoundRect(r1, r3, r0, r4)     // Catch:{ all -> 0x0229 }
+            r11.restore()     // Catch:{ all -> 0x0229 }
             r0 = 0
-        L_0x0213:
-            r11.setBitmap(r0)     // Catch:{ all -> 0x0223 }
-            if (r7 != 0) goto L_0x021c
+        L_0x0219:
+            r11.setBitmap(r0)     // Catch:{ all -> 0x0229 }
+            if (r7 != 0) goto L_0x0222
             r0 = 2131230791(0x7var_, float:1.8077645E38)
-            goto L_0x021f
-        L_0x021c:
+            goto L_0x0225
+        L_0x0222:
             r0 = 2131230792(0x7var_, float:1.8077647E38)
-        L_0x021f:
-            r5.setImageViewBitmap(r0, r10)     // Catch:{ all -> 0x0223 }
-            goto L_0x022b
-        L_0x0223:
-            r0 = move-exception
-            goto L_0x0228
         L_0x0225:
+            r5.setImageViewBitmap(r0, r10)     // Catch:{ all -> 0x0229 }
+            goto L_0x0231
+        L_0x0229:
+            r0 = move-exception
+            goto L_0x022e
+        L_0x022b:
             r0 = move-exception
             r9 = r18
-        L_0x0228:
+        L_0x022e:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x022b:
+        L_0x0231:
             android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r0 = r9.dialogs
             long r3 = r8.longValue()
             java.lang.Object r0 = r0.get(r3)
             org.telegram.tgnet.TLRPC$Dialog r0 = (org.telegram.tgnet.TLRPC$Dialog) r0
             r1 = 2131230795(0x7var_b, float:1.8077653E38)
             r3 = 2131230796(0x7var_c, float:1.8077655E38)
-            if (r0 == 0) goto L_0x0268
+            if (r0 == 0) goto L_0x0282
             int r0 = r0.unread_count
-            if (r0 <= 0) goto L_0x0268
-            if (r7 != 0) goto L_0x0249
-            r4 = 2131230793(0x7var_, float:1.8077649E38)
-            goto L_0x024c
-        L_0x0249:
-            r4 = 2131230794(0x7var_a, float:1.807765E38)
-        L_0x024c:
+            if (r0 <= 0) goto L_0x0282
+            r4 = 99
+            if (r0 <= r4) goto L_0x025d
             r10 = 1
-            java.lang.Object[] r11 = new java.lang.Object[r10]
+            java.lang.Object[] r0 = new java.lang.Object[r10]
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            r0[r6] = r4
+            java.lang.String r4 = "%d+"
+            java.lang.String r0 = java.lang.String.format(r4, r0)
+            goto L_0x026c
+        L_0x025d:
+            r10 = 1
+            java.lang.Object[] r4 = new java.lang.Object[r10]
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
-            r11[r6] = r0
+            r4[r6] = r0
             java.lang.String r0 = "%d"
-            java.lang.String r0 = java.lang.String.format(r0, r11)
-            r5.setTextViewText(r4, r0)
-            if (r7 != 0) goto L_0x0261
-            goto L_0x0264
-        L_0x0261:
-            r1 = 2131230796(0x7var_c, float:1.8077655E38)
-        L_0x0264:
-            r5.setViewVisibility(r1, r6)
-            goto L_0x0274
-        L_0x0268:
-            r10 = 1
-            if (r7 != 0) goto L_0x026c
-            goto L_0x026f
+            java.lang.String r0 = java.lang.String.format(r0, r4)
         L_0x026c:
+            if (r7 != 0) goto L_0x0272
+            r4 = 2131230793(0x7var_, float:1.8077649E38)
+            goto L_0x0275
+        L_0x0272:
+            r4 = 2131230794(0x7var_a, float:1.807765E38)
+        L_0x0275:
+            r5.setTextViewText(r4, r0)
+            if (r7 != 0) goto L_0x027b
+            goto L_0x027e
+        L_0x027b:
             r1 = 2131230796(0x7var_c, float:1.8077655E38)
-        L_0x026f:
+        L_0x027e:
+            r5.setViewVisibility(r1, r6)
+            goto L_0x028e
+        L_0x0282:
+            r10 = 1
+            if (r7 != 0) goto L_0x0286
+            goto L_0x0289
+        L_0x0286:
+            r1 = 2131230796(0x7var_c, float:1.8077655E38)
+        L_0x0289:
             r0 = 8
             r5.setViewVisibility(r1, r0)
-        L_0x0274:
+        L_0x028e:
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             long r3 = r8.longValue()
             int r1 = (r3 > r13 ? 1 : (r3 == r13 ? 0 : -1))
-            if (r1 <= 0) goto L_0x028d
+            if (r1 <= 0) goto L_0x02a7
             long r3 = r8.longValue()
             int r1 = (int) r3
             java.lang.String r3 = "userId"
             r0.putInt(r3, r1)
-            goto L_0x0298
-        L_0x028d:
+            goto L_0x02b2
+        L_0x02a7:
             long r3 = r8.longValue()
             int r1 = (int) r3
             int r1 = -r1
             java.lang.String r3 = "chatId"
             r0.putInt(r3, r1)
-        L_0x0298:
+        L_0x02b2:
             org.telegram.messenger.AccountInstance r1 = r9.accountInstance
             int r1 = r1.getCurrentAccount()
             r3 = r16
@@ -422,20 +437,20 @@ class ContactsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactor
             android.content.Intent r1 = new android.content.Intent
             r1.<init>()
             r1.putExtras(r0)
-            if (r7 != 0) goto L_0x02b1
+            if (r7 != 0) goto L_0x02cb
             r15 = 2131230789(0x7var_, float:1.807764E38)
-            goto L_0x02b4
-        L_0x02b1:
+            goto L_0x02ce
+        L_0x02cb:
             r15 = 2131230790(0x7var_, float:1.8077643E38)
-        L_0x02b4:
+        L_0x02ce:
             r5.setOnClickFillInIntent(r15, r1)
-        L_0x02b7:
+        L_0x02d1:
             int r7 = r7 + 1
             r4 = r3
             r1 = r9
             r3 = 1
             goto L_0x0086
-        L_0x02be:
+        L_0x02d8:
             r9 = r1
             return r5
         */

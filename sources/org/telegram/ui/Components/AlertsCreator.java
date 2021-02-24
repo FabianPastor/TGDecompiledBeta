@@ -100,6 +100,7 @@ import org.telegram.tgnet.TLRPC$TL_help_getSupport;
 import org.telegram.tgnet.TLRPC$TL_help_support;
 import org.telegram.tgnet.TLRPC$TL_inputPeerUser;
 import org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse;
+import org.telegram.tgnet.TLRPC$TL_inputReportReasonFake;
 import org.telegram.tgnet.TLRPC$TL_inputReportReasonOther;
 import org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography;
 import org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam;
@@ -899,7 +900,7 @@ public class AlertsCreator {
         L_0x0133:
             if (r7 == 0) goto L_0x0171
             if (r24 == 0) goto L_0x0171
-            r2 = 2131627136(0x7f0e0CLASSNAME, float:1.8881528E38)
+            r2 = 2131627137(0x7f0e0CLASSNAME, float:1.888153E38)
             java.lang.String r6 = "ReportUnrelatedGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r11.setTitle(r2)
@@ -908,7 +909,7 @@ public class AlertsCreator {
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelLocation
             if (r2 == 0) goto L_0x0164
             org.telegram.tgnet.TLRPC$TL_channelLocation r1 = (org.telegram.tgnet.TLRPC$TL_channelLocation) r1
-            r2 = 2131627137(0x7f0e0CLASSNAME, float:1.888153E38)
+            r2 = 2131627138(0x7f0e0CLASSNAME, float:1.8881532E38)
             java.lang.Object[] r4 = new java.lang.Object[r4]
             java.lang.String r1 = r1.address
             r4[r5] = r1
@@ -918,7 +919,7 @@ public class AlertsCreator {
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0164:
-            r1 = 2131627138(0x7f0e0CLASSNAME, float:1.8881532E38)
+            r1 = 2131627139(0x7f0e0CLASSNAME, float:1.8881534E38)
             java.lang.String r2 = "ReportUnrelatedGroupTextNoAddress"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
@@ -3706,6 +3707,8 @@ public class AlertsCreator {
         tLRPC$TL_messages_report.message = str;
         if (i == 0) {
             tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonSpam();
+        } else if (i == 1) {
+            tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonFake();
         } else if (i == 2) {
             tLRPC$TL_messages_report.reason = new TLRPC$TL_inputReportReasonViolence();
         } else if (i == 3) {
@@ -3719,12 +3722,21 @@ public class AlertsCreator {
     }
 
     public static void createReportAlert(Context context, long j, int i, BaseFragment baseFragment) {
+        CharSequence[] charSequenceArr;
+        int[] iArr;
         Context context2 = context;
         BaseFragment baseFragment2 = baseFragment;
         if (context2 != null && baseFragment2 != null) {
             BottomSheet.Builder builder = new BottomSheet.Builder(context2);
             builder.setTitle(LocaleController.getString("ReportChat", NUM), true);
-            builder.setItems(i != 0 ? new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)} : new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatFakeAccount", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)}, new DialogInterface.OnClickListener(i, baseFragment, context, j) {
+            if (i != 0) {
+                charSequenceArr = new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)};
+                iArr = new int[]{NUM, NUM, NUM, NUM, NUM};
+            } else {
+                charSequenceArr = new CharSequence[]{LocaleController.getString("ReportChatSpam", NUM), LocaleController.getString("ReportChatFakeAccount", NUM), LocaleController.getString("ReportChatViolence", NUM), LocaleController.getString("ReportChatChild", NUM), LocaleController.getString("ReportChatPornography", NUM), LocaleController.getString("ReportChatOther", NUM)};
+                iArr = new int[]{NUM, NUM, NUM, NUM, NUM, NUM};
+            }
+            builder.setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener(i, baseFragment, context, j) {
                 public final /* synthetic */ int f$0;
                 public final /* synthetic */ BaseFragment f$1;
                 public final /* synthetic */ Context f$2;
@@ -3745,151 +3757,160 @@ public class AlertsCreator {
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v2, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v3, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v4, resolved type: org.telegram.tgnet.TLRPC$TL_messages_report} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v5, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v6, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v7, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v8, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v9, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
-    /* JADX WARNING: Code restructure failed: missing block: B:26:0x0070, code lost:
-        if (r14 != 3) goto L_0x00b5;
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v2, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v4, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v5, resolved type: org.telegram.tgnet.TLRPC$TL_messages_report} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v6, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v7, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v8, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v9, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v10, resolved type: org.telegram.tgnet.TLRPC$TL_account_reportPeer} */
+    /* JADX WARNING: Code restructure failed: missing block: B:31:0x007a, code lost:
+        if (r0 != 3) goto L_0x00bf;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:27:0x0072, code lost:
-        r2.reason = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography();
-        r2 = r2;
+    /* JADX WARNING: Code restructure failed: missing block: B:32:0x007c, code lost:
+        r3.reason = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography();
+        r3 = r3;
      */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ void lambda$createReportAlert$53(int r8, org.telegram.ui.ActionBar.BaseFragment r9, android.content.Context r10, long r11, android.content.DialogInterface r13, int r14) {
+    static /* synthetic */ void lambda$createReportAlert$53(int r10, org.telegram.ui.ActionBar.BaseFragment r11, android.content.Context r12, long r13, android.content.DialogInterface r15, int r16) {
         /*
+            r7 = r11
+            r0 = r16
             r1 = 3
-            r2 = 4
-            r3 = 2
-            if (r8 != 0) goto L_0x0018
-            if (r14 == 0) goto L_0x000d
-            if (r14 == r3) goto L_0x000d
-            if (r14 == r1) goto L_0x000d
-            if (r14 != r2) goto L_0x0018
-        L_0x000d:
-            boolean r4 = r9 instanceof org.telegram.ui.ChatActivity
-            if (r4 == 0) goto L_0x0018
-            r1 = r9
+            r2 = 2
+            r3 = 4
+            if (r10 != 0) goto L_0x001b
+            if (r0 == 0) goto L_0x0010
+            if (r0 == r2) goto L_0x0010
+            if (r0 == r1) goto L_0x0010
+            if (r0 != r3) goto L_0x001b
+        L_0x0010:
+            boolean r4 = r7 instanceof org.telegram.ui.ChatActivity
+            if (r4 == 0) goto L_0x001b
+            r1 = r7
             org.telegram.ui.ChatActivity r1 = (org.telegram.ui.ChatActivity) r1
-            r1.openReportChat(r14)
+            r1.openReportChat(r0)
             return
-        L_0x0018:
-            if (r8 != 0) goto L_0x001d
+        L_0x001b:
             r4 = 5
-            if (r14 == r4) goto L_0x0021
-        L_0x001d:
-            if (r8 == 0) goto L_0x0030
-            if (r14 != r2) goto L_0x0030
-        L_0x0021:
-            org.telegram.ui.Components.AlertsCreator$14 r7 = new org.telegram.ui.Components.AlertsCreator$14
+            r5 = 1
+            if (r10 != 0) goto L_0x0023
+            if (r0 == r4) goto L_0x0027
+            if (r0 == r5) goto L_0x0027
+        L_0x0023:
+            if (r10 == 0) goto L_0x003a
+            if (r0 != r3) goto L_0x003a
+        L_0x0027:
+            org.telegram.ui.Components.AlertsCreator$14 r8 = new org.telegram.ui.Components.AlertsCreator$14
+            if (r0 != r3) goto L_0x002d
             r2 = 5
-            r0 = r7
-            r1 = r10
-            r3 = r8
-            r4 = r11
-            r6 = r9
+            goto L_0x002e
+        L_0x002d:
+            r2 = r0
+        L_0x002e:
+            r0 = r8
+            r1 = r12
+            r3 = r10
+            r4 = r13
+            r6 = r11
             r0.<init>(r1, r2, r3, r4, r6)
-            r9.showDialog(r7)
+            r11.showDialog(r8)
             return
-        L_0x0030:
+        L_0x003a:
             int r4 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
-            int r6 = (int) r11
+            r8 = r13
+            int r6 = (int) r8
             org.telegram.tgnet.TLRPC$InputPeer r4 = r4.getInputPeer((int) r6)
-            r5 = 1
             java.lang.String r6 = ""
-            if (r8 == 0) goto L_0x007a
-            org.telegram.tgnet.TLRPC$TL_messages_report r2 = new org.telegram.tgnet.TLRPC$TL_messages_report
-            r2.<init>()
-            r2.peer = r4
-            java.util.ArrayList<java.lang.Integer> r4 = r2.id
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r8)
-            r4.add(r7)
-            r2.message = r6
-            if (r14 != 0) goto L_0x005c
+            if (r10 == 0) goto L_0x0084
+            org.telegram.tgnet.TLRPC$TL_messages_report r3 = new org.telegram.tgnet.TLRPC$TL_messages_report
+            r3.<init>()
+            r3.peer = r4
+            java.util.ArrayList<java.lang.Integer> r4 = r3.id
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r10)
+            r4.add(r8)
+            r3.message = r6
+            if (r0 != 0) goto L_0x0066
             org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam
             r0.<init>()
-            r2.reason = r0
-            goto L_0x00b5
-        L_0x005c:
-            if (r14 != r5) goto L_0x0066
+            r3.reason = r0
+            goto L_0x00bf
+        L_0x0066:
+            if (r0 != r5) goto L_0x0070
             org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence
             r0.<init>()
-            r2.reason = r0
-            goto L_0x00b5
-        L_0x0066:
-            if (r14 != r3) goto L_0x0070
+            r3.reason = r0
+            goto L_0x00bf
+        L_0x0070:
+            if (r0 != r2) goto L_0x007a
             org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse
             r0.<init>()
-            r2.reason = r0
-            goto L_0x00b5
-        L_0x0070:
-            if (r14 != r1) goto L_0x00b5
+            r3.reason = r0
+            goto L_0x00bf
+        L_0x007a:
+            if (r0 != r1) goto L_0x00bf
             org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography
             r0.<init>()
-            r2.reason = r0
-            goto L_0x00b5
-        L_0x007a:
-            org.telegram.tgnet.TLRPC$TL_account_reportPeer r7 = new org.telegram.tgnet.TLRPC$TL_account_reportPeer
-            r7.<init>()
-            r7.peer = r4
-            r7.message = r6
-            if (r14 != 0) goto L_0x008d
+            r3.reason = r0
+            goto L_0x00bf
+        L_0x0084:
+            org.telegram.tgnet.TLRPC$TL_account_reportPeer r8 = new org.telegram.tgnet.TLRPC$TL_account_reportPeer
+            r8.<init>()
+            r8.peer = r4
+            r8.message = r6
+            if (r0 != 0) goto L_0x0097
             org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonSpam
             r0.<init>()
-            r7.reason = r0
-            goto L_0x00b4
-        L_0x008d:
-            if (r14 != r5) goto L_0x0097
+            r8.reason = r0
+            goto L_0x00be
+        L_0x0097:
+            if (r0 != r5) goto L_0x00a1
             org.telegram.tgnet.TLRPC$TL_inputReportReasonFake r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonFake
             r0.<init>()
-            r7.reason = r0
-            goto L_0x00b4
-        L_0x0097:
-            if (r14 != r3) goto L_0x00a1
+            r8.reason = r0
+            goto L_0x00be
+        L_0x00a1:
+            if (r0 != r2) goto L_0x00ab
             org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonViolence
             r0.<init>()
-            r7.reason = r0
-            goto L_0x00b4
-        L_0x00a1:
-            if (r14 != r1) goto L_0x00ab
+            r8.reason = r0
+            goto L_0x00be
+        L_0x00ab:
+            if (r0 != r1) goto L_0x00b5
             org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonChildAbuse
             r0.<init>()
-            r7.reason = r0
-            goto L_0x00b4
-        L_0x00ab:
-            if (r14 != r2) goto L_0x00b4
+            r8.reason = r0
+            goto L_0x00be
+        L_0x00b5:
+            if (r0 != r3) goto L_0x00be
             org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography r0 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonPornography
             r0.<init>()
-            r7.reason = r0
-        L_0x00b4:
-            r2 = r7
-        L_0x00b5:
+            r8.reason = r0
+        L_0x00be:
+            r3 = r8
+        L_0x00bf:
             int r0 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
             org.telegram.ui.Components.-$$Lambda$AlertsCreator$HSYsQWvuMKhLBNNx8iTggHeLu3w r1 = org.telegram.ui.Components.$$Lambda$AlertsCreator$HSYsQWvuMKhLBNNx8iTggHeLu3w.INSTANCE
-            r0.sendRequest(r2, r1)
-            boolean r0 = r9 instanceof org.telegram.ui.ChatActivity
-            if (r0 == 0) goto L_0x00d4
-            r0 = r9
+            r0.sendRequest(r3, r1)
+            boolean r0 = r7 instanceof org.telegram.ui.ChatActivity
+            if (r0 == 0) goto L_0x00de
+            r0 = r7
             org.telegram.ui.ChatActivity r0 = (org.telegram.ui.ChatActivity) r0
             org.telegram.ui.Components.UndoView r0 = r0.getUndoView()
             r1 = 0
             r3 = 74
             r4 = 0
             r0.showWithAction((long) r1, (int) r3, (java.lang.Runnable) r4)
-            goto L_0x00df
-        L_0x00d4:
-            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of((org.telegram.ui.ActionBar.BaseFragment) r9)
+            goto L_0x00e9
+        L_0x00de:
+            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of((org.telegram.ui.ActionBar.BaseFragment) r11)
             org.telegram.ui.Components.Bulletin r0 = r0.createReportSent()
             r0.show()
-        L_0x00df:
+        L_0x00e9:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$createReportAlert$53(int, org.telegram.ui.ActionBar.BaseFragment, android.content.Context, long, android.content.DialogInterface, int):void");

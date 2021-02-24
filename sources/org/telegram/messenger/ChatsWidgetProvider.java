@@ -17,7 +17,7 @@ import org.telegram.ui.LaunchActivity;
 public class ChatsWidgetProvider extends AppWidgetProvider {
     private static int getCellsForSize(int i) {
         int i2 = 2;
-        while ((i2 * 70) - 30 < i) {
+        while (i2 * 72 < i) {
             i2++;
         }
         return i2 - 1;
@@ -41,6 +41,7 @@ public class ChatsWidgetProvider extends AppWidgetProvider {
 
     public void onDeleted(Context context, int[] iArr) {
         super.onDeleted(context, iArr);
+        ApplicationLoader.postInitApplication();
         SharedPreferences sharedPreferences = context.getSharedPreferences("shortcut_widget", 0);
         SharedPreferences.Editor edit = sharedPreferences.edit();
         for (int i = 0; i < iArr.length; i++) {
@@ -59,7 +60,8 @@ public class ChatsWidgetProvider extends AppWidgetProvider {
         Context context2 = context;
         AppWidgetManager appWidgetManager2 = appWidgetManager;
         int i2 = i;
-        int cellsForSize = getCellsForSize(appWidgetManager.getAppWidgetOptions(i).getInt("appWidgetMinHeight"));
+        ApplicationLoader.postInitApplication();
+        int cellsForSize = getCellsForSize(appWidgetManager.getAppWidgetOptions(i).getInt("appWidgetMaxHeight"));
         Intent intent = new Intent(context2, ChatsWidgetService.class);
         intent.putExtra("appWidgetId", i2);
         intent.setData(Uri.parse(intent.toUri(1)));
@@ -80,7 +82,7 @@ public class ChatsWidgetProvider extends AppWidgetProvider {
         remoteViews.setEmptyView(NUM, NUM);
         Intent intent2 = new Intent(ApplicationLoader.applicationContext, LaunchActivity.class);
         intent2.setAction("com.tmessages.openchat" + Math.random() + Integer.MAX_VALUE);
-        intent2.setFlags(32768);
+        intent2.addFlags(67108864);
         intent2.addCategory("android.intent.category.LAUNCHER");
         remoteViews.setPendingIntentTemplate(NUM, PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent2, NUM));
         appWidgetManager2.updateAppWidget(i2, remoteViews);
