@@ -87,6 +87,7 @@ public class NotificationsController extends BaseController {
     private boolean inChatSoundEnabled;
     private int lastBadgeCount = -1;
     private int lastButtonId = 5000;
+    public long lastNotificationChannelCreateTime;
     private int lastOnlineFromOtherDevice = 0;
     private long lastSoundOutPlay;
     private long lastSoundPlay;
@@ -9120,7 +9121,7 @@ public class NotificationsController extends BaseController {
         L_0x0550:
             r8 = r7
         L_0x0551:
-            if (r8 != 0) goto L_0x0632
+            if (r8 != 0) goto L_0x0638
             java.lang.String r0 = "_"
             java.lang.String r7 = "channel_"
             if (r36 == 0) goto L_0x057a
@@ -9208,6 +9209,8 @@ public class NotificationsController extends BaseController {
             java.lang.String r2 = r2.toString()
             org.telegram.messenger.FileLog.d(r2)
         L_0x060d:
+            long r2 = android.os.SystemClock.elapsedRealtime()
+            r1.lastNotificationChannelCreateTime = r2
             android.app.NotificationManager r2 = systemNotificationManager
             r2.createNotificationChannel(r0)
             android.content.SharedPreferences$Editor r0 = r5.edit()
@@ -9220,7 +9223,7 @@ public class NotificationsController extends BaseController {
             java.lang.String r2 = r2.toString()
             android.content.SharedPreferences$Editor r0 = r0.putString(r2, r6)
             r0.commit()
-        L_0x0632:
+        L_0x0638:
             return r8
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.NotificationsController.validateChannelId(long, java.lang.String, long[], int, android.net.Uri, int, boolean, boolean, boolean, int):java.lang.String");

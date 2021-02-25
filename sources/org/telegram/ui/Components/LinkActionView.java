@@ -388,6 +388,7 @@ public class LinkActionView extends LinearLayout {
                     }
                 });
                 this.actionBarPopupWindow.setOutsideTouchable(true);
+                this.actionBarPopupWindow.setFocusable(true);
                 this.actionBarPopupWindow.setBackgroundDrawable(new ColorDrawable(0));
                 this.actionBarPopupWindow.setAnimationStyle(NUM);
                 this.actionBarPopupWindow.setInputMethodMode(2);
@@ -531,7 +532,7 @@ public class LinkActionView extends LinearLayout {
         this.removeView.setVisibility(8);
     }
 
-    public void showRevokeOption(boolean z) {
+    public void hideRevokeOption(boolean z) {
         if (this.hideRevokeOption != z) {
             this.hideRevokeOption = z;
             this.optionsView.setVisibility(0);

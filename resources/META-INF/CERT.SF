@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 4.1.2
-SHA1-Digest-Manifest: tY4D4K/Acae6i6+CTYzsdsPixgc=
+SHA1-Digest-Manifest: kmvUz85eklmmBCLZt+iQQGR1WeM=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: PJNVNhvy7zi3UaupX0Q942F3CFY=
+SHA1-Digest: MAwKeHJ2nS5ewq1c1zlRhuqIYLM=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9880,13 +9880,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: E0DLMSSNYbLUqrscnq+mP78Okcc=
+SHA1-Digest: B0nbusxYL73WcZB9QWWCbbBIogY=
 
 Name: classes2.dex
 SHA1-Digest: BxT9JeDKRTdfoqal0g2Um+G7n2I=
 
 Name: classes3.dex
-SHA1-Digest: MBuXkNMwspNzt8jPJCFttVjMYv4=
+SHA1-Digest: xMTemcb+NEf18CCQVaPaWbQ46/8=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -9943,16 +9943,16 @@ Name: isoparser-default.properties
 SHA1-Digest: ix2/FbuQDYdbrL/0Ibd5Tj5OTV0=
 
 Name: lib/arm64-v8a/libtmessages.36.so
-SHA1-Digest: PqWtCMmI2khQ5JvX6/RmVcvf5eU=
+SHA1-Digest: JeV7m8sA9JPwnIVZyxvdEuwSG5o=
 
 Name: lib/armeabi-v7a/libtmessages.36.so
-SHA1-Digest: y0/TGxTGVWY8xNWU2wW6bEpAIog=
+SHA1-Digest: tIhOe7mHaR8jTH9PyiKEVDFZvzA=
 
 Name: lib/x86/libtmessages.36.so
-SHA1-Digest: AdKn2qJvGz2/Ul+JlHifuwW7/uI=
+SHA1-Digest: sjzxWf1ZwgU1ikzbHJCrU8Zvpl4=
 
 Name: lib/x86_64/libtmessages.36.so
-SHA1-Digest: sdT1JwjjA0QLUTl2Qwq9oOWrQ/Y=
+SHA1-Digest: vu2EDFGlxku3OvrkXEpQmjWS+Rw=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -20598,7 +20598,7 @@ Name: res/layout/call_notification_rtl.xml
 SHA1-Digest: Y/Uy6mbXYgD+6AkPuwMjheIhTBk=
 
 Name: res/layout/contacts_widget_item.xml
-SHA1-Digest: jgjZreGfRiYUvg+9kTrfDTrrQNY=
+SHA1-Digest: e0CA44c6GNzB2TTLqiBOXbDbBXE=
 
 Name: res/layout/contacts_widget_layout_1.xml
 SHA1-Digest: 6Q4QULGCdCWS+YEwykZ/VX1PZyw=
@@ -20664,7 +20664,7 @@ Name: res/layout/widget_deleted.xml
 SHA1-Digest: rAu8eMvpiMyg+M2mf7jMQrm8cfo=
 
 Name: res/layout/widget_edititem.xml
-SHA1-Digest: tHj7zHE1/vAaWSYJ2Pbna1LR1ww=
+SHA1-Digest: yZRZ4PE/KKMQbJmH8lpWmeTBVh0=
 
 Name: res/mipmap-anydpi-v26/ic_launcher.xml
 SHA1-Digest: G7ddlJzJpeU1rRMHtiXTxUyDMv0=

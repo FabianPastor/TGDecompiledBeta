@@ -50,6 +50,8 @@ import org.telegram.ui.Components.RecyclerListView;
 public class InviteLinkBottomSheet extends BottomSheet {
     Adapter adapter;
     /* access modifiers changed from: private */
+    public boolean canEdit = true;
+    /* access modifiers changed from: private */
     public int chatId;
     int creatorHeaderRow;
     int creatorRow;
@@ -98,119 +100,120 @@ public class InviteLinkBottomSheet extends BottomSheet {
 
     /* JADX WARNING: Illegal instructions before constructor call */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public InviteLinkBottomSheet(android.content.Context r19, org.telegram.tgnet.TLRPC$TL_chatInviteExported r20, org.telegram.tgnet.TLRPC$ChatFull r21, java.util.HashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$User> r22, org.telegram.ui.ActionBar.BaseFragment r23, int r24, boolean r25, boolean r26) {
+    public InviteLinkBottomSheet(android.content.Context r20, org.telegram.tgnet.TLRPC$TL_chatInviteExported r21, org.telegram.tgnet.TLRPC$ChatFull r22, java.util.HashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$User> r23, org.telegram.ui.ActionBar.BaseFragment r24, int r25, boolean r26, boolean r27) {
         /*
-            r18 = this;
-            r0 = r18
-            r1 = r19
-            r2 = r20
-            r3 = r22
-            r4 = r23
-            r5 = r25
+            r19 = this;
+            r0 = r19
+            r1 = r20
+            r2 = r21
+            r3 = r23
+            r4 = r24
+            r5 = r26
             r6 = 0
             r0.<init>(r1, r6)
             java.util.ArrayList r7 = new java.util.ArrayList
             r7.<init>()
             r0.invitedUsers = r7
+            r7 = 1
+            r0.canEdit = r7
             r0.invite = r2
             r0.users = r3
             r0.fragment = r4
-            r7 = r21
-            r0.info = r7
-            r7 = r24
-            r0.chatId = r7
+            r8 = r22
+            r0.info = r8
+            r8 = r25
+            r0.chatId = r8
             r0.permanent = r5
-            r7 = r26
-            r0.isChannel = r7
-            if (r3 != 0) goto L_0x0034
-            java.util.HashMap r7 = new java.util.HashMap
-            r7.<init>()
-            r0.users = r7
-        L_0x0034:
-            int r7 = r0.currentAccount
-            org.telegram.tgnet.ConnectionsManager r7 = org.telegram.tgnet.ConnectionsManager.getInstance(r7)
-            int r7 = r7.getCurrentTime()
-            long r7 = (long) r7
-            long r9 = java.lang.System.currentTimeMillis()
-            r11 = 1000(0x3e8, double:4.94E-321)
-            long r9 = r9 / r11
-            long r7 = r7 - r9
-            r0.timeDif = r7
-            org.telegram.ui.Components.InviteLinkBottomSheet$1 r7 = new org.telegram.ui.Components.InviteLinkBottomSheet$1
-            r7.<init>(r1)
-            r0.containerView = r7
-            r7.setWillNotDraw(r6)
-            android.widget.FrameLayout$LayoutParams r7 = new android.widget.FrameLayout$LayoutParams
-            r8 = -1
-            int r9 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r10 = 51
-            r7.<init>(r8, r9, r10)
-            r8 = 1111490560(0x42400000, float:48.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            r7.topMargin = r9
-            android.view.View r9 = new android.view.View
-            r9.<init>(r1)
-            r0.shadow = r9
-            r10 = 0
-            r9.setAlpha(r10)
-            android.view.View r9 = r0.shadow
-            r11 = 4
-            r9.setVisibility(r11)
-            android.view.View r9 = r0.shadow
-            r12 = 1
-            java.lang.Integer r13 = java.lang.Integer.valueOf(r12)
-            r9.setTag(r13)
-            android.view.ViewGroup r9 = r0.containerView
+            r8 = r27
+            r0.isChannel = r8
+            if (r3 != 0) goto L_0x0037
+            java.util.HashMap r8 = new java.util.HashMap
+            r8.<init>()
+            r0.users = r8
+        L_0x0037:
+            int r8 = r0.currentAccount
+            org.telegram.tgnet.ConnectionsManager r8 = org.telegram.tgnet.ConnectionsManager.getInstance(r8)
+            int r8 = r8.getCurrentTime()
+            long r8 = (long) r8
+            long r10 = java.lang.System.currentTimeMillis()
+            r12 = 1000(0x3e8, double:4.94E-321)
+            long r10 = r10 / r12
+            long r8 = r8 - r10
+            r0.timeDif = r8
+            org.telegram.ui.Components.InviteLinkBottomSheet$1 r8 = new org.telegram.ui.Components.InviteLinkBottomSheet$1
+            r8.<init>(r1)
+            r0.containerView = r8
+            r8.setWillNotDraw(r6)
+            android.widget.FrameLayout$LayoutParams r8 = new android.widget.FrameLayout$LayoutParams
+            r9 = -1
+            int r10 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            r11 = 51
+            r8.<init>(r9, r10, r11)
+            r9 = 1111490560(0x42400000, float:48.0)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            r8.topMargin = r10
+            android.view.View r10 = new android.view.View
+            r10.<init>(r1)
+            r0.shadow = r10
+            r11 = 0
+            r10.setAlpha(r11)
+            android.view.View r10 = r0.shadow
+            r12 = 4
+            r10.setVisibility(r12)
+            android.view.View r10 = r0.shadow
+            java.lang.Integer r13 = java.lang.Integer.valueOf(r7)
+            r10.setTag(r13)
+            android.view.ViewGroup r10 = r0.containerView
             android.view.View r13 = r0.shadow
-            r9.addView(r13, r7)
-            org.telegram.ui.Components.InviteLinkBottomSheet$2 r7 = new org.telegram.ui.Components.InviteLinkBottomSheet$2
-            r7.<init>(r1)
-            r0.listView = r7
-            r9 = 14
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
-            r7.setTag(r9)
-            androidx.recyclerview.widget.LinearLayoutManager r7 = new androidx.recyclerview.widget.LinearLayoutManager
-            android.content.Context r9 = r18.getContext()
-            r7.<init>(r9, r12, r6)
-            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
-            r9.setLayoutManager(r7)
-            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            r10.addView(r13, r8)
+            org.telegram.ui.Components.InviteLinkBottomSheet$2 r8 = new org.telegram.ui.Components.InviteLinkBottomSheet$2
+            r8.<init>(r1)
+            r0.listView = r8
+            r10 = 14
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
+            r8.setTag(r10)
+            androidx.recyclerview.widget.LinearLayoutManager r8 = new androidx.recyclerview.widget.LinearLayoutManager
+            android.content.Context r10 = r19.getContext()
+            r8.<init>(r10, r7, r6)
+            org.telegram.ui.Components.RecyclerListView r10 = r0.listView
+            r10.setLayoutManager(r8)
+            org.telegram.ui.Components.RecyclerListView r10 = r0.listView
             org.telegram.ui.Components.InviteLinkBottomSheet$Adapter r13 = new org.telegram.ui.Components.InviteLinkBottomSheet$Adapter
             r14 = 0
             r13.<init>()
             r0.adapter = r13
-            r9.setAdapter(r13)
-            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
-            r9.setVerticalScrollBarEnabled(r6)
-            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
-            r9.setClipToPadding(r6)
-            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
-            r9.setNestedScrollingEnabled(r12)
-            org.telegram.ui.Components.RecyclerListView r9 = r0.listView
+            r10.setAdapter(r13)
+            org.telegram.ui.Components.RecyclerListView r10 = r0.listView
+            r10.setVerticalScrollBarEnabled(r6)
+            org.telegram.ui.Components.RecyclerListView r10 = r0.listView
+            r10.setClipToPadding(r6)
+            org.telegram.ui.Components.RecyclerListView r10 = r0.listView
+            r10.setNestedScrollingEnabled(r7)
+            org.telegram.ui.Components.RecyclerListView r10 = r0.listView
             org.telegram.ui.Components.InviteLinkBottomSheet$3 r13 = new org.telegram.ui.Components.InviteLinkBottomSheet$3
-            r13.<init>(r7)
-            r9.setOnScrollListener(r13)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.listView
-            org.telegram.ui.Components.InviteLinkBottomSheet$4 r9 = new org.telegram.ui.Components.InviteLinkBottomSheet$4
-            r9.<init>(r2, r3, r4)
-            r7.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r9)
+            r13.<init>(r8)
+            r10.setOnScrollListener(r13)
+            org.telegram.ui.Components.RecyclerListView r8 = r0.listView
+            org.telegram.ui.Components.InviteLinkBottomSheet$4 r10 = new org.telegram.ui.Components.InviteLinkBottomSheet$4
+            r10.<init>(r2, r3, r4)
+            r8.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r10)
             android.widget.TextView r4 = new android.widget.TextView
             r4.<init>(r1)
             r0.titleTextView = r4
-            r4.setLines(r12)
+            r4.setLines(r7)
             android.widget.TextView r1 = r0.titleTextView
-            r1.setSingleLine(r12)
+            r1.setSingleLine(r7)
             android.widget.TextView r1 = r0.titleTextView
             r4 = 1101004800(0x41a00000, float:20.0)
-            r1.setTextSize(r12, r4)
+            r1.setTextSize(r7, r4)
             android.widget.TextView r1 = r0.titleTextView
             android.text.TextUtils$TruncateAt r4 = android.text.TextUtils.TruncateAt.END
             r1.setEllipsize(r4)
             android.widget.TextView r1 = r0.titleTextView
             r4 = 1099956224(0x41900000, float:18.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r1.setPadding(r7, r6, r4, r6)
+            r1.setPadding(r8, r6, r4, r6)
             android.widget.TextView r1 = r0.titleTextView
             r4 = 16
             r1.setGravity(r4)
@@ -220,87 +223,87 @@ public class InviteLinkBottomSheet extends BottomSheet {
             r1.setTypeface(r4)
             r1 = 2131625822(0x7f0e075e, float:1.8878863E38)
             java.lang.String r4 = "InviteLink"
-            if (r5 != 0) goto L_0x014e
+            if (r5 != 0) goto L_0x0150
             boolean r5 = r2.expired
-            if (r5 == 0) goto L_0x012f
+            if (r5 == 0) goto L_0x0131
             android.widget.TextView r1 = r0.titleTextView
             r4 = 2131625431(0x7f0e05d7, float:1.887807E38)
             java.lang.String r5 = "ExpiredLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
-            goto L_0x014b
-        L_0x012f:
+            goto L_0x014d
+        L_0x0131:
             boolean r5 = r2.revoked
-            if (r5 == 0) goto L_0x0142
+            if (r5 == 0) goto L_0x0144
             android.widget.TextView r1 = r0.titleTextView
             r4 = 2131627194(0x7f0e0cba, float:1.8881646E38)
             java.lang.String r5 = "RevokedLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
-            goto L_0x014b
-        L_0x0142:
+            goto L_0x014d
+        L_0x0144:
             android.widget.TextView r5 = r0.titleTextView
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r5.setText(r1)
-        L_0x014b:
-            r0.titleVisible = r12
-            goto L_0x0163
-        L_0x014e:
+        L_0x014d:
+            r0.titleVisible = r7
+            goto L_0x0165
+        L_0x0150:
             android.widget.TextView r5 = r0.titleTextView
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r5.setText(r1)
             r0.titleVisible = r6
             android.widget.TextView r1 = r0.titleTextView
-            r1.setVisibility(r11)
+            r1.setVisibility(r12)
             android.widget.TextView r1 = r0.titleTextView
-            r1.setAlpha(r10)
-        L_0x0163:
+            r1.setAlpha(r11)
+        L_0x0165:
             android.view.ViewGroup r1 = r0.containerView
             org.telegram.ui.Components.RecyclerListView r4 = r0.listView
-            r11 = -1
-            r12 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r13 = 51
-            r14 = 0
-            boolean r5 = r0.titleVisible
-            if (r5 != 0) goto L_0x0173
+            r12 = -1
+            r13 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r14 = 51
             r15 = 0
-            goto L_0x0175
-        L_0x0173:
-            r15 = 1111490560(0x42400000, float:48.0)
-        L_0x0175:
+            boolean r5 = r0.titleVisible
+            if (r5 != 0) goto L_0x0176
             r16 = 0
+            goto L_0x0178
+        L_0x0176:
+            r16 = 1111490560(0x42400000, float:48.0)
+        L_0x0178:
             r17 = 0
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r18 = 0
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
             r1.addView(r4, r5)
             android.view.ViewGroup r1 = r0.containerView
             android.widget.TextView r4 = r0.titleTextView
-            r9 = -1
+            r10 = -1
             boolean r5 = r0.titleVisible
-            if (r5 != 0) goto L_0x018c
-            r10 = 1111490560(0x42400000, float:48.0)
-            goto L_0x0190
-        L_0x018c:
-            r8 = 1112014848(0x42480000, float:50.0)
-            r10 = 1112014848(0x42480000, float:50.0)
-        L_0x0190:
-            r11 = 51
-            r12 = 0
+            if (r5 != 0) goto L_0x018f
+            r11 = 1111490560(0x42400000, float:48.0)
+            goto L_0x0193
+        L_0x018f:
+            r9 = 1112014848(0x42480000, float:50.0)
+            r11 = 1112014848(0x42480000, float:50.0)
+        L_0x0193:
+            r12 = 51
             r13 = 0
             r14 = 0
             r15 = 0
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
+            r16 = 0
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
             r1.addView(r4, r5)
-            r18.updateRows()
-            r18.loadUsers()
-            if (r3 == 0) goto L_0x01b1
+            r19.updateRows()
+            r19.loadUsers()
+            if (r3 == 0) goto L_0x01b5
             int r1 = r2.admin_id
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             java.lang.Object r1 = r3.get(r1)
-            if (r1 != 0) goto L_0x01b4
-        L_0x01b1:
-            r18.loadCreator()
-        L_0x01b4:
-            r18.updateColors()
+            if (r1 != 0) goto L_0x01b8
+        L_0x01b5:
+            r19.loadCreator()
+        L_0x01b8:
+            r19.updateColors()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InviteLinkBottomSheet.<init>(android.content.Context, org.telegram.tgnet.TLRPC$TL_chatInviteExported, org.telegram.tgnet.TLRPC$ChatFull, java.util.HashMap, org.telegram.ui.ActionBar.BaseFragment, int, boolean, boolean):void");
@@ -689,6 +692,8 @@ public class InviteLinkBottomSheet extends BottomSheet {
                     linkActionView.setLink(InviteLinkBottomSheet.this.invite.link);
                     linkActionView.setRevoke(InviteLinkBottomSheet.this.invite.revoked);
                     linkActionView.setPermanent(InviteLinkBottomSheet.this.invite.permanent);
+                    linkActionView.setCanEdit(InviteLinkBottomSheet.this.canEdit);
+                    linkActionView.hideRevokeOption(!InviteLinkBottomSheet.this.canEdit);
                 } else if (itemViewType == 4) {
                     TimerPrivacyCell timerPrivacyCell = (TimerPrivacyCell) viewHolder.itemView;
                     timerPrivacyCell.cancelTimer();
@@ -983,5 +988,9 @@ public class InviteLinkBottomSheet extends BottomSheet {
         public void onMeasure(int i, int i2) {
             super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(84.0f), NUM));
         }
+    }
+
+    public void setCanEdit(boolean z) {
+        this.canEdit = z;
     }
 }

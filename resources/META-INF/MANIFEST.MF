@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 4.1.2
 
 Name: AndroidManifest.xml
-SHA1-Digest: HUISnx9Ee3Nohwidao3PGt+fQBs=
+SHA1-Digest: JdELHazh4FlvwxBmFlwfkaNfpos=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9879,13 +9879,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: ndkZzUrl8u8aKefKMEGT5tcbjXQ=
+SHA1-Digest: bXtu6HbP/5QNH3Fcxsb5kxRWaqE=
 
 Name: classes2.dex
 SHA1-Digest: llZShxa2C6kOv0Y1mdXRXmWawOg=
 
 Name: classes3.dex
-SHA1-Digest: I1qBuzLYpOhgfM/vudGL4Y/Y+6w=
+SHA1-Digest: cFV2GK784Y6JaRhvOjI1F8oJY4M=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -9942,16 +9942,16 @@ Name: isoparser-default.properties
 SHA1-Digest: 6/KBb+rGX/5O2/xNP3HN6XIg3lI=
 
 Name: lib/arm64-v8a/libtmessages.36.so
-SHA1-Digest: ERvdRkOEuIZ8HVQ/TBKVPWZu8tA=
+SHA1-Digest: BfXg+BpPieg+AFcWqBUguKcltu8=
 
 Name: lib/armeabi-v7a/libtmessages.36.so
-SHA1-Digest: 2spREQx6YC5urKkbNZpJrjMY6h4=
+SHA1-Digest: PReyhrhPuhedSTlvOwLk3Lg6iYI=
 
 Name: lib/x86/libtmessages.36.so
-SHA1-Digest: jFFUbV87bJZ4jAZrql1yyDc8920=
+SHA1-Digest: RBiAeTn/HysDiAaMv90Prgos25A=
 
 Name: lib/x86_64/libtmessages.36.so
-SHA1-Digest: s4aFvO0TjMP0VPPidqw3840MjpY=
+SHA1-Digest: VfCEq0i576uEYtzKET6GFbzHfBI=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: /3UPL+65RV1bQ1opEtJnBMah8ZI=
@@ -20597,7 +20597,7 @@ Name: res/layout/call_notification_rtl.xml
 SHA1-Digest: KB8YQEjHJLaxXwGsVBTnxmyjkc0=
 
 Name: res/layout/contacts_widget_item.xml
-SHA1-Digest: W8iwFIxd1jGAZrotpQtT51Y7t0U=
+SHA1-Digest: f5kpBtqDhRQb1l2BrjG3zYp6If8=
 
 Name: res/layout/contacts_widget_layout_1.xml
 SHA1-Digest: OgOPMCNVMmMZEUAyViLtadkF0gs=
@@ -20663,7 +20663,7 @@ Name: res/layout/widget_deleted.xml
 SHA1-Digest: 6+bFyIEwqmrN8Th95+B0AbN8c20=
 
 Name: res/layout/widget_edititem.xml
-SHA1-Digest: vI4DPu/8EwVgWcmAjz+Zg0uOsUs=
+SHA1-Digest: +Q39+ltDVU8+X4/pVDzGFXghQLs=
 
 Name: res/mipmap-anydpi-v26/ic_launcher.xml
 SHA1-Digest: f5ZJP3thwJfrQSFormC85H7px44=
