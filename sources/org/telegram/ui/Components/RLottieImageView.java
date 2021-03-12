@@ -102,6 +102,11 @@ public class RLottieImageView extends ImageView {
         }
     }
 
+    public void setImageResource(int i) {
+        super.setImageResource(i);
+        this.drawable = null;
+    }
+
     public void playAnimation() {
         RLottieDrawable rLottieDrawable = this.drawable;
         if (rLottieDrawable != null) {

@@ -962,7 +962,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                     }
                 };
             } else if (i == 3) {
-                manageChatTextCell = new GroupCreateUserCell(context, true, 0, InviteMembersBottomSheet.this.dialogsDelegate != null);
+                manageChatTextCell = new GroupCreateUserCell(context, 1, 0, InviteMembersBottomSheet.this.dialogsDelegate != null);
             } else if (i == 4) {
                 manageChatTextCell = new View(context);
             } else if (i != 5) {
@@ -1119,7 +1119,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             View view;
             Context context = viewGroup.getContext();
             if (i == 1) {
-                view = new GroupCreateUserCell(context, true, 0, false);
+                view = new GroupCreateUserCell(context, 1, 0, false);
             } else if (i != 2) {
                 view = i != 4 ? new GroupCreateSectionCell(context) : new View(context);
             } else {

@@ -1412,7 +1412,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         PhotoPickerActivity.this.lambda$null$5$PhotoPickerActivity(keyEvent);
                     }
                 });
-                this.sendPopupLayout.setShowedFromBotton(false);
+                this.sendPopupLayout.setShownFromBotton(false);
                 this.itemCells = new ActionBarMenuSubItem[2];
                 int i = 0;
                 while (i < 2) {

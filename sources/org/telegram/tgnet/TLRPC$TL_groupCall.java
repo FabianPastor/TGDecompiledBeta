@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -18,6 +18,15 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         if ((this.flags & 1) != 0) {
             this.params = TLRPC$TL_dataJSON.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
+        if ((this.flags & 8) != 0) {
+            this.title = abstractSerializedData.readString(z);
+        }
+        if ((this.flags & 16) != 0) {
+            this.stream_dc_id = abstractSerializedData.readInt32(z);
+        }
+        if ((this.flags & 32) != 0) {
+            this.record_start_date = abstractSerializedData.readInt32(z);
+        }
         this.version = abstractSerializedData.readInt32(z);
     }
 
@@ -33,6 +42,15 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         abstractSerializedData.writeInt32(this.participants_count);
         if ((this.flags & 1) != 0) {
             this.params.serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 8) != 0) {
+            abstractSerializedData.writeString(this.title);
+        }
+        if ((this.flags & 16) != 0) {
+            abstractSerializedData.writeInt32(this.stream_dc_id);
+        }
+        if ((this.flags & 32) != 0) {
+            abstractSerializedData.writeInt32(this.record_start_date);
         }
         abstractSerializedData.writeInt32(this.version);
     }

@@ -1518,7 +1518,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         ArticleViewer.this.lambda$showPopup$2$ArticleViewer(keyEvent);
                     }
                 });
-                this.popupLayout.setShowedFromBotton(false);
+                this.popupLayout.setShownFromBotton(false);
                 TextView textView = new TextView(this.parentActivity);
                 this.deleteView = textView;
                 textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 2));

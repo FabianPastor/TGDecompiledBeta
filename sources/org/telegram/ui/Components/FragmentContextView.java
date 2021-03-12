@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -49,6 +50,7 @@ import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$MessageMedia;
 import org.telegram.tgnet.TLRPC$ReplyMarkup;
@@ -677,7 +679,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
         } else if (i2 == 4) {
             if (this.fragment.getParentActivity() != null && (groupCall = chatActivity.getGroupCall()) != null) {
-                VoIPHelper.startCall((chatActivity = (ChatActivity) this.fragment).getMessagesController().getChat(Integer.valueOf(groupCall.chatId)), false, this.fragment.getParentActivity());
+                TLRPC$Chat chat = (chatActivity = (ChatActivity) this.fragment).getMessagesController().getChat(Integer.valueOf(groupCall.chatId));
+                Activity parentActivity = this.fragment.getParentActivity();
+                BaseFragment baseFragment4 = this.fragment;
+                VoIPHelper.startCall(chat, (TLRPC$InputPeer) null, (String) null, false, parentActivity, baseFragment4, baseFragment4.getAccountInstance());
             }
         } else if (i2 == 5 && baseFragment.getSendMessagesHelper().getImportingHistory(((ChatActivity) baseFragment).getDialogId()) != null) {
             ImportingAlert importingAlert = new ImportingAlert(getContext(), (ChatActivity) this.fragment);
@@ -737,7 +742,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     SendMessagesHelper.getInstance(LocationController.SharingLocationInfo.this.messageObject.currentAccount).sendMessage(tLRPC$MessageMedia, this.f$1, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2);
                 }
             });
-            launchActivity.lambda$runLinkRequest$41(locationActivity);
+            launchActivity.lambda$runLinkRequest$44(locationActivity);
         }
     }
 
@@ -2226,11 +2231,34 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
     /* access modifiers changed from: protected */
     public void dispatchDraw(Canvas canvas) {
+        VoIPService sharedInstance;
         if (!this.drawOverlay || getVisibility() == 0) {
-            boolean z = false;
             int i = this.currentStyle;
+            boolean z = false;
             if ((i == 3 || i == 1) && this.drawOverlay) {
+                boolean z2 = GroupCallActivity.groupCallInstance == null && Theme.getFragmentContextViewWavesDrawable().getState() == 3;
+                TLRPC$Chat tLRPC$Chat = null;
+                if (!z2 || (sharedInstance = VoIPService.getSharedInstance()) == null || sharedInstance.groupCall == null) {
+                    z = z2;
+                } else {
+                    AccountInstance instance = AccountInstance.getInstance(sharedInstance.getAccount());
+                    ChatObject.Call call = sharedInstance.groupCall;
+                    TLRPC$Chat chat = sharedInstance.getChat();
+                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = call.participants.get(instance.getUserConfig().getClientUserId());
+                    if (!(tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.raise_hand_rating == 0)) {
+                        z = z2;
+                    }
+                    tLRPC$Chat = chat;
+                }
                 Theme.getFragmentContextViewWavesDrawable().updateState(this.wasDraw);
+                if (z && Theme.getFragmentContextViewWavesDrawable().getState() != 3) {
+                    BaseFragment baseFragment = this.fragment;
+                    if (baseFragment instanceof ChatActivity) {
+                        ((ChatActivity) baseFragment).getUndoView().showWithAction(0, 38, (Object) tLRPC$Chat);
+                    } else if (baseFragment instanceof DialogsActivity) {
+                        ((DialogsActivity) baseFragment).getUndoView().showWithAction(0, 38, (Object) tLRPC$Chat);
+                    }
+                }
                 float dp = this.topPadding / ((float) AndroidUtilities.dp((float) getStyleHeight()));
                 if (this.collapseTransition) {
                     Theme.getFragmentContextViewWavesDrawable().draw(0.0f, (((float) AndroidUtilities.dp((float) getStyleHeight())) - this.topPadding) + this.extraHeight, (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.dp(2.0f)), canvas, (FragmentContextView) null, Math.min(dp, 1.0f - this.collapseProgress));

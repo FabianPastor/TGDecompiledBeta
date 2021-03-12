@@ -400,7 +400,7 @@ public class ActionBarMenuItem extends FrameLayout {
     public void setShowedFromBottom(boolean z) {
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
         if (actionBarPopupWindowLayout != null) {
-            actionBarPopupWindowLayout.setShowedFromBotton(z);
+            actionBarPopupWindowLayout.setShownFromBotton(z);
         }
     }
 
@@ -500,16 +500,33 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public ActionBarMenuSubItem addSubItem(int i, int i2, CharSequence charSequence) {
-        return addSubItem(i, i2, (Drawable) null, charSequence, false);
+        return addSubItem(i, i2, (Drawable) null, charSequence, true, false);
     }
 
     public ActionBarMenuSubItem addSubItem(int i, int i2, CharSequence charSequence, boolean z) {
-        return addSubItem(i, i2, (Drawable) null, charSequence, z);
+        return addSubItem(i, i2, (Drawable) null, charSequence, true, z);
     }
 
-    public ActionBarMenuSubItem addSubItem(int i, int i2, Drawable drawable, CharSequence charSequence, boolean z) {
+    public View addGap(int i) {
         createPopupLayout();
-        ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(getContext(), z, false, false);
+        View view = new View(getContext());
+        view.setMinimumWidth(AndroidUtilities.dp(196.0f));
+        view.setTag(Integer.valueOf(i));
+        view.setTag(NUM, 1);
+        this.popupLayout.addView(view);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) view.getLayoutParams();
+        if (LocaleController.isRTL) {
+            layoutParams.gravity = 5;
+        }
+        layoutParams.width = -1;
+        layoutParams.height = AndroidUtilities.dp(6.0f);
+        view.setLayoutParams(layoutParams);
+        return view;
+    }
+
+    public ActionBarMenuSubItem addSubItem(int i, int i2, Drawable drawable, CharSequence charSequence, boolean z, boolean z2) {
+        createPopupLayout();
+        ActionBarMenuSubItem actionBarMenuSubItem = new ActionBarMenuSubItem(getContext(), z2, false, false);
         actionBarMenuSubItem.setTextAndIcon(charSequence, i2, drawable);
         actionBarMenuSubItem.setMinimumWidth(AndroidUtilities.dp(196.0f));
         actionBarMenuSubItem.setTag(Integer.valueOf(i));
@@ -521,9 +538,15 @@ public class ActionBarMenuItem extends FrameLayout {
         layoutParams.width = -1;
         layoutParams.height = AndroidUtilities.dp(48.0f);
         actionBarMenuSubItem.setLayoutParams(layoutParams);
-        actionBarMenuSubItem.setOnClickListener(new View.OnClickListener() {
+        actionBarMenuSubItem.setOnClickListener(new View.OnClickListener(z) {
+            public final /* synthetic */ boolean f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
             public final void onClick(View view) {
-                ActionBarMenuItem.this.lambda$addSubItem$5$ActionBarMenuItem(view);
+                ActionBarMenuItem.this.lambda$addSubItem$5$ActionBarMenuItem(this.f$1, view);
             }
         });
         return actionBarMenuSubItem;
@@ -531,9 +554,9 @@ public class ActionBarMenuItem extends FrameLayout {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$addSubItem$5 */
-    public /* synthetic */ void lambda$addSubItem$5$ActionBarMenuItem(View view) {
+    public /* synthetic */ void lambda$addSubItem$5$ActionBarMenuItem(boolean z, View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
-        if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
+        if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing() && z) {
             if (!this.processedPopupClick) {
                 this.processedPopupClick = true;
                 this.popupWindow.dismiss(this.allowCloseAnimation);
@@ -550,22 +573,6 @@ public class ActionBarMenuItem extends FrameLayout {
         if (actionBarMenuItemDelegate != null) {
             actionBarMenuItemDelegate.onItemClick(((Integer) view.getTag()).intValue());
         }
-    }
-
-    public View addDivider(int i) {
-        createPopupLayout();
-        TextView textView2 = new TextView(getContext());
-        textView2.setBackgroundColor(i);
-        textView2.setMinimumWidth(AndroidUtilities.dp(196.0f));
-        this.popupLayout.addView(textView2);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView2.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = 1;
-        int dp = AndroidUtilities.dp(3.0f);
-        layoutParams.bottomMargin = dp;
-        layoutParams.topMargin = dp;
-        textView2.setLayoutParams(layoutParams);
-        return textView2;
     }
 
     public void redrawPopup(int i) {
@@ -622,6 +629,10 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public boolean hasSubMenu() {
         return this.popupLayout != null;
+    }
+
+    public ActionBarPopupWindow.ActionBarPopupWindowLayout getPopupLayout() {
+        return this.popupLayout;
     }
 
     public void setMenuYOffset(int i) {

@@ -1118,7 +1118,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             if (i != 1) {
                 view = new GraySectionCell(this.context);
             } else {
-                view = new GroupCreateUserCell(this.context, true, 0, true);
+                view = new GroupCreateUserCell(this.context, 1, 0, true);
             }
             return new RecyclerListView.Holder(view);
         }

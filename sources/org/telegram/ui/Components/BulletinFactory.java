@@ -238,7 +238,7 @@ public final class BulletinFactory {
             r1 = 1
         L_0x0065:
             if (r1 == 0) goto L_0x0085
-            r1 = 2131558440(0x7f0d0028, float:1.8742196E38)
+            r1 = 2131558442(0x7f0d002a, float:1.87422E38)
             r2 = 5
             java.lang.String[] r2 = new java.lang.String[r2]
             java.lang.String r3 = "Body Main"
@@ -254,7 +254,7 @@ public final class BulletinFactory {
             r0.setAnimation(r1, r2)
             goto L_0x009d
         L_0x0085:
-            r1 = 2131558445(0x7f0d002d, float:1.8742206E38)
+            r1 = 2131558447(0x7f0d002f, float:1.874221E38)
             java.lang.String[] r2 = new java.lang.String[r4]
             java.lang.String r3 = "BODY"
             r2[r7] = r3
@@ -299,7 +299,7 @@ public final class BulletinFactory {
             java.lang.String r1 = "Pin"
             r2 = 0
             r3 = 2
-            r4 = 2131558446(0x7f0d002e, float:1.8742208E38)
+            r4 = 2131558448(0x7f0d0030, float:1.8742212E38)
             r5 = 1
             r6 = 28
             if (r10 == 0) goto L_0x004a

@@ -18145,8 +18145,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
 
     private static VideoEditedInfo createCompressionSettings(String str) {
         int i;
+        String str2 = str;
         int[] iArr = new int[11];
-        AnimatedFileDrawable.getVideoInfo(str, iArr);
+        AnimatedFileDrawable.getVideoInfo(str2, iArr);
         if (iArr[0] == 0) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("video hasn't avc1 atom");
@@ -18154,11 +18155,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             return null;
         }
         int videoBitrate = MediaController.getVideoBitrate(str);
-        int i2 = 4;
+        if (videoBitrate == -1) {
+            videoBitrate = iArr[3];
+        }
         float f = (float) iArr[4];
         long j = (long) iArr[6];
         long j2 = (long) iArr[5];
-        int i3 = iArr[7];
+        int i2 = iArr[7];
         if (Build.VERSION.SDK_INT < 18) {
             try {
                 MediaCodecInfo selectCodec = MediaController.selectCodec("video/avc");
@@ -18190,27 +18193,25 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         videoEditedInfo.startTime = -1;
         videoEditedInfo.endTime = -1;
         videoEditedInfo.bitrate = videoBitrate;
-        videoEditedInfo.originalPath = str;
-        videoEditedInfo.framerate = i3;
+        videoEditedInfo.originalPath = str2;
+        videoEditedInfo.framerate = i2;
         videoEditedInfo.estimatedDuration = (long) Math.ceil((double) f);
-        int i4 = iArr[1];
-        videoEditedInfo.originalWidth = i4;
-        videoEditedInfo.resultWidth = i4;
-        int i5 = iArr[2];
-        videoEditedInfo.originalHeight = i5;
-        videoEditedInfo.resultHeight = i5;
+        int i3 = iArr[1];
+        videoEditedInfo.originalWidth = i3;
+        videoEditedInfo.resultWidth = i3;
+        int i4 = iArr[2];
+        videoEditedInfo.originalHeight = i4;
+        videoEditedInfo.resultHeight = i4;
         videoEditedInfo.rotationValue = iArr[8];
         videoEditedInfo.originalDuration = (long) (f * 1000.0f);
-        float max = (float) Math.max(i4, i5);
+        float max = (float) Math.max(i3, i4);
         float f2 = 640.0f;
-        if (max <= 1280.0f) {
-            i2 = max > 854.0f ? 3 : max > 640.0f ? 2 : 1;
+        int i5 = max > 1280.0f ? 4 : max > 854.0f ? 3 : max > 640.0f ? 2 : 1;
+        int round = Math.round(((float) DownloadController.getInstance(UserConfig.selectedAccount).getMaxVideoBitrate()) / (100.0f / ((float) i5))) - 1;
+        if (round >= i5) {
+            round = i5 - 1;
         }
-        int round = Math.round(((float) DownloadController.getInstance(UserConfig.selectedAccount).getMaxVideoBitrate()) / (100.0f / ((float) i2))) - 1;
-        if (round >= i2) {
-            round = i2 - 1;
-        }
-        int i6 = i2 - 1;
+        int i6 = i5 - 1;
         if (round != i6) {
             if (round == 1) {
                 f2 = 432.0f;
@@ -18231,7 +18232,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             videoEditedInfo.resultWidth = videoEditedInfo.originalWidth;
             videoEditedInfo.resultHeight = videoEditedInfo.originalHeight;
             videoEditedInfo.bitrate = videoBitrate;
-            videoEditedInfo.estimatedSize = (long) ((int) new File(str).length());
+            videoEditedInfo.estimatedSize = (long) ((int) new File(str2).length());
         } else {
             videoEditedInfo.bitrate = i;
             long j3 = (long) ((int) (j2 + j));

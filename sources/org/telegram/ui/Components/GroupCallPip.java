@@ -24,6 +24,7 @@ import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.voip.VoIPService;
@@ -949,7 +950,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                 while (i < 2) {
                     if (i2 < size) {
                         TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = call.sortedParticipants.get(i2);
-                        if (tLRPC$TL_groupCallParticipant.user_id != UserConfig.getInstance(this.currentAccount).clientUserId && SystemClock.uptimeMillis() - tLRPC$TL_groupCallParticipant.lastSpeakTime <= 500) {
+                        if (MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer) != UserConfig.getInstance(this.currentAccount).clientUserId && SystemClock.uptimeMillis() - tLRPC$TL_groupCallParticipant.lastSpeakTime <= 500) {
                             this.avatarsImageView.setObject(i, this.currentAccount, tLRPC$TL_groupCallParticipant);
                         }
                         i2++;

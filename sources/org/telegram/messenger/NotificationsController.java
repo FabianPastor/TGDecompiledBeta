@@ -3493,7 +3493,7 @@ public class NotificationsController extends BaseController {
             boolean r12 = r3 instanceof org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation
             r14 = 3
             if (r12 == 0) goto L_0x02a1
-            r1 = 2131628154(0x7f0e107a, float:1.8883593E38)
+            r1 = 2131628187(0x7f0e109b, float:1.888366E38)
             r2 = 2
             java.lang.Object[] r3 = new java.lang.Object[r2]
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
@@ -5397,7 +5397,7 @@ public class NotificationsController extends BaseController {
         L_0x014b:
             int r3 = (int) r2
             if (r3 != 0) goto L_0x0159
-            r0 = 2131628086(0x7f0e1036, float:1.8883455E38)
+            r0 = 2131628118(0x7f0e1056, float:1.888352E38)
             java.lang.String r1 = "YouHaveNewMessage"
             java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x145f
@@ -5442,7 +5442,7 @@ public class NotificationsController extends BaseController {
         L_0x01a8:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageActionLoginUnknownLocation
             if (r2 == 0) goto L_0x020b
-            r1 = 2131628154(0x7f0e107a, float:1.8883593E38)
+            r1 = 2131628187(0x7f0e109b, float:1.888366E38)
             r2 = 2
             java.lang.Object[] r3 = new java.lang.Object[r2]
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
@@ -7749,7 +7749,7 @@ public class NotificationsController extends BaseController {
         L_0x145f:
             return r15
         L_0x1460:
-            r0 = 2131628086(0x7f0e1036, float:1.8883455E38)
+            r0 = 2131628118(0x7f0e1056, float:1.888352E38)
             java.lang.String r1 = "YouHaveNewMessage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
@@ -10162,7 +10162,7 @@ public class NotificationsController extends BaseController {
             r10 = 0
             android.app.PendingIntent r0 = android.app.PendingIntent.getActivity(r7, r10, r0, r9)     // Catch:{ Exception -> 0x0a03 }
             r4.setContentTitle(r3)     // Catch:{ Exception -> 0x0a03 }
-            r3 = 2131165851(0x7var_b, float:1.794593E38)
+            r3 = 2131165856(0x7var_a0, float:1.794594E38)
             r4.setSmallIcon(r3)     // Catch:{ Exception -> 0x0a03 }
             r3 = 1
             r4.setAutoCancel(r3)     // Catch:{ Exception -> 0x0a03 }
@@ -12090,7 +12090,7 @@ public class NotificationsController extends BaseController {
             android.content.Context r14 = org.telegram.messenger.ApplicationLoader.applicationContext
             r13.<init>(r14)
             r13.setContentTitle(r12)
-            r14 = 2131165851(0x7var_b, float:1.794593E38)
+            r14 = 2131165856(0x7var_a0, float:1.794594E38)
             r13.setSmallIcon(r14)
             java.lang.String r14 = r49.toString()
             r13.setContentText(r14)

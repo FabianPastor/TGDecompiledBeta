@@ -508,7 +508,7 @@ public class AlertsCreator {
             builder.setNegativeButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             builder.setNeutralButton(LocaleController.getString("SETTINGS", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    LaunchActivity.this.lambda$runLinkRequest$41(new LanguageSelectActivity());
+                    LaunchActivity.this.lambda$runLinkRequest$44(new LanguageSelectActivity());
                 }
             });
         } else if (tLRPC$TL_langPackLanguage.strings_count == 0) {
@@ -4845,7 +4845,7 @@ public class AlertsCreator {
         });
         builder.setNeutralButton(LocaleController.getString("ClearMediaCache", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                LaunchActivity.this.lambda$runLinkRequest$41(new CacheControlActivity());
+                LaunchActivity.this.lambda$runLinkRequest$44(new CacheControlActivity());
             }
         });
         return builder.create();
@@ -5232,7 +5232,7 @@ public class AlertsCreator {
         linearLayout.setOrientation(1);
         for (int i = 0; i < 3; i++) {
             if (UserConfig.getInstance(i).getCurrentUser() != null) {
-                AccountSelectCell accountSelectCell = new AccountSelectCell(activity);
+                AccountSelectCell accountSelectCell = new AccountSelectCell(activity, false);
                 accountSelectCell.setAccount(i, false);
                 accountSelectCell.setPadding(AndroidUtilities.dp(14.0f), 0, AndroidUtilities.dp(14.0f), 0);
                 accountSelectCell.setBackgroundDrawable(Theme.getSelectorDrawable(false));

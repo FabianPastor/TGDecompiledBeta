@@ -70,7 +70,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.StatsController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.Instance;
 import org.telegram.messenger.voip.VoIPBaseService;
@@ -80,12 +79,11 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatPhoto;
+import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$PhoneCall;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
-import org.telegram.tgnet.TLRPC$TL_inputUser;
-import org.telegram.tgnet.TLRPC$TL_inputUserSelf;
-import org.telegram.tgnet.TLRPC$TL_phone_editGroupCallMember;
+import org.telegram.tgnet.TLRPC$TL_phone_editGroupCallParticipant;
 import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
@@ -189,12 +187,16 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected int currentAudioState = 1;
     /* access modifiers changed from: private */
     public String currentBluetoothDeviceName;
+    public boolean currentGroupModeStreaming = false;
     protected int currentState = 0;
+    protected int currentStreamRequestId;
     protected int currentVideoState = 0;
     protected boolean didDeleteConnectionServiceContact;
     boolean fetchingBluetoothDeviceName;
     public ChatObject.Call groupCall;
+    protected TLRPC$InputPeer groupCallPeer;
     protected boolean hasAudioFocus;
+    public boolean hasFewPeers;
     protected boolean isBtHeadsetConnected;
     protected boolean isFrontFaceCamera = true;
     protected boolean isHeadsetPlugged;
@@ -205,6 +207,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected NetworkInfo lastNetInfo;
     private Boolean mHasEarpiece;
     protected boolean micMute;
+    protected String myJson;
     protected int mySource;
     protected boolean needPlayEndSound;
     protected boolean needSwitchToBluetoothAfterScoActivates;
@@ -529,7 +532,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                     z3 = true;
                 }
                 if (z3) {
-                    editCallMember(UserConfig.getInstance(this.currentAccount).getCurrentUser(), z, -1);
+                    editCallMember(UserConfig.getInstance(this.currentAccount).getCurrentUser(), z, -1, (Boolean) null);
                     DispatchQueue dispatchQueue = Utilities.globalQueue;
                     $$Lambda$VoIPBaseService$2g4fCttj150miIvar_fb9pscys r0 = new Runnable() {
                         public final void run() {
@@ -565,28 +568,26 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         }
     }
 
-    public void editCallMember(TLObject tLObject, boolean z, int i) {
+    public void editCallMember(TLObject tLObject, boolean z, int i, Boolean bool) {
         if (this.groupCall != null) {
-            TLRPC$TL_phone_editGroupCallMember tLRPC$TL_phone_editGroupCallMember = new TLRPC$TL_phone_editGroupCallMember();
-            tLRPC$TL_phone_editGroupCallMember.call = this.groupCall.getInputGroupCall();
+            TLRPC$TL_phone_editGroupCallParticipant tLRPC$TL_phone_editGroupCallParticipant = new TLRPC$TL_phone_editGroupCallParticipant();
+            tLRPC$TL_phone_editGroupCallParticipant.call = this.groupCall.getInputGroupCall();
             if (tLObject instanceof TLRPC$User) {
-                TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
-                if (UserObject.isUserSelf(tLRPC$User)) {
-                    tLRPC$TL_phone_editGroupCallMember.user_id = new TLRPC$TL_inputUserSelf();
-                } else {
-                    TLRPC$TL_inputUser tLRPC$TL_inputUser = new TLRPC$TL_inputUser();
-                    tLRPC$TL_phone_editGroupCallMember.user_id = tLRPC$TL_inputUser;
-                    tLRPC$TL_inputUser.user_id = tLRPC$User.id;
-                    tLRPC$TL_inputUser.access_hash = tLRPC$User.access_hash;
-                }
+                tLRPC$TL_phone_editGroupCallParticipant.participant = MessagesController.getInputPeer((TLRPC$User) tLObject);
+            } else if (tLObject instanceof TLRPC$Chat) {
+                tLRPC$TL_phone_editGroupCallParticipant.participant = MessagesController.getInputPeer((TLRPC$Chat) tLObject);
             }
-            tLRPC$TL_phone_editGroupCallMember.muted = z;
+            tLRPC$TL_phone_editGroupCallParticipant.muted = z;
             if (i >= 0) {
-                tLRPC$TL_phone_editGroupCallMember.volume = i;
-                tLRPC$TL_phone_editGroupCallMember.flags |= 2;
+                tLRPC$TL_phone_editGroupCallParticipant.volume = i;
+                tLRPC$TL_phone_editGroupCallParticipant.flags |= 2;
+            }
+            if (bool != null) {
+                tLRPC$TL_phone_editGroupCallParticipant.raise_hand = bool.booleanValue();
+                tLRPC$TL_phone_editGroupCallParticipant.flags |= 4;
             }
             int i2 = this.currentAccount;
-            AccountInstance.getInstance(i2).getConnectionsManager().sendRequest(tLRPC$TL_phone_editGroupCallMember, new RequestDelegate(i2) {
+            AccountInstance.getInstance(i2).getConnectionsManager().sendRequest(tLRPC$TL_phone_editGroupCallParticipant, new RequestDelegate(i2) {
                 public final /* synthetic */ int f$0;
 
                 {
@@ -997,6 +998,8 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                         NativeInstance.this.stopGroup();
                     }
                 });
+                AccountInstance.getInstance(this.currentAccount).getConnectionsManager().cancelRequest(this.currentStreamRequestId, true);
+                this.currentStreamRequestId = 0;
             } else {
                 Instance.FinalState stop = this.tgVoip.stop();
                 updateTrafficStats(stop.trafficStats);
@@ -1425,6 +1428,10 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         return this.currentState;
     }
 
+    public TLRPC$InputPeer getGroupCallPeer() {
+        return this.groupCallPeer;
+    }
+
     /* access modifiers changed from: protected */
     public void updateNetworkType() {
         NativeInstance nativeInstance = this.tgVoip;
@@ -1579,9 +1586,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r4.setAction(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r1)
-            r6 = 2131627988(0x7f0e0fd4, float:1.8883256E38)
+            r6 = 2131628016(0x7f0e0ff0, float:1.8883313E38)
             java.lang.String r7 = "VoipInVideoCallBranding"
-            r8 = 2131627986(0x7f0e0fd2, float:1.8883252E38)
+            r8 = 2131628014(0x7f0e0fee, float:1.8883309E38)
             java.lang.String r9 = "VoipInCallBranding"
             if (r22 == 0) goto L_0x002b
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -1591,7 +1598,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         L_0x002f:
             android.app.Notification$Builder r5 = r5.setContentTitle(r10)
             android.app.Notification$Builder r5 = r5.setContentText(r0)
-            r10 = 2131165851(0x7var_b, float:1.794593E38)
+            r10 = 2131165856(0x7var_a0, float:1.794594E38)
             android.app.Notification$Builder r5 = r5.setSmallIcon(r10)
             android.app.Notification$Builder r5 = r5.setSubText(r2)
             r10 = 0
@@ -1725,7 +1732,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             java.lang.String r8 = "call_id"
             r2.putExtra(r8, r6)
             java.lang.String r6 = "VoipDeclineCall"
-            r7 = 2131627925(0x7f0e0var_, float:1.8883128E38)
+            r7 = 2131627926(0x7f0e0var_, float:1.888313E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10 = 24
             if (r12 < r10) goto L_0x01a0
@@ -1760,7 +1767,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             long r13 = r18.getCallID()
             r9.putExtra(r8, r13)
             java.lang.String r8 = "VoipAnswerCall"
-            r13 = 2131627915(0x7f0e0f8b, float:1.8883108E38)
+            r13 = 2131627916(0x7f0e0f8c, float:1.888311E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r8, r13)
             if (r12 < r10) goto L_0x01f5
             android.text.SpannableString r10 = new android.text.SpannableString
@@ -1840,7 +1847,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             if (r22 == 0) goto L_0x02a8
-            r12 = 2131627989(0x7f0e0fd5, float:1.8883258E38)
+            r12 = 2131628017(0x7f0e0ff1, float:1.8883315E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r14 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1852,7 +1859,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             goto L_0x02be
         L_0x02a8:
             r14 = 0
-            r12 = 2131627987(0x7f0e0fd3, float:1.8883254E38)
+            r12 = 2131628015(0x7f0e0fef, float:1.888331E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1866,11 +1873,11 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         L_0x02c2:
             if (r22 == 0) goto L_0x02ca
             r10 = r17
-            r0 = 2131627988(0x7f0e0fd4, float:1.8883256E38)
+            r0 = 2131628016(0x7f0e0ff0, float:1.8883313E38)
             goto L_0x02cf
         L_0x02ca:
             r10 = r16
-            r0 = 2131627986(0x7f0e0fd2, float:1.8883252E38)
+            r0 = 2131628014(0x7f0e0fee, float:1.8883309E38)
         L_0x02cf:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r10, r0)
             r7.setTextViewText(r11, r0)
@@ -1882,7 +1889,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             int r0 = r1.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
-            r10 = 2131627916(0x7f0e0f8c, float:1.888311E38)
+            r10 = 2131627917(0x7f0e0f8d, float:1.8883112E38)
             java.lang.Object[] r14 = new java.lang.Object[r14]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1904,7 +1911,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r13)
             r7.setTextViewText(r3, r8)
             r3 = 2131230803(0x7var_, float:1.807767E38)
-            r8 = 2131627925(0x7f0e0var_, float:1.8883128E38)
+            r8 = 2131627926(0x7f0e0var_, float:1.888313E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r8)
             r7.setTextViewText(r3, r6)
             r3 = 2131230882(0x7var_a2, float:1.807783E38)

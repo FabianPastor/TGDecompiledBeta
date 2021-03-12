@@ -345,7 +345,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r4)
             android.widget.ImageView r2 = r0.paintButton
-            r4 = 2131165893(0x7var_c5, float:1.7946016E38)
+            r4 = 2131165898(0x7var_ca, float:1.7946026E38)
             r2.setImageResource(r4)
             android.widget.ImageView r2 = r0.paintButton
             r4 = 1090519039(0x40ffffff, float:7.9999995)
@@ -370,7 +370,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r5)
-            r5 = 2131165897(0x7var_c9, float:1.7946024E38)
+            r5 = 2131165902(0x7var_ce, float:1.7946034E38)
             r2.setImageResource(r5)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r5)
@@ -385,7 +385,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r1)
-            r1 = 2131165895(0x7var_c7, float:1.794602E38)
+            r1 = 2131165900(0x7var_cc, float:1.794603E38)
             r2.setImageResource(r1)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r1)
@@ -1760,7 +1760,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                         PhotoPaintView.this.lambda$showPopup$19$PhotoPaintView(keyEvent);
                     }
                 });
-                this.popupLayout.setShowedFromBotton(true);
+                this.popupLayout.setShownFromBotton(true);
             }
             this.popupLayout.removeInnerViews();
             runnable.run();

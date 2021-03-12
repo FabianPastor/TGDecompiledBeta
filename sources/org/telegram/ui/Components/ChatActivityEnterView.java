@@ -4176,7 +4176,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.lambda$onSendLongClick$20$ChatActivityEnterView(keyEvent);
                     }
                 });
-                this.sendPopupLayout.setShowedFromBotton(false);
+                this.sendPopupLayout.setShownFromBotton(false);
                 int i2 = 0;
                 while (i2 < 2) {
                     if ((i2 != 0 || this.parentFragment.canScheduleMessage()) && (i2 != 1 || (!UserObject.isUserSelf(currentUser) && (this.slowModeTimer <= 0 || isInScheduleMode())))) {

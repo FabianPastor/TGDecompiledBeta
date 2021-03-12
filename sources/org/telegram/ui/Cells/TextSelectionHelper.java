@@ -569,7 +569,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                             return TextSelectionHelper.this.lambda$showActions$1$TextSelectionHelper(view, motionEvent);
                         }
                     });
-                    this.popupLayout.setShowedFromBotton(false);
+                    this.popupLayout.setShownFromBotton(false);
                     TextView textView = new TextView(this.textSelectionOverlay.getContext());
                     this.deleteView = textView;
                     textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 2));

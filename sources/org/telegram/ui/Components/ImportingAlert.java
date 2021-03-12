@@ -157,7 +157,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             r10 = 1123024896(0x42var_, float:120.0)
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r12 = 2131558448(0x7f0d0030, float:1.8742212E38)
+            r12 = 2131558450(0x7f0d0032, float:1.8742216E38)
             java.lang.String r13 = "NUM"
             r16 = 0
             r17 = 0
@@ -170,7 +170,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             r0.imageView = r6
             r6.setAutoRepeat(r8)
             org.telegram.ui.Components.RLottieImageView r6 = r0.imageView
-            r10 = 2131558449(0x7f0d0031, float:1.8742214E38)
+            r10 = 2131558451(0x7f0d0033, float:1.8742218E38)
             r11 = 120(0x78, float:1.68E-43)
             r6.setAnimation(r10, r11, r11)
             org.telegram.ui.Components.RLottieImageView r6 = r0.imageView

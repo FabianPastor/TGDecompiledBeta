@@ -1,4 +1,4 @@
-package org.webrtc;
+package org.telegram.ui.Components;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -9,25 +9,26 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
 import java.util.HashSet;
-import org.telegram.ui.Components.FlickerLoadingView;
-import org.telegram.ui.Components.RecyclerListView;
-import org.webrtc.RecyclerItemsEnterAnimator;
+import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
 
 public class RecyclerItemsEnterAnimator {
+    ArrayList<AnimatorSet> currentAnimations = new ArrayList<>();
     HashSet<View> ignoreView = new HashSet<>();
     boolean invalidateAlpha;
     /* access modifiers changed from: private */
     public final SparseArray<Float> listAlphaItems = new SparseArray<>();
     /* access modifiers changed from: private */
     public final RecyclerListView listView;
+    ArrayList<ViewTreeObserver.OnPreDrawListener> preDrawListeners = new ArrayList<>();
 
     public RecyclerItemsEnterAnimator(RecyclerListView recyclerListView) {
         this.listView = recyclerListView;
     }
 
     public void dispatchDraw() {
-        if (this.invalidateAlpha || this.listAlphaItems.size() > 0) {
+        if (this.invalidateAlpha) {
             for (int i = 0; i < this.listView.getChildCount(); i++) {
                 View childAt = this.listView.getChildAt(i);
                 int childAdapterPosition = this.listView.getChildAdapterPosition(childAt);
@@ -71,17 +72,20 @@ public class RecyclerItemsEnterAnimator {
             ofFloat.start();
             i--;
         }
-        this.listView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+        AnonymousClass2 r0 = new ViewTreeObserver.OnPreDrawListener() {
             public boolean onPreDraw() {
                 RecyclerItemsEnterAnimator.this.listView.getViewTreeObserver().removeOnPreDrawListener(this);
+                RecyclerItemsEnterAnimator.this.preDrawListeners.remove(this);
                 int childCount = RecyclerItemsEnterAnimator.this.listView.getChildCount();
-                AnimatorSet animatorSet = new AnimatorSet();
+                final AnimatorSet animatorSet = new AnimatorSet();
                 for (int i = 0; i < childCount; i++) {
                     View childAt = RecyclerItemsEnterAnimator.this.listView.getChildAt(i);
                     final int childAdapterPosition = RecyclerItemsEnterAnimator.this.listView.getChildAdapterPosition(childAt);
                     if (childAt != view && childAdapterPosition >= i - 1 && RecyclerItemsEnterAnimator.this.listAlphaItems.get(childAdapterPosition, (Object) null) == null) {
                         RecyclerItemsEnterAnimator.this.listAlphaItems.put(childAdapterPosition, Float.valueOf(0.0f));
-                        childAt.setAlpha(0.0f);
+                        RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = RecyclerItemsEnterAnimator.this;
+                        recyclerItemsEnterAnimator.invalidateAlpha = true;
+                        recyclerItemsEnterAnimator.listView.invalidate();
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                         ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(childAdapterPosition) {
                             public final /* synthetic */ int f$1;
@@ -107,7 +111,20 @@ public class RecyclerItemsEnterAnimator {
                         animatorSet.playTogether(new Animator[]{ofFloat});
                     }
                 }
+                RecyclerItemsEnterAnimator.this.currentAnimations.add(animatorSet);
                 animatorSet.start();
+                animatorSet.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        super.onAnimationEnd(animator);
+                        RecyclerItemsEnterAnimator.this.currentAnimations.remove(animatorSet);
+                        if (RecyclerItemsEnterAnimator.this.currentAnimations.isEmpty()) {
+                            RecyclerItemsEnterAnimator.this.listAlphaItems.clear();
+                            RecyclerItemsEnterAnimator recyclerItemsEnterAnimator = RecyclerItemsEnterAnimator.this;
+                            recyclerItemsEnterAnimator.invalidateAlpha = true;
+                            recyclerItemsEnterAnimator.listView.invalidate();
+                        }
+                    }
+                });
                 return false;
             }
 
@@ -119,6 +136,21 @@ public class RecyclerItemsEnterAnimator {
                 recyclerItemsEnterAnimator.invalidateAlpha = true;
                 recyclerItemsEnterAnimator.listView.invalidate();
             }
-        });
+        };
+        this.preDrawListeners.add(r0);
+        this.listView.getViewTreeObserver().addOnPreDrawListener(r0);
+    }
+
+    public void onDetached() {
+        for (int i = 0; i < this.currentAnimations.size(); i++) {
+            this.currentAnimations.get(i).cancel();
+        }
+        this.currentAnimations.clear();
+        for (int i2 = 0; i2 < this.preDrawListeners.size(); i2++) {
+            this.listView.getViewTreeObserver().removeOnPreDrawListener(this.preDrawListeners.get(i2));
+        }
+        this.preDrawListeners.clear();
+        this.listAlphaItems.clear();
+        this.invalidateAlpha = true;
     }
 }

@@ -27,22 +27,24 @@ public class ShareDialogCell extends FrameLayout {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private CheckBox2 checkBox;
     private int currentAccount = UserConfig.selectedAccount;
+    private boolean darkTheme;
     private BackupImageView imageView;
     private long lastUpdateTime;
     private TextView nameTextView;
     private float onlineProgress;
     private TLRPC$User user;
 
-    public ShareDialogCell(Context context) {
+    public ShareDialogCell(Context context, boolean z) {
         super(context);
         setWillNotDraw(false);
+        this.darkTheme = z;
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(28.0f));
         addView(this.imageView, LayoutHelper.createFrame(56, 56.0f, 49, 0.0f, 7.0f, 0.0f, 0.0f));
         TextView textView = new TextView(context);
         this.nameTextView = textView;
-        textView.setTextColor(Theme.getColor("dialogTextBlack"));
+        textView.setTextColor(Theme.getColor(z ? "voipgroup_nameText" : "dialogTextBlack"));
         this.nameTextView.setTextSize(1, 12.0f);
         this.nameTextView.setMaxLines(2);
         this.nameTextView.setGravity(49);
@@ -51,7 +53,7 @@ public class ShareDialogCell extends FrameLayout {
         addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 6.0f, 66.0f, 6.0f, 0.0f));
         CheckBox2 checkBox2 = new CheckBox2(context, 21);
         this.checkBox = checkBox2;
-        checkBox2.setColor("dialogRoundCheckBox", "dialogBackground", "dialogRoundCheckBoxCheck");
+        checkBox2.setColor("dialogRoundCheckBox", z ? "voipgroup_inviteMembersBackground" : "dialogBackground", "dialogRoundCheckBoxCheck");
         this.checkBox.setDrawUnchecked(false);
         this.checkBox.setDrawBackgroundAsArc(4);
         this.checkBox.setProgressDelegate(new CheckBoxBase.ProgressDelegate() {
@@ -131,11 +133,11 @@ public class ShareDialogCell extends FrameLayout {
             r6 = this;
             boolean r9 = super.drawChild(r7, r8, r9)
             org.telegram.ui.Components.BackupImageView r10 = r6.imageView
-            if (r8 != r10) goto L_0x00ec
+            if (r8 != r10) goto L_0x00f3
             org.telegram.tgnet.TLRPC$User r8 = r6.user
-            if (r8 == 0) goto L_0x00ec
+            if (r8 == 0) goto L_0x00f3
             boolean r8 = org.telegram.messenger.MessagesController.isSupportUser(r8)
-            if (r8 != 0) goto L_0x00ec
+            if (r8 != 0) goto L_0x00f3
             long r0 = android.os.SystemClock.elapsedRealtime()
             long r2 = r6.lastUpdateTime
             long r2 = r0 - r2
@@ -176,7 +178,7 @@ public class ShareDialogCell extends FrameLayout {
             if (r8 != 0) goto L_0x0061
             float r0 = r6.onlineProgress
             int r0 = (r0 > r10 ? 1 : (r0 == r10 ? 0 : -1))
-            if (r0 == 0) goto L_0x00ec
+            if (r0 == 0) goto L_0x00f3
         L_0x0061:
             org.telegram.ui.Components.BackupImageView r0 = r6.imageView
             int r0 = r0.getBottom()
@@ -189,7 +191,13 @@ public class ShareDialogCell extends FrameLayout {
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r1 = r1 - r4
             android.graphics.Paint r4 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
+            boolean r5 = r6.darkTheme
+            if (r5 == 0) goto L_0x0084
+            java.lang.String r5 = "voipgroup_inviteMembersBackground"
+            goto L_0x0086
+        L_0x0084:
             java.lang.String r5 = "windowBackgroundWhite"
+        L_0x0086:
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
             r4.setColor(r5)
             float r1 = (float) r1
@@ -213,39 +221,39 @@ public class ShareDialogCell extends FrameLayout {
             android.graphics.Paint r5 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
             r7.drawCircle(r1, r0, r4, r5)
             r7 = 1125515264(0x43160000, float:150.0)
-            if (r8 == 0) goto L_0x00d3
+            if (r8 == 0) goto L_0x00da
             float r8 = r6.onlineProgress
             r10 = 1065353216(0x3var_, float:1.0)
             int r0 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r0 >= 0) goto L_0x00ec
+            if (r0 >= 0) goto L_0x00f3
             float r0 = (float) r2
             float r0 = r0 / r7
             float r8 = r8 + r0
             r6.onlineProgress = r8
             int r7 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r7 <= 0) goto L_0x00ca
+            if (r7 <= 0) goto L_0x00d1
             r6.onlineProgress = r10
-        L_0x00ca:
+        L_0x00d1:
             org.telegram.ui.Components.BackupImageView r7 = r6.imageView
             r7.invalidate()
             r6.invalidate()
-            goto L_0x00ec
-        L_0x00d3:
+            goto L_0x00f3
+        L_0x00da:
             float r8 = r6.onlineProgress
             int r0 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r0 <= 0) goto L_0x00ec
+            if (r0 <= 0) goto L_0x00f3
             float r0 = (float) r2
             float r0 = r0 / r7
             float r8 = r8 - r0
             r6.onlineProgress = r8
             int r7 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r7 >= 0) goto L_0x00e4
+            if (r7 >= 0) goto L_0x00eb
             r6.onlineProgress = r10
-        L_0x00e4:
+        L_0x00eb:
             org.telegram.ui.Components.BackupImageView r7 = r6.imageView
             r7.invalidate()
             r6.invalidate()
-        L_0x00ec:
+        L_0x00f3:
             return r9
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ShareDialogCell.drawChild(android.graphics.Canvas, android.view.View, long):boolean");

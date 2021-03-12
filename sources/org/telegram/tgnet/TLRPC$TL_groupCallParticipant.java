@@ -2,6 +2,7 @@ package org.telegram.tgnet;
 
 public class TLRPC$TL_groupCallParticipant extends TLObject {
     public static int constructor = NUM;
+    public String about;
     public int active_date;
     public float amplitude;
     public boolean can_self_unmute;
@@ -17,8 +18,10 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
     public boolean min;
     public boolean muted;
     public boolean muted_by_you;
+    public TLRPC$Peer peer;
+    public long raise_hand_rating;
+    public boolean self;
     public int source;
-    public int user_id;
     public boolean versioned;
     public int volume;
     public boolean volume_by_admin;
@@ -46,11 +49,12 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         this.versioned = (readInt32 & 32) != 0;
         this.min = (readInt32 & 256) != 0;
         this.muted_by_you = (readInt32 & 512) != 0;
-        if ((readInt32 & 1024) != 0) {
+        this.volume_by_admin = (readInt32 & 1024) != 0;
+        if ((readInt32 & 4096) != 0) {
             z2 = true;
         }
-        this.volume_by_admin = z2;
-        this.user_id = abstractSerializedData.readInt32(z);
+        this.self = z2;
+        this.peer = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.date = abstractSerializedData.readInt32(z);
         if ((this.flags & 8) != 0) {
             this.active_date = abstractSerializedData.readInt32(z);
@@ -58,6 +62,12 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         this.source = abstractSerializedData.readInt32(z);
         if ((this.flags & 128) != 0) {
             this.volume = abstractSerializedData.readInt32(z);
+        }
+        if ((this.flags & 2048) != 0) {
+            this.about = abstractSerializedData.readString(z);
+        }
+        if ((this.flags & 8192) != 0) {
+            this.raise_hand_rating = abstractSerializedData.readInt64(z);
         }
     }
 
@@ -79,8 +89,10 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         this.flags = i7;
         int i8 = this.volume_by_admin ? i7 | 1024 : i7 & -1025;
         this.flags = i8;
-        abstractSerializedData.writeInt32(i8);
-        abstractSerializedData.writeInt32(this.user_id);
+        int i9 = this.self ? i8 | 4096 : i8 & -4097;
+        this.flags = i9;
+        abstractSerializedData.writeInt32(i9);
+        this.peer.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.date);
         if ((this.flags & 8) != 0) {
             abstractSerializedData.writeInt32(this.active_date);
@@ -88,6 +100,12 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         abstractSerializedData.writeInt32(this.source);
         if ((this.flags & 128) != 0) {
             abstractSerializedData.writeInt32(this.volume);
+        }
+        if ((this.flags & 2048) != 0) {
+            abstractSerializedData.writeString(this.about);
+        }
+        if ((this.flags & 8192) != 0) {
+            abstractSerializedData.writeInt64(this.raise_hand_rating);
         }
     }
 }

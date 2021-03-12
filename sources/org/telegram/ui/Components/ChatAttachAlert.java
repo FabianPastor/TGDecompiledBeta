@@ -1494,7 +1494,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                     ChatAttachAlert.this.lambda$null$12$ChatAttachAlert(keyEvent);
                 }
             });
-            this.sendPopupLayout.setShowedFromBotton(false);
+            this.sendPopupLayout.setShownFromBotton(false);
             this.itemCells = new ActionBarMenuSubItem[2];
             int i = 0;
             while (i < 2) {

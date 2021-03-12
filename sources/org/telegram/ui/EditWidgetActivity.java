@@ -218,7 +218,7 @@ public class EditWidgetActivity extends BaseFragment {
                 org.telegram.ui.Cells.ChatActionCell r9 = new org.telegram.ui.Cells.ChatActionCell
                 r9.<init>(r2)
                 java.lang.String r10 = "WidgetPreview"
-                r11 = 2131628067(0x7f0e1023, float:1.8883416E38)
+                r11 = 2131628099(0x7f0e1043, float:1.8883481E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
                 r9.setCustomText(r10)
                 r11 = -2
@@ -233,7 +233,7 @@ public class EditWidgetActivity extends BaseFragment {
                 android.widget.LinearLayout r9 = new android.widget.LinearLayout
                 r9.<init>(r2)
                 r9.setOrientation(r4)
-                r10 = 2131166115(0x7var_a3, float:1.7946466E38)
+                r10 = 2131166120(0x7var_a8, float:1.7946476E38)
                 r9.setBackgroundResource(r10)
                 r14 = 10
                 r16 = 10
@@ -1060,14 +1060,14 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r2 = r1.cells
                 r2 = r2[r13]
                 android.view.View r0 = r2.findViewById(r0)
-                r2 = 2131166119(0x7var_a7, float:1.7946474E38)
+                r2 = 2131166124(0x7var_ac, float:1.7946484E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x0616
             L_0x05fa:
                 android.view.ViewGroup[] r2 = r1.cells
                 r2 = r2[r13]
                 android.view.View r0 = r2.findViewById(r0)
-                r2 = 2131166118(0x7var_a6, float:1.7946472E38)
+                r2 = 2131166123(0x7var_ab, float:1.7946482E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x0616
             L_0x0609:

@@ -519,7 +519,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1.<init>()
             r0.setActionBarMenuOnItemClick(r1)
             android.content.res.Resources r0 = r27.getResources()
-            r1 = 2131165906(0x7var_d2, float:1.7946042E38)
+            r1 = 2131165911(0x7var_d7, float:1.7946052E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             r6.pinnedHeaderShadowDrawable = r0
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -642,7 +642,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             if (r1 == 0) goto L_0x026d
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
             r5 = 7
-            r12 = 2131165768(0x7var_, float:1.7945762E38)
+            r12 = 2131165769(0x7var_, float:1.7945764E38)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r14 = 2131623977(0x7f0e0029, float:1.887512E38)
             java.lang.String r15 = "AccDescrGoToMessage"
@@ -651,7 +651,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r6.gotoItem = r5
             r1.add(r5)
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
-            r5 = 2131165741(0x7var_d, float:1.7945708E38)
+            r5 = 2131165742(0x7var_e, float:1.794571E38)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r13 = 2131625558(0x7f0e0656, float:1.8878327E38)
             java.lang.String r14 = "Forward"
@@ -660,7 +660,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1.add(r5)
         L_0x026d:
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
-            r5 = 2131165729(0x7var_, float:1.7945683E38)
+            r5 = 2131165730(0x7var_, float:1.7945685E38)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r12 = 2131625076(0x7f0e0474, float:1.887735E38)
             java.lang.String r13 = "Delete"

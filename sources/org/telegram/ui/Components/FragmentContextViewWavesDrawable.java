@@ -261,6 +261,14 @@ public class FragmentContextViewWavesDrawable {
         }
     }
 
+    public int getState() {
+        WeavingState weavingState = this.currentState;
+        if (weavingState != null) {
+            return weavingState.currentState;
+        }
+        return 0;
+    }
+
     public static class WeavingState {
         String blueKey1 = "voipgroup_topPanelBlue1";
         String blueKey2 = "voipgroup_topPanelBlue2";

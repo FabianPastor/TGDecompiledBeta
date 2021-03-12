@@ -6,19 +6,18 @@ import j$.util.function.ToDoubleFunction;
 import j$.util.function.ToIntFunction;
 import j$.util.function.ToLongFunction;
 import java.util.Comparator;
-import org.telegram.messenger.ChatObject;
-import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
+import org.telegram.tgnet.TLRPC$TL_updateGroupCallParticipants;
 
-/* renamed from: org.telegram.messenger.-$$Lambda$ChatObject$Call$pEUnGLfTv7izabDhbw_GRqZb_aQ  reason: invalid class name */
+/* renamed from: org.telegram.messenger.-$$Lambda$ChatObject$Call$7O3T0NEnDcpjg_DSOcu2-AQIl_I  reason: invalid class name */
 /* compiled from: lambda */
-public final /* synthetic */ class $$Lambda$ChatObject$Call$pEUnGLfTv7izabDhbw_GRqZb_aQ implements Comparator, j$.util.Comparator {
-    public static final /* synthetic */ $$Lambda$ChatObject$Call$pEUnGLfTv7izabDhbw_GRqZb_aQ INSTANCE = new $$Lambda$ChatObject$Call$pEUnGLfTv7izabDhbw_GRqZb_aQ();
+public final /* synthetic */ class $$Lambda$ChatObject$Call$7O3T0NEnDcpjg_DSOcu2AQIl_I implements Comparator, j$.util.Comparator {
+    public static final /* synthetic */ $$Lambda$ChatObject$Call$7O3T0NEnDcpjg_DSOcu2AQIl_I INSTANCE = new $$Lambda$ChatObject$Call$7O3T0NEnDcpjg_DSOcu2AQIl_I();
 
-    private /* synthetic */ $$Lambda$ChatObject$Call$pEUnGLfTv7izabDhbw_GRqZb_aQ() {
+    private /* synthetic */ $$Lambda$ChatObject$Call$7O3T0NEnDcpjg_DSOcu2AQIl_I() {
     }
 
     public final int compare(Object obj, Object obj2) {
-        return ChatObject.Call.lambda$sortParticipants$6((TLRPC$TL_groupCallParticipant) obj, (TLRPC$TL_groupCallParticipant) obj2);
+        return AndroidUtilities.compare(((TLRPC$TL_updateGroupCallParticipants) obj).version, ((TLRPC$TL_updateGroupCallParticipants) obj2).version);
     }
 
     public /* synthetic */ Comparator reversed() {

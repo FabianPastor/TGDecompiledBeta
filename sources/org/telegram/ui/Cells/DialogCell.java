@@ -2690,7 +2690,7 @@ public class DialogCell extends BaseCell {
             r1.promoDialog = r5
             int r14 = r10.promoDialogType
             if (r14 != 0) goto L_0x0fc2
-            r10 = 2131627772(0x7f0e0efc, float:1.8882818E38)
+            r10 = 2131627773(0x7f0e0efd, float:1.888282E38)
             java.lang.String r12 = "UseProxySponsor"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r12 = r10
@@ -5001,7 +5001,7 @@ public class DialogCell extends BaseCell {
             if (r0 == 0) goto L_0x00bd
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r16)
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r17)
-            r2 = 2131627725(0x7f0e0ecd, float:1.8882723E38)
+            r2 = 2131627726(0x7f0e0ece, float:1.8882725E38)
             java.lang.String r3 = "UnhideFromTop"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             org.telegram.ui.Components.RLottieDrawable r3 = org.telegram.ui.ActionBar.Theme.dialogs_unpinArchiveDrawable
@@ -5044,7 +5044,7 @@ public class DialogCell extends BaseCell {
         L_0x0109:
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r16)
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r17)
-            r2 = 2131627716(0x7f0e0ec4, float:1.8882704E38)
+            r2 = 2131627717(0x7f0e0ec5, float:1.8882706E38)
             java.lang.String r3 = "Unarchive"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             org.telegram.ui.Components.RLottieDrawable r3 = org.telegram.ui.ActionBar.Theme.dialogs_unarchiveDrawable
