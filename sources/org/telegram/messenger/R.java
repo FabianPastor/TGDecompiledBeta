@@ -732,6 +732,7 @@ public final class R {
         public static final int msg_go_up = NUM;
         public static final int msg_halfcheck = NUM;
         public static final int msg_halfcheck_s = NUM;
+        public static final int msg_handdown = NUM;
         public static final int msg_home = NUM;
         public static final int msg_hybrid = NUM;
         public static final int msg_instant = NUM;
@@ -771,7 +772,6 @@ public final class R {
         public static final int msg_pollstop = NUM;
         public static final int msg_psa = NUM;
         public static final int msg_qrcode = NUM;
-        public static final int msg_raisehand = NUM;
         public static final int msg_removefolder = NUM;
         public static final int msg_reorder = NUM;
         public static final int msg_replace = NUM;
@@ -1576,7 +1576,6 @@ public final class R {
         public static final int gigagroup_convert = NUM;
         public static final int group_pip_delete_icon = NUM;
         public static final int hand_1 = NUM;
-        public static final int hand_2 = NUM;
         public static final int ic_admin = NUM;
         public static final int ic_ban = NUM;
         public static final int ic_delete = NUM;
@@ -1618,6 +1617,13 @@ public final class R {
         public static final int speaker = NUM;
         public static final int statistic_preload = NUM;
         public static final int sun = NUM;
+        public static final int swipe_delete = NUM;
+        public static final int swipe_mute = NUM;
+        public static final int swipe_pin = NUM;
+        public static final int swipe_read = NUM;
+        public static final int swipe_unmute = NUM;
+        public static final int swipe_unpin = NUM;
+        public static final int swipe_unread = NUM;
         public static final int ticks_double = NUM;
         public static final int ticks_single = NUM;
         public static final int tsv_monkey_close = NUM;
@@ -1647,7 +1653,7 @@ public final class R {
         public static final int voip_group_removed = NUM;
         public static final int voip_invite = NUM;
         public static final int voip_muted = NUM;
-        public static final int voip_record = NUM;
+        public static final int voip_record_start = NUM;
         public static final int voip_ringback = NUM;
         public static final int voip_unmuted = NUM;
         public static final int wallet_allset = NUM;
@@ -1840,13 +1846,14 @@ public final class R {
         public static final int ActionCreateChannel = NUM;
         public static final int ActionCreateGroup = NUM;
         public static final int ActionCreateMega = NUM;
-        public static final int ActionCreatedInviteLink = NUM;
-        public static final int ActionDeletedInviteLink = NUM;
-        public static final int ActionEditedInviteLink = NUM;
-        public static final int ActionEditedInviteLinkToSame = NUM;
+        public static final int ActionCreatedInviteLinkClickable = NUM;
+        public static final int ActionDeletedInviteLinkClickable = NUM;
+        public static final int ActionEditedInviteLinkClickable = NUM;
+        public static final int ActionEditedInviteLinkToSameClickable = NUM;
         public static final int ActionGroupCallEnded = NUM;
         public static final int ActionGroupCallInvited = NUM;
         public static final int ActionGroupCallInvitedYou = NUM;
+        public static final int ActionGroupCallJustStarted = NUM;
         public static final int ActionGroupCallStarted = NUM;
         public static final int ActionGroupCallStartedByYou = NUM;
         public static final int ActionGroupCallYouInvited = NUM;
@@ -1874,7 +1881,7 @@ public final class R {
         public static final int ActionPinnedVideo = NUM;
         public static final int ActionPinnedVoice = NUM;
         public static final int ActionRemovedPhoto = NUM;
-        public static final int ActionRevokedInviteLink = NUM;
+        public static final int ActionRevokedInviteLinkClickable = NUM;
         public static final int ActionTTLChanged = NUM;
         public static final int ActionTTLChannelChanged = NUM;
         public static final int ActionTTLChannelDisabled = NUM;
@@ -2367,6 +2374,9 @@ public final class R {
         public static final int CancelAccountResetInfo2 = NUM;
         public static final int CancelEmailQuestion = NUM;
         public static final int CancelEmailQuestionTitle = NUM;
+        public static final int CancelForward = NUM;
+        public static final int CancelForwardMessage = NUM;
+        public static final int CancelForwarding = NUM;
         public static final int CancelLinkExpired = NUM;
         public static final int CancelLinkSuccess = NUM;
         public static final int CancelPasswordQuestion = NUM;
@@ -2536,6 +2546,7 @@ public final class R {
         public static final int ChatList = NUM;
         public static final int ChatListDefault = NUM;
         public static final int ChatListExpanded = NUM;
+        public static final int ChatListSwipeGesture = NUM;
         public static final int ChatLocation = NUM;
         public static final int ChatSetLocation = NUM;
         public static final int ChatSetLocationInfo = NUM;
@@ -3531,6 +3542,10 @@ public final class R {
         public static final int InteractionsChartTitle = NUM;
         public static final int InternalFolderInfo = NUM;
         public static final int InternalStorage = NUM;
+        public static final int InvLinkToChats = NUM;
+        public static final int InvLinkToGroup = NUM;
+        public static final int InvLinkToSavedMessages = NUM;
+        public static final int InvLinkToUser = NUM;
         public static final int InvalidCode = NUM;
         public static final int InvalidFirstName = NUM;
         public static final int InvalidLastName = NUM;
@@ -3651,6 +3666,7 @@ public final class R {
         public static final int LinkCreatedeBy = NUM;
         public static final int LinkExpiresIn = NUM;
         public static final int LinkExpiresInTime = NUM;
+        public static final int LinkHashExpired = NUM;
         public static final int LinkInUse = NUM;
         public static final int LinkInfo = NUM;
         public static final int LinkInfoChannel = NUM;
@@ -5012,6 +5028,7 @@ public final class R {
         public static final int SelectFile = NUM;
         public static final int SelectFromGallery = NUM;
         public static final int SelectImage = NUM;
+        public static final int SelectOtherChat = NUM;
         public static final int Send = NUM;
         public static final int SendAnonymously = NUM;
         public static final int SendAsFile = NUM;
@@ -5280,6 +5297,19 @@ public final class R {
         public static final int SuggestStickersNone = NUM;
         public static final int Support = NUM;
         public static final int SupportStatus = NUM;
+        public static final int SwipeDeleteChat = NUM;
+        public static final int SwipeMarkAsRead = NUM;
+        public static final int SwipeMarkAsUnread = NUM;
+        public static final int SwipeMute = NUM;
+        public static final int SwipePin = NUM;
+        public static final int SwipeSettingsArchive = NUM;
+        public static final int SwipeSettingsDelete = NUM;
+        public static final int SwipeSettingsFolders = NUM;
+        public static final int SwipeSettingsMute = NUM;
+        public static final int SwipeSettingsPin = NUM;
+        public static final int SwipeSettingsRead = NUM;
+        public static final int SwipeUnmute = NUM;
+        public static final int SwipeUnpin = NUM;
         public static final int SyncContacts = NUM;
         public static final int SyncContactsAdded = NUM;
         public static final int SyncContactsDelete = NUM;
@@ -5691,6 +5721,7 @@ public final class R {
         public static final int VoipGroupJoinAs = NUM;
         public static final int VoipGroupJoinCall = NUM;
         public static final int VoipGroupJoinVoiceChatMessage = NUM;
+        public static final int VoipGroupJoinVoiceChatUrl = NUM;
         public static final int VoipGroupLeave = NUM;
         public static final int VoipGroupLeaveAlertEndChat = NUM;
         public static final int VoipGroupLeaveAlertText = NUM;
@@ -5709,7 +5740,7 @@ public final class R {
         public static final int VoipGroupPersonalAccount = NUM;
         public static final int VoipGroupRecordCall = NUM;
         public static final int VoipGroupRecording = NUM;
-        public static final int VoipGroupRemoveMemberAlertText = NUM;
+        public static final int VoipGroupRemoveMemberAlertText2 = NUM;
         public static final int VoipGroupRemoveMemberAlertTitle = NUM;
         public static final int VoipGroupRemovedFromGroup = NUM;
         public static final int VoipGroupSaveFileHint = NUM;

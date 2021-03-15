@@ -8,7 +8,9 @@ import j$.util.stream.CLASSNAMEj1;
 import java.util.Comparator;
 
 abstract class W2<P_IN, P_OUT, T_BUFFER extends CLASSNAMEj1> implements Spliterator<P_OUT> {
-    final boolean a;
+
+    /* renamed from: a  reason: collision with root package name */
+    final boolean var_a;
     final T1 b;
     private J c;
     Spliterator d;
@@ -22,14 +24,14 @@ abstract class W2<P_IN, P_OUT, T_BUFFER extends CLASSNAMEj1> implements Splitera
         this.b = t1;
         this.c = null;
         this.d = spliterator;
-        this.a = z;
+        this.var_a = z;
     }
 
     W2(T1 t1, J j, boolean z) {
         this.b = t1;
         this.c = j;
         this.d = null;
-        this.a = z;
+        this.var_a = z;
     }
 
     private boolean f() {
@@ -121,7 +123,7 @@ abstract class W2<P_IN, P_OUT, T_BUFFER extends CLASSNAMEj1> implements Splitera
     }
 
     public Spliterator trySplit() {
-        if (!this.a || this.i) {
+        if (!this.var_a || this.i) {
             return null;
         }
         g();

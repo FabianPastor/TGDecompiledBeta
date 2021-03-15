@@ -35,7 +35,7 @@ final class B2 {
                     long j2 = this.c;
                     if (j2 > 0) {
                         this.c = j2 - 1;
-                        this.a.accept(obj);
+                        this.var_a.accept(obj);
                         return;
                     }
                     return;
@@ -44,11 +44,11 @@ final class B2 {
             }
 
             public void n(long j) {
-                this.a.n(B2.c(j, a.this.l, this.c));
+                this.var_a.n(B2.c(j, a.this.l, this.c));
             }
 
             public boolean p() {
-                return this.c == 0 || this.a.p();
+                return this.c == 0 || this.var_a.p();
             }
         }
 
@@ -90,7 +90,7 @@ final class B2 {
             if (!T2.ORDERED.d(t1.r0())) {
                 return K0(t1.v0(spliterator), this.l, this.m, p0);
             }
-            return ((R1) new e(this, t1, spliterator, CLASSNAMEu0.a, this.l, this.m).invoke()).spliterator();
+            return ((R1) new e(this, t1, spliterator, CLASSNAMEt0.var_a, this.l, this.m).invoke()).spliterator();
         }
 
         /* access modifiers changed from: package-private */
@@ -135,7 +135,7 @@ final class B2 {
                     long j2 = this.c;
                     if (j2 > 0) {
                         this.c = j2 - 1;
-                        this.a.accept(i);
+                        this.var_a.accept(i);
                         return;
                     }
                     return;
@@ -144,11 +144,11 @@ final class B2 {
             }
 
             public void n(long j) {
-                this.a.n(B2.c(j, b.this.l, this.c));
+                this.var_a.n(B2.c(j, b.this.l, this.c));
             }
 
             public boolean p() {
-                return this.c == 0 || this.a.p();
+                return this.c == 0 || this.var_a.p();
             }
         }
 
@@ -188,7 +188,7 @@ final class B2 {
             if (!T2.ORDERED.d(t1.r0())) {
                 return M0((Spliterator.b) t1.v0(spliterator), this.l, this.m, p0);
             }
-            return ((R1) new e(this, t1, spliterator, CLASSNAMEt0.a, this.l, this.m).invoke()).spliterator();
+            return ((R1) new e(this, t1, spliterator, CLASSNAMEs0.var_a, this.l, this.m).invoke()).spliterator();
         }
 
         /* access modifiers changed from: package-private */
@@ -233,7 +233,7 @@ final class B2 {
                     long j3 = this.c;
                     if (j3 > 0) {
                         this.c = j3 - 1;
-                        this.a.accept(j);
+                        this.var_a.accept(j);
                         return;
                     }
                     return;
@@ -242,11 +242,11 @@ final class B2 {
             }
 
             public void n(long j) {
-                this.a.n(B2.c(j, c.this.l, this.c));
+                this.var_a.n(B2.c(j, c.this.l, this.c));
             }
 
             public boolean p() {
-                return this.c == 0 || this.a.p();
+                return this.c == 0 || this.var_a.p();
             }
         }
 
@@ -286,7 +286,7 @@ final class B2 {
             if (!T2.ORDERED.d(t1.r0())) {
                 return M0((Spliterator.c) t1.v0(spliterator), this.l, this.m, p0);
             }
-            return ((R1) new e(this, t1, spliterator, CLASSNAMEv0.a, this.l, this.m).invoke()).spliterator();
+            return ((R1) new e(this, t1, spliterator, CLASSNAMEu0.var_a, this.l, this.m).invoke()).spliterator();
         }
 
         /* access modifiers changed from: package-private */
@@ -331,7 +331,7 @@ final class B2 {
                     long j2 = this.c;
                     if (j2 > 0) {
                         this.c = j2 - 1;
-                        this.a.accept(d2);
+                        this.var_a.accept(d2);
                         return;
                     }
                     return;
@@ -340,11 +340,11 @@ final class B2 {
             }
 
             public void n(long j) {
-                this.a.n(B2.c(j, d.this.l, this.c));
+                this.var_a.n(B2.c(j, d.this.l, this.c));
             }
 
             public boolean p() {
-                return this.c == 0 || this.a.p();
+                return this.c == 0 || this.var_a.p();
             }
         }
 
@@ -384,7 +384,7 @@ final class B2 {
             if (!T2.ORDERED.d(t1.r0())) {
                 return M0((Spliterator.a) t1.v0(spliterator), this.l, this.m, p0);
             }
-            return ((R1) new e(this, t1, spliterator, CLASSNAMEw0.a, this.l, this.m).invoke()).spliterator();
+            return ((R1) new e(this, t1, spliterator, CLASSNAMEv0.var_a, this.l, this.m).invoke()).spliterator();
         }
 
         /* access modifiers changed from: package-private */
@@ -453,19 +453,19 @@ final class B2 {
                     j2 = this.j.p0(this.b);
                 }
                 R1.a s0 = this.j.s0(j2, this.k);
-                A2 G0 = this.j.G0(this.a.r0(), s0);
-                T1 t1 = this.a;
+                A2 G0 = this.j.G0(this.var_a.r0(), s0);
+                T1 t1 = this.var_a;
                 t1.n0(t1.u0(G0), this.b);
                 return s0.a();
             }
-            T1 t12 = this.a;
+            T1 t12 = this.var_a;
             R1.a s02 = t12.s0(-1, this.k);
             t12.t0(s02, this.b);
-            R1 a = s02.a();
-            this.n = a.count();
+            R1 a2 = s02.a();
+            this.n = a2.count();
             this.o = true;
             this.b = null;
-            return a;
+            return a2;
         }
 
         /* access modifiers changed from: protected */

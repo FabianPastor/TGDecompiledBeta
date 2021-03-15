@@ -5,10 +5,12 @@ import j$.util.function.Consumer;
 import j$.util.k;
 
 public final /* synthetic */ class N0 implements A2 {
-    public final /* synthetic */ Consumer a;
+
+    /* renamed from: a  reason: collision with root package name */
+    public final /* synthetic */ Consumer var_a;
 
     public /* synthetic */ N0(Consumer consumer) {
-        this.a = consumer;
+        this.var_a = consumer;
     }
 
     public /* synthetic */ void accept(double d) {
@@ -27,7 +29,7 @@ public final /* synthetic */ class N0 implements A2 {
     }
 
     public final void accept(Object obj) {
-        this.a.accept(obj);
+        this.var_a.accept(obj);
     }
 
     public Consumer f(Consumer consumer) {

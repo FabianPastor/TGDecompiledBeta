@@ -1,15 +1,16 @@
 package j$.util.stream;
 
-import j$.util.function.J;
-import j$.util.stream.CLASSNAMEu1;
+import j$.util.function.B;
 
-public final /* synthetic */ class Y implements J {
-    public static final /* synthetic */ Y a = new Y();
+public final /* synthetic */ class Y implements B {
+
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ Y var_a = new Y();
 
     private /* synthetic */ Y() {
     }
 
-    public final Object get() {
-        return new CLASSNAMEu1.b();
+    public final long applyAsLong(long j, long j2) {
+        return Math.min(j, j2);
     }
 }

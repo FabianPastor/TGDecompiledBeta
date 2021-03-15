@@ -6,34 +6,28 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Random;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DocumentObject;
-import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SvgHelper;
-import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeImageSize;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_getStickers;
-import org.telegram.tgnet.TLRPC$TL_messages_stickers;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 
-public class ChatGreetingsView extends LinearLayout {
+public class ChatGreetingsView extends LinearLayout implements NotificationCenter.NotificationCenterDelegate {
+    private final int currentAccount;
     private TextView descriptionView;
     boolean ignoreLayot;
     private Listener listener;
+    private TLRPC$Document preloadedGreetingsSticker;
     public BackupImageView stickerToSendView;
     private TextView titleView;
 
@@ -41,9 +35,10 @@ public class ChatGreetingsView extends LinearLayout {
         void onGreetings(TLRPC$Document tLRPC$Document);
     }
 
-    public ChatGreetingsView(Context context, TLRPC$User tLRPC$User, int i, TLRPC$Document tLRPC$Document) {
+    public ChatGreetingsView(Context context, TLRPC$User tLRPC$User, int i, int i2, TLRPC$Document tLRPC$Document) {
         super(context);
         setOrientation(1);
+        this.currentAccount = i2;
         TextView textView = new TextView(context);
         this.titleView = textView;
         textView.setTextSize(1, 14.0f);
@@ -65,43 +60,15 @@ public class ChatGreetingsView extends LinearLayout {
             this.titleView.setText(LocaleController.formatString("NearbyPeopleGreetingsMessage", NUM, tLRPC$User.first_name, LocaleController.formatDistance((float) i, 1)));
             this.descriptionView.setText(LocaleController.getString("NearbyPeopleGreetingsDescription", NUM));
         }
+        this.preloadedGreetingsSticker = tLRPC$Document;
         if (tLRPC$Document == null) {
-            TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers = new TLRPC$TL_messages_getStickers();
-            tLRPC$TL_messages_getStickers.emoticon = "👋" + Emoji.fixEmoji("⭐");
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_getStickers, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ChatGreetingsView.this.lambda$new$1$ChatGreetingsView(tLObject, tLRPC$TL_error);
-                }
-            });
-            return;
-        }
-        lambda$null$0(tLRPC$Document);
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$ChatGreetingsView(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        if (tLObject instanceof TLRPC$TL_messages_stickers) {
-            ArrayList<TLRPC$Document> arrayList = ((TLRPC$TL_messages_stickers) tLObject).stickers;
-            if (!arrayList.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new Runnable(arrayList.get(Math.abs(new Random().nextInt() % arrayList.size()))) {
-                    public final /* synthetic */ TLRPC$Document f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        ChatGreetingsView.this.lambda$null$0$ChatGreetingsView(this.f$1);
-                    }
-                });
-            }
+            MessagesController.getInstance(i2).preloadGreetingsSticker();
+        } else {
+            setSticker(tLRPC$Document);
         }
     }
 
-    /* access modifiers changed from: private */
-    /* renamed from: setSticker */
-    public void lambda$null$0(TLRPC$Document tLRPC$Document) {
+    private void setSticker(TLRPC$Document tLRPC$Document) {
         SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document, "chat_serviceBackground", 1.0f);
         if (svgThumb != null) {
             this.stickerToSendView.setImage(ImageLocation.getForDocument(tLRPC$Document), createFilter(tLRPC$Document), (Drawable) svgThumb, 0, (Object) tLRPC$Document);
@@ -116,14 +83,14 @@ public class ChatGreetingsView extends LinearLayout {
             }
 
             public final void onClick(View view) {
-                ChatGreetingsView.this.lambda$setSticker$2$ChatGreetingsView(this.f$1, view);
+                ChatGreetingsView.this.lambda$setSticker$0$ChatGreetingsView(this.f$1, view);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setSticker$2 */
-    public /* synthetic */ void lambda$setSticker$2$ChatGreetingsView(TLRPC$Document tLRPC$Document, View view) {
+    /* renamed from: lambda$setSticker$0 */
+    public /* synthetic */ void lambda$setSticker$0$ChatGreetingsView(TLRPC$Document tLRPC$Document, View view) {
         Listener listener2 = this.listener;
         if (listener2 != null) {
             listener2.onGreetings(tLRPC$Document);
@@ -211,5 +178,32 @@ public class ChatGreetingsView extends LinearLayout {
         if (!this.ignoreLayot) {
             super.requestLayout();
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        fetchSticker();
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.greetingsStickerLoaded);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.greetingsStickerLoaded);
+    }
+
+    private void fetchSticker() {
+        if (this.preloadedGreetingsSticker == null) {
+            TLRPC$Document preloadedSticker = MessagesController.getInstance(this.currentAccount).getPreloadedSticker();
+            this.preloadedGreetingsSticker = preloadedSticker;
+            if (preloadedSticker != null) {
+                setSticker(preloadedSticker);
+            }
+        }
+    }
+
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        fetchSticker();
     }
 }

@@ -21,19 +21,19 @@ final class R2<T> extends F2<T> {
     public void m() {
         int i = 0;
         Arrays.sort(this.d, 0, this.e, this.b);
-        this.a.n((long) this.e);
+        this.var_a.n((long) this.e);
         if (!this.c) {
             while (i < this.e) {
-                this.a.accept(this.d[i]);
+                this.var_a.accept(this.d[i]);
                 i++;
             }
         } else {
-            while (i < this.e && !this.a.p()) {
-                this.a.accept(this.d[i]);
+            while (i < this.e && !this.var_a.p()) {
+                this.var_a.accept(this.d[i]);
                 i++;
             }
         }
-        this.a.m();
+        this.var_a.m();
         this.d = null;
     }
 

@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.Y;
+import a.Y;
 import j$.util.function.CLASSNAMEg;
 import j$.util.function.w;
 import j$.util.function.y;
@@ -18,8 +18,8 @@ class J1 extends M1<Integer> implements A2.f {
     }
 
     public void accept(int i) {
-        if (!this.a && ((Y) this.d).b(i) == this.c.a) {
-            this.a = true;
+        if (!this.var_a && ((Y) this.d).b(i) == this.c.var_a) {
+            this.var_a = true;
             this.b = this.c.b;
         }
     }

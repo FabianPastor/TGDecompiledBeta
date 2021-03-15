@@ -47,7 +47,7 @@ public class VoIPController {
     protected long nativeInst = nativeInit(new File(ApplicationLoader.applicationContext.getFilesDir(), "voip_persistent_state.json").getAbsolutePath());
 
     public interface ConnectionStateListener {
-        void onConnectionStateChanged(int i);
+        void onConnectionStateChanged(int i, boolean z);
 
         void onSignalBarCountChanged(int i);
     }
@@ -149,7 +149,7 @@ public class VoIPController {
         }
         ConnectionStateListener connectionStateListener = this.listener;
         if (connectionStateListener != null) {
-            connectionStateListener.onConnectionStateChanged(i);
+            connectionStateListener.onConnectionStateChanged(i, false);
         }
     }
 

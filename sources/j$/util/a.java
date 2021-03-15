@@ -1,9 +1,9 @@
 package j$.util;
 
-import j$.E0;
-import j$.G0;
-import j$.I0;
-import j$.P;
+import a.E0;
+import a.G0;
+import a.I0;
+import a.P;
 import j$.util.Comparator;
 import j$.util.function.Function;
 import java.io.Serializable;
@@ -13,14 +13,16 @@ import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
 
 public final /* synthetic */ class a implements Comparator, Serializable {
-    public final /* synthetic */ Function a;
+
+    /* renamed from: a  reason: collision with root package name */
+    public final /* synthetic */ Function var_a;
 
     public /* synthetic */ a(Function function) {
-        this.a = function;
+        this.var_a = function;
     }
 
     public final int compare(Object obj, Object obj2) {
-        Function function = this.a;
+        Function function = this.var_a;
         return ((Comparable) function.apply(obj)).compareTo(function.apply(obj2));
     }
 

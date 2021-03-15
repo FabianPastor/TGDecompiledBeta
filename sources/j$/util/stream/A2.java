@@ -13,11 +13,13 @@ import j$.util.k;
 interface A2<T> extends Consumer<T> {
 
     public static abstract class a<E_OUT> implements e {
-        protected final A2 a;
+
+        /* renamed from: a  reason: collision with root package name */
+        protected final A2 var_a;
 
         public a(A2 a2) {
             a2.getClass();
-            this.a = a2;
+            this.var_a = a2;
         }
 
         public /* synthetic */ void accept(int i) {
@@ -46,24 +48,26 @@ interface A2<T> extends Consumer<T> {
         }
 
         public void m() {
-            this.a.m();
+            this.var_a.m();
         }
 
         public void n(long j) {
-            this.a.n(j);
+            this.var_a.n(j);
         }
 
         public boolean p() {
-            return this.a.p();
+            return this.var_a.p();
         }
     }
 
     public static abstract class b<E_OUT> implements f {
-        protected final A2 a;
+
+        /* renamed from: a  reason: collision with root package name */
+        protected final A2 var_a;
 
         public b(A2 a2) {
             a2.getClass();
-            this.a = a2;
+            this.var_a = a2;
         }
 
         public /* synthetic */ void accept(double d) {
@@ -92,24 +96,26 @@ interface A2<T> extends Consumer<T> {
         }
 
         public void m() {
-            this.a.m();
+            this.var_a.m();
         }
 
         public void n(long j) {
-            this.a.n(j);
+            this.var_a.n(j);
         }
 
         public boolean p() {
-            return this.a.p();
+            return this.var_a.p();
         }
     }
 
     public static abstract class c<E_OUT> implements g {
-        protected final A2 a;
+
+        /* renamed from: a  reason: collision with root package name */
+        protected final A2 var_a;
 
         public c(A2 a2) {
             a2.getClass();
-            this.a = a2;
+            this.var_a = a2;
         }
 
         public /* synthetic */ void accept(double d) {
@@ -138,24 +144,26 @@ interface A2<T> extends Consumer<T> {
         }
 
         public void m() {
-            this.a.m();
+            this.var_a.m();
         }
 
         public void n(long j) {
-            this.a.n(j);
+            this.var_a.n(j);
         }
 
         public boolean p() {
-            return this.a.p();
+            return this.var_a.p();
         }
     }
 
     public static abstract class d<T, E_OUT> implements A2<T> {
-        protected final A2 a;
+
+        /* renamed from: a  reason: collision with root package name */
+        protected final A2 var_a;
 
         public d(A2 a2) {
             a2.getClass();
-            this.a = a2;
+            this.var_a = a2;
         }
 
         public /* synthetic */ void accept(double d) {
@@ -179,15 +187,15 @@ interface A2<T> extends Consumer<T> {
         }
 
         public void m() {
-            this.a.m();
+            this.var_a.m();
         }
 
         public void n(long j) {
-            this.a.n(j);
+            this.var_a.n(j);
         }
 
         public boolean p() {
-            return this.a.p();
+            return this.var_a.p();
         }
     }
 

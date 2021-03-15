@@ -1,19 +1,21 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEg;
-import j$.util.function.w;
+import j$.util.function.C;
+import j$.util.function.CLASSNAMEh;
 
-public final /* synthetic */ class D0 implements w {
-    public static final /* synthetic */ D0 a = new D0();
+public final /* synthetic */ class D0 implements C {
+
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ D0 var_a = new D0();
 
     private /* synthetic */ D0() {
     }
 
-    public final void accept(int i) {
+    public final void accept(long j) {
     }
 
-    public w l(w wVar) {
-        wVar.getClass();
-        return new CLASSNAMEg(this, wVar);
+    public C g(C c) {
+        c.getClass();
+        return new CLASSNAMEh(this, c);
     }
 }

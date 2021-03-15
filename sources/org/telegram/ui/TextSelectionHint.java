@@ -24,7 +24,9 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 
 class TextSelectionHint extends View {
-    Animator a;
+
+    /* renamed from: a  reason: collision with root package name */
+    Animator f4a;
     int animateToEnd;
     int animateToStart;
     int currentEnd;
@@ -68,10 +70,10 @@ class TextSelectionHint extends View {
     public void onMeasure(int i, int i2) {
         super.onMeasure(i, i2);
         if (getMeasuredWidth() != this.lastW || this.textLayout == null) {
-            Animator animator = this.a;
+            Animator animator = this.f4a;
             if (animator != null) {
                 animator.removeAllListeners();
-                this.a.cancel();
+                this.f4a.cancel();
             }
             String string = LocaleController.getString("TextSelectionHit", NUM);
             Matcher matcher = Pattern.compile("\\*\\*.*\\*\\*").matcher(string);
@@ -262,10 +264,10 @@ class TextSelectionHint extends View {
 
     public void show() {
         AndroidUtilities.cancelRunOnUIThread(this.dismissTunnable);
-        Animator animator = this.a;
+        Animator animator = this.f4a;
         if (animator != null) {
             animator.removeAllListeners();
-            this.a.cancel();
+            this.f4a.cancel();
         }
         if (getMeasuredHeight() == 0 || getMeasuredWidth() == 0) {
             this.showOnMeasure = true;
@@ -317,7 +319,7 @@ class TextSelectionHint extends View {
         ofFloat4.setDuration(900);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playSequentially(new Animator[]{ofFloat, ofFloat2, ofFloat3, ofFloat4});
-        this.a = animatorSet;
+        this.f4a = animatorSet;
         animatorSet.start();
         AndroidUtilities.runOnUIThread(this.dismissTunnable, 5000);
     }
@@ -363,10 +365,10 @@ class TextSelectionHint extends View {
 
     /* access modifiers changed from: private */
     public void hideInternal() {
-        Animator animator = this.a;
+        Animator animator = this.f4a;
         if (animator != null) {
             animator.removeAllListeners();
-            this.a.cancel();
+            this.f4a.cancel();
         }
         this.showing = false;
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.prepareProgress, 0.0f});
@@ -380,7 +382,7 @@ class TextSelectionHint extends View {
                 TextSelectionHint.this.setVisibility(4);
             }
         });
-        this.a = ofFloat;
+        this.f4a = ofFloat;
         ofFloat.start();
     }
 

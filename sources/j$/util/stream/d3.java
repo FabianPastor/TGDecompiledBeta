@@ -16,7 +16,9 @@ import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicLong;
 
 abstract class d3<T, T_SPLITR extends Spliterator<T>> {
-    protected final Spliterator a;
+
+    /* renamed from: a  reason: collision with root package name */
+    protected final Spliterator var_a;
     protected final boolean b;
     private final long c;
     private final AtomicLong d;
@@ -178,7 +180,7 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
                         dVar.b = 0;
                     }
                     long j = 0;
-                    while (((Spliterator.d) this.a).tryAdvance(dVar)) {
+                    while (((Spliterator.d) this.var_a).tryAdvance(dVar)) {
                         j++;
                         if (j >= 128) {
                             break;
@@ -190,7 +192,7 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
                         return;
                     }
                 } else {
-                    ((Spliterator.d) this.a).forEachRemaining(obj);
+                    ((Spliterator.d) this.var_a).forEachRemaining(obj);
                     return;
                 }
             }
@@ -214,7 +216,7 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
         /* renamed from: tryAdvance */
         public boolean o(Object obj) {
             obj.getClass();
-            while (s() != f.NO_MORE && ((Spliterator.d) this.a).tryAdvance(this)) {
+            while (s() != f.NO_MORE && ((Spliterator.d) this.var_a).tryAdvance(this)) {
                 if (q(1) == 1) {
                     t(obj);
                     return true;
@@ -244,7 +246,7 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
 
         public boolean b(Consumer consumer) {
             consumer.getClass();
-            while (s() != f.NO_MORE && this.a.b(this)) {
+            while (s() != f.NO_MORE && this.var_a.b(this)) {
                 if (q(1) == 1) {
                     consumer.accept(this.e);
                     this.e = null;
@@ -271,10 +273,10 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
                     if (eVar == null) {
                         eVar = new X2.e(128);
                     } else {
-                        eVar.a = 0;
+                        eVar.var_a = 0;
                     }
                     long j = 0;
-                    while (this.a.b(eVar)) {
+                    while (this.var_a.b(eVar)) {
                         j++;
                         if (j >= 128) {
                             break;
@@ -289,7 +291,7 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
                         return;
                     }
                 } else {
-                    this.a.forEachRemaining(consumer);
+                    this.var_a.forEachRemaining(consumer);
                     return;
                 }
             }
@@ -320,7 +322,7 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
     }
 
     d3(Spliterator spliterator, long j, long j2) {
-        this.a = spliterator;
+        this.var_a = spliterator;
         long j3 = 0;
         int i = (j2 > 0 ? 1 : (j2 == 0 ? 0 : -1));
         this.b = i < 0;
@@ -329,18 +331,18 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
     }
 
     d3(Spliterator spliterator, d3 d3Var) {
-        this.a = spliterator;
+        this.var_a = spliterator;
         this.b = d3Var.b;
         this.d = d3Var.d;
         this.c = d3Var.c;
     }
 
     public final int characteristics() {
-        return this.a.characteristics() & -16465;
+        return this.var_a.characteristics() & -16465;
     }
 
     public final long estimateSize() {
-        return this.a.estimateSize();
+        return this.var_a.estimateSize();
     }
 
     /* access modifiers changed from: protected */
@@ -400,7 +402,7 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
 
     public final Spliterator trySplit() {
         Spliterator trySplit;
-        if (this.d.get() == 0 || (trySplit = this.a.trySplit()) == null) {
+        if (this.d.get() == 0 || (trySplit = this.var_a.trySplit()) == null) {
             return null;
         }
         return r(trySplit);

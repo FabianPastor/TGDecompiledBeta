@@ -17,26 +17,26 @@ final class G2 extends C2 {
     public void m() {
         double[] dArr = (double[]) this.c.e();
         Arrays.sort(dArr);
-        this.a.n((long) dArr.length);
+        this.var_a.n((long) dArr.length);
         int i = 0;
         if (!this.b) {
             int length = dArr.length;
             while (i < length) {
-                this.a.accept(dArr[i]);
+                this.var_a.accept(dArr[i]);
                 i++;
             }
         } else {
             int length2 = dArr.length;
             while (i < length2) {
                 double d = dArr[i];
-                if (this.a.p()) {
+                if (this.var_a.p()) {
                     break;
                 }
-                this.a.accept(d);
+                this.var_a.accept(d);
                 i++;
             }
         }
-        this.a.m();
+        this.var_a.m();
     }
 
     public void n(long j) {

@@ -3804,7 +3804,6 @@
     <string name="VoipGroupOfflineAirplane">Derzeit nutzt du den Flugmodus, deaktiviere diesen oder verbinde dich mit einem W-LAN, um Sprachchats teilzunehmen.</string>
     <string name="VoipGroupOnlyAdminsCanSpeak">Neue sind stumm</string>
     <string name="VoipGroupOpenVoiceChat">Sprachchat öffnen</string>
-    <string name="VoipGroupRemoveMemberAlertText">%1$s wirklich aus der Gruppe entfernen?</string>
     <string name="VoipGroupRemoveMemberAlertTitle">Mitglied entfernen</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s** aus der Gruppe entfernt.</string>
     <string name="VoipGroupSearchMembers">Mitglieder zum Anruf hinzufügen</string>

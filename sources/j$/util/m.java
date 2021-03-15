@@ -4,7 +4,9 @@ import j$.util.function.CLASSNAMEf;
 import j$.util.function.q;
 
 public class m implements q {
-    private double a;
+
+    /* renamed from: a  reason: collision with root package name */
+    private double var_a;
     private double b;
     private long count;
     private double max = Double.NEGATIVE_INFINITY;
@@ -12,10 +14,10 @@ public class m implements q {
     private double sum;
 
     private void d(double d) {
-        double d2 = d - this.a;
+        double d2 = d - this.var_a;
         double d3 = this.sum;
         double d4 = d3 + d2;
-        this.a = (d4 - d3) - d2;
+        this.var_a = (d4 - d3) - d2;
         this.sum = d4;
     }
 
@@ -31,13 +33,13 @@ public class m implements q {
         this.count += mVar.count;
         this.b += mVar.b;
         d(mVar.sum);
-        d(mVar.a);
+        d(mVar.var_a);
         this.min = Math.min(this.min, mVar.min);
         this.max = Math.max(this.max, mVar.max);
     }
 
     public final double c() {
-        double d = this.sum + this.a;
+        double d = this.sum + this.var_a;
         return (!Double.isNaN(d) || !Double.isInfinite(this.b)) ? d : this.b;
     }
 

@@ -3804,7 +3804,6 @@
     <string name="VoipGroupOfflineAirplane">Je hebt vliegtuigmodus ingeschakeld. Schakel vliegtuigmodus uit of verbind met Wi-Fi om deel te nemen aan spraakchats.</string>
     <string name="VoipGroupOnlyAdminsCanSpeak">Nieuwe deelnemers zijn gedempt</string>
     <string name="VoipGroupOpenVoiceChat">Spraakchat openen</string>
-    <string name="VoipGroupRemoveMemberAlertText">Wil je %1$s van de groepschat verwijderen?</string>
     <string name="VoipGroupRemoveMemberAlertTitle">Lid verwijderen</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s** verwijderd van de groep.</string>
     <string name="VoipGroupSearchMembers">Zoek leden om uit te nodigen...</string>

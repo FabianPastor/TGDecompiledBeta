@@ -3804,7 +3804,6 @@
     <string name="VoipGroupOfflineAirplane">Al momento la modalità aereo è attiva. Disattivala o connettiti al Wi-Fi per partecipare alle chat vocali.</string>
     <string name="VoipGroupOnlyAdminsCanSpeak">Nuovi partecipanti silenziati</string>
     <string name="VoipGroupOpenVoiceChat">Apri chat vocale</string>
-    <string name="VoipGroupRemoveMemberAlertText">Vuoi rimuovere %1$s dalla chat di gruppo?</string>
     <string name="VoipGroupRemoveMemberAlertTitle">Rimuovi membro</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s** rimosso dal gruppo.</string>
     <string name="VoipGroupSearchMembers">Cerca membri da invitare...</string>

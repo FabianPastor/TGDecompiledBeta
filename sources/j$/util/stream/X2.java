@@ -10,7 +10,9 @@ import j$.util.function.q;
 import j$.util.function.w;
 
 abstract class X2 {
-    int a;
+
+    /* renamed from: a  reason: collision with root package name */
+    int var_a;
 
     static final class a extends d<q> implements q {
         final double[] c;
@@ -113,8 +115,8 @@ abstract class X2 {
 
         public void accept(Object obj) {
             Object[] objArr = this.b;
-            int i = this.a;
-            this.a = i + 1;
+            int i = this.var_a;
+            this.var_a = i + 1;
             objArr[i] = obj;
         }
 

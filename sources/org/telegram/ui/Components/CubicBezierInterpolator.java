@@ -9,14 +9,16 @@ public class CubicBezierInterpolator implements Interpolator {
     public static final CubicBezierInterpolator EASE_IN = new CubicBezierInterpolator(0.42d, 0.0d, 1.0d, 1.0d);
     public static final CubicBezierInterpolator EASE_OUT = new CubicBezierInterpolator(0.0d, 0.0d, 0.58d, 1.0d);
     public static final CubicBezierInterpolator EASE_OUT_QUINT = new CubicBezierInterpolator(0.23d, 1.0d, 0.32d, 1.0d);
-    protected PointF a;
+
+    /* renamed from: a  reason: collision with root package name */
+    protected PointF f1a;
     protected PointF b;
     protected PointF c;
     protected PointF end;
     protected PointF start;
 
     public CubicBezierInterpolator(PointF pointF, PointF pointF2) throws IllegalArgumentException {
-        this.a = new PointF();
+        this.f1a = new PointF();
         this.b = new PointF();
         this.c = new PointF();
         float f = pointF.x;
@@ -52,7 +54,7 @@ public class CubicBezierInterpolator implements Interpolator {
         PointF pointF3 = this.b;
         float f3 = ((this.end.y - pointF2.y) * 3.0f) - f2;
         pointF3.y = f3;
-        PointF pointF4 = this.a;
+        PointF pointF4 = this.f1a;
         float f4 = (1.0f - pointF.y) - f3;
         pointF4.y = f4;
         return f * (pointF.y + ((pointF3.y + (f4 * f)) * f));
@@ -72,7 +74,7 @@ public class CubicBezierInterpolator implements Interpolator {
     }
 
     private float getXDerivate(float f) {
-        return this.c.x + (f * ((this.b.x * 2.0f) + (this.a.x * 3.0f * f)));
+        return this.c.x + (f * ((this.b.x * 2.0f) + (this.f1a.x * 3.0f * f)));
     }
 
     private float getBezierCoordinateX(float f) {
@@ -83,7 +85,7 @@ public class CubicBezierInterpolator implements Interpolator {
         PointF pointF3 = this.b;
         float f3 = ((this.end.x - pointF2.x) * 3.0f) - f2;
         pointF3.x = f3;
-        PointF pointF4 = this.a;
+        PointF pointF4 = this.f1a;
         float f4 = (1.0f - pointF.x) - f3;
         pointF4.x = f4;
         return f * (pointF.x + ((pointF3.x + (f4 * f)) * f));

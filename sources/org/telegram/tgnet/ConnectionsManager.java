@@ -309,8 +309,8 @@ public class ConnectionsManager extends BaseController {
         return sendRequest(tLObject, requestDelegate, (RequestDelegateTimestamp) null, (QuickAckDelegate) null, (WriteToSocketDelegate) null, i, Integer.MAX_VALUE, i2, true);
     }
 
-    public int sendRequest(TLObject tLObject, RequestDelegateTimestamp requestDelegateTimestamp, int i, int i2) {
-        return sendRequest(tLObject, (RequestDelegate) null, requestDelegateTimestamp, (QuickAckDelegate) null, (WriteToSocketDelegate) null, i, Integer.MAX_VALUE, i2, true);
+    public int sendRequest(TLObject tLObject, RequestDelegateTimestamp requestDelegateTimestamp, int i, int i2, int i3) {
+        return sendRequest(tLObject, (RequestDelegate) null, requestDelegateTimestamp, (QuickAckDelegate) null, (WriteToSocketDelegate) null, i, i3, i2, true);
     }
 
     public int sendRequest(TLObject tLObject, RequestDelegate requestDelegate, QuickAckDelegate quickAckDelegate, int i) {

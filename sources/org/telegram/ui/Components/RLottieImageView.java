@@ -1,6 +1,7 @@
 package org.telegram.ui.Components;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +62,15 @@ public class RLottieImageView extends ImageView {
         }
         this.drawable.setAllowDecodeSingleFrame(true);
         setImageDrawable(this.drawable);
+    }
+
+    public void clearAnimationDrawable() {
+        RLottieDrawable rLottieDrawable = this.drawable;
+        if (rLottieDrawable != null) {
+            rLottieDrawable.stop();
+        }
+        this.drawable = null;
+        setImageDrawable((Drawable) null);
     }
 
     /* access modifiers changed from: protected */

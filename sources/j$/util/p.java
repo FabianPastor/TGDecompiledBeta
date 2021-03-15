@@ -4,16 +4,18 @@ import java.util.NoSuchElementException;
 
 public final class p {
     private static final p c = new p();
-    private final boolean a;
+
+    /* renamed from: a  reason: collision with root package name */
+    private final boolean var_a;
     private final double b;
 
     private p() {
-        this.a = false;
+        this.var_a = false;
         this.b = Double.NaN;
     }
 
     private p(double d) {
-        this.a = true;
+        this.var_a = true;
         this.b = d;
     }
 
@@ -26,14 +28,14 @@ public final class p {
     }
 
     public double b() {
-        if (this.a) {
+        if (this.var_a) {
             return this.b;
         }
         throw new NoSuchElementException("No value present");
     }
 
     public boolean c() {
-        return this.a;
+        return this.var_a;
     }
 
     public boolean equals(Object obj) {
@@ -44,9 +46,9 @@ public final class p {
             return false;
         }
         p pVar = (p) obj;
-        boolean z = this.a;
-        if (!z || !pVar.a) {
-            if (z == pVar.a) {
+        boolean z = this.var_a;
+        if (!z || !pVar.var_a) {
+            if (z == pVar.var_a) {
                 return true;
             }
         } else if (Double.compare(this.b, pVar.b) == 0) {
@@ -56,14 +58,14 @@ public final class p {
     }
 
     public int hashCode() {
-        if (this.a) {
+        if (this.var_a) {
             return Double.doubleToLongBits(this.b);
         }
         return 0;
     }
 
     public String toString() {
-        if (!this.a) {
+        if (!this.var_a) {
             return "OptionalDouble.empty";
         }
         return String.format("OptionalDouble[%s]", new Object[]{Double.valueOf(this.b)});

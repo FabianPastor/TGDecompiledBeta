@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.CLASSNAMEm0;
+import a.CLASSNAMEm0;
 import j$.util.function.C;
 import j$.util.function.CLASSNAMEh;
 import j$.util.function.E;
@@ -18,8 +18,8 @@ class K1 extends M1<Long> implements A2.g {
     }
 
     public void accept(long j) {
-        if (!this.a && ((CLASSNAMEm0) this.d).b(j) == this.c.a) {
-            this.a = true;
+        if (!this.var_a && ((CLASSNAMEm0) this.d).b(j) == this.c.var_a) {
+            this.var_a = true;
             this.b = this.c.b;
         }
     }

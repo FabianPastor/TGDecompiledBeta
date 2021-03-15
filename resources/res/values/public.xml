@@ -751,6 +751,7 @@
     <public type="drawable" name="msg_go_up" id="NUM" />
     <public type="drawable" name="msg_halfcheck" id="NUM" />
     <public type="drawable" name="msg_halfcheck_s" id="NUM" />
+    <public type="drawable" name="msg_handdown" id="NUM" />
     <public type="drawable" name="msg_home" id="NUM" />
     <public type="drawable" name="msg_hybrid" id="NUM" />
     <public type="drawable" name="msg_instant" id="NUM" />
@@ -790,7 +791,6 @@
     <public type="drawable" name="msg_pollstop" id="NUM" />
     <public type="drawable" name="msg_psa" id="NUM" />
     <public type="drawable" name="msg_qrcode" id="NUM" />
-    <public type="drawable" name="msg_raisehand" id="NUM" />
     <public type="drawable" name="msg_removefolder" id="NUM" />
     <public type="drawable" name="msg_reorder" id="NUM" />
     <public type="drawable" name="msg_replace" id="NUM" />
@@ -1443,7 +1443,6 @@
     <public type="raw" name="gigagroup_convert" id="NUM" />
     <public type="raw" name="group_pip_delete_icon" id="NUM" />
     <public type="raw" name="hand_1" id="NUM" />
-    <public type="raw" name="hand_2" id="NUM" />
     <public type="raw" name="ic_admin" id="NUM" />
     <public type="raw" name="ic_ban" id="NUM" />
     <public type="raw" name="ic_delete" id="NUM" />
@@ -1485,6 +1484,13 @@
     <public type="raw" name="speaker" id="NUM" />
     <public type="raw" name="statistic_preload" id="NUM" />
     <public type="raw" name="sun" id="NUM" />
+    <public type="raw" name="swipe_delete" id="NUM" />
+    <public type="raw" name="swipe_mute" id="NUM" />
+    <public type="raw" name="swipe_pin" id="NUM" />
+    <public type="raw" name="swipe_read" id="NUM" />
+    <public type="raw" name="swipe_unmute" id="NUM" />
+    <public type="raw" name="swipe_unpin" id="NUM" />
+    <public type="raw" name="swipe_unread" id="NUM" />
     <public type="raw" name="ticks_double" id="NUM" />
     <public type="raw" name="ticks_single" id="NUM" />
     <public type="raw" name="tsv_monkey_close" id="NUM" />
@@ -1514,7 +1520,7 @@
     <public type="raw" name="voip_group_removed" id="NUM" />
     <public type="raw" name="voip_invite" id="NUM" />
     <public type="raw" name="voip_muted" id="NUM" />
-    <public type="raw" name="voip_record" id="NUM" />
+    <public type="raw" name="voip_record_start" id="NUM" />
     <public type="raw" name="voip_ringback" id="NUM" />
     <public type="raw" name="voip_unmuted" id="NUM" />
     <public type="raw" name="wallet_allset" id="NUM" />
@@ -1701,13 +1707,14 @@
     <public type="string" name="ActionCreateChannel" id="NUM" />
     <public type="string" name="ActionCreateGroup" id="NUM" />
     <public type="string" name="ActionCreateMega" id="NUM" />
-    <public type="string" name="ActionCreatedInviteLink" id="NUM" />
-    <public type="string" name="ActionDeletedInviteLink" id="NUM" />
-    <public type="string" name="ActionEditedInviteLink" id="NUM" />
-    <public type="string" name="ActionEditedInviteLinkToSame" id="NUM" />
+    <public type="string" name="ActionCreatedInviteLinkClickable" id="NUM" />
+    <public type="string" name="ActionDeletedInviteLinkClickable" id="NUM" />
+    <public type="string" name="ActionEditedInviteLinkClickable" id="NUM" />
+    <public type="string" name="ActionEditedInviteLinkToSameClickable" id="NUM" />
     <public type="string" name="ActionGroupCallEnded" id="NUM" />
     <public type="string" name="ActionGroupCallInvited" id="NUM" />
     <public type="string" name="ActionGroupCallInvitedYou" id="NUM" />
+    <public type="string" name="ActionGroupCallJustStarted" id="NUM" />
     <public type="string" name="ActionGroupCallStarted" id="NUM" />
     <public type="string" name="ActionGroupCallStartedByYou" id="NUM" />
     <public type="string" name="ActionGroupCallYouInvited" id="NUM" />
@@ -1735,7 +1742,7 @@
     <public type="string" name="ActionPinnedVideo" id="NUM" />
     <public type="string" name="ActionPinnedVoice" id="NUM" />
     <public type="string" name="ActionRemovedPhoto" id="NUM" />
-    <public type="string" name="ActionRevokedInviteLink" id="NUM" />
+    <public type="string" name="ActionRevokedInviteLinkClickable" id="NUM" />
     <public type="string" name="ActionTTLChanged" id="NUM" />
     <public type="string" name="ActionTTLChannelChanged" id="NUM" />
     <public type="string" name="ActionTTLChannelDisabled" id="NUM" />
@@ -2228,6 +2235,9 @@
     <public type="string" name="CancelAccountResetInfo2" id="NUM" />
     <public type="string" name="CancelEmailQuestion" id="NUM" />
     <public type="string" name="CancelEmailQuestionTitle" id="NUM" />
+    <public type="string" name="CancelForward" id="NUM" />
+    <public type="string" name="CancelForwardMessage" id="NUM" />
+    <public type="string" name="CancelForwarding" id="NUM" />
     <public type="string" name="CancelLinkExpired" id="NUM" />
     <public type="string" name="CancelLinkSuccess" id="NUM" />
     <public type="string" name="CancelPasswordQuestion" id="NUM" />
@@ -2397,6 +2407,7 @@
     <public type="string" name="ChatList" id="NUM" />
     <public type="string" name="ChatListDefault" id="NUM" />
     <public type="string" name="ChatListExpanded" id="NUM" />
+    <public type="string" name="ChatListSwipeGesture" id="NUM" />
     <public type="string" name="ChatLocation" id="NUM" />
     <public type="string" name="ChatSetLocation" id="NUM" />
     <public type="string" name="ChatSetLocationInfo" id="NUM" />
@@ -3392,6 +3403,10 @@
     <public type="string" name="InteractionsChartTitle" id="NUM" />
     <public type="string" name="InternalFolderInfo" id="NUM" />
     <public type="string" name="InternalStorage" id="NUM" />
+    <public type="string" name="InvLinkToChats" id="NUM" />
+    <public type="string" name="InvLinkToGroup" id="NUM" />
+    <public type="string" name="InvLinkToSavedMessages" id="NUM" />
+    <public type="string" name="InvLinkToUser" id="NUM" />
     <public type="string" name="InvalidCode" id="NUM" />
     <public type="string" name="InvalidFirstName" id="NUM" />
     <public type="string" name="InvalidLastName" id="NUM" />
@@ -3512,6 +3527,7 @@
     <public type="string" name="LinkCreatedeBy" id="NUM" />
     <public type="string" name="LinkExpiresIn" id="NUM" />
     <public type="string" name="LinkExpiresInTime" id="NUM" />
+    <public type="string" name="LinkHashExpired" id="NUM" />
     <public type="string" name="LinkInUse" id="NUM" />
     <public type="string" name="LinkInfo" id="NUM" />
     <public type="string" name="LinkInfoChannel" id="NUM" />
@@ -4873,6 +4889,7 @@
     <public type="string" name="SelectFile" id="NUM" />
     <public type="string" name="SelectFromGallery" id="NUM" />
     <public type="string" name="SelectImage" id="NUM" />
+    <public type="string" name="SelectOtherChat" id="NUM" />
     <public type="string" name="Send" id="NUM" />
     <public type="string" name="SendAnonymously" id="NUM" />
     <public type="string" name="SendAsFile" id="NUM" />
@@ -5141,6 +5158,19 @@
     <public type="string" name="SuggestStickersNone" id="NUM" />
     <public type="string" name="Support" id="NUM" />
     <public type="string" name="SupportStatus" id="NUM" />
+    <public type="string" name="SwipeDeleteChat" id="NUM" />
+    <public type="string" name="SwipeMarkAsRead" id="NUM" />
+    <public type="string" name="SwipeMarkAsUnread" id="NUM" />
+    <public type="string" name="SwipeMute" id="NUM" />
+    <public type="string" name="SwipePin" id="NUM" />
+    <public type="string" name="SwipeSettingsArchive" id="NUM" />
+    <public type="string" name="SwipeSettingsDelete" id="NUM" />
+    <public type="string" name="SwipeSettingsFolders" id="NUM" />
+    <public type="string" name="SwipeSettingsMute" id="NUM" />
+    <public type="string" name="SwipeSettingsPin" id="NUM" />
+    <public type="string" name="SwipeSettingsRead" id="NUM" />
+    <public type="string" name="SwipeUnmute" id="NUM" />
+    <public type="string" name="SwipeUnpin" id="NUM" />
     <public type="string" name="SyncContacts" id="NUM" />
     <public type="string" name="SyncContactsAdded" id="NUM" />
     <public type="string" name="SyncContactsDelete" id="NUM" />
@@ -5552,6 +5582,7 @@
     <public type="string" name="VoipGroupJoinAs" id="NUM" />
     <public type="string" name="VoipGroupJoinCall" id="NUM" />
     <public type="string" name="VoipGroupJoinVoiceChatMessage" id="NUM" />
+    <public type="string" name="VoipGroupJoinVoiceChatUrl" id="NUM" />
     <public type="string" name="VoipGroupLeave" id="NUM" />
     <public type="string" name="VoipGroupLeaveAlertEndChat" id="NUM" />
     <public type="string" name="VoipGroupLeaveAlertText" id="NUM" />
@@ -5570,7 +5601,7 @@
     <public type="string" name="VoipGroupPersonalAccount" id="NUM" />
     <public type="string" name="VoipGroupRecordCall" id="NUM" />
     <public type="string" name="VoipGroupRecording" id="NUM" />
-    <public type="string" name="VoipGroupRemoveMemberAlertText" id="NUM" />
+    <public type="string" name="VoipGroupRemoveMemberAlertText2" id="NUM" />
     <public type="string" name="VoipGroupRemoveMemberAlertTitle" id="NUM" />
     <public type="string" name="VoipGroupRemovedFromGroup" id="NUM" />
     <public type="string" name="VoipGroupSaveFileHint" id="NUM" />

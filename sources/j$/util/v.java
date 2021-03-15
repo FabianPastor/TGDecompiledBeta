@@ -1,6 +1,6 @@
 package j$.util;
 
-import j$.CLASSNAMEz;
+import a.CLASSNAMEz;
 import j$.util.Iterator;
 import j$.util.Spliterator;
 import j$.util.function.C;
@@ -18,13 +18,17 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public final class v {
-    private static final Spliterator a = new g.d();
+
+    /* renamed from: a  reason: collision with root package name */
+    private static final Spliterator var_a = new g.d();
     private static final Spliterator.b b = new g.b();
     private static final Spliterator.c c = new g.c();
     private static final Spliterator.a d = new g.a();
 
     class a implements Iterator<T>, Consumer<T>, Iterator {
-        boolean a = false;
+
+        /* renamed from: a  reason: collision with root package name */
+        boolean var_a = false;
         Object b;
         final /* synthetic */ Spliterator c;
 
@@ -33,7 +37,7 @@ public final class v {
         }
 
         public void accept(Object obj) {
-            this.a = true;
+            this.var_a = true;
             this.b = obj;
         }
 
@@ -51,15 +55,15 @@ public final class v {
         }
 
         public boolean hasNext() {
-            if (!this.a) {
+            if (!this.var_a) {
                 this.c.b(this);
             }
-            return this.a;
+            return this.var_a;
         }
 
         public Object next() {
-            if (this.a || hasNext()) {
-                this.a = false;
+            if (this.var_a || hasNext()) {
+                this.var_a = false;
                 return this.b;
             }
             throw new NoSuchElementException();
@@ -72,7 +76,9 @@ public final class v {
     }
 
     class b implements t.b, w {
-        boolean a = false;
+
+        /* renamed from: a  reason: collision with root package name */
+        boolean var_a = false;
         int b;
         final /* synthetic */ Spliterator.b c;
 
@@ -81,7 +87,7 @@ public final class v {
         }
 
         public void accept(int i) {
-            this.a = true;
+            this.var_a = true;
             this.b = i;
         }
 
@@ -99,7 +105,7 @@ public final class v {
                 return;
             }
             consumer.getClass();
-            if (!w.a) {
+            if (!w.var_a) {
                 forEachRemaining(new h(consumer));
             } else {
                 w.a(b.class, "{0} calling PrimitiveIterator.OfInt.forEachRemainingInt(action::accept)");
@@ -108,10 +114,10 @@ public final class v {
         }
 
         public boolean hasNext() {
-            if (!this.a) {
+            if (!this.var_a) {
                 this.c.h(this);
             }
-            return this.a;
+            return this.var_a;
         }
 
         public w l(w wVar) {
@@ -120,7 +126,7 @@ public final class v {
         }
 
         public Integer next() {
-            if (!w.a) {
+            if (!w.var_a) {
                 return Integer.valueOf(nextInt());
             }
             w.a(b.class, "{0} calling PrimitiveIterator.OfInt.nextInt()");
@@ -128,8 +134,8 @@ public final class v {
         }
 
         public int nextInt() {
-            if (this.a || hasNext()) {
-                this.a = false;
+            if (this.var_a || hasNext()) {
+                this.var_a = false;
                 return this.b;
             }
             throw new NoSuchElementException();
@@ -142,7 +148,9 @@ public final class v {
     }
 
     class c implements t.c, C {
-        boolean a = false;
+
+        /* renamed from: a  reason: collision with root package name */
+        boolean var_a = false;
         long b;
         final /* synthetic */ Spliterator.c c;
 
@@ -151,7 +159,7 @@ public final class v {
         }
 
         public void accept(long j) {
-            this.a = true;
+            this.var_a = true;
             this.b = j;
         }
 
@@ -169,7 +177,7 @@ public final class v {
                 return;
             }
             consumer.getClass();
-            if (!w.a) {
+            if (!w.var_a) {
                 forEachRemaining(new g(consumer));
             } else {
                 w.a(c.class, "{0} calling PrimitiveIterator.OfLong.forEachRemainingLong(action::accept)");
@@ -183,14 +191,14 @@ public final class v {
         }
 
         public boolean hasNext() {
-            if (!this.a) {
+            if (!this.var_a) {
                 this.c.j(this);
             }
-            return this.a;
+            return this.var_a;
         }
 
         public Long next() {
-            if (!w.a) {
+            if (!w.var_a) {
                 return Long.valueOf(nextLong());
             }
             w.a(c.class, "{0} calling PrimitiveIterator.OfLong.nextLong()");
@@ -198,8 +206,8 @@ public final class v {
         }
 
         public long nextLong() {
-            if (this.a || hasNext()) {
-                this.a = false;
+            if (this.var_a || hasNext()) {
+                this.var_a = false;
                 return this.b;
             }
             throw new NoSuchElementException();
@@ -212,7 +220,9 @@ public final class v {
     }
 
     class d implements t.a, q {
-        boolean a = false;
+
+        /* renamed from: a  reason: collision with root package name */
+        boolean var_a = false;
         double b;
         final /* synthetic */ Spliterator.a c;
 
@@ -221,7 +231,7 @@ public final class v {
         }
 
         public void accept(double d) {
-            this.a = true;
+            this.var_a = true;
             this.b = d;
         }
 
@@ -239,7 +249,7 @@ public final class v {
                 return;
             }
             consumer.getClass();
-            if (!w.a) {
+            if (!w.var_a) {
                 forEachRemaining(new j(consumer));
             } else {
                 w.a(d.class, "{0} calling PrimitiveIterator.OfDouble.forEachRemainingDouble(action::accept)");
@@ -248,10 +258,10 @@ public final class v {
         }
 
         public boolean hasNext() {
-            if (!this.a) {
+            if (!this.var_a) {
                 this.c.o(this);
             }
-            return this.a;
+            return this.var_a;
         }
 
         public q k(q qVar) {
@@ -260,7 +270,7 @@ public final class v {
         }
 
         public Double next() {
-            if (!w.a) {
+            if (!w.var_a) {
                 return Double.valueOf(nextDouble());
             }
             w.a(d.class, "{0} calling PrimitiveIterator.OfDouble.nextLong()");
@@ -268,8 +278,8 @@ public final class v {
         }
 
         public double nextDouble() {
-            if (this.a || hasNext()) {
-                this.a = false;
+            if (this.var_a || hasNext()) {
+                this.var_a = false;
                 return this.b;
             }
             throw new NoSuchElementException();
@@ -282,13 +292,15 @@ public final class v {
     }
 
     static final class e<T> implements Spliterator<T> {
-        private final Object[] a;
+
+        /* renamed from: a  reason: collision with root package name */
+        private final Object[] var_a;
         private int b;
         private final int c;
         private final int d;
 
         public e(Object[] objArr, int i, int i2, int i3) {
-            this.a = objArr;
+            this.var_a = objArr;
             this.b = i;
             this.c = i2;
             this.d = i3 | 64 | 16384;
@@ -300,7 +312,7 @@ public final class v {
             if (i < 0 || i >= this.c) {
                 return false;
             }
-            Object[] objArr = this.a;
+            Object[] objArr = this.var_a;
             this.b = i + 1;
             consumer.accept(objArr[i]);
             return true;
@@ -317,7 +329,7 @@ public final class v {
         public void forEachRemaining(Consumer consumer) {
             int i;
             consumer.getClass();
-            Object[] objArr = this.a;
+            Object[] objArr = this.var_a;
             int length = objArr.length;
             int i2 = this.c;
             if (length >= i2 && (i = this.b) >= 0) {
@@ -352,20 +364,22 @@ public final class v {
             if (i >= i2) {
                 return null;
             }
-            Object[] objArr = this.a;
+            Object[] objArr = this.var_a;
             this.b = i2;
             return new e(objArr, i, i2, this.d);
         }
     }
 
     static final class f implements Spliterator.a {
-        private final double[] a;
+
+        /* renamed from: a  reason: collision with root package name */
+        private final double[] var_a;
         private int b;
         private final int c;
         private final int d;
 
         public f(double[] dArr, int i, int i2, int i3) {
-            this.a = dArr;
+            this.var_a = dArr;
             this.b = i;
             this.c = i2;
             this.d = i3 | 64 | 16384;
@@ -383,7 +397,7 @@ public final class v {
         public void forEachRemaining(q qVar) {
             int i;
             qVar.getClass();
-            double[] dArr = this.a;
+            double[] dArr = this.var_a;
             int length = dArr.length;
             int i2 = this.c;
             if (length >= i2 && (i = this.b) >= 0) {
@@ -427,7 +441,7 @@ public final class v {
             if (i < 0 || i >= this.c) {
                 return false;
             }
-            double[] dArr = this.a;
+            double[] dArr = this.var_a;
             this.b = i + 1;
             qVar.accept(dArr[i]);
             return true;
@@ -439,7 +453,7 @@ public final class v {
             if (i >= i2) {
                 return null;
             }
-            double[] dArr = this.a;
+            double[] dArr = this.var_a;
             this.b = i2;
             return new f(dArr, i, i2, this.d);
         }
@@ -601,13 +615,15 @@ public final class v {
     }
 
     static final class h implements Spliterator.b {
-        private final int[] a;
+
+        /* renamed from: a  reason: collision with root package name */
+        private final int[] var_a;
         private int b;
         private final int c;
         private final int d;
 
         public h(int[] iArr, int i, int i2, int i3) {
-            this.a = iArr;
+            this.var_a = iArr;
             this.b = i;
             this.c = i2;
             this.d = i3 | 64 | 16384;
@@ -621,7 +637,7 @@ public final class v {
         public void forEachRemaining(w wVar) {
             int i;
             wVar.getClass();
-            int[] iArr = this.a;
+            int[] iArr = this.var_a;
             int length = iArr.length;
             int i2 = this.c;
             if (length >= i2 && (i = this.b) >= 0) {
@@ -665,7 +681,7 @@ public final class v {
             if (i < 0 || i >= this.c) {
                 return false;
             }
-            int[] iArr = this.a;
+            int[] iArr = this.var_a;
             this.b = i + 1;
             wVar.accept(iArr[i]);
             return true;
@@ -681,27 +697,29 @@ public final class v {
             if (i >= i2) {
                 return null;
             }
-            int[] iArr = this.a;
+            int[] iArr = this.var_a;
             this.b = i2;
             return new h(iArr, i, i2, this.d);
         }
     }
 
     static class i<T> implements Spliterator<T> {
-        private final Collection a;
+
+        /* renamed from: a  reason: collision with root package name */
+        private final Collection var_a;
         private java.util.Iterator b;
         private final int c;
         private long d;
         private int e;
 
         public i(Collection collection, int i) {
-            this.a = collection;
+            this.var_a = collection;
             this.b = null;
             this.c = (i & 4096) == 0 ? i | 64 | 16384 : i;
         }
 
         public i(java.util.Iterator it, int i) {
-            this.a = null;
+            this.var_a = null;
             this.b = it;
             this.d = Long.MAX_VALUE;
             this.c = i & -16449;
@@ -710,8 +728,8 @@ public final class v {
         public boolean b(Consumer consumer) {
             consumer.getClass();
             if (this.b == null) {
-                this.b = this.a.iterator();
-                this.d = (long) this.a.size();
+                this.b = this.var_a.iterator();
+                this.d = (long) this.var_a.size();
             }
             if (!this.b.hasNext()) {
                 return false;
@@ -728,8 +746,8 @@ public final class v {
             if (this.b != null) {
                 return this.d;
             }
-            this.b = this.a.iterator();
-            long size = (long) this.a.size();
+            this.b = this.var_a.iterator();
+            long size = (long) this.var_a.size();
             this.d = size;
             return size;
         }
@@ -738,9 +756,9 @@ public final class v {
             consumer.getClass();
             java.util.Iterator it = this.b;
             if (it == null) {
-                it = this.a.iterator();
+                it = this.var_a.iterator();
                 this.b = it;
-                this.d = (long) this.a.size();
+                this.d = (long) this.var_a.size();
             }
             if (it instanceof Iterator) {
                 ((Iterator) it).forEachRemaining(consumer);
@@ -768,9 +786,9 @@ public final class v {
             long j;
             java.util.Iterator it = this.b;
             if (it == null) {
-                it = this.a.iterator();
+                it = this.var_a.iterator();
                 this.b = it;
-                j = (long) this.a.size();
+                j = (long) this.var_a.size();
                 this.d = j;
             } else {
                 j = this.d;
@@ -808,13 +826,15 @@ public final class v {
     }
 
     static final class j implements Spliterator.c {
-        private final long[] a;
+
+        /* renamed from: a  reason: collision with root package name */
+        private final long[] var_a;
         private int b;
         private final int c;
         private final int d;
 
         public j(long[] jArr, int i, int i2, int i3) {
-            this.a = jArr;
+            this.var_a = jArr;
             this.b = i;
             this.c = i2;
             this.d = i3 | 64 | 16384;
@@ -832,7 +852,7 @@ public final class v {
         public void forEachRemaining(C c2) {
             int i;
             c2.getClass();
-            long[] jArr = this.a;
+            long[] jArr = this.var_a;
             int length = jArr.length;
             int i2 = this.c;
             if (length >= i2 && (i = this.b) >= 0) {
@@ -876,7 +896,7 @@ public final class v {
             if (i < 0 || i >= this.c) {
                 return false;
             }
-            long[] jArr = this.a;
+            long[] jArr = this.var_a;
             this.b = i + 1;
             c2.accept(jArr[i]);
             return true;
@@ -888,7 +908,7 @@ public final class v {
             if (i >= i2) {
                 return null;
             }
-            long[] jArr = this.a;
+            long[] jArr = this.var_a;
             this.b = i2;
             return new j(jArr, i, i2, this.d);
         }
@@ -917,7 +937,7 @@ public final class v {
     }
 
     public static Spliterator e() {
-        return a;
+        return var_a;
     }
 
     public static t.a f(Spliterator.a aVar) {

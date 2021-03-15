@@ -71,7 +71,7 @@ public final class Instance {
     }
 
     public interface OnStateUpdatedListener {
-        void onStateUpdated(int i);
+        void onStateUpdated(int i, boolean z);
     }
 
     public static int getConnectionMaxLayer() {

@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.CLASSNAMEz;
+import a.CLASSNAMEz;
 import j$.lang.Iterable;
 import j$.util.Spliterator;
 import j$.util.function.C;
@@ -24,14 +24,16 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
     protected Object[][] f;
 
     class a implements Spliterator<E> {
-        int a;
+
+        /* renamed from: a  reason: collision with root package name */
+        int var_a;
         final int b;
         int c;
         final int d;
         Object[] e;
 
         a(int i, int i2, int i3, int i4) {
-            this.a = i;
+            this.var_a = i;
             this.b = i2;
             this.c = i3;
             this.d = i4;
@@ -41,7 +43,7 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
 
         public boolean b(Consumer consumer) {
             consumer.getClass();
-            int i = this.a;
+            int i = this.var_a;
             int i2 = this.b;
             if (i >= i2 && (i != i2 || this.c >= this.d)) {
                 return false;
@@ -52,8 +54,8 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
             consumer.accept(objArr[i3]);
             if (this.c == this.e.length) {
                 this.c = 0;
-                int i4 = this.a + 1;
-                this.a = i4;
+                int i4 = this.var_a + 1;
+                this.var_a = i4;
                 Object[][] objArr2 = S2.this.f;
                 if (objArr2 != null && i4 <= this.b) {
                     this.e = objArr2[i4];
@@ -67,7 +69,7 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
         }
 
         public long estimateSize() {
-            int i = this.a;
+            int i = this.var_a;
             int i2 = this.b;
             if (i == i2) {
                 return ((long) this.d) - ((long) this.c);
@@ -79,7 +81,7 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
         public void forEachRemaining(Consumer consumer) {
             int i;
             consumer.getClass();
-            int i2 = this.a;
+            int i2 = this.var_a;
             int i3 = this.b;
             if (i2 < i3 || (i2 == i3 && this.c < this.d)) {
                 int i4 = this.c;
@@ -96,13 +98,13 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
                     i4 = 0;
                     i2++;
                 }
-                Object[] objArr2 = this.a == i ? this.e : S2.this.f[i];
+                Object[] objArr2 = this.var_a == i ? this.e : S2.this.f[i];
                 int i5 = this.d;
                 while (i4 < i5) {
                     consumer.accept(objArr2[i4]);
                     i4++;
                 }
-                this.a = this.b;
+                this.var_a = this.b;
                 this.c = this.d;
             }
         }
@@ -120,14 +122,14 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
         }
 
         public Spliterator trySplit() {
-            int i = this.a;
+            int i = this.var_a;
             int i2 = this.b;
             if (i < i2) {
                 S2 s2 = S2.this;
                 int i3 = i2 - 1;
                 a aVar = new a(i, i3, this.c, s2.f[i3].length);
                 int i4 = this.b;
-                this.a = i4;
+                this.var_a = i4;
                 this.c = 0;
                 this.e = S2.this.f[i4];
                 return aVar;
@@ -204,7 +206,7 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
         public void forEach(Consumer consumer) {
             if (consumer instanceof q) {
                 h((q) consumer);
-            } else if (!i3.a) {
+            } else if (!i3.var_a) {
                 spliterator().forEachRemaining(consumer);
             } else {
                 i3.a(getClass(), "{0} calling SpinedBuffer.OfDouble.forEach(Consumer)");
@@ -307,7 +309,7 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
         public void forEach(Consumer consumer) {
             if (consumer instanceof w) {
                 h((w) consumer);
-            } else if (!i3.a) {
+            } else if (!i3.var_a) {
                 spliterator().forEachRemaining(consumer);
             } else {
                 i3.a(getClass(), "{0} calling SpinedBuffer.OfInt.forEach(Consumer)");
@@ -410,7 +412,7 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
         public void forEach(Consumer consumer) {
             if (consumer instanceof C) {
                 h((C) consumer);
-            } else if (!i3.a) {
+            } else if (!i3.var_a) {
                 spliterator().forEachRemaining(consumer);
             } else {
                 i3.a(getClass(), "{0} calling SpinedBuffer.OfLong.forEach(Consumer)");
@@ -461,14 +463,16 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
         Object[] f;
 
         abstract class a<T_SPLITR extends Spliterator.d<E, T_CONS, T_SPLITR>> implements Spliterator.d<E, T_CONS, T_SPLITR> {
-            int a;
+
+            /* renamed from: a  reason: collision with root package name */
+            int var_a;
             final int b;
             int c;
             final int d;
             Object e;
 
             a(int i, int i2, int i3, int i4) {
-                this.a = i;
+                this.var_a = i;
                 this.b = i2;
                 this.c = i3;
                 this.d = i4;
@@ -484,7 +488,7 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
             }
 
             public long estimateSize() {
-                int i = this.a;
+                int i = this.var_a;
                 int i2 = this.b;
                 if (i == i2) {
                     return ((long) this.d) - ((long) this.c);
@@ -500,7 +504,7 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
             public void e(Object obj) {
                 int i;
                 obj.getClass();
-                int i2 = this.a;
+                int i2 = this.var_a;
                 int i3 = this.b;
                 if (i2 < i3 || (i2 == i3 && this.c < this.d)) {
                     int i4 = this.c;
@@ -515,8 +519,8 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
                         i4 = 0;
                         i2++;
                     }
-                    e.this.t(this.a == i ? this.e : e.this.f[i], i4, this.d, obj);
-                    this.a = this.b;
+                    e.this.t(this.var_a == i ? this.e : e.this.f[i], i4, this.d, obj);
+                    this.var_a = this.b;
                     this.c = this.d;
                 }
             }
@@ -539,7 +543,7 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
             /* renamed from: tryAdvance */
             public boolean o(Object obj) {
                 obj.getClass();
-                int i = this.a;
+                int i = this.var_a;
                 int i2 = this.b;
                 if (i >= i2 && (i != i2 || this.c >= this.d)) {
                     return false;
@@ -550,8 +554,8 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
                 a(obj2, i3, obj);
                 if (this.c == e.this.u(this.e)) {
                     this.c = 0;
-                    int i4 = this.a + 1;
-                    this.a = i4;
+                    int i4 = this.var_a + 1;
+                    this.var_a = i4;
                     Object[] objArr = e.this.f;
                     if (objArr != null && i4 <= this.b) {
                         this.e = objArr[i4];
@@ -561,14 +565,14 @@ class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
             }
 
             public Spliterator.d trySplit() {
-                int i = this.a;
+                int i = this.var_a;
                 int i2 = this.b;
                 if (i < i2) {
                     int i3 = this.c;
                     e eVar = e.this;
                     Spliterator.d g = g(i, i2 - 1, i3, eVar.u(eVar.f[i2 - 1]));
                     int i4 = this.b;
-                    this.a = i4;
+                    this.var_a = i4;
                     this.c = 0;
                     this.e = e.this.f[i4];
                     return g;

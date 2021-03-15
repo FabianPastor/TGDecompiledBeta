@@ -84,13 +84,13 @@ public class NativeInstance {
 
     public native void onSignalingDataReceive(byte[] bArr);
 
-    public native void onStreamPartAvailable(ByteBuffer byteBuffer, int i, long j);
+    public native void onStreamPartAvailable(long j, ByteBuffer byteBuffer, int i, long j2);
 
     public native void prepareForStream();
 
     public native void removeSsrcs(int[] iArr);
 
-    public native void resetGroupInstance();
+    public native void resetGroupInstance(boolean z);
 
     public native void setAudioOutputGainControlEnabled(boolean z);
 
@@ -171,7 +171,7 @@ public class NativeInstance {
     private void onStateUpdated(int i) {
         Instance.OnStateUpdatedListener onStateUpdatedListener2 = this.onStateUpdatedListener;
         if (onStateUpdatedListener2 != null) {
-            onStateUpdatedListener2.onStateUpdated(i);
+            onStateUpdatedListener2.onStateUpdated(i, false);
         }
     }
 
@@ -196,17 +196,19 @@ public class NativeInstance {
         }
     }
 
-    private void onNetworkStateUpdated(boolean z) {
+    private void onNetworkStateUpdated(boolean z, boolean z2) {
         if (this.onStateUpdatedListener != null) {
-            AndroidUtilities.runOnUIThread(new Runnable(z) {
+            AndroidUtilities.runOnUIThread(new Runnable(z, z2) {
                 public final /* synthetic */ boolean f$1;
+                public final /* synthetic */ boolean f$2;
 
                 {
                     this.f$1 = r2;
+                    this.f$2 = r3;
                 }
 
                 public final void run() {
-                    NativeInstance.this.lambda$onNetworkStateUpdated$0$NativeInstance(this.f$1);
+                    NativeInstance.this.lambda$onNetworkStateUpdated$0$NativeInstance(this.f$1, this.f$2);
                 }
             });
         }
@@ -214,8 +216,8 @@ public class NativeInstance {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$onNetworkStateUpdated$0 */
-    public /* synthetic */ void lambda$onNetworkStateUpdated$0$NativeInstance(boolean z) {
-        this.onStateUpdatedListener.onStateUpdated(z ? 1 : 0);
+    public /* synthetic */ void lambda$onNetworkStateUpdated$0$NativeInstance(boolean z, boolean z2) {
+        this.onStateUpdatedListener.onStateUpdated(z ? 1 : 0, z2);
     }
 
     private void onAudioLevelsUpdated(int[] iArr, float[] fArr, boolean[] zArr) {

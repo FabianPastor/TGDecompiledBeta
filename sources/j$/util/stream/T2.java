@@ -28,34 +28,38 @@ enum T2 {
     static final int s = 0;
     static final int t = 0;
     static final int u = 0;
-    private final Map a;
+
+    /* renamed from: a  reason: collision with root package name */
+    private final Map var_a;
     private final int b;
     private final int c;
     private final int d;
     private final int e;
 
     private static class a {
-        final Map a;
+
+        /* renamed from: a  reason: collision with root package name */
+        final Map var_a;
 
         a(Map map) {
-            this.a = map;
+            this.var_a = map;
         }
 
         /* access modifiers changed from: package-private */
         public a a(b bVar) {
-            this.a.put(bVar, 2);
+            this.var_a.put(bVar, 2);
             return this;
         }
 
         /* access modifiers changed from: package-private */
         public a b(b bVar) {
-            this.a.put(bVar, 1);
+            this.var_a.put(bVar, 1);
             return this;
         }
 
         /* access modifiers changed from: package-private */
         public a c(b bVar) {
-            this.a.put(bVar, 3);
+            this.var_a.put(bVar, 3);
             return this;
         }
     }
@@ -110,14 +114,14 @@ enum T2 {
         b[] values = b.values();
         for (int i3 = 0; i3 < 5; i3++) {
             b bVar = values[i3];
-            Map map = aVar.a;
+            Map map = aVar.var_a;
             if (map instanceof j$.util.Map) {
                 ((j$.util.Map) map).putIfAbsent(bVar, 0);
             } else {
                 Map.CC.$default$putIfAbsent(map, bVar, 0);
             }
         }
-        this.a = aVar.a;
+        this.var_a = aVar.var_a;
         int i4 = i2 * 2;
         this.b = i4;
         this.c = 1 << i4;
@@ -134,7 +138,7 @@ enum T2 {
         int i2 = 0;
         for (int i3 = 0; i3 < 5; i3++) {
             T2 t2 = values[i3];
-            i2 |= ((Integer) t2.a.get(bVar)).intValue() << t2.b;
+            i2 |= ((Integer) t2.var_a.get(bVar)).intValue() << t2.b;
         }
         return i2;
     }
@@ -146,7 +150,7 @@ enum T2 {
 
     private static a f(b bVar) {
         a aVar = new a(new EnumMap(b.class));
-        aVar.a.put(bVar, 1);
+        aVar.var_a.put(bVar, 1);
         return aVar;
     }
 

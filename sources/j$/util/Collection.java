@@ -18,7 +18,7 @@ public interface Collection<E> extends Iterable<E> {
         }
 
         public static boolean $default$removeIf(java.util.Collection collection, Predicate predicate) {
-            if (DesugarCollections.a.isInstance(collection)) {
+            if (DesugarCollections.var_a.isInstance(collection)) {
                 return DesugarCollections.d(collection, predicate);
             }
             predicate.getClass();

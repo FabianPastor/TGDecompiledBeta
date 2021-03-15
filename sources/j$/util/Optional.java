@@ -4,15 +4,17 @@ import java.util.NoSuchElementException;
 
 public final class Optional<T> {
     private static final Optional b = new Optional();
-    private final Object a;
+
+    /* renamed from: a  reason: collision with root package name */
+    private final Object var_a;
 
     private Optional() {
-        this.a = null;
+        this.var_a = null;
     }
 
     private Optional(Object obj) {
         obj.getClass();
-        this.a = obj;
+        this.var_a = obj;
     }
 
     public static Optional empty() {
@@ -30,11 +32,11 @@ public final class Optional<T> {
         if (!(obj instanceof Optional)) {
             return false;
         }
-        return k.r(this.a, ((Optional) obj).a);
+        return k.r(this.var_a, ((Optional) obj).var_a);
     }
 
     public Object get() {
-        Object obj = this.a;
+        Object obj = this.var_a;
         if (obj != null) {
             return obj;
         }
@@ -42,7 +44,7 @@ public final class Optional<T> {
     }
 
     public int hashCode() {
-        Object obj = this.a;
+        Object obj = this.var_a;
         if (obj != null) {
             return obj.hashCode();
         }
@@ -50,11 +52,11 @@ public final class Optional<T> {
     }
 
     public boolean isPresent() {
-        return this.a != null;
+        return this.var_a != null;
     }
 
     public String toString() {
-        Object obj = this.a;
+        Object obj = this.var_a;
         if (obj == null) {
             return "Optional.empty";
         }

@@ -3804,7 +3804,6 @@
     <string name="VoipGroupOfflineAirplane">현재 비행기 모드입니다. 음성 대화에 참여하려면, 비행기 모드를 종료하거나 와이파이에 연결 해주세요.</string>
     <string name="VoipGroupOnlyAdminsCanSpeak">새 참가자 음소거</string>
     <string name="VoipGroupOpenVoiceChat">음성 대화 참여</string>
-    <string name="VoipGroupRemoveMemberAlertText">%1$s님을 그룹 대화에서 내보내시겠습니까?</string>
     <string name="VoipGroupRemoveMemberAlertTitle">참가자 내보내기</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s**님이 그룹에서 내보내졌습니다</string>
     <string name="VoipGroupSearchMembers">초대할 참가자 검색...</string>

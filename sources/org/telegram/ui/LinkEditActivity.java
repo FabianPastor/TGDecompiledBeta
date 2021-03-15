@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
@@ -18,12 +17,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_chatInviteExported;
 import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_editExportedChatInvite;
-import org.telegram.tgnet.TLRPC$TL_messages_exportChatInvite;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -459,91 +455,204 @@ public class LinkEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x0155  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x0170  */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x0182  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:? A[RETURN, SYNTHETIC] */
     /* renamed from: lambda$createView$10 */
-    public /* synthetic */ void lambda$createView$10$LinkEditActivity(Context context, View view) {
-        if (!this.loading) {
-            int selectedIndex = this.timeChooseView.getSelectedIndex();
-            if (selectedIndex >= this.dispalyedDates.size() || this.dispalyedDates.get(selectedIndex).intValue() >= 0) {
-                int i = this.type;
-                if (i == 0) {
-                    AlertDialog alertDialog = this.progressDialog;
-                    if (alertDialog != null) {
-                        alertDialog.dismiss();
-                    }
-                    this.loading = true;
-                    AlertDialog alertDialog2 = new AlertDialog(context, 3);
-                    this.progressDialog = alertDialog2;
-                    alertDialog2.showDelayed(500);
-                    TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
-                    tLRPC$TL_messages_exportChatInvite.peer = getMessagesController().getInputPeer(-this.chatId);
-                    tLRPC$TL_messages_exportChatInvite.legacy_revoke_permanent = false;
-                    int selectedIndex2 = this.timeChooseView.getSelectedIndex();
-                    tLRPC$TL_messages_exportChatInvite.flags |= 1;
-                    if (selectedIndex2 < this.dispalyedDates.size()) {
-                        tLRPC$TL_messages_exportChatInvite.expire_date = this.dispalyedDates.get(selectedIndex2).intValue() + getConnectionsManager().getCurrentTime();
-                    } else {
-                        tLRPC$TL_messages_exportChatInvite.expire_date = 0;
-                    }
-                    int selectedIndex3 = this.usesChooseView.getSelectedIndex();
-                    tLRPC$TL_messages_exportChatInvite.flags |= 2;
-                    if (selectedIndex3 < this.dispalyedUses.size()) {
-                        tLRPC$TL_messages_exportChatInvite.usage_limit = this.dispalyedUses.get(selectedIndex3).intValue();
-                    } else {
-                        tLRPC$TL_messages_exportChatInvite.usage_limit = 0;
-                    }
-                    getConnectionsManager().sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate() {
-                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                            LinkEditActivity.this.lambda$null$7$LinkEditActivity(tLObject, tLRPC$TL_error);
-                        }
-                    });
-                } else if (i == 1) {
-                    AlertDialog alertDialog3 = this.progressDialog;
-                    if (alertDialog3 != null) {
-                        alertDialog3.dismiss();
-                    }
-                    this.loading = true;
-                    AlertDialog alertDialog4 = new AlertDialog(context, 3);
-                    this.progressDialog = alertDialog4;
-                    alertDialog4.showDelayed(500);
-                    TLRPC$TL_messages_editExportedChatInvite tLRPC$TL_messages_editExportedChatInvite = new TLRPC$TL_messages_editExportedChatInvite();
-                    tLRPC$TL_messages_editExportedChatInvite.link = this.inviteToEdit.link;
-                    tLRPC$TL_messages_editExportedChatInvite.revoked = false;
-                    tLRPC$TL_messages_editExportedChatInvite.peer = getMessagesController().getInputPeer(-this.chatId);
-                    int selectedIndex4 = this.timeChooseView.getSelectedIndex();
-                    if (selectedIndex4 < this.dispalyedDates.size()) {
-                        if (this.currentInviteDate != this.dispalyedDates.get(selectedIndex4).intValue()) {
-                            tLRPC$TL_messages_editExportedChatInvite.flags |= 1;
-                            tLRPC$TL_messages_editExportedChatInvite.expire_date = this.dispalyedDates.get(selectedIndex4).intValue() + getConnectionsManager().getCurrentTime();
-                        }
-                    } else if (this.currentInviteDate != 0) {
-                        tLRPC$TL_messages_editExportedChatInvite.flags |= 1;
-                        tLRPC$TL_messages_editExportedChatInvite.expire_date = 0;
-                    }
-                    int selectedIndex5 = this.usesChooseView.getSelectedIndex();
-                    if (selectedIndex5 < this.dispalyedUses.size()) {
-                        int intValue = this.dispalyedUses.get(selectedIndex5).intValue();
-                        if (this.inviteToEdit.usage_limit != intValue) {
-                            tLRPC$TL_messages_editExportedChatInvite.flags |= 2;
-                            tLRPC$TL_messages_editExportedChatInvite.usage_limit = intValue;
-                        }
-                    } else if (this.inviteToEdit.usage_limit != 0) {
-                        tLRPC$TL_messages_editExportedChatInvite.flags |= 2;
-                        tLRPC$TL_messages_editExportedChatInvite.usage_limit = 0;
-                    }
-                    getConnectionsManager().sendRequest(tLRPC$TL_messages_editExportedChatInvite, new RequestDelegate() {
-                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                            LinkEditActivity.this.lambda$null$9$LinkEditActivity(tLObject, tLRPC$TL_error);
-                        }
-                    });
-                }
-            } else {
-                AndroidUtilities.shakeView(this.timeEditText, 2.0f, 0);
-                Vibrator vibrator = (Vibrator) this.timeEditText.getContext().getSystemService("vibrator");
-                if (vibrator != null) {
-                    vibrator.vibrate(200);
-                }
-            }
-        }
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$createView$10$LinkEditActivity(android.content.Context r6, android.view.View r7) {
+        /*
+            r5 = this;
+            boolean r7 = r5.loading
+            if (r7 == 0) goto L_0x0005
+            return
+        L_0x0005:
+            org.telegram.ui.Components.SlideChooseView r7 = r5.timeChooseView
+            int r7 = r7.getSelectedIndex()
+            java.util.ArrayList<java.lang.Integer> r0 = r5.dispalyedDates
+            int r0 = r0.size()
+            r1 = 0
+            if (r7 >= r0) goto L_0x0040
+            java.util.ArrayList<java.lang.Integer> r0 = r5.dispalyedDates
+            java.lang.Object r7 = r0.get(r7)
+            java.lang.Integer r7 = (java.lang.Integer) r7
+            int r7 = r7.intValue()
+            if (r7 >= 0) goto L_0x0040
+            android.widget.TextView r6 = r5.timeEditText
+            r7 = 1073741824(0x40000000, float:2.0)
+            org.telegram.messenger.AndroidUtilities.shakeView(r6, r7, r1)
+            android.widget.TextView r6 = r5.timeEditText
+            android.content.Context r6 = r6.getContext()
+            java.lang.String r7 = "vibrator"
+            java.lang.Object r6 = r6.getSystemService(r7)
+            android.os.Vibrator r6 = (android.os.Vibrator) r6
+            if (r6 == 0) goto L_0x003f
+            r0 = 200(0xc8, double:9.9E-322)
+            r6.vibrate(r0)
+        L_0x003f:
+            return
+        L_0x0040:
+            int r7 = r5.type
+            r2 = 500(0x1f4, double:2.47E-321)
+            r0 = 3
+            r4 = 1
+            if (r7 != 0) goto L_0x00cf
+            org.telegram.ui.ActionBar.AlertDialog r7 = r5.progressDialog
+            if (r7 == 0) goto L_0x004f
+            r7.dismiss()
+        L_0x004f:
+            r5.loading = r4
+            org.telegram.ui.ActionBar.AlertDialog r7 = new org.telegram.ui.ActionBar.AlertDialog
+            r7.<init>(r6, r0)
+            r5.progressDialog = r7
+            r7.showDelayed(r2)
+            org.telegram.tgnet.TLRPC$TL_messages_exportChatInvite r6 = new org.telegram.tgnet.TLRPC$TL_messages_exportChatInvite
+            r6.<init>()
+            org.telegram.messenger.MessagesController r7 = r5.getMessagesController()
+            int r0 = r5.chatId
+            int r0 = -r0
+            org.telegram.tgnet.TLRPC$InputPeer r7 = r7.getInputPeer((int) r0)
+            r6.peer = r7
+            r6.legacy_revoke_permanent = r1
+            org.telegram.ui.Components.SlideChooseView r7 = r5.timeChooseView
+            int r7 = r7.getSelectedIndex()
+            int r0 = r6.flags
+            r0 = r0 | r4
+            r6.flags = r0
+            java.util.ArrayList<java.lang.Integer> r0 = r5.dispalyedDates
+            int r0 = r0.size()
+            if (r7 >= r0) goto L_0x009a
+            java.util.ArrayList<java.lang.Integer> r0 = r5.dispalyedDates
+            java.lang.Object r7 = r0.get(r7)
+            java.lang.Integer r7 = (java.lang.Integer) r7
+            int r7 = r7.intValue()
+            org.telegram.tgnet.ConnectionsManager r0 = r5.getConnectionsManager()
+            int r0 = r0.getCurrentTime()
+            int r7 = r7 + r0
+            r6.expire_date = r7
+            goto L_0x009c
+        L_0x009a:
+            r6.expire_date = r1
+        L_0x009c:
+            org.telegram.ui.Components.SlideChooseView r7 = r5.usesChooseView
+            int r7 = r7.getSelectedIndex()
+            int r0 = r6.flags
+            r0 = r0 | 2
+            r6.flags = r0
+            java.util.ArrayList<java.lang.Integer> r0 = r5.dispalyedUses
+            int r0 = r0.size()
+            if (r7 >= r0) goto L_0x00bf
+            java.util.ArrayList<java.lang.Integer> r0 = r5.dispalyedUses
+            java.lang.Object r7 = r0.get(r7)
+            java.lang.Integer r7 = (java.lang.Integer) r7
+            int r7 = r7.intValue()
+            r6.usage_limit = r7
+            goto L_0x00c1
+        L_0x00bf:
+            r6.usage_limit = r1
+        L_0x00c1:
+            org.telegram.tgnet.ConnectionsManager r7 = r5.getConnectionsManager()
+            org.telegram.ui.-$$Lambda$LinkEditActivity$e6mHs6Pk_fvDCFD4Da59Z-BSyXE r0 = new org.telegram.ui.-$$Lambda$LinkEditActivity$e6mHs6Pk_fvDCFD4Da59Z-BSyXE
+            r0.<init>()
+            r7.sendRequest(r6, r0)
+            goto L_0x018e
+        L_0x00cf:
+            if (r7 != r4) goto L_0x018e
+            org.telegram.ui.ActionBar.AlertDialog r7 = r5.progressDialog
+            if (r7 == 0) goto L_0x00d8
+            r7.dismiss()
+        L_0x00d8:
+            r5.loading = r4
+            org.telegram.ui.ActionBar.AlertDialog r7 = new org.telegram.ui.ActionBar.AlertDialog
+            r7.<init>(r6, r0)
+            r5.progressDialog = r7
+            r7.showDelayed(r2)
+            org.telegram.tgnet.TLRPC$TL_messages_editExportedChatInvite r6 = new org.telegram.tgnet.TLRPC$TL_messages_editExportedChatInvite
+            r6.<init>()
+            org.telegram.tgnet.TLRPC$TL_chatInviteExported r7 = r5.inviteToEdit
+            java.lang.String r7 = r7.link
+            r6.link = r7
+            r6.revoked = r1
+            org.telegram.messenger.MessagesController r7 = r5.getMessagesController()
+            int r0 = r5.chatId
+            int r0 = -r0
+            org.telegram.tgnet.TLRPC$InputPeer r7 = r7.getInputPeer((int) r0)
+            r6.peer = r7
+            org.telegram.ui.Components.SlideChooseView r7 = r5.timeChooseView
+            int r7 = r7.getSelectedIndex()
+            java.util.ArrayList<java.lang.Integer> r0 = r5.dispalyedDates
+            int r0 = r0.size()
+            if (r7 >= r0) goto L_0x0139
+            int r0 = r5.currentInviteDate
+            java.util.ArrayList<java.lang.Integer> r2 = r5.dispalyedDates
+            java.lang.Object r2 = r2.get(r7)
+            java.lang.Integer r2 = (java.lang.Integer) r2
+            int r2 = r2.intValue()
+            if (r0 == r2) goto L_0x0146
+            int r0 = r6.flags
+            r0 = r0 | r4
+            r6.flags = r0
+            java.util.ArrayList<java.lang.Integer> r0 = r5.dispalyedDates
+            java.lang.Object r7 = r0.get(r7)
+            java.lang.Integer r7 = (java.lang.Integer) r7
+            int r7 = r7.intValue()
+            org.telegram.tgnet.ConnectionsManager r0 = r5.getConnectionsManager()
+            int r0 = r0.getCurrentTime()
+            int r7 = r7 + r0
+            r6.expire_date = r7
+            goto L_0x0144
+        L_0x0139:
+            int r7 = r5.currentInviteDate
+            if (r7 == 0) goto L_0x0146
+            int r7 = r6.flags
+            r7 = r7 | r4
+            r6.flags = r7
+            r6.expire_date = r1
+        L_0x0144:
+            r7 = 1
+            goto L_0x0147
+        L_0x0146:
+            r7 = 0
+        L_0x0147:
+            org.telegram.ui.Components.SlideChooseView r0 = r5.usesChooseView
+            int r0 = r0.getSelectedIndex()
+            java.util.ArrayList<java.lang.Integer> r2 = r5.dispalyedUses
+            int r2 = r2.size()
+            if (r0 >= r2) goto L_0x0170
+            java.util.ArrayList<java.lang.Integer> r1 = r5.dispalyedUses
+            java.lang.Object r0 = r1.get(r0)
+            java.lang.Integer r0 = (java.lang.Integer) r0
+            int r0 = r0.intValue()
+            org.telegram.tgnet.TLRPC$TL_chatInviteExported r1 = r5.inviteToEdit
+            int r1 = r1.usage_limit
+            if (r1 == r0) goto L_0x017f
+            int r7 = r6.flags
+            r7 = r7 | 2
+            r6.flags = r7
+            r6.usage_limit = r0
+            goto L_0x0180
+        L_0x0170:
+            org.telegram.tgnet.TLRPC$TL_chatInviteExported r0 = r5.inviteToEdit
+            int r0 = r0.usage_limit
+            if (r0 == 0) goto L_0x017f
+            int r7 = r6.flags
+            r7 = r7 | 2
+            r6.flags = r7
+            r6.usage_limit = r1
+            goto L_0x0180
+        L_0x017f:
+            r4 = r7
+        L_0x0180:
+            if (r4 == 0) goto L_0x018e
+            org.telegram.tgnet.ConnectionsManager r7 = r5.getConnectionsManager()
+            org.telegram.ui.-$$Lambda$LinkEditActivity$MT79i4ppBzsL-oe6ewA_DcDzklU r0 = new org.telegram.ui.-$$Lambda$LinkEditActivity$MT79i4ppBzsL-oe6ewA_DcDzklU
+            r0.<init>()
+            r7.sendRequest(r6, r0)
+        L_0x018e:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LinkEditActivity.lambda$createView$10$LinkEditActivity(android.content.Context, android.view.View):void");
     }
 
     /* access modifiers changed from: private */

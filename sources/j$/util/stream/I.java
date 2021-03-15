@@ -3,7 +3,9 @@ package j$.util.stream;
 import j$.util.function.z;
 
 public final /* synthetic */ class I implements z {
-    public static final /* synthetic */ I a = new I();
+
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ I var_a = new I();
 
     private /* synthetic */ I() {
     }

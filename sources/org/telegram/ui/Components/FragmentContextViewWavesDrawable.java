@@ -4,8 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -38,16 +36,11 @@ public class FragmentContextViewWavesDrawable {
     WeavingState previousState;
     float progressToState = 1.0f;
     WeavingState[] states = new WeavingState[4];
-    private final Paint xRefP;
 
     public FragmentContextViewWavesDrawable() {
         new RectF();
         this.path = new Path();
-        Paint paint2 = new Paint(1);
-        this.xRefP = paint2;
         new Paint(1);
-        paint2.setColor(0);
-        paint2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         for (int i = 0; i < 4; i++) {
             this.states[i] = new WeavingState(i);
         }
@@ -243,21 +236,25 @@ public class FragmentContextViewWavesDrawable {
     }
 
     public void updateState(boolean z) {
-        if (VoIPService.getSharedInstance() != null) {
-            int callState = VoIPService.getSharedInstance().getCallState();
-            if (callState == 1 || callState == 2 || callState == 6 || callState == 5) {
-                setState(2, z);
-            } else if (VoIPService.getSharedInstance().groupCall != null) {
-                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = VoIPService.getSharedInstance().groupCall.participants.get(AccountInstance.getInstance(VoIPService.getSharedInstance().getAccount()).getUserConfig().getClientUserId());
-                if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(VoIPService.getSharedInstance().getChat())) {
-                    setState(VoIPService.getSharedInstance().isMicMute() ? 1 : 0, z);
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null) {
+            int callState = sharedInstance.getCallState();
+            if (sharedInstance.isSwitchingStream() || !(callState == 1 || callState == 2 || callState == 6 || callState == 5)) {
+                ChatObject.Call call = sharedInstance.groupCall;
+                if (call != null) {
+                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = call.participants.get(AccountInstance.getInstance(sharedInstance.getAccount()).getUserConfig().getClientUserId());
+                    if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(sharedInstance.getChat())) {
+                        setState(sharedInstance.isMicMute() ? 1 : 0, z);
+                        return;
+                    }
+                    sharedInstance.setMicMute(true, false, false);
+                    setState(3, z);
                     return;
                 }
-                VoIPService.getSharedInstance().setMicMute(true, false, false);
-                setState(3, z);
-            } else {
-                setState(VoIPService.getSharedInstance().isMicMute() ? 1 : 0, z);
+                setState(sharedInstance.isMicMute() ? 1 : 0, z);
+                return;
             }
+            setState(2, z);
         }
     }
 

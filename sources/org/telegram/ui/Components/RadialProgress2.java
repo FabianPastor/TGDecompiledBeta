@@ -885,4 +885,8 @@ public class RadialProgress2 {
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.RadialProgress2.draw(android.graphics.Canvas):void");
     }
+
+    public String getCircleColorKey() {
+        return this.circleColorKey;
+    }
 }

@@ -8,10 +8,12 @@ import j$.util.k;
 import j$.util.stream.A2;
 
 public final /* synthetic */ class V0 implements A2.g {
-    public final /* synthetic */ C a;
+
+    /* renamed from: a  reason: collision with root package name */
+    public final /* synthetic */ C var_a;
 
     public /* synthetic */ V0(C c) {
-        this.a = c;
+        this.var_a = c;
     }
 
     public /* synthetic */ void accept(double d) {
@@ -25,7 +27,7 @@ public final /* synthetic */ class V0 implements A2.g {
     }
 
     public final void accept(long j) {
-        this.a.accept(j);
+        this.var_a.accept(j);
     }
 
     /* renamed from: b */

@@ -1,14 +1,28 @@
 package j$.util.stream;
 
-import j$.util.function.ToLongFunction;
+import j$.util.function.CLASSNAMEi;
+import j$.util.function.CLASSNAMEj;
+import j$.util.function.F;
 
-public final /* synthetic */ class U implements ToLongFunction {
-    public static final /* synthetic */ U a = new U();
+public final /* synthetic */ class U implements F {
+
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ U var_a = new U();
 
     private /* synthetic */ U() {
     }
 
-    public final long applyAsLong(Object obj) {
-        return ((Long) obj).longValue();
+    public F a(F f) {
+        f.getClass();
+        return new CLASSNAMEi(this, f);
+    }
+
+    public final long applyAsLong(long j) {
+        return 1;
+    }
+
+    public F b(F f) {
+        f.getClass();
+        return new CLASSNAMEj(this, f);
     }
 }

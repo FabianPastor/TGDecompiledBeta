@@ -135,13 +135,8 @@ public class AdminLogFilterAlert extends BottomSheet {
         }
         int i8 = i7 + 1;
         this.leavingRow = i7;
-        if (z) {
-            this.callsRow = i8;
-            i8++;
-        } else {
-            this.callsRow = -1;
-        }
-        this.allAdminsRow = i8 + 1;
+        this.callsRow = i8;
+        this.allAdminsRow = i8 + 1 + 1;
         Drawable mutate = context.getResources().getDrawable(NUM).mutate();
         this.shadowDrawable = mutate;
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
@@ -165,7 +160,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                     size -= AndroidUtilities.statusBarHeight;
                 }
                 getMeasuredWidth();
-                int dp = AndroidUtilities.dp(48.0f) + ((AdminLogFilterAlert.this.isMegagroup ? 11 : 7) * AndroidUtilities.dp(48.0f)) + AdminLogFilterAlert.this.backgroundPaddingTop + AndroidUtilities.dp(17.0f);
+                int dp = AndroidUtilities.dp(48.0f) + ((AdminLogFilterAlert.this.isMegagroup ? 11 : 8) * AndroidUtilities.dp(48.0f)) + AdminLogFilterAlert.this.backgroundPaddingTop + AndroidUtilities.dp(17.0f);
                 if (AdminLogFilterAlert.this.currentAdmins != null) {
                     dp += ((AdminLogFilterAlert.this.currentAdmins.size() + 1) * AndroidUtilities.dp(48.0f)) + AndroidUtilities.dp(20.0f);
                 }
@@ -467,7 +462,7 @@ public class AdminLogFilterAlert extends BottomSheet {
         }
 
         public int getItemCount() {
-            return (AdminLogFilterAlert.this.isMegagroup ? 11 : 7) + (AdminLogFilterAlert.this.currentAdmins != null ? AdminLogFilterAlert.this.currentAdmins.size() + 2 : 0);
+            return (AdminLogFilterAlert.this.isMegagroup ? 11 : 8) + (AdminLogFilterAlert.this.currentAdmins != null ? AdminLogFilterAlert.this.currentAdmins.size() + 2 : 0);
         }
 
         public int getItemViewType(int i) {

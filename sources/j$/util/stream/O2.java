@@ -20,19 +20,19 @@ final class O2 extends C2 {
     public void m() {
         int i = 0;
         Arrays.sort(this.c, 0, this.d);
-        this.a.n((long) this.d);
+        this.var_a.n((long) this.d);
         if (!this.b) {
             while (i < this.d) {
-                this.a.accept(this.c[i]);
+                this.var_a.accept(this.c[i]);
                 i++;
             }
         } else {
-            while (i < this.d && !this.a.p()) {
-                this.a.accept(this.c[i]);
+            while (i < this.d && !this.var_a.p()) {
+                this.var_a.accept(this.c[i]);
                 i++;
             }
         }
-        this.a.m();
+        this.var_a.m();
         this.c = null;
     }
 

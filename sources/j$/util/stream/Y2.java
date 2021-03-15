@@ -9,18 +9,20 @@ import java.util.Comparator;
 
 final class Y2<T> implements Spliterator<T>, Consumer<T> {
     private static final Object d = new Object();
-    private final Spliterator a;
+
+    /* renamed from: a  reason: collision with root package name */
+    private final Spliterator var_a;
     private final ConcurrentHashMap b;
     private Object c;
 
     Y2(Spliterator spliterator) {
         ConcurrentHashMap concurrentHashMap = new ConcurrentHashMap();
-        this.a = spliterator;
+        this.var_a = spliterator;
         this.b = concurrentHashMap;
     }
 
     private Y2(Spliterator spliterator, ConcurrentHashMap concurrentHashMap) {
-        this.a = spliterator;
+        this.var_a = spliterator;
         this.b = concurrentHashMap;
     }
 
@@ -29,7 +31,7 @@ final class Y2<T> implements Spliterator<T>, Consumer<T> {
     }
 
     public boolean b(Consumer consumer) {
-        while (this.a.b(this)) {
+        while (this.var_a.b(this)) {
             ConcurrentHashMap concurrentHashMap = this.b;
             Object obj = this.c;
             if (obj == null) {
@@ -45,11 +47,11 @@ final class Y2<T> implements Spliterator<T>, Consumer<T> {
     }
 
     public int characteristics() {
-        return (this.a.characteristics() & -16469) | 1;
+        return (this.var_a.characteristics() & -16469) | 1;
     }
 
     public long estimateSize() {
-        return this.a.estimateSize();
+        return this.var_a.estimateSize();
     }
 
     public Consumer f(Consumer consumer) {
@@ -58,7 +60,7 @@ final class Y2<T> implements Spliterator<T>, Consumer<T> {
     }
 
     public void forEachRemaining(Consumer consumer) {
-        this.a.forEachRemaining(new CLASSNAMEy0(this, consumer));
+        this.var_a.forEachRemaining(new CLASSNAMEx0(this, consumer));
     }
 
     public void g(Consumer consumer, Object obj) {
@@ -68,7 +70,7 @@ final class Y2<T> implements Spliterator<T>, Consumer<T> {
     }
 
     public Comparator getComparator() {
-        return this.a.getComparator();
+        return this.var_a.getComparator();
     }
 
     public /* synthetic */ long getExactSizeIfKnown() {
@@ -80,7 +82,7 @@ final class Y2<T> implements Spliterator<T>, Consumer<T> {
     }
 
     public Spliterator trySplit() {
-        Spliterator trySplit = this.a.trySplit();
+        Spliterator trySplit = this.var_a.trySplit();
         if (trySplit != null) {
             return new Y2(trySplit, this.b);
         }

@@ -102,7 +102,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     private boolean isChannel;
     /* access modifiers changed from: private */
     public GridLayoutManager layoutManager;
-    private String[] linkToCopy;
+    /* access modifiers changed from: private */
+    public String[] linkToCopy;
     /* access modifiers changed from: private */
     public ShareDialogsAdapter listAdapter;
     private boolean loadingLink;
@@ -481,474 +482,476 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r1 = r25
             r2 = r27
             r3 = r30
-            r4 = r34
-            r5 = 1
-            r0.<init>(r1, r5)
-            r6 = 2
-            java.lang.String[] r7 = new java.lang.String[r6]
-            r0.sendingText = r7
-            android.view.View[] r7 = new android.view.View[r6]
-            r0.shadow = r7
-            android.animation.AnimatorSet[] r7 = new android.animation.AnimatorSet[r6]
-            r0.shadowAnimation = r7
-            android.util.LongSparseArray r7 = new android.util.LongSparseArray
-            r7.<init>()
-            r0.selectedDialogs = r7
-            android.graphics.RectF r7 = new android.graphics.RectF
-            r7.<init>()
-            r0.rect = r7
-            android.graphics.Paint r7 = new android.graphics.Paint
-            r7.<init>(r5)
-            r0.paint = r7
-            android.text.TextPaint r7 = new android.text.TextPaint
-            r7.<init>(r5)
-            r0.textPaint = r7
-            java.lang.String[] r7 = new java.lang.String[r6]
-            r0.linkToCopy = r7
-            boolean r7 = r1 instanceof android.app.Activity
-            if (r7 == 0) goto L_0x0044
-            r7 = r1
-            android.app.Activity r7 = (android.app.Activity) r7
-            r0.parentActivity = r7
-        L_0x0044:
-            r0.darkTheme = r4
-            r7 = r26
-            r0.parentFragment = r7
-            android.content.res.Resources r7 = r25.getResources()
-            r8 = 2131166005(0x7var_, float:1.7946243E38)
-            android.graphics.drawable.Drawable r7 = r7.getDrawable(r8)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
-            r0.shadowDrawable = r7
-            android.graphics.PorterDuffColorFilter r8 = new android.graphics.PorterDuffColorFilter
-            boolean r9 = r0.darkTheme
-            java.lang.String r10 = "dialogBackground"
-            java.lang.String r11 = "voipgroup_inviteMembersBackground"
-            if (r9 == 0) goto L_0x0067
-            r9 = r11
+            r4 = 1
+            r0.<init>(r1, r4)
+            r5 = 2
+            java.lang.String[] r6 = new java.lang.String[r5]
+            r0.sendingText = r6
+            android.view.View[] r6 = new android.view.View[r5]
+            r0.shadow = r6
+            android.animation.AnimatorSet[] r6 = new android.animation.AnimatorSet[r5]
+            r0.shadowAnimation = r6
+            android.util.LongSparseArray r6 = new android.util.LongSparseArray
+            r6.<init>()
+            r0.selectedDialogs = r6
+            android.graphics.RectF r6 = new android.graphics.RectF
+            r6.<init>()
+            r0.rect = r6
+            android.graphics.Paint r6 = new android.graphics.Paint
+            r6.<init>(r4)
+            r0.paint = r6
+            android.text.TextPaint r6 = new android.text.TextPaint
+            r6.<init>(r4)
+            r0.textPaint = r6
+            java.lang.String[] r6 = new java.lang.String[r5]
+            r0.linkToCopy = r6
+            boolean r6 = r1 instanceof android.app.Activity
+            if (r6 == 0) goto L_0x0042
+            r6 = r1
+            android.app.Activity r6 = (android.app.Activity) r6
+            r0.parentActivity = r6
+        L_0x0042:
+            r6 = r34
+            r0.darkTheme = r6
+            r6 = r26
+            r0.parentFragment = r6
+            android.content.res.Resources r6 = r25.getResources()
+            r7 = 2131166005(0x7var_, float:1.7946243E38)
+            android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
+            android.graphics.drawable.Drawable r6 = r6.mutate()
+            r0.shadowDrawable = r6
+            android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
+            boolean r8 = r0.darkTheme
+            java.lang.String r9 = "dialogBackground"
+            java.lang.String r10 = "voipgroup_inviteMembersBackground"
+            if (r8 == 0) goto L_0x0067
+            r8 = r10
             goto L_0x0068
         L_0x0067:
-            r9 = r10
+            r8 = r9
         L_0x0068:
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r8.<init>(r9, r12)
-            r7.setColorFilter(r8)
-            r7 = r33
-            r0.isFullscreen = r7
-            java.lang.String[] r7 = r0.linkToCopy
-            r8 = 0
-            r7[r8] = r31
-            r7[r5] = r32
+            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            android.graphics.PorterDuff$Mode r11 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r7.<init>(r8, r11)
+            r6.setColorFilter(r7)
+            r6 = r33
+            r0.isFullscreen = r6
+            java.lang.String[] r6 = r0.linkToCopy
+            r7 = 0
+            r6[r7] = r31
+            r6[r4] = r32
             r0.sendingMessageObjects = r2
-            org.telegram.ui.Components.ShareAlert$ShareSearchAdapter r7 = new org.telegram.ui.Components.ShareAlert$ShareSearchAdapter
-            r7.<init>(r1)
-            r0.searchAdapter = r7
+            org.telegram.ui.Components.ShareAlert$ShareSearchAdapter r6 = new org.telegram.ui.Components.ShareAlert$ShareSearchAdapter
+            r6.<init>(r1)
+            r0.searchAdapter = r6
             r0.isChannel = r3
-            java.lang.String[] r7 = r0.sendingText
-            r7[r8] = r28
-            r7[r5] = r29
-            r0.useSmoothKeyboard = r5
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r7 = r0.sendingMessageObjects
-            if (r7 == 0) goto L_0x00bc
-            int r7 = r7.size()
-            r9 = 0
+            java.lang.String[] r6 = r0.sendingText
+            r6[r7] = r28
+            r6[r4] = r29
+            r0.useSmoothKeyboard = r4
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r6 = r0.sendingMessageObjects
+            if (r6 == 0) goto L_0x00bc
+            int r6 = r6.size()
+            r8 = 0
         L_0x009b:
-            if (r9 >= r7) goto L_0x00bc
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r12 = r0.sendingMessageObjects
-            java.lang.Object r12 = r12.get(r9)
-            org.telegram.messenger.MessageObject r12 = (org.telegram.messenger.MessageObject) r12
-            boolean r13 = r12.isPoll()
-            if (r13 == 0) goto L_0x00b9
-            boolean r12 = r12.isPublicPoll()
-            if (r12 == 0) goto L_0x00b3
-            r12 = 2
+            if (r8 >= r6) goto L_0x00bc
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r11 = r0.sendingMessageObjects
+            java.lang.Object r11 = r11.get(r8)
+            org.telegram.messenger.MessageObject r11 = (org.telegram.messenger.MessageObject) r11
+            boolean r12 = r11.isPoll()
+            if (r12 == 0) goto L_0x00b9
+            boolean r11 = r11.isPublicPoll()
+            if (r11 == 0) goto L_0x00b3
+            r11 = 2
             goto L_0x00b4
         L_0x00b3:
-            r12 = 1
+            r11 = 1
         L_0x00b4:
-            r0.hasPoll = r12
-            if (r12 != r6) goto L_0x00b9
+            r0.hasPoll = r11
+            if (r11 != r5) goto L_0x00b9
             goto L_0x00bc
         L_0x00b9:
-            int r9 = r9 + 1
+            int r8 = r8 + 1
             goto L_0x009b
         L_0x00bc:
             if (r3 == 0) goto L_0x00f7
-            r0.loadingLink = r5
+            r0.loadingLink = r4
             org.telegram.tgnet.TLRPC$TL_channels_exportMessageLink r3 = new org.telegram.tgnet.TLRPC$TL_channels_exportMessageLink
             r3.<init>()
-            java.lang.Object r7 = r2.get(r8)
-            org.telegram.messenger.MessageObject r7 = (org.telegram.messenger.MessageObject) r7
-            int r7 = r7.getId()
-            r3.id = r7
-            int r7 = r0.currentAccount
-            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
-            java.lang.Object r2 = r2.get(r8)
+            java.lang.Object r6 = r2.get(r7)
+            org.telegram.messenger.MessageObject r6 = (org.telegram.messenger.MessageObject) r6
+            int r6 = r6.getId()
+            r3.id = r6
+            int r6 = r0.currentAccount
+            org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
+            java.lang.Object r2 = r2.get(r7)
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
             org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner
             org.telegram.tgnet.TLRPC$Peer r2 = r2.peer_id
             int r2 = r2.channel_id
-            org.telegram.tgnet.TLRPC$InputChannel r2 = r7.getInputChannel((int) r2)
+            org.telegram.tgnet.TLRPC$InputChannel r2 = r6.getInputChannel((int) r2)
             r3.channel = r2
             int r2 = r0.currentAccount
             org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2)
-            org.telegram.ui.Components.-$$Lambda$ShareAlert$FwxuZo6CliUuC7uPACVzrxBEdnU r7 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$FwxuZo6CliUuC7uPACVzrxBEdnU
-            r7.<init>(r1)
-            r2.sendRequest(r3, r7)
+            org.telegram.ui.Components.-$$Lambda$ShareAlert$FwxuZo6CliUuC7uPACVzrxBEdnU r6 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$FwxuZo6CliUuC7uPACVzrxBEdnU
+            r6.<init>(r1)
+            r2.sendRequest(r3, r6)
         L_0x00f7:
             org.telegram.ui.Components.ShareAlert$1 r2 = new org.telegram.ui.Components.ShareAlert$1
             r2.<init>(r1)
             r0.containerView = r2
-            r2.setWillNotDraw(r8)
+            r2.setWillNotDraw(r7)
             android.view.ViewGroup r3 = r0.containerView
-            r3.setClipChildren(r8)
+            r3.setClipChildren(r7)
             android.view.ViewGroup r3 = r0.containerView
-            int r7 = r0.backgroundPaddingLeft
-            r3.setPadding(r7, r8, r7, r8)
+            int r6 = r0.backgroundPaddingLeft
+            r3.setPadding(r6, r7, r6, r7)
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
             r3.<init>(r1)
             r0.frameLayout = r3
-            boolean r7 = r0.darkTheme
-            if (r7 == 0) goto L_0x011a
-            r7 = r11
+            boolean r6 = r0.darkTheme
+            if (r6 == 0) goto L_0x011a
+            r6 = r10
             goto L_0x011b
         L_0x011a:
-            r7 = r10
+            r6 = r9
         L_0x011b:
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
-            r3.setBackgroundColor(r7)
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r3.setBackgroundColor(r6)
             boolean r3 = r0.darkTheme
-            if (r3 == 0) goto L_0x0156
+            if (r3 == 0) goto L_0x0155
             java.lang.String[] r3 = r0.linkToCopy
-            r3 = r3[r5]
-            if (r3 == 0) goto L_0x0156
+            r3 = r3[r4]
+            if (r3 == 0) goto L_0x0155
             org.telegram.ui.Components.ShareAlert$2 r3 = new org.telegram.ui.Components.ShareAlert$2
             r3.<init>(r1)
             r0.switchView = r3
-            android.widget.FrameLayout r7 = r0.frameLayout
-            r9 = -1
-            r12 = 1108344832(0x42100000, float:36.0)
-            r13 = 51
-            r14 = 0
-            r15 = 1093664768(0x41300000, float:11.0)
+            android.widget.FrameLayout r6 = r0.frameLayout
+            r8 = -1
+            r11 = 1108344832(0x42100000, float:36.0)
+            r12 = 51
+            r13 = 0
+            r14 = 1093664768(0x41300000, float:11.0)
+            r15 = 0
             r16 = 0
-            r17 = 0
-            r26 = r9
-            r27 = r12
-            r28 = r13
-            r29 = r14
-            r30 = r15
-            r31 = r16
-            r32 = r17
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
-            r7.addView(r3, r9)
-        L_0x0156:
+            r26 = r8
+            r27 = r11
+            r28 = r12
+            r29 = r13
+            r30 = r14
+            r31 = r15
+            r32 = r16
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
+            r6.addView(r3, r8)
+        L_0x0155:
             org.telegram.ui.Components.ShareAlert$SearchField r3 = new org.telegram.ui.Components.ShareAlert$SearchField
             r3.<init>(r1)
-            android.widget.FrameLayout r7 = r0.frameLayout
-            r9 = -1
-            r12 = 58
-            r13 = 83
-            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r12, r13)
-            r7.addView(r3, r14)
-            org.telegram.ui.Components.ShareAlert$3 r7 = new org.telegram.ui.Components.ShareAlert$3
-            r7.<init>(r1)
-            r0.gridView = r7
-            r14 = 13
-            java.lang.Integer r14 = java.lang.Integer.valueOf(r14)
-            r7.setTag(r14)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.gridView
-            r14 = 1111490560(0x42400000, float:48.0)
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            r7.setPadding(r8, r8, r8, r15)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.gridView
-            r7.setClipToPadding(r8)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.gridView
-            androidx.recyclerview.widget.GridLayoutManager r15 = new androidx.recyclerview.widget.GridLayoutManager
-            android.content.Context r12 = r24.getContext()
-            r6 = 4
-            r15.<init>(r12, r6)
-            r0.layoutManager = r15
-            r7.setLayoutManager(r15)
-            androidx.recyclerview.widget.GridLayoutManager r7 = r0.layoutManager
-            org.telegram.ui.Components.ShareAlert$4 r12 = new org.telegram.ui.Components.ShareAlert$4
-            r12.<init>()
-            r7.setSpanSizeLookup(r12)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.gridView
-            r7.setHorizontalScrollBarEnabled(r8)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.gridView
-            r7.setVerticalScrollBarEnabled(r8)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.gridView
-            org.telegram.ui.Components.ShareAlert$5 r12 = new org.telegram.ui.Components.ShareAlert$5
-            r12.<init>(r0)
-            r7.addItemDecoration(r12)
-            android.view.ViewGroup r7 = r0.containerView
-            org.telegram.ui.Components.RecyclerListView r12 = r0.gridView
+            android.widget.FrameLayout r6 = r0.frameLayout
+            r8 = -1
+            r11 = 58
+            r12 = 83
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r11, r12)
+            r6.addView(r3, r13)
+            org.telegram.ui.Components.ShareAlert$3 r6 = new org.telegram.ui.Components.ShareAlert$3
+            r6.<init>(r1)
+            r0.gridView = r6
+            r13 = 13
+            java.lang.Integer r13 = java.lang.Integer.valueOf(r13)
+            r6.setTag(r13)
+            org.telegram.ui.Components.RecyclerListView r6 = r0.gridView
+            r13 = 1111490560(0x42400000, float:48.0)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            r6.setPadding(r7, r7, r7, r14)
+            org.telegram.ui.Components.RecyclerListView r6 = r0.gridView
+            r6.setClipToPadding(r7)
+            org.telegram.ui.Components.RecyclerListView r6 = r0.gridView
+            androidx.recyclerview.widget.GridLayoutManager r14 = new androidx.recyclerview.widget.GridLayoutManager
+            android.content.Context r15 = r24.getContext()
+            r11 = 4
+            r14.<init>(r15, r11)
+            r0.layoutManager = r14
+            r6.setLayoutManager(r14)
+            androidx.recyclerview.widget.GridLayoutManager r6 = r0.layoutManager
+            org.telegram.ui.Components.ShareAlert$4 r14 = new org.telegram.ui.Components.ShareAlert$4
+            r14.<init>()
+            r6.setSpanSizeLookup(r14)
+            org.telegram.ui.Components.RecyclerListView r6 = r0.gridView
+            r6.setHorizontalScrollBarEnabled(r7)
+            org.telegram.ui.Components.RecyclerListView r6 = r0.gridView
+            r6.setVerticalScrollBarEnabled(r7)
+            org.telegram.ui.Components.RecyclerListView r6 = r0.gridView
+            org.telegram.ui.Components.ShareAlert$5 r14 = new org.telegram.ui.Components.ShareAlert$5
+            r14.<init>(r0)
+            r6.addItemDecoration(r14)
+            android.view.ViewGroup r6 = r0.containerView
+            org.telegram.ui.Components.RecyclerListView r14 = r0.gridView
             r15 = -1
-            r17 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r18 = 51
+            r16 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r17 = 51
+            r18 = 0
             r19 = 0
             r20 = 0
             r21 = 0
-            r22 = 0
             r27 = r15
-            r28 = r17
-            r29 = r18
-            r30 = r19
-            r31 = r20
-            r32 = r21
-            r33 = r22
-            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r27, r28, r29, r30, r31, r32, r33)
-            r7.addView(r12, r15)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.gridView
-            org.telegram.ui.Components.ShareAlert$ShareDialogsAdapter r12 = new org.telegram.ui.Components.ShareAlert$ShareDialogsAdapter
-            r12.<init>(r1)
-            r0.listAdapter = r12
-            r7.setAdapter(r12)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.gridView
-            boolean r12 = r0.darkTheme
-            if (r12 == 0) goto L_0x01f2
-            r12 = r11
-            goto L_0x01f4
-        L_0x01f2:
-            java.lang.String r12 = "dialogScrollGlow"
-        L_0x01f4:
-            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
-            r7.setGlowColor(r12)
-            org.telegram.ui.Components.RecyclerListView r7 = r0.gridView
-            org.telegram.ui.Components.-$$Lambda$ShareAlert$tsqYP84rsmwyZrf_ARrZIDFFQec r12 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$tsqYP84rsmwyZrf_ARrZIDFFQec
-            r12.<init>(r3)
-            r7.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r12)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.gridView
-            org.telegram.ui.Components.ShareAlert$6 r7 = new org.telegram.ui.Components.ShareAlert$6
-            r7.<init>()
-            r3.setOnScrollListener(r7)
-            org.telegram.ui.Components.EmptyTextProgressView r3 = new org.telegram.ui.Components.EmptyTextProgressView
-            r3.<init>(r1)
-            r0.searchEmptyView = r3
-            r3.setShowAtCenter(r5)
-            org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r3.showTextView()
-            org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r7 = 2131626229(0x7f0e08f5, float:1.8879688E38)
-            java.lang.String r12 = "NoChats"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r12, r7)
-            r3.setText(r7)
-            org.telegram.ui.Components.RecyclerListView r3 = r0.gridView
-            org.telegram.ui.Components.EmptyTextProgressView r7 = r0.searchEmptyView
-            r3.setEmptyView(r7)
-            android.view.ViewGroup r3 = r0.containerView
-            org.telegram.ui.Components.EmptyTextProgressView r7 = r0.searchEmptyView
-            r12 = -1
-            r15 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r17 = 51
-            r18 = 0
-            r19 = 1112539136(0x42500000, float:52.0)
-            r20 = 0
-            r21 = 0
-            r27 = r12
-            r28 = r15
+            r28 = r16
             r29 = r17
             r30 = r18
             r31 = r19
             r32 = r20
             r33 = r21
-            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r27, r28, r29, r30, r31, r32, r33)
-            r3.addView(r7, r12)
-            android.widget.FrameLayout$LayoutParams r3 = new android.widget.FrameLayout$LayoutParams
-            int r7 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r12 = 51
-            r3.<init>(r9, r7, r12)
-            if (r4 == 0) goto L_0x026f
-            java.lang.String[] r7 = r0.linkToCopy
-            r7 = r7[r5]
-            if (r7 == 0) goto L_0x026f
-            r7 = 1121845248(0x42de0000, float:111.0)
-            goto L_0x0271
-        L_0x026f:
-            r7 = 1114112000(0x42680000, float:58.0)
-        L_0x0271:
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r3.topMargin = r7
-            android.view.View[] r7 = r0.shadow
-            android.view.View r15 = new android.view.View
-            r15.<init>(r1)
-            r7[r8] = r15
-            android.view.View[] r7 = r0.shadow
-            r7 = r7[r8]
-            java.lang.String r15 = "dialogShadowLine"
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r15)
-            r7.setBackgroundColor(r6)
-            android.view.View[] r6 = r0.shadow
-            r6 = r6[r8]
-            r7 = 0
-            r6.setAlpha(r7)
-            android.view.View[] r6 = r0.shadow
-            r6 = r6[r8]
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r5)
-            r6.setTag(r7)
-            android.view.ViewGroup r6 = r0.containerView
-            android.view.View[] r7 = r0.shadow
-            r7 = r7[r8]
-            r6.addView(r7, r3)
+            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r27, r28, r29, r30, r31, r32, r33)
+            r6.addView(r14, r15)
+            org.telegram.ui.Components.RecyclerListView r6 = r0.gridView
+            org.telegram.ui.Components.ShareAlert$ShareDialogsAdapter r14 = new org.telegram.ui.Components.ShareAlert$ShareDialogsAdapter
+            r14.<init>(r1)
+            r0.listAdapter = r14
+            r6.setAdapter(r14)
+            org.telegram.ui.Components.RecyclerListView r6 = r0.gridView
+            boolean r14 = r0.darkTheme
+            if (r14 == 0) goto L_0x01f1
+            r14 = r10
+            goto L_0x01f3
+        L_0x01f1:
+            java.lang.String r14 = "dialogScrollGlow"
+        L_0x01f3:
+            int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            r6.setGlowColor(r14)
+            org.telegram.ui.Components.RecyclerListView r6 = r0.gridView
+            org.telegram.ui.Components.-$$Lambda$ShareAlert$tsqYP84rsmwyZrf_ARrZIDFFQec r14 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$tsqYP84rsmwyZrf_ARrZIDFFQec
+            r14.<init>(r3)
+            r6.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r14)
+            org.telegram.ui.Components.RecyclerListView r3 = r0.gridView
+            org.telegram.ui.Components.ShareAlert$6 r6 = new org.telegram.ui.Components.ShareAlert$6
+            r6.<init>()
+            r3.setOnScrollListener(r6)
+            org.telegram.ui.Components.EmptyTextProgressView r3 = new org.telegram.ui.Components.EmptyTextProgressView
+            r3.<init>(r1)
+            r0.searchEmptyView = r3
+            r3.setShowAtCenter(r4)
+            org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
+            r3.showTextView()
+            org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
+            r6 = 2131626239(0x7f0e08ff, float:1.8879709E38)
+            java.lang.String r14 = "NoChats"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r14, r6)
+            r3.setText(r6)
+            org.telegram.ui.Components.RecyclerListView r3 = r0.gridView
+            org.telegram.ui.Components.EmptyTextProgressView r6 = r0.searchEmptyView
+            r3.setEmptyView(r6)
             android.view.ViewGroup r3 = r0.containerView
-            android.widget.FrameLayout r6 = r0.frameLayout
-            if (r4 == 0) goto L_0x02b8
-            java.lang.String[] r7 = r0.linkToCopy
-            r7 = r7[r5]
-            if (r7 == 0) goto L_0x02b8
-            r7 = 111(0x6f, float:1.56E-43)
-            goto L_0x02ba
-        L_0x02b8:
-            r7 = 58
-        L_0x02ba:
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r7, r12)
-            r3.addView(r6, r7)
+            org.telegram.ui.Components.EmptyTextProgressView r6 = r0.searchEmptyView
+            r14 = -1
+            r15 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r16 = 51
+            r17 = 0
+            r18 = 1112539136(0x42500000, float:52.0)
+            r19 = 0
+            r20 = 0
+            r27 = r14
+            r28 = r15
+            r29 = r16
+            r30 = r17
+            r31 = r18
+            r32 = r19
+            r33 = r20
+            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r27, r28, r29, r30, r31, r32, r33)
+            r3.addView(r6, r14)
             android.widget.FrameLayout$LayoutParams r3 = new android.widget.FrameLayout$LayoutParams
             int r6 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r3.<init>(r9, r6, r13)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            r3.bottomMargin = r6
+            r14 = 51
+            r3.<init>(r8, r6, r14)
+            boolean r6 = r0.darkTheme
+            if (r6 == 0) goto L_0x0270
+            java.lang.String[] r6 = r0.linkToCopy
+            r6 = r6[r4]
+            if (r6 == 0) goto L_0x0270
+            r6 = 1121845248(0x42de0000, float:111.0)
+            goto L_0x0272
+        L_0x0270:
+            r6 = 1114112000(0x42680000, float:58.0)
+        L_0x0272:
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r3.topMargin = r6
             android.view.View[] r6 = r0.shadow
-            android.view.View r7 = new android.view.View
-            r7.<init>(r1)
-            r6[r5] = r7
+            android.view.View r15 = new android.view.View
+            r15.<init>(r1)
+            r6[r7] = r15
             android.view.View[] r6 = r0.shadow
-            r6 = r6[r5]
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r15)
-            r6.setBackgroundColor(r7)
-            android.view.ViewGroup r6 = r0.containerView
-            android.view.View[] r7 = r0.shadow
-            r7 = r7[r5]
-            r6.addView(r7, r3)
+            r6 = r6[r7]
+            java.lang.String r15 = "dialogShadowLine"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+            r6.setBackgroundColor(r11)
+            android.view.View[] r6 = r0.shadow
+            r6 = r6[r7]
+            r11 = 0
+            r6.setAlpha(r11)
+            android.view.View[] r6 = r0.shadow
+            r6 = r6[r7]
+            java.lang.Integer r5 = java.lang.Integer.valueOf(r4)
+            r6.setTag(r5)
+            android.view.ViewGroup r5 = r0.containerView
+            android.view.View[] r6 = r0.shadow
+            r6 = r6[r7]
+            r5.addView(r6, r3)
+            android.view.ViewGroup r3 = r0.containerView
+            android.widget.FrameLayout r5 = r0.frameLayout
+            boolean r6 = r0.darkTheme
+            if (r6 == 0) goto L_0x02bb
+            java.lang.String[] r6 = r0.linkToCopy
+            r6 = r6[r4]
+            if (r6 == 0) goto L_0x02bb
+            r6 = 111(0x6f, float:1.56E-43)
+            goto L_0x02bd
+        L_0x02bb:
+            r6 = 58
+        L_0x02bd:
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r6, r14)
+            r3.addView(r5, r6)
+            android.widget.FrameLayout$LayoutParams r3 = new android.widget.FrameLayout$LayoutParams
+            int r5 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            r3.<init>(r8, r5, r12)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            r3.bottomMargin = r5
+            android.view.View[] r5 = r0.shadow
+            android.view.View r6 = new android.view.View
+            r6.<init>(r1)
+            r5[r4] = r6
+            android.view.View[] r5 = r0.shadow
+            r5 = r5[r4]
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+            r5.setBackgroundColor(r6)
+            android.view.ViewGroup r5 = r0.containerView
+            android.view.View[] r6 = r0.shadow
+            r6 = r6[r4]
+            r5.addView(r6, r3)
             boolean r3 = r0.isChannel
-            java.lang.String r6 = "fonts/rmedium.ttf"
-            if (r3 != 0) goto L_0x0304
+            java.lang.String r5 = "fonts/rmedium.ttf"
+            if (r3 != 0) goto L_0x0306
             java.lang.String[] r3 = r0.linkToCopy
-            r3 = r3[r8]
-            if (r3 == 0) goto L_0x02fa
-            goto L_0x0304
-        L_0x02fa:
+            r3 = r3[r7]
+            if (r3 == 0) goto L_0x02fd
+            goto L_0x0306
+        L_0x02fd:
             android.view.View[] r3 = r0.shadow
-            r3 = r3[r5]
-            r4 = 0
-            r3.setAlpha(r4)
-            goto L_0x04aa
-        L_0x0304:
+            r3 = r3[r4]
+            r3.setAlpha(r11)
+            goto L_0x04ae
+        L_0x0306:
             android.widget.TextView r3 = new android.widget.TextView
             r3.<init>(r1)
             r0.pickerBottomLayout = r3
-            boolean r7 = r0.darkTheme
-            if (r7 == 0) goto L_0x0310
-            r10 = r11
-        L_0x0310:
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            boolean r10 = r0.darkTheme
-            java.lang.String r11 = "voipgroup_listSelector"
-            java.lang.String r12 = "listSelectorSDK21"
-            if (r10 == 0) goto L_0x031e
-            r10 = r11
-            goto L_0x031f
-        L_0x031e:
-            r10 = r12
-        L_0x031f:
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.createSelectorWithBackgroundDrawable(r7, r10)
-            r3.setBackgroundDrawable(r7)
+            boolean r6 = r0.darkTheme
+            if (r6 == 0) goto L_0x0312
+            r9 = r10
+        L_0x0312:
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r9)
+            boolean r9 = r0.darkTheme
+            java.lang.String r10 = "voipgroup_listSelector"
+            java.lang.String r13 = "listSelectorSDK21"
+            if (r9 == 0) goto L_0x0320
+            r9 = r10
+            goto L_0x0321
+        L_0x0320:
+            r9 = r13
+        L_0x0321:
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
+            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createSelectorWithBackgroundDrawable(r6, r9)
+            r3.setBackgroundDrawable(r6)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            boolean r7 = r0.darkTheme
-            java.lang.String r10 = "voipgroup_listeningText"
+            boolean r6 = r0.darkTheme
+            java.lang.String r9 = "voipgroup_listeningText"
             java.lang.String r14 = "dialogTextBlue2"
-            if (r7 == 0) goto L_0x0336
-            r7 = r10
-            goto L_0x0337
-        L_0x0336:
-            r7 = r14
-        L_0x0337:
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
-            r3.setTextColor(r7)
+            if (r6 == 0) goto L_0x0338
+            r6 = r9
+            goto L_0x0339
+        L_0x0338:
+            r6 = r14
+        L_0x0339:
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r3.setTextColor(r6)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r7 = 1096810496(0x41600000, float:14.0)
-            r3.setTextSize(r5, r7)
+            r6 = 1096810496(0x41600000, float:14.0)
+            r3.setTextSize(r4, r6)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r7 = 1099956224(0x41900000, float:18.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r6 = 1099956224(0x41900000, float:18.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r15 = 1099956224(0x41900000, float:18.0)
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
-            r3.setPadding(r7, r8, r15, r8)
+            r3.setPadding(r6, r7, r15, r7)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
-            r3.setTypeface(r7)
+            android.graphics.Typeface r6 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
+            r3.setTypeface(r6)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r7 = 17
-            r3.setGravity(r7)
-            if (r4 == 0) goto L_0x0381
+            r6 = 17
+            r3.setGravity(r6)
+            boolean r3 = r0.darkTheme
+            if (r3 == 0) goto L_0x0385
             java.lang.String[] r3 = r0.linkToCopy
-            r3 = r3[r5]
-            if (r3 == 0) goto L_0x0381
+            r3 = r3[r4]
+            if (r3 == 0) goto L_0x0385
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r4 = 2131627946(0x7f0e0faa, float:1.888317E38)
-            java.lang.String r7 = "VoipGroupCopySpeakerLink"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
-            java.lang.String r4 = r4.toUpperCase()
-            r3.setText(r4)
-            goto L_0x0393
-        L_0x0381:
+            r6 = 2131627970(0x7f0e0fc2, float:1.888322E38)
+            java.lang.String r15 = "VoipGroupCopySpeakerLink"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r15, r6)
+            java.lang.String r6 = r6.toUpperCase()
+            r3.setText(r6)
+            goto L_0x0397
+        L_0x0385:
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r4 = 2131624989(0x7f0e041d, float:1.8877173E38)
-            java.lang.String r7 = "CopyLink"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
-            java.lang.String r4 = r4.toUpperCase()
-            r3.setText(r4)
-        L_0x0393:
+            r6 = 2131624994(0x7f0e0422, float:1.8877183E38)
+            java.lang.String r15 = "CopyLink"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r15, r6)
+            java.lang.String r6 = r6.toUpperCase()
+            r3.setText(r6)
+        L_0x0397:
             android.widget.TextView r3 = r0.pickerBottomLayout
-            org.telegram.ui.Components.-$$Lambda$ShareAlert$Jk_mrfDjAsna0QY0gGjdECS7var_ r4 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$Jk_mrfDjAsna0QY0gGjdECS7var_
-            r4.<init>()
-            r3.setOnClickListener(r4)
+            org.telegram.ui.Components.-$$Lambda$ShareAlert$Jk_mrfDjAsna0QY0gGjdECS7var_ r6 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$Jk_mrfDjAsna0QY0gGjdECS7var_
+            r6.<init>()
+            r3.setOnClickListener(r6)
             android.view.ViewGroup r3 = r0.containerView
-            android.widget.TextView r4 = r0.pickerBottomLayout
-            r7 = 48
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r7, r13)
-            r3.addView(r4, r7)
+            android.widget.TextView r6 = r0.pickerBottomLayout
+            r15 = 48
+            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r15, r12)
+            r3.addView(r6, r15)
             org.telegram.ui.ChatActivity r3 = r0.parentFragment
-            if (r3 == 0) goto L_0x04aa
+            if (r3 == 0) goto L_0x04ae
             org.telegram.tgnet.TLRPC$Chat r3 = r3.getCurrentChat()
             boolean r3 = org.telegram.messenger.ChatObject.hasAdminRights(r3)
-            if (r3 == 0) goto L_0x04aa
+            if (r3 == 0) goto L_0x04ae
             java.util.ArrayList<org.telegram.messenger.MessageObject> r3 = r0.sendingMessageObjects
             int r3 = r3.size()
-            if (r3 <= 0) goto L_0x04aa
+            if (r3 <= 0) goto L_0x04ae
             java.util.ArrayList<org.telegram.messenger.MessageObject> r3 = r0.sendingMessageObjects
-            java.lang.Object r3 = r3.get(r8)
+            java.lang.Object r3 = r3.get(r7)
             org.telegram.messenger.MessageObject r3 = (org.telegram.messenger.MessageObject) r3
             org.telegram.tgnet.TLRPC$Message r3 = r3.messageOwner
             int r3 = r3.forwards
-            if (r3 <= 0) goto L_0x04aa
+            if (r3 <= 0) goto L_0x04ae
             java.util.ArrayList<org.telegram.messenger.MessageObject> r3 = r0.sendingMessageObjects
-            java.lang.Object r3 = r3.get(r8)
+            java.lang.Object r3 = r3.get(r7)
             org.telegram.messenger.MessageObject r3 = (org.telegram.messenger.MessageObject) r3
-            boolean r4 = r3.isForwarded()
-            if (r4 != 0) goto L_0x04aa
-            android.widget.LinearLayout r4 = new android.widget.LinearLayout
-            r4.<init>(r1)
-            r0.sharesCountLayout = r4
-            r4.setOrientation(r8)
-            android.widget.LinearLayout r4 = r0.sharesCountLayout
-            r7 = 16
-            r4.setGravity(r7)
-            android.widget.LinearLayout r4 = r0.sharesCountLayout
-            boolean r7 = r0.darkTheme
-            if (r7 == 0) goto L_0x03f4
-            goto L_0x03f5
-        L_0x03f4:
-            r11 = r12
-        L_0x03f5:
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r11 = 2
-            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r7, r11)
-            r4.setBackgroundDrawable(r7)
-            android.view.ViewGroup r4 = r0.containerView
-            android.widget.LinearLayout r7 = r0.sharesCountLayout
+            boolean r6 = r3.isForwarded()
+            if (r6 != 0) goto L_0x04ae
+            android.widget.LinearLayout r6 = new android.widget.LinearLayout
+            r6.<init>(r1)
+            r0.sharesCountLayout = r6
+            r6.setOrientation(r7)
+            android.widget.LinearLayout r6 = r0.sharesCountLayout
+            r15 = 16
+            r6.setGravity(r15)
+            android.widget.LinearLayout r6 = r0.sharesCountLayout
+            boolean r15 = r0.darkTheme
+            if (r15 == 0) goto L_0x03f8
+            goto L_0x03f9
+        L_0x03f8:
+            r10 = r13
+        L_0x03f9:
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
+            r13 = 2
+            android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r10, r13)
+            r6.setBackgroundDrawable(r10)
+            android.view.ViewGroup r6 = r0.containerView
+            android.widget.LinearLayout r10 = r0.sharesCountLayout
             r17 = -2
             r18 = 1111490560(0x42400000, float:48.0)
             r19 = 85
@@ -956,29 +959,29 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r21 = 0
             r22 = -1061158912(0xffffffffc0CLASSNAME, float:-6.0)
             r23 = 0
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
-            r4.addView(r7, r11)
-            android.widget.LinearLayout r4 = r0.sharesCountLayout
-            org.telegram.ui.Components.-$$Lambda$ShareAlert$U4F_1ljMicnLTo1_tjEwp5yQbGc r7 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$U4F_1ljMicnLTo1_tjEwp5yQbGc
-            r7.<init>(r3)
-            r4.setOnClickListener(r7)
-            android.widget.ImageView r4 = new android.widget.ImageView
-            r4.<init>(r1)
-            r7 = 2131166003(0x7var_, float:1.794624E38)
-            r4.setImageResource(r7)
-            android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
-            boolean r11 = r0.darkTheme
-            if (r11 == 0) goto L_0x0437
-            r11 = r10
-            goto L_0x0438
-        L_0x0437:
-            r11 = r14
-        L_0x0438:
-            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r7.<init>(r11, r12)
-            r4.setColorFilter(r7)
-            android.widget.LinearLayout r7 = r0.sharesCountLayout
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
+            r6.addView(r10, r13)
+            android.widget.LinearLayout r6 = r0.sharesCountLayout
+            org.telegram.ui.Components.-$$Lambda$ShareAlert$U4F_1ljMicnLTo1_tjEwp5yQbGc r10 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$U4F_1ljMicnLTo1_tjEwp5yQbGc
+            r10.<init>(r3)
+            r6.setOnClickListener(r10)
+            android.widget.ImageView r6 = new android.widget.ImageView
+            r6.<init>(r1)
+            r10 = 2131166003(0x7var_, float:1.794624E38)
+            r6.setImageResource(r10)
+            android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
+            boolean r13 = r0.darkTheme
+            if (r13 == 0) goto L_0x043b
+            r13 = r9
+            goto L_0x043c
+        L_0x043b:
+            r13 = r14
+        L_0x043c:
+            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r13)
+            android.graphics.PorterDuff$Mode r15 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r10.<init>(r13, r15)
+            r6.setColorFilter(r10)
+            android.widget.LinearLayout r10 = r0.sharesCountLayout
             r17 = -2
             r18 = -1
             r19 = 16
@@ -986,32 +989,32 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r21 = 0
             r22 = 0
             r23 = 0
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
-            r7.addView(r4, r11)
-            android.widget.TextView r4 = new android.widget.TextView
-            r4.<init>(r1)
-            java.lang.Object[] r7 = new java.lang.Object[r5]
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
+            r10.addView(r6, r13)
+            android.widget.TextView r6 = new android.widget.TextView
+            r6.<init>(r1)
+            java.lang.Object[] r10 = new java.lang.Object[r4]
             org.telegram.tgnet.TLRPC$Message r3 = r3.messageOwner
             int r3 = r3.forwards
             java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-            r7[r8] = r3
+            r10[r7] = r3
             java.lang.String r3 = "%d"
-            java.lang.String r3 = java.lang.String.format(r3, r7)
-            r4.setText(r3)
+            java.lang.String r3 = java.lang.String.format(r3, r10)
+            r6.setText(r3)
             r3 = 1096810496(0x41600000, float:14.0)
-            r4.setTextSize(r5, r3)
+            r6.setTextSize(r4, r3)
             boolean r3 = r0.darkTheme
-            if (r3 == 0) goto L_0x047f
-            goto L_0x0480
-        L_0x047f:
-            r10 = r14
-        L_0x0480:
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r4.setTextColor(r3)
+            if (r3 == 0) goto L_0x0483
+            goto L_0x0484
+        L_0x0483:
+            r9 = r14
+        L_0x0484:
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r9)
+            r6.setTextColor(r3)
             r3 = 16
-            r4.setGravity(r3)
-            android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
-            r4.setTypeface(r3)
+            r6.setGravity(r3)
+            android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
+            r6.setTypeface(r3)
             android.widget.LinearLayout r3 = r0.sharesCountLayout
             r17 = -2
             r18 = -1
@@ -1020,65 +1023,64 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r21 = 0
             r22 = 20
             r23 = 0
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
-            r3.addView(r4, r7)
-        L_0x04aa:
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
+            r3.addView(r6, r9)
+        L_0x04ae:
             org.telegram.ui.Components.ShareAlert$7 r3 = new org.telegram.ui.Components.ShareAlert$7
             r3.<init>(r1)
             r0.frameLayout2 = r3
-            r3.setWillNotDraw(r8)
+            r3.setWillNotDraw(r7)
             android.widget.FrameLayout r3 = r0.frameLayout2
-            r4 = 0
-            r3.setAlpha(r4)
+            r3.setAlpha(r11)
             android.widget.FrameLayout r3 = r0.frameLayout2
-            r4 = 4
-            r3.setVisibility(r4)
+            r6 = 4
+            r3.setVisibility(r6)
             android.view.ViewGroup r3 = r0.containerView
-            android.widget.FrameLayout r4 = r0.frameLayout2
-            r7 = -2
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r7, r13)
-            r3.addView(r4, r7)
+            android.widget.FrameLayout r6 = r0.frameLayout2
+            r9 = -2
+            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r9, r12)
+            r3.addView(r6, r8)
             android.widget.FrameLayout r3 = r0.frameLayout2
-            org.telegram.ui.Components.-$$Lambda$ShareAlert$T1ALJm93IMMnbzuP0RS6nBlxlrM r4 = org.telegram.ui.Components.$$Lambda$ShareAlert$T1ALJm93IMMnbzuP0RS6nBlxlrM.INSTANCE
-            r3.setOnTouchListener(r4)
+            org.telegram.ui.Components.-$$Lambda$ShareAlert$T1ALJm93IMMnbzuP0RS6nBlxlrM r6 = org.telegram.ui.Components.$$Lambda$ShareAlert$T1ALJm93IMMnbzuP0RS6nBlxlrM.INSTANCE
+            r3.setOnTouchListener(r6)
             org.telegram.ui.Components.ShareAlert$8 r3 = new org.telegram.ui.Components.ShareAlert$8
-            r4 = 0
-            r7 = 1
+            r6 = 0
+            r8 = 1
             r26 = r3
             r27 = r24
             r28 = r25
             r29 = r2
-            r30 = r4
-            r31 = r7
+            r30 = r6
+            r31 = r8
             r26.<init>(r28, r29, r30, r31)
             r0.commentTextView = r3
-            r2 = 2131627374(0x7f0e0d6e, float:1.888201E38)
-            java.lang.String r4 = "ShareComment"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
+            r2 = 2131627385(0x7f0e0d79, float:1.8882033E38)
+            java.lang.String r6 = "ShareComment"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r3.setHint(r2)
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
             r2.onResume()
             android.widget.FrameLayout r2 = r0.frameLayout2
             org.telegram.ui.Components.EditTextEmoji r3 = r0.commentTextView
-            r9 = -1
-            r10 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r11 = 51
-            r12 = 0
-            r13 = 0
-            r14 = 1118306304(0x42a80000, float:84.0)
-            r15 = 0
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
-            r2.addView(r3, r4)
+            r17 = -1
+            r18 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r19 = 51
+            r20 = 0
+            r21 = 0
+            r22 = 1118306304(0x42a80000, float:84.0)
+            r23 = 0
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
+            r2.addView(r3, r6)
             android.widget.FrameLayout r2 = r0.frameLayout2
-            r2.setClipChildren(r8)
+            r2.setClipChildren(r7)
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
-            r2.setClipChildren(r8)
+            r2.setClipChildren(r7)
             org.telegram.ui.Components.ShareAlert$9 r2 = new org.telegram.ui.Components.ShareAlert$9
             r2.<init>(r1)
             r0.writeButtonContainer = r2
-            r2.setFocusable(r5)
+            r2.setFocusable(r4)
             android.widget.FrameLayout r2 = r0.writeButtonContainer
-            r2.setFocusableInTouchMode(r5)
+            r2.setFocusableInTouchMode(r4)
             android.widget.FrameLayout r2 = r0.writeButtonContainer
             r3 = 4
             r2.setVisibility(r3)
@@ -1088,105 +1090,104 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.widget.FrameLayout r2 = r0.writeButtonContainer
             r2.setScaleY(r3)
             android.widget.FrameLayout r2 = r0.writeButtonContainer
-            r4 = 0
-            r2.setAlpha(r4)
+            r2.setAlpha(r11)
             android.view.ViewGroup r2 = r0.containerView
             android.widget.FrameLayout r4 = r0.writeButtonContainer
-            r5 = 60
-            r7 = 1114636288(0x42700000, float:60.0)
+            r6 = 60
+            r8 = 1114636288(0x42700000, float:60.0)
             r9 = 85
             r10 = 0
-            r11 = 0
-            r12 = 1086324736(0x40CLASSNAME, float:6.0)
-            r13 = 1092616192(0x41200000, float:10.0)
-            r26 = r5
-            r27 = r7
+            r12 = 0
+            r13 = 1086324736(0x40CLASSNAME, float:6.0)
+            r14 = 1092616192(0x41200000, float:10.0)
+            r26 = r6
+            r27 = r8
             r28 = r9
             r29 = r10
-            r30 = r11
-            r31 = r12
-            r32 = r13
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
-            r2.addView(r4, r5)
+            r30 = r12
+            r31 = r13
+            r32 = r14
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
+            r2.addView(r4, r6)
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             r4 = 1113587712(0x42600000, float:56.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            java.lang.String r7 = "dialogFloatingButton"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            java.lang.String r8 = "dialogFloatingButton"
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r8)
             int r10 = android.os.Build.VERSION.SDK_INT
-            r11 = 21
-            if (r10 < r11) goto L_0x057e
-            java.lang.String r7 = "dialogFloatingButtonPressed"
-        L_0x057e:
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r5, r9, r7)
-            if (r10 >= r11) goto L_0x05b4
-            android.content.res.Resources r7 = r25.getResources()
+            r12 = 21
+            if (r10 < r12) goto L_0x0584
+            java.lang.String r8 = "dialogFloatingButtonPressed"
+        L_0x0584:
+            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r6, r9, r8)
+            if (r10 >= r12) goto L_0x05ba
+            android.content.res.Resources r8 = r25.getResources()
             r9 = 2131165419(0x7var_eb, float:1.7945055E38)
-            android.graphics.drawable.Drawable r7 = r7.getDrawable(r9)
-            android.graphics.drawable.Drawable r7 = r7.mutate()
+            android.graphics.drawable.Drawable r8 = r8.getDrawable(r9)
+            android.graphics.drawable.Drawable r8 = r8.mutate()
             android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter
-            r12 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
-            android.graphics.PorterDuff$Mode r13 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r9.<init>(r12, r13)
-            r7.setColorFilter(r9)
+            r13 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+            android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r9.<init>(r13, r14)
+            r8.setColorFilter(r9)
             org.telegram.ui.Components.CombinedDrawable r9 = new org.telegram.ui.Components.CombinedDrawable
-            r9.<init>(r7, r5, r8, r8)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r9.setIconSize(r5, r7)
-            r5 = r9
-        L_0x05b4:
-            r2.setBackgroundDrawable(r5)
-            r5 = 2131165269(0x7var_, float:1.794475E38)
-            r2.setImageResource(r5)
-            r5 = 2
-            r2.setImportantForAccessibility(r5)
-            android.graphics.PorterDuffColorFilter r5 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r7 = "dialogFloatingIcon"
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+            r9.<init>(r8, r6, r7, r7)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r9.setIconSize(r6, r8)
+            r6 = r9
+        L_0x05ba:
+            r2.setBackgroundDrawable(r6)
+            r6 = 2131165269(0x7var_, float:1.794475E38)
+            r2.setImageResource(r6)
+            r6 = 2
+            r2.setImportantForAccessibility(r6)
+            android.graphics.PorterDuffColorFilter r6 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r8 = "dialogFloatingIcon"
+            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
             android.graphics.PorterDuff$Mode r9 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r5.<init>(r7, r9)
-            r2.setColorFilter(r5)
-            android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
-            r2.setScaleType(r5)
-            if (r10 < r11) goto L_0x05e0
-            org.telegram.ui.Components.ShareAlert$10 r5 = new org.telegram.ui.Components.ShareAlert$10
-            r5.<init>(r0)
-            r2.setOutlineProvider(r5)
-        L_0x05e0:
-            android.widget.FrameLayout r5 = r0.writeButtonContainer
-            if (r10 < r11) goto L_0x05e7
-            r7 = 56
-            goto L_0x05e9
-        L_0x05e7:
-            r7 = 60
-        L_0x05e9:
-            if (r10 < r11) goto L_0x05ec
-            goto L_0x05ee
-        L_0x05ec:
+            r6.<init>(r8, r9)
+            r2.setColorFilter(r6)
+            android.widget.ImageView$ScaleType r6 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r6)
+            if (r10 < r12) goto L_0x05e6
+            org.telegram.ui.Components.ShareAlert$10 r6 = new org.telegram.ui.Components.ShareAlert$10
+            r6.<init>(r0)
+            r2.setOutlineProvider(r6)
+        L_0x05e6:
+            android.widget.FrameLayout r6 = r0.writeButtonContainer
+            if (r10 < r12) goto L_0x05ed
+            r8 = 56
+            goto L_0x05ef
+        L_0x05ed:
+            r8 = 60
+        L_0x05ef:
+            if (r10 < r12) goto L_0x05f2
+            goto L_0x05f4
+        L_0x05f2:
             r4 = 1114636288(0x42700000, float:60.0)
-        L_0x05ee:
+        L_0x05f4:
             r9 = 51
-            if (r10 < r11) goto L_0x05f5
+            if (r10 < r12) goto L_0x05fb
             r10 = 1073741824(0x40000000, float:2.0)
-            goto L_0x05f6
-        L_0x05f5:
+            goto L_0x05fc
+        L_0x05fb:
             r10 = 0
-        L_0x05f6:
-            r11 = 0
+        L_0x05fc:
             r12 = 0
             r13 = 0
-            r26 = r7
+            r14 = 0
+            r26 = r8
             r27 = r4
             r28 = r9
             r29 = r10
-            r30 = r11
-            r31 = r12
-            r32 = r13
+            r30 = r12
+            r31 = r13
+            r32 = r14
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
-            r5.addView(r2, r4)
+            r6.addView(r2, r4)
             org.telegram.ui.Components.-$$Lambda$ShareAlert$Uko9yg1NoarQ9lJ2Fv56y__kpL8 r4 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$Uko9yg1NoarQ9lJ2Fv56y__kpL8
             r4.<init>()
             r2.setOnClickListener(r4)
@@ -1196,13 +1197,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             float r4 = (float) r4
             r2.setTextSize(r4)
             android.text.TextPaint r2 = r0.textPaint
-            android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
+            android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r2.setTypeface(r4)
             org.telegram.ui.Components.ShareAlert$11 r2 = new org.telegram.ui.Components.ShareAlert$11
             r2.<init>(r1)
             r0.selectedCountView = r2
-            r1 = 0
-            r2.setAlpha(r1)
+            r2.setAlpha(r11)
             android.view.View r1 = r0.selectedCountView
             r1.setScaleX(r3)
             android.view.View r1 = r0.selectedCountView
@@ -1213,31 +1213,31 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r4 = 1103101952(0x41CLASSNAME, float:24.0)
             r5 = 85
             r6 = 0
-            r7 = 0
+            r8 = 0
             r9 = -1056964608(0xffffffffCLASSNAME, float:-8.0)
             r10 = 1091567616(0x41100000, float:9.0)
             r25 = r3
             r26 = r4
             r27 = r5
             r28 = r6
-            r29 = r7
+            r29 = r8
             r30 = r9
             r31 = r10
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
             r1.addView(r2, r3)
-            r0.updateSelectedCount(r8)
+            r0.updateSelectedCount(r7)
             int r1 = r0.currentAccount
             org.telegram.messenger.AccountInstance r1 = org.telegram.messenger.AccountInstance.getInstance(r1)
             org.telegram.ui.DialogsActivity.loadDialogs(r1)
             org.telegram.ui.Components.ShareAlert$ShareDialogsAdapter r1 = r0.listAdapter
             java.util.ArrayList r1 = r1.dialogs
             boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x0688
+            if (r1 == 0) goto L_0x068d
             int r1 = r0.currentAccount
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
             int r2 = org.telegram.messenger.NotificationCenter.dialogsNeedReload
             r1.addObserver(r0, r2)
-        L_0x0688:
+        L_0x068d:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ShareAlert.<init>(android.content.Context, org.telegram.ui.ChatActivity, java.util.ArrayList, java.lang.String, java.lang.String, boolean, java.lang.String, java.lang.String, boolean, boolean):void");
@@ -1340,13 +1340,13 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             return;
         }
         if (this.isChannel || this.linkToCopy[0] != null) {
+            dismiss();
             if (this.linkToCopy[0] != null || !this.loadingLink) {
                 copyLink(getContext());
-            } else {
-                this.copyLinkOnEnd = true;
-                Toast.makeText(getContext(), LocaleController.getString("Loading", NUM), 0).show();
+                return;
             }
-            dismiss();
+            this.copyLinkOnEnd = true;
+            Toast.makeText(getContext(), LocaleController.getString("Loading", NUM), 0).show();
         }
     }
 
@@ -1361,42 +1361,54 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     public /* synthetic */ void lambda$new$6$ShareAlert(View view) {
         int i = 0;
         int i2 = 0;
-        while (i2 < this.selectedDialogs.size()) {
-            if (!AlertsCreator.checkSlowMode(getContext(), this.currentAccount, this.selectedDialogs.keyAt(i2), this.frameLayout2.getTag() != null && this.commentTextView.length() > 0)) {
-                i2++;
+        while (true) {
+            boolean z = true;
+            if (i2 < this.selectedDialogs.size()) {
+                long keyAt = this.selectedDialogs.keyAt(i2);
+                Context context = getContext();
+                int i3 = this.currentAccount;
+                if (this.frameLayout2.getTag() == null || this.commentTextView.length() <= 0) {
+                    z = false;
+                }
+                if (!AlertsCreator.checkSlowMode(context, i3, keyAt, z)) {
+                    i2++;
+                } else {
+                    return;
+                }
             } else {
+                if (this.sendingMessageObjects != null) {
+                    while (i < this.selectedDialogs.size()) {
+                        long keyAt2 = this.selectedDialogs.keyAt(i);
+                        if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
+                            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+                        }
+                        SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt2, true, 0);
+                        i++;
+                    }
+                    onSend(this.selectedDialogs, this.sendingMessageObjects.size());
+                } else {
+                    SwitchView switchView2 = this.switchView;
+                    int access$7400 = switchView2 != null ? switchView2.currentTab : 0;
+                    if (this.sendingText[access$7400] != null) {
+                        while (i < this.selectedDialogs.size()) {
+                            long keyAt3 = this.selectedDialogs.keyAt(i);
+                            if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
+                                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt3, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+                            }
+                            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText[access$7400], keyAt3, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+                            i++;
+                        }
+                    }
+                    onSend(this.selectedDialogs, 1);
+                }
+                ShareAlertDelegate shareAlertDelegate = this.delegate;
+                if (shareAlertDelegate != null) {
+                    shareAlertDelegate.didShare();
+                }
+                dismiss();
                 return;
             }
         }
-        if (this.sendingMessageObjects != null) {
-            while (i < this.selectedDialogs.size()) {
-                long keyAt = this.selectedDialogs.keyAt(i);
-                if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
-                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
-                }
-                SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingMessageObjects, keyAt, true, 0);
-                i++;
-            }
-            onSend(this.selectedDialogs, this.sendingMessageObjects.size());
-        } else {
-            SwitchView switchView2 = this.switchView;
-            int access$7400 = switchView2 != null ? switchView2.currentTab : 0;
-            if (this.sendingText[access$7400] != null) {
-                while (i < this.selectedDialogs.size()) {
-                    long keyAt2 = this.selectedDialogs.keyAt(i);
-                    if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
-                        SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt2, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
-                    }
-                    SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText[access$7400], keyAt2, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
-                    i++;
-                }
-            }
-        }
-        ShareAlertDelegate shareAlertDelegate = this.delegate;
-        if (shareAlertDelegate != null) {
-            shareAlertDelegate.didShare();
-        }
-        dismiss();
     }
 
     /* access modifiers changed from: private */
@@ -1871,7 +1883,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             View view;
             if (i != 0) {
                 view = new View(this.context);
-                view.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(ShareAlert.this.darkTheme ? 109.0f : 56.0f)));
+                view.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp((!ShareAlert.this.darkTheme || ShareAlert.this.linkToCopy[1] == null) ? 56.0f : 109.0f)));
             } else {
                 view = new ShareDialogCell(this.context, ShareAlert.this.darkTheme);
                 view.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(100.0f)));

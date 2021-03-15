@@ -2195,7 +2195,7 @@ public class FilterTabsView extends FrameLayout {
                 break;
             }
             Tab tab = this.tabs.get(i);
-            if (tab.counter != this.delegate.getTabCounter(tab.id)) {
+            if (tab.counter != this.delegate.getTabCounter(tab.id) && this.delegate.getTabCounter(tab.id) >= 0) {
                 if (this.positionToWidth.get(i) != tab.getWidth(true) || this.invalidated) {
                     this.invalidated = true;
                     requestLayout();
@@ -2225,7 +2225,7 @@ public class FilterTabsView extends FrameLayout {
         int i2 = this.idToPosition.get(i, -1);
         if (i2 >= 0 && i2 < this.tabs.size()) {
             Tab tab = this.tabs.get(i2);
-            if (tab.counter != this.delegate.getTabCounter(tab.id)) {
+            if (tab.counter != this.delegate.getTabCounter(tab.id) && this.delegate.getTabCounter(tab.id) >= 0) {
                 this.listView.invalidateViews();
                 if (this.positionToWidth.get(i2) != tab.getWidth(true) || this.invalidated) {
                     this.invalidated = true;

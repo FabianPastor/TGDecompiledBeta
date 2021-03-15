@@ -3804,7 +3804,6 @@
     <string name="VoipGroupOfflineAirplane">وضع الطيران يعمل لديك حاليًا. يرجى إيقاف تشغيله أو تشغيل الـ Wi-Fi للانضمام إلى المحادثات الصوتية. </string>
     <string name="VoipGroupOnlyAdminsCanSpeak">كتم المشاركين الجدد</string>
     <string name="VoipGroupOpenVoiceChat">فتح المحادثة الصوتية</string>
-    <string name="VoipGroupRemoveMemberAlertText">هل تريد إزالة %1$s من المجموعة؟</string>
     <string name="VoipGroupRemoveMemberAlertTitle">إزالة عضو</string>
     <string name="VoipGroupRemovedFromGroup">تمت إزالة **%1$s** من المجموعة.</string>
     <string name="VoipGroupSearchMembers">البحث عن أعضاء لدعوتهم...</string>

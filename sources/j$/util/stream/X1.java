@@ -9,7 +9,9 @@ import j$.util.k;
 import j$.util.stream.A2;
 
 class X1 implements CLASSNAMEu2<Double, Double, X1>, A2.e {
-    private double a;
+
+    /* renamed from: a  reason: collision with root package name */
+    private double var_a;
     final /* synthetic */ double b;
     final /* synthetic */ p c;
 
@@ -19,7 +21,7 @@ class X1 implements CLASSNAMEu2<Double, Double, X1>, A2.e {
     }
 
     public void accept(double d) {
-        this.a = this.c.applyAsDouble(this.a, d);
+        this.var_a = this.c.applyAsDouble(this.var_a, d);
     }
 
     public /* synthetic */ void accept(int i) {
@@ -43,11 +45,11 @@ class X1 implements CLASSNAMEu2<Double, Double, X1>, A2.e {
     }
 
     public Object get() {
-        return Double.valueOf(this.a);
+        return Double.valueOf(this.var_a);
     }
 
     public void i(CLASSNAMEu2 u2Var) {
-        accept(((X1) u2Var).a);
+        accept(((X1) u2Var).var_a);
     }
 
     public q k(q qVar) {
@@ -59,7 +61,7 @@ class X1 implements CLASSNAMEu2<Double, Double, X1>, A2.e {
     }
 
     public void n(long j) {
-        this.a = this.b;
+        this.var_a = this.b;
     }
 
     public /* synthetic */ boolean p() {

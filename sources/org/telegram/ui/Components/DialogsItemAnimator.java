@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.telegram.ui.Adapters.DialogsAdapter;
 import org.telegram.ui.Cells.DialogCell;
 
 public class DialogsItemAnimator extends SimpleItemAnimator {
     private static TimeInterpolator sDefaultInterpolator = new DecelerateInterpolator();
     private int bottomClip;
+    private final RecyclerListView listView;
     ArrayList<RecyclerView.ViewHolder> mAddAnimations = new ArrayList<>();
     ArrayList<ArrayList<RecyclerView.ViewHolder>> mAdditionsList = new ArrayList<>();
     ArrayList<RecyclerView.ViewHolder> mChangeAnimations = new ArrayList<>();
@@ -57,6 +59,10 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
             this.toX = i3;
             this.toY = i4;
         }
+    }
+
+    public DialogsItemAnimator(RecyclerListView recyclerListView) {
+        this.listView = recyclerListView;
     }
 
     private static class ChangeInfo {
@@ -184,6 +190,17 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     public boolean animateRemove(RecyclerView.ViewHolder viewHolder, RecyclerView.ItemAnimator.ItemHolderInfo itemHolderInfo) {
         resetAnimation(viewHolder);
         this.mPendingRemovals.add(viewHolder);
+        DialogCell dialogCell = null;
+        for (int i = 0; i < this.listView.getChildCount(); i++) {
+            View childAt = this.listView.getChildAt(i);
+            if (childAt.getTop() > Integer.MIN_VALUE && (childAt instanceof DialogCell)) {
+                dialogCell = (DialogCell) childAt;
+            }
+        }
+        if (viewHolder.itemView != dialogCell) {
+            return true;
+        }
+        this.removingDialog = dialogCell;
         return true;
     }
 
@@ -198,26 +215,48 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         this.mRemoveAnimations.add(viewHolder);
         if (view instanceof DialogCell) {
             final DialogCell dialogCell = (DialogCell) view;
-            this.removingDialog = dialogCell;
-            if (this.topClip != Integer.MAX_VALUE) {
-                int measuredHeight = dialogCell.getMeasuredHeight();
-                int i = this.topClip;
-                this.bottomClip = measuredHeight - i;
-                this.removingDialog.setTopClip(i);
-                this.removingDialog.setBottomClip(this.bottomClip);
-            } else if (this.bottomClip != Integer.MAX_VALUE) {
-                int measuredHeight2 = dialogCell.getMeasuredHeight() - this.bottomClip;
-                this.topClip = measuredHeight2;
-                this.removingDialog.setTopClip(measuredHeight2);
-                this.removingDialog.setBottomClip(this.bottomClip);
+            DialogCell dialogCell2 = this.removingDialog;
+            if (view == dialogCell2) {
+                if (this.topClip != Integer.MAX_VALUE) {
+                    int measuredHeight = dialogCell2.getMeasuredHeight();
+                    int i = this.topClip;
+                    this.bottomClip = measuredHeight - i;
+                    this.removingDialog.setTopClip(i);
+                    this.removingDialog.setBottomClip(this.bottomClip);
+                } else if (this.bottomClip != Integer.MAX_VALUE) {
+                    int measuredHeight2 = dialogCell2.getMeasuredHeight() - this.bottomClip;
+                    this.topClip = measuredHeight2;
+                    this.removingDialog.setTopClip(measuredHeight2);
+                    this.removingDialog.setBottomClip(this.bottomClip);
+                }
+                if (Build.VERSION.SDK_INT >= 21) {
+                    dialogCell.setElevation(-1.0f);
+                    dialogCell.setOutlineProvider((ViewOutlineProvider) null);
+                }
+                ObjectAnimator duration = ObjectAnimator.ofFloat(dialogCell, AnimationProperties.CLIP_DIALOG_CELL_PROGRESS, new float[]{1.0f}).setDuration(180);
+                duration.setInterpolator(sDefaultInterpolator);
+                duration.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationStart(Animator animator) {
+                        DialogsItemAnimator.this.dispatchRemoveStarting(viewHolder);
+                    }
+
+                    public void onAnimationEnd(Animator animator) {
+                        animator.removeAllListeners();
+                        dialogCell.setClipProgress(0.0f);
+                        if (Build.VERSION.SDK_INT >= 21) {
+                            dialogCell.setElevation(0.0f);
+                        }
+                        DialogsItemAnimator.this.dispatchRemoveFinished(viewHolder);
+                        DialogsItemAnimator.this.mRemoveAnimations.remove(viewHolder);
+                        DialogsItemAnimator.this.dispatchFinishedWhenDone();
+                    }
+                });
+                duration.start();
+                return;
             }
-            if (Build.VERSION.SDK_INT >= 21) {
-                dialogCell.setElevation(-1.0f);
-                dialogCell.setOutlineProvider((ViewOutlineProvider) null);
-            }
-            ObjectAnimator duration = ObjectAnimator.ofFloat(dialogCell, AnimationProperties.CLIP_DIALOG_CELL_PROGRESS, new float[]{1.0f}).setDuration(180);
-            duration.setInterpolator(sDefaultInterpolator);
-            duration.addListener(new AnimatorListenerAdapter() {
+            ObjectAnimator duration2 = ObjectAnimator.ofFloat(dialogCell, View.ALPHA, new float[]{1.0f}).setDuration(180);
+            duration2.setInterpolator(sDefaultInterpolator);
+            duration2.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationStart(Animator animator) {
                     DialogsItemAnimator.this.dispatchRemoveStarting(viewHolder);
                 }
@@ -233,7 +272,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                     DialogsItemAnimator.this.dispatchFinishedWhenDone();
                 }
             });
-            duration.start();
+            duration2.start();
             return;
         }
         final ViewPropertyAnimator animate = view.animate();
@@ -255,12 +294,18 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     public boolean animateAdd(RecyclerView.ViewHolder viewHolder) {
         resetAnimation(viewHolder);
         View view = viewHolder.itemView;
-        if (view instanceof DialogCell) {
-            ((DialogCell) view).setClipProgress(1.0f);
-        } else {
+        if (!(view instanceof DialogCell)) {
             view.setAlpha(0.0f);
         }
         this.mPendingAdditions.add(viewHolder);
+        if (this.mPendingAdditions.size() > 2) {
+            for (int i = 0; i < this.mPendingAdditions.size(); i++) {
+                this.mPendingAdditions.get(i).itemView.setAlpha(0.0f);
+                if (this.mPendingAdditions.get(i).itemView instanceof DialogCell) {
+                    ((DialogCell) viewHolder.itemView).setMoving(true);
+                }
+            }
+        }
         return true;
     }
 
@@ -268,29 +313,6 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     public void animateAddImpl(final RecyclerView.ViewHolder viewHolder) {
         final View view = viewHolder.itemView;
         this.mAddAnimations.add(viewHolder);
-        if (view instanceof DialogCell) {
-            final DialogCell dialogCell = (DialogCell) view;
-            ObjectAnimator duration = ObjectAnimator.ofFloat(dialogCell, AnimationProperties.CLIP_DIALOG_CELL_PROGRESS, new float[]{0.0f}).setDuration(180);
-            duration.setInterpolator(sDefaultInterpolator);
-            duration.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationStart(Animator animator) {
-                    DialogsItemAnimator.this.dispatchAddStarting(viewHolder);
-                }
-
-                public void onAnimationCancel(Animator animator) {
-                    dialogCell.setClipProgress(0.0f);
-                }
-
-                public void onAnimationEnd(Animator animator) {
-                    animator.removeAllListeners();
-                    DialogsItemAnimator.this.dispatchAddFinished(viewHolder);
-                    DialogsItemAnimator.this.mAddAnimations.remove(viewHolder);
-                    DialogsItemAnimator.this.dispatchFinishedWhenDone();
-                }
-            });
-            duration.start();
-            return;
-        }
         final ViewPropertyAnimator animate = view.animate();
         animate.alpha(1.0f).setDuration(180).setListener(new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animator) {
@@ -306,6 +328,10 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                 DialogsItemAnimator.this.dispatchAddFinished(viewHolder);
                 DialogsItemAnimator.this.mAddAnimations.remove(viewHolder);
                 DialogsItemAnimator.this.dispatchFinishedWhenDone();
+                View view = viewHolder.itemView;
+                if (view instanceof DialogCell) {
+                    ((DialogCell) view).setMoving(false);
+                }
             }
         }).start();
     }
@@ -326,6 +352,12 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         }
         if (i6 != 0) {
             view.setTranslationY((float) (-i6));
+        }
+        View view2 = viewHolder.itemView;
+        if (view2 instanceof DialogCell) {
+            ((DialogCell) view2).setMoving(true);
+        } else if (view2 instanceof DialogsAdapter.LastEmptyView) {
+            ((DialogsAdapter.LastEmptyView) view2).moving = true;
         }
         this.mPendingMoves.add(new MoveInfo(viewHolder, translationX, translationY, i3, i4));
         return true;
@@ -394,6 +426,12 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                 if (i6 != 0) {
                     view.setTranslationY(0.0f);
                 }
+                View view = viewHolder2.itemView;
+                if (view instanceof DialogCell) {
+                    ((DialogCell) view).setMoving(false);
+                } else if (view instanceof DialogsAdapter.LastEmptyView) {
+                    ((DialogsAdapter.LastEmptyView) view).moving = false;
+                }
             }
 
             public void onAnimationEnd(Animator animator) {
@@ -401,6 +439,14 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                 DialogsItemAnimator.this.dispatchMoveFinished(viewHolder2);
                 DialogsItemAnimator.this.mMoveAnimations.remove(viewHolder2);
                 DialogsItemAnimator.this.dispatchFinishedWhenDone();
+                View view = viewHolder2.itemView;
+                if (view instanceof DialogCell) {
+                    ((DialogCell) view).setMoving(false);
+                } else if (view instanceof DialogsAdapter.LastEmptyView) {
+                    ((DialogsAdapter.LastEmptyView) view).moving = false;
+                }
+                view.setTranslationX(0.0f);
+                view.setTranslationY(0.0f);
             }
         }).start();
     }

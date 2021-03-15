@@ -3,7 +3,9 @@ package j$.util.stream;
 import j$.util.function.v;
 
 public final /* synthetic */ class C implements v {
-    public static final /* synthetic */ C a = new C();
+
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ C var_a = new C();
 
     private /* synthetic */ C() {
     }

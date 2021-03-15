@@ -6,12 +6,14 @@ enum N1 {
     NONE(true, false);
     
     /* access modifiers changed from: private */
-    public final boolean a;
+
+    /* renamed from: a  reason: collision with root package name */
+    public final boolean var_a;
     /* access modifiers changed from: private */
     public final boolean b;
 
     private N1(boolean z, boolean z2) {
-        this.a = z;
+        this.var_a = z;
         this.b = z2;
     }
 }

@@ -9,10 +9,12 @@ import j$.util.stream.A2;
 import j$.util.stream.S2;
 
 public final /* synthetic */ class L0 implements A2.f {
-    public final /* synthetic */ S2.c a;
+
+    /* renamed from: a  reason: collision with root package name */
+    public final /* synthetic */ S2.c var_a;
 
     public /* synthetic */ L0(S2.c cVar) {
-        this.a = cVar;
+        this.var_a = cVar;
     }
 
     public /* synthetic */ void accept(double d) {
@@ -21,7 +23,7 @@ public final /* synthetic */ class L0 implements A2.f {
     }
 
     public final void accept(int i) {
-        this.a.accept(i);
+        this.var_a.accept(i);
     }
 
     public /* synthetic */ void accept(long j) {

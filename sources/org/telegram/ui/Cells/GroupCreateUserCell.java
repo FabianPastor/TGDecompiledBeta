@@ -480,7 +480,7 @@ public class GroupCreateUserCell extends FrameLayout {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r0)
             if (r8 == 0) goto L_0x01e4
             org.telegram.ui.ActionBar.SimpleTextView r15 = r14.nameTextView
-            r1 = 2131627209(0x7f0e0cc9, float:1.8881676E38)
+            r1 = 2131627219(0x7f0e0cd3, float:1.8881696E38)
             java.lang.String r3 = "SavedMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r15.setText(r1, r6)
@@ -609,7 +609,7 @@ public class GroupCreateUserCell extends FrameLayout {
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
             r15.setTextColor(r5)
             org.telegram.ui.ActionBar.SimpleTextView r15 = r14.statusTextView
-            r5 = 2131624569(0x7f0e0279, float:1.8876321E38)
+            r5 = 2131624570(0x7f0e027a, float:1.8876323E38)
             java.lang.String r7 = "Bot"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r15.setText(r5)
@@ -666,7 +666,7 @@ public class GroupCreateUserCell extends FrameLayout {
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
             r15.setTextColor(r5)
             org.telegram.ui.ActionBar.SimpleTextView r15 = r14.statusTextView
-            r5 = 2131626478(0x7f0e09ee, float:1.8880193E38)
+            r5 = 2131626488(0x7f0e09f8, float:1.8880214E38)
             java.lang.String r7 = "Online"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r15.setText(r5)
@@ -783,7 +783,7 @@ public class GroupCreateUserCell extends FrameLayout {
             boolean r15 = r0.has_geo
             if (r15 == 0) goto L_0x03e4
             org.telegram.ui.ActionBar.SimpleTextView r15 = r14.statusTextView
-            r5 = 2131626058(0x7f0e084a, float:1.8879341E38)
+            r5 = 2131626068(0x7f0e0854, float:1.8879362E38)
             java.lang.String r7 = "MegaLocation"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r15.setText(r5)
@@ -797,14 +797,14 @@ public class GroupCreateUserCell extends FrameLayout {
             boolean r15 = r0.megagroup
             if (r15 != 0) goto L_0x0405
             org.telegram.ui.ActionBar.SimpleTextView r15 = r14.statusTextView
-            r5 = 2131624743(0x7f0e0327, float:1.8876674E38)
+            r5 = 2131624747(0x7f0e032b, float:1.8876682E38)
             java.lang.String r7 = "ChannelPrivate"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r15.setText(r5)
             goto L_0x043b
         L_0x0405:
             org.telegram.ui.ActionBar.SimpleTextView r15 = r14.statusTextView
-            r5 = 2131626059(0x7f0e084b, float:1.8879343E38)
+            r5 = 2131626069(0x7f0e0855, float:1.8879364E38)
             java.lang.String r7 = "MegaPrivate"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r15.setText(r5)
@@ -815,14 +815,14 @@ public class GroupCreateUserCell extends FrameLayout {
             boolean r15 = r0.megagroup
             if (r15 != 0) goto L_0x042d
             org.telegram.ui.ActionBar.SimpleTextView r15 = r14.statusTextView
-            r5 = 2131624746(0x7f0e032a, float:1.887668E38)
+            r5 = 2131624750(0x7f0e032e, float:1.8876689E38)
             java.lang.String r7 = "ChannelPublic"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r15.setText(r5)
             goto L_0x043b
         L_0x042d:
             org.telegram.ui.ActionBar.SimpleTextView r15 = r14.statusTextView
-            r5 = 2131626062(0x7f0e084e, float:1.887935E38)
+            r5 = 2131626072(0x7f0e0858, float:1.887937E38)
             java.lang.String r7 = "MegaPublic"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
             r15.setText(r5)

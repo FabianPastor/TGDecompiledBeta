@@ -287,8 +287,8 @@ public class AvatarPreviewer {
         /* access modifiers changed from: protected */
         public abstract void onReceiveNotification(Object... objArr);
 
-        public InfoLoadTask(A a, int i, int i2) {
-            this.argument = a;
+        public InfoLoadTask(A a2, int i, int i2) {
+            this.argument = a2;
             this.classGuid = i;
             this.notificationId = i2;
             this.notificationCenter = NotificationCenter.getInstance(UserConfig.selectedAccount);

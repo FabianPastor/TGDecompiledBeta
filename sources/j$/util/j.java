@@ -5,14 +5,16 @@ import j$.util.function.Consumer;
 import j$.util.function.q;
 
 public final /* synthetic */ class j implements q {
-    public final /* synthetic */ Consumer a;
+
+    /* renamed from: a  reason: collision with root package name */
+    public final /* synthetic */ Consumer var_a;
 
     public /* synthetic */ j(Consumer consumer) {
-        this.a = consumer;
+        this.var_a = consumer;
     }
 
     public final void accept(double d) {
-        this.a.accept(Double.valueOf(d));
+        this.var_a.accept(Double.valueOf(d));
     }
 
     public q k(q qVar) {

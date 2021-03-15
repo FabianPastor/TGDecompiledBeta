@@ -5,14 +5,16 @@ import j$.util.function.w;
 import j$.util.stream.CLASSNAMEz1;
 
 public final /* synthetic */ class F implements w {
-    public final /* synthetic */ CLASSNAMEz1.g.a a;
+
+    /* renamed from: a  reason: collision with root package name */
+    public final /* synthetic */ CLASSNAMEz1.g.a var_a;
 
     public /* synthetic */ F(CLASSNAMEz1.g.a aVar) {
-        this.a = aVar;
+        this.var_a = aVar;
     }
 
     public final void accept(int i) {
-        this.a.a.accept(i);
+        this.var_a.var_a.accept(i);
     }
 
     public w l(w wVar) {

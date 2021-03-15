@@ -5,14 +5,16 @@ import j$.util.function.CLASSNAMEh;
 import j$.util.function.Consumer;
 
 public final /* synthetic */ class g implements C {
-    public final /* synthetic */ Consumer a;
+
+    /* renamed from: a  reason: collision with root package name */
+    public final /* synthetic */ Consumer var_a;
 
     public /* synthetic */ g(Consumer consumer) {
-        this.a = consumer;
+        this.var_a = consumer;
     }
 
     public final void accept(long j) {
-        this.a.accept(Long.valueOf(j));
+        this.var_a.accept(Long.valueOf(j));
     }
 
     public C g(C c) {

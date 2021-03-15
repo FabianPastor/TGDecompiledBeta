@@ -9,7 +9,9 @@ import j$.util.p;
 import j$.util.stream.A2;
 
 class Z1 implements CLASSNAMEu2<Double, p, Z1>, A2.e {
-    private boolean a;
+
+    /* renamed from: a  reason: collision with root package name */
+    private boolean var_a;
     private double b;
     final /* synthetic */ j$.util.function.p c;
 
@@ -18,8 +20,8 @@ class Z1 implements CLASSNAMEu2<Double, p, Z1>, A2.e {
     }
 
     public void accept(double d) {
-        if (this.a) {
-            this.a = false;
+        if (this.var_a) {
+            this.var_a = false;
         } else {
             d = this.c.applyAsDouble(this.b, d);
         }
@@ -47,12 +49,12 @@ class Z1 implements CLASSNAMEu2<Double, p, Z1>, A2.e {
     }
 
     public Object get() {
-        return this.a ? p.a() : p.d(this.b);
+        return this.var_a ? p.a() : p.d(this.b);
     }
 
     public void i(CLASSNAMEu2 u2Var) {
         Z1 z1 = (Z1) u2Var;
-        if (!z1.a) {
+        if (!z1.var_a) {
             accept(z1.b);
         }
     }
@@ -66,7 +68,7 @@ class Z1 implements CLASSNAMEu2<Double, p, Z1>, A2.e {
     }
 
     public void n(long j) {
-        this.a = true;
+        this.var_a = true;
         this.b = 0.0d;
     }
 

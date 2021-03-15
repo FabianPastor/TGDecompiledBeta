@@ -1,20 +1,22 @@
 package j$.util;
 
-import j$.CLASSNAMEc;
+import a.CLASSNAMEc;
 import java.util.NoSuchElementException;
 
 public final class r {
     private static final r c = new r();
-    private final boolean a;
+
+    /* renamed from: a  reason: collision with root package name */
+    private final boolean var_a;
     private final long b;
 
     private r() {
-        this.a = false;
+        this.var_a = false;
         this.b = 0;
     }
 
     private r(long j) {
-        this.a = true;
+        this.var_a = true;
         this.b = j;
     }
 
@@ -27,14 +29,14 @@ public final class r {
     }
 
     public long b() {
-        if (this.a) {
+        if (this.var_a) {
             return this.b;
         }
         throw new NoSuchElementException("No value present");
     }
 
     public boolean c() {
-        return this.a;
+        return this.var_a;
     }
 
     public boolean equals(Object obj) {
@@ -45,9 +47,9 @@ public final class r {
             return false;
         }
         r rVar = (r) obj;
-        boolean z = this.a;
-        if (!z || !rVar.a) {
-            if (z == rVar.a) {
+        boolean z = this.var_a;
+        if (!z || !rVar.var_a) {
+            if (z == rVar.var_a) {
                 return true;
             }
         } else if (this.b == rVar.b) {
@@ -57,14 +59,14 @@ public final class r {
     }
 
     public int hashCode() {
-        if (this.a) {
+        if (this.var_a) {
             return CLASSNAMEc.a(this.b);
         }
         return 0;
     }
 
     public String toString() {
-        if (!this.a) {
+        if (!this.var_a) {
             return "OptionalLong.empty";
         }
         return String.format("OptionalLong[%s]", new Object[]{Long.valueOf(this.b)});

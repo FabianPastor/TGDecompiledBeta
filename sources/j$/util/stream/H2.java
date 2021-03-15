@@ -17,26 +17,26 @@ final class H2 extends D2 {
     public void m() {
         int[] iArr = (int[]) this.c.e();
         Arrays.sort(iArr);
-        this.a.n((long) iArr.length);
+        this.var_a.n((long) iArr.length);
         int i = 0;
         if (!this.b) {
             int length = iArr.length;
             while (i < length) {
-                this.a.accept(iArr[i]);
+                this.var_a.accept(iArr[i]);
                 i++;
             }
         } else {
             int length2 = iArr.length;
             while (i < length2) {
                 int i2 = iArr[i];
-                if (this.a.p()) {
+                if (this.var_a.p()) {
                     break;
                 }
-                this.a.accept(i2);
+                this.var_a.accept(i2);
                 i++;
             }
         }
-        this.a.m();
+        this.var_a.m();
     }
 
     public void n(long j) {

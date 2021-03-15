@@ -5,9 +5,11 @@ import android.text.TextPaint;
 import android.text.style.URLSpan;
 import android.view.View;
 import org.telegram.messenger.browser.Browser;
+import org.telegram.tgnet.TLObject;
 import org.telegram.ui.Components.TextStyleSpan;
 
 public class URLSpanNoUnderline extends URLSpan {
+    private TLObject object;
     private TextStyleSpan.TextStyleRun style;
 
     public URLSpanNoUnderline(String str) {
@@ -38,5 +40,13 @@ public class URLSpanNoUnderline extends URLSpan {
             textStyleRun.applyStyle(textPaint);
         }
         textPaint.setUnderlineText(i == color);
+    }
+
+    public void setObject(TLObject tLObject) {
+        this.object = tLObject;
+    }
+
+    public TLObject getObject() {
+        return this.object;
     }
 }
