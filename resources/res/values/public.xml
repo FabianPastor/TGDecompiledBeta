@@ -1485,6 +1485,7 @@
     <public type="raw" name="statistic_preload" id="NUM" />
     <public type="raw" name="sun" id="NUM" />
     <public type="raw" name="swipe_delete" id="NUM" />
+    <public type="raw" name="swipe_disabled" id="NUM" />
     <public type="raw" name="swipe_mute" id="NUM" />
     <public type="raw" name="swipe_pin" id="NUM" />
     <public type="raw" name="swipe_read" id="NUM" />
@@ -1520,7 +1521,9 @@
     <public type="raw" name="voip_group_removed" id="NUM" />
     <public type="raw" name="voip_invite" id="NUM" />
     <public type="raw" name="voip_muted" id="NUM" />
+    <public type="raw" name="voip_onallowtalk" id="NUM" />
     <public type="raw" name="voip_record_start" id="NUM" />
+    <public type="raw" name="voip_recordstart" id="NUM" />
     <public type="raw" name="voip_ringback" id="NUM" />
     <public type="raw" name="voip_unmuted" id="NUM" />
     <public type="raw" name="wallet_allset" id="NUM" />
@@ -5609,6 +5612,7 @@
     <public type="string" name="VoipGroupShareInviteLink" id="NUM" />
     <public type="string" name="VoipGroupStartAs" id="NUM" />
     <public type="string" name="VoipGroupStartAsInfo" id="NUM" />
+    <public type="string" name="VoipGroupStartAsInfoGroup" id="NUM" />
     <public type="string" name="VoipGroupStartRecordingText" id="NUM" />
     <public type="string" name="VoipGroupStartRecordingTitle" id="NUM" />
     <public type="string" name="VoipGroupStopRecordCall" id="NUM" />

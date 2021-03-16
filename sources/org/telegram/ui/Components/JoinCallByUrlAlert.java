@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
@@ -61,22 +62,24 @@ public class JoinCallByUrlAlert extends BottomSheet {
         super(context, true);
         setApplyBottomPadding(false);
         setApplyTopPadding(false);
-        FrameLayout frameLayout = new FrameLayout(context);
-        setCustomView(frameLayout);
+        LinearLayout linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(1);
+        setCustomView(linearLayout);
         BackupImageView backupImageView = new BackupImageView(context);
         backupImageView.setRoundRadius(AndroidUtilities.dp(45.0f));
-        frameLayout.addView(backupImageView, LayoutHelper.createFrame(90, 90.0f, 49, 0.0f, 29.0f, 0.0f, 0.0f));
+        linearLayout.addView(backupImageView, LayoutHelper.createLinear(90, 90, 49, 0, 29, 0, 0));
         backupImageView.setImage(ImageLocation.getForChat(tLRPC$Chat, false), "50_50", (Drawable) new AvatarDrawable(tLRPC$Chat), (Object) tLRPC$Chat);
         TextView textView = new TextView(context);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTextSize(1, 18.0f);
         textView.setTextColor(Theme.getColor("dialogTextBlack"));
-        frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, 49, 17.0f, 147.0f, 17.0f, 0.0f));
+        textView.setGravity(1);
+        linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 49, 17, 24, 17, 0));
         TextView textView2 = new TextView(context);
         textView2.setTextSize(1, 14.0f);
         textView2.setTextColor(Theme.getColor("dialogTextGray3"));
         textView2.setGravity(1);
-        frameLayout.addView(textView2, LayoutHelper.createFrame(-2, -2.0f, 49, 30.0f, 178.0f, 30.0f, 44.0f));
+        linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, 49, 30, 8, 30, 0));
         ChatObject.Call groupCall = AccountInstance.getInstance(this.currentAccount).getMessagesController().getGroupCall(tLRPC$Chat.id, false);
         if (groupCall != null) {
             if (TextUtils.isEmpty(groupCall.call.title)) {
@@ -88,7 +91,7 @@ public class JoinCallByUrlAlert extends BottomSheet {
             if (i == 0) {
                 textView2.setText(LocaleController.getString("NoOneJoinedYet", NUM));
             } else {
-                textView2.setText(LocaleController.formatPluralString("Members", i));
+                textView2.setText(LocaleController.formatPluralString("Participants", i));
             }
         } else {
             textView.setText(tLRPC$Chat.title);
@@ -102,7 +105,7 @@ public class JoinCallByUrlAlert extends BottomSheet {
                 JoinCallByUrlAlert.this.lambda$new$0$JoinCallByUrlAlert(view);
             }
         });
-        frameLayout.addView(bottomSheetCell, LayoutHelper.createFrame(-1, 50.0f, 51, 0.0f, 223.0f, 0.0f, 0.0f));
+        linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 50, 51, 0, 30, 0, 0));
     }
 
     /* access modifiers changed from: private */

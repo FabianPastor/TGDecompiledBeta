@@ -472,7 +472,10 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         }
         alertDialogArr[0] = null;
         this.info.linked_chat_id = 0;
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, Boolean.FALSE);
+        NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
+        int i = NotificationCenter.chatInfoDidLoad;
+        Boolean bool = Boolean.FALSE;
+        instance.postNotificationName(i, this.info, 0, bool, bool);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
                 ChatLinkActivity.this.lambda$null$0$ChatLinkActivity();
@@ -717,7 +720,10 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             alertDialogArr[0] = null;
         }
         this.info.linked_chat_id = tLRPC$Chat.id;
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, Boolean.FALSE);
+        NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
+        int i = NotificationCenter.chatInfoDidLoad;
+        Boolean bool = Boolean.FALSE;
+        instance.postNotificationName(i, this.info, 0, bool, bool);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
                 ChatLinkActivity.this.lambda$null$11$ChatLinkActivity();

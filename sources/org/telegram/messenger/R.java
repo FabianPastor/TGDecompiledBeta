@@ -1618,6 +1618,7 @@ public final class R {
         public static final int statistic_preload = NUM;
         public static final int sun = NUM;
         public static final int swipe_delete = NUM;
+        public static final int swipe_disabled = NUM;
         public static final int swipe_mute = NUM;
         public static final int swipe_pin = NUM;
         public static final int swipe_read = NUM;
@@ -1653,7 +1654,9 @@ public final class R {
         public static final int voip_group_removed = NUM;
         public static final int voip_invite = NUM;
         public static final int voip_muted = NUM;
+        public static final int voip_onallowtalk = NUM;
         public static final int voip_record_start = NUM;
+        public static final int voip_recordstart = NUM;
         public static final int voip_ringback = NUM;
         public static final int voip_unmuted = NUM;
         public static final int wallet_allset = NUM;
@@ -5748,6 +5751,7 @@ public final class R {
         public static final int VoipGroupShareInviteLink = NUM;
         public static final int VoipGroupStartAs = NUM;
         public static final int VoipGroupStartAsInfo = NUM;
+        public static final int VoipGroupStartAsInfoGroup = NUM;
         public static final int VoipGroupStartRecordingText = NUM;
         public static final int VoipGroupStartRecordingTitle = NUM;
         public static final int VoipGroupStopRecordCall = NUM;

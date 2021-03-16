@@ -204,17 +204,13 @@ public class Emoji {
 
     public static EmojiDrawable getEmojiDrawable(CharSequence charSequence) {
         DrawableInfo drawableInfo = getDrawableInfo(charSequence);
-        if (drawableInfo != null) {
-            EmojiDrawable emojiDrawable = new EmojiDrawable(drawableInfo);
-            int i = drawImgSize;
-            emojiDrawable.setBounds(0, 0, i, i);
-            return emojiDrawable;
-        } else if (!BuildVars.LOGS_ENABLED) {
-            return null;
-        } else {
-            FileLog.d("No drawable for emoji " + charSequence);
+        if (drawableInfo == null) {
             return null;
         }
+        EmojiDrawable emojiDrawable = new EmojiDrawable(drawableInfo);
+        int i = drawImgSize;
+        emojiDrawable.setBounds(0, 0, i, i);
+        return emojiDrawable;
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:2:0x000a, code lost:

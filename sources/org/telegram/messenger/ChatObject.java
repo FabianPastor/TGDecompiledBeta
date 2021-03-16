@@ -1071,6 +1071,7 @@ public class ChatObject {
                     ChatObject.Call.this.lambda$toggleRecord$8$ChatObject$Call(tLObject, tLRPC$TL_error);
                 }
             });
+            this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.groupCallUpdated, Integer.valueOf(this.chatId), Long.valueOf(this.call.id), Boolean.FALSE);
         }
 
         /* access modifiers changed from: private */

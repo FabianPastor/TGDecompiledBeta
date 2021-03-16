@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 4.1.2
 
 Name: AndroidManifest.xml
-SHA1-Digest: PfHpkGvxq3MU9krKBUqTTGiY6T4=
+SHA1-Digest: KMMTcyja9/SP5QsY+co8aOh39lA=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9879,13 +9879,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: oLad6E+PVlTFIB+cxF1TNbL3PGQ=
+SHA1-Digest: 6irGZFpQJHyJbU4SpHvvUBpU3wo=
 
 Name: classes2.dex
 SHA1-Digest: PW4PzXilTc5mHrOb8Tn7+jq6PxI=
 
 Name: classes3.dex
-SHA1-Digest: qVaHyjtCuAU2O7Cg7avE3gE/KRA=
+SHA1-Digest: DzMSmSsw8LXIPg+aff6u5UFP92c=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -9942,16 +9942,16 @@ Name: isoparser-default.properties
 SHA1-Digest: 6/KBb+rGX/5O2/xNP3HN6XIg3lI=
 
 Name: lib/arm64-v8a/libtmessages.37.so
-SHA1-Digest: jzgSmhtM+/fAeltgThKWAd07i2U=
+SHA1-Digest: 8qlbjdi+GsN3PqZir5JvAMIVVCo=
 
 Name: lib/armeabi-v7a/libtmessages.37.so
-SHA1-Digest: DJG2m4qk1cXyTg/o9aRjdJfTyWQ=
+SHA1-Digest: wpTJCgYaAlbo0U0D78g5EDGC9OU=
 
 Name: lib/x86/libtmessages.37.so
-SHA1-Digest: r0GOFX/m3OsQUUDcdXyOp00qkCY=
+SHA1-Digest: YczFQw/plBCkKgRDaJg8bG4DY0s=
 
 Name: lib/x86_64/libtmessages.37.so
-SHA1-Digest: jfe3J01fRaUHvEI3/BoN1iKdvJg=
+SHA1-Digest: Ofg67Vg5/qKRkpjyKcLJGr8PgmU=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: /3UPL+65RV1bQ1opEtJnBMah8ZI=
@@ -21074,25 +21074,28 @@ Name: res/raw/sun.tgs
 SHA1-Digest: ed587HOc6FY54mT6lVZjWE5Uajw=
 
 Name: res/raw/swipe_delete.json
-SHA1-Digest: bmkYI6qWTU6WRNldE2gm9faABE8=
+SHA1-Digest: MYyy3p/pHNRJOkx8CtCGeHnf/aM=
+
+Name: res/raw/swipe_disabled.json
+SHA1-Digest: DXj/T76XbfelRWeD6jqhFcpFgJM=
 
 Name: res/raw/swipe_mute.json
-SHA1-Digest: MN8FMwKaSVOxgjp+I0CtPB2sCQI=
+SHA1-Digest: O9ymBXzljlQk00XC8BBeZXijkUw=
 
 Name: res/raw/swipe_pin.json
-SHA1-Digest: Hdw35Q9C2adaBWnxP5w21k2JpmU=
+SHA1-Digest: OL7YkcDy64y0dwsSkGdbJQOVrD0=
 
 Name: res/raw/swipe_read.json
-SHA1-Digest: AVsadjgf3ccII6FJ1Rml4rR6Vus=
+SHA1-Digest: kS8AKqJ4mF/L0L/DHxp+F0SxR7A=
 
 Name: res/raw/swipe_unmute.json
-SHA1-Digest: l6xkwVleXtIvpJy6g+6oR1yodPA=
+SHA1-Digest: IkyoiBgvonxBWyHK7Bru8iayr4A=
 
 Name: res/raw/swipe_unpin.json
 SHA1-Digest: feNoR8q6OTSfwrgxnuRcrxFf0m0=
 
 Name: res/raw/swipe_unread.json
-SHA1-Digest: iqU0naHYyEgk4nI/N6OdSb+P78I=
+SHA1-Digest: 9UzoUvQBj+eIPoSG4Q5EN/8KZgY=
 
 Name: res/raw/ticks_double.json
 SHA1-Digest: NLHTCwvy+y/W0cHx6gZ2vDQtaj0=
@@ -21181,8 +21184,14 @@ SHA1-Digest: u051zjtFuTm7px7LOzlAv12BFng=
 Name: res/raw/voip_muted.json
 SHA1-Digest: 6gNXoCljgiuPHgo9vbZjLSAV0m8=
 
+Name: res/raw/voip_onallowtalk.mp3
+SHA1-Digest: 8cIZh8I4jQTTqpW+CCWLreLhjdc=
+
 Name: res/raw/voip_record_start.json
 SHA1-Digest: kTTrCqqTR2m0TlkObrEMWQ96yfo=
+
+Name: res/raw/voip_recordstart.mp3
+SHA1-Digest: krEuCevJwti8syGOt4zn/dXXxAk=
 
 Name: res/raw/voip_ringback.mp3
 SHA1-Digest: v9QaFjKBPHitC78HrJZyoPk1yGY=
@@ -21248,7 +21257,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: 3X6cy9XtLOisIoNP8Y3Z4Pt4Db4=
+SHA1-Digest: iDKtjVE8LFlhdEqppGWTEoNF3LA=
 
 Name: transport-api.properties
 SHA1-Digest: Jz4dPszpGdGJqctaJoPe9Lpu55k=

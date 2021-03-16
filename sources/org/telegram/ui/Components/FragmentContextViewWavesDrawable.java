@@ -10,7 +10,6 @@ import android.graphics.Shader;
 import android.os.SystemClock;
 import android.view.View;
 import java.util.ArrayList;
-import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.Utilities;
@@ -242,7 +241,7 @@ public class FragmentContextViewWavesDrawable {
             if (sharedInstance.isSwitchingStream() || !(callState == 1 || callState == 2 || callState == 6 || callState == 5)) {
                 ChatObject.Call call = sharedInstance.groupCall;
                 if (call != null) {
-                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = call.participants.get(AccountInstance.getInstance(sharedInstance.getAccount()).getUserConfig().getClientUserId());
+                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = call.participants.get(sharedInstance.getSelfId());
                     if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(sharedInstance.getChat())) {
                         setState(sharedInstance.isMicMute() ? 1 : 0, z);
                         return;

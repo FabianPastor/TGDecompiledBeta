@@ -9267,7 +9267,10 @@ public class MessagesStorage extends BaseController {
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$75 */
     public /* synthetic */ void lambda$null$75$MessagesStorage(TLRPC$ChatFull tLRPC$ChatFull) {
-        getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, tLRPC$ChatFull, 0, Boolean.FALSE);
+        NotificationCenter notificationCenter = getNotificationCenter();
+        int i = NotificationCenter.chatInfoDidLoad;
+        Boolean bool = Boolean.FALSE;
+        notificationCenter.postNotificationName(i, tLRPC$ChatFull, 0, bool, bool);
     }
 
     public void loadChannelAdmins(int i) {
@@ -10327,7 +10330,10 @@ public class MessagesStorage extends BaseController {
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$91 */
     public /* synthetic */ void lambda$null$91$MessagesStorage(TLRPC$ChatFull tLRPC$ChatFull) {
-        getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, tLRPC$ChatFull, 0, Boolean.FALSE);
+        NotificationCenter notificationCenter = getNotificationCenter();
+        int i = NotificationCenter.chatInfoDidLoad;
+        Boolean bool = Boolean.FALSE;
+        notificationCenter.postNotificationName(i, tLRPC$ChatFull, 0, bool, bool);
     }
 
     public boolean isMigratedChat(int i) {

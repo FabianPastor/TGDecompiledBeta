@@ -434,7 +434,7 @@ public class ClearHistoryAlert extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
             r5.<init>(r1)
             r5.setAutoRepeat(r4)
-            r8 = 2131558499(0x7f0d0063, float:1.8742316E38)
+            r8 = 2131558500(0x7f0d0064, float:1.8742318E38)
             r10 = 120(0x78, float:1.68E-43)
             r5.setAnimation(r8, r10, r10)
             r8 = 1101004800(0x41a00000, float:20.0)

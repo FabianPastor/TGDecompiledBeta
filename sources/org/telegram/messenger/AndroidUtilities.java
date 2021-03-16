@@ -375,6 +375,9 @@ public class AndroidUtilities {
     }
 
     private static void gatherLinks(ArrayList<LinkSpec> arrayList, Spannable spannable, Pattern pattern, String[] strArr, Linkify.MatchFilter matchFilter, boolean z) {
+        if (TextUtils.indexOf(spannable, 9472) >= 0) {
+            spannable = new SpannableStringBuilder(spannable.toString().replace(9472, ' '));
+        }
         Matcher matcher = pattern.matcher(spannable);
         while (matcher.find()) {
             int start = matcher.start();

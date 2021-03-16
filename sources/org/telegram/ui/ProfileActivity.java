@@ -1904,6 +1904,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         getNotificationCenter().addObserver(this, NotificationCenter.closeChats);
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
         updateRowsIds();
+        ListAdapter listAdapter2 = this.listAdapter;
+        if (listAdapter2 != null) {
+            listAdapter2.notifyDataSetChanged();
+        }
         if (this.arguments.containsKey("nearby_distance")) {
             getMessagesController().preloadGreetingsSticker();
         }
@@ -2130,7 +2134,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r1 = 2131165841(0x7var_, float:1.794591E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r3, (int) r1)
             r11.callItem = r1
-            r3 = 2131628034(0x7f0e1002, float:1.888335E38)
+            r3 = 2131628035(0x7f0e1003, float:1.8883351E38)
             java.lang.String r4 = "VoipGroupVoiceChat"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setContentDescription(r3)
@@ -6682,7 +6686,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r2 = 2
             r4 = 1
             if (r1 != r2) goto L_0x0022
-            r1 = 2131628100(0x7f0e1044, float:1.8883483E38)
+            r1 = 2131628101(0x7f0e1045, float:1.8883485E38)
             java.lang.String r5 = "WaitingForNetwork"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
@@ -7126,7 +7130,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x039a:
             boolean r2 = org.telegram.messenger.ChatObject.isKickedFromChat(r5)
             if (r2 == 0) goto L_0x03ab
-            r2 = 2131628146(0x7f0e1072, float:1.8883576E38)
+            r2 = 2131628147(0x7f0e1073, float:1.8883578E38)
             java.lang.String r3 = "YouWereKicked"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x03a9:
@@ -7135,7 +7139,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x03ab:
             boolean r2 = org.telegram.messenger.ChatObject.isLeftFromChat(r5)
             if (r2 == 0) goto L_0x03bb
-            r2 = 2131628145(0x7f0e1071, float:1.8883574E38)
+            r2 = 2131628146(0x7f0e1072, float:1.8883576E38)
             java.lang.String r3 = "YouLeft"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x03a9
@@ -9253,7 +9257,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x02ca
             L_0x023a:
                 r3 = 3600(0xe10, float:5.045E-42)
-                r4 = 2131628127(0x7f0e105f, float:1.8883538E38)
+                r4 = 2131628128(0x7f0e1060, float:1.888354E38)
                 java.lang.String r5 = "WillUnmuteIn"
                 if (r2 >= r3) goto L_0x0256
                 java.lang.Object[] r3 = new java.lang.Object[r7]
@@ -11998,26 +12002,27 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         public boolean areItemsTheSame(int i, int i2) {
             TLRPC$ChatParticipant tLRPC$ChatParticipant;
             TLRPC$ChatParticipant tLRPC$ChatParticipant2;
-            if (i2 >= ProfileActivity.this.membersStartRow && i2 < ProfileActivity.this.membersEndRow && i >= this.oldMembersStartRow && i < this.oldMembersEndRow) {
-                if (!this.oldChatParticipantSorted.isEmpty()) {
-                    tLRPC$ChatParticipant = this.oldChatParticipant.get(this.oldChatParticipantSorted.get(i - this.oldMembersStartRow).intValue());
-                } else {
-                    tLRPC$ChatParticipant = this.oldChatParticipant.get(i - this.oldMembersStartRow);
+            if (i2 < ProfileActivity.this.membersStartRow || i2 >= ProfileActivity.this.membersEndRow || i < this.oldMembersStartRow || i >= this.oldMembersEndRow) {
+                int i3 = this.oldPositionToItem.get(i, -1);
+                if (i3 != this.newPositionToItem.get(i2, -1) || i3 < 0) {
+                    return false;
                 }
-                if (!ProfileActivity.this.sortedUsers.isEmpty()) {
-                    tLRPC$ChatParticipant2 = (TLRPC$ChatParticipant) ProfileActivity.this.visibleChatParticipants.get(((Integer) ProfileActivity.this.visibleSortedUsers.get(i2 - ProfileActivity.this.membersStartRow)).intValue());
-                } else {
-                    tLRPC$ChatParticipant2 = (TLRPC$ChatParticipant) ProfileActivity.this.visibleChatParticipants.get(i2 - ProfileActivity.this.membersStartRow);
-                }
-                if (tLRPC$ChatParticipant.user_id == tLRPC$ChatParticipant2.user_id) {
-                    return true;
-                }
-                return false;
-            } else if (this.oldPositionToItem.get(i) == this.newPositionToItem.get(i2)) {
                 return true;
-            } else {
-                return false;
             }
+            if (!this.oldChatParticipantSorted.isEmpty()) {
+                tLRPC$ChatParticipant = this.oldChatParticipant.get(this.oldChatParticipantSorted.get(i - this.oldMembersStartRow).intValue());
+            } else {
+                tLRPC$ChatParticipant = this.oldChatParticipant.get(i - this.oldMembersStartRow);
+            }
+            if (!ProfileActivity.this.sortedUsers.isEmpty()) {
+                tLRPC$ChatParticipant2 = (TLRPC$ChatParticipant) ProfileActivity.this.visibleChatParticipants.get(((Integer) ProfileActivity.this.visibleSortedUsers.get(i2 - ProfileActivity.this.membersStartRow)).intValue());
+            } else {
+                tLRPC$ChatParticipant2 = (TLRPC$ChatParticipant) ProfileActivity.this.visibleChatParticipants.get(i2 - ProfileActivity.this.membersStartRow);
+            }
+            if (tLRPC$ChatParticipant.user_id == tLRPC$ChatParticipant2.user_id) {
+                return true;
+            }
+            return false;
         }
 
         public boolean areContentsTheSame(int i, int i2) {

@@ -6937,7 +6937,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r39 = r8
             r8 = 9
             if (r9 != r8) goto L_0x0caa
-            r0 = 2131628034(0x7f0e1002, float:1.888335E38)
+            r0 = 2131628035(0x7f0e1003, float:1.8883351E38)
             java.lang.String r8 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r8, r0)
             goto L_0x0ccb

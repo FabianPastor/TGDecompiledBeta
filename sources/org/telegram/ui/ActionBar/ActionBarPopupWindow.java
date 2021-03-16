@@ -115,25 +115,38 @@ public class ActionBarPopupWindow extends PopupWindow {
                     if (ActionBarPopupWindowLayout.this.fitItems) {
                         int unused = ActionBarPopupWindowLayout.this.gapStartY = -1;
                         int unused2 = ActionBarPopupWindowLayout.this.gapEndY = -1;
-                        ArrayList arrayList = null;
                         int childCount = getChildCount();
+                        ArrayList arrayList = null;
                         int i3 = 0;
-                        for (int i4 = 0; i4 < childCount; i4++) {
-                            View childAt = getChildAt(i4);
+                        int i4 = 0;
+                        for (int i5 = 0; i5 < childCount; i5++) {
+                            View childAt = getChildAt(i5);
                             if (childAt.getVisibility() != 8) {
                                 Object tag = childAt.getTag(NUM);
+                                Object tag2 = childAt.getTag(NUM);
                                 measureChildWithMargins(childAt, i, 0, i2, 0);
-                                if (!(tag instanceof Integer)) {
-                                    i3 = Math.max(i3, childAt.getMeasuredWidth());
-                                } else {
-                                    int unused3 = ActionBarPopupWindowLayout.this.gapStartY = childAt.getMeasuredHeight();
-                                    ActionBarPopupWindowLayout actionBarPopupWindowLayout = ActionBarPopupWindowLayout.this;
-                                    int unused4 = actionBarPopupWindowLayout.gapEndY = actionBarPopupWindowLayout.gapStartY + AndroidUtilities.dp(6.0f);
+                                boolean z = tag instanceof Integer;
+                                if (z || tag2 != null) {
+                                    if (z) {
+                                        int max = Math.max(((Integer) tag).intValue(), childAt.getMeasuredWidth());
+                                        int unused3 = ActionBarPopupWindowLayout.this.gapStartY = childAt.getMeasuredHeight();
+                                        ActionBarPopupWindowLayout actionBarPopupWindowLayout = ActionBarPopupWindowLayout.this;
+                                        int unused4 = actionBarPopupWindowLayout.gapEndY = actionBarPopupWindowLayout.gapStartY + AndroidUtilities.dp(6.0f);
+                                        i4 = max;
+                                    }
                                     if (arrayList == null) {
                                         arrayList = new ArrayList();
                                     }
                                     arrayList.add(childAt);
+                                } else {
+                                    i3 = Math.max(i3, childAt.getMeasuredWidth());
                                 }
+                            }
+                        }
+                        if (arrayList != null) {
+                            int size = arrayList.size();
+                            for (int i6 = 0; i6 < size; i6++) {
+                                ((View) arrayList.get(i6)).getLayoutParams().width = Math.max(i3, i4);
                             }
                         }
                     }

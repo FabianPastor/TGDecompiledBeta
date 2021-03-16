@@ -289,6 +289,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     };
     protected EditTextCaption messageEditText;
+    boolean messageTransitionIsRunning;
     private TLRPC$WebPage messageWebPage;
     /* access modifiers changed from: private */
     public boolean messageWebPageSearch;
@@ -951,23 +952,23 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:154:0x0564  */
-        /* JADX WARNING: Removed duplicated region for block: B:159:0x05c8  */
-        /* JADX WARNING: Removed duplicated region for block: B:162:0x0641  */
-        /* JADX WARNING: Removed duplicated region for block: B:165:0x0654  */
-        /* JADX WARNING: Removed duplicated region for block: B:179:0x067d  */
-        /* JADX WARNING: Removed duplicated region for block: B:184:0x069b  */
-        /* JADX WARNING: Removed duplicated region for block: B:189:0x06c8  */
-        /* JADX WARNING: Removed duplicated region for block: B:190:0x07ef  */
-        /* JADX WARNING: Removed duplicated region for block: B:194:0x081a  */
-        /* JADX WARNING: Removed duplicated region for block: B:195:0x081f  */
-        /* JADX WARNING: Removed duplicated region for block: B:206:0x0838  */
-        /* JADX WARNING: Removed duplicated region for block: B:211:0x084d  */
-        /* JADX WARNING: Removed duplicated region for block: B:218:0x0884  */
-        /* JADX WARNING: Removed duplicated region for block: B:221:0x097f  */
-        /* JADX WARNING: Removed duplicated region for block: B:224:0x098e  */
-        /* JADX WARNING: Removed duplicated region for block: B:230:0x0a64  */
-        /* JADX WARNING: Removed duplicated region for block: B:235:0x0aa0  */
+        /* JADX WARNING: Removed duplicated region for block: B:157:0x0574  */
+        /* JADX WARNING: Removed duplicated region for block: B:162:0x05d8  */
+        /* JADX WARNING: Removed duplicated region for block: B:165:0x0651  */
+        /* JADX WARNING: Removed duplicated region for block: B:168:0x0664  */
+        /* JADX WARNING: Removed duplicated region for block: B:182:0x068d  */
+        /* JADX WARNING: Removed duplicated region for block: B:187:0x06ab  */
+        /* JADX WARNING: Removed duplicated region for block: B:192:0x06d8  */
+        /* JADX WARNING: Removed duplicated region for block: B:193:0x07ff  */
+        /* JADX WARNING: Removed duplicated region for block: B:197:0x082a  */
+        /* JADX WARNING: Removed duplicated region for block: B:198:0x082f  */
+        /* JADX WARNING: Removed duplicated region for block: B:209:0x0848  */
+        /* JADX WARNING: Removed duplicated region for block: B:214:0x085d  */
+        /* JADX WARNING: Removed duplicated region for block: B:221:0x0894  */
+        /* JADX WARNING: Removed duplicated region for block: B:224:0x098f  */
+        /* JADX WARNING: Removed duplicated region for block: B:227:0x099e  */
+        /* JADX WARNING: Removed duplicated region for block: B:233:0x0a74  */
+        /* JADX WARNING: Removed duplicated region for block: B:238:0x0ab0  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onDraw(android.graphics.Canvas r38) {
             /*
@@ -1112,11 +1113,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r3 = r3 * r1
                 r6.progressToSeekbarStep3 = r10
                 float r1 = r6.transformToSeekbar
-                r20 = 1053609165(0x3ecccccd, float:0.4)
-                r21 = 1098907648(0x41800000, float:16.0)
+                r20 = 1098907648(0x41800000, float:16.0)
+                r21 = 1053609165(0x3ecccccd, float:0.4)
                 r22 = 1073741824(0x40000000, float:2.0)
                 int r4 = (r1 > r10 ? 1 : (r1 == r10 ? 0 : -1))
-                if (r4 == 0) goto L_0x0160
+                if (r4 == 0) goto L_0x0161
                 r4 = 1052938076(0x3eCLASSNAMEf5c, float:0.38)
                 r5 = 1052602532(0x3ebd70a4, float:0.37)
                 int r23 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
@@ -1149,7 +1150,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r5 = r6.progressToSeekbarStep3
                 float r2 = r2.getInterpolation(r5)
                 r6.progressToSeekbarStep3 = r2
-                int r2 = org.telegram.messenger.AndroidUtilities.dp(r21)
+                int r2 = org.telegram.messenger.AndroidUtilities.dp(r20)
                 float r2 = (float) r2
                 float r2 = r2 * r4
                 float r3 = r3 + r2
@@ -1168,24 +1169,34 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r26 = r4
                 r5 = 1065353216(0x3var_, float:1.0)
                 r25 = 0
-                goto L_0x01ba
-            L_0x0160:
+                goto L_0x01ca
+            L_0x0161:
                 float r1 = r6.exitTransition
                 r2 = 0
                 int r4 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r4 == 0) goto L_0x01b2
+                if (r4 == 0) goto L_0x01c2
                 r2 = 1058642330(0x3var_a, float:0.6)
                 int r4 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r4 <= 0) goto L_0x0171
+                if (r4 <= 0) goto L_0x0172
                 r4 = 1065353216(0x3var_, float:1.0)
-                goto L_0x0173
-            L_0x0171:
+                goto L_0x0174
+            L_0x0172:
                 float r4 = r1 / r2
-            L_0x0173:
+            L_0x0174:
+                org.telegram.ui.Components.ChatActivityEnterView r5 = org.telegram.ui.Components.ChatActivityEnterView.this
+                boolean r5 = r5.messageTransitionIsRunning
+                if (r5 == 0) goto L_0x017b
+                goto L_0x0183
+            L_0x017b:
+                float r1 = r1 - r2
+                float r1 = r1 / r21
+                r5 = 0
+                float r1 = java.lang.Math.max(r5, r1)
+            L_0x0183:
                 org.telegram.ui.Components.CubicBezierInterpolator r5 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
                 float r4 = r5.getInterpolation(r4)
                 float r1 = r5.getInterpolation(r1)
-                int r5 = org.telegram.messenger.AndroidUtilities.dp(r21)
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r20)
                 float r5 = (float) r5
                 float r5 = r5 * r4
                 float r3 = r3 + r5
@@ -1194,50 +1205,50 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r3 = r3 * r15
                 org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
                 boolean r10 = r10.configAnimationsEnabled
-                if (r10 == 0) goto L_0x01a9
+                if (r10 == 0) goto L_0x01b9
                 float r10 = r6.exitTransition
                 int r15 = (r10 > r2 ? 1 : (r10 == r2 ? 0 : -1))
-                if (r15 <= 0) goto L_0x01a9
+                if (r15 <= 0) goto L_0x01b9
                 float r10 = r10 - r2
-                float r10 = r10 / r20
+                float r10 = r10 / r21
                 float r15 = r5 - r10
                 r2 = 0
                 float r5 = java.lang.Math.max(r2, r15)
                 r25 = r1
                 r10 = r3
                 r26 = r4
-                goto L_0x01b0
-            L_0x01a9:
+                goto L_0x01c0
+            L_0x01b9:
                 r25 = r1
                 r10 = r3
                 r26 = r4
                 r5 = 1065353216(0x3var_, float:1.0)
-            L_0x01b0:
+            L_0x01c0:
                 r15 = 0
-                goto L_0x01ba
-            L_0x01b2:
+                goto L_0x01ca
+            L_0x01c2:
                 r10 = r3
                 r5 = 1065353216(0x3var_, float:1.0)
                 r15 = 0
                 r25 = 0
                 r26 = 0
-            L_0x01ba:
+            L_0x01ca:
                 boolean r1 = r6.canceledByGesture
-                if (r1 == 0) goto L_0x01d0
+                if (r1 == 0) goto L_0x01e0
                 float r1 = r6.slideToCancelProgress
                 int r2 = (r1 > r19 ? 1 : (r1 == r19 ? 0 : -1))
-                if (r2 <= 0) goto L_0x01d0
+                if (r2 <= 0) goto L_0x01e0
                 float r1 = r1 - r19
                 r2 = 1050253722(0x3e99999a, float:0.3)
                 float r1 = r1 / r2
                 r2 = 1065353216(0x3var_, float:1.0)
                 float r1 = r2 - r1
                 float r5 = r5 * r1
-            L_0x01d0:
+            L_0x01e0:
                 float r1 = r6.progressToSeekbarStep3
                 r2 = 0
                 int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r1 <= 0) goto L_0x01f3
+                if (r1 <= 0) goto L_0x0203
                 org.telegram.ui.Components.ChatActivityEnterView r1 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.graphics.Paint r1 = r1.paint
                 java.lang.String r2 = "chat_messagePanelVoiceBackground"
@@ -1247,66 +1258,66 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r4 = r6.progressToSeekbarStep3
                 int r2 = androidx.core.graphics.ColorUtils.blendARGB(r2, r3, r4)
                 r1.setColor(r2)
-                goto L_0x0202
-            L_0x01f3:
+                goto L_0x0212
+            L_0x0203:
                 org.telegram.ui.Components.ChatActivityEnterView r1 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.graphics.Paint r1 = r1.paint
                 java.lang.String r2 = "chat_messagePanelVoiceBackground"
                 int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 r1.setColor(r2)
-            L_0x0202:
+            L_0x0212:
                 r1 = 0
                 boolean r2 = r37.isSendButtonVisible()
                 r27 = 1125515264(0x43160000, float:150.0)
-                if (r2 == 0) goto L_0x0249
+                if (r2 == 0) goto L_0x0259
                 float r2 = r6.progressToSendButton
                 r3 = 1065353216(0x3var_, float:1.0)
                 int r4 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r4 == 0) goto L_0x0240
+                if (r4 == 0) goto L_0x0250
                 float r1 = (float) r8
                 float r1 = r1 / r27
                 float r2 = r2 + r1
                 r6.progressToSendButton = r2
                 int r1 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r1 <= 0) goto L_0x021f
+                if (r1 <= 0) goto L_0x022f
                 r6.progressToSendButton = r3
-            L_0x021f:
+            L_0x022f:
                 org.telegram.ui.Components.ChatActivityEnterView r1 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.widget.ImageView r1 = r1.videoSendButton
-                if (r1 == 0) goto L_0x023a
+                if (r1 == 0) goto L_0x024a
                 org.telegram.ui.Components.ChatActivityEnterView r1 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.widget.ImageView r1 = r1.videoSendButton
                 java.lang.Object r1 = r1.getTag()
-                if (r1 == 0) goto L_0x023a
+                if (r1 == 0) goto L_0x024a
                 org.telegram.ui.Components.ChatActivityEnterView r1 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.graphics.drawable.Drawable r1 = r1.cameraDrawable
-                goto L_0x0240
-            L_0x023a:
+                goto L_0x0250
+            L_0x024a:
                 org.telegram.ui.Components.ChatActivityEnterView r1 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.graphics.drawable.Drawable r1 = r1.micDrawable
-            L_0x0240:
+            L_0x0250:
                 org.telegram.ui.Components.ChatActivityEnterView r2 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.graphics.drawable.Drawable r2 = r2.sendDrawable
-            L_0x0246:
+            L_0x0256:
                 r3 = r1
                 r4 = r2
-                goto L_0x026b
-            L_0x0249:
+                goto L_0x027b
+            L_0x0259:
                 org.telegram.ui.Components.ChatActivityEnterView r2 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.widget.ImageView r2 = r2.videoSendButton
-                if (r2 == 0) goto L_0x0264
+                if (r2 == 0) goto L_0x0274
                 org.telegram.ui.Components.ChatActivityEnterView r2 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.widget.ImageView r2 = r2.videoSendButton
                 java.lang.Object r2 = r2.getTag()
-                if (r2 == 0) goto L_0x0264
+                if (r2 == 0) goto L_0x0274
                 org.telegram.ui.Components.ChatActivityEnterView r2 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.graphics.drawable.Drawable r2 = r2.cameraDrawable
-                goto L_0x0246
-            L_0x0264:
+                goto L_0x0256
+            L_0x0274:
                 org.telegram.ui.Components.ChatActivityEnterView r2 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.graphics.drawable.Drawable r2 = r2.micDrawable
-                goto L_0x0246
-            L_0x026b:
+                goto L_0x0256
+            L_0x027b:
                 org.telegram.ui.Components.ChatActivityEnterView r1 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.graphics.Rect r1 = r1.sendRect
                 int r2 = r4.getIntrinsicWidth()
@@ -1328,7 +1339,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 org.telegram.ui.Components.ChatActivityEnterView r1 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.graphics.Rect r1 = r1.sendRect
                 r4.setBounds(r1)
-                if (r3 == 0) goto L_0x02c6
+                if (r3 == 0) goto L_0x02d6
                 int r1 = r3.getIntrinsicWidth()
                 int r1 = r1 / 2
                 int r1 = r12 - r1
@@ -1342,7 +1353,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 int r10 = r10 / 2
                 int r0 = r0 + r10
                 r3.setBounds(r1, r2, r5, r0)
-            L_0x02c6:
+            L_0x02d6:
                 r0 = 1113849856(0x42640000, float:57.0)
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
                 float r0 = (float) r0
@@ -1350,33 +1361,33 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r1 = 1065353216(0x3var_, float:1.0)
                 float r10 = r1 - r0
                 boolean r0 = r6.incIdle
-                if (r0 == 0) goto L_0x02e9
+                if (r0 == 0) goto L_0x02f9
                 float r0 = r6.idleProgress
                 r2 = 1008981770(0x3CLASSNAMEd70a, float:0.01)
                 float r0 = r0 + r2
                 r6.idleProgress = r0
                 int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-                if (r0 <= 0) goto L_0x02fb
+                if (r0 <= 0) goto L_0x030b
                 r0 = 0
                 r6.incIdle = r0
                 r6.idleProgress = r1
-                goto L_0x02fb
-            L_0x02e9:
+                goto L_0x030b
+            L_0x02f9:
                 float r0 = r6.idleProgress
                 r1 = 1008981770(0x3CLASSNAMEd70a, float:0.01)
                 float r0 = r0 - r1
                 r6.idleProgress = r0
                 r1 = 0
                 int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-                if (r0 >= 0) goto L_0x02fb
+                if (r0 >= 0) goto L_0x030b
                 r0 = 1
                 r6.incIdle = r0
                 r6.idleProgress = r1
-            L_0x02fb:
+            L_0x030b:
                 org.telegram.ui.Components.ChatActivityEnterView r0 = org.telegram.ui.Components.ChatActivityEnterView.this
                 boolean r0 = r0.configAnimationsEnabled
                 r11 = 1094713344(0x41400000, float:12.0)
-                if (r0 == 0) goto L_0x0365
+                if (r0 == 0) goto L_0x0375
                 org.telegram.ui.Components.BlobDrawable r0 = r6.tinyWaveDrawable
                 r1 = 1111228416(0x423CLASSNAME, float:47.0)
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -1420,44 +1431,44 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r1 = r0.amplitude
                 r2 = 1065520988(0x3var_f5c, float:1.02)
                 r0.update(r1, r2)
-            L_0x0365:
+            L_0x0375:
                 long r0 = java.lang.System.currentTimeMillis()
                 r6.lastUpdateTime = r0
                 float r0 = r6.slideToCancelProgress
                 int r1 = (r0 > r19 ? 1 : (r0 == r19 ? 0 : -1))
-                if (r1 <= 0) goto L_0x0374
+                if (r1 <= 0) goto L_0x0384
                 r0 = 1065353216(0x3var_, float:1.0)
-                goto L_0x0376
-            L_0x0374:
+                goto L_0x0386
+            L_0x0384:
                 float r0 = r0 / r19
-            L_0x0376:
+            L_0x0386:
                 org.telegram.ui.Components.ChatActivityEnterView r1 = org.telegram.ui.Components.ChatActivityEnterView.this
                 boolean r1 = r1.configAnimationsEnabled
-                if (r1 == 0) goto L_0x0413
+                if (r1 == 0) goto L_0x0423
                 r1 = 1065353216(0x3var_, float:1.0)
                 int r2 = (r15 > r1 ? 1 : (r15 == r1 ? 0 : -1))
-                if (r2 == 0) goto L_0x0413
-                int r2 = (r25 > r20 ? 1 : (r25 == r20 ? 0 : -1))
-                if (r2 >= 0) goto L_0x0413
+                if (r2 == 0) goto L_0x0423
+                int r2 = (r25 > r21 ? 1 : (r25 == r21 ? 0 : -1))
+                if (r2 >= 0) goto L_0x0423
                 r2 = 0
                 int r5 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-                if (r5 <= 0) goto L_0x0413
+                if (r5 <= 0) goto L_0x0423
                 boolean r2 = r6.canceledByGesture
-                if (r2 != 0) goto L_0x0413
+                if (r2 != 0) goto L_0x0423
                 boolean r2 = r6.showWaves
-                if (r2 == 0) goto L_0x03a7
+                if (r2 == 0) goto L_0x03b7
                 float r2 = r6.wavesEnterAnimation
                 int r5 = (r2 > r1 ? 1 : (r2 == r1 ? 0 : -1))
-                if (r5 == 0) goto L_0x03a7
+                if (r5 == 0) goto L_0x03b7
                 r5 = 1025758986(0x3d23d70a, float:0.04)
                 float r2 = r2 + r5
                 r6.wavesEnterAnimation = r2
                 int r2 = (r2 > r1 ? 1 : (r2 == r1 ? 0 : -1))
-                if (r2 <= 0) goto L_0x03a7
+                if (r2 <= 0) goto L_0x03b7
                 r6.wavesEnterAnimation = r1
-            L_0x03a7:
+            L_0x03b7:
                 boolean r1 = r6.voiceEnterTransitionInProgress
-                if (r1 != 0) goto L_0x0413
+                if (r1 != 0) goto L_0x0423
                 org.telegram.ui.Components.CubicBezierInterpolator r1 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT
                 float r2 = r6.wavesEnterAnimation
                 float r1 = r1.getInterpolation(r2)
@@ -1509,9 +1520,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 android.graphics.Paint r2 = r0.paint
                 r0.draw(r1, r13, r7, r2)
                 r38.restore()
-            L_0x0413:
+            L_0x0423:
                 boolean r0 = r6.voiceEnterTransitionInProgress
-                if (r0 != 0) goto L_0x0550
+                if (r0 != 0) goto L_0x0560
                 org.telegram.ui.Components.ChatActivityEnterView r0 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.graphics.Paint r0 = r0.paint
                 int r1 = r6.paintAlpha
@@ -1522,14 +1533,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r0 = r6.scale
                 r1 = 1065353216(0x3var_, float:1.0)
                 int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-                if (r0 != 0) goto L_0x0550
+                if (r0 != 0) goto L_0x0560
                 float r0 = r6.transformToSeekbar
                 r1 = 0
                 int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-                if (r0 == 0) goto L_0x050e
+                if (r0 == 0) goto L_0x051e
                 float r0 = r6.progressToSeekbarStep3
                 int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-                if (r0 <= 0) goto L_0x04f6
+                if (r0 <= 0) goto L_0x0506
                 float r0 = r13 + r30
                 float r1 = r13 - r30
                 int r2 = r6.slideDelta
@@ -1548,17 +1559,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r3 = r28
                 r28 = 0
                 r31 = 0
-            L_0x0460:
+            L_0x0470:
                 android.view.ViewParent r8 = r37.getParent()
-                if (r3 == r8) goto L_0x0479
+                if (r3 == r8) goto L_0x0489
                 int r8 = r3.getTop()
                 int r28 = r28 + r8
                 int r8 = r3.getLeft()
                 int r31 = r31 + r8
                 android.view.ViewParent r3 = r3.getParent()
                 android.view.View r3 = (android.view.View) r3
-                goto L_0x0460
-            L_0x0479:
+                goto L_0x0470
+            L_0x0489:
                 int r3 = r11.getTop()
                 int r3 = r3 + r28
                 int r8 = r37.getTop()
@@ -1579,14 +1590,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r28 = r14
                 org.telegram.ui.Components.ChatActivityEnterView r14 = org.telegram.ui.Components.ChatActivityEnterView.this
                 boolean r14 = r14.isInVideoMode()
-                if (r14 == 0) goto L_0x04b5
+                if (r14 == 0) goto L_0x04c5
                 r11 = 0
-                goto L_0x04bc
-            L_0x04b5:
+                goto L_0x04cc
+            L_0x04c5:
                 int r11 = r11.getMeasuredHeight()
                 float r11 = (float) r11
                 float r11 = r11 / r22
-            L_0x04bc:
+            L_0x04cc:
                 float r3 = (float) r3
                 float r1 = r1 - r3
                 float r14 = r6.progressToSeekbarStep3
@@ -1620,8 +1631,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 android.graphics.Paint r1 = r1.paint
                 r7.drawRoundRect(r0, r11, r11, r1)
                 r8 = r30
-                goto L_0x0525
-            L_0x04f6:
+                goto L_0x0535
+            L_0x0506:
                 r32 = r3
                 r33 = r8
                 r35 = r10
@@ -1633,8 +1644,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 android.graphics.Paint r1 = r1.paint
                 r8 = r30
                 r7.drawCircle(r0, r13, r8, r1)
-                goto L_0x0525
-            L_0x050e:
+                goto L_0x0535
+            L_0x051e:
                 r32 = r3
                 r33 = r8
                 r35 = r10
@@ -1646,7 +1657,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 org.telegram.ui.Components.ChatActivityEnterView r1 = org.telegram.ui.Components.ChatActivityEnterView.this
                 android.graphics.Paint r1 = r1.paint
                 r7.drawCircle(r0, r13, r8, r1)
-            L_0x0525:
+            L_0x0535:
                 r38.save()
                 r0 = 1065353216(0x3var_, float:1.0)
                 float r1 = r0 - r25
@@ -1670,19 +1681,19 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r5 = r9
                 r0.drawIconInternal(r1, r2, r3, r4, r5)
                 r38.restore()
-                goto L_0x055a
-            L_0x0550:
+                goto L_0x056a
+            L_0x0560:
                 r11 = r4
                 r33 = r8
                 r35 = r10
                 r28 = r14
                 r8 = r30
                 r10 = r3
-            L_0x055a:
+            L_0x056a:
                 boolean r0 = r37.isSendButtonVisible()
                 r1 = 1108344832(0x42100000, float:36.0)
                 r2 = 1090519040(0x41000000, float:8.0)
-                if (r0 == 0) goto L_0x05c8
+                if (r0 == 0) goto L_0x05d8
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
                 float r0 = (float) r0
                 r3 = 1114636288(0x42700000, float:60.0)
@@ -1706,33 +1717,33 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r5 = r4 - r5
                 float r9 = org.telegram.messenger.AndroidUtilities.dpf2(r22)
                 float r5 = r5 + r9
-                float r9 = org.telegram.messenger.AndroidUtilities.dpf2(r21)
+                float r9 = org.telegram.messenger.AndroidUtilities.dpf2(r20)
                 float r4 = r4 - r9
                 float r9 = org.telegram.messenger.AndroidUtilities.dpf2(r22)
                 float r4 = r4 + r9
-                int r9 = (r35 > r20 ? 1 : (r35 == r20 ? 0 : -1))
-                if (r9 <= 0) goto L_0x05a9
+                int r9 = (r35 > r21 ? 1 : (r35 == r21 ? 0 : -1))
+                if (r9 <= 0) goto L_0x05b9
                 r9 = 1065353216(0x3var_, float:1.0)
-                goto L_0x05ab
-            L_0x05a9:
-                float r9 = r35 / r20
-            L_0x05ab:
+                goto L_0x05bb
+            L_0x05b9:
+                float r9 = r35 / r21
+            L_0x05bb:
                 r14 = 1091567616(0x41100000, float:9.0)
                 r16 = 1065353216(0x3var_, float:1.0)
-                float r20 = r16 - r35
-                float r20 = r20 * r14
+                float r21 = r16 - r35
+                float r21 = r21 * r14
                 float r14 = r6.snapAnimationProgress
                 float r24 = r16 - r14
-                float r20 = r20 * r24
+                float r21 = r21 * r24
                 r24 = 1097859072(0x41700000, float:15.0)
                 float r14 = r14 * r24
                 float r9 = r16 - r9
                 float r14 = r14 * r9
-                float r20 = r20 - r14
-                r9 = r20
+                float r21 = r21 - r14
+                r9 = r21
                 r14 = r35
-                goto L_0x0637
-            L_0x05c8:
+                goto L_0x0647
+            L_0x05d8:
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
                 r3 = 1096810496(0x41600000, float:14.0)
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
@@ -1774,7 +1785,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r9 = org.telegram.messenger.AndroidUtilities.dpf2(r22)
                 float r9 = r9 * r35
                 float r5 = r5 + r9
-                float r9 = org.telegram.messenger.AndroidUtilities.dpf2(r21)
+                float r9 = org.telegram.messenger.AndroidUtilities.dpf2(r20)
                 float r4 = r4 - r9
                 float r9 = org.telegram.messenger.AndroidUtilities.dpf2(r22)
                 float r4 = r4 + r9
@@ -1784,58 +1795,58 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r9 = 1091567616(0x41100000, float:9.0)
                 r14 = 1065353216(0x3var_, float:1.0)
                 float r16 = r14 - r35
-                float r20 = r16 * r9
+                float r21 = r16 * r9
                 r9 = 0
                 r6.snapAnimationProgress = r9
-                r9 = r20
+                r9 = r21
                 r14 = 0
-            L_0x0637:
+            L_0x0647:
                 boolean r1 = r6.showTooltip
-                r20 = 1101004800(0x41a00000, float:20.0)
+                r21 = 1101004800(0x41a00000, float:20.0)
                 r28 = 1077936128(0x40400000, float:3.0)
                 r29 = 1082130432(0x40800000, float:4.0)
-                if (r1 == 0) goto L_0x0654
+                if (r1 == 0) goto L_0x0664
                 long r30 = java.lang.System.currentTimeMillis()
                 r32 = r3
                 long r2 = r6.showTooltipStartTime
                 long r30 = r30 - r2
                 r2 = 200(0xc8, double:9.9E-322)
                 int r36 = (r30 > r2 ? 1 : (r30 == r2 ? 0 : -1))
-                if (r36 > 0) goto L_0x0652
-                goto L_0x0656
-            L_0x0652:
+                if (r36 > 0) goto L_0x0662
+                goto L_0x0666
+            L_0x0662:
                 r3 = 0
-                goto L_0x065d
-            L_0x0654:
+                goto L_0x066d
+            L_0x0664:
                 r32 = r3
-            L_0x0656:
+            L_0x0666:
                 float r2 = r6.tooltipAlpha
                 r3 = 0
                 int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r2 == 0) goto L_0x07ef
-            L_0x065d:
+                if (r2 == 0) goto L_0x07ff
+            L_0x066d:
                 r2 = 1061997773(0x3f4ccccd, float:0.8)
                 int r2 = (r35 > r2 ? 1 : (r35 == r2 ? 0 : -1))
-                if (r2 < 0) goto L_0x0676
+                if (r2 < 0) goto L_0x0686
                 boolean r2 = r37.isSendButtonVisible()
-                if (r2 != 0) goto L_0x0676
+                if (r2 != 0) goto L_0x0686
                 float r2 = r6.exitTransition
                 int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r2 != 0) goto L_0x0676
+                if (r2 != 0) goto L_0x0686
                 float r2 = r6.transformToSeekbar
                 int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r2 == 0) goto L_0x0679
-            L_0x0676:
+                if (r2 == 0) goto L_0x0689
+            L_0x0686:
                 r2 = 0
                 r6.showTooltip = r2
-            L_0x0679:
+            L_0x0689:
                 boolean r2 = r6.showTooltip
-                if (r2 == 0) goto L_0x069b
+                if (r2 == 0) goto L_0x06ab
                 float r2 = r6.tooltipAlpha
                 r3 = 1065353216(0x3var_, float:1.0)
                 int r24 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
                 r30 = r4
-                if (r24 == 0) goto L_0x06ae
+                if (r24 == 0) goto L_0x06be
                 r3 = r33
                 float r3 = (float) r3
                 float r3 = r3 / r27
@@ -1843,11 +1854,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r6.tooltipAlpha = r2
                 r3 = 1065353216(0x3var_, float:1.0)
                 int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r2 < 0) goto L_0x06ae
+                if (r2 < 0) goto L_0x06be
                 r6.tooltipAlpha = r3
                 org.telegram.messenger.SharedConfig.increaseLockRecordAudioVideoHintShowed()
-                goto L_0x06ae
-            L_0x069b:
+                goto L_0x06be
+            L_0x06ab:
                 r30 = r4
                 r3 = r33
                 float r2 = r6.tooltipAlpha
@@ -1857,9 +1868,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r6.tooltipAlpha = r2
                 r3 = 0
                 int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r2 >= 0) goto L_0x06ae
+                if (r2 >= 0) goto L_0x06be
                 r6.tooltipAlpha = r3
-            L_0x06ae:
+            L_0x06be:
                 float r2 = r6.tooltipAlpha
                 r3 = 1132396544(0x437var_, float:255.0)
                 float r2 = r2 * r3
@@ -1871,7 +1882,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 android.text.TextPaint r3 = r6.tooltipPaint
                 r3.setAlpha(r2)
                 android.text.StaticLayout r3 = r6.tooltipLayout
-                if (r3 == 0) goto L_0x07f1
+                if (r3 == 0) goto L_0x0801
                 r38.save()
                 android.graphics.RectF r3 = r6.rectF
                 int r4 = r37.getMeasuredWidth()
@@ -1889,7 +1900,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
                 float r3 = (float) r3
                 float r1 = r1 - r3
-                float r3 = org.telegram.messenger.AndroidUtilities.dpf2(r21)
+                float r3 = org.telegram.messenger.AndroidUtilities.dpf2(r20)
                 r7.translate(r1, r3)
                 android.graphics.drawable.Drawable r3 = r6.tooltipBackground
                 r1 = 1090519040(0x41000000, float:8.0)
@@ -1898,7 +1909,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 int r10 = org.telegram.messenger.AndroidUtilities.dp(r22)
                 int r10 = -r10
                 float r1 = r6.tooltipWidth
-                r21 = r11
+                r20 = r11
                 r16 = 1108344832(0x42100000, float:36.0)
                 int r11 = org.telegram.messenger.AndroidUtilities.dp(r16)
                 float r11 = (float) r11
@@ -1976,7 +1987,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 android.text.StaticLayout r3 = r6.tooltipLayout
                 int r3 = r3.getHeight()
                 float r3 = (float) r3
-                float r4 = org.telegram.messenger.AndroidUtilities.dpf2(r20)
+                float r4 = org.telegram.messenger.AndroidUtilities.dpf2(r21)
                 float r3 = r3 + r4
                 int r3 = (int) r3
                 android.graphics.drawable.Drawable r4 = r6.tooltipBackgroundArrow
@@ -1986,7 +1997,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 android.text.StaticLayout r10 = r6.tooltipLayout
                 int r10 = r10.getHeight()
                 float r10 = (float) r10
-                float r11 = org.telegram.messenger.AndroidUtilities.dpf2(r20)
+                float r11 = org.telegram.messenger.AndroidUtilities.dpf2(r21)
                 float r10 = r10 + r11
                 int r10 = (int) r10
                 android.graphics.drawable.Drawable r11 = r6.tooltipBackgroundArrow
@@ -1996,13 +2007,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 android.graphics.drawable.Drawable r1 = r6.tooltipBackgroundArrow
                 r1.draw(r7)
                 r38.restore()
-                goto L_0x07f5
-            L_0x07ef:
+                goto L_0x0805
+            L_0x07ff:
                 r30 = r4
-            L_0x07f1:
+            L_0x0801:
                 r31 = r10
-                r21 = r11
-            L_0x07f5:
+                r20 = r11
+            L_0x0805:
                 r38.save()
                 int r1 = r37.getMeasuredWidth()
                 int r2 = r37.getMeasuredHeight()
@@ -2017,59 +2028,59 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r3 = r2 - r1
                 r4 = 0
                 int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-                if (r3 == 0) goto L_0x081f
+                if (r3 == 0) goto L_0x082f
                 float r23 = r2 - r1
                 r1 = r23
-                goto L_0x082d
-            L_0x081f:
+                goto L_0x083d
+            L_0x082f:
                 int r1 = (r15 > r4 ? 1 : (r15 == r4 ? 0 : -1))
-                if (r1 == 0) goto L_0x0825
+                if (r1 == 0) goto L_0x0835
                 r1 = r15
-                goto L_0x082d
-            L_0x0825:
+                goto L_0x083d
+            L_0x0835:
                 int r1 = (r25 > r4 ? 1 : (r25 == r4 ? 0 : -1))
-                if (r1 == 0) goto L_0x082c
+                if (r1 == 0) goto L_0x083c
                 r1 = r25
-                goto L_0x082d
-            L_0x082c:
+                goto L_0x083d
+            L_0x083c:
                 r1 = 0
-            L_0x082d:
+            L_0x083d:
                 float r2 = r6.slideToCancelProgress
                 int r2 = (r2 > r19 ? 1 : (r2 == r19 ? 0 : -1))
-                if (r2 < 0) goto L_0x084d
+                if (r2 < 0) goto L_0x085d
                 boolean r2 = r6.canceledByGesture
-                if (r2 == 0) goto L_0x0838
-                goto L_0x084d
-            L_0x0838:
+                if (r2 == 0) goto L_0x0848
+                goto L_0x085d
+            L_0x0848:
                 float r2 = r6.slideToCancelLockProgress
                 r3 = 1065353216(0x3var_, float:1.0)
                 int r4 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r4 == 0) goto L_0x0863
+                if (r4 == 0) goto L_0x0873
                 r4 = 1039516303(0x3df5CLASSNAMEf, float:0.12)
                 float r2 = r2 + r4
                 r6.slideToCancelLockProgress = r2
                 int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r2 <= 0) goto L_0x0863
+                if (r2 <= 0) goto L_0x0873
                 r6.slideToCancelLockProgress = r3
-                goto L_0x0863
-            L_0x084d:
+                goto L_0x0873
+            L_0x085d:
                 r2 = 0
                 r6.showTooltip = r2
                 float r2 = r6.slideToCancelLockProgress
                 r3 = 0
                 int r4 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r4 == 0) goto L_0x0863
+                if (r4 == 0) goto L_0x0873
                 r4 = 1039516303(0x3df5CLASSNAMEf, float:0.12)
                 float r2 = r2 - r4
                 r6.slideToCancelLockProgress = r2
                 int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r2 >= 0) goto L_0x0863
+                if (r2 >= 0) goto L_0x0873
                 r6.slideToCancelLockProgress = r3
-            L_0x0863:
+            L_0x0873:
                 r2 = 1116733440(0x42900000, float:72.0)
                 float r2 = org.telegram.messenger.AndroidUtilities.dpf2(r2)
                 float r3 = r2 * r1
-                float r4 = org.telegram.messenger.AndroidUtilities.dpf2(r20)
+                float r4 = org.telegram.messenger.AndroidUtilities.dpf2(r21)
                 float r4 = r4 * r26
                 r10 = 1065353216(0x3var_, float:1.0)
                 float r1 = r10 - r1
@@ -2080,11 +2091,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r1 = r1 * r2
                 float r3 = r3 + r1
                 int r1 = (r3 > r2 ? 1 : (r3 == r2 ? 0 : -1))
-                if (r1 <= 0) goto L_0x0884
-                goto L_0x0885
-            L_0x0884:
+                if (r1 <= 0) goto L_0x0894
+                goto L_0x0895
+            L_0x0894:
                 r2 = r3
-            L_0x0885:
+            L_0x0895:
                 r1 = 0
                 r7.translate(r1, r2)
                 float r1 = r6.scale
@@ -2189,14 +2200,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r7.drawRoundRect(r5, r11, r8, r13)
                 r5 = 1065353216(0x3var_, float:1.0)
                 int r8 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1))
-                if (r8 == 0) goto L_0x098a
+                if (r8 == 0) goto L_0x099a
                 float r8 = org.telegram.messenger.AndroidUtilities.dpf2(r22)
                 float r8 = r8 * r15
                 android.graphics.Paint r11 = r6.lockBackgroundPaint
                 r7.drawCircle(r0, r1, r8, r11)
-            L_0x098a:
+            L_0x099a:
                 int r0 = (r14 > r5 ? 1 : (r14 == r5 ? 0 : -1))
-                if (r0 == 0) goto L_0x0a56
+                if (r0 == 0) goto L_0x0a66
                 android.graphics.RectF r0 = r6.rectF
                 r1 = 1090519040(0x41000000, float:8.0)
                 float r5 = org.telegram.messenger.AndroidUtilities.dpf2(r1)
@@ -2236,13 +2247,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r0 = 0
                 int r2 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
                 r0 = 1090519040(0x41000000, float:8.0)
-                if (r2 <= 0) goto L_0x09f8
+                if (r2 <= 0) goto L_0x0a08
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r0)
                 float r1 = (float) r1
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r0)
                 float r2 = (float) r2
                 r7.rotate(r9, r1, r2)
-            L_0x09f8:
+            L_0x0a08:
                 float r1 = org.telegram.messenger.AndroidUtilities.dpf2(r0)
                 float r2 = org.telegram.messenger.AndroidUtilities.dpf2(r29)
                 float r3 = org.telegram.messenger.AndroidUtilities.dpf2(r0)
@@ -2283,13 +2294,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r0 = r38
                 r0.drawLine(r1, r2, r3, r4, r5)
                 r38.restore()
-            L_0x0a56:
+            L_0x0a66:
                 r38.restore()
                 r38.restore()
                 float r0 = r6.scale
                 r1 = 1065353216(0x3var_, float:1.0)
                 int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-                if (r0 == 0) goto L_0x0aa0
+                if (r0 == 0) goto L_0x0ab0
                 int r0 = r6.slideDelta
                 int r12 = r12 + r0
                 float r0 = (float) r12
@@ -2299,13 +2310,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r3 = r17
                 r7.drawCircle(r0, r3, r8, r2)
                 boolean r0 = r6.canceledByGesture
-                if (r0 == 0) goto L_0x0a7e
+                if (r0 == 0) goto L_0x0a8e
                 float r0 = r6.slideToCancelProgress
                 float r15 = r1 - r0
-                goto L_0x0a80
-            L_0x0a7e:
+                goto L_0x0a90
+            L_0x0a8e:
                 r15 = 1065353216(0x3var_, float:1.0)
-            L_0x0a80:
+            L_0x0a90:
                 r38.save()
                 int r0 = r6.slideDelta
                 float r0 = (float) r0
@@ -2317,14 +2328,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 int r5 = (int) r15
                 r0 = r37
                 r1 = r38
-                r2 = r21
+                r2 = r20
                 r3 = r31
                 r0.drawIconInternal(r1, r2, r3, r4, r5)
                 r38.restore()
-                goto L_0x0aa2
-            L_0x0aa0:
+                goto L_0x0ab2
+            L_0x0ab0:
                 r8 = r16
-            L_0x0aa2:
+            L_0x0ab2:
                 r6.drawingCircleRadius = r8
                 return
             */
@@ -4068,6 +4079,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     /* renamed from: lambda$null$11 */
     public /* synthetic */ void lambda$null$11$ChatActivityEnterView() {
         this.moveToSendStateRunnable = null;
+        this.messageTransitionIsRunning = false;
         updateRecordIntefrace(1);
     }
 
@@ -4075,6 +4087,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     /* renamed from: lambda$null$14 */
     public /* synthetic */ void lambda$null$14$ChatActivityEnterView() {
         this.moveToSendStateRunnable = null;
+        this.messageTransitionIsRunning = false;
         updateRecordIntefrace(1);
     }
 
@@ -6386,6 +6399,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             AndroidUtilities.cancelRunOnUIThread(runnable);
             this.moveToSendStateRunnable = null;
         }
+        this.messageTransitionIsRunning = true;
         updateRecordIntefrace(1);
     }
 
@@ -6705,7 +6719,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r0.start()
             org.telegram.ui.Components.ChatActivityEnterView$TimerView r0 = r1.recordTimerView
             r0.start()
-            goto L_0x0d92
+            goto L_0x0d9b
         L_0x02a3:
             boolean r0 = r1.recordIsCanceled
             if (r0 == 0) goto L_0x02aa
@@ -6783,9 +6797,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r9.<init>()
             r1.runningAnimationAudio = r9
             java.lang.String r13 = "slideToCancelProgress"
-            if (r0 != 0) goto L_0x0ba9
+            if (r0 != 0) goto L_0x0bb2
             if (r2 != r14) goto L_0x032f
-            goto L_0x0ba9
+            goto L_0x0bb2
         L_0x032f:
             if (r2 != r15) goto L_0x0612
             org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r0 = r1.slideText
@@ -7114,13 +7128,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             org.telegram.ui.Components.ChatActivityEnterView$36 r3 = new org.telegram.ui.Components.ChatActivityEnterView$36
             r3.<init>(r13, r9)
             r0.addListener(r3)
-            goto L_0x0d7e
+            goto L_0x0d87
         L_0x0612:
             r9 = 200(0xc8, double:9.9E-322)
-            if (r2 == r3) goto L_0x07fa
+            if (r2 == r3) goto L_0x0803
             r7 = 5
             if (r2 != r7) goto L_0x061b
-            goto L_0x07fa
+            goto L_0x0803
         L_0x061b:
             android.widget.ImageView r0 = r1.videoSendButton
             if (r0 == 0) goto L_0x062b
@@ -7319,17 +7333,24 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             float[] r11 = new float[r8]
             r12 = 1065353216(0x3var_, float:1.0)
             r11[r4] = r12
-            java.lang.String r13 = "exitTransition"
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r13, r11)
-            r13 = 220(0xdc, double:1.087E-321)
-            r7.setDuration(r13)
+            java.lang.String r12 = "exitTransition"
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r12, r11)
+            boolean r11 = r1.messageTransitionIsRunning
+            if (r11 == 0) goto L_0x07d1
+            r11 = 220(0xdc, double:1.087E-321)
+            goto L_0x07d3
+        L_0x07d1:
+            r11 = 360(0x168, double:1.78E-321)
+        L_0x07d3:
+            r7.setDuration(r11)
             org.telegram.ui.Components.EditTextCaption r11 = r1.messageEditText
             r11.setTranslationX(r6)
             org.telegram.ui.Components.EditTextCaption r6 = r1.messageEditText
             android.util.Property r11 = android.view.View.ALPHA
-            float[] r13 = new float[r8]
-            r13[r4] = r12
-            android.animation.ObjectAnimator r6 = android.animation.ObjectAnimator.ofFloat(r6, r11, r13)
+            float[] r12 = new float[r8]
+            r13 = 1065353216(0x3var_, float:1.0)
+            r12[r4] = r13
+            android.animation.ObjectAnimator r6 = android.animation.ObjectAnimator.ofFloat(r6, r11, r12)
             r11 = 150(0x96, double:7.4E-322)
             r6.setStartDelay(r11)
             r6.setDuration(r9)
@@ -7341,20 +7362,20 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r10[r3] = r6
             r10[r15] = r7
             r9.playTogether(r10)
-            goto L_0x0d7e
-        L_0x07fa:
+            goto L_0x0d87
+        L_0x0803:
             android.widget.ImageView r0 = r1.videoSendButton
-            if (r0 == 0) goto L_0x080a
+            if (r0 == 0) goto L_0x0813
             boolean r0 = r24.isInVideoMode()
-            if (r0 == 0) goto L_0x080a
+            if (r0 == 0) goto L_0x0813
             android.widget.ImageView r0 = r1.videoSendButton
             r0.setVisibility(r4)
-            goto L_0x0811
-        L_0x080a:
+            goto L_0x081a
+        L_0x0813:
             android.widget.ImageView r0 = r1.audioSendButton
-            if (r0 == 0) goto L_0x0811
+            if (r0 == 0) goto L_0x081a
             r0.setVisibility(r4)
-        L_0x0811:
+        L_0x081a:
             r1.recordIsCanceled = r8
             android.animation.AnimatorSet r0 = new android.animation.AnimatorSet
             r0.<init>()
@@ -7456,29 +7477,29 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r12[r15] = r7
             r5.playTogether(r12)
             r7 = 5
-            if (r2 == r7) goto L_0x0a89
+            if (r2 == r7) goto L_0x0a92
             android.widget.FrameLayout r7 = r1.audioVideoButtonContainer
             r7.setScaleX(r6)
             android.widget.FrameLayout r7 = r1.audioVideoButtonContainer
             r7.setScaleY(r6)
             android.widget.ImageView r7 = r1.attachButton
-            if (r7 == 0) goto L_0x0911
+            if (r7 == 0) goto L_0x091a
             int r7 = r7.getVisibility()
-            if (r7 != 0) goto L_0x0911
+            if (r7 != 0) goto L_0x091a
             android.widget.ImageView r7 = r1.attachButton
             r7.setScaleX(r6)
             android.widget.ImageView r7 = r1.attachButton
             r7.setScaleY(r6)
-        L_0x0911:
+        L_0x091a:
             android.widget.ImageView r7 = r1.botButton
-            if (r7 == 0) goto L_0x0925
+            if (r7 == 0) goto L_0x092e
             int r7 = r7.getVisibility()
-            if (r7 != 0) goto L_0x0925
+            if (r7 != 0) goto L_0x092e
             android.widget.ImageView r7 = r1.botButton
             r7.setScaleX(r6)
             android.widget.ImageView r7 = r1.botButton
             r7.setScaleY(r6)
-        L_0x0925:
+        L_0x092e:
             r7 = 4
             android.animation.Animator[] r9 = new android.animation.Animator[r7]
             org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r7 = r1.recordCircle
@@ -7507,7 +7528,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r9[r15] = r7
             r0.playTogether(r9)
             android.widget.LinearLayout r7 = r1.attachLayout
-            if (r7 == 0) goto L_0x0986
+            if (r7 == 0) goto L_0x098f
             android.animation.Animator[] r9 = new android.animation.Animator[r3]
             android.util.Property r10 = android.view.View.ALPHA
             float[] r12 = new float[r8]
@@ -7521,9 +7542,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
             r9[r8] = r7
             r0.playTogether(r9)
-        L_0x0986:
+        L_0x098f:
             android.widget.ImageView r7 = r1.attachButton
-            if (r7 == 0) goto L_0x09ac
+            if (r7 == 0) goto L_0x09b5
             android.animation.Animator[] r9 = new android.animation.Animator[r3]
             android.util.Property r10 = android.view.View.SCALE_X
             float[] r11 = new float[r8]
@@ -7538,12 +7559,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
             r9[r8] = r7
             r0.playTogether(r9)
-            goto L_0x09ae
-        L_0x09ac:
+            goto L_0x09b7
+        L_0x09b5:
             r12 = 1065353216(0x3var_, float:1.0)
-        L_0x09ae:
+        L_0x09b7:
             android.widget.ImageView r7 = r1.botButton
-            if (r7 == 0) goto L_0x09d1
+            if (r7 == 0) goto L_0x09da
             android.animation.Animator[] r9 = new android.animation.Animator[r3]
             android.util.Property r10 = android.view.View.SCALE_X
             float[] r11 = new float[r8]
@@ -7557,19 +7578,19 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
             r9[r8] = r7
             r0.playTogether(r9)
-        L_0x09d1:
+        L_0x09da:
             android.widget.ImageView r7 = r1.videoSendButton
-            if (r7 == 0) goto L_0x0a18
+            if (r7 == 0) goto L_0x0a21
             android.animation.Animator[] r9 = new android.animation.Animator[r8]
             android.util.Property r10 = android.view.View.ALPHA
             float[] r11 = new float[r8]
             boolean r12 = r24.isInVideoMode()
-            if (r12 == 0) goto L_0x09e4
+            if (r12 == 0) goto L_0x09ed
             r12 = 1065353216(0x3var_, float:1.0)
-            goto L_0x09e5
-        L_0x09e4:
+            goto L_0x09ee
+        L_0x09ed:
             r12 = 0
-        L_0x09e5:
+        L_0x09ee:
             r11[r4] = r12
             android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
             r9[r4] = r7
@@ -7591,19 +7612,19 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r10, r11)
             r7[r4] = r9
             r0.playTogether(r7)
-        L_0x0a18:
+        L_0x0a21:
             android.widget.ImageView r7 = r1.audioSendButton
-            if (r7 == 0) goto L_0x0a60
+            if (r7 == 0) goto L_0x0a69
             android.animation.Animator[] r9 = new android.animation.Animator[r8]
             android.util.Property r10 = android.view.View.ALPHA
             float[] r11 = new float[r8]
             boolean r12 = r24.isInVideoMode()
-            if (r12 == 0) goto L_0x0a2a
+            if (r12 == 0) goto L_0x0a33
             r12 = 0
-            goto L_0x0a2c
-        L_0x0a2a:
+            goto L_0x0a35
+        L_0x0a33:
             r12 = 1065353216(0x3var_, float:1.0)
-        L_0x0a2c:
+        L_0x0a35:
             r11[r4] = r12
             android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
             r9[r4] = r7
@@ -7625,12 +7646,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r10, r11)
             r7[r4] = r9
             r0.playTogether(r7)
-            goto L_0x0a62
-        L_0x0a60:
+            goto L_0x0a6b
+        L_0x0a69:
             r12 = 1065353216(0x3var_, float:1.0)
-        L_0x0a62:
+        L_0x0a6b:
             android.widget.ImageView r7 = r1.scheduledButton
-            if (r7 == 0) goto L_0x0a85
+            if (r7 == 0) goto L_0x0a8e
             android.animation.Animator[] r9 = new android.animation.Animator[r3]
             android.util.Property r10 = android.view.View.ALPHA
             float[] r11 = new float[r8]
@@ -7644,10 +7665,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
             r9[r8] = r7
             r0.playTogether(r9)
-        L_0x0a85:
+        L_0x0a8e:
             r9 = 150(0x96, double:7.4E-322)
-            goto L_0x0b09
-        L_0x0a89:
+            goto L_0x0b12
+        L_0x0a92:
             android.animation.AnimatorSet r7 = new android.animation.AnimatorSet
             r7.<init>()
             android.animation.Animator[] r9 = new android.animation.Animator[r8]
@@ -7660,7 +7681,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r9[r4] = r10
             r7.playTogether(r9)
             android.widget.LinearLayout r9 = r1.attachLayout
-            if (r9 == 0) goto L_0x0ac9
+            if (r9 == 0) goto L_0x0ad2
             android.animation.Animator[] r10 = new android.animation.Animator[r3]
             android.util.Property r11 = android.view.View.TRANSLATION_X
             float[] r12 = new float[r8]
@@ -7675,12 +7696,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r11, r12)
             r10[r8] = r9
             r7.playTogether(r10)
-            goto L_0x0acb
-        L_0x0ac9:
+            goto L_0x0ad4
+        L_0x0ad2:
             r14 = 1065353216(0x3var_, float:1.0)
-        L_0x0acb:
+        L_0x0ad4:
             android.widget.ImageView r9 = r1.scheduledButton
-            if (r9 == 0) goto L_0x0aee
+            if (r9 == 0) goto L_0x0af7
             android.animation.Animator[] r10 = new android.animation.Animator[r3]
             android.util.Property r11 = android.view.View.ALPHA
             float[] r12 = new float[r8]
@@ -7694,7 +7715,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r11, r12)
             r10[r8] = r9
             r7.playTogether(r10)
-        L_0x0aee:
+        L_0x0af7:
             r9 = 150(0x96, double:7.4E-322)
             r7.setDuration(r9)
             r11 = 110(0x6e, double:5.43E-322)
@@ -7706,7 +7727,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.Animator[] r12 = new android.animation.Animator[r8]
             r12[r4] = r7
             r11.playTogether(r12)
-        L_0x0b09:
+        L_0x0b12:
             r0.setDuration(r9)
             r9 = 700(0x2bc, double:3.46E-321)
             r0.setStartDelay(r9)
@@ -7741,7 +7762,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r9[r15] = r0
             r7.playTogether(r9)
             r3 = 5
-            if (r2 != r3) goto L_0x0b81
+            if (r2 != r3) goto L_0x0b8a
             org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r0 = r1.recordCircle
             r0.canceledByGesture()
             org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r0 = r1.recordCircle
@@ -7756,8 +7777,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.Animator[] r5 = new android.animation.Animator[r8]
             r5[r4] = r0
             r3.playTogether(r5)
-            goto L_0x0ba2
-        L_0x0b81:
+            goto L_0x0bab
+        L_0x0b8a:
             org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r0 = r1.recordCircle
             float[] r3 = new float[r8]
             r5 = 1065353216(0x3var_, float:1.0)
@@ -7772,23 +7793,23 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.Animator[] r5 = new android.animation.Animator[r8]
             r5[r4] = r0
             r3.playTogether(r5)
-        L_0x0ba2:
+        L_0x0bab:
             org.telegram.ui.Components.ChatActivityEnterView$RecordDot r0 = r1.recordDot
             r0.playDeleteAnimation()
-            goto L_0x0d7e
-        L_0x0ba9:
+            goto L_0x0d87
+        L_0x0bb2:
             android.widget.ImageView r0 = r1.videoSendButton
-            if (r0 == 0) goto L_0x0bb9
+            if (r0 == 0) goto L_0x0bc2
             boolean r0 = r24.isInVideoMode()
-            if (r0 == 0) goto L_0x0bb9
+            if (r0 == 0) goto L_0x0bc2
             android.widget.ImageView r0 = r1.videoSendButton
             r0.setVisibility(r4)
-            goto L_0x0bc0
-        L_0x0bb9:
+            goto L_0x0bc9
+        L_0x0bc2:
             android.widget.ImageView r0 = r1.audioSendButton
-            if (r0 == 0) goto L_0x0bc0
+            if (r0 == 0) goto L_0x0bc9
             r0.setVisibility(r4)
-        L_0x0bc0:
+        L_0x0bc9:
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
             r9 = 16
             android.animation.Animator[] r9 = new android.animation.Animator[r9]
@@ -7911,7 +7932,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r9[r5] = r7
             r0.playTogether(r9)
             android.widget.ImageView r0 = r1.audioSendButton
-            if (r0 == 0) goto L_0x0cfa
+            if (r0 == 0) goto L_0x0d03
             r0.setScaleX(r11)
             android.widget.ImageView r0 = r1.audioSendButton
             r0.setScaleY(r11)
@@ -7921,19 +7942,19 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.util.Property r9 = android.view.View.ALPHA
             float[] r10 = new float[r8]
             boolean r11 = r24.isInVideoMode()
-            if (r11 == 0) goto L_0x0ced
+            if (r11 == 0) goto L_0x0cf6
             r11 = 0
-            goto L_0x0cef
-        L_0x0ced:
+            goto L_0x0cf8
+        L_0x0cf6:
             r11 = 1065353216(0x3var_, float:1.0)
-        L_0x0cef:
+        L_0x0cf8:
             r10[r4] = r11
             android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
             r5[r4] = r7
             r0.playTogether(r5)
-        L_0x0cfa:
+        L_0x0d03:
             android.widget.ImageView r0 = r1.videoSendButton
-            if (r0 == 0) goto L_0x0d27
+            if (r0 == 0) goto L_0x0d30
             r5 = 1065353216(0x3var_, float:1.0)
             r0.setScaleX(r5)
             android.widget.ImageView r0 = r1.videoSendButton
@@ -7944,19 +7965,19 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.util.Property r9 = android.view.View.ALPHA
             float[] r10 = new float[r8]
             boolean r11 = r24.isInVideoMode()
-            if (r11 == 0) goto L_0x0d1b
+            if (r11 == 0) goto L_0x0d24
             r11 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0d1c
-        L_0x0d1b:
+            goto L_0x0d25
+        L_0x0d24:
             r11 = 0
-        L_0x0d1c:
+        L_0x0d25:
             r10[r4] = r11
             android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
             r5[r4] = r7
             r0.playTogether(r5)
-        L_0x0d27:
+        L_0x0d30:
             android.widget.ImageView r0 = r1.scheduledButton
-            if (r0 == 0) goto L_0x0d4e
+            if (r0 == 0) goto L_0x0d57
             android.animation.AnimatorSet r5 = r1.runningAnimationAudio
             android.animation.Animator[] r7 = new android.animation.Animator[r3]
             android.util.Property r9 = android.view.View.TRANSLATION_X
@@ -7972,9 +7993,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r9, r10)
             r7[r8] = r0
             r5.playTogether(r7)
-        L_0x0d4e:
+        L_0x0d57:
             android.widget.LinearLayout r0 = r1.attachLayout
-            if (r0 == 0) goto L_0x0d75
+            if (r0 == 0) goto L_0x0d7e
             android.animation.AnimatorSet r5 = r1.runningAnimationAudio
             android.animation.Animator[] r3 = new android.animation.Animator[r3]
             android.util.Property r7 = android.view.View.TRANSLATION_X
@@ -7990,12 +8011,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r6, r7)
             r3[r8] = r0
             r5.playTogether(r3)
-        L_0x0d75:
+        L_0x0d7e:
             r1.recordIsCanceled = r8
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
             r3 = 150(0x96, double:7.4E-322)
             r0.setDuration(r3)
-        L_0x0d7e:
+        L_0x0d87:
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
             org.telegram.ui.Components.ChatActivityEnterView$38 r3 = new org.telegram.ui.Components.ChatActivityEnterView$38
             r3.<init>(r2)
@@ -8004,7 +8025,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r0.start()
             org.telegram.ui.Components.ChatActivityEnterView$TimerView r0 = r1.recordTimerView
             r0.stop()
-        L_0x0d92:
+        L_0x0d9b:
             org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r0 = r1.delegate
             r0.onAudioVideoInterfaceUpdated()
             return

@@ -179,9 +179,9 @@
     <string name="ActionCreateChannel">Channel created</string>
     <string name="ActionCreateGroup">un1 created the group</string>
     <string name="ActionCreateMega">Group created</string>
-    <string name="ActionCreatedInviteLinkClickable">un1 created invite link l1</string>
-    <string name="ActionDeletedInviteLinkClickable">un1 deleted invite link l1</string>
-    <string name="ActionEditedInviteLinkClickable">un1 edited invite link l1 to l2</string>
+    <string name="ActionCreatedInviteLinkClickable">un1 created invite link un2</string>
+    <string name="ActionDeletedInviteLinkClickable">un1 deleted invite link un2</string>
+    <string name="ActionEditedInviteLinkClickable">un1 edited invite link un2 to un3</string>
     <string name="ActionEditedInviteLinkToSameClickable">un1 edited invite link l1</string>
     <string name="ActionGroupCallEnded">Voice chat finished (%s)</string>
     <string name="ActionGroupCallInvited">un1 invited un2 to the voice chat</string>
@@ -708,8 +708,8 @@
     <string name="CancelEmailQuestion">Are you sure you want to abort recovery email setup?</string>
     <string name="CancelEmailQuestionTitle">Abort setup</string>
     <string name="CancelForward">Cancel Forward</string>
-    <string name="CancelForwardMessage">Do you want to cancel this forwarding or would like to send this messages to anothet chat?</string>
-    <string name="CancelForwarding">Cancael Forwarding</string>
+    <string name="CancelForwardMessage">Do you want to cancel forwarding or to forward messages to a different chat?</string>
+    <string name="CancelForwarding">Cancel Forwarding</string>
     <string name="CancelLinkExpired">Link is invalid or expired.</string>
     <string name="CancelLinkSuccess">The deletion process was cancelled for your account %1$s. You may close this window now.</string>
     <string name="CancelPasswordQuestion">Are you sure you want to abort two-step verification setup?</string>
@@ -1999,7 +1999,7 @@
     <string name="LinkCreatedeBy">Link created by</string>
     <string name="LinkExpiresIn">The link expires %s</string>
     <string name="LinkExpiresInTime">The link expires in %s</string>
-    <string name="LinkHashExpired">Link has been removed</string>
+    <string name="LinkHashExpired">Link is no longer active</string>
     <string name="LinkInUse">Sorry, this name is already taken.</string>
     <string name="LinkInfo">Anyone who has Telegram installed will be able to join your group by following this link.</string>
     <string name="LinkInfoChannel">Anyone who has Telegram installed will be able to join your channel by following this link.</string>
@@ -3361,7 +3361,7 @@
     <string name="SelectFile">Select File</string>
     <string name="SelectFromGallery">Select from gallery</string>
     <string name="SelectImage">Select image</string>
-    <string name="SelectOtherChat">Slect other chat</string>
+    <string name="SelectOtherChat">Select another chat</string>
     <string name="Send">Send</string>
     <string name="SendAnonymously">Send anonymously</string>
     <string name="SendAsFile">Send as file</string>
@@ -4080,11 +4080,12 @@
     <string name="VoipGroupSearchMembers">Search members to invite...</string>
     <string name="VoipGroupShareInviteLink">Share invite link</string>
     <string name="VoipGroupStartAs">Start Voice Chat as...</string>
-    <string name="VoipGroupStartAsInfo">Choose wheather you want to be displayed as your personal account or as your channel.</string>
-    <string name="VoipGroupStartRecordingText">Do you want to start recording this chat and save the result into an audio file?\10\10Other members will see the chat is being recorded.</string>
+    <string name="VoipGroupStartAsInfo">Choose whether you want to be displayed as your personal account or as your channel.</string>
+    <string name="VoipGroupStartAsInfoGroup">Choose whether you want to be displayed as your personal account, this group, or one of your channels.</string>
+    <string name="VoipGroupStartRecordingText">Do you want to start recording this chat and save the result into an audio file?\10\10Other members will see that the chat is being recorded.</string>
     <string name="VoipGroupStartRecordingTitle">Start recording</string>
     <string name="VoipGroupStopRecordCall">Stop recording</string>
-    <string name="VoipGroupStopRecordingText">Are you sure you want to stop recording this voice chat?</string>
+    <string name="VoipGroupStopRecordingText">Do you want to stop recording this voice chat?</string>
     <string name="VoipGroupStopRecordingTitle">Stop recording</string>
     <string name="VoipGroupTitle">Voice chat title</string>
     <string name="VoipGroupTooMuch">Sorry, this voice chat is full.</string>

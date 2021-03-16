@@ -1662,7 +1662,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 org.telegram.ui.PhotoViewer r3 = org.telegram.ui.PhotoViewer.this
                 org.telegram.ui.PhotoViewer$FrameLayoutDrawer r3 = r3.containerView
                 org.telegram.ui.Components.BulletinFactory r3 = org.telegram.ui.Components.BulletinFactory.of((android.widget.FrameLayout) r3)
-                r4 = 2131558512(0x7f0d0070, float:1.8742342E38)
+                r4 = 2131558513(0x7f0d0071, float:1.8742344E38)
                 org.telegram.ui.Components.Bulletin r2 = r3.createSimpleBulletin(r4, r2)
                 r2.show()
             L_0x007e:
@@ -15186,7 +15186,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 long r9 = (long) r7
                 r13 = 1000(0x3e8, double:4.94E-321)
                 long r9 = r9 * r13
-                r7 = 2131628213(0x7f0e10b5, float:1.8883712E38)
+                r7 = 2131628214(0x7f0e10b6, float:1.8883714E38)
                 r13 = 2
                 java.lang.Object[] r14 = new java.lang.Object[r13]
                 org.telegram.messenger.LocaleController r13 = org.telegram.messenger.LocaleController.getInstance()
@@ -19947,8 +19947,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         }
                         this.captionEditText.onDestroy();
                         ChatActivity chatActivity = this.parentChatActivity;
-                        if (chatActivity != null) {
-                            chatActivity.getFragmentView().invalidate();
+                        if (!(chatActivity == null || chatActivity.getFragmentView() == null)) {
+                            this.parentChatActivity.getFragmentView().invalidate();
                         }
                         this.parentChatActivity = null;
                         removeObservers();

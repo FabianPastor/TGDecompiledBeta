@@ -110,9 +110,10 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             boolean pressed;
             Runnable pressedRunnable = new Runnable() {
                 public void run() {
-                    if (VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().isMicMute()) {
-                        TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = VoIPService.getSharedInstance().groupCall.participants.get(UserConfig.getInstance(GroupCallPip.this.currentAccount).getClientUserId());
-                        if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(VoIPService.getSharedInstance().getChat())) {
+                    VoIPService sharedInstance = VoIPService.getSharedInstance();
+                    if (sharedInstance != null && sharedInstance.isMicMute()) {
+                        TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = sharedInstance.groupCall.participants.get(sharedInstance.getSelfId());
+                        if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(sharedInstance.getChat())) {
                             AndroidUtilities.runOnUIThread(AnonymousClass3.this.micRunnable, 90);
                             AnonymousClass3.this.performHapticFeedback(3, 2);
                             AnonymousClass3.this.pressed = true;

@@ -10999,6 +10999,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             } else if (baseFragment instanceof ProfileActivity) {
                 ((ProfileActivity) baseFragment).getUndoView().showWithAction(0, 38, (Object) chat);
             }
+            if (VoIPService.getSharedInstance() != null) {
+                VoIPService.getSharedInstance().playAllowTalkSound();
+            }
         }
     }
 

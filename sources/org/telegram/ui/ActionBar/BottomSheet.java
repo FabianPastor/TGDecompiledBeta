@@ -360,7 +360,7 @@ public class BottomSheet extends Dialog {
                         BottomSheet.this.containerView.setTranslationY(f);
                         this.startedTrackingY = (int) motionEvent.getY();
                     }
-                } else if (motionEvent == null || (motionEvent != null && motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6))) {
+                } else if (motionEvent == null || (motionEvent.getPointerId(0) == this.startedTrackingPointerId && (motionEvent.getAction() == 3 || motionEvent.getAction() == 1 || motionEvent.getAction() == 6))) {
                     if (this.velocityTracker == null) {
                         this.velocityTracker = VelocityTracker.obtain();
                     }
@@ -1126,7 +1126,9 @@ public class BottomSheet extends Dialog {
     public BottomSheet(Context context, boolean z) {
         super(context, NUM);
         int i = Build.VERSION.SDK_INT;
-        if (i >= 21) {
+        if (i >= 30) {
+            getWindow().addFlags(-NUM);
+        } else if (i >= 21) {
             getWindow().addFlags(-NUM);
         }
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
@@ -1137,7 +1139,7 @@ public class BottomSheet extends Dialog {
         this.shadowDrawable.getPadding(rect);
         this.backgroundPaddingLeft = rect.left;
         this.backgroundPaddingTop = rect.top;
-        AnonymousClass1 r8 = new ContainerView(getContext()) {
+        AnonymousClass1 r9 = new ContainerView(getContext()) {
             public boolean drawChild(Canvas canvas, View view, long j) {
                 try {
                     return BottomSheet.this.allowDrawContent && super.drawChild(canvas, view, j);
@@ -1147,8 +1149,8 @@ public class BottomSheet extends Dialog {
                 }
             }
         };
-        this.container = r8;
-        r8.setBackgroundDrawable(this.backDrawable);
+        this.container = r9;
+        r9.setBackgroundDrawable(this.backDrawable);
         this.focusable = z;
         if (i >= 21) {
             this.container.setFitsSystemWindows(true);
@@ -1157,7 +1159,11 @@ public class BottomSheet extends Dialog {
                     return BottomSheet.this.lambda$new$0$BottomSheet(view, windowInsets);
                 }
             });
-            this.container.setSystemUiVisibility(1280);
+            if (i >= 30) {
+                this.container.setSystemUiVisibility(1792);
+            } else {
+                this.container.setSystemUiVisibility(1280);
+            }
         }
         this.backDrawable.setAlpha(0);
     }

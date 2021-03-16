@@ -51,7 +51,9 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.RequestDelegate;
@@ -105,6 +107,7 @@ import org.telegram.ui.Cells.UserCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.Bulletin;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.ChatActivityEnterView;
 import org.telegram.ui.Components.ChatAvatarContainer;
 import org.telegram.ui.Components.CubicBezierInterpolator;
@@ -1551,13 +1554,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 int unused2 = DialogsActivity.this.canReadCount = (tLRPC$Dialog.unread_count > 0 || tLRPC$Dialog.unread_mark) ? 1 : 0;
                                 DialogsActivity.this.perfromSelectedDialogsAction(arrayList, 101, true);
                             } else if (SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 3) {
-                                ArrayList arrayList2 = new ArrayList();
-                                arrayList2.add(Long.valueOf(dialogId));
-                                DialogsActivity dialogsActivity2 = DialogsActivity.this;
-                                int unused3 = dialogsActivity2.canMuteCount = MessagesController.getInstance(dialogsActivity2.currentAccount).isDialogMuted(dialogId) ^ true ? 1 : 0;
-                                DialogsActivity dialogsActivity3 = DialogsActivity.this;
-                                int unused4 = dialogsActivity3.canUnmuteCount = dialogsActivity3.canMuteCount > 0 ? 0 : 1;
-                                DialogsActivity.this.perfromSelectedDialogsAction(arrayList2, 104, true);
+                                if (!DialogsActivity.this.getMessagesController().isDialogMuted(dialogId)) {
+                                    NotificationsController.getInstance(UserConfig.selectedAccount).setDialogNotificationsSettings(dialogId, 3);
+                                    if (BulletinFactory.canShowBulletin(DialogsActivity.this)) {
+                                        BulletinFactory.createMuteBulletin((BaseFragment) DialogsActivity.this, 3).show();
+                                    }
+                                } else {
+                                    ArrayList arrayList2 = new ArrayList();
+                                    arrayList2.add(Long.valueOf(dialogId));
+                                    DialogsActivity dialogsActivity2 = DialogsActivity.this;
+                                    int unused3 = dialogsActivity2.canMuteCount = MessagesController.getInstance(dialogsActivity2.currentAccount).isDialogMuted(dialogId) ^ true ? 1 : 0;
+                                    DialogsActivity dialogsActivity3 = DialogsActivity.this;
+                                    int unused4 = dialogsActivity3.canUnmuteCount = dialogsActivity3.canMuteCount > 0 ? 0 : 1;
+                                    DialogsActivity.this.perfromSelectedDialogsAction(arrayList2, 104, true);
+                                }
                             } else if (SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 0) {
                                 ArrayList arrayList3 = new ArrayList();
                                 arrayList3.add(Long.valueOf(dialogId));
@@ -1810,7 +1820,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 TLRPC$Dialog tLRPC$Dialog = DialogsActivity.this.getMessagesController().dialogs_dict.get(dialogId);
                 if (tLRPC$Dialog != null) {
-                    if (SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 1) {
+                    if (DialogsActivity.this.folderId == 0 && SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 1) {
                         ArrayList arrayList = new ArrayList();
                         arrayList.add(Long.valueOf(dialogId));
                         DialogsActivity dialogsActivity = DialogsActivity.this;
@@ -2913,7 +2923,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             goto L_0x0686
         L_0x066c:
             org.telegram.ui.Components.RLottieImageView r0 = r10.floatingButton
-            r1 = 2131558520(0x7f0d0078, float:1.8742358E38)
+            r1 = 2131558523(0x7f0d007b, float:1.8742364E38)
             r3 = 52
             r4 = 52
             r0.setAnimation(r1, r3, r4)
@@ -7282,35 +7292,36 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     /* renamed from: lambda$perfromSelectedDialogsAction$28 */
     public /* synthetic */ void lambda$perfromSelectedDialogsAction$28$DialogsActivity(int i, TLRPC$Chat tLRPC$Chat, long j, boolean z, boolean z2) {
         int i2;
-        int i3 = i;
+        int i3;
+        int i4;
+        int i5 = i;
         TLRPC$Chat tLRPC$Chat2 = tLRPC$Chat;
         long j2 = j;
         hideActionMode(false);
-        if (i3 != 103 || !ChatObject.isChannel(tLRPC$Chat) || (tLRPC$Chat2.megagroup && TextUtils.isEmpty(tLRPC$Chat2.username))) {
+        if (i5 != 103 || !ChatObject.isChannel(tLRPC$Chat) || (tLRPC$Chat2.megagroup && TextUtils.isEmpty(tLRPC$Chat2.username))) {
             boolean z3 = z2;
-            if (i3 == 102 && this.folderId != 0 && getDialogsArray(this.currentAccount, this.viewPages[0].dialogsType, this.folderId, false).size() == 1) {
+            if (i5 == 102 && this.folderId != 0 && getDialogsArray(this.currentAccount, this.viewPages[0].dialogsType, this.folderId, false).size() == 1) {
                 this.viewPages[0].progressView.setVisibility(4);
             }
-            int i4 = -1;
-            if (i3 == 102) {
+            if (i5 == 102) {
                 setDialogsListFrozen(true);
-                int i5 = 0;
+                int i6 = 0;
                 while (true) {
-                    if (i5 >= this.frozenDialogsList.size()) {
+                    if (i6 >= this.frozenDialogsList.size()) {
                         break;
-                    } else if (this.frozenDialogsList.get(i5).id == j2) {
-                        i2 = i5;
+                    } else if (this.frozenDialogsList.get(i6).id == j2) {
+                        i2 = i6;
                         break;
                     } else {
-                        i5++;
+                        i6++;
                     }
                 }
             }
             i2 = -1;
             UndoView undoView2 = getUndoView();
-            int i6 = i3 == 103 ? 0 : 1;
+            int i7 = i5 == 103 ? 0 : 1;
             $$Lambda$DialogsActivity$NhjayaBpBDhSPbDjvqJHKORzXQg r15 = r0;
-            int i7 = i2;
+            int i8 = i2;
             $$Lambda$DialogsActivity$NhjayaBpBDhSPbDjvqJHKORzXQg r0 = new Runnable(i, j, z2, tLRPC$Chat, z) {
                 public final /* synthetic */ int f$1;
                 public final /* synthetic */ long f$2;
@@ -7330,28 +7341,31 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     DialogsActivity.this.lambda$null$27$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             };
-            undoView2.showWithAction(j2, i6, (Runnable) r15);
+            undoView2.showWithAction(j2, i7, (Runnable) r15);
             ArrayList arrayList = new ArrayList(getDialogsArray(this.currentAccount, this.viewPages[0].dialogsType, this.folderId, false));
-            int i8 = 0;
+            int i9 = 0;
             while (true) {
-                if (i8 >= arrayList.size()) {
+                if (i9 >= arrayList.size()) {
+                    i3 = 102;
+                    i4 = -1;
                     break;
-                } else if (((TLRPC$Dialog) arrayList.get(i8)).id == j2) {
-                    i4 = i8;
+                } else if (((TLRPC$Dialog) arrayList.get(i9)).id == j2) {
+                    i4 = i9;
+                    i3 = 102;
                     break;
                 } else {
-                    i8++;
+                    i9++;
                 }
             }
-            if (i3 == 102) {
-                int i9 = i7;
-                if (i9 < 0 || i4 >= 0) {
-                    setDialogsListFrozen(true, false);
+            if (i5 == i3 && this.dialogsListFrozen) {
+                int i10 = i8;
+                if (i10 < 0 || i4 >= 0) {
+                    setDialogsListFrozen(false, false);
                     return;
                 }
-                this.frozenDialogsList.remove(i9);
+                this.frozenDialogsList.remove(i10);
                 this.viewPages[0].dialogsItemAnimator.prepareForRemove();
-                this.viewPages[0].dialogsAdapter.notifyItemRemoved(i9);
+                this.viewPages[0].dialogsAdapter.notifyItemRemoved(i10);
                 this.dialogRemoveFinished = 2;
                 return;
             }

@@ -522,10 +522,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
             if (sharedInstance.groupCall != null) {
-                AccountInstance instance = AccountInstance.getInstance(sharedInstance.getAccount());
+                AccountInstance.getInstance(sharedInstance.getAccount());
                 ChatObject.Call call = sharedInstance.groupCall;
                 TLRPC$Chat chat = sharedInstance.getChat();
-                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = call.participants.get(instance.getUserConfig().getClientUserId());
+                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = call.participants.get(sharedInstance.getSelfId());
                 if (tLRPC$TL_groupCallParticipant != null && !tLRPC$TL_groupCallParticipant.can_self_unmute && tLRPC$TL_groupCallParticipant.muted && !ChatObject.canManageCalls(chat)) {
                     return;
                 }
@@ -1179,7 +1179,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                         sharedInstance.registerStateListener(this);
                     }
                     int callState = sharedInstance.getCallState();
-                    if (callState != 1 && callState != 2 && callState != 6 && callState != 5 && (tLRPC$TL_groupCallParticipant = sharedInstance.groupCall.participants.get(AccountInstance.getInstance(sharedInstance.getAccount()).getUserConfig().getClientUserId())) != null && !tLRPC$TL_groupCallParticipant.can_self_unmute && tLRPC$TL_groupCallParticipant.muted && !ChatObject.canManageCalls(sharedInstance.getChat())) {
+                    if (callState != 1 && callState != 2 && callState != 6 && callState != 5 && (tLRPC$TL_groupCallParticipant = sharedInstance.groupCall.participants.get(sharedInstance.getSelfId())) != null && !tLRPC$TL_groupCallParticipant.can_self_unmute && tLRPC$TL_groupCallParticipant.muted && !ChatObject.canManageCalls(sharedInstance.getChat())) {
                         sharedInstance.setMicMute(true, false, false);
                         long uptimeMillis = SystemClock.uptimeMillis();
                         this.muteButton.dispatchTouchEvent(MotionEvent.obtain(uptimeMillis, uptimeMillis, 3, 0.0f, 0.0f, 0));
@@ -2309,13 +2309,15 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 if (!sharedInstance.isSwitchingStream() && (callState == 1 || callState == 2 || callState == 6 || callState == 5)) {
                     this.titleTextView.setText(LocaleController.getString("VoipGroupConnecting", NUM), false);
                 } else if (sharedInstance.getChat() != null) {
-                    BaseFragment baseFragment = this.fragment;
-                    if ((baseFragment instanceof ChatActivity) && ((ChatActivity) baseFragment).getCurrentChat() != null && ((ChatActivity) this.fragment).getCurrentChat().id == sharedInstance.getChat().id) {
-                        this.titleTextView.setText(LocaleController.getString("VoipGroupViewVoiceChat", NUM), false);
-                    } else if (!TextUtils.isEmpty(sharedInstance.groupCall.call.title)) {
+                    if (!TextUtils.isEmpty(sharedInstance.groupCall.call.title)) {
                         this.titleTextView.setText(sharedInstance.groupCall.call.title, false);
-                    } else {
+                        return;
+                    }
+                    BaseFragment baseFragment = this.fragment;
+                    if (!(baseFragment instanceof ChatActivity) || ((ChatActivity) baseFragment).getCurrentChat() == null || ((ChatActivity) this.fragment).getCurrentChat().id != sharedInstance.getChat().id) {
                         this.titleTextView.setText(sharedInstance.getChat().title, false);
+                    } else {
+                        this.titleTextView.setText(LocaleController.getString("VoipGroupViewVoiceChat", NUM), false);
                     }
                 } else if (sharedInstance.getUser() != null) {
                     TLRPC$User user = sharedInstance.getUser();
