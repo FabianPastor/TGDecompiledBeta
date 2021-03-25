@@ -222,6 +222,7 @@ public class GroupCallUserCell extends FrameLayout {
         this.dividerPaint = paint;
         paint.setColor(Theme.getColor("voipgroup_actionBar"));
         this.avatarDrawable = new AvatarDrawable();
+        setClipChildren(false);
         BackupImageView backupImageView = new BackupImageView(context2);
         this.avatarImageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(24.0f));

@@ -204,7 +204,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
                             CharSequence subSequence = this.text.subSequence(0, lineEnd);
                             CharSequence charSequence3 = this.text;
                             CharSequence subSequence2 = charSequence3.subSequence(lineStart, charSequence3.length());
-                            CharSequence subSequence3 = charSequence2.subSequence(lineEnd, charSequence2.length());
+                            String subSequence3 = lineEnd < charSequence2.length() ? charSequence2.subSequence(lineEnd, charSequence2.length()) : "…";
                             this.firstLineLayout = new StaticLayout(charSequence2, 0, charSequence2.length(), this.textPaint, this.scrollNonFitText ? AndroidUtilities.dp(2000.0f) : AndroidUtilities.dp(8.0f) + intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             StaticLayout staticLayout = new StaticLayout(subSequence, 0, subSequence.length(), this.textPaint, this.scrollNonFitText ? AndroidUtilities.dp(2000.0f) : AndroidUtilities.dp(8.0f) + intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             this.layout = staticLayout;
@@ -544,9 +544,9 @@ public class SimpleTextView extends View implements Drawable.Callback {
                 this.textPaint.setAlpha((int) ((1.0f - this.fullAlpha) * 255.0f));
                 canvas.save();
                 if (this.layout.getLineLeft(0) != 0.0f) {
-                    canvas.translate(-this.layout.getLineWidth(0), 0.0f);
+                    canvas.translate((-this.layout.getLineWidth(0)) + ((float) (this.partLayout.getText().length() == 1 ? AndroidUtilities.dp(4.0f) : 0)), 0.0f);
                 } else {
-                    canvas.translate(this.layout.getLineWidth(0), 0.0f);
+                    canvas.translate(this.layout.getLineWidth(0) - ((float) (this.partLayout.getText().length() == 1 ? AndroidUtilities.dp(4.0f) : 0)), 0.0f);
                 }
                 this.partLayout.draw(canvas);
                 canvas.restore();
@@ -555,11 +555,6 @@ public class SimpleTextView extends View implements Drawable.Callback {
             if (this.fullLayout != null && this.fullAlpha > 0.0f) {
                 int alpha2 = this.textPaint.getAlpha();
                 this.textPaint.setAlpha((int) (this.fullAlpha * 255.0f));
-                int lineCount = this.fullLayout.getLineCount();
-                int i16 = 0;
-                while (i16 < lineCount && this.fullLayout.getLineLeft(i16) == 0.0f) {
-                    i16++;
-                }
                 if (this.layout.getLineLeft(0) != 0.0f) {
                     canvas.translate((float) (-this.offsetX), (float) this.layout.getLineBottom(0));
                 } else {

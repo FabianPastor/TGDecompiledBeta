@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<set xmlns:android="http://schemas.android.com/apk/res/android">
+<set xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt">
     <set android:ordering="sequentially">
         <objectAnimator android:interpolator="@android:interpolator/linear" android:duration="50" android:valueFrom="M -7.0,-1.0 l 14.0,0.0 c 0.0,0.0 0.0,0.0 0.0,0.0 l 0.0,2.0 c 0.0,0.0 0.0,0.0 0.0,0.0 l -14.0,0.0 c 0.0,0.0 0.0,0.0 0.0,0.0 l 0.0,-2.0 c 0.0,0.0 0.0,0.0 0.0,0.0 Z" android:valueTo="M -7.0,-1.0 l 14.0,0.0 c 0.0,0.0 0.0,0.0 0.0,0.0 l 0.0,2.0 c 0.0,0.0 0.0,0.0 0.0,0.0 l -14.0,0.0 c 0.0,0.0 0.0,0.0 0.0,0.0 l 0.0,-2.0 c 0.0,0.0 0.0,0.0 0.0,0.0 Z" android:valueType="pathType" android:propertyName="pathData"/>
         <objectAnimator android:interpolator="@android:interpolator/linear" android:duration="37" android:valueFrom="M -7.0,-1.0 l 14.0,0.0 c 0.0,0.0 0.0,0.0 0.0,0.0 l 0.0,2.0 c 0.0,0.0 0.0,0.0 0.0,0.0 l -14.0,0.0 c 0.0,0.0 0.0,0.0 0.0,0.0 l 0.0,-2.0 c 0.0,0.0 0.0,0.0 0.0,0.0 Z" android:valueTo="M -4.NUM,-1.NUM l 8.NUM,0.0 c 0.NUM,0.0 0.NUM,0.NUM 0.NUM,0.NUM l 0.0,2.NUM c 0.0,0.NUM -0.NUM,0.NUM -0.NUM,0.NUM l -8.NUM,0.0 c -0.NUM,0.0 -0.NUM,-0.NUM -0.NUM,-0.NUM l 0.0,-2.NUM c 0.0,-0.NUM 0.NUM,-0.NUM 0.NUM,-0.NUM Z" android:valueType="pathType" android:propertyName="pathData"/>
