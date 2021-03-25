@@ -5997,7 +5997,7 @@ public class MessageObject {
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
             if (r2 == 0) goto L_0x06cb
-            r2 = 2131628214(0x7f0e10b6, float:1.8883714E38)
+            r2 = 2131628217(0x7f0e10b9, float:1.888372E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -6168,7 +6168,7 @@ public class MessageObject {
         L_0x080c:
             boolean r7 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
             if (r7 == 0) goto L_0x0820
-            r0 = 2131628144(0x7f0e1070, float:1.8883572E38)
+            r0 = 2131628147(0x7f0e1073, float:1.8883578E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"
@@ -10765,41 +10765,42 @@ public class MessageObject {
 
     public String getArtworkUrl(boolean z) {
         TLRPC$Document document = getDocument();
-        if (document != null) {
-            int size = document.attributes.size();
-            int i = 0;
-            while (i < size) {
-                TLRPC$DocumentAttribute tLRPC$DocumentAttribute = document.attributes.get(i);
-                if (!(tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeAudio)) {
-                    i++;
-                } else if (tLRPC$DocumentAttribute.voice) {
-                    return null;
-                } else {
-                    String str = tLRPC$DocumentAttribute.performer;
-                    String str2 = tLRPC$DocumentAttribute.title;
-                    if (!TextUtils.isEmpty(str)) {
-                        int i2 = 0;
-                        while (true) {
-                            String[] strArr = excludeWords;
-                            if (i2 >= strArr.length) {
-                                break;
-                            }
-                            str = str.replace(strArr[i2], " ");
-                            i2++;
+        if (document == null || "audio/ogg".equals(document.mime_type)) {
+            return null;
+        }
+        int size = document.attributes.size();
+        int i = 0;
+        while (i < size) {
+            TLRPC$DocumentAttribute tLRPC$DocumentAttribute = document.attributes.get(i);
+            if (!(tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeAudio)) {
+                i++;
+            } else if (tLRPC$DocumentAttribute.voice) {
+                return null;
+            } else {
+                String str = tLRPC$DocumentAttribute.performer;
+                String str2 = tLRPC$DocumentAttribute.title;
+                if (!TextUtils.isEmpty(str)) {
+                    int i2 = 0;
+                    while (true) {
+                        String[] strArr = excludeWords;
+                        if (i2 >= strArr.length) {
+                            break;
                         }
+                        str = str.replace(strArr[i2], " ");
+                        i2++;
                     }
-                    if (TextUtils.isEmpty(str) && TextUtils.isEmpty(str2)) {
-                        return null;
-                    }
-                    try {
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("athumb://itunes.apple.com/search?term=");
-                        sb.append(URLEncoder.encode(str + " - " + str2, "UTF-8"));
-                        sb.append("&entity=song&limit=4");
-                        sb.append(z ? "&s=1" : "");
-                        return sb.toString();
-                    } catch (Exception unused) {
-                    }
+                }
+                if (TextUtils.isEmpty(str) && TextUtils.isEmpty(str2)) {
+                    return null;
+                }
+                try {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("athumb://itunes.apple.com/search?term=");
+                    sb.append(URLEncoder.encode(str + " - " + str2, "UTF-8"));
+                    sb.append("&entity=song&limit=4");
+                    sb.append(z ? "&s=1" : "");
+                    return sb.toString();
+                } catch (Exception unused) {
                 }
             }
         }

@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 4.1.2
-SHA1-Digest-Manifest: 4T3KJ7c7tpoFsUz9bJnuKCbseZA=
+SHA1-Digest-Manifest: wvoA3+n3Bmhg9uTPNwAsoaIoD+g=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: +wMVcxs0X6vuNJIQEq68Ev8jQJ0=
+SHA1-Digest: 158j1npiWFHbTOPquitoBSXtXx8=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9880,13 +9880,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: PeyFdrkibet2pLItEeENTSPaZR0=
+SHA1-Digest: xk7mCcms0JZz97/vI/f3eiKuE/E=
 
 Name: classes2.dex
 SHA1-Digest: jOZWxOTngSorOwtSgpgdVjhl0UM=
 
 Name: classes3.dex
-SHA1-Digest: waUQjqutyUpLDr2etRZYDr9Lkt0=
+SHA1-Digest: 58fEuE6RwdxDyFc8qy3wjoNWnXo=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -21188,6 +21188,9 @@ SHA1-Digest: 7e/lbE6hfuMh6G9+nWsAAmlCOxU=
 Name: res/raw/voip_onallowtalk.mp3
 SHA1-Digest: bc1EpHfuEx2zy++t3R0viDAmrGg=
 
+Name: res/raw/voip_record_saved.json
+SHA1-Digest: QrjoLi1T5EXE9MbXfXWOtCgdFR4=
+
 Name: res/raw/voip_record_start.json
 SHA1-Digest: ADIXjqB5CusVseAY2EFFsSwo17Q=
 
@@ -21258,7 +21261,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: wJX1DhZekgpl5fWey4/BWBbcQv8=
+SHA1-Digest: rtufXodhthCxo1RsdLApsGZQ4PA=
 
 Name: transport-api.properties
 SHA1-Digest: OrUd0dvMYm2tlcfDVrGNApZLT1M=

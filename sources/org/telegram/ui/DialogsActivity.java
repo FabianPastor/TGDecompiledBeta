@@ -1700,7 +1700,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             DialogsActivity.this.movingView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                             this.swipeFolderBack = false;
                             return ItemTouchHelper.Callback.makeMovementFlags(3, 0);
-                        } else if (!((DialogsActivity.this.filterTabsView != null && DialogsActivity.this.filterTabsView.getVisibility() == 0 && SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 5) || !DialogsActivity.this.allowSwipeDuringCurrentTouch || ((dialogId == ((long) DialogsActivity.this.getUserConfig().clientUserId) && SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 2) || dialogId == 777000 || (DialogsActivity.this.getMessagesController().isPromoDialog(dialogId, false) && DialogsActivity.this.getMessagesController().promoDialogType != 1)))) {
+                        } else if (!(DialogsActivity.this.filterTabsView != null && DialogsActivity.this.filterTabsView.getVisibility() == 0 && SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 5) && DialogsActivity.this.allowSwipeDuringCurrentTouch && (!((dialogId == ((long) DialogsActivity.this.getUserConfig().clientUserId) || dialogId == 777000) && SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 2) && (!DialogsActivity.this.getMessagesController().isPromoDialog(dialogId, false) || DialogsActivity.this.getMessagesController().promoDialogType == 1))) {
                             boolean z = DialogsActivity.this.folderId == 0 && (SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 3 || SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 1 || SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 0 || SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 4);
                             if (SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 1) {
                                 MessagesController.DialogFilter dialogFilter = null;
@@ -1820,7 +1820,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 TLRPC$Dialog tLRPC$Dialog = DialogsActivity.this.getMessagesController().dialogs_dict.get(dialogId);
                 if (tLRPC$Dialog != null) {
-                    if (DialogsActivity.this.folderId == 0 && SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 1) {
+                    if (!DialogsActivity.this.getMessagesController().isPromoDialog(dialogId, false) && DialogsActivity.this.folderId == 0 && SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 1) {
                         ArrayList arrayList = new ArrayList();
                         arrayList.add(Long.valueOf(dialogId));
                         DialogsActivity dialogsActivity = DialogsActivity.this;
@@ -2923,7 +2923,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             goto L_0x0686
         L_0x066c:
             org.telegram.ui.Components.RLottieImageView r0 = r10.floatingButton
-            r1 = 2131558523(0x7f0d007b, float:1.8742364E38)
+            r1 = 2131558524(0x7f0d007c, float:1.8742366E38)
             r3 = 52
             r4 = 52
             r0.setAnimation(r1, r3, r4)
@@ -5527,10 +5527,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r6.findAndUpdateCheckBox(r10, r0)
         L_0x01ad:
             r17.updateSelectedCount()
-            goto L_0x02b6
+            goto L_0x02a2
         L_0x01b2:
             r6.didSelectResult(r10, r5, r9)
-            goto L_0x02b6
+            goto L_0x02a2
         L_0x01b7:
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
@@ -5620,7 +5620,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (r1 == 0) goto L_0x0273
             org.telegram.messenger.MessagesController r1 = r17.getMessagesController()
             boolean r1 = r1.checkCanOpenChat(r0, r6)
-            if (r1 == 0) goto L_0x02b6
+            if (r1 == 0) goto L_0x02a2
             org.telegram.messenger.NotificationCenter r1 = r17.getNotificationCenter()
             int r2 = org.telegram.messenger.NotificationCenter.closeChats
             java.lang.Object[] r3 = new java.lang.Object[r9]
@@ -5628,34 +5628,26 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ChatActivity r1 = new org.telegram.ui.ChatActivity
             r1.<init>(r0)
             r6.presentFragment(r1)
-            goto L_0x02b6
+            goto L_0x02a2
         L_0x0273:
             org.telegram.messenger.MessagesController r1 = r17.getMessagesController()
             boolean r1 = r1.checkCanOpenChat(r0, r6)
-            if (r1 == 0) goto L_0x02b6
+            if (r1 == 0) goto L_0x02a2
             org.telegram.ui.ChatActivity r1 = new org.telegram.ui.ChatActivity
             r1.<init>(r0)
-            int r0 = r6.currentAccount
-            org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
-            android.util.LongSparseArray<org.telegram.messenger.MessageObject> r0 = r0.dialogMessage
+            if (r3 == 0) goto L_0x029f
+            if (r7 <= 0) goto L_0x029f
+            org.telegram.messenger.MessagesController r0 = r17.getMessagesController()
+            android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r0 = r0.dialogs_dict
             java.lang.Object r0 = r0.get(r10)
-            org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
-            if (r3 == 0) goto L_0x02b3
-            if (r7 <= 0) goto L_0x02b3
-            org.telegram.messenger.MessagesController r2 = r17.getMessagesController()
-            android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r2 = r2.dialogs_dict
-            java.lang.Object r2 = r2.get(r10)
-            if (r2 == 0) goto L_0x02a6
-            boolean r0 = org.telegram.messenger.MessageObject.isSystemSignUp(r0)
-            if (r0 == 0) goto L_0x02b3
-        L_0x02a6:
+            if (r0 != 0) goto L_0x029f
             org.telegram.messenger.MessagesController r0 = r17.getMessagesController()
             org.telegram.tgnet.TLRPC$Document r0 = r0.getPreloadedSticker()
-            if (r0 == 0) goto L_0x02b3
+            if (r0 == 0) goto L_0x029f
             r1.setPreloadedSticker(r0, r5)
-        L_0x02b3:
+        L_0x029f:
             r6.presentFragment(r1)
-        L_0x02b6:
+        L_0x02a2:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.onItemClick(android.view.View, int, androidx.recyclerview.widget.RecyclerView$Adapter):void");

@@ -9,12 +9,14 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
     public int date;
     public int flags;
     public boolean hasVoice;
+    public boolean hasVoiceDelayed;
     public boolean just_joined;
     public long lastActiveDate;
     public long lastRaiseHandDate;
     public long lastSpeakTime;
     public int lastTypingDate;
     public long lastVisibleDate;
+    public long lastVoiceUpdateTime;
     public boolean left;
     public boolean min;
     public boolean muted;

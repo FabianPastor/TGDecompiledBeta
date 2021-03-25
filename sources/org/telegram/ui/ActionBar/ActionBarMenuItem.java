@@ -1555,6 +1555,14 @@ public class ActionBarMenuItem extends FrameLayout {
         this.additionalXOffset = i;
     }
 
+    public void forceUpdatePopupPosition() {
+        ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
+        if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
+            this.popupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.x - AndroidUtilities.dp(40.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.displaySize.y, Integer.MIN_VALUE));
+            updateOrShowPopup(true, true);
+        }
+    }
+
     private void updateOrShowPopup(boolean z, boolean z2) {
         int i;
         int i2;

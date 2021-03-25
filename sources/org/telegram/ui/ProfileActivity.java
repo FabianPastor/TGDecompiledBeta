@@ -2134,7 +2134,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r1 = 2131165841(0x7var_, float:1.794591E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r3, (int) r1)
             r11.callItem = r1
-            r3 = 2131628035(0x7f0e1003, float:1.8883351E38)
+            r3 = 2131628038(0x7f0e1006, float:1.8883357E38)
             java.lang.String r4 = "VoipGroupVoiceChat"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setContentDescription(r3)
@@ -4304,9 +4304,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 searchItem2.setVisibility(0);
                             }
                             AnimatorSet unused = ProfileActivity.this.headerShadowAnimatorSet = new AnimatorSet();
-                            AnimatorSet access$12800 = ProfileActivity.this.headerShadowAnimatorSet;
+                            AnimatorSet access$12900 = ProfileActivity.this.headerShadowAnimatorSet;
                             ProfileActivity profileActivity = ProfileActivity.this;
-                            access$12800.playTogether(new Animator[]{ObjectAnimator.ofFloat(profileActivity, profileActivity.HEADER_SHADOW, new float[]{1.0f})});
+                            access$12900.playTogether(new Animator[]{ObjectAnimator.ofFloat(profileActivity, profileActivity.HEADER_SHADOW, new float[]{1.0f})});
                             ProfileActivity.this.headerShadowAnimatorSet.setDuration(100);
                             ProfileActivity.this.headerShadowAnimatorSet.addListener(new AnimatorListenerAdapter() {
                                 public void onAnimationEnd(Animator animator) {
@@ -5049,11 +5049,15 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (intValue2 == tLRPC$Chat2.id && ChatObject.canManageCalls(tLRPC$Chat2)) {
                     TLRPC$ChatFull chatFull = MessagesController.getInstance(this.currentAccount).getChatFull(num2.intValue());
                     if (chatFull != null) {
+                        TLRPC$ChatFull tLRPC$ChatFull = this.chatInfo;
+                        if (tLRPC$ChatFull != null) {
+                            chatFull.participants = tLRPC$ChatFull.participants;
+                        }
                         this.chatInfo = chatFull;
                     }
-                    TLRPC$ChatFull tLRPC$ChatFull = this.chatInfo;
-                    if (tLRPC$ChatFull != null) {
-                        TLRPC$TL_inputGroupCall tLRPC$TL_inputGroupCall = tLRPC$ChatFull.call;
+                    TLRPC$ChatFull tLRPC$ChatFull2 = this.chatInfo;
+                    if (tLRPC$ChatFull2 != null) {
+                        TLRPC$TL_inputGroupCall tLRPC$TL_inputGroupCall = tLRPC$ChatFull2.call;
                         if ((tLRPC$TL_inputGroupCall == null && !this.hasVoiceChatItem) || (tLRPC$TL_inputGroupCall != null && this.hasVoiceChatItem)) {
                             createActionBarMenu(false);
                         }
@@ -5061,18 +5065,18 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
             }
         } else if (i == NotificationCenter.chatInfoDidLoad) {
-            TLRPC$ChatFull tLRPC$ChatFull2 = objArr[0];
-            if (tLRPC$ChatFull2.id == this.chat_id) {
+            TLRPC$ChatFull tLRPC$ChatFull3 = objArr[0];
+            if (tLRPC$ChatFull3.id == this.chat_id) {
                 boolean booleanValue = objArr[2].booleanValue();
-                TLRPC$ChatFull tLRPC$ChatFull3 = this.chatInfo;
-                if ((tLRPC$ChatFull3 instanceof TLRPC$TL_channelFull) && tLRPC$ChatFull2.participants == null) {
-                    tLRPC$ChatFull2.participants = tLRPC$ChatFull3.participants;
+                TLRPC$ChatFull tLRPC$ChatFull4 = this.chatInfo;
+                if ((tLRPC$ChatFull4 instanceof TLRPC$TL_channelFull) && tLRPC$ChatFull3.participants == null) {
+                    tLRPC$ChatFull3.participants = tLRPC$ChatFull4.participants;
                 }
-                if (tLRPC$ChatFull3 == null && (tLRPC$ChatFull2 instanceof TLRPC$TL_channelFull)) {
+                if (tLRPC$ChatFull4 == null && (tLRPC$ChatFull3 instanceof TLRPC$TL_channelFull)) {
                     i4 = 1;
                 }
-                this.chatInfo = tLRPC$ChatFull2;
-                if (this.mergeDialogId == 0 && (i3 = tLRPC$ChatFull2.migrated_from_chat_id) != 0) {
+                this.chatInfo = tLRPC$ChatFull3;
+                if (this.mergeDialogId == 0 && (i3 = tLRPC$ChatFull3.migrated_from_chat_id) != 0) {
                     this.mergeDialogId = (long) (-i3);
                     getMediaDataController().getMediaCount(this.mergeDialogId, 0, this.classGuid, true);
                 }
@@ -6686,7 +6690,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r2 = 2
             r4 = 1
             if (r1 != r2) goto L_0x0022
-            r1 = 2131628101(0x7f0e1045, float:1.8883485E38)
+            r1 = 2131628104(0x7f0e1048, float:1.8883491E38)
             java.lang.String r5 = "WaitingForNetwork"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
@@ -7130,7 +7134,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x039a:
             boolean r2 = org.telegram.messenger.ChatObject.isKickedFromChat(r5)
             if (r2 == 0) goto L_0x03ab
-            r2 = 2131628147(0x7f0e1073, float:1.8883578E38)
+            r2 = 2131628150(0x7f0e1076, float:1.8883585E38)
             java.lang.String r3 = "YouWereKicked"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x03a9:
@@ -7139,7 +7143,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x03ab:
             boolean r2 = org.telegram.messenger.ChatObject.isLeftFromChat(r5)
             if (r2 == 0) goto L_0x03bb
-            r2 = 2131628146(0x7f0e1072, float:1.8883576E38)
+            r2 = 2131628149(0x7f0e1075, float:1.8883583E38)
             java.lang.String r3 = "YouLeft"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x03a9
@@ -7477,27 +7481,22 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     /* JADX WARNING: Removed duplicated region for block: B:156:0x039f  */
     /* JADX WARNING: Removed duplicated region for block: B:158:0x03aa  */
     /* JADX WARNING: Removed duplicated region for block: B:161:0x03be  */
-    /* JADX WARNING: Removed duplicated region for block: B:164:0x03e4  */
-    /* JADX WARNING: Removed duplicated region for block: B:169:0x040a  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x041b  */
-    /* JADX WARNING: Removed duplicated region for block: B:179:0x0441  */
-    /* JADX WARNING: Removed duplicated region for block: B:184:0x0452  */
-    /* JADX WARNING: Removed duplicated region for block: B:189:0x0478  */
-    /* JADX WARNING: Removed duplicated region for block: B:198:0x0493  */
-    /* JADX WARNING: Removed duplicated region for block: B:201:0x04aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:204:0x04c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:207:0x04d8  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:164:0x03e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:200:0x0497  */
+    /* JADX WARNING: Removed duplicated region for block: B:203:0x04ae  */
+    /* JADX WARNING: Removed duplicated region for block: B:206:0x04c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:209:0x04dc  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void createActionBarMenu(boolean r17) {
         /*
             r16 = this;
             r0 = r16
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            if (r1 == 0) goto L_0x04df
+            if (r1 == 0) goto L_0x04e3
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
             if (r2 != 0) goto L_0x000c
-            goto L_0x04df
+            goto L_0x04e3
         L_0x000c:
             r1.createMenu()
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.otherItem
@@ -7943,118 +7942,120 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.otherItem
             r2.hideSubItem(r4)
         L_0x03d9:
+            boolean r2 = r0.mediaHeaderVisible
+            r3 = 1065353216(0x3var_, float:1.0)
+            r4 = 8
+            if (r2 != 0) goto L_0x0489
             boolean r2 = r0.callItemVisible
-            r3 = 150(0x96, double:7.4E-322)
-            r5 = 0
-            r6 = 1065353216(0x3var_, float:1.0)
-            r7 = 8
-            if (r2 == 0) goto L_0x040a
+            r5 = 150(0x96, double:7.4E-322)
+            r7 = 0
+            if (r2 == 0) goto L_0x040e
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.callItem
             int r2 = r2.getVisibility()
-            if (r2 == 0) goto L_0x0417
+            if (r2 == 0) goto L_0x041b
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.callItem
             r2.setVisibility(r1)
-            if (r17 == 0) goto L_0x0417
+            if (r17 == 0) goto L_0x041b
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.callItem
-            r2.setAlpha(r5)
+            r2.setAlpha(r7)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.callItem
             android.view.ViewPropertyAnimator r2 = r2.animate()
-            android.view.ViewPropertyAnimator r2 = r2.alpha(r6)
-            android.view.ViewPropertyAnimator r2 = r2.setDuration(r3)
+            android.view.ViewPropertyAnimator r2 = r2.alpha(r3)
+            android.view.ViewPropertyAnimator r2 = r2.setDuration(r5)
             r2.start()
-            goto L_0x0417
-        L_0x040a:
+            goto L_0x041b
+        L_0x040e:
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.callItem
             int r2 = r2.getVisibility()
-            if (r2 == r7) goto L_0x0417
+            if (r2 == r4) goto L_0x041b
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.callItem
-            r2.setVisibility(r7)
-        L_0x0417:
+            r2.setVisibility(r4)
+        L_0x041b:
             boolean r2 = r0.videoCallItemVisible
-            if (r2 == 0) goto L_0x0441
+            if (r2 == 0) goto L_0x0445
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.videoCallItem
             int r2 = r2.getVisibility()
-            if (r2 == 0) goto L_0x044e
+            if (r2 == 0) goto L_0x0452
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.videoCallItem
             r2.setVisibility(r1)
-            if (r17 == 0) goto L_0x044e
+            if (r17 == 0) goto L_0x0452
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.videoCallItem
-            r2.setAlpha(r5)
+            r2.setAlpha(r7)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.videoCallItem
             android.view.ViewPropertyAnimator r2 = r2.animate()
-            android.view.ViewPropertyAnimator r2 = r2.alpha(r6)
-            android.view.ViewPropertyAnimator r2 = r2.setDuration(r3)
+            android.view.ViewPropertyAnimator r2 = r2.alpha(r3)
+            android.view.ViewPropertyAnimator r2 = r2.setDuration(r5)
             r2.start()
-            goto L_0x044e
-        L_0x0441:
+            goto L_0x0452
+        L_0x0445:
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.videoCallItem
             int r2 = r2.getVisibility()
-            if (r2 == r7) goto L_0x044e
+            if (r2 == r4) goto L_0x0452
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.videoCallItem
-            r2.setVisibility(r7)
-        L_0x044e:
+            r2.setVisibility(r4)
+        L_0x0452:
             boolean r2 = r0.editItemVisible
-            if (r2 == 0) goto L_0x0478
+            if (r2 == 0) goto L_0x047c
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.editItem
             int r2 = r2.getVisibility()
-            if (r2 == 0) goto L_0x0485
+            if (r2 == 0) goto L_0x0489
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r0.editItem
             r2.setVisibility(r1)
-            if (r17 == 0) goto L_0x0485
+            if (r17 == 0) goto L_0x0489
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.editItem
-            r1.setAlpha(r5)
+            r1.setAlpha(r7)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.editItem
             android.view.ViewPropertyAnimator r1 = r1.animate()
-            android.view.ViewPropertyAnimator r1 = r1.alpha(r6)
-            android.view.ViewPropertyAnimator r1 = r1.setDuration(r3)
+            android.view.ViewPropertyAnimator r1 = r1.alpha(r3)
+            android.view.ViewPropertyAnimator r1 = r1.setDuration(r5)
             r1.start()
-            goto L_0x0485
-        L_0x0478:
+            goto L_0x0489
+        L_0x047c:
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.editItem
             int r1 = r1.getVisibility()
-            if (r1 == r7) goto L_0x0485
+            if (r1 == r4) goto L_0x0489
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.editItem
-            r1.setVisibility(r7)
-        L_0x0485:
+            r1.setVisibility(r4)
+        L_0x0489:
             org.telegram.ui.ProfileActivity$PagerIndicatorView r1 = r0.avatarsViewPagerIndicatorView
-            if (r1 == 0) goto L_0x04d4
+            if (r1 == 0) goto L_0x04d8
             boolean r1 = r1.isIndicatorFullyVisible()
-            if (r1 == 0) goto L_0x04d4
+            if (r1 == 0) goto L_0x04d8
             boolean r1 = r0.editItemVisible
-            if (r1 == 0) goto L_0x04a6
+            if (r1 == 0) goto L_0x04aa
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.editItem
-            r1.setVisibility(r7)
+            r1.setVisibility(r4)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.editItem
             android.view.ViewPropertyAnimator r1 = r1.animate()
             r1.cancel()
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.editItem
-            r1.setAlpha(r6)
-        L_0x04a6:
+            r1.setAlpha(r3)
+        L_0x04aa:
             boolean r1 = r0.callItemVisible
-            if (r1 == 0) goto L_0x04bd
+            if (r1 == 0) goto L_0x04c1
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.callItem
-            r1.setVisibility(r7)
+            r1.setVisibility(r4)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.callItem
             android.view.ViewPropertyAnimator r1 = r1.animate()
             r1.cancel()
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.callItem
-            r1.setAlpha(r6)
-        L_0x04bd:
+            r1.setAlpha(r3)
+        L_0x04c1:
             boolean r1 = r0.videoCallItemVisible
-            if (r1 == 0) goto L_0x04d4
+            if (r1 == 0) goto L_0x04d8
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.videoCallItem
-            r1.setVisibility(r7)
+            r1.setVisibility(r4)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.videoCallItem
             android.view.ViewPropertyAnimator r1 = r1.animate()
             r1.cancel()
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.videoCallItem
-            r1.setAlpha(r6)
-        L_0x04d4:
+            r1.setAlpha(r3)
+        L_0x04d8:
             org.telegram.ui.Components.SharedMediaLayout r1 = r0.sharedMediaLayout
-            if (r1 == 0) goto L_0x04df
+            if (r1 == 0) goto L_0x04e3
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.getSearchItem()
             r1.requestLayout()
-        L_0x04df:
+        L_0x04e3:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.createActionBarMenu(boolean):void");
@@ -9257,7 +9258,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x02ca
             L_0x023a:
                 r3 = 3600(0xe10, float:5.045E-42)
-                r4 = 2131628128(0x7f0e1060, float:1.888354E38)
+                r4 = 2131628131(0x7f0e1063, float:1.8883546E38)
                 java.lang.String r5 = "WillUnmuteIn"
                 if (r2 >= r3) goto L_0x0256
                 java.lang.Object[] r3 = new java.lang.Object[r7]

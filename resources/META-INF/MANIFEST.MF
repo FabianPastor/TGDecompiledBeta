@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 4.1.2
 
 Name: AndroidManifest.xml
-SHA1-Digest: KMMTcyja9/SP5QsY+co8aOh39lA=
+SHA1-Digest: sz6WxEdXxUMCo7U5V8LoNhpKUUE=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9879,13 +9879,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: 6irGZFpQJHyJbU4SpHvvUBpU3wo=
+SHA1-Digest: w31sSJX+x+osYczW1tIh2x9pEyM=
 
 Name: classes2.dex
 SHA1-Digest: PW4PzXilTc5mHrOb8Tn7+jq6PxI=
 
 Name: classes3.dex
-SHA1-Digest: DzMSmSsw8LXIPg+aff6u5UFP92c=
+SHA1-Digest: KQHDIKxhTbfCYZmybKcaDSF5Dxc=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -21187,6 +21187,9 @@ SHA1-Digest: 6gNXoCljgiuPHgo9vbZjLSAV0m8=
 Name: res/raw/voip_onallowtalk.mp3
 SHA1-Digest: 8cIZh8I4jQTTqpW+CCWLreLhjdc=
 
+Name: res/raw/voip_record_saved.json
+SHA1-Digest: ExqOTWwvr/TPrRCwxFrfNPFkG1U=
+
 Name: res/raw/voip_record_start.json
 SHA1-Digest: kTTrCqqTR2m0TlkObrEMWQ96yfo=
 
@@ -21257,7 +21260,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: iDKtjVE8LFlhdEqppGWTEoNF3LA=
+SHA1-Digest: 6mOIXEHAwJk1yOR28V1Lzb3Q+z0=
 
 Name: transport-api.properties
 SHA1-Digest: Jz4dPszpGdGJqctaJoPe9Lpu55k=

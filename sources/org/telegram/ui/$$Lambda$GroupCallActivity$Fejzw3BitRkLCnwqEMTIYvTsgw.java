@@ -1,7 +1,5 @@
 package org.telegram.ui;
 
-import org.telegram.messenger.voip.VoIPService;
-
 /* renamed from: org.telegram.ui.-$$Lambda$GroupCallActivity$Fejzw3-BitRkLCnwqEMTIYvTsgw  reason: invalid class name */
 /* compiled from: lambda */
 public final /* synthetic */ class $$Lambda$GroupCallActivity$Fejzw3BitRkLCnwqEMTIYvTsgw implements Runnable {
@@ -11,6 +9,6 @@ public final /* synthetic */ class $$Lambda$GroupCallActivity$Fejzw3BitRkLCnwqEM
     }
 
     public final void run() {
-        VoIPService.getSharedInstance().setMicMute(false, true, false);
+        GroupCallActivity.lambda$new$0();
     }
 }

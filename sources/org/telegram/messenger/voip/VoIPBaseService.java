@@ -1544,9 +1544,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r4.setAction(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r1)
-            r6 = 2131628043(0x7f0e100b, float:1.8883368E38)
+            r6 = 2131628046(0x7f0e100e, float:1.8883374E38)
             java.lang.String r7 = "VoipInVideoCallBranding"
-            r8 = 2131628041(0x7f0e1009, float:1.8883363E38)
+            r8 = 2131628044(0x7f0e100c, float:1.888337E38)
             java.lang.String r9 = "VoipInCallBranding"
             if (r22 == 0) goto L_0x002b
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -1807,7 +1807,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             if (r22 == 0) goto L_0x02b0
-            r12 = 2131628044(0x7f0e100c, float:1.888337E38)
+            r12 = 2131628047(0x7f0e100f, float:1.8883376E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r14 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1819,7 +1819,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             goto L_0x02c6
         L_0x02b0:
             r14 = 0
-            r12 = 2131628042(0x7f0e100a, float:1.8883365E38)
+            r12 = 2131628045(0x7f0e100d, float:1.8883372E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1833,11 +1833,11 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         L_0x02ca:
             if (r22 == 0) goto L_0x02d2
             r10 = r17
-            r0 = 2131628043(0x7f0e100b, float:1.8883368E38)
+            r0 = 2131628046(0x7f0e100e, float:1.8883374E38)
             goto L_0x02d7
         L_0x02d2:
             r10 = r16
-            r0 = 2131628041(0x7f0e1009, float:1.8883363E38)
+            r0 = 2131628044(0x7f0e100c, float:1.888337E38)
         L_0x02d7:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r10, r0)
             r7.setTextViewText(r11, r0)

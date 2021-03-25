@@ -924,6 +924,10 @@ public class NotificationCenter {
         return this.currentHeavyOperationFlags;
     }
 
+    public ArrayList<NotificationCenterDelegate> getObservers(int i) {
+        return this.observers.get(i);
+    }
+
     public void postNotificationName(int i, Object... objArr) {
         int i2 = i;
         Object[] objArr2 = objArr;

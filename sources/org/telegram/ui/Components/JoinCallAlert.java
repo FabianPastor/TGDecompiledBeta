@@ -488,14 +488,14 @@ public class JoinCallAlert extends BottomSheet {
         L_0x013c:
             if (r3 != 0) goto L_0x014d
             android.widget.TextView r6 = r0.textView
-            r8 = 2131628016(0x7f0e0ff0, float:1.8883313E38)
+            r8 = 2131628019(0x7f0e0ff3, float:1.8883319E38)
             java.lang.String r9 = "VoipGroupStartAs"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r6.setText(r8)
             goto L_0x015b
         L_0x014d:
             android.widget.TextView r6 = r0.textView
-            r8 = 2131627987(0x7f0e0fd3, float:1.8883254E38)
+            r8 = 2131627988(0x7f0e0fd4, float:1.8883256E38)
             java.lang.String r9 = "VoipGroupJoinAs"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r6.setText(r8)
@@ -547,7 +547,7 @@ public class JoinCallAlert extends BottomSheet {
             java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
             org.telegram.tgnet.TLRPC$Chat r7 = r8.getChat(r7)
             boolean r8 = org.telegram.messenger.ChatObject.isChannel(r7)
-            if (r8 == 0) goto L_0x01d2
+            if (r8 == 0) goto L_0x01d6
             boolean r7 = r7.megagroup
             if (r7 == 0) goto L_0x01d2
             goto L_0x01d6
@@ -559,14 +559,14 @@ public class JoinCallAlert extends BottomSheet {
         L_0x01d6:
             if (r10 == 0) goto L_0x01e7
             android.widget.TextView r3 = r0.messageTextView
-            r6 = 2131628018(0x7f0e0ff2, float:1.8883317E38)
+            r6 = 2131628021(0x7f0e0ff5, float:1.8883323E38)
             java.lang.String r7 = "VoipGroupStartAsInfoGroup"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
             goto L_0x01f5
         L_0x01e7:
             android.widget.TextView r3 = r0.messageTextView
-            r6 = 2131628017(0x7f0e0ff1, float:1.8883315E38)
+            r6 = 2131628020(0x7f0e0ff4, float:1.888332E38)
             java.lang.String r7 = "VoipGroupStartAsInfo"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)

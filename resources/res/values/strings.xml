@@ -4051,9 +4051,11 @@
     <string name="VoipGroupInvitedToVoiceChat">un1 invited un2 to the voice chat</string>
     <string name="VoipGroupInvitedUser">You invited **%1$s** to the voice chat.</string>
     <string name="VoipGroupJoinAnonymousAdmin">Sorry, you can\'t join voice chats as an anonymous administrator.</string>
+    <string name="VoipGroupJoinAnonymouseAlert">Are sure you want to appear in this voice chat as your personal account?</string>
     <string name="VoipGroupJoinAs">Join Voice Chat as...</string>
+    <string name="VoipGroupJoinAsLinstener">JOIN AS LISTENER</string>
+    <string name="VoipGroupJoinAsSpeaker">JOIN AS SPEAKER</string>
     <string name="VoipGroupJoinCall">Join voice chat</string>
-    <string name="VoipGroupJoinVoiceChatMessage">JOIN VOICE CHAT</string>
     <string name="VoipGroupJoinVoiceChatUrl">Join Voice Chat</string>
     <string name="VoipGroupLeave">Leave</string>
     <string name="VoipGroupLeaveAlertEndChat">End voice chat</string>
@@ -4068,6 +4070,7 @@
     <string name="VoipGroupOfflineAirplane">You currently have airplane mode enabled. Please turn it off or connect to Wi-Fi to join voice chats.</string>
     <string name="VoipGroupOnlyAdminsCanSpeak">New paricipants are muted</string>
     <string name="VoipGroupOpenChannel">Open Channel</string>
+    <string name="VoipGroupOpenGroup">Open Group</string>
     <string name="VoipGroupOpenProfile">Open Profile</string>
     <string name="VoipGroupOpenVoiceChat">Open voice chat</string>
     <string name="VoipGroupPersonalAccount">personal account</string>

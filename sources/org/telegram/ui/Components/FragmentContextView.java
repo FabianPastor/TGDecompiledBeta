@@ -163,7 +163,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             this.isMuted = z;
             this.muteDrawable.setCustomEndFrame(z ? 15 : 29);
             RLottieDrawable rLottieDrawable = this.muteDrawable;
-            rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame(), false, true);
+            rLottieDrawable.setCurrentFrame(rLottieDrawable.getCustomEndFrame() - 1, false, true);
             this.muteButton.invalidate();
             Theme.getFragmentContextViewWavesDrawable().updateState(this.visible);
         }

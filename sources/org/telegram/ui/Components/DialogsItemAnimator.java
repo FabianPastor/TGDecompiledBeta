@@ -302,7 +302,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
             for (int i = 0; i < this.mPendingAdditions.size(); i++) {
                 this.mPendingAdditions.get(i).itemView.setAlpha(0.0f);
                 if (this.mPendingAdditions.get(i).itemView instanceof DialogCell) {
-                    ((DialogCell) viewHolder.itemView).setMoving(true);
+                    ((DialogCell) this.mPendingAdditions.get(i).itemView).setMoving(true);
                 }
             }
         }

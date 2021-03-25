@@ -121,7 +121,7 @@ import org.telegram.ui.Adapters.DialogsSearchAdapter;
 
 public class MessagesStorage extends BaseController {
     private static volatile MessagesStorage[] Instance = new MessagesStorage[3];
-    private static final int LAST_DB_VERSION = 77;
+    private static final int LAST_DB_VERSION = 78;
     private int archiveUnreadCount;
     private int[][] bots = {new int[2], new int[2]};
     private File cacheFile;
@@ -411,7 +411,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE TABLE chats(uid INTEGER PRIMARY KEY, name TEXT, data BLOB)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE enc_chats(uid INTEGER PRIMARY KEY, user INTEGER, name TEXT, data BLOB, g BLOB, authkey BLOB, ttl INTEGER, layer INTEGER, seq_in INTEGER, seq_out INTEGER, use_count INTEGER, exchange_id INTEGER, key_date INTEGER, fprint INTEGER, fauthkey BLOB, khash BLOB, in_seq_no INTEGER, admin_id INTEGER, mtproto_seq INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE channel_users_v2(did INTEGER, uid INTEGER, date INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
-                this.database.executeFast("CREATE TABLE channel_admins_v2(did INTEGER, uid INTEGER, rank TEXT, PRIMARY KEY(did, uid))").stepThis().dispose();
+                this.database.executeFast("CREATE TABLE channel_admins_v3(did INTEGER, uid INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE contacts(uid INTEGER PRIMARY KEY, mutual INTEGER)").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE user_photos(uid INTEGER, id INTEGER, data BLOB, PRIMARY KEY (uid, id))").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE dialog_settings(did INTEGER PRIMARY KEY, flags INTEGER);").stepThis().dispose();
@@ -441,7 +441,7 @@ public class MessagesStorage extends BaseController {
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS unread_push_messages_idx_random ON unread_push_messages(random);").stepThis().dispose();
                 this.database.executeFast("CREATE TABLE polls(mid INTEGER PRIMARY KEY, id INTEGER);").stepThis().dispose();
                 this.database.executeFast("CREATE INDEX IF NOT EXISTS polls_id ON polls(id);").stepThis().dispose();
-                this.database.executeFast("PRAGMA user_version = 77").stepThis().dispose();
+                this.database.executeFast("PRAGMA user_version = 78").stepThis().dispose();
                 loadDialogFilters();
                 loadUnreadMessages();
                 loadPendingTasks();
@@ -484,7 +484,7 @@ public class MessagesStorage extends BaseController {
                             FileLog.e((Throwable) e2);
                         }
                     }
-                    if (intValue < 77) {
+                    if (intValue < 78) {
                         updateDbToLastVersion(intValue);
                     }
                     loadDialogFilters();
@@ -907,7 +907,6 @@ public class MessagesStorage extends BaseController {
         if (i == 60) {
             this.database.executeFast("DROP TABLE IF EXISTS channel_admins;").stepThis().dispose();
             this.database.executeFast("DROP TABLE IF EXISTS blocked_users;").stepThis().dispose();
-            this.database.executeFast("CREATE TABLE IF NOT EXISTS channel_admins_v2(did INTEGER, uid INTEGER, rank TEXT, PRIMARY KEY(did, uid))").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 61").stepThis().dispose();
             i = 61;
         }
@@ -995,6 +994,12 @@ public class MessagesStorage extends BaseController {
         if (i == 76) {
             executeNoException("ALTER TABLE enc_tasks_v2 ADD COLUMN media INTEGER default -1");
             this.database.executeFast("PRAGMA user_version = 77").stepThis().dispose();
+            i = 77;
+        }
+        if (i == 77) {
+            this.database.executeFast("DROP TABLE IF EXISTS channel_admins_v2;").stepThis().dispose();
+            this.database.executeFast("CREATE TABLE IF NOT EXISTS channel_admins_v3(did INTEGER, uid INTEGER, data BLOB, PRIMARY KEY(did, uid))").stepThis().dispose();
+            this.database.executeFast("PRAGMA user_version = 78").stepThis().dispose();
         }
     }
 
@@ -9292,10 +9297,17 @@ public class MessagesStorage extends BaseController {
     public /* synthetic */ void lambda$loadChannelAdmins$77$MessagesStorage(int i) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
-            SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized("SELECT uid, rank FROM channel_admins_v2 WHERE did = " + i, new Object[0]);
+            SQLiteCursor queryFinalized = sQLiteDatabase.queryFinalized("SELECT uid, data FROM channel_admins_v3 WHERE did = " + i, new Object[0]);
             SparseArray sparseArray = new SparseArray();
             while (queryFinalized.next()) {
-                sparseArray.put(queryFinalized.intValue(0), queryFinalized.stringValue(1));
+                NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(1);
+                if (byteBufferValue != null) {
+                    TLRPC$ChannelParticipant TLdeserialize = TLRPC$ChannelParticipant.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                    byteBufferValue.reuse();
+                    if (TLdeserialize != null) {
+                        sparseArray.put(queryFinalized.intValue(0), TLdeserialize);
+                    }
+                }
             }
             queryFinalized.dispose();
             getMessagesController().processLoadedChannelAdmins(sparseArray, i, true);
@@ -9304,7 +9316,7 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public void putChannelAdmins(int i, SparseArray<String> sparseArray) {
+    public void putChannelAdmins(int i, SparseArray<TLRPC$ChannelParticipant> sparseArray) {
         this.storageQueue.postRunnable(new Runnable(i, sparseArray) {
             public final /* synthetic */ int f$1;
             public final /* synthetic */ SparseArray f$2;
@@ -9325,16 +9337,20 @@ public class MessagesStorage extends BaseController {
     public /* synthetic */ void lambda$putChannelAdmins$78$MessagesStorage(int i, SparseArray sparseArray) {
         try {
             SQLiteDatabase sQLiteDatabase = this.database;
-            sQLiteDatabase.executeFast("DELETE FROM channel_admins_v2 WHERE did = " + i).stepThis().dispose();
+            sQLiteDatabase.executeFast("DELETE FROM channel_admins_v3 WHERE did = " + i).stepThis().dispose();
             this.database.beginTransaction();
-            SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO channel_admins_v2 VALUES(?, ?, ?)");
+            SQLitePreparedStatement executeFast = this.database.executeFast("REPLACE INTO channel_admins_v3 VALUES(?, ?, ?)");
             long currentTimeMillis = System.currentTimeMillis() / 1000;
             for (int i2 = 0; i2 < sparseArray.size(); i2++) {
                 executeFast.requery();
                 executeFast.bindInteger(1, i);
                 executeFast.bindInteger(2, sparseArray.keyAt(i2));
-                executeFast.bindString(3, (String) sparseArray.valueAt(i2));
+                TLRPC$ChannelParticipant tLRPC$ChannelParticipant = (TLRPC$ChannelParticipant) sparseArray.valueAt(i2);
+                NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$ChannelParticipant.getObjectSize());
+                tLRPC$ChannelParticipant.serializeToStream(nativeByteBuffer);
+                executeFast.bindByteBuffer(3, nativeByteBuffer);
                 executeFast.step();
+                nativeByteBuffer.reuse();
             }
             executeFast.dispose();
             this.database.commitTransaction();
@@ -9377,8 +9393,8 @@ public class MessagesStorage extends BaseController {
                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$ChannelParticipant.getObjectSize());
                 tLRPC$ChannelParticipant.serializeToStream(nativeByteBuffer);
                 executeFast.bindByteBuffer(4, nativeByteBuffer);
-                nativeByteBuffer.reuse();
                 executeFast.step();
+                nativeByteBuffer.reuse();
                 currentTimeMillis--;
             }
             executeFast.dispose();

@@ -62,6 +62,7 @@ import org.telegram.tgnet.TLRPC$TL_groupCall;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.tgnet.TLRPC$TL_inputGroupCallStream;
 import org.telegram.tgnet.TLRPC$TL_inputPeerChannel;
+import org.telegram.tgnet.TLRPC$TL_inputPeerChat;
 import org.telegram.tgnet.TLRPC$TL_inputPeerUser;
 import org.telegram.tgnet.TLRPC$TL_inputPhoneCall;
 import org.telegram.tgnet.TLRPC$TL_messages_dhConfig;
@@ -303,16 +304,22 @@ public class VoIPService extends VoIPBaseService {
             this.hasFewPeers = intent.getBooleanExtra("hasFewPeers", false);
             this.joinHash = intent.getStringExtra("hash");
             int intExtra4 = intent.getIntExtra("peerChannelId", 0);
-            int intExtra5 = intent.getIntExtra("peerUserId", 0);
-            if (intExtra4 != 0) {
+            int intExtra5 = intent.getIntExtra("peerChatId", 0);
+            int intExtra6 = intent.getIntExtra("peerUserId", 0);
+            if (intExtra5 != 0) {
+                TLRPC$TL_inputPeerChat tLRPC$TL_inputPeerChat = new TLRPC$TL_inputPeerChat();
+                this.groupCallPeer = tLRPC$TL_inputPeerChat;
+                tLRPC$TL_inputPeerChat.chat_id = intExtra5;
+                tLRPC$TL_inputPeerChat.access_hash = intent.getLongExtra("peerAccessHash", 0);
+            } else if (intExtra4 != 0) {
                 TLRPC$TL_inputPeerChannel tLRPC$TL_inputPeerChannel = new TLRPC$TL_inputPeerChannel();
                 this.groupCallPeer = tLRPC$TL_inputPeerChannel;
                 tLRPC$TL_inputPeerChannel.channel_id = intExtra4;
                 tLRPC$TL_inputPeerChannel.access_hash = intent.getLongExtra("peerAccessHash", 0);
-            } else if (intExtra5 != 0) {
+            } else if (intExtra6 != 0) {
                 TLRPC$TL_inputPeerUser tLRPC$TL_inputPeerUser = new TLRPC$TL_inputPeerUser();
                 this.groupCallPeer = tLRPC$TL_inputPeerUser;
-                tLRPC$TL_inputPeerUser.user_id = intExtra5;
+                tLRPC$TL_inputPeerUser.user_id = intExtra6;
                 tLRPC$TL_inputPeerUser.access_hash = intent.getLongExtra("peerAccessHash", 0);
             }
             this.isOutgoing = intent.getBooleanExtra("is_outgoing", false);
@@ -1262,15 +1269,20 @@ public class VoIPService extends VoIPBaseService {
                 } else {
                     int i5 = tLRPC$TL_groupCallParticipant.source;
                     int i6 = this.mySource;
-                    if (i5 != i6 && i6 != 0 && i5 != 0) {
+                    if (i5 == i6 || i6 == 0 || i5 == 0) {
+                        if (ChatObject.isChannel(this.chat) && this.currentGroupModeStreaming && tLRPC$TL_groupCallParticipant.can_self_unmute) {
+                            this.switchingStream = true;
+                            createGroupInstance(false);
+                        }
+                        if (tLRPC$TL_groupCallParticipant.muted) {
+                            setMicMute(true, false, false);
+                        }
+                    } else {
                         if (BuildVars.LOGS_ENABLED) {
                             FileLog.d("source mismatch my = " + this.mySource + " psrc = " + tLRPC$TL_groupCallParticipant.source);
                         }
                         hangUp(2);
                         return;
-                    } else if (ChatObject.isChannel(this.chat) && this.currentGroupModeStreaming && tLRPC$TL_groupCallParticipant.can_self_unmute) {
-                        this.switchingStream = true;
-                        createGroupInstance(false);
                     }
                 }
             }

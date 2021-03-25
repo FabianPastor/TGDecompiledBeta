@@ -810,14 +810,14 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         }
         getConnectionsManager().sendRequest(tLRPC$TL_stats_getMessageStats, new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                MessageStatisticActivity.this.lambda$loadStat$7$MessageStatisticActivity(tLObject, tLRPC$TL_error);
+                MessageStatisticActivity.this.lambda$loadStat$8$MessageStatisticActivity(tLObject, tLRPC$TL_error);
             }
         }, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$loadStat$7 */
-    public /* synthetic */ void lambda$loadStat$7$MessageStatisticActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$loadStat$8 */
+    public /* synthetic */ void lambda$loadStat$8$MessageStatisticActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -828,14 +828,14 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             }
 
             public final void run() {
-                MessageStatisticActivity.this.lambda$null$6$MessageStatisticActivity(this.f$1, this.f$2);
+                MessageStatisticActivity.this.lambda$null$7$MessageStatisticActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$null$7 */
+    public /* synthetic */ void lambda$null$7$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.statsLoaded = true;
         if (tLRPC$TL_error != null) {
             updateRows();
@@ -864,14 +864,14 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                MessageStatisticActivity.this.lambda$null$5$MessageStatisticActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                MessageStatisticActivity.this.lambda$null$6$MessageStatisticActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
             }
         }, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, this.chat.stats_dc, 1, true), this.classGuid);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$MessageStatisticActivity(String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$null$6 */
+    public /* synthetic */ void lambda$null$6$MessageStatisticActivity(String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         ChartData chartData = null;
         if (tLObject instanceof TLRPC$TL_statsGraph) {
             try {
@@ -880,7 +880,17 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 e.printStackTrace();
             }
         } else if (tLObject instanceof TLRPC$TL_statsGraphError) {
-            Toast.makeText(getParentActivity(), ((TLRPC$TL_statsGraphError) tLObject).error, 1).show();
+            AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
+                public final /* synthetic */ TLObject f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run() {
+                    MessageStatisticActivity.this.lambda$null$4$MessageStatisticActivity(this.f$1);
+                }
+            });
         }
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, chartData, str, tLRPC$TL_stats_loadAsyncGraph) {
             public final /* synthetic */ TLRPC$TL_error f$1;
@@ -896,14 +906,22 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             }
 
             public final void run() {
-                MessageStatisticActivity.this.lambda$null$4$MessageStatisticActivity(this.f$1, this.f$2, this.f$3, this.f$4);
+                MessageStatisticActivity.this.lambda$null$5$MessageStatisticActivity(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, ChartData chartData, String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph) {
+    public /* synthetic */ void lambda$null$4$MessageStatisticActivity(TLObject tLObject) {
+        if (getParentActivity() != null) {
+            Toast.makeText(getParentActivity(), ((TLRPC$TL_statsGraphError) tLObject).error, 1).show();
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$5 */
+    public /* synthetic */ void lambda$null$5$MessageStatisticActivity(TLRPC$TL_error tLRPC$TL_error, ChartData chartData, String str, TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph) {
         this.statsLoaded = true;
         if (tLRPC$TL_error != null || chartData == null) {
             updateRows();
@@ -1196,9 +1214,9 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$MessageStatisticActivity$FqYyYyPaDhQSkIN9gs41U7WkSpE r11 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$MessageStatisticActivity$H3SqTZnAvbSMyfnIBLg6N8s3vU r11 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
-                MessageStatisticActivity.this.lambda$getThemeDescriptions$8$MessageStatisticActivity();
+                MessageStatisticActivity.this.lambda$getThemeDescriptions$9$MessageStatisticActivity();
             }
         };
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{HeaderCell.class, ManageChatUserCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
@@ -1219,11 +1237,11 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        $$Lambda$MessageStatisticActivity$FqYyYyPaDhQSkIN9gs41U7WkSpE r9 = r11;
+        $$Lambda$MessageStatisticActivity$H3SqTZnAvbSMyfnIBLg6N8s3vU r9 = r11;
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteGrayText"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{ManageChatUserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{ManageChatUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$MessageStatisticActivity$FqYyYyPaDhQSkIN9gs41U7WkSpE r8 = r11;
+        $$Lambda$MessageStatisticActivity$H3SqTZnAvbSMyfnIBLg6N8s3vU r8 = r11;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
@@ -1239,8 +1257,8 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$8 */
-    public /* synthetic */ void lambda$getThemeDescriptions$8$MessageStatisticActivity() {
+    /* renamed from: lambda$getThemeDescriptions$9 */
+    public /* synthetic */ void lambda$getThemeDescriptions$9$MessageStatisticActivity() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {
             int childCount = recyclerListView.getChildCount();

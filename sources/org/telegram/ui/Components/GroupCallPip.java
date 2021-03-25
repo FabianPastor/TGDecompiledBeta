@@ -26,7 +26,6 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
@@ -943,15 +942,17 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     private void updateAvatars(boolean z) {
         AvatarsImageView avatarsImageView2 = this.avatarsImageView;
         if (avatarsImageView2.transitionProgressAnimator == null) {
-            ChatObject.Call call = VoIPService.getSharedInstance() != null ? VoIPService.getSharedInstance().groupCall : null;
+            VoIPService sharedInstance = VoIPService.getSharedInstance();
+            ChatObject.Call call = sharedInstance != null ? sharedInstance.groupCall : null;
             int i = 0;
             if (call != null) {
+                int selfId = sharedInstance.getSelfId();
                 int size = call.sortedParticipants.size();
                 int i2 = 0;
                 while (i < 2) {
                     if (i2 < size) {
                         TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = call.sortedParticipants.get(i2);
-                        if (MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer) != UserConfig.getInstance(this.currentAccount).clientUserId && SystemClock.uptimeMillis() - tLRPC$TL_groupCallParticipant.lastSpeakTime <= 500) {
+                        if (MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer) != selfId && SystemClock.uptimeMillis() - tLRPC$TL_groupCallParticipant.lastSpeakTime <= 500) {
                             this.avatarsImageView.setObject(i, this.currentAccount, tLRPC$TL_groupCallParticipant);
                         }
                         i2++;

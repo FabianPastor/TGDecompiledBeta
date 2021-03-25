@@ -1522,6 +1522,7 @@
     <public type="raw" name="voip_invite" id="NUM" />
     <public type="raw" name="voip_muted" id="NUM" />
     <public type="raw" name="voip_onallowtalk" id="NUM" />
+    <public type="raw" name="voip_record_saved" id="NUM" />
     <public type="raw" name="voip_record_start" id="NUM" />
     <public type="raw" name="voip_recordstart" id="NUM" />
     <public type="raw" name="voip_ringback" id="NUM" />
@@ -5582,9 +5583,11 @@
     <public type="string" name="VoipGroupInvitedToVoiceChat" id="NUM" />
     <public type="string" name="VoipGroupInvitedUser" id="NUM" />
     <public type="string" name="VoipGroupJoinAnonymousAdmin" id="NUM" />
+    <public type="string" name="VoipGroupJoinAnonymouseAlert" id="NUM" />
     <public type="string" name="VoipGroupJoinAs" id="NUM" />
+    <public type="string" name="VoipGroupJoinAsLinstener" id="NUM" />
+    <public type="string" name="VoipGroupJoinAsSpeaker" id="NUM" />
     <public type="string" name="VoipGroupJoinCall" id="NUM" />
-    <public type="string" name="VoipGroupJoinVoiceChatMessage" id="NUM" />
     <public type="string" name="VoipGroupJoinVoiceChatUrl" id="NUM" />
     <public type="string" name="VoipGroupLeave" id="NUM" />
     <public type="string" name="VoipGroupLeaveAlertEndChat" id="NUM" />
@@ -5599,6 +5602,7 @@
     <public type="string" name="VoipGroupOfflineAirplane" id="NUM" />
     <public type="string" name="VoipGroupOnlyAdminsCanSpeak" id="NUM" />
     <public type="string" name="VoipGroupOpenChannel" id="NUM" />
+    <public type="string" name="VoipGroupOpenGroup" id="NUM" />
     <public type="string" name="VoipGroupOpenProfile" id="NUM" />
     <public type="string" name="VoipGroupOpenVoiceChat" id="NUM" />
     <public type="string" name="VoipGroupPersonalAccount" id="NUM" />

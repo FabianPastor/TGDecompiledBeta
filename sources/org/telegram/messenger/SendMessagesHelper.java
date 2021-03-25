@@ -2196,8 +2196,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         sendMessage((TLRPC$TL_document) tLRPC$Document, (VideoEditedInfo) null, (String) null, j, messageObject, messageObject2, (String) null, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i, 0, obj);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:259:0x0615, code lost:
-        if (r5.get(r6 + 1).getDialogId() != r1.getDialogId()) goto L_0x063c;
+    /* JADX WARNING: Code restructure failed: missing block: B:259:0x061b, code lost:
+        if (r5.get(r6 + 1).getDialogId() != r1.getDialogId()) goto L_0x0642;
      */
     /* JADX WARNING: Removed duplicated region for block: B:135:0x032e  */
     /* JADX WARNING: Removed duplicated region for block: B:138:0x033f  */
@@ -2208,41 +2208,41 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:151:0x037e  */
     /* JADX WARNING: Removed duplicated region for block: B:154:0x03a0  */
     /* JADX WARNING: Removed duplicated region for block: B:157:0x03b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:186:0x0463  */
-    /* JADX WARNING: Removed duplicated region for block: B:190:0x0470  */
-    /* JADX WARNING: Removed duplicated region for block: B:193:0x047a  */
-    /* JADX WARNING: Removed duplicated region for block: B:196:0x0495  */
-    /* JADX WARNING: Removed duplicated region for block: B:202:0x04c1 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:209:0x04db  */
-    /* JADX WARNING: Removed duplicated region for block: B:210:0x04de  */
-    /* JADX WARNING: Removed duplicated region for block: B:213:0x04f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x051a  */
-    /* JADX WARNING: Removed duplicated region for block: B:217:0x051c  */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x052c A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x0569  */
-    /* JADX WARNING: Removed duplicated region for block: B:236:0x0570  */
-    /* JADX WARNING: Removed duplicated region for block: B:239:0x057b  */
-    /* JADX WARNING: Removed duplicated region for block: B:242:0x058e  */
-    /* JADX WARNING: Removed duplicated region for block: B:243:0x0590  */
-    /* JADX WARNING: Removed duplicated region for block: B:246:0x05a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x05a7  */
-    /* JADX WARNING: Removed duplicated region for block: B:250:0x05af  */
-    /* JADX WARNING: Removed duplicated region for block: B:251:0x05e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:254:0x05f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x0638  */
-    /* JADX WARNING: Removed duplicated region for block: B:266:0x064f  */
-    /* JADX WARNING: Removed duplicated region for block: B:267:0x0652  */
-    /* JADX WARNING: Removed duplicated region for block: B:270:0x0661  */
-    /* JADX WARNING: Removed duplicated region for block: B:271:0x0663  */
-    /* JADX WARNING: Removed duplicated region for block: B:274:0x0687  */
-    /* JADX WARNING: Removed duplicated region for block: B:280:0x06ad  */
-    /* JADX WARNING: Removed duplicated region for block: B:283:0x06bd  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x06e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x0706  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x0708  */
-    /* JADX WARNING: Removed duplicated region for block: B:295:0x0715  */
-    /* JADX WARNING: Removed duplicated region for block: B:296:0x0718  */
-    /* JADX WARNING: Removed duplicated region for block: B:299:0x076c  */
+    /* JADX WARNING: Removed duplicated region for block: B:186:0x0469  */
+    /* JADX WARNING: Removed duplicated region for block: B:190:0x0476  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0480  */
+    /* JADX WARNING: Removed duplicated region for block: B:196:0x049b  */
+    /* JADX WARNING: Removed duplicated region for block: B:202:0x04c7 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:209:0x04e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x04e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:213:0x04f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:216:0x0520  */
+    /* JADX WARNING: Removed duplicated region for block: B:217:0x0522  */
+    /* JADX WARNING: Removed duplicated region for block: B:220:0x0532 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:235:0x056f  */
+    /* JADX WARNING: Removed duplicated region for block: B:236:0x0576  */
+    /* JADX WARNING: Removed duplicated region for block: B:239:0x0581  */
+    /* JADX WARNING: Removed duplicated region for block: B:242:0x0594  */
+    /* JADX WARNING: Removed duplicated region for block: B:243:0x0596  */
+    /* JADX WARNING: Removed duplicated region for block: B:246:0x05ab  */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x05ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:250:0x05b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:251:0x05ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:254:0x05f6  */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x063e  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x0655  */
+    /* JADX WARNING: Removed duplicated region for block: B:267:0x0658  */
+    /* JADX WARNING: Removed duplicated region for block: B:270:0x0667  */
+    /* JADX WARNING: Removed duplicated region for block: B:271:0x0669  */
+    /* JADX WARNING: Removed duplicated region for block: B:274:0x068d  */
+    /* JADX WARNING: Removed duplicated region for block: B:280:0x06b3  */
+    /* JADX WARNING: Removed duplicated region for block: B:283:0x06c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:286:0x06ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x070c  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x070e  */
+    /* JADX WARNING: Removed duplicated region for block: B:295:0x071b  */
+    /* JADX WARNING: Removed duplicated region for block: B:296:0x071e  */
+    /* JADX WARNING: Removed duplicated region for block: B:299:0x0772  */
     /* JADX WARNING: Removed duplicated region for block: B:69:0x01a3  */
     /* JADX WARNING: Removed duplicated region for block: B:74:0x01b1  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -2254,15 +2254,15 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r11 = r44
             r15 = r47
             r10 = 0
-            if (r14 == 0) goto L_0x082c
+            if (r14 == 0) goto L_0x0832
             boolean r0 = r43.isEmpty()
             if (r0 == 0) goto L_0x0013
-            goto L_0x082c
+            goto L_0x0832
         L_0x0013:
             int r0 = (int) r11
             org.telegram.messenger.UserConfig r1 = r42.getUserConfig()
             int r9 = r1.getClientUserId()
-            if (r0 == 0) goto L_0x080d
+            if (r0 == 0) goto L_0x0813
             org.telegram.messenger.MessagesController r1 = r42.getMessagesController()
             org.telegram.tgnet.TLRPC$Peer r8 = r1.getPeer(r0)
             r6 = 1
@@ -2351,14 +2351,14 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r3 = r1
         L_0x00d2:
             int r1 = r43.size()
-            if (r6 >= r1) goto L_0x0808
+            if (r6 >= r1) goto L_0x080e
             java.lang.Object r1 = r14.get(r6)
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
             int r31 = r1.getId()
-            if (r31 <= 0) goto L_0x078c
+            if (r31 <= 0) goto L_0x0792
             boolean r31 = r1.needDrawBluredPreview()
             if (r31 == 0) goto L_0x00ec
-            goto L_0x078c
+            goto L_0x0792
         L_0x00ec:
             if (r18 != 0) goto L_0x0153
             boolean r32 = r1.isSticker()
@@ -2395,7 +2395,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r24 = r5
             r30 = r26
             r26 = r2
-            goto L_0x07e8
+            goto L_0x07ee
         L_0x0132:
             r32 = r0
             r35 = r3
@@ -2414,7 +2414,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r24 = r5
             r30 = r26
             r26 = r2
-            goto L_0x07e2
+            goto L_0x07e8
         L_0x0153:
             if (r19 != 0) goto L_0x0197
             org.telegram.tgnet.TLRPC$Message r14 = r1.messageOwner
@@ -2746,7 +2746,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r6.entities = r10
             org.telegram.tgnet.TLRPC$ReplyMarkup r0 = r0.reply_markup
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_replyInlineMarkup
-            if (r0 == 0) goto L_0x0463
+            if (r0 == 0) goto L_0x0469
             org.telegram.tgnet.TLRPC$TL_replyInlineMarkup r0 = new org.telegram.tgnet.TLRPC$TL_replyInlineMarkup
             r0.<init>()
             r6.reply_markup = r0
@@ -2842,29 +2842,32 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             int r0 = r6.flags
             r0 = r0 | 64
             r6.flags = r0
-            goto L_0x0467
+            goto L_0x046d
         L_0x045d:
             org.telegram.tgnet.TLRPC$Message r0 = r1.messageOwner
             r7 = 0
             r0.reply_markup = r7
-            goto L_0x0468
-        L_0x0463:
+            int r0 = r6.flags
+            r0 = r0 & -65
+            r6.flags = r0
+            goto L_0x046e
+        L_0x0469:
             r37 = r4
             r38 = r7
-        L_0x0467:
+        L_0x046d:
             r7 = 0
-        L_0x0468:
+        L_0x046e:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r0 = r6.entities
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x0476
+            if (r0 != 0) goto L_0x047c
             int r0 = r6.flags
             r0 = r0 | 128(0x80, float:1.794E-43)
             r6.flags = r0
-        L_0x0476:
-            java.lang.String r0 = r6.attachPath
-            if (r0 != 0) goto L_0x047c
-            r6.attachPath = r3
         L_0x047c:
+            java.lang.String r0 = r6.attachPath
+            if (r0 != 0) goto L_0x0482
+            r6.attachPath = r3
+        L_0x0482:
             org.telegram.messenger.UserConfig r0 = r42.getUserConfig()
             int r0 = r0.getNewMessageId()
             r6.id = r0
@@ -2875,46 +2878,46 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             long r3 = r0.grouped_id
             r13 = 0
             int r0 = (r3 > r13 ? 1 : (r3 == r13 ? 0 : -1))
-            if (r0 == 0) goto L_0x04bb
+            if (r0 == 0) goto L_0x04c1
             java.lang.Object r0 = r2.get(r3)
             java.lang.Long r0 = (java.lang.Long) r0
-            if (r0 != 0) goto L_0x04ae
+            if (r0 != 0) goto L_0x04b4
             java.security.SecureRandom r0 = org.telegram.messenger.Utilities.random
             long r3 = r0.nextLong()
             java.lang.Long r0 = java.lang.Long.valueOf(r3)
             org.telegram.tgnet.TLRPC$Message r3 = r1.messageOwner
             long r3 = r3.grouped_id
             r2.put(r3, r0)
-        L_0x04ae:
+        L_0x04b4:
             long r3 = r0.longValue()
             r6.grouped_id = r3
             int r0 = r6.flags
             r3 = 131072(0x20000, float:1.83671E-40)
             r0 = r0 | r3
             r6.flags = r0
-        L_0x04bb:
+        L_0x04c1:
             r8 = r26
             int r0 = r8.channel_id
-            if (r0 == 0) goto L_0x04d5
-            if (r17 == 0) goto L_0x04d5
-            if (r16 == 0) goto L_0x04cf
+            if (r0 == 0) goto L_0x04db
+            if (r17 == 0) goto L_0x04db
+            if (r16 == 0) goto L_0x04d5
             org.telegram.tgnet.TLRPC$TL_peerUser r0 = new org.telegram.tgnet.TLRPC$TL_peerUser
             r0.<init>()
             r6.from_id = r0
             r0.user_id = r9
-            goto L_0x04d1
-        L_0x04cf:
+            goto L_0x04d7
+        L_0x04d5:
             r6.from_id = r8
-        L_0x04d1:
+        L_0x04d7:
             r0 = 1
             r6.post = r0
-            goto L_0x04ed
-        L_0x04d5:
+            goto L_0x04f3
+        L_0x04db:
             boolean r0 = org.telegram.messenger.ChatObject.shouldSendAnonymously(r5)
-            if (r0 == 0) goto L_0x04de
+            if (r0 == 0) goto L_0x04e4
             r6.from_id = r8
-            goto L_0x04ed
-        L_0x04de:
+            goto L_0x04f3
+        L_0x04e4:
             org.telegram.tgnet.TLRPC$TL_peerUser r0 = new org.telegram.tgnet.TLRPC$TL_peerUser
             r0.<init>()
             r6.from_id = r0
@@ -2922,13 +2925,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             int r0 = r6.flags
             r0 = r0 | 256(0x100, float:3.59E-43)
             r6.flags = r0
-        L_0x04ed:
+        L_0x04f3:
             long r3 = r6.random_id
             int r0 = (r3 > r13 ? 1 : (r3 == r13 ? 0 : -1))
-            if (r0 != 0) goto L_0x04f9
+            if (r0 != 0) goto L_0x04ff
             long r3 = r42.getNextRandomId()
             r6.random_id = r3
-        L_0x04f9:
+        L_0x04ff:
             long r3 = r6.random_id
             java.lang.Long r0 = java.lang.Long.valueOf(r3)
             r3 = r36
@@ -2941,77 +2944,77 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r13 = r29
             r13.add(r0)
             r14 = r47
-            if (r14 == 0) goto L_0x051c
+            if (r14 == 0) goto L_0x0522
             r0 = r14
-            goto L_0x0524
-        L_0x051c:
+            goto L_0x052a
+        L_0x0522:
             org.telegram.tgnet.ConnectionsManager r0 = r42.getConnectionsManager()
             int r0 = r0.getCurrentTime()
-        L_0x0524:
+        L_0x052a:
             r6.date = r0
             r10 = r35
             boolean r0 = r10 instanceof org.telegram.tgnet.TLRPC$TL_inputPeerChannel
-            if (r0 == 0) goto L_0x053a
-            if (r17 == 0) goto L_0x053a
-            if (r14 != 0) goto L_0x0551
+            if (r0 == 0) goto L_0x0540
+            if (r17 == 0) goto L_0x0540
+            if (r14 != 0) goto L_0x0557
             r4 = 1
             r6.views = r4
             int r4 = r6.flags
             r4 = r4 | 1024(0x400, float:1.435E-42)
             r6.flags = r4
-            goto L_0x0551
-        L_0x053a:
+            goto L_0x0557
+        L_0x0540:
             org.telegram.tgnet.TLRPC$Message r4 = r1.messageOwner
             int r7 = r4.flags
             r7 = r7 & 1024(0x400, float:1.435E-42)
-            if (r7 == 0) goto L_0x054e
-            if (r14 != 0) goto L_0x054e
+            if (r7 == 0) goto L_0x0554
+            if (r14 != 0) goto L_0x0554
             int r4 = r4.views
             r6.views = r4
             int r4 = r6.flags
             r4 = r4 | 1024(0x400, float:1.435E-42)
             r6.flags = r4
-        L_0x054e:
+        L_0x0554:
             r4 = 1
             r6.unread = r4
-        L_0x0551:
+        L_0x0557:
             r6.dialog_id = r11
             r6.peer_id = r8
             boolean r4 = org.telegram.messenger.MessageObject.isVoiceMessage(r6)
-            if (r4 != 0) goto L_0x0561
+            if (r4 != 0) goto L_0x0567
             boolean r4 = org.telegram.messenger.MessageObject.isRoundVideoMessage(r6)
-            if (r4 == 0) goto L_0x0573
-        L_0x0561:
-            if (r0 == 0) goto L_0x0570
+            if (r4 == 0) goto L_0x0579
+        L_0x0567:
+            if (r0 == 0) goto L_0x0576
             int r0 = r1.getChannelId()
-            if (r0 == 0) goto L_0x0570
+            if (r0 == 0) goto L_0x0576
             boolean r0 = r1.isContentUnread()
             r6.media_unread = r0
-            goto L_0x0573
-        L_0x0570:
+            goto L_0x0579
+        L_0x0576:
             r0 = 1
             r6.media_unread = r0
-        L_0x0573:
+        L_0x0579:
             org.telegram.tgnet.TLRPC$Message r0 = r1.messageOwner
             org.telegram.tgnet.TLRPC$Peer r0 = r0.peer_id
             boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_peerChannel
-            if (r4 == 0) goto L_0x0580
+            if (r4 == 0) goto L_0x0586
             int r0 = r0.channel_id
             int r0 = -r0
             r6.ttl = r0
-        L_0x0580:
+        L_0x0586:
             org.telegram.messenger.MessageObject r0 = new org.telegram.messenger.MessageObject
             r7 = r42
             int r4 = r7.currentAccount
             r26 = r2
             r2 = 1
             r0.<init>(r4, r6, r2, r2)
-            if (r14 == 0) goto L_0x0590
+            if (r14 == 0) goto L_0x0596
             r4 = 1
-            goto L_0x0591
-        L_0x0590:
+            goto L_0x0597
+        L_0x0596:
             r4 = 0
-        L_0x0591:
+        L_0x0597:
             r0.scheduled = r4
             org.telegram.tgnet.TLRPC$Message r4 = r0.messageOwner
             r4.send_state = r2
@@ -3020,15 +3023,15 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r2.add(r0)
             r4 = r24
             r4.add(r6)
-            if (r14 == 0) goto L_0x05a7
+            if (r14 == 0) goto L_0x05ad
             r0 = 1
-            goto L_0x05a8
-        L_0x05a7:
+            goto L_0x05ae
+        L_0x05ad:
             r0 = 0
-        L_0x05a8:
+        L_0x05ae:
             r7.putToSendingMessages(r6, r0)
             boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r0 == 0) goto L_0x05e6
+            if (r0 == 0) goto L_0x05ec
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r6 = "forward message user_id = "
@@ -3050,21 +3053,21 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r0.append(r5)
             java.lang.String r0 = r0.toString()
             org.telegram.messenger.FileLog.d(r0)
-            goto L_0x05e8
-        L_0x05e6:
+            goto L_0x05ee
+        L_0x05ec:
             r24 = r5
-        L_0x05e8:
+        L_0x05ee:
             int r0 = r4.size()
             r5 = 100
-            if (r0 == r5) goto L_0x0638
+            if (r0 == r5) goto L_0x063e
             int r0 = r43.size()
             r5 = 1
             int r0 = r0 - r5
             r6 = r33
-            if (r6 == r0) goto L_0x0635
+            if (r6 == r0) goto L_0x063b
             int r0 = r43.size()
             int r0 = r0 - r5
-            if (r6 == r0) goto L_0x0618
+            if (r6 == r0) goto L_0x061e
             int r0 = r6 + 1
             r5 = r43
             java.lang.Object r0 = r5.get(r0)
@@ -3072,11 +3075,11 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             long r29 = r0.getDialogId()
             long r31 = r1.getDialogId()
             int r0 = (r29 > r31 ? 1 : (r29 == r31 ? 0 : -1))
-            if (r0 == 0) goto L_0x061a
-            goto L_0x063c
-        L_0x0618:
+            if (r0 == 0) goto L_0x0620
+            goto L_0x0642
+        L_0x061e:
             r5 = r43
-        L_0x061a:
+        L_0x0620:
             r35 = r2
             r32 = r3
             r25 = r4
@@ -3090,14 +3093,14 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r29 = 0
             r33 = 1
             r13 = r6
-            goto L_0x07e2
-        L_0x0635:
+            goto L_0x07e8
+        L_0x063b:
             r5 = r43
-            goto L_0x063c
-        L_0x0638:
+            goto L_0x0642
+        L_0x063e:
             r5 = r43
             r6 = r33
-        L_0x063c:
+        L_0x0642:
             org.telegram.messenger.MessagesStorage r29 = r42.getMessagesStorage()
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>(r4)
@@ -3105,22 +3108,22 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r32 = 1
             r33 = 0
             r34 = 0
-            if (r14 == 0) goto L_0x0652
+            if (r14 == 0) goto L_0x0658
             r35 = 1
-            goto L_0x0654
-        L_0x0652:
+            goto L_0x065a
+        L_0x0658:
             r35 = 0
-        L_0x0654:
+        L_0x065a:
             r30 = r0
             r29.putMessages((java.util.ArrayList<org.telegram.tgnet.TLRPC$Message>) r30, (boolean) r31, (boolean) r32, (boolean) r33, (int) r34, (boolean) r35)
             org.telegram.messenger.MessagesController r0 = r42.getMessagesController()
             r29 = r4
-            if (r14 == 0) goto L_0x0663
+            if (r14 == 0) goto L_0x0669
             r4 = 1
-            goto L_0x0664
-        L_0x0663:
+            goto L_0x066a
+        L_0x0669:
             r4 = 0
-        L_0x0664:
+        L_0x066a:
             r0.updateInterfaceWithMessages(r11, r2, r4)
             org.telegram.messenger.NotificationCenter r0 = r42.getNotificationCenter()
             int r4 = org.telegram.messenger.NotificationCenter.dialogsNeedReload
@@ -3134,7 +3137,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             org.telegram.tgnet.TLRPC$TL_messages_forwardMessages r8 = new org.telegram.tgnet.TLRPC$TL_messages_forwardMessages
             r8.<init>()
             r8.to_peer = r10
-            if (r46 == 0) goto L_0x06a8
+            if (r46 == 0) goto L_0x06ae
             int r0 = r7.currentAccount
             android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getNotificationsSettings(r0)
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
@@ -3145,25 +3148,25 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r4 = r4.toString()
             r6 = 0
             boolean r0 = r0.getBoolean(r4, r6)
-            if (r0 == 0) goto L_0x06a6
-            goto L_0x06a8
-        L_0x06a6:
+            if (r0 == 0) goto L_0x06ac
+            goto L_0x06ae
+        L_0x06ac:
             r0 = 0
-            goto L_0x06a9
-        L_0x06a8:
+            goto L_0x06af
+        L_0x06ae:
             r0 = 1
-        L_0x06a9:
+        L_0x06af:
             r8.silent = r0
-            if (r14 == 0) goto L_0x06b5
+            if (r14 == 0) goto L_0x06bb
             r8.schedule_date = r14
             int r0 = r8.flags
             r0 = r0 | 1024(0x400, float:1.435E-42)
             r8.flags = r0
-        L_0x06b5:
+        L_0x06bb:
             org.telegram.tgnet.TLRPC$Message r0 = r1.messageOwner
             org.telegram.tgnet.TLRPC$Peer r0 = r0.peer_id
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_peerChannel
-            if (r0 == 0) goto L_0x06e6
+            if (r0 == 0) goto L_0x06ec
             org.telegram.messenger.MessagesController r0 = r42.getMessagesController()
             org.telegram.tgnet.TLRPC$Message r4 = r1.messageOwner
             org.telegram.tgnet.TLRPC$Peer r4 = r4.peer_id
@@ -3178,42 +3181,42 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             int r6 = r6.channel_id
             r4.channel_id = r6
             r6 = r1
-            if (r0 == 0) goto L_0x06ee
+            if (r0 == 0) goto L_0x06f4
             long r0 = r0.access_hash
             r4.access_hash = r0
-            goto L_0x06ee
-        L_0x06e6:
+            goto L_0x06f4
+        L_0x06ec:
             r6 = r1
             org.telegram.tgnet.TLRPC$TL_inputPeerEmpty r0 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty
             r0.<init>()
             r8.from_peer = r0
-        L_0x06ee:
+        L_0x06f4:
             r8.random_id = r3
             r8.id = r13
             int r0 = r43.size()
             r4 = 1
             r1 = 0
-            if (r0 != r4) goto L_0x0708
+            if (r0 != r4) goto L_0x070e
             java.lang.Object r0 = r5.get(r1)
             org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             boolean r0 = r0.with_my_score
-            if (r0 == 0) goto L_0x0708
+            if (r0 == 0) goto L_0x070e
             r0 = 1
-            goto L_0x0709
-        L_0x0708:
+            goto L_0x070f
+        L_0x070e:
             r0 = 0
-        L_0x0709:
+        L_0x070f:
             r8.with_my_score = r0
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>(r2)
             r1 = 2147483646(0x7ffffffe, float:NaN)
-            if (r14 != r1) goto L_0x0718
+            if (r14 != r1) goto L_0x071e
             r22 = 1
-            goto L_0x071a
-        L_0x0718:
+            goto L_0x0720
+        L_0x071e:
             r22 = 0
-        L_0x071a:
+        L_0x0720:
             org.telegram.tgnet.ConnectionsManager r1 = r42.getConnectionsManager()
             r31 = r13
             org.telegram.messenger.-$$Lambda$SendMessagesHelper$S_9fl6ACrfKnQfdTXc8UzVMP9RI r13 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$S_9fl6ACrfKnQfdTXc8UzVMP9RI
@@ -3253,7 +3256,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             int r0 = r43.size()
             int r0 = r0 + -1
             r13 = r40
-            if (r13 == r0) goto L_0x07e2
+            if (r13 == r0) goto L_0x07e8
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>()
             java.util.ArrayList r1 = new java.util.ArrayList
@@ -3268,8 +3271,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r15 = r4
             r3 = r0
             r0 = r2
-            goto L_0x07e8
-        L_0x078c:
+            goto L_0x07ee
+        L_0x0792:
             r32 = r0
             r35 = r3
             r36 = r4
@@ -3287,29 +3290,29 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r30 = r26
             r26 = r2
             int r0 = r1.type
-            if (r0 != 0) goto L_0x07e2
+            if (r0 != 0) goto L_0x07e8
             java.lang.CharSequence r0 = r1.messageText
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x07e2
+            if (r0 != 0) goto L_0x07e8
             org.telegram.tgnet.TLRPC$Message r0 = r1.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
-            if (r0 == 0) goto L_0x07c1
+            if (r0 == 0) goto L_0x07c7
             org.telegram.tgnet.TLRPC$WebPage r0 = r0.webpage
             r6 = r0
-            goto L_0x07c3
-        L_0x07c1:
+            goto L_0x07c9
+        L_0x07c7:
             r6 = r27
-        L_0x07c3:
+        L_0x07c9:
             java.lang.CharSequence r0 = r1.messageText
             java.lang.String r2 = r0.toString()
             r4 = 0
             r5 = 0
-            if (r6 == 0) goto L_0x07cf
+            if (r6 == 0) goto L_0x07d5
             r7 = 1
-            goto L_0x07d0
-        L_0x07cf:
+            goto L_0x07d6
+        L_0x07d5:
             r7 = 0
-        L_0x07d0:
+        L_0x07d6:
             org.telegram.tgnet.TLRPC$Message r0 = r1.messageOwner
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r8 = r0.entities
             r9 = 0
@@ -3320,11 +3323,11 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r11 = r46
             r12 = r47
             r0.sendMessage(r1, r2, r4, r5, r6, r7, r8, r9, r10, r11, r12)
-        L_0x07e2:
+        L_0x07e8:
             r1 = r25
             r0 = r32
             r3 = r35
-        L_0x07e8:
+        L_0x07ee:
             int r6 = r13 + 1
             r13 = r42
             r14 = r43
@@ -3341,16 +3344,16 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r30 = r15
             r15 = r47
             goto L_0x00d2
-        L_0x0808:
+        L_0x080e:
             r2 = r42
             r10 = r23
-            goto L_0x082b
-        L_0x080d:
+            goto L_0x0831
+        L_0x0813:
             r29 = 0
             r10 = 0
-        L_0x0810:
+        L_0x0816:
             int r0 = r43.size()
-            if (r10 >= r0) goto L_0x0828
+            if (r10 >= r0) goto L_0x082e
             r0 = r43
             java.lang.Object r1 = r0.get(r10)
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
@@ -3358,13 +3361,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r3 = r44
             r2.processForwardFromMyName(r1, r3)
             int r10 = r10 + 1
-            goto L_0x0810
-        L_0x0828:
+            goto L_0x0816
+        L_0x082e:
             r2 = r42
             r10 = 0
-        L_0x082b:
+        L_0x0831:
             return r10
-        L_0x082c:
+        L_0x0832:
             r2 = r13
             r29 = 0
             return r29

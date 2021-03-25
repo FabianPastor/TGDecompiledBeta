@@ -15,6 +15,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,6 +47,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     private boolean canCacnel = true;
     private AlertDialog cancelDialog;
     /* access modifiers changed from: private */
+    public boolean checkFocusable = true;
+    /* access modifiers changed from: private */
     public ScrollView contentScrollView;
     private int currentProgress;
     /* access modifiers changed from: private */
@@ -65,6 +68,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     };
     /* access modifiers changed from: private */
     public boolean drawBackground;
+    private boolean focusable;
     /* access modifiers changed from: private */
     public int[] itemIcons;
     private ArrayList<AlertDialogCell> itemViews = new ArrayList<>();
@@ -931,6 +935,23 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.scrollContainer.addView(this.customView, LayoutHelper.createLinear(-1, this.customViewHeight));
         }
         if (z) {
+            if (!this.verticalButtons) {
+                TextPaint textPaint = new TextPaint();
+                textPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
+                CharSequence charSequence2 = this.positiveButtonText;
+                int measureText = charSequence2 != null ? (int) (((float) 0) + textPaint.measureText(charSequence2, 0, charSequence2.length()) + ((float) AndroidUtilities.dp(10.0f))) : 0;
+                CharSequence charSequence3 = this.negativeButtonText;
+                if (charSequence3 != null) {
+                    measureText = (int) (((float) measureText) + textPaint.measureText(charSequence3, 0, charSequence3.length()) + ((float) AndroidUtilities.dp(10.0f)));
+                }
+                CharSequence charSequence4 = this.neutralButtonText;
+                if (charSequence4 != null) {
+                    measureText = (int) (((float) measureText) + textPaint.measureText(charSequence4, 0, charSequence4.length()) + ((float) AndroidUtilities.dp(10.0f)));
+                }
+                if (measureText > AndroidUtilities.dp(320.0f)) {
+                    this.verticalButtons = true;
+                }
+            }
             if (this.verticalButtons) {
                 LinearLayout linearLayout2 = new LinearLayout(getContext());
                 linearLayout2.setOrientation(1);
@@ -1115,7 +1136,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                         i3 = -2;
                         i2 = 5;
                     }
-                    viewGroup.addView(r14, LayoutHelper.createLinear(i3, 36, i2));
+                    viewGroup.addView(r14, 1, LayoutHelper.createLinear(i3, 36, i2));
                 } else {
                     this.buttonsLayout.addView(r14, LayoutHelper.createFrame(-2, 36, 51));
                 }
@@ -1156,7 +1177,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             layoutParams.width = min + rect2.left + rect2.right;
         }
         View view3 = this.customView;
-        if (view3 == null || !canTextInput(view3)) {
+        if (view3 == null || !this.checkFocusable || !canTextInput(view3)) {
             layoutParams.flags |= 131072;
         } else {
             layoutParams.softInputMode = 4;
@@ -1218,6 +1239,22 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         DialogInterface.OnClickListener onClickListener2 = this.onBackButtonListener;
         if (onClickListener2 != null) {
             onClickListener2.onClick(this, -2);
+        }
+    }
+
+    public void setFocusable(boolean z) {
+        if (this.focusable != z) {
+            this.focusable = z;
+            Window window = getWindow();
+            WindowManager.LayoutParams attributes = window.getAttributes();
+            if (this.focusable) {
+                attributes.softInputMode = 16;
+                attributes.flags &= -131073;
+            } else {
+                attributes.softInputMode = 48;
+                attributes.flags |= 131072;
+            }
+            window.setAttributes(attributes);
         }
     }
 
@@ -1496,6 +1533,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         public Builder setItems(CharSequence[] charSequenceArr, DialogInterface.OnClickListener onClickListener) {
             CharSequence[] unused = this.alertDialog.items = charSequenceArr;
             DialogInterface.OnClickListener unused2 = this.alertDialog.onClickListener = onClickListener;
+            return this;
+        }
+
+        public Builder setCheckFocusable(boolean z) {
+            boolean unused = this.alertDialog.checkFocusable = z;
             return this;
         }
 

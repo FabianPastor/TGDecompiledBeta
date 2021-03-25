@@ -38,8 +38,10 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.tgnet.TLRPC$TL_inputGroupCall;
 import org.telegram.tgnet.TLRPC$TL_inputPeerChannel;
+import org.telegram.tgnet.TLRPC$TL_inputPeerChat;
 import org.telegram.tgnet.TLRPC$TL_inputPeerUser;
 import org.telegram.tgnet.TLRPC$TL_peerChannel;
+import org.telegram.tgnet.TLRPC$TL_peerChat;
 import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$TL_phone_editGroupCallTitle;
 import org.telegram.tgnet.TLRPC$TL_phone_getGroupParticipants;
@@ -604,13 +606,14 @@ public class ChatObject {
         public void processVoiceLevelsUpdate(int[] iArr, float[] fArr, boolean[] zArr) {
             TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant;
             int i;
+            int[] iArr2 = iArr;
             int currentTime = this.currentAccount.getConnectionsManager().getCurrentTime();
             long elapsedRealtime = SystemClock.elapsedRealtime();
             this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.applyGroupCallVisibleParticipants, Long.valueOf(elapsedRealtime));
             ArrayList arrayList = null;
             boolean z = false;
-            for (int i2 = 0; i2 < iArr.length; i2++) {
-                if (iArr[i2] == 0) {
+            for (int i2 = 0; i2 < iArr2.length; i2++) {
+                if (iArr2[i2] == 0) {
                     TLRPC$Peer tLRPC$Peer = this.selfPeer;
                     if (tLRPC$Peer != null) {
                         i = MessageObject.getPeerId(tLRPC$Peer);
@@ -619,10 +622,14 @@ public class ChatObject {
                     }
                     tLRPC$TL_groupCallParticipant = this.participants.get(i);
                 } else {
-                    tLRPC$TL_groupCallParticipant = this.participantsBySources.get(iArr[i2]);
+                    tLRPC$TL_groupCallParticipant = this.participantsBySources.get(iArr2[i2]);
                 }
                 if (tLRPC$TL_groupCallParticipant != null) {
                     tLRPC$TL_groupCallParticipant.hasVoice = zArr[i2];
+                    if (zArr[i2] || elapsedRealtime - tLRPC$TL_groupCallParticipant.lastVoiceUpdateTime > 500) {
+                        tLRPC$TL_groupCallParticipant.hasVoiceDelayed = zArr[i2];
+                        tLRPC$TL_groupCallParticipant.lastVoiceUpdateTime = elapsedRealtime;
+                    }
                     if (fArr[i2] > 0.1f) {
                         if (zArr[i2] && tLRPC$TL_groupCallParticipant.lastTypingDate + 1 < currentTime) {
                             if (elapsedRealtime != tLRPC$TL_groupCallParticipant.lastVisibleDate) {
@@ -640,7 +647,7 @@ public class ChatObject {
                     if (arrayList == null) {
                         arrayList = new ArrayList();
                     }
-                    arrayList.add(Integer.valueOf(iArr[i2]));
+                    arrayList.add(Integer.valueOf(iArr2[i2]));
                 }
             }
             if (arrayList != null) {
@@ -684,6 +691,10 @@ public class ChatObject {
                 TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
                 this.selfPeer = tLRPC$TL_peerUser;
                 tLRPC$TL_peerUser.user_id = tLRPC$InputPeer.user_id;
+            } else if (tLRPC$InputPeer instanceof TLRPC$TL_inputPeerChat) {
+                TLRPC$TL_peerChat tLRPC$TL_peerChat = new TLRPC$TL_peerChat();
+                this.selfPeer = tLRPC$TL_peerChat;
+                tLRPC$TL_peerChat.chat_id = tLRPC$InputPeer.chat_id;
             } else {
                 TLRPC$TL_peerChannel tLRPC$TL_peerChannel = new TLRPC$TL_peerChannel();
                 this.selfPeer = tLRPC$TL_peerChannel;

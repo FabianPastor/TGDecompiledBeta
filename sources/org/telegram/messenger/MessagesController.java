@@ -327,6 +327,7 @@ import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.DialogsActivity;
+import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.ProfileActivity;
 
 public class MessagesController extends BaseController implements NotificationCenter.NotificationCenterDelegate {
@@ -382,7 +383,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public int callReceiveTimeout;
     public int callRingTimeout;
     public boolean canRevokePmInbox;
-    private SparseArray<SparseArray<String>> channelAdmins;
+    private SparseArray<SparseArray<TLRPC$ChannelParticipant>> channelAdmins;
     private SparseArray<ArrayList<Integer>> channelViewsToSend;
     private SparseIntArray channelsPts;
     private ConcurrentHashMap<Integer, TLRPC$Chat> chats = new ConcurrentHashMap<>(100, 1.0f, 2);
@@ -4972,20 +4973,21 @@ public class MessagesController extends BaseController implements NotificationCe
         }
     }
 
-    public boolean isAdminInChannel(int i, int i2) {
+    public TLRPC$ChannelParticipant getAdminInChannel(int i, int i2) {
         SparseArray sparseArray = this.channelAdmins.get(i2);
-        if (sparseArray != null && sparseArray.indexOfKey(i) >= 0) {
-            return true;
+        if (sparseArray == null) {
+            return null;
         }
-        return false;
+        return (TLRPC$ChannelParticipant) sparseArray.get(i);
     }
 
     public String getAdminRank(int i, int i2) {
         SparseArray sparseArray = this.channelAdmins.get(i);
-        if (sparseArray == null) {
+        if (sparseArray == null || ((TLRPC$ChannelParticipant) sparseArray.get(i2)) == null) {
             return null;
         }
-        return (String) sparseArray.get(i2);
+        String str = ((TLRPC$ChannelParticipant) sparseArray.get(i2)).rank;
+        return str != null ? str : "";
     }
 
     public boolean isChannelAdminsLoaded(int i) {
@@ -5029,17 +5031,12 @@ public class MessagesController extends BaseController implements NotificationCe
         SparseArray sparseArray = new SparseArray(tLRPC$TL_channels_channelParticipants.participants.size());
         for (int i2 = 0; i2 < tLRPC$TL_channels_channelParticipants.participants.size(); i2++) {
             TLRPC$ChannelParticipant tLRPC$ChannelParticipant = tLRPC$TL_channels_channelParticipants.participants.get(i2);
-            int i3 = tLRPC$ChannelParticipant.user_id;
-            String str = tLRPC$ChannelParticipant.rank;
-            if (str == null) {
-                str = "";
-            }
-            sparseArray.put(i3, str);
+            sparseArray.put(tLRPC$ChannelParticipant.user_id, tLRPC$ChannelParticipant);
         }
         processLoadedChannelAdmins(sparseArray, i, false);
     }
 
-    public void processLoadedChannelAdmins(SparseArray<String> sparseArray, int i, boolean z) {
+    public void processLoadedChannelAdmins(SparseArray<TLRPC$ChannelParticipant> sparseArray, int i, boolean z) {
         if (!z) {
             getMessagesStorage().putChannelAdmins(i, sparseArray);
         }
@@ -17261,13 +17258,40 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
             });
         } else {
-            ConnectionsManager connectionsManager = getConnectionsManager();
-            if (i != 2) {
-                z = false;
-            }
-            connectionsManager.cleanup(z);
+            getConnectionsManager().cleanup(i == 2);
         }
         getUserConfig().clearConfig();
+        ArrayList<NotificationCenter.NotificationCenterDelegate> observers = getNotificationCenter().getObservers(NotificationCenter.appDidLogout);
+        int size = observers.size();
+        int i2 = 0;
+        while (true) {
+            if (i2 >= size) {
+                break;
+            } else if (observers.get(i2) instanceof LaunchActivity) {
+                z = false;
+                break;
+            } else {
+                i2++;
+            }
+        }
+        if (z && UserConfig.selectedAccount == this.currentAccount) {
+            int i3 = 0;
+            while (true) {
+                if (i3 >= 3) {
+                    i3 = -1;
+                    break;
+                } else if (UserConfig.getInstance(i3).isClientActivated()) {
+                    break;
+                } else {
+                    i3++;
+                }
+            }
+            if (i3 != -1) {
+                UserConfig.selectedAccount = i3;
+                UserConfig.getInstance(0).saveConfig(false);
+                LaunchActivity.clearFragments();
+            }
+        }
         getNotificationCenter().postNotificationName(NotificationCenter.appDidLogout, new Object[0]);
         getMessagesStorage().cleanup(false);
         cleanup();

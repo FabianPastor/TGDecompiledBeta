@@ -1655,6 +1655,7 @@ public final class R {
         public static final int voip_invite = NUM;
         public static final int voip_muted = NUM;
         public static final int voip_onallowtalk = NUM;
+        public static final int voip_record_saved = NUM;
         public static final int voip_record_start = NUM;
         public static final int voip_recordstart = NUM;
         public static final int voip_ringback = NUM;
@@ -5721,9 +5722,11 @@ public final class R {
         public static final int VoipGroupInvitedToVoiceChat = NUM;
         public static final int VoipGroupInvitedUser = NUM;
         public static final int VoipGroupJoinAnonymousAdmin = NUM;
+        public static final int VoipGroupJoinAnonymouseAlert = NUM;
         public static final int VoipGroupJoinAs = NUM;
+        public static final int VoipGroupJoinAsLinstener = NUM;
+        public static final int VoipGroupJoinAsSpeaker = NUM;
         public static final int VoipGroupJoinCall = NUM;
-        public static final int VoipGroupJoinVoiceChatMessage = NUM;
         public static final int VoipGroupJoinVoiceChatUrl = NUM;
         public static final int VoipGroupLeave = NUM;
         public static final int VoipGroupLeaveAlertEndChat = NUM;
@@ -5738,6 +5741,7 @@ public final class R {
         public static final int VoipGroupOfflineAirplane = NUM;
         public static final int VoipGroupOnlyAdminsCanSpeak = NUM;
         public static final int VoipGroupOpenChannel = NUM;
+        public static final int VoipGroupOpenGroup = NUM;
         public static final int VoipGroupOpenProfile = NUM;
         public static final int VoipGroupOpenVoiceChat = NUM;
         public static final int VoipGroupPersonalAccount = NUM;
