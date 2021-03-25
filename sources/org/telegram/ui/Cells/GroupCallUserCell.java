@@ -208,6 +208,13 @@ public class GroupCallUserCell extends FrameLayout {
                     }
                 }
 
+                public void setTranslationY(float f) {
+                    if (i2 == 4 && getFullAlpha() > 0.0f) {
+                        f = 0.0f;
+                    }
+                    super.setTranslationY(f);
+                }
+
                 public float getAlpha() {
                     return this.originalAlpha;
                 }

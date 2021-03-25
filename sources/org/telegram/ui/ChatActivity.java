@@ -31766,7 +31766,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
     }
 
-    public void showRequestUrlAlert(TLRPC$TL_urlAuthResultRequest tLRPC$TL_urlAuthResultRequest, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, String str) {
+    public void showRequestUrlAlert(TLRPC$TL_urlAuthResultRequest tLRPC$TL_urlAuthResultRequest, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, String str, boolean z) {
         TLRPC$TL_urlAuthResultRequest tLRPC$TL_urlAuthResultRequest2 = tLRPC$TL_urlAuthResultRequest;
         String str2 = str;
         if (getParentActivity() != null) {
@@ -31819,21 +31819,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     builder.setCustomViewOffset(12);
                     builder.setView(linearLayout);
-                    builder.setPositiveButton(LocaleController.getString("Open", NUM), new DialogInterface.OnClickListener(checkBoxCellArr, str, tLRPC$TL_messages_requestUrlAuth, tLRPC$TL_urlAuthResultRequest) {
+                    builder.setPositiveButton(LocaleController.getString("Open", NUM), new DialogInterface.OnClickListener(checkBoxCellArr, str, tLRPC$TL_messages_requestUrlAuth, tLRPC$TL_urlAuthResultRequest, z) {
                         public final /* synthetic */ CheckBoxCell[] f$1;
                         public final /* synthetic */ String f$2;
                         public final /* synthetic */ TLRPC$TL_messages_requestUrlAuth f$3;
                         public final /* synthetic */ TLRPC$TL_urlAuthResultRequest f$4;
+                        public final /* synthetic */ boolean f$5;
 
                         {
                             this.f$1 = r2;
                             this.f$2 = r3;
                             this.f$3 = r4;
                             this.f$4 = r5;
+                            this.f$5 = r6;
                         }
 
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            ChatActivity.this.lambda$showRequestUrlAlert$147$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
+                            ChatActivity.this.lambda$showRequestUrlAlert$147$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, dialogInterface, i);
                         }
                     });
                     showDialog(builder.create());
@@ -31860,16 +31862,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$showRequestUrlAlert$147 */
-    public /* synthetic */ void lambda$showRequestUrlAlert$147$ChatActivity(CheckBoxCell[] checkBoxCellArr, String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, TLRPC$TL_urlAuthResultRequest tLRPC$TL_urlAuthResultRequest, DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$showRequestUrlAlert$147$ChatActivity(CheckBoxCell[] checkBoxCellArr, String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, TLRPC$TL_urlAuthResultRequest tLRPC$TL_urlAuthResultRequest, boolean z, DialogInterface dialogInterface, int i) {
         if (!checkBoxCellArr[0].isChecked()) {
             Browser.openUrl((Context) getParentActivity(), str, false);
             return;
         }
         AlertDialog[] alertDialogArr = {new AlertDialog(getParentActivity(), 3)};
         TLRPC$TL_messages_acceptUrlAuth tLRPC$TL_messages_acceptUrlAuth = new TLRPC$TL_messages_acceptUrlAuth();
-        tLRPC$TL_messages_acceptUrlAuth.button_id = tLRPC$TL_messages_requestUrlAuth.button_id;
-        tLRPC$TL_messages_acceptUrlAuth.msg_id = tLRPC$TL_messages_requestUrlAuth.msg_id;
-        tLRPC$TL_messages_acceptUrlAuth.peer = tLRPC$TL_messages_requestUrlAuth.peer;
+        String str2 = tLRPC$TL_messages_requestUrlAuth.url;
+        if (str2 != null) {
+            tLRPC$TL_messages_acceptUrlAuth.url = str2;
+            tLRPC$TL_messages_acceptUrlAuth.flags |= 4;
+        } else {
+            tLRPC$TL_messages_acceptUrlAuth.button_id = tLRPC$TL_messages_requestUrlAuth.button_id;
+            tLRPC$TL_messages_acceptUrlAuth.msg_id = tLRPC$TL_messages_requestUrlAuth.msg_id;
+            tLRPC$TL_messages_acceptUrlAuth.peer = tLRPC$TL_messages_requestUrlAuth.peer;
+            tLRPC$TL_messages_acceptUrlAuth.flags |= 2;
+        }
         if (tLRPC$TL_urlAuthResultRequest.request_write_access) {
             tLRPC$TL_messages_acceptUrlAuth.write_allowed = checkBoxCellArr[1].isChecked();
         }
@@ -31878,15 +31887,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } catch (Throwable unused) {
         }
         alertDialogArr[0] = null;
-        AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr, getConnectionsManager().sendRequest(tLRPC$TL_messages_acceptUrlAuth, new RequestDelegate(str) {
+        AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr, getConnectionsManager().sendRequest(tLRPC$TL_messages_acceptUrlAuth, new RequestDelegate(str, tLRPC$TL_messages_requestUrlAuth, z) {
             public final /* synthetic */ String f$1;
+            public final /* synthetic */ TLRPC$TL_messages_requestUrlAuth f$2;
+            public final /* synthetic */ boolean f$3;
 
             {
                 this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ChatActivity.this.lambda$null$144$ChatActivity(this.f$1, tLObject, tLRPC$TL_error);
+                ChatActivity.this.lambda$null$144$ChatActivity(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
             }
         })) {
             public final /* synthetic */ AlertDialog[] f$1;
@@ -31905,29 +31918,38 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$144 */
-    public /* synthetic */ void lambda$null$144$ChatActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLObject, str) {
+    public /* synthetic */ void lambda$null$144$ChatActivity(String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(tLObject, str, tLRPC$TL_messages_requestUrlAuth, z) {
             public final /* synthetic */ TLObject f$1;
             public final /* synthetic */ String f$2;
+            public final /* synthetic */ TLRPC$TL_messages_requestUrlAuth f$3;
+            public final /* synthetic */ boolean f$4;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r3;
+                this.f$3 = r4;
+                this.f$4 = r5;
             }
 
             public final void run() {
-                ChatActivity.this.lambda$null$143$ChatActivity(this.f$1, this.f$2);
+                ChatActivity.this.lambda$null$143$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$143 */
-    public /* synthetic */ void lambda$null$143$ChatActivity(TLObject tLObject, String str) {
+    public /* synthetic */ void lambda$null$143$ChatActivity(TLObject tLObject, String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, boolean z) {
         if (tLObject instanceof TLRPC$TL_urlAuthResultAccepted) {
             Browser.openUrl((Context) getParentActivity(), ((TLRPC$TL_urlAuthResultAccepted) tLObject).url, false);
         } else if (tLObject instanceof TLRPC$TL_urlAuthResultDefault) {
             Browser.openUrl((Context) getParentActivity(), str, false);
+        } else {
+            String str2 = tLRPC$TL_messages_requestUrlAuth.url;
+            if (str2 != null) {
+                AlertsCreator.showOpenUrlAlert(this, str2, false, z);
+            }
         }
     }
 

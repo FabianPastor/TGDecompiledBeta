@@ -1829,6 +1829,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             getNotificationCenter().addObserver(this, NotificationCenter.blockedUsersDidLoad);
             getNotificationCenter().addObserver(this, NotificationCenter.botInfoDidLoad);
             getNotificationCenter().addObserver(this, NotificationCenter.userInfoDidLoad);
+            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.reloadInterface);
             this.userBlocked = getMessagesController().blockePeers.indexOfKey(this.user_id) >= 0;
             if (user.bot) {
                 this.isBot = true;
@@ -1953,6 +1954,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             getNotificationCenter().removeObserver(this, NotificationCenter.blockedUsersDidLoad);
             getNotificationCenter().removeObserver(this, NotificationCenter.botInfoDidLoad);
             getNotificationCenter().removeObserver(this, NotificationCenter.userInfoDidLoad);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.reloadInterface);
             getMessagesController().cancelLoadFullUser(this.user_id);
         } else if (this.chat_id != 0) {
             getNotificationCenter().removeObserver(this, NotificationCenter.chatInfoDidLoad);
@@ -2901,6 +2903,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ProfileActivity$20 r1 = new org.telegram.ui.ProfileActivity$20
             r1.<init>()
             r0.addListener(r1)
+            r30.updateRowsIds()
             r30.updateSelectedMediaTabText()
             android.view.View r0 = r11.fragmentView
             return r0
@@ -4964,13 +4967,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        RecyclerListView recyclerListView;
         int i3;
+        int i4;
         TLRPC$Chat tLRPC$Chat;
+        RecyclerListView recyclerListView;
         RecyclerListView recyclerListView2;
-        RecyclerListView recyclerListView3;
         RecyclerListView.Holder holder;
-        int i4 = 0;
+        int i5 = 0;
         if (i == NotificationCenter.updateInterfaces) {
             int intValue = objArr[0].intValue();
             boolean z = ((intValue & 2) == 0 && (intValue & 1) == 0 && (intValue & 4) == 0) ? false : true;
@@ -4978,27 +4981,27 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (z) {
                     updateProfileData();
                 }
-                if ((intValue & 1024) != 0 && (recyclerListView3 = this.listView) != null && (holder = (RecyclerListView.Holder) recyclerListView3.findViewHolderForPosition(this.phoneRow)) != null) {
+                if ((intValue & 1024) != 0 && (recyclerListView2 = this.listView) != null && (holder = (RecyclerListView.Holder) recyclerListView2.findViewHolderForPosition(this.phoneRow)) != null) {
                     this.listAdapter.onBindViewHolder(holder, this.phoneRow);
                 }
             } else if (this.chat_id != 0) {
-                int i5 = intValue & 8192;
-                if (!(i5 == 0 && (intValue & 8) == 0 && (intValue & 16) == 0 && (intValue & 32) == 0 && (intValue & 4) == 0)) {
-                    if (i5 != 0) {
+                int i6 = intValue & 8192;
+                if (!(i6 == 0 && (intValue & 8) == 0 && (intValue & 16) == 0 && (intValue & 32) == 0 && (intValue & 4) == 0)) {
+                    if (i6 != 0) {
                         updateListAnimated(true);
                     } else {
                         updateOnlineCount(true);
                     }
                     updateProfileData();
                 }
-                if (z && (recyclerListView2 = this.listView) != null) {
-                    int childCount = recyclerListView2.getChildCount();
-                    while (i4 < childCount) {
-                        View childAt = this.listView.getChildAt(i4);
+                if (z && (recyclerListView = this.listView) != null) {
+                    int childCount = recyclerListView.getChildCount();
+                    while (i5 < childCount) {
+                        View childAt = this.listView.getChildAt(i5);
                         if (childAt instanceof UserCell) {
                             ((UserCell) childAt).update(intValue);
                         }
-                        i4++;
+                        i5++;
                     }
                 }
             }
@@ -5073,11 +5076,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     tLRPC$ChatFull3.participants = tLRPC$ChatFull4.participants;
                 }
                 if (tLRPC$ChatFull4 == null && (tLRPC$ChatFull3 instanceof TLRPC$TL_channelFull)) {
-                    i4 = 1;
+                    i5 = 1;
                 }
                 this.chatInfo = tLRPC$ChatFull3;
-                if (this.mergeDialogId == 0 && (i3 = tLRPC$ChatFull3.migrated_from_chat_id) != 0) {
-                    this.mergeDialogId = (long) (-i3);
+                if (this.mergeDialogId == 0 && (i4 = tLRPC$ChatFull3.migrated_from_chat_id) != 0) {
+                    this.mergeDialogId = (long) (-i4);
                     getMediaDataController().getMediaCount(this.mergeDialogId, 0, this.classGuid, true);
                 }
                 fetchUsersFromChannelInfo();
@@ -5091,7 +5094,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     this.currentChat = chat;
                     createActionBarMenu(true);
                 }
-                if (this.currentChat.megagroup && (i4 != 0 || !booleanValue)) {
+                if (this.currentChat.megagroup && (i5 != 0 || !booleanValue)) {
                     getChannelParticipants(true);
                 }
                 updateTimeItem();
@@ -5131,10 +5134,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (!objArr[2].booleanValue()) {
                 long dialogId = getDialogId();
                 if (dialogId == objArr[0].longValue()) {
-                    int i6 = (int) dialogId;
+                    int i7 = (int) dialogId;
                     ArrayList arrayList = objArr[1];
-                    while (i4 < arrayList.size()) {
-                        MessageObject messageObject = (MessageObject) arrayList.get(i4);
+                    while (i5 < arrayList.size()) {
+                        MessageObject messageObject = (MessageObject) arrayList.get(i5);
                         if (this.currentEncryptedChat != null) {
                             TLRPC$MessageAction tLRPC$MessageAction = messageObject.messageOwner.action;
                             if (tLRPC$MessageAction instanceof TLRPC$TL_messageEncryptedAction) {
@@ -5148,12 +5151,26 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 }
                             }
                         }
-                        i4++;
+                        i5++;
                     }
                 }
             }
-        } else if (i == NotificationCenter.emojiDidLoad && (recyclerListView = this.listView) != null) {
-            recyclerListView.invalidateViews();
+        } else if (i == NotificationCenter.emojiDidLoad) {
+            RecyclerListView recyclerListView3 = this.listView;
+            if (recyclerListView3 != null) {
+                recyclerListView3.invalidateViews();
+            }
+        } else if (i == NotificationCenter.reloadInterface) {
+            int i8 = this.emptyRow;
+            updateRowsIds();
+            ListAdapter listAdapter3 = this.listAdapter;
+            if (listAdapter3 != null && i8 != (i3 = this.emptyRow)) {
+                if (i3 == -1) {
+                    listAdapter3.notifyItemRemoved(i3);
+                } else {
+                    listAdapter3.notifyItemInserted(i3);
+                }
+            }
         }
     }
 

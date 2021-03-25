@@ -1295,6 +1295,7 @@ public class VoIPService extends VoIPBaseService {
                 this.tgVoip.removeSsrcs(iArr);
             }
             addAllParticipants();
+            setParticipantsVolume();
         }
     }
 
@@ -2301,6 +2302,7 @@ public class VoIPService extends VoIPBaseService {
     public /* synthetic */ void lambda$null$40$VoIPService() {
         if (VoIPBaseService.sharedInstance != null && this.groupCall != null) {
             addAllParticipants();
+            setParticipantsVolume();
         }
     }
 
@@ -2407,25 +2409,10 @@ public class VoIPService extends VoIPBaseService {
         if (!this.wasConnected) {
             this.wasConnected = true;
             NativeInstance nativeInstance = this.tgVoip;
-            if (nativeInstance != null) {
-                if (!this.micMute) {
-                    nativeInstance.setMuteMicrophone(false);
-                }
-                int size = this.groupCall.participants.size();
-                for (int i2 = 0; i2 < size; i2++) {
-                    TLRPC$TL_groupCallParticipant valueAt = this.groupCall.participants.valueAt(i2);
-                    int i3 = valueAt.source;
-                    if (i3 != 0) {
-                        if (valueAt.muted_by_you) {
-                            nativeInstance.setVolume(i3, 0.0d);
-                        } else {
-                            double participantVolume = (double) ChatObject.getParticipantVolume(valueAt);
-                            Double.isNaN(participantVolume);
-                            nativeInstance.setVolume(i3, participantVolume / 10000.0d);
-                        }
-                    }
-                }
+            if (nativeInstance != null && !this.micMute) {
+                nativeInstance.setMuteMicrophone(false);
             }
+            setParticipantsVolume();
         }
     }
 
@@ -2453,6 +2440,26 @@ public class VoIPService extends VoIPBaseService {
     /* renamed from: lambda$null$48 */
     public /* synthetic */ void lambda$null$48$VoIPService() {
         this.soundPool.play(this.spVoiceChatStartId, 1.0f, 1.0f, 0, 0, 1.0f);
+    }
+
+    public void setParticipantsVolume() {
+        int i;
+        NativeInstance nativeInstance = this.tgVoip;
+        if (nativeInstance != null) {
+            int size = this.groupCall.participants.size();
+            for (int i2 = 0; i2 < size; i2++) {
+                TLRPC$TL_groupCallParticipant valueAt = this.groupCall.participants.valueAt(i2);
+                if (!valueAt.self && (i = valueAt.source) != 0 && (valueAt.can_self_unmute || !valueAt.muted)) {
+                    if (valueAt.muted_by_you) {
+                        nativeInstance.setVolume(i, 0.0d);
+                    } else {
+                        double participantVolume = (double) ChatObject.getParticipantVolume(valueAt);
+                        Double.isNaN(participantVolume);
+                        nativeInstance.setVolume(i, participantVolume / 10000.0d);
+                    }
+                }
+            }
+        }
     }
 
     public void setParticipantVolume(int i, int i2) {
