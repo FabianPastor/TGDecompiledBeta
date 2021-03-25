@@ -34,6 +34,7 @@ import org.telegram.tgnet.TLRPC$TL_messages_chats;
 import org.telegram.tgnet.TLRPC$TL_messages_exportChatInvite;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -64,6 +65,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     private TextInfoPrivacyCell checkTextView;
     /* access modifiers changed from: private */
     public TLRPC$Chat currentChat;
+    private ActionBarMenuItem doneButton;
     private EditTextBoldCursor editText;
     private HeaderCell headerCell;
     private HeaderCell headerCell2;
@@ -286,7 +288,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                 }
             }
         });
-        this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
+        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
         AnonymousClass2 r0 = new ScrollView(this, context2) {
             public boolean requestChildRectangleOnScreen(View view, Rect rect, boolean z) {
                 rect.bottom += AndroidUtilities.dp(60.0f);
@@ -404,9 +406,6 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         this.usernameTextView.setCursorWidth(1.5f);
         this.publicContainer.addView(this.usernameTextView, LayoutHelper.createLinear(-1, 36));
         this.usernameTextView.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable editable) {
-            }
-
             public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
             }
 
@@ -415,6 +414,10 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                     ChatEditTypeActivity chatEditTypeActivity = ChatEditTypeActivity.this;
                     boolean unused = chatEditTypeActivity.checkUserName(chatEditTypeActivity.usernameTextView.getText().toString());
                 }
+            }
+
+            public void afterTextChanged(Editable editable) {
+                ChatEditTypeActivity.this.checkDoneButton();
             }
         });
         LinearLayout linearLayout6 = new LinearLayout(context2);
@@ -440,10 +443,10 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             public void showUsersForPermanentLink() {
                 ChatEditTypeActivity chatEditTypeActivity = ChatEditTypeActivity.this;
                 Context context = context2;
-                TLRPC$TL_chatInviteExported access$600 = ChatEditTypeActivity.this.invite;
-                TLRPC$ChatFull access$700 = ChatEditTypeActivity.this.info;
+                TLRPC$TL_chatInviteExported access$700 = ChatEditTypeActivity.this.invite;
+                TLRPC$ChatFull access$800 = ChatEditTypeActivity.this.info;
                 ChatEditTypeActivity chatEditTypeActivity2 = ChatEditTypeActivity.this;
-                InviteLinkBottomSheet unused = chatEditTypeActivity.inviteLinkBottomSheet = new InviteLinkBottomSheet(context, access$600, access$700, chatEditTypeActivity2.usersMap, chatEditTypeActivity2, chatEditTypeActivity2.chatId, true, ChatObject.isChannel(ChatEditTypeActivity.this.currentChat));
+                InviteLinkBottomSheet unused = chatEditTypeActivity.inviteLinkBottomSheet = new InviteLinkBottomSheet(context, access$700, access$800, chatEditTypeActivity2.usersMap, chatEditTypeActivity2, chatEditTypeActivity2.chatId, true, ChatObject.isChannel(ChatEditTypeActivity.this.currentChat));
                 ChatEditTypeActivity.this.inviteLinkBottomSheet.show();
             }
         });
@@ -820,7 +823,19 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             this.radioButtonCell1.setChecked(!this.isPrivate, true);
             this.radioButtonCell2.setChecked(this.isPrivate, true);
             this.usernameTextView.clearFocus();
+            checkDoneButton();
         }
+    }
+
+    /* access modifiers changed from: private */
+    public void checkDoneButton() {
+        if (this.isPrivate || this.usernameTextView.length() > 0) {
+            this.doneButton.setEnabled(true);
+            this.doneButton.setAlpha(1.0f);
+            return;
+        }
+        this.doneButton.setEnabled(false);
+        this.doneButton.setAlpha(0.5f);
     }
 
     /* access modifiers changed from: private */

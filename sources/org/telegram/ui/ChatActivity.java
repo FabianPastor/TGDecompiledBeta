@@ -8418,13 +8418,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* access modifiers changed from: private */
     public void showVoiceHint(boolean z, boolean z2) {
-        View view;
+        ChatActivityEnterView chatActivityEnterView2;
         int i;
         String str;
-        if (getParentActivity() != null && (view = this.fragmentView) != null) {
-            if ((!z || this.voiceHintTextView != null) && this.chatMode == 0) {
+        if (getParentActivity() != null && this.fragmentView != null) {
+            if ((!z || this.voiceHintTextView != null) && this.chatMode == 0 && (chatActivityEnterView2 = this.chatActivityEnterView) != null && chatActivityEnterView2.getAudioVideoButtonContainer() != null && this.chatActivityEnterView.getAudioVideoButtonContainer().getVisibility() == 0) {
                 if (this.voiceHintTextView == null) {
-                    SizeNotifierFrameLayout sizeNotifierFrameLayout = (SizeNotifierFrameLayout) view;
+                    SizeNotifierFrameLayout sizeNotifierFrameLayout = (SizeNotifierFrameLayout) this.fragmentView;
                     int indexOfChild = sizeNotifierFrameLayout.indexOfChild(this.chatActivityEnterView);
                     if (indexOfChild != -1) {
                         HintView hintView = new HintView(getParentActivity(), 9);
@@ -8451,7 +8451,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     this.voiceHintTextView.setText(LocaleController.getString("HoldToAudioOnly", NUM));
                 }
-                this.voiceHintTextView.showForView(this.chatActivityEnterView.getSendButton(), true);
+                this.voiceHintTextView.showForView(this.chatActivityEnterView.getAudioVideoButtonContainer(), true);
             }
         }
     }

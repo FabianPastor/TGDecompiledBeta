@@ -1013,8 +1013,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         chatActivity = null;
                         i2 = 4;
                     }
+                    AndroidUtilities.hideKeyboard(baseFragment2.getFragmentView().findFocus());
+                    AndroidUtilities.hideKeyboard(this.parentAlert.getContainer().findFocus());
                     PhotoViewer.getInstance().openPhotoForSelect(allPhotosArray, i3, i2, false, this.photoViewerProvider, chatActivity);
-                    AndroidUtilities.hideKeyboard(this.parentAlert.baseFragment.getFragmentView().findFocus());
                 }
             } else if (SharedConfig.inappCamera) {
                 openCamera(true);

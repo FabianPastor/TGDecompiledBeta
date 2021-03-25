@@ -9728,7 +9728,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                                 boolean unused3 = PhotoViewer.this.wasRotated = false;
                                             }
                                         }
-                                    } else if (i >= 330 || i <= 30) {
+                                    } else if (i > 0 && (i >= 330 || i <= 30)) {
                                         boolean unused4 = PhotoViewer.this.wasRotated = true;
                                     } else if (PhotoViewer.this.wasRotated && i >= 240 && i <= 300) {
                                         PhotoViewer.this.parentActivity.setRequestedOrientation(PhotoViewer.this.prevOrientation);

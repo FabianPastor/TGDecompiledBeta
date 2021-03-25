@@ -8576,6 +8576,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         return this.sendButton.getVisibility() == 0 ? this.sendButton : this.audioVideoButtonContainer;
     }
 
+    public View getAudioVideoButtonContainer() {
+        return this.audioVideoButtonContainer;
+    }
+
     public EmojiView getEmojiView() {
         return this.emojiView;
     }

@@ -25,6 +25,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
     private int drawablePadding = AndroidUtilities.dp(4.0f);
     private Paint fadePaint;
     private Paint fadePaintBack;
+    private Layout firstLineLayout;
     private float fullAlpha;
     private Layout fullLayout;
     private int gravity = 51;
@@ -160,7 +161,12 @@ public class SimpleTextView extends View implements Drawable.Callback {
             if ((i2 & 7) == 1) {
                 this.offsetX = (i - this.textWidth) / 2;
             } else if ((i2 & 7) == 3) {
-                this.offsetX = -((int) this.layout.getLineLeft(0));
+                Layout layout4 = this.firstLineLayout;
+                if (layout4 != null) {
+                    this.offsetX = -((int) layout4.getLineLeft(0));
+                } else {
+                    this.offsetX = -((int) this.layout.getLineLeft(0));
+                }
             } else if (this.layout.getLineLeft(0) == 0.0f) {
                 this.offsetX = i - this.textWidth;
             } else {
@@ -198,27 +204,35 @@ public class SimpleTextView extends View implements Drawable.Callback {
                             CharSequence subSequence = this.text.subSequence(0, lineEnd);
                             CharSequence charSequence3 = this.text;
                             CharSequence subSequence2 = charSequence3.subSequence(lineStart, charSequence3.length());
-                            this.layout = new StaticLayout(subSequence, 0, subSequence.length(), this.textPaint, this.scrollNonFitText ? AndroidUtilities.dp(2000.0f) : AndroidUtilities.dp(8.0f) + intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-                            this.partLayout = new StaticLayout(charSequence2, lineEnd, charSequence2.length(), this.textPaint, this.scrollNonFitText ? AndroidUtilities.dp(2000.0f) : AndroidUtilities.dp(8.0f) + intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                            CharSequence subSequence3 = charSequence2.subSequence(lineEnd, charSequence2.length());
+                            this.firstLineLayout = new StaticLayout(charSequence2, 0, charSequence2.length(), this.textPaint, this.scrollNonFitText ? AndroidUtilities.dp(2000.0f) : AndroidUtilities.dp(8.0f) + intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                            StaticLayout staticLayout = new StaticLayout(subSequence, 0, subSequence.length(), this.textPaint, this.scrollNonFitText ? AndroidUtilities.dp(2000.0f) : AndroidUtilities.dp(8.0f) + intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                            this.layout = staticLayout;
+                            if (staticLayout.getLineLeft(0) != 0.0f) {
+                                subSequence3 = "‏" + subSequence3;
+                            }
+                            CharSequence charSequence4 = subSequence3;
+                            this.partLayout = new StaticLayout(charSequence4, 0, charSequence4.length(), this.textPaint, this.scrollNonFitText ? AndroidUtilities.dp(2000.0f) : AndroidUtilities.dp(8.0f) + intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                             this.fullLayout = StaticLayoutEx.createStaticLayout(subSequence2, 0, subSequence2.length(), this.textPaint, intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TextUtils.TruncateAt.END, intrinsicWidth, 2, false);
                         }
                     } else {
-                        CharSequence charSequence4 = ellipsize2;
-                        this.layout = new StaticLayout(charSequence4, 0, charSequence4.length(), this.textPaint, this.scrollNonFitText ? AndroidUtilities.dp(2000.0f) : AndroidUtilities.dp(8.0f) + intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                        CharSequence charSequence5 = ellipsize2;
+                        this.layout = new StaticLayout(charSequence5, 0, charSequence5.length(), this.textPaint, this.scrollNonFitText ? AndroidUtilities.dp(2000.0f) : AndroidUtilities.dp(8.0f) + intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                         this.fullLayout = null;
                         this.partLayout = null;
+                        this.firstLineLayout = null;
                     }
                 } else if (this.maxLines > 1) {
-                    CharSequence charSequence5 = this.text;
-                    this.layout = StaticLayoutEx.createStaticLayout(charSequence5, 0, charSequence5.length(), this.textPaint, intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TextUtils.TruncateAt.END, intrinsicWidth, this.maxLines, false);
+                    CharSequence charSequence6 = this.text;
+                    this.layout = StaticLayoutEx.createStaticLayout(charSequence6, 0, charSequence6.length(), this.textPaint, intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TextUtils.TruncateAt.END, intrinsicWidth, this.maxLines, false);
                 } else {
                     if (this.scrollNonFitText) {
                         ellipsize = this.text;
                     } else {
                         ellipsize = TextUtils.ellipsize(this.text, this.textPaint, (float) intrinsicWidth, TextUtils.TruncateAt.END);
                     }
-                    CharSequence charSequence6 = ellipsize;
-                    this.layout = new StaticLayout(charSequence6, 0, charSequence6.length(), this.textPaint, this.scrollNonFitText ? AndroidUtilities.dp(2000.0f) : AndroidUtilities.dp(8.0f) + intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+                    CharSequence charSequence7 = ellipsize;
+                    this.layout = new StaticLayout(charSequence7, 0, charSequence7.length(), this.textPaint, this.scrollNonFitText ? AndroidUtilities.dp(2000.0f) : AndroidUtilities.dp(8.0f) + intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
                 }
                 calcOffset(intrinsicWidth);
             } catch (Exception unused) {
@@ -529,7 +543,11 @@ public class SimpleTextView extends View implements Drawable.Callback {
                 int alpha = this.textPaint.getAlpha();
                 this.textPaint.setAlpha((int) ((1.0f - this.fullAlpha) * 255.0f));
                 canvas.save();
-                canvas.translate(this.layout.getLineWidth(0), 0.0f);
+                if (this.layout.getLineLeft(0) != 0.0f) {
+                    canvas.translate(-this.layout.getLineWidth(0), 0.0f);
+                } else {
+                    canvas.translate(this.layout.getLineWidth(0), 0.0f);
+                }
                 this.partLayout.draw(canvas);
                 canvas.restore();
                 this.textPaint.setAlpha(alpha);
@@ -537,7 +555,16 @@ public class SimpleTextView extends View implements Drawable.Callback {
             if (this.fullLayout != null && this.fullAlpha > 0.0f) {
                 int alpha2 = this.textPaint.getAlpha();
                 this.textPaint.setAlpha((int) (this.fullAlpha * 255.0f));
-                canvas.translate(0.0f, (float) this.layout.getLineBottom(0));
+                int lineCount = this.fullLayout.getLineCount();
+                int i16 = 0;
+                while (i16 < lineCount && this.fullLayout.getLineLeft(i16) == 0.0f) {
+                    i16++;
+                }
+                if (this.layout.getLineLeft(0) != 0.0f) {
+                    canvas.translate((float) (-this.offsetX), (float) this.layout.getLineBottom(0));
+                } else {
+                    canvas.translate(0.0f, (float) this.layout.getLineBottom(0));
+                }
                 this.fullLayout.draw(canvas);
                 this.textPaint.setAlpha(alpha2);
             }

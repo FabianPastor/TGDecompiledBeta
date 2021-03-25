@@ -888,6 +888,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 this.currentProgress = d;
                 TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.currentParticipant;
                 tLRPC$TL_groupCallParticipant.volume = (int) (d * 20000.0d);
+                int i = 0;
+                tLRPC$TL_groupCallParticipant.volume_by_admin = false;
                 tLRPC$TL_groupCallParticipant.flags |= 128;
                 double participantVolume = (double) ChatObject.getParticipantVolume(tLRPC$TL_groupCallParticipant);
                 Double.isNaN(participantVolume);
@@ -895,7 +897,6 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 TextView textView2 = this.textView;
                 Locale locale = Locale.US;
                 Object[] objArr = new Object[1];
-                int i = 0;
                 objArr[0] = Integer.valueOf((int) (d2 > 0.0d ? Math.max(d2, 1.0d) : 0.0d));
                 textView2.setText(String.format(locale, "%d%%", objArr));
                 VoIPService sharedInstance = VoIPService.getSharedInstance();
@@ -2440,14 +2441,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r0.updateState(r4, r4)
             r0.setColorProgress(r13)
             android.graphics.Paint r1 = r0.leaveBackgroundPaint
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r8)
-            r1.setColor(r2)
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r8)
+            r1.setColor(r3)
             r0.updateTitle(r4)
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
             org.telegram.ui.ActionBar.SimpleTextView r1 = r1.getTitleTextView()
-            org.telegram.ui.-$$Lambda$GroupCallActivity$WtHaoxiePrgL4BVQ6dMGRTU73cE r2 = new org.telegram.ui.-$$Lambda$GroupCallActivity$WtHaoxiePrgL4BVQ6dMGRTU73cE
-            r2.<init>()
-            r1.setOnClickListener(r2)
+            org.telegram.ui.-$$Lambda$GroupCallActivity$ssYXzmaOJ3p3A4b-fJwJh7Xk7hU r3 = new org.telegram.ui.-$$Lambda$GroupCallActivity$ssYXzmaOJ3p3A4b-fJwJh7Xk7hU
+            r3.<init>(r2)
+            r1.setOnClickListener(r3)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCallActivity.<init>(android.content.Context, org.telegram.messenger.AccountInstance, org.telegram.messenger.ChatObject$Call, org.telegram.tgnet.TLRPC$Chat):void");
@@ -2651,8 +2652,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$20 */
-    public /* synthetic */ void lambda$new$20$GroupCallActivity(View view) {
-        showRecordHint(this.actionBar.getTitleTextView());
+    public /* synthetic */ void lambda$new$20$GroupCallActivity(ChatObject.Call call2, View view) {
+        if (call2.recording) {
+            showRecordHint(this.actionBar.getTitleTextView());
+        }
     }
 
     public void dismissInternal() {
@@ -2737,9 +2740,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             }
         } else if (titleTextView2.getRightDrawable() != null) {
             titleTextView2.setRightDrawable((Drawable) null);
-            this.titleTextView.getTextView();
             this.titleTextView.getTextView().setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, (Drawable) null, (Drawable) null);
-            this.titleTextView.getNextTextView();
             this.titleTextView.getNextTextView().setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, (Drawable) null, (Drawable) null);
         }
     }
@@ -4009,6 +4010,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     sharedInstance.editCallMember(tLObject2, false, -1, (Boolean) null);
                 } else {
                     tLRPC$TL_groupCallParticipant2.volume = 10000;
+                    tLRPC$TL_groupCallParticipant2.volume_by_admin = false;
                     sharedInstance.editCallMember(tLObject2, false, 10000, (Boolean) null);
                 }
                 sharedInstance.setParticipantVolume(tLRPC$TL_groupCallParticipant2.source, ChatObject.getParticipantVolume(tLRPC$TL_groupCallParticipant));

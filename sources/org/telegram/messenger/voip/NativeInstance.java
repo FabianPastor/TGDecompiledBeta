@@ -88,8 +88,6 @@ public class NativeInstance {
 
     public native void prepareForStream();
 
-    public native void removeSsrcs(int[] iArr);
-
     public native void resetGroupInstance(boolean z);
 
     public native void setAudioOutputGainControlEnabled(boolean z);
