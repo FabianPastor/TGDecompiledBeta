@@ -37,6 +37,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
@@ -67,6 +68,8 @@ import org.telegram.tgnet.TLRPC$TL_chatParticipantAdmin;
 import org.telegram.tgnet.TLRPC$TL_chatParticipantCreator;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
+import org.telegram.tgnet.TLRPC$TL_peerChannel;
+import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserStatus;
@@ -243,10 +246,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             public static void $default$didChangeOwner(ChatUsersActivityDelegate chatUsersActivityDelegate, TLRPC$User tLRPC$User) {
             }
 
-            public static void $default$didSelectUser(ChatUsersActivityDelegate chatUsersActivityDelegate, int i) {
+            public static void $default$didKickParticipant(ChatUsersActivityDelegate chatUsersActivityDelegate, int i) {
             }
 
-            public static void $default$didUserKicked(ChatUsersActivityDelegate chatUsersActivityDelegate, int i) {
+            public static void $default$didSelectUser(ChatUsersActivityDelegate chatUsersActivityDelegate, int i) {
             }
         }
 
@@ -254,9 +257,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
         void didChangeOwner(TLRPC$User tLRPC$User);
 
-        void didSelectUser(int i);
+        void didKickParticipant(int i);
 
-        void didUserKicked(int i);
+        void didSelectUser(int i);
     }
 
     /* access modifiers changed from: private */
@@ -1314,17 +1317,17 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:201:0x03b1  */
-    /* JADX WARNING: Removed duplicated region for block: B:256:0x04d9 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:257:0x04da  */
-    /* JADX WARNING: Removed duplicated region for block: B:276:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x03ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:256:0x04e4 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:257:0x04e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:280:? A[RETURN, SYNTHETIC] */
     /* renamed from: lambda$createView$1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$createView$1$ChatUsersActivity(android.view.View r22, int r23) {
+    public /* synthetic */ void lambda$createView$1$ChatUsersActivity(android.view.View r23, int r24) {
         /*
-            r21 = this;
-            r9 = r21
-            r0 = r23
+            r22 = this;
+            r9 = r22
+            r0 = r24
             org.telegram.ui.Components.RecyclerListView r1 = r9.listView
             androidx.recyclerview.widget.RecyclerView$Adapter r1 = r1.getAdapter()
             org.telegram.ui.ChatUsersActivity$ListAdapter r2 = r9.listViewAdapter
@@ -1336,25 +1339,25 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         L_0x0012:
             r1 = 0
         L_0x0013:
-            r2 = 3
-            r5 = 2
+            java.lang.String r2 = "chat_id"
+            r5 = 3
+            r6 = 2
             if (r1 == 0) goto L_0x02a8
-            int r6 = r9.addNewRow
-            java.lang.String r7 = "type"
-            java.lang.String r8 = "chat_id"
-            if (r0 != r6) goto L_0x00bf
+            int r7 = r9.addNewRow
+            java.lang.String r8 = "type"
+            if (r0 != r7) goto L_0x00bf
             int r0 = r9.type
             java.lang.String r1 = "selectType"
             if (r0 == 0) goto L_0x0094
-            if (r0 != r2) goto L_0x0028
+            if (r0 != r5) goto L_0x0028
             goto L_0x0094
         L_0x0028:
             if (r0 != r4) goto L_0x0050
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
-            int r2 = r9.chatId
-            r0.putInt(r8, r2)
-            r0.putInt(r7, r5)
+            int r3 = r9.chatId
+            r0.putInt(r2, r3)
+            r0.putInt(r8, r6)
             r0.putInt(r1, r4)
             org.telegram.ui.ChatUsersActivity r1 = new org.telegram.ui.ChatUsersActivity
             r1.<init>(r0)
@@ -1366,7 +1369,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r9.presentFragment(r1)
             goto L_0x00be
         L_0x0050:
-            if (r0 != r5) goto L_0x00be
+            if (r0 != r6) goto L_0x00be
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             java.lang.String r1 = "addToGroup"
@@ -1404,13 +1407,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             int r3 = r9.chatId
-            r0.putInt(r8, r3)
-            r0.putInt(r7, r5)
-            int r3 = r9.type
-            if (r3 != 0) goto L_0x00a6
-            r2 = 2
+            r0.putInt(r2, r3)
+            r0.putInt(r8, r6)
+            int r2 = r9.type
+            if (r2 != 0) goto L_0x00a6
+            r5 = 2
         L_0x00a6:
-            r0.putInt(r1, r2)
+            r0.putInt(r1, r5)
             org.telegram.ui.ChatUsersActivity r1 = new org.telegram.ui.ChatUsersActivity
             r1.<init>(r0)
             org.telegram.tgnet.TLRPC$ChatFull r0 = r9.info
@@ -1422,21 +1425,21 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         L_0x00be:
             return
         L_0x00bf:
-            int r6 = r9.recentActionsRow
-            if (r0 != r6) goto L_0x00ce
+            int r7 = r9.recentActionsRow
+            if (r0 != r7) goto L_0x00ce
             org.telegram.ui.ChannelAdminLogActivity r0 = new org.telegram.ui.ChannelAdminLogActivity
             org.telegram.tgnet.TLRPC$Chat r1 = r9.currentChat
             r0.<init>(r1)
             r9.presentFragment(r0)
             return
         L_0x00ce:
-            int r6 = r9.removedUsersRow
-            if (r0 != r6) goto L_0x00ed
+            int r7 = r9.removedUsersRow
+            if (r0 != r7) goto L_0x00ed
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             int r1 = r9.chatId
-            r0.putInt(r8, r1)
-            r0.putInt(r7, r3)
+            r0.putInt(r2, r1)
+            r0.putInt(r8, r3)
             org.telegram.ui.ChatUsersActivity r1 = new org.telegram.ui.ChatUsersActivity
             r1.<init>(r0)
             org.telegram.tgnet.TLRPC$ChatFull r0 = r9.info
@@ -1444,27 +1447,27 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r9.presentFragment(r1)
             return
         L_0x00ed:
-            int r6 = r9.gigaConvertRow
-            if (r0 != r6) goto L_0x00ff
-            org.telegram.ui.ChatUsersActivity$10 r6 = new org.telegram.ui.ChatUsersActivity$10
-            android.app.Activity r7 = r21.getParentActivity()
-            r6.<init>(r7, r9)
-            r9.showDialog(r6)
+            int r7 = r9.gigaConvertRow
+            if (r0 != r7) goto L_0x00ff
+            org.telegram.ui.ChatUsersActivity$10 r7 = new org.telegram.ui.ChatUsersActivity$10
+            android.app.Activity r8 = r22.getParentActivity()
+            r7.<init>(r8, r9)
+            r9.showDialog(r7)
             goto L_0x02a8
         L_0x00ff:
-            int r6 = r9.addNew2Row
-            if (r0 != r6) goto L_0x010e
+            int r7 = r9.addNew2Row
+            if (r0 != r7) goto L_0x010e
             org.telegram.ui.GroupInviteActivity r0 = new org.telegram.ui.GroupInviteActivity
             int r1 = r9.chatId
             r0.<init>(r1)
             r9.presentFragment(r0)
             return
         L_0x010e:
-            int r6 = r9.permissionsSectionRow
-            if (r0 <= r6) goto L_0x02a8
-            int r6 = r9.changeInfoRow
-            if (r0 > r6) goto L_0x02a8
-            r1 = r22
+            int r7 = r9.permissionsSectionRow
+            if (r0 <= r7) goto L_0x02a8
+            int r7 = r9.changeInfoRow
+            if (r0 > r7) goto L_0x02a8
+            r1 = r23
             org.telegram.ui.Cells.TextCheckCell2 r1 = (org.telegram.ui.Cells.TextCheckCell2) r1
             boolean r2 = r1.isEnabled()
             if (r2 != 0) goto L_0x0121
@@ -1481,7 +1484,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             int r1 = r9.changeInfoRow
             if (r0 != r1) goto L_0x014e
         L_0x0139:
-            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of((org.telegram.ui.ActionBar.BaseFragment) r21)
+            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of((org.telegram.ui.ActionBar.BaseFragment) r22)
             r1 = 2131625239(0x7f0e0517, float:1.887768E38)
             java.lang.String r2 = "EditCantEditPermissionsPublic"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
@@ -1489,7 +1492,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r0.show()
             goto L_0x0162
         L_0x014e:
-            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of((org.telegram.ui.ActionBar.BaseFragment) r21)
+            org.telegram.ui.Components.BulletinFactory r0 = org.telegram.ui.Components.BulletinFactory.of((org.telegram.ui.ActionBar.BaseFragment) r22)
             r1 = 2131625238(0x7f0e0516, float:1.8877678E38)
             java.lang.String r2 = "EditCantEditPermissions"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
@@ -1678,301 +1681,304 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             return
         L_0x02a8:
             r8 = 0
-            java.lang.String r6 = ""
-            if (r1 == 0) goto L_0x033d
+            java.lang.String r7 = ""
+            if (r1 == 0) goto L_0x0341
             org.telegram.ui.ChatUsersActivity$ListAdapter r1 = r9.listViewAdapter
             org.telegram.tgnet.TLObject r0 = r1.getItem(r0)
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
-            if (r1 == 0) goto L_0x02fd
+            if (r1 == 0) goto L_0x0301
             r1 = r0
             org.telegram.tgnet.TLRPC$ChannelParticipant r1 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r1
-            int r6 = r1.user_id
-            org.telegram.tgnet.TLRPC$TL_chatBannedRights r7 = r1.banned_rights
-            org.telegram.tgnet.TLRPC$TL_chatAdminRights r10 = r1.admin_rights
-            java.lang.String r11 = r1.rank
-            boolean r12 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantAdmin
-            if (r12 != 0) goto L_0x02ca
-            boolean r12 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
-            if (r12 == 0) goto L_0x02ce
-        L_0x02ca:
-            boolean r1 = r1.can_edit
-            if (r1 == 0) goto L_0x02d0
+            org.telegram.tgnet.TLRPC$Peer r7 = r1.peer
+            int r7 = org.telegram.messenger.MessageObject.getPeerId(r7)
+            org.telegram.tgnet.TLRPC$TL_chatBannedRights r10 = r1.banned_rights
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r11 = r1.admin_rights
+            java.lang.String r12 = r1.rank
+            boolean r13 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantAdmin
+            if (r13 != 0) goto L_0x02ce
+            boolean r13 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
+            if (r13 == 0) goto L_0x02d2
         L_0x02ce:
+            boolean r1 = r1.can_edit
+            if (r1 == 0) goto L_0x02d4
+        L_0x02d2:
             r1 = 1
-            goto L_0x02d1
-        L_0x02d0:
+            goto L_0x02d5
+        L_0x02d4:
             r1 = 0
-        L_0x02d1:
-            boolean r12 = r0 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
-            if (r12 == 0) goto L_0x02f7
-            r10 = r0
-            org.telegram.tgnet.TLRPC$TL_channelParticipantCreator r10 = (org.telegram.tgnet.TLRPC$TL_channelParticipantCreator) r10
-            org.telegram.tgnet.TLRPC$TL_chatAdminRights r10 = r10.admin_rights
-            if (r10 != 0) goto L_0x02f7
-            org.telegram.tgnet.TLRPC$TL_chatAdminRights r10 = new org.telegram.tgnet.TLRPC$TL_chatAdminRights
-            r10.<init>()
-            r10.add_admins = r4
-            r10.pin_messages = r4
-            r10.invite_users = r4
-            r10.ban_users = r4
-            r10.delete_messages = r4
-            r10.edit_messages = r4
-            r10.post_messages = r4
-            r10.change_info = r4
-            boolean r12 = r9.isChannel
-            if (r12 != 0) goto L_0x02f7
-            r10.manage_call = r4
-        L_0x02f7:
-            r13 = r10
-            r16 = r11
-            r10 = r1
-            r11 = r6
-            goto L_0x033a
-        L_0x02fd:
+        L_0x02d5:
+            boolean r13 = r0 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
+            if (r13 == 0) goto L_0x02fb
+            r11 = r0
+            org.telegram.tgnet.TLRPC$TL_channelParticipantCreator r11 = (org.telegram.tgnet.TLRPC$TL_channelParticipantCreator) r11
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r11 = r11.admin_rights
+            if (r11 != 0) goto L_0x02fb
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r11 = new org.telegram.tgnet.TLRPC$TL_chatAdminRights
+            r11.<init>()
+            r11.add_admins = r4
+            r11.pin_messages = r4
+            r11.invite_users = r4
+            r11.ban_users = r4
+            r11.delete_messages = r4
+            r11.edit_messages = r4
+            r11.post_messages = r4
+            r11.change_info = r4
+            boolean r13 = r9.isChannel
+            if (r13 != 0) goto L_0x02fb
+            r11.manage_call = r4
+        L_0x02fb:
+            r14 = r11
+            r17 = r12
+            r11 = r1
+            r12 = r7
+            goto L_0x033e
+        L_0x0301:
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$ChatParticipant
-            if (r1 == 0) goto L_0x0334
+            if (r1 == 0) goto L_0x0338
             r1 = r0
             org.telegram.tgnet.TLRPC$ChatParticipant r1 = (org.telegram.tgnet.TLRPC$ChatParticipant) r1
             int r1 = r1.user_id
-            org.telegram.tgnet.TLRPC$Chat r7 = r9.currentChat
-            boolean r7 = r7.creator
-            boolean r10 = r0 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantCreator
-            if (r10 == 0) goto L_0x032a
-            org.telegram.tgnet.TLRPC$TL_chatAdminRights r10 = new org.telegram.tgnet.TLRPC$TL_chatAdminRights
-            r10.<init>()
-            r10.add_admins = r4
-            r10.pin_messages = r4
-            r10.invite_users = r4
-            r10.ban_users = r4
-            r10.delete_messages = r4
-            r10.edit_messages = r4
-            r10.post_messages = r4
-            r10.change_info = r4
-            boolean r11 = r9.isChannel
-            if (r11 != 0) goto L_0x032b
-            r10.manage_call = r4
-            goto L_0x032b
-        L_0x032a:
+            org.telegram.tgnet.TLRPC$Chat r10 = r9.currentChat
+            boolean r10 = r10.creator
+            boolean r11 = r0 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantCreator
+            if (r11 == 0) goto L_0x032e
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r11 = new org.telegram.tgnet.TLRPC$TL_chatAdminRights
+            r11.<init>()
+            r11.add_admins = r4
+            r11.pin_messages = r4
+            r11.invite_users = r4
+            r11.ban_users = r4
+            r11.delete_messages = r4
+            r11.edit_messages = r4
+            r11.post_messages = r4
+            r11.change_info = r4
+            boolean r12 = r9.isChannel
+            if (r12 != 0) goto L_0x032f
+            r11.manage_call = r4
+            goto L_0x032f
+        L_0x032e:
+            r11 = r8
+        L_0x032f:
+            r12 = r1
+            r17 = r7
+            r14 = r11
+            r7 = r0
+            r11 = r10
             r10 = r8
-        L_0x032b:
-            r11 = r1
-            r16 = r6
-            r13 = r10
-            r6 = r0
-            r10 = r7
-            r7 = r8
-            goto L_0x03af
-        L_0x0334:
-            r16 = r6
-            r7 = r8
-            r13 = r7
-            r10 = 0
+            goto L_0x03b8
+        L_0x0338:
+            r17 = r7
+            r10 = r8
+            r14 = r10
             r11 = 0
-        L_0x033a:
-            r6 = r0
-            goto L_0x03af
-        L_0x033d:
+            r12 = 0
+        L_0x033e:
+            r7 = r0
+            goto L_0x03b8
+        L_0x0341:
             org.telegram.ui.ChatUsersActivity$SearchAdapter r1 = r9.searchListViewAdapter
             org.telegram.tgnet.TLObject r0 = r1.getItem(r0)
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$User
-            if (r1 == 0) goto L_0x035c
+            if (r1 == 0) goto L_0x0360
             org.telegram.tgnet.TLRPC$User r0 = (org.telegram.tgnet.TLRPC$User) r0
-            org.telegram.messenger.MessagesController r1 = r21.getMessagesController()
+            org.telegram.messenger.MessagesController r1 = r22.getMessagesController()
             r1.putUser(r0, r3)
             int r0 = r0.id
             org.telegram.tgnet.TLObject r1 = r9.getAnyParticipant(r0)
-            r20 = r1
+            r21 = r1
             r1 = r0
-            r0 = r20
-            goto L_0x0367
-        L_0x035c:
+            r0 = r21
+            goto L_0x036b
+        L_0x0360:
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
-            if (r1 != 0) goto L_0x0366
+            if (r1 != 0) goto L_0x036a
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$ChatParticipant
-            if (r1 == 0) goto L_0x0365
-            goto L_0x0366
-        L_0x0365:
+            if (r1 == 0) goto L_0x0369
+            goto L_0x036a
+        L_0x0369:
             r0 = r8
-        L_0x0366:
+        L_0x036a:
             r1 = 0
-        L_0x0367:
-            boolean r7 = r0 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
-            if (r7 == 0) goto L_0x0390
+        L_0x036b:
+            boolean r10 = r0 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
+            if (r10 == 0) goto L_0x0398
             r1 = r0
             org.telegram.tgnet.TLRPC$ChannelParticipant r1 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r1
-            int r6 = r1.user_id
-            boolean r7 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantAdmin
-            if (r7 != 0) goto L_0x0378
-            boolean r7 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
-            if (r7 == 0) goto L_0x037c
-        L_0x0378:
-            boolean r7 = r1.can_edit
-            if (r7 == 0) goto L_0x037e
-        L_0x037c:
-            r7 = 1
-            goto L_0x037f
-        L_0x037e:
-            r7 = 0
-        L_0x037f:
-            org.telegram.tgnet.TLRPC$TL_chatBannedRights r10 = r1.banned_rights
-            org.telegram.tgnet.TLRPC$TL_chatAdminRights r11 = r1.admin_rights
+            org.telegram.tgnet.TLRPC$Peer r7 = r1.peer
+            int r7 = org.telegram.messenger.MessageObject.getPeerId(r7)
+            boolean r10 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantAdmin
+            if (r10 != 0) goto L_0x0380
+            boolean r10 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
+            if (r10 == 0) goto L_0x0384
+        L_0x0380:
+            boolean r10 = r1.can_edit
+            if (r10 == 0) goto L_0x0386
+        L_0x0384:
+            r10 = 1
+            goto L_0x0387
+        L_0x0386:
+            r10 = 0
+        L_0x0387:
+            org.telegram.tgnet.TLRPC$TL_chatBannedRights r11 = r1.banned_rights
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r12 = r1.admin_rights
             java.lang.String r1 = r1.rank
-            r16 = r1
-            r13 = r11
-            r11 = r6
-            r6 = r0
-            r20 = r10
-            r10 = r7
-            r7 = r20
-            goto L_0x03af
-        L_0x0390:
-            boolean r7 = r0 instanceof org.telegram.tgnet.TLRPC$ChatParticipant
-            if (r7 == 0) goto L_0x03a4
+            r17 = r1
+            r14 = r12
+            r12 = r7
+            r7 = r0
+            r21 = r11
+            r11 = r10
+            r10 = r21
+            goto L_0x03b8
+        L_0x0398:
+            boolean r10 = r0 instanceof org.telegram.tgnet.TLRPC$ChatParticipant
+            if (r10 == 0) goto L_0x03ad
             r1 = r0
             org.telegram.tgnet.TLRPC$ChatParticipant r1 = (org.telegram.tgnet.TLRPC$ChatParticipant) r1
             int r1 = r1.user_id
-            org.telegram.tgnet.TLRPC$Chat r7 = r9.currentChat
-            boolean r7 = r7.creator
-            r11 = r1
-            r16 = r6
-            r10 = r7
-            r7 = r8
-            r13 = r7
-            goto L_0x033a
-        L_0x03a4:
-            r11 = r1
-            r16 = r6
-            r7 = r8
-            r13 = r7
-            if (r0 != 0) goto L_0x03ad
-            r10 = 1
-            goto L_0x033a
+            org.telegram.tgnet.TLRPC$Chat r10 = r9.currentChat
+            boolean r10 = r10.creator
+            r12 = r1
+            r17 = r7
+            r14 = r8
+            r11 = r10
+            r7 = r0
+            r10 = r14
+            goto L_0x03b8
         L_0x03ad:
-            r10 = 0
-            goto L_0x033a
-        L_0x03af:
-            if (r11 == 0) goto L_0x04ed
+            r12 = r1
+            r17 = r7
+            r10 = r8
+            r14 = r10
+            if (r0 != 0) goto L_0x03b6
+            r11 = 1
+            goto L_0x033e
+        L_0x03b6:
+            r11 = 0
+            goto L_0x033e
+        L_0x03b8:
+            if (r12 == 0) goto L_0x04ff
             int r0 = r9.selectType
-            if (r0 == 0) goto L_0x044c
-            if (r0 == r2) goto L_0x03bf
-            if (r0 != r4) goto L_0x03ba
-            goto L_0x03bf
-        L_0x03ba:
-            r9.removeUser(r11)
-            goto L_0x04ed
-        L_0x03bf:
-            if (r0 == r4) goto L_0x042f
-            if (r10 == 0) goto L_0x042f
-            boolean r1 = r6 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantAdmin
-            if (r1 != 0) goto L_0x03cb
-            boolean r1 = r6 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantAdmin
-            if (r1 == 0) goto L_0x042f
-        L_0x03cb:
-            org.telegram.messenger.MessagesController r0 = r21.getMessagesController()
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r11)
+            if (r0 == 0) goto L_0x0455
+            if (r0 == r5) goto L_0x03c8
+            if (r0 != r4) goto L_0x03c3
+            goto L_0x03c8
+        L_0x03c3:
+            r9.removeParticipant(r12)
+            goto L_0x04ff
+        L_0x03c8:
+            if (r0 == r4) goto L_0x0438
+            if (r11 == 0) goto L_0x0438
+            boolean r1 = r7 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantAdmin
+            if (r1 != 0) goto L_0x03d4
+            boolean r1 = r7 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantAdmin
+            if (r1 == 0) goto L_0x0438
+        L_0x03d4:
+            org.telegram.messenger.MessagesController r0 = r22.getMessagesController()
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r12)
             org.telegram.tgnet.TLRPC$User r2 = r0.getUser(r1)
-            org.telegram.ui.ActionBar.AlertDialog$Builder r11 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            android.app.Activity r0 = r21.getParentActivity()
-            r11.<init>((android.content.Context) r0)
+            org.telegram.ui.ActionBar.AlertDialog$Builder r12 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            android.app.Activity r0 = r22.getParentActivity()
+            r12.<init>((android.content.Context) r0)
             r0 = 2131624281(0x7f0e0159, float:1.8875737E38)
             java.lang.String r1 = "AppName"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r11.setTitle(r0)
+            r12.setTitle(r0)
             r0 = 2131624233(0x7f0e0129, float:1.887564E38)
             java.lang.Object[] r1 = new java.lang.Object[r4]
             java.lang.String r4 = org.telegram.messenger.UserObject.getUserName(r2)
             r1[r3] = r4
             java.lang.String r3 = "AdminWillBeRemoved"
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r3, r0, r1)
-            r11.setMessage(r0)
+            r12.setMessage(r0)
             r0 = 2131626483(0x7f0e09f3, float:1.8880203E38)
             java.lang.String r1 = "OK"
-            java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            org.telegram.ui.-$$Lambda$ChatUsersActivity$GDkHXwoamCn6kq8XE81r3lcS8vE r14 = new org.telegram.ui.-$$Lambda$ChatUsersActivity$GDkHXwoamCn6kq8XE81r3lcS8vE
-            r0 = r14
-            r1 = r21
-            r3 = r6
-            r4 = r13
-            r5 = r7
-            r6 = r16
-            r7 = r10
+            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            org.telegram.ui.-$$Lambda$ChatUsersActivity$GDkHXwoamCn6kq8XE81r3lcS8vE r15 = new org.telegram.ui.-$$Lambda$ChatUsersActivity$GDkHXwoamCn6kq8XE81r3lcS8vE
+            r0 = r15
+            r1 = r22
+            r3 = r7
+            r4 = r14
+            r5 = r10
+            r6 = r17
+            r7 = r11
             r0.<init>(r2, r3, r4, r5, r6, r7)
-            r11.setPositiveButton(r12, r14)
+            r12.setPositiveButton(r13, r15)
             r0 = 2131624638(0x7f0e02be, float:1.8876461E38)
             java.lang.String r1 = "Cancel"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r11.setNegativeButton(r0, r8)
-            org.telegram.ui.ActionBar.AlertDialog r0 = r11.create()
+            r12.setNegativeButton(r0, r8)
+            org.telegram.ui.ActionBar.AlertDialog r0 = r12.create()
             r9.showDialog(r0)
-            goto L_0x04ed
-        L_0x042f:
-            if (r0 != r4) goto L_0x0433
+            goto L_0x04ff
+        L_0x0438:
+            if (r0 != r4) goto L_0x043c
             r8 = 0
-            goto L_0x0434
-        L_0x0433:
-            r8 = 1
-        L_0x0434:
-            if (r0 == r4) goto L_0x043b
-            if (r0 != r2) goto L_0x0439
-            goto L_0x043b
-        L_0x0439:
-            r12 = 0
-            goto L_0x043c
-        L_0x043b:
-            r12 = 1
+            goto L_0x043d
         L_0x043c:
-            r0 = r21
-            r1 = r11
-            r2 = r6
-            r3 = r13
-            r4 = r7
-            r5 = r16
-            r6 = r10
+            r8 = 1
+        L_0x043d:
+            if (r0 == r4) goto L_0x0444
+            if (r0 != r5) goto L_0x0442
+            goto L_0x0444
+        L_0x0442:
+            r13 = 0
+            goto L_0x0445
+        L_0x0444:
+            r13 = 1
+        L_0x0445:
+            r0 = r22
+            r1 = r12
+            r2 = r7
+            r3 = r14
+            r4 = r10
+            r5 = r17
+            r6 = r11
             r7 = r8
-            r8 = r12
+            r8 = r13
             r0.openRightsEdit(r1, r2, r3, r4, r5, r6, r7, r8)
-            goto L_0x04ed
-        L_0x044c:
+            goto L_0x04ff
+        L_0x0455:
             int r0 = r9.type
-            if (r0 != r4) goto L_0x0466
-            org.telegram.messenger.UserConfig r0 = r21.getUserConfig()
+            if (r0 != r4) goto L_0x046f
+            org.telegram.messenger.UserConfig r0 = r22.getUserConfig()
             int r0 = r0.getClientUserId()
-            if (r11 == r0) goto L_0x0464
+            if (r12 == r0) goto L_0x046d
             org.telegram.tgnet.TLRPC$Chat r0 = r9.currentChat
             boolean r0 = r0.creator
-            if (r0 != 0) goto L_0x0462
-            if (r10 == 0) goto L_0x0464
-        L_0x0462:
-            r0 = 1
-            goto L_0x0474
-        L_0x0464:
-            r0 = 0
-            goto L_0x0474
-        L_0x0466:
-            if (r0 == 0) goto L_0x046e
-            if (r0 != r2) goto L_0x046b
-            goto L_0x046e
+            if (r0 != 0) goto L_0x046b
+            if (r11 == 0) goto L_0x046d
         L_0x046b:
-            r18 = 0
-            goto L_0x0476
-        L_0x046e:
+            r0 = 1
+            goto L_0x047d
+        L_0x046d:
+            r0 = 0
+            goto L_0x047d
+        L_0x046f:
+            if (r0 == 0) goto L_0x0477
+            if (r0 != r5) goto L_0x0474
+            goto L_0x0477
+        L_0x0474:
+            r19 = 0
+            goto L_0x047f
+        L_0x0477:
             org.telegram.tgnet.TLRPC$Chat r0 = r9.currentChat
             boolean r0 = org.telegram.messenger.ChatObject.canBlockUsers(r0)
-        L_0x0474:
-            r18 = r0
-        L_0x0476:
+        L_0x047d:
+            r19 = r0
+        L_0x047f:
             int r0 = r9.type
-            if (r0 == 0) goto L_0x04cf
-            if (r0 == r4) goto L_0x0480
+            if (r0 == 0) goto L_0x04da
+            if (r0 == r4) goto L_0x0489
             boolean r1 = r9.isChannel
-            if (r1 != 0) goto L_0x04cf
-        L_0x0480:
-            if (r0 != r5) goto L_0x0487
+            if (r1 != 0) goto L_0x04da
+        L_0x0489:
+            if (r0 != r6) goto L_0x0490
             int r0 = r9.selectType
-            if (r0 != 0) goto L_0x0487
-            goto L_0x04cf
-        L_0x0487:
-            if (r7 != 0) goto L_0x04a8
+            if (r0 != 0) goto L_0x0490
+            goto L_0x04da
+        L_0x0490:
+            if (r10 != 0) goto L_0x04b2
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r0 = new org.telegram.tgnet.TLRPC$TL_chatBannedRights
             r0.<init>()
             r0.view_messages = r4
@@ -1987,48 +1993,54 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r0.send_polls = r4
             r0.invite_users = r4
             r0.change_info = r4
-            r15 = r0
-            goto L_0x04a9
-        L_0x04a8:
-            r15 = r7
-        L_0x04a9:
+            r16 = r0
+            goto L_0x04b4
+        L_0x04b2:
+            r16 = r10
+        L_0x04b4:
             org.telegram.ui.ChatRightsEditActivity r0 = new org.telegram.ui.ChatRightsEditActivity
-            int r12 = r9.chatId
-            org.telegram.tgnet.TLRPC$TL_chatBannedRights r14 = r9.defaultBannedRights
+            int r13 = r9.chatId
+            org.telegram.tgnet.TLRPC$TL_chatBannedRights r15 = r9.defaultBannedRights
             int r1 = r9.type
-            if (r1 != r4) goto L_0x04b6
-            r17 = 0
-            goto L_0x04b8
-        L_0x04b6:
-            r17 = 1
-        L_0x04b8:
-            if (r6 != 0) goto L_0x04bd
-            r19 = 1
-            goto L_0x04bf
-        L_0x04bd:
-            r19 = 0
-        L_0x04bf:
-            r10 = r0
-            r10.<init>(r11, r12, r13, r14, r15, r16, r17, r18, r19)
+            if (r1 != r4) goto L_0x04c1
+            r18 = 0
+            goto L_0x04c3
+        L_0x04c1:
+            r18 = 1
+        L_0x04c3:
+            if (r7 != 0) goto L_0x04c8
+            r20 = 1
+            goto L_0x04ca
+        L_0x04c8:
+            r20 = 0
+        L_0x04ca:
+            r11 = r0
+            r11.<init>(r12, r13, r14, r15, r16, r17, r18, r19, r20)
             org.telegram.ui.ChatUsersActivity$11 r1 = new org.telegram.ui.ChatUsersActivity$11
-            r1.<init>(r6)
+            r1.<init>(r7)
             r0.setDelegate(r1)
             r9.presentFragment(r0)
-            goto L_0x04ed
-        L_0x04cf:
-            org.telegram.messenger.UserConfig r0 = r21.getUserConfig()
-            int r0 = r0.getClientUserId()
-            if (r11 != r0) goto L_0x04da
-            return
+            goto L_0x04ff
         L_0x04da:
+            org.telegram.messenger.UserConfig r0 = r22.getUserConfig()
+            int r0 = r0.getClientUserId()
+            if (r12 != r0) goto L_0x04e5
+            return
+        L_0x04e5:
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
+            if (r12 <= 0) goto L_0x04f3
             java.lang.String r1 = "user_id"
-            r0.putInt(r1, r11)
+            r0.putInt(r1, r12)
+            goto L_0x04f7
+        L_0x04f3:
+            int r1 = -r12
+            r0.putInt(r2, r1)
+        L_0x04f7:
             org.telegram.ui.ProfileActivity r1 = new org.telegram.ui.ProfileActivity
             r1.<init>(r0)
             r9.presentFragment(r1)
-        L_0x04ed:
+        L_0x04ff:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.lambda$createView$1$ChatUsersActivity(android.view.View, int):void");
@@ -2118,7 +2130,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (!(tLObject instanceof TLRPC$ChannelParticipant) || !(tLObject2 instanceof TLRPC$ChannelParticipant)) {
             return 0;
         }
-        return ((TLRPC$ChannelParticipant) tLObject).user_id - ((TLRPC$ChannelParticipant) tLObject2).user_id;
+        return MessageObject.getPeerId(((TLRPC$ChannelParticipant) tLObject).peer) - MessageObject.getPeerId(((TLRPC$ChannelParticipant) tLObject2).peer);
     }
 
     /* access modifiers changed from: private */
@@ -2200,8 +2212,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             TLObject tLObject = sparseArray.get(tLRPC$User.id);
             if (tLObject instanceof TLRPC$ChannelParticipant) {
                 TLRPC$TL_channelParticipantCreator tLRPC$TL_channelParticipantCreator = new TLRPC$TL_channelParticipantCreator();
+                TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+                tLRPC$TL_channelParticipantCreator.peer = tLRPC$TL_peerUser;
                 int i2 = tLRPC$User.id;
-                tLRPC$TL_channelParticipantCreator.user_id = i2;
+                tLRPC$TL_peerUser.user_id = i2;
                 sparseArray.put(i2, tLRPC$TL_channelParticipantCreator);
                 int indexOf = arrayList.indexOf(tLObject);
                 if (indexOf >= 0) {
@@ -2216,7 +2230,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             TLObject tLObject2 = sparseArray.get(clientUserId);
             if (tLObject2 instanceof TLRPC$ChannelParticipant) {
                 TLRPC$TL_channelParticipantAdmin tLRPC$TL_channelParticipantAdmin = new TLRPC$TL_channelParticipantAdmin();
-                tLRPC$TL_channelParticipantAdmin.user_id = clientUserId;
+                TLRPC$TL_peerUser tLRPC$TL_peerUser2 = new TLRPC$TL_peerUser();
+                tLRPC$TL_channelParticipantAdmin.peer = tLRPC$TL_peerUser2;
+                tLRPC$TL_peerUser2.user_id = clientUserId;
                 tLRPC$TL_channelParticipantAdmin.self = true;
                 tLRPC$TL_channelParticipantAdmin.inviter_id = clientUserId;
                 tLRPC$TL_channelParticipantAdmin.promoted_by = clientUserId;
@@ -2280,8 +2296,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         }
         if (!z2) {
             TLRPC$TL_channelParticipantCreator tLRPC$TL_channelParticipantCreator2 = new TLRPC$TL_channelParticipantCreator();
+            TLRPC$TL_peerUser tLRPC$TL_peerUser3 = new TLRPC$TL_peerUser();
+            tLRPC$TL_channelParticipantCreator2.peer = tLRPC$TL_peerUser3;
             int i3 = tLRPC$User.id;
-            tLRPC$TL_channelParticipantCreator2.user_id = i3;
+            tLRPC$TL_peerUser3.user_id = i3;
             this.participantsMap.put(i3, tLRPC$TL_channelParticipantCreator2);
             this.participants.add(tLRPC$TL_channelParticipantCreator2);
             sortAdmins(this.participants);
@@ -2321,9 +2339,19 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
 
             /* access modifiers changed from: protected */
             public void onTransitionAnimationEnd(boolean z, boolean z2) {
-                TLRPC$User user;
-                if (!z && z2 && zArr2[0] && BulletinFactory.canShowBulletin(this.this$0) && (user = getMessagesController().getUser(Integer.valueOf(i4))) != null) {
-                    BulletinFactory.createPromoteToAdminBulletin(this.this$0, user.first_name).show();
+                if (!z && z2 && zArr2[0] && BulletinFactory.canShowBulletin(this.this$0)) {
+                    if (i4 > 0) {
+                        TLRPC$User user = getMessagesController().getUser(Integer.valueOf(i4));
+                        if (user != null) {
+                            BulletinFactory.createPromoteToAdminBulletin(this.this$0, user.first_name).show();
+                            return;
+                        }
+                        return;
+                    }
+                    TLRPC$Chat chat = getMessagesController().getChat(Integer.valueOf(-i4));
+                    if (chat != null) {
+                        BulletinFactory.createPromoteToAdminBulletin(this.this$0, chat.title).show();
+                    }
                 }
             }
         };
@@ -2345,7 +2373,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         }
                         TLObject tLObject = (TLObject) ChatUsersActivity.this.participants.get(i3);
                         if (tLObject instanceof TLRPC$ChannelParticipant) {
-                            if (((TLRPC$ChannelParticipant) tLObject).user_id == i6) {
+                            if (MessageObject.getPeerId(((TLRPC$ChannelParticipant) tLObject).peer) == i6) {
                                 if (i == 1) {
                                     tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantAdmin();
                                 } else {
@@ -2354,7 +2382,15 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                                 tLRPC$ChannelParticipant.admin_rights = tLRPC$TL_chatAdminRights;
                                 tLRPC$ChannelParticipant.banned_rights = tLRPC$TL_chatBannedRights;
                                 tLRPC$ChannelParticipant.inviter_id = ChatUsersActivity.this.getUserConfig().getClientUserId();
-                                tLRPC$ChannelParticipant.user_id = i6;
+                                if (i6 > 0) {
+                                    TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+                                    tLRPC$ChannelParticipant.peer = tLRPC$TL_peerUser;
+                                    tLRPC$TL_peerUser.user_id = i6;
+                                } else {
+                                    TLRPC$TL_peerChannel tLRPC$TL_peerChannel = new TLRPC$TL_peerChannel();
+                                    tLRPC$ChannelParticipant.peer = tLRPC$TL_peerChannel;
+                                    tLRPC$TL_peerChannel.channel_id = -i6;
+                                }
                                 tLRPC$ChannelParticipant.date = i7;
                                 tLRPC$ChannelParticipant.flags |= 4;
                                 tLRPC$ChannelParticipant.rank = str;
@@ -2428,12 +2464,12 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         presentFragment(chatRightsEditActivity, z3);
     }
 
-    private void removeUser(int i) {
+    private void removeParticipant(int i) {
         if (ChatObject.isChannel(this.currentChat)) {
-            getMessagesController().deleteUserFromChat(this.chatId, getMessagesController().getUser(Integer.valueOf(i)), (TLRPC$ChatFull) null);
+            getMessagesController().deleteParticipantFromChat(this.chatId, getMessagesController().getUser(Integer.valueOf(i)), (TLRPC$ChatFull) null);
             ChatUsersActivityDelegate chatUsersActivityDelegate = this.delegate;
             if (chatUsersActivityDelegate != null) {
-                chatUsersActivityDelegate.didUserKicked(i);
+                chatUsersActivityDelegate.didKickParticipant(i);
             }
             finishFragment();
         }
@@ -2461,7 +2497,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         if (tLObject instanceof TLRPC$ChatParticipant) {
             removeParticipants(((TLRPC$ChatParticipant) tLObject).user_id);
         } else if (tLObject instanceof TLRPC$ChannelParticipant) {
-            removeParticipants(((TLRPC$ChannelParticipant) tLObject).user_id);
+            removeParticipants(MessageObject.getPeerId(((TLRPC$ChannelParticipant) tLObject).peer));
         }
     }
 
@@ -2515,7 +2551,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             } else {
                 sparseArray = this.participantsMap;
             }
-            TLObject tLObject = sparseArray.get(tLRPC$ChannelParticipant.user_id);
+            TLObject tLObject = sparseArray.get(MessageObject.getPeerId(tLRPC$ChannelParticipant.peer));
             if (tLObject instanceof TLRPC$ChannelParticipant) {
                 tLRPC$ChannelParticipant = (TLRPC$ChannelParticipant) tLObject;
                 tLRPC$ChannelParticipant.admin_rights = tLRPC$TL_chatAdminRights;
@@ -2536,8 +2572,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     /* JADX WARNING: type inference failed for: r5v9 */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:120:0x029a A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x029b  */
+    /* JADX WARNING: Removed duplicated region for block: B:121:0x02a0 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:122:0x02a1  */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean createMenuForParticipant(org.telegram.tgnet.TLObject r23, boolean r24) {
@@ -2545,16 +2581,17 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r22 = this;
             r11 = r22
             r6 = r23
-            if (r6 == 0) goto L_0x02d2
+            if (r6 == 0) goto L_0x02d8
             int r1 = r11.selectType
             if (r1 == 0) goto L_0x000c
-            goto L_0x02d2
+            goto L_0x02d8
         L_0x000c:
             boolean r1 = r6 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
-            if (r1 == 0) goto L_0x0029
+            if (r1 == 0) goto L_0x002d
             r1 = r6
             org.telegram.tgnet.TLRPC$ChannelParticipant r1 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r1
-            int r3 = r1.user_id
+            org.telegram.tgnet.TLRPC$Peer r3 = r1.peer
+            int r3 = org.telegram.messenger.MessageObject.getPeerId(r3)
             boolean r4 = r1.can_edit
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r5 = r1.banned_rights
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r7 = r1.admin_rights
@@ -2567,10 +2604,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r21 = r8
             r8 = r7
             r7 = r21
-            goto L_0x0049
-        L_0x0029:
+            goto L_0x004d
+        L_0x002d:
             boolean r1 = r6 instanceof org.telegram.tgnet.TLRPC$ChatParticipant
-            if (r1 == 0) goto L_0x0043
+            if (r1 == 0) goto L_0x0047
             r1 = r6
             org.telegram.tgnet.TLRPC$ChatParticipant r1 = (org.telegram.tgnet.TLRPC$ChatParticipant) r1
             int r3 = r1.user_id
@@ -2584,80 +2621,80 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r8 = 0
             r9 = 0
             r4 = r3
-            goto L_0x0049
-        L_0x0043:
+            goto L_0x004d
+        L_0x0047:
             r1 = 0
             r4 = 0
             r7 = 0
             r8 = 0
             r9 = 0
             r10 = 0
-        L_0x0049:
-            if (r4 == 0) goto L_0x02d0
+        L_0x004d:
+            if (r4 == 0) goto L_0x02d6
             org.telegram.messenger.UserConfig r3 = r22.getUserConfig()
             int r3 = r3.getClientUserId()
-            if (r4 != r3) goto L_0x0057
-            goto L_0x02d0
-        L_0x0057:
+            if (r4 != r3) goto L_0x005b
+            goto L_0x02d6
+        L_0x005b:
             int r3 = r11.type
             java.lang.String r13 = "EditAdminRights"
             java.lang.String r14 = "dialogRedIcon"
             java.lang.String r15 = "dialogTextRed2"
             r2 = 2
             r5 = 1
-            if (r3 != r2) goto L_0x01c7
+            if (r3 != r2) goto L_0x01cb
             org.telegram.messenger.MessagesController r3 = r22.getMessagesController()
             java.lang.Integer r2 = java.lang.Integer.valueOf(r4)
             org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r2)
             org.telegram.tgnet.TLRPC$Chat r2 = r11.currentChat
             boolean r2 = org.telegram.messenger.ChatObject.canAddAdmins(r2)
-            if (r2 == 0) goto L_0x0087
+            if (r2 == 0) goto L_0x008b
             boolean r2 = r6 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipant
-            if (r2 != 0) goto L_0x0085
+            if (r2 != 0) goto L_0x0089
             boolean r2 = r6 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantBanned
-            if (r2 != 0) goto L_0x0085
+            if (r2 != 0) goto L_0x0089
             boolean r2 = r6 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipant
-            if (r2 != 0) goto L_0x0085
-            if (r1 == 0) goto L_0x0087
-        L_0x0085:
+            if (r2 != 0) goto L_0x0089
+            if (r1 == 0) goto L_0x008b
+        L_0x0089:
             r2 = 1
-            goto L_0x0088
-        L_0x0087:
+            goto L_0x008c
+        L_0x008b:
             r2 = 0
-        L_0x0088:
+        L_0x008c:
             boolean r0 = r6 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantAdmin
-            if (r0 != 0) goto L_0x0098
+            if (r0 != 0) goto L_0x009c
             boolean r12 = r6 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
-            if (r12 != 0) goto L_0x0098
+            if (r12 != 0) goto L_0x009c
             boolean r12 = r6 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantCreator
-            if (r12 != 0) goto L_0x0098
+            if (r12 != 0) goto L_0x009c
             boolean r12 = r6 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantAdmin
-            if (r12 == 0) goto L_0x009a
-        L_0x0098:
-            if (r1 == 0) goto L_0x009c
-        L_0x009a:
-            r12 = 1
-            goto L_0x009d
+            if (r12 == 0) goto L_0x009e
         L_0x009c:
+            if (r1 == 0) goto L_0x00a0
+        L_0x009e:
+            r12 = 1
+            goto L_0x00a1
+        L_0x00a0:
             r12 = 0
-        L_0x009d:
-            if (r0 != 0) goto L_0x00a6
+        L_0x00a1:
+            if (r0 != 0) goto L_0x00aa
             boolean r0 = r6 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantAdmin
-            if (r0 == 0) goto L_0x00a4
-            goto L_0x00a6
-        L_0x00a4:
+            if (r0 == 0) goto L_0x00a8
+            goto L_0x00aa
+        L_0x00a8:
             r0 = 0
-            goto L_0x00a7
-        L_0x00a6:
+            goto L_0x00ab
+        L_0x00aa:
             r0 = 1
-        L_0x00a7:
+        L_0x00ab:
             int r1 = r11.selectType
-            if (r1 != 0) goto L_0x00b1
+            if (r1 != 0) goto L_0x00b5
             boolean r1 = org.telegram.messenger.UserObject.isDeleted(r3)
             r1 = r1 ^ r5
             r2 = r2 & r1
-        L_0x00b1:
-            if (r24 != 0) goto L_0x00c7
+        L_0x00b5:
+            if (r24 != 0) goto L_0x00cb
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
             java.util.ArrayList r16 = new java.util.ArrayList
@@ -2666,25 +2703,25 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r18.<init>()
             r20 = r16
             r19 = r18
-            goto L_0x00cc
-        L_0x00c7:
+            goto L_0x00d0
+        L_0x00cb:
             r1 = 0
             r19 = 0
             r20 = 0
-        L_0x00cc:
-            if (r2 == 0) goto L_0x00fe
-            if (r24 == 0) goto L_0x00d1
+        L_0x00d0:
+            if (r2 == 0) goto L_0x0102
+            if (r24 == 0) goto L_0x00d5
             return r5
-        L_0x00d1:
-            if (r0 == 0) goto L_0x00db
+        L_0x00d5:
+            if (r0 == 0) goto L_0x00df
             r0 = 2131625225(0x7f0e0509, float:1.8877652E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r13, r0)
-            goto L_0x00e4
-        L_0x00db:
+            goto L_0x00e8
+        L_0x00df:
             r0 = 2131627358(0x7f0e0d5e, float:1.8881978E38)
             java.lang.String r2 = "SetAsAdmin"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
-        L_0x00e4:
+        L_0x00e8:
             r1.add(r0)
             r0 = 2131165247(0x7var_f, float:1.7944706E38)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
@@ -2694,23 +2731,23 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             java.lang.Integer r13 = java.lang.Integer.valueOf(r0)
             r0 = r20
             r0.add(r13)
-            goto L_0x0102
-        L_0x00fe:
+            goto L_0x0106
+        L_0x0102:
             r2 = r19
             r0 = r20
-        L_0x0102:
+        L_0x0106:
             org.telegram.tgnet.TLRPC$Chat r13 = r11.currentChat
             boolean r13 = org.telegram.messenger.ChatObject.canBlockUsers(r13)
-            if (r13 == 0) goto L_0x0166
-            if (r12 == 0) goto L_0x0166
-            if (r24 == 0) goto L_0x010f
+            if (r13 == 0) goto L_0x016a
+            if (r12 == 0) goto L_0x016a
+            if (r24 == 0) goto L_0x0113
             return r5
-        L_0x010f:
+        L_0x0113:
             boolean r13 = r11.isChannel
-            if (r13 != 0) goto L_0x0146
+            if (r13 != 0) goto L_0x014a
             org.telegram.tgnet.TLRPC$Chat r13 = r11.currentChat
             boolean r13 = org.telegram.messenger.ChatObject.isChannel(r13)
-            if (r13 == 0) goto L_0x0139
+            if (r13 == 0) goto L_0x013d
             r13 = 2131624663(0x7f0e02d7, float:1.8876512E38)
             java.lang.String r5 = "ChangePermissions"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r13)
@@ -2721,18 +2758,18 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r5 = 1
             java.lang.Integer r13 = java.lang.Integer.valueOf(r5)
             r0.add(r13)
-        L_0x0139:
+        L_0x013d:
             r13 = 2131625882(0x7f0e079a, float:1.8878984E38)
             java.lang.String r5 = "KickFromGroup"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r13)
             r1.add(r5)
-            goto L_0x0152
-        L_0x0146:
+            goto L_0x0156
+        L_0x014a:
             r5 = 2131624754(0x7f0e0332, float:1.8876697E38)
             java.lang.String r13 = "ChannelRemoveUser"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r13, r5)
             r1.add(r5)
-        L_0x0152:
+        L_0x0156:
             r5 = 2131165254(0x7var_, float:1.794472E38)
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             r2.add(r5)
@@ -2740,15 +2777,15 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             r0.add(r5)
             r13 = 1
-            goto L_0x0167
-        L_0x0166:
+            goto L_0x016b
+        L_0x016a:
             r13 = 0
-        L_0x0167:
-            if (r0 == 0) goto L_0x01c5
+        L_0x016b:
+            if (r0 == 0) goto L_0x01c9
             boolean r5 = r0.isEmpty()
-            if (r5 == 0) goto L_0x0170
-            goto L_0x01c5
-        L_0x0170:
+            if (r5 == 0) goto L_0x0174
+            goto L_0x01c9
+        L_0x0174:
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r6 = r22.getParentActivity()
             r5.<init>((android.content.Context) r6)
@@ -2775,34 +2812,34 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r13.setItems(r12, r15, r14)
             org.telegram.ui.ActionBar.AlertDialog r0 = r13.create()
             r11.showDialog(r0)
-            if (r24 == 0) goto L_0x01c2
+            if (r24 == 0) goto L_0x01c6
             int r1 = r17.size()
             r12 = 1
             int r1 = r1 - r12
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r19)
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r18)
             r0.setItemColor(r1, r2, r3)
-            goto L_0x02cf
-        L_0x01c2:
+            goto L_0x02d5
+        L_0x01c6:
             r12 = 1
-            goto L_0x02cf
-        L_0x01c5:
+            goto L_0x02d5
+        L_0x01c9:
             r0 = 0
             return r0
-        L_0x01c7:
+        L_0x01cb:
             r18 = r14
             r19 = r15
             r12 = 1
             r0 = 3
             r2 = 2131624701(0x7f0e02fd, float:1.887659E38)
             java.lang.String r5 = "ChannelDeleteFromList"
-            if (r3 != r0) goto L_0x0200
+            if (r3 != r0) goto L_0x0204
             org.telegram.tgnet.TLRPC$Chat r0 = r11.currentChat
             boolean r0 = org.telegram.messenger.ChatObject.canBlockUsers(r0)
-            if (r0 == 0) goto L_0x0200
-            if (r24 == 0) goto L_0x01df
+            if (r0 == 0) goto L_0x0204
+            if (r24 == 0) goto L_0x01e3
             return r12
-        L_0x01df:
+        L_0x01e3:
             r0 = 2
             java.lang.CharSequence[] r1 = new java.lang.CharSequence[r0]
             r3 = 2131624707(0x7f0e0303, float:1.8876601E38)
@@ -2814,40 +2851,41 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r1[r12] = r2
             int[] r2 = new int[r0]
             r2 = {NUM, NUM} // fill-array
-        L_0x01f9:
+        L_0x01fd:
             r6 = r23
             r13 = r1
             r14 = r2
             r5 = 0
-            goto L_0x0298
-        L_0x0200:
+            goto L_0x029e
+        L_0x0204:
             int r0 = r11.type
-            if (r0 != 0) goto L_0x023f
+            if (r0 != 0) goto L_0x0245
             org.telegram.tgnet.TLRPC$Chat r0 = r11.currentChat
             boolean r0 = org.telegram.messenger.ChatObject.canBlockUsers(r0)
-            if (r0 == 0) goto L_0x023f
-            if (r24 == 0) goto L_0x020f
+            if (r0 == 0) goto L_0x0245
+            if (r24 == 0) goto L_0x0213
             return r12
-        L_0x020f:
+        L_0x0213:
             r0 = 2
             java.lang.CharSequence[] r1 = new java.lang.CharSequence[r0]
             org.telegram.tgnet.TLRPC$Chat r0 = r11.currentChat
             boolean r0 = org.telegram.messenger.ChatObject.canAddUsers(r0)
-            if (r0 == 0) goto L_0x022e
+            if (r0 == 0) goto L_0x0234
+            if (r4 <= 0) goto L_0x0234
             boolean r0 = r11.isChannel
-            if (r0 == 0) goto L_0x0224
+            if (r0 == 0) goto L_0x022a
             r0 = 2131624676(0x7f0e02e4, float:1.8876538E38)
             java.lang.String r3 = "ChannelAddToChannel"
-            goto L_0x0229
-        L_0x0224:
+            goto L_0x022f
+        L_0x022a:
             r0 = 2131624677(0x7f0e02e5, float:1.887654E38)
             java.lang.String r3 = "ChannelAddToGroup"
-        L_0x0229:
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
-            goto L_0x022f
-        L_0x022e:
-            r0 = 0
         L_0x022f:
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
+            goto L_0x0235
+        L_0x0234:
+            r0 = 0
+        L_0x0235:
             r3 = 0
             r1[r3] = r0
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r2)
@@ -2855,30 +2893,30 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r0 = 2
             int[] r2 = new int[r0]
             r2 = {NUM, NUM} // fill-array
-            goto L_0x01f9
-        L_0x023f:
+            goto L_0x01fd
+        L_0x0245:
             int r0 = r11.type
-            if (r0 != r12) goto L_0x0293
+            if (r0 != r12) goto L_0x0299
             org.telegram.tgnet.TLRPC$Chat r0 = r11.currentChat
             boolean r0 = org.telegram.messenger.ChatObject.canAddAdmins(r0)
-            if (r0 == 0) goto L_0x0293
-            if (r1 == 0) goto L_0x0293
-            if (r24 == 0) goto L_0x0250
+            if (r0 == 0) goto L_0x0299
+            if (r1 == 0) goto L_0x0299
+            if (r24 == 0) goto L_0x0256
             return r12
-        L_0x0250:
+        L_0x0256:
             org.telegram.tgnet.TLRPC$Chat r0 = r11.currentChat
             boolean r0 = r0.creator
             r2 = 2131624755(0x7f0e0333, float:1.8876699E38)
             java.lang.String r3 = "ChannelRemoveUserAdmin"
             r6 = r23
-            if (r0 != 0) goto L_0x0278
+            if (r0 != 0) goto L_0x027e
             boolean r0 = r6 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
-            if (r0 != 0) goto L_0x0266
-            if (r1 == 0) goto L_0x0266
+            if (r0 != 0) goto L_0x026c
+            if (r1 == 0) goto L_0x026c
             r0 = 2
             r5 = 0
-            goto L_0x027a
-        L_0x0266:
+            goto L_0x0280
+        L_0x026c:
             java.lang.CharSequence[] r0 = new java.lang.CharSequence[r12]
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r5 = 0
@@ -2887,11 +2925,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r1 = 2131165254(0x7var_, float:1.794472E38)
             r2[r5] = r1
             r13 = r0
-            goto L_0x0291
-        L_0x0278:
+            goto L_0x0297
+        L_0x027e:
             r5 = 0
             r0 = 2
-        L_0x027a:
+        L_0x0280:
             java.lang.CharSequence[] r1 = new java.lang.CharSequence[r0]
             r7 = 2131625225(0x7f0e0509, float:1.8877652E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r13, r7)
@@ -2901,18 +2939,18 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             int[] r2 = new int[r0]
             r2 = {NUM, NUM} // fill-array
             r13 = r1
-        L_0x0291:
+        L_0x0297:
             r14 = r2
-            goto L_0x0298
-        L_0x0293:
+            goto L_0x029e
+        L_0x0299:
             r6 = r23
             r5 = 0
             r13 = 0
             r14 = 0
-        L_0x0298:
-            if (r13 != 0) goto L_0x029b
+        L_0x029e:
+            if (r13 != 0) goto L_0x02a1
             return r5
-        L_0x029b:
+        L_0x02a1:
             org.telegram.ui.ActionBar.AlertDialog$Builder r15 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r0 = r22.getParentActivity()
             r15.<init>((android.content.Context) r0)
@@ -2931,18 +2969,18 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             org.telegram.ui.ActionBar.AlertDialog r0 = r15.create()
             r11.showDialog(r0)
             int r1 = r11.type
-            if (r1 != r12) goto L_0x02cf
+            if (r1 != r12) goto L_0x02d5
             int r1 = r13.length
             int r1 = r1 - r12
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r19)
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r18)
             r0.setItemColor(r1, r2, r3)
-        L_0x02cf:
+        L_0x02d5:
             return r12
-        L_0x02d0:
+        L_0x02d6:
             r0 = 0
             return r0
-        L_0x02d2:
+        L_0x02d8:
             r0 = 0
             return r0
         */
@@ -2957,7 +2995,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         TLObject tLObject2 = tLObject;
         int i4 = i3;
         if (((Integer) arrayList2.get(i4)).intValue() == 2) {
-            getMessagesController().deleteUserFromChat(this.chatId, tLRPC$User2, (TLRPC$ChatFull) null);
+            getMessagesController().deleteParticipantFromChat(this.chatId, tLRPC$User2, (TLRPC$ChatFull) null);
             removeParticipants(i);
             if (this.currentChat != null && tLRPC$User2 != null && BulletinFactory.canShowBulletin(this)) {
                 BulletinFactory.createRemoveFromChatBulletin(this, tLRPC$User2, this.currentChat.title).show();
@@ -3015,6 +3053,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     public /* synthetic */ void lambda$createMenuForParticipant$9$ChatUsersActivity(CharSequence[] charSequenceArr, int i, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, String str, TLObject tLObject, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, DialogInterface dialogInterface, int i2) {
         int i3;
         int i4;
+        TLRPC$Chat tLRPC$Chat;
         int i5 = i;
         final TLObject tLObject2 = tLObject;
         int i6 = i2;
@@ -3064,7 +3103,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                         }
                     });
                     presentFragment(chatRightsEditActivity2);
-                } else if (i7 == 0) {
+                } else if (i7 == 0 && i5 > 0) {
                     i4 = 1;
                     i3 = i6;
                     getMessagesController().addUserToChat(this.chatId, getMessagesController().getUser(Integer.valueOf(i)), 0, (String) null, this, (Runnable) null);
@@ -3076,7 +3115,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 i4 = 1;
                 if (i3 == 1) {
                     TLRPC$TL_channels_editBanned tLRPC$TL_channels_editBanned = new TLRPC$TL_channels_editBanned();
-                    tLRPC$TL_channels_editBanned.user_id = getMessagesController().getInputUser(i5);
+                    tLRPC$TL_channels_editBanned.participant = getMessagesController().getInputPeer(i5);
                     tLRPC$TL_channels_editBanned.channel = getMessagesController().getInputChannel(this.chatId);
                     tLRPC$TL_channels_editBanned.banned_rights = new TLRPC$TL_chatBannedRights();
                     getConnectionsManager().sendRequest(tLRPC$TL_channels_editBanned, new RequestDelegate() {
@@ -3090,7 +3129,14 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 removeParticipants(tLObject2);
             }
         } else if (i6 == 0) {
-            getMessagesController().deleteUserFromChat(this.chatId, getMessagesController().getUser(Integer.valueOf(i)), (TLRPC$ChatFull) null);
+            TLRPC$User tLRPC$User = null;
+            if (i5 > 0) {
+                tLRPC$Chat = null;
+                tLRPC$User = getMessagesController().getUser(Integer.valueOf(i));
+            } else {
+                tLRPC$Chat = getMessagesController().getChat(Integer.valueOf(-i5));
+            }
+            getMessagesController().deleteParticipantFromChat(this.chatId, tLRPC$User, tLRPC$Chat, (TLRPC$ChatFull) null, false, false);
         }
     }
 
@@ -3527,7 +3573,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:43:0x00e4, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:44:0x00f7, code lost:
         r4 = r7.ignoredUsers;
      */
     /* renamed from: lambda$null$14 */
@@ -3538,7 +3584,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             r0 = 2
             r1 = 0
             r2 = 1
-            if (r8 != 0) goto L_0x0132
+            if (r8 != 0) goto L_0x0141
             org.telegram.tgnet.TLRPC$TL_channels_channelParticipants r9 = (org.telegram.tgnet.TLRPC$TL_channels_channelParticipants) r9
             int r8 = r7.type
             if (r8 != r2) goto L_0x0014
@@ -3549,193 +3595,196 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             org.telegram.messenger.MessagesController r8 = r7.getMessagesController()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r3 = r9.users
             r8.putUsers(r3, r1)
+            org.telegram.messenger.MessagesController r8 = r7.getMessagesController()
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r3 = r9.chats
+            r8.putChats(r3, r1)
             org.telegram.messenger.UserConfig r8 = r7.getUserConfig()
             int r8 = r8.getClientUserId()
             int r3 = r7.selectType
-            if (r3 == 0) goto L_0x0047
+            if (r3 == 0) goto L_0x0054
             r3 = 0
-        L_0x002a:
+        L_0x0033:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChannelParticipant> r4 = r9.participants
             int r4 = r4.size()
-            if (r3 >= r4) goto L_0x0047
+            if (r3 >= r4) goto L_0x0054
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChannelParticipant> r4 = r9.participants
             java.lang.Object r4 = r4.get(r3)
             org.telegram.tgnet.TLRPC$ChannelParticipant r4 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r4
-            int r4 = r4.user_id
-            if (r4 != r8) goto L_0x0044
+            org.telegram.tgnet.TLRPC$Peer r4 = r4.peer
+            int r4 = org.telegram.messenger.MessageObject.getPeerId(r4)
+            if (r4 != r8) goto L_0x0051
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChannelParticipant> r8 = r9.participants
             r8.remove(r3)
-            goto L_0x0047
-        L_0x0044:
+            goto L_0x0054
+        L_0x0051:
             int r3 = r3 + 1
-            goto L_0x002a
-        L_0x0047:
+            goto L_0x0033
+        L_0x0054:
             int r8 = r7.type
-            if (r8 != r0) goto L_0x0069
+            if (r8 != r0) goto L_0x0076
             int r8 = r7.delayResults
             int r8 = r8 - r2
             r7.delayResults = r8
             org.telegram.tgnet.TLRPC$ChannelParticipantsFilter r8 = r10.filter
             boolean r10 = r8 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantsContacts
-            if (r10 == 0) goto L_0x005b
+            if (r10 == 0) goto L_0x0068
             java.util.ArrayList<org.telegram.tgnet.TLObject> r8 = r7.contacts
             android.util.SparseArray<org.telegram.tgnet.TLObject> r10 = r7.contactsMap
-            goto L_0x0070
-        L_0x005b:
+            goto L_0x007d
+        L_0x0068:
             boolean r8 = r8 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantsBots
-            if (r8 == 0) goto L_0x0064
+            if (r8 == 0) goto L_0x0071
             java.util.ArrayList<org.telegram.tgnet.TLObject> r8 = r7.bots
             android.util.SparseArray<org.telegram.tgnet.TLObject> r10 = r7.botsMap
-            goto L_0x0070
-        L_0x0064:
+            goto L_0x007d
+        L_0x0071:
             java.util.ArrayList<org.telegram.tgnet.TLObject> r8 = r7.participants
             android.util.SparseArray<org.telegram.tgnet.TLObject> r10 = r7.participantsMap
-            goto L_0x0070
-        L_0x0069:
+            goto L_0x007d
+        L_0x0076:
             java.util.ArrayList<org.telegram.tgnet.TLObject> r8 = r7.participants
             android.util.SparseArray<org.telegram.tgnet.TLObject> r10 = r7.participantsMap
             r10.clear()
-        L_0x0070:
+        L_0x007d:
             r8.clear()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChannelParticipant> r3 = r9.participants
             r8.addAll(r3)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChannelParticipant> r3 = r9.participants
             int r3 = r3.size()
             r4 = 0
-        L_0x007f:
-            if (r4 >= r3) goto L_0x0091
+        L_0x008c:
+            if (r4 >= r3) goto L_0x00a2
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChannelParticipant> r5 = r9.participants
             java.lang.Object r5 = r5.get(r4)
             org.telegram.tgnet.TLRPC$ChannelParticipant r5 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r5
-            int r6 = r5.user_id
+            org.telegram.tgnet.TLRPC$Peer r6 = r5.peer
+            int r6 = org.telegram.messenger.MessageObject.getPeerId(r6)
             r10.put(r6, r5)
             int r4 = r4 + 1
-            goto L_0x007f
-        L_0x0091:
+            goto L_0x008c
+        L_0x00a2:
             int r9 = r7.type
-            if (r9 != r0) goto L_0x0105
+            if (r9 != r0) goto L_0x0114
             java.util.ArrayList<org.telegram.tgnet.TLObject> r9 = r7.participants
             int r9 = r9.size()
             r10 = 0
-        L_0x009c:
-            if (r10 >= r9) goto L_0x0105
+        L_0x00ad:
+            if (r10 >= r9) goto L_0x0114
             java.util.ArrayList<org.telegram.tgnet.TLObject> r3 = r7.participants
             java.lang.Object r3 = r3.get(r10)
             org.telegram.tgnet.TLObject r3 = (org.telegram.tgnet.TLObject) r3
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
-            if (r4 != 0) goto L_0x00b4
+            if (r4 != 0) goto L_0x00c5
             java.util.ArrayList<org.telegram.tgnet.TLObject> r3 = r7.participants
             r3.remove(r10)
-        L_0x00af:
+        L_0x00c0:
             int r10 = r10 + -1
             int r9 = r9 + -1
-            goto L_0x0103
-        L_0x00b4:
+            goto L_0x0112
+        L_0x00c5:
             org.telegram.tgnet.TLRPC$ChannelParticipant r3 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r3
+            org.telegram.tgnet.TLRPC$Peer r3 = r3.peer
+            int r3 = org.telegram.messenger.MessageObject.getPeerId(r3)
             android.util.SparseArray<org.telegram.tgnet.TLObject> r4 = r7.contactsMap
-            int r5 = r3.user_id
-            java.lang.Object r4 = r4.get(r5)
-            if (r4 != 0) goto L_0x00f3
+            java.lang.Object r4 = r4.get(r3)
+            if (r4 != 0) goto L_0x0104
             android.util.SparseArray<org.telegram.tgnet.TLObject> r4 = r7.botsMap
-            int r5 = r3.user_id
-            java.lang.Object r4 = r4.get(r5)
-            if (r4 == 0) goto L_0x00cb
-            goto L_0x00f3
-        L_0x00cb:
+            java.lang.Object r4 = r4.get(r3)
+            if (r4 == 0) goto L_0x00de
+            goto L_0x0104
+        L_0x00de:
             int r4 = r7.selectType
-            if (r4 != r2) goto L_0x00e4
+            if (r4 != r2) goto L_0x00f7
+            if (r3 <= 0) goto L_0x00f7
             org.telegram.messenger.MessagesController r4 = r7.getMessagesController()
-            int r5 = r3.user_id
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
+            java.lang.Integer r5 = java.lang.Integer.valueOf(r3)
             org.telegram.tgnet.TLRPC$User r4 = r4.getUser(r5)
             boolean r4 = org.telegram.messenger.UserObject.isDeleted(r4)
-            if (r4 == 0) goto L_0x00e4
-            goto L_0x00f3
-        L_0x00e4:
+            if (r4 == 0) goto L_0x00f7
+            goto L_0x0104
+        L_0x00f7:
             android.util.SparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r4 = r7.ignoredUsers
-            if (r4 == 0) goto L_0x00f1
-            int r5 = r3.user_id
-            int r4 = r4.indexOfKey(r5)
-            if (r4 < 0) goto L_0x00f1
-            goto L_0x00f3
-        L_0x00f1:
+            if (r4 == 0) goto L_0x0102
+            int r4 = r4.indexOfKey(r3)
+            if (r4 < 0) goto L_0x0102
+            goto L_0x0104
+        L_0x0102:
             r4 = 0
-            goto L_0x00f4
-        L_0x00f3:
+            goto L_0x0105
+        L_0x0104:
             r4 = 1
-        L_0x00f4:
-            if (r4 == 0) goto L_0x0103
+        L_0x0105:
+            if (r4 == 0) goto L_0x0112
             java.util.ArrayList<org.telegram.tgnet.TLObject> r4 = r7.participants
             r4.remove(r10)
             android.util.SparseArray<org.telegram.tgnet.TLObject> r4 = r7.participantsMap
-            int r3 = r3.user_id
             r4.remove(r3)
-            goto L_0x00af
-        L_0x0103:
+            goto L_0x00c0
+        L_0x0112:
             int r10 = r10 + r2
-            goto L_0x009c
-        L_0x0105:
-            int r9 = r7.type     // Catch:{ Exception -> 0x012e }
-            if (r9 == 0) goto L_0x010e
+            goto L_0x00ad
+        L_0x0114:
+            int r9 = r7.type     // Catch:{ Exception -> 0x013d }
+            if (r9 == 0) goto L_0x011d
             r10 = 3
-            if (r9 == r10) goto L_0x010e
-            if (r9 != r0) goto L_0x0126
-        L_0x010e:
-            org.telegram.tgnet.TLRPC$Chat r10 = r7.currentChat     // Catch:{ Exception -> 0x012e }
-            if (r10 == 0) goto L_0x0126
-            boolean r10 = r10.megagroup     // Catch:{ Exception -> 0x012e }
-            if (r10 == 0) goto L_0x0126
-            org.telegram.tgnet.TLRPC$ChatFull r10 = r7.info     // Catch:{ Exception -> 0x012e }
-            boolean r3 = r10 instanceof org.telegram.tgnet.TLRPC$TL_channelFull     // Catch:{ Exception -> 0x012e }
-            if (r3 == 0) goto L_0x0126
-            int r10 = r10.participants_count     // Catch:{ Exception -> 0x012e }
+            if (r9 == r10) goto L_0x011d
+            if (r9 != r0) goto L_0x0135
+        L_0x011d:
+            org.telegram.tgnet.TLRPC$Chat r10 = r7.currentChat     // Catch:{ Exception -> 0x013d }
+            if (r10 == 0) goto L_0x0135
+            boolean r10 = r10.megagroup     // Catch:{ Exception -> 0x013d }
+            if (r10 == 0) goto L_0x0135
+            org.telegram.tgnet.TLRPC$ChatFull r10 = r7.info     // Catch:{ Exception -> 0x013d }
+            boolean r3 = r10 instanceof org.telegram.tgnet.TLRPC$TL_channelFull     // Catch:{ Exception -> 0x013d }
+            if (r3 == 0) goto L_0x0135
+            int r10 = r10.participants_count     // Catch:{ Exception -> 0x013d }
             r3 = 200(0xc8, float:2.8E-43)
-            if (r10 > r3) goto L_0x0126
-            r7.sortUsers(r8)     // Catch:{ Exception -> 0x012e }
-            goto L_0x0132
-        L_0x0126:
-            if (r9 != r2) goto L_0x0132
-            java.util.ArrayList<org.telegram.tgnet.TLObject> r8 = r7.participants     // Catch:{ Exception -> 0x012e }
-            r7.sortAdmins(r8)     // Catch:{ Exception -> 0x012e }
-            goto L_0x0132
-        L_0x012e:
+            if (r10 > r3) goto L_0x0135
+            r7.sortUsers(r8)     // Catch:{ Exception -> 0x013d }
+            goto L_0x0141
+        L_0x0135:
+            if (r9 != r2) goto L_0x0141
+            java.util.ArrayList<org.telegram.tgnet.TLObject> r8 = r7.participants     // Catch:{ Exception -> 0x013d }
+            r7.sortAdmins(r8)     // Catch:{ Exception -> 0x013d }
+            goto L_0x0141
+        L_0x013d:
             r8 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x0132:
+        L_0x0141:
             int r8 = r7.type
-            if (r8 != r0) goto L_0x013a
+            if (r8 != r0) goto L_0x0149
             int r8 = r7.delayResults
-            if (r8 > 0) goto L_0x014b
-        L_0x013a:
+            if (r8 > 0) goto L_0x015a
+        L_0x0149:
             org.telegram.ui.ChatUsersActivity$ListAdapter r8 = r7.listViewAdapter
-            if (r8 == 0) goto L_0x0143
+            if (r8 == 0) goto L_0x0152
             int r8 = r8.getItemCount()
-            goto L_0x0144
-        L_0x0143:
+            goto L_0x0153
+        L_0x0152:
             r8 = 0
-        L_0x0144:
+        L_0x0153:
             r7.showItemsAnimated(r8)
             r7.loadingUsers = r1
             r7.firstLoaded = r2
-        L_0x014b:
+        L_0x015a:
             r7.updateRows()
             org.telegram.ui.ChatUsersActivity$ListAdapter r8 = r7.listViewAdapter
-            if (r8 == 0) goto L_0x0173
+            if (r8 == 0) goto L_0x0182
             org.telegram.ui.Components.RecyclerListView r8 = r7.listView
             boolean r9 = r7.openTransitionStarted
             r8.setAnimateEmptyView(r9, r1)
             org.telegram.ui.ChatUsersActivity$ListAdapter r8 = r7.listViewAdapter
             r8.notifyDataSetChanged()
             org.telegram.ui.Components.StickerEmptyView r8 = r7.emptyView
-            if (r8 == 0) goto L_0x0173
+            if (r8 == 0) goto L_0x0182
             org.telegram.ui.ChatUsersActivity$ListAdapter r8 = r7.listViewAdapter
             int r8 = r8.getItemCount()
-            if (r8 != 0) goto L_0x0173
+            if (r8 != 0) goto L_0x0182
             boolean r8 = r7.firstLoaded
-            if (r8 == 0) goto L_0x0173
+            if (r8 == 0) goto L_0x0182
             org.telegram.ui.Components.StickerEmptyView r8 = r7.emptyView
             r8.showProgress(r1, r2)
-        L_0x0173:
+        L_0x0182:
             r7.resumeDelayedFragmentAnimation()
             return
         */
@@ -3789,42 +3838,54 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     /* renamed from: lambda$sortUsers$16 */
     public /* synthetic */ int lambda$sortUsers$16$ChatUsersActivity(int i, TLObject tLObject, TLObject tLObject2) {
         int i2;
-        int i3;
         TLRPC$UserStatus tLRPC$UserStatus;
+        int i3;
         TLRPC$UserStatus tLRPC$UserStatus2;
-        TLRPC$User user = getMessagesController().getUser(Integer.valueOf(((TLRPC$ChannelParticipant) tLObject).user_id));
-        TLRPC$User user2 = getMessagesController().getUser(Integer.valueOf(((TLRPC$ChannelParticipant) tLObject2).user_id));
-        if (user == null || (tLRPC$UserStatus2 = user.status) == null) {
-            i2 = 0;
+        TLRPC$ChannelParticipant tLRPC$ChannelParticipant = (TLRPC$ChannelParticipant) tLObject;
+        TLRPC$ChannelParticipant tLRPC$ChannelParticipant2 = (TLRPC$ChannelParticipant) tLObject2;
+        int peerId = MessageObject.getPeerId(tLRPC$ChannelParticipant.peer);
+        int peerId2 = MessageObject.getPeerId(tLRPC$ChannelParticipant2.peer);
+        int i4 = -100;
+        if (peerId > 0) {
+            TLRPC$User user = getMessagesController().getUser(Integer.valueOf(MessageObject.getPeerId(tLRPC$ChannelParticipant.peer)));
+            i2 = (user == null || (tLRPC$UserStatus2 = user.status) == null) ? 0 : user.self ? i + 50000 : tLRPC$UserStatus2.expires;
         } else {
-            i2 = user.self ? i + 50000 : tLRPC$UserStatus2.expires;
+            i2 = -100;
         }
-        if (user2 == null || (tLRPC$UserStatus = user2.status) == null) {
-            i3 = 0;
-        } else {
-            i3 = user2.self ? i + 50000 : tLRPC$UserStatus.expires;
+        if (peerId2 > 0) {
+            TLRPC$User user2 = getMessagesController().getUser(Integer.valueOf(MessageObject.getPeerId(tLRPC$ChannelParticipant2.peer)));
+            if (user2 == null || (tLRPC$UserStatus = user2.status) == null) {
+                i4 = 0;
+            } else {
+                if (user2.self) {
+                    i3 = i + 50000;
+                } else {
+                    i3 = tLRPC$UserStatus.expires;
+                }
+                i4 = i3;
+            }
         }
-        if (i2 <= 0 || i3 <= 0) {
-            if (i2 >= 0 || i3 >= 0) {
-                if ((i2 < 0 && i3 > 0) || (i2 == 0 && i3 != 0)) {
+        if (i2 <= 0 || i4 <= 0) {
+            if (i2 >= 0 || i4 >= 0) {
+                if ((i2 < 0 && i4 > 0) || (i2 == 0 && i4 != 0)) {
                     return -1;
                 }
-                if ((i3 >= 0 || i2 <= 0) && (i3 != 0 || i2 == 0)) {
+                if ((i4 >= 0 || i2 <= 0) && (i4 != 0 || i2 == 0)) {
                     return 0;
                 }
                 return 1;
-            } else if (i2 > i3) {
+            } else if (i2 > i4) {
                 return 1;
             } else {
-                if (i2 < i3) {
+                if (i2 < i4) {
                     return -1;
                 }
                 return 0;
             }
-        } else if (i2 > i3) {
+        } else if (i2 > i4) {
             return 1;
         } else {
-            if (i2 < i3) {
+            if (i2 < i4) {
                 return -1;
             }
             return 0;
@@ -4005,32 +4066,32 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             this.searchAdapterHelper.queryServerSearch(str, ChatUsersActivity.this.selectType != 0, false, true, false, false, ChatObject.isChannel(ChatUsersActivity.this.currentChat) ? ChatUsersActivity.this.chatId : 0, false, ChatUsersActivity.this.type, 1);
         }
 
-        /* JADX WARNING: type inference failed for: r3v13 */
-        /* JADX WARNING: type inference failed for: r3v19 */
-        /* JADX WARNING: type inference failed for: r3v24 */
-        /* JADX WARNING: type inference failed for: r3v26 */
+        /* JADX WARNING: type inference failed for: r9v15 */
+        /* JADX WARNING: type inference failed for: r9v17 */
+        /* JADX WARNING: type inference failed for: r9v21 */
+        /* JADX WARNING: type inference failed for: r9v23 */
         /* access modifiers changed from: private */
-        /* JADX WARNING: Code restructure failed: missing block: B:41:0x0104, code lost:
-            if (r7.contains(" " + r4) != false) goto L_0x0118;
+        /* JADX WARNING: Code restructure failed: missing block: B:45:0x0143, code lost:
+            if (r4.contains(" " + r8) != false) goto L_0x0155;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:81:0x0204, code lost:
-            if (r5.contains(" " + r12) != false) goto L_0x0213;
+        /* JADX WARNING: Code restructure failed: missing block: B:85:0x024a, code lost:
+            if (r5.contains(" " + r9) != false) goto L_0x0259;
          */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Removed duplicated region for block: B:103:0x011b A[SYNTHETIC] */
-        /* JADX WARNING: Removed duplicated region for block: B:108:0x0216 A[SYNTHETIC] */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x0156 A[LOOP:1: B:32:0x00c6->B:56:0x0156, LOOP_END] */
-        /* JADX WARNING: Removed duplicated region for block: B:94:0x025f A[LOOP:3: B:72:0x01ca->B:94:0x025f, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:108:0x0158 A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:113:0x025c A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:59:0x018d A[LOOP:1: B:35:0x0105->B:59:0x018d, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:98:0x02a4 A[LOOP:3: B:76:0x0210->B:98:0x02a4, LOOP_END] */
         /* JADX WARNING: Unknown variable types count: 1 */
         /* renamed from: lambda$null$2 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$null$2$ChatUsersActivity$SearchAdapter(java.lang.String r22, java.util.ArrayList r23, java.util.ArrayList r24) {
+        public /* synthetic */ void lambda$null$2$ChatUsersActivity$SearchAdapter(java.lang.String r25, java.util.ArrayList r26, java.util.ArrayList r27) {
             /*
-                r21 = this;
-                r0 = r21
-                r1 = r23
-                r2 = r24
-                java.lang.String r3 = r22.trim()
+                r24 = this;
+                r0 = r24
+                r1 = r26
+                r2 = r27
+                java.lang.String r3 = r25.trim()
                 java.lang.String r3 = r3.toLowerCase()
                 int r4 = r3.length()
                 if (r4 != 0) goto L_0x002c
@@ -4078,10 +4139,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r11.<init>()
                 java.lang.String r13 = "@"
                 java.lang.String r14 = " "
-                if (r1 == 0) goto L_0x017a
-                int r15 = r23.size()
+                if (r1 == 0) goto L_0x01b7
+                int r15 = r26.size()
             L_0x006f:
-                if (r5 >= r15) goto L_0x017a
+                if (r5 >= r15) goto L_0x01b7
                 java.lang.Object r16 = r1.get(r5)
                 r12 = r16
                 org.telegram.tgnet.TLObject r12 = (org.telegram.tgnet.TLObject) r12
@@ -4090,14 +4151,16 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r6 = r12
                 org.telegram.tgnet.TLRPC$ChatParticipant r6 = (org.telegram.tgnet.TLRPC$ChatParticipant) r6
                 int r6 = r6.user_id
-                goto L_0x008c
+                goto L_0x0090
             L_0x0083:
                 boolean r6 = r12 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
-                if (r6 == 0) goto L_0x0167
+                if (r6 == 0) goto L_0x019c
                 r6 = r12
                 org.telegram.tgnet.TLRPC$ChannelParticipant r6 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r6
-                int r6 = r6.user_id
-            L_0x008c:
+                org.telegram.tgnet.TLRPC$Peer r6 = r6.peer
+                int r6 = org.telegram.messenger.MessageObject.getPeerId(r6)
+            L_0x0090:
+                if (r6 <= 0) goto L_0x00cd
                 org.telegram.ui.ChatUsersActivity r7 = org.telegram.ui.ChatUsersActivity.this
                 org.telegram.messenger.MessagesController r7 = r7.getMessagesController()
                 java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
@@ -4106,117 +4169,148 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 org.telegram.ui.ChatUsersActivity r1 = org.telegram.ui.ChatUsersActivity.this
                 org.telegram.messenger.UserConfig r1 = r1.getUserConfig()
                 int r1 = r1.getClientUserId()
-                if (r7 != r1) goto L_0x00aa
-                goto L_0x0167
-            L_0x00aa:
+                if (r7 != r1) goto L_0x00b0
+                goto L_0x019c
+            L_0x00b0:
                 java.lang.String r1 = org.telegram.messenger.UserObject.getUserName(r6)
                 java.lang.String r1 = r1.toLowerCase()
-                org.telegram.messenger.LocaleController r7 = org.telegram.messenger.LocaleController.getInstance()
-                java.lang.String r7 = r7.getTranslitString(r1)
-                boolean r17 = r1.equals(r7)
-                if (r17 == 0) goto L_0x00c1
-                r7 = 0
-            L_0x00c1:
-                r18 = r15
-                r15 = 0
-                r17 = 0
-            L_0x00c6:
-                if (r15 >= r8) goto L_0x0162
-                r19 = r4
-                r4 = r9[r15]
-                boolean r20 = r1.startsWith(r4)
-                if (r20 != 0) goto L_0x0116
-                r20 = r3
-                java.lang.StringBuilder r3 = new java.lang.StringBuilder
-                r3.<init>()
-                r3.append(r14)
-                r3.append(r4)
-                java.lang.String r3 = r3.toString()
-                boolean r3 = r1.contains(r3)
-                if (r3 != 0) goto L_0x0118
-                if (r7 == 0) goto L_0x0107
-                boolean r3 = r7.startsWith(r4)
-                if (r3 != 0) goto L_0x0118
-                java.lang.StringBuilder r3 = new java.lang.StringBuilder
-                r3.<init>()
-                r3.append(r14)
-                r3.append(r4)
-                java.lang.String r3 = r3.toString()
-                boolean r3 = r7.contains(r3)
-                if (r3 == 0) goto L_0x0107
-                goto L_0x0118
-            L_0x0107:
-                java.lang.String r3 = r6.username
-                if (r3 == 0) goto L_0x0113
-                boolean r3 = r3.startsWith(r4)
-                if (r3 == 0) goto L_0x0113
-                r3 = 2
-                goto L_0x0119
-            L_0x0113:
-                r3 = r17
-                goto L_0x0119
-            L_0x0116:
-                r20 = r3
-            L_0x0118:
-                r3 = 1
-            L_0x0119:
-                if (r3 == 0) goto L_0x0156
-                r1 = 1
-                if (r3 != r1) goto L_0x012a
+                java.lang.String r7 = r6.username
+                r17 = r1
                 java.lang.String r1 = r6.first_name
-                java.lang.String r3 = r6.last_name
-                java.lang.CharSequence r1 = org.telegram.messenger.AndroidUtilities.generateSearchName(r1, r3, r4)
+                java.lang.String r6 = r6.last_name
+                r18 = r4
+                r23 = r6
+                r6 = r1
+                r1 = r17
+                r17 = r15
+                r15 = r7
+                r7 = r23
+                goto L_0x00f1
+            L_0x00cd:
+                org.telegram.ui.ChatUsersActivity r1 = org.telegram.ui.ChatUsersActivity.this
+                org.telegram.messenger.MessagesController r1 = r1.getMessagesController()
+                int r6 = -r6
+                java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+                org.telegram.tgnet.TLRPC$Chat r1 = r1.getChat(r6)
+                java.lang.String r6 = r1.title
+                java.lang.String r6 = r6.toLowerCase()
+                java.lang.String r7 = r1.username
+                java.lang.String r1 = r1.title
+                r18 = r4
+                r17 = r15
+                r15 = r7
+                r7 = 0
+                r23 = r6
+                r6 = r1
+                r1 = r23
+            L_0x00f1:
+                org.telegram.messenger.LocaleController r4 = org.telegram.messenger.LocaleController.getInstance()
+                java.lang.String r4 = r4.getTranslitString(r1)
+                boolean r19 = r1.equals(r4)
+                if (r19 == 0) goto L_0x0100
+                r4 = 0
+            L_0x0100:
+                r20 = r3
+                r3 = 0
+                r19 = 0
+            L_0x0105:
+                r21 = r8
+                if (r3 >= r8) goto L_0x0199
+                r8 = r9[r3]
+                boolean r22 = r1.startsWith(r8)
+                if (r22 != 0) goto L_0x0153
+                r22 = r9
+                java.lang.StringBuilder r9 = new java.lang.StringBuilder
+                r9.<init>()
+                r9.append(r14)
+                r9.append(r8)
+                java.lang.String r9 = r9.toString()
+                boolean r9 = r1.contains(r9)
+                if (r9 != 0) goto L_0x0155
+                if (r4 == 0) goto L_0x0146
+                boolean r9 = r4.startsWith(r8)
+                if (r9 != 0) goto L_0x0155
+                java.lang.StringBuilder r9 = new java.lang.StringBuilder
+                r9.<init>()
+                r9.append(r14)
+                r9.append(r8)
+                java.lang.String r9 = r9.toString()
+                boolean r9 = r4.contains(r9)
+                if (r9 == 0) goto L_0x0146
+                goto L_0x0155
+            L_0x0146:
+                if (r15 == 0) goto L_0x0150
+                boolean r9 = r15.startsWith(r8)
+                if (r9 == 0) goto L_0x0150
+                r9 = 2
+                goto L_0x0156
+            L_0x0150:
+                r9 = r19
+                goto L_0x0156
+            L_0x0153:
+                r22 = r9
+            L_0x0155:
+                r9 = 1
+            L_0x0156:
+                if (r9 == 0) goto L_0x018d
+                r1 = 1
+                if (r9 != r1) goto L_0x0163
+                java.lang.CharSequence r1 = org.telegram.messenger.AndroidUtilities.generateSearchName(r6, r7, r8)
                 r10.add(r1)
-                goto L_0x0152
-            L_0x012a:
+                goto L_0x0189
+            L_0x0163:
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
                 r1.append(r13)
-                java.lang.String r3 = r6.username
-                r1.append(r3)
+                r1.append(r15)
                 java.lang.String r1 = r1.toString()
                 java.lang.StringBuilder r3 = new java.lang.StringBuilder
                 r3.<init>()
                 r3.append(r13)
-                r3.append(r4)
+                r3.append(r8)
                 java.lang.String r3 = r3.toString()
                 r4 = 0
                 java.lang.CharSequence r1 = org.telegram.messenger.AndroidUtilities.generateSearchName(r1, r4, r3)
                 r10.add(r1)
-            L_0x0152:
+            L_0x0189:
                 r11.add(r12)
-                goto L_0x016d
-            L_0x0156:
-                r17 = r1
-                int r15 = r15 + 1
-                r4 = r19
-                r17 = r3
-                r3 = r20
-                goto L_0x00c6
-            L_0x0162:
+                goto L_0x01a6
+            L_0x018d:
+                r19 = r1
+                int r3 = r3 + 1
+                r8 = r21
+                r19 = r9
+                r9 = r22
+                goto L_0x0105
+            L_0x0199:
+                r22 = r9
+                goto L_0x01a6
+            L_0x019c:
                 r20 = r3
-                r19 = r4
-                goto L_0x016d
-            L_0x0167:
-                r20 = r3
-                r19 = r4
-                r18 = r15
-            L_0x016d:
+                r18 = r4
+                r21 = r8
+                r22 = r9
+                r17 = r15
+            L_0x01a6:
                 int r5 = r5 + 1
-                r1 = r23
-                r15 = r18
-                r4 = r19
+                r1 = r26
+                r15 = r17
+                r4 = r18
                 r3 = r20
+                r8 = r21
+                r9 = r22
                 r7 = 1
                 goto L_0x006f
-            L_0x017a:
+            L_0x01b7:
                 r20 = r3
-                r19 = r4
-                if (r2 == 0) goto L_0x026f
+                r18 = r4
+                r21 = r8
+                r22 = r9
+                if (r2 == 0) goto L_0x02bd
                 r1 = 0
-            L_0x0181:
-                int r3 = r24.size()
-                if (r1 >= r3) goto L_0x026f
+            L_0x01c2:
+                int r3 = r27.size()
+                if (r1 >= r3) goto L_0x02bd
                 java.lang.Object r3 = r2.get(r1)
                 org.telegram.tgnet.TLRPC$TL_contact r3 = (org.telegram.tgnet.TLRPC$TL_contact) r3
                 org.telegram.ui.ChatUsersActivity r4 = org.telegram.ui.ChatUsersActivity.this
@@ -4228,66 +4322,69 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 org.telegram.ui.ChatUsersActivity r5 = org.telegram.ui.ChatUsersActivity.this
                 org.telegram.messenger.UserConfig r5 = r5.getUserConfig()
                 int r5 = r5.getClientUserId()
-                if (r4 != r5) goto L_0x01b1
-            L_0x01ab:
-                r15 = r19
-                r12 = r20
-                goto L_0x0267
-            L_0x01b1:
+                if (r4 != r5) goto L_0x01f5
+                r9 = r18
+                r15 = r20
+                r8 = r21
+            L_0x01f2:
+                r12 = 1
+                goto L_0x02b3
+            L_0x01f5:
                 java.lang.String r4 = org.telegram.messenger.UserObject.getUserName(r3)
                 java.lang.String r4 = r4.toLowerCase()
                 org.telegram.messenger.LocaleController r5 = org.telegram.messenger.LocaleController.getInstance()
                 java.lang.String r5 = r5.getTranslitString(r4)
                 boolean r6 = r4.equals(r5)
-                if (r6 == 0) goto L_0x01c8
+                if (r6 == 0) goto L_0x020c
                 r5 = 0
-            L_0x01c8:
+            L_0x020c:
+                r8 = r21
                 r6 = 0
                 r7 = 0
-            L_0x01ca:
-                if (r7 >= r8) goto L_0x01ab
-                r12 = r9[r7]
-                boolean r15 = r4.startsWith(r12)
-                if (r15 != 0) goto L_0x0213
-                java.lang.StringBuilder r15 = new java.lang.StringBuilder
-                r15.<init>()
-                r15.append(r14)
-                r15.append(r12)
-                java.lang.String r15 = r15.toString()
-                boolean r15 = r4.contains(r15)
-                if (r15 != 0) goto L_0x0213
-                if (r5 == 0) goto L_0x0207
-                boolean r15 = r5.startsWith(r12)
-                if (r15 != 0) goto L_0x0213
-                java.lang.StringBuilder r15 = new java.lang.StringBuilder
-                r15.<init>()
-                r15.append(r14)
-                r15.append(r12)
-                java.lang.String r15 = r15.toString()
-                boolean r15 = r5.contains(r15)
-                if (r15 == 0) goto L_0x0207
-                goto L_0x0213
-            L_0x0207:
-                java.lang.String r15 = r3.username
-                if (r15 == 0) goto L_0x0214
-                boolean r15 = r15.startsWith(r12)
-                if (r15 == 0) goto L_0x0214
+            L_0x0210:
+                if (r7 >= r8) goto L_0x02ad
+                r9 = r22[r7]
+                boolean r12 = r4.startsWith(r9)
+                if (r12 != 0) goto L_0x0259
+                java.lang.StringBuilder r12 = new java.lang.StringBuilder
+                r12.<init>()
+                r12.append(r14)
+                r12.append(r9)
+                java.lang.String r12 = r12.toString()
+                boolean r12 = r4.contains(r12)
+                if (r12 != 0) goto L_0x0259
+                if (r5 == 0) goto L_0x024d
+                boolean r12 = r5.startsWith(r9)
+                if (r12 != 0) goto L_0x0259
+                java.lang.StringBuilder r12 = new java.lang.StringBuilder
+                r12.<init>()
+                r12.append(r14)
+                r12.append(r9)
+                java.lang.String r12 = r12.toString()
+                boolean r12 = r5.contains(r12)
+                if (r12 == 0) goto L_0x024d
+                goto L_0x0259
+            L_0x024d:
+                java.lang.String r12 = r3.username
+                if (r12 == 0) goto L_0x025a
+                boolean r12 = r12.startsWith(r9)
+                if (r12 == 0) goto L_0x025a
                 r6 = 2
-                goto L_0x0214
-            L_0x0213:
+                goto L_0x025a
+            L_0x0259:
                 r6 = 1
-            L_0x0214:
-                if (r6 == 0) goto L_0x025f
-                r15 = 1
-                if (r6 != r15) goto L_0x0228
+            L_0x025a:
+                if (r6 == 0) goto L_0x02a4
+                r12 = 1
+                if (r6 != r12) goto L_0x026e
                 java.lang.String r4 = r3.first_name
                 java.lang.String r5 = r3.last_name
-                java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r5, r12)
+                java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r5, r9)
                 r10.add(r4)
-                r4 = r20
-                r12 = 0
-                goto L_0x0252
-            L_0x0228:
+                r15 = r20
+                r9 = 0
+                goto L_0x0298
+            L_0x026e:
                 java.lang.StringBuilder r4 = new java.lang.StringBuilder
                 r4.<init>()
                 r4.append(r13)
@@ -4297,34 +4394,39 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
                 r5.<init>()
                 r5.append(r13)
-                r5.append(r12)
+                r5.append(r9)
                 java.lang.String r5 = r5.toString()
-                r12 = 0
-                java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r12, r5)
+                r9 = 0
+                java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r9, r5)
                 r10.add(r4)
-                r4 = r20
-            L_0x0252:
-                r4.add(r3)
-                int r5 = r3.id
-                r6 = r19
-                r6.put(r5, r3)
-                r12 = r4
-                r15 = r6
-                goto L_0x0267
-            L_0x025f:
-                r15 = r19
-                r12 = r20
+                r15 = r20
+            L_0x0298:
+                r15.add(r3)
+                int r4 = r3.id
+                r5 = r18
+                r5.put(r4, r3)
+                r9 = r5
+                goto L_0x02b3
+            L_0x02a4:
+                r9 = r18
+                r15 = r20
+                r12 = 1
                 int r7 = r7 + 1
-                goto L_0x01ca
-            L_0x0267:
+                goto L_0x0210
+            L_0x02ad:
+                r9 = r18
+                r15 = r20
+                goto L_0x01f2
+            L_0x02b3:
                 int r1 = r1 + 1
-                r20 = r12
-                r19 = r15
-                goto L_0x0181
-            L_0x026f:
-                r15 = r19
-                r12 = r20
-                r0.updateSearchResults(r12, r15, r10, r11)
+                r21 = r8
+                r18 = r9
+                r20 = r15
+                goto L_0x01c2
+            L_0x02bd:
+                r9 = r18
+                r15 = r20
+                r0.updateSearchResults(r15, r9, r10, r11)
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.SearchAdapter.lambda$null$2$ChatUsersActivity$SearchAdapter(java.lang.String, java.util.ArrayList, java.util.ArrayList):void");
@@ -4483,27 +4585,37 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             return new RecyclerListView.Holder(graySectionCell);
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v1, resolved type: java.lang.String} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v2, resolved type: org.telegram.tgnet.TLRPC$User} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v0, resolved type: android.text.SpannableStringBuilder} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v2, resolved type: java.lang.String} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v2, resolved type: java.lang.String} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v1, resolved type: android.text.SpannableStringBuilder} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v2, resolved type: android.text.SpannableStringBuilder} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v3, resolved type: java.lang.String} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v2, resolved type: android.text.SpannableStringBuilder} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v4, resolved type: java.lang.String} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v4, resolved type: java.lang.String} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v5, resolved type: android.text.SpannableStringBuilder} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v3, resolved type: android.text.SpannableStringBuilder} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v10, resolved type: java.lang.CharSequence} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v9, resolved type: java.lang.CharSequence} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v8, resolved type: android.text.SpannableStringBuilder} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v11, resolved type: java.lang.String} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v10, resolved type: java.lang.String} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v9, resolved type: android.text.SpannableStringBuilder} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v12, resolved type: java.lang.String} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v11, resolved type: java.lang.String} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v13, resolved type: android.text.SpannableStringBuilder} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v12, resolved type: org.telegram.tgnet.TLRPC$Chat} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v14, resolved type: java.lang.String} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v15, resolved type: java.lang.String} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v16, resolved type: java.lang.String} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v17, resolved type: java.lang.String} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v18, resolved type: java.lang.String} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v19, resolved type: java.lang.String} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v20, resolved type: java.lang.String} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v28, resolved type: org.telegram.tgnet.TLRPC$User} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v29, resolved type: org.telegram.tgnet.TLRPC$User} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v30, resolved type: org.telegram.tgnet.TLRPC$User} */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Removed duplicated region for block: B:43:0x00f3  */
-        /* JADX WARNING: Removed duplicated region for block: B:52:0x0125  */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x0132 A[ADDED_TO_REGION] */
-        /* JADX WARNING: Removed duplicated region for block: B:77:0x0186  */
+        /* JADX WARNING: Removed duplicated region for block: B:36:0x00f0  */
+        /* JADX WARNING: Removed duplicated region for block: B:47:0x010d  */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x013f  */
+        /* JADX WARNING: Removed duplicated region for block: B:61:0x014e  */
+        /* JADX WARNING: Removed duplicated region for block: B:79:0x019e  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r17, int r18) {
             /*
@@ -4515,7 +4627,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r4 = 1
                 if (r3 == 0) goto L_0x008e
                 if (r3 == r4) goto L_0x0011
-                goto L_0x01b4
+                goto L_0x01c8
             L_0x0011:
                 android.view.View r2 = r2.itemView
                 org.telegram.ui.Cells.GraySectionCell r2 = (org.telegram.ui.Cells.GraySectionCell) r2
@@ -4528,7 +4640,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "ChannelBlockedUsers"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
                 r2.setText(r0)
-                goto L_0x01b4
+                goto L_0x01c8
             L_0x002f:
                 org.telegram.ui.ChatUsersActivity r0 = org.telegram.ui.ChatUsersActivity.this
                 int r0 = r0.type
@@ -4538,7 +4650,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "ChannelRestrictedUsers"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
                 r2.setText(r0)
-                goto L_0x01b4
+                goto L_0x01c8
             L_0x0046:
                 org.telegram.ui.ChatUsersActivity r0 = org.telegram.ui.ChatUsersActivity.this
                 boolean r0 = r0.isChannel
@@ -4547,13 +4659,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "ChannelSubscribers"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
                 r2.setText(r0)
-                goto L_0x01b4
+                goto L_0x01c8
             L_0x005c:
                 r0 = 2131624718(0x7f0e030e, float:1.8876624E38)
                 java.lang.String r3 = "ChannelMembers"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
                 r2.setText(r0)
-                goto L_0x01b4
+                goto L_0x01c8
             L_0x006a:
                 int r3 = r1.globalStartRow
                 if (r0 != r3) goto L_0x007c
@@ -4561,74 +4673,87 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "GlobalSearch"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
                 r2.setText(r0)
-                goto L_0x01b4
+                goto L_0x01c8
             L_0x007c:
                 int r3 = r1.contactsStartRow
-                if (r0 != r3) goto L_0x01b4
+                if (r0 != r3) goto L_0x01c8
                 r0 = 2131624978(0x7f0e0412, float:1.887715E38)
                 java.lang.String r3 = "Contacts"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
                 r2.setText(r0)
-                goto L_0x01b4
+                goto L_0x01c8
             L_0x008e:
                 org.telegram.tgnet.TLObject r3 = r1.getItem(r0)
                 boolean r5 = r3 instanceof org.telegram.tgnet.TLRPC$User
-                if (r5 == 0) goto L_0x0099
+                r6 = 0
+                if (r5 == 0) goto L_0x009b
                 org.telegram.tgnet.TLRPC$User r3 = (org.telegram.tgnet.TLRPC$User) r3
-                goto L_0x00c6
             L_0x0099:
+                r5 = r6
+                goto L_0x00e3
+            L_0x009b:
                 boolean r5 = r3 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
-                if (r5 == 0) goto L_0x00b0
+                if (r5 == 0) goto L_0x00cc
+                org.telegram.tgnet.TLRPC$ChannelParticipant r3 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r3
+                org.telegram.tgnet.TLRPC$Peer r3 = r3.peer
+                int r3 = org.telegram.messenger.MessageObject.getPeerId(r3)
+                if (r3 <= 0) goto L_0x00ba
                 org.telegram.ui.ChatUsersActivity r5 = org.telegram.ui.ChatUsersActivity.this
                 org.telegram.messenger.MessagesController r5 = r5.getMessagesController()
-                org.telegram.tgnet.TLRPC$ChannelParticipant r3 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r3
-                int r3 = r3.user_id
                 java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
                 org.telegram.tgnet.TLRPC$User r3 = r5.getUser(r3)
-                goto L_0x00c6
-            L_0x00b0:
+                java.lang.String r5 = r3.username
+                goto L_0x00e3
+            L_0x00ba:
+                org.telegram.ui.ChatUsersActivity r5 = org.telegram.ui.ChatUsersActivity.this
+                org.telegram.messenger.MessagesController r5 = r5.getMessagesController()
+                int r3 = -r3
+                java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
+                org.telegram.tgnet.TLRPC$Chat r3 = r5.getChat(r3)
+                java.lang.String r5 = r3.username
+                goto L_0x00e3
+            L_0x00cc:
                 boolean r5 = r3 instanceof org.telegram.tgnet.TLRPC$ChatParticipant
-                if (r5 == 0) goto L_0x01b4
+                if (r5 == 0) goto L_0x01c8
                 org.telegram.ui.ChatUsersActivity r5 = org.telegram.ui.ChatUsersActivity.this
                 org.telegram.messenger.MessagesController r5 = r5.getMessagesController()
                 org.telegram.tgnet.TLRPC$ChatParticipant r3 = (org.telegram.tgnet.TLRPC$ChatParticipant) r3
                 int r3 = r3.user_id
                 java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
                 org.telegram.tgnet.TLRPC$User r3 = r5.getUser(r3)
-            L_0x00c6:
-                java.lang.String r5 = r3.username
-                org.telegram.ui.Adapters.SearchAdapterHelper r6 = r1.searchAdapterHelper
-                java.util.ArrayList r6 = r6.getGroupSearch()
-                int r6 = r6.size()
-                r7 = 0
+                goto L_0x0099
+            L_0x00e3:
+                org.telegram.ui.Adapters.SearchAdapterHelper r7 = r1.searchAdapterHelper
+                java.util.ArrayList r7 = r7.getGroupSearch()
+                int r7 = r7.size()
                 r8 = 0
-                if (r6 == 0) goto L_0x00e2
-                int r6 = r6 + r4
-                if (r6 <= r0) goto L_0x00e1
-                org.telegram.ui.Adapters.SearchAdapterHelper r6 = r1.searchAdapterHelper
-                java.lang.String r6 = r6.getLastFoundChannel()
+                if (r7 == 0) goto L_0x00fc
+                int r7 = r7 + r4
+                if (r7 <= r0) goto L_0x00fb
+                org.telegram.ui.Adapters.SearchAdapterHelper r7 = r1.searchAdapterHelper
+                java.lang.String r7 = r7.getLastFoundChannel()
                 r9 = 1
-                goto L_0x00e4
-            L_0x00e1:
-                int r0 = r0 - r6
-            L_0x00e2:
-                r6 = r8
+                goto L_0x00fe
+            L_0x00fb:
+                int r0 = r0 - r7
+            L_0x00fc:
+                r7 = r6
                 r9 = 0
-            L_0x00e4:
+            L_0x00fe:
                 java.lang.String r10 = "@"
-                if (r9 != 0) goto L_0x0126
+                if (r9 != 0) goto L_0x0140
                 java.util.ArrayList<org.telegram.tgnet.TLObject> r11 = r1.searchResult
                 int r11 = r11.size()
-                if (r11 == 0) goto L_0x0126
+                if (r11 == 0) goto L_0x0140
                 int r11 = r11 + r4
-                if (r11 <= r0) goto L_0x0125
+                if (r11 <= r0) goto L_0x013f
                 java.util.ArrayList<java.lang.CharSequence> r9 = r1.searchResultNames
                 int r11 = r0 + -1
                 java.lang.Object r9 = r9.get(r11)
                 java.lang.CharSequence r9 = (java.lang.CharSequence) r9
-                if (r9 == 0) goto L_0x0120
+                if (r9 == 0) goto L_0x013a
                 boolean r11 = android.text.TextUtils.isEmpty(r5)
-                if (r11 != 0) goto L_0x0120
+                if (r11 != 0) goto L_0x013a
                 java.lang.String r11 = r9.toString()
                 java.lang.StringBuilder r12 = new java.lang.StringBuilder
                 r12.<init>()
@@ -4636,88 +4761,83 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r12.append(r5)
                 java.lang.String r12 = r12.toString()
                 boolean r11 = r11.startsWith(r12)
-                if (r11 == 0) goto L_0x0120
-                r11 = r8
-                goto L_0x0122
-            L_0x0120:
+                if (r11 == 0) goto L_0x013a
+                r11 = r6
+                goto L_0x013c
+            L_0x013a:
                 r11 = r9
-                r9 = r8
-            L_0x0122:
-                r8 = r0
+                r9 = r6
+            L_0x013c:
+                r6 = r0
                 r0 = 1
-                goto L_0x012a
-            L_0x0125:
+                goto L_0x0144
+            L_0x013f:
                 int r0 = r0 - r11
-            L_0x0126:
-                r11 = r8
-                r8 = r0
+            L_0x0140:
+                r11 = r6
+                r6 = r0
                 r0 = r9
                 r9 = r11
-            L_0x012a:
+            L_0x0144:
                 r12 = 33
                 java.lang.String r13 = "windowBackgroundWhiteBlueText4"
                 r14 = -1
-                if (r0 != 0) goto L_0x0183
-                if (r5 == 0) goto L_0x0183
+                if (r0 != 0) goto L_0x019c
+                if (r5 == 0) goto L_0x019c
                 org.telegram.ui.Adapters.SearchAdapterHelper r0 = r1.searchAdapterHelper
                 java.util.ArrayList r0 = r0.getGlobalSearch()
                 int r0 = r0.size()
-                if (r0 == 0) goto L_0x0183
+                if (r0 == 0) goto L_0x019c
                 int r0 = r0 + r4
-                if (r0 <= r8) goto L_0x0183
+                if (r0 <= r6) goto L_0x019c
                 org.telegram.ui.Adapters.SearchAdapterHelper r0 = r1.searchAdapterHelper
                 java.lang.String r0 = r0.getLastFoundUsername()
                 boolean r9 = r0.startsWith(r10)
-                if (r9 == 0) goto L_0x0153
+                if (r9 == 0) goto L_0x016d
                 java.lang.String r0 = r0.substring(r4)
-            L_0x0153:
-                android.text.SpannableStringBuilder r4 = new android.text.SpannableStringBuilder     // Catch:{ Exception -> 0x017e }
-                r4.<init>()     // Catch:{ Exception -> 0x017e }
-                r4.append(r10)     // Catch:{ Exception -> 0x017e }
-                r4.append(r5)     // Catch:{ Exception -> 0x017e }
-                int r9 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r5, r0)     // Catch:{ Exception -> 0x017e }
-                if (r9 == r14) goto L_0x017c
-                int r0 = r0.length()     // Catch:{ Exception -> 0x017e }
-                if (r9 != 0) goto L_0x016d
-                int r0 = r0 + 1
-                goto L_0x016f
             L_0x016d:
-                int r9 = r9 + 1
-            L_0x016f:
-                android.text.style.ForegroundColorSpan r10 = new android.text.style.ForegroundColorSpan     // Catch:{ Exception -> 0x017e }
-                int r15 = org.telegram.ui.ActionBar.Theme.getColor(r13)     // Catch:{ Exception -> 0x017e }
-                r10.<init>(r15)     // Catch:{ Exception -> 0x017e }
-                int r0 = r0 + r9
-                r4.setSpan(r10, r9, r0, r12)     // Catch:{ Exception -> 0x017e }
-            L_0x017c:
-                r5 = r4
-                goto L_0x0184
-            L_0x017e:
+                android.text.SpannableStringBuilder r9 = new android.text.SpannableStringBuilder     // Catch:{ Exception -> 0x0197 }
+                r9.<init>()     // Catch:{ Exception -> 0x0197 }
+                r9.append(r10)     // Catch:{ Exception -> 0x0197 }
+                r9.append(r5)     // Catch:{ Exception -> 0x0197 }
+                int r4 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r5, r0)     // Catch:{ Exception -> 0x0197 }
+                if (r4 == r14) goto L_0x019c
+                int r0 = r0.length()     // Catch:{ Exception -> 0x0197 }
+                if (r4 != 0) goto L_0x0187
+                int r0 = r0 + 1
+                goto L_0x0189
+            L_0x0187:
+                int r4 = r4 + 1
+            L_0x0189:
+                android.text.style.ForegroundColorSpan r10 = new android.text.style.ForegroundColorSpan     // Catch:{ Exception -> 0x0197 }
+                int r15 = org.telegram.ui.ActionBar.Theme.getColor(r13)     // Catch:{ Exception -> 0x0197 }
+                r10.<init>(r15)     // Catch:{ Exception -> 0x0197 }
+                int r0 = r0 + r4
+                r9.setSpan(r10, r4, r0, r12)     // Catch:{ Exception -> 0x0197 }
+                goto L_0x019c
+            L_0x0197:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-                goto L_0x0184
-            L_0x0183:
-                r5 = r9
-            L_0x0184:
-                if (r6 == 0) goto L_0x01a6
-                java.lang.String r0 = org.telegram.messenger.UserObject.getUserName(r3)
+                r9 = r5
+            L_0x019c:
+                if (r7 == 0) goto L_0x01ba
                 android.text.SpannableStringBuilder r11 = new android.text.SpannableStringBuilder
-                r11.<init>(r0)
-                int r0 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r0, r6)
-                if (r0 == r14) goto L_0x01a6
+                r11.<init>(r5)
+                int r0 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r5, r7)
+                if (r0 == r14) goto L_0x01ba
                 android.text.style.ForegroundColorSpan r4 = new android.text.style.ForegroundColorSpan
-                int r9 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-                r4.<init>(r9)
-                int r6 = r6.length()
-                int r6 = r6 + r0
-                r11.setSpan(r4, r0, r6, r12)
-            L_0x01a6:
+                int r5 = org.telegram.ui.ActionBar.Theme.getColor(r13)
+                r4.<init>(r5)
+                int r5 = r7.length()
+                int r5 = r5 + r0
+                r11.setSpan(r4, r0, r5, r12)
+            L_0x01ba:
                 android.view.View r0 = r2.itemView
                 org.telegram.ui.Cells.ManageChatUserCell r0 = (org.telegram.ui.Cells.ManageChatUserCell) r0
-                java.lang.Integer r2 = java.lang.Integer.valueOf(r8)
+                java.lang.Integer r2 = java.lang.Integer.valueOf(r6)
                 r0.setTag(r2)
-                r0.setData(r3, r11, r5, r7)
-            L_0x01b4:
+                r0.setData(r3, r11, r9, r8)
+            L_0x01c8:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.SearchAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
@@ -5051,11 +5171,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             if (org.telegram.ui.ChatUsersActivity.access$2600(r0.this$0).megagroup == false) goto L_0x066d;
          */
         /* JADX WARNING: Removed duplicated region for block: B:264:0x06a7  */
-        /* JADX WARNING: Removed duplicated region for block: B:265:0x06ba  */
-        /* JADX WARNING: Removed duplicated region for block: B:270:0x06dc  */
-        /* JADX WARNING: Removed duplicated region for block: B:304:0x0781  */
-        /* JADX WARNING: Removed duplicated region for block: B:305:0x0784  */
-        /* JADX WARNING: Removed duplicated region for block: B:360:? A[RETURN, SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:265:0x06be  */
+        /* JADX WARNING: Removed duplicated region for block: B:269:0x06d2  */
+        /* JADX WARNING: Removed duplicated region for block: B:270:0x06e1  */
+        /* JADX WARNING: Removed duplicated region for block: B:272:0x06f2  */
+        /* JADX WARNING: Removed duplicated region for block: B:306:0x079c  */
+        /* JADX WARNING: Removed duplicated region for block: B:307:0x079f  */
+        /* JADX WARNING: Removed duplicated region for block: B:362:? A[RETURN, SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r17, int r18) {
             /*
@@ -5088,7 +5210,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 if (r3 == r4) goto L_0x005d
                 r2 = 11
                 if (r3 == r2) goto L_0x0036
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x0036:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Components.FlickerLoadingView r1 = (org.telegram.ui.Components.FlickerLoadingView) r1
@@ -5105,10 +5227,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 int r8 = r2.kicked_count
             L_0x0053:
                 r1.setItemsCount(r8)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x0058:
                 r1.setItemsCount(r8)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x005d:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.GraySectionCell r1 = (org.telegram.ui.Cells.GraySectionCell) r1
@@ -5127,13 +5249,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "ChannelOtherSubscribers"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x008d:
                 r2 = 2131624740(0x7f0e0324, float:1.8876668E38)
                 java.lang.String r3 = "ChannelOtherMembers"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x009b:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.botHeaderRow
@@ -5142,7 +5264,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "ChannelBots"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x00b1:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.contactsHeaderRow
@@ -5159,19 +5281,19 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "ChannelContacts"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x00dd:
                 r2 = 2131625694(0x7f0e06de, float:1.8878603E38)
                 java.lang.String r3 = "GroupContacts"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x00eb:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.loadingHeaderRow
-                if (r2 != r3) goto L_0x07a8
+                if (r2 != r3) goto L_0x07c6
                 r1.setText(r10)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x00f8:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.TextCheckCell2 r1 = (org.telegram.ui.Cells.TextCheckCell2) r1
@@ -5379,13 +5501,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             L_0x02c9:
                 r2 = 2131165887(0x7var_bf, float:1.7946004E38)
                 r1.setIcon(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x02d1:
                 r1.setIcon(r7)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x02d6:
                 r1.setIcon(r7)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x02db:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.TextSettingsCell r1 = (org.telegram.ui.Cells.TextSettingsCell) r1
@@ -5408,7 +5530,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r4 = "%d"
                 java.lang.String r3 = java.lang.String.format(r4, r3)
                 r1.setTextAndValue(r2, r3, r7)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x030d:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.HeaderCell r1 = (org.telegram.ui.Cells.HeaderCell) r1
@@ -5434,19 +5556,19 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "RemovedUser"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.formatPluralString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x0349:
                 r2 = 2131624689(0x7f0e02f1, float:1.8876565E38)
                 java.lang.String r3 = "ChannelBlockedUsers"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x0357:
                 r2 = 2131624756(0x7f0e0334, float:1.88767E38)
                 java.lang.String r3 = "ChannelRestrictedUsers"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x0365:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.permissionsSectionRow
@@ -5455,7 +5577,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "ChannelPermissionsHeader"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x037b:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.slowmodeRow
@@ -5464,16 +5586,16 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "Slowmode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x0391:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.gigaHeaderRow
-                if (r2 != r3) goto L_0x07a8
+                if (r2 != r3) goto L_0x07c6
                 r2 = 2131624588(0x7f0e028c, float:1.887636E38)
                 java.lang.String r3 = "BroadcastGroup"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x03a7:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.addNewSectionRow
@@ -5496,13 +5618,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 android.content.Context r2 = r0.mContext
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r9, (java.lang.String) r13)
                 r1.setBackgroundDrawable(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x03dd:
                 android.view.View r1 = r1.itemView
                 android.content.Context r2 = r0.mContext
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r11, (java.lang.String) r13)
                 r1.setBackgroundDrawable(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x03ea:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.ManageChatTextCell r1 = (org.telegram.ui.Cells.ManageChatTextCell) r1
@@ -5528,7 +5650,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r7 = 1
             L_0x0425:
                 r1.setText(r2, r6, r3, r7)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x042a:
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 int r2 = r2.type
@@ -5538,7 +5660,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r3 = 2131165255(0x7var_, float:1.7944722E38)
                 r1.setText(r2, r6, r3, r7)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x0443:
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 int r2 = r2.type
@@ -5558,11 +5680,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r3 = 2131165259(0x7var_b, float:1.794473E38)
                 r1.setText(r2, r6, r3, r7)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x0470:
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 int r2 = r2.type
-                if (r2 != r4) goto L_0x07a8
+                if (r2 != r4) goto L_0x07c6
                 r1.setColors(r10, r9)
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 boolean r2 = r2.loadingUsers
@@ -5587,13 +5709,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r4 = "AddSubscriber"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
                 r1.setText(r2, r6, r3, r7)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x04b6:
                 r2 = 2131624202(0x7f0e010a, float:1.8875577E38)
                 java.lang.String r4 = "AddMember"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
                 r1.setText(r2, r6, r3, r7)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x04c4:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.recentActionsRow
@@ -5603,7 +5725,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r3 = 2131165459(0x7var_, float:1.7945136E38)
                 r1.setText(r2, r6, r3, r7)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x04dd:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.addNew2Row
@@ -5613,18 +5735,18 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r3 = 2131165957(0x7var_, float:1.7946146E38)
                 r1.setText(r2, r6, r3, r8)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x04f6:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.gigaConvertRow
-                if (r2 != r3) goto L_0x07a8
+                if (r2 != r3) goto L_0x07c6
                 r1.setColors(r10, r9)
                 r2 = 2131624589(0x7f0e028d, float:1.8876362E38)
                 java.lang.String r3 = "BroadcastGroupConvert"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r3 = 2131165722(0x7var_a, float:1.794567E38)
                 r1.setText(r2, r6, r3, r7)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x0512:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.TextInfoPrivacyCell r1 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r1
@@ -5665,11 +5787,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 android.content.Context r2 = r0.mContext
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r11, (java.lang.String) r13)
                 r1.setBackgroundDrawable(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x0570:
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 int r2 = r2.type
-                if (r2 != r4) goto L_0x07a8
+                if (r2 != r4) goto L_0x07c6
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 boolean r2 = r2.isChannel
                 if (r2 == 0) goto L_0x0596
@@ -5689,7 +5811,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 android.content.Context r2 = r0.mContext
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r11, (java.lang.String) r13)
                 r1.setBackgroundDrawable(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x05a4:
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 boolean r2 = r2.isChannel
@@ -5708,7 +5830,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 android.content.Context r2 = r0.mContext
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r11, (java.lang.String) r13)
                 r1.setBackgroundDrawable(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x05d0:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.slowmodeInfoRow
@@ -5733,22 +5855,22 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r2 = "SlowmodeInfoSelected"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r2, r3, r4)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x060e:
                 r2 = 2131627466(0x7f0e0dca, float:1.8882197E38)
                 java.lang.String r3 = "SlowmodeInfoOff"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x061c:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.gigaInfoRow
-                if (r2 != r3) goto L_0x07a8
+                if (r2 != r3) goto L_0x07c6
                 r2 = 2131624590(0x7f0e028e, float:1.8876364E38)
                 java.lang.String r3 = "BroadcastGroupConvertInfo"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x07a8
+                goto L_0x07c6
             L_0x0632:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.ManageChatUserCell r1 = (org.telegram.ui.Cells.ManageChatUserCell) r1
@@ -5799,9 +5921,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r10 = 0
             L_0x06a3:
                 boolean r11 = r3 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
-                if (r11 == 0) goto L_0x06ba
+                if (r11 == 0) goto L_0x06be
                 org.telegram.tgnet.TLRPC$ChannelParticipant r3 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r3
-                int r11 = r3.user_id
+                org.telegram.tgnet.TLRPC$Peer r11 = r3.peer
+                int r11 = org.telegram.messenger.MessageObject.getPeerId(r11)
                 int r12 = r3.kicked_by
                 int r13 = r3.promoted_by
                 org.telegram.tgnet.TLRPC$TL_chatBannedRights r14 = r3.banned_rights
@@ -5809,10 +5932,10 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantBanned
                 boolean r7 = r3 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
                 boolean r3 = r3 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantAdmin
-                goto L_0x06cc
-            L_0x06ba:
+                goto L_0x06d0
+            L_0x06be:
                 boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$ChatParticipant
-                if (r4 == 0) goto L_0x07a8
+                if (r4 == 0) goto L_0x07c6
                 org.telegram.tgnet.TLRPC$ChatParticipant r3 = (org.telegram.tgnet.TLRPC$ChatParticipant) r3
                 int r11 = r3.user_id
                 int r15 = r3.date
@@ -5822,132 +5945,150 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r4 = 0
                 r12 = 0
                 r13 = 0
-            L_0x06cc:
+            L_0x06d0:
+                if (r11 <= 0) goto L_0x06e1
                 org.telegram.ui.ChatUsersActivity r6 = org.telegram.ui.ChatUsersActivity.this
                 org.telegram.messenger.MessagesController r6 = r6.getMessagesController()
-                java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
-                org.telegram.tgnet.TLRPC$User r6 = r6.getUser(r11)
-                if (r6 == 0) goto L_0x07a8
-                org.telegram.ui.ChatUsersActivity r11 = org.telegram.ui.ChatUsersActivity.this
-                int r11 = r11.type
-                if (r11 != r5) goto L_0x06f7
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r11)
+                org.telegram.tgnet.TLRPC$User r6 = r6.getUser(r8)
+                goto L_0x06f0
+            L_0x06e1:
+                org.telegram.ui.ChatUsersActivity r6 = org.telegram.ui.ChatUsersActivity.this
+                org.telegram.messenger.MessagesController r6 = r6.getMessagesController()
+                int r8 = -r11
+                java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
+                org.telegram.tgnet.TLRPC$Chat r6 = r6.getChat(r8)
+            L_0x06f0:
+                if (r6 == 0) goto L_0x07c6
+                org.telegram.ui.ChatUsersActivity r8 = org.telegram.ui.ChatUsersActivity.this
+                int r8 = r8.type
+                if (r8 != r5) goto L_0x070e
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 java.lang.String r3 = r3.formatUserPermissions(r14)
-                int r9 = r9 - r8
-                if (r2 == r9) goto L_0x06f0
+                r4 = 1
+                int r9 = r9 - r4
+                if (r2 == r9) goto L_0x0707
                 r2 = 0
                 r7 = 1
-                goto L_0x06f2
-            L_0x06f0:
+                goto L_0x0709
+            L_0x0707:
                 r2 = 0
                 r7 = 0
-            L_0x06f2:
+            L_0x0709:
                 r1.setData(r6, r2, r3, r7)
-                goto L_0x07a8
-            L_0x06f7:
+                goto L_0x07c6
+            L_0x070e:
                 org.telegram.ui.ChatUsersActivity r5 = org.telegram.ui.ChatUsersActivity.this
                 int r5 = r5.type
-                if (r5 != 0) goto L_0x0732
-                if (r4 == 0) goto L_0x0724
+                if (r5 != 0) goto L_0x074b
+                if (r4 == 0) goto L_0x073c
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 org.telegram.messenger.MessagesController r3 = r3.getMessagesController()
                 java.lang.Integer r4 = java.lang.Integer.valueOf(r12)
                 org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r4)
-                if (r3 == 0) goto L_0x0724
+                if (r3 == 0) goto L_0x073c
                 r4 = 2131627811(0x7f0e0var_, float:1.8882897E38)
-                java.lang.Object[] r5 = new java.lang.Object[r8]
+                r5 = 1
+                java.lang.Object[] r7 = new java.lang.Object[r5]
                 java.lang.String r3 = org.telegram.messenger.UserObject.getUserName(r3)
-                r7 = 0
-                r5[r7] = r3
+                r8 = 0
+                r7[r8] = r3
                 java.lang.String r3 = "UserRemovedBy"
-                java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r3, r4, r5)
-                goto L_0x0725
-            L_0x0724:
+                java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r3, r4, r7)
+                goto L_0x073e
+            L_0x073c:
+                r5 = 1
                 r3 = 0
-            L_0x0725:
-                int r9 = r9 - r8
-                if (r2 == r9) goto L_0x072b
+            L_0x073e:
+                int r9 = r9 - r5
+                if (r2 == r9) goto L_0x0744
                 r2 = 0
                 r7 = 1
-                goto L_0x072d
-            L_0x072b:
+                goto L_0x0746
+            L_0x0744:
                 r2 = 0
                 r7 = 0
-            L_0x072d:
+            L_0x0746:
                 r1.setData(r6, r2, r3, r7)
-                goto L_0x07a8
-            L_0x0732:
+                goto L_0x07c6
+            L_0x074b:
+                r5 = 1
                 org.telegram.ui.ChatUsersActivity r4 = org.telegram.ui.ChatUsersActivity.this
                 int r4 = r4.type
-                if (r4 != r8) goto L_0x0789
-                if (r7 == 0) goto L_0x0747
+                if (r4 != r5) goto L_0x07a5
+                if (r7 == 0) goto L_0x0762
                 r3 = 2131624698(0x7f0e02fa, float:1.8876583E38)
                 java.lang.String r4 = "ChannelCreator"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            L_0x0745:
-                r7 = 0
-                goto L_0x077e
-            L_0x0747:
-                if (r3 == 0) goto L_0x077c
+            L_0x075f:
+                r5 = 1
+                r8 = 0
+                goto L_0x0799
+            L_0x0762:
+                if (r3 == 0) goto L_0x0796
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 org.telegram.messenger.MessagesController r3 = r3.getMessagesController()
                 java.lang.Integer r4 = java.lang.Integer.valueOf(r13)
                 org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r4)
-                if (r3 == 0) goto L_0x077c
+                if (r3 == 0) goto L_0x0796
                 int r4 = r3.id
-                int r5 = r6.id
-                if (r4 != r5) goto L_0x0769
+                if (r4 != r11) goto L_0x0782
                 r3 = 2131624681(0x7f0e02e9, float:1.8876549E38)
                 java.lang.String r4 = "ChannelAdministrator"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-                goto L_0x0745
-            L_0x0769:
+                goto L_0x075f
+            L_0x0782:
                 r4 = 2131625221(0x7f0e0505, float:1.8877644E38)
-                java.lang.Object[] r5 = new java.lang.Object[r8]
+                r5 = 1
+                java.lang.Object[] r7 = new java.lang.Object[r5]
                 java.lang.String r3 = org.telegram.messenger.UserObject.getUserName(r3)
-                r7 = 0
-                r5[r7] = r3
+                r8 = 0
+                r7[r8] = r3
                 java.lang.String r3 = "EditAdminPromotedBy"
-                java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r3, r4, r5)
-                goto L_0x077e
-            L_0x077c:
-                r7 = 0
+                java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r3, r4, r7)
+                goto L_0x0799
+            L_0x0796:
+                r5 = 1
+                r8 = 0
                 r3 = 0
-            L_0x077e:
-                int r9 = r9 - r8
-                if (r2 == r9) goto L_0x0784
+            L_0x0799:
+                int r9 = r9 - r5
+                if (r2 == r9) goto L_0x079f
                 r2 = 0
                 r7 = 1
-                goto L_0x0785
-            L_0x0784:
+                goto L_0x07a1
+            L_0x079f:
                 r2 = 0
-            L_0x0785:
-                r1.setData(r6, r2, r3, r7)
-                goto L_0x07a8
-            L_0x0789:
                 r7 = 0
+            L_0x07a1:
+                r1.setData(r6, r2, r3, r7)
+                goto L_0x07c6
+            L_0x07a5:
+                r8 = 0
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.type
                 r4 = 2
-                if (r3 != r4) goto L_0x07a8
-                if (r10 == 0) goto L_0x079d
-                if (r15 == 0) goto L_0x079d
+                if (r3 != r4) goto L_0x07c6
+                if (r10 == 0) goto L_0x07b9
+                if (r15 == 0) goto L_0x07b9
                 long r3 = (long) r15
                 java.lang.String r3 = org.telegram.messenger.LocaleController.formatJoined(r3)
-                goto L_0x079e
-            L_0x079d:
+                goto L_0x07ba
+            L_0x07b9:
                 r3 = 0
-            L_0x079e:
-                int r9 = r9 - r8
-                if (r2 == r9) goto L_0x07a4
+            L_0x07ba:
+                r4 = 1
+                int r9 = r9 - r4
+                if (r2 == r9) goto L_0x07c1
                 r2 = 0
                 r7 = 1
-                goto L_0x07a5
-            L_0x07a4:
+                goto L_0x07c3
+            L_0x07c1:
                 r2 = 0
-            L_0x07a5:
+                r7 = 0
+            L_0x07c3:
                 r1.setData(r6, r2, r3, r7)
-            L_0x07a8:
+            L_0x07c6:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

@@ -78,19 +78,23 @@ public class JoinCallAlert extends BottomSheet {
         return false;
     }
 
-    public static void processDeletedChat(long j) {
-        ArrayList<TLRPC$Peer> arrayList = cachedChats;
-        if (arrayList != null && j <= 0) {
-            int i = 0;
+    public static void resetCache() {
+        cachedChats = null;
+    }
+
+    public static void processDeletedChat(int i, long j) {
+        ArrayList<TLRPC$Peer> arrayList;
+        if (lastCachedAccount == i && (arrayList = cachedChats) != null && j <= 0) {
+            int i2 = 0;
             int size = arrayList.size();
             while (true) {
-                if (i >= size) {
+                if (i2 >= size) {
                     break;
-                } else if (((long) MessageObject.getPeerId(cachedChats.get(i))) == j) {
-                    cachedChats.remove(i);
+                } else if (((long) MessageObject.getPeerId(cachedChats.get(i2))) == j) {
+                    cachedChats.remove(i2);
                     break;
                 } else {
-                    i++;
+                    i2++;
                 }
             }
             if (cachedChats.isEmpty()) {
@@ -488,7 +492,7 @@ public class JoinCallAlert extends BottomSheet {
         L_0x013c:
             if (r3 != 0) goto L_0x014d
             android.widget.TextView r6 = r0.textView
-            r8 = 2131628019(0x7f0e0ff3, float:1.8883319E38)
+            r8 = 2131628020(0x7f0e0ff4, float:1.888332E38)
             java.lang.String r9 = "VoipGroupStartAs"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r6.setText(r8)
@@ -559,14 +563,14 @@ public class JoinCallAlert extends BottomSheet {
         L_0x01d6:
             if (r10 == 0) goto L_0x01e7
             android.widget.TextView r3 = r0.messageTextView
-            r6 = 2131628021(0x7f0e0ff5, float:1.8883323E38)
+            r6 = 2131628022(0x7f0e0ff6, float:1.8883325E38)
             java.lang.String r7 = "VoipGroupStartAsInfoGroup"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
             goto L_0x01f5
         L_0x01e7:
             android.widget.TextView r3 = r0.messageTextView
-            r6 = 2131628020(0x7f0e0ff4, float:1.888332E38)
+            r6 = 2131628021(0x7f0e0ff5, float:1.8883323E38)
             java.lang.String r7 = "VoipGroupStartAsInfo"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r3.setText(r6)
@@ -663,12 +667,14 @@ public class JoinCallAlert extends BottomSheet {
     private void updateDoneButton(boolean z) {
         int peerId = MessageObject.getPeerId(this.selectedPeer);
         if (peerId > 0) {
-            TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(peerId));
-            this.doneButton.setText(LocaleController.formatString("VoipGroupContinueAs", NUM, UserObject.getFirstName(user)), z);
+            this.doneButton.setText(LocaleController.formatString("VoipGroupContinueAs", NUM, UserObject.getFirstName(MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(peerId)))), z);
             return;
         }
         TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-peerId));
-        this.doneButton.setText(LocaleController.formatString("VoipGroupContinueAs", NUM, chat.title), z);
+        BottomSheetCell bottomSheetCell = this.doneButton;
+        Object[] objArr = new Object[1];
+        objArr[0] = chat != null ? chat.title : "";
+        bottomSheetCell.setText(LocaleController.formatString("VoipGroupContinueAs", NUM, objArr), z);
     }
 
     /* access modifiers changed from: private */

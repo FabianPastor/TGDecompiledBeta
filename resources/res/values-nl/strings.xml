@@ -4078,7 +4078,6 @@
     <string name="VoipGroupRecordCall">Start opname</string>
     <string name="VoipGroupRecording">Voice chat is being recorded</string>
     <string name="VoipGroupRemoveMemberAlertText2">Do you want to remove %1$s from the voice chat and ban them in %2$s?</string>
-    <string name="VoipGroupRemoveMemberAlertTitle">Lid verwijderen</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s** verwijderd van de groep.</string>
     <string name="VoipGroupSaveFileHint">Recording Title</string>
     <string name="VoipGroupSearchMembers">Zoek leden om uit te nodigen...</string>

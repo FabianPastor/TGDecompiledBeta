@@ -4078,7 +4078,6 @@
     <string name="VoipGroupRecordCall">Avvia registrazione</string>
     <string name="VoipGroupRecording">La chat vocale viene registrata</string>
     <string name="VoipGroupRemoveMemberAlertText2">Vuoi rimuovere %1$s dalla chat vocale e bloccarlo in %2$s?</string>
-    <string name="VoipGroupRemoveMemberAlertTitle">Rimuovi membro</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s** rimosso dal gruppo.</string>
     <string name="VoipGroupSaveFileHint">Titolo registrazione</string>
     <string name="VoipGroupSearchMembers">Cerca membri da invitare...</string>

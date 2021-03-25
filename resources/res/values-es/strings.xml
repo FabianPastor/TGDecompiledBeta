@@ -4078,7 +4078,6 @@
     <string name="VoipGroupRecordCall">Iniciar grabación</string>
     <string name="VoipGroupRecording">El chat de voz está siendo grabado</string>
     <string name="VoipGroupRemoveMemberAlertText2">¿Quieres eliminar a %1$s del chat de voz y suspenderlo en %2$s?</string>
-    <string name="VoipGroupRemoveMemberAlertTitle">Eliminar miembro</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s** fue eliminado del grupo.</string>
     <string name="VoipGroupSaveFileHint">Título de la grabación</string>
     <string name="VoipGroupSearchMembers">Buscar miembros para invitar...</string>

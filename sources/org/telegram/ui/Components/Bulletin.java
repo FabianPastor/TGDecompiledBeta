@@ -156,7 +156,7 @@ public final class Bulletin {
     }
 
     public Bulletin show() {
-        if (!this.showing) {
+        if (!this.showing && this.containerLayout != null) {
             this.showing = true;
             if (this.layout.getParent() == this.parentLayout) {
                 Bulletin bulletin = visibleBulletin;

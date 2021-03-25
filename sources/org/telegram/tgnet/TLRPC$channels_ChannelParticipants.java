@@ -3,16 +3,17 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public abstract class TLRPC$channels_ChannelParticipants extends TLObject {
-    public int count;
-    public ArrayList<TLRPC$ChannelParticipant> participants = new ArrayList<>();
-    public ArrayList<TLRPC$User> users = new ArrayList<>();
+    public TLRPC$channels_ChannelParticipants() {
+        new ArrayList();
+        new ArrayList();
+    }
 
     public static TLRPC$channels_ChannelParticipants TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$channels_ChannelParticipants tLRPC$channels_ChannelParticipants;
         if (i != -NUM) {
-            tLRPC$channels_ChannelParticipants = i != -NUM ? null : new TLRPC$TL_channels_channelParticipants();
+            tLRPC$channels_ChannelParticipants = i != -NUM ? null : new TLRPC$TL_channels_channelParticipantsNotModified();
         } else {
-            tLRPC$channels_ChannelParticipants = new TLRPC$TL_channels_channelParticipantsNotModified();
+            tLRPC$channels_ChannelParticipants = new TLRPC$TL_channels_channelParticipants();
         }
         if (tLRPC$channels_ChannelParticipants != null || !z) {
             if (tLRPC$channels_ChannelParticipants != null) {

@@ -1,6 +1,6 @@
 package org.telegram.tgnet;
 
-public class TLRPC$TL_channelParticipantBanned_layer92 extends TLRPC$TL_channelParticipantBanned {
+public class TLRPC$TL_channelParticipantBanned_layer125 extends TLRPC$TL_channelParticipantBanned {
     public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
@@ -16,9 +16,7 @@ public class TLRPC$TL_channelParticipantBanned_layer92 extends TLRPC$TL_channelP
         tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
         this.kicked_by = abstractSerializedData.readInt32(z);
         this.date = abstractSerializedData.readInt32(z);
-        TLRPC$TL_channelBannedRights_layer92 TLdeserialize = TLRPC$TL_channelBannedRights_layer92.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        this.banned_rights_layer92 = TLdeserialize;
-        this.banned_rights = TLRPC$Chat.mergeBannedRights(TLdeserialize);
+        this.banned_rights = TLRPC$TL_chatBannedRights.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -29,6 +27,6 @@ public class TLRPC$TL_channelParticipantBanned_layer92 extends TLRPC$TL_channelP
         abstractSerializedData.writeInt32(this.peer.user_id);
         abstractSerializedData.writeInt32(this.kicked_by);
         abstractSerializedData.writeInt32(this.date);
-        this.banned_rights_layer92.serializeToStream(abstractSerializedData);
+        this.banned_rights.serializeToStream(abstractSerializedData);
     }
 }

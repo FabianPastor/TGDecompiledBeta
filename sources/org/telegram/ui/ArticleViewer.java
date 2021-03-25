@@ -5930,6 +5930,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 i = dp;
             }
             float f = (float) (dp - max);
+            if (f == 0.0f) {
+                f = 1.0f;
+            }
             this.currentHeaderHeight = i;
             float f2 = ((((float) (i - max)) / f) * 0.2f) + 0.8f;
             this.backButton.setScaleX(f2);

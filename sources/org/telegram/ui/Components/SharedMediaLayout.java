@@ -1761,7 +1761,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (adapter == groupUsersSearchAdapter2) {
                 TLObject item = groupUsersSearchAdapter2.getItem(i);
                 if (item instanceof TLRPC$ChannelParticipant) {
-                    i2 = ((TLRPC$ChannelParticipant) item).user_id;
+                    i2 = MessageObject.getPeerId(((TLRPC$ChannelParticipant) item).peer);
                 } else if (item instanceof TLRPC$ChatParticipant) {
                     i2 = ((TLRPC$ChatParticipant) item).user_id;
                 } else {
@@ -5916,7 +5916,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 TLRPC$ChannelParticipant tLRPC$ChannelParticipant = (TLRPC$ChannelParticipant) tLObject;
                 TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant = new TLRPC$TL_chatChannelParticipant();
                 tLRPC$TL_chatChannelParticipant.channelParticipant = tLRPC$ChannelParticipant;
-                tLRPC$TL_chatChannelParticipant.user_id = tLRPC$ChannelParticipant.user_id;
+                tLRPC$TL_chatChannelParticipant.user_id = MessageObject.getPeerId(tLRPC$ChannelParticipant.peer);
                 tLRPC$TL_chatChannelParticipant.inviter_id = tLRPC$ChannelParticipant.inviter_id;
                 tLRPC$TL_chatChannelParticipant.date = tLRPC$ChannelParticipant.date;
                 tLObject = tLRPC$TL_chatChannelParticipant;
@@ -6006,12 +6006,12 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         /* JADX WARNING: type inference failed for: r4v9 */
         /* JADX WARNING: type inference failed for: r4v11 */
         /* access modifiers changed from: private */
-        /* JADX WARNING: Code restructure failed: missing block: B:39:0x00eb, code lost:
-            if (r14.contains(" " + r3) != false) goto L_0x00ff;
+        /* JADX WARNING: Code restructure failed: missing block: B:39:0x00ef, code lost:
+            if (r14.contains(" " + r3) != false) goto L_0x0103;
          */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Removed duplicated region for block: B:53:0x0141 A[LOOP:1: B:30:0x00af->B:53:0x0141, LOOP_END] */
-        /* JADX WARNING: Removed duplicated region for block: B:61:0x0102 A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:53:0x0145 A[LOOP:1: B:30:0x00b3->B:53:0x0145, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:61:0x0106 A[SYNTHETIC] */
         /* JADX WARNING: Unknown variable types count: 1 */
         /* renamed from: lambda$null$2 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -6060,7 +6060,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 int r8 = r20.size()
                 r9 = 0
             L_0x0052:
-                if (r9 >= r8) goto L_0x0150
+                if (r9 >= r8) goto L_0x0154
                 r10 = r20
                 java.lang.Object r11 = r10.get(r9)
                 org.telegram.tgnet.TLObject r11 = (org.telegram.tgnet.TLObject) r11
@@ -6069,14 +6069,15 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 r12 = r11
                 org.telegram.tgnet.TLRPC$ChatParticipant r12 = (org.telegram.tgnet.TLRPC$ChatParticipant) r12
                 int r12 = r12.user_id
-                goto L_0x006f
+                goto L_0x0073
             L_0x0066:
                 boolean r12 = r11 instanceof org.telegram.tgnet.TLRPC$ChannelParticipant
-                if (r12 == 0) goto L_0x014a
+                if (r12 == 0) goto L_0x014e
                 r12 = r11
                 org.telegram.tgnet.TLRPC$ChannelParticipant r12 = (org.telegram.tgnet.TLRPC$ChannelParticipant) r12
-                int r12 = r12.user_id
-            L_0x006f:
+                org.telegram.tgnet.TLRPC$Peer r12 = r12.peer
+                int r12 = org.telegram.messenger.MessageObject.getPeerId(r12)
+            L_0x0073:
                 org.telegram.ui.Components.SharedMediaLayout r13 = org.telegram.ui.Components.SharedMediaLayout.this
                 org.telegram.ui.ProfileActivity r13 = r13.profileActivity
                 org.telegram.messenger.MessagesController r13 = r13.getMessagesController()
@@ -6087,24 +6088,24 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 org.telegram.ui.ProfileActivity r14 = r14.profileActivity
                 org.telegram.messenger.UserConfig r14 = r14.getUserConfig()
                 int r14 = r14.getClientUserId()
-                if (r13 != r14) goto L_0x0095
-                goto L_0x014a
-            L_0x0095:
+                if (r13 != r14) goto L_0x0099
+                goto L_0x014e
+            L_0x0099:
                 java.lang.String r13 = org.telegram.messenger.UserObject.getUserName(r12)
                 java.lang.String r13 = r13.toLowerCase()
                 org.telegram.messenger.LocaleController r14 = org.telegram.messenger.LocaleController.getInstance()
                 java.lang.String r14 = r14.getTranslitString(r13)
                 boolean r15 = r13.equals(r14)
-                if (r15 == 0) goto L_0x00ac
+                if (r15 == 0) goto L_0x00b0
                 r14 = 0
-            L_0x00ac:
+            L_0x00b0:
                 r15 = 0
                 r16 = 0
-            L_0x00af:
-                if (r15 >= r6) goto L_0x014a
+            L_0x00b3:
+                if (r15 >= r6) goto L_0x014e
                 r3 = r7[r15]
                 boolean r17 = r13.startsWith(r3)
-                if (r17 != 0) goto L_0x00ff
+                if (r17 != 0) goto L_0x0103
                 java.lang.StringBuilder r4 = new java.lang.StringBuilder
                 r4.<init>()
                 java.lang.String r5 = " "
@@ -6112,42 +6113,42 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 r4.append(r3)
                 java.lang.String r4 = r4.toString()
                 boolean r4 = r13.contains(r4)
-                if (r4 != 0) goto L_0x00ff
-                if (r14 == 0) goto L_0x00ee
+                if (r4 != 0) goto L_0x0103
+                if (r14 == 0) goto L_0x00f2
                 boolean r4 = r14.startsWith(r3)
-                if (r4 != 0) goto L_0x00ff
+                if (r4 != 0) goto L_0x0103
                 java.lang.StringBuilder r4 = new java.lang.StringBuilder
                 r4.<init>()
                 r4.append(r5)
                 r4.append(r3)
                 java.lang.String r4 = r4.toString()
                 boolean r4 = r14.contains(r4)
-                if (r4 == 0) goto L_0x00ee
-                goto L_0x00ff
-            L_0x00ee:
+                if (r4 == 0) goto L_0x00f2
+                goto L_0x0103
+            L_0x00f2:
                 java.lang.String r4 = r12.username
-                if (r4 == 0) goto L_0x00fc
+                if (r4 == 0) goto L_0x0100
                 boolean r4 = r4.startsWith(r3)
-                if (r4 == 0) goto L_0x00fc
+                if (r4 == 0) goto L_0x0100
                 r16 = 2
                 r4 = 2
-                goto L_0x0100
-            L_0x00fc:
-                r4 = r16
-                goto L_0x0100
-            L_0x00ff:
-                r4 = 1
+                goto L_0x0104
             L_0x0100:
-                if (r4 == 0) goto L_0x0141
+                r4 = r16
+                goto L_0x0104
+            L_0x0103:
+                r4 = 1
+            L_0x0104:
+                if (r4 == 0) goto L_0x0145
                 r5 = 1
-                if (r4 != r5) goto L_0x0112
+                if (r4 != r5) goto L_0x0116
                 java.lang.String r4 = r12.first_name
                 java.lang.String r12 = r12.last_name
                 java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r12, r3)
                 r1.add(r3)
                 r12 = 0
-                goto L_0x013c
-            L_0x0112:
+                goto L_0x0140
+            L_0x0116:
                 java.lang.StringBuilder r4 = new java.lang.StringBuilder
                 r4.<init>()
                 java.lang.String r13 = "@"
@@ -6163,24 +6164,24 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 r12 = 0
                 java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r12, r3)
                 r1.add(r3)
-            L_0x013c:
+            L_0x0140:
                 r2.add(r11)
                 r3 = r12
-                goto L_0x014b
-            L_0x0141:
+                goto L_0x014f
+            L_0x0145:
                 r3 = 0
                 r5 = 1
                 int r15 = r15 + 1
                 r16 = r4
                 r3 = 0
-                goto L_0x00af
-            L_0x014a:
+                goto L_0x00b3
+            L_0x014e:
                 r3 = 0
-            L_0x014b:
+            L_0x014f:
                 int r9 = r9 + 1
                 r3 = 0
                 goto L_0x0052
-            L_0x0150:
+            L_0x0154:
                 r0.updateSearchResults(r1, r2)
                 return
             */
@@ -6281,7 +6282,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             SpannableStringBuilder spannableStringBuilder;
             TLObject item = getItem(i);
             if (item instanceof TLRPC$ChannelParticipant) {
-                tLRPC$User = SharedMediaLayout.this.profileActivity.getMessagesController().getUser(Integer.valueOf(((TLRPC$ChannelParticipant) item).user_id));
+                tLRPC$User = SharedMediaLayout.this.profileActivity.getMessagesController().getUser(Integer.valueOf(MessageObject.getPeerId(((TLRPC$ChannelParticipant) item).peer)));
             } else if (item instanceof TLRPC$ChatParticipant) {
                 tLRPC$User = SharedMediaLayout.this.profileActivity.getMessagesController().getUser(Integer.valueOf(((TLRPC$ChatParticipant) item).user_id));
             } else {

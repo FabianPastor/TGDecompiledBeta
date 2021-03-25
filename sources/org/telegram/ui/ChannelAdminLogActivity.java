@@ -2209,7 +2209,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     public /* synthetic */ void lambda$null$10$ChannelAdminLogActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_channels_channelParticipants tLRPC$TL_channels_channelParticipants = (TLRPC$TL_channels_channelParticipants) tLObject;
-            MessagesController.getInstance(this.currentAccount).putUsers(tLRPC$TL_channels_channelParticipants.users, false);
+            getMessagesController().putUsers(tLRPC$TL_channels_channelParticipants.users, false);
+            getMessagesController().putChats(tLRPC$TL_channels_channelParticipants.chats, false);
             ArrayList<TLRPC$ChannelParticipant> arrayList = tLRPC$TL_channels_channelParticipants.participants;
             this.admins = arrayList;
             Dialog dialog = this.visibleDialog;
@@ -2557,7 +2558,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     break;
                 }
                 TLRPC$ChannelParticipant tLRPC$ChannelParticipant = this.admins.get(i2);
-                if (tLRPC$ChannelParticipant.user_id != i) {
+                if (MessageObject.getPeerId(tLRPC$ChannelParticipant.peer) != i) {
                     i2++;
                 } else if (!tLRPC$ChannelParticipant.can_edit) {
                     return;
@@ -3010,9 +3011,18 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         ((URLSpanMono) characterStyle).copyToClipboard();
                                         Toast.makeText(ChannelAdminLogActivity.this.getParentActivity(), LocaleController.getString("TextCopied", NUM), 0).show();
                                     } else if (characterStyle instanceof URLSpanUserMention) {
-                                        TLRPC$User user = MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).getUser(Utilities.parseInt(((URLSpanUserMention) characterStyle).getURL()));
-                                        if (user != null) {
-                                            MessagesController.openChatOrProfileWith(user, (TLRPC$Chat) null, ChannelAdminLogActivity.this, 0, false);
+                                        int intValue = Utilities.parseInt(((URLSpanUserMention) characterStyle).getURL()).intValue();
+                                        if (intValue > 0) {
+                                            TLRPC$User user = MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).getUser(Integer.valueOf(intValue));
+                                            if (user != null) {
+                                                MessagesController.openChatOrProfileWith(user, (TLRPC$Chat) null, ChannelAdminLogActivity.this, 0, false);
+                                                return;
+                                            }
+                                            return;
+                                        }
+                                        TLRPC$Chat chat = MessagesController.getInstance(ChannelAdminLogActivity.this.currentAccount).getChat(Integer.valueOf(-intValue));
+                                        if (chat != null) {
+                                            MessagesController.openChatOrProfileWith((TLRPC$User) null, chat, ChannelAdminLogActivity.this, 0, false);
                                         }
                                     } else if (characterStyle instanceof URLSpanNoUnderline) {
                                         String url = ((URLSpanNoUnderline) characterStyle).getURL();
@@ -3030,13 +3040,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                             builder.setTitle(url2);
                                             builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, 
                                             /*  JADX ERROR: Method code generation error
-                                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00d1: INVOKE  
+                                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00fb: INVOKE  
                                                   (r5v7 'builder' org.telegram.ui.ActionBar.BottomSheet$Builder)
                                                   (wrap: java.lang.CharSequence[] : ?: FILLED_NEW_ARRAY  (r6v15 java.lang.CharSequence[]) = 
-                                                  (wrap: java.lang.String : 0x00bb: INVOKE  (r7v12 java.lang.String) = ("Open"), (NUM int) org.telegram.messenger.LocaleController.getString(java.lang.String, int):java.lang.String type: STATIC)
-                                                  (wrap: java.lang.String : 0x00c6: INVOKE  (r7v14 java.lang.String) = ("Copy"), (NUM int) org.telegram.messenger.LocaleController.getString(java.lang.String, int):java.lang.String type: STATIC)
+                                                  (wrap: java.lang.String : 0x00e5: INVOKE  (r7v12 java.lang.String) = ("Open"), (NUM int) org.telegram.messenger.LocaleController.getString(java.lang.String, int):java.lang.String type: STATIC)
+                                                  (wrap: java.lang.String : 0x00f0: INVOKE  (r7v14 java.lang.String) = ("Copy"), (NUM int) org.telegram.messenger.LocaleController.getString(java.lang.String, int):java.lang.String type: STATIC)
                                                  elemType: java.lang.CharSequence)
-                                                  (wrap: org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$1$rbrOVgG843N56Jyq2QFQkJwMTrI : 0x00ce: CONSTRUCTOR  (r7v15 org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$1$rbrOVgG843N56Jyq2QFQkJwMTrI) = 
+                                                  (wrap: org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$1$rbrOVgG843N56Jyq2QFQkJwMTrI : 0x00f8: CONSTRUCTOR  (r7v15 org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$1$rbrOVgG843N56Jyq2QFQkJwMTrI) = 
                                                   (r4v0 'this' org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$1 A[THIS])
                                                   (r0v5 'url2' java.lang.String)
                                                  call: org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$1$rbrOVgG843N56Jyq2QFQkJwMTrI.<init>(org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$1, java.lang.String):void type: CONSTRUCTOR)
@@ -3142,7 +3152,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                 	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                                 	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                                 	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00ce: CONSTRUCTOR  (r7v15 org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$1$rbrOVgG843N56Jyq2QFQkJwMTrI) = 
+                                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00f8: CONSTRUCTOR  (r7v15 org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$1$rbrOVgG843N56Jyq2QFQkJwMTrI) = 
                                                   (r4v0 'this' org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$1 A[THIS])
                                                   (r0v5 'url2' java.lang.String)
                                                  call: org.telegram.ui.-$$Lambda$ChannelAdminLogActivity$ChatActivityAdapter$1$rbrOVgG843N56Jyq2QFQkJwMTrI.<init>(org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter$1, java.lang.String):void type: CONSTRUCTOR in method: org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.1.didPressUrl(org.telegram.ui.Cells.ChatMessageCell, android.text.style.CharacterStyle, boolean):void, dex: classes.dex
@@ -3180,33 +3190,49 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                 java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                                                 android.widget.Toast r5 = android.widget.Toast.makeText(r5, r6, r1)
                                                 r5.show()
-                                                goto L_0x0152
+                                                goto L_0x017c
                                             L_0x002b:
                                                 boolean r0 = r6 instanceof org.telegram.ui.Components.URLSpanUserMention
                                                 r2 = 0
-                                                if (r0 == 0) goto L_0x0055
-                                                org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
-                                                org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
-                                                int r5 = r5.currentAccount
-                                                org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
+                                                if (r0 == 0) goto L_0x007f
                                                 org.telegram.ui.Components.URLSpanUserMention r6 = (org.telegram.ui.Components.URLSpanUserMention) r6
-                                                java.lang.String r6 = r6.getURL()
-                                                java.lang.Integer r6 = org.telegram.messenger.Utilities.parseInt(r6)
-                                                org.telegram.tgnet.TLRPC$User r5 = r5.getUser(r6)
-                                                if (r5 == 0) goto L_0x0152
+                                                java.lang.String r5 = r6.getURL()
+                                                java.lang.Integer r5 = org.telegram.messenger.Utilities.parseInt(r5)
+                                                int r5 = r5.intValue()
+                                                if (r5 <= 0) goto L_0x005f
+                                                org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r6 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
+                                                org.telegram.ui.ChannelAdminLogActivity r6 = org.telegram.ui.ChannelAdminLogActivity.this
+                                                int r6 = r6.currentAccount
+                                                org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
+                                                java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
+                                                org.telegram.tgnet.TLRPC$User r5 = r6.getUser(r5)
+                                                if (r5 == 0) goto L_0x017c
                                                 org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r6 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                                 org.telegram.ui.ChannelAdminLogActivity r6 = org.telegram.ui.ChannelAdminLogActivity.this
                                                 org.telegram.messenger.MessagesController.openChatOrProfileWith(r5, r2, r6, r1, r1)
-                                                goto L_0x0152
-                                            L_0x0055:
+                                                goto L_0x017c
+                                            L_0x005f:
+                                                org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r6 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
+                                                org.telegram.ui.ChannelAdminLogActivity r6 = org.telegram.ui.ChannelAdminLogActivity.this
+                                                int r6 = r6.currentAccount
+                                                org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
+                                                int r5 = -r5
+                                                java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
+                                                org.telegram.tgnet.TLRPC$Chat r5 = r6.getChat(r5)
+                                                if (r5 == 0) goto L_0x017c
+                                                org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r6 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
+                                                org.telegram.ui.ChannelAdminLogActivity r6 = org.telegram.ui.ChannelAdminLogActivity.this
+                                                org.telegram.messenger.MessagesController.openChatOrProfileWith(r2, r5, r6, r1, r1)
+                                                goto L_0x017c
+                                            L_0x007f:
                                                 boolean r0 = r6 instanceof org.telegram.ui.Components.URLSpanNoUnderline
                                                 r3 = 1
-                                                if (r0 == 0) goto L_0x009a
+                                                if (r0 == 0) goto L_0x00c4
                                                 org.telegram.ui.Components.URLSpanNoUnderline r6 = (org.telegram.ui.Components.URLSpanNoUnderline) r6
                                                 java.lang.String r5 = r6.getURL()
                                                 java.lang.String r6 = "@"
                                                 boolean r6 = r5.startsWith(r6)
-                                                if (r6 == 0) goto L_0x0081
+                                                if (r6 == 0) goto L_0x00ab
                                                 org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r6 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                                 org.telegram.ui.ChannelAdminLogActivity r6 = org.telegram.ui.ChannelAdminLogActivity.this
                                                 int r6 = r6.currentAccount
@@ -3215,23 +3241,23 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                 org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r7 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                                 org.telegram.ui.ChannelAdminLogActivity r7 = org.telegram.ui.ChannelAdminLogActivity.this
                                                 r6.openByUserName(r5, r7, r1)
-                                                goto L_0x0152
-                                            L_0x0081:
+                                                goto L_0x017c
+                                            L_0x00ab:
                                                 java.lang.String r6 = "#"
                                                 boolean r6 = r5.startsWith(r6)
-                                                if (r6 == 0) goto L_0x0152
+                                                if (r6 == 0) goto L_0x017c
                                                 org.telegram.ui.DialogsActivity r6 = new org.telegram.ui.DialogsActivity
                                                 r6.<init>(r2)
                                                 r6.setSearchString(r5)
                                                 org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                                 org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
                                                 r5.presentFragment(r6)
-                                                goto L_0x0152
-                                            L_0x009a:
+                                                goto L_0x017c
+                                            L_0x00c4:
                                                 r0 = r6
                                                 android.text.style.URLSpan r0 = (android.text.style.URLSpan) r0
                                                 java.lang.String r0 = r0.getURL()
-                                                if (r7 == 0) goto L_0x00e0
+                                                if (r7 == 0) goto L_0x010a
                                                 org.telegram.ui.ActionBar.BottomSheet$Builder r5 = new org.telegram.ui.ActionBar.BottomSheet$Builder
                                                 org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r6 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                                 org.telegram.ui.ChannelAdminLogActivity r6 = org.telegram.ui.ChannelAdminLogActivity.this
@@ -3255,25 +3281,25 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                 org.telegram.ui.ChannelAdminLogActivity r6 = org.telegram.ui.ChannelAdminLogActivity.this
                                                 org.telegram.ui.ActionBar.BottomSheet r5 = r5.create()
                                                 r6.showDialog(r5)
-                                                goto L_0x0152
-                                            L_0x00e0:
+                                                goto L_0x017c
+                                            L_0x010a:
                                                 boolean r7 = r6 instanceof org.telegram.ui.Components.URLSpanReplacement
-                                                if (r7 == 0) goto L_0x00f2
+                                                if (r7 == 0) goto L_0x011c
                                                 org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                                 org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
                                                 org.telegram.ui.Components.URLSpanReplacement r6 = (org.telegram.ui.Components.URLSpanReplacement) r6
                                                 java.lang.String r6 = r6.getURL()
                                                 r5.showOpenUrlAlert(r6, r3)
-                                                goto L_0x0152
-                                            L_0x00f2:
+                                                goto L_0x017c
+                                            L_0x011c:
                                                 org.telegram.tgnet.TLRPC$Message r6 = r5.messageOwner
                                                 org.telegram.tgnet.TLRPC$MessageMedia r6 = r6.media
                                                 boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
-                                                if (r7 == 0) goto L_0x0147
+                                                if (r7 == 0) goto L_0x0171
                                                 org.telegram.tgnet.TLRPC$WebPage r6 = r6.webpage
-                                                if (r6 == 0) goto L_0x0147
+                                                if (r6 == 0) goto L_0x0171
                                                 org.telegram.tgnet.TLRPC$Page r6 = r6.cached_page
-                                                if (r6 == 0) goto L_0x0147
+                                                if (r6 == 0) goto L_0x0171
                                                 java.lang.String r6 = r0.toLowerCase()
                                                 org.telegram.tgnet.TLRPC$Message r7 = r5.messageOwner
                                                 org.telegram.tgnet.TLRPC$MessageMedia r7 = r7.media
@@ -3281,16 +3307,16 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                 java.lang.String r7 = r7.url
                                                 java.lang.String r7 = r7.toLowerCase()
                                                 boolean r1 = org.telegram.messenger.browser.Browser.isTelegraphUrl(r6, r1)
-                                                if (r1 != 0) goto L_0x0120
+                                                if (r1 != 0) goto L_0x014a
                                                 java.lang.String r1 = "t.me/iv"
                                                 boolean r1 = r6.contains(r1)
-                                                if (r1 == 0) goto L_0x0147
-                                            L_0x0120:
+                                                if (r1 == 0) goto L_0x0171
+                                            L_0x014a:
                                                 boolean r1 = r6.contains(r7)
-                                                if (r1 != 0) goto L_0x012c
+                                                if (r1 != 0) goto L_0x0156
                                                 boolean r6 = r7.contains(r6)
-                                                if (r6 == 0) goto L_0x0147
-                                            L_0x012c:
+                                                if (r6 == 0) goto L_0x0171
+                                            L_0x0156:
                                                 org.telegram.ui.ArticleViewer r6 = org.telegram.ui.ArticleViewer.getInstance()
                                                 org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r7 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                                 org.telegram.ui.ChannelAdminLogActivity r7 = org.telegram.ui.ChannelAdminLogActivity.this
@@ -3301,12 +3327,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                 org.telegram.ui.ArticleViewer r6 = org.telegram.ui.ArticleViewer.getInstance()
                                                 r6.open(r5)
                                                 return
-                                            L_0x0147:
+                                            L_0x0171:
                                                 org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                                 org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
                                                 android.app.Activity r5 = r5.getParentActivity()
                                                 org.telegram.messenger.browser.Browser.openUrl((android.content.Context) r5, (java.lang.String) r0, (boolean) r3)
-                                            L_0x0152:
+                                            L_0x017c:
                                                 return
                                             */
                                             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.AnonymousClass1.didPressUrl(org.telegram.ui.Cells.ChatMessageCell, android.text.style.CharacterStyle, boolean):void");
@@ -4340,12 +4366,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                             tLRPC$TL_channelAdminLogEvent.action = tLRPC$TL_channelAdminLogEventActionExportedInviteRevoke;
                                             tLRPC$TL_channelAdminLogEvent.date = (int) (System.currentTimeMillis() / 1000);
                                             tLRPC$TL_channelAdminLogEvent.user_id = ChannelAdminLogActivity.this.getAccountInstance().getUserConfig().clientUserId;
-                                            int access$6500 = ChannelAdminLogActivity.this.currentAccount;
+                                            int access$6600 = ChannelAdminLogActivity.this.currentAccount;
                                             ChannelAdminLogActivity channelAdminLogActivity = ChannelAdminLogActivity.this;
                                             ArrayList<MessageObject> arrayList = channelAdminLogActivity.messages;
-                                            HashMap access$6600 = channelAdminLogActivity.messagesByDays;
+                                            HashMap access$6700 = channelAdminLogActivity.messagesByDays;
                                             ChannelAdminLogActivity channelAdminLogActivity2 = ChannelAdminLogActivity.this;
-                                            if (new MessageObject(access$6500, tLRPC$TL_channelAdminLogEvent, arrayList, (HashMap<String, ArrayList<MessageObject>>) access$6600, channelAdminLogActivity2.currentChat, channelAdminLogActivity2.mid, true).contentType >= 0) {
+                                            if (new MessageObject(access$6600, tLRPC$TL_channelAdminLogEvent, arrayList, (HashMap<String, ArrayList<MessageObject>>) access$6700, channelAdminLogActivity2.currentChat, channelAdminLogActivity2.mid, true).contentType >= 0) {
                                                 int size2 = ChannelAdminLogActivity.this.messages.size() - size;
                                                 if (size2 > 0) {
                                                     ChannelAdminLogActivity.this.chatListItemAnimator.setShouldAnimateEnterFromBottom(true);
@@ -4365,12 +4391,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                             tLRPC$TL_channelAdminLogEvent.action = tLRPC$TL_channelAdminLogEventActionExportedInviteDelete;
                                             tLRPC$TL_channelAdminLogEvent.date = (int) (System.currentTimeMillis() / 1000);
                                             tLRPC$TL_channelAdminLogEvent.user_id = ChannelAdminLogActivity.this.getAccountInstance().getUserConfig().clientUserId;
-                                            int access$7200 = ChannelAdminLogActivity.this.currentAccount;
+                                            int access$7300 = ChannelAdminLogActivity.this.currentAccount;
                                             ChannelAdminLogActivity channelAdminLogActivity = ChannelAdminLogActivity.this;
                                             ArrayList<MessageObject> arrayList = channelAdminLogActivity.messages;
-                                            HashMap access$6600 = channelAdminLogActivity.messagesByDays;
+                                            HashMap access$6700 = channelAdminLogActivity.messagesByDays;
                                             ChannelAdminLogActivity channelAdminLogActivity2 = ChannelAdminLogActivity.this;
-                                            if (new MessageObject(access$7200, tLRPC$TL_channelAdminLogEvent, arrayList, (HashMap<String, ArrayList<MessageObject>>) access$6600, channelAdminLogActivity2.currentChat, channelAdminLogActivity2.mid, true).contentType >= 0) {
+                                            if (new MessageObject(access$7300, tLRPC$TL_channelAdminLogEvent, arrayList, (HashMap<String, ArrayList<MessageObject>>) access$6700, channelAdminLogActivity2.currentChat, channelAdminLogActivity2.mid, true).contentType >= 0) {
                                                 int size2 = ChannelAdminLogActivity.this.messages.size() - size;
                                                 if (size2 > 0) {
                                                     ChannelAdminLogActivity.this.chatListItemAnimator.setShouldAnimateEnterFromBottom(true);
@@ -4389,12 +4415,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                             tLRPC$TL_channelAdminLogEvent.action = tLRPC$TL_channelAdminLogEventActionExportedInviteEdit;
                                             tLRPC$TL_channelAdminLogEvent.date = (int) (System.currentTimeMillis() / 1000);
                                             tLRPC$TL_channelAdminLogEvent.user_id = ChannelAdminLogActivity.this.getAccountInstance().getUserConfig().clientUserId;
-                                            int access$7300 = ChannelAdminLogActivity.this.currentAccount;
+                                            int access$7400 = ChannelAdminLogActivity.this.currentAccount;
                                             ChannelAdminLogActivity channelAdminLogActivity = ChannelAdminLogActivity.this;
                                             ArrayList<MessageObject> arrayList = channelAdminLogActivity.messages;
-                                            HashMap access$6600 = channelAdminLogActivity.messagesByDays;
+                                            HashMap access$6700 = channelAdminLogActivity.messagesByDays;
                                             ChannelAdminLogActivity channelAdminLogActivity2 = ChannelAdminLogActivity.this;
-                                            if (new MessageObject(access$7300, tLRPC$TL_channelAdminLogEvent, arrayList, (HashMap<String, ArrayList<MessageObject>>) access$6600, channelAdminLogActivity2.currentChat, channelAdminLogActivity2.mid, true).contentType >= 0) {
+                                            if (new MessageObject(access$7400, tLRPC$TL_channelAdminLogEvent, arrayList, (HashMap<String, ArrayList<MessageObject>>) access$6700, channelAdminLogActivity2.currentChat, channelAdminLogActivity2.mid, true).contentType >= 0) {
                                                 ChannelAdminLogActivity.this.chatAdapter.notifyDataSetChanged();
                                                 ChannelAdminLogActivity.this.moveScrollToLastMessage();
                                             }

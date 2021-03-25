@@ -5749,7 +5749,7 @@ public final class R {
         public static final int VoipGroupRecordCall = NUM;
         public static final int VoipGroupRecording = NUM;
         public static final int VoipGroupRemoveMemberAlertText2 = NUM;
-        public static final int VoipGroupRemoveMemberAlertTitle = NUM;
+        public static final int VoipGroupRemoveMemberAlertTitle2 = NUM;
         public static final int VoipGroupRemovedFromGroup = NUM;
         public static final int VoipGroupSaveFileHint = NUM;
         public static final int VoipGroupSearchMembers = NUM;

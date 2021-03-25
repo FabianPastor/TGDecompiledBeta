@@ -56,6 +56,7 @@ import org.telegram.tgnet.TLRPC$GroupCall;
 import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$PhoneCall;
 import org.telegram.tgnet.TLRPC$TL_boolFalse;
+import org.telegram.tgnet.TLRPC$TL_chatFull;
 import org.telegram.tgnet.TLRPC$TL_dataJSON;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_groupCall;
@@ -99,6 +100,7 @@ import org.telegram.tgnet.TLRPC$Update;
 import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$messages_DhConfig;
+import org.telegram.ui.Components.JoinCallAlert;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.VoIPFeedbackActivity;
@@ -120,6 +122,7 @@ public class VoIPService extends VoIPBaseService {
     private byte[] authKey;
     private int callReqId;
     private int checkRequestId;
+    private int classGuid;
     private long currentStreamRequestTimestamp;
     private Runnable delayedStartOutgoingCall;
     private boolean endCallAfterRequest;
@@ -298,6 +301,7 @@ public class VoIPService extends VoIPBaseService {
         int intExtra = intent.getIntExtra("account", -1);
         this.currentAccount = intExtra;
         if (intExtra != -1) {
+            this.classGuid = ConnectionsManager.generateClassGuid();
             int intExtra2 = intent.getIntExtra("user_id", 0);
             int intExtra3 = intent.getIntExtra("chat_id", 0);
             this.createGroupCall = intent.getBooleanExtra("createGroupCall", false);
@@ -330,7 +334,11 @@ public class VoIPService extends VoIPBaseService {
                 this.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(intExtra2));
             }
             if (intExtra3 != 0) {
-                this.chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(intExtra3));
+                TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(intExtra3));
+                this.chat = chat;
+                if (ChatObject.isChannel(chat)) {
+                    MessagesController.getInstance(this.currentAccount).startShortPoll(this.chat, this.classGuid, false);
+                }
             }
             this.localSink = new ProxyVideoSink();
             this.remoteSink = new ProxyVideoSink();
@@ -1119,6 +1127,9 @@ public class VoIPService extends VoIPBaseService {
         Runnable runnable = this.onDestroyRunnable;
         if (runnable != null) {
             runnable.run();
+        }
+        if (ChatObject.isChannel(this.chat)) {
+            MessagesController.getInstance(this.currentAccount).startShortPoll(this.chat, this.classGuid, true);
         }
     }
 
@@ -2031,6 +2042,7 @@ public class VoIPService extends VoIPBaseService {
                     VoIPService.this.lambda$null$30$VoIPService(this.f$1);
                 }
             });
+            startGroupCheckShortpoll();
             return;
         }
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
@@ -2055,12 +2067,27 @@ public class VoIPService extends VoIPBaseService {
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$31 */
     public /* synthetic */ void lambda$null$31$VoIPService(TLRPC$TL_error tLRPC$TL_error) {
-        if ("GROUPCALL_SSRC_DUPLICATE_MUCH".equals(tLRPC$TL_error.text)) {
+        if ("JOIN_AS_PEER_INVALID".equals(tLRPC$TL_error.text)) {
+            TLRPC$ChatFull chatFull = MessagesController.getInstance(this.currentAccount).getChatFull(this.chat.id);
+            if (chatFull != null) {
+                if (chatFull instanceof TLRPC$TL_chatFull) {
+                    chatFull.flags &= -32769;
+                } else {
+                    chatFull.flags &= -67108865;
+                }
+                chatFull.groupcall_default_join_as = null;
+                JoinCallAlert.resetCache();
+            }
+            hangUp(2);
+        } else if ("GROUPCALL_SSRC_DUPLICATE_MUCH".equals(tLRPC$TL_error.text)) {
             createGroupInstance(false);
-            return;
+        } else {
+            if ("GROUPCALL_INVALID".equals(tLRPC$TL_error.text)) {
+                MessagesController.getInstance(this.currentAccount).loadFullChat(this.chat.id, 0, true);
+            }
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.needShowAlert, 6, tLRPC$TL_error.text);
+            hangUp(0);
         }
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.needShowAlert, 6, tLRPC$TL_error.text);
-        hangUp(0);
     }
 
     private void startGroupCheckShortpoll() {
@@ -2329,7 +2356,7 @@ public class VoIPService extends VoIPBaseService {
                     }
                 });
             } else {
-                this.tgVoip.onStreamPartAvailable(j, (ByteBuffer) null, ("TIME_INVALID".equals(tLRPC$TL_error.text) || "TIME_TOO_BIG".equals(tLRPC$TL_error.text) || "TIME_TOO_SMALL".equals(tLRPC$TL_error.text)) ? -1 : 0, j2);
+                this.tgVoip.onStreamPartAvailable(j, (ByteBuffer) null, ("TIME_TOO_BIG".equals(tLRPC$TL_error.text) || tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) ? 0 : -1, j2);
             }
         }
     }

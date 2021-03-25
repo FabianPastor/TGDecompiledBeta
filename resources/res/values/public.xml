@@ -5610,7 +5610,7 @@
     <public type="string" name="VoipGroupRecordCall" id="NUM" />
     <public type="string" name="VoipGroupRecording" id="NUM" />
     <public type="string" name="VoipGroupRemoveMemberAlertText2" id="NUM" />
-    <public type="string" name="VoipGroupRemoveMemberAlertTitle" id="NUM" />
+    <public type="string" name="VoipGroupRemoveMemberAlertTitle2" id="NUM" />
     <public type="string" name="VoipGroupRemovedFromGroup" id="NUM" />
     <public type="string" name="VoipGroupSaveFileHint" id="NUM" />
     <public type="string" name="VoipGroupSearchMembers" id="NUM" />

@@ -13,6 +13,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
@@ -284,6 +285,7 @@ public class SearchAdapterHelper {
                 TLRPC$TL_channels_channelParticipants tLRPC$TL_channels_channelParticipants = (TLRPC$TL_channels_channelParticipants) tLObject;
                 this.lastFoundChannel = str.toLowerCase();
                 MessagesController.getInstance(this.currentAccount).putUsers(tLRPC$TL_channels_channelParticipants.users, false);
+                MessagesController.getInstance(this.currentAccount).putChats(tLRPC$TL_channels_channelParticipants.chats, false);
                 this.groupSearch.clear();
                 this.groupSearchMap.clear();
                 this.groupSearch.addAll(tLRPC$TL_channels_channelParticipants.participants);
@@ -291,8 +293,9 @@ public class SearchAdapterHelper {
                 int size = tLRPC$TL_channels_channelParticipants.participants.size();
                 for (int i3 = 0; i3 < size; i3++) {
                     TLRPC$ChannelParticipant tLRPC$ChannelParticipant = tLRPC$TL_channels_channelParticipants.participants.get(i3);
-                    if (z || tLRPC$ChannelParticipant.user_id != clientUserId) {
-                        this.groupSearchMap.put(tLRPC$ChannelParticipant.user_id, tLRPC$ChannelParticipant);
+                    int peerId = MessageObject.getPeerId(tLRPC$ChannelParticipant.peer);
+                    if (z || peerId != clientUserId) {
+                        this.groupSearchMap.put(peerId, tLRPC$ChannelParticipant);
                     } else {
                         this.groupSearch.remove(tLRPC$ChannelParticipant);
                     }
@@ -542,7 +545,7 @@ public class SearchAdapterHelper {
             if (tLObject instanceof TLRPC$ChatParticipant) {
                 this.groupSearchMap.put(((TLRPC$ChatParticipant) tLObject).user_id, tLObject);
             } else if (tLObject instanceof TLRPC$ChannelParticipant) {
-                this.groupSearchMap.put(((TLRPC$ChannelParticipant) tLObject).user_id, tLObject);
+                this.groupSearchMap.put(MessageObject.getPeerId(((TLRPC$ChannelParticipant) tLObject).peer), tLObject);
             }
         }
         removeGroupSearchFromGlobal();

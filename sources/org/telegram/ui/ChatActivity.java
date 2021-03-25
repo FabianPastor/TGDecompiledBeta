@@ -26450,40 +26450,42 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* access modifiers changed from: private */
     public void hideActionMode() {
-        if (this.actionBar.isActionModeShowed()) {
-            ActionBar actionBar = this.actionBar;
-            if (actionBar != null) {
-                actionBar.hideActionMode();
+        ActionBar actionBar = this.actionBar;
+        if (actionBar != null) {
+            if (actionBar.isActionModeShowed()) {
+                this.actionBar.hideActionMode();
+            } else {
+                return;
             }
-            this.cantDeleteMessagesCount = 0;
-            this.canEditMessagesCount = 0;
-            this.cantForwardMessagesCount = 0;
-            this.canSaveMusicCount = 0;
-            this.canSaveDocumentsCount = 0;
-            this.cantSaveMessagesCount = 0;
-            ChatActivityEnterView chatActivityEnterView2 = this.chatActivityEnterView;
-            if (chatActivityEnterView2 != null) {
-                EditTextCaption editField = chatActivityEnterView2.getEditField();
-                if (this.chatActivityEnterView.getVisibility() == 0) {
-                    editField.requestFocus();
-                }
-                editField.setAllowDrawCursor(true);
-            }
-            TextSelectionHelper.ChatListTextSelectionHelper chatListTextSelectionHelper = this.textSelectionHelper;
-            if (chatListTextSelectionHelper != null) {
-                chatListTextSelectionHelper.clear(true);
-                this.textSelectionHelper.cancelAllAnimators();
-            }
-            TextSelectionHint textSelectionHint2 = this.textSelectionHint;
-            if (textSelectionHint2 != null) {
-                textSelectionHint2.hide();
-            }
-            ChatActivityEnterView chatActivityEnterView3 = this.chatActivityEnterView;
-            if (chatActivityEnterView3 != null) {
-                chatActivityEnterView3.preventInput = false;
-            }
-            this.textSelectionHintWasShowed = false;
         }
+        this.cantDeleteMessagesCount = 0;
+        this.canEditMessagesCount = 0;
+        this.cantForwardMessagesCount = 0;
+        this.canSaveMusicCount = 0;
+        this.canSaveDocumentsCount = 0;
+        this.cantSaveMessagesCount = 0;
+        ChatActivityEnterView chatActivityEnterView2 = this.chatActivityEnterView;
+        if (chatActivityEnterView2 != null) {
+            EditTextCaption editField = chatActivityEnterView2.getEditField();
+            if (this.chatActivityEnterView.getVisibility() == 0) {
+                editField.requestFocus();
+            }
+            editField.setAllowDrawCursor(true);
+        }
+        TextSelectionHelper.ChatListTextSelectionHelper chatListTextSelectionHelper = this.textSelectionHelper;
+        if (chatListTextSelectionHelper != null) {
+            chatListTextSelectionHelper.clear(true);
+            this.textSelectionHelper.cancelAllAnimators();
+        }
+        TextSelectionHint textSelectionHint2 = this.textSelectionHint;
+        if (textSelectionHint2 != null) {
+            textSelectionHint2.hide();
+        }
+        ChatActivityEnterView chatActivityEnterView3 = this.chatActivityEnterView;
+        if (chatActivityEnterView3 != null) {
+            chatActivityEnterView3.preventInput = false;
+        }
+        this.textSelectionHintWasShowed = false;
     }
 
     /* access modifiers changed from: private */
@@ -32084,7 +32086,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         boolean z3 = true;
         try {
             Uri parse = Uri.parse(str);
-            if (getMessagesController().authDomains.contains(parse.getHost() != null ? parse.getHost().toLowerCase() : "")) {
+            String lowerCase = parse.getHost() != null ? parse.getHost().toLowerCase() : "";
+            if ((this.currentEncryptedChat == null || getMessagesController().secretWebpagePreview == 1) && getMessagesController().authDomains.contains(lowerCase)) {
                 SendMessagesHelper sendMessagesHelper = getSendMessagesHelper();
                 if (i != 0) {
                     if (i != 2) {

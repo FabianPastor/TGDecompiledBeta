@@ -1333,7 +1333,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             boolean r12 = r13.isAddingNew
             r5.setUserAdminRole(r6, r7, r8, r9, r10, r11, r12)
             org.telegram.ui.ChatRightsEditActivity$ChatRightsEditActivityDelegate r0 = r13.delegate
-            if (r0 == 0) goto L_0x0158
+            if (r0 == 0) goto L_0x0159
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r1 = r13.adminRights
             boolean r2 = r1.change_info
             if (r2 != 0) goto L_0x010c
@@ -1364,43 +1364,44 @@ public class ChatRightsEditActivity extends BaseFragment {
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r2 = r13.bannedRights
             java.lang.String r4 = r13.currentRank
             r0.didSetRights(r3, r1, r2, r4)
-            goto L_0x0158
+            goto L_0x0159
         L_0x0114:
-            if (r0 != r3) goto L_0x0158
+            if (r0 != r3) goto L_0x0159
             int r0 = r13.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r0)
             int r6 = r13.chatId
             org.telegram.tgnet.TLRPC$User r7 = r13.currentUser
-            org.telegram.tgnet.TLRPC$TL_chatBannedRights r8 = r13.bannedRights
-            boolean r9 = r13.isChannel
-            org.telegram.ui.ActionBar.BaseFragment r10 = r13.getFragmentForAlert(r3)
-            r5.setUserBannedRole(r6, r7, r8, r9, r10)
+            r8 = 0
+            org.telegram.tgnet.TLRPC$TL_chatBannedRights r9 = r13.bannedRights
+            boolean r10 = r13.isChannel
+            org.telegram.ui.ActionBar.BaseFragment r11 = r13.getFragmentForAlert(r3)
+            r5.setParticipantBannedRole(r6, r7, r8, r9, r10, r11)
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r0 = r13.bannedRights
             boolean r1 = r0.send_messages
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_stickers
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.embed_links
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_media
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_gifs
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_games
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_inline
-            if (r1 == 0) goto L_0x014a
-            goto L_0x014d
-        L_0x014a:
+            if (r1 == 0) goto L_0x014b
+            goto L_0x014e
+        L_0x014b:
             r0.until_date = r4
             r3 = 2
-        L_0x014d:
+        L_0x014e:
             org.telegram.ui.ChatRightsEditActivity$ChatRightsEditActivityDelegate r1 = r13.delegate
-            if (r1 == 0) goto L_0x0158
+            if (r1 == 0) goto L_0x0159
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r2 = r13.adminRights
             java.lang.String r4 = r13.currentRank
             r1.didSetRights(r3, r2, r0, r4)
-        L_0x0158:
+        L_0x0159:
             r13.finishFragment()
             return
         */

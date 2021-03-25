@@ -4078,7 +4078,6 @@
     <string name="VoipGroupRecordCall">녹음 시작</string>
     <string name="VoipGroupRecording">음성 대화가 녹음되고 있습니다</string>
     <string name="VoipGroupRemoveMemberAlertText2">%1$s님을 음성대화에서 추방하고, %2$s에서 차단하겠습니까?</string>
-    <string name="VoipGroupRemoveMemberAlertTitle">참가자 추방</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s**님이 그룹에서 내보내졌습니다</string>
     <string name="VoipGroupSaveFileHint">녹음 제목</string>
     <string name="VoipGroupSearchMembers">초대할 참가자 검색...</string>

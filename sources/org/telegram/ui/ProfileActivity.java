@@ -110,6 +110,7 @@ import org.telegram.tgnet.TLRPC$MessageAction;
 import org.telegram.tgnet.TLRPC$Page;
 import org.telegram.tgnet.TLRPC$PageBlock;
 import org.telegram.tgnet.TLRPC$PageListItem;
+import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$ReplyMarkup;
 import org.telegram.tgnet.TLRPC$TL_channelFull;
@@ -138,6 +139,7 @@ import org.telegram.tgnet.TLRPC$TL_pageBlockList;
 import org.telegram.tgnet.TLRPC$TL_pageBlockParagraph;
 import org.telegram.tgnet.TLRPC$TL_pageListItemText;
 import org.telegram.tgnet.TLRPC$TL_peerNotifySettings;
+import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$TL_photos_photo;
 import org.telegram.tgnet.TLRPC$TL_photos_uploadProfilePhoto;
 import org.telegram.tgnet.TLRPC$TL_userEmpty;
@@ -2136,7 +2138,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r1 = 2131165841(0x7var_, float:1.794591E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r3, (int) r1)
             r11.callItem = r1
-            r3 = 2131628038(0x7f0e1006, float:1.8883357E38)
+            r3 = 2131628039(0x7f0e1007, float:1.888336E38)
             java.lang.String r4 = "VoipGroupVoiceChat"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setContentDescription(r3)
@@ -2322,8 +2324,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r2.channel = r4
             org.telegram.messenger.MessagesController r4 = r30.getMessagesController()
             int r5 = r11.user_id
-            org.telegram.tgnet.TLRPC$InputUser r4 = r4.getInputUser((int) r5)
-            r2.user_id = r4
+            org.telegram.tgnet.TLRPC$InputPeer r4 = r4.getInputPeer((int) r5)
+            r2.participant = r4
             org.telegram.tgnet.ConnectionsManager r4 = r30.getConnectionsManager()
             org.telegram.ui.-$$Lambda$ProfileActivity$JIvt10ClV36JH8Lt1CzjI6KYZzQ r5 = new org.telegram.ui.-$$Lambda$ProfileActivity$JIvt10ClV36JH8Lt1CzjI6KYZzQ
             r5.<init>()
@@ -3838,9 +3840,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                             tLRPC$TL_chatChannelParticipant.channelParticipant = new TLRPC$TL_channelParticipant();
                         }
                         tLRPC$TL_chatChannelParticipant.channelParticipant.inviter_id = ProfileActivity.this.getUserConfig().getClientUserId();
+                        tLRPC$TL_chatChannelParticipant.channelParticipant.peer = new TLRPC$TL_peerUser();
                         TLRPC$ChannelParticipant tLRPC$ChannelParticipant = tLRPC$TL_chatChannelParticipant.channelParticipant;
+                        TLRPC$Peer tLRPC$Peer = tLRPC$ChannelParticipant.peer;
                         TLRPC$ChatParticipant tLRPC$ChatParticipant3 = tLRPC$ChatParticipant2;
-                        tLRPC$ChannelParticipant.user_id = tLRPC$ChatParticipant3.user_id;
+                        tLRPC$Peer.user_id = tLRPC$ChatParticipant3.user_id;
                         tLRPC$ChannelParticipant.date = tLRPC$ChatParticipant3.date;
                         tLRPC$ChannelParticipant.banned_rights = tLRPC$TL_chatBannedRights;
                         tLRPC$ChannelParticipant.admin_rights = tLRPC$TL_chatAdminRights;
@@ -3869,7 +3873,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         if (i4 >= ProfileActivity.this.chatInfo.participants.participants.size()) {
                             z = false;
                             break;
-                        } else if (((TLRPC$TL_chatChannelParticipant) ProfileActivity.this.chatInfo.participants.participants.get(i4)).channelParticipant.user_id == tLRPC$ChatParticipant2.user_id) {
+                        } else if (MessageObject.getPeerId(((TLRPC$TL_chatChannelParticipant) ProfileActivity.this.chatInfo.participants.participants.get(i4)).channelParticipant.peer) == tLRPC$ChatParticipant2.user_id) {
                             ProfileActivity.this.chatInfo.participants_count--;
                             ProfileActivity.this.chatInfo.participants.participants.remove(i4);
                             z = true;
@@ -4150,13 +4154,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (tLRPC$TL_error == null) {
             TLRPC$TL_channels_channelParticipants tLRPC$TL_channels_channelParticipants = (TLRPC$TL_channels_channelParticipants) tLObject;
             getMessagesController().putUsers(tLRPC$TL_channels_channelParticipants.users, false);
+            getMessagesController().putChats(tLRPC$TL_channels_channelParticipants.chats, false);
             if (tLRPC$TL_channels_channelParticipants.users.size() < 200) {
                 this.usersEndReached = true;
             }
             if (tLRPC$TL_channels_getParticipants.offset == 0) {
                 this.participantsMap.clear();
                 this.chatInfo.participants = new TLRPC$TL_chatParticipants();
-                getMessagesStorage().putUsersAndChats(tLRPC$TL_channels_channelParticipants.users, (ArrayList<TLRPC$Chat>) null, true, true);
+                getMessagesStorage().putUsersAndChats(tLRPC$TL_channels_channelParticipants.users, tLRPC$TL_channels_channelParticipants.chats, true, true);
                 getMessagesStorage().updateChannelUsers(this.chat_id, tLRPC$TL_channels_channelParticipants.participants);
             }
             for (int i = 0; i < tLRPC$TL_channels_channelParticipants.participants.size(); i++) {
@@ -4164,10 +4169,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 TLRPC$ChannelParticipant tLRPC$ChannelParticipant = tLRPC$TL_channels_channelParticipants.participants.get(i);
                 tLRPC$TL_chatChannelParticipant.channelParticipant = tLRPC$ChannelParticipant;
                 tLRPC$TL_chatChannelParticipant.inviter_id = tLRPC$ChannelParticipant.inviter_id;
-                int i2 = tLRPC$ChannelParticipant.user_id;
-                tLRPC$TL_chatChannelParticipant.user_id = i2;
-                tLRPC$TL_chatChannelParticipant.date = tLRPC$ChannelParticipant.date;
-                if (this.participantsMap.indexOfKey(i2) < 0) {
+                int peerId = MessageObject.getPeerId(tLRPC$ChannelParticipant.peer);
+                tLRPC$TL_chatChannelParticipant.user_id = peerId;
+                tLRPC$TL_chatChannelParticipant.date = tLRPC$TL_chatChannelParticipant.channelParticipant.date;
+                if (this.participantsMap.indexOfKey(peerId) < 0) {
                     TLRPC$ChatFull tLRPC$ChatFull = this.chatInfo;
                     if (tLRPC$ChatFull.participants == null) {
                         tLRPC$ChatFull.participants = new TLRPC$TL_chatParticipants();
@@ -4375,8 +4380,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     TLRPC$TL_channelParticipant tLRPC$TL_channelParticipant = new TLRPC$TL_channelParticipant();
                     tLRPC$TL_chatChannelParticipant.channelParticipant = tLRPC$TL_channelParticipant;
                     tLRPC$TL_channelParticipant.inviter_id = getUserConfig().getClientUserId();
+                    tLRPC$TL_chatChannelParticipant.channelParticipant.peer = new TLRPC$TL_peerUser();
                     TLRPC$ChannelParticipant tLRPC$ChannelParticipant = tLRPC$TL_chatChannelParticipant.channelParticipant;
-                    tLRPC$ChannelParticipant.user_id = tLRPC$User.id;
+                    tLRPC$ChannelParticipant.peer.user_id = tLRPC$User.id;
                     tLRPC$ChannelParticipant.date = getConnectionsManager().getCurrentTime();
                     tLRPC$TL_chatChannelParticipant.user_id = tLRPC$User.id;
                     this.chatInfo.participants.participants.add(tLRPC$TL_chatChannelParticipant);
@@ -5896,7 +5902,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private void kickUser(int i, TLRPC$ChatParticipant tLRPC$ChatParticipant) {
         if (i != 0) {
             TLRPC$User user = getMessagesController().getUser(Integer.valueOf(i));
-            getMessagesController().deleteUserFromChat(this.chat_id, user, this.chatInfo);
+            getMessagesController().deleteParticipantFromChat(this.chat_id, user, this.chatInfo);
             if (!(this.currentChat == null || user == null || !BulletinFactory.canShowBulletin(this))) {
                 BulletinFactory.createRemoveFromChatBulletin(this, user, this.currentChat.title).show();
             }
@@ -5914,7 +5920,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         } else {
             getNotificationCenter().postNotificationName(i2, new Object[0]);
         }
-        getMessagesController().deleteUserFromChat(this.chat_id, getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), this.chatInfo);
+        getMessagesController().deleteParticipantFromChat(this.chat_id, getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), this.chatInfo);
         this.playProfileAnimation = 0;
         finishFragment();
     }
@@ -6701,7 +6707,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r2 = 2
             r4 = 1
             if (r1 != r2) goto L_0x0022
-            r1 = 2131628104(0x7f0e1048, float:1.8883491E38)
+            r1 = 2131628105(0x7f0e1049, float:1.8883493E38)
             java.lang.String r5 = "WaitingForNetwork"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
@@ -7145,7 +7151,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x039a:
             boolean r2 = org.telegram.messenger.ChatObject.isKickedFromChat(r5)
             if (r2 == 0) goto L_0x03ab
-            r2 = 2131628150(0x7f0e1076, float:1.8883585E38)
+            r2 = 2131628151(0x7f0e1077, float:1.8883587E38)
             java.lang.String r3 = "YouWereKicked"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x03a9:
@@ -7154,7 +7160,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x03ab:
             boolean r2 = org.telegram.messenger.ChatObject.isLeftFromChat(r5)
             if (r2 == 0) goto L_0x03bb
-            r2 = 2131628149(0x7f0e1075, float:1.8883583E38)
+            r2 = 2131628150(0x7f0e1076, float:1.8883585E38)
             java.lang.String r3 = "YouLeft"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x03a9
@@ -9266,7 +9272,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x02ca
             L_0x023a:
                 r3 = 3600(0xe10, float:5.045E-42)
-                r4 = 2131628131(0x7f0e1063, float:1.8883546E38)
+                r4 = 2131628132(0x7f0e1064, float:1.8883548E38)
                 java.lang.String r5 = "WillUnmuteIn"
                 if (r2 >= r3) goto L_0x0256
                 java.lang.Object[] r3 = new java.lang.Object[r7]

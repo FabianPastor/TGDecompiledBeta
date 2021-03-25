@@ -6929,7 +6929,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             long r12 = -r5
             int r4 = (int) r12
             r12 = 0
-            r3.deleteUserFromChat(r4, r2, r12)
+            r3.deleteParticipantFromChat(r4, r2, r12)
             goto L_0x0590
         L_0x057f:
             org.telegram.messenger.MessagesController r2 = r38.getMessagesController()
@@ -7399,7 +7399,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else if (ChatObject.isNotInChat(tLRPC$Chat)) {
             getMessagesController().deleteDialog(j, 0, z);
         } else {
-            getMessagesController().deleteUserFromChat((int) (-j), getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), (TLRPC$ChatFull) null, z, false);
+            getMessagesController().deleteParticipantFromChat((int) (-j), getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), (TLRPC$Chat) null, (TLRPC$ChatFull) null, z, false);
         }
         if (AndroidUtilities.isTablet()) {
             getNotificationCenter().postNotificationName(NotificationCenter.closeChats, Long.valueOf(j));
@@ -8464,7 +8464,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else if (ChatObject.isNotInChat(tLRPC$Chat)) {
             getMessagesController().deleteDialog(j, 0, z);
         } else {
-            getMessagesController().deleteUserFromChat((int) (-j), getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), (TLRPC$ChatFull) null, z, z);
+            getMessagesController().deleteParticipantFromChat((int) (-j), getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), (TLRPC$Chat) null, (TLRPC$ChatFull) null, z, z);
         }
         getMessagesController().checkIfFolderEmpty(this.folderId);
     }

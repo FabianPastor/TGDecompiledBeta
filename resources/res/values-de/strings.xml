@@ -4078,7 +4078,6 @@
     <string name="VoipGroupRecordCall">Aufnahme starten</string>
     <string name="VoipGroupRecording">Sprachchat wird aufgenommen</string>
     <string name="VoipGroupRemoveMemberAlertText2">Möchtest du %1$s aus dem Sprachchat entfernen und bei %2$s sperren?</string>
-    <string name="VoipGroupRemoveMemberAlertTitle">Mitglied entfernen</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s** aus der Gruppe entfernt.</string>
     <string name="VoipGroupSaveFileHint">Titel der Aufnahme</string>
     <string name="VoipGroupSearchMembers">Mitglieder zum Anruf hinzufügen</string>

@@ -12,7 +12,9 @@ public class TLRPC$TL_channelParticipantAdmin_layer103 extends TLRPC$TL_channelP
             z2 = true;
         }
         this.self = z2;
-        this.user_id = abstractSerializedData.readInt32(z);
+        TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+        this.peer = tLRPC$TL_peerUser;
+        tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
         if ((this.flags & 2) != 0) {
             this.inviter_id = abstractSerializedData.readInt32(z);
         }
@@ -28,7 +30,7 @@ public class TLRPC$TL_channelParticipantAdmin_layer103 extends TLRPC$TL_channelP
         int i2 = this.self ? i | 2 : i & -3;
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
-        abstractSerializedData.writeInt32(this.user_id);
+        abstractSerializedData.writeInt32(this.peer.user_id);
         if ((this.flags & 2) != 0) {
             abstractSerializedData.writeInt32(this.inviter_id);
         }

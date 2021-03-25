@@ -4078,7 +4078,6 @@
     <string name="VoipGroupRecordCall">بدء التسجيل</string>
     <string name="VoipGroupRecording">يتم تسجيل المحادثة الصوتيّة</string>
     <string name="VoipGroupRemoveMemberAlertText2">هل تريد إزالة %1$s من المحادثة الصوتية وحظرهم في %2$s؟</string>
-    <string name="VoipGroupRemoveMemberAlertTitle">إزالة عضو</string>
     <string name="VoipGroupRemovedFromGroup">تمت إزالة **%1$s** من المجموعة.</string>
     <string name="VoipGroupSaveFileHint">عنوان التسجيل</string>
     <string name="VoipGroupSearchMembers">البحث عن أشخاص لدعوتهم...</string>
