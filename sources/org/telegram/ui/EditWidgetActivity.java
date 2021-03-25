@@ -353,7 +353,7 @@ public class EditWidgetActivity extends BaseFragment {
                 org.telegram.ui.EditWidgetActivity r0 = r1.this$0
                 int r0 = r0.widgetType
                 r2 = 1111490560(0x42400000, float:48.0)
-                r3 = 2131627219(0x7f0e0cd3, float:1.8881696E38)
+                r3 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
                 java.lang.String r4 = "SavedMessages"
                 r5 = 0
                 r6 = 0
@@ -440,7 +440,7 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x00c4:
                 boolean r9 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
                 if (r9 == 0) goto L_0x00d4
-                r9 = 2131627108(0x7f0e0CLASSNAME, float:1.8881471E38)
+                r9 = 2131627109(0x7f0e0CLASSNAME, float:1.8881473E38)
                 java.lang.String r15 = "RepliesTitle"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r15, r9)
                 goto L_0x00ec
@@ -1080,7 +1080,7 @@ public class EditWidgetActivity extends BaseFragment {
                 int r13 = r13 + 1
                 r4 = r18
                 r2 = 1111490560(0x42400000, float:48.0)
-                r3 = 2131627219(0x7f0e0cd3, float:1.8881696E38)
+                r3 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
                 r5 = 0
                 r6 = 0
                 r8 = 8
@@ -1227,15 +1227,15 @@ public class EditWidgetActivity extends BaseFragment {
                 boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r0)
                 if (r6 == 0) goto L_0x075d
                 r7 = r18
-                r6 = 2131627219(0x7f0e0cd3, float:1.8881696E38)
+                r6 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 goto L_0x0786
             L_0x075d:
                 r7 = r18
-                r6 = 2131627219(0x7f0e0cd3, float:1.8881696E38)
+                r6 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
                 boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
                 if (r8 == 0) goto L_0x0772
-                r8 = 2131627108(0x7f0e0CLASSNAME, float:1.8881471E38)
+                r8 = 2131627109(0x7f0e0CLASSNAME, float:1.8881473E38)
                 java.lang.String r9 = "RepliesTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
                 goto L_0x0786
@@ -1277,7 +1277,7 @@ public class EditWidgetActivity extends BaseFragment {
                 goto L_0x07e7
             L_0x07b4:
                 r7 = r18
-                r6 = 2131627219(0x7f0e0cd3, float:1.8881696E38)
+                r6 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
                 org.telegram.ui.EditWidgetActivity r8 = r1.this$0
                 org.telegram.messenger.MessagesController r8 = r8.getMessagesController()
                 int r0 = -r0

@@ -558,18 +558,18 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
                 if (r8 != 0) goto L_0x00a1
-                r8 = 2131627704(0x7f0e0eb8, float:1.888268E38)
+                r8 = 2131627705(0x7f0e0eb9, float:1.8882682E38)
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b6
             L_0x00a1:
                 if (r8 != r0) goto L_0x00ad
-                r8 = 2131627703(0x7f0e0eb7, float:1.8882678E38)
+                r8 = 2131627704(0x7f0e0eb8, float:1.888268E38)
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b6
             L_0x00ad:
-                r8 = 2131627702(0x7f0e0eb6, float:1.8882676E38)
+                r8 = 2131627703(0x7f0e0eb7, float:1.8882678E38)
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
             L_0x00b6:

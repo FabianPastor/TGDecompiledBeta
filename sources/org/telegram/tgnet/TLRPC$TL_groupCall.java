@@ -8,10 +8,11 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         this.flags = readInt32;
         boolean z2 = false;
         this.join_muted = (readInt32 & 2) != 0;
-        if ((readInt32 & 4) != 0) {
+        this.can_change_join_muted = (readInt32 & 4) != 0;
+        if ((readInt32 & 64) != 0) {
             z2 = true;
         }
-        this.can_change_join_muted = z2;
+        this.join_date_asc = z2;
         this.id = abstractSerializedData.readInt64(z);
         this.access_hash = abstractSerializedData.readInt64(z);
         this.participants_count = abstractSerializedData.readInt32(z);
@@ -36,7 +37,9 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         this.flags = i;
         int i2 = this.can_change_join_muted ? i | 4 : i & -5;
         this.flags = i2;
-        abstractSerializedData.writeInt32(i2);
+        int i3 = this.join_date_asc ? i2 | 64 : i2 & -65;
+        this.flags = i3;
+        abstractSerializedData.writeInt32(i3);
         abstractSerializedData.writeInt64(this.id);
         abstractSerializedData.writeInt64(this.access_hash);
         abstractSerializedData.writeInt32(this.participants_count);

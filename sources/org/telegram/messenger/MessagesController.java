@@ -17314,16 +17314,18 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         getUserConfig().clearConfig();
         ArrayList<NotificationCenter.NotificationCenterDelegate> observers = getNotificationCenter().getObservers(NotificationCenter.appDidLogout);
-        int size = observers.size();
-        int i2 = 0;
-        while (true) {
-            if (i2 >= size) {
-                break;
-            } else if (observers.get(i2) instanceof LaunchActivity) {
-                z = false;
-                break;
-            } else {
-                i2++;
+        if (observers != null) {
+            int size = observers.size();
+            int i2 = 0;
+            while (true) {
+                if (i2 >= size) {
+                    break;
+                } else if (observers.get(i2) instanceof LaunchActivity) {
+                    z = false;
+                    break;
+                } else {
+                    i2++;
+                }
             }
         }
         if (z && UserConfig.selectedAccount == this.currentAccount) {

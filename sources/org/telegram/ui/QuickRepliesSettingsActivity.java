@@ -160,7 +160,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 int r0 = r0.reply1Row
                 r2 = 0
                 if (r9 != r0) goto L_0x0030
-                r0 = 2131627045(0x7f0e0CLASSNAME, float:1.8881343E38)
+                r0 = 2131627046(0x7f0e0CLASSNAME, float:1.8881345E38)
                 java.lang.String r2 = "QuickReplyDefault1"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg1"
@@ -173,7 +173,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
                 int r0 = r0.reply2Row
                 if (r9 != r0) goto L_0x0044
-                r0 = 2131627046(0x7f0e0CLASSNAME, float:1.8881345E38)
+                r0 = 2131627047(0x7f0e0CLASSNAME, float:1.8881347E38)
                 java.lang.String r2 = "QuickReplyDefault2"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg2"
@@ -182,7 +182,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
                 int r0 = r0.reply3Row
                 if (r9 != r0) goto L_0x0058
-                r0 = 2131627047(0x7f0e0CLASSNAME, float:1.8881347E38)
+                r0 = 2131627048(0x7f0e0CLASSNAME, float:1.888135E38)
                 java.lang.String r2 = "QuickReplyDefault3"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg3"
@@ -191,7 +191,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
                 int r0 = r0.reply4Row
                 if (r9 != r0) goto L_0x006c
-                r0 = 2131627048(0x7f0e0CLASSNAME, float:1.888135E38)
+                r0 = 2131627049(0x7f0e0CLASSNAME, float:1.8881351E38)
                 java.lang.String r2 = "QuickReplyDefault4"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg4"

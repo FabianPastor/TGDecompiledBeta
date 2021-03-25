@@ -6,6 +6,7 @@ public abstract class TLRPC$GroupCall extends TLObject {
     public int duration;
     public int flags;
     public long id;
+    public boolean join_date_asc;
     public boolean join_muted;
     public TLRPC$TL_dataJSON params;
     public int participants_count;

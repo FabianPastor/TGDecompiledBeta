@@ -357,7 +357,8 @@ public class ManageLinksActivity extends BaseFragment {
                 tLRPC$TL_messages_getExportedChatInvites.flags |= 4;
                 ArrayList<TLRPC$TL_chatInviteExported> arrayList3 = this.invites;
                 tLRPC$TL_messages_getExportedChatInvites.offset_link = arrayList3.get(arrayList3.size() - 1).link;
-                tLRPC$TL_messages_getExportedChatInvites.offset_date = this.invites.get(this.revokedInvites.size() - 1).date;
+                ArrayList<TLRPC$TL_chatInviteExported> arrayList4 = this.invites;
+                tLRPC$TL_messages_getExportedChatInvites.offset_date = arrayList4.get(arrayList4.size() - 1).date;
             }
             this.linksLoading = true;
             getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getExportedChatInvites, new RequestDelegate(this.isPublic ? null : this.invite, z2) {
@@ -1561,7 +1562,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.messenger.UserConfig r0 = r0.getUserConfig()
                 int r0 = r0.clientUserId
                 if (r7 != r0) goto L_0x0214
-                r7 = 2131627029(0x7f0e0CLASSNAME, float:1.888131E38)
+                r7 = 2131627030(0x7f0e0CLASSNAME, float:1.8881313E38)
                 java.lang.String r0 = "PublicLink"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1580,7 +1581,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r6.setText(r7)
                 goto L_0x0280
             L_0x0235:
-                r7 = 2131626847(0x7f0e0b5f, float:1.8880942E38)
+                r7 = 2131626848(0x7f0e0b60, float:1.8880944E38)
                 java.lang.String r0 = "PermanentLinkForThisAdmin"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1589,7 +1590,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.revokedHeader
                 if (r7 != r0) goto L_0x0257
-                r7 = 2131627205(0x7f0e0cc5, float:1.8881668E38)
+                r7 = 2131627206(0x7f0e0cc6, float:1.888167E38)
                 java.lang.String r0 = "RevokedLinks"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1900,7 +1901,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r0.add(r2)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r4)
                 r1.add(r2)
-                r2 = 2131627389(0x7f0e0d7d, float:1.8882041E38)
+                r2 = 2131627390(0x7f0e0d7e, float:1.8882043E38)
                 java.lang.String r6 = "ShareLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1929,7 +1930,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r2 = org.telegram.ui.ManageLinksActivity.this
                 boolean r2 = r2.canEdit
                 if (r2 == 0) goto L_0x00c8
-                r2 = 2131627200(0x7f0e0cc0, float:1.8881658E38)
+                r2 = 2131627201(0x7f0e0cc1, float:1.888166E38)
                 java.lang.String r6 = "RevokeLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -2617,7 +2618,9 @@ public class ManageLinksActivity extends BaseFragment {
                     getMessagesStorage().saveChatLinksCount(this.currentChatId, this.info.invitesCount);
                 }
             }
-            BulletinFactory.of((BaseFragment) this).createSimpleBulletin(NUM, LocaleController.getString("InviteRevokedHint", NUM)).show();
+            if (getParentActivity() != null) {
+                BulletinFactory.of((BaseFragment) this).createSimpleBulletin(NUM, LocaleController.getString("InviteRevokedHint", NUM)).show();
+            }
         }
     }
 

@@ -1906,7 +1906,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0164:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x017a }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131627388(0x7f0e0d7c, float:1.888204E38)
+                r0 = 2131627389(0x7f0e0d7d, float:1.8882041E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x017a }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x017a }
                 r10 = 500(0x1f4, float:7.0E-43)

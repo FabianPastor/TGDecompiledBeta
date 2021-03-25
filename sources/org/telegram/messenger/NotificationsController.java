@@ -5097,12 +5097,12 @@ public class NotificationsController extends BaseController {
             org.telegram.tgnet.TLRPC$Poll r0 = r1.poll
             boolean r0 = r0.quiz
             if (r0 == 0) goto L_0x0var_
-            r0 = 2131627051(0x7f0e0c2b, float:1.8881356E38)
+            r0 = 2131627052(0x7f0e0c2c, float:1.8881358E38)
             java.lang.String r1 = "QuizPoll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
         L_0x0var_:
-            r0 = 2131626939(0x7f0e0bbb, float:1.8881128E38)
+            r0 = 2131626940(0x7f0e0bbc, float:1.888113E38)
             java.lang.String r1 = "Poll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             return r0
@@ -9155,7 +9155,7 @@ public class NotificationsController extends BaseController {
             r8 = r0
             android.app.NotificationChannel r0 = new android.app.NotificationChannel
             if (r26 == 0) goto L_0x05a9
-            r7 = 2131627277(0x7f0e0d0d, float:1.8881814E38)
+            r7 = 2131627278(0x7f0e0d0e, float:1.8881816E38)
             java.lang.String r9 = "SecretChatName"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             goto L_0x05ab
@@ -10590,7 +10590,7 @@ public class NotificationsController extends BaseController {
             if (r1 > r3) goto L_0x09d0
             r1 = 2131165477(0x7var_, float:1.7945172E38)
             java.lang.String r3 = "Reply"
-            r5 = 2131627115(0x7f0e0c6b, float:1.8881485E38)
+            r5 = 2131627116(0x7f0e0c6c, float:1.8881487E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r5)     // Catch:{ Exception -> 0x0a03 }
             android.content.Context r5 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0a03 }
             r6 = 134217728(0x8000000, float:3.85186E-34)
@@ -10601,7 +10601,7 @@ public class NotificationsController extends BaseController {
         L_0x09d0:
             r1 = 2131165476(0x7var_, float:1.794517E38)
             java.lang.String r3 = "Reply"
-            r5 = 2131627115(0x7f0e0c6b, float:1.8881485E38)
+            r5 = 2131627116(0x7f0e0c6c, float:1.8881487E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r5)     // Catch:{ Exception -> 0x0a03 }
             android.content.Context r5 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0a03 }
             r6 = 134217728(0x8000000, float:3.85186E-34)
@@ -10996,7 +10996,7 @@ public class NotificationsController extends BaseController {
             long r3 = (long) r9
             boolean r3 = org.telegram.messenger.UserObject.isReplyUser((long) r3)
             if (r3 == 0) goto L_0x01e8
-            r3 = 2131627108(0x7f0e0CLASSNAME, float:1.8881471E38)
+            r3 = 2131627109(0x7f0e0CLASSNAME, float:1.8881473E38)
             java.lang.String r4 = "RepliesTitle"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r4, r3)
             goto L_0x01f3
@@ -11130,7 +11130,7 @@ public class NotificationsController extends BaseController {
         L_0x02ed:
             r3 = 0
         L_0x02ee:
-            r0 = 2131627277(0x7f0e0d0d, float:1.8881814E38)
+            r0 = 2131627278(0x7f0e0d0e, float:1.8881816E38)
             java.lang.String r4 = "SecretChatName"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r4, r0)
             r4 = r3
@@ -11261,7 +11261,7 @@ public class NotificationsController extends BaseController {
             androidx.core.app.RemoteInput$Builder r1 = new androidx.core.app.RemoteInput$Builder
             java.lang.String r8 = "extra_voice_reply"
             r1.<init>(r8)
-            r8 = 2131627115(0x7f0e0c6b, float:1.8881485E38)
+            r8 = 2131627116(0x7f0e0c6c, float:1.8881487E38)
             java.lang.String r12 = "Reply"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r12, r8)
             r1.setLabel(r8)
@@ -11273,12 +11273,12 @@ public class NotificationsController extends BaseController {
             r8[r12] = r14
             java.lang.String r12 = "ReplyToGroup"
             r52 = r11
-            r11 = 2131627116(0x7f0e0c6c, float:1.8881487E38)
+            r11 = 2131627117(0x7f0e0c6d, float:1.888149E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.formatString(r12, r11, r8)
             goto L_0x0410
         L_0x03ff:
             r52 = r11
-            r8 = 2131627117(0x7f0e0c6d, float:1.888149E38)
+            r8 = 2131627118(0x7f0e0c6e, float:1.8881491E38)
             r11 = 1
             java.lang.Object[] r12 = new java.lang.Object[r11]
             r11 = 0

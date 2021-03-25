@@ -2465,7 +2465,7 @@ public class MessageObject {
         L_0x04af:
             r21 = r12
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
-            r5 = 2131627839(0x7f0e0f3f, float:1.8882954E38)
+            r5 = 2131627840(0x7f0e0var_, float:1.8882956E38)
             java.lang.String r8 = "UserRestrictionsUntilForever"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r8, r5)
             r11.<init>(r5)
@@ -6604,13 +6604,13 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$Poll r0 = r1.poll
             boolean r0 = r0.quiz
             if (r0 == 0) goto L_0x0bb5
-            r0 = 2131627051(0x7f0e0c2b, float:1.8881356E38)
+            r0 = 2131627052(0x7f0e0c2c, float:1.8881358E38)
             java.lang.String r1 = "QuizPoll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0d5e
         L_0x0bb5:
-            r0 = 2131626939(0x7f0e0bbb, float:1.8881128E38)
+            r0 = 2131626940(0x7f0e0bbc, float:1.888113E38)
             java.lang.String r1 = "Poll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -6713,7 +6713,7 @@ public class MessageObject {
         L_0x0c8a:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaUnsupported
             if (r0 == 0) goto L_0x0c9b
-            r0 = 2131627762(0x7f0e0ef2, float:1.8882798E38)
+            r0 = 2131627763(0x7f0e0ef3, float:1.88828E38)
             java.lang.String r1 = "UnsupportedMedia"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0

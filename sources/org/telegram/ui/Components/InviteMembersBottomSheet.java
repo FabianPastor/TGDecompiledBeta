@@ -169,7 +169,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             org.telegram.ui.Components.UsersAlertBase$SearchField r1 = r6.searchView
             org.telegram.ui.Components.EditTextBoldCursor r1 = r1.searchEditText
             java.lang.String r2 = "SearchForChats"
-            r5 = 2131627244(0x7f0e0cec, float:1.8881747E38)
+            r5 = 2131627245(0x7f0e0ced, float:1.888175E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r5)
             r1.setHint(r2)
             android.view.ViewConfiguration r1 = android.view.ViewConfiguration.get(r17)

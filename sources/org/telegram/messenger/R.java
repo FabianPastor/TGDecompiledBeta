@@ -4556,11 +4556,12 @@ public final class R {
         public static final int PaymentTransactionTotal = NUM;
         public static final int PaymentWarning = NUM;
         public static final int PaymentWarningText = NUM;
-        public static final int PeopleCanJoinViaLink_few = NUM;
-        public static final int PeopleCanJoinViaLink_many = NUM;
-        public static final int PeopleCanJoinViaLink_one = NUM;
-        public static final int PeopleCanJoinViaLink_other = NUM;
-        public static final int PeopleCanJoinViaLink_two = NUM;
+        public static final int PeopleCanJoinViaLinkCount_few = NUM;
+        public static final int PeopleCanJoinViaLinkCount_many = NUM;
+        public static final int PeopleCanJoinViaLinkCount_one = NUM;
+        public static final int PeopleCanJoinViaLinkCount_other = NUM;
+        public static final int PeopleCanJoinViaLinkCount_two = NUM;
+        public static final int PeopleCanJoinViaLinkCount_zero = NUM;
         public static final int PeopleJoinedRemaining_few = NUM;
         public static final int PeopleJoinedRemaining_many = NUM;
         public static final int PeopleJoinedRemaining_one = NUM;

@@ -386,7 +386,7 @@ public class ThemeEditorView {
                     r13.setImeOptions(r0)
                     org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
                     java.lang.String r0 = "Search"
-                    r1 = 2131627231(0x7f0e0cdf, float:1.888172E38)
+                    r1 = 2131627232(0x7f0e0ce0, float:1.8881723E38)
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r1)
                     r13.setHint(r0)
                     org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
@@ -1344,7 +1344,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r15, r5)
                 java.lang.String r4 = "SaveTheme"
-                r15 = 2131627213(0x7f0e0ccd, float:1.8881684E38)
+                r15 = 2131627214(0x7f0e0cce, float:1.8881686E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r15)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1435,7 +1435,7 @@ public class ThemeEditorView {
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r2, r5, r3, r5)
                 java.lang.String r2 = "Save"
-                r3 = 2131627209(0x7f0e0cc9, float:1.8881676E38)
+                r3 = 2131627210(0x7f0e0cca, float:1.8881678E38)
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
                 java.lang.String r2 = r2.toUpperCase()
                 r4.setText(r2)

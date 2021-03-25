@@ -396,7 +396,8 @@ public class GroupCallUserCell extends FrameLayout {
             this.avatarDrawable.setInfo(user);
             this.nameTextView.setText(UserObject.getUserName(this.currentUser));
             SimpleTextView simpleTextView = this.nameTextView;
-            if (this.currentUser.verified) {
+            TLRPC$User tLRPC$User = this.currentUser;
+            if (tLRPC$User != null && tLRPC$User.verified) {
                 verifiedDrawable = new VerifiedDrawable(getContext());
             }
             simpleTextView.setRightDrawable((Drawable) verifiedDrawable);
@@ -826,7 +827,7 @@ public class GroupCallUserCell extends FrameLayout {
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r2 = r0.participant
             int r2 = org.telegram.messenger.ChatObject.getParticipantVolume(r2)
             int r11 = r2 / 100
-            r12 = 2131627489(0x7f0e0de1, float:1.8882244E38)
+            r12 = 2131627490(0x7f0e0de2, float:1.8882246E38)
             java.lang.String r13 = "Speaking"
             r14 = 100
             if (r11 == r14) goto L_0x022f

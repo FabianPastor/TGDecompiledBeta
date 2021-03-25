@@ -480,7 +480,7 @@ public class JoinCallAlert extends BottomSheet {
         L_0x012b:
             if (r3 != r7) goto L_0x013c
             android.widget.TextView r6 = r0.textView
-            r8 = 2131627971(0x7f0e0fc3, float:1.8883221E38)
+            r8 = 2131627972(0x7f0e0fc4, float:1.8883224E38)
             java.lang.String r9 = "VoipGroupDisplayAs"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r6.setText(r8)
@@ -495,7 +495,7 @@ public class JoinCallAlert extends BottomSheet {
             goto L_0x015b
         L_0x014d:
             android.widget.TextView r6 = r0.textView
-            r8 = 2131627988(0x7f0e0fd4, float:1.8883256E38)
+            r8 = 2131627989(0x7f0e0fd5, float:1.8883258E38)
             java.lang.String r9 = "VoipGroupJoinAs"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r6.setText(r8)

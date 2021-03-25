@@ -1390,7 +1390,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             goto L_0x0286
         L_0x0065:
             org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131627946(0x7f0e0faa, float:1.888317E38)
+            r10 = 2131627947(0x7f0e0fab, float:1.8883173E38)
             java.lang.String r11 = "VoipBusy"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.setText(r10, r1, r2)
@@ -1468,7 +1468,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             goto L_0x0286
         L_0x0103:
             org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131627953(0x7f0e0fb1, float:1.8883185E38)
+            r10 = 2131627954(0x7f0e0fb2, float:1.8883187E38)
             java.lang.String r11 = "VoipExchangingKeys"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.setText(r10, r4, r2)
@@ -1484,7 +1484,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         L_0x0124:
             org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
             java.lang.String r10 = "VoipFailed"
-            r11 = 2131627954(0x7f0e0fb2, float:1.8883187E38)
+            r11 = 2131627955(0x7f0e0fb3, float:1.888319E38)
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r10, r11)
             r6.setText(r12, r1, r2)
             org.telegram.messenger.voip.VoIPService r6 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
@@ -1597,7 +1597,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             java.lang.String r10 = "ERROR_CONNECTION_SERVICE"
             boolean r6 = android.text.TextUtils.equals(r6, r10)
             if (r6 == 0) goto L_0x024e
-            r6 = 2131627952(0x7f0e0fb0, float:1.8883183E38)
+            r6 = 2131627953(0x7f0e0fb1, float:1.8883185E38)
             java.lang.String r10 = "VoipErrorUnknown"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
             r0.showErrorDialog(r6)
@@ -1634,7 +1634,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             goto L_0x028a
         L_0x0278:
             org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131627949(0x7f0e0fad, float:1.8883177E38)
+            r10 = 2131627950(0x7f0e0fae, float:1.8883179E38)
             java.lang.String r11 = "VoipConnecting"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.setText(r10, r4, r2)

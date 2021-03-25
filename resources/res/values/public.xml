@@ -4417,11 +4417,12 @@
     <public type="string" name="PaymentTransactionTotal" id="NUM" />
     <public type="string" name="PaymentWarning" id="NUM" />
     <public type="string" name="PaymentWarningText" id="NUM" />
-    <public type="string" name="PeopleCanJoinViaLink_few" id="NUM" />
-    <public type="string" name="PeopleCanJoinViaLink_many" id="NUM" />
-    <public type="string" name="PeopleCanJoinViaLink_one" id="NUM" />
-    <public type="string" name="PeopleCanJoinViaLink_other" id="NUM" />
-    <public type="string" name="PeopleCanJoinViaLink_two" id="NUM" />
+    <public type="string" name="PeopleCanJoinViaLinkCount_few" id="NUM" />
+    <public type="string" name="PeopleCanJoinViaLinkCount_many" id="NUM" />
+    <public type="string" name="PeopleCanJoinViaLinkCount_one" id="NUM" />
+    <public type="string" name="PeopleCanJoinViaLinkCount_other" id="NUM" />
+    <public type="string" name="PeopleCanJoinViaLinkCount_two" id="NUM" />
+    <public type="string" name="PeopleCanJoinViaLinkCount_zero" id="NUM" />
     <public type="string" name="PeopleJoinedRemaining_few" id="NUM" />
     <public type="string" name="PeopleJoinedRemaining_many" id="NUM" />
     <public type="string" name="PeopleJoinedRemaining_one" id="NUM" />

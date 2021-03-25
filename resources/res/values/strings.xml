@@ -182,7 +182,7 @@
     <string name="ActionCreatedInviteLinkClickable">un1 created invite link un2</string>
     <string name="ActionDeletedInviteLinkClickable">un1 deleted invite link un2</string>
     <string name="ActionEditedInviteLinkClickable">un1 edited invite link un2 to un3</string>
-    <string name="ActionEditedInviteLinkToSameClickable">un1 edited invite link l1</string>
+    <string name="ActionEditedInviteLinkToSameClickable">un1 edited invite link un2</string>
     <string name="ActionGroupCallEnded">Voice chat finished (%s)</string>
     <string name="ActionGroupCallInvited">un1 invited un2 to the voice chat</string>
     <string name="ActionGroupCallInvitedYou">un1 invited you to the voice chat</string>
@@ -214,7 +214,7 @@
     <string name="ActionPinnedVideo">un1 pinned a video</string>
     <string name="ActionPinnedVoice">un1 pinned a voice message</string>
     <string name="ActionRemovedPhoto">un1 removed the group photo</string>
-    <string name="ActionRevokedInviteLinkClickable">un1 revoked invite link l1</string>
+    <string name="ActionRevokedInviteLinkClickable">un1 revoked invite link un2</string>
     <string name="ActionTTLChanged">un1 has set messages to auto-delete in %1$s</string>
     <string name="ActionTTLChannelChanged">Messages in this channel will be automatically deleted after %1$s</string>
     <string name="ActionTTLChannelDisabled">Messages in this channel will no longer be automatically deleted</string>
@@ -2885,11 +2885,12 @@
     <string name="PaymentTransactionTotal">Total</string>
     <string name="PaymentWarning">Warning</string>
     <string name="PaymentWarningText">Neither Telegram, nor %1$s will have access to your credit card information. Credit card details will be handled only by the payment system, %2$s.\10\10Payments will go directly to the developer of %1$s. Telegram cannot provide any guarantees, so proceed at your own risk. In case of problems, please contact the developer of %1$s or your bank.</string>
-    <string name="PeopleCanJoinViaLink_few">%s peoples can join via this link</string>
-    <string name="PeopleCanJoinViaLink_many">%s peoples can join via this link</string>
-    <string name="PeopleCanJoinViaLink_one">%s people can join via this link</string>
-    <string name="PeopleCanJoinViaLink_other">%s peoples can join via this link</string>
-    <string name="PeopleCanJoinViaLink_two">%s peoples can join via this link</string>
+    <string name="PeopleCanJoinViaLinkCount_few">%s peoples can join via this link</string>
+    <string name="PeopleCanJoinViaLinkCount_many">%s peoples can join via this link</string>
+    <string name="PeopleCanJoinViaLinkCount_one">%s people can join via this link</string>
+    <string name="PeopleCanJoinViaLinkCount_other">%s peoples can join via this link</string>
+    <string name="PeopleCanJoinViaLinkCount_two">%s peoples can join via this link</string>
+    <string name="PeopleCanJoinViaLinkCount_zero">%s people can join via this link</string>
     <string name="PeopleJoinedRemaining_few">%1$d remaining</string>
     <string name="PeopleJoinedRemaining_many">%1$d remaining</string>
     <string name="PeopleJoinedRemaining_one">%1$d remaining</string>

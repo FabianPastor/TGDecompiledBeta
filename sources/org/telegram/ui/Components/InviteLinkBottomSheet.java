@@ -247,7 +247,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             boolean r5 = r2.revoked
             if (r5 == 0) goto L_0x0144
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131627204(0x7f0e0cc4, float:1.8881666E38)
+            r4 = 2131627205(0x7f0e0cc5, float:1.8881668E38)
             java.lang.String r5 = "RevokedLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
@@ -754,7 +754,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                     EmptyHintRow emptyHintRow = (EmptyHintRow) viewHolder.itemView;
                     int i9 = InviteLinkBottomSheet.this.invite.usage_limit;
                     if (i9 > 0) {
-                        emptyHintRow.textView.setText(LocaleController.formatPluralString("PeopleCanJoinViaLink", i9));
+                        emptyHintRow.textView.setText(LocaleController.formatPluralString("PeopleCanJoinViaLinkCount", i9));
                         emptyHintRow.textView.setVisibility(0);
                         return;
                     }
