@@ -93,7 +93,7 @@ public class SvgHelper {
         private float colorAlpha;
         /* access modifiers changed from: private */
         public ArrayList<Object> commands = new ArrayList<>();
-        private float crossfadeAlpha;
+        private float crossfadeAlpha = 1.0f;
         private int currentColor;
         private String currentColorKey;
         /* access modifiers changed from: private */
@@ -1578,7 +1578,11 @@ public class SvgHelper {
                         if (doFill(properties5)) {
                             SvgDrawable svgDrawable11 = this.drawable;
                             if (svgDrawable11 != null) {
-                                svgDrawable11.addCommand(new RoundRect(new RectF(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue()), access$1200.floatValue()), this.paint);
+                                if (access$1200 != null) {
+                                    svgDrawable11.addCommand(new RoundRect(new RectF(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue()), access$1200.floatValue()), this.paint);
+                                } else {
+                                    svgDrawable11.addCommand(new RectF(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue()), this.paint);
+                                }
                             } else if (access$1200 != null) {
                                 this.rectTmp.set(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue());
                                 this.canvas.drawRoundRect(this.rectTmp, access$1200.floatValue(), access$1200.floatValue(), this.paint);
@@ -1589,7 +1593,11 @@ public class SvgHelper {
                         if (doStroke(properties5)) {
                             SvgDrawable svgDrawable12 = this.drawable;
                             if (svgDrawable12 != null) {
-                                svgDrawable12.addCommand(new RoundRect(new RectF(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue()), access$1200.floatValue()), this.paint);
+                                if (access$1200 != null) {
+                                    svgDrawable12.addCommand(new RoundRect(new RectF(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue()), access$1200.floatValue()), this.paint);
+                                } else {
+                                    svgDrawable12.addCommand(new RectF(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue()), this.paint);
+                                }
                             } else if (access$1200 != null) {
                                 this.rectTmp.set(access$110014.floatValue(), access$110015.floatValue(), access$110014.floatValue() + access$110016.floatValue(), access$110015.floatValue() + access$110017.floatValue());
                                 this.canvas.drawRoundRect(this.rectTmp, access$1200.floatValue(), access$1200.floatValue(), this.paint);

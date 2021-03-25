@@ -1235,26 +1235,30 @@ public class VoIPService extends VoIPBaseService {
 
     public void onGroupCallParticipantsUpdate(TLRPC$TL_updateGroupCallParticipants tLRPC$TL_updateGroupCallParticipants) {
         ChatObject.Call call;
-        if (this.chat != null && (call = this.groupCall) != null && call.call.id == tLRPC$TL_updateGroupCallParticipants.call.id) {
-            ArrayList arrayList = null;
+        int i;
+        TLRPC$TL_updateGroupCallParticipants tLRPC$TL_updateGroupCallParticipants2 = tLRPC$TL_updateGroupCallParticipants;
+        if (this.chat != null && (call = this.groupCall) != null && call.call.id == tLRPC$TL_updateGroupCallParticipants2.call.id) {
             int selfId = getSelfId();
-            int size = tLRPC$TL_updateGroupCallParticipants.participants.size();
-            for (int i = 0; i < size; i++) {
-                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = tLRPC$TL_updateGroupCallParticipants.participants.get(i);
+            NativeInstance nativeInstance = this.tgVoip;
+            int size = tLRPC$TL_updateGroupCallParticipants2.participants.size();
+            ArrayList arrayList = null;
+            ArrayList arrayList2 = null;
+            for (int i2 = 0; i2 < size; i2++) {
+                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = tLRPC$TL_updateGroupCallParticipants2.participants.get(i2);
                 if (tLRPC$TL_groupCallParticipant.left) {
-                    int i2 = tLRPC$TL_groupCallParticipant.source;
-                    if (i2 == 0) {
+                    int i3 = tLRPC$TL_groupCallParticipant.source;
+                    if (i3 == 0) {
                         continue;
                     } else {
-                        if (i2 == this.mySource) {
-                            int i3 = 0;
-                            for (int i4 = 0; i4 < size; i4++) {
-                                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = tLRPC$TL_updateGroupCallParticipants.participants.get(i4);
+                        if (i3 == this.mySource) {
+                            int i4 = 0;
+                            for (int i5 = 0; i5 < size; i5++) {
+                                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = tLRPC$TL_updateGroupCallParticipants2.participants.get(i5);
                                 if (tLRPC$TL_groupCallParticipant2.self || tLRPC$TL_groupCallParticipant2.source == this.mySource) {
-                                    i3++;
+                                    i4++;
                                 }
                             }
-                            if (i3 > 1) {
+                            if (i4 > 1) {
                                 hangUp(2);
                                 return;
                             }
@@ -1264,12 +1268,10 @@ public class VoIPService extends VoIPBaseService {
                         }
                         arrayList.add(Integer.valueOf(tLRPC$TL_groupCallParticipant.source));
                     }
-                } else if (MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer) != selfId) {
-                    continue;
-                } else {
-                    int i5 = tLRPC$TL_groupCallParticipant.source;
-                    int i6 = this.mySource;
-                    if (i5 == i6 || i6 == 0 || i5 == 0) {
+                } else if (MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer) == selfId) {
+                    int i6 = tLRPC$TL_groupCallParticipant.source;
+                    int i7 = this.mySource;
+                    if (i6 == i7 || i7 == 0 || i6 == 0) {
                         if (ChatObject.isChannel(this.chat) && this.currentGroupModeStreaming && tLRPC$TL_groupCallParticipant.can_self_unmute) {
                             this.switchingStream = true;
                             createGroupInstance(false);
@@ -1284,18 +1286,44 @@ public class VoIPService extends VoIPBaseService {
                         hangUp(2);
                         return;
                     }
+                } else {
+                    if (arrayList2 == null) {
+                        arrayList2 = new ArrayList();
+                    }
+                    arrayList2.add(tLRPC$TL_groupCallParticipant);
                 }
             }
             if (arrayList != null) {
                 int[] iArr = new int[arrayList.size()];
                 int size2 = arrayList.size();
-                for (int i7 = 0; i7 < size2; i7++) {
-                    iArr[i7] = ((Integer) arrayList.get(i7)).intValue();
+                for (int i8 = 0; i8 < size2; i8++) {
+                    iArr[i8] = ((Integer) arrayList.get(i8)).intValue();
                 }
                 this.tgVoip.removeSsrcs(iArr);
             }
-            addAllParticipants();
-            setParticipantsVolume();
+            if (arrayList2 != null) {
+                String[] strArr = new String[arrayList2.size()];
+                int[] iArr2 = new int[arrayList2.size()];
+                int size3 = arrayList2.size();
+                for (int i9 = 0; i9 < size3; i9++) {
+                    strArr[i9] = null;
+                    iArr2[i9] = ((TLRPC$TL_groupCallParticipant) arrayList2.get(i9)).source;
+                }
+                this.tgVoip.addParticipants(iArr2, strArr);
+                int size4 = arrayList2.size();
+                for (int i10 = 0; i10 < size4; i10++) {
+                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant3 = (TLRPC$TL_groupCallParticipant) arrayList2.get(i10);
+                    if (!tLRPC$TL_groupCallParticipant3.self && (i = tLRPC$TL_groupCallParticipant3.source) != 0 && (tLRPC$TL_groupCallParticipant3.can_self_unmute || !tLRPC$TL_groupCallParticipant3.muted)) {
+                        if (tLRPC$TL_groupCallParticipant3.muted_by_you) {
+                            nativeInstance.setVolume(i, 0.0d);
+                        } else {
+                            double participantVolume = (double) ChatObject.getParticipantVolume(tLRPC$TL_groupCallParticipant3);
+                            Double.isNaN(participantVolume);
+                            nativeInstance.setVolume(i, participantVolume / 10000.0d);
+                        }
+                    }
+                }
+            }
         }
     }
 

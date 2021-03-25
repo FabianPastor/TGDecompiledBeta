@@ -93,7 +93,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             TLRPC$User tLRPC$User = callLogRow.user;
             TLRPC$User unused = callLogActivity.lastCallUser = tLRPC$User;
             boolean z = callLogRow.video;
-            VoIPHelper.startCall(tLRPC$User, z, z || (userFull != null && userFull.video_calls_available), CallLogActivity.this.getParentActivity(), (TLRPC$UserFull) null);
+            VoIPHelper.startCall(tLRPC$User, z, z || (userFull != null && userFull.video_calls_available), CallLogActivity.this.getParentActivity(), (TLRPC$UserFull) null, CallLogActivity.this.getAccountInstance());
         }
     };
     /* access modifiers changed from: private */
@@ -555,7 +555,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     public /* synthetic */ void lambda$null$2$CallLogActivity(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
         TLRPC$UserFull userFull = getMessagesController().getUserFull(tLRPC$User.id);
         this.lastCallUser = tLRPC$User;
-        VoIPHelper.startCall(tLRPC$User, false, userFull != null && userFull.video_calls_available, getParentActivity(), (TLRPC$UserFull) null);
+        VoIPHelper.startCall(tLRPC$User, false, userFull != null && userFull.video_calls_available, getParentActivity(), (TLRPC$UserFull) null, getAccountInstance());
     }
 
     /* access modifiers changed from: private */
@@ -892,7 +892,6 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
         boolean z;
         if (i == 101 || i == 102) {
-            boolean z2 = false;
             int i2 = 0;
             while (true) {
                 if (i2 >= iArr.length) {
@@ -905,17 +904,15 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                     i2++;
                 }
             }
+            TLRPC$UserFull tLRPC$UserFull = null;
             if (iArr.length <= 0 || !z) {
                 VoIPHelper.permissionDenied(getParentActivity(), (Runnable) null, i);
                 return;
             }
-            TLRPC$UserFull userFull = this.lastCallUser != null ? getMessagesController().getUserFull(this.lastCallUser.id) : null;
-            TLRPC$User tLRPC$User = this.lastCallUser;
-            boolean z3 = i == 102;
-            if (i == 102 || (userFull != null && userFull.video_calls_available)) {
-                z2 = true;
+            if (this.lastCallUser != null) {
+                tLRPC$UserFull = getMessagesController().getUserFull(this.lastCallUser.id);
             }
-            VoIPHelper.startCall(tLRPC$User, z3, z2, getParentActivity(), (TLRPC$UserFull) null);
+            VoIPHelper.startCall(this.lastCallUser, i == 102, i == 102 || (tLRPC$UserFull != null && tLRPC$UserFull.video_calls_available), getParentActivity(), (TLRPC$UserFull) null, getAccountInstance());
         }
     }
 

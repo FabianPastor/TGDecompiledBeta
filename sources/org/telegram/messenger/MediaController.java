@@ -4572,7 +4572,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     if (videoPlayer2 != null) {
                         videoPlayer2.pause();
                     }
-                } else if (!this.playingMessageObject.isVoice()) {
+                } else if (this.playingMessageObject.isVoice() || ((float) this.playingMessageObject.getDuration()) * (1.0f - this.playingMessageObject.audioProgress) <= 1000.0f) {
+                    this.audioPlayer.pause();
+                } else {
                     ValueAnimator valueAnimator = this.audioVolumeAnimator;
                     if (valueAnimator != null) {
                         valueAnimator.removeAllUpdateListeners();
@@ -4590,8 +4592,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                         }
                     });
                     this.audioVolumeAnimator.start();
-                } else {
-                    this.audioPlayer.pause();
                 }
                 this.isPaused = true;
                 NotificationCenter.getInstance(this.playingMessageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingPlayStateChanged, Integer.valueOf(this.playingMessageObject.getId()));

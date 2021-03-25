@@ -12549,10 +12549,10 @@ public class Theme {
             dialogs_groupDrawable = resources.getDrawable(NUM);
             dialogs_broadcastDrawable = resources.getDrawable(NUM);
             dialogs_muteDrawable = resources.getDrawable(NUM).mutate();
-            dialogs_verifiedDrawable = resources.getDrawable(NUM);
+            dialogs_verifiedDrawable = resources.getDrawable(NUM).mutate();
             dialogs_scamDrawable = new ScamDrawable(11, 0);
             dialogs_fakeDrawable = new ScamDrawable(11, 1);
-            dialogs_verifiedCheckDrawable = resources.getDrawable(NUM);
+            dialogs_verifiedCheckDrawable = resources.getDrawable(NUM).mutate();
             dialogs_mentionDrawable = resources.getDrawable(NUM);
             dialogs_botDrawable = resources.getDrawable(NUM);
             dialogs_pinnedDrawable = resources.getDrawable(NUM);

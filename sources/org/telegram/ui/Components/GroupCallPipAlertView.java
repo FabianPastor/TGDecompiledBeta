@@ -594,6 +594,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
 
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
+        String str;
         super.onAttachedToWindow();
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (!(sharedInstance == null || sharedInstance.groupCall == null)) {
@@ -603,10 +604,14 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             avatarDrawable.setInfo(sharedInstance.getChat());
             this.avatarImageView.setImage(ImageLocation.getForLocal(sharedInstance.getChat().photo.photo_small), "50_50", (Drawable) avatarDrawable, (Object) null);
             if (!TextUtils.isEmpty(sharedInstance.groupCall.call.title)) {
-                this.titleView.setText(sharedInstance.groupCall.call.title);
+                str = sharedInstance.groupCall.call.title;
             } else {
-                this.titleView.setText(sharedInstance.getChat().title);
+                str = sharedInstance.getChat().title;
             }
+            if (str != null) {
+                str = str.replace("\n", " ").replaceAll(" +", " ").trim();
+            }
+            this.titleView.setText(str);
             updateMembersCount();
             sharedInstance.registerStateListener(this);
             if (VoIPService.getSharedInstance() != null) {

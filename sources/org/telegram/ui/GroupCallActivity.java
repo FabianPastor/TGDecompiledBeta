@@ -1067,7 +1067,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             if (this.shader != null) {
                 float f = this.duration;
                 if (f == 0.0f || this.time >= f) {
-                    this.duration = (float) (Utilities.random.nextInt(700) + 500);
+                    this.duration = (float) (Utilities.random.nextInt(200) + 1500);
                     this.time = 0.0f;
                     if (this.targetX == -1.0f) {
                         setTarget();
@@ -1101,7 +1101,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         private void setTarget() {
             int i = this.currentState;
             if (i == 2 || i == 4) {
-                this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.25f) / 100.0f) + 0.85f;
+                this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.2f) / 100.0f) + 0.85f;
                 this.targetY = 1.0f;
             } else if (i == 1) {
                 this.targetX = ((((float) Utilities.random.nextInt(100)) * 0.3f) / 100.0f) + 0.2f;
@@ -2728,16 +2728,20 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         }
         SimpleTextView titleTextView2 = this.actionBar.getTitleTextView();
         if (this.call.recording) {
-            titleTextView2.setRightDrawable((Drawable) new SmallRecordCallDrawable(titleTextView2));
-            TextView textView = this.titleTextView.getTextView();
-            textView.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, new SmallRecordCallDrawable(textView), (Drawable) null);
-            TextView nextTextView = this.titleTextView.getNextTextView();
-            nextTextView.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, new SmallRecordCallDrawable(nextTextView), (Drawable) null);
-            return;
+            if (titleTextView2.getRightDrawable() == null) {
+                titleTextView2.setRightDrawable((Drawable) new SmallRecordCallDrawable(titleTextView2));
+                TextView textView = this.titleTextView.getTextView();
+                textView.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, new SmallRecordCallDrawable(textView), (Drawable) null);
+                TextView nextTextView = this.titleTextView.getNextTextView();
+                nextTextView.setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, new SmallRecordCallDrawable(nextTextView), (Drawable) null);
+            }
+        } else if (titleTextView2.getRightDrawable() != null) {
+            titleTextView2.setRightDrawable((Drawable) null);
+            this.titleTextView.getTextView();
+            this.titleTextView.getTextView().setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, (Drawable) null, (Drawable) null);
+            this.titleTextView.getNextTextView();
+            this.titleTextView.getNextTextView().setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, (Drawable) null, (Drawable) null);
         }
-        titleTextView2.setRightDrawable((Drawable) null);
-        this.titleTextView.getTextView().setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, (Drawable) null, (Drawable) null);
-        this.titleTextView.getNextTextView().setCompoundDrawablesWithIntrinsicBounds((Drawable) null, (Drawable) null, (Drawable) null, (Drawable) null);
     }
 
     /* access modifiers changed from: private */

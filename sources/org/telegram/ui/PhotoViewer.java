@@ -8810,8 +8810,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
                 this.changingTextureView = true;
                 this.isInline = false;
-                this.videoTextureView.setVisibility(4);
-                this.aspectRatioFrameLayout.addView(this.videoTextureView);
+                TextureView textureView = this.videoTextureView;
+                if (textureView != null) {
+                    textureView.setVisibility(4);
+                    this.aspectRatioFrameLayout.addView(this.videoTextureView);
+                }
                 if (ApplicationLoader.mainInterfacePaused) {
                     try {
                         this.parentActivity.startService(new Intent(ApplicationLoader.applicationContext, BringAppForegroundService.class));
@@ -8819,7 +8822,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                         FileLog.e(th);
                     }
                 }
-                if (Build.VERSION.SDK_INT >= 21) {
+                if (Build.VERSION.SDK_INT < 21 || this.videoTextureView == null) {
+                    this.pipVideoView.close();
+                    this.pipVideoView = null;
+                } else {
                     this.pipAnimationInProgress = true;
                     org.telegram.ui.Components.Rect pipRect = PipVideoView.getPipRect(this.aspectRatioFrameLayout.getAspectRatio());
                     float f = pipRect.width / ((float) this.textureImageView.getLayoutParams().width);
@@ -8831,9 +8837,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     this.videoTextureView.setScaleY(f);
                     this.videoTextureView.setTranslationX(pipRect.x - this.aspectRatioFrameLayout.getX());
                     this.videoTextureView.setTranslationY(pipRect.y - this.aspectRatioFrameLayout.getY());
-                } else {
-                    this.pipVideoView.close();
-                    this.pipVideoView = null;
                 }
                 try {
                     this.isVisible = true;
@@ -9712,24 +9715,26 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (this.orientationEventListener == null) {
                     AnonymousClass41 r7 = new OrientationEventListener(ApplicationLoader.applicationContext) {
                         public void onOrientationChanged(int i) {
-                            if (PhotoViewer.this.orientationEventListener != null && PhotoViewer.this.aspectRatioFrameLayout != null && PhotoViewer.this.aspectRatioFrameLayout.getVisibility() == 0 && PhotoViewer.this.parentActivity != null && PhotoViewer.this.fullscreenedByButton != 0) {
-                                if (PhotoViewer.this.fullscreenedByButton == 1) {
-                                    if (i >= 240 && i <= 300) {
-                                        boolean unused = PhotoViewer.this.wasRotated = true;
-                                    } else if (!PhotoViewer.this.wasRotated) {
-                                    } else {
-                                        if (i >= 330 || i <= 30) {
-                                            PhotoViewer.this.parentActivity.setRequestedOrientation(PhotoViewer.this.prevOrientation);
-                                            int unused2 = PhotoViewer.this.fullscreenedByButton = 0;
-                                            boolean unused3 = PhotoViewer.this.wasRotated = false;
+                            if (PhotoViewer.this.orientationEventListener != null && PhotoViewer.this.aspectRatioFrameLayout != null && PhotoViewer.this.aspectRatioFrameLayout.getVisibility() == 0) {
+                                FileLog.d("orientation = " + i);
+                                if (PhotoViewer.this.parentActivity != null && PhotoViewer.this.fullscreenedByButton != 0) {
+                                    if (PhotoViewer.this.fullscreenedByButton == 1) {
+                                        if (i >= 240 && i <= 300) {
+                                            boolean unused = PhotoViewer.this.wasRotated = true;
+                                        } else if (PhotoViewer.this.wasRotated && i > 0) {
+                                            if (i >= 330 || i <= 30) {
+                                                PhotoViewer.this.parentActivity.setRequestedOrientation(PhotoViewer.this.prevOrientation);
+                                                int unused2 = PhotoViewer.this.fullscreenedByButton = 0;
+                                                boolean unused3 = PhotoViewer.this.wasRotated = false;
+                                            }
                                         }
+                                    } else if (i >= 330 || i <= 30) {
+                                        boolean unused4 = PhotoViewer.this.wasRotated = true;
+                                    } else if (PhotoViewer.this.wasRotated && i >= 240 && i <= 300) {
+                                        PhotoViewer.this.parentActivity.setRequestedOrientation(PhotoViewer.this.prevOrientation);
+                                        int unused5 = PhotoViewer.this.fullscreenedByButton = 0;
+                                        boolean unused6 = PhotoViewer.this.wasRotated = false;
                                     }
-                                } else if (i >= 330 || i <= 30) {
-                                    boolean unused4 = PhotoViewer.this.wasRotated = true;
-                                } else if (PhotoViewer.this.wasRotated && i >= 240 && i <= 300) {
-                                    PhotoViewer.this.parentActivity.setRequestedOrientation(PhotoViewer.this.prevOrientation);
-                                    int unused5 = PhotoViewer.this.fullscreenedByButton = 0;
-                                    boolean unused6 = PhotoViewer.this.wasRotated = false;
                                 }
                             }
                         }

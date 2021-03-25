@@ -4021,23 +4021,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
-        } else {
-            boolean z = true;
-            if (intValue == 1) {
-                try {
-                    ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", "+" + tLRPC$User.phone));
-                    BulletinFactory.of((BaseFragment) this).createCopyBulletin(LocaleController.getString("PhoneCopied", NUM)).show();
-                } catch (Exception e2) {
-                    FileLog.e((Throwable) e2);
-                }
-            } else if (intValue == 2 || intValue == 3) {
-                boolean z2 = intValue == 3;
-                TLRPC$UserFull tLRPC$UserFull = this.userInfo;
-                if (tLRPC$UserFull == null || !tLRPC$UserFull.video_calls_available) {
-                    z = false;
-                }
-                VoIPHelper.startCall(tLRPC$User, z2, z, getParentActivity(), this.userInfo);
+        } else if (intValue == 1) {
+            try {
+                ((ClipboardManager) ApplicationLoader.applicationContext.getSystemService("clipboard")).setPrimaryClip(ClipData.newPlainText("label", "+" + tLRPC$User.phone));
+                BulletinFactory.of((BaseFragment) this).createCopyBulletin(LocaleController.getString("PhoneCopied", NUM)).show();
+            } catch (Exception e2) {
+                FileLog.e((Throwable) e2);
             }
+        } else if (intValue == 2 || intValue == 3) {
+            boolean z = intValue == 3;
+            TLRPC$UserFull tLRPC$UserFull = this.userInfo;
+            VoIPHelper.startCall(tLRPC$User, z, tLRPC$UserFull != null && tLRPC$UserFull.video_calls_available, getParentActivity(), this.userInfo, getAccountInstance());
         }
     }
 
@@ -8137,10 +8131,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 boolean z3 = i == 102;
                 TLRPC$UserFull tLRPC$UserFull = this.userInfo;
-                if (tLRPC$UserFull != null && tLRPC$UserFull.video_calls_available) {
-                    z2 = true;
-                }
-                VoIPHelper.startCall(user, z3, z2, getParentActivity(), this.userInfo);
+                VoIPHelper.startCall(user, z3, tLRPC$UserFull != null && tLRPC$UserFull.video_calls_available, getParentActivity(), this.userInfo, getAccountInstance());
             }
         } else if (i == 103 && this.currentChat != null) {
             int i3 = 0;

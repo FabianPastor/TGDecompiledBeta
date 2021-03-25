@@ -5722,8 +5722,8 @@
     <public type="string" name="WhoCanCallMeInfo" id="NUM" />
     <public type="string" name="WidgetChats" id="NUM" />
     <public type="string" name="WidgetLoggedOff" id="NUM" />
-    <public type="string" name="WidgetPasscode" id="NUM" />
-    <public type="string" name="WidgetPasscodeEnable" id="NUM" />
+    <public type="string" name="WidgetPasscode2" id="NUM" />
+    <public type="string" name="WidgetPasscodeEnable2" id="NUM" />
     <public type="string" name="WidgetPreview" id="NUM" />
     <public type="string" name="WidgetShortcuts" id="NUM" />
     <public type="string" name="WillUnmuteIn" id="NUM" />

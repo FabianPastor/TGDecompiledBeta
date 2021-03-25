@@ -5861,8 +5861,8 @@ public final class R {
         public static final int WhoCanCallMeInfo = NUM;
         public static final int WidgetChats = NUM;
         public static final int WidgetLoggedOff = NUM;
-        public static final int WidgetPasscode = NUM;
-        public static final int WidgetPasscodeEnable = NUM;
+        public static final int WidgetPasscode2 = NUM;
+        public static final int WidgetPasscodeEnable2 = NUM;
         public static final int WidgetPreview = NUM;
         public static final int WidgetShortcuts = NUM;
         public static final int WillUnmuteIn = NUM;

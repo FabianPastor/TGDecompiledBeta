@@ -1926,7 +1926,7 @@ public class EditWidgetActivity extends BaseFragment {
                         spannableStringBuilder.append(LocaleController.getString("EditWidgetContactsInfo", NUM));
                     }
                     if (SharedConfig.passcodeHash.length() > 0) {
-                        spannableStringBuilder.append(AndroidUtilities.replaceTags(LocaleController.getString("WidgetPasscode", NUM)));
+                        spannableStringBuilder.append("\n\n").append(AndroidUtilities.replaceTags(LocaleController.getString("WidgetPasscode2", NUM)));
                     }
                     textInfoPrivacyCell.setText(spannableStringBuilder);
                 }

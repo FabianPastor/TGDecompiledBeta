@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
@@ -158,6 +159,60 @@ public class GroupCallUserCell extends FrameLayout {
         this.updateVoiceRunnableScheduled = false;
     }
 
+    private static class VerifiedDrawable extends Drawable {
+        private Drawable[] drawables;
+
+        public int getOpacity() {
+            return -2;
+        }
+
+        public void setColorFilter(ColorFilter colorFilter) {
+        }
+
+        public VerifiedDrawable(Context context) {
+            Drawable[] drawableArr = new Drawable[2];
+            this.drawables = drawableArr;
+            drawableArr[0] = context.getResources().getDrawable(NUM).mutate();
+            this.drawables[0].setColorFilter(new PorterDuffColorFilter(-9063442, PorterDuff.Mode.MULTIPLY));
+            this.drawables[1] = context.getResources().getDrawable(NUM).mutate();
+        }
+
+        public int getIntrinsicWidth() {
+            return this.drawables[0].getIntrinsicWidth();
+        }
+
+        public int getIntrinsicHeight() {
+            return this.drawables[0].getIntrinsicHeight();
+        }
+
+        public void draw(Canvas canvas) {
+            int i = 0;
+            while (true) {
+                Drawable[] drawableArr = this.drawables;
+                if (i < drawableArr.length) {
+                    drawableArr[i].setBounds(getBounds());
+                    this.drawables[i].draw(canvas);
+                    i++;
+                } else {
+                    return;
+                }
+            }
+        }
+
+        public void setAlpha(int i) {
+            int i2 = 0;
+            while (true) {
+                Drawable[] drawableArr = this.drawables;
+                if (i2 < drawableArr.length) {
+                    drawableArr[i2].setAlpha(i);
+                    i2++;
+                } else {
+                    return;
+                }
+            }
+        }
+    }
+
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public GroupCallUserCell(Context context) {
         super(context);
@@ -178,6 +233,7 @@ public class GroupCallUserCell extends FrameLayout {
         simpleTextView.setTextColor(Theme.getColor("voipgroup_nameText"));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setTextSize(16);
+        this.nameTextView.setDrawablePadding(AndroidUtilities.dp(6.0f));
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         SimpleTextView simpleTextView2 = this.nameTextView;
         boolean z2 = LocaleController.isRTL;
@@ -332,12 +388,18 @@ public class GroupCallUserCell extends FrameLayout {
         this.selfId = i;
         this.participant = tLRPC$TL_groupCallParticipant;
         int peerId = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
+        VerifiedDrawable verifiedDrawable = null;
         if (peerId > 0) {
             TLRPC$User user = this.accountInstance.getMessagesController().getUser(Integer.valueOf(peerId));
             this.currentUser = user;
             this.currentChat = null;
             this.avatarDrawable.setInfo(user);
             this.nameTextView.setText(UserObject.getUserName(this.currentUser));
+            SimpleTextView simpleTextView = this.nameTextView;
+            if (this.currentUser.verified) {
+                verifiedDrawable = new VerifiedDrawable(getContext());
+            }
+            simpleTextView.setRightDrawable((Drawable) verifiedDrawable);
             this.avatarImageView.getImageReceiver().setCurrentAccount(accountInstance2.getCurrentAccount());
             this.avatarImageView.setImage(ImageLocation.getForUser(this.currentUser, false), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
             return;
@@ -349,6 +411,11 @@ public class GroupCallUserCell extends FrameLayout {
         TLRPC$Chat tLRPC$Chat = this.currentChat;
         if (tLRPC$Chat != null) {
             this.nameTextView.setText(tLRPC$Chat.title);
+            SimpleTextView simpleTextView2 = this.nameTextView;
+            if (this.currentChat.verified) {
+                verifiedDrawable = new VerifiedDrawable(getContext());
+            }
+            simpleTextView2.setRightDrawable((Drawable) verifiedDrawable);
             this.avatarImageView.getImageReceiver().setCurrentAccount(accountInstance2.getCurrentAccount());
             this.avatarImageView.setImage(ImageLocation.getForChat(this.currentChat, false), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentChat);
         }
@@ -433,21 +500,21 @@ public class GroupCallUserCell extends FrameLayout {
         invalidate();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:105:0x018d  */
-    /* JADX WARNING: Removed duplicated region for block: B:106:0x019d  */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x01b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:114:0x01b4  */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x01cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x01ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x0208  */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0261  */
-    /* JADX WARNING: Removed duplicated region for block: B:173:0x02eb  */
-    /* JADX WARNING: Removed duplicated region for block: B:177:0x02f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:188:0x032e  */
-    /* JADX WARNING: Removed duplicated region for block: B:192:0x034a  */
-    /* JADX WARNING: Removed duplicated region for block: B:203:0x0373  */
-    /* JADX WARNING: Removed duplicated region for block: B:216:0x03a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x03bc  */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0177  */
+    /* JADX WARNING: Removed duplicated region for block: B:101:0x0187  */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x019c  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x019e  */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x01b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:121:0x01d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x01f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x024b  */
+    /* JADX WARNING: Removed duplicated region for block: B:168:0x02d5  */
+    /* JADX WARNING: Removed duplicated region for block: B:172:0x02e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:183:0x0318  */
+    /* JADX WARNING: Removed duplicated region for block: B:187:0x0334  */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x035d  */
+    /* JADX WARNING: Removed duplicated region for block: B:211:0x038e  */
+    /* JADX WARNING: Removed duplicated region for block: B:215:0x03a6  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void applyParticipantChanges(boolean r19, boolean r20) {
         /*
@@ -478,60 +545,49 @@ public class GroupCallUserCell extends FrameLayout {
             r3 = 1
         L_0x002d:
             r2.setEnabled(r3)
-            boolean r2 = r0.updateVoiceRunnableScheduled
-            if (r2 == 0) goto L_0x003b
-            java.lang.Runnable r2 = r0.updateVoiceRunnable
-            org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r2)
-            r0.updateVoiceRunnableScheduled = r6
-        L_0x003b:
             long r2 = android.os.SystemClock.elapsedRealtime()
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r8 = r0.participant
             long r9 = r8.lastVoiceUpdateTime
             long r2 = r2 - r9
-            r11 = 500(0x1f4, double:2.47E-321)
-            int r13 = (r2 > r11 ? 1 : (r2 == r11 ? 0 : -1))
-            if (r13 >= 0) goto L_0x0058
+            r9 = 500(0x1f4, double:2.47E-321)
+            int r11 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1))
+            if (r11 >= 0) goto L_0x0042
             boolean r2 = r8.hasVoiceDelayed
-            if (r2 == 0) goto L_0x005a
-            java.lang.Runnable r3 = r0.updateVoiceRunnable
-            long r9 = r11 - r9
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r3, r9)
-            r0.updateVoiceRunnableScheduled = r7
-            goto L_0x005a
-        L_0x0058:
+            goto L_0x0044
+        L_0x0042:
             boolean r2 = r8.hasVoice
-        L_0x005a:
-            if (r20 != 0) goto L_0x008d
-            long r8 = android.os.SystemClock.uptimeMillis()
+        L_0x0044:
+            if (r20 != 0) goto L_0x0077
+            long r11 = android.os.SystemClock.uptimeMillis()
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r0.participant
             long r13 = r3.lastSpeakTime
-            long r8 = r8 - r13
-            int r3 = (r8 > r11 ? 1 : (r8 == r11 ? 0 : -1))
-            if (r3 >= 0) goto L_0x006b
+            long r11 = r11 - r13
+            int r3 = (r11 > r9 ? 1 : (r11 == r9 ? 0 : -1))
+            if (r3 >= 0) goto L_0x0055
             r3 = 1
-            goto L_0x006c
-        L_0x006b:
+            goto L_0x0056
+        L_0x0055:
             r3 = 0
-        L_0x006c:
-            boolean r10 = r0.isSpeaking
-            if (r10 == 0) goto L_0x0074
-            if (r3 == 0) goto L_0x0074
-            if (r2 == 0) goto L_0x008d
-        L_0x0074:
+        L_0x0056:
+            boolean r8 = r0.isSpeaking
+            if (r8 == 0) goto L_0x005e
+            if (r3 == 0) goto L_0x005e
+            if (r2 == 0) goto L_0x0077
+        L_0x005e:
             r0.isSpeaking = r3
             boolean r3 = r0.updateRunnableScheduled
-            if (r3 == 0) goto L_0x0081
+            if (r3 == 0) goto L_0x006b
             java.lang.Runnable r3 = r0.updateRunnable
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r3)
             r0.updateRunnableScheduled = r6
-        L_0x0081:
+        L_0x006b:
             boolean r3 = r0.isSpeaking
-            if (r3 == 0) goto L_0x008d
+            if (r3 == 0) goto L_0x0077
             java.lang.Runnable r3 = r0.updateRunnable
-            long r11 = r11 - r8
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r3, r11)
+            long r9 = r9 - r11
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r3, r9)
             r0.updateRunnableScheduled = r7
-        L_0x008d:
+        L_0x0077:
             org.telegram.messenger.ChatObject$Call r3 = r0.currentCall
             android.util.SparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r3 = r3.participants
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r8 = r0.participant
@@ -539,50 +595,50 @@ public class GroupCallUserCell extends FrameLayout {
             int r8 = org.telegram.messenger.MessageObject.getPeerId(r8)
             java.lang.Object r3 = r3.get(r8)
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = (org.telegram.tgnet.TLRPC$TL_groupCallParticipant) r3
-            if (r3 == 0) goto L_0x00a3
+            if (r3 == 0) goto L_0x008d
             r0.participant = r3
-        L_0x00a3:
+        L_0x008d:
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r0.participant
             boolean r3 = r3.muted_by_you
-            if (r3 == 0) goto L_0x00b1
+            if (r3 == 0) goto L_0x009b
             boolean r3 = r18.isSelfUser()
-            if (r3 != 0) goto L_0x00b1
+            if (r3 != 0) goto L_0x009b
             r3 = 1
-            goto L_0x00b2
-        L_0x00b1:
+            goto L_0x009c
+        L_0x009b:
             r3 = 0
-        L_0x00b2:
+        L_0x009c:
             boolean r8 = r18.isSelfUser()
-            if (r8 == 0) goto L_0x00d2
+            if (r8 == 0) goto L_0x00bc
             org.telegram.messenger.voip.VoIPService r8 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r8 == 0) goto L_0x00d0
+            if (r8 == 0) goto L_0x00ba
             org.telegram.messenger.voip.VoIPService r8 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             boolean r8 = r8.isMicMute()
-            if (r8 == 0) goto L_0x00d0
+            if (r8 == 0) goto L_0x00ba
             boolean r8 = r0.isSpeaking
-            if (r8 == 0) goto L_0x00ce
-            if (r2 != 0) goto L_0x00d0
-        L_0x00ce:
+            if (r8 == 0) goto L_0x00b8
+            if (r2 != 0) goto L_0x00ba
+        L_0x00b8:
             r8 = 1
-            goto L_0x00e1
-        L_0x00d0:
+            goto L_0x00cb
+        L_0x00ba:
             r8 = 0
-            goto L_0x00e1
-        L_0x00d2:
+            goto L_0x00cb
+        L_0x00bc:
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r8 = r0.participant
             boolean r8 = r8.muted
-            if (r8 == 0) goto L_0x00de
+            if (r8 == 0) goto L_0x00c8
             boolean r8 = r0.isSpeaking
-            if (r8 == 0) goto L_0x00ce
-            if (r2 == 0) goto L_0x00ce
-        L_0x00de:
-            if (r3 == 0) goto L_0x00d0
-            goto L_0x00ce
-        L_0x00e1:
-            if (r8 == 0) goto L_0x00e7
+            if (r8 == 0) goto L_0x00b8
+            if (r2 == 0) goto L_0x00b8
+        L_0x00c8:
+            if (r3 == 0) goto L_0x00ba
+            goto L_0x00b8
+        L_0x00cb:
+            if (r8 == 0) goto L_0x00d1
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r9 = r0.participant
             boolean r9 = r9.can_self_unmute
-        L_0x00e7:
+        L_0x00d1:
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r9 = r0.participant
             java.lang.String r9 = r9.about
             boolean r9 = android.text.TextUtils.isEmpty(r9)
@@ -593,37 +649,37 @@ public class GroupCallUserCell extends FrameLayout {
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r10 = r0.participant
             boolean r11 = r10.muted
             r14 = 4
-            if (r11 == 0) goto L_0x0102
+            if (r11 == 0) goto L_0x00ec
             boolean r11 = r0.isSpeaking
-            if (r11 == 0) goto L_0x0104
-        L_0x0102:
-            if (r3 == 0) goto L_0x016d
-        L_0x0104:
+            if (r11 == 0) goto L_0x00ee
+        L_0x00ec:
+            if (r3 == 0) goto L_0x0157
+        L_0x00ee:
             boolean r2 = r10.can_self_unmute
-            if (r2 == 0) goto L_0x011b
-            if (r3 == 0) goto L_0x010b
-            goto L_0x011b
-        L_0x010b:
+            if (r2 == 0) goto L_0x0105
+            if (r3 == 0) goto L_0x00f5
+            goto L_0x0105
+        L_0x00f5:
             java.lang.String r2 = r0.grayIconColor
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r0.currentIconGray = r7
-            if (r9 == 0) goto L_0x0118
+            if (r9 == 0) goto L_0x0102
             r3 = 4
-            goto L_0x0189
-        L_0x0118:
+            goto L_0x0173
+        L_0x0102:
             r3 = 0
-            goto L_0x0189
-        L_0x011b:
-            if (r2 != 0) goto L_0x0125
+            goto L_0x0173
+        L_0x0105:
+            if (r2 != 0) goto L_0x010f
             long r10 = r10.raise_hand_rating
             int r2 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
-            if (r2 == 0) goto L_0x0125
+            if (r2 == 0) goto L_0x010f
             r2 = 1
-            goto L_0x0126
-        L_0x0125:
+            goto L_0x0110
+        L_0x010f:
             r2 = 0
-        L_0x0126:
-            if (r2 == 0) goto L_0x0157
+        L_0x0110:
+            if (r2 == 0) goto L_0x0141
             java.lang.String r10 = "voipgroup_listeningText"
             int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
             long r15 = android.os.SystemClock.elapsedRealtime()
@@ -631,113 +687,113 @@ public class GroupCallUserCell extends FrameLayout {
             long r12 = r11.lastRaiseHandDate
             long r15 = r15 - r12
             int r11 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
-            if (r11 == 0) goto L_0x014a
+            if (r11 == 0) goto L_0x0134
             r4 = 5000(0x1388, double:2.4703E-320)
             int r11 = (r15 > r4 ? 1 : (r15 == r4 ? 0 : -1))
-            if (r11 <= 0) goto L_0x0142
-            goto L_0x014a
-        L_0x0142:
+            if (r11 <= 0) goto L_0x012c
+            goto L_0x0134
+        L_0x012c:
             java.lang.Runnable r3 = r0.checkRaiseRunnable
             long r4 = r4 - r15
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r3, r4)
             r3 = 3
-            goto L_0x0153
-        L_0x014a:
-            if (r3 == 0) goto L_0x014e
+            goto L_0x013d
+        L_0x0134:
+            if (r3 == 0) goto L_0x0138
             r3 = 2
-            goto L_0x0153
-        L_0x014e:
-            if (r9 == 0) goto L_0x0152
+            goto L_0x013d
+        L_0x0138:
+            if (r9 == 0) goto L_0x013c
             r3 = 4
-            goto L_0x0153
-        L_0x0152:
+            goto L_0x013d
+        L_0x013c:
             r3 = 0
-        L_0x0153:
+        L_0x013d:
             r4 = r3
             r3 = r2
             r2 = r10
-            goto L_0x018b
-        L_0x0157:
+            goto L_0x0175
+        L_0x0141:
             java.lang.String r4 = "voipgroup_mutedByAdminIcon"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            if (r3 == 0) goto L_0x0161
+            if (r3 == 0) goto L_0x014b
             r3 = 2
-            goto L_0x0166
-        L_0x0161:
-            if (r9 == 0) goto L_0x0165
+            goto L_0x0150
+        L_0x014b:
+            if (r9 == 0) goto L_0x014f
             r3 = 4
-            goto L_0x0166
-        L_0x0165:
+            goto L_0x0150
+        L_0x014f:
             r3 = 0
-        L_0x0166:
+        L_0x0150:
             r17 = r3
             r3 = r2
             r2 = r4
             r4 = r17
-            goto L_0x018b
-        L_0x016d:
+            goto L_0x0175
+        L_0x0157:
             boolean r3 = r0.isSpeaking
-            if (r3 == 0) goto L_0x017c
-            if (r2 == 0) goto L_0x017c
+            if (r3 == 0) goto L_0x0166
+            if (r2 == 0) goto L_0x0166
             java.lang.String r2 = "voipgroup_speakingText"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r3 = 0
             r4 = 1
-            goto L_0x018b
-        L_0x017c:
+            goto L_0x0175
+        L_0x0166:
             java.lang.String r2 = r0.grayIconColor
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            if (r9 == 0) goto L_0x0186
+            if (r9 == 0) goto L_0x0170
             r3 = 4
-            goto L_0x0187
-        L_0x0186:
+            goto L_0x0171
+        L_0x0170:
             r3 = 0
-        L_0x0187:
+        L_0x0171:
             r0.currentIconGray = r7
-        L_0x0189:
+        L_0x0173:
             r4 = r3
             r3 = 0
-        L_0x018b:
-            if (r9 == 0) goto L_0x019d
+        L_0x0175:
+            if (r9 == 0) goto L_0x0187
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r14]
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r9 = r0.participant
             java.lang.String r9 = r9.about
             java.lang.CharSequence r9 = org.telegram.messenger.AndroidUtilities.replaceNewLines(r9)
             r5.setText(r9)
-            goto L_0x01a6
-        L_0x019d:
+            goto L_0x0190
+        L_0x0187:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r14]
             java.lang.String r9 = ""
             r5.setText(r9)
-        L_0x01a6:
+        L_0x0190:
             android.animation.AnimatorSet r5 = r0.animatorSet
-            if (r5 == 0) goto L_0x01b4
+            if (r5 == 0) goto L_0x019e
             int r9 = r0.currentStatus
-            if (r4 != r9) goto L_0x01b2
+            if (r4 != r9) goto L_0x019c
             int r9 = r0.lastMuteColor
-            if (r9 == r2) goto L_0x01b4
-        L_0x01b2:
+            if (r9 == r2) goto L_0x019e
+        L_0x019c:
             r9 = 1
-            goto L_0x01b5
-        L_0x01b4:
+            goto L_0x019f
+        L_0x019e:
             r9 = 0
-        L_0x01b5:
+        L_0x019f:
             r10 = 0
-            if (r1 == 0) goto L_0x01ba
-            if (r9 == 0) goto L_0x01c1
-        L_0x01ba:
-            if (r5 == 0) goto L_0x01c1
+            if (r1 == 0) goto L_0x01a4
+            if (r9 == 0) goto L_0x01ab
+        L_0x01a4:
+            if (r5 == 0) goto L_0x01ab
             r5.cancel()
             r0.animatorSet = r10
-        L_0x01c1:
-            if (r1 == 0) goto L_0x01c9
+        L_0x01ab:
+            if (r1 == 0) goto L_0x01b3
             int r5 = r0.lastMuteColor
-            if (r5 != r2) goto L_0x01c9
-            if (r9 == 0) goto L_0x0205
-        L_0x01c9:
-            if (r1 == 0) goto L_0x01ea
+            if (r5 != r2) goto L_0x01b3
+            if (r9 == 0) goto L_0x01ef
+        L_0x01b3:
+            if (r1 == 0) goto L_0x01d4
             java.util.ArrayList r5 = new java.util.ArrayList
             r5.<init>()
             int r11 = r0.lastMuteColor
@@ -750,8 +806,8 @@ public class GroupCallUserCell extends FrameLayout {
             r13.<init>(r11, r2)
             r12.addUpdateListener(r13)
             r5.add(r12)
-            goto L_0x0206
-        L_0x01ea:
+            goto L_0x01f0
+        L_0x01d4:
             org.telegram.ui.Components.RLottieImageView r5 = r0.muteButton
             android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
             r0.lastMuteColor = r2
@@ -763,17 +819,17 @@ public class GroupCallUserCell extends FrameLayout {
             r11 = 620756991(0x24ffffff, float:1.11022296E-16)
             r2 = r2 & r11
             org.telegram.ui.ActionBar.Theme.setSelectorDrawableColor(r5, r2, r7)
-        L_0x0205:
+        L_0x01ef:
             r5 = r10
-        L_0x0206:
-            if (r4 != r7) goto L_0x0257
+        L_0x01f0:
+            if (r4 != r7) goto L_0x0241
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r2 = r0.participant
             int r2 = org.telegram.messenger.ChatObject.getParticipantVolume(r2)
             int r11 = r2 / 100
             r12 = 2131627489(0x7f0e0de1, float:1.8882244E38)
             java.lang.String r13 = "Speaking"
             r14 = 100
-            if (r11 == r14) goto L_0x0245
+            if (r11 == r14) goto L_0x022f
             org.telegram.ui.ActionBar.SimpleTextView[] r15 = r0.statusTextView
             r15 = r15[r7]
             android.graphics.drawable.Drawable r6 = r0.speakingDrawable
@@ -782,9 +838,9 @@ public class GroupCallUserCell extends FrameLayout {
             r6 = r6[r7]
             java.lang.StringBuilder r15 = new java.lang.StringBuilder
             r15.<init>()
-            if (r2 >= r14) goto L_0x022e
+            if (r2 >= r14) goto L_0x0218
             r11 = 1
-        L_0x022e:
+        L_0x0218:
             r15.append(r11)
             java.lang.String r2 = "% "
             r15.append(r2)
@@ -792,8 +848,8 @@ public class GroupCallUserCell extends FrameLayout {
             r15.append(r2)
             java.lang.String r2 = r15.toString()
             r6.setText(r2)
-            goto L_0x0257
-        L_0x0245:
+            goto L_0x0241
+        L_0x022f:
             org.telegram.ui.ActionBar.SimpleTextView[] r2 = r0.statusTextView
             r2 = r2[r7]
             r2.setLeftDrawable((android.graphics.drawable.Drawable) r10)
@@ -801,36 +857,36 @@ public class GroupCallUserCell extends FrameLayout {
             r2 = r2[r7]
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r13, r12)
             r2.setText(r6)
-        L_0x0257:
-            if (r1 == 0) goto L_0x025f
+        L_0x0241:
+            if (r1 == 0) goto L_0x0249
             int r2 = r0.currentStatus
-            if (r4 != r2) goto L_0x025f
-            if (r9 == 0) goto L_0x02f0
-        L_0x025f:
-            if (r1 == 0) goto L_0x02eb
-            if (r5 != 0) goto L_0x0268
+            if (r4 != r2) goto L_0x0249
+            if (r9 == 0) goto L_0x02da
+        L_0x0249:
+            if (r1 == 0) goto L_0x02d5
+            if (r5 != 0) goto L_0x0252
             java.util.ArrayList r5 = new java.util.ArrayList
             r5.<init>()
-        L_0x0268:
+        L_0x0252:
             r2 = 1065353216(0x3var_, float:1.0)
             r6 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             r9 = 0
-            if (r4 != 0) goto L_0x02a9
+            if (r4 != 0) goto L_0x0293
             r11 = 0
-        L_0x0270:
+        L_0x025a:
             org.telegram.ui.ActionBar.SimpleTextView[] r12 = r0.statusTextView
             int r13 = r12.length
-            if (r11 >= r13) goto L_0x02ee
+            if (r11 >= r13) goto L_0x02d8
             r12 = r12[r11]
             android.util.Property r13 = android.view.View.TRANSLATION_Y
             float[] r14 = new float[r7]
-            if (r11 != r4) goto L_0x027f
+            if (r11 != r4) goto L_0x0269
             r15 = 0
-            goto L_0x0284
-        L_0x027f:
+            goto L_0x026e
+        L_0x0269:
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r6)
             float r15 = (float) r15
-        L_0x0284:
+        L_0x026e:
             r16 = 0
             r14[r16] = r15
             android.animation.ObjectAnimator r12 = android.animation.ObjectAnimator.ofFloat(r12, r13, r14)
@@ -839,42 +895,42 @@ public class GroupCallUserCell extends FrameLayout {
             r12 = r12[r11]
             android.util.Property r13 = android.view.View.ALPHA
             float[] r14 = new float[r7]
-            if (r11 != r4) goto L_0x029c
+            if (r11 != r4) goto L_0x0286
             r15 = 1065353216(0x3var_, float:1.0)
-            goto L_0x029d
-        L_0x029c:
+            goto L_0x0287
+        L_0x0286:
             r15 = 0
-        L_0x029d:
+        L_0x0287:
             r14[r16] = r15
             android.animation.ObjectAnimator r12 = android.animation.ObjectAnimator.ofFloat(r12, r13, r14)
             r5.add(r12)
             int r11 = r11 + 1
-            goto L_0x0270
-        L_0x02a9:
+            goto L_0x025a
+        L_0x0293:
             r11 = 0
-        L_0x02aa:
+        L_0x0294:
             org.telegram.ui.ActionBar.SimpleTextView[] r12 = r0.statusTextView
             int r13 = r12.length
-            if (r11 >= r13) goto L_0x02ee
+            if (r11 >= r13) goto L_0x02d8
             r12 = r12[r11]
             android.util.Property r13 = android.view.View.TRANSLATION_Y
             float[] r14 = new float[r7]
-            if (r11 != r4) goto L_0x02bb
+            if (r11 != r4) goto L_0x02a5
             r15 = 0
-        L_0x02b8:
+        L_0x02a2:
             r16 = 0
-            goto L_0x02c8
-        L_0x02bb:
-            if (r11 != 0) goto L_0x02c0
+            goto L_0x02b2
+        L_0x02a5:
+            if (r11 != 0) goto L_0x02aa
             r15 = 1073741824(0x40000000, float:2.0)
-            goto L_0x02c2
-        L_0x02c0:
+            goto L_0x02ac
+        L_0x02aa:
             r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-        L_0x02c2:
+        L_0x02ac:
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
             float r15 = (float) r15
-            goto L_0x02b8
-        L_0x02c8:
+            goto L_0x02a2
+        L_0x02b2:
             r14[r16] = r15
             android.animation.ObjectAnimator r12 = android.animation.ObjectAnimator.ofFloat(r12, r13, r14)
             r5.add(r12)
@@ -882,30 +938,30 @@ public class GroupCallUserCell extends FrameLayout {
             r12 = r12[r11]
             android.util.Property r13 = android.view.View.ALPHA
             float[] r14 = new float[r7]
-            if (r11 != r4) goto L_0x02de
+            if (r11 != r4) goto L_0x02c8
             r15 = 1065353216(0x3var_, float:1.0)
-            goto L_0x02df
-        L_0x02de:
+            goto L_0x02c9
+        L_0x02c8:
             r15 = 0
-        L_0x02df:
+        L_0x02c9:
             r14[r16] = r15
             android.animation.ObjectAnimator r12 = android.animation.ObjectAnimator.ofFloat(r12, r13, r14)
             r5.add(r12)
             int r11 = r11 + 1
-            goto L_0x02aa
-        L_0x02eb:
+            goto L_0x0294
+        L_0x02d5:
             r0.applyStatus(r4)
-        L_0x02ee:
+        L_0x02d8:
             r0.currentStatus = r4
-        L_0x02f0:
+        L_0x02da:
             org.telegram.ui.Cells.GroupCallUserCell$AvatarWavesDrawable r2 = r0.avatarWavesDrawable
             r2.setMuted(r4, r1)
-            if (r5 == 0) goto L_0x0320
+            if (r5 == 0) goto L_0x030a
             android.animation.AnimatorSet r2 = r0.animatorSet
-            if (r2 == 0) goto L_0x0300
+            if (r2 == 0) goto L_0x02ea
             r2.cancel()
             r0.animatorSet = r10
-        L_0x0300:
+        L_0x02ea:
             android.animation.AnimatorSet r2 = new android.animation.AnimatorSet
             r2.<init>()
             r0.animatorSet = r2
@@ -919,84 +975,84 @@ public class GroupCallUserCell extends FrameLayout {
             r2.setDuration(r5)
             android.animation.AnimatorSet r2 = r0.animatorSet
             r2.start()
-        L_0x0320:
-            if (r1 == 0) goto L_0x032a
+        L_0x030a:
+            if (r1 == 0) goto L_0x0314
             boolean r2 = r0.lastMuted
-            if (r2 != r8) goto L_0x032a
+            if (r2 != r8) goto L_0x0314
             boolean r2 = r0.lastRaisedHand
-            if (r2 == r3) goto L_0x03b8
-        L_0x032a:
+            if (r2 == r3) goto L_0x03a2
+        L_0x0314:
             r2 = 21
-            if (r3 == 0) goto L_0x034a
+            if (r3 == 0) goto L_0x0334
             org.telegram.ui.Components.RLottieDrawable r5 = r0.muteDrawable
             r6 = 84
             boolean r5 = r5.setCustomEndFrame(r6)
-            if (r1 == 0) goto L_0x0343
+            if (r1 == 0) goto L_0x032d
             org.telegram.ui.Components.RLottieDrawable r6 = r0.muteDrawable
             java.lang.Runnable r9 = r0.raiseHandCallback
             r10 = 83
             r6.setOnFinishCallback(r9, r10)
             r9 = 0
-            goto L_0x0371
-        L_0x0343:
+            goto L_0x035b
+        L_0x032d:
             org.telegram.ui.Components.RLottieDrawable r6 = r0.muteDrawable
             r9 = 0
             r6.setOnFinishCallback(r10, r9)
-            goto L_0x0371
-        L_0x034a:
+            goto L_0x035b
+        L_0x0334:
             r9 = 0
             org.telegram.ui.Components.RLottieImageView r5 = r0.muteButton
             org.telegram.ui.Components.RLottieDrawable r6 = r0.muteDrawable
             r5.setAnimation(r6)
             org.telegram.ui.Components.RLottieDrawable r5 = r0.muteDrawable
             r5.setOnFinishCallback(r10, r9)
-            if (r8 == 0) goto L_0x0364
+            if (r8 == 0) goto L_0x034e
             boolean r5 = r0.lastRaisedHand
-            if (r5 == 0) goto L_0x0364
+            if (r5 == 0) goto L_0x034e
             org.telegram.ui.Components.RLottieDrawable r5 = r0.muteDrawable
             boolean r5 = r5.setCustomEndFrame(r2)
-            goto L_0x0371
-        L_0x0364:
+            goto L_0x035b
+        L_0x034e:
             org.telegram.ui.Components.RLottieDrawable r5 = r0.muteDrawable
-            if (r8 == 0) goto L_0x036b
+            if (r8 == 0) goto L_0x0355
             r6 = 64
-            goto L_0x036d
-        L_0x036b:
+            goto L_0x0357
+        L_0x0355:
             r6 = 42
-        L_0x036d:
+        L_0x0357:
             boolean r5 = r5.setCustomEndFrame(r6)
-        L_0x0371:
-            if (r1 == 0) goto L_0x03a4
-            if (r5 == 0) goto L_0x039e
+        L_0x035b:
+            if (r1 == 0) goto L_0x038e
+            if (r5 == 0) goto L_0x0388
             r1 = 3
-            if (r4 != r1) goto L_0x0380
+            if (r4 != r1) goto L_0x036a
             org.telegram.ui.Components.RLottieDrawable r1 = r0.muteDrawable
             r2 = 63
             r1.setCurrentFrame(r2)
-            goto L_0x039e
-        L_0x0380:
-            if (r8 == 0) goto L_0x038f
+            goto L_0x0388
+        L_0x036a:
+            if (r8 == 0) goto L_0x0379
             boolean r1 = r0.lastRaisedHand
-            if (r1 == 0) goto L_0x038f
-            if (r3 != 0) goto L_0x038f
+            if (r1 == 0) goto L_0x0379
+            if (r3 != 0) goto L_0x0379
             org.telegram.ui.Components.RLottieDrawable r1 = r0.muteDrawable
             r2 = 0
             r1.setCurrentFrame(r2)
-            goto L_0x039e
-        L_0x038f:
-            if (r8 == 0) goto L_0x0399
+            goto L_0x0388
+        L_0x0379:
+            if (r8 == 0) goto L_0x0383
             org.telegram.ui.Components.RLottieDrawable r1 = r0.muteDrawable
             r2 = 43
             r1.setCurrentFrame(r2)
-            goto L_0x039e
-        L_0x0399:
+            goto L_0x0388
+        L_0x0383:
             org.telegram.ui.Components.RLottieDrawable r1 = r0.muteDrawable
             r1.setCurrentFrame(r2)
-        L_0x039e:
+        L_0x0388:
             org.telegram.ui.Components.RLottieImageView r1 = r0.muteButton
             r1.playAnimation()
-            goto L_0x03b4
-        L_0x03a4:
+            goto L_0x039e
+        L_0x038e:
             org.telegram.ui.Components.RLottieDrawable r1 = r0.muteDrawable
             int r2 = r1.getCustomEndFrame()
             int r2 = r2 - r7
@@ -1004,16 +1060,16 @@ public class GroupCallUserCell extends FrameLayout {
             r1.setCurrentFrame(r2, r4, r7)
             org.telegram.ui.Components.RLottieImageView r1 = r0.muteButton
             r1.invalidate()
-        L_0x03b4:
+        L_0x039e:
             r0.lastMuted = r8
             r0.lastRaisedHand = r3
-        L_0x03b8:
+        L_0x03a2:
             boolean r1 = r0.isSpeaking
-            if (r1 != 0) goto L_0x03c3
+            if (r1 != 0) goto L_0x03ad
             org.telegram.ui.Cells.GroupCallUserCell$AvatarWavesDrawable r1 = r0.avatarWavesDrawable
             r2 = 0
             r1.setAmplitude(r2)
-        L_0x03c3:
+        L_0x03ad:
             org.telegram.ui.Cells.GroupCallUserCell$AvatarWavesDrawable r1 = r0.avatarWavesDrawable
             boolean r2 = r0.isSpeaking
             r1.setShowWaves(r2, r0)
