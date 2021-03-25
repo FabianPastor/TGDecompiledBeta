@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 4.1.2
-SHA1-Digest-Manifest: TcCUEHGG+IX5USctpKc3rBwhDiM=
+SHA1-Digest-Manifest: rg9CSP7vttFgcF8pRirEhPV+C8o=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: Xem/r0phVlxcMiBBOh+sT2witrk=
+SHA1-Digest: jMIqvkHaoBGcijPmVBe+LS5UsZE=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9880,13 +9880,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: fttG0krlOeK5hRcPsmPvgFP7pVg=
+SHA1-Digest: MJvf9CndcAxczIGW4N6Mh9wq06g=
 
 Name: classes2.dex
-SHA1-Digest: BxT9JeDKRTdfoqal0g2Um+G7n2I=
+SHA1-Digest: N6LCxWG4yKmtilzTzdWq5SS1m/g=
 
 Name: classes3.dex
-SHA1-Digest: /4tQzIUlki47LLGDJwloaeM96vg=
+SHA1-Digest: 5EvSVJ/LC1LTrakyaa8mEQPPiek=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -9943,16 +9943,16 @@ Name: isoparser-default.properties
 SHA1-Digest: ix2/FbuQDYdbrL/0Ibd5Tj5OTV0=
 
 Name: lib/arm64-v8a/libtmessages.36.so
-SHA1-Digest: XF6naznRLKUWZgoGtjT/Kh2b4b0=
+SHA1-Digest: 0Yp2LGUvL7daIJkvgrCSwtRIufc=
 
 Name: lib/armeabi-v7a/libtmessages.36.so
-SHA1-Digest: GxERzs1XtZKKM11eVrs8pnoGfJA=
+SHA1-Digest: AVgedPWREJN4JNejoe1VMjxxNrc=
 
 Name: lib/x86/libtmessages.36.so
-SHA1-Digest: eyELc1O5NgXeADucJd0PhXw4HY4=
+SHA1-Digest: lkfUMIXgn3bnHCB9zPIUjnivgLs=
 
 Name: lib/x86_64/libtmessages.36.so
-SHA1-Digest: kaWnyw7bFvx7/5FTykTUeur3aBM=
+SHA1-Digest: oXavx+2G97tTEz5oUOCp2suiFN4=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -20598,7 +20598,7 @@ Name: res/layout/call_notification_rtl.xml
 SHA1-Digest: Y/Uy6mbXYgD+6AkPuwMjheIhTBk=
 
 Name: res/layout/contacts_widget_item.xml
-SHA1-Digest: wn1y/HDJ6ji70ZJ65jsTObFdrrQ=
+SHA1-Digest: e0CA44c6GNzB2TTLqiBOXbDbBXE=
 
 Name: res/layout/contacts_widget_layout_1.xml
 SHA1-Digest: 6Q4QULGCdCWS+YEwykZ/VX1PZyw=
@@ -20664,7 +20664,7 @@ Name: res/layout/widget_deleted.xml
 SHA1-Digest: rAu8eMvpiMyg+M2mf7jMQrm8cfo=
 
 Name: res/layout/widget_edititem.xml
-SHA1-Digest: tHj7zHE1/vAaWSYJ2Pbna1LR1ww=
+SHA1-Digest: yZRZ4PE/KKMQbJmH8lpWmeTBVh0=
 
 Name: res/mipmap-anydpi-v26/ic_launcher.xml
 SHA1-Digest: G7ddlJzJpeU1rRMHtiXTxUyDMv0=

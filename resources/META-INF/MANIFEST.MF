@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 4.1.2
 
 Name: AndroidManifest.xml
-SHA1-Digest: /MPBp5qxoMOi6QekyqIrXZTrZqA=
+SHA1-Digest: yvcWFiOLv6BBx1FqcM7PtagCjwg=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9879,13 +9879,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: 0HLnFvVhHzgz9xHmUF2lr1Rdjmg=
+SHA1-Digest: ppqmVS0l0HFmmEAdZhxDhvFihxQ=
 
 Name: classes2.dex
-SHA1-Digest: llZShxa2C6kOv0Y1mdXRXmWawOg=
+SHA1-Digest: O0SLYUn3Hxe9teqwtIF3PDSF7Hc=
 
 Name: classes3.dex
-SHA1-Digest: uwdHTJMiUTvPcA0xowciiKT0/Uk=
+SHA1-Digest: WVmy1PBi6tOwQY2Xu9KFA7WnowI=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -9942,16 +9942,16 @@ Name: isoparser-default.properties
 SHA1-Digest: 6/KBb+rGX/5O2/xNP3HN6XIg3lI=
 
 Name: lib/arm64-v8a/libtmessages.36.so
-SHA1-Digest: tHEqVNPF+oXkrf6tszVT3AJxmnE=
+SHA1-Digest: nR+7elzay4DU/p9950zSd2qU6sk=
 
 Name: lib/armeabi-v7a/libtmessages.36.so
-SHA1-Digest: Re+8OgVX04gsYo0tdK3hE5at9Yo=
+SHA1-Digest: G+T68IMkWPQh4qh1jaCskKAvvtM=
 
 Name: lib/x86/libtmessages.36.so
-SHA1-Digest: IT7c8d2QCcO84l4WCCSqmGpnyIA=
+SHA1-Digest: j5iKlPbW4p9u9jpJrKSkIOcXfeI=
 
 Name: lib/x86_64/libtmessages.36.so
-SHA1-Digest: ImFKWgs9XUFDgrNjjWglgAwYmiI=
+SHA1-Digest: o9adpLFRtfw5N5dw4zlUOXoHLRs=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: /3UPL+65RV1bQ1opEtJnBMah8ZI=
@@ -20597,7 +20597,7 @@ Name: res/layout/call_notification_rtl.xml
 SHA1-Digest: KB8YQEjHJLaxXwGsVBTnxmyjkc0=
 
 Name: res/layout/contacts_widget_item.xml
-SHA1-Digest: /OlnGugWaFERJlDcwLgFCk9Jqgo=
+SHA1-Digest: f5kpBtqDhRQb1l2BrjG3zYp6If8=
 
 Name: res/layout/contacts_widget_layout_1.xml
 SHA1-Digest: OgOPMCNVMmMZEUAyViLtadkF0gs=
@@ -20663,7 +20663,7 @@ Name: res/layout/widget_deleted.xml
 SHA1-Digest: 6+bFyIEwqmrN8Th95+B0AbN8c20=
 
 Name: res/layout/widget_edititem.xml
-SHA1-Digest: vI4DPu/8EwVgWcmAjz+Zg0uOsUs=
+SHA1-Digest: +Q39+ltDVU8+X4/pVDzGFXghQLs=
 
 Name: res/mipmap-anydpi-v26/ic_launcher.xml
 SHA1-Digest: f5ZJP3thwJfrQSFormC85H7px44=

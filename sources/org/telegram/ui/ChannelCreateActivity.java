@@ -798,7 +798,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.linkContainer.addView(this.privateContainer, LayoutHelper.createLinear(-1, -2));
             LinkActionView linkActionView = new LinkActionView(context, this, (BottomSheet) null, this.chatId, true, ChatObject.isChannel(getMessagesController().getChat(Integer.valueOf(this.chatId))));
             this.permanentLinkView = linkActionView;
-            linkActionView.showRevokeOption(true);
+            linkActionView.hideRevokeOption(true);
             this.permanentLinkView.setUsers(0, (ArrayList<TLRPC$User>) null);
             this.privateContainer.addView(this.permanentLinkView);
             TextView textView2 = new TextView(context2);

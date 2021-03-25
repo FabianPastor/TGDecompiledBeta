@@ -64,7 +64,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         rLottieDrawable.setCustomEndFrame(42);
         rLottieImageView.setAnimation(this.linkIcon);
         linkActionView2.setUsers(0, (ArrayList<TLRPC$User>) null);
-        linkActionView2.showRevokeOption(true);
+        linkActionView2.hideRevokeOption(true);
         linkActionView2.setDelegate(new LinkActionView.Delegate() {
             public /* synthetic */ void editLink() {
                 LinkActionView.Delegate.CC.$default$editLink(this);
