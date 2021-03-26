@@ -226,6 +226,10 @@ public class UserConfig extends BaseController {
         }
     }
 
+    public static boolean isValidAccount(int i) {
+        return i >= 0 && i < 3 && getInstance(i).isClientActivated();
+    }
+
     public boolean isClientActivated() {
         boolean z;
         synchronized (this.sync) {

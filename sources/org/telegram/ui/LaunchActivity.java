@@ -10,6 +10,7 @@ import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -128,6 +129,7 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.LocationActivity;
+import org.webrtc.voiceengine.WebRtcAudioTrack;
 
 public class LaunchActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
     private static ArrayList<BaseFragment> layerFragmentsStack = new ArrayList<>();
@@ -334,7 +336,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0118:
         L_0x0119:
             android.view.Window r1 = r13.getWindow()
-            r6 = 2131166080(0x7var_, float:1.7946395E38)
+            r6 = 2131166081(0x7var_, float:1.7946397E38)
             r1.setBackgroundDrawableResource(r6)
             java.lang.String r1 = org.telegram.messenger.SharedConfig.passcodeHash
             int r1 = r1.length()
@@ -1125,7 +1127,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     public void switchToAccount(int i, boolean z) {
-        if (i != UserConfig.selectedAccount) {
+        if (i != UserConfig.selectedAccount && UserConfig.isValidAccount(this.currentAccount)) {
             ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
             UserConfig.selectedAccount = i;
             UserConfig.getInstance(0).saveConfig(false);
@@ -11023,7 +11025,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             z2 = true;
         }
         this.wasMutedByAdminRaisedHand = z2;
-        if (!z && z3 && !z2 && !z4 && GroupCallActivity.groupCallInstance == null && !mainFragmentsStack.isEmpty()) {
+        if (!z && z3 && !z2 && !z4 && GroupCallActivity.groupCallInstance == null) {
+            showVoiceChatTooltip(38);
+        }
+    }
+
+    private void showVoiceChatTooltip(int i) {
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null && !mainFragmentsStack.isEmpty() && sharedInstance.groupCall != null && !mainFragmentsStack.isEmpty()) {
             TLRPC$Chat chat = sharedInstance.getChat();
             ArrayList<BaseFragment> arrayList = this.actionBarLayout.fragmentsStack;
             BaseFragment baseFragment = arrayList.get(arrayList.size() - 1);
@@ -11032,13 +11041,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 if (chatActivity.getDialogId() == ((long) (-chat.id))) {
                     chat = null;
                 }
-                chatActivity.getUndoView().showWithAction(0, 38, (Object) chat);
+                chatActivity.getUndoView().showWithAction(0, i, (Object) chat);
             } else if (baseFragment instanceof DialogsActivity) {
-                ((DialogsActivity) baseFragment).getUndoView().showWithAction(0, 38, (Object) chat);
+                ((DialogsActivity) baseFragment).getUndoView().showWithAction(0, i, (Object) chat);
             } else if (baseFragment instanceof ProfileActivity) {
-                ((ProfileActivity) baseFragment).getUndoView().showWithAction(0, 38, (Object) chat);
+                ((ProfileActivity) baseFragment).getUndoView().showWithAction(0, i, (Object) chat);
             }
-            if (VoIPService.getSharedInstance() != null) {
+            if (i == 38 && VoIPService.getSharedInstance() != null) {
                 VoIPService.getSharedInstance().playAllowTalkSound();
             }
         }
@@ -11766,17 +11775,32 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
 
     public boolean dispatchKeyEvent(KeyEvent keyEvent) {
         keyEvent.getKeyCode();
-        if (VoIPService.getSharedInstance() == null && !mainFragmentsStack.isEmpty() && ((!PhotoViewer.hasInstance() || !PhotoViewer.getInstance().isVisible()) && keyEvent.getRepeatCount() == 0 && keyEvent.getAction() == 0 && (keyEvent.getKeyCode() == 24 || keyEvent.getKeyCode() == 25))) {
-            ArrayList<BaseFragment> arrayList = mainFragmentsStack;
-            BaseFragment baseFragment = arrayList.get(arrayList.size() - 1);
-            if ((baseFragment instanceof ChatActivity) && ((ChatActivity) baseFragment).maybePlayVisibleVideo()) {
-                return true;
-            }
-            if (AndroidUtilities.isTablet() && !rightFragmentsStack.isEmpty()) {
-                ArrayList<BaseFragment> arrayList2 = rightFragmentsStack;
-                BaseFragment baseFragment2 = arrayList2.get(arrayList2.size() - 1);
-                if ((baseFragment2 instanceof ChatActivity) && ((ChatActivity) baseFragment2).maybePlayVisibleVideo()) {
+        if (keyEvent.getAction() == 0 && (keyEvent.getKeyCode() == 24 || keyEvent.getKeyCode() == 25)) {
+            boolean z = true;
+            if (VoIPService.getSharedInstance() != null) {
+                if (Build.VERSION.SDK_INT >= 31 && !SharedConfig.useMediaStream) {
+                    boolean isSpeakerMuted = WebRtcAudioTrack.isSpeakerMuted();
+                    AudioManager audioManager = (AudioManager) getSystemService("audio");
+                    if (!(audioManager.getStreamVolume(0) == audioManager.getStreamMinVolume(0) && keyEvent.getKeyCode() == 25)) {
+                        z = false;
+                    }
+                    WebRtcAudioTrack.setSpeakerMute(z);
+                    if (isSpeakerMuted != WebRtcAudioTrack.isSpeakerMuted()) {
+                        showVoiceChatTooltip(z ? 42 : 43);
+                    }
+                }
+            } else if (!mainFragmentsStack.isEmpty() && ((!PhotoViewer.hasInstance() || !PhotoViewer.getInstance().isVisible()) && keyEvent.getRepeatCount() == 0)) {
+                ArrayList<BaseFragment> arrayList = mainFragmentsStack;
+                BaseFragment baseFragment = arrayList.get(arrayList.size() - 1);
+                if ((baseFragment instanceof ChatActivity) && ((ChatActivity) baseFragment).maybePlayVisibleVideo()) {
                     return true;
+                }
+                if (AndroidUtilities.isTablet() && !rightFragmentsStack.isEmpty()) {
+                    ArrayList<BaseFragment> arrayList2 = rightFragmentsStack;
+                    BaseFragment baseFragment2 = arrayList2.get(arrayList2.size() - 1);
+                    if ((baseFragment2 instanceof ChatActivity) && ((ChatActivity) baseFragment2).maybePlayVisibleVideo()) {
+                        return true;
+                    }
                 }
             }
         }

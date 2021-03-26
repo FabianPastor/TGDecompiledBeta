@@ -1647,7 +1647,12 @@ public class PopupNotificationActivity extends Activity implements NotificationC
         this.isReply = intent != null && intent.getBooleanExtra("force", false);
         this.popupMessages.clear();
         if (this.isReply) {
-            this.popupMessages.addAll(NotificationsController.getInstance(intent != null ? intent.getIntExtra("currentAccount", UserConfig.selectedAccount) : UserConfig.selectedAccount).popupReplyMessages);
+            int intExtra = intent != null ? intent.getIntExtra("currentAccount", UserConfig.selectedAccount) : UserConfig.selectedAccount;
+            if (UserConfig.isValidAccount(intExtra)) {
+                this.popupMessages.addAll(NotificationsController.getInstance(intExtra).popupReplyMessages);
+            } else {
+                return;
+            }
         } else {
             for (int i = 0; i < 3; i++) {
                 if (UserConfig.getInstance(i).isClientActivated()) {

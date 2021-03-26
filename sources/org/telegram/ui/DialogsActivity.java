@@ -2147,7 +2147,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     public ActionBar createActionBar(Context context) {
         AnonymousClass2 r0 = new ActionBar(context) {
             public void setTranslationY(float f) {
-                if (f != getTranslationY()) {
+                if (!(f == getTranslationY() || DialogsActivity.this.fragmentView == null)) {
                     DialogsActivity.this.fragmentView.invalidate();
                 }
                 super.setTranslationY(f);
@@ -3333,9 +3333,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 public void didFinishChatCreation(GroupCreateFinalActivity groupCreateFinalActivity, int i) {
                     ArrayList arrayList = new ArrayList();
                     arrayList.add(Long.valueOf((long) (-i)));
-                    DialogsActivityDelegate access$23200 = DialogsActivity.this.delegate;
+                    DialogsActivityDelegate access$23300 = DialogsActivity.this.delegate;
                     DialogsActivity.this.removeSelfFromStack();
-                    access$23200.didSelectDialogs(DialogsActivity.this, arrayList, (CharSequence) null, true);
+                    access$23300.didSelectDialogs(DialogsActivity.this, arrayList, (CharSequence) null, true);
                 }
             });
             presentFragment(groupCreateFinalActivity);
@@ -3634,11 +3634,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             dialogsActivity4.perfromSelectedDialogsAction(dialogsActivity4.selectedDialogs, i2, true);
                         }
                     } else if (DialogsActivity.this.getParentActivity() != null) {
-                        DialogsActivityDelegate access$23200 = DialogsActivity.this.delegate;
+                        DialogsActivityDelegate access$23300 = DialogsActivity.this.delegate;
                         LaunchActivity launchActivity = (LaunchActivity) DialogsActivity.this.getParentActivity();
                         launchActivity.switchToAccount(i2 - 10, true);
                         DialogsActivity dialogsActivity5 = new DialogsActivity(DialogsActivity.this.arguments);
-                        dialogsActivity5.setDelegate(access$23200);
+                        dialogsActivity5.setDelegate(access$23300);
                         launchActivity.presentFragment(dialogsActivity5, false, true);
                     }
                 }
@@ -6177,7 +6177,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 this.actionBar.getChildAt(i).setAlpha(1.0f - this.progressToActionMode);
             }
         }
-        this.fragmentView.invalidate();
+        View view = this.fragmentView;
+        if (view != null) {
+            view.invalidate();
+        }
     }
 
     private int getPinnedCount() {
@@ -7937,7 +7940,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 this.actionBar.getChildAt(i).setAlpha(1.0f - this.progressToActionMode);
             }
         }
-        this.fragmentView.invalidate();
+        View view = this.fragmentView;
+        if (view != null) {
+            view.invalidate();
+        }
     }
 
     /* access modifiers changed from: private */

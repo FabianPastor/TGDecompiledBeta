@@ -4072,6 +4072,7 @@
     <string name="VoipGroupOfflineAirplane">You currently have airplane mode enabled. Please turn it off or connect to Wi-Fi to join voice chats.</string>
     <string name="VoipGroupOnlyAdminsCanSpeak">New paricipants are muted</string>
     <string name="VoipGroupOpenChannel">Open Channel</string>
+    <string name="VoipGroupOpenChat">Open Chat</string>
     <string name="VoipGroupOpenGroup">Open Group</string>
     <string name="VoipGroupOpenProfile">Open Profile</string>
     <string name="VoipGroupOpenVoiceChat">Open voice chat</string>
@@ -4084,6 +4085,8 @@
     <string name="VoipGroupSaveFileHint">Recording Title</string>
     <string name="VoipGroupSearchMembers">Search members to invite...</string>
     <string name="VoipGroupShareInviteLink">Share invite link</string>
+    <string name="VoipGroupSoundMuted">Voice chat sound muted.</string>
+    <string name="VoipGroupSoundUnmuted">Voice chat sound unmuted.</string>
     <string name="VoipGroupStartAs">Start Voice Chat as...</string>
     <string name="VoipGroupStartAsInfo">Choose whether you want to be displayed as your personal account or as your channel.</string>
     <string name="VoipGroupStartAsInfoGroup">Choose whether you want to be displayed as your personal account, this group, or one of your channels.</string>

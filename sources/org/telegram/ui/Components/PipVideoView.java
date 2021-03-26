@@ -758,14 +758,20 @@ public class PipVideoView {
     public void setX(int i) {
         WindowManager.LayoutParams layoutParams = this.windowLayoutParams;
         layoutParams.x = i;
-        this.windowManager.updateViewLayout(this.windowView, layoutParams);
+        try {
+            this.windowManager.updateViewLayout(this.windowView, layoutParams);
+        } catch (Exception unused) {
+        }
     }
 
     @Keep
     public void setY(int i) {
         WindowManager.LayoutParams layoutParams = this.windowLayoutParams;
         layoutParams.y = i;
-        this.windowManager.updateViewLayout(this.windowView, layoutParams);
+        try {
+            this.windowManager.updateViewLayout(this.windowView, layoutParams);
+        } catch (Exception unused) {
+        }
     }
 
     @Keep

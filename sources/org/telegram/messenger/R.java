@@ -757,6 +757,7 @@ public final class R {
         public static final int msg_minvideo = NUM;
         public static final int msg_msgbubble = NUM;
         public static final int msg_msgbubble2 = NUM;
+        public static final int msg_msgbubble3 = NUM;
         public static final int msg_mute = NUM;
         public static final int msg_openin = NUM;
         public static final int msg_openprofile = NUM;
@@ -5743,6 +5744,7 @@ public final class R {
         public static final int VoipGroupOfflineAirplane = NUM;
         public static final int VoipGroupOnlyAdminsCanSpeak = NUM;
         public static final int VoipGroupOpenChannel = NUM;
+        public static final int VoipGroupOpenChat = NUM;
         public static final int VoipGroupOpenGroup = NUM;
         public static final int VoipGroupOpenProfile = NUM;
         public static final int VoipGroupOpenVoiceChat = NUM;
@@ -5755,6 +5757,8 @@ public final class R {
         public static final int VoipGroupSaveFileHint = NUM;
         public static final int VoipGroupSearchMembers = NUM;
         public static final int VoipGroupShareInviteLink = NUM;
+        public static final int VoipGroupSoundMuted = NUM;
+        public static final int VoipGroupSoundUnmuted = NUM;
         public static final int VoipGroupStartAs = NUM;
         public static final int VoipGroupStartAsInfo = NUM;
         public static final int VoipGroupStartAsInfoGroup = NUM;

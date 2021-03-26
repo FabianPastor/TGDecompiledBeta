@@ -489,6 +489,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             if (imageLocation7 == null) {
                 imageLocation7 = imageLocation4 != null ? imageLocation4 : imageLocation5;
             }
+            if (imageLocation7 == null) {
+                imageLocation7 = imageLocation6;
+            }
             String key3 = imageLocation6 != null ? imageLocation6.getKey(obj2, imageLocation7, false) : null;
             if (!(key3 == null || str9 == null)) {
                 key3 = key3 + "@" + str9;

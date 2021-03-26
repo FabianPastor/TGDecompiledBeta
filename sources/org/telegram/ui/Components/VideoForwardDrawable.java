@@ -6,7 +6,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.text.TextPaint;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 
 public class VideoForwardDrawable extends Drawable {
     private static final int[] playPath = {10, 7, 26, 16, 10, 25};
@@ -17,6 +19,9 @@ public class VideoForwardDrawable extends Drawable {
     private boolean leftSide;
     private Paint paint = new Paint(1);
     private Path path1 = new Path();
+    private TextPaint textPaint = new TextPaint(1);
+    long time;
+    String timeStr;
 
     public interface VideoForwardDrawableDelegate {
         void invalidate();
@@ -30,6 +35,9 @@ public class VideoForwardDrawable extends Drawable {
 
     public VideoForwardDrawable() {
         this.paint.setColor(-1);
+        this.textPaint.setColor(-1);
+        this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
+        this.textPaint.setTextAlign(Paint.Align.CENTER);
         this.path1.reset();
         int i = 0;
         while (true) {
@@ -61,7 +69,12 @@ public class VideoForwardDrawable extends Drawable {
     }
 
     public void setLeftSide(boolean z) {
-        if (this.leftSide != z || this.animationProgress < 1.0f) {
+        boolean z2 = this.leftSide;
+        if (z2 != z || this.animationProgress < 1.0f) {
+            if (z2 != z) {
+                this.time = 0;
+                this.timeStr = null;
+            }
             this.leftSide = z;
             startAnimation();
         }
@@ -73,6 +86,7 @@ public class VideoForwardDrawable extends Drawable {
 
     public void setAlpha(int i) {
         this.paint.setAlpha(i);
+        this.textPaint.setAlpha(i);
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
@@ -94,11 +108,22 @@ public class VideoForwardDrawable extends Drawable {
         float f = this.animationProgress;
         if (f <= 0.7f) {
             this.paint.setAlpha((int) (Math.min(1.0f, f / 0.3f) * 80.0f));
+            this.textPaint.setAlpha((int) (Math.min(1.0f, this.animationProgress / 0.3f) * 255.0f));
         } else {
             this.paint.setAlpha((int) ((1.0f - ((f - 0.7f) / 0.3f)) * 80.0f));
+            this.textPaint.setAlpha((int) ((1.0f - ((this.animationProgress - 0.7f) / 0.3f)) * 255.0f));
         }
+        int i2 = -1;
         canvas.drawCircle((float) (((Math.max(bounds.width(), bounds.height()) / 4) * (this.leftSide ? -1 : 1)) + i), (float) (AndroidUtilities.dp(16.0f) + height), (float) (Math.max(bounds.width(), bounds.height()) / 2), this.paint);
         canvas.restore();
+        String str = this.timeStr;
+        if (str != null) {
+            int intrinsicWidth = getIntrinsicWidth();
+            if (!this.leftSide) {
+                i2 = 1;
+            }
+            canvas.drawText(str, (float) ((intrinsicWidth * i2) + i), (float) (getIntrinsicHeight() + height + AndroidUtilities.dp(15.0f)), this.textPaint);
+        }
         canvas.save();
         if (this.leftSide) {
             canvas.rotate(180.0f, (float) i, (float) ((getIntrinsicHeight() / 2) + height));
@@ -150,6 +175,8 @@ public class VideoForwardDrawable extends Drawable {
                 if (f8 >= 1.0f) {
                     this.animationProgress = 0.0f;
                     this.animating = false;
+                    this.time = 0;
+                    this.timeStr = null;
                     VideoForwardDrawableDelegate videoForwardDrawableDelegate = this.delegate;
                     if (videoForwardDrawableDelegate != null) {
                         videoForwardDrawableDelegate.onAnimationEnd();
@@ -179,5 +206,11 @@ public class VideoForwardDrawable extends Drawable {
 
     public int getMinimumHeight() {
         return AndroidUtilities.dp(32.0f);
+    }
+
+    public void addTime(long j) {
+        long j2 = this.time + j;
+        this.time = j2;
+        this.timeStr = LocaleController.formatPluralString("Seconds", (int) (j2 / 1000));
     }
 }

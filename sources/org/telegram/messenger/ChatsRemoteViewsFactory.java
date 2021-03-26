@@ -91,7 +91,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r3 = 2131427352(0x7f0b0018, float:1.8476318E38)
             r0.<init>(r2, r3)
             r2 = 2131230935(0x7var_d7, float:1.8077937E38)
-            r3 = 2131628128(0x7f0e1060, float:1.888354E38)
+            r3 = 2131628131(0x7f0e1063, float:1.8883546E38)
             java.lang.String r4 = "WidgetLoggedOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setTextViewText(r2, r3)
@@ -784,11 +784,11 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             boolean r6 = r6.isDialogMuted(r7)
             java.lang.String r7 = "setBackgroundResource"
             if (r6 == 0) goto L_0x05bf
-            r6 = 2131166124(0x7var_ac, float:1.7946484E38)
+            r6 = 2131166125(0x7var_ad, float:1.7946487E38)
             r13.setInt(r4, r7, r6)
             goto L_0x05ca
         L_0x05bf:
-            r6 = 2131166123(0x7var_ab, float:1.7946482E38)
+            r6 = 2131166124(0x7var_ac, float:1.7946484E38)
             r13.setInt(r4, r7, r6)
             goto L_0x05ca
         L_0x05c6:

@@ -355,6 +355,10 @@ public class WebRtcAudioTrack {
         speakerMute = z;
     }
 
+    public static boolean isSpeakerMuted() {
+        return speakerMute;
+    }
+
     private void releaseAudioResources() {
         Logging.d("WebRtcAudioTrack", "releaseAudioResources");
         AudioTrack audioTrack2 = this.audioTrack;

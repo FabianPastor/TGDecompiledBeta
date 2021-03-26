@@ -21,7 +21,7 @@ public class AutoMessageReplyReceiver extends BroadcastReceiver {
             long longExtra = intent2.getLongExtra("dialog_id", 0);
             int intExtra = intent2.getIntExtra("max_id", 0);
             int intExtra2 = intent2.getIntExtra("currentAccount", 0);
-            if (longExtra != 0 && intExtra != 0) {
+            if (longExtra != 0 && intExtra != 0 && UserConfig.isValidAccount(intExtra2)) {
                 SendMessagesHelper.getInstance(intExtra2).sendMessage(charSequence.toString(), longExtra, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
                 MessagesController.getInstance(intExtra2).markDialogAsRead(longExtra, intExtra, intExtra, 0, false, 0, 0, true, 0);
             }

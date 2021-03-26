@@ -3247,7 +3247,6 @@ public class ImageLoader {
         }
     }
 
-    /* access modifiers changed from: private */
     public static Bitmap getStrippedPhotoBitmap(byte[] bArr, String str) {
         int length = (bArr.length - 3) + Bitmaps.header.length + Bitmaps.footer.length;
         byte[] bArr2 = bytesLocal.get();

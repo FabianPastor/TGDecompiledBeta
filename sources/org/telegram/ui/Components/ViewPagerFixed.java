@@ -196,6 +196,9 @@ public class ViewPagerFixed extends FrameLayout {
             } else {
                 this.viewsByType.remove(this.viewTypes[i]);
             }
+            if (view.getParent() != null) {
+                ((ViewGroup) view.getParent()).removeView(view);
+            }
             addView(view);
             View[] viewArr = this.viewPages;
             viewArr[i] = view;
