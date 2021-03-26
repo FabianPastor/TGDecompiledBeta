@@ -24,6 +24,7 @@ public class WebRtcAudioTrack {
     private static WebRtcAudioTrackErrorCallback errorCallbackOld;
     /* access modifiers changed from: private */
     public static volatile boolean speakerMute;
+    private static int streamType = 0;
     private static int usageAttribute;
     private final AudioManager audioManager = ((AudioManager) ContextUtils.getApplicationContext().getSystemService("audio"));
     private AudioTrackThread audioThread;
@@ -78,6 +79,12 @@ public class WebRtcAudioTrack {
         synchronized (WebRtcAudioTrack.class) {
             Logging.w("WebRtcAudioTrack", "Default usage attribute is changed from: " + DEFAULT_USAGE + " to " + i);
             usageAttribute = i;
+        }
+    }
+
+    public static synchronized void setAudioStreamType(int i) {
+        synchronized (WebRtcAudioTrack.class) {
+            streamType = i;
         }
     }
 
@@ -255,7 +262,7 @@ public class WebRtcAudioTrack {
         this.threadChecker.checkIsOnValidThread();
         Logging.d("WebRtcAudioTrack", "getStreamMaxVolume");
         assertTrue(this.audioManager != null);
-        return this.audioManager.getStreamMaxVolume(0);
+        return this.audioManager.getStreamMaxVolume(streamType);
     }
 
     private boolean setStreamVolume(int i) {
@@ -266,7 +273,7 @@ public class WebRtcAudioTrack {
             Logging.e("WebRtcAudioTrack", "The device implements a fixed volume policy.");
             return false;
         }
-        this.audioManager.setStreamVolume(0, i, 0);
+        this.audioManager.setStreamVolume(streamType, i, 0);
         return true;
     }
 
@@ -281,7 +288,7 @@ public class WebRtcAudioTrack {
         this.threadChecker.checkIsOnValidThread();
         Logging.d("WebRtcAudioTrack", "getStreamVolume");
         assertTrue(this.audioManager != null);
-        return this.audioManager.getStreamVolume(0);
+        return this.audioManager.getStreamVolume(streamType);
     }
 
     private void logMainParameters() {
@@ -291,7 +298,7 @@ public class WebRtcAudioTrack {
     @TargetApi(21)
     private static AudioTrack createAudioTrackOnLollipopOrHigher(int i, int i2, int i3) {
         Logging.d("WebRtcAudioTrack", "createAudioTrackOnLollipopOrHigher");
-        int nativeOutputSampleRate = AudioTrack.getNativeOutputSampleRate(0);
+        int nativeOutputSampleRate = AudioTrack.getNativeOutputSampleRate(streamType);
         Logging.d("WebRtcAudioTrack", "nativeOutputSampleRate: " + nativeOutputSampleRate);
         if (i != nativeOutputSampleRate) {
             Logging.w("WebRtcAudioTrack", "Unable to use fast mode since requested sample rate is not native");
@@ -303,7 +310,7 @@ public class WebRtcAudioTrack {
     }
 
     private static AudioTrack createAudioTrackOnLowerThanLollipop(int i, int i2, int i3) {
-        return new AudioTrack(0, i, i2, 2, i3, 1);
+        return new AudioTrack(streamType, i, i2, 2, i3, 1);
     }
 
     private void logBufferSizeInFrames() {

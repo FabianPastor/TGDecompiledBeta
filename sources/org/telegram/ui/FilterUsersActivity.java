@@ -1019,7 +1019,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         private ArrayList<TLObject> contacts = new ArrayList<>();
         private Context context;
         private SearchAdapterHelper searchAdapterHelper;
-        private ArrayList<TLObject> searchResult = new ArrayList<>();
+        private ArrayList<Object> searchResult = new ArrayList<>();
         private ArrayList<CharSequence> searchResultNames = new ArrayList<>();
         private Runnable searchRunnable;
         /* access modifiers changed from: private */
@@ -1168,7 +1168,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 r3 = 0
                 r4 = 0
                 if (r0 == 0) goto L_0x0119
-                java.util.ArrayList<org.telegram.tgnet.TLObject> r0 = r11.searchResult
+                java.util.ArrayList<java.lang.Object> r0 = r11.searchResult
                 int r0 = r0.size()
                 org.telegram.ui.Adapters.SearchAdapterHelper r1 = r11.searchAdapterHelper
                 java.util.ArrayList r1 = r1.getGlobalSearch()
@@ -1178,7 +1178,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 int r5 = r5.size()
                 if (r13 < 0) goto L_0x005d
                 if (r13 >= r0) goto L_0x005d
-                java.util.ArrayList<org.telegram.tgnet.TLObject> r1 = r11.searchResult
+                java.util.ArrayList<java.lang.Object> r1 = r11.searchResult
                 java.lang.Object r1 = r1.get(r13)
                 goto L_0x0087
             L_0x005d:
@@ -1466,7 +1466,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             if (str == null) {
                 this.searchResult.clear();
                 this.searchResultNames.clear();
-                this.searchAdapterHelper.mergeResults((ArrayList<TLObject>) null);
+                this.searchAdapterHelper.mergeResults((ArrayList<Object>) null);
                 this.searchAdapterHelper.queryServerSearch((String) null, true, true, false, false, false, 0, false, 0, 0);
                 notifyDataSetChanged();
                 return;
@@ -1639,7 +1639,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             updateSearchResults(arrayList, arrayList2);
         }
 
-        private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {
+        private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2) {
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
                 public final /* synthetic */ ArrayList f$1;
                 public final /* synthetic */ ArrayList f$2;

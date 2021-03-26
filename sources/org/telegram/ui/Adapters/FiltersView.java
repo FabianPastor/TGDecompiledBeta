@@ -231,16 +231,16 @@ public class FiltersView extends RecyclerListView {
         return this.usersFilters.get(i);
     }
 
-    public void setUsersAndDates(ArrayList<TLObject> arrayList, ArrayList<DateData> arrayList2) {
+    public void setUsersAndDates(ArrayList<Object> arrayList, ArrayList<DateData> arrayList2) {
         String str;
         this.oldItems.clear();
         this.oldItems.addAll(this.usersFilters);
         this.usersFilters.clear();
         if (arrayList != null) {
             for (int i = 0; i < arrayList.size(); i++) {
-                TLObject tLObject = arrayList.get(i);
-                if (tLObject instanceof TLRPC$User) {
-                    TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
+                Object obj = arrayList.get(i);
+                if (obj instanceof TLRPC$User) {
+                    TLRPC$User tLRPC$User = (TLRPC$User) obj;
                     if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == tLRPC$User.id) {
                         str = LocaleController.getString("SavedMessages", NUM);
                     } else {
@@ -249,8 +249,8 @@ public class FiltersView extends RecyclerListView {
                     MediaFilterData mediaFilterData = new MediaFilterData(NUM, NUM, str, (TLRPC$MessagesFilter) null, 4);
                     mediaFilterData.setUser(tLRPC$User);
                     this.usersFilters.add(mediaFilterData);
-                } else if (tLObject instanceof TLRPC$Chat) {
-                    TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject;
+                } else if (obj instanceof TLRPC$Chat) {
+                    TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) obj;
                     String str2 = tLRPC$Chat.title;
                     if (str2.length() > 12) {
                         str2 = String.format("%s...", new Object[]{str2.substring(0, 10)});

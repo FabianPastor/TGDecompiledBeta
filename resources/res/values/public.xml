@@ -5283,6 +5283,7 @@
     <public type="string" name="ThemeSetUrl" id="NUM" />
     <public type="string" name="ThemeSetUrlHelp" id="NUM" />
     <public type="string" name="ThemeUrl" id="NUM" />
+    <public type="string" name="ThisIsYou" id="NUM" />
     <public type="string" name="TimeLimitHelp" id="NUM" />
     <public type="string" name="TimeLimitHint" id="NUM" />
     <public type="string" name="TimeToEdit" id="NUM" />

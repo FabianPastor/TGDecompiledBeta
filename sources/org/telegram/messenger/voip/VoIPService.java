@@ -340,6 +340,7 @@ public class VoIPService extends VoIPBaseService {
                     MessagesController.getInstance(this.currentAccount).startShortPoll(this.chat, this.classGuid, false);
                 }
             }
+            loadResources();
             this.localSink = new ProxyVideoSink();
             this.remoteSink = new ProxyVideoSink();
             try {
@@ -1291,8 +1292,8 @@ public class VoIPService extends VoIPBaseService {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x004c  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x004e  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onGroupCallUpdated(org.telegram.tgnet.TLRPC$GroupCall r27) {
         /*
@@ -1305,13 +1306,13 @@ public class VoIPService extends VoIPBaseService {
             return
         L_0x000b:
             org.telegram.messenger.ChatObject$Call r0 = r1.groupCall
-            if (r0 == 0) goto L_0x011b
+            if (r0 == 0) goto L_0x011d
             org.telegram.tgnet.TLRPC$GroupCall r0 = r0.call
             long r4 = r0.id
             long r6 = r2.id
             int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
             if (r8 == 0) goto L_0x001b
-            goto L_0x011b
+            goto L_0x011d
         L_0x001b:
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_groupCallDiscarded
             r4 = 2
@@ -1320,120 +1321,122 @@ public class VoIPService extends VoIPBaseService {
             return
         L_0x0024:
             r5 = 0
+            org.telegram.tgnet.TLRPC$TL_dataJSON r0 = r2.params
             r6 = 0
-            org.telegram.tgnet.TLRPC$TL_dataJSON r0 = r2.params     // Catch:{ Exception -> 0x0039 }
-            org.json.JSONObject r7 = new org.json.JSONObject     // Catch:{ Exception -> 0x0039 }
-            java.lang.String r0 = r0.data     // Catch:{ Exception -> 0x0039 }
-            r7.<init>(r0)     // Catch:{ Exception -> 0x0039 }
+            if (r0 == 0) goto L_0x0040
+            org.json.JSONObject r7 = new org.json.JSONObject     // Catch:{ Exception -> 0x003c }
+            java.lang.String r0 = r0.data     // Catch:{ Exception -> 0x003c }
+            r7.<init>(r0)     // Catch:{ Exception -> 0x003c }
             java.lang.String r0 = "stream"
-            boolean r0 = r7.optBoolean(r0)     // Catch:{ Exception -> 0x0036 }
-            goto L_0x003f
-        L_0x0036:
-            r0 = move-exception
+            boolean r0 = r7.optBoolean(r0)     // Catch:{ Exception -> 0x0039 }
             r5 = r7
-            goto L_0x003a
+            goto L_0x0041
         L_0x0039:
             r0 = move-exception
-        L_0x003a:
+            r5 = r7
+            goto L_0x003d
+        L_0x003c:
+            r0 = move-exception
+        L_0x003d:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            r7 = r5
+        L_0x0040:
             r0 = 0
-        L_0x003f:
-            int r5 = r1.currentState
+        L_0x0041:
+            int r7 = r1.currentState
             r8 = 1
-            if (r5 == r8) goto L_0x0048
-            boolean r5 = r1.currentGroupModeStreaming
-            if (r0 == r5) goto L_0x011b
-        L_0x0048:
+            if (r7 == r8) goto L_0x004a
+            boolean r7 = r1.currentGroupModeStreaming
+            if (r0 == r7) goto L_0x011d
+        L_0x004a:
             org.telegram.tgnet.TLRPC$TL_dataJSON r2 = r2.params
-            if (r2 == 0) goto L_0x011b
+            if (r2 == 0) goto L_0x011d
             boolean r2 = r1.playedConnectedSound
-            if (r2 == 0) goto L_0x0056
+            if (r2 == 0) goto L_0x0058
             boolean r2 = r1.currentGroupModeStreaming
-            if (r0 == r2) goto L_0x0056
+            if (r0 == r2) goto L_0x0058
             r1.switchingStream = r8
-        L_0x0056:
+        L_0x0058:
             r1.currentGroupModeStreaming = r0
-            if (r0 == 0) goto L_0x0061
-            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x0117 }
-            r0.prepareForStream()     // Catch:{ Exception -> 0x0117 }
-            goto L_0x0113
-        L_0x0061:
+            if (r0 == 0) goto L_0x0063
+            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x0119 }
+            r0.prepareForStream()     // Catch:{ Exception -> 0x0119 }
+            goto L_0x0115
+        L_0x0063:
             java.lang.String r0 = "transport"
-            org.json.JSONObject r0 = r7.getJSONObject(r0)     // Catch:{ Exception -> 0x0117 }
+            org.json.JSONObject r0 = r5.getJSONObject(r0)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r2 = "ufrag"
-            java.lang.String r2 = r0.getString(r2)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r2 = r0.getString(r2)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r5 = "pwd"
-            java.lang.String r5 = r0.getString(r5)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r5 = r0.getString(r5)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r7 = "fingerprints"
-            org.json.JSONArray r7 = r0.getJSONArray(r7)     // Catch:{ Exception -> 0x0117 }
-            int r8 = r7.length()     // Catch:{ Exception -> 0x0117 }
-            org.telegram.messenger.voip.Instance$Fingerprint[] r9 = new org.telegram.messenger.voip.Instance.Fingerprint[r8]     // Catch:{ Exception -> 0x0117 }
+            org.json.JSONArray r7 = r0.getJSONArray(r7)     // Catch:{ Exception -> 0x0119 }
+            int r8 = r7.length()     // Catch:{ Exception -> 0x0119 }
+            org.telegram.messenger.voip.Instance$Fingerprint[] r9 = new org.telegram.messenger.voip.Instance.Fingerprint[r8]     // Catch:{ Exception -> 0x0119 }
             r10 = 0
-        L_0x0080:
-            if (r10 >= r8) goto L_0x00a2
-            org.json.JSONObject r11 = r7.getJSONObject(r10)     // Catch:{ Exception -> 0x0117 }
-            org.telegram.messenger.voip.Instance$Fingerprint r12 = new org.telegram.messenger.voip.Instance$Fingerprint     // Catch:{ Exception -> 0x0117 }
+        L_0x0082:
+            if (r10 >= r8) goto L_0x00a4
+            org.json.JSONObject r11 = r7.getJSONObject(r10)     // Catch:{ Exception -> 0x0119 }
+            org.telegram.messenger.voip.Instance$Fingerprint r12 = new org.telegram.messenger.voip.Instance$Fingerprint     // Catch:{ Exception -> 0x0119 }
             java.lang.String r13 = "hash"
-            java.lang.String r13 = r11.getString(r13)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r13 = r11.getString(r13)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r14 = "setup"
-            java.lang.String r14 = r11.getString(r14)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r14 = r11.getString(r14)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r15 = "fingerprint"
-            java.lang.String r11 = r11.getString(r15)     // Catch:{ Exception -> 0x0117 }
-            r12.<init>(r13, r14, r11)     // Catch:{ Exception -> 0x0117 }
-            r9[r10] = r12     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r11 = r11.getString(r15)     // Catch:{ Exception -> 0x0119 }
+            r12.<init>(r13, r14, r11)     // Catch:{ Exception -> 0x0119 }
+            r9[r10] = r12     // Catch:{ Exception -> 0x0119 }
             int r10 = r10 + 1
-            goto L_0x0080
-        L_0x00a2:
+            goto L_0x0082
+        L_0x00a4:
             java.lang.String r7 = "candidates"
-            org.json.JSONArray r0 = r0.getJSONArray(r7)     // Catch:{ Exception -> 0x0117 }
-            int r7 = r0.length()     // Catch:{ Exception -> 0x0117 }
-            org.telegram.messenger.voip.Instance$Candidate[] r8 = new org.telegram.messenger.voip.Instance.Candidate[r7]     // Catch:{ Exception -> 0x0117 }
-        L_0x00ae:
-            if (r6 >= r7) goto L_0x010e
-            org.json.JSONObject r10 = r0.getJSONObject(r6)     // Catch:{ Exception -> 0x0117 }
-            org.telegram.messenger.voip.Instance$Candidate r25 = new org.telegram.messenger.voip.Instance$Candidate     // Catch:{ Exception -> 0x0117 }
+            org.json.JSONArray r0 = r0.getJSONArray(r7)     // Catch:{ Exception -> 0x0119 }
+            int r7 = r0.length()     // Catch:{ Exception -> 0x0119 }
+            org.telegram.messenger.voip.Instance$Candidate[] r8 = new org.telegram.messenger.voip.Instance.Candidate[r7]     // Catch:{ Exception -> 0x0119 }
+        L_0x00b0:
+            if (r6 >= r7) goto L_0x0110
+            org.json.JSONObject r10 = r0.getJSONObject(r6)     // Catch:{ Exception -> 0x0119 }
+            org.telegram.messenger.voip.Instance$Candidate r25 = new org.telegram.messenger.voip.Instance$Candidate     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "port"
-            java.lang.String r12 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r12 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "protocol"
-            java.lang.String r13 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r13 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "network"
-            java.lang.String r14 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r14 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "generation"
-            java.lang.String r15 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r15 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "id"
-            java.lang.String r16 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r16 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "component"
-            java.lang.String r17 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r17 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "foundation"
-            java.lang.String r18 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r18 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "priority"
-            java.lang.String r19 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r19 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "ip"
-            java.lang.String r20 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r20 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "type"
-            java.lang.String r21 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r21 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "tcpType"
-            java.lang.String r22 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r22 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "relAddr"
-            java.lang.String r23 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r23 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             java.lang.String r11 = "relPort"
-            java.lang.String r24 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0117 }
+            java.lang.String r24 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x0119 }
             r11 = r25
-            r11.<init>(r12, r13, r14, r15, r16, r17, r18, r19, r20, r21, r22, r23, r24)     // Catch:{ Exception -> 0x0117 }
-            r8[r6] = r25     // Catch:{ Exception -> 0x0117 }
+            r11.<init>(r12, r13, r14, r15, r16, r17, r18, r19, r20, r21, r22, r23, r24)     // Catch:{ Exception -> 0x0119 }
+            r8[r6] = r25     // Catch:{ Exception -> 0x0119 }
             int r6 = r6 + 1
-            goto L_0x00ae
-        L_0x010e:
-            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x0117 }
-            r0.setJoinResponsePayload(r2, r5, r9, r8)     // Catch:{ Exception -> 0x0117 }
-        L_0x0113:
-            r1.dispatchStateChanged(r4)     // Catch:{ Exception -> 0x0117 }
-            goto L_0x011b
-        L_0x0117:
+            goto L_0x00b0
+        L_0x0110:
+            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x0119 }
+            r0.setJoinResponsePayload(r2, r5, r9, r8)     // Catch:{ Exception -> 0x0119 }
+        L_0x0115:
+            r1.dispatchStateChanged(r4)     // Catch:{ Exception -> 0x0119 }
+            goto L_0x011d
+        L_0x0119:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x011b:
+        L_0x011d:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.onGroupCallUpdated(org.telegram.tgnet.TLRPC$GroupCall):void");
@@ -2246,7 +2249,7 @@ public class VoIPService extends VoIPBaseService {
             this.tgVoip = makeGroup;
             makeGroup.setOnStateUpdatedListener(new Instance.OnStateUpdatedListener() {
                 public final void onStateUpdated(int i, boolean z) {
-                    VoIPService.this.lambda$createGroupInstance$49$VoIPService(i, z);
+                    VoIPService.this.updateConnectionState(i, z);
                 }
             });
         }
@@ -2377,15 +2380,23 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createGroupInstance$49 */
-    public /* synthetic */ void lambda$createGroupInstance$49$VoIPService(int i, boolean z) {
+    public void updateConnectionState(int i, boolean z) {
         dispatchStateChanged((i == 1 || this.switchingStream) ? 3 : 5);
+        if (this.switchingStream && (i == 0 || (i == 1 && z))) {
+            $$Lambda$VoIPService$zJg35vAnE3jbe6FzRXwKpV4OhU r1 = new Runnable() {
+                public final void run() {
+                    VoIPService.this.lambda$updateConnectionState$46$VoIPService();
+                }
+            };
+            this.switchingStreamTimeoutRunnable = r1;
+            AndroidUtilities.runOnUIThread(r1, 3000);
+        }
         if (i == 0) {
             startGroupCheckShortpoll();
             if (this.playedConnectedSound && this.spPlayId == 0 && !this.switchingStream) {
                 Utilities.globalQueue.postRunnable(new Runnable() {
                     public final void run() {
-                        VoIPService.this.lambda$null$46$VoIPService();
+                        VoIPService.this.lambda$updateConnectionState$47$VoIPService();
                     }
                 });
                 return;
@@ -2396,21 +2407,26 @@ public class VoIPService extends VoIPBaseService {
         if (!z) {
             this.switchingStream = false;
         }
+        Runnable runnable = this.switchingStreamTimeoutRunnable;
+        if (runnable != null) {
+            AndroidUtilities.cancelRunOnUIThread(runnable);
+            this.switchingStreamTimeoutRunnable = null;
+        }
         if (this.playedConnectedSound) {
             Utilities.globalQueue.postRunnable(new Runnable() {
                 public final void run() {
-                    VoIPService.this.lambda$null$47$VoIPService();
+                    VoIPService.this.lambda$updateConnectionState$48$VoIPService();
                 }
             });
-            Runnable runnable = this.connectingSoundRunnable;
-            if (runnable != null) {
-                AndroidUtilities.cancelRunOnUIThread(runnable);
+            Runnable runnable2 = this.connectingSoundRunnable;
+            if (runnable2 != null) {
+                AndroidUtilities.cancelRunOnUIThread(runnable2);
                 this.connectingSoundRunnable = null;
             }
         } else {
             Utilities.globalQueue.postRunnable(new Runnable() {
                 public final void run() {
-                    VoIPService.this.lambda$null$48$VoIPService();
+                    VoIPService.this.lambda$updateConnectionState$49$VoIPService();
                 }
             });
             this.playedConnectedSound = true;
@@ -2426,8 +2442,18 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$46 */
-    public /* synthetic */ void lambda$null$46$VoIPService() {
+    /* renamed from: lambda$updateConnectionState$46 */
+    public /* synthetic */ void lambda$updateConnectionState$46$VoIPService() {
+        if (this.switchingStreamTimeoutRunnable != null) {
+            this.switchingStream = false;
+            updateConnectionState(0, true);
+            this.switchingStreamTimeoutRunnable = null;
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$updateConnectionState$47 */
+    public /* synthetic */ void lambda$updateConnectionState$47$VoIPService() {
         int i = this.spPlayId;
         if (i != 0) {
             this.soundPool.stop(i);
@@ -2436,8 +2462,8 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$47 */
-    public /* synthetic */ void lambda$null$47$VoIPService() {
+    /* renamed from: lambda$updateConnectionState$48 */
+    public /* synthetic */ void lambda$updateConnectionState$48$VoIPService() {
         int i = this.spPlayId;
         if (i != 0) {
             this.soundPool.stop(i);
@@ -2446,8 +2472,8 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$48 */
-    public /* synthetic */ void lambda$null$48$VoIPService() {
+    /* renamed from: lambda$updateConnectionState$49 */
+    public /* synthetic */ void lambda$updateConnectionState$49$VoIPService() {
         this.soundPool.play(this.spVoiceChatStartId, 1.0f, 1.0f, 0, 0, 1.0f);
     }
 

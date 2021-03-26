@@ -1071,7 +1071,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
         /* access modifiers changed from: private */
         public final SearchAdapterHelper searchAdapterHelper;
         /* access modifiers changed from: private */
-        public ArrayList<TLObject> searchResult = new ArrayList<>();
+        public ArrayList<Object> searchResult = new ArrayList<>();
         private ArrayList<CharSequence> searchResultNames = new ArrayList<>();
         private Runnable searchRunnable;
 
@@ -1160,7 +1160,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             L_0x0015:
                 android.view.View r10 = r10.itemView
                 org.telegram.ui.Cells.GroupCreateUserCell r10 = (org.telegram.ui.Cells.GroupCreateUserCell) r10
-                java.util.ArrayList<org.telegram.tgnet.TLObject> r0 = r9.searchResult
+                java.util.ArrayList<java.lang.Object> r0 = r9.searchResult
                 int r0 = r0.size()
                 org.telegram.ui.Adapters.SearchAdapterHelper r2 = r9.searchAdapterHelper
                 java.util.ArrayList r2 = r2.getGlobalSearch()
@@ -1173,7 +1173,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 r5 = 0
                 if (r11 < 0) goto L_0x0043
                 if (r11 >= r0) goto L_0x0043
-                java.util.ArrayList<org.telegram.tgnet.TLObject> r2 = r9.searchResult
+                java.util.ArrayList<java.lang.Object> r2 = r9.searchResult
                 java.lang.Object r2 = r2.get(r11)
                 org.telegram.tgnet.TLObject r2 = (org.telegram.tgnet.TLObject) r2
                 goto L_0x0072
@@ -1382,7 +1382,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             return i2;
         }
 
-        private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {
+        private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2) {
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
                 public final /* synthetic */ ArrayList f$1;
                 public final /* synthetic */ ArrayList f$2;
@@ -1419,7 +1419,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             }
             this.searchResult.clear();
             this.searchResultNames.clear();
-            this.searchAdapterHelper.mergeResults((ArrayList<TLObject>) null);
+            this.searchAdapterHelper.mergeResults((ArrayList<Object>) null);
             this.searchAdapterHelper.queryServerSearch((String) null, true, false, false, false, false, 0, false, 0, 0);
             notifyDataSetChanged();
             if (!TextUtils.isEmpty(str)) {

@@ -3411,7 +3411,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     /* JADX WARNING: Removed duplicated region for block: B:47:0x0090  */
     /* JADX WARNING: Removed duplicated region for block: B:50:0x009d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void updateFiltersView(boolean r10, java.util.ArrayList<org.telegram.tgnet.TLObject> r11, java.util.ArrayList<org.telegram.ui.Adapters.FiltersView.DateData> r12, boolean r13) {
+    public void updateFiltersView(boolean r10, java.util.ArrayList<java.lang.Object> r11, java.util.ArrayList<org.telegram.ui.Adapters.FiltersView.DateData> r12, boolean r13) {
         /*
             r9 = this;
             boolean r0 = r9.searchIsShowed
@@ -3541,7 +3541,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             currentSearchFilters.add(mediaFilterData);
             this.actionBar.setSearchFilter(mediaFilterData);
             this.actionBar.setSearchFieldText("");
-            updateFiltersView(true, (ArrayList<TLObject>) null, (ArrayList<FiltersView.DateData>) null, true);
+            updateFiltersView(true, (ArrayList<Object>) null, (ArrayList<FiltersView.DateData>) null, true);
         }
     }
 

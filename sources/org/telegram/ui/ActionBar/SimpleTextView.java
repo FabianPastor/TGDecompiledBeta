@@ -168,7 +168,12 @@ public class SimpleTextView extends View implements Drawable.Callback {
                     this.offsetX = -((int) this.layout.getLineLeft(0));
                 }
             } else if (this.layout.getLineLeft(0) == 0.0f) {
-                this.offsetX = i - this.textWidth;
+                Layout layout5 = this.firstLineLayout;
+                if (layout5 != null) {
+                    this.offsetX = (int) (((float) i) - layout5.getLineWidth(0));
+                } else {
+                    this.offsetX = i - this.textWidth;
+                }
             } else {
                 this.offsetX = -AndroidUtilities.dp(8.0f);
             }

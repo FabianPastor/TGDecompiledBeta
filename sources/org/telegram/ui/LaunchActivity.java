@@ -10252,7 +10252,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r2 = "Proxy"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r4.setTitle(r0)
-            r0 = 2131627801(0x7f0e0var_, float:1.8882877E38)
+            r0 = 2131627802(0x7f0e0f1a, float:1.8882879E38)
             java.lang.String r2 = "UseProxyTelegramError"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r4.setMessage(r0)
@@ -10431,11 +10431,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r6 = (org.telegram.ui.ActionBar.BaseFragment) r6
             org.telegram.ui.ActionBar.AlertDialog$Builder r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r8.<init>((android.content.Context) r1)
-            r9 = 2131627769(0x7f0e0ef9, float:1.8882812E38)
+            r9 = 2131627770(0x7f0e0efa, float:1.8882814E38)
             java.lang.String r10 = "UpdateContactsTitle"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setTitle(r9)
-            r9 = 2131627768(0x7f0e0ef8, float:1.888281E38)
+            r9 = 2131627769(0x7f0e0ef9, float:1.8882812E38)
             java.lang.String r10 = "UpdateContactsMessage"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setMessage(r9)

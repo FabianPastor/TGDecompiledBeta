@@ -700,7 +700,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 AndroidUtilities.cancelRunOnUIThread(runnable);
                 this.searchRunnable = null;
             }
-            this.searchAdapterHelper.mergeResults((ArrayList<TLObject>) null);
+            this.searchAdapterHelper.mergeResults((ArrayList<Object>) null);
             this.searchAdapterHelper.queryServerSearch((String) null, true, false, true, false, false, GroupVoipInviteAlert.this.currentChat.id, false, 2, -1);
             if (!TextUtils.isEmpty(str)) {
                 GroupVoipInviteAlert.this.emptyView.showProgress(true, true);

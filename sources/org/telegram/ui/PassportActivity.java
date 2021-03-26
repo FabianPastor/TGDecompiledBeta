@@ -7073,15 +7073,27 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
         SecureDocument secureDocument = (SecureDocument) view.getTag();
         PhotoViewer.getInstance().setParentActivity(getParentActivity());
-        if (i == 0) {
+        if (i == 1) {
+            ArrayList arrayList = new ArrayList();
+            arrayList.add(this.selfieDocument);
+            PhotoViewer.getInstance().openPhoto((ArrayList<SecureDocument>) arrayList, 0, this.provider);
+        } else if (i == 2) {
+            ArrayList arrayList2 = new ArrayList();
+            arrayList2.add(this.frontDocument);
+            PhotoViewer.getInstance().openPhoto((ArrayList<SecureDocument>) arrayList2, 0, this.provider);
+        } else if (i == 3) {
+            ArrayList arrayList3 = new ArrayList();
+            arrayList3.add(this.reverseDocument);
+            PhotoViewer.getInstance().openPhoto((ArrayList<SecureDocument>) arrayList3, 0, this.provider);
+        } else if (i == 0) {
             PhotoViewer instance = PhotoViewer.getInstance();
-            ArrayList<SecureDocument> arrayList = this.documents;
-            instance.openPhoto(arrayList, arrayList.indexOf(secureDocument), this.provider);
-            return;
+            ArrayList<SecureDocument> arrayList4 = this.documents;
+            instance.openPhoto(arrayList4, arrayList4.indexOf(secureDocument), this.provider);
+        } else {
+            PhotoViewer instance2 = PhotoViewer.getInstance();
+            ArrayList<SecureDocument> arrayList5 = this.translationDocuments;
+            instance2.openPhoto(arrayList5, arrayList5.indexOf(secureDocument), this.provider);
         }
-        PhotoViewer instance2 = PhotoViewer.getInstance();
-        ArrayList<SecureDocument> arrayList2 = this.translationDocuments;
-        instance2.openPhoto(arrayList2, arrayList2.indexOf(secureDocument), this.provider);
     }
 
     /* access modifiers changed from: private */

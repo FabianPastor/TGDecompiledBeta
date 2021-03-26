@@ -5822,7 +5822,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x046b:
             boolean r2 = r1.isRepliesChat
             if (r2 == 0) goto L_0x047b
-            r2 = 2131627913(0x7f0e0var_, float:1.8883104E38)
+            r2 = 2131627914(0x7f0e0f8a, float:1.8883106E38)
             java.lang.String r3 = "ViewInChat"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x0478:
@@ -6956,7 +6956,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r39 = r8
             r8 = 9
             if (r9 != r8) goto L_0x0cb2
-            r0 = 2131628039(0x7f0e1007, float:1.888336E38)
+            r0 = 2131628040(0x7f0e1008, float:1.8883361E38)
             java.lang.String r8 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r8, r0)
             org.telegram.tgnet.TLRPC$Message r0 = r14.messageOwner
@@ -23594,7 +23594,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r6 = r0.via_bot_id
             java.lang.String r7 = " %s <b>%s</b>"
             java.lang.String r8 = "@"
-            r9 = 2131627877(0x7f0e0var_, float:1.888303E38)
+            r9 = 2131627878(0x7f0e0var_, float:1.8883033E38)
             java.lang.String r10 = "ViaBot"
             r11 = 2
             if (r6 == 0) goto L_0x0106
@@ -23822,7 +23822,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
         L_0x028d:
             r13 = r21
-            r12 = 2131627877(0x7f0e0var_, float:1.888303E38)
+            r12 = 2131627878(0x7f0e0var_, float:1.8883033E38)
             goto L_0x02a5
         L_0x0293:
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
@@ -24162,7 +24162,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.Object[] r7 = new java.lang.Object[r7]
             r12 = 0
             r7[r12] = r11
-            r12 = 2131627877(0x7f0e0var_, float:1.888303E38)
+            r12 = 2131627878(0x7f0e0var_, float:1.8883033E38)
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             r13 = 1
             r7[r13] = r12

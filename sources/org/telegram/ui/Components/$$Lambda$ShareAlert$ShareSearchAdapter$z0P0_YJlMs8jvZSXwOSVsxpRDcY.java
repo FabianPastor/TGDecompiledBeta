@@ -8,16 +8,16 @@ import j$.util.function.ToLongFunction;
 import java.util.Comparator;
 import org.telegram.ui.Components.ShareAlert;
 
-/* renamed from: org.telegram.ui.Components.-$$Lambda$ShareAlert$ShareSearchAdapter$3uXXmATUx9C3rxXC0ErExoMapt0  reason: invalid class name */
+/* renamed from: org.telegram.ui.Components.-$$Lambda$ShareAlert$ShareSearchAdapter$z0P0_YJlMs8jvZSXwOSVsxpRDcY  reason: invalid class name */
 /* compiled from: lambda */
-public final /* synthetic */ class $$Lambda$ShareAlert$ShareSearchAdapter$3uXXmATUx9C3rxXC0ErExoMapt0 implements Comparator, j$.util.Comparator {
-    public static final /* synthetic */ $$Lambda$ShareAlert$ShareSearchAdapter$3uXXmATUx9C3rxXC0ErExoMapt0 INSTANCE = new $$Lambda$ShareAlert$ShareSearchAdapter$3uXXmATUx9C3rxXC0ErExoMapt0();
+public final /* synthetic */ class $$Lambda$ShareAlert$ShareSearchAdapter$z0P0_YJlMs8jvZSXwOSVsxpRDcY implements Comparator, j$.util.Comparator {
+    public static final /* synthetic */ $$Lambda$ShareAlert$ShareSearchAdapter$z0P0_YJlMs8jvZSXwOSVsxpRDcY INSTANCE = new $$Lambda$ShareAlert$ShareSearchAdapter$z0P0_YJlMs8jvZSXwOSVsxpRDcY();
 
-    private /* synthetic */ $$Lambda$ShareAlert$ShareSearchAdapter$3uXXmATUx9C3rxXC0ErExoMapt0() {
+    private /* synthetic */ $$Lambda$ShareAlert$ShareSearchAdapter$z0P0_YJlMs8jvZSXwOSVsxpRDcY() {
     }
 
     public final int compare(Object obj, Object obj2) {
-        return ShareAlert.ShareSearchAdapter.lambda$null$0((ShareAlert.ShareSearchAdapter.DialogSearchResult) obj, (ShareAlert.ShareSearchAdapter.DialogSearchResult) obj2);
+        return ShareAlert.ShareSearchAdapter.lambda$null$0(obj, obj2);
     }
 
     public /* synthetic */ Comparator reversed() {

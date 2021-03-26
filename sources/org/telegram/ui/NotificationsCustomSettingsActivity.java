@@ -1329,7 +1329,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             if (str == null) {
                 this.searchResult.clear();
                 this.searchResultNames.clear();
-                this.searchAdapterHelper.mergeResults((ArrayList<TLObject>) null);
+                this.searchAdapterHelper.mergeResults((ArrayList<Object>) null);
                 this.searchAdapterHelper.queryServerSearch((String) null, true, NotificationsCustomSettingsActivity.this.currentType != 1, true, false, false, 0, false, 0, 0);
                 notifyDataSetChanged();
                 return;
@@ -1649,7 +1649,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NotificationsCustomSettingsActivity.SearchAdapter.lambda$null$2$NotificationsCustomSettingsActivity$SearchAdapter(java.lang.String, java.util.ArrayList):void");
         }
 
-        private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<NotificationsSettingsActivity.NotificationException> arrayList2, ArrayList<CharSequence> arrayList3) {
+        private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<NotificationsSettingsActivity.NotificationException> arrayList2, ArrayList<CharSequence> arrayList3) {
             AndroidUtilities.runOnUIThread(new Runnable(arrayList2, arrayList3, arrayList) {
                 public final /* synthetic */ ArrayList f$1;
                 public final /* synthetic */ ArrayList f$2;
@@ -2017,11 +2017,11 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r14 = "vibrate_channel"
                 int r14 = r0.getInt(r14, r4)
             L_0x0190:
-                r0 = 2131627878(0x7f0e0var_, float:1.8883033E38)
+                r0 = 2131627879(0x7f0e0var_, float:1.8883035E38)
                 java.lang.String r1 = "Vibrate"
                 if (r14 != 0) goto L_0x01a9
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131627879(0x7f0e0var_, float:1.8883035E38)
+                r0 = 2131627880(0x7f0e0var_, float:1.8883037E38)
                 java.lang.String r1 = "VibrationDefault"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)
@@ -2037,7 +2037,7 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             L_0x01bd:
                 if (r14 != r3) goto L_0x01d1
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
-                r0 = 2131627880(0x7f0e0var_, float:1.8883037E38)
+                r0 = 2131627881(0x7f0e0var_, float:1.8883039E38)
                 java.lang.String r1 = "VibrationDisabled"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setTextAndValue(r14, r0, r5)

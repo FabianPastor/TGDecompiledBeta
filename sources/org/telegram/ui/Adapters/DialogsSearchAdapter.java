@@ -74,7 +74,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     private int reqId = 0;
     private SearchAdapterHelper searchAdapterHelper;
     /* access modifiers changed from: private */
-    public ArrayList<TLObject> searchResult = new ArrayList<>();
+    public ArrayList<Object> searchResult = new ArrayList<>();
     /* access modifiers changed from: private */
     public ArrayList<String> searchResultHashtags = new ArrayList<>();
     /* access modifiers changed from: private */
@@ -828,11 +828,11 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     public /* synthetic */ void lambda$null$8$DialogsSearchAdapter() {
         FilteredSearchView.Delegate delegate2 = this.filtersDelegate;
         if (delegate2 != null) {
-            delegate2.updateFiltersView(false, (ArrayList<TLObject>) null, this.localTipDates);
+            delegate2.updateFiltersView(false, (ArrayList<Object>) null, this.localTipDates);
         }
     }
 
-    private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2, ArrayList<TLRPC$User> arrayList3, int i) {
+    private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2, ArrayList<TLRPC$User> arrayList3, int i) {
         AndroidUtilities.runOnUIThread(new Runnable(i, arrayList, arrayList3, arrayList2) {
             public final /* synthetic */ int f$1;
             public final /* synthetic */ ArrayList f$2;
@@ -867,13 +867,13 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             this.searchWas = true;
             boolean z = false;
             for (int i2 = 0; i2 < arrayList.size(); i2++) {
-                TLObject tLObject = (TLObject) arrayList.get(i2);
-                if (tLObject instanceof TLRPC$User) {
-                    MessagesController.getInstance(this.currentAccount).putUser((TLRPC$User) tLObject, true);
-                } else if (tLObject instanceof TLRPC$Chat) {
-                    MessagesController.getInstance(this.currentAccount).putChat((TLRPC$Chat) tLObject, true);
-                } else if (tLObject instanceof TLRPC$EncryptedChat) {
-                    MessagesController.getInstance(this.currentAccount).putEncryptedChat((TLRPC$EncryptedChat) tLObject, true);
+                Object obj = arrayList.get(i2);
+                if (obj instanceof TLRPC$User) {
+                    MessagesController.getInstance(this.currentAccount).putUser((TLRPC$User) obj, true);
+                } else if (obj instanceof TLRPC$Chat) {
+                    MessagesController.getInstance(this.currentAccount).putChat((TLRPC$Chat) obj, true);
+                } else if (obj instanceof TLRPC$EncryptedChat) {
+                    MessagesController.getInstance(this.currentAccount).putEncryptedChat((TLRPC$EncryptedChat) obj, true);
                 }
             }
             MessagesController.getInstance(this.currentAccount).putUsers(arrayList2, true);
@@ -921,7 +921,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 this.searchResult.clear();
                 this.searchResultNames.clear();
                 this.searchResultHashtags.clear();
-                this.searchAdapterHelper.mergeResults((ArrayList<TLObject>) null);
+                this.searchAdapterHelper.mergeResults((ArrayList<Object>) null);
                 SearchAdapterHelper searchAdapterHelper2 = this.searchAdapterHelper;
                 int i = this.dialogsType;
                 searchAdapterHelper2.queryServerSearch((String) null, true, true, i != 11, i != 11, i == 2 || i == 11, 0, i == 0, 0, 0);
@@ -937,7 +937,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 this.localTipDates.clear();
                 FilteredSearchView.Delegate delegate2 = this.filtersDelegate;
                 if (delegate2 != null) {
-                    delegate2.updateFiltersView(false, (ArrayList<TLObject>) null, this.localTipDates);
+                    delegate2.updateFiltersView(false, (ArrayList<Object>) null, this.localTipDates);
                     return;
                 }
                 return;
@@ -1448,7 +1448,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
         L_0x010e:
             org.telegram.ui.Adapters.SearchAdapterHelper r3 = r1.searchAdapterHelper
             java.util.ArrayList r3 = r3.getGlobalSearch()
-            java.util.ArrayList<org.telegram.tgnet.TLObject> r4 = r1.searchResult
+            java.util.ArrayList<java.lang.Object> r4 = r1.searchResult
             int r4 = r4.size()
             org.telegram.ui.Adapters.SearchAdapterHelper r5 = r1.searchAdapterHelper
             java.util.ArrayList r5 = r5.getLocalServerSearch()
@@ -1572,7 +1572,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             java.util.ArrayList r0 = r0.getGlobalSearch()
             org.telegram.ui.Adapters.SearchAdapterHelper r12 = r1.searchAdapterHelper
             java.util.ArrayList r12 = r12.getPhoneSearch()
-            java.util.ArrayList<org.telegram.tgnet.TLObject> r13 = r1.searchResult
+            java.util.ArrayList<java.lang.Object> r13 = r1.searchResult
             int r13 = r13.size()
             org.telegram.ui.Adapters.SearchAdapterHelper r14 = r1.searchAdapterHelper
             java.util.ArrayList r14 = r14.getLocalServerSearch()
@@ -1614,7 +1614,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             r0 = 0
         L_0x024b:
             r8.useSeparator = r0
-            java.util.ArrayList<org.telegram.tgnet.TLObject> r0 = r1.searchResult
+            java.util.ArrayList<java.lang.Object> r0 = r1.searchResult
             int r0 = r0.size()
             java.lang.String r5 = "@"
             if (r2 >= r0) goto L_0x028f
@@ -1849,7 +1849,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
     public void setFiltersDelegate(FilteredSearchView.Delegate delegate2, boolean z) {
         this.filtersDelegate = delegate2;
         if (delegate2 != null && z) {
-            delegate2.updateFiltersView(false, (ArrayList<TLObject>) null, this.localTipDates);
+            delegate2.updateFiltersView(false, (ArrayList<Object>) null, this.localTipDates);
         }
     }
 

@@ -590,6 +590,24 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     }
 
     private void startCrop(String str, Uri uri) {
+        AndroidUtilities.runOnUIThread(new Runnable(str, uri) {
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ Uri f$2;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+            }
+
+            public final void run() {
+                ImageUpdater.this.lambda$startCrop$1$ImageUpdater(this.f$1, this.f$2);
+            }
+        });
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$startCrop$1 */
+    public /* synthetic */ void lambda$startCrop$1$ImageUpdater(String str, Uri uri) {
         try {
             LaunchActivity launchActivity = (LaunchActivity) this.parentFragment.getParentActivity();
             if (launchActivity != null) {

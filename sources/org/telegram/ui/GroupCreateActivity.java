@@ -1260,7 +1260,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         /* access modifiers changed from: private */
         public int noContactsStubRow;
         private SearchAdapterHelper searchAdapterHelper;
-        private ArrayList<TLObject> searchResult = new ArrayList<>();
+        private ArrayList<Object> searchResult = new ArrayList<>();
         private ArrayList<CharSequence> searchResultNames = new ArrayList<>();
         private Runnable searchRunnable;
         /* access modifiers changed from: private */
@@ -1523,7 +1523,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     int size2 = this.searchAdapterHelper.getGlobalSearch().size();
                     int size3 = this.searchAdapterHelper.getLocalServerSearch().size();
                     if (i >= 0 && i < size) {
-                        tLObject = this.searchResult.get(i);
+                        tLObject = (TLObject) this.searchResult.get(i);
                     } else if (i < size || i >= size3 + size) {
                         tLObject = (i <= size + size3 || i > (size2 + size) + size3) ? null : this.searchAdapterHelper.getGlobalSearch().get(((i - size) - size3) - 1);
                     } else {
@@ -1656,7 +1656,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             }
             this.searchResult.clear();
             this.searchResultNames.clear();
-            this.searchAdapterHelper.mergeResults((ArrayList<TLObject>) null);
+            this.searchAdapterHelper.mergeResults((ArrayList<Object>) null);
             this.searchAdapterHelper.queryServerSearch((String) null, true, GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare, false, false, false, 0, false, 0, 0);
             notifyDataSetChanged();
             if (!TextUtils.isEmpty(str)) {
@@ -1890,7 +1890,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCreateActivity.GroupCreateAdapter.lambda$null$1$GroupCreateActivity$GroupCreateAdapter(java.lang.String):void");
         }
 
-        private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {
+        private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2) {
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
                 public final /* synthetic */ ArrayList f$1;
                 public final /* synthetic */ ArrayList f$2;

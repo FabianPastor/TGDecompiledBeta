@@ -26271,7 +26271,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:98:0x023f A[Catch:{ Exception -> 0x063e }, LOOP:2: B:71:0x018f->B:98:0x023f, LOOP_END] */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void localSearch(int r22, java.lang.String r23, java.util.ArrayList<org.telegram.tgnet.TLObject> r24, java.util.ArrayList<java.lang.CharSequence> r25, java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r26, int r27) {
+    public void localSearch(int r22, java.lang.String r23, java.util.ArrayList<java.lang.Object> r24, java.util.ArrayList<java.lang.CharSequence> r25, java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r26, int r27) {
         /*
             r21 = this;
             r1 = r21

@@ -2760,7 +2760,7 @@ public class DialogCell extends BaseCell {
             r1.promoDialog = r15
             int r13 = r10.promoDialogType
             if (r13 != 0) goto L_0x100d
-            r10 = 2131627798(0x7f0e0var_, float:1.888287E38)
+            r10 = 2131627799(0x7f0e0var_, float:1.8882873E38)
             java.lang.String r11 = "UseProxySponsor"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r11 = r10
@@ -5079,12 +5079,12 @@ public class DialogCell extends BaseCell {
             if (r0 == 0) goto L_0x00c4
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r17)
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r18)
-            r2 = 2131627751(0x7f0e0ee7, float:1.8882775E38)
+            r2 = 2131627752(0x7f0e0ee8, float:1.8882777E38)
             java.lang.String r3 = "UnhideFromTop"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r2)
             org.telegram.ui.Components.RLottieDrawable r2 = org.telegram.ui.ActionBar.Theme.dialogs_unpinArchiveDrawable
             r8.translationDrawable = r2
-            r2 = 2131627751(0x7f0e0ee7, float:1.8882775E38)
+            r2 = 2131627752(0x7f0e0ee8, float:1.8882777E38)
             goto L_0x00f9
         L_0x00c4:
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r18)
@@ -5208,12 +5208,12 @@ public class DialogCell extends BaseCell {
         L_0x01d1:
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r17)
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r18)
-            r2 = 2131627742(0x7f0e0ede, float:1.8882757E38)
+            r2 = 2131627743(0x7f0e0edf, float:1.888276E38)
             java.lang.String r3 = "Unarchive"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r2)
             org.telegram.ui.Components.RLottieDrawable r2 = org.telegram.ui.ActionBar.Theme.dialogs_unarchiveDrawable
             r8.translationDrawable = r2
-            r2 = 2131627742(0x7f0e0ede, float:1.8882757E38)
+            r2 = 2131627743(0x7f0e0edf, float:1.888276E38)
             goto L_0x00f9
         L_0x01eb:
             boolean r6 = r8.swipeCanceled

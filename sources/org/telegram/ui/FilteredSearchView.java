@@ -122,7 +122,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     String lastSearchFilterQueryString;
     public final LinearLayoutManager layoutManager;
     private final FlickerLoadingView loadingView;
-    ArrayList<TLObject> localTipChats = new ArrayList<>();
+    ArrayList<Object> localTipChats = new ArrayList<>();
     ArrayList<FiltersView.DateData> localTipDates = new ArrayList<>();
     /* access modifiers changed from: private */
     public final MessageHashId messageHashIdTmp = new MessageHashId(0, 0);
@@ -250,7 +250,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     public UiCallback uiCallback;
 
     public interface Delegate {
-        void updateFiltersView(boolean z, ArrayList<TLObject> arrayList, ArrayList<FiltersView.DateData> arrayList2);
+        void updateFiltersView(boolean z, ArrayList<Object> arrayList, ArrayList<FiltersView.DateData> arrayList2);
     }
 
     public interface UiCallback {
@@ -633,7 +633,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 this.localTipChats.clear();
                 Delegate delegate2 = this.delegate;
                 if (delegate2 != null) {
-                    delegate2.updateFiltersView(false, (ArrayList<TLObject>) null, (ArrayList<FiltersView.DateData>) null);
+                    delegate2.updateFiltersView(false, (ArrayList<Object>) null, (ArrayList<FiltersView.DateData>) null);
                 }
             }
             int i4 = this.requestIndex + 1;
