@@ -218,7 +218,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
                         this.fullLayout = createStaticLayout;
                         if (createStaticLayout != null) {
                             if (!LocaleController.isRTL) {
-                                if (!createStaticLayout.isRtlCharAt(0)) {
+                                if (!createStaticLayout.isRtlCharAt(0) || this.fullLayoutAdditionalWidth == 0) {
                                     int lineEnd = this.fullLayout.getLineEnd(0);
                                     int lineStart = this.fullLayout.getLineStart(1);
                                     CharSequence subSequence = this.text.subSequence(0, lineEnd);
@@ -246,7 +246,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
                                 }
                             }
                             CharSequence charSequence6 = this.text;
-                            this.layout = StaticLayoutEx.createStaticLayout(charSequence6, 0, charSequence6.length(), this.textPaint, intrinsicWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TextUtils.TruncateAt.END, intrinsicWidth, this.maxLines, false);
+                            this.layout = StaticLayoutEx.createStaticLayout(charSequence6, 0, charSequence6.length(), this.textPaint, intrinsicWidth + AndroidUtilities.dp(8.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false, TextUtils.TruncateAt.END, intrinsicWidth, this.maxLines, false);
                             CharSequence charSequence7 = this.text;
                             int length2 = charSequence7.length();
                             TextPaint textPaint3 = this.textPaint;

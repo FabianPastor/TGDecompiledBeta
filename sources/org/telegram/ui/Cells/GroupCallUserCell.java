@@ -172,12 +172,9 @@ public class GroupCallUserCell extends FrameLayout {
             }
             if (TextUtils.isEmpty(simpleTextViewArr[4].getText()) || this.statusTextView[4].getLineCount() <= 1) {
                 this.statusTextView[i].setTranslationX(((float) (LocaleController.isRTL ? AndroidUtilities.dp(53.0f) : -AndroidUtilities.dp(53.0f))) * f);
+                this.statusTextView[i].setFullLayoutAdditionalWidth(0, 0);
             } else {
-                if (f > 0.0f) {
-                    this.statusTextView[i].setFullLayoutAdditionalWidth(AndroidUtilities.dp(92.0f), LocaleController.isRTL ? AndroidUtilities.dp(48.0f) : AndroidUtilities.dp(53.0f));
-                } else {
-                    this.statusTextView[i].setFullLayoutAdditionalWidth(0, 0);
-                }
+                this.statusTextView[i].setFullLayoutAdditionalWidth(AndroidUtilities.dp(92.0f), LocaleController.isRTL ? AndroidUtilities.dp(48.0f) : AndroidUtilities.dp(53.0f));
                 this.statusTextView[i].setFullAlpha(f);
                 this.statusTextView[i].setTranslationX(0.0f);
                 this.statusTextView[i].invalidate();
@@ -533,6 +530,7 @@ public class GroupCallUserCell extends FrameLayout {
             f = 0.0f;
         }
         this.statusTextView[4].setFullAlpha(f);
+        this.statusTextView[4].setFullLayoutAdditionalWidth(0, 0);
         invalidate();
     }
 
