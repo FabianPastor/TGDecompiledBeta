@@ -1127,7 +1127,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     }
 
     public void switchToAccount(int i, boolean z) {
-        if (i != UserConfig.selectedAccount && UserConfig.isValidAccount(this.currentAccount)) {
+        if (i != UserConfig.selectedAccount && UserConfig.isValidAccount(i)) {
             ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
             UserConfig.selectedAccount = i;
             UserConfig.getInstance(0).saveConfig(false);
