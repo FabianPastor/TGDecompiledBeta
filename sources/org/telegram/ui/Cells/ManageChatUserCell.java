@@ -5,14 +5,24 @@ import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ChatObject;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatPhoto;
 import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$UserProfilePhoto;
+import org.telegram.tgnet.TLRPC$UserStatus;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
@@ -233,360 +243,142 @@ public class ManageChatUserCell extends FrameLayout {
         this.dividerColor = str;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:112:0x0193, code lost:
-        if (r13.equals(r7) == false) goto L_0x0198;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:44:0x0069, code lost:
-        if (r13.equals(r12.lastName) == false) goto L_0x006e;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void update(int r13) {
-        /*
-            r12 = this;
-            java.lang.Object r0 = r12.currentObject
-            if (r0 != 0) goto L_0x0005
-            return
-        L_0x0005:
-            boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$User
-            java.lang.String r2 = "50_50"
-            r3 = 0
-            r4 = 1
-            r5 = 0
-            if (r1 == 0) goto L_0x014d
-            org.telegram.tgnet.TLRPC$User r0 = (org.telegram.tgnet.TLRPC$User) r0
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r1 = r0.photo
-            if (r1 == 0) goto L_0x0017
-            org.telegram.tgnet.TLRPC$FileLocation r1 = r1.photo_small
-            goto L_0x0018
-        L_0x0017:
-            r1 = r5
-        L_0x0018:
-            if (r13 == 0) goto L_0x0071
-            r6 = r13 & 2
-            if (r6 == 0) goto L_0x003c
-            org.telegram.tgnet.TLRPC$FileLocation r6 = r12.lastAvatar
-            if (r6 == 0) goto L_0x0024
-            if (r1 == 0) goto L_0x003a
-        L_0x0024:
-            if (r6 != 0) goto L_0x0028
-            if (r1 != 0) goto L_0x003a
-        L_0x0028:
-            if (r6 == 0) goto L_0x003c
-            if (r1 == 0) goto L_0x003c
-            long r7 = r6.volume_id
-            long r9 = r1.volume_id
-            int r11 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r11 != 0) goto L_0x003a
-            int r6 = r6.local_id
-            int r7 = r1.local_id
-            if (r6 == r7) goto L_0x003c
-        L_0x003a:
-            r6 = 1
-            goto L_0x003d
-        L_0x003c:
-            r6 = 0
-        L_0x003d:
-            if (r0 == 0) goto L_0x0052
-            if (r6 != 0) goto L_0x0052
-            r7 = r13 & 4
-            if (r7 == 0) goto L_0x0052
-            org.telegram.tgnet.TLRPC$UserStatus r7 = r0.status
-            if (r7 == 0) goto L_0x004c
-            int r7 = r7.expires
-            goto L_0x004d
-        L_0x004c:
-            r7 = 0
-        L_0x004d:
-            int r8 = r12.lastStatus
-            if (r7 == r8) goto L_0x0052
-            r6 = 1
-        L_0x0052:
-            if (r6 != 0) goto L_0x006c
-            java.lang.CharSequence r7 = r12.currentName
-            if (r7 != 0) goto L_0x006c
-            java.lang.String r7 = r12.lastName
-            if (r7 == 0) goto L_0x006c
-            r13 = r13 & r4
-            if (r13 == 0) goto L_0x006c
-            java.lang.String r13 = org.telegram.messenger.UserObject.getUserName(r0)
-            java.lang.String r7 = r12.lastName
-            boolean r7 = r13.equals(r7)
-            if (r7 != 0) goto L_0x006d
-            goto L_0x006e
-        L_0x006c:
-            r13 = r5
-        L_0x006d:
-            r4 = r6
-        L_0x006e:
-            if (r4 != 0) goto L_0x0072
-            return
-        L_0x0071:
-            r13 = r5
-        L_0x0072:
-            org.telegram.ui.Components.AvatarDrawable r4 = r12.avatarDrawable
-            r4.setInfo((org.telegram.tgnet.TLRPC$User) r0)
-            org.telegram.tgnet.TLRPC$UserStatus r4 = r0.status
-            if (r4 == 0) goto L_0x0080
-            int r4 = r4.expires
-            r12.lastStatus = r4
-            goto L_0x0082
-        L_0x0080:
-            r12.lastStatus = r3
-        L_0x0082:
-            java.lang.CharSequence r4 = r12.currentName
-            if (r4 == 0) goto L_0x008e
-            r12.lastName = r5
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.nameTextView
-            r13.setText(r4)
-            goto L_0x009b
-        L_0x008e:
-            if (r13 != 0) goto L_0x0094
-            java.lang.String r13 = org.telegram.messenger.UserObject.getUserName(r0)
-        L_0x0094:
-            r12.lastName = r13
-            org.telegram.ui.ActionBar.SimpleTextView r4 = r12.nameTextView
-            r4.setText(r13)
-        L_0x009b:
-            java.lang.CharSequence r13 = r12.currrntStatus
-            if (r13 == 0) goto L_0x00af
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            int r4 = r12.statusColor
-            r13.setTextColor(r4)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            java.lang.CharSequence r4 = r12.currrntStatus
-            r13.setText(r4)
-            goto L_0x013e
-        L_0x00af:
-            boolean r13 = r0.bot
-            if (r13 == 0) goto L_0x00e1
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            int r4 = r12.statusColor
-            r13.setTextColor(r4)
-            boolean r13 = r0.bot_chat_history
-            if (r13 != 0) goto L_0x00d2
-            boolean r13 = r12.isAdmin
-            if (r13 == 0) goto L_0x00c3
-            goto L_0x00d2
-        L_0x00c3:
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131624584(0x7f0e0288, float:1.8876352E38)
-            java.lang.String r5 = "BotStatusCantRead"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r13.setText(r4)
-            goto L_0x013e
-        L_0x00d2:
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131624585(0x7f0e0289, float:1.8876354E38)
-            java.lang.String r5 = "BotStatusRead"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r13.setText(r4)
-            goto L_0x013e
-        L_0x00e1:
-            int r13 = r0.id
-            int r4 = r12.currentAccount
-            org.telegram.messenger.UserConfig r4 = org.telegram.messenger.UserConfig.getInstance(r4)
-            int r4 = r4.getClientUserId()
-            if (r13 == r4) goto L_0x0129
-            org.telegram.tgnet.TLRPC$UserStatus r13 = r0.status
-            if (r13 == 0) goto L_0x0101
-            int r13 = r13.expires
-            int r4 = r12.currentAccount
-            org.telegram.tgnet.ConnectionsManager r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4)
-            int r4 = r4.getCurrentTime()
-            if (r13 > r4) goto L_0x0129
-        L_0x0101:
-            int r13 = r12.currentAccount
-            org.telegram.messenger.MessagesController r13 = org.telegram.messenger.MessagesController.getInstance(r13)
-            j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, java.lang.Integer> r13 = r13.onlinePrivacy
-            int r4 = r0.id
-            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
-            boolean r13 = r13.containsKey(r4)
-            if (r13 == 0) goto L_0x0116
-            goto L_0x0129
-        L_0x0116:
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            int r4 = r12.statusColor
-            r13.setTextColor(r4)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            int r4 = r12.currentAccount
-            java.lang.String r4 = org.telegram.messenger.LocaleController.formatUserStatus(r4, r0)
-            r13.setText(r4)
-            goto L_0x013e
-        L_0x0129:
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            int r4 = r12.statusOnlineColor
-            r13.setTextColor(r4)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131626488(0x7f0e09f8, float:1.8880214E38)
-            java.lang.String r5 = "Online"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r13.setText(r4)
-        L_0x013e:
-            r12.lastAvatar = r1
-            org.telegram.ui.Components.BackupImageView r13 = r12.avatarImageView
-            org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForUser(r0, r3)
-            org.telegram.ui.Components.AvatarDrawable r3 = r12.avatarDrawable
-            r13.setImage((org.telegram.messenger.ImageLocation) r1, (java.lang.String) r2, (android.graphics.drawable.Drawable) r3, (java.lang.Object) r0)
-            goto L_0x0268
-        L_0x014d:
-            boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$Chat
-            if (r1 == 0) goto L_0x0242
-            org.telegram.tgnet.TLRPC$Chat r0 = (org.telegram.tgnet.TLRPC$Chat) r0
-            org.telegram.tgnet.TLRPC$ChatPhoto r1 = r0.photo
-            if (r1 == 0) goto L_0x015a
-            org.telegram.tgnet.TLRPC$FileLocation r1 = r1.photo_small
-            goto L_0x015b
-        L_0x015a:
-            r1 = r5
-        L_0x015b:
-            if (r13 == 0) goto L_0x019b
-            r6 = r13 & 2
-            if (r6 == 0) goto L_0x017f
-            org.telegram.tgnet.TLRPC$FileLocation r6 = r12.lastAvatar
-            if (r6 == 0) goto L_0x0167
-            if (r1 == 0) goto L_0x017d
-        L_0x0167:
-            if (r6 != 0) goto L_0x016b
-            if (r1 != 0) goto L_0x017d
-        L_0x016b:
-            if (r6 == 0) goto L_0x017f
-            if (r1 == 0) goto L_0x017f
-            long r7 = r6.volume_id
-            long r9 = r1.volume_id
-            int r11 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r11 != 0) goto L_0x017d
-            int r6 = r6.local_id
-            int r7 = r1.local_id
-            if (r6 == r7) goto L_0x017f
-        L_0x017d:
-            r6 = 1
-            goto L_0x0180
-        L_0x017f:
-            r6 = 0
-        L_0x0180:
-            if (r6 != 0) goto L_0x0196
-            java.lang.CharSequence r7 = r12.currentName
-            if (r7 != 0) goto L_0x0196
-            java.lang.String r7 = r12.lastName
-            if (r7 == 0) goto L_0x0196
-            r13 = r13 & r4
-            if (r13 == 0) goto L_0x0196
-            java.lang.String r13 = r0.title
-            boolean r7 = r13.equals(r7)
-            if (r7 != 0) goto L_0x0197
-            goto L_0x0198
-        L_0x0196:
-            r13 = r5
-        L_0x0197:
-            r4 = r6
-        L_0x0198:
-            if (r4 != 0) goto L_0x019c
-            return
-        L_0x019b:
-            r13 = r5
-        L_0x019c:
-            org.telegram.ui.Components.AvatarDrawable r4 = r12.avatarDrawable
-            r4.setInfo((org.telegram.tgnet.TLRPC$Chat) r0)
-            java.lang.CharSequence r4 = r12.currentName
-            if (r4 == 0) goto L_0x01ad
-            r12.lastName = r5
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.nameTextView
-            r13.setText(r4)
-            goto L_0x01b8
-        L_0x01ad:
-            if (r13 != 0) goto L_0x01b1
-            java.lang.String r13 = r0.title
-        L_0x01b1:
-            r12.lastName = r13
-            org.telegram.ui.ActionBar.SimpleTextView r4 = r12.nameTextView
-            r4.setText(r13)
-        L_0x01b8:
-            java.lang.CharSequence r13 = r12.currrntStatus
-            if (r13 == 0) goto L_0x01cb
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            int r4 = r12.statusColor
-            r13.setTextColor(r4)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            java.lang.CharSequence r4 = r12.currrntStatus
-            r13.setText(r4)
-            goto L_0x0234
-        L_0x01cb:
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            int r4 = r12.statusColor
-            r13.setTextColor(r4)
-            int r13 = r0.participants_count
-            if (r13 == 0) goto L_0x01fc
-            boolean r13 = org.telegram.messenger.ChatObject.isChannel(r0)
-            if (r13 == 0) goto L_0x01ee
-            boolean r13 = r0.megagroup
-            if (r13 != 0) goto L_0x01ee
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            int r4 = r0.participants_count
-            java.lang.String r5 = "Subscribers"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r4)
-            r13.setText(r4)
-            goto L_0x0234
-        L_0x01ee:
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            int r4 = r0.participants_count
-            java.lang.String r5 = "Members"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r4)
-            r13.setText(r4)
-            goto L_0x0234
-        L_0x01fc:
-            boolean r13 = r0.has_geo
-            if (r13 == 0) goto L_0x020f
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131626068(0x7f0e0854, float:1.8879362E38)
-            java.lang.String r5 = "MegaLocation"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r13.setText(r4)
-            goto L_0x0234
-        L_0x020f:
-            java.lang.String r13 = r0.username
-            boolean r13 = android.text.TextUtils.isEmpty(r13)
-            if (r13 == 0) goto L_0x0226
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131626069(0x7f0e0855, float:1.8879364E38)
-            java.lang.String r5 = "MegaPrivate"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r13.setText(r4)
-            goto L_0x0234
-        L_0x0226:
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131626072(0x7f0e0858, float:1.887937E38)
-            java.lang.String r5 = "MegaPublic"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r13.setText(r4)
-        L_0x0234:
-            r12.lastAvatar = r1
-            org.telegram.ui.Components.BackupImageView r13 = r12.avatarImageView
-            org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForChat(r0, r3)
-            org.telegram.ui.Components.AvatarDrawable r3 = r12.avatarDrawable
-            r13.setImage((org.telegram.messenger.ImageLocation) r1, (java.lang.String) r2, (android.graphics.drawable.Drawable) r3, (java.lang.Object) r0)
-            goto L_0x0268
-        L_0x0242:
-            boolean r13 = r0 instanceof java.lang.Integer
-            if (r13 == 0) goto L_0x0268
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.nameTextView
-            java.lang.CharSequence r0 = r12.currentName
-            r13.setText(r0)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            int r0 = r12.statusColor
-            r13.setTextColor(r0)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            java.lang.CharSequence r0 = r12.currrntStatus
-            r13.setText(r0)
-            org.telegram.ui.Components.AvatarDrawable r13 = r12.avatarDrawable
-            r0 = 3
-            r13.setAvatarType(r0)
-            org.telegram.ui.Components.BackupImageView r13 = r12.avatarImageView
-            org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
-            r13.setImage(r5, r2, r0)
-        L_0x0268:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ManageChatUserCell.update(int):void");
+    public void update(int i) {
+        String str;
+        String str2;
+        TLRPC$FileLocation tLRPC$FileLocation;
+        String str3;
+        TLRPC$UserStatus tLRPC$UserStatus;
+        TLRPC$FileLocation tLRPC$FileLocation2;
+        Object obj = this.currentObject;
+        if (obj != null) {
+            boolean z = false;
+            if (obj instanceof TLRPC$User) {
+                TLRPC$User tLRPC$User = (TLRPC$User) obj;
+                TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = tLRPC$User.photo;
+                TLRPC$FileLocation tLRPC$FileLocation3 = tLRPC$UserProfilePhoto != null ? tLRPC$UserProfilePhoto.photo_small : null;
+                if (i != 0) {
+                    boolean z2 = (i & 2) != 0 && (((tLRPC$FileLocation2 = this.lastAvatar) != null && tLRPC$FileLocation3 == null) || ((tLRPC$FileLocation2 == null && tLRPC$FileLocation3 != null) || !(tLRPC$FileLocation2 == null || tLRPC$FileLocation3 == null || (tLRPC$FileLocation2.volume_id == tLRPC$FileLocation3.volume_id && tLRPC$FileLocation2.local_id == tLRPC$FileLocation3.local_id))));
+                    if (!(tLRPC$User == null || z2 || (i & 4) == 0)) {
+                        TLRPC$UserStatus tLRPC$UserStatus2 = tLRPC$User.status;
+                        if ((tLRPC$UserStatus2 != null ? tLRPC$UserStatus2.expires : 0) != this.lastStatus) {
+                            z2 = true;
+                        }
+                    }
+                    if (z2 || this.currentName != null || this.lastName == null || (i & 1) == 0) {
+                        str3 = null;
+                    } else {
+                        str3 = UserObject.getUserName(tLRPC$User);
+                        if (!str3.equals(this.lastName)) {
+                            z2 = true;
+                        }
+                    }
+                    if (!z2) {
+                        return;
+                    }
+                } else {
+                    str3 = null;
+                }
+                this.avatarDrawable.setInfo(tLRPC$User);
+                TLRPC$UserStatus tLRPC$UserStatus3 = tLRPC$User.status;
+                if (tLRPC$UserStatus3 != null) {
+                    this.lastStatus = tLRPC$UserStatus3.expires;
+                } else {
+                    this.lastStatus = 0;
+                }
+                CharSequence charSequence = this.currentName;
+                if (charSequence != null) {
+                    this.lastName = null;
+                    this.nameTextView.setText(charSequence);
+                } else {
+                    if (str3 == null) {
+                        str3 = UserObject.getUserName(tLRPC$User);
+                    }
+                    this.lastName = str3;
+                    this.nameTextView.setText(str3);
+                }
+                if (this.currrntStatus != null) {
+                    this.statusTextView.setTextColor(this.statusColor);
+                    this.statusTextView.setText(this.currrntStatus);
+                } else if (tLRPC$User.bot) {
+                    this.statusTextView.setTextColor(this.statusColor);
+                    if (tLRPC$User.bot_chat_history || this.isAdmin) {
+                        this.statusTextView.setText(LocaleController.getString("BotStatusRead", NUM));
+                    } else {
+                        this.statusTextView.setText(LocaleController.getString("BotStatusCantRead", NUM));
+                    }
+                } else if (tLRPC$User.id == UserConfig.getInstance(this.currentAccount).getClientUserId() || (((tLRPC$UserStatus = tLRPC$User.status) != null && tLRPC$UserStatus.expires > ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) || MessagesController.getInstance(this.currentAccount).onlinePrivacy.containsKey(Integer.valueOf(tLRPC$User.id)))) {
+                    this.statusTextView.setTextColor(this.statusOnlineColor);
+                    this.statusTextView.setText(LocaleController.getString("Online", NUM));
+                } else {
+                    this.statusTextView.setTextColor(this.statusColor);
+                    this.statusTextView.setText(LocaleController.formatUserStatus(this.currentAccount, tLRPC$User));
+                }
+                this.lastAvatar = tLRPC$FileLocation3;
+                this.avatarImageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
+            } else if (obj instanceof TLRPC$Chat) {
+                TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) obj;
+                TLRPC$ChatPhoto tLRPC$ChatPhoto = tLRPC$Chat.photo;
+                TLRPC$FileLocation tLRPC$FileLocation4 = tLRPC$ChatPhoto != null ? tLRPC$ChatPhoto.photo_small : null;
+                if (i != 0) {
+                    if ((i & 2) != 0 && (((tLRPC$FileLocation = this.lastAvatar) != null && tLRPC$FileLocation4 == null) || ((tLRPC$FileLocation == null && tLRPC$FileLocation4 != null) || !(tLRPC$FileLocation == null || tLRPC$FileLocation4 == null || (tLRPC$FileLocation.volume_id == tLRPC$FileLocation4.volume_id && tLRPC$FileLocation.local_id == tLRPC$FileLocation4.local_id))))) {
+                        z = true;
+                    }
+                    if (z || this.currentName != null || (str2 = this.lastName) == null || (i & 1) == 0) {
+                        str = null;
+                    } else {
+                        str = tLRPC$Chat.title;
+                        if (!str.equals(str2)) {
+                            z = true;
+                        }
+                    }
+                    if (!z) {
+                        return;
+                    }
+                } else {
+                    str = null;
+                }
+                this.avatarDrawable.setInfo(tLRPC$Chat);
+                CharSequence charSequence2 = this.currentName;
+                if (charSequence2 != null) {
+                    this.lastName = null;
+                    this.nameTextView.setText(charSequence2);
+                } else {
+                    if (str == null) {
+                        str = tLRPC$Chat.title;
+                    }
+                    this.lastName = str;
+                    this.nameTextView.setText(str);
+                }
+                if (this.currrntStatus != null) {
+                    this.statusTextView.setTextColor(this.statusColor);
+                    this.statusTextView.setText(this.currrntStatus);
+                } else {
+                    this.statusTextView.setTextColor(this.statusColor);
+                    if (tLRPC$Chat.participants_count != 0) {
+                        if (!ChatObject.isChannel(tLRPC$Chat) || tLRPC$Chat.megagroup) {
+                            this.statusTextView.setText(LocaleController.formatPluralString("Members", tLRPC$Chat.participants_count));
+                        } else {
+                            this.statusTextView.setText(LocaleController.formatPluralString("Subscribers", tLRPC$Chat.participants_count));
+                        }
+                    } else if (tLRPC$Chat.has_geo) {
+                        this.statusTextView.setText(LocaleController.getString("MegaLocation", NUM));
+                    } else if (TextUtils.isEmpty(tLRPC$Chat.username)) {
+                        this.statusTextView.setText(LocaleController.getString("MegaPrivate", NUM));
+                    } else {
+                        this.statusTextView.setText(LocaleController.getString("MegaPublic", NUM));
+                    }
+                }
+                this.lastAvatar = tLRPC$FileLocation4;
+                this.avatarImageView.setImage(ImageLocation.getForUserOrChat(tLRPC$Chat, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$Chat);
+            } else if (obj instanceof Integer) {
+                this.nameTextView.setText(this.currentName);
+                this.statusTextView.setTextColor(this.statusColor);
+                this.statusTextView.setText(this.currrntStatus);
+                this.avatarDrawable.setAvatarType(3);
+                this.avatarImageView.setImage((String) null, "50_50", this.avatarDrawable);
+            }
+        }
     }
 
     public void recycle() {

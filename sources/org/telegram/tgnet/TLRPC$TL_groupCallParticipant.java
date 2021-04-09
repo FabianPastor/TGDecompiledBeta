@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_groupCallParticipant extends TLObject {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
     public String about;
     public int active_date;
     public float amplitude;
@@ -21,6 +21,7 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
     public boolean min;
     public boolean muted;
     public boolean muted_by_you;
+    public TLRPC$TL_dataJSON params;
     public TLRPC$Peer peer;
     public long raise_hand_rating;
     public boolean self;
@@ -72,6 +73,9 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         if ((this.flags & 8192) != 0) {
             this.raise_hand_rating = abstractSerializedData.readInt64(z);
         }
+        if ((this.flags & 64) != 0) {
+            this.params = TLRPC$TL_dataJSON.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -109,6 +113,9 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         }
         if ((this.flags & 8192) != 0) {
             abstractSerializedData.writeInt64(this.raise_hand_rating);
+        }
+        if ((this.flags & 64) != 0) {
+            this.params.serializeToStream(abstractSerializedData);
         }
     }
 }

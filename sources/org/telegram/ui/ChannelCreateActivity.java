@@ -1226,7 +1226,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             bundle.putInt("chat_id", intValue);
             bundle.putBoolean("canCreatePublic", this.canCreatePublic);
             if (!(this.inputPhoto == null && this.inputVideo == null)) {
-                MessagesController.getInstance(this.currentAccount).changeChatAvatar(intValue, (TLRPC$TL_inputChatPhoto) null, this.inputPhoto, this.inputVideo, this.videoTimestamp, this.inputVideoPath, this.avatar, this.avatarBig);
+                MessagesController.getInstance(this.currentAccount).changeChatAvatar(intValue, (TLRPC$TL_inputChatPhoto) null, this.inputPhoto, this.inputVideo, this.videoTimestamp, this.inputVideoPath, this.avatar, this.avatarBig, (Runnable) null);
             }
             presentFragment(new ChannelCreateActivity(bundle), true);
         }

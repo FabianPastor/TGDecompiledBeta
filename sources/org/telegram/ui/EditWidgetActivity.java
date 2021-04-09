@@ -218,7 +218,7 @@ public class EditWidgetActivity extends BaseFragment {
                 org.telegram.ui.Cells.ChatActionCell r9 = new org.telegram.ui.Cells.ChatActionCell
                 r9.<init>(r2)
                 java.lang.String r10 = "WidgetPreview"
-                r11 = 2131628134(0x7f0e1066, float:1.8883552E38)
+                r11 = 2131628178(0x7f0e1092, float:1.8883641E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
                 r9.setCustomText(r10)
                 r11 = -2
@@ -233,7 +233,7 @@ public class EditWidgetActivity extends BaseFragment {
                 android.widget.LinearLayout r9 = new android.widget.LinearLayout
                 r9.<init>(r2)
                 r9.setOrientation(r4)
-                r10 = 2131166121(0x7var_a9, float:1.7946478E38)
+                r10 = 2131166133(0x7var_b5, float:1.7946503E38)
                 r9.setBackgroundResource(r10)
                 r14 = 10
                 r16 = 10
@@ -269,7 +269,7 @@ public class EditWidgetActivity extends BaseFragment {
                 android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r4, (int) r11, (int) r8)
                 r9.addView(r3, r4)
                 android.widget.ImageView r1 = r19.previewImageView
-                r3 = 2131165356(0x7var_ac, float:1.7944927E38)
+                r3 = 2131165357(0x7var_ad, float:1.7944929E38)
                 r1.setImageResource(r3)
                 goto L_0x010e
             L_0x00ce:
@@ -295,11 +295,11 @@ public class EditWidgetActivity extends BaseFragment {
                 android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r11, (int) r11, (int) r8)
                 r9.addView(r3, r4)
                 android.widget.ImageView r1 = r19.previewImageView
-                r3 = 2131165384(0x7var_c8, float:1.7944984E38)
+                r3 = 2131165385(0x7var_c9, float:1.7944986E38)
                 r1.setImageResource(r3)
             L_0x010e:
                 r18.updateDialogs()
-                r1 = 2131165449(0x7var_, float:1.7945115E38)
+                r1 = 2131165450(0x7var_a, float:1.7945117E38)
                 java.lang.String r3 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r1, (java.lang.String) r3)
                 r0.shadowDrawable = r1
@@ -353,7 +353,7 @@ public class EditWidgetActivity extends BaseFragment {
                 org.telegram.ui.EditWidgetActivity r0 = r1.this$0
                 int r0 = r0.widgetType
                 r2 = 1111490560(0x42400000, float:48.0)
-                r3 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
+                r3 = 2131627224(0x7f0e0cd8, float:1.8881706E38)
                 java.lang.String r4 = "SavedMessages"
                 r5 = 0
                 r6 = 0
@@ -440,14 +440,14 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x00c4:
                 boolean r9 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
                 if (r9 == 0) goto L_0x00d4
-                r9 = 2131627109(0x7f0e0CLASSNAME, float:1.8881473E38)
+                r9 = 2131627113(0x7f0e0CLASSNAME, float:1.8881481E38)
                 java.lang.String r15 = "RepliesTitle"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r15, r9)
                 goto L_0x00ec
             L_0x00d4:
                 boolean r9 = org.telegram.messenger.UserObject.isDeleted(r0)
                 if (r9 == 0) goto L_0x00e4
-                r9 = 2131625732(0x7f0e0704, float:1.887868E38)
+                r9 = 2131625733(0x7f0e0705, float:1.8878682E38)
                 java.lang.String r15 = "HiddenName"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r15, r9)
                 goto L_0x00ec
@@ -665,7 +665,7 @@ public class EditWidgetActivity extends BaseFragment {
             L_0x0298:
                 boolean r0 = r4.isOutOwner()
                 if (r0 == 0) goto L_0x02a9
-                r0 = 2131625643(0x7f0e06ab, float:1.88785E38)
+                r0 = 2131625644(0x7f0e06ac, float:1.8878502E38)
                 java.lang.String r3 = "FromYou"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             L_0x02a7:
@@ -879,7 +879,7 @@ public class EditWidgetActivity extends BaseFragment {
                 if (r2 == 0) goto L_0x0467
                 int r2 = r0.ttl_seconds
                 if (r2 == 0) goto L_0x0467
-                r0 = 2131624392(0x7f0e01c8, float:1.8875962E38)
+                r0 = 2131624393(0x7f0e01c9, float:1.8875964E38)
                 java.lang.String r2 = "AttachPhotoExpired"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 goto L_0x053c
@@ -891,7 +891,7 @@ public class EditWidgetActivity extends BaseFragment {
                 if (r2 == 0) goto L_0x0480
                 int r2 = r0.ttl_seconds
                 if (r2 == 0) goto L_0x0480
-                r0 = 2131624398(0x7f0e01ce, float:1.8875975E38)
+                r0 = 2131624399(0x7f0e01cf, float:1.8875977E38)
                 java.lang.String r2 = "AttachVideoExpired"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 goto L_0x053c
@@ -1060,14 +1060,14 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r2 = r1.cells
                 r2 = r2[r13]
                 android.view.View r0 = r2.findViewById(r0)
-                r2 = 2131166125(0x7var_ad, float:1.7946487E38)
+                r2 = 2131166137(0x7var_b9, float:1.794651E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x0616
             L_0x05fa:
                 android.view.ViewGroup[] r2 = r1.cells
                 r2 = r2[r13]
                 android.view.View r0 = r2.findViewById(r0)
-                r2 = 2131166124(0x7var_ac, float:1.7946484E38)
+                r2 = 2131166136(0x7var_b8, float:1.7946509E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x0616
             L_0x0609:
@@ -1080,7 +1080,7 @@ public class EditWidgetActivity extends BaseFragment {
                 int r13 = r13 + 1
                 r4 = r18
                 r2 = 1111490560(0x42400000, float:48.0)
-                r3 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
+                r3 = 2131627224(0x7f0e0cd8, float:1.8881706E38)
                 r5 = 0
                 r6 = 0
                 r8 = 8
@@ -1227,22 +1227,22 @@ public class EditWidgetActivity extends BaseFragment {
                 boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r0)
                 if (r6 == 0) goto L_0x075d
                 r7 = r18
-                r6 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
+                r6 = 2131627224(0x7f0e0cd8, float:1.8881706E38)
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r7, r6)
                 goto L_0x0786
             L_0x075d:
                 r7 = r18
-                r6 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
+                r6 = 2131627224(0x7f0e0cd8, float:1.8881706E38)
                 boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
                 if (r8 == 0) goto L_0x0772
-                r8 = 2131627109(0x7f0e0CLASSNAME, float:1.8881473E38)
+                r8 = 2131627113(0x7f0e0CLASSNAME, float:1.8881481E38)
                 java.lang.String r9 = "RepliesTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
                 goto L_0x0786
             L_0x0772:
                 boolean r8 = org.telegram.messenger.UserObject.isDeleted(r0)
                 if (r8 == 0) goto L_0x0782
-                r8 = 2131625732(0x7f0e0704, float:1.887868E38)
+                r8 = 2131625733(0x7f0e0705, float:1.8878682E38)
                 java.lang.String r9 = "HiddenName"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
                 goto L_0x0786
@@ -1277,7 +1277,7 @@ public class EditWidgetActivity extends BaseFragment {
                 goto L_0x07e7
             L_0x07b4:
                 r7 = r18
-                r6 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
+                r6 = 2131627224(0x7f0e0cd8, float:1.8881706E38)
                 org.telegram.ui.EditWidgetActivity r8 = r1.this$0
                 org.telegram.messenger.MessagesController r8 = r8.getMessagesController()
                 int r0 = -r0
@@ -1837,7 +1837,7 @@ public class EditWidgetActivity extends BaseFragment {
                 android.widget.ImageView r10 = new android.widget.ImageView
                 android.content.Context r0 = r8.mContext
                 r10.<init>(r0)
-                r0 = 2131165586(0x7var_, float:1.7945393E38)
+                r0 = 2131165587(0x7var_, float:1.7945395E38)
                 r10.setImageResource(r0)
                 android.widget.ImageView$ScaleType r0 = android.widget.ImageView.ScaleType.CENTER
                 r10.setScaleType(r0)
@@ -1891,7 +1891,7 @@ public class EditWidgetActivity extends BaseFragment {
                 android.content.Context r10 = r8.mContext
                 r9.<init>(r10)
                 android.content.Context r10 = r8.mContext
-                r0 = 2131165449(0x7var_, float:1.7945115E38)
+                r0 = 2131165450(0x7var_a, float:1.7945117E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r10, (int) r0, (java.lang.String) r1)
                 r9.setBackgroundDrawable(r10)

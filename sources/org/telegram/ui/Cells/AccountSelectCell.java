@@ -93,17 +93,18 @@ public class AccountSelectCell extends FrameLayout {
     }
 
     public void setObject(TLObject tLObject) {
-        if (tLObject instanceof TLRPC$User) {
-            TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
+        TLObject tLObject2 = tLObject;
+        if (tLObject2 instanceof TLRPC$User) {
+            TLRPC$User tLRPC$User = (TLRPC$User) tLObject2;
             this.avatarDrawable.setInfo(tLRPC$User);
             this.infoTextView.setText(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
-            this.imageView.setImage(ImageLocation.getForUser(tLRPC$User, false), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
+            this.imageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
             return;
         }
-        TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject;
+        TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject2;
         this.avatarDrawable.setInfo(tLRPC$Chat);
         this.infoTextView.setText(tLRPC$Chat.title);
-        this.imageView.setImage(ImageLocation.getForChat(tLRPC$Chat, false), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$Chat);
+        this.imageView.setImage(ImageLocation.getForUserOrChat(tLRPC$Chat, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$Chat);
     }
 
     public void setAccount(int i, boolean z) {
@@ -112,13 +113,8 @@ public class AccountSelectCell extends FrameLayout {
         this.avatarDrawable.setInfo(currentUser);
         this.textView.setText(ContactsController.formatName(currentUser.first_name, currentUser.last_name));
         this.imageView.getImageReceiver().setCurrentAccount(i);
-        int i2 = 0;
-        this.imageView.setImage(ImageLocation.getForUser(currentUser, false), "50_50", (Drawable) this.avatarDrawable, (Object) currentUser);
-        ImageView imageView2 = this.checkImageView;
-        if (!z || i != UserConfig.selectedAccount) {
-            i2 = 4;
-        }
-        imageView2.setVisibility(i2);
+        this.imageView.setImage(ImageLocation.getForUserOrChat(currentUser, 1), "50_50", ImageLocation.getForUserOrChat(currentUser, 2), "50_50", (Drawable) this.avatarDrawable, (Object) currentUser);
+        this.checkImageView.setVisibility((!z || i != UserConfig.selectedAccount) ? 4 : 0);
     }
 
     public int getAccountNumber() {

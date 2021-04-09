@@ -62,6 +62,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     /* access modifiers changed from: private */
     public ImageUpdaterDelegate delegate;
     private String finalPath;
+    private boolean forceDarkTheme;
     private ImageReceiver imageReceiver;
     private boolean openWithFrontfaceCamera;
     public BaseFragment parentFragment;
@@ -217,6 +218,11 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         this.useAttachMenu = z;
     }
 
+    public void setSearchAvailable(boolean z, boolean z2) {
+        this.useAttachMenu = z2;
+        this.searchAvailable = z;
+    }
+
     public void setUploadAfterSelect(boolean z) {
         this.uploadAfterSelect = z;
     }
@@ -323,7 +329,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     private void createChatAttachView() {
         BaseFragment baseFragment = this.parentFragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null && this.chatAttachAlert == null) {
-            ChatAttachAlert chatAttachAlert2 = new ChatAttachAlert(this.parentFragment.getParentActivity(), this.parentFragment);
+            ChatAttachAlert chatAttachAlert2 = new ChatAttachAlert(this.parentFragment.getParentActivity(), this.parentFragment, this.forceDarkTheme);
             this.chatAttachAlert = chatAttachAlert2;
             chatAttachAlert2.setAvatarPicker(this.canSelectVideo ? 2 : 1, this.searchAvailable);
             this.chatAttachAlert.setDelegate(new ChatAttachAlert.ChatAttachViewDelegate() {
@@ -904,5 +910,9 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
             }
         }
+    }
+
+    public void setForceDarkTheme(boolean z) {
+        this.forceDarkTheme = z;
     }
 }

@@ -185,6 +185,14 @@ public class ChatObject {
             }
         }
 
+        public boolean shouldShowPanel() {
+            return this.call.participants_count > 0 || isScheduled();
+        }
+
+        public boolean isScheduled() {
+            return (this.call.flags & 128) != 0;
+        }
+
         private int getSelfId() {
             TLRPC$Peer tLRPC$Peer = this.selfPeer;
             if (tLRPC$Peer != null) {

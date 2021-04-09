@@ -556,16 +556,10 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             textView2.setEllipsize(TextUtils.TruncateAt.END);
             textView2.setText(tLRPC$Chat2.title);
             boolean z2 = LocaleController.isRTL;
-            int i = (z2 ? 5 : 3) | 48;
-            int i2 = 21;
-            float f = (float) (z2 ? 21 : 76);
-            if (z2) {
-                i2 = 76;
-            }
-            frameLayout.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, i, f, 11.0f, (float) i2, 0.0f));
+            frameLayout.addView(textView2, LayoutHelper.createFrame(-1, -2.0f, (z2 ? 5 : 3) | 48, (float) (z2 ? 21 : 76), 11.0f, (float) (z2 ? 76 : 21), 0.0f));
             frameLayout.addView(textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 24.0f, 57.0f, 24.0f, 9.0f));
             avatarDrawable.setInfo(tLRPC$Chat2);
-            backupImageView.setImage(ImageLocation.getForChat(tLRPC$Chat2, false), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$Chat2);
+            backupImageView.setImage(ImageLocation.getForUserOrChat(tLRPC$Chat2, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat2, 2), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$Chat);
             builder.setPositiveButton(LocaleController.getString("DiscussionLinkGroup", NUM), new DialogInterface.OnClickListener(chatFull, tLRPC$Chat2) {
                 public final /* synthetic */ TLRPC$ChatFull f$1;
                 public final /* synthetic */ TLRPC$Chat f$2;

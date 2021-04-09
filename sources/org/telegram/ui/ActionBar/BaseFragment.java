@@ -1,5 +1,6 @@
 package org.telegram.ui.ActionBar;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.Dialog;
@@ -37,7 +38,7 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 
-public class BaseFragment {
+public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public ActionBar actionBar;
     /* access modifiers changed from: protected */
@@ -73,6 +74,11 @@ public class BaseFragment {
 
     public boolean extendActionMode(Menu menu) {
         return false;
+    }
+
+    /* access modifiers changed from: protected */
+    public Animator getCustomSlideTransition(boolean z, boolean z2, float f) {
+        return null;
     }
 
     /* access modifiers changed from: protected */
@@ -135,6 +141,10 @@ public class BaseFragment {
     }
 
     /* access modifiers changed from: protected */
+    public void onSlideProgress(boolean z, float f) {
+    }
+
+    /* access modifiers changed from: protected */
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
     }
 
@@ -146,10 +156,17 @@ public class BaseFragment {
     public void onTransitionAnimationStart(boolean z, boolean z2) {
     }
 
+    /* access modifiers changed from: protected */
+    public void prepareFragmentToSlide(boolean z, boolean z2) {
+    }
+
     public void saveKeyboardPositionBeforeTransition() {
     }
 
     public void saveSelfArgs(Bundle bundle) {
+    }
+
+    public void setProgressToDrawerOpened(float f) {
     }
 
     public BaseFragment() {

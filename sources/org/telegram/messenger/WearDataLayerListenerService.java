@@ -371,7 +371,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
     /* renamed from: lambda$onChannelOpened$1 */
     public /* synthetic */ void lambda$onChannelOpened$1$WearDataLayerListenerService(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate, TLRPC$User tLRPC$User) {
         NotificationCenter.getInstance(this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.fileDidLoad);
-        FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForUser(tLRPC$User, false), tLRPC$User, (String) null, 1, 1);
+        FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForUserOrChat(tLRPC$User, 1), tLRPC$User, (String) null, 1, 1);
     }
 
     /* access modifiers changed from: private */

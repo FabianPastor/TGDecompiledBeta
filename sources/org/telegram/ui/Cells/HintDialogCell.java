@@ -112,7 +112,7 @@ public class HintDialogCell extends FrameLayout {
                 this.nameTextView.setText("");
             }
             this.avatarDrawable.setInfo(this.currentUser);
-            this.imageView.setImage(ImageLocation.getForUser(this.currentUser, false), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
+            this.imageView.setImage(ImageLocation.getForUserOrChat(this.currentUser, 1), "50_50", ImageLocation.getForUserOrChat(this.currentUser, 2), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
         } else {
             TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
             if (charSequence != null) {
@@ -124,7 +124,7 @@ public class HintDialogCell extends FrameLayout {
             }
             this.avatarDrawable.setInfo(chat);
             this.currentUser = null;
-            this.imageView.setImage(ImageLocation.getForChat(chat, false), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+            this.imageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
         }
         if (z) {
             update(0);

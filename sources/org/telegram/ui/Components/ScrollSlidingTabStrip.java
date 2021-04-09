@@ -263,7 +263,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         int i = this.tabCount;
         this.tabCount = i + 1;
         FrameLayout frameLayout = (FrameLayout) this.prevTypes.get(str);
-        boolean z = false;
+        boolean z = true;
         if (frameLayout != null) {
             checkViewIndex(str, frameLayout, i);
         } else {
@@ -281,13 +281,13 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             BackupImageView backupImageView = new BackupImageView(getContext());
             backupImageView.setLayerNum(1);
             backupImageView.setRoundRadius(AndroidUtilities.dp(15.0f));
-            backupImageView.setImage(ImageLocation.getForChat(tLRPC$Chat, false), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$Chat);
+            backupImageView.setImage(ImageLocation.getForUserOrChat(tLRPC$Chat, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat, 2), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$Chat);
             backupImageView.setAspectFit(true);
             frameLayout.addView(backupImageView, LayoutHelper.createFrame(30, 30, 17));
         }
         frameLayout.setTag(NUM, Integer.valueOf(i));
-        if (i == this.currentPosition) {
-            z = true;
+        if (i != this.currentPosition) {
+            z = false;
         }
         frameLayout.setSelected(z);
         this.tabTypes.put(str, frameLayout);

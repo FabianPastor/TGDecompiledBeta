@@ -161,18 +161,18 @@ public class AvatarPreviewer {
         public final ImageLocation videoLocation;
 
         public static Data of(TLRPC$User tLRPC$User, int i, MenuItem... menuItemArr) {
-            ImageLocation forUser = ImageLocation.getForUser(tLRPC$User, true);
-            ImageLocation forUser2 = ImageLocation.getForUser(tLRPC$User, false);
-            return new Data(forUser, forUser2, (ImageLocation) null, (String) null, (forUser2 == null || !(forUser2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b", (String) null, (String) null, tLRPC$User, menuItemArr, new UserInfoLoadTask(tLRPC$User, i));
+            ImageLocation forUserOrChat = ImageLocation.getForUserOrChat(tLRPC$User, 0);
+            ImageLocation forUserOrChat2 = ImageLocation.getForUserOrChat(tLRPC$User, 1);
+            return new Data(forUserOrChat, forUserOrChat2, (ImageLocation) null, (String) null, (forUserOrChat2 == null || !(forUserOrChat2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b", (String) null, (String) null, tLRPC$User, menuItemArr, new UserInfoLoadTask(tLRPC$User, i));
         }
 
         public static Data of(TLRPC$UserFull tLRPC$UserFull, MenuItem... menuItemArr) {
             String str;
             ImageLocation imageLocation2;
-            ImageLocation forUser = ImageLocation.getForUser(tLRPC$UserFull.user, true);
-            ImageLocation forUser2 = ImageLocation.getForUser(tLRPC$UserFull.user, false);
+            ImageLocation forUserOrChat = ImageLocation.getForUserOrChat(tLRPC$UserFull.user, 0);
+            ImageLocation forUserOrChat2 = ImageLocation.getForUserOrChat(tLRPC$UserFull.user, 1);
             String str2 = null;
-            String str3 = (forUser2 == null || !(forUser2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b";
+            String str3 = (forUserOrChat2 == null || !(forUserOrChat2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b";
             TLRPC$Photo tLRPC$Photo = tLRPC$UserFull.profile_photo;
             if (tLRPC$Photo == null || tLRPC$Photo.video_sizes.isEmpty()) {
                 imageLocation2 = null;
@@ -186,21 +186,21 @@ public class AvatarPreviewer {
             if (imageLocation2 != null && imageLocation2.imageType == 2) {
                 str2 = "g";
             }
-            return new Data(forUser, forUser2, imageLocation2, (String) null, str3, str2, str, tLRPC$UserFull.user, menuItemArr, (InfoLoadTask<?, ?>) null);
+            return new Data(forUserOrChat, forUserOrChat2, imageLocation2, (String) null, str3, str2, str, tLRPC$UserFull.user, menuItemArr, (InfoLoadTask<?, ?>) null);
         }
 
         public static Data of(TLRPC$Chat tLRPC$Chat, int i, MenuItem... menuItemArr) {
-            ImageLocation forChat = ImageLocation.getForChat(tLRPC$Chat, true);
-            ImageLocation forChat2 = ImageLocation.getForChat(tLRPC$Chat, false);
-            return new Data(forChat, forChat2, (ImageLocation) null, (String) null, (forChat2 == null || !(forChat2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b", (String) null, (String) null, tLRPC$Chat, menuItemArr, new ChatInfoLoadTask(tLRPC$Chat, i));
+            ImageLocation forUserOrChat = ImageLocation.getForUserOrChat(tLRPC$Chat, 0);
+            ImageLocation forUserOrChat2 = ImageLocation.getForUserOrChat(tLRPC$Chat, 1);
+            return new Data(forUserOrChat, forUserOrChat2, (ImageLocation) null, (String) null, (forUserOrChat2 == null || !(forUserOrChat2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b", (String) null, (String) null, tLRPC$Chat, menuItemArr, new ChatInfoLoadTask(tLRPC$Chat, i));
         }
 
         public static Data of(TLRPC$Chat tLRPC$Chat, TLRPC$ChatFull tLRPC$ChatFull, MenuItem... menuItemArr) {
             String str;
             ImageLocation imageLocation2;
-            ImageLocation forChat = ImageLocation.getForChat(tLRPC$Chat, true);
-            ImageLocation forChat2 = ImageLocation.getForChat(tLRPC$Chat, false);
-            String str2 = (forChat2 == null || !(forChat2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b";
+            ImageLocation forUserOrChat = ImageLocation.getForUserOrChat(tLRPC$Chat, 0);
+            ImageLocation forUserOrChat2 = ImageLocation.getForUserOrChat(tLRPC$Chat, 1);
+            String str2 = (forUserOrChat2 == null || !(forUserOrChat2.photoSize instanceof TLRPC$TL_photoStrippedSize)) ? null : "b";
             TLRPC$Photo tLRPC$Photo = tLRPC$ChatFull.chat_photo;
             if (tLRPC$Photo == null || tLRPC$Photo.video_sizes.isEmpty()) {
                 imageLocation2 = null;
@@ -210,7 +210,7 @@ public class AvatarPreviewer {
                 imageLocation2 = ImageLocation.getForPhoto(tLRPC$VideoSize, tLRPC$ChatFull.chat_photo);
                 str = FileLoader.getAttachFileName(tLRPC$VideoSize);
             }
-            return new Data(forChat, forChat2, imageLocation2, (String) null, str2, (imageLocation2 == null || imageLocation2.imageType != 2) ? null : "g", str, tLRPC$Chat, menuItemArr, (InfoLoadTask<?, ?>) null);
+            return new Data(forUserOrChat, forUserOrChat2, imageLocation2, (String) null, str2, (imageLocation2 == null || imageLocation2.imageType != 2) ? null : "g", str, tLRPC$Chat, menuItemArr, (InfoLoadTask<?, ?>) null);
         }
 
         private Data(ImageLocation imageLocation2, ImageLocation imageLocation3, ImageLocation imageLocation4, String str, String str2, String str3, String str4, Object obj, MenuItem[] menuItemArr, InfoLoadTask<?, ?> infoLoadTask2) {

@@ -1773,15 +1773,16 @@ public class ActionBarMenuItem extends FrameLayout {
         }
 
         public void setData(FiltersView.MediaFilterData mediaFilterData) {
-            this.data = mediaFilterData;
-            this.titleView.setText(mediaFilterData.title);
-            CombinedDrawable createCircleDrawableWithIcon = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), mediaFilterData.iconResFilled);
+            FiltersView.MediaFilterData mediaFilterData2 = mediaFilterData;
+            this.data = mediaFilterData2;
+            this.titleView.setText(mediaFilterData2.title);
+            CombinedDrawable createCircleDrawableWithIcon = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), mediaFilterData2.iconResFilled);
             this.thumbDrawable = createCircleDrawableWithIcon;
             Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, Theme.getColor("avatar_backgroundBlue"), false);
             Theme.setCombinedDrawableColor(this.thumbDrawable, Theme.getColor("avatar_actionBarIconBlue"), true);
-            int i = mediaFilterData.filterType;
+            int i = mediaFilterData2.filterType;
             if (i == 4) {
-                TLObject tLObject = mediaFilterData.chat;
+                TLObject tLObject = mediaFilterData2.chat;
                 if (tLObject instanceof TLRPC$User) {
                     TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
                     if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == tLRPC$User.id) {
@@ -1793,11 +1794,11 @@ public class ActionBarMenuItem extends FrameLayout {
                         return;
                     }
                     this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16.0f));
-                    this.avatarImageView.getImageReceiver().setImage(ImageLocation.getForUser(tLRPC$User, false), "50_50", this.thumbDrawable, (String) null, tLRPC$User, 0);
+                    this.avatarImageView.getImageReceiver().setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", this.thumbDrawable, (Object) tLRPC$User, 0);
                 } else if (tLObject instanceof TLRPC$Chat) {
                     TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject;
                     this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16.0f));
-                    this.avatarImageView.getImageReceiver().setImage(ImageLocation.getForChat(tLRPC$Chat, false), "50_50", this.thumbDrawable, (String) null, tLRPC$Chat, 0);
+                    this.avatarImageView.getImageReceiver().setImage(ImageLocation.getForUserOrChat(tLRPC$Chat, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat, 2), "50_50", this.thumbDrawable, (Object) tLRPC$Chat, 0);
                 }
             } else if (i == 7) {
                 CombinedDrawable createCircleDrawableWithIcon3 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);

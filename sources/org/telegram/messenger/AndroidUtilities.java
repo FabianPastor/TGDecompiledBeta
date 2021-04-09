@@ -158,12 +158,14 @@ public class AndroidUtilities {
     public static OvershootInterpolator overshootInterpolator = new OvershootInterpolator();
     public static Integer photoSize = null;
     private static int prevOrientation = -10;
+    public static final RectF rectTmp = new RectF();
     public static int roundMessageInset;
     public static int roundMessageSize;
     private static Paint roundPaint;
     public static final Linkify.MatchFilter sUrlMatchFilter = $$Lambda$AndroidUtilities$7u2C_VzyCOR_g29g_gFE94u3hQ.INSTANCE;
     public static float screenRefreshRate = 60.0f;
     private static final Object smsLock = new Object();
+    private static Boolean standaloneApp;
     public static int statusBarHeight = 0;
     private static final Hashtable<String, Typeface> typefaceCache = new Hashtable<>();
     private static Runnable unregisterRunnable;
@@ -349,6 +351,13 @@ public class AndroidUtilities {
 
         private LinkSpec() {
         }
+    }
+
+    public static boolean isStandaloneApp() {
+        if (standaloneApp == null) {
+            standaloneApp = Boolean.valueOf("org.telegram.messenger.web".equals(ApplicationLoader.applicationContext.getPackageName()));
+        }
+        return standaloneApp.booleanValue();
     }
 
     private static String makeUrl(String str, String[] strArr, Matcher matcher) {
@@ -1018,7 +1027,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131624966(0x7f0e0406, float:1.8877127E38)
+                r0 = 2131624967(0x7f0e0407, float:1.8877129E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1030,12 +1039,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131624967(0x7f0e0407, float:1.8877129E38)
+                r0 = 2131624968(0x7f0e0408, float:1.887713E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131624968(0x7f0e0408, float:1.887713E38)
+                r0 = 2131624969(0x7f0e0409, float:1.8877133E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1153,27 +1162,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131626875(0x7f0e0b7b, float:1.8880999E38)
+                r0 = 2131626879(0x7f0e0b7f, float:1.8881007E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131626876(0x7f0e0b7c, float:1.8881E38)
+                r0 = 2131626880(0x7f0e0b80, float:1.8881009E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131626867(0x7f0e0b73, float:1.8880982E38)
+                r0 = 2131626871(0x7f0e0b77, float:1.888099E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131626866(0x7f0e0b72, float:1.888098E38)
+                r0 = 2131626870(0x7f0e0b76, float:1.8880988E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131626868(0x7f0e0b74, float:1.8880984E38)
+                r0 = 2131626872(0x7f0e0b78, float:1.8880992E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -2218,16 +2227,16 @@ public class AndroidUtilities {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:25:0x006f, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:25:0x0070, code lost:
         r10 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:26:0x0070, code lost:
-        if (r0 != null) goto L_0x0072;
+    /* JADX WARNING: Code restructure failed: missing block: B:26:0x0071, code lost:
+        if (r0 != null) goto L_0x0073;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:28:?, code lost:
         r0.close();
      */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:29:0x0075 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:29:0x0076 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.lang.String obtainLoginPhoneCall(java.lang.String r10) {
         /*
@@ -2236,67 +2245,67 @@ public class AndroidUtilities {
             if (r0 != 0) goto L_0x0006
             return r1
         L_0x0006:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0076 }
-            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0076 }
-            android.net.Uri r3 = android.provider.CallLog.Calls.CONTENT_URI     // Catch:{ Exception -> 0x0076 }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0077 }
+            android.content.ContentResolver r2 = r0.getContentResolver()     // Catch:{ Exception -> 0x0077 }
+            android.net.Uri r3 = android.provider.CallLog.Calls.CONTENT_URI     // Catch:{ Exception -> 0x0077 }
             r0 = 2
-            java.lang.String[] r4 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0076 }
+            java.lang.String[] r4 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0077 }
             java.lang.String r0 = "number"
             r8 = 0
-            r4[r8] = r0     // Catch:{ Exception -> 0x0076 }
+            r4[r8] = r0     // Catch:{ Exception -> 0x0077 }
             java.lang.String r0 = "date"
             r9 = 1
-            r4[r9] = r0     // Catch:{ Exception -> 0x0076 }
+            r4[r9] = r0     // Catch:{ Exception -> 0x0077 }
             java.lang.String r5 = "type IN (3,1,5)"
             r6 = 0
             java.lang.String r7 = "date DESC LIMIT 5"
-            android.database.Cursor r0 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0076 }
-        L_0x0024:
-            boolean r2 = r0.moveToNext()     // Catch:{ all -> 0x006d }
-            if (r2 == 0) goto L_0x0067
-            java.lang.String r2 = r0.getString(r8)     // Catch:{ all -> 0x006d }
-            long r3 = r0.getLong(r9)     // Catch:{ all -> 0x006d }
-            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ all -> 0x006d }
-            if (r5 == 0) goto L_0x004a
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x006d }
-            r5.<init>()     // Catch:{ all -> 0x006d }
+            android.database.Cursor r0 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0077 }
+        L_0x0025:
+            boolean r2 = r0.moveToNext()     // Catch:{ all -> 0x006e }
+            if (r2 == 0) goto L_0x0068
+            java.lang.String r2 = r0.getString(r8)     // Catch:{ all -> 0x006e }
+            long r3 = r0.getLong(r9)     // Catch:{ all -> 0x006e }
+            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ all -> 0x006e }
+            if (r5 == 0) goto L_0x004b
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ all -> 0x006e }
+            r5.<init>()     // Catch:{ all -> 0x006e }
             java.lang.String r6 = "number = "
-            r5.append(r6)     // Catch:{ all -> 0x006d }
-            r5.append(r2)     // Catch:{ all -> 0x006d }
-            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x006d }
-            org.telegram.messenger.FileLog.e((java.lang.String) r5)     // Catch:{ all -> 0x006d }
-        L_0x004a:
-            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x006d }
+            r5.append(r6)     // Catch:{ all -> 0x006e }
+            r5.append(r2)     // Catch:{ all -> 0x006e }
+            java.lang.String r5 = r5.toString()     // Catch:{ all -> 0x006e }
+            org.telegram.messenger.FileLog.e((java.lang.String) r5)     // Catch:{ all -> 0x006e }
+        L_0x004b:
+            long r5 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x006e }
             long r5 = r5 - r3
-            long r3 = java.lang.Math.abs(r5)     // Catch:{ all -> 0x006d }
+            long r3 = java.lang.Math.abs(r5)     // Catch:{ all -> 0x006e }
             r5 = 3600000(0x36ee80, double:1.7786363E-317)
             int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r7 < 0) goto L_0x005b
-            goto L_0x0024
-        L_0x005b:
-            boolean r3 = checkPhonePattern(r10, r2)     // Catch:{ all -> 0x006d }
-            if (r3 == 0) goto L_0x0024
-            if (r0 == 0) goto L_0x0066
-            r0.close()     // Catch:{ Exception -> 0x0076 }
-        L_0x0066:
-            return r2
+            if (r7 < 0) goto L_0x005c
+            goto L_0x0025
+        L_0x005c:
+            boolean r3 = checkPhonePattern(r10, r2)     // Catch:{ all -> 0x006e }
+            if (r3 == 0) goto L_0x0025
+            if (r0 == 0) goto L_0x0067
+            r0.close()     // Catch:{ Exception -> 0x0077 }
         L_0x0067:
-            if (r0 == 0) goto L_0x007a
-            r0.close()     // Catch:{ Exception -> 0x0076 }
-            goto L_0x007a
-        L_0x006d:
+            return r2
+        L_0x0068:
+            if (r0 == 0) goto L_0x007b
+            r0.close()     // Catch:{ Exception -> 0x0077 }
+            goto L_0x007b
+        L_0x006e:
             r10 = move-exception
-            throw r10     // Catch:{ all -> 0x006f }
-        L_0x006f:
+            throw r10     // Catch:{ all -> 0x0070 }
+        L_0x0070:
             r10 = move-exception
-            if (r0 == 0) goto L_0x0075
-            r0.close()     // Catch:{ all -> 0x0075 }
-        L_0x0075:
-            throw r10     // Catch:{ Exception -> 0x0076 }
+            if (r0 == 0) goto L_0x0076
+            r0.close()     // Catch:{ all -> 0x0076 }
         L_0x0076:
+            throw r10     // Catch:{ Exception -> 0x0077 }
+        L_0x0077:
             r10 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r10)
-        L_0x007a:
+        L_0x007b:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.obtainLoginPhoneCall(java.lang.String):java.lang.String");
@@ -2979,6 +2988,16 @@ public class AndroidUtilities {
         }
     }
 
+    public static String formatFullDuration(int i) {
+        int i2 = i / 3600;
+        int i3 = (i / 60) % 60;
+        int i4 = i % 60;
+        if (i < 0) {
+            return String.format(Locale.US, "-%02d:%02d:%02d", new Object[]{Integer.valueOf(Math.abs(i2)), Integer.valueOf(Math.abs(i3)), Integer.valueOf(Math.abs(i4))});
+        }
+        return String.format(Locale.US, "%02d:%02d:%02d", new Object[]{Integer.valueOf(i2), Integer.valueOf(i3), Integer.valueOf(i4)});
+    }
+
     public static String formatDurationNoHours(int i, boolean z) {
         int i2 = i / 60;
         int i3 = i % 60;
@@ -3258,9 +3277,9 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0159
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0159
-            r7 = 2131626483(0x7f0e09f3, float:1.8880203E38)
+            r7 = 2131626484(0x7f0e09f4, float:1.8880205E38)
             java.lang.String r8 = "OK"
-            r9 = 2131624281(0x7f0e0159, float:1.8875737E38)
+            r9 = 2131624282(0x7f0e015a, float:1.887574E38)
             java.lang.String r10 = "AppName"
             r11 = 1
             if (r2 == 0) goto L_0x00a6
@@ -3281,7 +3300,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625802(0x7f0e074a, float:1.8878822E38)
+            r1 = 2131625803(0x7f0e074b, float:1.8878824E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3365,7 +3384,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131626256(0x7f0e0910, float:1.8879743E38)
+            r1 = 2131626257(0x7f0e0911, float:1.8879745E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3464,21 +3483,21 @@ public class AndroidUtilities {
             if (r5 != 0) goto L_0x00ca
             org.telegram.ui.ActionBar.AlertDialog$Builder r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r8.<init>((android.content.Context) r9)
-            r0 = 2131624281(0x7f0e0159, float:1.8875737E38)
+            r0 = 2131624282(0x7f0e015a, float:1.887574E38)
             java.lang.String r1 = "AppName"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setTitle(r0)
-            r0 = 2131624279(0x7f0e0157, float:1.8875733E38)
+            r0 = 2131624280(0x7f0e0158, float:1.8875735E38)
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setMessage(r0)
-            r0 = 2131626860(0x7f0e0b6c, float:1.8880968E38)
+            r0 = 2131626864(0x7f0e0b70, float:1.8880976E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY
             r1.<init>(r9)
             r8.setPositiveButton(r0, r1)
-            r9 = 2131624638(0x7f0e02be, float:1.8876461E38)
+            r9 = 2131624639(0x7f0e02bf, float:1.8876463E38)
             java.lang.String r0 = "Cancel"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
             r8.setNegativeButton(r9, r2)
@@ -4531,13 +4550,31 @@ public class AndroidUtilities {
     }
 
     public static void updateViewVisibilityAnimated(final View view, boolean z, float f, boolean z2) {
+        int i = 0;
         if (view.getParent() == null) {
             z2 = false;
         }
-        if (!z || view.getTag() != null) {
+        int i2 = null;
+        if (z && view.getTag() == null) {
             view.animate().setListener((Animator.AnimatorListener) null).cancel();
             if (z2) {
+                if (view.getVisibility() != 0) {
+                    view.setVisibility(0);
+                    view.setAlpha(0.0f);
+                    view.setScaleX(f);
+                    view.setScaleY(f);
+                }
                 view.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
+            } else {
+                view.setVisibility(0);
+                view.setAlpha(1.0f);
+                view.setScaleX(1.0f);
+                view.setScaleY(1.0f);
+            }
+            view.setTag(1);
+        } else if (!z && view.getTag() != null) {
+            view.animate().setListener((Animator.AnimatorListener) null).cancel();
+            if (z2) {
                 view.animate().alpha(0.0f).scaleY(f).scaleX(f).setListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         view.setVisibility(8);
@@ -4547,23 +4584,19 @@ public class AndroidUtilities {
                 view.setVisibility(8);
             }
             view.setTag((Object) null);
-            return;
-        }
-        view.animate().setListener((Animator.AnimatorListener) null).cancel();
-        if (z2) {
-            if (view.getVisibility() != 0) {
-                view.setVisibility(0);
-                view.setAlpha(0.0f);
-                view.setScaleX(f);
-                view.setScaleY(f);
+        } else if (!z2) {
+            view.animate().setListener((Animator.AnimatorListener) null).cancel();
+            if (!z) {
+                i = 8;
             }
-            view.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
-        } else {
-            view.setVisibility(0);
+            view.setVisibility(i);
+            if (z) {
+                i2 = 1;
+            }
+            view.setTag(i2);
             view.setAlpha(1.0f);
             view.setScaleX(1.0f);
             view.setScaleY(1.0f);
         }
-        view.setTag(1);
     }
 }

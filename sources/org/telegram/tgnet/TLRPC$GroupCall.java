@@ -11,6 +11,8 @@ public abstract class TLRPC$GroupCall extends TLObject {
     public TLRPC$TL_dataJSON params;
     public int participants_count;
     public int record_start_date;
+    public int schedule_date;
+    public boolean schedule_start_subscribed;
     public int stream_dc_id;
     public String title;
     public int version;

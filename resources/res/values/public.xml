@@ -295,6 +295,7 @@
     <public type="drawable" name="book_group" id="NUM" />
     <public type="drawable" name="book_logo" id="NUM" />
     <public type="drawable" name="book_user" id="NUM" />
+    <public type="drawable" name="bot_card" id="NUM" />
     <public type="drawable" name="bot_file" id="NUM" />
     <public type="drawable" name="bot_lines" id="NUM" />
     <public type="drawable" name="bot_link" id="NUM" />
@@ -711,6 +712,7 @@
     <public type="drawable" name="minithumb_play" id="NUM" />
     <public type="drawable" name="moon" id="NUM" />
     <public type="drawable" name="msg_actions" id="NUM" />
+    <public type="drawable" name="msg_addbio" id="NUM" />
     <public type="drawable" name="msg_addbot" id="NUM" />
     <public type="drawable" name="msg_addcontact" id="NUM" />
     <public type="drawable" name="msg_addfolder" id="NUM" />
@@ -719,6 +721,7 @@
     <public type="drawable" name="msg_archive" id="NUM" />
     <public type="drawable" name="msg_arrowright" id="NUM" />
     <public type="drawable" name="msg_background" id="NUM" />
+    <public type="drawable" name="msg_bio" id="NUM" />
     <public type="drawable" name="msg_block" id="NUM" />
     <public type="drawable" name="msg_block2" id="NUM" />
     <public type="drawable" name="msg_calendar" id="NUM" />
@@ -830,6 +833,7 @@
     <public type="drawable" name="msg_text_regular" id="NUM" />
     <public type="drawable" name="msg_theme" id="NUM" />
     <public type="drawable" name="msg_timer" id="NUM" />
+    <public type="drawable" name="msg_timeredit" id="NUM" />
     <public type="drawable" name="msg_unarchive" id="NUM" />
     <public type="drawable" name="msg_unfave" id="NUM" />
     <public type="drawable" name="msg_unmute" id="NUM" />
@@ -845,6 +849,7 @@
     <public type="drawable" name="msg_voice_unmuted" id="NUM" />
     <public type="drawable" name="msg_voicechat" id="NUM" />
     <public type="drawable" name="msg_voicechat2" id="NUM" />
+    <public type="drawable" name="msg_voiceshare" id="NUM" />
     <public type="drawable" name="msg_warning" id="NUM" />
     <public type="drawable" name="music_empty" id="NUM" />
     <public type="drawable" name="navigate" id="NUM" />
@@ -890,6 +895,13 @@
     <public type="drawable" name="passcode_check" id="NUM" />
     <public type="drawable" name="passcode_delete" id="NUM" />
     <public type="drawable" name="passcode_logo" id="NUM" />
+    <public type="drawable" name="payment_address" id="NUM" />
+    <public type="drawable" name="payment_card" id="NUM" />
+    <public type="drawable" name="payment_delivery" id="NUM" />
+    <public type="drawable" name="payment_email" id="NUM" />
+    <public type="drawable" name="payment_name" id="NUM" />
+    <public type="drawable" name="payment_phone" id="NUM" />
+    <public type="drawable" name="payment_provider" id="NUM" />
     <public type="drawable" name="permission_locked" id="NUM" />
     <public type="drawable" name="permissions_camera1" id="NUM" />
     <public type="drawable" name="permissions_camera2" id="NUM" />
@@ -1439,11 +1451,14 @@
     <public type="raw" name="filters" id="NUM" />
     <public type="raw" name="fire_off" id="NUM" />
     <public type="raw" name="fire_on" id="NUM" />
+    <public type="raw" name="folder_in" id="NUM" />
+    <public type="raw" name="folder_out" id="NUM" />
     <public type="raw" name="forward" id="NUM" />
     <public type="raw" name="gigagroup" id="NUM" />
     <public type="raw" name="gigagroup_convert" id="NUM" />
     <public type="raw" name="group_pip_delete_icon" id="NUM" />
     <public type="raw" name="hand_1" id="NUM" />
+    <public type="raw" name="hand_2" id="NUM" />
     <public type="raw" name="ic_admin" id="NUM" />
     <public type="raw" name="ic_ban" id="NUM" />
     <public type="raw" name="ic_delete" id="NUM" />
@@ -1508,6 +1523,7 @@
     <public type="raw" name="tsv_setup_monkey_tracking" id="NUM" />
     <public type="raw" name="utyan_gigagroup" id="NUM" />
     <public type="raw" name="utyan_private" id="NUM" />
+    <public type="raw" name="utyan_schedule" id="NUM" />
     <public type="raw" name="voice_muted" id="NUM" />
     <public type="raw" name="voice_outlined" id="NUM" />
     <public type="raw" name="voice_outlined2" id="NUM" />
@@ -1519,6 +1535,7 @@
     <public type="raw" name="voip_connecting" id="NUM" />
     <public type="raw" name="voip_end" id="NUM" />
     <public type="raw" name="voip_failed" id="NUM" />
+    <public type="raw" name="voip_filled" id="NUM" />
     <public type="raw" name="voip_group_removed" id="NUM" />
     <public type="raw" name="voip_invite" id="NUM" />
     <public type="raw" name="voip_muted" id="NUM" />
@@ -1720,6 +1737,7 @@
     <public type="string" name="ActionGroupCallInvited" id="NUM" />
     <public type="string" name="ActionGroupCallInvitedYou" id="NUM" />
     <public type="string" name="ActionGroupCallJustStarted" id="NUM" />
+    <public type="string" name="ActionGroupCallScheduled" id="NUM" />
     <public type="string" name="ActionGroupCallStarted" id="NUM" />
     <public type="string" name="ActionGroupCallStartedByYou" id="NUM" />
     <public type="string" name="ActionGroupCallYouInvited" id="NUM" />
@@ -4371,6 +4389,7 @@
     <public type="string" name="PaymentCheckout" id="NUM" />
     <public type="string" name="PaymentCheckoutEmail" id="NUM" />
     <public type="string" name="PaymentCheckoutMethod" id="NUM" />
+    <public type="string" name="PaymentCheckoutMethodNewCard" id="NUM" />
     <public type="string" name="PaymentCheckoutName" id="NUM" />
     <public type="string" name="PaymentCheckoutPay" id="NUM" />
     <public type="string" name="PaymentCheckoutPhoneNumber" id="NUM" />
@@ -4413,6 +4432,8 @@
     <public type="string" name="PaymentSuccessfullyPaid" id="NUM" />
     <public type="string" name="PaymentSuccessfullyPaidNoItem" id="NUM" />
     <public type="string" name="PaymentTestInvoice" id="NUM" />
+    <public type="string" name="PaymentTip" id="NUM" />
+    <public type="string" name="PaymentTipOptional" id="NUM" />
     <public type="string" name="PaymentTransactionMessage" id="NUM" />
     <public type="string" name="PaymentTransactionReview" id="NUM" />
     <public type="string" name="PaymentTransactionTotal" id="NUM" />
@@ -5089,14 +5110,23 @@
     <public type="string" name="SoundMuted" id="NUM" />
     <public type="string" name="Speaking" id="NUM" />
     <public type="string" name="Start" id="NUM" />
+    <public type="string" name="StartDayAt" id="NUM" />
+    <public type="string" name="StartDayYearAt" id="NUM" />
     <public type="string" name="StartEncryptedChat" id="NUM" />
     <public type="string" name="StartMessaging" id="NUM" />
+    <public type="string" name="StartShortDayAt" id="NUM" />
+    <public type="string" name="StartShortDayYearAt" id="NUM" />
+    <public type="string" name="StartShortTodayAt" id="NUM" />
     <public type="string" name="StartText" id="NUM" />
+    <public type="string" name="StartTodayAt" id="NUM" />
     <public type="string" name="StartVoipChannelAlertText" id="NUM" />
     <public type="string" name="StartVoipChat" id="NUM" />
     <public type="string" name="StartVoipChatAlertText" id="NUM" />
     <public type="string" name="StartVoipChatPermission" id="NUM" />
     <public type="string" name="StartVoipChatTitle" id="NUM" />
+    <public type="string" name="StartsDayAt" id="NUM" />
+    <public type="string" name="StartsDayYearAt" id="NUM" />
+    <public type="string" name="StartsTodayAt" id="NUM" />
     <public type="string" name="StatisticOpenProfile" id="NUM" />
     <public type="string" name="StatisticOverview" id="NUM" />
     <public type="string" name="StatisticSearchUserHistory" id="NUM" />
@@ -5190,6 +5220,11 @@
     <public type="string" name="TapForVideo" id="NUM" />
     <public type="string" name="TapHereGifs" id="NUM" />
     <public type="string" name="TapOnThePencil" id="NUM" />
+    <public type="string" name="TapToAddBio" id="NUM" />
+    <public type="string" name="TapToAddDescription" id="NUM" />
+    <public type="string" name="TapToAddPhoto" id="NUM" />
+    <public type="string" name="TapToAddPhotoOrBio" id="NUM" />
+    <public type="string" name="TapToAddPhotoOrDescription" id="NUM" />
     <public type="string" name="TapToChange" id="NUM" />
     <public type="string" name="TapToChangePhone" id="NUM" />
     <public type="string" name="TapToDownload" id="NUM" />
@@ -5209,6 +5244,7 @@
     <public type="string" name="TelegramFAQ" id="NUM" />
     <public type="string" name="TelegramFaq" id="NUM" />
     <public type="string" name="TelegramFaqUrl" id="NUM" />
+    <public type="string" name="TelegramFeatures" id="NUM" />
     <public type="string" name="TelegramPassport" id="NUM" />
     <public type="string" name="TelegramPassportCreatePassword" id="NUM" />
     <public type="string" name="TelegramPassportCreatePasswordInfo" id="NUM" />
@@ -5539,6 +5575,9 @@
     <public type="string" name="Voice_other" id="NUM" />
     <public type="string" name="Voice_two" id="NUM" />
     <public type="string" name="Voice_zero" id="NUM" />
+    <public type="string" name="VoipAddBio" id="NUM" />
+    <public type="string" name="VoipAddDescription" id="NUM" />
+    <public type="string" name="VoipAddPhoto" id="NUM" />
     <public type="string" name="VoipAnswerCall" id="NUM" />
     <public type="string" name="VoipAnsweringAsAccount" id="NUM" />
     <public type="string" name="VoipAudioRoutingBluetooth" id="NUM" />
@@ -5547,9 +5586,17 @@
     <public type="string" name="VoipAudioRoutingSpeaker" id="NUM" />
     <public type="string" name="VoipBusy" id="NUM" />
     <public type="string" name="VoipCallEnded" id="NUM" />
+    <public type="string" name="VoipChannelScheduleInfo" id="NUM" />
+    <public type="string" name="VoipChannelStart" id="NUM" />
     <public type="string" name="VoipChatJoin" id="NUM" />
+    <public type="string" name="VoipChatStartsIn" id="NUM" />
     <public type="string" name="VoipConnecting" id="NUM" />
     <public type="string" name="VoipDeclineCall" id="NUM" />
+    <public type="string" name="VoipEditBio" id="NUM" />
+    <public type="string" name="VoipEditDescription" id="NUM" />
+    <public type="string" name="VoipEditName" id="NUM" />
+    <public type="string" name="VoipEditTitle" id="NUM" />
+    <public type="string" name="VoipEditTitleHint" id="NUM" />
     <public type="string" name="VoipEndCall" id="NUM" />
     <public type="string" name="VoipErrorUnknown" id="NUM" />
     <public type="string" name="VoipExchangingKeys" id="NUM" />
@@ -5563,7 +5610,11 @@
     <public type="string" name="VoipGroupAllowToSpeak" id="NUM" />
     <public type="string" name="VoipGroupAudioRecordSaved" id="NUM" />
     <public type="string" name="VoipGroupAudioRecordStarted" id="NUM" />
+    <public type="string" name="VoipGroupBioEditAlertText" id="NUM" />
+    <public type="string" name="VoipGroupBioEditTitle" id="NUM" />
+    <public type="string" name="VoipGroupCancelChat" id="NUM" />
     <public type="string" name="VoipGroupCancelRaiseHand" id="NUM" />
+    <public type="string" name="VoipGroupCancelReminder" id="NUM" />
     <public type="string" name="VoipGroupConnecting" id="NUM" />
     <public type="string" name="VoipGroupContinueAs" id="NUM" />
     <public type="string" name="VoipGroupCopyInviteLink" id="NUM" />
@@ -5616,15 +5667,23 @@
     <public type="string" name="VoipGroupRemoveMemberAlertTitle2" id="NUM" />
     <public type="string" name="VoipGroupRemovedFromGroup" id="NUM" />
     <public type="string" name="VoipGroupSaveFileHint" id="NUM" />
+    <public type="string" name="VoipGroupScheduleInfo" id="NUM" />
+    <public type="string" name="VoipGroupScheduleVoiceChat" id="NUM" />
+    <public type="string" name="VoipGroupScheduledVoiceChat" id="NUM" />
     <public type="string" name="VoipGroupSearchMembers" id="NUM" />
+    <public type="string" name="VoipGroupSetReminder" id="NUM" />
     <public type="string" name="VoipGroupShareInviteLink" id="NUM" />
+    <public type="string" name="VoipGroupShareLink" id="NUM" />
     <public type="string" name="VoipGroupSoundMuted" id="NUM" />
     <public type="string" name="VoipGroupSoundUnmuted" id="NUM" />
+    <public type="string" name="VoipGroupStart" id="NUM" />
     <public type="string" name="VoipGroupStartAs" id="NUM" />
     <public type="string" name="VoipGroupStartAsInfo" id="NUM" />
     <public type="string" name="VoipGroupStartAsInfoGroup" id="NUM" />
+    <public type="string" name="VoipGroupStartNow" id="NUM" />
     <public type="string" name="VoipGroupStartRecordingText" id="NUM" />
     <public type="string" name="VoipGroupStartRecordingTitle" id="NUM" />
+    <public type="string" name="VoipGroupStartVoiceChat" id="NUM" />
     <public type="string" name="VoipGroupStopRecordCall" id="NUM" />
     <public type="string" name="VoipGroupStopRecordingText" id="NUM" />
     <public type="string" name="VoipGroupStopRecordingTitle" id="NUM" />
@@ -5684,12 +5743,14 @@
     <public type="string" name="VoipRequesting" id="NUM" />
     <public type="string" name="VoipRinging" id="NUM" />
     <public type="string" name="VoipRingtoneInfo" id="NUM" />
+    <public type="string" name="VoipSetNewPhoto" id="NUM" />
     <public type="string" name="VoipSettingsRingtone" id="NUM" />
     <public type="string" name="VoipSpeaker" id="NUM" />
     <public type="string" name="VoipStartVideo" id="NUM" />
     <public type="string" name="VoipStopVideo" id="NUM" />
     <public type="string" name="VoipSwitch" id="NUM" />
     <public type="string" name="VoipSwitchToVideoCall" id="NUM" />
+    <public type="string" name="VoipTapToAddBio" id="NUM" />
     <public type="string" name="VoipTapToMute" id="NUM" />
     <public type="string" name="VoipUnmute" id="NUM" />
     <public type="string" name="VoipUseLessData" id="NUM" />
@@ -5752,6 +5813,7 @@
     <public type="string" name="YouHaveNewMessage" id="NUM" />
     <public type="string" name="YouLeft" id="NUM" />
     <public type="string" name="YouWereKicked" id="NUM" />
+    <public type="string" name="YourBioIsChanged" id="NUM" />
     <public type="string" name="YourCode" id="NUM" />
     <public type="string" name="YourContacts" id="NUM" />
     <public type="string" name="YourContactsToInvite" id="NUM" />
@@ -5768,6 +5830,7 @@
     <public type="string" name="YourEmailSuccessText" id="NUM" />
     <public type="string" name="YourLocatedChannelsTooMuch" id="NUM" />
     <public type="string" name="YourName" id="NUM" />
+    <public type="string" name="YourNameIsChanged" id="NUM" />
     <public type="string" name="YourPassword" id="NUM" />
     <public type="string" name="YourPasswordChangedSuccessText" id="NUM" />
     <public type="string" name="YourPasswordSuccess" id="NUM" />

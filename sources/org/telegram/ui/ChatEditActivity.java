@@ -1050,7 +1050,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     /* renamed from: lambda$null$4 */
     public /* synthetic */ void lambda$null$4$ChatEditActivity() {
         this.avatar = null;
-        MessagesController.getInstance(this.currentAccount).changeChatAvatar(this.chatId, (TLRPC$TL_inputChatPhoto) null, (TLRPC$InputFile) null, (TLRPC$InputFile) null, 0.0d, (String) null, (TLRPC$FileLocation) null, (TLRPC$FileLocation) null);
+        MessagesController.getInstance(this.currentAccount).changeChatAvatar(this.chatId, (TLRPC$TL_inputChatPhoto) null, (TLRPC$InputFile) null, (TLRPC$InputFile) null, 0.0d, (String) null, (TLRPC$FileLocation) null, (TLRPC$FileLocation) null, (Runnable) null);
         showAvatarProgress(false, true);
         this.avatarImage.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) this.currentChat);
     }
@@ -1273,9 +1273,9 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             boolean z = false;
             if (tLRPC$ChatPhoto != null) {
                 this.avatar = tLRPC$ChatPhoto.photo_small;
-                ImageLocation forChat = ImageLocation.getForChat(chat, false);
-                this.avatarImage.setImage(forChat, "50_50", (Drawable) this.avatarDrawable, (Object) this.currentChat);
-                if (forChat != null) {
+                ImageLocation forUserOrChat = ImageLocation.getForUserOrChat(chat, 1);
+                this.avatarImage.setImage(forUserOrChat, "50_50", ImageLocation.getForUserOrChat(this.currentChat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentChat);
+                if (forUserOrChat != null) {
                     z = true;
                 }
             } else {
@@ -1369,7 +1369,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             showAvatarProgress(true, false);
             return;
         }
-        MessagesController.getInstance(this.currentAccount).changeChatAvatar(this.chatId, (TLRPC$TL_inputChatPhoto) null, tLRPC$InputFile, tLRPC$InputFile2, d, str, tLRPC$PhotoSize3.location, tLRPC$PhotoSize2.location);
+        MessagesController.getInstance(this.currentAccount).changeChatAvatar(this.chatId, (TLRPC$TL_inputChatPhoto) null, tLRPC$InputFile, tLRPC$InputFile2, d, str, tLRPC$PhotoSize3.location, tLRPC$PhotoSize2.location, (Runnable) null);
         if (this.createAfterUpload) {
             try {
                 AlertDialog alertDialog = this.progressDialog;

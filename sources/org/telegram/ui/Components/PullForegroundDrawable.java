@@ -533,7 +533,7 @@ public class PullForegroundDrawable {
     }
 
     public void startOutAnimation() {
-        if (!this.animateOut) {
+        if (!this.animateOut && this.listView != null) {
             AnimatorSet animatorSet = this.outAnimator;
             if (animatorSet != null) {
                 animatorSet.removeAllListeners();

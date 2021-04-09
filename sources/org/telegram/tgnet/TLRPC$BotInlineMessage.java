@@ -43,6 +43,9 @@ public abstract class TLRPC$BotInlineMessage extends TLObject {
             case 416402882:
                 tLRPC$BotInlineMessage = new TLRPC$TL_botInlineMessageMediaContact();
                 break;
+            case 894081801:
+                tLRPC$BotInlineMessage = new TLRPC$TL_botInlineMessageMediaInvoice();
+                break;
             case 904770772:
                 tLRPC$BotInlineMessage = new TLRPC$TL_botInlineMessageMediaContact_layer81();
                 break;

@@ -9,10 +9,11 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         boolean z2 = false;
         this.join_muted = (readInt32 & 2) != 0;
         this.can_change_join_muted = (readInt32 & 4) != 0;
-        if ((readInt32 & 64) != 0) {
+        this.join_date_asc = (readInt32 & 64) != 0;
+        if ((readInt32 & 256) != 0) {
             z2 = true;
         }
-        this.join_date_asc = z2;
+        this.schedule_start_subscribed = z2;
         this.id = abstractSerializedData.readInt64(z);
         this.access_hash = abstractSerializedData.readInt64(z);
         this.participants_count = abstractSerializedData.readInt32(z);
@@ -28,6 +29,9 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         if ((this.flags & 32) != 0) {
             this.record_start_date = abstractSerializedData.readInt32(z);
         }
+        if ((this.flags & 128) != 0) {
+            this.schedule_date = abstractSerializedData.readInt32(z);
+        }
         this.version = abstractSerializedData.readInt32(z);
     }
 
@@ -39,7 +43,9 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         this.flags = i2;
         int i3 = this.join_date_asc ? i2 | 64 : i2 & -65;
         this.flags = i3;
-        abstractSerializedData.writeInt32(i3);
+        int i4 = this.schedule_start_subscribed ? i3 | 256 : i3 & -257;
+        this.flags = i4;
+        abstractSerializedData.writeInt32(i4);
         abstractSerializedData.writeInt64(this.id);
         abstractSerializedData.writeInt64(this.access_hash);
         abstractSerializedData.writeInt32(this.participants_count);
@@ -54,6 +60,9 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         }
         if ((this.flags & 32) != 0) {
             abstractSerializedData.writeInt32(this.record_start_date);
+        }
+        if ((this.flags & 128) != 0) {
+            abstractSerializedData.writeInt32(this.schedule_date);
         }
         abstractSerializedData.writeInt32(this.version);
     }

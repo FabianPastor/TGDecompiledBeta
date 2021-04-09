@@ -102,6 +102,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     /* access modifiers changed from: private */
     public DialogInterface.OnClickListener onClickListener;
     /* access modifiers changed from: private */
+    public DialogInterface.OnDismissListener onDismissListener;
+    /* access modifiers changed from: private */
     public ViewTreeObserver.OnScrollChangedListener onScrollChangedListener;
     /* access modifiers changed from: private */
     public DialogInterface.OnClickListener positiveButtonListener;
@@ -1406,6 +1408,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     }
 
     public void dismiss() {
+        DialogInterface.OnDismissListener onDismissListener2 = this.onDismissListener;
+        if (onDismissListener2 != null) {
+            onDismissListener2.onDismiss(this);
+        }
         AlertDialog alertDialog = this.cancelDialog;
         if (alertDialog != null) {
             alertDialog.dismiss();
@@ -1668,6 +1674,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
         public void setButtonsVertical(boolean z) {
             boolean unused = this.alertDialog.verticalButtons = z;
+        }
+
+        public Builder setOnPreDismissListener(DialogInterface.OnDismissListener onDismissListener) {
+            DialogInterface.OnDismissListener unused = this.alertDialog.onDismissListener = onDismissListener;
+            return this;
         }
     }
 }

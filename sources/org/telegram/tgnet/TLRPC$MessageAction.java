@@ -65,6 +65,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
             case -1297179892:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatDeleteUser();
                 break;
+            case -1281329567:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionGroupCallScheduled();
+                break;
             case -1247687078:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatEditTitle();
                 break;

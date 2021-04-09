@@ -908,20 +908,21 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.updateInterfaces) {
+        int i3 = i;
+        if (i3 == NotificationCenter.updateInterfaces) {
             if (this.listView != null) {
                 int intValue = objArr[0].intValue();
                 if ((intValue & 2) != 0 || (intValue & 1) != 0 || (intValue & 4) != 0) {
                     int childCount = this.listView.getChildCount();
-                    for (int i3 = 0; i3 < childCount; i3++) {
-                        View childAt = this.listView.getChildAt(i3);
+                    for (int i4 = 0; i4 < childCount; i4++) {
+                        View childAt = this.listView.getChildAt(i4);
                         if (childAt instanceof GroupCreateUserCell) {
                             ((GroupCreateUserCell) childAt).update(intValue);
                         }
                     }
                 }
             }
-        } else if (i == NotificationCenter.chatDidFailCreate) {
+        } else if (i3 == NotificationCenter.chatDidFailCreate) {
             this.reqId = 0;
             this.donePressed = false;
             showEditDoneProgress(false);
@@ -933,7 +934,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             if (groupCreateFinalActivityDelegate != null) {
                 groupCreateFinalActivityDelegate.didFailChatCreation();
             }
-        } else if (i == NotificationCenter.chatDidCreated) {
+        } else if (i3 == NotificationCenter.chatDidCreated) {
             this.reqId = 0;
             int intValue2 = objArr[0].intValue();
             GroupCreateFinalActivityDelegate groupCreateFinalActivityDelegate2 = this.delegate;
@@ -946,7 +947,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 presentFragment(new ChatActivity(bundle), true);
             }
             if (this.inputPhoto != null || this.inputVideo != null) {
-                getMessagesController().changeChatAvatar(intValue2, (TLRPC$TL_inputChatPhoto) null, this.inputPhoto, this.inputVideo, this.videoTimestamp, this.inputVideoPath, this.avatar, this.avatarBig);
+                getMessagesController().changeChatAvatar(intValue2, (TLRPC$TL_inputChatPhoto) null, this.inputPhoto, this.inputVideo, this.videoTimestamp, this.inputVideoPath, this.avatar, this.avatarBig, (Runnable) null);
             }
         }
     }
@@ -1046,7 +1047,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 android.content.Context r0 = r4.context
                 r6.<init>(r0)
                 android.content.Context r0 = r4.context
-                r1 = 2131165450(0x7var_a, float:1.7945117E38)
+                r1 = 2131165451(0x7var_b, float:1.794512E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable

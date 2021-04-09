@@ -129,6 +129,7 @@ import org.telegram.tgnet.TLRPC$TL_encryptedChatWaiting;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_folder;
 import org.telegram.tgnet.TLRPC$TL_folderPeer;
+import org.telegram.tgnet.TLRPC$TL_groupCallDiscarded;
 import org.telegram.tgnet.TLRPC$TL_help_dismissSuggestion;
 import org.telegram.tgnet.TLRPC$TL_help_getAppChangelog;
 import org.telegram.tgnet.TLRPC$TL_help_getAppConfig;
@@ -4884,7 +4885,10 @@ public class MessagesController extends BaseController implements NotificationCe
                 });
             }
         }
-        return call;
+        if (call == null || !(call.call instanceof TLRPC$TL_groupCallDiscarded)) {
+            return call;
+        }
+        return null;
     }
 
     /* access modifiers changed from: private */
@@ -10512,7 +10516,7 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:139:0x03d4, code lost:
-        if (r1[0] < 126) goto L_0x03da;
+        if (r1[0] < Byte.MAX_VALUE) goto L_0x03da;
      */
     /* JADX WARNING: Removed duplicated region for block: B:111:0x032c  */
     /* JADX WARNING: Removed duplicated region for block: B:114:0x0331 A[ADDED_TO_REGION] */
@@ -11015,7 +11019,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r42 == 0) goto L_0x042d
             r2 = r38
             boolean r7 = r2.legacy
-            r1 = 126(0x7e, float:1.77E-43)
+            r1 = 127(0x7f, float:1.78E-43)
             if (r7 == 0) goto L_0x03bc
             int r7 = r2.layer
             if (r7 >= r1) goto L_0x03bc
@@ -11037,7 +11041,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r7 != r0) goto L_0x03e6
             r7 = 0
             byte r1 = r1[r7]
-            r0 = 126(0x7e, float:1.77E-43)
+            r0 = 127(0x7f, float:1.78E-43)
             if (r1 >= r0) goto L_0x03e7
             goto L_0x03da
         L_0x03d7:
@@ -13831,7 +13835,7 @@ public class MessagesController extends BaseController implements NotificationCe
     /* JADX WARNING: type inference failed for: r1v18 */
     /* JADX WARNING: type inference failed for: r1v19 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r1v12, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r1v12, types: [boolean, int] */
     /* renamed from: lambda$null$167 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$null$167$MessagesController(org.telegram.tgnet.TLRPC$Message r27, int r28, org.telegram.tgnet.TLRPC$messages_Dialogs r29, java.util.ArrayList r30, boolean r31, int r32, android.util.LongSparseArray r33, android.util.LongSparseArray r34, android.util.SparseArray r35, int r36, boolean r37, int r38, java.util.ArrayList r39) {
@@ -17150,80 +17154,89 @@ public class MessagesController extends BaseController implements NotificationCe
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v3, resolved type: org.telegram.tgnet.TLRPC$TL_messages_editChatPhoto} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v5, resolved type: org.telegram.tgnet.TLRPC$TL_channels_editPhoto} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v6, resolved type: org.telegram.tgnet.TLRPC$TL_messages_editChatPhoto} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v7, resolved type: org.telegram.tgnet.TLRPC$TL_messages_editChatPhoto} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v3, resolved type: org.telegram.tgnet.TLRPC$TL_messages_editChatPhoto} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v6, resolved type: org.telegram.tgnet.TLRPC$TL_channels_editPhoto} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v7, resolved type: org.telegram.tgnet.TLRPC$TL_messages_editChatPhoto} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v8, resolved type: org.telegram.tgnet.TLRPC$TL_messages_editChatPhoto} */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void changeChatAvatar(int r7, org.telegram.tgnet.TLRPC$TL_inputChatPhoto r8, org.telegram.tgnet.TLRPC$InputFile r9, org.telegram.tgnet.TLRPC$InputFile r10, double r11, java.lang.String r13, org.telegram.tgnet.TLRPC$FileLocation r14, org.telegram.tgnet.TLRPC$FileLocation r15) {
+    public void changeChatAvatar(int r12, org.telegram.tgnet.TLRPC$TL_inputChatPhoto r13, org.telegram.tgnet.TLRPC$InputFile r14, org.telegram.tgnet.TLRPC$InputFile r15, double r16, java.lang.String r18, org.telegram.tgnet.TLRPC$FileLocation r19, org.telegram.tgnet.TLRPC$FileLocation r20, java.lang.Runnable r21) {
         /*
-            r6 = this;
-            if (r8 == 0) goto L_0x0004
-            r9 = r8
-            goto L_0x002f
-        L_0x0004:
-            if (r9 != 0) goto L_0x000f
-            if (r10 == 0) goto L_0x0009
-            goto L_0x000f
-        L_0x0009:
-            org.telegram.tgnet.TLRPC$TL_inputChatPhotoEmpty r9 = new org.telegram.tgnet.TLRPC$TL_inputChatPhotoEmpty
-            r9.<init>()
-            goto L_0x002f
-        L_0x000f:
-            org.telegram.tgnet.TLRPC$TL_inputChatUploadedPhoto r0 = new org.telegram.tgnet.TLRPC$TL_inputChatUploadedPhoto
-            r0.<init>()
-            if (r9 == 0) goto L_0x001e
-            r0.file = r9
-            int r9 = r0.flags
-            r9 = r9 | 1
-            r0.flags = r9
-        L_0x001e:
-            if (r10 == 0) goto L_0x002e
-            r0.video = r10
-            int r9 = r0.flags
-            r9 = r9 | 2
-            r0.flags = r9
-            r0.video_start_ts = r11
-            r9 = r9 | 4
-            r0.flags = r9
-        L_0x002e:
-            r9 = r0
-        L_0x002f:
-            int r10 = r6.currentAccount
-            boolean r10 = org.telegram.messenger.ChatObject.isChannel(r7, r10)
-            if (r10 == 0) goto L_0x0045
-            org.telegram.tgnet.TLRPC$TL_channels_editPhoto r10 = new org.telegram.tgnet.TLRPC$TL_channels_editPhoto
-            r10.<init>()
-            org.telegram.tgnet.TLRPC$InputChannel r7 = r6.getInputChannel((int) r7)
-            r10.channel = r7
-            r10.photo = r9
-            goto L_0x004e
-        L_0x0045:
-            org.telegram.tgnet.TLRPC$TL_messages_editChatPhoto r10 = new org.telegram.tgnet.TLRPC$TL_messages_editChatPhoto
-            r10.<init>()
-            r10.chat_id = r7
-            r10.photo = r9
-        L_0x004e:
-            org.telegram.tgnet.ConnectionsManager r7 = r6.getConnectionsManager()
-            org.telegram.messenger.-$$Lambda$MessagesController$lNZ9DA7wPwt1HC2LN8P52TP94fY r9 = new org.telegram.messenger.-$$Lambda$MessagesController$lNZ9DA7wPwt1HC2LN8P52TP94fY
-            r0 = r9
-            r1 = r6
-            r2 = r8
-            r3 = r14
-            r4 = r15
-            r5 = r13
-            r0.<init>(r2, r3, r4, r5)
-            r8 = 64
-            r7.sendRequest(r10, r9, r8)
+            r11 = this;
+            r0 = r12
+            r1 = r14
+            r2 = r15
+            if (r13 == 0) goto L_0x0008
+            r7 = r11
+            r1 = r13
+            goto L_0x0037
+        L_0x0008:
+            if (r1 != 0) goto L_0x0014
+            if (r2 == 0) goto L_0x000d
+            goto L_0x0014
+        L_0x000d:
+            org.telegram.tgnet.TLRPC$TL_inputChatPhotoEmpty r1 = new org.telegram.tgnet.TLRPC$TL_inputChatPhotoEmpty
+            r1.<init>()
+            r7 = r11
+            goto L_0x0037
+        L_0x0014:
+            org.telegram.tgnet.TLRPC$TL_inputChatUploadedPhoto r3 = new org.telegram.tgnet.TLRPC$TL_inputChatUploadedPhoto
+            r3.<init>()
+            if (r1 == 0) goto L_0x0023
+            r3.file = r1
+            int r1 = r3.flags
+            r1 = r1 | 1
+            r3.flags = r1
+        L_0x0023:
+            if (r2 == 0) goto L_0x0035
+            r3.video = r2
+            int r1 = r3.flags
+            r1 = r1 | 2
+            r3.flags = r1
+            r4 = r16
+            r3.video_start_ts = r4
+            r1 = r1 | 4
+            r3.flags = r1
+        L_0x0035:
+            r7 = r11
+            r1 = r3
+        L_0x0037:
+            int r2 = r7.currentAccount
+            boolean r2 = org.telegram.messenger.ChatObject.isChannel(r12, r2)
+            if (r2 == 0) goto L_0x004d
+            org.telegram.tgnet.TLRPC$TL_channels_editPhoto r2 = new org.telegram.tgnet.TLRPC$TL_channels_editPhoto
+            r2.<init>()
+            org.telegram.tgnet.TLRPC$InputChannel r0 = r11.getInputChannel((int) r12)
+            r2.channel = r0
+            r2.photo = r1
+            goto L_0x0056
+        L_0x004d:
+            org.telegram.tgnet.TLRPC$TL_messages_editChatPhoto r2 = new org.telegram.tgnet.TLRPC$TL_messages_editChatPhoto
+            r2.<init>()
+            r2.chat_id = r0
+            r2.photo = r1
+        L_0x0056:
+            r8 = r2
+            org.telegram.tgnet.ConnectionsManager r9 = r11.getConnectionsManager()
+            org.telegram.messenger.-$$Lambda$MessagesController$7zgpE7IClnByon2jCJEX4zoPcbU r10 = new org.telegram.messenger.-$$Lambda$MessagesController$7zgpE7IClnByon2jCJEX4zoPcbU
+            r0 = r10
+            r1 = r11
+            r2 = r13
+            r3 = r19
+            r4 = r20
+            r5 = r18
+            r6 = r21
+            r0.<init>(r2, r3, r4, r5, r6)
+            r0 = 64
+            r9.sendRequest(r8, r10, r0)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.changeChatAvatar(int, org.telegram.tgnet.TLRPC$TL_inputChatPhoto, org.telegram.tgnet.TLRPC$InputFile, org.telegram.tgnet.TLRPC$InputFile, double, java.lang.String, org.telegram.tgnet.TLRPC$FileLocation, org.telegram.tgnet.TLRPC$FileLocation):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.changeChatAvatar(int, org.telegram.tgnet.TLRPC$TL_inputChatPhoto, org.telegram.tgnet.TLRPC$InputFile, org.telegram.tgnet.TLRPC$InputFile, double, java.lang.String, org.telegram.tgnet.TLRPC$FileLocation, org.telegram.tgnet.TLRPC$FileLocation, java.lang.Runnable):void");
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$changeChatAvatar$231 */
-    public /* synthetic */ void lambda$changeChatAvatar$231$MessagesController(TLRPC$TL_inputChatPhoto tLRPC$TL_inputChatPhoto, TLRPC$FileLocation tLRPC$FileLocation, TLRPC$FileLocation tLRPC$FileLocation2, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$changeChatAvatar$231$MessagesController(TLRPC$TL_inputChatPhoto tLRPC$TL_inputChatPhoto, TLRPC$FileLocation tLRPC$FileLocation, TLRPC$FileLocation tLRPC$FileLocation2, String str, Runnable runnable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         TLRPC$VideoSize tLRPC$VideoSize;
         TLRPC$Photo tLRPC$Photo;
         if (tLRPC$TL_error == null) {
@@ -17282,9 +17295,15 @@ public class MessagesController extends BaseController implements NotificationCe
                 }
             }
             processUpdates(tLRPC$Updates, false);
-            AndroidUtilities.runOnUIThread(new Runnable() {
+            AndroidUtilities.runOnUIThread(new Runnable(runnable) {
+                public final /* synthetic */ Runnable f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
                 public final void run() {
-                    MessagesController.this.lambda$null$230$MessagesController();
+                    MessagesController.this.lambda$null$230$MessagesController(this.f$1);
                 }
             });
         }
@@ -17292,7 +17311,10 @@ public class MessagesController extends BaseController implements NotificationCe
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$230 */
-    public /* synthetic */ void lambda$null$230$MessagesController() {
+    public /* synthetic */ void lambda$null$230$MessagesController(Runnable runnable) {
+        if (runnable != null) {
+            runnable.run();
+        }
         getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, 2);
     }
 
@@ -27968,7 +27990,7 @@ public class MessagesController extends BaseController implements NotificationCe
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
             TLRPC$TL_restrictionReason tLRPC$TL_restrictionReason = arrayList.get(i);
-            if ("all".equals(tLRPC$TL_restrictionReason.platform) || "android".equals(tLRPC$TL_restrictionReason.platform)) {
+            if ("all".equals(tLRPC$TL_restrictionReason.platform) || (!AndroidUtilities.isStandaloneApp() && "android".equals(tLRPC$TL_restrictionReason.platform))) {
                 return tLRPC$TL_restrictionReason.text;
             }
         }
