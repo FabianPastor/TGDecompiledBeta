@@ -63,7 +63,6 @@ import org.telegram.messenger.voip.VideoCameraCapturer;
 import org.telegram.messenger.voip.VoIPBaseService;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLRPC$PhoneCall;
-import org.telegram.tgnet.TLRPC$TL_encryptedChat;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.DarkAlertDialog;
@@ -426,17 +425,17 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.voipServiceCreated && this.currentState == 17 && VoIPService.getSharedInstance() != null) {
-            this.currentUserTextureView.renderer.release();
-            this.callingUserTextureView.renderer.release();
-            this.callingUserMiniTextureRenderer.release();
-            initRenderers();
-            VoIPService.getSharedInstance().registerStateListener(this);
-        }
-        if (i == NotificationCenter.emojiDidLoad) {
+        if (i == NotificationCenter.voipServiceCreated) {
+            if (this.currentState == 17 && VoIPService.getSharedInstance() != null) {
+                this.currentUserTextureView.renderer.release();
+                this.callingUserTextureView.renderer.release();
+                this.callingUserMiniTextureRenderer.release();
+                initRenderers();
+                VoIPService.getSharedInstance().registerStateListener(this);
+            }
+        } else if (i == NotificationCenter.emojiDidLoad) {
             updateKeyView(true);
-        }
-        if (i == NotificationCenter.closeInCallActivity) {
+        } else if (i == NotificationCenter.closeInCallActivity) {
             this.windowView.finish();
         }
     }
@@ -2432,31 +2431,32 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     }
 
     private void updateKeyView(boolean z) {
-        TLRPC$TL_encryptedChat tLRPC$TL_encryptedChat = new TLRPC$TL_encryptedChat();
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
+            byte[] bArr = null;
             try {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 byteArrayOutputStream.write(sharedInstance.getEncryptionKey());
                 byteArrayOutputStream.write(sharedInstance.getGA());
-                tLRPC$TL_encryptedChat.auth_key = byteArrayOutputStream.toByteArray();
+                bArr = byteArrayOutputStream.toByteArray();
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
-            byte[] bArr = tLRPC$TL_encryptedChat.auth_key;
-            String[] emojifyForCall = EncryptionKeyEmojifier.emojifyForCall(Utilities.computeSHA256(bArr, 0, bArr.length));
-            for (int i = 0; i < 4; i++) {
-                Emoji.EmojiDrawable emojiDrawable = Emoji.getEmojiDrawable(emojifyForCall[i]);
-                if (emojiDrawable != null) {
-                    emojiDrawable.setBounds(0, 0, AndroidUtilities.dp(22.0f), AndroidUtilities.dp(22.0f));
-                    emojiDrawable.preload();
-                    this.emojiViews[i].setImageDrawable(emojiDrawable);
-                    this.emojiViews[i].setContentDescription(emojifyForCall[i]);
-                    this.emojiViews[i].setVisibility(8);
+            if (bArr != null) {
+                String[] emojifyForCall = EncryptionKeyEmojifier.emojifyForCall(Utilities.computeSHA256(bArr, 0, bArr.length));
+                for (int i = 0; i < 4; i++) {
+                    Emoji.EmojiDrawable emojiDrawable = Emoji.getEmojiDrawable(emojifyForCall[i]);
+                    if (emojiDrawable != null) {
+                        emojiDrawable.setBounds(0, 0, AndroidUtilities.dp(22.0f), AndroidUtilities.dp(22.0f));
+                        emojiDrawable.preload();
+                        this.emojiViews[i].setImageDrawable(emojiDrawable);
+                        this.emojiViews[i].setContentDescription(emojifyForCall[i]);
+                        this.emojiViews[i].setVisibility(8);
+                    }
+                    this.emojiDrawables[i] = emojiDrawable;
                 }
-                this.emojiDrawables[i] = emojiDrawable;
+                checkEmojiLoaded(z);
             }
-            checkEmojiLoaded(z);
         }
     }
 

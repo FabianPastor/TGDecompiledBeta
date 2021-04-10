@@ -71,7 +71,7 @@ public class LocaleController {
     public FastDateFormat formatterDayMonth;
     public FastDateFormat formatterMonthYear;
     public FastDateFormat formatterScheduleDay;
-    public FastDateFormat[] formatterScheduleSend = new FastDateFormat[12];
+    public FastDateFormat[] formatterScheduleSend = new FastDateFormat[15];
     public FastDateFormat formatterScheduleYear;
     public FastDateFormat formatterStats;
     public FastDateFormat formatterWeek;

@@ -16606,30 +16606,28 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void updateChatAbout(int i, String str, TLRPC$ChatFull tLRPC$ChatFull) {
-        if (tLRPC$ChatFull != null) {
-            TLRPC$TL_messages_editChatAbout tLRPC$TL_messages_editChatAbout = new TLRPC$TL_messages_editChatAbout();
-            tLRPC$TL_messages_editChatAbout.peer = getInputPeer(-i);
-            tLRPC$TL_messages_editChatAbout.about = str;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_editChatAbout, new RequestDelegate(tLRPC$ChatFull, str) {
-                public final /* synthetic */ TLRPC$ChatFull f$1;
-                public final /* synthetic */ String f$2;
+        TLRPC$TL_messages_editChatAbout tLRPC$TL_messages_editChatAbout = new TLRPC$TL_messages_editChatAbout();
+        tLRPC$TL_messages_editChatAbout.peer = getInputPeer(-i);
+        tLRPC$TL_messages_editChatAbout.about = str;
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_editChatAbout, new RequestDelegate(tLRPC$ChatFull, str) {
+            public final /* synthetic */ TLRPC$ChatFull f$1;
+            public final /* synthetic */ String f$2;
 
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+            }
 
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    MessagesController.this.lambda$updateChatAbout$218$MessagesController(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                }
-            }, 64);
-        }
+            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                MessagesController.this.lambda$updateChatAbout$218$MessagesController(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+            }
+        }, 64);
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$updateChatAbout$218 */
     public /* synthetic */ void lambda$updateChatAbout$218$MessagesController(TLRPC$ChatFull tLRPC$ChatFull, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        if (tLObject instanceof TLRPC$TL_boolTrue) {
+        if ((tLObject instanceof TLRPC$TL_boolTrue) && tLRPC$ChatFull != null) {
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$ChatFull, str) {
                 public final /* synthetic */ TLRPC$ChatFull f$1;
                 public final /* synthetic */ String f$2;
