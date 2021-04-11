@@ -2430,12 +2430,7 @@ public class VoIPService extends VoIPBaseService {
                 this.connectingSoundRunnable = null;
             }
         } else {
-            Utilities.globalQueue.postRunnable(new Runnable() {
-                public final void run() {
-                    VoIPService.this.lambda$updateConnectionState$49$VoIPService();
-                }
-            });
-            this.playedConnectedSound = true;
+            playConnectedSound();
         }
         if (!this.wasConnected) {
             this.wasConnected = true;
@@ -2475,12 +2470,6 @@ public class VoIPService extends VoIPBaseService {
             this.soundPool.stop(i);
             this.spPlayId = 0;
         }
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$updateConnectionState$49 */
-    public /* synthetic */ void lambda$updateConnectionState$49$VoIPService() {
-        this.soundPool.play(this.spVoiceChatStartId, 1.0f, 1.0f, 0, 0, 1.0f);
     }
 
     public void setParticipantsVolume() {
@@ -2761,7 +2750,7 @@ public class VoIPService extends VoIPBaseService {
             r29 = r5
             r7 = r15
             if (r2 == 0) goto L_0x01d7
-            org.telegram.messenger.voip.-$$Lambda$VoIPService$9S84dcwe-l90ghFTh6_xdi9RlM8 r0 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$9S84dcwe-l90ghFTh6_xdi9RlM8     // Catch:{ Exception -> 0x02da }
+            org.telegram.messenger.voip.-$$Lambda$VoIPService$1dgM1D1Nvar_uAr5TFLWXcmdU7Dk r0 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$1dgM1D1Nvar_uAr5TFLWXcmdU7Dk     // Catch:{ Exception -> 0x02da }
             r0.<init>()     // Catch:{ Exception -> 0x02da }
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x02da }
         L_0x01d7:
@@ -2836,7 +2825,7 @@ public class VoIPService extends VoIPBaseService {
             int r31 = r37.getNetworkType()     // Catch:{ Exception -> 0x02da }
             org.telegram.messenger.voip.VoIPService$ProxyVideoSink r3 = r1.remoteSink     // Catch:{ Exception -> 0x02da }
             long r8 = r1.videoCapturer     // Catch:{ Exception -> 0x02da }
-            org.telegram.messenger.voip.-$$Lambda$VoIPService$oLBmC1Q4ZltTUko3YGnQ6lB8bFU r10 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$oLBmC1Q4ZltTUko3YGnQ6lB8bFU     // Catch:{ Exception -> 0x02da }
+            org.telegram.messenger.voip.-$$Lambda$VoIPService$6lUwD0L0NvpU2i9IXIFH9oCLASSNAMEws r10 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$6lUwD0L0NvpU2i9IXIFH9oCLASSNAMEws     // Catch:{ Exception -> 0x02da }
             r10.<init>()     // Catch:{ Exception -> 0x02da }
             r29 = r7
             r32 = r0
@@ -2900,14 +2889,14 @@ public class VoIPService extends VoIPBaseService {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initiateActualEncryptedCall$50 */
-    public /* synthetic */ void lambda$initiateActualEncryptedCall$50$VoIPService() {
+    /* renamed from: lambda$initiateActualEncryptedCall$49 */
+    public /* synthetic */ void lambda$initiateActualEncryptedCall$49$VoIPService() {
         Toast.makeText(this, "This call uses TCP which will degrade its quality.", 0).show();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initiateActualEncryptedCall$51 */
-    public /* synthetic */ void lambda$initiateActualEncryptedCall$51$VoIPService(int[] iArr, float[] fArr, boolean[] zArr) {
+    /* renamed from: lambda$initiateActualEncryptedCall$50 */
+    public /* synthetic */ void lambda$initiateActualEncryptedCall$50$VoIPService(int[] iArr, float[] fArr, boolean[] zArr) {
         if (VoIPBaseService.sharedInstance != null && this.privateCall != null) {
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.webRtcMicAmplitudeEvent, Float.valueOf(fArr[0]));
         }
@@ -2922,6 +2911,21 @@ public class VoIPService extends VoIPBaseService {
         }
         TLRPC$Chat tLRPC$Chat = this.chat;
         showNotification(tLRPC$Chat.title, getRoundAvatarBitmap(tLRPC$Chat));
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$playConnectedSound$51 */
+    public /* synthetic */ void lambda$playConnectedSound$51$VoIPService() {
+        this.soundPool.play(this.spVoiceChatStartId, 1.0f, 1.0f, 0, 0, 1.0f);
+    }
+
+    public void playConnectedSound() {
+        Utilities.globalQueue.postRunnable(new Runnable() {
+            public final void run() {
+                VoIPService.this.lambda$playConnectedSound$51$VoIPService();
+            }
+        });
+        this.playedConnectedSound = true;
     }
 
     private void startConnectingSound() {

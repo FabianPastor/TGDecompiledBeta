@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 4.1.2
-SHA1-Digest-Manifest: kN1p+7ureWcp5JkT1o9xalzpzdI=
+SHA1-Digest-Manifest: bM0i+/3BydlKyjbi/MV+LGXHfmA=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: JzujX3PF63T4FqX2Fwpa4vMHEV4=
+SHA1-Digest: e9zk14ezVHqLTL8Ex2pQvi511f8=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9880,13 +9880,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: cDvY83CWJ+ZzbCuroksU8oW39CQ=
+SHA1-Digest: 8hf+eWrgh79LzDbmHw6CglaBfmM=
 
 Name: classes2.dex
 SHA1-Digest: jOZWxOTngSorOwtSgpgdVjhl0UM=
 
 Name: classes3.dex
-SHA1-Digest: gHhmgaItsg1fGD7bNxa5xR0K98E=
+SHA1-Digest: F1aX3KmLY3gJTEm0NQeJ68hdLjo=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -21176,6 +21176,9 @@ SHA1-Digest: KIr7XBSvP9FW8gJDZ4ZnP7kr+bM=
 Name: res/raw/passcode_lock_open.json
 SHA1-Digest: tD9Hnnqp3EG/VvVzdy2WsSN0sf0=
 
+Name: res/raw/payment_success.json
+SHA1-Digest: mXr3Y0XXRMCXqdmCQNIFs33qxvc=
+
 Name: res/raw/permission_map.svg
 SHA1-Digest: ZPJoeZ8j/naYM1yq2fQGoUENt88=
 
@@ -21345,7 +21348,7 @@ Name: res/raw/voip_failed.mp3
 SHA1-Digest: cEBdLKiUTsk/fxm4Yc2LLda8SGM=
 
 Name: res/raw/voip_filled.json
-SHA1-Digest: wZfWy3W6j89I2wIO4A7V9wPn8yQ=
+SHA1-Digest: E8O9/3o+t31rJ8fFzQishPk3ZRQ=
 
 Name: res/raw/voip_group_removed.json
 SHA1-Digest: 8VOQVOnybJqw15PEBhB9TrN9KDQ=
@@ -21405,7 +21408,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: iAvM2GdecI2IpqukWo7jWmTwsrE=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: tTerEj20VjP3jke63sSrfTUbh5I=
+SHA1-Digest: OYlNbYZVplgay23U7c1zwctlpVQ=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -21432,7 +21435,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: 9kNWsqe/wG/zT0/0VWYFgfjlZJQ=
+SHA1-Digest: a02vB/8EobOpGzCoSaRxZwT3hQ8=
 
 Name: transport-api.properties
 SHA1-Digest: OrUd0dvMYm2tlcfDVrGNApZLT1M=

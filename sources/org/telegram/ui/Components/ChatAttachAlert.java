@@ -783,7 +783,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.doneItem = r14
             r14.setLongClickEnabled(r9)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.doneItem
-            r1 = 2131625004(0x7f0e042c, float:1.8877204E38)
+            r1 = 2131625006(0x7f0e042e, float:1.8877208E38)
             java.lang.String r2 = "Create"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -816,7 +816,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = 2131165479(0x7var_, float:1.7945176E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
-            r1 = 2131627236(0x7f0e0ce4, float:1.888173E38)
+            r1 = 2131627257(0x7f0e0cf9, float:1.8881773E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -2899,7 +2899,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         BaseFragment baseFragment2 = this.baseFragment;
         if (baseFragment2 != null) {
             int i = 4;
-            if (baseFragment2 instanceof ChatActivity) {
+            if (!(baseFragment2 instanceof ChatActivity) || this.avatarPicker == 2) {
+                this.commentTextView.setVisibility(4);
+            } else {
                 TLRPC$Chat currentChat = ((ChatActivity) baseFragment2).getCurrentChat();
                 TLRPC$User currentUser = ((ChatActivity) this.baseFragment).getCurrentUser();
                 if (currentChat != null) {
@@ -2908,8 +2910,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 } else {
                     this.pollsEnabled = currentUser != null && currentUser.bot;
                 }
-            } else {
-                this.commentTextView.setVisibility(4);
             }
             this.photoLayout.onInit(this.mediaEnabled);
             this.commentTextView.hidePopup(true);

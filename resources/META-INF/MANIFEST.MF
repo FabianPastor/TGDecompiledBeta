@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 4.1.2
 
 Name: AndroidManifest.xml
-SHA1-Digest: mOr04OrHDr7kVYsNp5EVmABXMao=
+SHA1-Digest: /IzG89rU84sAURonzyZ8NBYMpLA=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9879,13 +9879,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: O1Sd9ofzcy0C+ddGqaop6Mduoz4=
+SHA1-Digest: Yb5ohSRtxIFctzoAWskHWHeAcBs=
 
 Name: classes2.dex
 SHA1-Digest: PW4PzXilTc5mHrOb8Tn7+jq6PxI=
 
 Name: classes3.dex
-SHA1-Digest: 5jjmzhwRqnKp4DN9799xdiK3qXY=
+SHA1-Digest: MpNlMpLzdJ7xAc2dw57KKA8Ux38=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -21175,6 +21175,9 @@ SHA1-Digest: uY5lWcOnq2fdrEn4kAiIPjH26Ss=
 Name: res/raw/passcode_lock_open.json
 SHA1-Digest: oGuhyPUZda53pRZc5WC4F+nDkfo=
 
+Name: res/raw/payment_success.json
+SHA1-Digest: q3yY8wjcNFWQVrpv8Sr0rXVOneY=
+
 Name: res/raw/permission_map.svg
 SHA1-Digest: IxUBKi2UH/0o/hYYe4CZyql5G6s=
 
@@ -21344,7 +21347,7 @@ Name: res/raw/voip_failed.mp3
 SHA1-Digest: xxoFOr4CExUGNKLZoLWD+a6T64s=
 
 Name: res/raw/voip_filled.json
-SHA1-Digest: nEKelmdeCMoqJqQwesT63V8wxZg=
+SHA1-Digest: iWaLTbde0f2WCPjQUkA/B7S5EvM=
 
 Name: res/raw/voip_group_removed.json
 SHA1-Digest: LKrrPJtnoKcD6rDz9MMui3d+5iI=
@@ -21404,7 +21407,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: L937YztA0g1uLSbtxQcnBw9vUts=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: 3v/qMD8vMNN07eQey9Cwfa3AOOk=
+SHA1-Digest: tylTGuXZX7B0eqnqTHGjCOfGfNI=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: vNxeRePtnY64Hxd7k8wXLkWhqV0=
@@ -21431,7 +21434,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: 9vfC/dda6+K6/D88jy6K8WhGD+4=
+SHA1-Digest: dwWgTgDOpDTEyVt8DtWxBufCTHk=
 
 Name: transport-api.properties
 SHA1-Digest: Jz4dPszpGdGJqctaJoPe9Lpu55k=

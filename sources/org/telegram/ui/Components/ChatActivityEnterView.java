@@ -5158,7 +5158,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     /* access modifiers changed from: private */
     /* renamed from: lambda$onPause$26 */
     public /* synthetic */ void lambda$onPause$26$ChatActivityEnterView() {
-        closeKeyboard();
+        ChatActivity chatActivity = this.parentFragment;
+        if (chatActivity == null || chatActivity.isLastFragment()) {
+            closeKeyboard();
+        }
         this.hideKeyboardRunnable = null;
     }
 

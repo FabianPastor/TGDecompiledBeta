@@ -770,6 +770,7 @@
     <string name="ChannelDeleteInfo">You will lose all messages in this channel.</string>
     <string name="ChannelDeleteMenu">Delete channel</string>
     <string name="ChannelDeletedUndo">Channel deleted.</string>
+    <string name="ChannelDescriptionIsChanged">Channel description is changed</string>
     <string name="ChannelDiscuss">DISCUSS</string>
     <string name="ChannelEdit">Edit</string>
     <string name="ChannelEditPermissions">Edit permissions</string>
@@ -830,6 +831,7 @@
     <string name="ChannelSignMessagesInfo">Add names of the admins to the messages they post.</string>
     <string name="ChannelSilentBroadcast">Silent Broadcast</string>
     <string name="ChannelSubscribers">Subscribers</string>
+    <string name="ChannelTitleIsChanged">Channel title is changed</string>
     <string name="ChannelTooMuch">Sorry, you are a member of too many groups and channels. Please leave some before creating a new one.</string>
     <string name="ChannelTooMuchJoin">Sorry, you are a member of too many groups and channels. Please leave some before joining a new one.</string>
     <string name="ChannelTooMuchTitle">Too many communities</string>
@@ -1115,6 +1117,12 @@
     <string name="DaysLeft_other">%1$d days left</string>
     <string name="DaysLeft_two">%1$d days left</string>
     <string name="DaysLeft_zero">%1$d days left</string>
+    <string name="DaysSchedule_few">%1$d days</string>
+    <string name="DaysSchedule_many">%1$d days</string>
+    <string name="DaysSchedule_one">%1$d day</string>
+    <string name="DaysSchedule_other">%1$d days</string>
+    <string name="DaysSchedule_two">%1$d days</string>
+    <string name="DaysSchedule_zero">%1$d days</string>
     <string name="Days_few">%1$d days</string>
     <string name="Days_many">%1$d days</string>
     <string name="Days_one">%1$d day</string>
@@ -1817,6 +1825,12 @@
     <string name="HoursBold_other">**%1$d** hours</string>
     <string name="HoursBold_two">**%1$d** hours</string>
     <string name="HoursBold_zero">**%1$d** hours</string>
+    <string name="HoursSchedule_few">%1$d hours</string>
+    <string name="HoursSchedule_many">%1$d hours</string>
+    <string name="HoursSchedule_one">%1$d hour</string>
+    <string name="HoursSchedule_other">%1$d hours</string>
+    <string name="HoursSchedule_two">%1$d hours</string>
+    <string name="HoursSchedule_zero">%1$d hours</string>
     <string name="Hours_few">%1$d hours</string>
     <string name="Hours_many">%1$d hours</string>
     <string name="Hours_one">%1$d hour</string>
@@ -2222,6 +2236,12 @@
     <string name="MinutesBold_other">**%1$d** minutes</string>
     <string name="MinutesBold_two">**%1$d** minutes</string>
     <string name="MinutesBold_zero">**%1$d** minutes</string>
+    <string name="MinutesSchedule_few">%1$d minutes</string>
+    <string name="MinutesSchedule_many">%1$d minutes</string>
+    <string name="MinutesSchedule_one">%1$d minute</string>
+    <string name="MinutesSchedule_other">%1$d minutes</string>
+    <string name="MinutesSchedule_two">%1$d minutes</string>
+    <string name="MinutesSchedule_zero">%1$d minutes</string>
     <string name="Minutes_few">%1$d minutes</string>
     <string name="Minutes_many">%1$d minutes</string>
     <string name="Minutes_one">%1$d minute</string>
@@ -2850,6 +2870,7 @@
     <string name="PaymentConnectionFailed">Unable to reach payment server. Please check your internet connection and try again.</string>
     <string name="PaymentEmailToProvider">Email address will be passed to %1$s as billing info.</string>
     <string name="PaymentFailed">Sorry, the payment was declined.</string>
+    <string name="PaymentInfoHint">You paid **%1$s** for **%2$s**.</string>
     <string name="PaymentInvoice">INVOICE</string>
     <string name="PaymentNoShippingMethod">Sorry, it is not possible to deliver to your address.</string>
     <string name="PaymentPassword">Password &amp; Email</string>
@@ -3338,6 +3359,12 @@
     <string name="SecondsBold_other">**%1$d** seconds</string>
     <string name="SecondsBold_two">**%1$d** seconds</string>
     <string name="SecondsBold_zero">**%1$d** seconds</string>
+    <string name="SecondsSchedule_few">%1$d seconds</string>
+    <string name="SecondsSchedule_many">%1$d seconds</string>
+    <string name="SecondsSchedule_one">%1$d second</string>
+    <string name="SecondsSchedule_other">%1$d seconds</string>
+    <string name="SecondsSchedule_two">%1$d seconds</string>
+    <string name="SecondsSchedule_zero">%1$d seconds</string>
     <string name="Seconds_few">%1$d seconds</string>
     <string name="Seconds_many">%1$d seconds</string>
     <string name="Seconds_one">%1$d second</string>
@@ -3559,6 +3586,7 @@
     <string name="SoundDefault">Default</string>
     <string name="SoundMuted">Sound muted</string>
     <string name="Speaking">speaking</string>
+    <string name="SpeakingWithVolume">%1$d%% speaking</string>
     <string name="Start">Start</string>
     <string name="StartDayAt">\'Start on\' MMM d \'at\' HH:mm</string>
     <string name="StartDayYearAt">\'Start on\' MMM d yyyy \'at\' HH:mm</string>
@@ -4036,9 +4064,13 @@
     <string name="VoipAudioRoutingSpeaker">Speaker</string>
     <string name="VoipBusy">Line busy</string>
     <string name="VoipCallEnded">Call ended</string>
-    <string name="VoipChannelScheduleInfo">The members of the channel will be notified that the voice chat will start in %1$s.</string>
-    <string name="VoipChannelStart">Members of this channel will be notified once you start the voice chat.\10\10You will be displayed as:</string>
+    <string name="VoipChannelScheduleInfo">Subscribers of the channel will be notified that the voice chat will start in %1$s.</string>
+    <string name="VoipChannelStart2">Members of this channel will be notified once you start the voice chat.</string>
+    <string name="VoipChatDisplayedAs">You will be displayed as:</string>
     <string name="VoipChatJoin">Join</string>
+    <string name="VoipChatLateBy">Late by</string>
+    <string name="VoipChatReminderHint">We will notify you when it starts.</string>
+    <string name="VoipChatShare">Share</string>
     <string name="VoipChatStartsIn">Starts in</string>
     <string name="VoipConnecting">Connecting</string>
     <string name="VoipDeclineCall">Decline</string>
@@ -4060,7 +4092,7 @@
     <string name="VoipGroupAllowToSpeak">Allow to speak</string>
     <string name="VoipGroupAudioRecordSaved">Audio saved to **Saved Messages**.</string>
     <string name="VoipGroupAudioRecordStarted">Audio recording started.</string>
-    <string name="VoipGroupBioEditAlertText">You can add a few lineas about. Everyone will see this text.</string>
+    <string name="VoipGroupBioEditAlertText">You can add a few lines about yourself. Everyone will see this text.</string>
     <string name="VoipGroupBioEditTitle">Bio</string>
     <string name="VoipGroupCancelChat">Cancel voice chat</string>
     <string name="VoipGroupCancelRaiseHand">Cancel request to speak</string>
@@ -4117,7 +4149,7 @@
     <string name="VoipGroupRemoveMemberAlertTitle2">Remove participant</string>
     <string name="VoipGroupRemovedFromGroup">**%1$s** removed from the group.</string>
     <string name="VoipGroupSaveFileHint">Recording Title</string>
-    <string name="VoipGroupScheduleInfo">The members of the group will be notified that the voice chat will start in %1$s.</string>
+    <string name="VoipGroupScheduleInfo">Members of the group will be notified that the voice chat will start in %1$s.</string>
     <string name="VoipGroupScheduleVoiceChat">Schedule Voice Chat</string>
     <string name="VoipGroupScheduledVoiceChat">Scheduled Voice Chat</string>
     <string name="VoipGroupSearchMembers">Search members to invite...</string>
@@ -4126,7 +4158,7 @@
     <string name="VoipGroupShareLink">Share Invite Link</string>
     <string name="VoipGroupSoundMuted">Voice chat sound muted.</string>
     <string name="VoipGroupSoundUnmuted">Voice chat sound unmuted.</string>
-    <string name="VoipGroupStart">Members of this group will be notified once you start the voice chat.\10\10You will be displayed as:</string>
+    <string name="VoipGroupStart2">Members of this group will be notified once you start the voice chat.</string>
     <string name="VoipGroupStartAs">Start Voice Chat as...</string>
     <string name="VoipGroupStartAsInfo">Choose whether you want to be displayed as your personal account or as your channel.</string>
     <string name="VoipGroupStartAsInfoGroup">Choose whether you want to be displayed as your personal account, this group, or one of your channels.</string>
@@ -4200,7 +4232,7 @@
     <string name="VoipStopVideo">Stop Video</string>
     <string name="VoipSwitch">SWITCH</string>
     <string name="VoipSwitchToVideoCall">Switch to video call?</string>
-    <string name="VoipTapToAddBio">Tap to add Bio</string>
+    <string name="VoipTapToAddBio">Tap to add a Bio</string>
     <string name="VoipTapToMute">You\'re Live</string>
     <string name="VoipUnmute">Unmute</string>
     <string name="VoipUseLessData">Use less data for calls</string>

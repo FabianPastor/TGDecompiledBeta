@@ -163,7 +163,7 @@ public class SimpleTextView extends View implements Drawable.Callback {
             }
             int i2 = this.gravity;
             if ((i2 & 7) == 1) {
-                this.offsetX = (i - this.textWidth) / 2;
+                this.offsetX = ((i - this.textWidth) / 2) - ((int) this.layout.getLineLeft(0));
             } else if ((i2 & 7) == 3) {
                 if (this.crosfadeFullLayout) {
                     this.offsetX = 0;
@@ -709,5 +709,9 @@ public class SimpleTextView extends View implements Drawable.Callback {
             this.fullLayoutLeftOffset = i2;
             createLayout(getMeasuredWidth());
         }
+    }
+
+    public int getTextColor() {
+        return this.textPaint.getColor();
     }
 }

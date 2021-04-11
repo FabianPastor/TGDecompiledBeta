@@ -17,13 +17,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Icon;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -61,9 +54,7 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DispatchQueue;
-import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -79,17 +70,13 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$ChatPhoto;
 import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$PhoneCall;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_phone_editGroupCallParticipant;
 import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.tgnet.TLRPC$User;
-import org.telegram.tgnet.TLRPC$UserProfilePhoto;
 import org.telegram.ui.ActionBar.BottomSheet;
-import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.VoIPPermissionActivity;
@@ -1503,66 +1490,132 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* access modifiers changed from: protected */
-    public Bitmap getRoundAvatarBitmap(TLObject tLObject) {
-        AvatarDrawable avatarDrawable;
-        Bitmap decodeFile;
-        boolean z = tLObject instanceof TLRPC$User;
-        Bitmap bitmap = null;
-        if (z) {
-            TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
-            TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = tLRPC$User.photo;
-            if (!(tLRPC$UserProfilePhoto == null || tLRPC$UserProfilePhoto.photo_small == null)) {
-                BitmapDrawable imageFromMemory = ImageLoader.getInstance().getImageFromMemory(tLRPC$User.photo.photo_small, (String) null, "50_50");
-                if (imageFromMemory != null) {
-                    decodeFile = imageFromMemory.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
-                } else {
-                    try {
-                        BitmapFactory.Options options = new BitmapFactory.Options();
-                        options.inMutable = true;
-                        decodeFile = BitmapFactory.decodeFile(FileLoader.getPathToAttach(tLRPC$User.photo.photo_small, true).toString(), options);
-                    } catch (Throwable th) {
-                        FileLog.e(th);
-                    }
-                }
-                bitmap = decodeFile;
-            }
-        } else {
-            TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject;
-            TLRPC$ChatPhoto tLRPC$ChatPhoto = tLRPC$Chat.photo;
-            if (!(tLRPC$ChatPhoto == null || tLRPC$ChatPhoto.photo_small == null)) {
-                BitmapDrawable imageFromMemory2 = ImageLoader.getInstance().getImageFromMemory(tLRPC$Chat.photo.photo_small, (String) null, "50_50");
-                if (imageFromMemory2 != null) {
-                    bitmap = imageFromMemory2.getBitmap().copy(Bitmap.Config.ARGB_8888, true);
-                } else {
-                    try {
-                        BitmapFactory.Options options2 = new BitmapFactory.Options();
-                        options2.inMutable = true;
-                        bitmap = BitmapFactory.decodeFile(FileLoader.getPathToAttach(tLRPC$Chat.photo.photo_small, true).toString(), options2);
-                    } catch (Throwable th2) {
-                        FileLog.e(th2);
-                    }
-                }
-            }
-        }
-        if (bitmap == null) {
-            Theme.createDialogsResources(this);
-            if (z) {
-                avatarDrawable = new AvatarDrawable((TLRPC$User) tLObject);
-            } else {
-                avatarDrawable = new AvatarDrawable((TLRPC$Chat) tLObject);
-            }
-            bitmap = Bitmap.createBitmap(AndroidUtilities.dp(42.0f), AndroidUtilities.dp(42.0f), Bitmap.Config.ARGB_8888);
-            avatarDrawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
-            avatarDrawable.draw(new Canvas(bitmap));
-        }
-        Canvas canvas = new Canvas(bitmap);
-        Path path = new Path();
-        path.addCircle((float) (bitmap.getWidth() / 2), (float) (bitmap.getHeight() / 2), (float) (bitmap.getWidth() / 2), Path.Direction.CW);
-        path.toggleInverseFillType();
-        Paint paint = new Paint(1);
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        canvas.drawPath(path, paint);
-        return bitmap;
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x0090  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public android.graphics.Bitmap getRoundAvatarBitmap(org.telegram.tgnet.TLObject r8) {
+        /*
+            r7 = this;
+            r0 = 0
+            r1 = 1
+            boolean r2 = r8 instanceof org.telegram.tgnet.TLRPC$User     // Catch:{ all -> 0x008a }
+            java.lang.String r3 = "50_50"
+            if (r2 == 0) goto L_0x0049
+            r2 = r8
+            org.telegram.tgnet.TLRPC$User r2 = (org.telegram.tgnet.TLRPC$User) r2     // Catch:{ all -> 0x008a }
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r4 = r2.photo     // Catch:{ all -> 0x008a }
+            if (r4 == 0) goto L_0x008e
+            org.telegram.tgnet.TLRPC$FileLocation r4 = r4.photo_small     // Catch:{ all -> 0x008a }
+            if (r4 == 0) goto L_0x008e
+            org.telegram.messenger.ImageLoader r4 = org.telegram.messenger.ImageLoader.getInstance()     // Catch:{ all -> 0x008a }
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r5 = r2.photo     // Catch:{ all -> 0x008a }
+            org.telegram.tgnet.TLRPC$FileLocation r5 = r5.photo_small     // Catch:{ all -> 0x008a }
+            android.graphics.drawable.BitmapDrawable r3 = r4.getImageFromMemory(r5, r0, r3)     // Catch:{ all -> 0x008a }
+            if (r3 == 0) goto L_0x002c
+            android.graphics.Bitmap r2 = r3.getBitmap()     // Catch:{ all -> 0x008a }
+            android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x008a }
+            android.graphics.Bitmap r0 = r2.copy(r3, r1)     // Catch:{ all -> 0x008a }
+            goto L_0x008e
+        L_0x002c:
+            android.graphics.BitmapFactory$Options r3 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0044 }
+            r3.<init>()     // Catch:{ all -> 0x0044 }
+            r3.inMutable = r1     // Catch:{ all -> 0x0044 }
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r2 = r2.photo     // Catch:{ all -> 0x0044 }
+            org.telegram.tgnet.TLRPC$FileLocation r2 = r2.photo_small     // Catch:{ all -> 0x0044 }
+            java.io.File r2 = org.telegram.messenger.FileLoader.getPathToAttach(r2, r1)     // Catch:{ all -> 0x0044 }
+            java.lang.String r2 = r2.toString()     // Catch:{ all -> 0x0044 }
+            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r2, r3)     // Catch:{ all -> 0x0044 }
+            goto L_0x008e
+        L_0x0044:
+            r2 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x008a }
+            goto L_0x008e
+        L_0x0049:
+            r2 = r8
+            org.telegram.tgnet.TLRPC$Chat r2 = (org.telegram.tgnet.TLRPC$Chat) r2     // Catch:{ all -> 0x008a }
+            org.telegram.tgnet.TLRPC$ChatPhoto r4 = r2.photo     // Catch:{ all -> 0x008a }
+            if (r4 == 0) goto L_0x008e
+            org.telegram.tgnet.TLRPC$FileLocation r4 = r4.photo_small     // Catch:{ all -> 0x008a }
+            if (r4 == 0) goto L_0x008e
+            org.telegram.messenger.ImageLoader r4 = org.telegram.messenger.ImageLoader.getInstance()     // Catch:{ all -> 0x008a }
+            org.telegram.tgnet.TLRPC$ChatPhoto r5 = r2.photo     // Catch:{ all -> 0x008a }
+            org.telegram.tgnet.TLRPC$FileLocation r5 = r5.photo_small     // Catch:{ all -> 0x008a }
+            android.graphics.drawable.BitmapDrawable r3 = r4.getImageFromMemory(r5, r0, r3)     // Catch:{ all -> 0x008a }
+            if (r3 == 0) goto L_0x006d
+            android.graphics.Bitmap r2 = r3.getBitmap()     // Catch:{ all -> 0x008a }
+            android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x008a }
+            android.graphics.Bitmap r0 = r2.copy(r3, r1)     // Catch:{ all -> 0x008a }
+            goto L_0x008e
+        L_0x006d:
+            android.graphics.BitmapFactory$Options r3 = new android.graphics.BitmapFactory$Options     // Catch:{ all -> 0x0085 }
+            r3.<init>()     // Catch:{ all -> 0x0085 }
+            r3.inMutable = r1     // Catch:{ all -> 0x0085 }
+            org.telegram.tgnet.TLRPC$ChatPhoto r2 = r2.photo     // Catch:{ all -> 0x0085 }
+            org.telegram.tgnet.TLRPC$FileLocation r2 = r2.photo_small     // Catch:{ all -> 0x0085 }
+            java.io.File r2 = org.telegram.messenger.FileLoader.getPathToAttach(r2, r1)     // Catch:{ all -> 0x0085 }
+            java.lang.String r2 = r2.toString()     // Catch:{ all -> 0x0085 }
+            android.graphics.Bitmap r0 = android.graphics.BitmapFactory.decodeFile(r2, r3)     // Catch:{ all -> 0x0085 }
+            goto L_0x008e
+        L_0x0085:
+            r2 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x008a }
+            goto L_0x008e
+        L_0x008a:
+            r2 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
+        L_0x008e:
+            if (r0 != 0) goto L_0x00cb
+            org.telegram.ui.ActionBar.Theme.createDialogsResources(r7)
+            boolean r0 = r8 instanceof org.telegram.tgnet.TLRPC$User
+            if (r0 == 0) goto L_0x009f
+            org.telegram.ui.Components.AvatarDrawable r0 = new org.telegram.ui.Components.AvatarDrawable
+            org.telegram.tgnet.TLRPC$User r8 = (org.telegram.tgnet.TLRPC$User) r8
+            r0.<init>((org.telegram.tgnet.TLRPC$User) r8)
+            goto L_0x00a6
+        L_0x009f:
+            org.telegram.ui.Components.AvatarDrawable r0 = new org.telegram.ui.Components.AvatarDrawable
+            org.telegram.tgnet.TLRPC$Chat r8 = (org.telegram.tgnet.TLRPC$Chat) r8
+            r0.<init>((org.telegram.tgnet.TLRPC$Chat) r8)
+        L_0x00a6:
+            r8 = 1109917696(0x42280000, float:42.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            android.graphics.Bitmap$Config r3 = android.graphics.Bitmap.Config.ARGB_8888
+            android.graphics.Bitmap r8 = android.graphics.Bitmap.createBitmap(r2, r8, r3)
+            int r2 = r8.getWidth()
+            int r3 = r8.getHeight()
+            r4 = 0
+            r0.setBounds(r4, r4, r2, r3)
+            android.graphics.Canvas r2 = new android.graphics.Canvas
+            r2.<init>(r8)
+            r0.draw(r2)
+            r0 = r8
+        L_0x00cb:
+            android.graphics.Canvas r8 = new android.graphics.Canvas
+            r8.<init>(r0)
+            android.graphics.Path r2 = new android.graphics.Path
+            r2.<init>()
+            int r3 = r0.getWidth()
+            int r3 = r3 / 2
+            float r3 = (float) r3
+            int r4 = r0.getHeight()
+            int r4 = r4 / 2
+            float r4 = (float) r4
+            int r5 = r0.getWidth()
+            int r5 = r5 / 2
+            float r5 = (float) r5
+            android.graphics.Path$Direction r6 = android.graphics.Path.Direction.CW
+            r2.addCircle(r3, r4, r5, r6)
+            r2.toggleInverseFillType()
+            android.graphics.Paint r3 = new android.graphics.Paint
+            r3.<init>(r1)
+            android.graphics.PorterDuffXfermode r1 = new android.graphics.PorterDuffXfermode
+            android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.CLEAR
+            r1.<init>(r4)
+            r3.setXfermode(r1)
+            r8.drawPath(r2, r3)
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPBaseService.getRoundAvatarBitmap(org.telegram.tgnet.TLObject):android.graphics.Bitmap");
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v1, resolved type: java.lang.String} */
@@ -1595,9 +1648,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r4.setAction(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r1)
-            r6 = 2131628093(0x7f0e103d, float:1.8883469E38)
+            r6 = 2131628125(0x7f0e105d, float:1.8883534E38)
             java.lang.String r7 = "VoipInVideoCallBranding"
-            r8 = 2131628091(0x7f0e103b, float:1.8883465E38)
+            r8 = 2131628123(0x7f0e105b, float:1.888353E38)
             java.lang.String r9 = "VoipInCallBranding"
             if (r22 == 0) goto L_0x002b
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -1691,7 +1744,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r10.append(r15)
             r10.append(r14)
             java.lang.String r10 = r10.toString()
-            r13 = 2131625801(0x7f0e0749, float:1.887882E38)
+            r13 = 2131625815(0x7f0e0757, float:1.8878849E38)
             r17 = r7
             java.lang.String r7 = "IncomingCalls"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r13)
@@ -1743,7 +1796,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             java.lang.String r8 = "call_id"
             r2.putExtra(r8, r6)
             java.lang.String r6 = "VoipDeclineCall"
-            r7 = 2131627977(0x7f0e0fc9, float:1.8883234E38)
+            r7 = 2131628009(0x7f0e0fe9, float:1.8883299E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10 = 24
             if (r12 < r10) goto L_0x01a8
@@ -1778,7 +1831,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             long r13 = r18.getCallID()
             r9.putExtra(r8, r13)
             java.lang.String r8 = "VoipAnswerCall"
-            r13 = 2131627964(0x7f0e0fbc, float:1.8883207E38)
+            r13 = 2131627992(0x7f0e0fd8, float:1.8883264E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r8, r13)
             if (r12 < r10) goto L_0x01fd
             android.text.SpannableString r10 = new android.text.SpannableString
@@ -1858,7 +1911,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             if (r22 == 0) goto L_0x02b0
-            r12 = 2131628094(0x7f0e103e, float:1.888347E38)
+            r12 = 2131628126(0x7f0e105e, float:1.8883536E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r14 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1870,7 +1923,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             goto L_0x02c6
         L_0x02b0:
             r14 = 0
-            r12 = 2131628092(0x7f0e103c, float:1.8883467E38)
+            r12 = 2131628124(0x7f0e105c, float:1.8883532E38)
             java.lang.Object[] r10 = new java.lang.Object[r10]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1884,11 +1937,11 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         L_0x02ca:
             if (r22 == 0) goto L_0x02d2
             r10 = r17
-            r0 = 2131628093(0x7f0e103d, float:1.8883469E38)
+            r0 = 2131628125(0x7f0e105d, float:1.8883534E38)
             goto L_0x02d7
         L_0x02d2:
             r10 = r16
-            r0 = 2131628091(0x7f0e103b, float:1.8883465E38)
+            r0 = 2131628123(0x7f0e105b, float:1.888353E38)
         L_0x02d7:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r10, r0)
             r7.setTextViewText(r11, r0)
@@ -1900,7 +1953,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             int r0 = r1.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
-            r10 = 2131627965(0x7f0e0fbd, float:1.888321E38)
+            r10 = 2131627993(0x7f0e0fd9, float:1.8883266E38)
             java.lang.Object[] r14 = new java.lang.Object[r14]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1922,7 +1975,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r13)
             r7.setTextViewText(r3, r8)
             r3 = 2131230803(0x7var_, float:1.807767E38)
-            r8 = 2131627977(0x7f0e0fc9, float:1.8883234E38)
+            r8 = 2131628009(0x7f0e0fe9, float:1.8883299E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r8)
             r7.setTextViewText(r3, r6)
             r3 = 2131230882(0x7var_a2, float:1.807783E38)

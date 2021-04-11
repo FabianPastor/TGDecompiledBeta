@@ -11,6 +11,7 @@ import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$GroupCall;
 import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$Peer;
@@ -46,6 +47,7 @@ import org.telegram.tgnet.TLRPC$TL_phone_toggleGroupCallRecord;
 import org.telegram.tgnet.TLRPC$TL_updateGroupCall;
 import org.telegram.tgnet.TLRPC$TL_updateGroupCallParticipants;
 import org.telegram.tgnet.TLRPC$Updates;
+import org.telegram.tgnet.TLRPC$UserFull;
 
 public class ChatObject {
     public static final int ACTION_ADD_ADMINS = 4;
@@ -157,23 +159,36 @@ public class ChatObject {
             loadMembers(true);
         }
 
-        public void addSelfDummyParticipant() {
+        public void addSelfDummyParticipant(boolean z) {
             int selfId = getSelfId();
             if (this.participants.indexOfKey(selfId) < 0) {
                 TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = new TLRPC$TL_groupCallParticipant();
                 tLRPC$TL_groupCallParticipant.peer = this.selfPeer;
                 tLRPC$TL_groupCallParticipant.muted = true;
                 tLRPC$TL_groupCallParticipant.self = true;
-                tLRPC$TL_groupCallParticipant.can_self_unmute = !this.call.join_muted;
-                tLRPC$TL_groupCallParticipant.date = this.currentAccount.getConnectionsManager().getCurrentTime();
                 TLRPC$Chat chat = this.currentAccount.getMessagesController().getChat(Integer.valueOf(this.chatId));
+                tLRPC$TL_groupCallParticipant.can_self_unmute = !this.call.join_muted || ChatObject.canManageCalls(chat);
+                tLRPC$TL_groupCallParticipant.date = this.currentAccount.getConnectionsManager().getCurrentTime();
                 if (ChatObject.canManageCalls(chat) || !ChatObject.isChannel(chat) || chat.megagroup || tLRPC$TL_groupCallParticipant.can_self_unmute) {
                     tLRPC$TL_groupCallParticipant.active_date = this.currentAccount.getConnectionsManager().getCurrentTime();
+                }
+                if (selfId > 0) {
+                    TLRPC$UserFull userFull = MessagesController.getInstance(this.currentAccount.getCurrentAccount()).getUserFull(selfId);
+                    if (userFull != null) {
+                        tLRPC$TL_groupCallParticipant.about = userFull.about;
+                    }
+                } else {
+                    TLRPC$ChatFull chatFull = MessagesController.getInstance(this.currentAccount.getCurrentAccount()).getChatFull(-selfId);
+                    if (chatFull != null) {
+                        tLRPC$TL_groupCallParticipant.about = chatFull.about;
+                    }
                 }
                 this.participants.put(selfId, tLRPC$TL_groupCallParticipant);
                 this.sortedParticipants.add(tLRPC$TL_groupCallParticipant);
                 sortParticipants();
-                this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.groupCallUpdated, Integer.valueOf(this.chatId), Long.valueOf(this.call.id), Boolean.FALSE);
+                if (z) {
+                    this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.groupCallUpdated, Integer.valueOf(this.chatId), Long.valueOf(this.call.id), Boolean.FALSE);
+                }
             }
         }
 

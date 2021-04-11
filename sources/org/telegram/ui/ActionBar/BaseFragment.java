@@ -414,6 +414,17 @@ public abstract class BaseFragment {
         return arrayList.get((arrayList.size() - 2) - i);
     }
 
+    public boolean isLastFragment() {
+        ActionBarLayout actionBarLayout = this.parentLayout;
+        if (actionBarLayout != null && !actionBarLayout.fragmentsStack.isEmpty()) {
+            ArrayList<BaseFragment> arrayList = this.parentLayout.fragmentsStack;
+            if (arrayList.get(arrayList.size() - 1) == this) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public ActionBarLayout getParentLayout() {
         return this.parentLayout;
     }

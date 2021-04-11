@@ -58,6 +58,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     /* access modifiers changed from: private */
     public int customViewOffset = 20;
     /* access modifiers changed from: private */
+    public String dialogButtonColorKey = "dialogButton";
+    /* access modifiers changed from: private */
     public boolean dimEnabled = true;
     private boolean dismissDialogByButtons = true;
     /* access modifiers changed from: private */
@@ -1067,11 +1069,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 r12.setMinWidth(AndroidUtilities.dp(64.0f));
                 r12.setTag(-1);
                 r12.setTextSize(1, 14.0f);
-                r12.setTextColor(getThemeColor("dialogButton"));
+                r12.setTextColor(getThemeColor(this.dialogButtonColorKey));
                 r12.setGravity(17);
                 r12.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 r12.setText(this.positiveButtonText.toString().toUpperCase());
-                r12.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor("dialogButton")));
+                r12.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor(this.dialogButtonColorKey)));
                 r12.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
                 if (this.verticalButtons) {
                     this.buttonsLayout.addView(r12, LayoutHelper.createLinear(-2, 36, LocaleController.isRTL ? 3 : 5));
@@ -1099,13 +1101,13 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 r13.setMinWidth(AndroidUtilities.dp(64.0f));
                 r13.setTag(-2);
                 r13.setTextSize(1, 14.0f);
-                r13.setTextColor(getThemeColor("dialogButton"));
+                r13.setTextColor(getThemeColor(this.dialogButtonColorKey));
                 r13.setGravity(17);
                 r13.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 r13.setEllipsize(TextUtils.TruncateAt.END);
                 r13.setSingleLine(true);
                 r13.setText(this.negativeButtonText.toString().toUpperCase());
-                r13.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor("dialogButton")));
+                r13.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor(this.dialogButtonColorKey)));
                 r13.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
                 if (this.verticalButtons) {
                     this.buttonsLayout.addView(r13, 0, LayoutHelper.createLinear(-2, 36, LocaleController.isRTL ? 3 : 5));
@@ -1133,13 +1135,13 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 r14.setMinWidth(AndroidUtilities.dp(64.0f));
                 r14.setTag(-3);
                 r14.setTextSize(1, 14.0f);
-                r14.setTextColor(getThemeColor("dialogButton"));
+                r14.setTextColor(getThemeColor(this.dialogButtonColorKey));
                 r14.setGravity(17);
                 r14.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 r14.setEllipsize(TextUtils.TruncateAt.END);
                 r14.setSingleLine(true);
                 r14.setText(this.neutralButtonText.toString().toUpperCase());
-                r14.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor("dialogButton")));
+                r14.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor(this.dialogButtonColorKey)));
                 r14.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
                 if (this.verticalButtons) {
                     ViewGroup viewGroup = this.buttonsLayout;
@@ -1595,6 +1597,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
 
         public Builder setTopView(View view) {
             View unused = this.alertDialog.topView = view;
+            return this;
+        }
+
+        public Builder setDialogButtonColorKey(String str) {
+            String unused = this.alertDialog.dialogButtonColorKey = str;
             return this;
         }
 

@@ -173,7 +173,13 @@ public class PinchToZoomHelper {
             ImageReceiver imageReceiver3 = new ImageReceiver();
             this.childImage = imageReceiver3;
             imageReceiver3.onAttachedToWindow();
-            this.childImage.setImageBitmap(imageReceiver.getDrawable());
+            Drawable drawable = imageReceiver.getDrawable();
+            this.childImage.setImageBitmap(drawable);
+            if (drawable instanceof AnimatedFileDrawable) {
+                AnimatedFileDrawable animatedFileDrawable = (AnimatedFileDrawable) drawable;
+                animatedFileDrawable.addSecondParentView(this.overlayView);
+                animatedFileDrawable.setInvalidateParentViewWithSecond(true);
+            }
             this.childImage.setImageCoords(this.imageX, this.imageY, this.imageWidth, this.imageHeight);
             this.childImage.setRoundRadius(imageReceiver.getRoundRadius());
             this.fullImage.setRoundRadius(imageReceiver.getRoundRadius());
@@ -279,21 +285,28 @@ public class PinchToZoomHelper {
         if (!(zoomOverlayView == null || zoomOverlayView.getParent() == null)) {
             this.parentView.removeView(this.overlayView);
             this.overlayView.backupImageView.getImageReceiver().clearImage();
+            ImageReceiver imageReceiver = this.childImage;
+            if (imageReceiver != null) {
+                Drawable drawable = imageReceiver.getDrawable();
+                if (drawable instanceof AnimatedFileDrawable) {
+                    ((AnimatedFileDrawable) drawable).removeSecondParentView(this.overlayView);
+                }
+            }
         }
         View view = this.child;
         if (view != null) {
             view.invalidate();
             this.child = null;
         }
-        ImageReceiver imageReceiver = this.childImage;
-        if (imageReceiver != null) {
-            imageReceiver.onDetachedFromWindow();
+        ImageReceiver imageReceiver2 = this.childImage;
+        if (imageReceiver2 != null) {
+            imageReceiver2.onDetachedFromWindow();
             this.childImage.clearImage();
             this.childImage = null;
         }
-        ImageReceiver imageReceiver2 = this.fullImage;
-        if (imageReceiver2 != null) {
-            imageReceiver2.onDetachedFromWindow();
+        ImageReceiver imageReceiver3 = this.fullImage;
+        if (imageReceiver3 != null) {
+            imageReceiver3.onDetachedFromWindow();
             this.fullImage.clearImage();
             this.fullImage = null;
         }

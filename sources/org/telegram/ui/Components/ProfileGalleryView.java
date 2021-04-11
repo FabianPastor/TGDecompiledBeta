@@ -382,6 +382,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                 this.videoLocations.set(0, (Object) null);
                 this.videoFileNames.add(0, (Object) null);
             }
+            this.imagesUploadProgress.set(0, (Object) null);
             this.adapter.notifyDataSetChanged();
         }
     }
@@ -620,6 +621,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         this.thumbsLocations.remove(i);
         this.imagesLocationsSizes.remove(i);
         this.radialProgresses.delete(i);
+        this.imagesUploadProgress.remove(i);
         if (i == 0 && !this.imagesLocations.isEmpty()) {
             this.prevImageLocation = this.imagesLocations.get(0);
         }
@@ -1549,7 +1551,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     int realPosition = ProfileGalleryView.this.getRealPosition(this.position);
                     Drawable drawable = getImageReceiver().getDrawable();
                     long j = 0;
-                    if (!(ProfileGalleryView.this.imagesUploadProgress.get(realPosition) == null ? !(drawable == null || (this.isVideo && (!(drawable instanceof AnimatedFileDrawable) || ((AnimatedFileDrawable) drawable).getDurationMs() <= 0))) : ((Float) ProfileGalleryView.this.imagesUploadProgress.get(realPosition)).floatValue() >= 1.0f)) {
+                    if (!(realPosition >= ProfileGalleryView.this.imagesUploadProgress.size() || ProfileGalleryView.this.imagesUploadProgress.get(realPosition) == null ? !(drawable == null || (this.isVideo && (!(drawable instanceof AnimatedFileDrawable) || ((AnimatedFileDrawable) drawable).getDurationMs() <= 0))) : ((Float) ProfileGalleryView.this.imagesUploadProgress.get(realPosition)).floatValue() >= 1.0f)) {
                         if (this.firstDrawTime < 0) {
                             this.firstDrawTime = System.currentTimeMillis();
                         } else {

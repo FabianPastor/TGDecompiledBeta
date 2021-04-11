@@ -1643,13 +1643,13 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     public void checkCamera(boolean z) {
         PhotoAttachAdapter photoAttachAdapter;
         BaseFragment baseFragment = this.parentAlert.baseFragment;
-        if (baseFragment != null) {
+        if (baseFragment != null && baseFragment.getParentActivity() != null) {
             boolean z2 = this.deviceHasGoodCamera;
             boolean z3 = this.noCameraPermissions;
             if (!SharedConfig.inappCamera) {
                 this.deviceHasGoodCamera = false;
             } else if (Build.VERSION.SDK_INT >= 23) {
-                boolean z4 = baseFragment.getParentActivity().checkSelfPermission("android.permission.CAMERA") != 0;
+                boolean z4 = this.parentAlert.baseFragment.getParentActivity().checkSelfPermission("android.permission.CAMERA") != 0;
                 this.noCameraPermissions = z4;
                 if (z4) {
                     if (z) {

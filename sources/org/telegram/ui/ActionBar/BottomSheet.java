@@ -120,6 +120,7 @@ public class BottomSheet extends Dialog {
     private boolean showWithoutAnimation;
     protected boolean smoothKeyboardAnimationEnabled;
     protected Runnable startAnimationRunnable;
+    protected int statusBarHeight = AndroidUtilities.statusBarHeight;
     /* access modifiers changed from: private */
     public CharSequence title;
     private TextView titleView;
@@ -1171,6 +1172,11 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$0 */
     public /* synthetic */ WindowInsets lambda$new$0$BottomSheet(View view, WindowInsets windowInsets) {
+        int i;
+        int systemWindowInsetTop = windowInsets.getSystemWindowInsetTop();
+        if (!((systemWindowInsetTop == 0 && !AndroidUtilities.isInMultiwindow) || (i = this.statusBarHeight) == 0 || i == systemWindowInsetTop)) {
+            this.statusBarHeight = systemWindowInsetTop;
+        }
         this.lastInsets = windowInsets;
         view.requestLayout();
         if (Build.VERSION.SDK_INT >= 30) {

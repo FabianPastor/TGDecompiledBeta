@@ -1205,42 +1205,9 @@ public class VoIPHelper {
 
     public static void showGroupCallAlert(BaseFragment baseFragment, TLRPC$Chat tLRPC$Chat, TLRPC$InputPeer tLRPC$InputPeer, boolean z, AccountInstance accountInstance) {
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
-            JoinCallAlert.checkFewUsers(baseFragment.getParentActivity(), -tLRPC$Chat.id, accountInstance, new MessagesStorage.BooleanCallback(z, tLRPC$Chat, tLRPC$InputPeer, accountInstance) {
-                public final /* synthetic */ boolean f$1;
-                public final /* synthetic */ TLRPC$Chat f$2;
-                public final /* synthetic */ TLRPC$InputPeer f$3;
-                public final /* synthetic */ AccountInstance f$4;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                }
-
-                public final void run(boolean z) {
-                    VoIPHelper.lambda$showGroupCallAlert$21(BaseFragment.this, this.f$1, this.f$2, this.f$3, this.f$4, z);
-                }
-            });
-        }
-    }
-
-    static /* synthetic */ void lambda$showGroupCallAlert$21(BaseFragment baseFragment, boolean z, TLRPC$Chat tLRPC$Chat, TLRPC$InputPeer tLRPC$InputPeer, AccountInstance accountInstance, boolean z2) {
-        if (!z2) {
-            startCall(tLRPC$Chat, tLRPC$InputPeer, (String) null, true, baseFragment.getParentActivity(), baseFragment, accountInstance);
-        } else if (baseFragment.getParentActivity() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
-            builder.setTitle(LocaleController.getString("StartVoipChatTitle", NUM));
-            if (z) {
-                builder.setMessage(LocaleController.getString("VoipGroupEndedStartNew", NUM));
-            } else if (!ChatObject.isChannel(tLRPC$Chat) || tLRPC$Chat.megagroup) {
-                builder.setMessage(LocaleController.getString("StartVoipChatAlertText", NUM));
-            } else {
-                builder.setMessage(LocaleController.getString("StartVoipChannelAlertText", NUM));
-            }
-            builder.setPositiveButton(LocaleController.getString("Start", NUM), new DialogInterface.OnClickListener(tLRPC$Chat, tLRPC$InputPeer, accountInstance) {
-                public final /* synthetic */ TLRPC$Chat f$1;
-                public final /* synthetic */ TLRPC$InputPeer f$2;
+            JoinCallAlert.checkFewUsers(baseFragment.getParentActivity(), -tLRPC$Chat.id, accountInstance, new MessagesStorage.BooleanCallback(tLRPC$InputPeer, baseFragment, accountInstance) {
+                public final /* synthetic */ TLRPC$InputPeer f$1;
+                public final /* synthetic */ BaseFragment f$2;
                 public final /* synthetic */ AccountInstance f$3;
 
                 {
@@ -1249,18 +1216,10 @@ public class VoIPHelper {
                     this.f$3 = r4;
                 }
 
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    VoIPHelper.lambda$null$20(BaseFragment.this, this.f$1, this.f$2, this.f$3, dialogInterface, i);
+                public final void run(boolean z) {
+                    VoIPHelper.startCall(TLRPC$Chat.this, this.f$1, (String) null, true, this.f$2.getParentActivity(), this.f$2, this.f$3);
                 }
             });
-            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-            baseFragment.showDialog(builder.create());
-        }
-    }
-
-    static /* synthetic */ void lambda$null$20(BaseFragment baseFragment, TLRPC$Chat tLRPC$Chat, TLRPC$InputPeer tLRPC$InputPeer, AccountInstance accountInstance, DialogInterface dialogInterface, int i) {
-        if (baseFragment.getParentActivity() != null) {
-            startCall(tLRPC$Chat, tLRPC$InputPeer, (String) null, true, baseFragment.getParentActivity(), baseFragment, accountInstance);
         }
     }
 }

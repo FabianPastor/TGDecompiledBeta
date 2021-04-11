@@ -1612,6 +1612,7 @@ public final class R {
         public static final int mapstyle_night = NUM;
         public static final int passcode_lock_close = NUM;
         public static final int passcode_lock_open = NUM;
+        public static final int payment_success = NUM;
         public static final int permission_map = NUM;
         public static final int permission_map_dark = NUM;
         public static final int permission_pin = NUM;
@@ -2459,6 +2460,7 @@ public final class R {
         public static final int ChannelDeleteInfo = NUM;
         public static final int ChannelDeleteMenu = NUM;
         public static final int ChannelDeletedUndo = NUM;
+        public static final int ChannelDescriptionIsChanged = NUM;
         public static final int ChannelDiscuss = NUM;
         public static final int ChannelEdit = NUM;
         public static final int ChannelEditPermissions = NUM;
@@ -2519,6 +2521,7 @@ public final class R {
         public static final int ChannelSignMessagesInfo = NUM;
         public static final int ChannelSilentBroadcast = NUM;
         public static final int ChannelSubscribers = NUM;
+        public static final int ChannelTitleIsChanged = NUM;
         public static final int ChannelTooMuch = NUM;
         public static final int ChannelTooMuchJoin = NUM;
         public static final int ChannelTooMuchTitle = NUM;
@@ -2804,6 +2807,12 @@ public final class R {
         public static final int DaysLeft_other = NUM;
         public static final int DaysLeft_two = NUM;
         public static final int DaysLeft_zero = NUM;
+        public static final int DaysSchedule_few = NUM;
+        public static final int DaysSchedule_many = NUM;
+        public static final int DaysSchedule_one = NUM;
+        public static final int DaysSchedule_other = NUM;
+        public static final int DaysSchedule_two = NUM;
+        public static final int DaysSchedule_zero = NUM;
         public static final int Days_few = NUM;
         public static final int Days_many = NUM;
         public static final int Days_one = NUM;
@@ -3506,6 +3515,12 @@ public final class R {
         public static final int HoursBold_other = NUM;
         public static final int HoursBold_two = NUM;
         public static final int HoursBold_zero = NUM;
+        public static final int HoursSchedule_few = NUM;
+        public static final int HoursSchedule_many = NUM;
+        public static final int HoursSchedule_one = NUM;
+        public static final int HoursSchedule_other = NUM;
+        public static final int HoursSchedule_two = NUM;
+        public static final int HoursSchedule_zero = NUM;
         public static final int Hours_few = NUM;
         public static final int Hours_many = NUM;
         public static final int Hours_one = NUM;
@@ -3911,6 +3926,12 @@ public final class R {
         public static final int MinutesBold_other = NUM;
         public static final int MinutesBold_two = NUM;
         public static final int MinutesBold_zero = NUM;
+        public static final int MinutesSchedule_few = NUM;
+        public static final int MinutesSchedule_many = NUM;
+        public static final int MinutesSchedule_one = NUM;
+        public static final int MinutesSchedule_other = NUM;
+        public static final int MinutesSchedule_two = NUM;
+        public static final int MinutesSchedule_zero = NUM;
         public static final int Minutes_few = NUM;
         public static final int Minutes_many = NUM;
         public static final int Minutes_one = NUM;
@@ -4539,6 +4560,7 @@ public final class R {
         public static final int PaymentConnectionFailed = NUM;
         public static final int PaymentEmailToProvider = NUM;
         public static final int PaymentFailed = NUM;
+        public static final int PaymentInfoHint = NUM;
         public static final int PaymentInvoice = NUM;
         public static final int PaymentNoShippingMethod = NUM;
         public static final int PaymentPassword = NUM;
@@ -5027,6 +5049,12 @@ public final class R {
         public static final int SecondsBold_other = NUM;
         public static final int SecondsBold_two = NUM;
         public static final int SecondsBold_zero = NUM;
+        public static final int SecondsSchedule_few = NUM;
+        public static final int SecondsSchedule_many = NUM;
+        public static final int SecondsSchedule_one = NUM;
+        public static final int SecondsSchedule_other = NUM;
+        public static final int SecondsSchedule_two = NUM;
+        public static final int SecondsSchedule_zero = NUM;
         public static final int Seconds_few = NUM;
         public static final int Seconds_many = NUM;
         public static final int Seconds_one = NUM;
@@ -5248,6 +5276,7 @@ public final class R {
         public static final int SoundDefault = NUM;
         public static final int SoundMuted = NUM;
         public static final int Speaking = NUM;
+        public static final int SpeakingWithVolume = NUM;
         public static final int Start = NUM;
         public static final int StartDayAt = NUM;
         public static final int StartDayYearAt = NUM;
@@ -5726,8 +5755,12 @@ public final class R {
         public static final int VoipBusy = NUM;
         public static final int VoipCallEnded = NUM;
         public static final int VoipChannelScheduleInfo = NUM;
-        public static final int VoipChannelStart = NUM;
+        public static final int VoipChannelStart2 = NUM;
+        public static final int VoipChatDisplayedAs = NUM;
         public static final int VoipChatJoin = NUM;
+        public static final int VoipChatLateBy = NUM;
+        public static final int VoipChatReminderHint = NUM;
+        public static final int VoipChatShare = NUM;
         public static final int VoipChatStartsIn = NUM;
         public static final int VoipConnecting = NUM;
         public static final int VoipDeclineCall = NUM;
@@ -5815,7 +5848,7 @@ public final class R {
         public static final int VoipGroupShareLink = NUM;
         public static final int VoipGroupSoundMuted = NUM;
         public static final int VoipGroupSoundUnmuted = NUM;
-        public static final int VoipGroupStart = NUM;
+        public static final int VoipGroupStart2 = NUM;
         public static final int VoipGroupStartAs = NUM;
         public static final int VoipGroupStartAsInfo = NUM;
         public static final int VoipGroupStartAsInfoGroup = NUM;

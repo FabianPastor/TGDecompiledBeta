@@ -228,7 +228,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r13.setTextSize(r7, r5)
             int r11 = org.telegram.ui.ActionBar.Theme.getColor(r17)
             r13.setTextColor(r11)
-            r11 = 2131624893(0x7f0e03bd, float:1.8876979E38)
+            r11 = 2131624895(0x7f0e03bf, float:1.8876983E38)
             java.lang.String r5 = "ClearHistory"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r11)
             r13.setText(r5)
@@ -329,7 +329,7 @@ public class ClearHistoryAlert extends BottomSheet {
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r4)
             r3.setBackgroundDrawable(r5)
             org.telegram.ui.Cells.CheckBoxCell r3 = r0.cell
-            r5 = 2131624895(0x7f0e03bf, float:1.8876983E38)
+            r5 = 2131624897(0x7f0e03c1, float:1.8876987E38)
             java.lang.Object[] r8 = new java.lang.Object[r7]
             java.lang.String r2 = org.telegram.messenger.UserObject.getFirstName(r28)
             r8[r4] = r2
@@ -434,7 +434,7 @@ public class ClearHistoryAlert extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
             r5.<init>(r1)
             r5.setAutoRepeat(r4)
-            r8 = 2131558503(0x7f0d0067, float:1.8742324E38)
+            r8 = 2131558504(0x7f0d0068, float:1.8742326E38)
             r10 = 120(0x78, float:1.68E-43)
             r5.setAnimation(r8, r10, r10)
             r8 = 1101004800(0x41a00000, float:20.0)
@@ -585,7 +585,7 @@ public class ClearHistoryAlert extends BottomSheet {
             int r1 = r0.currentTimer
             if (r1 != 0) goto L_0x0474
             org.telegram.ui.Components.ClearHistoryAlert$BottomSheetCell r1 = r0.setTimerButton
-            r3 = 2131625284(0x7f0e0544, float:1.8877772E38)
+            r3 = 2131625292(0x7f0e054c, float:1.8877788E38)
             java.lang.String r5 = "EnableAutoDelete"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r1.setText(r3)
