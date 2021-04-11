@@ -86,7 +86,7 @@ public class DownloadController extends BaseController implements NotificationCe
             return 0;
         }
         if (i == 2) {
-            return 3;
+            return 2;
         }
         if (i == 4) {
             return 1;
@@ -651,50 +651,52 @@ public class DownloadController extends BaseController implements NotificationCe
         if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r5.user_id)) != false) goto L_0x0061;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:38:0x007f, code lost:
-        if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id.user_id)) != false) goto L_0x0061;
+        if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r11.from_id.user_id)) != false) goto L_0x0061;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:52:0x00be, code lost:
-        if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id.user_id)) != false) goto L_0x0061;
+        if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r11.from_id.user_id)) != false) goto L_0x0061;
      */
     /* JADX WARNING: Removed duplicated region for block: B:57:0x00ca  */
     /* JADX WARNING: Removed duplicated region for block: B:61:0x00d6  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x0113 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x011d A[ORIG_RETURN, RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:90:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00f5  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x0104  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x0124 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x012e A[ORIG_RETURN, RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:94:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public int canDownloadMedia(org.telegram.tgnet.TLRPC$Message r10) {
+    public int canDownloadMedia(org.telegram.tgnet.TLRPC$Message r11) {
         /*
-            r9 = this;
+            r10 = this;
             r0 = 0
-            if (r10 != 0) goto L_0x0004
+            if (r11 != 0) goto L_0x0004
             return r0
         L_0x0004:
-            boolean r1 = org.telegram.messenger.MessageObject.isVideoMessage(r10)
-            r2 = 2
-            r3 = 1
+            boolean r1 = org.telegram.messenger.MessageObject.isVideoMessage(r11)
+            r2 = 1
+            r3 = 2
             if (r1 != 0) goto L_0x0046
-            boolean r4 = org.telegram.messenger.MessageObject.isGifMessage(r10)
+            boolean r4 = org.telegram.messenger.MessageObject.isGifMessage(r11)
             if (r4 != 0) goto L_0x0046
-            boolean r4 = org.telegram.messenger.MessageObject.isRoundVideoMessage(r10)
+            boolean r4 = org.telegram.messenger.MessageObject.isRoundVideoMessage(r11)
             if (r4 != 0) goto L_0x0046
-            boolean r4 = org.telegram.messenger.MessageObject.isGameMessage(r10)
+            boolean r4 = org.telegram.messenger.MessageObject.isGameMessage(r11)
             if (r4 == 0) goto L_0x001f
             goto L_0x0046
         L_0x001f:
-            boolean r4 = org.telegram.messenger.MessageObject.isVoiceMessage(r10)
+            boolean r4 = org.telegram.messenger.MessageObject.isVoiceMessage(r11)
             if (r4 == 0) goto L_0x0027
             r4 = 2
             goto L_0x0047
         L_0x0027:
-            boolean r4 = org.telegram.messenger.MessageObject.isPhoto(r10)
+            boolean r4 = org.telegram.messenger.MessageObject.isPhoto(r11)
             if (r4 != 0) goto L_0x0044
-            boolean r4 = org.telegram.messenger.MessageObject.isStickerMessage(r10)
+            boolean r4 = org.telegram.messenger.MessageObject.isStickerMessage(r11)
             if (r4 != 0) goto L_0x0044
-            boolean r4 = org.telegram.messenger.MessageObject.isAnimatedStickerMessage(r10)
+            boolean r4 = org.telegram.messenger.MessageObject.isAnimatedStickerMessage(r11)
             if (r4 == 0) goto L_0x003a
             goto L_0x0044
         L_0x003a:
-            org.telegram.tgnet.TLRPC$Document r4 = org.telegram.messenger.MessageObject.getDocument(r10)
+            org.telegram.tgnet.TLRPC$Document r4 = org.telegram.messenger.MessageObject.getDocument(r11)
             if (r4 == 0) goto L_0x0043
             r4 = 8
             goto L_0x0047
@@ -706,11 +708,11 @@ public class DownloadController extends BaseController implements NotificationCe
         L_0x0046:
             r4 = 4
         L_0x0047:
-            org.telegram.tgnet.TLRPC$Peer r5 = r10.peer_id
+            org.telegram.tgnet.TLRPC$Peer r5 = r11.peer_id
             if (r5 == 0) goto L_0x00c3
             int r6 = r5.user_id
             if (r6 == 0) goto L_0x0063
-            org.telegram.messenger.ContactsController r6 = r9.getContactsController()
+            org.telegram.messenger.ContactsController r6 = r10.getContactsController()
             j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r6 = r6.contactsDict
             int r5 = r5.user_id
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
@@ -722,12 +724,12 @@ public class DownloadController extends BaseController implements NotificationCe
         L_0x0063:
             int r6 = r5.chat_id
             if (r6 == 0) goto L_0x0084
-            org.telegram.tgnet.TLRPC$Peer r5 = r10.from_id
+            org.telegram.tgnet.TLRPC$Peer r5 = r11.from_id
             boolean r5 = r5 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
             if (r5 == 0) goto L_0x0082
-            org.telegram.messenger.ContactsController r5 = r9.getContactsController()
+            org.telegram.messenger.ContactsController r5 = r10.getContactsController()
             j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r5 = r5.contactsDict
-            org.telegram.tgnet.TLRPC$Peer r6 = r10.from_id
+            org.telegram.tgnet.TLRPC$Peer r6 = r11.from_id
             int r6 = r6.user_id
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             boolean r5 = r5.containsKey(r6)
@@ -740,8 +742,8 @@ public class DownloadController extends BaseController implements NotificationCe
             if (r5 == 0) goto L_0x009b
             int r5 = r5.channel_id
             if (r5 == 0) goto L_0x009b
-            org.telegram.messenger.MessagesController r5 = r9.getMessagesController()
-            org.telegram.tgnet.TLRPC$Peer r6 = r10.peer_id
+            org.telegram.messenger.MessagesController r5 = r10.getMessagesController()
+            org.telegram.tgnet.TLRPC$Peer r6 = r11.peer_id
             int r6 = r6.channel_id
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             org.telegram.tgnet.TLRPC$Chat r5 = r5.getChat(r6)
@@ -753,12 +755,12 @@ public class DownloadController extends BaseController implements NotificationCe
             if (r6 == 0) goto L_0x00c1
             boolean r5 = r5.megagroup
             if (r5 == 0) goto L_0x00c1
-            org.telegram.tgnet.TLRPC$Peer r5 = r10.from_id
+            org.telegram.tgnet.TLRPC$Peer r5 = r11.from_id
             boolean r5 = r5 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
             if (r5 == 0) goto L_0x0082
-            org.telegram.messenger.ContactsController r5 = r9.getContactsController()
+            org.telegram.messenger.ContactsController r5 = r10.getContactsController()
             j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r5 = r5.contactsDict
-            org.telegram.tgnet.TLRPC$Peer r6 = r10.from_id
+            org.telegram.tgnet.TLRPC$Peer r6 = r11.from_id
             int r6 = r6.user_id
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             boolean r5 = r5.containsKey(r6)
@@ -771,59 +773,68 @@ public class DownloadController extends BaseController implements NotificationCe
             r5 = 1
         L_0x00c4:
             int r6 = org.telegram.messenger.ApplicationLoader.getAutodownloadNetworkType()
-            if (r6 != r3) goto L_0x00d6
-            org.telegram.messenger.DownloadController$Preset r6 = r9.wifiPreset
+            if (r6 != r2) goto L_0x00d6
+            org.telegram.messenger.DownloadController$Preset r6 = r10.wifiPreset
             boolean r6 = r6.enabled
             if (r6 != 0) goto L_0x00d1
             return r0
         L_0x00d1:
-            org.telegram.messenger.DownloadController$Preset r6 = r9.getCurrentWiFiPreset()
+            org.telegram.messenger.DownloadController$Preset r6 = r10.getCurrentWiFiPreset()
             goto L_0x00ef
         L_0x00d6:
-            if (r6 != r2) goto L_0x00e4
-            org.telegram.messenger.DownloadController$Preset r6 = r9.roamingPreset
+            if (r6 != r3) goto L_0x00e4
+            org.telegram.messenger.DownloadController$Preset r6 = r10.roamingPreset
             boolean r6 = r6.enabled
             if (r6 != 0) goto L_0x00df
             return r0
         L_0x00df:
-            org.telegram.messenger.DownloadController$Preset r6 = r9.getCurrentRoamingPreset()
+            org.telegram.messenger.DownloadController$Preset r6 = r10.getCurrentRoamingPreset()
             goto L_0x00ef
         L_0x00e4:
-            org.telegram.messenger.DownloadController$Preset r6 = r9.mobilePreset
+            org.telegram.messenger.DownloadController$Preset r6 = r10.mobilePreset
             boolean r6 = r6.enabled
             if (r6 != 0) goto L_0x00eb
             return r0
         L_0x00eb:
-            org.telegram.messenger.DownloadController$Preset r6 = r9.getCurrentMobilePreset()
+            org.telegram.messenger.DownloadController$Preset r6 = r10.getCurrentMobilePreset()
         L_0x00ef:
             int[] r7 = r6.mask
             r5 = r7[r5]
+            if (r4 != r3) goto L_0x0104
+            r7 = 524288(0x80000, float:7.34684E-40)
+            int[] r8 = r6.sizes
+            int r9 = typeToIndex(r4)
+            r8 = r8[r9]
+            int r7 = java.lang.Math.max(r7, r8)
+            goto L_0x010c
+        L_0x0104:
             int[] r7 = r6.sizes
             int r8 = typeToIndex(r4)
             r7 = r7[r8]
-            int r10 = org.telegram.messenger.MessageObject.getMessageSize(r10)
-            if (r1 == 0) goto L_0x0111
+        L_0x010c:
+            int r11 = org.telegram.messenger.MessageObject.getMessageSize(r11)
+            if (r1 == 0) goto L_0x0122
             boolean r1 = r6.preloadVideo
-            if (r1 == 0) goto L_0x0111
-            if (r10 <= r7) goto L_0x0111
+            if (r1 == 0) goto L_0x0122
+            if (r11 <= r7) goto L_0x0122
             r1 = 2097152(0x200000, float:2.938736E-39)
-            if (r7 <= r1) goto L_0x0111
-            r10 = r5 & r4
-            if (r10 == 0) goto L_0x0110
+            if (r7 <= r1) goto L_0x0122
+            r11 = r5 & r4
+            if (r11 == 0) goto L_0x0121
             r0 = 2
-        L_0x0110:
+        L_0x0121:
             return r0
-        L_0x0111:
-            if (r4 == r3) goto L_0x0117
-            if (r10 == 0) goto L_0x011e
-            if (r10 > r7) goto L_0x011e
-        L_0x0117:
-            if (r4 == r2) goto L_0x011d
-            r10 = r5 & r4
-            if (r10 == 0) goto L_0x011e
-        L_0x011d:
+        L_0x0122:
+            if (r4 == r2) goto L_0x0128
+            if (r11 == 0) goto L_0x012f
+            if (r11 > r7) goto L_0x012f
+        L_0x0128:
+            if (r4 == r3) goto L_0x012e
+            r11 = r5 & r4
+            if (r11 == 0) goto L_0x012f
+        L_0x012e:
             r0 = 1
-        L_0x011e:
+        L_0x012f:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DownloadController.canDownloadMedia(org.telegram.tgnet.TLRPC$Message):int");

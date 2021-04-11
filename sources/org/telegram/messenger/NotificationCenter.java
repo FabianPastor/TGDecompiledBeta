@@ -84,7 +84,6 @@ public class NotificationCenter {
     public static final int folderBecomeEmpty;
     private static volatile NotificationCenter globalInstance = null;
     public static final int goingToPreviewTheme;
-    public static final int greetingsStickerLoaded;
     public static final int groupCallTypingsUpdated;
     public static final int groupCallUpdated;
     public static final int groupCallVisibilityChanged;
@@ -744,9 +743,6 @@ public class NotificationCenter {
         int i176 = totalEvents;
         totalEvents = i176 + 1;
         showBulletin = i176;
-        int i177 = totalEvents;
-        totalEvents = i177 + 1;
-        greetingsStickerLoaded = i177;
     }
 
     private static class DelayedPost {

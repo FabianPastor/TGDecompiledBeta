@@ -2956,7 +2956,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r0 < r2) goto L_0x0254
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
             r2 = 2131165839(0x7var_f, float:1.7945906E38)
-            r4 = 2131627929(0x7f0e0var_, float:1.8883136E38)
+            r4 = 2131627930(0x7f0e0f9a, float:1.8883138E38)
             java.lang.String r5 = "VideoCall"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.addSubItem(r13, r2, r4)
@@ -3062,7 +3062,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r4 = 55
             r2.addSubItem(r4, r0)
             android.text.SpannableStringBuilder r0 = new android.text.SpannableStringBuilder
-            r2 = 2131627796(0x7f0e0var_, float:1.8882867E38)
+            r2 = 2131627797(0x7f0e0var_, float:1.8882869E38)
             java.lang.String r4 = "Underline"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.<init>(r2)
@@ -4944,7 +4944,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2.setOnScrollListener(r3)
             org.telegram.ui.ChatActivity$35 r1 = new org.telegram.ui.ChatActivity$35
             r2 = 1
-            r1.<init>(r8, r2)
+            r1.<init>(r8, r7, r2)
             r7.topUndoView = r1
             org.telegram.ui.Components.SizeNotifierFrameLayout r2 = r7.contentView
             r32 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
@@ -5867,7 +5867,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r15, r3)
             r1.addView(r2, r3)
             org.telegram.ui.Components.UndoView r1 = new org.telegram.ui.Components.UndoView
-            r1.<init>(r8)
+            r1.<init>(r8, r7)
             r7.undoView = r1
             r2 = 1112276992(0x424CLASSNAME, float:51.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
@@ -6156,15 +6156,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r0 = r4.getParentActivity()
             r5.<init>((android.content.Context) r0)
-            r0 = 2131627808(0x7f0e0var_, float:1.888289E38)
+            r0 = 2131627809(0x7f0e0var_, float:1.8882893E38)
             java.lang.String r1 = "UnpinMessageAlertTitle"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r5.setTitle(r0)
-            r0 = 2131627807(0x7f0e0f1f, float:1.8882889E38)
+            r0 = 2131627808(0x7f0e0var_, float:1.888289E38)
             java.lang.String r1 = "UnpinMessageAlert"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r5.setMessage(r0)
-            r0 = 2131627806(0x7f0e0f1e, float:1.8882887E38)
+            r0 = 2131627807(0x7f0e0f1f, float:1.8882889E38)
             java.lang.String r1 = "UnpinMessage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.ui.-$$Lambda$ChatActivity$AXBx5yA7YGRgfvNqRyNH6uw1btA r1 = new org.telegram.ui.-$$Lambda$ChatActivity$AXBx5yA7YGRgfvNqRyNH6uw1btA
@@ -20364,8 +20364,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     /* JADX WARNING: type inference failed for: r4v38 */
     /* JADX WARNING: type inference failed for: r4v39 */
     /* JADX WARNING: type inference failed for: r4v88 */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v16, types: [boolean, int] */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v36, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v16, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v36, types: [int, boolean] */
     /* JADX WARNING: Removed duplicated region for block: B:299:0x04e4  */
     /* JADX WARNING: Removed duplicated region for block: B:319:0x0519  */
     /* JADX WARNING: Removed duplicated region for block: B:344:0x056a  */
@@ -27364,7 +27364,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r12.add(r1)
         L_0x0605:
             if (r6 == 0) goto L_0x0627
-            r1 = 2131627806(0x7f0e0f1e, float:1.8882887E38)
+            r1 = 2131627807(0x7f0e0f1f, float:1.8882889E38)
             java.lang.String r2 = "UnpinMessage"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r13.add(r1)
@@ -27639,7 +27639,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r13.add(r8)
             goto L_0x08b7
         L_0x08ab:
-            r8 = 2131627972(0x7f0e0fc4, float:1.8883224E38)
+            r8 = 2131627973(0x7f0e0fc5, float:1.8883226E38)
             java.lang.String r11 = "ViewThread"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r11, r8)
             r13.add(r8)
@@ -27690,7 +27690,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r2 != 0) goto L_0x09a8
             boolean r2 = r0.canUnvote()
             if (r2 == 0) goto L_0x0940
-            r2 = 2131627812(0x7f0e0var_, float:1.88829E38)
+            r2 = 2131627813(0x7f0e0var_, float:1.8882901E38)
             java.lang.String r3 = "Unvote"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r13.add(r2)
@@ -28160,7 +28160,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r12.add(r1)
         L_0x0e26:
             if (r6 == 0) goto L_0x0e48
-            r1 = 2131627806(0x7f0e0f1e, float:1.8882887E38)
+            r1 = 2131627807(0x7f0e0f1f, float:1.8882889E38)
             java.lang.String r2 = "UnpinMessage"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r13.add(r1)
@@ -28350,7 +28350,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r13.add(r0)
             goto L_0x0ffe
         L_0x0ff2:
-            r0 = 2131627972(0x7f0e0fc4, float:1.8883224E38)
+            r0 = 2131627973(0x7f0e0fc5, float:1.8883226E38)
             java.lang.String r2 = "ViewThread"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r13.add(r0)
@@ -33562,7 +33562,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 boolean r1 = r6 instanceof org.telegram.ui.Cells.ChatUnreadCell
                 if (r1 == 0) goto L_0x04dd
                 org.telegram.ui.Cells.ChatUnreadCell r6 = (org.telegram.ui.Cells.ChatUnreadCell) r6
-                r1 = 2131627809(0x7f0e0var_, float:1.8882893E38)
+                r1 = 2131627810(0x7f0e0var_, float:1.8882895E38)
                 java.lang.String r2 = "UnreadMessages"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                 r6.setText(r1)

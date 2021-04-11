@@ -5823,7 +5823,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x046a:
             boolean r2 = r1.isRepliesChat
             if (r2 == 0) goto L_0x047a
-            r2 = 2131627961(0x7f0e0fb9, float:1.8883201E38)
+            r2 = 2131627962(0x7f0e0fba, float:1.8883203E38)
             java.lang.String r3 = "ViewInChat"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x0477:
@@ -6959,7 +6959,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r39 = r8
             r8 = 9
             if (r9 != r8) goto L_0x0cb9
-            r0 = 2131628117(0x7f0e1055, float:1.8883518E38)
+            r0 = 2131628118(0x7f0e1056, float:1.888352E38)
             java.lang.String r8 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r8, r0)
             org.telegram.tgnet.TLRPC$Message r0 = r14.messageOwner
@@ -23474,7 +23474,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v4, resolved type: android.text.StaticLayout[]} */
-    /* JADX WARNING: type inference failed for: r4v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r4v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r3v4, types: [org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$User, java.lang.String] */
     /* JADX WARNING: type inference failed for: r14v2, types: [java.lang.CharSequence] */
     /* JADX WARNING: type inference failed for: r3v156 */
@@ -23617,7 +23617,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r7 = r0.via_bot_id
             java.lang.String r8 = " %s <b>%s</b>"
             java.lang.String r9 = "@"
-            r10 = 2131627925(0x7f0e0var_, float:1.8883128E38)
+            r10 = 2131627926(0x7f0e0var_, float:1.888313E38)
             java.lang.String r11 = "ViaBot"
             if (r7 == 0) goto L_0x0114
             int r0 = r1.currentAccount
@@ -23843,7 +23843,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
         L_0x029a:
             r11 = r21
-            r9 = 2131627925(0x7f0e0var_, float:1.8883128E38)
+            r9 = 2131627926(0x7f0e0var_, float:1.888313E38)
             goto L_0x02b2
         L_0x02a0:
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
@@ -24180,7 +24180,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.Object[] r8 = new java.lang.Object[r8]
             r12 = 0
             r8[r12] = r10
-            r12 = 2131627925(0x7f0e0var_, float:1.8883128E38)
+            r12 = 2131627926(0x7f0e0var_, float:1.888313E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r12)
             r12 = 1
             r8[r12] = r11

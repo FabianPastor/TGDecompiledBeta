@@ -57,6 +57,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     public ArrayList<Integer> imagesLocationsSizes = new ArrayList<>();
     /* access modifiers changed from: private */
     public ArrayList<Float> imagesUploadProgress = new ArrayList<>();
+    /* access modifiers changed from: private */
+    public boolean invalidateWithParent;
     private boolean isDownReleased;
     /* access modifiers changed from: private */
     public final boolean isProfileFragment;
@@ -446,6 +448,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                 this.photos.remove(i);
                 this.imagesLocationsSizes.remove(i);
                 this.imagesUploadProgress.remove(i);
+                this.adapter.notifyDataSetChanged();
                 break;
             } else {
                 i++;
@@ -1339,7 +1342,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             L_0x0210:
                 r4 = r5
             L_0x0211:
-                if (r4 == 0) goto L_0x027d
+                if (r4 == 0) goto L_0x028b
                 org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r4 = r2.imageView
                 org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
                 android.util.SparseArray r5 = r5.radialProgresses
@@ -1374,8 +1377,15 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                 r4.append(r1, r5)
             L_0x0278:
                 org.telegram.ui.Components.ProfileGalleryView r1 = org.telegram.ui.Components.ProfileGalleryView.this
+                boolean r1 = r1.invalidateWithParent
+                if (r1 == 0) goto L_0x0286
+                org.telegram.ui.Components.ProfileGalleryView r1 = org.telegram.ui.Components.ProfileGalleryView.this
+                r1.invalidate()
+                goto L_0x028b
+            L_0x0286:
+                org.telegram.ui.Components.ProfileGalleryView r1 = org.telegram.ui.Components.ProfileGalleryView.this
                 r1.postInvalidateOnAnimation()
-            L_0x027d:
+            L_0x028b:
                 org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r1 = r2.imageView
                 org.telegram.messenger.ImageReceiver r1 = r1.getImageReceiver()
                 org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1 r4 = new org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1
@@ -1561,7 +1571,12 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                 this.radialProgress.setOverrideAlpha(CubicBezierInterpolator.DEFAULT.getInterpolation(((float) (currentTimeMillis - j2)) / 250.0f));
                             }
                         }
-                        postInvalidateOnAnimation();
+                        if (ProfileGalleryView.this.invalidateWithParent) {
+                            invalidate();
+                        } else {
+                            postInvalidateOnAnimation();
+                        }
+                        invalidate();
                     } else if (this.radialProgressHideAnimator == null) {
                         if (this.radialProgress.getProgress() < 1.0f) {
                             this.radialProgress.setProgress(1.0f, true);
@@ -1621,9 +1636,20 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         public /* synthetic */ void lambda$onDraw$0$ProfileGalleryView$AvatarImageView(ValueAnimator valueAnimator) {
             this.radialProgress.setOverrideAlpha(AndroidUtilities.lerp(this.radialProgressHideAnimatorStartValue, 0.0f, valueAnimator.getAnimatedFraction()));
         }
+
+        public void invalidate() {
+            super.invalidate();
+            if (ProfileGalleryView.this.invalidateWithParent) {
+                ProfileGalleryView.this.invalidate();
+            }
+        }
     }
 
     public void setPinchToZoomHelper(PinchToZoomHelper pinchToZoomHelper2) {
         this.pinchToZoomHelper = pinchToZoomHelper2;
+    }
+
+    public void setInvalidateWithParent(boolean z) {
+        this.invalidateWithParent = z;
     }
 }

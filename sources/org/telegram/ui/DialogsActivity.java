@@ -2135,6 +2135,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             messagesController.loadUserInfo(accountInstance.getUserConfig().getCurrentUser(), false, 0);
             accountInstance.getContactsController().checkInviteText();
             accountInstance.getMediaDataController().loadRecents(2, false, true, false);
+            accountInstance.getMediaDataController().loadRecents(3, false, true, false);
             accountInstance.getMediaDataController().checkFeaturedStickers();
             Iterator<String> it = messagesController.diceEmojies.iterator();
             while (it.hasNext()) {
@@ -2221,7 +2222,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         return r0;
     }
 
-    /* JADX WARNING: type inference failed for: r12v1, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r12v1, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r12v7 */
     /* JADX WARNING: type inference failed for: r12v8 */
     /* JADX WARNING: Removed duplicated region for block: B:171:0x07bd  */
@@ -2314,7 +2315,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
             org.telegram.ui.Components.RLottieDrawable r0 = new org.telegram.ui.Components.RLottieDrawable
-            r19 = 2131558459(0x7f0d003b, float:1.8742234E38)
+            r19 = 2131558461(0x7f0d003d, float:1.8742238E38)
             r1 = 1105199104(0x41e00000, float:28.0)
             int r21 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r22 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -2325,7 +2326,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r18.<init>((int) r19, (java.lang.String) r20, (int) r21, (int) r22, (boolean) r23, (int[]) r24)
             r10.passcodeDrawable = r0
             org.telegram.ui.Components.RLottieDrawable r0 = new org.telegram.ui.Components.RLottieDrawable
-            r26 = 2131558458(0x7f0d003a, float:1.8742232E38)
+            r26 = 2131558460(0x7f0d003c, float:1.8742236E38)
             int r28 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r29 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r30 = 1
@@ -2973,7 +2974,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             goto L_0x0691
         L_0x0677:
             org.telegram.ui.Components.RLottieImageView r0 = r10.floatingButton
-            r1 = 2131558530(0x7f0d0082, float:1.8742378E38)
+            r1 = 2131558532(0x7f0d0084, float:1.8742382E38)
             r3 = 52
             r4 = 52
             r0.setAnimation(r1, r3, r4)
@@ -5701,8 +5702,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r0 = r0.dialogs_dict
             java.lang.Object r0 = r0.get(r10)
             if (r0 != 0) goto L_0x029f
-            org.telegram.messenger.MessagesController r0 = r17.getMessagesController()
-            org.telegram.tgnet.TLRPC$Document r0 = r0.getPreloadedSticker()
+            org.telegram.messenger.MediaDataController r0 = r17.getMediaDataController()
+            org.telegram.tgnet.TLRPC$Document r0 = r0.getGreetingsSticker()
             if (r0 == 0) goto L_0x029f
             r1.setPreloadedSticker(r0, r5)
         L_0x029f:

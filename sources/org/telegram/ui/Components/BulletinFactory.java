@@ -100,6 +100,8 @@ public final class BulletinFactory {
         Bulletin.LottieLayout lottieLayout = new Bulletin.LottieLayout(getContext());
         lottieLayout.setAnimation(i, 36, 36, new String[0]);
         lottieLayout.textView.setText(str);
+        lottieLayout.textView.setSingleLine(false);
+        lottieLayout.textView.setMaxLines(2);
         return create(lottieLayout, 1500);
     }
 
@@ -238,7 +240,7 @@ public final class BulletinFactory {
             r1 = 1
         L_0x0065:
             if (r1 == 0) goto L_0x0085
-            r1 = 2131558444(0x7f0d002c, float:1.8742204E38)
+            r1 = 2131558446(0x7f0d002e, float:1.8742208E38)
             r2 = 5
             java.lang.String[] r2 = new java.lang.String[r2]
             java.lang.String r3 = "Body Main"
@@ -254,7 +256,7 @@ public final class BulletinFactory {
             r0.setAnimation(r1, r2)
             goto L_0x009d
         L_0x0085:
-            r1 = 2131558449(0x7f0d0031, float:1.8742214E38)
+            r1 = 2131558451(0x7f0d0033, float:1.8742218E38)
             java.lang.String[] r2 = new java.lang.String[r4]
             java.lang.String r3 = "BODY"
             r2[r7] = r3
@@ -299,7 +301,7 @@ public final class BulletinFactory {
             java.lang.String r1 = "Pin"
             r2 = 0
             r3 = 2
-            r4 = 2131558450(0x7f0d0032, float:1.8742216E38)
+            r4 = 2131558452(0x7f0d0034, float:1.874222E38)
             r5 = 1
             r6 = 28
             if (r10 == 0) goto L_0x004a

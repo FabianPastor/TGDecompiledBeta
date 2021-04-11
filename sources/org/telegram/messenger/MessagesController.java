@@ -201,7 +201,6 @@ import org.telegram.tgnet.TLRPC$TL_messages_getPeerSettings;
 import org.telegram.tgnet.TLRPC$TL_messages_getPinnedDialogs;
 import org.telegram.tgnet.TLRPC$TL_messages_getReplies;
 import org.telegram.tgnet.TLRPC$TL_messages_getScheduledHistory;
-import org.telegram.tgnet.TLRPC$TL_messages_getStickers;
 import org.telegram.tgnet.TLRPC$TL_messages_getSuggestedDialogFilters;
 import org.telegram.tgnet.TLRPC$TL_messages_getUnreadMentions;
 import org.telegram.tgnet.TLRPC$TL_messages_getWebPagePreview;
@@ -224,7 +223,6 @@ import org.telegram.tgnet.TLRPC$TL_messages_setEncryptedTyping;
 import org.telegram.tgnet.TLRPC$TL_messages_setHistoryTTL;
 import org.telegram.tgnet.TLRPC$TL_messages_setTyping;
 import org.telegram.tgnet.TLRPC$TL_messages_startBot;
-import org.telegram.tgnet.TLRPC$TL_messages_stickers;
 import org.telegram.tgnet.TLRPC$TL_messages_toggleDialogPin;
 import org.telegram.tgnet.TLRPC$TL_messages_unpinAllMessages;
 import org.telegram.tgnet.TLRPC$TL_messages_updatePinnedMessage;
@@ -520,8 +518,6 @@ public class MessagesController extends BaseController implements NotificationCe
     private LongSparseArray<SparseArray<MessageObject>> pollsToCheck;
     private int pollsToCheckSize;
     public boolean preloadFeaturedStickers;
-    private ArrayList<TLRPC$Document> preloadedStickers;
-    private boolean preloadingSticker;
     public LongSparseArray<SparseArray<CharSequence>> printingStrings = new LongSparseArray<>();
     public LongSparseArray<SparseArray<Integer>> printingStringsTypes = new LongSparseArray<>();
     public ConcurrentHashMap<Long, ConcurrentHashMap<Integer, ArrayList<PrintingUser>>> printingUsers = new ConcurrentHashMap<>(20, 1.0f, 2);
@@ -1080,7 +1076,6 @@ public class MessagesController extends BaseController implements NotificationCe
         this.gifSearchEmojies = new ArrayList<>();
         this.diceSuccess = new HashMap<>();
         this.emojiSounds = new HashMap<>();
-        this.preloadedStickers = new ArrayList<>();
         this.dialogDateComparator = new Object() {
             public final int compare(Object obj, Object obj2) {
                 return MessagesController.this.lambda$new$1$MessagesController((TLRPC$Dialog) obj, (TLRPC$Dialog) obj2);
@@ -13835,7 +13830,7 @@ public class MessagesController extends BaseController implements NotificationCe
     /* JADX WARNING: type inference failed for: r1v18 */
     /* JADX WARNING: type inference failed for: r1v19 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r1v12, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r1v12, types: [int, boolean] */
     /* renamed from: lambda$null$167 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$null$167$MessagesController(org.telegram.tgnet.TLRPC$Message r27, int r28, org.telegram.tgnet.TLRPC$messages_Dialogs r29, java.util.ArrayList r30, boolean r31, int r32, android.util.LongSparseArray r33, android.util.LongSparseArray r34, android.util.SparseArray r35, int r36, boolean r37, int r38, java.util.ArrayList r39) {
@@ -28360,7 +28355,7 @@ public class MessagesController extends BaseController implements NotificationCe
             i2 = i;
         }
         int generateClassGuid = ConnectionsManager.generateClassGuid();
-        final int i3 = (int) j2;
+        int i3 = (int) j2;
         int i4 = i3 < 0 ? -i3 : 0;
         TLRPC$Chat tLRPC$Chat = null;
         if (i4 == 0 || (tLRPC$Chat = getMessagesController().getChat(Integer.valueOf(i4))) != null) {
@@ -28388,9 +28383,6 @@ public class MessagesController extends BaseController implements NotificationCe
                             MessagesLoadedCallback messagesLoadedCallback = messagesLoadedCallback2;
                             if (messagesLoadedCallback != null) {
                                 messagesLoadedCallback.onMessagesLoaded(booleanValue);
-                            }
-                            if (i3 > 0 && intValue == 0) {
-                                MessagesController.this.preloadGreetingsSticker();
                                 return;
                             }
                             return;
@@ -28476,58 +28468,5 @@ public class MessagesController extends BaseController implements NotificationCe
         } else if (messagesLoadedCallback != null) {
             messagesLoadedCallback.onError();
         }
-    }
-
-    public void preloadGreetingsSticker() {
-        if (!this.preloadingSticker) {
-            this.preloadingSticker = true;
-            TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers = new TLRPC$TL_messages_getStickers();
-            tLRPC$TL_messages_getStickers.emoticon = "👋" + Emoji.fixEmoji("⭐");
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStickers, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    MessagesController.this.lambda$preloadGreetingsSticker$319$MessagesController(tLObject, tLRPC$TL_error);
-                }
-            });
-        }
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$preloadGreetingsSticker$319 */
-    public /* synthetic */ void lambda$preloadGreetingsSticker$319$MessagesController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        if (tLObject instanceof TLRPC$TL_messages_stickers) {
-            ArrayList<TLRPC$Document> arrayList = ((TLRPC$TL_messages_stickers) tLObject).stickers;
-            if (!arrayList.isEmpty()) {
-                AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-                    public final /* synthetic */ ArrayList f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        MessagesController.this.lambda$null$318$MessagesController(this.f$1);
-                    }
-                });
-            }
-        }
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$null$318 */
-    public /* synthetic */ void lambda$null$318$MessagesController(ArrayList arrayList) {
-        for (int i = 0; i < arrayList.size(); i++) {
-            TLRPC$Document tLRPC$Document = (TLRPC$Document) arrayList.get(i);
-            FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForDocument(tLRPC$Document), tLRPC$Document, (String) null, 0, 1);
-            this.preloadedStickers.add(tLRPC$Document);
-        }
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.greetingsStickerLoaded, new Object[0]);
-    }
-
-    public TLRPC$Document getPreloadedSticker() {
-        if (this.preloadedStickers.isEmpty()) {
-            return null;
-        }
-        ArrayList<TLRPC$Document> arrayList = this.preloadedStickers;
-        return arrayList.get(Utilities.random.nextInt(arrayList.size()));
     }
 }

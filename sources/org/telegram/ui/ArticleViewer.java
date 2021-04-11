@@ -5103,6 +5103,21 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 fArr[1] = (float) ArticleViewer.this.listView[0].getMeasuredHeight();
             }
         });
+        this.pinchToZoomHelper.setCallback(new PinchToZoomHelper.Callback() {
+            public /* synthetic */ TextureView getCurrentTextureView() {
+                return PinchToZoomHelper.Callback.CC.$default$getCurrentTextureView(this);
+            }
+
+            public /* synthetic */ void onZoomFinished(MessageObject messageObject) {
+                PinchToZoomHelper.Callback.CC.$default$onZoomFinished(this, messageObject);
+            }
+
+            public void onZoomStarted(MessageObject messageObject) {
+                if (ArticleViewer.this.listView[0] != null) {
+                    ArticleViewer.this.listView[0].cancelClickRunnables(true);
+                }
+            }
+        });
         updatePaintColors();
     }
 
@@ -6260,7 +6275,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r12.setDuration(r13)
             android.view.animation.DecelerateInterpolator r13 = r11.interpolator
             r12.setInterpolator(r13)
-            org.telegram.ui.ArticleViewer$21 r13 = new org.telegram.ui.ArticleViewer$21
+            org.telegram.ui.ArticleViewer$22 r13 = new org.telegram.ui.ArticleViewer$22
             r13.<init>()
             r12.addListener(r13)
             long r13 = java.lang.System.currentTimeMillis()

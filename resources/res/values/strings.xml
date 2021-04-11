@@ -770,7 +770,7 @@
     <string name="ChannelDeleteInfo">You will lose all messages in this channel.</string>
     <string name="ChannelDeleteMenu">Delete channel</string>
     <string name="ChannelDeletedUndo">Channel deleted.</string>
-    <string name="ChannelDescriptionIsChanged">Channel description is changed</string>
+    <string name="ChannelDescriptionChanged">Channel description updated.</string>
     <string name="ChannelDiscuss">DISCUSS</string>
     <string name="ChannelEdit">Edit</string>
     <string name="ChannelEditPermissions">Edit permissions</string>
@@ -831,7 +831,7 @@
     <string name="ChannelSignMessagesInfo">Add names of the admins to the messages they post.</string>
     <string name="ChannelSilentBroadcast">Silent Broadcast</string>
     <string name="ChannelSubscribers">Subscribers</string>
-    <string name="ChannelTitleIsChanged">Channel title is changed</string>
+    <string name="ChannelTitleChanged">Channel title updated.</string>
     <string name="ChannelTooMuch">Sorry, you are a member of too many groups and channels. Please leave some before creating a new one.</string>
     <string name="ChannelTooMuchJoin">Sorry, you are a member of too many groups and channels. Please leave some before joining a new one.</string>
     <string name="ChannelTooMuchTitle">Too many communities</string>
@@ -3723,6 +3723,7 @@
     <string name="TelegramFaq">Telegram FAQ</string>
     <string name="TelegramFaqUrl">https://telegram.org/faq</string>
     <string name="TelegramFeatures">Telegram Features</string>
+    <string name="TelegramFeaturesUrl">https://t.me/TelegramTips</string>
     <string name="TelegramPassport">Telegram Passport</string>
     <string name="TelegramPassportCreatePassword">CREATE A PASSWORD</string>
     <string name="TelegramPassportCreatePasswordInfo">Please create a password to secure your personal data with end-to-end encryption.\10\10This password will also be required whenever you log in to Telegram on a new device.</string>
@@ -4065,7 +4066,7 @@
     <string name="VoipBusy">Line busy</string>
     <string name="VoipCallEnded">Call ended</string>
     <string name="VoipChannelScheduleInfo">Subscribers of the channel will be notified that the voice chat will start in %1$s.</string>
-    <string name="VoipChannelStart2">Members of this channel will be notified once you start the voice chat.</string>
+    <string name="VoipChannelStart2">Subscribers of this channel will be notified once you start the voice chat.</string>
     <string name="VoipChatDisplayedAs">You will be displayed as:</string>
     <string name="VoipChatJoin">Join</string>
     <string name="VoipChatLateBy">Late by</string>
@@ -4295,7 +4296,7 @@
     <string name="YouHaveNewMessage">You have a new message</string>
     <string name="YouLeft">You left this group</string>
     <string name="YouWereKicked">you were removed</string>
-    <string name="YourBioIsChanged">Your bio is changed.</string>
+    <string name="YourBioChanged">Bio updated.</string>
     <string name="YourCode">Phone verification</string>
     <string name="YourContacts">Your contacts on Telegram</string>
     <string name="YourContactsToInvite">Your contacts</string>
@@ -4312,7 +4313,7 @@
     <string name="YourEmailSuccessText">Your recovery email for Two-Step Verification is now active.</string>
     <string name="YourLocatedChannelsTooMuch">Sorry, you have too many location-based groups already. Please delete one of your existing ones first.</string>
     <string name="YourName">Your name</string>
-    <string name="YourNameIsChanged">Your name is changed.</string>
+    <string name="YourNameChanged">Name updated.</string>
     <string name="YourPassword">Your Password</string>
     <string name="YourPasswordChangedSuccessText">Your password for Two-Step Verification has been changed.</string>
     <string name="YourPasswordSuccess">Success!</string>

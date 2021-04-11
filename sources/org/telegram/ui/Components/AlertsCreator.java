@@ -76,7 +76,6 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$ChannelParticipant;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
-import org.telegram.tgnet.TLRPC$Dialog;
 import org.telegram.tgnet.TLRPC$EncryptedChat;
 import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$Message;
@@ -135,7 +134,6 @@ import org.telegram.tgnet.TLRPC$TL_messages_startBot;
 import org.telegram.tgnet.TLRPC$TL_messages_startHistoryImport;
 import org.telegram.tgnet.TLRPC$TL_payments_sendPaymentForm;
 import org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo;
-import org.telegram.tgnet.TLRPC$TL_peerNotifySettings;
 import org.telegram.tgnet.TLRPC$TL_phone_inviteToGroupCall;
 import org.telegram.tgnet.TLRPC$TL_updateUserName;
 import org.telegram.tgnet.TLRPC$Updates;
@@ -161,7 +159,6 @@ import org.telegram.ui.LanguageSelectActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.NotificationsCustomSettingsActivity;
 import org.telegram.ui.NotificationsSettingsActivity;
-import org.telegram.ui.ProfileNotificationsActivity;
 import org.telegram.ui.ThemePreviewActivity;
 import org.telegram.ui.TooManyCommunitiesActivity;
 
@@ -1140,95 +1137,225 @@ public class AlertsCreator {
         }
     }
 
-    static /* synthetic */ void lambda$showCustomNotificationsDialog$8(long j, int i, boolean z, MessagesStorage.IntCallback intCallback, int i2, BaseFragment baseFragment, ArrayList arrayList, MessagesStorage.IntCallback intCallback2, AlertDialog.Builder builder, View view) {
-        long j2 = j;
-        MessagesStorage.IntCallback intCallback3 = intCallback;
-        int i3 = i2;
-        BaseFragment baseFragment2 = baseFragment;
-        MessagesStorage.IntCallback intCallback4 = intCallback2;
-        int intValue = ((Integer) view.getTag()).intValue();
-        long j3 = 0;
-        if (intValue == 0) {
-            if (j2 != 0) {
-                SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(i).edit();
-                if (z) {
-                    edit.remove("notify2_" + j2);
-                } else {
-                    edit.putInt("notify2_" + j2, 0);
-                }
-                MessagesStorage.getInstance(i).setDialogFlags(j2, 0);
-                edit.commit();
-                TLRPC$Dialog tLRPC$Dialog = MessagesController.getInstance(i).dialogs_dict.get(j2);
-                if (tLRPC$Dialog != null) {
-                    tLRPC$Dialog.notify_settings = new TLRPC$TL_peerNotifySettings();
-                }
-                NotificationsController.getInstance(i).updateServerNotificationsSettings(j2);
-                if (intCallback3 != null) {
-                    if (z) {
-                        intCallback3.run(0);
-                    } else {
-                        intCallback3.run(1);
-                    }
-                }
-            } else {
-                NotificationsController.getInstance(i).setGlobalNotificationsEnabled(i3, 0);
-            }
-        } else if (intValue != 3) {
-            int currentTime = ConnectionsManager.getInstance(i).getCurrentTime();
-            if (intValue == 1) {
-                currentTime += 3600;
-            } else if (intValue == 2) {
-                currentTime += 172800;
-            } else if (intValue == 4) {
-                currentTime = Integer.MAX_VALUE;
-            }
-            if (j2 != 0) {
-                SharedPreferences.Editor edit2 = MessagesController.getNotificationsSettings(i).edit();
-                if (intValue != 4) {
-                    edit2.putInt("notify2_" + j2, 3);
-                    edit2.putInt("notifyuntil_" + j2, currentTime);
-                    j3 = (((long) currentTime) << 32) | 1;
-                } else if (!z) {
-                    edit2.remove("notify2_" + j2);
-                } else {
-                    edit2.putInt("notify2_" + j2, 2);
-                    j3 = 1;
-                }
-                NotificationsController.getInstance(i).removeNotificationsForDialog(j2);
-                MessagesStorage.getInstance(i).setDialogFlags(j2, j3);
-                edit2.commit();
-                TLRPC$Dialog tLRPC$Dialog2 = MessagesController.getInstance(i).dialogs_dict.get(j2);
-                if (tLRPC$Dialog2 != null) {
-                    TLRPC$TL_peerNotifySettings tLRPC$TL_peerNotifySettings = new TLRPC$TL_peerNotifySettings();
-                    tLRPC$Dialog2.notify_settings = tLRPC$TL_peerNotifySettings;
-                    if (intValue != 4 || z) {
-                        tLRPC$TL_peerNotifySettings.mute_until = currentTime;
-                    }
-                }
-                NotificationsController.getInstance(i).updateServerNotificationsSettings(j2);
-                if (intCallback3 != null) {
-                    if (intValue != 4 || z) {
-                        intCallback3.run(1);
-                    } else {
-                        intCallback3.run(0);
-                    }
-                }
-            } else if (intValue == 4) {
-                NotificationsController.getInstance(i).setGlobalNotificationsEnabled(i3, Integer.MAX_VALUE);
-            } else {
-                NotificationsController.getInstance(i).setGlobalNotificationsEnabled(i3, currentTime);
-            }
-        } else if (j2 != 0) {
-            Bundle bundle = new Bundle();
-            bundle.putLong("dialog_id", j2);
-            baseFragment2.presentFragment(new ProfileNotificationsActivity(bundle));
-        } else {
-            baseFragment2.presentFragment(new NotificationsCustomSettingsActivity(i3, arrayList));
-        }
-        if (intCallback4 != null) {
-            intCallback4.run(intValue);
-        }
-        builder.getDismissRunnable().run();
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x018c  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x0199  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x019b  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x01af  */
+    /* JADX WARNING: Removed duplicated region for block: B:71:? A[RETURN, SYNTHETIC] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    static /* synthetic */ void lambda$showCustomNotificationsDialog$8(long r18, int r20, boolean r21, org.telegram.messenger.MessagesStorage.IntCallback r22, int r23, org.telegram.ui.ActionBar.BaseFragment r24, java.util.ArrayList r25, org.telegram.messenger.MessagesStorage.IntCallback r26, org.telegram.ui.ActionBar.AlertDialog.Builder r27, android.view.View r28) {
+        /*
+            r0 = r18
+            r2 = r22
+            r3 = r23
+            r4 = r24
+            r5 = r26
+            java.lang.Object r6 = r28.getTag()
+            java.lang.Integer r6 = (java.lang.Integer) r6
+            int r6 = r6.intValue()
+            r7 = 3
+            r8 = 2
+            r9 = 1
+            java.lang.String r10 = "notify2_"
+            r11 = 0
+            r12 = 0
+            r14 = 4
+            if (r6 != 0) goto L_0x008e
+            int r15 = (r0 > r12 ? 1 : (r0 == r12 ? 0 : -1))
+            if (r15 == 0) goto L_0x0084
+            android.content.SharedPreferences r3 = org.telegram.messenger.MessagesController.getNotificationsSettings(r20)
+            android.content.SharedPreferences$Editor r3 = r3.edit()
+            if (r21 == 0) goto L_0x0040
+            java.lang.StringBuilder r15 = new java.lang.StringBuilder
+            r15.<init>()
+            r15.append(r10)
+            r15.append(r0)
+            java.lang.String r10 = r15.toString()
+            r3.remove(r10)
+            goto L_0x0052
+        L_0x0040:
+            java.lang.StringBuilder r15 = new java.lang.StringBuilder
+            r15.<init>()
+            r15.append(r10)
+            r15.append(r0)
+            java.lang.String r10 = r15.toString()
+            r3.putInt(r10, r11)
+        L_0x0052:
+            org.telegram.messenger.MessagesStorage r10 = org.telegram.messenger.MessagesStorage.getInstance(r20)
+            r10.setDialogFlags(r0, r12)
+            r3.commit()
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r20)
+            android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r3 = r3.dialogs_dict
+            java.lang.Object r3 = r3.get(r0)
+            org.telegram.tgnet.TLRPC$Dialog r3 = (org.telegram.tgnet.TLRPC$Dialog) r3
+            if (r3 == 0) goto L_0x0071
+            org.telegram.tgnet.TLRPC$TL_peerNotifySettings r10 = new org.telegram.tgnet.TLRPC$TL_peerNotifySettings
+            r10.<init>()
+            r3.notify_settings = r10
+        L_0x0071:
+            org.telegram.messenger.NotificationsController r3 = org.telegram.messenger.NotificationsController.getInstance(r20)
+            r3.updateServerNotificationsSettings((long) r0)
+            if (r2 == 0) goto L_0x008b
+            if (r21 == 0) goto L_0x0080
+            r2.run(r11)
+            goto L_0x008b
+        L_0x0080:
+            r2.run(r9)
+            goto L_0x008b
+        L_0x0084:
+            org.telegram.messenger.NotificationsController r0 = org.telegram.messenger.NotificationsController.getInstance(r20)
+            r0.setGlobalNotificationsEnabled(r3, r11)
+        L_0x008b:
+            r0 = 0
+            goto L_0x018a
+        L_0x008e:
+            if (r6 != r7) goto L_0x00b2
+            int r2 = (r0 > r12 ? 1 : (r0 == r12 ? 0 : -1))
+            if (r2 == 0) goto L_0x00a7
+            android.os.Bundle r2 = new android.os.Bundle
+            r2.<init>()
+            java.lang.String r3 = "dialog_id"
+            r2.putLong(r3, r0)
+            org.telegram.ui.ProfileNotificationsActivity r0 = new org.telegram.ui.ProfileNotificationsActivity
+            r0.<init>(r2)
+            r4.presentFragment(r0)
+            goto L_0x008b
+        L_0x00a7:
+            org.telegram.ui.NotificationsCustomSettingsActivity r0 = new org.telegram.ui.NotificationsCustomSettingsActivity
+            r1 = r25
+            r0.<init>(r3, r1)
+            r4.presentFragment(r0)
+            goto L_0x008b
+        L_0x00b2:
+            org.telegram.tgnet.ConnectionsManager r15 = org.telegram.tgnet.ConnectionsManager.getInstance(r20)
+            int r15 = r15.getCurrentTime()
+            r11 = 2147483647(0x7fffffff, float:NaN)
+            if (r6 != r9) goto L_0x00c2
+            int r15 = r15 + 3600
+            goto L_0x00cf
+        L_0x00c2:
+            if (r6 != r8) goto L_0x00ca
+            r16 = 172800(0x2a300, float:2.42144E-40)
+            int r15 = r15 + r16
+            goto L_0x00cf
+        L_0x00ca:
+            if (r6 != r14) goto L_0x00cf
+            r15 = 2147483647(0x7fffffff, float:NaN)
+        L_0x00cf:
+            int r16 = (r0 > r12 ? 1 : (r0 == r12 ? 0 : -1))
+            if (r16 == 0) goto L_0x0178
+            android.content.SharedPreferences r3 = org.telegram.messenger.MessagesController.getNotificationsSettings(r20)
+            android.content.SharedPreferences$Editor r3 = r3.edit()
+            r16 = 1
+            if (r6 != r14) goto L_0x0109
+            if (r21 != 0) goto L_0x00f4
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder
+            r11.<init>()
+            r11.append(r10)
+            r11.append(r0)
+            java.lang.String r10 = r11.toString()
+            r3.remove(r10)
+            goto L_0x0135
+        L_0x00f4:
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder
+            r11.<init>()
+            r11.append(r10)
+            r11.append(r0)
+            java.lang.String r10 = r11.toString()
+            r3.putInt(r10, r8)
+            r12 = r16
+            goto L_0x0135
+        L_0x0109:
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder
+            r11.<init>()
+            r11.append(r10)
+            r11.append(r0)
+            java.lang.String r10 = r11.toString()
+            r3.putInt(r10, r7)
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder
+            r10.<init>()
+            java.lang.String r11 = "notifyuntil_"
+            r10.append(r11)
+            r10.append(r0)
+            java.lang.String r10 = r10.toString()
+            r3.putInt(r10, r15)
+            long r10 = (long) r15
+            r12 = 32
+            long r10 = r10 << r12
+            long r12 = r10 | r16
+        L_0x0135:
+            org.telegram.messenger.NotificationsController r10 = org.telegram.messenger.NotificationsController.getInstance(r20)
+            r10.removeNotificationsForDialog(r0)
+            org.telegram.messenger.MessagesStorage r10 = org.telegram.messenger.MessagesStorage.getInstance(r20)
+            r10.setDialogFlags(r0, r12)
+            r3.commit()
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r20)
+            android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r3 = r3.dialogs_dict
+            java.lang.Object r3 = r3.get(r0)
+            org.telegram.tgnet.TLRPC$Dialog r3 = (org.telegram.tgnet.TLRPC$Dialog) r3
+            if (r3 == 0) goto L_0x0161
+            org.telegram.tgnet.TLRPC$TL_peerNotifySettings r10 = new org.telegram.tgnet.TLRPC$TL_peerNotifySettings
+            r10.<init>()
+            r3.notify_settings = r10
+            if (r6 != r14) goto L_0x015f
+            if (r21 == 0) goto L_0x0161
+        L_0x015f:
+            r10.mute_until = r15
+        L_0x0161:
+            org.telegram.messenger.NotificationsController r3 = org.telegram.messenger.NotificationsController.getInstance(r20)
+            r3.updateServerNotificationsSettings((long) r0)
+            if (r2 == 0) goto L_0x008b
+            if (r6 != r14) goto L_0x0173
+            if (r21 != 0) goto L_0x0173
+            r0 = 0
+            r2.run(r0)
+            goto L_0x018a
+        L_0x0173:
+            r0 = 0
+            r2.run(r9)
+            goto L_0x018a
+        L_0x0178:
+            r0 = 0
+            if (r6 != r14) goto L_0x0183
+            org.telegram.messenger.NotificationsController r1 = org.telegram.messenger.NotificationsController.getInstance(r20)
+            r1.setGlobalNotificationsEnabled(r3, r11)
+            goto L_0x018a
+        L_0x0183:
+            org.telegram.messenger.NotificationsController r1 = org.telegram.messenger.NotificationsController.getInstance(r20)
+            r1.setGlobalNotificationsEnabled(r3, r15)
+        L_0x018a:
+            if (r5 == 0) goto L_0x018f
+            r5.run(r6)
+        L_0x018f:
+            java.lang.Runnable r1 = r27.getDismissRunnable()
+            r1.run()
+            r1 = -1
+            if (r6 != 0) goto L_0x019b
+            r7 = 4
+            goto L_0x01a7
+        L_0x019b:
+            if (r6 != r9) goto L_0x019f
+            r7 = 0
+            goto L_0x01a7
+        L_0x019f:
+            if (r6 != r8) goto L_0x01a3
+            r7 = 2
+            goto L_0x01a7
+        L_0x01a3:
+            if (r6 != r14) goto L_0x01a6
+            goto L_0x01a7
+        L_0x01a6:
+            r7 = -1
+        L_0x01a7:
+            if (r7 < 0) goto L_0x01b6
+            boolean r0 = org.telegram.ui.Components.BulletinFactory.canShowBulletin(r24)
+            if (r0 == 0) goto L_0x01b6
+            org.telegram.ui.Components.Bulletin r0 = org.telegram.ui.Components.BulletinFactory.createMuteBulletin((org.telegram.ui.ActionBar.BaseFragment) r4, (int) r7)
+            r0.show()
+        L_0x01b6:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.lambda$showCustomNotificationsDialog$8(long, int, boolean, org.telegram.messenger.MessagesStorage$IntCallback, int, org.telegram.ui.ActionBar.BaseFragment, java.util.ArrayList, org.telegram.messenger.MessagesStorage$IntCallback, org.telegram.ui.ActionBar.AlertDialog$Builder, android.view.View):void");
     }
 
     public static AlertDialog showSecretLocationAlert(Context context, int i, Runnable runnable, boolean z) {

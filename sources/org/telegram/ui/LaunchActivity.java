@@ -1038,7 +1038,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 lambda$runLinkRequest$41(new ActionIntroActivity(1));
                 this.drawerLayoutContainer.closeDrawer(false);
             } else if (id == 13) {
-                Browser.openUrl((Context) this, "https://t.me/TelegramTips");
+                Browser.openUrl((Context) this, LocaleController.getString("TelegramFeaturesUrl", NUM));
                 this.drawerLayoutContainer.closeDrawer(false);
             }
         }
@@ -2464,7 +2464,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v234, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v597, resolved type: java.lang.String} */
     /* JADX WARNING: type inference failed for: r3v6, types: [android.os.Bundle, java.lang.String] */
-    /* JADX WARNING: type inference failed for: r2v3, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r2v3, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r3v10 */
     /* JADX WARNING: type inference failed for: r2v12 */
     /* JADX WARNING: type inference failed for: r2v14 */
@@ -8887,11 +8887,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)
         L_0x008e:
-            r5 = 2131627682(0x7f0e0ea2, float:1.8882635E38)
+            r5 = 2131627683(0x7f0e0ea3, float:1.8882637E38)
             java.lang.String r6 = "Theme"
             if (r0 != r1) goto L_0x00aa
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r6 = 2131627702(0x7f0e0eb6, float:1.8882676E38)
+            r6 = 2131627703(0x7f0e0eb7, float:1.8882678E38)
             java.lang.String r7 = "ThemeNotSupported"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r4, r5, r6)
@@ -8899,7 +8899,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             goto L_0x00be
         L_0x00aa:
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r6 = 2131627701(0x7f0e0eb5, float:1.8882674E38)
+            r6 = 2131627702(0x7f0e0eb6, float:1.8882676E38)
             java.lang.String r7 = "ThemeNotFound"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r4, r5, r6)
@@ -10264,7 +10264,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r2 = "Proxy"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r4.setTitle(r0)
-            r0 = 2131627849(0x7f0e0var_, float:1.8882974E38)
+            r0 = 2131627850(0x7f0e0f4a, float:1.8882976E38)
             java.lang.String r2 = "UseProxyTelegramError"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r4.setMessage(r0)
@@ -10443,11 +10443,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r6 = (org.telegram.ui.ActionBar.BaseFragment) r6
             org.telegram.ui.ActionBar.AlertDialog$Builder r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r8.<init>((android.content.Context) r1)
-            r9 = 2131627817(0x7f0e0var_, float:1.888291E38)
+            r9 = 2131627818(0x7f0e0f2a, float:1.8882911E38)
             java.lang.String r10 = "UpdateContactsTitle"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setTitle(r9)
-            r9 = 2131627816(0x7f0e0var_, float:1.8882907E38)
+            r9 = 2131627817(0x7f0e0var_, float:1.888291E38)
             java.lang.String r10 = "UpdateContactsMessage"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setMessage(r9)
@@ -10893,12 +10893,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             if (r0 <= 0) goto L_0x06b5
-            r0 = 2131628249(0x7f0e10d9, float:1.8883785E38)
-            java.lang.String r3 = "YourNameIsChanged"
+            r0 = 2131628250(0x7f0e10da, float:1.8883787E38)
+            java.lang.String r3 = "YourNameChanged"
             goto L_0x06ba
         L_0x06b5:
             r0 = 2131624767(0x7f0e033f, float:1.8876723E38)
-            java.lang.String r3 = "CannelTitleIsChanged"
+            java.lang.String r3 = "CannelTitleChanged"
         L_0x06ba:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             if (r2 == 0) goto L_0x06c5
@@ -10916,12 +10916,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             if (r0 <= 0) goto L_0x06e4
-            r0 = 2131628232(0x7f0e10c8, float:1.888375E38)
-            java.lang.String r3 = "YourBioIsChanged"
+            r0 = 2131628233(0x7f0e10c9, float:1.8883753E38)
+            java.lang.String r3 = "YourBioChanged"
             goto L_0x06e9
         L_0x06e4:
             r0 = 2131624706(0x7f0e0302, float:1.88766E38)
-            java.lang.String r3 = "CannelDescriptionIsChanged"
+            java.lang.String r3 = "CannelDescriptionChanged"
         L_0x06e9:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             if (r2 == 0) goto L_0x06f4

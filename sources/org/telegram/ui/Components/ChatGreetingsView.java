@@ -12,9 +12,8 @@ import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
-import org.telegram.messenger.MessagesController;
-import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
@@ -22,7 +21,7 @@ import org.telegram.tgnet.TLRPC$TL_documentAttributeImageSize;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 
-public class ChatGreetingsView extends LinearLayout implements NotificationCenter.NotificationCenterDelegate {
+public class ChatGreetingsView extends LinearLayout {
     private final int currentAccount;
     private TextView descriptionView;
     boolean ignoreLayot;
@@ -62,30 +61,31 @@ public class ChatGreetingsView extends LinearLayout implements NotificationCente
         }
         this.preloadedGreetingsSticker = tLRPC$Document;
         if (tLRPC$Document == null) {
-            MessagesController.getInstance(i2).preloadGreetingsSticker();
-        } else {
-            setSticker(tLRPC$Document);
+            this.preloadedGreetingsSticker = MediaDataController.getInstance(i2).getGreetingsSticker();
         }
+        setSticker(this.preloadedGreetingsSticker);
     }
 
     private void setSticker(TLRPC$Document tLRPC$Document) {
-        SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document, "chat_serviceBackground", 1.0f);
-        if (svgThumb != null) {
-            this.stickerToSendView.setImage(ImageLocation.getForDocument(tLRPC$Document), createFilter(tLRPC$Document), (Drawable) svgThumb, 0, (Object) tLRPC$Document);
-        } else {
-            this.stickerToSendView.setImage(ImageLocation.getForDocument(tLRPC$Document), createFilter(tLRPC$Document), ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document), (String) null, 0, (Object) tLRPC$Document);
+        if (tLRPC$Document != null) {
+            SvgHelper.SvgDrawable svgThumb = DocumentObject.getSvgThumb(tLRPC$Document, "chat_serviceBackground", 1.0f);
+            if (svgThumb != null) {
+                this.stickerToSendView.setImage(ImageLocation.getForDocument(tLRPC$Document), createFilter(tLRPC$Document), (Drawable) svgThumb, 0, (Object) tLRPC$Document);
+            } else {
+                this.stickerToSendView.setImage(ImageLocation.getForDocument(tLRPC$Document), createFilter(tLRPC$Document), ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document), (String) null, 0, (Object) tLRPC$Document);
+            }
+            this.stickerToSendView.setOnClickListener(new View.OnClickListener(tLRPC$Document) {
+                public final /* synthetic */ TLRPC$Document f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void onClick(View view) {
+                    ChatGreetingsView.this.lambda$setSticker$0$ChatGreetingsView(this.f$1, view);
+                }
+            });
         }
-        this.stickerToSendView.setOnClickListener(new View.OnClickListener(tLRPC$Document) {
-            public final /* synthetic */ TLRPC$Document f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void onClick(View view) {
-                ChatGreetingsView.this.lambda$setSticker$0$ChatGreetingsView(this.f$1, view);
-            }
-        });
     }
 
     /* access modifiers changed from: private */
@@ -184,26 +184,18 @@ public class ChatGreetingsView extends LinearLayout implements NotificationCente
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         fetchSticker();
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.greetingsStickerLoaded);
     }
 
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.greetingsStickerLoaded);
     }
 
     private void fetchSticker() {
         if (this.preloadedGreetingsSticker == null) {
-            TLRPC$Document preloadedSticker = MessagesController.getInstance(this.currentAccount).getPreloadedSticker();
-            this.preloadedGreetingsSticker = preloadedSticker;
-            if (preloadedSticker != null) {
-                setSticker(preloadedSticker);
-            }
+            TLRPC$Document greetingsSticker = MediaDataController.getInstance(this.currentAccount).getGreetingsSticker();
+            this.preloadedGreetingsSticker = greetingsSticker;
+            setSticker(greetingsSticker);
         }
-    }
-
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        fetchSticker();
     }
 }

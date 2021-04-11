@@ -447,10 +447,10 @@ public class GroupCallUserCell extends FrameLayout {
 
     public int getClipHeight() {
         SimpleTextView simpleTextView;
-        if (!TextUtils.isEmpty(this.fullAboutTextView.getText())) {
-            simpleTextView = this.fullAboutTextView;
-        } else {
+        if (TextUtils.isEmpty(this.fullAboutTextView.getText()) || !this.hasAvatar) {
             simpleTextView = this.statusTextView[4];
+        } else {
+            simpleTextView = this.fullAboutTextView;
         }
         if (simpleTextView.getLineCount() <= 1) {
             return getMeasuredHeight();
@@ -978,7 +978,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x0229:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627734(0x7f0e0ed6, float:1.888274E38)
+            r10 = 2131627735(0x7f0e0ed7, float:1.8882743E38)
             java.lang.String r11 = "ThisIsYou"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)

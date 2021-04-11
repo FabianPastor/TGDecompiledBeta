@@ -356,6 +356,10 @@ public final class Bulletin {
         return this.showing;
     }
 
+    public Layout getLayout() {
+        return this.layout;
+    }
+
     /* access modifiers changed from: private */
     public static boolean isTransitionsEnabled() {
         return MessagesController.getGlobalMainSettings().getBoolean("view_animations", true) && Build.VERSION.SDK_INT >= 18;
@@ -1738,6 +1742,7 @@ public final class Bulletin {
                                 textView2.setTypeface(Typeface.SANS_SERIF);
                                 textView2.setTextSize(1, 15.0f);
                                 textView2.setEllipsize(TextUtils.TruncateAt.END);
+                                textView2.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
                                 addView(textView2, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
                             }
 

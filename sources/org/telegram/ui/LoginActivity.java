@@ -336,10 +336,10 @@ public class LoginActivity extends BaseFragment {
             r13 = 8
         L_0x0097:
             r3.setVisibility(r13)
-            android.widget.FrameLayout r3 = new android.widget.FrameLayout
+            org.telegram.ui.LoginActivity$2 r3 = new org.telegram.ui.LoginActivity$2
             r3.<init>(r1)
             r0.fragmentView = r3
-            org.telegram.ui.LoginActivity$2 r13 = new org.telegram.ui.LoginActivity$2
+            org.telegram.ui.LoginActivity$3 r13 = new org.telegram.ui.LoginActivity$3
             r13.<init>(r1)
             r13.setFillViewport(r4)
             android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11)
@@ -562,7 +562,7 @@ public class LoginActivity extends BaseFragment {
             android.widget.FrameLayout r4 = r0.floatingButtonContainer
             r4.setStateListAnimator(r7)
             android.widget.FrameLayout r4 = r0.floatingButtonContainer
-            org.telegram.ui.LoginActivity$3 r5 = new org.telegram.ui.LoginActivity$3
+            org.telegram.ui.LoginActivity$4 r5 = new org.telegram.ui.LoginActivity$4
             r5.<init>(r0)
             r4.setOutlineProvider(r5)
         L_0x0289:
@@ -774,7 +774,7 @@ public class LoginActivity extends BaseFragment {
 
     public void onResume() {
         SlideView slideView;
-        int access$600;
+        int access$700;
         super.onResume();
         if (this.newAccount) {
             ConnectionsManager.getInstance(this.currentAccount).setAppPaused(false, false);
@@ -785,7 +785,7 @@ public class LoginActivity extends BaseFragment {
             int i = this.currentViewNum;
             if (i >= 1 && i <= 4) {
                 SlideView[] slideViewArr = this.views;
-                if ((slideViewArr[i] instanceof LoginActivitySmsView) && (access$600 = ((LoginActivitySmsView) slideViewArr[i]).openTime) != 0 && Math.abs((System.currentTimeMillis() / 1000) - ((long) access$600)) >= 86400) {
+                if ((slideViewArr[i] instanceof LoginActivitySmsView) && (access$700 = ((LoginActivitySmsView) slideViewArr[i]).openTime) != 0 && Math.abs((System.currentTimeMillis() / 1000) - ((long) access$700)) >= 86400) {
                     this.views[this.currentViewNum].onBackPressed(true);
                     setPage(0, false, (Bundle) null, true);
                 }
@@ -2623,7 +2623,7 @@ public class LoginActivity extends BaseFragment {
                 r8.<init>(r2)
                 r0.blueImageView = r8
                 org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
-                r18 = 2131558476(0x7f0d004c, float:1.8742269E38)
+                r18 = 2131558478(0x7f0d004e, float:1.8742273E38)
                 r10 = 1115684864(0x42800000, float:64.0)
                 int r20 = org.telegram.messenger.AndroidUtilities.dp(r10)
                 int r21 = org.telegram.messenger.AndroidUtilities.dp(r10)
@@ -3322,14 +3322,14 @@ public class LoginActivity extends BaseFragment {
                     /* renamed from: lambda$run$0 */
                     public /* synthetic */ void lambda$run$0$LoginActivity$LoginActivitySmsView$4() {
                         double currentTimeMillis = (double) System.currentTimeMillis();
-                        double access$5000 = LoginActivitySmsView.this.lastCodeTime;
+                        double access$5200 = LoginActivitySmsView.this.lastCodeTime;
                         Double.isNaN(currentTimeMillis);
-                        double d = currentTimeMillis - access$5000;
+                        double d = currentTimeMillis - access$5200;
                         double unused = LoginActivitySmsView.this.lastCodeTime = currentTimeMillis;
                         LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
-                        double access$5100 = (double) loginActivitySmsView.codeTime;
-                        Double.isNaN(access$5100);
-                        int unused2 = loginActivitySmsView.codeTime = (int) (access$5100 - d);
+                        double access$5300 = (double) loginActivitySmsView.codeTime;
+                        Double.isNaN(access$5300);
+                        int unused2 = loginActivitySmsView.codeTime = (int) (access$5300 - d);
                         if (LoginActivitySmsView.this.codeTime <= 1000) {
                             LoginActivitySmsView.this.problemText.setVisibility(0);
                             LoginActivitySmsView.this.timeText.setVisibility(8);
@@ -3501,21 +3501,21 @@ public class LoginActivity extends BaseFragment {
                         /* renamed from: lambda$run$2 */
                         public /* synthetic */ void lambda$run$2$LoginActivity$LoginActivitySmsView$5() {
                             double currentTimeMillis = (double) System.currentTimeMillis();
-                            double access$5600 = LoginActivitySmsView.this.lastCurrentTime;
+                            double access$5800 = LoginActivitySmsView.this.lastCurrentTime;
                             Double.isNaN(currentTimeMillis);
-                            double d = currentTimeMillis - access$5600;
+                            double d = currentTimeMillis - access$5800;
                             double unused = LoginActivitySmsView.this.lastCurrentTime = currentTimeMillis;
                             LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
-                            double access$5700 = (double) loginActivitySmsView.time;
-                            Double.isNaN(access$5700);
-                            int unused2 = loginActivitySmsView.time = (int) (access$5700 - d);
+                            double access$5900 = (double) loginActivitySmsView.time;
+                            Double.isNaN(access$5900);
+                            int unused2 = loginActivitySmsView.time = (int) (access$5900 - d);
                             if (LoginActivitySmsView.this.time >= 1000) {
-                                int access$57002 = (LoginActivitySmsView.this.time / 1000) / 60;
-                                int access$57003 = (LoginActivitySmsView.this.time / 1000) - (access$57002 * 60);
+                                int access$59002 = (LoginActivitySmsView.this.time / 1000) / 60;
+                                int access$59003 = (LoginActivitySmsView.this.time / 1000) - (access$59002 * 60);
                                 if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3) {
-                                    LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(access$57002), Integer.valueOf(access$57003)));
+                                    LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(access$59002), Integer.valueOf(access$59003)));
                                 } else if (LoginActivitySmsView.this.nextType == 2) {
-                                    LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(access$57002), Integer.valueOf(access$57003)));
+                                    LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(access$59002), Integer.valueOf(access$59003)));
                                 }
                                 if (LoginActivitySmsView.this.progressView != null && !LoginActivitySmsView.this.progressView.isProgressAnimationRunning()) {
                                     LoginActivitySmsView.this.progressView.startProgressAnimation(((long) LoginActivitySmsView.this.time) - 1000);
@@ -3552,7 +3552,7 @@ public class LoginActivity extends BaseFragment {
                                           (r8v0 'this' org.telegram.ui.LoginActivity$LoginActivitySmsView$5 A[THIS])
                                          org.telegram.ui.LoginActivity.LoginActivitySmsView.5.this$1 org.telegram.ui.LoginActivity$LoginActivitySmsView)
                                          org.telegram.ui.LoginActivity.LoginActivitySmsView.this$0 org.telegram.ui.LoginActivity)
-                                         org.telegram.ui.LoginActivity.access$6700(org.telegram.ui.LoginActivity):int type: STATIC)
+                                         org.telegram.ui.LoginActivity.access$6900(org.telegram.ui.LoginActivity):int type: STATIC)
                                          org.telegram.tgnet.ConnectionsManager.getInstance(int):org.telegram.tgnet.ConnectionsManager type: STATIC)
                                           (r0v15 'tLRPC$TL_auth_resendCode' org.telegram.tgnet.TLRPC$TL_auth_resendCode)
                                           (wrap: org.telegram.ui.-$$Lambda$LoginActivity$LoginActivitySmsView$5$WdHQ5-Qp-TN7VdC5vZlMfRqlDyU : 0x0191: CONSTRUCTOR  (r2v4 org.telegram.ui.-$$Lambda$LoginActivity$LoginActivitySmsView$5$WdHQ5-Qp-TN7VdC5vZlMfRqlDyU) = 
@@ -6624,7 +6624,7 @@ public class LoginActivity extends BaseFragment {
                                 r5 = -2
                                 android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r5, r3)
                                 r1.addView(r2, r3)
-                                r1 = 2131627678(0x7f0e0e9e, float:1.8882627E38)
+                                r1 = 2131627679(0x7f0e0e9f, float:1.888263E38)
                                 java.lang.String r2 = "TermsOfServiceLogin"
                                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                 android.text.SpannableStringBuilder r2 = new android.text.SpannableStringBuilder

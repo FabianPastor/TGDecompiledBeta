@@ -546,10 +546,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.getBoolean(r1, r14)
             org.telegram.ui.Components.RLottieImageView r1 = r11.floatingButton
             if (r0 == 0) goto L_0x02c5
-            r0 = 2131558530(0x7f0d0082, float:1.8742378E38)
+            r0 = 2131558532(0x7f0d0084, float:1.8742382E38)
             goto L_0x02c8
         L_0x02c5:
-            r0 = 2131558531(0x7f0d0083, float:1.874238E38)
+            r0 = 2131558533(0x7f0d0085, float:1.8742384E38)
         L_0x02c8:
             r6 = 52
             r1.setAnimation(r0, r6, r6)

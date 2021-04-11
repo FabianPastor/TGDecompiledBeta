@@ -25,7 +25,6 @@ import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -184,14 +183,10 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                     }
                 }
             }
-            if (this.folderId == 0 && this.onlineContacts != null) {
-                if (!z) {
-                    this.onlineContacts = null;
-                } else {
-                    MessagesController.getInstance(this.currentAccount).preloadGreetingsSticker();
-                }
-            }
             int i10 = this.folderId;
+            if (i10 == 0 && this.onlineContacts != null && !z) {
+                this.onlineContacts = null;
+            }
             if (i10 == 1 && this.showArchiveHint) {
                 i5 += 2;
             }
@@ -676,9 +671,6 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             }
             dialogCell.setChecked(this.selectedDialogs.contains(Long.valueOf(tLRPC$Dialog.id)), false);
             dialogCell.setDialog(tLRPC$Dialog, this.dialogsType, this.folderId);
-            if (((int) tLRPC$Dialog.id) > 0 && MessageObject.isSystemSignUp(MessagesController.getInstance(this.currentAccount).dialogMessage.get(tLRPC$Dialog.id))) {
-                MessagesController.getInstance(this.currentAccount).preloadGreetingsSticker();
-            }
             DialogsPreloader dialogsPreloader = this.preloader;
             if (dialogsPreloader != null && i < 10) {
                 dialogsPreloader.add(tLRPC$Dialog.id);

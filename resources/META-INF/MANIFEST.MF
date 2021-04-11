@@ -3,7 +3,7 @@ Built-By: Signflinger
 Created-By: Android Gradle 4.1.2
 
 Name: AndroidManifest.xml
-SHA1-Digest: /IzG89rU84sAURonzyZ8NBYMpLA=
+SHA1-Digest: deA6mcXL3yqwX1P3vTwUC+ZcsN0=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9879,13 +9879,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: Yb5ohSRtxIFctzoAWskHWHeAcBs=
+SHA1-Digest: kafvhrCaUiDQLFYrdVw0Hkdyi3U=
 
 Name: classes2.dex
 SHA1-Digest: PW4PzXilTc5mHrOb8Tn7+jq6PxI=
 
 Name: classes3.dex
-SHA1-Digest: MpNlMpLzdJ7xAc2dw57KKA8Ux38=
+SHA1-Digest: S2j47KzGVipTGJCNsAz65j3tRu0=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -21061,6 +21061,12 @@ SHA1-Digest: uRym+BNO6sCRjGDp4X/DqufDKyc=
 Name: res/raw/contact_check.json
 SHA1-Digest: LqrDggYhw78O/BRreZtwPU/nVls=
 
+Name: res/raw/contacts_sync_off.json
+SHA1-Digest: uGS0ow3PZi9DDM5rFRwbu91LMNA=
+
+Name: res/raw/contacts_sync_on.json
+SHA1-Digest: GdbosGtWZwcJzX9JJO/ZYauQdlk=
+
 Name: res/raw/copy.json
 SHA1-Digest: g/2qgg5luSWCOT7+ykQOi0Pzcaw=
 
@@ -21434,7 +21440,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: dwWgTgDOpDTEyVt8DtWxBufCTHk=
+SHA1-Digest: may/gW0uknAWkqOEpSDnwSQB/eY=
 
 Name: transport-api.properties
 SHA1-Digest: Jz4dPszpGdGJqctaJoPe9Lpu55k=

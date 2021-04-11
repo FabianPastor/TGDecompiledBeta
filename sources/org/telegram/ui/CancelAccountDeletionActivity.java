@@ -712,7 +712,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r8.<init>(r2)
                 r0.blueImageView = r8
                 org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
-                r18 = 2131558476(0x7f0d004c, float:1.8742269E38)
+                r18 = 2131558478(0x7f0d004e, float:1.8742273E38)
                 r10 = 1111490560(0x42400000, float:48.0)
                 int r20 = org.telegram.messenger.AndroidUtilities.dp(r10)
                 int r21 = org.telegram.messenger.AndroidUtilities.dp(r10)

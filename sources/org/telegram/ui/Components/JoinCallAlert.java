@@ -544,7 +544,7 @@ public class JoinCallAlert extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
             r8.<init>(r1)
             r8.setAutoRepeat(r7)
-            r9 = 2131558505(0x7f0d0069, float:1.8742328E38)
+            r9 = 2131558507(0x7f0d006b, float:1.8742332E38)
             r10 = 120(0x78, float:1.68E-43)
             r8.setAnimation(r9, r10, r10)
             r8.playAnimation()
@@ -604,14 +604,14 @@ public class JoinCallAlert extends BottomSheet {
         L_0x01e7:
             if (r2 != r6) goto L_0x01f8
             android.widget.TextView r8 = r0.textView
-            r9 = 2131628039(0x7f0e1007, float:1.888336E38)
+            r9 = 2131628040(0x7f0e1008, float:1.8883361E38)
             java.lang.String r10 = "VoipGroupDisplayAs"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setText(r9)
             goto L_0x0206
         L_0x01f8:
             android.widget.TextView r8 = r0.textView
-            r9 = 2131628056(0x7f0e1018, float:1.8883394E38)
+            r9 = 2131628057(0x7f0e1019, float:1.8883396E38)
             java.lang.String r10 = "VoipGroupJoinAs"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r8.setText(r9)
@@ -695,13 +695,13 @@ public class JoinCallAlert extends BottomSheet {
             if (r10 == 0) goto L_0x02be
             boolean r6 = r6.megagroup
             if (r6 != 0) goto L_0x02be
-            r6 = 2131628001(0x7f0e0fe1, float:1.8883282E38)
+            r6 = 2131628002(0x7f0e0fe2, float:1.8883284E38)
             java.lang.String r10 = "VoipChannelStart2"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
             r9.append(r6)
             goto L_0x02ca
         L_0x02be:
-            r6 = 2131628095(0x7f0e103f, float:1.8883473E38)
+            r6 = 2131628096(0x7f0e1040, float:1.8883475E38)
             java.lang.String r10 = "VoipGroupStart2"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
             r9.append(r6)
@@ -711,7 +711,7 @@ public class JoinCallAlert extends BottomSheet {
             if (r6 <= r7) goto L_0x02e4
             java.lang.String r6 = "\n\n"
             r9.append(r6)
-            r6 = 2131628002(0x7f0e0fe2, float:1.8883284E38)
+            r6 = 2131628003(0x7f0e0fe3, float:1.8883286E38)
             java.lang.String r10 = "VoipChatDisplayedAs"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
             r9.append(r6)
@@ -740,14 +740,14 @@ public class JoinCallAlert extends BottomSheet {
         L_0x030b:
             if (r6 == 0) goto L_0x031c
             android.widget.TextView r6 = r0.messageTextView
-            r9 = 2131628098(0x7f0e1042, float:1.888348E38)
+            r9 = 2131628099(0x7f0e1043, float:1.8883481E38)
             java.lang.String r10 = "VoipGroupStartAsInfoGroup"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r6.setText(r9)
             goto L_0x032a
         L_0x031c:
             android.widget.TextView r6 = r0.messageTextView
-            r9 = 2131628097(0x7f0e1041, float:1.8883477E38)
+            r9 = 2131628098(0x7f0e1042, float:1.888348E38)
             java.lang.String r10 = "VoipGroupStartAsInfo"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r6.setText(r9)
@@ -815,7 +815,7 @@ public class JoinCallAlert extends BottomSheet {
             r5.addView(r2, r3)
             org.telegram.ui.Components.JoinCallAlert$BottomSheetCell r2 = new org.telegram.ui.Components.JoinCallAlert$BottomSheetCell
             r2.<init>(r1, r7)
-            r1 = 2131628087(0x7f0e1037, float:1.8883457E38)
+            r1 = 2131628088(0x7f0e1038, float:1.8883459E38)
             java.lang.String r3 = "VoipGroupScheduleVoiceChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r2.setText(r1, r4)

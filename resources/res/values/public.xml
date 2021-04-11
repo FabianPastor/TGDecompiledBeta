@@ -1441,6 +1441,8 @@
     <public type="raw" name="chats_unarchive" id="NUM" />
     <public type="raw" name="chats_unhide" id="NUM" />
     <public type="raw" name="contact_check" id="NUM" />
+    <public type="raw" name="contacts_sync_off" id="NUM" />
+    <public type="raw" name="contacts_sync_on" id="NUM" />
     <public type="raw" name="copy" id="NUM" />
     <public type="raw" name="dartloop" id="NUM" />
     <public type="raw" name="diceloop" id="NUM" />
@@ -2321,7 +2323,7 @@
     <public type="string" name="ChannelDeleteInfo" id="NUM" />
     <public type="string" name="ChannelDeleteMenu" id="NUM" />
     <public type="string" name="ChannelDeletedUndo" id="NUM" />
-    <public type="string" name="ChannelDescriptionIsChanged" id="NUM" />
+    <public type="string" name="ChannelDescriptionChanged" id="NUM" />
     <public type="string" name="ChannelDiscuss" id="NUM" />
     <public type="string" name="ChannelEdit" id="NUM" />
     <public type="string" name="ChannelEditPermissions" id="NUM" />
@@ -2382,7 +2384,7 @@
     <public type="string" name="ChannelSignMessagesInfo" id="NUM" />
     <public type="string" name="ChannelSilentBroadcast" id="NUM" />
     <public type="string" name="ChannelSubscribers" id="NUM" />
-    <public type="string" name="ChannelTitleIsChanged" id="NUM" />
+    <public type="string" name="ChannelTitleChanged" id="NUM" />
     <public type="string" name="ChannelTooMuch" id="NUM" />
     <public type="string" name="ChannelTooMuchJoin" id="NUM" />
     <public type="string" name="ChannelTooMuchTitle" id="NUM" />
@@ -5274,6 +5276,7 @@
     <public type="string" name="TelegramFaq" id="NUM" />
     <public type="string" name="TelegramFaqUrl" id="NUM" />
     <public type="string" name="TelegramFeatures" id="NUM" />
+    <public type="string" name="TelegramFeaturesUrl" id="NUM" />
     <public type="string" name="TelegramPassport" id="NUM" />
     <public type="string" name="TelegramPassportCreatePassword" id="NUM" />
     <public type="string" name="TelegramPassportCreatePasswordInfo" id="NUM" />
@@ -5846,7 +5849,7 @@
     <public type="string" name="YouHaveNewMessage" id="NUM" />
     <public type="string" name="YouLeft" id="NUM" />
     <public type="string" name="YouWereKicked" id="NUM" />
-    <public type="string" name="YourBioIsChanged" id="NUM" />
+    <public type="string" name="YourBioChanged" id="NUM" />
     <public type="string" name="YourCode" id="NUM" />
     <public type="string" name="YourContacts" id="NUM" />
     <public type="string" name="YourContactsToInvite" id="NUM" />
@@ -5863,7 +5866,7 @@
     <public type="string" name="YourEmailSuccessText" id="NUM" />
     <public type="string" name="YourLocatedChannelsTooMuch" id="NUM" />
     <public type="string" name="YourName" id="NUM" />
-    <public type="string" name="YourNameIsChanged" id="NUM" />
+    <public type="string" name="YourNameChanged" id="NUM" />
     <public type="string" name="YourPassword" id="NUM" />
     <public type="string" name="YourPasswordChangedSuccessText" id="NUM" />
     <public type="string" name="YourPasswordSuccess" id="NUM" />

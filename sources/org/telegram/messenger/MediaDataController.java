@@ -133,6 +133,7 @@ import org.telegram.tgnet.TLRPC$TL_messages_search;
 import org.telegram.tgnet.TLRPC$TL_messages_searchCounter;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSetInstallResultArchive;
+import org.telegram.tgnet.TLRPC$TL_messages_stickers;
 import org.telegram.tgnet.TLRPC$TL_messages_toggleStickerSets;
 import org.telegram.tgnet.TLRPC$TL_messages_uninstallStickerSet;
 import org.telegram.tgnet.TLRPC$TL_peerChat;
@@ -166,6 +167,7 @@ public class MediaDataController extends BaseController {
     public static final int TYPE_EMOJI = 4;
     public static final int TYPE_FAVE = 2;
     public static final int TYPE_FEATURED = 3;
+    public static final int TYPE_GREETINGS = 3;
     public static final int TYPE_IMAGE = 0;
     public static final int TYPE_MASK = 1;
     private static RectF bitmapRect;
@@ -189,6 +191,7 @@ public class MediaDataController extends BaseController {
     private ArrayList<TLRPC$StickerSetCovered> featuredStickerSets = new ArrayList<>();
     private LongSparseArray<TLRPC$StickerSetCovered> featuredStickerSetsById = new LongSparseArray<>();
     private boolean featuredStickersLoaded;
+    private TLRPC$Document greetingsSticker;
     private LongSparseArray<TLRPC$TL_messages_stickerSet> groupStickerSets = new LongSparseArray<>();
     public ArrayList<TLRPC$TL_topPeer> hints = new ArrayList<>();
     private boolean inTransaction;
@@ -215,7 +218,7 @@ public class MediaDataController extends BaseController {
     private boolean loadingMoreSearchMessages;
     private LongSparseArray<Boolean> loadingPinnedMessages = new LongSparseArray<>();
     private boolean loadingRecentGifs;
-    private boolean[] loadingRecentStickers = new boolean[3];
+    private boolean[] loadingRecentStickers = new boolean[4];
     private boolean[] loadingStickers = new boolean[5];
     private int mergeReqId;
     private int[] messagesSearchCount = {0, 0};
@@ -223,8 +226,8 @@ public class MediaDataController extends BaseController {
     private ArrayList<Long> readingStickerSets = new ArrayList<>();
     private ArrayList<TLRPC$Document> recentGifs = new ArrayList<>();
     private boolean recentGifsLoaded;
-    private ArrayList<TLRPC$Document>[] recentStickers = {new ArrayList<>(), new ArrayList<>(), new ArrayList<>()};
-    private boolean[] recentStickersLoaded = new boolean[3];
+    private ArrayList<TLRPC$Document>[] recentStickers = {new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()};
+    private boolean[] recentStickersLoaded = new boolean[4];
     private LongSparseArray<Runnable> removingStickerSetsUndos = new LongSparseArray<>();
     private int reqId;
     private Runnable[] scheduledLoadStickers = new Runnable[5];
@@ -327,10 +330,16 @@ public class MediaDataController extends BaseController {
     }
 
     public void cleanup() {
-        for (int i = 0; i < 3; i++) {
-            this.recentStickers[i].clear();
+        int i = 0;
+        while (true) {
+            ArrayList<TLRPC$Document>[] arrayListArr = this.recentStickers;
+            if (i >= arrayListArr.length) {
+                break;
+            }
+            arrayListArr[i].clear();
             this.loadingRecentStickers[i] = false;
             this.recentStickersLoaded[i] = false;
+            i++;
         }
         for (int i2 = 0; i2 < 4; i2++) {
             this.loadHash[i2] = 0;
@@ -435,6 +444,9 @@ public class MediaDataController extends BaseController {
         Object obj2 = obj;
         TLRPC$Document tLRPC$Document3 = tLRPC$Document;
         boolean z3 = z;
+        if (i4 == 3) {
+            return;
+        }
         if (MessageObject.isStickerDocument(tLRPC$Document) || MessageObject.isAnimatedStickerDocument(tLRPC$Document3, true)) {
             int i5 = 0;
             while (true) {
@@ -524,7 +536,7 @@ public class MediaDataController extends BaseController {
                     ArrayList<TLRPC$Document>[] arrayListArr = this.recentStickers;
                     tLRPC$Document2 = arrayListArr[i4].remove(arrayListArr[i4].size() - 1);
                 }
-                getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, tLRPC$Document2) {
+                getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i4, tLRPC$Document2) {
                     public final /* synthetic */ int f$1;
                     public final /* synthetic */ TLRPC$Document f$2;
 
@@ -1132,128 +1144,154 @@ public class MediaDataController extends BaseController {
         return (int) j;
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v5, resolved type: org.telegram.tgnet.TLRPC$TL_messages_getRecentStickers} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v7, resolved type: org.telegram.tgnet.TLRPC$TL_messages_getFavedStickers} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v18, resolved type: org.telegram.tgnet.TLRPC$TL_messages_getRecentStickers} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v19, resolved type: org.telegram.tgnet.TLRPC$TL_messages_getRecentStickers} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v2, resolved type: org.telegram.tgnet.TLRPC$TL_messages_getRecentStickers} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v4, resolved type: org.telegram.tgnet.TLRPC$TL_messages_getStickers} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v5, resolved type: org.telegram.tgnet.TLRPC$TL_messages_getFavedStickers} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v7, resolved type: org.telegram.tgnet.TLRPC$TL_messages_getRecentStickers} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v8, resolved type: org.telegram.tgnet.TLRPC$TL_messages_getRecentStickers} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v9, resolved type: org.telegram.tgnet.TLRPC$TL_messages_getRecentStickers} */
     /* JADX WARNING: Code restructure failed: missing block: B:11:0x001d, code lost:
-        if (r5.recentStickersLoaded[r6] != false) goto L_0x001f;
+        if (r6.recentStickersLoaded[r7] != false) goto L_0x001f;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:6:0x000d, code lost:
-        if (r5.recentGifsLoaded != false) goto L_0x001f;
+        if (r6.recentGifsLoaded != false) goto L_0x001f;
      */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void loadRecents(int r6, boolean r7, boolean r8, boolean r9) {
+    public void loadRecents(int r7, boolean r8, boolean r9, boolean r10) {
         /*
-            r5 = this;
+            r6 = this;
             r0 = 0
             r1 = 1
-            if (r7 == 0) goto L_0x0010
-            boolean r2 = r5.loadingRecentGifs
+            if (r8 == 0) goto L_0x0010
+            boolean r2 = r6.loadingRecentGifs
             if (r2 == 0) goto L_0x0009
             return
         L_0x0009:
-            r5.loadingRecentGifs = r1
-            boolean r2 = r5.recentGifsLoaded
+            r6.loadingRecentGifs = r1
+            boolean r2 = r6.recentGifsLoaded
             if (r2 == 0) goto L_0x0020
             goto L_0x001f
         L_0x0010:
-            boolean[] r2 = r5.loadingRecentStickers
-            boolean r3 = r2[r6]
+            boolean[] r2 = r6.loadingRecentStickers
+            boolean r3 = r2[r7]
             if (r3 == 0) goto L_0x0017
             return
         L_0x0017:
-            r2[r6] = r1
-            boolean[] r2 = r5.recentStickersLoaded
-            boolean r2 = r2[r6]
+            r2[r7] = r1
+            boolean[] r2 = r6.recentStickersLoaded
+            boolean r2 = r2[r7]
             if (r2 == 0) goto L_0x0020
         L_0x001f:
-            r8 = 0
+            r9 = 0
         L_0x0020:
-            if (r8 == 0) goto L_0x0034
-            org.telegram.messenger.MessagesStorage r8 = r5.getMessagesStorage()
-            org.telegram.messenger.DispatchQueue r8 = r8.getStorageQueue()
-            org.telegram.messenger.-$$Lambda$MediaDataController$9ZuDWbj4_b2zwUBkJLev9j0IRUg r9 = new org.telegram.messenger.-$$Lambda$MediaDataController$9ZuDWbj4_b2zwUBkJLev9j0IRUg
-            r9.<init>(r7, r6)
-            r8.postRunnable(r9)
-            goto L_0x00c8
+            if (r9 == 0) goto L_0x0034
+            org.telegram.messenger.MessagesStorage r9 = r6.getMessagesStorage()
+            org.telegram.messenger.DispatchQueue r9 = r9.getStorageQueue()
+            org.telegram.messenger.-$$Lambda$MediaDataController$9ZuDWbj4_b2zwUBkJLev9j0IRUg r10 = new org.telegram.messenger.-$$Lambda$MediaDataController$9ZuDWbj4_b2zwUBkJLev9j0IRUg
+            r10.<init>(r8, r7)
+            r9.postRunnable(r10)
+            goto L_0x00ff
         L_0x0034:
-            int r8 = r5.currentAccount
-            android.content.SharedPreferences r8 = org.telegram.messenger.MessagesController.getEmojiSettings(r8)
-            if (r9 != 0) goto L_0x0079
-            r2 = 0
-            if (r7 == 0) goto L_0x0047
-            java.lang.String r9 = "lastGifLoadTime"
-            long r8 = r8.getLong(r9, r2)
-            goto L_0x005f
-        L_0x0047:
-            if (r6 != 0) goto L_0x0050
-            java.lang.String r9 = "lastStickersLoadTime"
-            long r8 = r8.getLong(r9, r2)
-            goto L_0x005f
-        L_0x0050:
-            if (r6 != r1) goto L_0x0059
-            java.lang.String r9 = "lastStickersLoadTimeMask"
-            long r8 = r8.getLong(r9, r2)
-            goto L_0x005f
-        L_0x0059:
-            java.lang.String r9 = "lastStickersLoadTimeFavs"
-            long r8 = r8.getLong(r9, r2)
-        L_0x005f:
-            long r2 = java.lang.System.currentTimeMillis()
-            long r2 = r2 - r8
-            long r8 = java.lang.Math.abs(r2)
-            r2 = 3600000(0x36ee80, double:1.7786363E-317)
-            int r4 = (r8 > r2 ? 1 : (r8 == r2 ? 0 : -1))
-            if (r4 >= 0) goto L_0x0079
-            if (r7 == 0) goto L_0x0074
-            r5.loadingRecentGifs = r0
-            goto L_0x0078
-        L_0x0074:
-            boolean[] r7 = r5.loadingRecentStickers
-            r7[r6] = r0
-        L_0x0078:
+            int r9 = r6.currentAccount
+            android.content.SharedPreferences r9 = org.telegram.messenger.MessagesController.getEmojiSettings(r9)
+            r2 = 3
+            if (r10 != 0) goto L_0x0083
+            r3 = 0
+            if (r8 == 0) goto L_0x0048
+            java.lang.String r10 = "lastGifLoadTime"
+            long r9 = r9.getLong(r10, r3)
+            goto L_0x0069
+        L_0x0048:
+            if (r7 != 0) goto L_0x0051
+            java.lang.String r10 = "lastStickersLoadTime"
+            long r9 = r9.getLong(r10, r3)
+            goto L_0x0069
+        L_0x0051:
+            if (r7 != r1) goto L_0x005a
+            java.lang.String r10 = "lastStickersLoadTimeMask"
+            long r9 = r9.getLong(r10, r3)
+            goto L_0x0069
+        L_0x005a:
+            if (r7 != r2) goto L_0x0063
+            java.lang.String r10 = "lastStickersLoadTimeGreet"
+            long r9 = r9.getLong(r10, r3)
+            goto L_0x0069
+        L_0x0063:
+            java.lang.String r10 = "lastStickersLoadTimeFavs"
+            long r9 = r9.getLong(r10, r3)
+        L_0x0069:
+            long r3 = java.lang.System.currentTimeMillis()
+            long r3 = r3 - r9
+            long r9 = java.lang.Math.abs(r3)
+            r3 = 3600000(0x36ee80, double:1.7786363E-317)
+            int r5 = (r9 > r3 ? 1 : (r9 == r3 ? 0 : -1))
+            if (r5 >= 0) goto L_0x0083
+            if (r8 == 0) goto L_0x007e
+            r6.loadingRecentGifs = r0
+            goto L_0x0082
+        L_0x007e:
+            boolean[] r8 = r6.loadingRecentStickers
+            r8[r7] = r0
+        L_0x0082:
             return
-        L_0x0079:
-            if (r7 == 0) goto L_0x0095
-            org.telegram.tgnet.TLRPC$TL_messages_getSavedGifs r8 = new org.telegram.tgnet.TLRPC$TL_messages_getSavedGifs
-            r8.<init>()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r9 = r5.recentGifs
-            int r9 = calcDocumentsHash(r9)
-            r8.hash = r9
-            org.telegram.tgnet.ConnectionsManager r9 = r5.getConnectionsManager()
+        L_0x0083:
+            if (r8 == 0) goto L_0x009f
+            org.telegram.tgnet.TLRPC$TL_messages_getSavedGifs r9 = new org.telegram.tgnet.TLRPC$TL_messages_getSavedGifs
+            r9.<init>()
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r10 = r6.recentGifs
+            int r10 = calcDocumentsHash(r10)
+            r9.hash = r10
+            org.telegram.tgnet.ConnectionsManager r10 = r6.getConnectionsManager()
             org.telegram.messenger.-$$Lambda$MediaDataController$t_QjUzWokgy554m34X1KR98mB9s r0 = new org.telegram.messenger.-$$Lambda$MediaDataController$t_QjUzWokgy554m34X1KR98mB9s
-            r0.<init>(r6, r7)
-            r9.sendRequest(r8, r0)
-            goto L_0x00c8
-        L_0x0095:
+            r0.<init>(r7, r8)
+            r10.sendRequest(r9, r0)
+            goto L_0x00ff
+        L_0x009f:
             r8 = 2
-            if (r6 != r8) goto L_0x00a8
+            if (r7 != r8) goto L_0x00b2
             org.telegram.tgnet.TLRPC$TL_messages_getFavedStickers r8 = new org.telegram.tgnet.TLRPC$TL_messages_getFavedStickers
             r8.<init>()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document>[] r9 = r5.recentStickers
-            r9 = r9[r6]
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document>[] r9 = r6.recentStickers
+            r9 = r9[r7]
             int r9 = calcDocumentsHash(r9)
             r8.hash = r9
-            goto L_0x00bc
-        L_0x00a8:
+            goto L_0x00f3
+        L_0x00b2:
+            if (r7 != r2) goto L_0x00df
+            org.telegram.tgnet.TLRPC$TL_messages_getStickers r8 = new org.telegram.tgnet.TLRPC$TL_messages_getStickers
+            r8.<init>()
+            java.lang.StringBuilder r9 = new java.lang.StringBuilder
+            r9.<init>()
+            java.lang.String r10 = "👋"
+            r9.append(r10)
+            java.lang.String r10 = "⭐"
+            java.lang.String r10 = org.telegram.messenger.Emoji.fixEmoji(r10)
+            r9.append(r10)
+            java.lang.String r9 = r9.toString()
+            r8.emoticon = r9
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document>[] r9 = r6.recentStickers
+            r9 = r9[r7]
+            int r9 = calcDocumentsHash(r9)
+            r8.hash = r9
+            goto L_0x00f3
+        L_0x00df:
             org.telegram.tgnet.TLRPC$TL_messages_getRecentStickers r8 = new org.telegram.tgnet.TLRPC$TL_messages_getRecentStickers
             r8.<init>()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document>[] r9 = r5.recentStickers
-            r9 = r9[r6]
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Document>[] r9 = r6.recentStickers
+            r9 = r9[r7]
             int r9 = calcDocumentsHash(r9)
             r8.hash = r9
-            if (r6 != r1) goto L_0x00ba
+            if (r7 != r1) goto L_0x00f1
             r0 = 1
-        L_0x00ba:
+        L_0x00f1:
             r8.attached = r0
-        L_0x00bc:
-            org.telegram.tgnet.ConnectionsManager r9 = r5.getConnectionsManager()
-            org.telegram.messenger.-$$Lambda$MediaDataController$up1ZK47tMhOIVWUH4S6mAYCQjgo r0 = new org.telegram.messenger.-$$Lambda$MediaDataController$up1ZK47tMhOIVWUH4S6mAYCQjgo
-            r0.<init>(r6, r7)
-            r9.sendRequest(r8, r0)
-        L_0x00c8:
+        L_0x00f3:
+            org.telegram.tgnet.ConnectionsManager r9 = r6.getConnectionsManager()
+            org.telegram.messenger.-$$Lambda$MediaDataController$NwQMd2w8a7HXW_QYuFwKt64FPPA r10 = new org.telegram.messenger.-$$Lambda$MediaDataController$NwQMd2w8a7HXW_QYuFwKt64FPPA
+            r10.<init>(r7)
+            r9.sendRequest(r8, r10)
+        L_0x00ff:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.loadRecents(int, boolean, boolean, boolean):void");
@@ -1263,7 +1301,12 @@ public class MediaDataController extends BaseController {
     /* renamed from: lambda$loadRecents$15 */
     public /* synthetic */ void lambda$loadRecents$15$MediaDataController(boolean z, int i) {
         NativeByteBuffer byteBufferValue;
-        int i2 = z ? 2 : i == 0 ? 3 : i == 1 ? 4 : 5;
+        int i2 = 3;
+        if (z) {
+            i2 = 2;
+        } else if (i != 0) {
+            i2 = i == 1 ? 4 : i == 3 ? 6 : 5;
+        }
         try {
             SQLiteDatabase database = getMessagesStorage().getDatabase();
             SQLiteCursor queryFinalized = database.queryFinalized("SELECT document FROM web_recent_v3 WHERE type = " + i2 + " ORDER BY date DESC", new Object[0]);
@@ -1310,6 +1353,9 @@ public class MediaDataController extends BaseController {
             this.loadingRecentStickers[i] = false;
             this.recentStickersLoaded[i] = true;
         }
+        if (i == 3) {
+            preloadNextGreetingsSticker();
+        }
         getNotificationCenter().postNotificationName(NotificationCenter.recentDocumentsDidLoad, Boolean.valueOf(z), Integer.valueOf(i));
         loadRecents(i, z, false, false);
     }
@@ -1322,19 +1368,38 @@ public class MediaDataController extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$loadRecents$17 */
-    public /* synthetic */ void lambda$loadRecents$17$MediaDataController(int i, boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadRecents$17$MediaDataController(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         ArrayList<TLRPC$Document> arrayList;
-        if (i == 2) {
+        if (i == 3) {
+            if (tLObject instanceof TLRPC$TL_messages_stickers) {
+                arrayList = ((TLRPC$TL_messages_stickers) tLObject).stickers;
+                processLoadedRecentDocuments(i, arrayList, false, 0, true);
+            }
+        } else if (i == 2) {
             if (tLObject instanceof TLRPC$TL_messages_favedStickers) {
                 arrayList = ((TLRPC$TL_messages_favedStickers) tLObject).stickers;
-                processLoadedRecentDocuments(i, arrayList, z, 0, true);
+                processLoadedRecentDocuments(i, arrayList, false, 0, true);
             }
         } else if (tLObject instanceof TLRPC$TL_messages_recentStickers) {
             arrayList = ((TLRPC$TL_messages_recentStickers) tLObject).stickers;
-            processLoadedRecentDocuments(i, arrayList, z, 0, true);
+            processLoadedRecentDocuments(i, arrayList, false, 0, true);
         }
         arrayList = null;
-        processLoadedRecentDocuments(i, arrayList, z, 0, true);
+        processLoadedRecentDocuments(i, arrayList, false, 0, true);
+    }
+
+    private void preloadNextGreetingsSticker() {
+        if (!this.recentStickers[3].isEmpty()) {
+            ArrayList<TLRPC$Document>[] arrayListArr = this.recentStickers;
+            this.greetingsSticker = arrayListArr[3].get(Utilities.random.nextInt(arrayListArr[3].size()));
+            getFileLoader().loadFile(ImageLocation.getForDocument(this.greetingsSticker), this.greetingsSticker, (String) null, 0, 1);
+        }
+    }
+
+    public TLRPC$Document getGreetingsSticker() {
+        TLRPC$Document tLRPC$Document = this.greetingsSticker;
+        preloadNextGreetingsSticker();
+        return tLRPC$Document;
     }
 
     /* access modifiers changed from: protected */
@@ -1382,62 +1447,57 @@ public class MediaDataController extends BaseController {
     /* access modifiers changed from: private */
     /* renamed from: lambda$processLoadedRecentDocuments$18 */
     public /* synthetic */ void lambda$processLoadedRecentDocuments$18$MediaDataController(boolean z, int i, ArrayList arrayList, boolean z2, int i2) {
-        int i3;
-        int i4 = i;
+        int i3 = i;
         ArrayList arrayList2 = arrayList;
         try {
             SQLiteDatabase database = getMessagesStorage().getDatabase();
-            if (z) {
-                i3 = getMessagesController().maxRecentGifsCount;
-            } else if (i4 == 2) {
-                i3 = getMessagesController().maxFaveStickersCount;
-            } else {
-                i3 = getMessagesController().maxRecentStickersCount;
-            }
+            int i4 = 2;
+            int i5 = z ? getMessagesController().maxRecentGifsCount : i3 == 3 ? 200 : i3 == 2 ? getMessagesController().maxFaveStickersCount : getMessagesController().maxRecentStickersCount;
             database.beginTransaction();
             SQLitePreparedStatement executeFast = database.executeFast("REPLACE INTO web_recent_v3 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             int size = arrayList.size();
-            int i5 = z ? 2 : i4 == 0 ? 3 : i4 == 1 ? 4 : 5;
+            int i6 = z ? 2 : i3 == 0 ? 3 : i3 == 1 ? 4 : i3 == 3 ? 6 : 5;
             if (z2) {
-                database.executeFast("DELETE FROM web_recent_v3 WHERE type = " + i5).stepThis().dispose();
+                database.executeFast("DELETE FROM web_recent_v3 WHERE type = " + i6).stepThis().dispose();
             }
-            int i6 = 0;
+            int i7 = 0;
             while (true) {
-                if (i6 >= size) {
+                if (i7 >= size) {
                     break;
-                } else if (i6 == i3) {
+                } else if (i7 == i5) {
                     break;
                 } else {
-                    TLRPC$Document tLRPC$Document = (TLRPC$Document) arrayList2.get(i6);
+                    TLRPC$Document tLRPC$Document = (TLRPC$Document) arrayList2.get(i7);
                     executeFast.requery();
                     StringBuilder sb = new StringBuilder();
                     sb.append("");
-                    int i7 = i6;
+                    int i8 = i7;
                     sb.append(tLRPC$Document.id);
                     executeFast.bindString(1, sb.toString());
-                    executeFast.bindInteger(2, i5);
+                    executeFast.bindInteger(i4, i6);
                     executeFast.bindString(3, "");
                     executeFast.bindString(4, "");
                     executeFast.bindString(5, "");
                     executeFast.bindInteger(6, 0);
                     executeFast.bindInteger(7, 0);
                     executeFast.bindInteger(8, 0);
-                    executeFast.bindInteger(9, i2 != 0 ? i2 : size - i7);
+                    executeFast.bindInteger(9, i2 != 0 ? i2 : size - i8);
                     NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$Document.getObjectSize());
                     tLRPC$Document.serializeToStream(nativeByteBuffer);
                     executeFast.bindByteBuffer(10, nativeByteBuffer);
                     executeFast.step();
                     nativeByteBuffer.reuse();
-                    i6 = i7 + 1;
+                    i7 = i8 + 1;
+                    i4 = 2;
                 }
             }
             executeFast.dispose();
             database.commitTransaction();
-            if (arrayList.size() >= i3) {
+            if (arrayList.size() >= i5) {
                 database.beginTransaction();
-                while (i3 < arrayList.size()) {
-                    database.executeFast("DELETE FROM web_recent_v3 WHERE id = '" + ((TLRPC$Document) arrayList2.get(i3)).id + "' AND type = " + i5).stepThis().dispose();
-                    i3++;
+                while (i5 < arrayList.size()) {
+                    database.executeFast("DELETE FROM web_recent_v3 WHERE id = '" + ((TLRPC$Document) arrayList2.get(i5)).id + "' AND type = " + i6).stepThis().dispose();
+                    i5++;
                 }
                 database.commitTransaction();
             }
@@ -1461,6 +1521,8 @@ public class MediaDataController extends BaseController {
                 edit.putLong("lastStickersLoadTime", System.currentTimeMillis()).commit();
             } else if (i == 1) {
                 edit.putLong("lastStickersLoadTimeMask", System.currentTimeMillis()).commit();
+            } else if (i == 3) {
+                edit.putLong("lastStickersLoadTimeGreet", System.currentTimeMillis()).commit();
             } else {
                 edit.putLong("lastStickersLoadTimeFavs", System.currentTimeMillis()).commit();
             }
@@ -1470,6 +1532,9 @@ public class MediaDataController extends BaseController {
                 this.recentGifs = arrayList;
             } else {
                 this.recentStickers[i] = arrayList;
+            }
+            if (i == 3) {
+                preloadNextGreetingsSticker();
             }
             getNotificationCenter().postNotificationName(NotificationCenter.recentDocumentsDidLoad, Boolean.valueOf(z), Integer.valueOf(i));
         }

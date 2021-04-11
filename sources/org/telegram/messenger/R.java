@@ -1574,6 +1574,8 @@ public final class R {
         public static final int chats_unarchive = NUM;
         public static final int chats_unhide = NUM;
         public static final int contact_check = NUM;
+        public static final int contacts_sync_off = NUM;
+        public static final int contacts_sync_on = NUM;
         public static final int copy = NUM;
         public static final int dartloop = NUM;
         public static final int diceloop = NUM;
@@ -2460,7 +2462,7 @@ public final class R {
         public static final int ChannelDeleteInfo = NUM;
         public static final int ChannelDeleteMenu = NUM;
         public static final int ChannelDeletedUndo = NUM;
-        public static final int ChannelDescriptionIsChanged = NUM;
+        public static final int ChannelDescriptionChanged = NUM;
         public static final int ChannelDiscuss = NUM;
         public static final int ChannelEdit = NUM;
         public static final int ChannelEditPermissions = NUM;
@@ -2521,7 +2523,7 @@ public final class R {
         public static final int ChannelSignMessagesInfo = NUM;
         public static final int ChannelSilentBroadcast = NUM;
         public static final int ChannelSubscribers = NUM;
-        public static final int ChannelTitleIsChanged = NUM;
+        public static final int ChannelTitleChanged = NUM;
         public static final int ChannelTooMuch = NUM;
         public static final int ChannelTooMuchJoin = NUM;
         public static final int ChannelTooMuchTitle = NUM;
@@ -5413,6 +5415,7 @@ public final class R {
         public static final int TelegramFaq = NUM;
         public static final int TelegramFaqUrl = NUM;
         public static final int TelegramFeatures = NUM;
+        public static final int TelegramFeaturesUrl = NUM;
         public static final int TelegramPassport = NUM;
         public static final int TelegramPassportCreatePassword = NUM;
         public static final int TelegramPassportCreatePasswordInfo = NUM;
@@ -5985,7 +5988,7 @@ public final class R {
         public static final int YouHaveNewMessage = NUM;
         public static final int YouLeft = NUM;
         public static final int YouWereKicked = NUM;
-        public static final int YourBioIsChanged = NUM;
+        public static final int YourBioChanged = NUM;
         public static final int YourCode = NUM;
         public static final int YourContacts = NUM;
         public static final int YourContactsToInvite = NUM;
@@ -6002,7 +6005,7 @@ public final class R {
         public static final int YourEmailSuccessText = NUM;
         public static final int YourLocatedChannelsTooMuch = NUM;
         public static final int YourName = NUM;
-        public static final int YourNameIsChanged = NUM;
+        public static final int YourNameChanged = NUM;
         public static final int YourPassword = NUM;
         public static final int YourPasswordChangedSuccessText = NUM;
         public static final int YourPasswordSuccess = NUM;

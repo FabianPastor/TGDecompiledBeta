@@ -214,78 +214,107 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (messageObject != null && (SharedMediaLayout.this.mediaPages[0].selectedType == 0 || SharedMediaLayout.this.mediaPages[0].selectedType == 1 || SharedMediaLayout.this.mediaPages[0].selectedType == 5)) {
                 RecyclerListView access$200 = SharedMediaLayout.this.mediaPages[0].listView;
                 int childCount = access$200.getChildCount();
-                for (int i2 = 0; i2 < childCount; i2++) {
-                    View childAt = access$200.getChildAt(i2);
-                    int[] iArr = new int[2];
-                    if (childAt instanceof SharedPhotoVideoCell) {
-                        SharedPhotoVideoCell sharedPhotoVideoCell = (SharedPhotoVideoCell) childAt;
-                        imageReceiver = null;
-                        int i3 = 0;
-                        while (i3 < 6 && (messageObject2 = sharedPhotoVideoCell.getMessageObject(i3)) != null) {
-                            if (messageObject2.getId() == messageObject.getId()) {
-                                BackupImageView imageView = sharedPhotoVideoCell.getImageView(i3);
-                                ImageReceiver imageReceiver2 = imageView.getImageReceiver();
-                                imageView.getLocationInWindow(iArr);
-                                imageReceiver = imageReceiver2;
-                            }
-                            i3++;
-                        }
-                    } else {
-                        if (childAt instanceof SharedDocumentCell) {
-                            SharedDocumentCell sharedDocumentCell = (SharedDocumentCell) childAt;
-                            if (sharedDocumentCell.getMessage().getId() == messageObject.getId()) {
-                                BackupImageView imageView2 = sharedDocumentCell.getImageView();
-                                ImageReceiver imageReceiver3 = imageView2.getImageReceiver();
-                                imageView2.getLocationInWindow(iArr);
-                                imageReceiver = imageReceiver3;
-                            }
-                        } else if (childAt instanceof ContextLinkCell) {
-                            ContextLinkCell contextLinkCell = (ContextLinkCell) childAt;
-                            MessageObject messageObject3 = (MessageObject) contextLinkCell.getParentObject();
-                            if (messageObject3 != null && messageObject3.getId() == messageObject.getId()) {
-                                imageReceiver = contextLinkCell.getPhotoImage();
-                                contextLinkCell.getLocationInWindow(iArr);
-                            }
-                        }
-                        imageReceiver = null;
+                int i2 = -1;
+                int i3 = 0;
+                int i4 = -1;
+                int i5 = -1;
+                while (i3 < childCount) {
+                    View childAt = access$200.getChildAt(i3);
+                    int measuredHeight = SharedMediaLayout.this.mediaPages[0].listView.getMeasuredHeight();
+                    View view = (View) SharedMediaLayout.this.getParent();
+                    if (view != null && SharedMediaLayout.this.getY() + ((float) SharedMediaLayout.this.getMeasuredHeight()) > ((float) view.getMeasuredHeight())) {
+                        measuredHeight -= SharedMediaLayout.this.getBottom() - view.getMeasuredHeight();
                     }
-                    if (imageReceiver != null) {
-                        PhotoViewer.PlaceProviderObject placeProviderObject = new PhotoViewer.PlaceProviderObject();
-                        placeProviderObject.viewX = iArr[0];
-                        placeProviderObject.viewY = iArr[1] - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
-                        placeProviderObject.parentView = access$200;
-                        placeProviderObject.animatingImageView = SharedMediaLayout.this.mediaPages[0].animatingImageView;
-                        SharedMediaLayout.this.mediaPages[0].listView.getLocationInWindow(iArr);
-                        placeProviderObject.animatingImageViewYOffset = -iArr[1];
-                        placeProviderObject.imageReceiver = imageReceiver;
-                        placeProviderObject.allowTakeAnimation = false;
-                        placeProviderObject.radius = imageReceiver.getRoundRadius();
-                        placeProviderObject.thumb = placeProviderObject.imageReceiver.getBitmapSafe();
-                        placeProviderObject.parentView.getLocationInWindow(iArr);
-                        placeProviderObject.clipTopAddition = 0;
-                        if (SharedMediaLayout.this.fragmentContextView != null && SharedMediaLayout.this.fragmentContextView.getVisibility() == 0) {
-                            placeProviderObject.clipTopAddition += AndroidUtilities.dp(36.0f);
+                    if (childAt.getTop() < measuredHeight) {
+                        int childAdapterPosition = access$200.getChildAdapterPosition(childAt);
+                        if (childAdapterPosition < i4 || i4 == i2) {
+                            i4 = childAdapterPosition;
                         }
-                        if (PhotoViewer.isShowingImage(messageObject) && (pinnedHeader = access$200.getPinnedHeader()) != null) {
-                            int height = (SharedMediaLayout.this.fragmentContextView == null || SharedMediaLayout.this.fragmentContextView.getVisibility() != 0) ? 0 : (SharedMediaLayout.this.fragmentContextView.getHeight() - AndroidUtilities.dp(2.5f)) + 0;
-                            boolean z2 = childAt instanceof SharedDocumentCell;
-                            if (z2) {
-                                height += AndroidUtilities.dp(8.0f);
+                        if (childAdapterPosition > i5 || i5 == i2) {
+                            i5 = childAdapterPosition;
+                        }
+                        int[] iArr = new int[2];
+                        if (childAt instanceof SharedPhotoVideoCell) {
+                            SharedPhotoVideoCell sharedPhotoVideoCell = (SharedPhotoVideoCell) childAt;
+                            imageReceiver = null;
+                            int i6 = 0;
+                            while (i6 < 6 && (messageObject2 = sharedPhotoVideoCell.getMessageObject(i6)) != null) {
+                                if (messageObject2.getId() == messageObject.getId()) {
+                                    BackupImageView imageView = sharedPhotoVideoCell.getImageView(i6);
+                                    imageReceiver = imageView.getImageReceiver();
+                                    imageView.getLocationInWindow(iArr);
+                                }
+                                i6++;
                             }
-                            int i4 = height - placeProviderObject.viewY;
-                            if (i4 > childAt.getHeight()) {
-                                access$200.scrollBy(0, -(i4 + pinnedHeader.getHeight()));
-                            } else {
-                                int height2 = placeProviderObject.viewY - access$200.getHeight();
+                        } else {
+                            if (childAt instanceof SharedDocumentCell) {
+                                SharedDocumentCell sharedDocumentCell = (SharedDocumentCell) childAt;
+                                if (sharedDocumentCell.getMessage().getId() == messageObject.getId()) {
+                                    BackupImageView imageView2 = sharedDocumentCell.getImageView();
+                                    ImageReceiver imageReceiver2 = imageView2.getImageReceiver();
+                                    imageView2.getLocationInWindow(iArr);
+                                    imageReceiver = imageReceiver2;
+                                }
+                            } else if (childAt instanceof ContextLinkCell) {
+                                ContextLinkCell contextLinkCell = (ContextLinkCell) childAt;
+                                MessageObject messageObject3 = (MessageObject) contextLinkCell.getParentObject();
+                                if (messageObject3 != null && messageObject3.getId() == messageObject.getId()) {
+                                    imageReceiver = contextLinkCell.getPhotoImage();
+                                    contextLinkCell.getLocationInWindow(iArr);
+                                }
+                            }
+                            imageReceiver = null;
+                        }
+                        if (imageReceiver != null) {
+                            PhotoViewer.PlaceProviderObject placeProviderObject = new PhotoViewer.PlaceProviderObject();
+                            placeProviderObject.viewX = iArr[0];
+                            placeProviderObject.viewY = iArr[1] - (Build.VERSION.SDK_INT >= 21 ? 0 : AndroidUtilities.statusBarHeight);
+                            placeProviderObject.parentView = access$200;
+                            placeProviderObject.animatingImageView = SharedMediaLayout.this.mediaPages[0].animatingImageView;
+                            SharedMediaLayout.this.mediaPages[0].listView.getLocationInWindow(iArr);
+                            placeProviderObject.animatingImageViewYOffset = -iArr[1];
+                            placeProviderObject.imageReceiver = imageReceiver;
+                            placeProviderObject.allowTakeAnimation = false;
+                            placeProviderObject.radius = imageReceiver.getRoundRadius();
+                            placeProviderObject.thumb = placeProviderObject.imageReceiver.getBitmapSafe();
+                            placeProviderObject.parentView.getLocationInWindow(iArr);
+                            placeProviderObject.clipTopAddition = 0;
+                            if (SharedMediaLayout.this.fragmentContextView != null && SharedMediaLayout.this.fragmentContextView.getVisibility() == 0) {
+                                placeProviderObject.clipTopAddition += AndroidUtilities.dp(36.0f);
+                            }
+                            if (PhotoViewer.isShowingImage(messageObject) && (pinnedHeader = access$200.getPinnedHeader()) != null) {
+                                int height = (SharedMediaLayout.this.fragmentContextView == null || SharedMediaLayout.this.fragmentContextView.getVisibility() != 0) ? 0 : (SharedMediaLayout.this.fragmentContextView.getHeight() - AndroidUtilities.dp(2.5f)) + 0;
+                                boolean z2 = childAt instanceof SharedDocumentCell;
                                 if (z2) {
-                                    height2 -= AndroidUtilities.dp(8.0f);
+                                    height += AndroidUtilities.dp(8.0f);
                                 }
-                                if (height2 >= 0) {
-                                    access$200.scrollBy(0, height2 + childAt.getHeight());
+                                int i7 = height - placeProviderObject.viewY;
+                                if (i7 > childAt.getHeight()) {
+                                    access$200.scrollBy(0, -(i7 + pinnedHeader.getHeight()));
+                                } else {
+                                    int height2 = placeProviderObject.viewY - access$200.getHeight();
+                                    if (z2) {
+                                        height2 -= AndroidUtilities.dp(8.0f);
+                                    }
+                                    if (height2 >= 0) {
+                                        access$200.scrollBy(0, height2 + childAt.getHeight());
+                                    }
                                 }
                             }
+                            return placeProviderObject;
                         }
-                        return placeProviderObject;
+                    }
+                    i3++;
+                    i2 = -1;
+                }
+                if (SharedMediaLayout.this.mediaPages[0].selectedType == 0 && i4 >= 0 && i5 >= 0) {
+                    int positionForIndex = SharedMediaLayout.this.photoVideoAdapter.getPositionForIndex(i);
+                    if (positionForIndex <= i4) {
+                        SharedMediaLayout.this.mediaPages[0].layoutManager.scrollToPositionWithOffset(positionForIndex, 0);
+                        SharedMediaLayout.this.profileActivity.scrollToSharedMedia();
+                    } else if (positionForIndex >= i5 && i5 >= 0) {
+                        SharedMediaLayout.this.mediaPages[0].layoutManager.scrollToPositionWithOffset(positionForIndex, 0, true);
+                        SharedMediaLayout.this.profileActivity.scrollToSharedMedia();
                     }
                 }
             }
@@ -5003,6 +5032,10 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             this.mContext = context;
         }
 
+        public int getPositionForIndex(int i) {
+            return i / SharedMediaLayout.this.columnsCount;
+        }
+
         public int getItemCount() {
             if (SharedMediaLayout.this.sharedMediaData[0].messages.size() == 0 && !SharedMediaLayout.this.sharedMediaData[0].loading) {
                 return 1;
@@ -5097,9 +5130,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 sharedPhotoVideoCell.setItemsCount(SharedMediaLayout.this.columnsCount);
                 sharedPhotoVideoCell.setIsFirst(i == 0);
                 for (int i2 = 0; i2 < SharedMediaLayout.this.columnsCount; i2++) {
-                    int access$2200 = (SharedMediaLayout.this.columnsCount * i) + i2;
-                    if (access$2200 < arrayList.size()) {
-                        MessageObject messageObject = arrayList.get(access$2200);
+                    int access$2400 = (SharedMediaLayout.this.columnsCount * i) + i2;
+                    if (access$2400 < arrayList.size()) {
+                        MessageObject messageObject = arrayList.get(access$2400);
                         sharedPhotoVideoCell.setItem(i2, SharedMediaLayout.this.sharedMediaData[0].messages.indexOf(messageObject), messageObject);
                         if (SharedMediaLayout.this.isActionModeShowed) {
                             sharedPhotoVideoCell.setChecked(i2, SharedMediaLayout.this.selectedFiles[(messageObject.getDialogId() > SharedMediaLayout.this.dialog_id ? 1 : (messageObject.getDialogId() == SharedMediaLayout.this.dialog_id ? 0 : -1)) == 0 ? (char) 0 : 1].indexOfKey(messageObject.getId()) >= 0, !SharedMediaLayout.this.scrolling);
@@ -5107,7 +5140,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             sharedPhotoVideoCell.setChecked(i2, false, !SharedMediaLayout.this.scrolling);
                         }
                     } else {
-                        sharedPhotoVideoCell.setItem(i2, access$2200, (MessageObject) null);
+                        sharedPhotoVideoCell.setItem(i2, access$2400, (MessageObject) null);
                     }
                 }
                 sharedPhotoVideoCell.requestLayout();
