@@ -213,7 +213,7 @@ public class FileLoadOperation {
             tLRPC$TL_inputPeerPhotoFileLocation.id = j2;
             tLRPC$TL_inputPeerPhotoFileLocation.volume_id = j2;
             tLRPC$TL_inputPeerPhotoFileLocation.local_id = tLRPC$TL_fileLocationToBeDeprecated2.local_id;
-            tLRPC$TL_inputPeerPhotoFileLocation.big = imageLocation.photoPeerBig;
+            tLRPC$TL_inputPeerPhotoFileLocation.big = imageLocation.photoPeerType == 0;
             tLRPC$TL_inputPeerPhotoFileLocation.peer = imageLocation.photoPeer;
         } else if (imageLocation.stickerSet != null) {
             TLRPC$TL_inputStickerSetThumb tLRPC$TL_inputStickerSetThumb = new TLRPC$TL_inputStickerSetThumb();

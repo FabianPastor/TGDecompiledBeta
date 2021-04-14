@@ -1,22 +1,16 @@
 package j$.util.stream;
 
-import j$.util.function.C;
-import j$.util.function.CLASSNAMEh;
-import j$.util.stream.D1;
+import j$.util.function.x;
 
-public final /* synthetic */ class Q implements C {
-    public final /* synthetic */ D1.d.a a;
+public final /* synthetic */ class Q implements x {
 
-    public /* synthetic */ Q(D1.d.a aVar) {
-        this.a = aVar;
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ Q var_a = new Q();
+
+    private /* synthetic */ Q() {
     }
 
-    public final void accept(long j) {
-        this.a.a.accept(j);
-    }
-
-    public C g(C c) {
-        c.getClass();
-        return new CLASSNAMEh(this, c);
+    public final Object apply(int i) {
+        return new Long[i];
     }
 }

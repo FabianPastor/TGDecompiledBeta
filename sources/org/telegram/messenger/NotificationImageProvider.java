@@ -10,7 +10,7 @@ import java.util.HashSet;
 import org.telegram.messenger.NotificationCenter;
 
 public class NotificationImageProvider extends ContentProvider implements NotificationCenter.NotificationCenterDelegate {
-    public static final String AUTHORITY = "org.telegram.messenger.notification_image_provider";
+    public static final String AUTHORITY = "org.telegram.messenger.web.notification_image_provider";
     private static final UriMatcher matcher;
     private HashMap<String, Long> fileStartTimes = new HashMap<>();
     private final Object sync = new Object();
@@ -39,7 +39,7 @@ public class NotificationImageProvider extends ContentProvider implements Notifi
     static {
         UriMatcher uriMatcher = new UriMatcher(-1);
         matcher = uriMatcher;
-        uriMatcher.addURI("org.telegram.messenger.notification_image_provider", "msg_media_raw/#/*", 1);
+        uriMatcher.addURI("org.telegram.messenger.web.notification_image_provider", "msg_media_raw/#/*", 1);
     }
 
     public boolean onCreate() {

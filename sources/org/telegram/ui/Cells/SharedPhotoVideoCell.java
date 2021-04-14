@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +25,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$MessageMedia;
@@ -179,6 +181,11 @@ public class SharedPhotoVideoCell extends FrameLayout {
         public void setMessageObject(MessageObject messageObject) {
             this.currentMessageObject = messageObject;
             this.imageView.getImageReceiver().setVisible(!PhotoViewer.isShowingImage(messageObject), false);
+            if (!TextUtils.isEmpty(MessagesController.getRestrictionReason(messageObject.messageOwner.restriction_reason))) {
+                this.videoInfoContainer.setVisibility(4);
+                this.imageView.setImageResource(NUM);
+                return;
+            }
             TLRPC$PhotoSize tLRPC$PhotoSize = null;
             if (messageObject.isVideo()) {
                 this.videoInfoContainer.setVisibility(0);

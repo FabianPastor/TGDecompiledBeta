@@ -17,7 +17,7 @@ final class P1<P_IN, P_OUT> extends CLASSNAMEi1<P_IN, P_OUT, Boolean, P1<P_IN, P
 
     /* access modifiers changed from: protected */
     public Object a() {
-        T1 t1 = this.a;
+        T1 t1 = this.var_a;
         M1 m1 = (M1) this.j.c.get();
         t1.t0(m1, this.b);
         boolean z = m1.b;

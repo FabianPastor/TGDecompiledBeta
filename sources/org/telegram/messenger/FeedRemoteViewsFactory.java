@@ -93,7 +93,7 @@ class FeedRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory, N
             File pathToAttach = FileLoader.getPathToAttach(FileLoader.getClosestPhotoSizeWithSize(messageObject.photoThumbs, AndroidUtilities.getPhotoSize()));
             if (pathToAttach.exists()) {
                 remoteViews.setViewVisibility(NUM, 0);
-                Uri uriForFile = FileProvider.getUriForFile(this.mContext, "org.telegram.messenger.provider", pathToAttach);
+                Uri uriForFile = FileProvider.getUriForFile(this.mContext, "org.telegram.messenger.web.provider", pathToAttach);
                 grantUriAccessToWidget(this.mContext, uriForFile);
                 remoteViews.setImageViewUri(NUM, uriForFile);
             } else {

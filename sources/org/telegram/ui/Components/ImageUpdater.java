@@ -62,6 +62,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     /* access modifiers changed from: private */
     public ImageUpdaterDelegate delegate;
     private String finalPath;
+    private boolean forceDarkTheme;
     private ImageReceiver imageReceiver;
     private boolean openWithFrontfaceCamera;
     public BaseFragment parentFragment;
@@ -217,6 +218,11 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         this.useAttachMenu = z;
     }
 
+    public void setSearchAvailable(boolean z, boolean z2) {
+        this.useAttachMenu = z2;
+        this.searchAvailable = z;
+    }
+
     public void setUploadAfterSelect(boolean z) {
         this.uploadAfterSelect = z;
     }
@@ -323,7 +329,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     private void createChatAttachView() {
         BaseFragment baseFragment = this.parentFragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null && this.chatAttachAlert == null) {
-            ChatAttachAlert chatAttachAlert2 = new ChatAttachAlert(this.parentFragment.getParentActivity(), this.parentFragment);
+            ChatAttachAlert chatAttachAlert2 = new ChatAttachAlert(this.parentFragment.getParentActivity(), this.parentFragment, this.forceDarkTheme);
             this.chatAttachAlert = chatAttachAlert2;
             chatAttachAlert2.setAvatarPicker(this.canSelectVideo ? 2 : 1, this.searchAvailable);
             this.chatAttachAlert.setDelegate(new ChatAttachAlert.ChatAttachViewDelegate() {
@@ -504,7 +510,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     File generatePicturePath = AndroidUtilities.generatePicturePath();
                     if (generatePicturePath != null) {
                         if (i >= 24) {
-                            intent.putExtra("output", FileProvider.getUriForFile(this.parentFragment.getParentActivity(), "org.telegram.messenger.provider", generatePicturePath));
+                            intent.putExtra("output", FileProvider.getUriForFile(this.parentFragment.getParentActivity(), "org.telegram.messenger.web.provider", generatePicturePath));
                             intent.addFlags(2);
                             intent.addFlags(1);
                         } else {
@@ -532,7 +538,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     File generateVideoPath = AndroidUtilities.generateVideoPath();
                     if (generateVideoPath != null) {
                         if (i >= 24) {
-                            intent.putExtra("output", FileProvider.getUriForFile(this.parentFragment.getParentActivity(), "org.telegram.messenger.provider", generateVideoPath));
+                            intent.putExtra("output", FileProvider.getUriForFile(this.parentFragment.getParentActivity(), "org.telegram.messenger.web.provider", generateVideoPath));
                             intent.addFlags(2);
                             intent.addFlags(1);
                         } else if (i >= 18) {
@@ -590,6 +596,24 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     }
 
     private void startCrop(String str, Uri uri) {
+        AndroidUtilities.runOnUIThread(new Runnable(str, uri) {
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ Uri f$2;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+            }
+
+            public final void run() {
+                ImageUpdater.this.lambda$startCrop$1$ImageUpdater(this.f$1, this.f$2);
+            }
+        });
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$startCrop$1 */
+    public /* synthetic */ void lambda$startCrop$1$ImageUpdater(String str, Uri uri) {
         try {
             LaunchActivity launchActivity = (LaunchActivity) this.parentFragment.getParentActivity();
             if (launchActivity != null) {
@@ -886,5 +910,9 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
             }
         }
+    }
+
+    public void setForceDarkTheme(boolean z) {
+        this.forceDarkTheme = z;
     }
 }

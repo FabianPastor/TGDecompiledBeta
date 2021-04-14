@@ -10,7 +10,9 @@ import j$.util.s;
 import java.util.Comparator;
 
 abstract class c3<T, T_SPLITR extends Spliterator<T>> {
-    final long a;
+
+    /* renamed from: a  reason: collision with root package name */
+    final long var_a;
     final long b;
     Spliterator c;
     long d;
@@ -36,7 +38,7 @@ abstract class c3<T, T_SPLITR extends Spliterator<T>> {
 
         /* access modifiers changed from: protected */
         public /* bridge */ /* synthetic */ Object f() {
-            return C0.a;
+            return B0.var_a;
         }
 
         public /* synthetic */ void forEachRemaining(Consumer consumer) {
@@ -64,7 +66,7 @@ abstract class c3<T, T_SPLITR extends Spliterator<T>> {
 
         /* access modifiers changed from: protected */
         public /* bridge */ /* synthetic */ Object f() {
-            return D0.a;
+            return C0.var_a;
         }
 
         public /* synthetic */ void forEachRemaining(Consumer consumer) {
@@ -92,7 +94,7 @@ abstract class c3<T, T_SPLITR extends Spliterator<T>> {
 
         /* access modifiers changed from: protected */
         public /* bridge */ /* synthetic */ Object f() {
-            return E0.a;
+            return D0.var_a;
         }
 
         public /* synthetic */ void forEachRemaining(Consumer consumer) {
@@ -125,13 +127,13 @@ abstract class c3<T, T_SPLITR extends Spliterator<T>> {
         /* renamed from: forEachRemaining */
         public void e(Object obj) {
             obj.getClass();
-            long j = this.a;
+            long j = this.var_a;
             long j2 = this.e;
             if (j < j2) {
                 long j3 = this.d;
                 if (j3 < j2) {
                     if (j3 < j || ((Spliterator.d) this.c).estimateSize() + j3 > this.b) {
-                        while (this.a > this.d) {
+                        while (this.var_a > this.d) {
                             ((Spliterator.d) this.c).tryAdvance(f());
                             this.d++;
                         }
@@ -163,11 +165,11 @@ abstract class c3<T, T_SPLITR extends Spliterator<T>> {
         public boolean o(Object obj) {
             long j;
             obj.getClass();
-            if (this.a >= this.e) {
+            if (this.var_a >= this.e) {
                 return false;
             }
             while (true) {
-                long j2 = this.a;
+                long j2 = this.var_a;
                 j = this.d;
                 if (j2 <= j) {
                     break;
@@ -218,16 +220,16 @@ abstract class c3<T, T_SPLITR extends Spliterator<T>> {
         public boolean b(Consumer consumer) {
             long j;
             consumer.getClass();
-            if (this.a >= this.e) {
+            if (this.var_a >= this.e) {
                 return false;
             }
             while (true) {
-                long j2 = this.a;
+                long j2 = this.var_a;
                 j = this.d;
                 if (j2 <= j) {
                     break;
                 }
-                this.c.b(F0.a);
+                this.c.b(E0.var_a);
                 this.d++;
             }
             if (j >= this.e) {
@@ -239,14 +241,14 @@ abstract class c3<T, T_SPLITR extends Spliterator<T>> {
 
         public void forEachRemaining(Consumer consumer) {
             consumer.getClass();
-            long j = this.a;
+            long j = this.var_a;
             long j2 = this.e;
             if (j < j2) {
                 long j3 = this.d;
                 if (j3 < j2) {
                     if (j3 < j || this.c.estimateSize() + j3 > this.b) {
-                        while (this.a > this.d) {
-                            this.c.b(G0.a);
+                        while (this.var_a > this.d) {
+                            this.c.b(F0.var_a);
                             this.d++;
                         }
                         while (this.d < this.e) {
@@ -276,7 +278,7 @@ abstract class c3<T, T_SPLITR extends Spliterator<T>> {
 
     c3(Spliterator spliterator, long j, long j2, long j3, long j4) {
         this.c = spliterator;
-        this.a = j;
+        this.var_a = j;
         this.b = j2;
         this.d = j3;
         this.e = j4;
@@ -290,7 +292,7 @@ abstract class c3<T, T_SPLITR extends Spliterator<T>> {
     }
 
     public long estimateSize() {
-        long j = this.a;
+        long j = this.var_a;
         long j2 = this.e;
         if (j < j2) {
             return j2 - Math.max(j, this.d);
@@ -299,7 +301,7 @@ abstract class c3<T, T_SPLITR extends Spliterator<T>> {
     }
 
     public Spliterator trySplit() {
-        long j = this.a;
+        long j = this.var_a;
         long j2 = this.e;
         if (j >= j2 || this.d >= j2) {
             return null;
@@ -311,7 +313,7 @@ abstract class c3<T, T_SPLITR extends Spliterator<T>> {
             }
             long estimateSize = trySplit.estimateSize() + this.d;
             long min = Math.min(estimateSize, this.b);
-            long j3 = this.a;
+            long j3 = this.var_a;
             if (j3 >= min) {
                 this.d = min;
             } else {

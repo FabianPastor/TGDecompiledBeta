@@ -1,16 +1,24 @@
 package j$.util.stream;
 
-import j$.util.function.I;
+import j$.util.function.C;
+import j$.util.function.CLASSNAMEh;
+import j$.util.stream.D1;
 
-public final /* synthetic */ class P implements I {
-    public static final /* synthetic */ P a = new P();
+public final /* synthetic */ class P implements C {
 
-    private /* synthetic */ P() {
+    /* renamed from: a  reason: collision with root package name */
+    public final /* synthetic */ D1.d.a var_a;
+
+    public /* synthetic */ P(D1.d.a aVar) {
+        this.var_a = aVar;
     }
 
-    public final void accept(Object obj, long j) {
-        long[] jArr = (long[]) obj;
-        jArr[0] = jArr[0] + 1;
-        jArr[1] = jArr[1] + j;
+    public final void accept(long j) {
+        this.var_a.var_a.accept(j);
+    }
+
+    public C g(C c) {
+        c.getClass();
+        return new CLASSNAMEh(this, c);
     }
 }

@@ -96,37 +96,37 @@ public class PhonebookShareAlert extends BottomSheet {
     public class UserCell extends LinearLayout {
         /* JADX WARNING: Illegal instructions before constructor call */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public UserCell(org.telegram.ui.Components.PhonebookShareAlert r19, android.content.Context r20) {
+        public UserCell(org.telegram.ui.Components.PhonebookShareAlert r22, android.content.Context r23) {
             /*
-                r18 = this;
-                r0 = r18
-                r1 = r20
+                r21 = this;
+                r0 = r21
+                r1 = r23
                 r0.<init>(r1)
                 r2 = 1
                 r0.setOrientation(r2)
-                java.util.ArrayList r3 = r19.phones
+                java.util.ArrayList r3 = r22.phones
                 int r3 = r3.size()
                 r4 = 0
                 if (r3 != r2) goto L_0x0030
-                java.util.ArrayList r3 = r19.other
+                java.util.ArrayList r3 = r22.other
                 int r3 = r3.size()
                 if (r3 != 0) goto L_0x0030
-                java.util.ArrayList r3 = r19.phones
+                java.util.ArrayList r3 = r22.phones
                 java.lang.Object r3 = r3.get(r4)
                 org.telegram.messenger.AndroidUtilities$VcardItem r3 = (org.telegram.messenger.AndroidUtilities.VcardItem) r3
                 java.lang.String r3 = r3.getValue(r2)
                 r5 = 0
                 goto L_0x0051
             L_0x0030:
-                org.telegram.tgnet.TLRPC$User r3 = r19.currentUser
+                org.telegram.tgnet.TLRPC$User r3 = r22.currentUser
                 org.telegram.tgnet.TLRPC$UserStatus r3 = r3.status
                 if (r3 == 0) goto L_0x004f
-                org.telegram.tgnet.TLRPC$User r3 = r19.currentUser
+                org.telegram.tgnet.TLRPC$User r3 = r22.currentUser
                 org.telegram.tgnet.TLRPC$UserStatus r3 = r3.status
                 int r3 = r3.expires
                 if (r3 == 0) goto L_0x004f
-                int r3 = r19.currentAccount
-                org.telegram.tgnet.TLRPC$User r5 = r19.currentUser
+                int r3 = r22.currentAccount
+                org.telegram.tgnet.TLRPC$User r5 = r22.currentUser
                 java.lang.String r3 = org.telegram.messenger.LocaleController.formatUserStatus(r3, r5)
                 goto L_0x0050
             L_0x004f:
@@ -134,32 +134,37 @@ public class PhonebookShareAlert extends BottomSheet {
             L_0x0050:
                 r5 = 1
             L_0x0051:
-                org.telegram.ui.Components.AvatarDrawable r6 = new org.telegram.ui.Components.AvatarDrawable
-                r6.<init>()
-                r7 = 1106247680(0x41var_, float:30.0)
-                int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                r6.setTextSize(r7)
-                org.telegram.tgnet.TLRPC$User r7 = r19.currentUser
-                r6.setInfo((org.telegram.tgnet.TLRPC$User) r7)
-                org.telegram.ui.Components.BackupImageView r7 = new org.telegram.ui.Components.BackupImageView
-                r7.<init>(r1)
-                r8 = 1109393408(0x42200000, float:40.0)
-                int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
-                r7.setRoundRadius(r8)
-                org.telegram.tgnet.TLRPC$User r8 = r19.currentUser
-                org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForUser(r8, r4)
-                org.telegram.tgnet.TLRPC$User r9 = r19.currentUser
+                org.telegram.ui.Components.AvatarDrawable r11 = new org.telegram.ui.Components.AvatarDrawable
+                r11.<init>()
+                r6 = 1106247680(0x41var_, float:30.0)
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+                r11.setTextSize(r6)
+                org.telegram.tgnet.TLRPC$User r6 = r22.currentUser
+                r11.setInfo((org.telegram.tgnet.TLRPC$User) r6)
+                org.telegram.ui.Components.BackupImageView r13 = new org.telegram.ui.Components.BackupImageView
+                r13.<init>(r1)
+                r6 = 1109393408(0x42200000, float:40.0)
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+                r13.setRoundRadius(r6)
+                org.telegram.tgnet.TLRPC$User r6 = r22.currentUser
+                org.telegram.messenger.ImageLocation r7 = org.telegram.messenger.ImageLocation.getForUserOrChat(r6, r2)
+                org.telegram.tgnet.TLRPC$User r6 = r22.currentUser
+                r8 = 2
+                org.telegram.messenger.ImageLocation r9 = org.telegram.messenger.ImageLocation.getForUserOrChat(r6, r8)
+                org.telegram.tgnet.TLRPC$User r12 = r22.currentUser
+                java.lang.String r8 = "50_50"
                 java.lang.String r10 = "50_50"
-                r7.setImage((org.telegram.messenger.ImageLocation) r8, (java.lang.String) r10, (android.graphics.drawable.Drawable) r6, (java.lang.Object) r9)
-                r11 = 80
-                r12 = 80
-                r13 = 49
-                r14 = 0
-                r15 = 32
-                r16 = 0
+                r6 = r13
+                r6.setImage((org.telegram.messenger.ImageLocation) r7, (java.lang.String) r8, (org.telegram.messenger.ImageLocation) r9, (java.lang.String) r10, (android.graphics.drawable.Drawable) r11, (java.lang.Object) r12)
+                r14 = 80
+                r15 = 80
+                r16 = 49
                 r17 = 0
-                android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17)
-                r0.addView(r7, r6)
+                r18 = 32
+                r19 = 0
+                r20 = 0
+                android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r14, (int) r15, (int) r16, (int) r17, (int) r18, (int) r19, (int) r20)
+                r0.addView(r13, r6)
                 android.widget.TextView r6 = new android.widget.TextView
                 r6.<init>(r1)
                 java.lang.String r7 = "fonts/rmedium.ttf"
@@ -173,9 +178,9 @@ public class PhonebookShareAlert extends BottomSheet {
                 r6.setSingleLine(r2)
                 android.text.TextUtils$TruncateAt r7 = android.text.TextUtils.TruncateAt.END
                 r6.setEllipsize(r7)
-                org.telegram.tgnet.TLRPC$User r7 = r19.currentUser
+                org.telegram.tgnet.TLRPC$User r7 = r22.currentUser
                 java.lang.String r7 = r7.first_name
-                org.telegram.tgnet.TLRPC$User r8 = r19.currentUser
+                org.telegram.tgnet.TLRPC$User r8 = r22.currentUser
                 java.lang.String r8 = r8.last_name
                 java.lang.String r7 = org.telegram.messenger.ContactsController.formatName(r7, r8)
                 r6.setText(r7)
@@ -186,15 +191,15 @@ public class PhonebookShareAlert extends BottomSheet {
                 r12 = 10
                 r13 = 10
                 r7 = 27
-                if (r3 == 0) goto L_0x00e0
+                if (r3 == 0) goto L_0x00ed
                 r14 = 0
-                goto L_0x00e2
-            L_0x00e0:
+                goto L_0x00ef
+            L_0x00ed:
                 r14 = 27
-            L_0x00e2:
+            L_0x00ef:
                 android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14)
                 r0.addView(r6, r4)
-                if (r3 == 0) goto L_0x0122
+                if (r3 == 0) goto L_0x012f
                 android.widget.TextView r4 = new android.widget.TextView
                 r4.<init>(r1)
                 r1 = 1096810496(0x41600000, float:14.0)
@@ -212,16 +217,16 @@ public class PhonebookShareAlert extends BottomSheet {
                 r11 = 10
                 r12 = 3
                 r13 = 10
-                if (r5 == 0) goto L_0x0117
+                if (r5 == 0) goto L_0x0124
                 r14 = 27
-                goto L_0x011b
-            L_0x0117:
+                goto L_0x0128
+            L_0x0124:
                 r7 = 11
                 r14 = 11
-            L_0x011b:
+            L_0x0128:
                 android.widget.LinearLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14)
                 r0.addView(r4, r1)
-            L_0x0122:
+            L_0x012f:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhonebookShareAlert.UserCell.<init>(org.telegram.ui.Components.PhonebookShareAlert, android.content.Context):void");
@@ -762,7 +767,7 @@ public class PhonebookShareAlert extends BottomSheet {
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r3.setBackgroundColor(r6)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
-            r6 = 2131165468(0x7var_c, float:1.7945154E38)
+            r6 = 2131165469(0x7var_d, float:1.7945156E38)
             r3.setBackButtonImage(r6)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
             java.lang.String r6 = "dialogTextBlack"
@@ -781,9 +786,9 @@ public class PhonebookShareAlert extends BottomSheet {
             r6 = 0
             r3.setAlpha(r6)
             boolean r3 = r0.isImport
-            r7 = 2131624195(0x7f0e0103, float:1.8875563E38)
+            r7 = 2131624197(0x7f0e0105, float:1.8875567E38)
             java.lang.String r9 = "AddContactPhonebookTitle"
-            r10 = 2131627376(0x7f0e0d70, float:1.8882015E38)
+            r10 = 2131627425(0x7f0e0da1, float:1.8882114E38)
             java.lang.String r11 = "ShareContactTitle"
             if (r3 == 0) goto L_0x022a
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar

@@ -10,7 +10,7 @@ public final /* synthetic */ class s {
     public static void a(Spliterator.a aVar, Consumer consumer) {
         if (consumer instanceof q) {
             aVar.e((q) consumer);
-        } else if (!w.a) {
+        } else if (!w.var_a) {
             consumer.getClass();
             aVar.e(new j(consumer));
         } else {
@@ -22,7 +22,7 @@ public final /* synthetic */ class s {
     public static void b(Spliterator.b bVar, Consumer consumer) {
         if (consumer instanceof w) {
             bVar.c((w) consumer);
-        } else if (!w.a) {
+        } else if (!w.var_a) {
             consumer.getClass();
             bVar.c(new h(consumer));
         } else {
@@ -34,7 +34,7 @@ public final /* synthetic */ class s {
     public static void c(Spliterator.c cVar, Consumer consumer) {
         if (consumer instanceof C) {
             cVar.d((C) consumer);
-        } else if (!w.a) {
+        } else if (!w.var_a) {
             consumer.getClass();
             cVar.d(new g(consumer));
         } else {
@@ -47,7 +47,7 @@ public final /* synthetic */ class s {
         if (consumer instanceof q) {
             return aVar.o((q) consumer);
         }
-        if (!w.a) {
+        if (!w.var_a) {
             consumer.getClass();
             return aVar.o(new j(consumer));
         }
@@ -59,7 +59,7 @@ public final /* synthetic */ class s {
         if (consumer instanceof w) {
             return bVar.h((w) consumer);
         }
-        if (!w.a) {
+        if (!w.var_a) {
             consumer.getClass();
             return bVar.h(new h(consumer));
         }
@@ -71,7 +71,7 @@ public final /* synthetic */ class s {
         if (consumer instanceof C) {
             return cVar.j((C) consumer);
         }
-        if (!w.a) {
+        if (!w.var_a) {
             consumer.getClass();
             return cVar.j(new g(consumer));
         }

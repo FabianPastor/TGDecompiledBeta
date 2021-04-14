@@ -1,8 +1,8 @@
 package j$.util.concurrent;
 
-import j$.P0;
-import j$.R0;
-import j$.T0;
+import a.P0;
+import a.R0;
+import a.T0;
 import j$.util.Spliterator;
 import j$.util.function.C;
 import j$.util.function.Consumer;
@@ -27,7 +27,9 @@ public class e extends Random {
     private static final AtomicLong e;
     private static final ThreadLocal f = new ThreadLocal();
     private static final ThreadLocal g = new a();
-    long a;
+
+    /* renamed from: a  reason: collision with root package name */
+    long var_a;
     int b;
     boolean c = true;
 
@@ -42,13 +44,15 @@ public class e extends Random {
     }
 
     static final class b implements Spliterator.a {
-        long a;
+
+        /* renamed from: a  reason: collision with root package name */
+        long var_a;
         final long b;
         final double c;
         final double d;
 
         b(long j, long j2, double d2, double d3) {
-            this.a = j;
+            this.var_a = j;
             this.b = j2;
             this.c = d2;
             this.d = d3;
@@ -56,12 +60,12 @@ public class e extends Random {
 
         /* renamed from: a */
         public b trySplit() {
-            long j = this.a;
+            long j = this.var_a;
             long j2 = (this.b + j) >>> 1;
             if (j2 <= j) {
                 return null;
             }
-            this.a = j2;
+            this.var_a = j2;
             return new b(j, j2, this.c, this.d);
         }
 
@@ -76,10 +80,10 @@ public class e extends Random {
         /* renamed from: e */
         public void forEachRemaining(q qVar) {
             qVar.getClass();
-            long j = this.a;
+            long j = this.var_a;
             long j2 = this.b;
             if (j < j2) {
-                this.a = j2;
+                this.var_a = j2;
                 double d2 = this.c;
                 double d3 = this.d;
                 e b2 = e.b();
@@ -91,7 +95,7 @@ public class e extends Random {
         }
 
         public long estimateSize() {
-            return this.b - this.a;
+            return this.b - this.var_a;
         }
 
         public /* synthetic */ void forEachRemaining(Consumer consumer) {
@@ -113,24 +117,26 @@ public class e extends Random {
         /* renamed from: o */
         public boolean tryAdvance(q qVar) {
             qVar.getClass();
-            long j = this.a;
+            long j = this.var_a;
             if (j >= this.b) {
                 return false;
             }
             qVar.accept(e.b().d(this.c, this.d));
-            this.a = j + 1;
+            this.var_a = j + 1;
             return true;
         }
     }
 
     static final class c implements Spliterator.b {
-        long a;
+
+        /* renamed from: a  reason: collision with root package name */
+        long var_a;
         final long b;
         final int c;
         final int d;
 
         c(long j, long j2, int i, int i2) {
-            this.a = j;
+            this.var_a = j;
             this.b = j2;
             this.c = i;
             this.d = i2;
@@ -138,12 +144,12 @@ public class e extends Random {
 
         /* renamed from: a */
         public c trySplit() {
-            long j = this.a;
+            long j = this.var_a;
             long j2 = (this.b + j) >>> 1;
             if (j2 <= j) {
                 return null;
             }
-            this.a = j2;
+            this.var_a = j2;
             return new c(j, j2, this.c, this.d);
         }
 
@@ -154,10 +160,10 @@ public class e extends Random {
         /* renamed from: c */
         public void forEachRemaining(w wVar) {
             wVar.getClass();
-            long j = this.a;
+            long j = this.var_a;
             long j2 = this.b;
             if (j < j2) {
-                this.a = j2;
+                this.var_a = j2;
                 int i = this.c;
                 int i2 = this.d;
                 e b2 = e.b();
@@ -173,7 +179,7 @@ public class e extends Random {
         }
 
         public long estimateSize() {
-            return this.b - this.a;
+            return this.b - this.var_a;
         }
 
         public /* synthetic */ void forEachRemaining(Consumer consumer) {
@@ -191,12 +197,12 @@ public class e extends Random {
         /* renamed from: h */
         public boolean tryAdvance(w wVar) {
             wVar.getClass();
-            long j = this.a;
+            long j = this.var_a;
             if (j >= this.b) {
                 return false;
             }
             wVar.accept(e.b().e(this.c, this.d));
-            this.a = j + 1;
+            this.var_a = j + 1;
             return true;
         }
 
@@ -206,13 +212,15 @@ public class e extends Random {
     }
 
     static final class d implements Spliterator.c {
-        long a;
+
+        /* renamed from: a  reason: collision with root package name */
+        long var_a;
         final long b;
         final long c;
         final long d;
 
         d(long j, long j2, long j3, long j4) {
-            this.a = j;
+            this.var_a = j;
             this.b = j2;
             this.c = j3;
             this.d = j4;
@@ -220,12 +228,12 @@ public class e extends Random {
 
         /* renamed from: a */
         public d trySplit() {
-            long j = this.a;
+            long j = this.var_a;
             long j2 = (this.b + j) >>> 1;
             if (j2 <= j) {
                 return null;
             }
-            this.a = j2;
+            this.var_a = j2;
             return new d(j, j2, this.c, this.d);
         }
 
@@ -240,10 +248,10 @@ public class e extends Random {
         /* renamed from: d */
         public void forEachRemaining(C c2) {
             c2.getClass();
-            long j = this.a;
+            long j = this.var_a;
             long j2 = this.b;
             if (j < j2) {
-                this.a = j2;
+                this.var_a = j2;
                 long j3 = this.c;
                 long j4 = this.d;
                 e b2 = e.b();
@@ -255,7 +263,7 @@ public class e extends Random {
         }
 
         public long estimateSize() {
-            return this.b - this.a;
+            return this.b - this.var_a;
         }
 
         public /* synthetic */ void forEachRemaining(Consumer consumer) {
@@ -277,12 +285,12 @@ public class e extends Random {
         /* renamed from: j */
         public boolean tryAdvance(C c2) {
             c2.getClass();
-            long j = this.a;
+            long j = this.var_a;
             if (j >= this.b) {
                 return false;
             }
             c2.accept(e.b().f(this.c, this.d));
-            this.a = j + 1;
+            this.var_a = j + 1;
             return true;
         }
     }
@@ -336,7 +344,7 @@ public class e extends Random {
         }
         long i = i(e.getAndAdd(-4942790177534073029L));
         e eVar = (e) g.get();
-        eVar.a = i;
+        eVar.var_a = i;
         eVar.b = addAndGet;
     }
 
@@ -436,8 +444,8 @@ public class e extends Random {
 
     /* access modifiers changed from: package-private */
     public final long j() {
-        long j = this.a - 7046029254386353131L;
-        this.a = j;
+        long j = this.var_a - 7046029254386353131L;
+        this.var_a = j;
         return j;
     }
 

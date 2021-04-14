@@ -1,25 +1,16 @@
 package j$.util.stream;
 
-import j$.util.function.BiConsumer;
-import j$.util.function.BiFunction;
-import j$.util.function.CLASSNAMEb;
-import j$.util.function.Function;
-import j$.util.function.n;
+import j$.util.function.ToLongFunction;
 
-public final /* synthetic */ class T implements n {
-    public final /* synthetic */ BiConsumer a;
+public final /* synthetic */ class T implements ToLongFunction {
 
-    public /* synthetic */ T(BiConsumer biConsumer) {
-        this.a = biConsumer;
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ T var_a = new T();
+
+    private /* synthetic */ T() {
     }
 
-    public BiFunction a(Function function) {
-        function.getClass();
-        return new CLASSNAMEb(this, function);
-    }
-
-    public final Object apply(Object obj, Object obj2) {
-        this.a.accept(obj, obj2);
-        return obj;
+    public final long applyAsLong(Object obj) {
+        return ((Long) obj).longValue();
     }
 }

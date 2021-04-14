@@ -1,10 +1,11 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_payments_validateRequestedInfo extends TLObject {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
     public int flags;
     public TLRPC$TL_paymentRequestedInfo info;
     public int msg_id;
+    public TLRPC$InputPeer peer;
     public boolean save;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -16,6 +17,7 @@ public class TLRPC$TL_payments_validateRequestedInfo extends TLObject {
         int i = this.save ? this.flags | 1 : this.flags & -2;
         this.flags = i;
         abstractSerializedData.writeInt32(i);
+        this.peer.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.msg_id);
         this.info.serializeToStream(abstractSerializedData);
     }

@@ -18,23 +18,23 @@ final class N2<T> extends F2<T> {
 
     public void m() {
         k.B(this.d, this.b);
-        this.a.n((long) this.d.size());
+        this.var_a.n((long) this.d.size());
         if (!this.c) {
             ArrayList arrayList = this.d;
-            A2 a2 = this.a;
+            A2 a2 = this.var_a;
             a2.getClass();
             k.s(arrayList, new CLASSNAMEb(a2));
         } else {
             Iterator it = this.d.iterator();
             while (it.hasNext()) {
                 Object next = it.next();
-                if (this.a.p()) {
+                if (this.var_a.p()) {
                     break;
                 }
-                this.a.accept(next);
+                this.var_a.accept(next);
             }
         }
-        this.a.m();
+        this.var_a.m();
         this.d = null;
     }
 

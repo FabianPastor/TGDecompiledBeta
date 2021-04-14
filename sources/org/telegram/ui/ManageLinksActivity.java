@@ -77,11 +77,11 @@ import org.telegram.ui.Components.DotDividerSpan;
 import org.telegram.ui.Components.InviteLinkBottomSheet;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkActionView;
+import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.TimerParticles;
 import org.telegram.ui.LinkEditActivity;
 import org.telegram.ui.ManageLinksActivity;
-import org.webrtc.RecyclerItemsEnterAnimator;
 
 public class ManageLinksActivity extends BaseFragment {
     /* access modifiers changed from: private */
@@ -357,7 +357,8 @@ public class ManageLinksActivity extends BaseFragment {
                 tLRPC$TL_messages_getExportedChatInvites.flags |= 4;
                 ArrayList<TLRPC$TL_chatInviteExported> arrayList3 = this.invites;
                 tLRPC$TL_messages_getExportedChatInvites.offset_link = arrayList3.get(arrayList3.size() - 1).link;
-                tLRPC$TL_messages_getExportedChatInvites.offset_date = this.invites.get(this.revokedInvites.size() - 1).date;
+                ArrayList<TLRPC$TL_chatInviteExported> arrayList4 = this.invites;
+                tLRPC$TL_messages_getExportedChatInvites.offset_date = arrayList4.get(arrayList4.size() - 1).date;
             }
             this.linksLoading = true;
             getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getExportedChatInvites, new RequestDelegate(this.isPublic ? null : this.invite, z2) {
@@ -662,7 +663,7 @@ public class ManageLinksActivity extends BaseFragment {
             if (r2 <= 0) goto L_0x00ee
             boolean r2 = r5.isOpened
             if (r2 == 0) goto L_0x00ee
-            org.webrtc.RecyclerItemsEnterAnimator r2 = r5.recyclerItemsEnterAnimator
+            org.telegram.ui.Components.RecyclerItemsEnterAnimator r2 = r5.recyclerItemsEnterAnimator
             if (r2 == 0) goto L_0x00ec
             boolean r3 = r5.isPaused
             if (r3 != 0) goto L_0x00ec
@@ -917,6 +918,12 @@ public class ManageLinksActivity extends BaseFragment {
             public void dispatchDraw(Canvas canvas) {
                 ManageLinksActivity.this.recyclerItemsEnterAnimator.dispatchDraw();
                 super.dispatchDraw(canvas);
+            }
+
+            /* access modifiers changed from: protected */
+            public void onDetachedFromWindow() {
+                super.onDetachedFromWindow();
+                ManageLinksActivity.this.recyclerItemsEnterAnimator.onDetached();
             }
         };
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
@@ -1188,7 +1195,7 @@ public class ManageLinksActivity extends BaseFragment {
                 java.lang.String r12 = "windowBackgroundGrayShadow"
                 r0 = 1
                 r1 = 0
-                r2 = 2131165449(0x7var_, float:1.7945115E38)
+                r2 = 2131165450(0x7var_a, float:1.7945117E38)
                 java.lang.String r3 = "windowBackgroundWhite"
                 switch(r13) {
                     case 1: goto L_0x00ef;
@@ -1225,7 +1232,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.Cells.TextInfoPrivacyCell r13 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r0 = r11.mContext
                 r13.<init>(r0)
-                r0 = 2131625007(0x7f0e042f, float:1.887721E38)
+                r0 = 2131625015(0x7f0e0437, float:1.8877226E38)
                 java.lang.String r1 = "CreateNewLinkHelp"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r13.setText(r0)
@@ -1239,7 +1246,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r12.<init>(r13)
                 int r13 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r12.setBackgroundColor(r13)
-                r13 = 2131625088(0x7f0e0480, float:1.8877374E38)
+                r13 = 2131625102(0x7f0e048e, float:1.8877402E38)
                 java.lang.String r0 = "DeleteAllRevokedLinks"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13, r1)
@@ -1445,11 +1452,11 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity$TextCell r6 = (org.telegram.ui.ManageLinksActivity.TextCell) r6
                 android.content.Context r7 = r5.mContext
                 android.content.res.Resources r7 = r7.getResources()
-                r0 = 2131165929(0x7var_e9, float:1.7946089E38)
+                r0 = 2131165947(0x7var_fb, float:1.7946125E38)
                 android.graphics.drawable.Drawable r7 = r7.getDrawable(r0)
                 android.content.Context r0 = r5.mContext
                 android.content.res.Resources r0 = r0.getResources()
-                r2 = 2131165930(0x7var_ea, float:1.794609E38)
+                r2 = 2131165948(0x7var_fc, float:1.7946128E38)
                 android.graphics.drawable.Drawable r0 = r0.getDrawable(r2)
                 android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
                 java.lang.String r3 = "switchTrackChecked"
@@ -1465,7 +1472,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r0.setColorFilter(r2)
                 org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
                 r2.<init>(r7, r0)
-                r7 = 2131625006(0x7f0e042e, float:1.8877208E38)
+                r7 = 2131625014(0x7f0e0436, float:1.8877224E38)
                 java.lang.String r0 = "CreateNewLink"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
@@ -1555,7 +1562,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.messenger.UserConfig r0 = r0.getUserConfig()
                 int r0 = r0.clientUserId
                 if (r7 != r0) goto L_0x0214
-                r7 = 2131627019(0x7f0e0c0b, float:1.888129E38)
+                r7 = 2131627061(0x7f0e0CLASSNAME, float:1.8881376E38)
                 java.lang.String r0 = "PublicLink"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1568,13 +1575,13 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.messenger.UserConfig r0 = r0.getUserConfig()
                 int r0 = r0.clientUserId
                 if (r7 != r0) goto L_0x0235
-                r7 = 2131624704(0x7f0e0300, float:1.8876595E38)
+                r7 = 2131624710(0x7f0e0306, float:1.8876607E38)
                 java.lang.String r0 = "ChannelInviteLinkTitle"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x0280
             L_0x0235:
-                r7 = 2131626837(0x7f0e0b55, float:1.8880921E38)
+                r7 = 2131626876(0x7f0e0b7c, float:1.8881E38)
                 java.lang.String r0 = "PermanentLinkForThisAdmin"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1583,7 +1590,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.revokedHeader
                 if (r7 != r0) goto L_0x0257
-                r7 = 2131627195(0x7f0e0cbb, float:1.8881648E38)
+                r7 = 2131627237(0x7f0e0ce5, float:1.8881733E38)
                 java.lang.String r0 = "RevokedLinks"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1592,7 +1599,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.linksHeaderRow
                 if (r7 != r0) goto L_0x026c
-                r7 = 2131625943(0x7f0e07d7, float:1.8879108E38)
+                r7 = 2131625971(0x7f0e07f3, float:1.8879165E38)
                 java.lang.String r0 = "LinksCreatedByThisAdmin"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1601,7 +1608,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.adminsHeaderRow
                 if (r7 != r0) goto L_0x0280
-                r7 = 2131625942(0x7f0e07d6, float:1.8879106E38)
+                r7 = 2131625970(0x7f0e07f2, float:1.8879163E38)
                 java.lang.String r0 = "LinksCreatedByOtherAdmins"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1780,7 +1787,7 @@ public class ManageLinksActivity extends BaseFragment {
         public void onDraw(Canvas canvas) {
             super.onDraw(canvas);
             if (this.divider) {
-                canvas.drawLine((float) AndroidUtilities.dp(70.0f), (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.dividerPaint);
+                canvas.drawLine((float) AndroidUtilities.dp(70.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() + AndroidUtilities.dp(23.0f)), (float) getMeasuredHeight(), Theme.dividerPaint);
             }
         }
 
@@ -1836,7 +1843,7 @@ public class ManageLinksActivity extends BaseFragment {
             this.optionsView = imageView;
             imageView.setImageDrawable(ContextCompat.getDrawable(context, NUM));
             this.optionsView.setScaleType(ImageView.ScaleType.CENTER);
-            this.optionsView.setColorFilter(Theme.getColor("dialogTextGray3"));
+            this.optionsView.setColorFilter(Theme.getColor("stickers_menu"));
             this.optionsView.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
                     ManageLinksActivity.LinkCell.this.lambda$new$3$ManageLinksActivity$LinkCell(view);
@@ -1868,11 +1875,11 @@ public class ManageLinksActivity extends BaseFragment {
                 r1.<init>()
                 org.telegram.tgnet.TLRPC$TL_chatInviteExported r2 = r7.invite
                 boolean r2 = r2.revoked
-                r3 = 2131165729(0x7var_, float:1.7945683E38)
+                r3 = 2131165733(0x7var_, float:1.7945691E38)
                 r4 = 0
                 r5 = 1
                 if (r2 == 0) goto L_0x003d
-                r2 = 2131625076(0x7f0e0474, float:1.887735E38)
+                r2 = 2131625090(0x7f0e0482, float:1.8877378E38)
                 java.lang.String r6 = "Delete"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1885,20 +1892,20 @@ public class ManageLinksActivity extends BaseFragment {
                 r2 = 1
                 goto L_0x00c9
             L_0x003d:
-                r2 = 2131624987(0x7f0e041b, float:1.887717E38)
-                java.lang.String r6 = "Copy"
+                r2 = 2131624997(0x7f0e0425, float:1.887719E38)
+                java.lang.String r6 = "CopyLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
-                r2 = 2131165727(0x7var_f, float:1.794568E38)
+                r2 = 2131165731(0x7var_, float:1.7945687E38)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
                 r0.add(r2)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r4)
                 r1.add(r2)
-                r2 = 2131627378(0x7f0e0d72, float:1.8882019E38)
+                r2 = 2131627427(0x7f0e0da3, float:1.8882118E38)
                 java.lang.String r6 = "ShareLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
-                r2 = 2131165810(0x7var_, float:1.7945848E38)
+                r2 = 2131165817(0x7var_, float:1.7945862E38)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
                 r0.add(r2)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r5)
@@ -1909,11 +1916,11 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r2 = org.telegram.ui.ManageLinksActivity.this
                 boolean r2 = r2.canEdit
                 if (r2 == 0) goto L_0x00a3
-                r2 = 2131625200(0x7f0e04f0, float:1.8877601E38)
-                java.lang.String r6 = "Edit"
+                r2 = 2131625252(0x7f0e0524, float:1.8877707E38)
+                java.lang.String r6 = "EditLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
-                r2 = 2131165738(0x7var_a, float:1.7945702E38)
+                r2 = 2131165742(0x7var_e, float:1.794571E38)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
                 r0.add(r2)
                 r2 = 2
@@ -1923,7 +1930,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r2 = org.telegram.ui.ManageLinksActivity.this
                 boolean r2 = r2.canEdit
                 if (r2 == 0) goto L_0x00c8
-                r2 = 2131627190(0x7f0e0cb6, float:1.8881637E38)
+                r2 = 2131627232(0x7f0e0ce0, float:1.8881723E38)
                 java.lang.String r6 = "RevokeLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1947,7 +1954,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.-$$Lambda$ManageLinksActivity$LinkCell$b_1dwdUspytHIulkBxi0BRo5DaQ r6 = new org.telegram.ui.-$$Lambda$ManageLinksActivity$LinkCell$b_1dwdUspytHIulkBxi0BRo5DaQ
                 r6.<init>(r1)
                 r3.setItems(r4, r0, r6)
-                r0 = 2131625822(0x7f0e075e, float:1.8878863E38)
+                r0 = 2131625847(0x7f0e0777, float:1.8878914E38)
                 java.lang.String r1 = "InviteLink"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r3.setTitle(r0)
@@ -2357,7 +2364,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r1.draw(r7)
             L_0x0215:
                 boolean r1 = r0.drawDivider
-                if (r1 == 0) goto L_0x0237
+                if (r1 == 0) goto L_0x023e
                 r1 = 1116471296(0x428CLASSNAME, float:70.0)
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                 float r2 = (float) r1
@@ -2365,13 +2372,16 @@ public class ManageLinksActivity extends BaseFragment {
                 int r1 = r1 - r10
                 float r3 = (float) r1
                 int r1 = r15.getMeasuredWidth()
+                r4 = 1102577664(0x41b80000, float:23.0)
+                int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                int r1 = r1 + r4
                 float r4 = (float) r1
                 int r1 = r15.getMeasuredHeight()
                 float r5 = (float) r1
                 android.graphics.Paint r6 = org.telegram.ui.ActionBar.Theme.dividerPaint
                 r1 = r16
                 r1.drawLine(r2, r3, r4, r5, r6)
-            L_0x0237:
+            L_0x023e:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ManageLinksActivity.LinkCell.onDraw(android.graphics.Canvas):void");
@@ -2608,7 +2618,9 @@ public class ManageLinksActivity extends BaseFragment {
                     getMessagesStorage().saveChatLinksCount(this.currentChatId, this.info.invitesCount);
                 }
             }
-            BulletinFactory.of((BaseFragment) this).createSimpleBulletin(NUM, LocaleController.getString("InviteRevokedHint", NUM)).show();
+            if (getParentActivity() != null) {
+                BulletinFactory.of((BaseFragment) this).createSimpleBulletin(NUM, LocaleController.getString("InviteRevokedHint", NUM)).show();
+            }
         }
     }
 
@@ -2789,7 +2801,7 @@ public class ManageLinksActivity extends BaseFragment {
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{HeaderCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueHeader"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{LinkCell.class}, new String[]{"titleView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{LinkCell.class}, new String[]{"subtitleView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{LinkCell.class}, new String[]{"optionsView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextGray3"));
+        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{LinkCell.class}, new String[]{"optionsView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "stickers_menu"));
         return arrayList;
     }
 

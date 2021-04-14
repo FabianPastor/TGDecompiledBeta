@@ -244,7 +244,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 Intent intent = new Intent("android.intent.action.VIEW");
                 intent.setFlags(1);
                 if (Build.VERSION.SDK_INT >= 24) {
-                    intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.provider", pathToAttach), "application/vnd.android.package-archive");
+                    intent.setDataAndType(FileProvider.getUriForFile(activity, "org.telegram.messenger.web.provider", pathToAttach), "application/vnd.android.package-archive");
                 } else {
                     intent.setDataAndType(Uri.fromFile(pathToAttach), "application/vnd.android.package-archive");
                 }

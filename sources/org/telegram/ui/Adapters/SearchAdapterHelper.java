@@ -13,6 +13,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.UserConfig;
@@ -35,6 +36,7 @@ import org.telegram.tgnet.TLRPC$TL_contacts_search;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.Components.ShareAlert;
 
 public class SearchAdapterHelper {
     private boolean allResultsAreGlobal;
@@ -53,7 +55,7 @@ public class SearchAdapterHelper {
     private String lastFoundChannel;
     private String lastFoundUsername = null;
     private int lastReqId;
-    private ArrayList<TLObject> localSearchResults;
+    private ArrayList<Object> localSearchResults;
     private ArrayList<TLObject> localServerSearch = new ArrayList<>();
     private SparseArray<TLObject> phoneSearchMap = new SparseArray<>();
     private ArrayList<Object> phonesSearch = new ArrayList<>();
@@ -284,6 +286,7 @@ public class SearchAdapterHelper {
                 TLRPC$TL_channels_channelParticipants tLRPC$TL_channels_channelParticipants = (TLRPC$TL_channels_channelParticipants) tLObject;
                 this.lastFoundChannel = str.toLowerCase();
                 MessagesController.getInstance(this.currentAccount).putUsers(tLRPC$TL_channels_channelParticipants.users, false);
+                MessagesController.getInstance(this.currentAccount).putChats(tLRPC$TL_channels_channelParticipants.chats, false);
                 this.groupSearch.clear();
                 this.groupSearchMap.clear();
                 this.groupSearch.addAll(tLRPC$TL_channels_channelParticipants.participants);
@@ -291,14 +294,15 @@ public class SearchAdapterHelper {
                 int size = tLRPC$TL_channels_channelParticipants.participants.size();
                 for (int i3 = 0; i3 < size; i3++) {
                     TLRPC$ChannelParticipant tLRPC$ChannelParticipant = tLRPC$TL_channels_channelParticipants.participants.get(i3);
-                    if (z || tLRPC$ChannelParticipant.user_id != clientUserId) {
-                        this.groupSearchMap.put(tLRPC$ChannelParticipant.user_id, tLRPC$ChannelParticipant);
+                    int peerId = MessageObject.getPeerId(tLRPC$ChannelParticipant.peer);
+                    if (z || peerId != clientUserId) {
+                        this.groupSearchMap.put(peerId, tLRPC$ChannelParticipant);
                     } else {
                         this.groupSearch.remove(tLRPC$ChannelParticipant);
                     }
                 }
                 removeGroupSearchFromGlobal();
-                ArrayList<TLObject> arrayList = this.localSearchResults;
+                ArrayList<Object> arrayList = this.localSearchResults;
                 if (arrayList != null) {
                     mergeResults(arrayList);
                 }
@@ -445,7 +449,7 @@ public class SearchAdapterHelper {
             }
             removeGroupSearchFromGlobal();
             this.lastFoundUsername = str.toLowerCase();
-            ArrayList<TLObject> arrayList2 = this.localSearchResults;
+            ArrayList<Object> arrayList2 = this.localSearchResults;
             if (arrayList2 != null) {
                 mergeResults(arrayList2);
             }
@@ -542,38 +546,41 @@ public class SearchAdapterHelper {
             if (tLObject instanceof TLRPC$ChatParticipant) {
                 this.groupSearchMap.put(((TLRPC$ChatParticipant) tLObject).user_id, tLObject);
             } else if (tLObject instanceof TLRPC$ChannelParticipant) {
-                this.groupSearchMap.put(((TLRPC$ChannelParticipant) tLObject).user_id, tLObject);
+                this.groupSearchMap.put(MessageObject.getPeerId(((TLRPC$ChannelParticipant) tLObject).peer), tLObject);
             }
         }
         removeGroupSearchFromGlobal();
     }
 
-    public void mergeResults(ArrayList<TLObject> arrayList) {
+    public void mergeResults(ArrayList<Object> arrayList) {
         TLRPC$Chat tLRPC$Chat;
         this.localSearchResults = arrayList;
         if (this.globalSearchMap.size() != 0 && arrayList != null) {
             int size = arrayList.size();
             for (int i = 0; i < size; i++) {
-                TLObject tLObject = arrayList.get(i);
-                if (tLObject instanceof TLRPC$User) {
-                    TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
+                Object obj = arrayList.get(i);
+                if (obj instanceof ShareAlert.DialogSearchResult) {
+                    obj = ((ShareAlert.DialogSearchResult) obj).object;
+                }
+                if (obj instanceof TLRPC$User) {
+                    TLRPC$User tLRPC$User = (TLRPC$User) obj;
                     TLRPC$User tLRPC$User2 = (TLRPC$User) this.globalSearchMap.get(tLRPC$User.id);
                     if (tLRPC$User2 != null) {
                         this.globalSearch.remove(tLRPC$User2);
                         this.localServerSearch.remove(tLRPC$User2);
                         this.globalSearchMap.remove(tLRPC$User2.id);
                     }
-                    TLObject tLObject2 = this.groupSearchMap.get(tLRPC$User.id);
-                    if (tLObject2 != null) {
-                        this.groupSearch.remove(tLObject2);
+                    TLObject tLObject = this.groupSearchMap.get(tLRPC$User.id);
+                    if (tLObject != null) {
+                        this.groupSearch.remove(tLObject);
                         this.groupSearchMap.remove(tLRPC$User.id);
                     }
-                    TLObject tLObject3 = this.phoneSearchMap.get(tLRPC$User.id);
-                    if (tLObject3 != null) {
-                        this.phonesSearch.remove(tLObject3);
+                    TLObject tLObject2 = this.phoneSearchMap.get(tLRPC$User.id);
+                    if (tLObject2 != null) {
+                        this.phonesSearch.remove(tLObject2);
                         this.phoneSearchMap.remove(tLRPC$User.id);
                     }
-                } else if ((tLObject instanceof TLRPC$Chat) && (tLRPC$Chat = (TLRPC$Chat) this.globalSearchMap.get(-((TLRPC$Chat) tLObject).id)) != null) {
+                } else if ((obj instanceof TLRPC$Chat) && (tLRPC$Chat = (TLRPC$Chat) this.globalSearchMap.get(-((TLRPC$Chat) obj).id)) != null) {
                     this.globalSearch.remove(tLRPC$Chat);
                     this.localServerSearch.remove(tLRPC$Chat);
                     this.globalSearchMap.remove(-tLRPC$Chat.id);

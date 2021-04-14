@@ -7,11 +7,19 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.drawable.Drawable;
 import android.widget.FrameLayout;
 import java.util.Random;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
+import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.MessagesController;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.GroupCallUserCell;
 
@@ -194,168 +202,67 @@ public class AvatarsImageView extends FrameLayout {
         this.xRefP.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x00c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x00df  */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x0106  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x0109  */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x0116  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0119  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setObject(int r15, int r16, org.telegram.tgnet.TLObject r17) {
-        /*
-            r14 = this;
-            r0 = r14
-            r1 = r17
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
-            r2 = r2[r15]
-            r3 = 0
-            int unused = r2.id = r3
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
-            r4 = r2[r15]
-            r5 = 0
-            r4.participant = r5
-            if (r1 != 0) goto L_0x0021
-            r1 = r2[r15]
-            org.telegram.messenger.ImageReceiver r1 = r1.imageReceiver
-            r1.setImageBitmap((android.graphics.drawable.Drawable) r5)
-            r14.invalidate()
-            return
-        L_0x0021:
-            r2 = r2[r15]
-            r6 = -1
-            long unused = r2.lastSpeakTime = r6
-            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_groupCallParticipant
-            r4 = 4
-            if (r2 == 0) goto L_0x008c
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = (org.telegram.tgnet.TLRPC$TL_groupCallParticipant) r1
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
-            r2 = r2[r15]
-            r2.participant = r1
-            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r16)
-            int r6 = r1.user_id
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r6)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r6 = r0.animatingStates
-            r6 = r6[r15]
-            org.telegram.ui.Components.AvatarDrawable r6 = r6.avatarDrawable
-            r6.setInfo((org.telegram.tgnet.TLRPC$User) r2)
-            int r6 = r0.currentStyle
-            if (r6 != r4) goto L_0x0077
-            int r6 = r1.user_id
-            org.telegram.messenger.AccountInstance r7 = org.telegram.messenger.AccountInstance.getInstance(r16)
-            org.telegram.messenger.UserConfig r7 = r7.getUserConfig()
-            int r7 = r7.getClientUserId()
-            if (r6 != r7) goto L_0x006c
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r6 = r0.animatingStates
-            r6 = r6[r15]
-            r7 = 0
-            long unused = r6.lastSpeakTime = r7
-            goto L_0x0081
-        L_0x006c:
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r6 = r0.animatingStates
-            r6 = r6[r15]
-            int r7 = r1.active_date
-            long r7 = (long) r7
-            long unused = r6.lastSpeakTime = r7
-            goto L_0x0081
-        L_0x0077:
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r6 = r0.animatingStates
-            r6 = r6[r15]
-            int r7 = r1.active_date
-            long r7 = (long) r7
-            long unused = r6.lastSpeakTime = r7
-        L_0x0081:
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r6 = r0.animatingStates
-            r6 = r6[r15]
-            int r1 = r1.user_id
-            int unused = r6.id = r1
-            r12 = r2
-            goto L_0x00a7
-        L_0x008c:
-            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$User
-            if (r2 == 0) goto L_0x00a9
-            org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
-            r2 = r2[r15]
-            org.telegram.ui.Components.AvatarDrawable r2 = r2.avatarDrawable
-            r2.setInfo((org.telegram.tgnet.TLRPC$User) r1)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
-            r2 = r2[r15]
-            int r6 = r1.id
-            int unused = r2.id = r6
-            r12 = r1
-        L_0x00a7:
-            r10 = r5
-            goto L_0x00c1
-        L_0x00a9:
-            org.telegram.tgnet.TLRPC$Chat r1 = (org.telegram.tgnet.TLRPC$Chat) r1
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
-            r2 = r2[r15]
-            org.telegram.ui.Components.AvatarDrawable r2 = r2.avatarDrawable
-            r2.setInfo((org.telegram.tgnet.TLRPC$Chat) r1)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
-            r2 = r2[r15]
-            int r6 = r1.id
-            int unused = r2.id = r6
-            r10 = r1
-            r12 = r5
-        L_0x00c1:
-            if (r12 == 0) goto L_0x00df
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
-            r1 = r1[r15]
-            org.telegram.messenger.ImageReceiver r7 = r1.imageReceiver
-            org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForUser(r12, r3)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
-            r1 = r1[r15]
-            org.telegram.ui.Components.AvatarDrawable r10 = r1.avatarDrawable
-            r11 = 0
-            r13 = 0
-            java.lang.String r9 = "50_50"
-            r7.setImage(r8, r9, r10, r11, r12, r13)
-            goto L_0x00fa
-        L_0x00df:
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
-            r1 = r1[r15]
-            org.telegram.messenger.ImageReceiver r5 = r1.imageReceiver
-            org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForChat(r10, r3)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
-            r1 = r1[r15]
-            org.telegram.ui.Components.AvatarDrawable r8 = r1.avatarDrawable
-            r9 = 0
-            r11 = 0
-            java.lang.String r7 = "50_50"
-            r5.setImage(r6, r7, r8, r9, r10, r11)
-        L_0x00fa:
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r1 = r0.animatingStates
-            r1 = r1[r15]
-            org.telegram.messenger.ImageReceiver r1 = r1.imageReceiver
-            int r2 = r0.currentStyle
-            if (r2 != r4) goto L_0x0109
-            r2 = 1098907648(0x41800000, float:16.0)
-            goto L_0x010b
-        L_0x0109:
-            r2 = 1094713344(0x41400000, float:12.0)
-        L_0x010b:
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r1.setRoundRadius((int) r2)
-            int r1 = r0.currentStyle
-            if (r1 != r4) goto L_0x0119
-            r1 = 1107296256(0x42000000, float:32.0)
-            goto L_0x011b
-        L_0x0119:
-            r1 = 1103101952(0x41CLASSNAME, float:24.0)
-        L_0x011b:
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            org.telegram.ui.Components.AvatarsImageView$DrawingState[] r2 = r0.animatingStates
-            r2 = r2[r15]
-            org.telegram.messenger.ImageReceiver r2 = r2.imageReceiver
-            float r1 = (float) r1
-            r3 = 0
-            r2.setImageCoords(r3, r3, r1, r1)
-            r14.invalidate()
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AvatarsImageView.setObject(int, int, org.telegram.tgnet.TLObject):void");
+    public void setObject(int i, int i2, TLObject tLObject) {
+        TLRPC$User tLRPC$User;
+        TLRPC$Chat tLRPC$Chat;
+        TLRPC$Chat tLRPC$Chat2;
+        TLObject tLObject2 = tLObject;
+        int unused = this.animatingStates[i].id = 0;
+        DrawingState[] drawingStateArr = this.animatingStates;
+        TLRPC$User tLRPC$User2 = null;
+        drawingStateArr[i].participant = null;
+        if (tLObject2 == null) {
+            drawingStateArr[i].imageReceiver.setImageBitmap((Drawable) null);
+            invalidate();
+            return;
+        }
+        long unused2 = drawingStateArr[i].lastSpeakTime = -1;
+        if (tLObject2 instanceof TLRPC$TL_groupCallParticipant) {
+            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = (TLRPC$TL_groupCallParticipant) tLObject2;
+            this.animatingStates[i].participant = tLRPC$TL_groupCallParticipant;
+            int peerId = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
+            if (peerId > 0) {
+                TLRPC$User user = MessagesController.getInstance(i2).getUser(Integer.valueOf(peerId));
+                this.animatingStates[i].avatarDrawable.setInfo(user);
+                TLRPC$User tLRPC$User3 = user;
+                tLRPC$Chat2 = null;
+                tLRPC$User2 = tLRPC$User3;
+            } else {
+                tLRPC$Chat2 = MessagesController.getInstance(i2).getChat(Integer.valueOf(-peerId));
+                this.animatingStates[i].avatarDrawable.setInfo(tLRPC$Chat2);
+            }
+            if (this.currentStyle != 4) {
+                long unused3 = this.animatingStates[i].lastSpeakTime = (long) tLRPC$TL_groupCallParticipant.active_date;
+            } else if (peerId == AccountInstance.getInstance(i2).getUserConfig().getClientUserId()) {
+                long unused4 = this.animatingStates[i].lastSpeakTime = 0;
+            } else {
+                long unused5 = this.animatingStates[i].lastSpeakTime = (long) tLRPC$TL_groupCallParticipant.active_date;
+            }
+            int unused6 = this.animatingStates[i].id = peerId;
+            tLRPC$User = tLRPC$User2;
+            tLRPC$Chat = tLRPC$Chat2;
+        } else if (tLObject2 instanceof TLRPC$User) {
+            TLRPC$User tLRPC$User4 = (TLRPC$User) tLObject2;
+            this.animatingStates[i].avatarDrawable.setInfo(tLRPC$User4);
+            int unused7 = this.animatingStates[i].id = tLRPC$User4.id;
+            tLRPC$User = tLRPC$User4;
+            tLRPC$Chat = null;
+        } else {
+            TLRPC$Chat tLRPC$Chat3 = (TLRPC$Chat) tLObject2;
+            this.animatingStates[i].avatarDrawable.setInfo(tLRPC$Chat3);
+            int unused8 = this.animatingStates[i].id = -tLRPC$Chat3.id;
+            tLRPC$Chat = tLRPC$Chat3;
+            tLRPC$User = null;
+        }
+        if (tLRPC$User != null) {
+            this.animatingStates[i].imageReceiver.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) this.animatingStates[i].avatarDrawable, (Object) tLRPC$User, 0);
+        } else {
+            this.animatingStates[i].imageReceiver.setImage(ImageLocation.getForUserOrChat(tLRPC$Chat, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat, 2), "50_50", (Drawable) this.animatingStates[i].avatarDrawable, (Object) tLRPC$Chat, 0);
+        }
+        this.animatingStates[i].imageReceiver.setRoundRadius(AndroidUtilities.dp(this.currentStyle == 4 ? 16.0f : 12.0f));
+        float dp = (float) AndroidUtilities.dp(this.currentStyle == 4 ? 32.0f : 24.0f);
+        this.animatingStates[i].imageReceiver.setImageCoords(0.0f, 0.0f, dp, dp);
+        invalidate();
     }
 
     /* access modifiers changed from: protected */

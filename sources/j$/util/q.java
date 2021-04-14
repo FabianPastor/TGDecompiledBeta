@@ -4,16 +4,18 @@ import java.util.NoSuchElementException;
 
 public final class q {
     private static final q c = new q();
-    private final boolean a;
+
+    /* renamed from: a  reason: collision with root package name */
+    private final boolean var_a;
     private final int b;
 
     private q() {
-        this.a = false;
+        this.var_a = false;
         this.b = 0;
     }
 
     private q(int i) {
-        this.a = true;
+        this.var_a = true;
         this.b = i;
     }
 
@@ -26,14 +28,14 @@ public final class q {
     }
 
     public int b() {
-        if (this.a) {
+        if (this.var_a) {
             return this.b;
         }
         throw new NoSuchElementException("No value present");
     }
 
     public boolean c() {
-        return this.a;
+        return this.var_a;
     }
 
     public boolean equals(Object obj) {
@@ -44,9 +46,9 @@ public final class q {
             return false;
         }
         q qVar = (q) obj;
-        boolean z = this.a;
-        if (!z || !qVar.a) {
-            if (z == qVar.a) {
+        boolean z = this.var_a;
+        if (!z || !qVar.var_a) {
+            if (z == qVar.var_a) {
                 return true;
             }
         } else if (this.b == qVar.b) {
@@ -56,14 +58,14 @@ public final class q {
     }
 
     public int hashCode() {
-        if (this.a) {
+        if (this.var_a) {
             return this.b;
         }
         return 0;
     }
 
     public String toString() {
-        if (!this.a) {
+        if (!this.var_a) {
             return "OptionalInt.empty";
         }
         return String.format("OptionalInt[%s]", new Object[]{Integer.valueOf(this.b)});

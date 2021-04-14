@@ -1,19 +1,18 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEe;
-import j$.util.function.Consumer;
+import j$.util.function.o;
 
-public final /* synthetic */ class G0 implements Consumer {
-    public static final /* synthetic */ G0 a = new G0();
+public final /* synthetic */ class G0 implements o {
 
-    private /* synthetic */ G0() {
+    /* renamed from: a  reason: collision with root package name */
+    public final /* synthetic */ e3 var_a;
+
+    public /* synthetic */ G0(e3 e3Var) {
+        this.var_a = e3Var;
     }
 
-    public final void accept(Object obj) {
-    }
-
-    public Consumer f(Consumer consumer) {
-        consumer.getClass();
-        return new CLASSNAMEe(this, consumer);
+    public final boolean a() {
+        e3 e3Var = this.var_a;
+        return e3Var.d.b(e3Var.e);
     }
 }

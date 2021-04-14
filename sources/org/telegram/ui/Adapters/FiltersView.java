@@ -231,16 +231,16 @@ public class FiltersView extends RecyclerListView {
         return this.usersFilters.get(i);
     }
 
-    public void setUsersAndDates(ArrayList<TLObject> arrayList, ArrayList<DateData> arrayList2) {
+    public void setUsersAndDates(ArrayList<Object> arrayList, ArrayList<DateData> arrayList2) {
         String str;
         this.oldItems.clear();
         this.oldItems.addAll(this.usersFilters);
         this.usersFilters.clear();
         if (arrayList != null) {
             for (int i = 0; i < arrayList.size(); i++) {
-                TLObject tLObject = arrayList.get(i);
-                if (tLObject instanceof TLRPC$User) {
-                    TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
+                Object obj = arrayList.get(i);
+                if (obj instanceof TLRPC$User) {
+                    TLRPC$User tLRPC$User = (TLRPC$User) obj;
                     if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == tLRPC$User.id) {
                         str = LocaleController.getString("SavedMessages", NUM);
                     } else {
@@ -249,8 +249,8 @@ public class FiltersView extends RecyclerListView {
                     MediaFilterData mediaFilterData = new MediaFilterData(NUM, NUM, str, (TLRPC$MessagesFilter) null, 4);
                     mediaFilterData.setUser(tLRPC$User);
                     this.usersFilters.add(mediaFilterData);
-                } else if (tLObject instanceof TLRPC$Chat) {
-                    TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject;
+                } else if (obj instanceof TLRPC$Chat) {
+                    TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) obj;
                     String str2 = tLRPC$Chat.title;
                     if (str2.length() > 12) {
                         str2 = String.format("%s...", new Object[]{str2.substring(0, 10)});
@@ -615,13 +615,14 @@ public class FiltersView extends RecyclerListView {
         }
 
         public void setData(MediaFilterData mediaFilterData) {
+            MediaFilterData mediaFilterData2 = mediaFilterData;
             this.avatarImageView.getImageReceiver().clearImage();
-            CombinedDrawable createCircleDrawableWithIcon = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), mediaFilterData.iconResFilled);
+            CombinedDrawable createCircleDrawableWithIcon = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), mediaFilterData2.iconResFilled);
             this.thumbDrawable = createCircleDrawableWithIcon;
             Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, Theme.getColor("avatar_backgroundBlue"), false);
             Theme.setCombinedDrawableColor(this.thumbDrawable, Theme.getColor("avatar_actionBarIconBlue"), true);
-            if (mediaFilterData.filterType == 4) {
-                TLObject tLObject = mediaFilterData.chat;
+            if (mediaFilterData2.filterType == 4) {
+                TLObject tLObject = mediaFilterData2.chat;
                 if (tLObject instanceof TLRPC$User) {
                     TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
                     if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == tLRPC$User.id) {
@@ -632,17 +633,17 @@ public class FiltersView extends RecyclerListView {
                         this.avatarImageView.setImageDrawable(createCircleDrawableWithIcon2);
                     } else {
                         this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16.0f));
-                        this.avatarImageView.getImageReceiver().setImage(ImageLocation.getForUser(tLRPC$User, false), "50_50", this.thumbDrawable, (String) null, tLRPC$User, 0);
+                        this.avatarImageView.getImageReceiver().setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", this.thumbDrawable, (Object) tLRPC$User, 0);
                     }
                 } else if (tLObject instanceof TLRPC$Chat) {
                     TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject;
                     this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16.0f));
-                    this.avatarImageView.getImageReceiver().setImage(ImageLocation.getForChat(tLRPC$Chat, false), "50_50", this.thumbDrawable, (String) null, tLRPC$Chat, 0);
+                    this.avatarImageView.getImageReceiver().setImage(ImageLocation.getForUserOrChat(tLRPC$Chat, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat, 2), "50_50", this.thumbDrawable, (Object) tLRPC$Chat, 0);
                 }
             } else {
                 this.avatarImageView.setImageDrawable(this.thumbDrawable);
             }
-            this.titleView.setText(mediaFilterData.title);
+            this.titleView.setText(mediaFilterData2.title);
         }
     }
 

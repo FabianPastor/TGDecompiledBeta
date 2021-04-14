@@ -24,7 +24,7 @@ public class WearReplyReceiver extends BroadcastReceiver {
                 long longExtra = intent.getLongExtra("dialog_id", 0);
                 int intExtra = intent.getIntExtra("max_id", 0);
                 int intExtra2 = intent.getIntExtra("currentAccount", 0);
-                if (longExtra != 0 && intExtra != 0) {
+                if (longExtra != 0 && intExtra != 0 && UserConfig.isValidAccount(intExtra2)) {
                     int i = (int) longExtra;
                     AccountInstance instance = AccountInstance.getInstance(intExtra2);
                     if (i > 0) {

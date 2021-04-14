@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +83,7 @@ public class ActionBar extends FrameLayout {
     public Object[] overlayTitleToSet;
     protected BaseFragment parentFragment;
     private Rect rect;
+    AnimatorSet searchVisibleAnimator;
     private SnowflakesEffect snowflakesEffect;
     /* access modifiers changed from: private */
     public SimpleTextView subtitleTextView;
@@ -836,26 +838,89 @@ public class ActionBar extends FrameLayout {
         return this.actionMode != null && this.actionModeVisible;
     }
 
-    public void onSearchFieldVisibilityChanged(boolean z) {
+    public void onSearchFieldVisibilityChanged(final boolean z) {
+        float f;
         this.isSearchFieldVisible = z;
+        AnimatorSet animatorSet = this.searchVisibleAnimator;
+        if (animatorSet != null) {
+            animatorSet.cancel();
+        }
+        this.searchVisibleAnimator = new AnimatorSet();
+        final ArrayList arrayList = new ArrayList();
         SimpleTextView[] simpleTextViewArr = this.titleTextView;
-        int i = 0;
         if (simpleTextViewArr[0] != null) {
-            simpleTextViewArr[0].setVisibility(z ? 4 : 0);
+            arrayList.add(simpleTextViewArr[0]);
         }
         SimpleTextView simpleTextView = this.subtitleTextView;
         if (simpleTextView != null && !TextUtils.isEmpty(simpleTextView.getText())) {
-            SimpleTextView simpleTextView2 = this.subtitleTextView;
-            if (z) {
-                i = 4;
-            }
-            simpleTextView2.setVisibility(i);
+            arrayList.add(this.subtitleTextView);
+            this.subtitleTextView.setVisibility(z ? 4 : 0);
         }
+        int i = 0;
+        while (true) {
+            f = 0.0f;
+            float f2 = 1.0f;
+            if (i >= arrayList.size()) {
+                break;
+            }
+            View view = (View) arrayList.get(i);
+            if (!z) {
+                view.setVisibility(0);
+                view.setAlpha(0.0f);
+                view.setScaleX(0.95f);
+                view.setScaleY(0.95f);
+            }
+            AnimatorSet animatorSet2 = this.searchVisibleAnimator;
+            Animator[] animatorArr = new Animator[1];
+            Property property = View.ALPHA;
+            float[] fArr = new float[1];
+            if (!z) {
+                f = 1.0f;
+            }
+            fArr[0] = f;
+            animatorArr[0] = ObjectAnimator.ofFloat(view, property, fArr);
+            animatorSet2.playTogether(animatorArr);
+            AnimatorSet animatorSet3 = this.searchVisibleAnimator;
+            Animator[] animatorArr2 = new Animator[1];
+            Property property2 = View.SCALE_Y;
+            float[] fArr2 = new float[1];
+            fArr2[0] = z ? 0.95f : 1.0f;
+            animatorArr2[0] = ObjectAnimator.ofFloat(view, property2, fArr2);
+            animatorSet3.playTogether(animatorArr2);
+            AnimatorSet animatorSet4 = this.searchVisibleAnimator;
+            Animator[] animatorArr3 = new Animator[1];
+            Property property3 = View.SCALE_X;
+            float[] fArr3 = new float[1];
+            if (z) {
+                f2 = 0.95f;
+            }
+            fArr3[0] = f2;
+            animatorArr3[0] = ObjectAnimator.ofFloat(view, property3, fArr3);
+            animatorSet4.playTogether(animatorArr3);
+            i++;
+        }
+        this.searchVisibleAnimator.addListener(new AnimatorListenerAdapter(this) {
+            public void onAnimationEnd(Animator animator) {
+                for (int i = 0; i < arrayList.size(); i++) {
+                    View view = (View) arrayList.get(i);
+                    if (z) {
+                        view.setVisibility(4);
+                        view.setAlpha(0.0f);
+                    } else {
+                        view.setAlpha(1.0f);
+                    }
+                }
+            }
+        });
+        this.searchVisibleAnimator.setDuration(150).start();
         Drawable drawable = this.backButtonImageView.getDrawable();
         if (drawable instanceof MenuDrawable) {
             MenuDrawable menuDrawable = (MenuDrawable) drawable;
             menuDrawable.setRotateToBack(true);
-            menuDrawable.setRotation(z ? 1.0f : 0.0f, true);
+            if (z) {
+                f = 1.0f;
+            }
+            menuDrawable.setRotation(f, true);
         }
     }
 
@@ -958,10 +1023,24 @@ public class ActionBar extends FrameLayout {
         }
         ActionBarMenu actionBarMenu2 = this.menu;
         if (!(actionBarMenu2 == null || actionBarMenu2.getVisibility() == 8)) {
-            if (this.isSearchFieldVisible) {
-                i4 = View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(AndroidUtilities.isTablet() ? 74.0f : 66.0f), NUM);
+            float f = 74.0f;
+            if (this.menu.searchFieldVisible() && !this.isSearchFieldVisible) {
+                this.menu.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), makeMeasureSpec);
+                int itemsMeasuredWidth = this.menu.getItemsMeasuredWidth();
+                if (!AndroidUtilities.isTablet()) {
+                    f = 66.0f;
+                }
+                i4 = View.MeasureSpec.makeMeasureSpec((size - AndroidUtilities.dp(f)) + this.menu.getItemsMeasuredWidth(), NUM);
+                this.menu.translateXItems(-itemsMeasuredWidth);
+            } else if (this.isSearchFieldVisible) {
+                if (!AndroidUtilities.isTablet()) {
+                    f = 66.0f;
+                }
+                i4 = View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(f), NUM);
+                this.menu.translateXItems(0);
             } else {
                 i4 = View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE);
+                this.menu.translateXItems(0);
             }
             this.menu.measure(i4, makeMeasureSpec);
         }
@@ -1041,8 +1120,8 @@ public class ActionBar extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:101:0x01c2  */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x01b5  */
+    /* JADX WARNING: Removed duplicated region for block: B:101:0x01c6  */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x01b9  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onLayout(boolean r15, int r16, int r17, int r18, int r19) {
         /*
@@ -1087,26 +1166,27 @@ public class ActionBar extends FrameLayout {
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
         L_0x0045:
             org.telegram.ui.ActionBar.ActionBarMenu r5 = r0.menu
-            if (r5 == 0) goto L_0x007d
+            if (r5 == 0) goto L_0x0081
             int r5 = r5.getVisibility()
-            if (r5 == r4) goto L_0x007d
-            boolean r5 = r0.isSearchFieldVisible
-            if (r5 == 0) goto L_0x0063
+            if (r5 == r4) goto L_0x0081
+            org.telegram.ui.ActionBar.ActionBarMenu r5 = r0.menu
+            boolean r5 = r5.searchFieldVisible()
+            if (r5 == 0) goto L_0x0067
             boolean r5 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r5 == 0) goto L_0x005c
+            if (r5 == 0) goto L_0x0060
             r5 = 1116995584(0x42940000, float:74.0)
-            goto L_0x005e
-        L_0x005c:
+            goto L_0x0062
+        L_0x0060:
             r5 = 1115947008(0x42840000, float:66.0)
-        L_0x005e:
+        L_0x0062:
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            goto L_0x006c
-        L_0x0063:
+            goto L_0x0070
+        L_0x0067:
             int r5 = r18 - r16
             org.telegram.ui.ActionBar.ActionBarMenu r6 = r0.menu
             int r6 = r6.getMeasuredWidth()
             int r5 = r5 - r6
-        L_0x006c:
+        L_0x0070:
             org.telegram.ui.ActionBar.ActionBarMenu r6 = r0.menu
             int r7 = r6.getMeasuredWidth()
             int r7 = r7 + r5
@@ -1114,41 +1194,41 @@ public class ActionBar extends FrameLayout {
             int r8 = r8.getMeasuredHeight()
             int r8 = r8 + r1
             r6.layout(r5, r1, r7, r8)
-        L_0x007d:
+        L_0x0081:
             r5 = 0
-        L_0x007e:
+        L_0x0082:
             r6 = 1
             r7 = 2
-            if (r5 >= r7) goto L_0x0111
+            if (r5 >= r7) goto L_0x0115
             org.telegram.ui.ActionBar.SimpleTextView[] r8 = r0.titleTextView
             r9 = r8[r5]
-            if (r9 == 0) goto L_0x010d
+            if (r9 == 0) goto L_0x0111
             r8 = r8[r5]
             int r8 = r8.getVisibility()
-            if (r8 == r4) goto L_0x010d
+            if (r8 == r4) goto L_0x0111
             boolean r8 = r0.fromBottom
-            if (r8 == 0) goto L_0x0096
-            if (r5 == 0) goto L_0x009a
-        L_0x0096:
-            if (r8 != 0) goto L_0x00b1
-            if (r5 != r6) goto L_0x00b1
+            if (r8 == 0) goto L_0x009a
+            if (r5 == 0) goto L_0x009e
         L_0x009a:
+            if (r8 != 0) goto L_0x00b5
+            if (r5 != r6) goto L_0x00b5
+        L_0x009e:
             boolean r6 = r0.overlayTitleAnimation
-            if (r6 == 0) goto L_0x00b1
+            if (r6 == 0) goto L_0x00b5
             boolean r6 = r0.titleAnimationRunning
-            if (r6 == 0) goto L_0x00b1
+            if (r6 == 0) goto L_0x00b5
             int r6 = getCurrentActionBarHeight()
             org.telegram.ui.ActionBar.SimpleTextView[] r8 = r0.titleTextView
             r8 = r8[r5]
             int r8 = r8.getTextHeight()
             int r6 = r6 - r8
             int r6 = r6 / r7
-            goto L_0x00f5
-        L_0x00b1:
+            goto L_0x00f9
+        L_0x00b5:
             org.telegram.ui.ActionBar.SimpleTextView r6 = r0.subtitleTextView
-            if (r6 == 0) goto L_0x00e7
+            if (r6 == 0) goto L_0x00eb
             int r6 = r6.getVisibility()
-            if (r6 == r4) goto L_0x00e7
+            if (r6 == r4) goto L_0x00eb
             int r6 = getCurrentActionBarHeight()
             int r6 = r6 / r7
             org.telegram.ui.ActionBar.SimpleTextView[] r8 = r0.titleTextView
@@ -1157,27 +1237,27 @@ public class ActionBar extends FrameLayout {
             int r6 = r6 - r8
             int r6 = r6 / r7
             boolean r8 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r8 != 0) goto L_0x00df
+            if (r8 != 0) goto L_0x00e3
             android.content.res.Resources r8 = r14.getResources()
             android.content.res.Configuration r8 = r8.getConfiguration()
             int r8 = r8.orientation
-            if (r8 != r7) goto L_0x00df
+            if (r8 != r7) goto L_0x00e3
             r7 = 1073741824(0x40000000, float:2.0)
-            goto L_0x00e1
-        L_0x00df:
+            goto L_0x00e5
+        L_0x00e3:
             r7 = 1077936128(0x40400000, float:3.0)
-        L_0x00e1:
+        L_0x00e5:
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r6 = r6 + r7
-            goto L_0x00f5
-        L_0x00e7:
+            goto L_0x00f9
+        L_0x00eb:
             int r6 = getCurrentActionBarHeight()
             org.telegram.ui.ActionBar.SimpleTextView[] r8 = r0.titleTextView
             r8 = r8[r5]
             int r8 = r8.getTextHeight()
             int r6 = r6 - r8
             int r6 = r6 / r7
-        L_0x00f5:
+        L_0x00f9:
             org.telegram.ui.ActionBar.SimpleTextView[] r7 = r0.titleTextView
             r8 = r7[r5]
             int r6 = r6 + r1
@@ -1189,14 +1269,14 @@ public class ActionBar extends FrameLayout {
             int r9 = r9.getTextHeight()
             int r9 = r9 + r6
             r8.layout(r3, r6, r7, r9)
-        L_0x010d:
-            int r5 = r5 + 1
-            goto L_0x007e
         L_0x0111:
+            int r5 = r5 + 1
+            goto L_0x0082
+        L_0x0115:
             org.telegram.ui.ActionBar.SimpleTextView r5 = r0.subtitleTextView
-            if (r5 == 0) goto L_0x0157
+            if (r5 == 0) goto L_0x015b
             int r5 = r5.getVisibility()
-            if (r5 == r4) goto L_0x0157
+            if (r5 == r4) goto L_0x015b
             int r5 = getCurrentActionBarHeight()
             int r5 = r5 / r7
             int r8 = getCurrentActionBarHeight()
@@ -1207,11 +1287,11 @@ public class ActionBar extends FrameLayout {
             int r8 = r8 / r7
             int r5 = r5 + r8
             boolean r8 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r8 != 0) goto L_0x013e
+            if (r8 != 0) goto L_0x0142
             android.content.res.Resources r8 = r14.getResources()
             android.content.res.Configuration r8 = r8.getConfiguration()
             int r8 = r8.orientation
-        L_0x013e:
+        L_0x0142:
             r8 = 1065353216(0x3var_, float:1.0)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
             int r5 = r5 - r8
@@ -1223,86 +1303,86 @@ public class ActionBar extends FrameLayout {
             int r9 = r9.getTextHeight()
             int r9 = r9 + r1
             r8.layout(r3, r1, r5, r9)
-        L_0x0157:
+        L_0x015b:
             int r1 = r14.getChildCount()
             r3 = 0
-        L_0x015c:
-            if (r3 >= r1) goto L_0x01d5
+        L_0x0160:
+            if (r3 >= r1) goto L_0x01d9
             android.view.View r5 = r14.getChildAt(r3)
             int r8 = r5.getVisibility()
-            if (r8 == r4) goto L_0x01d2
+            if (r8 == r4) goto L_0x01d6
             org.telegram.ui.ActionBar.SimpleTextView[] r8 = r0.titleTextView
             r9 = r8[r2]
-            if (r5 == r9) goto L_0x01d2
+            if (r5 == r9) goto L_0x01d6
             r8 = r8[r6]
-            if (r5 == r8) goto L_0x01d2
+            if (r5 == r8) goto L_0x01d6
             org.telegram.ui.ActionBar.SimpleTextView r8 = r0.subtitleTextView
-            if (r5 == r8) goto L_0x01d2
+            if (r5 == r8) goto L_0x01d6
             org.telegram.ui.ActionBar.ActionBarMenu r8 = r0.menu
-            if (r5 == r8) goto L_0x01d2
+            if (r5 == r8) goto L_0x01d6
             android.widget.ImageView r8 = r0.backButtonImageView
-            if (r5 != r8) goto L_0x017f
-            goto L_0x01d2
-        L_0x017f:
+            if (r5 != r8) goto L_0x0183
+            goto L_0x01d6
+        L_0x0183:
             android.view.ViewGroup$LayoutParams r8 = r5.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r8 = (android.widget.FrameLayout.LayoutParams) r8
             int r9 = r5.getMeasuredWidth()
             int r10 = r5.getMeasuredHeight()
             int r11 = r8.gravity
             r12 = -1
-            if (r11 != r12) goto L_0x0194
+            if (r11 != r12) goto L_0x0198
             r11 = 51
-        L_0x0194:
+        L_0x0198:
             r12 = r11 & 7
             r11 = r11 & 112(0x70, float:1.57E-43)
             r12 = r12 & 7
-            if (r12 == r6) goto L_0x01a7
+            if (r12 == r6) goto L_0x01ab
             r13 = 5
-            if (r12 == r13) goto L_0x01a2
+            if (r12 == r13) goto L_0x01a6
             int r12 = r8.leftMargin
-            goto L_0x01b1
-        L_0x01a2:
+            goto L_0x01b5
+        L_0x01a6:
             int r12 = r18 - r9
             int r13 = r8.rightMargin
-            goto L_0x01b0
-        L_0x01a7:
+            goto L_0x01b4
+        L_0x01ab:
             int r12 = r18 - r16
             int r12 = r12 - r9
             int r12 = r12 / r7
             int r13 = r8.leftMargin
             int r12 = r12 + r13
             int r13 = r8.rightMargin
-        L_0x01b0:
+        L_0x01b4:
             int r12 = r12 - r13
-        L_0x01b1:
+        L_0x01b5:
             r13 = 16
-            if (r11 == r13) goto L_0x01c2
+            if (r11 == r13) goto L_0x01c6
             r13 = 80
-            if (r11 == r13) goto L_0x01bc
+            if (r11 == r13) goto L_0x01c0
             int r8 = r8.topMargin
-            goto L_0x01cd
-        L_0x01bc:
+            goto L_0x01d1
+        L_0x01c0:
             int r11 = r19 - r17
             int r11 = r11 - r10
             int r8 = r8.bottomMargin
-            goto L_0x01cb
-        L_0x01c2:
+            goto L_0x01cf
+        L_0x01c6:
             int r11 = r19 - r17
             int r11 = r11 - r10
             int r11 = r11 / r7
             int r13 = r8.topMargin
             int r11 = r11 + r13
             int r8 = r8.bottomMargin
-        L_0x01cb:
+        L_0x01cf:
             int r8 = r11 - r8
-        L_0x01cd:
+        L_0x01d1:
             int r9 = r9 + r12
             int r10 = r10 + r8
             r5.layout(r12, r8, r9, r10)
-        L_0x01d2:
+        L_0x01d6:
             int r3 = r3 + 1
-            goto L_0x015c
-        L_0x01d5:
+            goto L_0x0160
+        L_0x01d9:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBar.onLayout(boolean, int, int, int, int):void");
@@ -1476,7 +1556,7 @@ public class ActionBar extends FrameLayout {
             r0.scaleX(r6)
         L_0x010f:
             android.view.ViewPropertyAnimator r5 = r5.setDuration(r1)
-            org.telegram.ui.ActionBar.ActionBar$4 r6 = new org.telegram.ui.ActionBar.ActionBar$4
+            org.telegram.ui.ActionBar.ActionBar$5 r6 = new org.telegram.ui.ActionBar.ActionBar$5
             r6.<init>()
             android.view.ViewPropertyAnimator r5 = r5.setListener(r6)
             r5.start()

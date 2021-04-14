@@ -1,7 +1,7 @@
 package j$.util.stream;
 
-import j$.CLASSNAMEo0;
-import j$.CLASSNAMEq0;
+import a.CLASSNAMEo0;
+import a.CLASSNAMEq0;
 import j$.util.Spliterator;
 import j$.util.function.B;
 import j$.util.function.BiConsumer;

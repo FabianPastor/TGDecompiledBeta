@@ -103,8 +103,4 @@ public class CircleBezierDrawable {
         canvas2.drawPath(this.path, paint);
         canvas.restore();
     }
-
-    public void setRandomAdditions(float f) {
-        this.randomK = f;
-    }
 }

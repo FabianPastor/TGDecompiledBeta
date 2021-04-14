@@ -169,7 +169,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             org.telegram.ui.Components.UsersAlertBase$SearchField r1 = r6.searchView
             org.telegram.ui.Components.EditTextBoldCursor r1 = r1.searchEditText
             java.lang.String r2 = "SearchForChats"
-            r5 = 2131627234(0x7f0e0ce2, float:1.8881727E38)
+            r5 = 2131627276(0x7f0e0d0c, float:1.8881812E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r5)
             r1.setHint(r2)
             android.view.ViewConfiguration r1 = android.view.ViewConfiguration.get(r17)
@@ -255,7 +255,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r4 = 21
             if (r3 >= r4) goto L_0x012b
             android.content.res.Resources r5 = r17.getResources()
-            r11 = 2131165418(0x7var_ea, float:1.7945053E38)
+            r11 = 2131165419(0x7var_eb, float:1.7945055E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r11)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
@@ -277,7 +277,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
             r1.<init>(r2, r5)
             r0.setColorFilter(r1)
-            r1 = 2131165415(0x7var_e7, float:1.7945046E38)
+            r1 = 2131165416(0x7var_e8, float:1.7945048E38)
             r0.setImageResource(r1)
             r1 = 1082130432(0x40800000, float:4.0)
             if (r3 < r4) goto L_0x01a0
@@ -326,7 +326,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r0.setScaleX(r10)
             r0.setScaleY(r10)
             r0.setAlpha(r10)
-            r2 = 2131626218(0x7f0e08ea, float:1.8879666E38)
+            r2 = 2131626252(0x7f0e090c, float:1.8879735E38)
             java.lang.String r4 = "Next"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setContentDescription(r2)
@@ -962,7 +962,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                     }
                 };
             } else if (i == 3) {
-                manageChatTextCell = new GroupCreateUserCell(context, true, 0, InviteMembersBottomSheet.this.dialogsDelegate != null);
+                manageChatTextCell = new GroupCreateUserCell(context, 1, 0, InviteMembersBottomSheet.this.dialogsDelegate != null);
             } else if (i == 4) {
                 manageChatTextCell = new View(context);
             } else if (i != 5) {
@@ -1071,7 +1071,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
         /* access modifiers changed from: private */
         public final SearchAdapterHelper searchAdapterHelper;
         /* access modifiers changed from: private */
-        public ArrayList<TLObject> searchResult = new ArrayList<>();
+        public ArrayList<Object> searchResult = new ArrayList<>();
         private ArrayList<CharSequence> searchResultNames = new ArrayList<>();
         private Runnable searchRunnable;
 
@@ -1119,7 +1119,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             View view;
             Context context = viewGroup.getContext();
             if (i == 1) {
-                view = new GroupCreateUserCell(context, true, 0, false);
+                view = new GroupCreateUserCell(context, 1, 0, false);
             } else if (i != 2) {
                 view = i != 4 ? new GroupCreateSectionCell(context) : new View(context);
             } else {
@@ -1160,7 +1160,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             L_0x0015:
                 android.view.View r10 = r10.itemView
                 org.telegram.ui.Cells.GroupCreateUserCell r10 = (org.telegram.ui.Cells.GroupCreateUserCell) r10
-                java.util.ArrayList<org.telegram.tgnet.TLObject> r0 = r9.searchResult
+                java.util.ArrayList<java.lang.Object> r0 = r9.searchResult
                 int r0 = r0.size()
                 org.telegram.ui.Adapters.SearchAdapterHelper r2 = r9.searchAdapterHelper
                 java.util.ArrayList r2 = r2.getGlobalSearch()
@@ -1173,7 +1173,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
                 r5 = 0
                 if (r11 < 0) goto L_0x0043
                 if (r11 >= r0) goto L_0x0043
-                java.util.ArrayList<org.telegram.tgnet.TLObject> r2 = r9.searchResult
+                java.util.ArrayList<java.lang.Object> r2 = r9.searchResult
                 java.lang.Object r2 = r2.get(r11)
                 org.telegram.tgnet.TLObject r2 = (org.telegram.tgnet.TLObject) r2
                 goto L_0x0072
@@ -1346,7 +1346,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             L_0x016a:
                 android.view.View r10 = r10.itemView
                 org.telegram.ui.Cells.GroupCreateSectionCell r10 = (org.telegram.ui.Cells.GroupCreateSectionCell) r10
-                r11 = 2131625679(0x7f0e06cf, float:1.8878573E38)
+                r11 = 2131625694(0x7f0e06de, float:1.8878603E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r11)
                 r10.setText(r11)
@@ -1382,7 +1382,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             return i2;
         }
 
-        private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {
+        private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2) {
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
                 public final /* synthetic */ ArrayList f$1;
                 public final /* synthetic */ ArrayList f$2;
@@ -1419,7 +1419,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             }
             this.searchResult.clear();
             this.searchResultNames.clear();
-            this.searchAdapterHelper.mergeResults((ArrayList<TLObject>) null);
+            this.searchAdapterHelper.mergeResults((ArrayList<Object>) null);
             this.searchAdapterHelper.queryServerSearch((String) null, true, false, false, false, false, 0, false, 0, 0);
             notifyDataSetChanged();
             if (!TextUtils.isEmpty(str)) {

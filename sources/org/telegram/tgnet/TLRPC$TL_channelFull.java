@@ -101,7 +101,12 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
                     }
                 } else if (z) {
                     throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
+                } else {
+                    return;
                 }
+            }
+            if ((this.flags & 67108864) != 0) {
+                this.groupcall_default_join_as = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
             }
         } else if (z) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
@@ -205,6 +210,9 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
             for (int i10 = 0; i10 < size2; i10++) {
                 abstractSerializedData.writeString(this.pending_suggestions.get(i10));
             }
+        }
+        if ((this.flags & 67108864) != 0) {
+            this.groupcall_default_join_as.serializeToStream(abstractSerializedData);
         }
     }
 }

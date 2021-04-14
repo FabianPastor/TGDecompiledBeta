@@ -20,6 +20,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public TLRPC$TL_chatInviteExported exported_invite;
     public int flags;
     public int folder_id;
+    public TLRPC$Peer groupcall_default_join_as;
     public boolean has_scheduled;
     public boolean hidden_prehistory;
     public int id;
@@ -50,6 +51,9 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public static TLRPC$ChatFull TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$ChatFull tLRPC$ChatFull;
         switch (i) {
+            case -1977734781:
+                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                break;
             case -1781833897:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer70();
                 break;
@@ -75,7 +79,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer122();
                 break;
             case -261341160:
-                tLRPC$ChatFull = new TLRPC$TL_chatFull();
+                tLRPC$ChatFull = new TLRPC$TL_chatFull_layer124();
                 break;
             case -253335766:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer121();
@@ -108,13 +112,16 @@ public abstract class TLRPC$ChatFull extends TLObject {
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer98();
                 break;
             case 625524791:
-                tLRPC$ChatFull = new TLRPC$TL_channelFull();
+                tLRPC$ChatFull = new TLRPC$TL_channelFull_layer124();
                 break;
             case 763976820:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer110();
                 break;
             case 771925524:
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer87();
+                break;
+            case 1418477459:
+                tLRPC$ChatFull = new TLRPC$TL_channelFull();
                 break;
             case 1991201921:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_layer72();

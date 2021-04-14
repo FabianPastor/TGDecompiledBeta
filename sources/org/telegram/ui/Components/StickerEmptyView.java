@@ -23,6 +23,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
     int keyboardSize;
     private int lastH;
     private LinearLayout linearLayout;
+    boolean preventMoving;
     /* access modifiers changed from: private */
     public RadialProgressView progressBar;
     private boolean progressShowing;
@@ -113,17 +114,19 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         int i5;
         super.onLayout(z, i, i2, i3, i4);
-        if (this.animateLayoutChange && (i5 = this.lastH) > 0 && i5 != getMeasuredHeight()) {
+        if ((this.animateLayoutChange || this.preventMoving) && (i5 = this.lastH) > 0 && i5 != getMeasuredHeight()) {
             float measuredHeight = ((float) (this.lastH - getMeasuredHeight())) / 2.0f;
             LinearLayout linearLayout2 = this.linearLayout;
             linearLayout2.setTranslationY(linearLayout2.getTranslationY() + measuredHeight);
-            ViewPropertyAnimator translationY = this.linearLayout.animate().translationY(0.0f);
-            CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;
-            translationY.setInterpolator(cubicBezierInterpolator).setDuration(250);
+            if (!this.preventMoving) {
+                this.linearLayout.animate().translationY(0.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(250);
+            }
             RadialProgressView radialProgressView = this.progressBar;
             if (radialProgressView != null) {
                 radialProgressView.setTranslationY(radialProgressView.getTranslationY() + measuredHeight);
-                this.progressBar.animate().translationY(0.0f).setInterpolator(cubicBezierInterpolator).setDuration(250);
+                if (!this.preventMoving) {
+                    this.progressBar.animate().translationY(0.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(250);
+                }
             }
         }
         this.lastH = getMeasuredHeight();
@@ -316,5 +319,16 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
 
     public void setAnimateLayoutChange(boolean z) {
         this.animateLayoutChange = z;
+    }
+
+    public void setPreventMoving(boolean z) {
+        this.preventMoving = z;
+        if (!z) {
+            this.linearLayout.setTranslationY(0.0f);
+            RadialProgressView radialProgressView = this.progressBar;
+            if (radialProgressView != null) {
+                radialProgressView.setTranslationY(0.0f);
+            }
+        }
     }
 }

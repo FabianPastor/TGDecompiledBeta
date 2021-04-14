@@ -50,6 +50,9 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
         if ((this.flags & 16384) != 0) {
             this.ttl_period = abstractSerializedData.readInt32(z);
         }
+        if ((this.flags & 32768) != 0) {
+            this.groupcall_default_join_as = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -88,6 +91,9 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
         }
         if ((this.flags & 16384) != 0) {
             abstractSerializedData.writeInt32(this.ttl_period);
+        }
+        if ((this.flags & 32768) != 0) {
+            this.groupcall_default_join_as.serializeToStream(abstractSerializedData);
         }
     }
 }

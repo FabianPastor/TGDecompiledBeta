@@ -77,13 +77,8 @@ public class DrawerUserCell extends FrameLayout {
             this.avatarDrawable.setInfo(currentUser);
             this.textView.setText(ContactsController.formatName(currentUser.first_name, currentUser.last_name));
             this.imageView.getImageReceiver().setCurrentAccount(i);
-            int i2 = 0;
-            this.imageView.setImage(ImageLocation.getForUser(currentUser, false), "50_50", (Drawable) this.avatarDrawable, (Object) currentUser);
-            GroupCreateCheckBox groupCreateCheckBox = this.checkBox;
-            if (i != UserConfig.selectedAccount) {
-                i2 = 4;
-            }
-            groupCreateCheckBox.setVisibility(i2);
+            this.imageView.setImage(ImageLocation.getForUserOrChat(currentUser, 1), "50_50", ImageLocation.getForUserOrChat(currentUser, 2), "50_50", (Drawable) this.avatarDrawable, (Object) currentUser);
+            this.checkBox.setVisibility(i == UserConfig.selectedAccount ? 0 : 4);
         }
     }
 

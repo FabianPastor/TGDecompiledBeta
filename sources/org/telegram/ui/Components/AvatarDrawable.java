@@ -12,6 +12,7 @@ import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
@@ -121,6 +122,14 @@ public class AvatarDrawable extends Drawable {
         if (tLRPC$User != null) {
             setInfo(tLRPC$User.id, tLRPC$User.first_name, tLRPC$User.last_name, (String) null);
             this.drawDeleted = UserObject.isDeleted(tLRPC$User);
+        }
+    }
+
+    public void setInfo(TLObject tLObject) {
+        if (tLObject instanceof TLRPC$User) {
+            setInfo((TLRPC$User) tLObject);
+        } else if (tLObject instanceof TLRPC$Chat) {
+            setInfo((TLRPC$Chat) tLObject);
         }
     }
 

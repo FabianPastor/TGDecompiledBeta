@@ -69,7 +69,9 @@ public class ChartPickerDelegate {
     }
 
     class CapturesData {
-        ValueAnimator a;
+
+        /* renamed from: a  reason: collision with root package name */
+        ValueAnimator f0a;
         public float aValue = 0.0f;
         public int capturedX;
         public float end;
@@ -84,15 +86,15 @@ public class ChartPickerDelegate {
 
         public void captured() {
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-            this.a = ofFloat;
+            this.f0a = ofFloat;
             ofFloat.setDuration(600);
-            this.a.setInterpolator(BaseChartView.INTERPOLATOR);
-            this.a.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            this.f0a.setInterpolator(BaseChartView.INTERPOLATOR);
+            this.f0a.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
                     ChartPickerDelegate.CapturesData.this.lambda$captured$0$ChartPickerDelegate$CapturesData(valueAnimator);
                 }
             });
-            this.a.start();
+            this.f0a.start();
         }
 
         /* access modifiers changed from: private */
@@ -103,7 +105,7 @@ public class ChartPickerDelegate {
         }
 
         public void uncapture() {
-            ValueAnimator valueAnimator = this.a;
+            ValueAnimator valueAnimator = this.f0a;
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             }

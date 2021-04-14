@@ -236,7 +236,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             this.items.add(new Item(8, LocaleController.getString("Settings", NUM), i4));
             this.items.add((Object) null);
             this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), i3));
-            this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), i2));
+            this.items.add(new Item(13, LocaleController.getString("TelegramFeatures", NUM), i2));
         }
     }
 

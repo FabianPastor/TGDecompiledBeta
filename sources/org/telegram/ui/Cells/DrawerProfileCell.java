@@ -209,7 +209,7 @@ public class DrawerProfileCell extends FrameLayout {
             int r2 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
             if (r2 == 0) goto L_0x0095
             android.content.Context r2 = r6.getContext()
-            r3 = 2131624486(0x7f0e0226, float:1.8876153E38)
+            r3 = 2131624488(0x7f0e0228, float:1.8876157E38)
             java.lang.String r4 = "AutoNightModeOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.widget.Toast r2 = android.widget.Toast.makeText(r2, r3, r1)
@@ -428,7 +428,7 @@ public class DrawerProfileCell extends FrameLayout {
             textView.setText(instance.format("+" + tLRPC$User.phone));
             AvatarDrawable avatarDrawable = new AvatarDrawable(tLRPC$User);
             avatarDrawable.setColor(Theme.getColor("avatar_backgroundInProfileBlue"));
-            this.avatarImageView.setImage(ImageLocation.getForUser(tLRPC$User, false), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$User);
+            this.avatarImageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$User);
             applyBackground(true);
         }
     }

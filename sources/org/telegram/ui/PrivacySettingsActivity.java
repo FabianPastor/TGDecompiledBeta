@@ -57,6 +57,7 @@ import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Cells.TextSettingsCell;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
@@ -670,6 +671,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$13 */
     public /* synthetic */ void lambda$null$13$PrivacySettingsActivity(DialogInterface dialogInterface, int i) {
+        String str;
         TLRPC$TL_payments_clearSavedInfo tLRPC$TL_payments_clearSavedInfo = new TLRPC$TL_payments_clearSavedInfo();
         boolean[] zArr = this.clear;
         tLRPC$TL_payments_clearSavedInfo.credentials = zArr[1];
@@ -677,6 +679,17 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         getUserConfig().tmpPassword = null;
         getUserConfig().saveConfig(false);
         getConnectionsManager().sendRequest(tLRPC$TL_payments_clearSavedInfo, $$Lambda$PrivacySettingsActivity$gmaPPhB4Qzdj4V7Y5cSfwbF5SZI.INSTANCE);
+        boolean[] zArr2 = this.clear;
+        if (zArr2[0] && zArr2[1]) {
+            str = LocaleController.getString("PrivacyPaymentsPaymentShippingCleared", NUM);
+        } else if (zArr2[0]) {
+            str = LocaleController.getString("PrivacyPaymentsShippingInfoCleared", NUM);
+        } else if (zArr2[1]) {
+            str = LocaleController.getString("PrivacyPaymentsPaymentInfoCleared", NUM);
+        } else {
+            return;
+        }
+        BulletinFactory.of((BaseFragment) this).createSimpleBulletin(NUM, str).show();
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {

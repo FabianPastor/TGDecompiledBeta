@@ -3,17 +3,19 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public class TLRPC$TL_invoice extends TLObject {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
     public String currency;
     public boolean email_requested;
     public boolean email_to_provider;
     public int flags;
     public boolean flexible;
+    public long max_tip_amount;
     public boolean name_requested;
     public boolean phone_requested;
     public boolean phone_to_provider;
     public ArrayList<TLRPC$TL_labeledPrice> prices = new ArrayList<>();
     public boolean shipping_address_requested;
+    public ArrayList<Long> suggested_tip_amounts = new ArrayList<>();
     public boolean test;
 
     public static TLRPC$TL_invoice TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -31,7 +33,6 @@ public class TLRPC$TL_invoice extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        int i = 0;
         this.test = (readInt32 & 1) != 0;
         this.name_requested = (readInt32 & 2) != 0;
         this.phone_requested = (readInt32 & 4) != 0;
@@ -44,6 +45,7 @@ public class TLRPC$TL_invoice extends TLObject {
         int readInt322 = abstractSerializedData.readInt32(z);
         if (readInt322 == NUM) {
             int readInt323 = abstractSerializedData.readInt32(z);
+            int i = 0;
             while (i < readInt323) {
                 TLRPC$TL_labeledPrice TLdeserialize = TLRPC$TL_labeledPrice.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize != null) {
@@ -51,6 +53,20 @@ public class TLRPC$TL_invoice extends TLObject {
                     i++;
                 } else {
                     return;
+                }
+            }
+            if ((this.flags & 256) != 0) {
+                this.max_tip_amount = abstractSerializedData.readInt64(z);
+            }
+            if ((this.flags & 256) != 0) {
+                int readInt324 = abstractSerializedData.readInt32(z);
+                if (readInt324 == NUM) {
+                    int readInt325 = abstractSerializedData.readInt32(z);
+                    for (int i2 = 0; i2 < readInt325; i2++) {
+                        this.suggested_tip_amounts.add(Long.valueOf(abstractSerializedData.readInt64(z)));
+                    }
+                } else if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt324)}));
                 }
             }
         } else if (z) {
@@ -83,6 +99,17 @@ public class TLRPC$TL_invoice extends TLObject {
         abstractSerializedData.writeInt32(size);
         for (int i9 = 0; i9 < size; i9++) {
             this.prices.get(i9).serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 256) != 0) {
+            abstractSerializedData.writeInt64(this.max_tip_amount);
+        }
+        if ((this.flags & 256) != 0) {
+            abstractSerializedData.writeInt32(NUM);
+            int size2 = this.suggested_tip_amounts.size();
+            abstractSerializedData.writeInt32(size2);
+            for (int i10 = 0; i10 < size2; i10++) {
+                abstractSerializedData.writeInt64(this.suggested_tip_amounts.get(i10).longValue());
+            }
         }
     }
 }

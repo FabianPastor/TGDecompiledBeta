@@ -9,14 +9,16 @@ import j$.util.stream.A2;
 import j$.util.stream.S2;
 
 public final /* synthetic */ class T0 implements A2.e {
-    public final /* synthetic */ S2.b a;
+
+    /* renamed from: a  reason: collision with root package name */
+    public final /* synthetic */ S2.b var_a;
 
     public /* synthetic */ T0(S2.b bVar) {
-        this.a = bVar;
+        this.var_a = bVar;
     }
 
     public final void accept(double d) {
-        this.a.accept(d);
+        this.var_a.accept(d);
     }
 
     public /* synthetic */ void accept(int i) {

@@ -13,7 +13,7 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
         long longExtra = intent2.getLongExtra("dialog_id", 0);
         int intExtra = intent2.getIntExtra("max_id", 0);
         int intExtra2 = intent2.getIntExtra("currentAccount", 0);
-        if (longExtra != 0 && intExtra != 0) {
+        if (longExtra != 0 && intExtra != 0 && UserConfig.isValidAccount(intExtra2)) {
             int i = (int) longExtra;
             AccountInstance instance = AccountInstance.getInstance(intExtra2);
             if (i > 0) {

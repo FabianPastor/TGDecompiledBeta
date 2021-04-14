@@ -16,6 +16,7 @@ public abstract class TLRPC$StickerSet extends TLObject {
     public boolean official;
     public String short_name;
     public int thumb_dc_id;
+    public int thumb_version;
     public ArrayList<TLRPC$PhotoSize> thumbs = new ArrayList<>();
     public String title;
 
@@ -28,11 +29,14 @@ public abstract class TLRPC$StickerSet extends TLObject {
             case -852477119:
                 tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer75();
                 break;
+            case -673242758:
+                tLRPC$StickerSet = new TLRPC$TL_stickerSet();
+                break;
             case -290164953:
                 tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer121();
                 break;
             case 1088567208:
-                tLRPC$StickerSet = new TLRPC$TL_stickerSet();
+                tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer126();
                 break;
             case 1434820921:
                 tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer96();

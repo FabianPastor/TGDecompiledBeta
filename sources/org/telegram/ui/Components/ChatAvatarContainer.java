@@ -692,7 +692,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         this.avatarDrawable.setInfo(tLRPC$Chat);
         BackupImageView backupImageView = this.avatarImageView;
         if (backupImageView != null) {
-            backupImageView.setImage(ImageLocation.getForChat(tLRPC$Chat, false), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$Chat);
+            backupImageView.setImage(ImageLocation.getForUserOrChat(tLRPC$Chat, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$Chat);
         }
     }
 
@@ -713,7 +713,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             this.avatarDrawable.setSmallSize(false);
             BackupImageView backupImageView2 = this.avatarImageView;
             if (backupImageView2 != null) {
-                backupImageView2.setImage(ImageLocation.getForUser(tLRPC$User, false), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
+                backupImageView2.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
             }
         } else {
             this.avatarDrawable.setAvatarType(1);
@@ -750,14 +750,14 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                     this.avatarDrawable.setSmallSize(false);
                     BackupImageView backupImageView3 = this.avatarImageView;
                     if (backupImageView3 != null) {
-                        backupImageView3.setImage(ImageLocation.getForUser(currentUser, false), "50_50", (Drawable) this.avatarDrawable, (Object) currentUser);
+                        backupImageView3.setImage(ImageLocation.getForUserOrChat(currentUser, 1), "50_50", ImageLocation.getForUserOrChat(currentUser, 2), "50_50", (Drawable) this.avatarDrawable, (Object) currentUser);
                     }
                 }
             } else if (currentChat != null) {
                 this.avatarDrawable.setInfo(currentChat);
                 BackupImageView backupImageView4 = this.avatarImageView;
                 if (backupImageView4 != null) {
-                    backupImageView4.setImage(ImageLocation.getForChat(currentChat, false), "50_50", (Drawable) this.avatarDrawable, (Object) currentChat);
+                    backupImageView4.setImage(ImageLocation.getForUserOrChat(currentChat, 1), "50_50", ImageLocation.getForUserOrChat(currentChat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) currentChat);
                 }
             }
         }

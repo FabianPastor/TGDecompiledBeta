@@ -1818,7 +1818,7 @@ public class FilterTabsView extends FrameLayout {
 
     /* access modifiers changed from: protected */
     /* JADX WARNING: Removed duplicated region for block: B:33:0x0108  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x01b2  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x01dd  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean drawChild(android.graphics.Canvas r10, android.view.View r11, long r12) {
         /*
@@ -1827,7 +1827,7 @@ public class FilterTabsView extends FrameLayout {
             org.telegram.ui.Components.RecyclerListView r13 = r9.listView
             r0 = 1065353216(0x3var_, float:1.0)
             r1 = 0
-            if (r11 != r13) goto L_0x011d
+            if (r11 != r13) goto L_0x0148
             int r11 = r9.getMeasuredHeight()
             android.graphics.drawable.GradientDrawable r13 = r9.selectorDrawable
             r2 = 1132396544(0x437var_, float:255.0)
@@ -1963,7 +1963,21 @@ public class FilterTabsView extends FrameLayout {
             float r2 = (float) r2
         L_0x0104:
             int r3 = (r2 > r1 ? 1 : (r2 == r1 ? 0 : -1))
-            if (r3 == 0) goto L_0x011d
+            if (r3 == 0) goto L_0x0148
+            r10.save()
+            org.telegram.ui.Components.RecyclerListView r3 = r9.listView
+            float r3 = r3.getTranslationX()
+            r10.translate(r3, r1)
+            org.telegram.ui.Components.RecyclerListView r3 = r9.listView
+            float r3 = r3.getScaleX()
+            org.telegram.ui.Components.RecyclerListView r4 = r9.listView
+            float r4 = r4.getPivotX()
+            org.telegram.ui.Components.RecyclerListView r5 = r9.listView
+            float r5 = r5.getX()
+            float r4 = r4 + r5
+            org.telegram.ui.Components.RecyclerListView r5 = r9.listView
+            float r5 = r5.getPivotY()
+            r10.scale(r3, r0, r4, r5)
             android.graphics.drawable.GradientDrawable r3 = r9.selectorDrawable
             int r4 = (int) r13
             r5 = 1082130432(0x40800000, float:4.0)
@@ -1974,7 +1988,8 @@ public class FilterTabsView extends FrameLayout {
             r3.setBounds(r4, r5, r13, r11)
             android.graphics.drawable.GradientDrawable r11 = r9.selectorDrawable
             r11.draw(r10)
-        L_0x011d:
+            r10.restore()
+        L_0x0148:
             long r10 = android.os.SystemClock.elapsedRealtime()
             r2 = 17
             long r4 = r9.lastEditingAnimationTime
@@ -1984,97 +1999,97 @@ public class FilterTabsView extends FrameLayout {
             boolean r10 = r9.isEditing
             r11 = 0
             r13 = 1
-            if (r10 != 0) goto L_0x0139
+            if (r10 != 0) goto L_0x0164
             float r4 = r9.editingAnimationProgress
             int r4 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r4 == 0) goto L_0x0185
-        L_0x0139:
+            if (r4 == 0) goto L_0x01b0
+        L_0x0164:
             boolean r4 = r9.editingForwardAnimation
             r5 = 1123024896(0x42var_, float:120.0)
-            if (r4 == 0) goto L_0x0162
+            if (r4 == 0) goto L_0x018d
             float r4 = r9.editingAnimationProgress
             int r6 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r6 > 0) goto L_0x0147
+            if (r6 > 0) goto L_0x0172
             r6 = 1
-            goto L_0x0148
-        L_0x0147:
+            goto L_0x0173
+        L_0x0172:
             r6 = 0
-        L_0x0148:
+        L_0x0173:
             float r7 = (float) r2
             float r7 = r7 / r5
             float r4 = r4 + r7
             r9.editingAnimationProgress = r4
-            if (r10 != 0) goto L_0x0157
-            if (r6 == 0) goto L_0x0157
+            if (r10 != 0) goto L_0x0182
+            if (r6 == 0) goto L_0x0182
             int r4 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r4 < 0) goto L_0x0157
+            if (r4 < 0) goto L_0x0182
             r9.editingAnimationProgress = r1
-        L_0x0157:
+        L_0x0182:
             float r4 = r9.editingAnimationProgress
             int r4 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1))
-            if (r4 < 0) goto L_0x0184
+            if (r4 < 0) goto L_0x01af
             r9.editingAnimationProgress = r0
             r9.editingForwardAnimation = r11
-            goto L_0x0184
-        L_0x0162:
+            goto L_0x01af
+        L_0x018d:
             float r4 = r9.editingAnimationProgress
             int r6 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r6 < 0) goto L_0x0169
+            if (r6 < 0) goto L_0x0194
             r11 = 1
-        L_0x0169:
+        L_0x0194:
             float r6 = (float) r2
             float r6 = r6 / r5
             float r4 = r4 - r6
             r9.editingAnimationProgress = r4
-            if (r10 != 0) goto L_0x0178
-            if (r11 == 0) goto L_0x0178
+            if (r10 != 0) goto L_0x01a3
+            if (r11 == 0) goto L_0x01a3
             int r11 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r11 > 0) goto L_0x0178
+            if (r11 > 0) goto L_0x01a3
             r9.editingAnimationProgress = r1
-        L_0x0178:
+        L_0x01a3:
             float r11 = r9.editingAnimationProgress
             r4 = -1082130432(0xffffffffbvar_, float:-1.0)
             int r11 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
-            if (r11 > 0) goto L_0x0184
+            if (r11 > 0) goto L_0x01af
             r9.editingAnimationProgress = r4
             r9.editingForwardAnimation = r13
-        L_0x0184:
+        L_0x01af:
             r11 = 1
-        L_0x0185:
+        L_0x01b0:
             r4 = 1127481344(0x43340000, float:180.0)
-            if (r10 == 0) goto L_0x019b
+            if (r10 == 0) goto L_0x01c6
             float r10 = r9.editingStartAnimationProgress
             int r1 = (r10 > r0 ? 1 : (r10 == r0 ? 0 : -1))
-            if (r1 >= 0) goto L_0x01af
+            if (r1 >= 0) goto L_0x01da
             float r11 = (float) r2
             float r11 = r11 / r4
             float r10 = r10 + r11
             r9.editingStartAnimationProgress = r10
             int r10 = (r10 > r0 ? 1 : (r10 == r0 ? 0 : -1))
-            if (r10 <= 0) goto L_0x01b0
+            if (r10 <= 0) goto L_0x01db
             r9.editingStartAnimationProgress = r0
-            goto L_0x01b0
-        L_0x019b:
-            if (r10 != 0) goto L_0x01af
+            goto L_0x01db
+        L_0x01c6:
+            if (r10 != 0) goto L_0x01da
             float r10 = r9.editingStartAnimationProgress
             int r0 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1))
-            if (r0 <= 0) goto L_0x01af
+            if (r0 <= 0) goto L_0x01da
             float r11 = (float) r2
             float r11 = r11 / r4
             float r10 = r10 - r11
             r9.editingStartAnimationProgress = r10
             int r10 = (r10 > r1 ? 1 : (r10 == r1 ? 0 : -1))
-            if (r10 >= 0) goto L_0x01b0
+            if (r10 >= 0) goto L_0x01db
             r9.editingStartAnimationProgress = r1
-            goto L_0x01b0
-        L_0x01af:
+            goto L_0x01db
+        L_0x01da:
             r13 = r11
-        L_0x01b0:
-            if (r13 == 0) goto L_0x01ba
+        L_0x01db:
+            if (r13 == 0) goto L_0x01e5
             org.telegram.ui.Components.RecyclerListView r10 = r9.listView
             r10.invalidateViews()
             r9.invalidate()
-        L_0x01ba:
+        L_0x01e5:
             return r12
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.FilterTabsView.drawChild(android.graphics.Canvas, android.view.View, long):boolean");
@@ -2195,7 +2210,7 @@ public class FilterTabsView extends FrameLayout {
                 break;
             }
             Tab tab = this.tabs.get(i);
-            if (tab.counter != this.delegate.getTabCounter(tab.id)) {
+            if (tab.counter != this.delegate.getTabCounter(tab.id) && this.delegate.getTabCounter(tab.id) >= 0) {
                 if (this.positionToWidth.get(i) != tab.getWidth(true) || this.invalidated) {
                     this.invalidated = true;
                     requestLayout();
@@ -2225,7 +2240,7 @@ public class FilterTabsView extends FrameLayout {
         int i2 = this.idToPosition.get(i, -1);
         if (i2 >= 0 && i2 < this.tabs.size()) {
             Tab tab = this.tabs.get(i2);
-            if (tab.counter != this.delegate.getTabCounter(tab.id)) {
+            if (tab.counter != this.delegate.getTabCounter(tab.id) && this.delegate.getTabCounter(tab.id) >= 0) {
                 this.listView.invalidateViews();
                 if (this.positionToWidth.get(i2) != tab.getWidth(true) || this.invalidated) {
                     this.invalidated = true;
@@ -2360,5 +2375,9 @@ public class FilterTabsView extends FrameLayout {
             viewHolder.itemView.setPressed(false);
             viewHolder.itemView.setBackground((Drawable) null);
         }
+    }
+
+    public RecyclerListView getListView() {
+        return this.listView;
     }
 }

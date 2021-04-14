@@ -943,7 +943,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         } else if (ChatObject.isNotInChat(tLRPC$Chat)) {
             getMessagesController().deleteDialog(j, 0, z);
         } else {
-            getMessagesController().deleteUserFromChat((int) (-j), getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), (TLRPC$ChatFull) null, z, z);
+            getMessagesController().deleteParticipantFromChat((int) (-j), getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), (TLRPC$Chat) null, (TLRPC$ChatFull) null, z, z);
         }
     }
 
@@ -999,11 +999,11 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         checkForExpiredLocations(false);
     }
 
-    public class HeaderCellProgress extends HeaderCell {
+    public static class HeaderCellProgress extends HeaderCell {
         /* access modifiers changed from: private */
         public RadialProgressView progressView;
 
-        public HeaderCellProgress(PeopleNearbyActivity peopleNearbyActivity, Context context) {
+        public HeaderCellProgress(Context context) {
             super(context);
             setClipChildren(false);
             RadialProgressView radialProgressView = new RadialProgressView(context);
@@ -1079,7 +1079,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                 manageChatTextCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                 hintInnerCell = manageChatTextCell;
             } else if (i == 3) {
-                HeaderCellProgress headerCellProgress = new HeaderCellProgress(PeopleNearbyActivity.this, this.mContext);
+                HeaderCellProgress headerCellProgress = new HeaderCellProgress(this.mContext);
                 headerCellProgress.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                 hintInnerCell = headerCellProgress;
             } else if (i != 4) {

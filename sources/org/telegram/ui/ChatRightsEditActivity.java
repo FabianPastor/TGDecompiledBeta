@@ -183,6 +183,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         if (this.myAdminRights == null) {
             TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights2 = new TLRPC$TL_chatAdminRights();
             this.myAdminRights = tLRPC$TL_chatAdminRights2;
+            tLRPC$TL_chatAdminRights2.manage_call = true;
             tLRPC$TL_chatAdminRights2.add_admins = true;
             tLRPC$TL_chatAdminRights2.pin_messages = true;
             tLRPC$TL_chatAdminRights2.invite_users = true;
@@ -191,9 +192,6 @@ public class ChatRightsEditActivity extends BaseFragment {
             tLRPC$TL_chatAdminRights2.edit_messages = true;
             tLRPC$TL_chatAdminRights2.post_messages = true;
             tLRPC$TL_chatAdminRights2.change_info = true;
-            if (!this.isChannel) {
-                tLRPC$TL_chatAdminRights2.manage_call = true;
-            }
         }
         if (i3 == 0) {
             TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights3 = new TLRPC$TL_chatAdminRights();
@@ -734,13 +732,13 @@ public class ChatRightsEditActivity extends BaseFragment {
     private boolean isDefaultAdminRights() {
         TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights = this.adminRights;
         boolean z = tLRPC$TL_chatAdminRights.change_info;
-        return (z && tLRPC$TL_chatAdminRights.delete_messages && tLRPC$TL_chatAdminRights.ban_users && tLRPC$TL_chatAdminRights.invite_users && tLRPC$TL_chatAdminRights.pin_messages && ((this.isChannel || tLRPC$TL_chatAdminRights.manage_call) && !tLRPC$TL_chatAdminRights.add_admins && !tLRPC$TL_chatAdminRights.anonymous)) || (!z && !tLRPC$TL_chatAdminRights.delete_messages && !tLRPC$TL_chatAdminRights.ban_users && !tLRPC$TL_chatAdminRights.invite_users && !tLRPC$TL_chatAdminRights.pin_messages && !tLRPC$TL_chatAdminRights.manage_call && !tLRPC$TL_chatAdminRights.add_admins && !tLRPC$TL_chatAdminRights.anonymous);
+        return (z && tLRPC$TL_chatAdminRights.delete_messages && tLRPC$TL_chatAdminRights.ban_users && tLRPC$TL_chatAdminRights.invite_users && tLRPC$TL_chatAdminRights.pin_messages && tLRPC$TL_chatAdminRights.manage_call && !tLRPC$TL_chatAdminRights.add_admins && !tLRPC$TL_chatAdminRights.anonymous) || (!z && !tLRPC$TL_chatAdminRights.delete_messages && !tLRPC$TL_chatAdminRights.ban_users && !tLRPC$TL_chatAdminRights.invite_users && !tLRPC$TL_chatAdminRights.pin_messages && !tLRPC$TL_chatAdminRights.manage_call && !tLRPC$TL_chatAdminRights.add_admins && !tLRPC$TL_chatAdminRights.anonymous);
     }
 
     private boolean hasAllAdminRights() {
         if (this.isChannel) {
             TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights = this.adminRights;
-            if (!tLRPC$TL_chatAdminRights.change_info || !tLRPC$TL_chatAdminRights.post_messages || !tLRPC$TL_chatAdminRights.edit_messages || !tLRPC$TL_chatAdminRights.delete_messages || !tLRPC$TL_chatAdminRights.invite_users || !tLRPC$TL_chatAdminRights.add_admins) {
+            if (!tLRPC$TL_chatAdminRights.change_info || !tLRPC$TL_chatAdminRights.post_messages || !tLRPC$TL_chatAdminRights.edit_messages || !tLRPC$TL_chatAdminRights.delete_messages || !tLRPC$TL_chatAdminRights.invite_users || !tLRPC$TL_chatAdminRights.add_admins || !tLRPC$TL_chatAdminRights.manage_call) {
                 return false;
             }
             return true;
@@ -1078,135 +1076,138 @@ public class ChatRightsEditActivity extends BaseFragment {
                 int i7 = i6 + 1;
                 this.rowCount = i7;
                 this.addUsersRow = i6;
-                this.rowCount = i7 + 1;
-                this.addAdminsRow = i7;
-            } else {
-                int i8 = 3 + 1;
+                int i8 = i7 + 1;
                 this.rowCount = i8;
-                this.changeInfoRow = 3;
-                int i9 = i8 + 1;
+                this.startVoiceChatRow = i7;
+                this.rowCount = i8 + 1;
+                this.addAdminsRow = i8;
+            } else {
+                int i9 = 3 + 1;
                 this.rowCount = i9;
-                this.deleteMessagesRow = i8;
+                this.changeInfoRow = 3;
                 int i10 = i9 + 1;
                 this.rowCount = i10;
-                this.banUsersRow = i9;
+                this.deleteMessagesRow = i9;
                 int i11 = i10 + 1;
                 this.rowCount = i11;
-                this.addUsersRow = i10;
+                this.banUsersRow = i10;
                 int i12 = i11 + 1;
                 this.rowCount = i12;
-                this.pinMessagesRow = i11;
+                this.addUsersRow = i11;
                 int i13 = i12 + 1;
                 this.rowCount = i13;
-                this.startVoiceChatRow = i12;
+                this.pinMessagesRow = i12;
                 int i14 = i13 + 1;
                 this.rowCount = i14;
-                this.addAdminsRow = i13;
-                this.rowCount = i14 + 1;
-                this.anonymousRow = i14;
+                this.startVoiceChatRow = i13;
+                int i15 = i14 + 1;
+                this.rowCount = i15;
+                this.addAdminsRow = i14;
+                this.rowCount = i15 + 1;
+                this.anonymousRow = i15;
             }
         } else if (i2 == 1) {
-            int i15 = 3 + 1;
-            this.rowCount = i15;
-            this.sendMessagesRow = 3;
-            int i16 = i15 + 1;
+            int i16 = 3 + 1;
             this.rowCount = i16;
-            this.sendMediaRow = i15;
+            this.sendMessagesRow = 3;
             int i17 = i16 + 1;
             this.rowCount = i17;
-            this.sendStickersRow = i16;
+            this.sendMediaRow = i16;
             int i18 = i17 + 1;
             this.rowCount = i18;
-            this.sendPollsRow = i17;
+            this.sendStickersRow = i17;
             int i19 = i18 + 1;
             this.rowCount = i19;
-            this.embedLinksRow = i18;
+            this.sendPollsRow = i18;
             int i20 = i19 + 1;
             this.rowCount = i20;
-            this.addUsersRow = i19;
+            this.embedLinksRow = i19;
             int i21 = i20 + 1;
             this.rowCount = i21;
-            this.pinMessagesRow = i20;
+            this.addUsersRow = i20;
             int i22 = i21 + 1;
             this.rowCount = i22;
-            this.changeInfoRow = i21;
+            this.pinMessagesRow = i21;
             int i23 = i22 + 1;
             this.rowCount = i23;
-            this.untilSectionRow = i22;
-            this.rowCount = i23 + 1;
-            this.untilDateRow = i23;
+            this.changeInfoRow = i22;
+            int i24 = i23 + 1;
+            this.rowCount = i24;
+            this.untilSectionRow = i23;
+            this.rowCount = i24 + 1;
+            this.untilDateRow = i24;
         }
         if (this.canEdit) {
             if (!this.isChannel && i2 == 0) {
-                int i24 = this.rowCount;
-                int i25 = i24 + 1;
-                this.rowCount = i25;
-                this.rightsShadowRow = i24;
+                int i25 = this.rowCount;
                 int i26 = i25 + 1;
                 this.rowCount = i26;
-                this.rankHeaderRow = i25;
+                this.rightsShadowRow = i25;
                 int i27 = i26 + 1;
                 this.rowCount = i27;
-                this.rankRow = i26;
-                this.rowCount = i27 + 1;
-                this.rankInfoRow = i27;
+                this.rankHeaderRow = i26;
+                int i28 = i27 + 1;
+                this.rowCount = i28;
+                this.rankRow = i27;
+                this.rowCount = i28 + 1;
+                this.rankInfoRow = i28;
             }
             TLRPC$Chat tLRPC$Chat = this.currentChat;
             if (tLRPC$Chat != null && tLRPC$Chat.creator && i2 == 0 && hasAllAdminRights() && !this.currentUser.bot) {
-                int i28 = this.rightsShadowRow;
-                if (i28 == -1) {
-                    int i29 = this.rowCount;
-                    this.rowCount = i29 + 1;
-                    this.transferOwnerShadowRow = i29;
+                int i29 = this.rightsShadowRow;
+                if (i29 == -1) {
+                    int i30 = this.rowCount;
+                    this.rowCount = i30 + 1;
+                    this.transferOwnerShadowRow = i30;
                 }
-                int i30 = this.rowCount;
-                int i31 = i30 + 1;
-                this.rowCount = i31;
-                this.transferOwnerRow = i30;
-                if (i28 != -1) {
-                    this.rowCount = i31 + 1;
-                    this.transferOwnerShadowRow = i31;
+                int i31 = this.rowCount;
+                int i32 = i31 + 1;
+                this.rowCount = i32;
+                this.transferOwnerRow = i31;
+                if (i29 != -1) {
+                    this.rowCount = i32 + 1;
+                    this.transferOwnerShadowRow = i32;
                 }
             }
             if (this.initialIsSet) {
                 if (this.rightsShadowRow == -1) {
-                    int i32 = this.rowCount;
-                    this.rowCount = i32 + 1;
-                    this.rightsShadowRow = i32;
+                    int i33 = this.rowCount;
+                    this.rowCount = i33 + 1;
+                    this.rightsShadowRow = i33;
                 }
-                int i33 = this.rowCount;
-                int i34 = i33 + 1;
-                this.rowCount = i34;
-                this.removeAdminRow = i33;
-                this.rowCount = i34 + 1;
-                this.removeAdminShadowRow = i34;
+                int i34 = this.rowCount;
+                int i35 = i34 + 1;
+                this.rowCount = i35;
+                this.removeAdminRow = i34;
+                this.rowCount = i35 + 1;
+                this.removeAdminShadowRow = i35;
             }
         } else if (i2 != 0) {
-            int i35 = this.rowCount;
-            this.rowCount = i35 + 1;
-            this.rightsShadowRow = i35;
-        } else if (this.isChannel || i2 != 0 || (this.currentRank.isEmpty() && (!this.currentChat.creator || !UserObject.isUserSelf(this.currentUser)))) {
             int i36 = this.rowCount;
             this.rowCount = i36 + 1;
-            this.cantEditInfoRow = i36;
-        } else {
+            this.rightsShadowRow = i36;
+        } else if (this.isChannel || i2 != 0 || (this.currentRank.isEmpty() && (!this.currentChat.creator || !UserObject.isUserSelf(this.currentUser)))) {
             int i37 = this.rowCount;
-            int i38 = i37 + 1;
-            this.rowCount = i38;
-            this.rightsShadowRow = i37;
+            this.rowCount = i37 + 1;
+            this.cantEditInfoRow = i37;
+        } else {
+            int i38 = this.rowCount;
             int i39 = i38 + 1;
             this.rowCount = i39;
-            this.rankHeaderRow = i38;
-            this.rowCount = i39 + 1;
-            this.rankRow = i39;
+            this.rightsShadowRow = i38;
+            int i40 = i39 + 1;
+            this.rowCount = i40;
+            this.rankHeaderRow = i39;
+            this.rowCount = i40 + 1;
+            this.rankRow = i40;
             if (!this.currentChat.creator || !UserObject.isUserSelf(this.currentUser)) {
-                int i40 = this.rowCount;
-                this.rowCount = i40 + 1;
-                this.cantEditInfoRow = i40;
-            } else {
                 int i41 = this.rowCount;
                 this.rowCount = i41 + 1;
-                this.rankInfoRow = i41;
+                this.cantEditInfoRow = i41;
+            } else {
+                int i42 = this.rowCount;
+                this.rowCount = i42 + 1;
+                this.rankInfoRow = i42;
             }
         }
         if (!z) {
@@ -1332,7 +1333,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             boolean r12 = r13.isAddingNew
             r5.setUserAdminRole(r6, r7, r8, r9, r10, r11, r12)
             org.telegram.ui.ChatRightsEditActivity$ChatRightsEditActivityDelegate r0 = r13.delegate
-            if (r0 == 0) goto L_0x0158
+            if (r0 == 0) goto L_0x0159
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r1 = r13.adminRights
             boolean r2 = r1.change_info
             if (r2 != 0) goto L_0x010c
@@ -1363,43 +1364,44 @@ public class ChatRightsEditActivity extends BaseFragment {
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r2 = r13.bannedRights
             java.lang.String r4 = r13.currentRank
             r0.didSetRights(r3, r1, r2, r4)
-            goto L_0x0158
+            goto L_0x0159
         L_0x0114:
-            if (r0 != r3) goto L_0x0158
+            if (r0 != r3) goto L_0x0159
             int r0 = r13.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r0)
             int r6 = r13.chatId
             org.telegram.tgnet.TLRPC$User r7 = r13.currentUser
-            org.telegram.tgnet.TLRPC$TL_chatBannedRights r8 = r13.bannedRights
-            boolean r9 = r13.isChannel
-            org.telegram.ui.ActionBar.BaseFragment r10 = r13.getFragmentForAlert(r3)
-            r5.setUserBannedRole(r6, r7, r8, r9, r10)
+            r8 = 0
+            org.telegram.tgnet.TLRPC$TL_chatBannedRights r9 = r13.bannedRights
+            boolean r10 = r13.isChannel
+            org.telegram.ui.ActionBar.BaseFragment r11 = r13.getFragmentForAlert(r3)
+            r5.setParticipantBannedRole(r6, r7, r8, r9, r10, r11)
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r0 = r13.bannedRights
             boolean r1 = r0.send_messages
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_stickers
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.embed_links
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_media
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_gifs
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_games
-            if (r1 != 0) goto L_0x014d
+            if (r1 != 0) goto L_0x014e
             boolean r1 = r0.send_inline
-            if (r1 == 0) goto L_0x014a
-            goto L_0x014d
-        L_0x014a:
+            if (r1 == 0) goto L_0x014b
+            goto L_0x014e
+        L_0x014b:
             r0.until_date = r4
             r3 = 2
-        L_0x014d:
+        L_0x014e:
             org.telegram.ui.ChatRightsEditActivity$ChatRightsEditActivityDelegate r1 = r13.delegate
-            if (r1 == 0) goto L_0x0158
+            if (r1 == 0) goto L_0x0159
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r2 = r13.adminRights
             java.lang.String r4 = r13.currentRank
             r1.didSetRights(r3, r2, r0, r4)
-        L_0x0158:
+        L_0x0159:
             r13.finishFragment()
             return
         */
@@ -1628,7 +1630,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
                 android.content.Context r7 = r6.mContext
-                r0 = 2131165449(0x7var_, float:1.7945115E38)
+                r0 = 2131165450(0x7var_a, float:1.7945117E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r0, (java.lang.String) r1)
                 r8.setBackgroundDrawable(r7)

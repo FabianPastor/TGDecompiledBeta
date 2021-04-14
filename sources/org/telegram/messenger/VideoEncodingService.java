@@ -72,7 +72,11 @@ public class VideoEncodingService extends Service implements NotificationCenter.
         int i3 = this.currentAccount;
         int intExtra = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
         this.currentAccount = intExtra;
-        if (i3 != intExtra) {
+        if (!UserConfig.isValidAccount(intExtra)) {
+            stopSelf();
+            return 2;
+        }
+        if (i3 != this.currentAccount) {
             NotificationCenter instance = NotificationCenter.getInstance(i3);
             int i4 = NotificationCenter.FileUploadProgressChanged;
             instance.removeObserver(this, i4);

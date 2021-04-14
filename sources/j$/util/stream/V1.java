@@ -32,7 +32,7 @@ class V1 extends CLASSNAMEv2<R> implements CLASSNAMEu2<Long, R, V1>, A2.g {
     }
 
     public void accept(long j) {
-        this.c.accept(this.a, j);
+        this.c.accept(this.var_a, j);
     }
 
     /* renamed from: b */
@@ -51,14 +51,14 @@ class V1 extends CLASSNAMEv2<R> implements CLASSNAMEu2<Long, R, V1>, A2.g {
     }
 
     public void i(CLASSNAMEu2 u2Var) {
-        this.a = this.d.apply(this.a, ((V1) u2Var).a);
+        this.var_a = this.d.apply(this.var_a, ((V1) u2Var).var_a);
     }
 
     public void m() {
     }
 
     public void n(long j) {
-        this.a = this.b.get();
+        this.var_a = this.b.get();
     }
 
     public /* synthetic */ boolean p() {

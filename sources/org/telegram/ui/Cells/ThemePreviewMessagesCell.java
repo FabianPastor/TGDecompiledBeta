@@ -30,6 +30,7 @@ import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.PinchToZoomHelper;
 
 public class ThemePreviewMessagesCell extends LinearLayout {
     private Drawable backgroundDrawable;
@@ -244,6 +245,10 @@ public class ThemePreviewMessagesCell extends LinearLayout {
 
                     public /* synthetic */ String getAdminRank(int i) {
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$getAdminRank(this, i);
+                    }
+
+                    public /* synthetic */ PinchToZoomHelper getPinchToZoomHelper() {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$getPinchToZoomHelper(this);
                     }
 
                     public /* synthetic */ TextSelectionHelper.ChatListTextSelectionHelper getTextSelectionHelper() {

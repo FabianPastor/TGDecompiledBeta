@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.TextView;
@@ -21,24 +22,18 @@ import java.util.Comparator;
 import java.util.HashSet;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.Emoji;
-import org.telegram.messenger.FileLoader;
+import org.telegram.messenger.DialogObject;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
-import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.ConnectionsManager;
-import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Dialog;
-import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$RecentMeUrl;
 import org.telegram.tgnet.TLRPC$TL_contact;
-import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_messages_getStickers;
-import org.telegram.tgnet.TLRPC$TL_messages_stickers;
+import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.DialogsAdapter;
 import org.telegram.ui.Cells.ArchiveHintCell;
@@ -78,9 +73,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     private long openedDialogId;
     /* access modifiers changed from: private */
     public DialogsActivity parentFragment;
-    private ArrayList<TLRPC$Document> preloadedStickers = new ArrayList<>();
     private DialogsPreloader preloader;
-    private boolean preloadingSticker;
     private int prevContactsCount;
     private int prevDialogsCount;
     private PullForegroundDrawable pullForegroundDrawable;
@@ -138,58 +131,6 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         notifyDataSetChanged();
     }
 
-    private void preloadGreetingsSticker() {
-        if (!this.preloadingSticker) {
-            this.preloadingSticker = true;
-            TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers = new TLRPC$TL_messages_getStickers();
-            tLRPC$TL_messages_getStickers.emoticon = "👋" + Emoji.fixEmoji("⭐");
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStickers, new RequestDelegate() {
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    DialogsAdapter.this.lambda$preloadGreetingsSticker$1$DialogsAdapter(tLObject, tLRPC$TL_error);
-                }
-            });
-        }
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$preloadGreetingsSticker$1 */
-    public /* synthetic */ void lambda$preloadGreetingsSticker$1$DialogsAdapter(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        if (tLObject instanceof TLRPC$TL_messages_stickers) {
-            ArrayList<TLRPC$Document> arrayList = ((TLRPC$TL_messages_stickers) tLObject).stickers;
-            if (!arrayList.isEmpty()) {
-                for (int i = 0; i < 5; i++) {
-                    TLRPC$Document tLRPC$Document = arrayList.get(Math.abs(Utilities.random.nextInt() % arrayList.size()));
-                    AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Document) {
-                        public final /* synthetic */ TLRPC$Document f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void run() {
-                            DialogsAdapter.this.lambda$null$0$DialogsAdapter(this.f$1);
-                        }
-                    });
-                    this.preloadedStickers.add(tLRPC$Document);
-                }
-            }
-        }
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$DialogsAdapter(TLRPC$Document tLRPC$Document) {
-        FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForDocument(tLRPC$Document), tLRPC$Document, (String) null, 0, 1);
-    }
-
-    public TLRPC$Document getPreloadedSticker() {
-        if (this.onlineContacts == null || this.preloadedStickers.isEmpty()) {
-            return null;
-        }
-        ArrayList<TLRPC$Document> arrayList = this.preloadedStickers;
-        return arrayList.get(Utilities.random.nextInt(arrayList.size()));
-    }
-
     public int getItemCount() {
         int i;
         int i2;
@@ -242,14 +183,10 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                     }
                 }
             }
-            if (this.folderId == 0 && this.onlineContacts != null) {
-                if (!z) {
-                    this.onlineContacts = null;
-                } else {
-                    preloadGreetingsSticker();
-                }
-            }
             int i10 = this.folderId;
+            if (i10 == 0 && this.onlineContacts != null && !z) {
+                this.onlineContacts = null;
+            }
             if (i10 == 1 && this.showArchiveHint) {
                 i5 += 2;
             }
@@ -323,7 +260,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                     }
 
                     public final int compare(Object obj, Object obj2) {
-                        return DialogsAdapter.lambda$sortOnlineContacts$2(MessagesController.this, this.f$1, (TLRPC$TL_contact) obj, (TLRPC$TL_contact) obj2);
+                        return DialogsAdapter.lambda$sortOnlineContacts$0(MessagesController.this, this.f$1, (TLRPC$TL_contact) obj, (TLRPC$TL_contact) obj2);
                     }
 
                     public /* synthetic */ Comparator reversed() {
@@ -369,7 +306,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     /* JADX WARNING: Removed duplicated region for block: B:33:0x0053 A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:38:0x005c A[ADDED_TO_REGION] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ int lambda$sortOnlineContacts$2(org.telegram.messenger.MessagesController r2, int r3, org.telegram.tgnet.TLRPC$TL_contact r4, org.telegram.tgnet.TLRPC$TL_contact r5) {
+    static /* synthetic */ int lambda$sortOnlineContacts$0(org.telegram.messenger.MessagesController r2, int r3, org.telegram.tgnet.TLRPC$TL_contact r4, org.telegram.tgnet.TLRPC$TL_contact r5) {
         /*
             int r5 = r5.user_id
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
@@ -443,7 +380,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         L_0x0060:
             return r4
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsAdapter.lambda$sortOnlineContacts$2(org.telegram.messenger.MessagesController, int, org.telegram.tgnet.TLRPC$TL_contact, org.telegram.tgnet.TLRPC$TL_contact):int");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsAdapter.lambda$sortOnlineContacts$0(org.telegram.messenger.MessagesController, int, org.telegram.tgnet.TLRPC$TL_contact, org.telegram.tgnet.TLRPC$TL_contact):int");
     }
 
     public void setDialogsListFrozen(boolean z) {
@@ -480,8 +417,8 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onCreateViewHolder$3 */
-    public /* synthetic */ void lambda$onCreateViewHolder$3$DialogsAdapter(View view) {
+    /* renamed from: lambda$onCreateViewHolder$1 */
+    public /* synthetic */ void lambda$onCreateViewHolder$1$DialogsAdapter(View view) {
         MessagesController.getInstance(this.currentAccount).hintDialogs.clear();
         MessagesController.getGlobalMainSettings().edit().remove("installReferer").commit();
         notifyDataSetChanged();
@@ -511,8 +448,8 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     /* JADX WARNING: type inference failed for: r5v8, types: [org.telegram.ui.Cells.HeaderCell] */
     /* JADX WARNING: type inference failed for: r5v9, types: [org.telegram.ui.Cells.ShadowSectionCell, android.view.View] */
     /* JADX WARNING: type inference failed for: r5v10, types: [org.telegram.ui.Cells.ArchiveHintCell, android.widget.FrameLayout] */
-    /* JADX WARNING: type inference failed for: r5v11, types: [org.telegram.ui.Adapters.DialogsAdapter$2] */
-    /* JADX WARNING: type inference failed for: r5v12, types: [android.view.View, org.telegram.ui.Adapters.DialogsAdapter$3] */
+    /* JADX WARNING: type inference failed for: r5v11, types: [org.telegram.ui.Adapters.DialogsAdapter$LastEmptyView] */
+    /* JADX WARNING: type inference failed for: r5v12, types: [android.view.View, org.telegram.ui.Adapters.DialogsAdapter$2] */
     /* JADX WARNING: type inference failed for: r5v13, types: [org.telegram.ui.Cells.TextCell] */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Unknown variable types count: 4 */
@@ -523,31 +460,31 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r14 = 5
             r0 = -1
             java.lang.String r1 = "windowBackgroundGrayShadow"
-            r2 = 2131165448(0x7var_, float:1.7945113E38)
+            r2 = 2131165449(0x7var_, float:1.7945115E38)
             java.lang.String r3 = "windowBackgroundGray"
             r4 = 1
             switch(r15) {
-                case 0: goto L_0x014a;
-                case 1: goto L_0x013b;
-                case 2: goto L_0x00ce;
-                case 3: goto L_0x00a5;
-                case 4: goto L_0x009c;
-                case 5: goto L_0x0093;
-                case 6: goto L_0x0087;
-                case 7: goto L_0x007e;
-                case 8: goto L_0x005b;
-                case 9: goto L_0x0044;
-                case 10: goto L_0x003b;
-                case 11: goto L_0x0018;
-                default: goto L_0x000f;
+                case 0: goto L_0x0147;
+                case 1: goto L_0x0138;
+                case 2: goto L_0x00cc;
+                case 3: goto L_0x00a3;
+                case 4: goto L_0x009a;
+                case 5: goto L_0x0091;
+                case 6: goto L_0x0085;
+                case 7: goto L_0x007c;
+                case 8: goto L_0x0059;
+                case 9: goto L_0x0042;
+                case 10: goto L_0x0039;
+                case 11: goto L_0x0016;
+                default: goto L_0x000d;
             }
-        L_0x000f:
+        L_0x000d:
             org.telegram.ui.Cells.TextCell r5 = new org.telegram.ui.Cells.TextCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0162
-        L_0x0018:
-            org.telegram.ui.Adapters.DialogsAdapter$3 r5 = new org.telegram.ui.Adapters.DialogsAdapter$3
+            goto L_0x015f
+        L_0x0016:
+            org.telegram.ui.Adapters.DialogsAdapter$2 r5 = new org.telegram.ui.Adapters.DialogsAdapter$2
             android.content.Context r6 = r13.mContext
             r5.<init>(r6)
             android.content.Context r6 = r13.mContext
@@ -559,23 +496,23 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r2.<init>(r6, r1)
             r2.setFullsize(r4)
             r5.setBackgroundDrawable(r2)
-            goto L_0x0162
-        L_0x003b:
-            org.telegram.ui.Adapters.DialogsAdapter$2 r5 = new org.telegram.ui.Adapters.DialogsAdapter$2
+            goto L_0x015f
+        L_0x0039:
+            org.telegram.ui.Adapters.DialogsAdapter$LastEmptyView r5 = new org.telegram.ui.Adapters.DialogsAdapter$LastEmptyView
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0162
-        L_0x0044:
+            goto L_0x015f
+        L_0x0042:
             org.telegram.ui.Cells.ArchiveHintCell r5 = r13.archiveHintCell
             android.view.ViewParent r1 = r5.getParent()
-            if (r1 == 0) goto L_0x0162
+            if (r1 == 0) goto L_0x015f
             org.telegram.ui.Cells.ArchiveHintCell r1 = r13.archiveHintCell
             android.view.ViewParent r1 = r1.getParent()
             android.view.ViewGroup r1 = (android.view.ViewGroup) r1
             org.telegram.ui.Cells.ArchiveHintCell r2 = r13.archiveHintCell
             r1.removeView(r2)
-            goto L_0x0162
-        L_0x005b:
+            goto L_0x015f
+        L_0x0059:
             org.telegram.ui.Cells.ShadowSectionCell r5 = new org.telegram.ui.Cells.ShadowSectionCell
             android.content.Context r6 = r13.mContext
             r5.<init>(r6)
@@ -588,30 +525,30 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r2.<init>(r6, r1)
             r2.setFullsize(r4)
             r5.setBackgroundDrawable(r2)
-            goto L_0x0162
-        L_0x007e:
+            goto L_0x015f
+        L_0x007c:
             org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0162
-        L_0x0087:
+            goto L_0x015f
+        L_0x0085:
             org.telegram.ui.Cells.UserCell r5 = new org.telegram.ui.Cells.UserCell
             android.content.Context r1 = r13.mContext
             r2 = 8
             r3 = 0
             r5.<init>(r1, r2, r3, r3)
-            goto L_0x0162
-        L_0x0093:
+            goto L_0x015f
+        L_0x0091:
             org.telegram.ui.Cells.DialogsEmptyCell r5 = new org.telegram.ui.Cells.DialogsEmptyCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0162
-        L_0x009c:
+            goto L_0x015f
+        L_0x009a:
             org.telegram.ui.Cells.DialogMeUrlCell r5 = new org.telegram.ui.Cells.DialogMeUrlCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            goto L_0x0162
-        L_0x00a5:
+            goto L_0x015f
+        L_0x00a3:
             org.telegram.ui.Adapters.DialogsAdapter$1 r5 = new org.telegram.ui.Adapters.DialogsAdapter$1
             android.content.Context r4 = r13.mContext
             r5.<init>(r13, r4)
@@ -626,12 +563,12 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r1 = -1082130432(0xffffffffbvar_, float:-1.0)
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r0, r1)
             r5.addView(r3, r1)
-            goto L_0x0162
-        L_0x00ce:
+            goto L_0x015f
+        L_0x00cc:
             org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
-            r1 = 2131627062(0x7f0e0CLASSNAME, float:1.8881378E38)
+            r1 = 2131627104(0x7f0e0CLASSNAME, float:1.8881463E38)
             java.lang.String r2 = "RecentlyViewed"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r5.setText(r1)
@@ -646,28 +583,28 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             java.lang.String r2 = "windowBackgroundWhiteBlueHeader"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             r1.setTextColor(r2)
-            r2 = 2131627063(0x7f0e0CLASSNAME, float:1.888138E38)
+            r2 = 2131627105(0x7f0e0CLASSNAME, float:1.8881465E38)
             java.lang.String r3 = "RecentlyViewedHide"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
             r3 = 3
-            if (r2 == 0) goto L_0x0113
+            if (r2 == 0) goto L_0x0110
             r2 = 3
-            goto L_0x0114
-        L_0x0113:
+            goto L_0x0111
+        L_0x0110:
             r2 = 5
-        L_0x0114:
+        L_0x0111:
             r2 = r2 | 16
             r1.setGravity(r2)
             r6 = -1
             r7 = -1082130432(0xffffffffbvar_, float:-1.0)
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
-            if (r2 == 0) goto L_0x0121
-            goto L_0x0122
-        L_0x0121:
+            if (r2 == 0) goto L_0x011e
+            goto L_0x011f
+        L_0x011e:
             r3 = 5
-        L_0x0122:
+        L_0x011f:
             r8 = r3 | 48
             r9 = 1099431936(0x41880000, float:17.0)
             r10 = 1097859072(0x41700000, float:15.0)
@@ -675,19 +612,19 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r12 = 0
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7, r8, r9, r10, r11, r12)
             r5.addView(r1, r2)
-            org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$VXW0QrDCKyiHPAnTSgwYeiVspl0 r2 = new org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$VXW0QrDCKyiHPAnTSgwYeiVspl0
+            org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$B0qIe6TxDardgaYX-7eWyt6VPHc r2 = new org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$B0qIe6TxDardgaYX-7eWyt6VPHc
             r2.<init>()
             r1.setOnClickListener(r2)
-            goto L_0x0162
-        L_0x013b:
+            goto L_0x015f
+        L_0x0138:
             org.telegram.ui.Components.FlickerLoadingView r5 = new org.telegram.ui.Components.FlickerLoadingView
             android.content.Context r1 = r13.mContext
             r5.<init>(r1)
             r5.setIsSingleCell(r4)
             r1 = 7
             r5.setViewType(r1)
-            goto L_0x0162
-        L_0x014a:
+            goto L_0x015f
+        L_0x0147:
             org.telegram.ui.Cells.DialogCell r5 = new org.telegram.ui.Cells.DialogCell
             org.telegram.ui.DialogsActivity r7 = r13.parentFragment
             android.content.Context r8 = r13.mContext
@@ -700,14 +637,14 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r5.setArchivedPullAnimation(r1)
             org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader r1 = r13.preloader
             r5.setPreloader(r1)
-        L_0x0162:
+        L_0x015f:
             androidx.recyclerview.widget.RecyclerView$LayoutParams r1 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-            if (r15 != r14) goto L_0x0168
+            if (r15 != r14) goto L_0x0165
             r14 = -1
-            goto L_0x0169
-        L_0x0168:
+            goto L_0x0166
+        L_0x0165:
             r14 = -2
-        L_0x0169:
+        L_0x0166:
             r1.<init>((int) r0, (int) r14)
             r5.setLayoutParams(r1)
             org.telegram.ui.Components.RecyclerListView$Holder r14 = new org.telegram.ui.Components.RecyclerListView$Holder
@@ -976,7 +913,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                               (r3v0 'this' org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1 A[THIS])
                              org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.val$dialog_id long)
                              call: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$uLfPHYxzbWAkjtxFDFkg7uuiZ0c.<init>(org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1, boolean, long):void type: CONSTRUCTOR)
-                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.onMessagesLoaded(boolean):void, dex: classes.dex
+                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.onMessagesLoaded(boolean):void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -1067,7 +1004,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                               (wrap: long : 0x0000: IGET  (r0v0 long) = 
                               (r3v0 'this' org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1 A[THIS])
                              org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.val$dialog_id long)
-                             call: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$uLfPHYxzbWAkjtxFDFkg7uuiZ0c.<init>(org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1, boolean, long):void type: CONSTRUCTOR in method: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.onMessagesLoaded(boolean):void, dex: classes.dex
+                             call: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$uLfPHYxzbWAkjtxFDFkg7uuiZ0c.<init>(org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1, boolean, long):void type: CONSTRUCTOR in method: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.onMessagesLoaded(boolean):void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1125,7 +1062,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                               (r3v0 'this' org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1 A[THIS])
                              org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.val$dialog_id long)
                              call: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$3F-ZmIc7iTrW5y3bKNV1GMqz07U.<init>(org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1, long):void type: CONSTRUCTOR)
-                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.onError():void, dex: classes.dex
+                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.onError():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -1215,7 +1152,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                               (wrap: long : 0x0000: IGET  (r0v0 long) = 
                               (r3v0 'this' org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1 A[THIS])
                              org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.val$dialog_id long)
-                             call: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$3F-ZmIc7iTrW5y3bKNV1GMqz07U.<init>(org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1, long):void type: CONSTRUCTOR in method: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.onError():void, dex: classes.dex
+                             call: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$3F-ZmIc7iTrW5y3bKNV1GMqz07U.<init>(org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1, long):void type: CONSTRUCTOR in method: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.onError():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1291,5 +1228,55 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
     public void setForceShowEmptyCell(boolean z) {
         this.forceShowEmptyCell = z;
+    }
+
+    public class LastEmptyView extends View {
+        public boolean moving;
+
+        public LastEmptyView(Context context) {
+            super(context);
+        }
+
+        /* access modifiers changed from: protected */
+        public void onMeasure(int i, int i2) {
+            int size = DialogsAdapter.this.parentFragment.getDialogsArray(DialogsAdapter.this.currentAccount, DialogsAdapter.this.dialogsType, DialogsAdapter.this.folderId, DialogsAdapter.this.dialogsListFrozen).size();
+            int i3 = 0;
+            boolean z = DialogsAdapter.this.dialogsType == 0 && MessagesController.getInstance(DialogsAdapter.this.currentAccount).dialogs_dict.get(DialogObject.makeFolderDialogId(1)) != null;
+            View view = (View) getParent();
+            int paddingTop = view.getPaddingTop();
+            if (size != 0 && (paddingTop != 0 || z)) {
+                int size2 = View.MeasureSpec.getSize(i2);
+                if (size2 == 0) {
+                    size2 = view.getMeasuredHeight();
+                }
+                if (size2 == 0) {
+                    size2 = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+                }
+                int dp = AndroidUtilities.dp(SharedConfig.useThreeLinesLayout ? 78.0f : 72.0f);
+                int i4 = (size * dp) + (size - 1);
+                if (DialogsAdapter.this.onlineContacts != null) {
+                    i4 += (DialogsAdapter.this.onlineContacts.size() * AndroidUtilities.dp(58.0f)) + (DialogsAdapter.this.onlineContacts.size() - 1) + AndroidUtilities.dp(52.0f);
+                }
+                int i5 = z ? dp + 1 : 0;
+                if (i4 < size2) {
+                    int i6 = (size2 - i4) + i5;
+                    if (paddingTop == 0 || (i6 = i6 - AndroidUtilities.statusBarHeight) >= 0) {
+                        i3 = i6;
+                    }
+                } else {
+                    int i7 = i4 - size2;
+                    if (i7 < i5) {
+                        int i8 = i5 - i7;
+                        if (paddingTop != 0) {
+                            i8 -= AndroidUtilities.statusBarHeight;
+                        }
+                        if (i8 >= 0) {
+                            i3 = i8;
+                        }
+                    }
+                }
+            }
+            setMeasuredDimension(View.MeasureSpec.getSize(i), i3);
+        }
     }
 }

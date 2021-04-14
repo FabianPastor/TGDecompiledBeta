@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.H;
+import a.H;
 import j$.util.function.CLASSNAMEf;
 import j$.util.function.q;
 import j$.util.function.s;
@@ -18,8 +18,8 @@ class L1 extends M1<Double> implements A2.e {
     }
 
     public void accept(double d2) {
-        if (!this.a && ((H) this.d).b(d2) == this.c.a) {
-            this.a = true;
+        if (!this.var_a && ((H) this.d).b(d2) == this.c.var_a) {
+            this.var_a = true;
             this.b = this.c.b;
         }
     }

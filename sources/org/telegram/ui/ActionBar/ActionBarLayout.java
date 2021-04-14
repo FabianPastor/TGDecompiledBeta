@@ -380,6 +380,10 @@ public class ActionBarLayout extends FrameLayout {
     public void setInnerTranslationX(float f) {
         this.innerTranslationX = f;
         invalidate();
+        if (this.fragmentsStack.size() >= 2) {
+            ArrayList<BaseFragment> arrayList = this.fragmentsStack;
+            arrayList.get(arrayList.size() - 2).onSlideProgress(false, f / ((float) this.containerView.getMeasuredWidth()));
+        }
     }
 
     @Keep
@@ -570,6 +574,7 @@ public class ActionBarLayout extends FrameLayout {
             if (this.fragmentsStack.size() >= 2) {
                 ArrayList<BaseFragment> arrayList = this.fragmentsStack;
                 BaseFragment baseFragment = arrayList.get(arrayList.size() - 1);
+                baseFragment.prepareFragmentToSlide(true, false);
                 baseFragment.onPause();
                 baseFragment.onFragmentDestroy();
                 baseFragment.setParentLayout((ActionBarLayout) null);
@@ -585,12 +590,16 @@ public class ActionBarLayout extends FrameLayout {
                 this.currentActionBar = baseFragment2.actionBar;
                 baseFragment2.onResume();
                 baseFragment2.onBecomeFullyVisible();
+                baseFragment2.prepareFragmentToSlide(false, false);
             } else {
                 return;
             }
         } else if (this.fragmentsStack.size() >= 2) {
             ArrayList<BaseFragment> arrayList4 = this.fragmentsStack;
-            BaseFragment baseFragment3 = arrayList4.get(arrayList4.size() - 2);
+            arrayList4.get(arrayList4.size() - 1).prepareFragmentToSlide(true, false);
+            ArrayList<BaseFragment> arrayList5 = this.fragmentsStack;
+            BaseFragment baseFragment3 = arrayList5.get(arrayList5.size() - 2);
+            baseFragment3.prepareFragmentToSlide(false, false);
             baseFragment3.onPause();
             View view = baseFragment3.fragmentView;
             if (!(view == null || (viewGroup2 = (ViewGroup) view.getParent()) == null)) {
@@ -655,9 +664,13 @@ public class ActionBarLayout extends FrameLayout {
         if (this.themeAnimatorSet != null) {
             this.presentingFragmentDescriptions = baseFragment.getThemeDescriptions();
         }
+        ArrayList<BaseFragment> arrayList2 = this.fragmentsStack;
+        arrayList2.get(arrayList2.size() - 1).prepareFragmentToSlide(true, true);
+        baseFragment.prepareFragmentToSlide(false, true);
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
+        Animator customSlideTransition;
         if (checkTransitionAnimation() || this.inActionMode || this.animationInProgress) {
             return false;
         }
@@ -729,12 +742,24 @@ public class ActionBarLayout extends FrameLayout {
                     final boolean z = x < ((float) this.containerView.getMeasuredWidth()) / 3.0f && (xVelocity2 < 3500.0f || xVelocity2 < this.velocityTracker.getYVelocity());
                     if (!z) {
                         x = ((float) this.containerView.getMeasuredWidth()) - x;
+                        int max2 = Math.max((int) ((200.0f / ((float) this.containerView.getMeasuredWidth())) * x), 50);
                         LayoutContainer layoutContainer = this.containerView;
-                        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(layoutContainer, View.TRANSLATION_X, new float[]{(float) layoutContainer.getMeasuredWidth()}), ObjectAnimator.ofFloat(this, "innerTranslationX", new float[]{(float) this.containerView.getMeasuredWidth()})});
+                        long j = (long) max2;
+                        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(layoutContainer, View.TRANSLATION_X, new float[]{(float) layoutContainer.getMeasuredWidth()}).setDuration(j), ObjectAnimator.ofFloat(this, "innerTranslationX", new float[]{(float) this.containerView.getMeasuredWidth()}).setDuration(j)});
                     } else {
-                        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.containerView, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this, "innerTranslationX", new float[]{0.0f})});
+                        int max3 = Math.max((int) ((200.0f / ((float) this.containerView.getMeasuredWidth())) * x), 50);
+                        long j2 = (long) max3;
+                        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.containerView, View.TRANSLATION_X, new float[]{0.0f}).setDuration(j2), ObjectAnimator.ofFloat(this, "innerTranslationX", new float[]{0.0f}).setDuration(j2)});
                     }
-                    animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) this.containerView.getMeasuredWidth())) * x), 50));
+                    Animator customSlideTransition2 = baseFragment.getCustomSlideTransition(false, z, x);
+                    if (customSlideTransition2 != null) {
+                        animatorSet.playTogether(new Animator[]{customSlideTransition2});
+                    }
+                    ArrayList<BaseFragment> arrayList5 = this.fragmentsStack;
+                    BaseFragment baseFragment2 = arrayList5.get(arrayList5.size() - 2);
+                    if (!(baseFragment2 == null || (customSlideTransition = baseFragment2.getCustomSlideTransition(false, z, x)) == null)) {
+                        animatorSet.playTogether(new Animator[]{customSlideTransition});
+                    }
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             ActionBarLayout.this.onSlideAnimationEnd(z);

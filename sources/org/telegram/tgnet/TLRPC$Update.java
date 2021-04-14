@@ -10,6 +10,9 @@ public abstract class TLRPC$Update extends TLObject {
             case -2054649973:
                 tLRPC$Update = new TLRPC$TL_updatePinnedChannelMessages();
                 break;
+            case -2033525908:
+                tLRPC$Update = new TLRPC$TL_updateChatUserTyping();
+                break;
             case -2027964103:
                 tLRPC$Update = new TLRPC$TL_updateGeoLiveViewed();
                 break;
@@ -33,9 +36,6 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case -1706939360:
                 tLRPC$Update = new TLRPC$TL_updateRecentStickers();
-                break;
-            case -1704596961:
-                tLRPC$Update = new TLRPC$TL_updateChatUserTyping();
                 break;
             case -1667805217:
                 tLRPC$Update = new TLRPC$TL_updateReadHistoryInbox();
@@ -114,9 +114,6 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case -99664734:
                 tLRPC$Update = new TLRPC$TL_updatePinnedDialogs();
-                break;
-            case -13975905:
-                tLRPC$Update = new TLRPC$TL_updateChannelUserTyping();
                 break;
             case 125178264:
                 tLRPC$Update = new TLRPC$TL_updateChatParticipants();
@@ -225,6 +222,9 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case 1786671974:
                 tLRPC$Update = new TLRPC$TL_updatePeerSettings();
+                break;
+            case 1796675352:
+                tLRPC$Update = new TLRPC$TL_updateChannelUserTyping();
                 break;
             case 1851755554:
                 tLRPC$Update = new TLRPC$TL_updateChatParticipantDelete();

@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.CLASSNAMEa0;
+import a.CLASSNAMEa0;
 import j$.util.Spliterator;
 import j$.util.function.A;
 import j$.util.function.BiConsumer;
@@ -85,5 +85,5 @@ public interface C1 extends CLASSNAMEl1<Integer, C1> {
 
     int[] toArray();
 
-    C1 y(A a);
+    C1 y(A a2);
 }

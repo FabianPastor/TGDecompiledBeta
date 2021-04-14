@@ -7,7 +7,9 @@ import j$.util.function.n;
 import j$.util.stream.S1;
 
 public final /* synthetic */ class P0 implements n {
-    public static final /* synthetic */ P0 a = new P0();
+
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ P0 var_a = new P0();
 
     private /* synthetic */ P0() {
     }

@@ -282,7 +282,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             for (int i2 = 0; i2 < arrayList.size(); i2++) {
                 TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) arrayList.get(i2);
                 getMessagesController().putChat(tLRPC$Chat, false);
-                getMessagesController().deleteUserFromChat(tLRPC$Chat.id, user, (TLRPC$ChatFull) null);
+                getMessagesController().deleteParticipantFromChat(tLRPC$Chat.id, user, (TLRPC$ChatFull) null);
             }
             finishFragment();
         }
@@ -525,7 +525,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r3, r4, r5, r6)
                 r8 = 54
                 r9.setHeight(r8)
-                r8 = 2131625794(0x7f0e0742, float:1.8878806E38)
+                r8 = 2131625815(0x7f0e0757, float:1.8878849E38)
                 java.lang.String r0 = "InactiveChats"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r9.setText(r8)
@@ -535,7 +535,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 android.content.Context r1 = r8.getContext()
                 r9.<init>(r1)
                 android.content.Context r8 = r8.getContext()
-                r1 = 2131165448(0x7var_, float:1.7945113E38)
+                r1 = 2131165449(0x7var_, float:1.7945115E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -558,18 +558,18 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
                 if (r8 != 0) goto L_0x00a1
-                r8 = 2131627679(0x7f0e0e9f, float:1.888263E38)
+                r8 = 2131627760(0x7f0e0ef0, float:1.8882794E38)
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b6
             L_0x00a1:
                 if (r8 != r0) goto L_0x00ad
-                r8 = 2131627678(0x7f0e0e9e, float:1.8882627E38)
+                r8 = 2131627759(0x7f0e0eef, float:1.8882792E38)
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b6
             L_0x00ad:
-                r8 = 2131627677(0x7f0e0e9d, float:1.8882625E38)
+                r8 = 2131627758(0x7f0e0eee, float:1.888279E38)
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
             L_0x00b6:
@@ -654,7 +654,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            return new RecyclerListView.Holder(new GroupCreateUserCell(viewGroup.getContext(), true, 0, false));
+            return new RecyclerListView.Holder(new GroupCreateUserCell(viewGroup.getContext(), 1, 0, false));
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {

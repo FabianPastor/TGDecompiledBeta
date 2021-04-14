@@ -10,9 +10,11 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class ContextProgressView extends View {
     private RectF cicleRect = new RectF();
+    private int innerColor;
     private String innerKey;
     private Paint innerPaint = new Paint(1);
     private long lastUpdateTime;
+    private int outerColor;
     private String outerKey;
     private Paint outerPaint = new Paint(1);
     private int radOffset = 0;
@@ -40,9 +42,27 @@ public class ContextProgressView extends View {
         updateColors();
     }
 
+    public void setColors(int i, int i2) {
+        this.innerKey = null;
+        this.outerKey = null;
+        this.innerColor = i;
+        this.outerColor = i2;
+        updateColors();
+    }
+
     public void updateColors() {
-        this.innerPaint.setColor(Theme.getColor(this.innerKey));
-        this.outerPaint.setColor(Theme.getColor(this.outerKey));
+        String str = this.innerKey;
+        if (str != null) {
+            this.innerPaint.setColor(Theme.getColor(str));
+        } else {
+            this.innerPaint.setColor(this.innerColor);
+        }
+        String str2 = this.outerKey;
+        if (str2 != null) {
+            this.outerPaint.setColor(Theme.getColor(str2));
+        } else {
+            this.outerPaint.setColor(this.outerColor);
+        }
         invalidate();
     }
 

@@ -5,7 +5,9 @@ import j$.util.function.Consumer;
 import j$.util.k;
 
 abstract class M1<T> implements A2<T> {
-    boolean a;
+
+    /* renamed from: a  reason: collision with root package name */
+    boolean var_a;
     boolean b;
 
     M1(N1 n1) {
@@ -39,6 +41,6 @@ abstract class M1<T> implements A2<T> {
     }
 
     public boolean p() {
-        return this.a;
+        return this.var_a;
     }
 }

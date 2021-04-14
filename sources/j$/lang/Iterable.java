@@ -11,7 +11,7 @@ public interface Iterable<T> {
     /* renamed from: j$.lang.Iterable$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {
         public static void $default$forEach(Iterable iterable, Consumer consumer) {
-            if (DesugarCollections.a.isInstance(iterable)) {
+            if (DesugarCollections.var_a.isInstance(iterable)) {
                 DesugarCollections.c(iterable, consumer);
                 return;
             }

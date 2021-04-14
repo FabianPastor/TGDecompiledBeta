@@ -361,6 +361,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         setImage(imageLocation, str, imageLocation2, str2, (Drawable) null, i, str3, obj, i2);
     }
 
+    public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Drawable drawable, Object obj, int i) {
+        setImage((ImageLocation) null, (String) null, imageLocation, str, imageLocation2, str2, drawable, 0, (String) null, obj, i);
+    }
+
     public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Drawable drawable, int i, String str3, Object obj, int i2) {
         setImage((ImageLocation) null, (String) null, imageLocation, str, imageLocation2, str2, drawable, i, str3, obj, i2);
     }
@@ -488,6 +492,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             ImageLocation imageLocation7 = this.strippedLocation;
             if (imageLocation7 == null) {
                 imageLocation7 = imageLocation4 != null ? imageLocation4 : imageLocation5;
+            }
+            if (imageLocation7 == null) {
+                imageLocation7 = imageLocation6;
             }
             String key3 = imageLocation6 != null ? imageLocation6.getKey(obj2, imageLocation7, false) : null;
             if (!(key3 == null || str9 == null)) {

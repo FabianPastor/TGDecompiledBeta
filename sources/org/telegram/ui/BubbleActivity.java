@@ -134,18 +134,23 @@ public class BubbleActivity extends Activity implements ActionBarLayout.ActionBa
 
     private boolean handleIntent(Intent intent, boolean z, boolean z2, boolean z3, int i, int i2) {
         if (z3 || (!AndroidUtilities.needShowPasscode(true) && !SharedConfig.isWaitingForPasscodeEnter)) {
-            this.currentAccount = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
+            int intExtra = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
+            this.currentAccount = intExtra;
+            if (!UserConfig.isValidAccount(intExtra)) {
+                finish();
+                return false;
+            }
             ChatActivity chatActivity = null;
-            if (intent.getAction().startsWith("com.tmessages.openchat")) {
-                int intExtra = intent.getIntExtra("chatId", 0);
-                int intExtra2 = intent.getIntExtra("userId", 0);
+            if (intent.getAction() != null && intent.getAction().startsWith("com.tmessages.openchat")) {
+                int intExtra2 = intent.getIntExtra("chatId", 0);
+                int intExtra3 = intent.getIntExtra("userId", 0);
                 Bundle bundle = new Bundle();
-                if (intExtra2 != 0) {
-                    this.dialogId = (long) intExtra2;
-                    bundle.putInt("user_id", intExtra2);
+                if (intExtra3 != 0) {
+                    this.dialogId = (long) intExtra3;
+                    bundle.putInt("user_id", intExtra3);
                 } else {
-                    this.dialogId = (long) (-intExtra);
-                    bundle.putInt("chat_id", intExtra);
+                    this.dialogId = (long) (-intExtra2);
+                    bundle.putInt("chat_id", intExtra2);
                 }
                 chatActivity = new ChatActivity(bundle);
                 chatActivity.setInBubbleMode(true);

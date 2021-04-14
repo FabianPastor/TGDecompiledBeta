@@ -1,10 +1,10 @@
 package j$.util;
 
-import j$.CLASSNAMEb;
-import j$.E0;
-import j$.G0;
-import j$.I0;
-import j$.P;
+import a.CLASSNAMEb;
+import a.E0;
+import a.G0;
+import a.I0;
+import a.P;
 import j$.util.Comparator;
 import j$.util.function.ToIntFunction;
 import java.io.Serializable;
@@ -14,14 +14,16 @@ import java.util.function.ToDoubleFunction;
 import java.util.function.ToLongFunction;
 
 public final /* synthetic */ class e implements Comparator, Serializable {
-    public final /* synthetic */ ToIntFunction a;
+
+    /* renamed from: a  reason: collision with root package name */
+    public final /* synthetic */ ToIntFunction var_a;
 
     public /* synthetic */ e(ToIntFunction toIntFunction) {
-        this.a = toIntFunction;
+        this.var_a = toIntFunction;
     }
 
     public final int compare(Object obj, Object obj2) {
-        return CLASSNAMEb.a(this.a.applyAsInt(obj), this.a.applyAsInt(obj2));
+        return CLASSNAMEb.a(this.var_a.applyAsInt(obj), this.var_a.applyAsInt(obj2));
     }
 
     public /* synthetic */ Comparator reversed() {

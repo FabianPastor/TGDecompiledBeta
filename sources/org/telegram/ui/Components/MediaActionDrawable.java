@@ -353,9 +353,9 @@ public class MediaActionDrawable extends Drawable {
             r19 = 1080033280(0x40600000, float:3.5)
             r20 = 1073741824(0x40000000, float:2.0)
             r21 = 1088421888(0x40e00000, float:7.0)
-            r22 = 1132396544(0x437var_, float:255.0)
             r13 = 2
-            r23 = 1056964608(0x3var_, float:0.5)
+            r22 = 1056964608(0x3var_, float:0.5)
+            r23 = 1132396544(0x437var_, float:255.0)
             if (r1 == r13) goto L_0x00af
             int r1 = r0.nextIcon
             if (r1 != r13) goto L_0x0350
@@ -386,9 +386,9 @@ public class MediaActionDrawable extends Drawable {
             if (r10 != r13) goto L_0x00fe
             android.graphics.Paint r10 = r0.paint
             float r2 = r0.transitionProgress
-            float r2 = r2 / r23
+            float r2 = r2 / r22
             float r2 = java.lang.Math.min(r4, r2)
-            float r2 = r2 * r22
+            float r2 = r2 * r23
             int r2 = (int) r2
             r10.setAlpha(r2)
             float r2 = r0.transitionProgress
@@ -407,10 +407,10 @@ public class MediaActionDrawable extends Drawable {
             if (r2 == r13) goto L_0x0123
             android.graphics.Paint r2 = r0.paint
             float r4 = r0.savedTransitionProgress
-            float r4 = r4 / r23
+            float r4 = r4 / r22
             r10 = 1065353216(0x3var_, float:1.0)
             float r4 = java.lang.Math.min(r10, r4)
-            float r4 = r4 * r22
+            float r4 = r4 * r23
             float r5 = r0.transitionProgress
             float r5 = r10 - r5
             float r4 = r4 * r5
@@ -438,7 +438,7 @@ public class MediaActionDrawable extends Drawable {
             if (r4 == 0) goto L_0x0301
             int r4 = r0.nextIcon
             if (r4 == r13) goto L_0x02b7
-            int r26 = (r2 > r23 ? 1 : (r2 == r23 ? 0 : -1))
+            int r26 = (r2 > r22 ? 1 : (r2 == r22 ? 0 : -1))
             if (r26 > 0) goto L_0x014b
             goto L_0x02b7
         L_0x014b:
@@ -457,8 +457,8 @@ public class MediaActionDrawable extends Drawable {
         L_0x0162:
             float r4 = (float) r4
             float r3 = r3 + r4
-            float r2 = r2 - r23
-            float r4 = r2 / r23
+            float r2 = r2 - r22
+            float r4 = r2 / r22
             r5 = 1045220557(0x3e4ccccd, float:0.2)
             int r5 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
             if (r5 <= 0) goto L_0x017c
@@ -517,7 +517,7 @@ public class MediaActionDrawable extends Drawable {
             float r1 = r1 * r27
             float r2 = r0.scale
             float r1 = r1 * r2
-            float r2 = r27 * r22
+            float r2 = r27 * r23
             int r2 = (int) r2
             int r3 = r0.nextIcon
             r4 = 3
@@ -526,7 +526,7 @@ public class MediaActionDrawable extends Drawable {
             r4 = 2
             if (r3 == r4) goto L_0x01e9
             float r3 = r0.transitionProgress
-            float r3 = r3 / r23
+            float r3 = r3 / r22
             float r3 = java.lang.Math.min(r13, r3)
             float r4 = r13 - r3
             float r2 = (float) r2
@@ -657,7 +657,7 @@ public class MediaActionDrawable extends Drawable {
             goto L_0x02c5
         L_0x02bf:
             r1 = 1065353216(0x3var_, float:1.0)
-            float r4 = r2 / r23
+            float r4 = r2 / r22
             float r2 = r1 - r4
         L_0x02c5:
             float r25 = r25 - r3
@@ -776,7 +776,7 @@ public class MediaActionDrawable extends Drawable {
             float r1 = r0.transitionProgress
             r2 = 1065353216(0x3var_, float:1.0)
             float r4 = r2 - r1
-            float r4 = r4 * r22
+            float r4 = r4 * r23
             int r2 = (int) r4
         L_0x0386:
             if (r2 == 0) goto L_0x060a
@@ -828,9 +828,9 @@ public class MediaActionDrawable extends Drawable {
             r3 = 2
             if (r2 != r3) goto L_0x03fe
             float r1 = r0.transitionProgress
-            int r2 = (r1 > r23 ? 1 : (r1 == r23 ? 0 : -1))
+            int r2 = (r1 > r22 ? 1 : (r1 == r22 ? 0 : -1))
             if (r2 > 0) goto L_0x03f2
-            float r1 = r1 / r23
+            float r1 = r1 / r22
             r2 = 1065353216(0x3var_, float:1.0)
             float r4 = r2 - r1
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
@@ -838,7 +838,7 @@ public class MediaActionDrawable extends Drawable {
             float r1 = r1 * r4
             float r2 = r0.scale
             float r1 = r1 * r2
-            float r4 = r4 * r22
+            float r4 = r4 * r23
             int r2 = (int) r4
             goto L_0x03f4
         L_0x03f2:
@@ -876,7 +876,7 @@ public class MediaActionDrawable extends Drawable {
             float r2 = (float) r2
             float r3 = r0.scale
             float r2 = r2 * r3
-            float r3 = r4 * r22
+            float r3 = r4 * r23
             int r3 = (int) r3
             int r5 = r0.currentIcon
             r6 = 14
@@ -944,7 +944,7 @@ public class MediaActionDrawable extends Drawable {
             float r3 = (float) r3
             float r5 = r0.scale
             float r3 = r3 * r5
-            float r2 = r2 * r22
+            float r2 = r2 * r23
             int r2 = (int) r2
             int r5 = r0.nextIcon
             r6 = 14
@@ -971,7 +971,7 @@ public class MediaActionDrawable extends Drawable {
             r1 = 6
             if (r2 != r1) goto L_0x04bd
             float r1 = r0.transitionProgress
-            float r1 = r1 / r23
+            float r1 = r1 / r22
             r2 = 1065353216(0x3var_, float:1.0)
             float r1 = java.lang.Math.min(r2, r1)
             goto L_0x04c1
@@ -989,7 +989,7 @@ public class MediaActionDrawable extends Drawable {
             float r3 = r3 * r5
             float r4 = r4 * r20
             float r4 = java.lang.Math.min(r2, r4)
-            float r4 = r4 * r22
+            float r4 = r4 * r23
             int r4 = (int) r4
             r13 = r1
             r1 = r3
@@ -1178,10 +1178,10 @@ public class MediaActionDrawable extends Drawable {
         L_0x061e:
             r1 = 1065353216(0x3var_, float:1.0)
             float r2 = r0.transitionProgress
-            float r2 = r2 / r23
+            float r2 = r2 / r22
             float r4 = java.lang.Math.min(r1, r2)
             float r2 = r0.transitionProgress
-            float r2 = r2 / r23
+            float r2 = r2 / r22
             float r2 = r1 - r2
             r1 = 0
             float r2 = java.lang.Math.max(r1, r2)
@@ -1258,7 +1258,7 @@ public class MediaActionDrawable extends Drawable {
             goto L_0x0693
         L_0x068e:
             float r1 = r0.transitionProgress
-            float r1 = r1 * r22
+            float r1 = r1 * r23
             int r2 = (int) r1
         L_0x0693:
             r3.setAlpha(r2)
@@ -1347,7 +1347,7 @@ public class MediaActionDrawable extends Drawable {
             r2 = 255(0xff, float:3.57E-43)
             goto L_0x0732
         L_0x072f:
-            float r1 = r4 * r22
+            float r1 = r4 * r23
             int r2 = (int) r1
         L_0x0732:
             r3.setAlpha(r2)
@@ -1408,7 +1408,7 @@ public class MediaActionDrawable extends Drawable {
             float r4 = r2 - r1
         L_0x0799:
             android.text.TextPaint r1 = r0.textPaint
-            float r2 = r4 * r22
+            float r2 = r4 * r23
             int r2 = (int) r2
             r1.setAlpha(r2)
             r1 = 1084227584(0x40a00000, float:5.0)
@@ -1525,7 +1525,7 @@ public class MediaActionDrawable extends Drawable {
             float r2 = r0.transitionProgress
             r3 = 1065353216(0x3var_, float:1.0)
             float r2 = r3 - r2
-            float r2 = r2 * r22
+            float r2 = r2 * r23
             int r2 = (int) r2
             r1.setAlpha(r2)
         L_0x085a:
@@ -1538,7 +1538,7 @@ public class MediaActionDrawable extends Drawable {
             goto L_0x0869
         L_0x0864:
             float r1 = r0.transitionProgress
-            float r1 = r1 * r22
+            float r1 = r1 * r23
             int r2 = (int) r1
         L_0x0869:
             r3.setAlpha(r2)
@@ -1668,18 +1668,18 @@ public class MediaActionDrawable extends Drawable {
         L_0x0943:
             if (r1 == r2) goto L_0x096e
             float r1 = r0.transitionProgress
-            int r2 = (r1 > r23 ? 1 : (r1 == r23 ? 0 : -1))
+            int r2 = (r1 > r22 ? 1 : (r1 == r22 ? 0 : -1))
             if (r2 <= 0) goto L_0x0964
-            float r1 = r1 - r23
-            float r1 = r1 / r23
-            float r2 = r1 / r23
+            float r1 = r1 - r22
+            float r1 = r1 / r22
+            float r2 = r1 / r22
             r3 = 1065353216(0x3var_, float:1.0)
             float r2 = java.lang.Math.min(r3, r2)
             float r4 = r3 - r2
-            int r2 = (r1 > r23 ? 1 : (r1 == r23 ? 0 : -1))
+            int r2 = (r1 > r22 ? 1 : (r1 == r22 ? 0 : -1))
             if (r2 <= 0) goto L_0x0962
-            float r1 = r1 - r23
-            float r1 = r1 / r23
+            float r1 = r1 - r22
+            float r1 = r1 / r22
             goto L_0x0967
         L_0x0962:
             r1 = 0
@@ -1700,7 +1700,7 @@ public class MediaActionDrawable extends Drawable {
             float r2 = r0.transitionProgress
             r3 = 1065353216(0x3var_, float:1.0)
             float r4 = r3 - r2
-            float r4 = r4 * r22
+            float r4 = r4 * r23
             int r2 = (int) r4
             r1.setAlpha(r2)
             goto L_0x0987
@@ -1789,7 +1789,7 @@ public class MediaActionDrawable extends Drawable {
             float r3 = r0.transitionProgress
             r4 = 1065353216(0x3var_, float:1.0)
             float r3 = r4 - r3
-            float r3 = r3 * r22
+            float r3 = r3 * r23
             int r3 = (int) r3
         L_0x0a23:
             r15.setAlpha(r3)
@@ -1821,7 +1821,7 @@ public class MediaActionDrawable extends Drawable {
             goto L_0x0a5a
         L_0x0a55:
             float r3 = r0.transitionProgress
-            float r3 = r3 * r22
+            float r3 = r3 * r23
             int r3 = (int) r3
         L_0x0a5a:
             r14.setAlpha(r3)
@@ -1862,7 +1862,7 @@ public class MediaActionDrawable extends Drawable {
             float r6 = r0.transitionProgress
             r8 = 1065353216(0x3var_, float:1.0)
             float r6 = r8 - r6
-            float r6 = r6 * r22
+            float r6 = r6 * r23
             int r6 = (int) r6
         L_0x0aa3:
             r5.setAlpha(r6)
@@ -1888,7 +1888,7 @@ public class MediaActionDrawable extends Drawable {
         L_0x0ac9:
             r34.restore()
         L_0x0acc:
-            if (r1 == 0) goto L_0x0b20
+            if (r1 == 0) goto L_0x0b45
             r2 = 1103101952(0x41CLASSNAME, float:24.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             float r2 = (float) r2
@@ -1899,27 +1899,27 @@ public class MediaActionDrawable extends Drawable {
             float r3 = (float) r3
             float r3 = r3 * r18
             int r3 = (int) r3
-            android.graphics.Paint r4 = r0.paint2
-            android.graphics.Paint$Style r5 = android.graphics.Paint.Style.FILL_AND_STROKE
-            r4.setStyle(r5)
-            android.graphics.Paint r4 = r0.paint2
-            int r5 = r0.currentIcon
-            int r6 = r0.nextIcon
-            if (r5 != r6) goto L_0x0af4
-            r5 = 255(0xff, float:3.57E-43)
-            goto L_0x0af9
-        L_0x0af4:
-            float r5 = r0.transitionProgress
-            float r5 = r5 * r22
-            int r5 = (int) r5
-        L_0x0af9:
-            r4.setAlpha(r5)
+            int r4 = r0.currentIcon
+            int r5 = r0.nextIcon
+            if (r4 != r5) goto L_0x0aeb
+            r4 = 255(0xff, float:3.57E-43)
+            goto L_0x0af0
+        L_0x0aeb:
+            float r4 = r0.transitionProgress
+            float r4 = r4 * r23
+            int r4 = (int) r4
+        L_0x0af0:
+            android.graphics.Paint r5 = r0.paint2
+            android.graphics.Paint$Style r6 = android.graphics.Paint.Style.FILL_AND_STROKE
+            r5.setStyle(r6)
+            android.graphics.Paint r5 = r0.paint2
+            r5.setAlpha(r4)
             r34.save()
-            r4 = 2
-            int r2 = r2 / r4
+            r5 = 2
+            int r2 = r2 / r5
             int r11 = r11 - r2
             float r2 = (float) r11
-            int r3 = r3 / r4
+            int r3 = r3 / r5
             int r12 = r12 - r3
             float r3 = (float) r12
             r7.translate(r2, r3)
@@ -1929,37 +1929,57 @@ public class MediaActionDrawable extends Drawable {
             r7.drawPath(r3, r2)
             r2 = 1
             r3 = r1[r2]
-            if (r3 == 0) goto L_0x0b1d
-            r1 = r1[r2]
+            if (r3 == 0) goto L_0x0b42
+            r2 = 255(0xff, float:3.57E-43)
+            if (r4 == r2) goto L_0x0b3a
+            android.graphics.Paint r2 = r0.backPaint
+            int r2 = r2.getAlpha()
+            android.graphics.Paint r3 = r0.backPaint
+            float r5 = (float) r2
+            float r4 = (float) r4
+            float r4 = r4 / r23
+            float r5 = r5 * r4
+            int r4 = (int) r5
+            r3.setAlpha(r4)
+            r3 = 1
+            r1 = r1[r3]
+            android.graphics.Paint r4 = r0.backPaint
+            r7.drawPath(r1, r4)
+            android.graphics.Paint r1 = r0.backPaint
+            r1.setAlpha(r2)
+            goto L_0x0b42
+        L_0x0b3a:
+            r3 = 1
+            r1 = r1[r3]
             android.graphics.Paint r2 = r0.backPaint
             r7.drawPath(r1, r2)
-        L_0x0b1d:
+        L_0x0b42:
             r34.restore()
-        L_0x0b20:
+        L_0x0b45:
             long r1 = java.lang.System.currentTimeMillis()
             long r3 = r0.lastAnimationTime
             long r3 = r1 - r3
             r5 = 17
             int r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r8 <= 0) goto L_0x0b30
+            if (r8 <= 0) goto L_0x0b55
             r3 = 17
-        L_0x0b30:
+        L_0x0b55:
             r0.lastAnimationTime = r1
             int r1 = r0.currentIcon
             r2 = 3
-            if (r1 == r2) goto L_0x0b4a
+            if (r1 == r2) goto L_0x0b6f
             r2 = 14
-            if (r1 == r2) goto L_0x0b4a
+            if (r1 == r2) goto L_0x0b6f
             r5 = 4
-            if (r1 != r5) goto L_0x0b42
+            if (r1 != r5) goto L_0x0b67
             int r5 = r0.nextIcon
-            if (r5 == r2) goto L_0x0b4a
-        L_0x0b42:
+            if (r5 == r2) goto L_0x0b6f
+        L_0x0b67:
             r2 = 10
-            if (r1 == r2) goto L_0x0b4a
+            if (r1 == r2) goto L_0x0b6f
             r2 = 13
-            if (r1 != r2) goto L_0x0b92
-        L_0x0b4a:
+            if (r1 != r2) goto L_0x0bb7
+        L_0x0b6f:
             float r1 = r0.downloadRadOffset
             r5 = 360(0x168, double:1.78E-321)
             long r5 = r5 * r3
@@ -1972,25 +1992,25 @@ public class MediaActionDrawable extends Drawable {
             r0.downloadRadOffset = r1
             int r1 = r0.nextIcon
             r2 = 2
-            if (r1 == r2) goto L_0x0b8f
+            if (r1 == r2) goto L_0x0bb4
             float r1 = r0.downloadProgress
             float r2 = r0.downloadProgressAnimationStart
             float r5 = r1 - r2
             r6 = 0
             int r8 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r8 <= 0) goto L_0x0b8f
+            if (r8 <= 0) goto L_0x0bb4
             float r8 = r0.downloadProgressTime
             float r9 = (float) r3
             float r8 = r8 + r9
             r0.downloadProgressTime = r8
             r9 = 1128792064(0x43480000, float:200.0)
             int r9 = (r8 > r9 ? 1 : (r8 == r9 ? 0 : -1))
-            if (r9 < 0) goto L_0x0b81
+            if (r9 < 0) goto L_0x0ba6
             r0.animatedDownloadProgress = r1
             r0.downloadProgressAnimationStart = r1
             r0.downloadProgressTime = r6
-            goto L_0x0b8f
-        L_0x0b81:
+            goto L_0x0bb4
+        L_0x0ba6:
             android.view.animation.DecelerateInterpolator r1 = r0.interpolator
             r6 = 1128792064(0x43480000, float:200.0)
             float r8 = r8 / r6
@@ -1998,35 +2018,35 @@ public class MediaActionDrawable extends Drawable {
             float r5 = r5 * r1
             float r2 = r2 + r5
             r0.animatedDownloadProgress = r2
-        L_0x0b8f:
+        L_0x0bb4:
             r33.invalidateSelf()
-        L_0x0b92:
+        L_0x0bb7:
             boolean r1 = r0.animatingTransition
-            if (r1 == 0) goto L_0x0bb5
+            if (r1 == 0) goto L_0x0bda
             float r1 = r0.transitionProgress
             r2 = 1065353216(0x3var_, float:1.0)
             int r5 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r5 >= 0) goto L_0x0bb5
+            if (r5 >= 0) goto L_0x0bda
             float r3 = (float) r3
             float r4 = r0.transitionAnimationTime
             float r3 = r3 / r4
             float r1 = r1 + r3
             r0.transitionProgress = r1
             int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r1 < 0) goto L_0x0bb2
+            if (r1 < 0) goto L_0x0bd7
             int r1 = r0.nextIcon
             r0.currentIcon = r1
             r0.transitionProgress = r2
             r1 = 0
             r0.animatingTransition = r1
-        L_0x0bb2:
+        L_0x0bd7:
             r33.invalidateSelf()
-        L_0x0bb5:
+        L_0x0bda:
             r1 = r20
             r2 = 1
-            if (r1 < r2) goto L_0x0bbd
+            if (r1 < r2) goto L_0x0be2
             r7.restoreToCount(r1)
-        L_0x0bbd:
+        L_0x0be2:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MediaActionDrawable.draw(android.graphics.Canvas):void");

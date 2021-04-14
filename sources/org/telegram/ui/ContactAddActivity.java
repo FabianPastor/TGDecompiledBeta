@@ -296,10 +296,11 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             }
             this.onlineTextView.setText(LocaleController.formatUserStatus(this.currentAccount, user));
             BackupImageView backupImageView = this.avatarImage;
-            ImageLocation forUser = ImageLocation.getForUser(user, false);
+            ImageLocation forUserOrChat = ImageLocation.getForUserOrChat(user, 1);
+            ImageLocation forUserOrChat2 = ImageLocation.getForUserOrChat(user, 2);
             AvatarDrawable avatarDrawable2 = new AvatarDrawable(user);
             this.avatarDrawable = avatarDrawable2;
-            backupImageView.setImage(forUser, "50_50", (Drawable) avatarDrawable2, (Object) user);
+            backupImageView.setImage(forUserOrChat, "50_50", forUserOrChat2, "50_50", (Drawable) avatarDrawable2, (Object) user);
         }
     }
 

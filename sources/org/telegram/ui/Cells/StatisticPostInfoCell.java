@@ -107,7 +107,7 @@ public class StatisticPostInfoCell extends FrameLayout {
 
     public void setData(StatisticActivity.MemberData memberData) {
         this.avatarDrawable.setInfo(memberData.user);
-        this.imageView.setImage(ImageLocation.getForUser(memberData.user, false), "50_50", (Drawable) this.avatarDrawable, (Object) memberData.user);
+        this.imageView.setImage(ImageLocation.getForUserOrChat(memberData.user, 1), "50_50", ImageLocation.getForUserOrChat(memberData.user, 2), "50_50", (Drawable) this.avatarDrawable, (Object) memberData.user);
         this.imageView.setRoundRadius(AndroidUtilities.dp(46.0f) >> 1);
         this.message.setText(memberData.user.first_name);
         this.date.setText(memberData.description);

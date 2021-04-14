@@ -49,7 +49,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
     private boolean searchInProgress;
     private int searchPointer;
     private int searchReqId;
-    private ArrayList<TLObject> searchResult = new ArrayList<>();
+    private ArrayList<Object> searchResult = new ArrayList<>();
     private ArrayList<CharSequence> searchResultNames = new ArrayList<>();
     /* access modifiers changed from: private */
     public Timer searchTimer;
@@ -291,7 +291,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         updateSearchResults(i4, arrayList2, arrayList3);
     }
 
-    private void updateSearchResults(int i, ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {
+    private void updateSearchResults(int i, ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2) {
         AndroidUtilities.runOnUIThread(new Runnable(i, arrayList, arrayList2) {
             public final /* synthetic */ int f$1;
             public final /* synthetic */ ArrayList f$2;

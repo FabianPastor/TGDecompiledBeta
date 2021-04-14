@@ -91,7 +91,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r3 = 2131427352(0x7f0b0018, float:1.8476318E38)
             r0.<init>(r2, r3)
             r2 = 2131230935(0x7var_d7, float:1.8077937E38)
-            r3 = 2131628064(0x7f0e1020, float:1.888341E38)
+            r3 = 2131628214(0x7f0e10b6, float:1.8883714E38)
             java.lang.String r4 = "WidgetLoggedOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setTextViewText(r2, r3)
@@ -108,7 +108,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r5 = 2131427353(0x7f0b0019, float:1.847632E38)
             r0.<init>(r2, r5)
             r2 = 2131230937(0x7var_d9, float:1.807794E38)
-            r5 = 2131627570(0x7f0e0e32, float:1.8882408E38)
+            r5 = 2131627648(0x7f0e0e80, float:1.8882566E38)
             java.lang.String r6 = "TapToEditWidget"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.setTextViewText(r2, r5)
@@ -148,21 +148,21 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             if (r0 == 0) goto L_0x0100
             boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r0)
             if (r6 == 0) goto L_0x00b2
-            r6 = 2131627209(0x7f0e0cc9, float:1.8881676E38)
+            r6 = 2131627251(0x7f0e0cf3, float:1.8881761E38)
             java.lang.String r7 = "SavedMessages"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x00da
         L_0x00b2:
             boolean r6 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
             if (r6 == 0) goto L_0x00c2
-            r6 = 2131627098(0x7f0e0c5a, float:1.888145E38)
+            r6 = 2131627140(0x7f0e0CLASSNAME, float:1.8881536E38)
             java.lang.String r7 = "RepliesTitle"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x00da
         L_0x00c2:
             boolean r6 = org.telegram.messenger.UserObject.isDeleted(r0)
             if (r6 == 0) goto L_0x00d2
-            r6 = 2131625727(0x7f0e06ff, float:1.887867E38)
+            r6 = 2131625742(0x7f0e070e, float:1.88787E38)
             java.lang.String r7 = "HiddenName"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x00da
@@ -393,7 +393,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         L_0x029b:
             boolean r6 = r4.isOutOwner()
             if (r6 == 0) goto L_0x02ac
-            r0 = 2131625638(0x7f0e06a6, float:1.887849E38)
+            r0 = 2131625652(0x7f0e06b4, float:1.8878518E38)
             java.lang.String r6 = "FromYou"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
         L_0x02aa:
@@ -633,7 +633,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             if (r6 == 0) goto L_0x0480
             int r6 = r0.ttl_seconds
             if (r6 == 0) goto L_0x0480
-            r0 = 2131624391(0x7f0e01c7, float:1.887596E38)
+            r0 = 2131624393(0x7f0e01c9, float:1.8875964E38)
             java.lang.String r6 = "AttachPhotoExpired"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r6, r0)
             goto L_0x054f
@@ -645,7 +645,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             if (r6 == 0) goto L_0x0499
             int r6 = r0.ttl_seconds
             if (r6 == 0) goto L_0x0499
-            r0 = 2131624397(0x7f0e01cd, float:1.8875973E38)
+            r0 = 2131624399(0x7f0e01cf, float:1.8875977E38)
             java.lang.String r6 = "AttachVideoExpired"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r6, r0)
             goto L_0x054f
@@ -784,11 +784,11 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             boolean r6 = r6.isDialogMuted(r7)
             java.lang.String r7 = "setBackgroundResource"
             if (r6 == 0) goto L_0x05bf
-            r6 = 2131166119(0x7var_a7, float:1.7946474E38)
+            r6 = 2131166137(0x7var_b9, float:1.794651E38)
             r13.setInt(r4, r7, r6)
             goto L_0x05ca
         L_0x05bf:
-            r6 = 2131166118(0x7var_a6, float:1.7946472E38)
+            r6 = 2131166136(0x7var_b8, float:1.7946509E38)
             r13.setInt(r4, r7, r6)
             goto L_0x05ca
         L_0x05c6:

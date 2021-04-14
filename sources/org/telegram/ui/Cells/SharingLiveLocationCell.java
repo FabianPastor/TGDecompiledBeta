@@ -126,7 +126,7 @@ public class SharingLiveLocationCell extends FrameLayout {
             if (user != null) {
                 this.avatarDrawable = new AvatarDrawable(user);
                 String userName = UserObject.getUserName(user);
-                this.avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) this.avatarDrawable, (Object) user);
+                this.avatarImageView.setImage(ImageLocation.getForUserOrChat(user, 1), "50_50", ImageLocation.getForUserOrChat(user, 2), "50_50", (Drawable) this.avatarDrawable, (Object) user);
                 str2 = userName;
             }
         } else {
@@ -134,7 +134,7 @@ public class SharingLiveLocationCell extends FrameLayout {
             if (chat != null) {
                 this.avatarDrawable = new AvatarDrawable(chat);
                 str2 = chat.title;
-                this.avatarImageView.setImage(ImageLocation.getForChat(chat, false), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+                this.avatarImageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
             }
         }
         this.nameTextView.setText(str2);
@@ -170,24 +170,23 @@ public class SharingLiveLocationCell extends FrameLayout {
             combinedDrawable.setIconSize(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f));
             this.avatarImageView.setImageDrawable(combinedDrawable);
         } else {
-            String str3 = "";
             this.avatarDrawable = null;
             if (fromChatId > 0) {
                 TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(fromChatId));
                 if (user != null) {
                     this.avatarDrawable = new AvatarDrawable(user);
-                    str3 = UserObject.getUserName(user);
-                    this.avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) this.avatarDrawable, (Object) user);
+                    str = UserObject.getUserName(user);
+                    this.avatarImageView.setImage(ImageLocation.getForUserOrChat(user, 1), "50_50", ImageLocation.getForUserOrChat(user, 2), "50_50", (Drawable) this.avatarDrawable, (Object) user);
                 }
             } else {
                 TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-fromChatId));
                 if (chat != null) {
                     this.avatarDrawable = new AvatarDrawable(chat);
-                    str3 = chat.title;
-                    this.avatarImageView.setImage(ImageLocation.getForChat(chat, false), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+                    str = chat.title;
+                    this.avatarImageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
                 }
             }
-            str = str3;
+            str = "";
         }
         this.nameTextView.setText(str);
         this.location.setLatitude(messageObject.messageOwner.media.geo.lat);
@@ -214,14 +213,14 @@ public class SharingLiveLocationCell extends FrameLayout {
             if (user != null) {
                 this.avatarDrawable.setInfo(user);
                 this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
-                this.avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) this.avatarDrawable, (Object) user);
+                this.avatarImageView.setImage(ImageLocation.getForUserOrChat(user, 1), "50_50", ImageLocation.getForUserOrChat(user, 2), "50_50", (Drawable) this.avatarDrawable, (Object) user);
             }
         } else {
             TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
             if (chat != null) {
                 this.avatarDrawable.setInfo(chat);
                 this.nameTextView.setText(chat.title);
-                this.avatarImageView.setImage(ImageLocation.getForChat(chat, false), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+                this.avatarImageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
             }
         }
         LatLng position = liveLocation2.marker.getPosition();
@@ -247,7 +246,7 @@ public class SharingLiveLocationCell extends FrameLayout {
             if (user != null) {
                 this.avatarDrawable.setInfo(user);
                 this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
-                this.avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) this.avatarDrawable, (Object) user);
+                this.avatarImageView.setImage(ImageLocation.getForUserOrChat(user, 1), "50_50", ImageLocation.getForUserOrChat(user, 2), "50_50", (Drawable) this.avatarDrawable, (Object) user);
                 return;
             }
             return;
@@ -256,7 +255,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         if (chat != null) {
             this.avatarDrawable.setInfo(chat);
             this.nameTextView.setText(chat.title);
-            this.avatarImageView.setImage(ImageLocation.getForChat(chat, false), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+            this.avatarImageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
         }
     }
 

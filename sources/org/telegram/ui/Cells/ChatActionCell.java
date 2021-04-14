@@ -24,6 +24,7 @@ import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$MessageMedia;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$TL_chatInviteExported;
 import org.telegram.tgnet.TLRPC$TL_documentEmpty;
 import org.telegram.tgnet.TLRPC$TL_messageActionUserUpdatedPhoto;
 import org.telegram.tgnet.TLRPC$TL_photoEmpty;
@@ -74,6 +75,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             public static void $default$didPressReplyMessage(ChatActionCellDelegate chatActionCellDelegate, ChatActionCell chatActionCell, int i) {
             }
 
+            public static void $default$needOpenInviteLink(ChatActionCellDelegate chatActionCellDelegate, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
+            }
+
             public static void $default$needOpenUserProfile(ChatActionCellDelegate chatActionCellDelegate, int i) {
             }
         }
@@ -83,6 +87,8 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         void didLongPress(ChatActionCell chatActionCell, float f, float f2);
 
         void didPressReplyMessage(ChatActionCell chatActionCell, int i);
+
+        void needOpenInviteLink(TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported);
 
         void needOpenUserProfile(int i);
     }
@@ -251,8 +257,8 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:44:0x0092  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x013b  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x015b  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r10) {
         /*
@@ -320,33 +326,33 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         L_0x0077:
             r2 = 0
         L_0x0078:
-            if (r2 != 0) goto L_0x0139
+            if (r2 != 0) goto L_0x0159
             int r5 = r10.getAction()
             if (r5 == 0) goto L_0x008a
             android.text.style.URLSpan r5 = r9.pressedLink
-            if (r5 == 0) goto L_0x0139
+            if (r5 == 0) goto L_0x0159
             int r5 = r10.getAction()
-            if (r5 != r3) goto L_0x0139
+            if (r5 != r3) goto L_0x0159
         L_0x008a:
             int r5 = r9.textX
             float r6 = (float) r5
             r7 = 0
             int r6 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
-            if (r6 < 0) goto L_0x0137
+            if (r6 < 0) goto L_0x0157
             int r6 = r9.textY
             float r8 = (float) r6
             int r8 = (r1 > r8 ? 1 : (r1 == r8 ? 0 : -1))
-            if (r8 < 0) goto L_0x0137
+            if (r8 < 0) goto L_0x0157
             int r8 = r9.textWidth
             int r5 = r5 + r8
             float r5 = (float) r5
             int r5 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-            if (r5 > 0) goto L_0x0137
+            if (r5 > 0) goto L_0x0157
             int r5 = r9.textHeight
             int r5 = r5 + r6
             float r5 = (float) r5
             int r5 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-            if (r5 > 0) goto L_0x0137
+            if (r5 > 0) goto L_0x0157
             float r5 = (float) r6
             float r1 = r1 - r5
             int r5 = r9.textXLeft
@@ -360,71 +366,86 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             android.text.StaticLayout r6 = r9.textLayout
             float r6 = r6.getLineLeft(r1)
             int r8 = (r6 > r0 ? 1 : (r6 == r0 ? 0 : -1))
-            if (r8 > 0) goto L_0x0134
+            if (r8 > 0) goto L_0x0154
             android.text.StaticLayout r8 = r9.textLayout
             float r1 = r8.getLineWidth(r1)
             float r6 = r6 + r1
             int r0 = (r6 > r0 ? 1 : (r6 == r0 ? 0 : -1))
-            if (r0 < 0) goto L_0x0134
+            if (r0 < 0) goto L_0x0154
             org.telegram.messenger.MessageObject r0 = r9.currentMessageObject
             java.lang.CharSequence r0 = r0.messageText
             boolean r1 = r0 instanceof android.text.Spannable
-            if (r1 == 0) goto L_0x0134
+            if (r1 == 0) goto L_0x0154
             android.text.Spannable r0 = (android.text.Spannable) r0
             java.lang.Class<android.text.style.URLSpan> r1 = android.text.style.URLSpan.class
             java.lang.Object[] r0 = r0.getSpans(r5, r5, r1)
             android.text.style.URLSpan[] r0 = (android.text.style.URLSpan[]) r0
             int r1 = r0.length
-            if (r1 == 0) goto L_0x012f
+            if (r1 == 0) goto L_0x014f
             int r1 = r10.getAction()
             if (r1 != 0) goto L_0x00f1
             r0 = r0[r4]
             r9.pressedLink = r0
-            goto L_0x0132
+            goto L_0x0152
         L_0x00f1:
             r1 = r0[r4]
             android.text.style.URLSpan r5 = r9.pressedLink
-            if (r1 != r5) goto L_0x0131
+            if (r1 != r5) goto L_0x0151
             org.telegram.ui.Cells.ChatActionCell$ChatActionCellDelegate r1 = r9.delegate
-            if (r1 == 0) goto L_0x0132
+            if (r1 == 0) goto L_0x0152
             r0 = r0[r4]
             java.lang.String r0 = r0.getURL()
+            java.lang.String r1 = "invite"
+            boolean r1 = r0.startsWith(r1)
+            if (r1 == 0) goto L_0x0121
+            android.text.style.URLSpan r1 = r9.pressedLink
+            boolean r2 = r1 instanceof org.telegram.ui.Components.URLSpanNoUnderline
+            if (r2 == 0) goto L_0x0121
+            org.telegram.ui.Components.URLSpanNoUnderline r1 = (org.telegram.ui.Components.URLSpanNoUnderline) r1
+            org.telegram.tgnet.TLObject r0 = r1.getObject()
+            boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_chatInviteExported
+            if (r1 == 0) goto L_0x0152
+            org.telegram.tgnet.TLRPC$TL_chatInviteExported r0 = (org.telegram.tgnet.TLRPC$TL_chatInviteExported) r0
+            org.telegram.ui.Cells.ChatActionCell$ChatActionCellDelegate r1 = r9.delegate
+            r1.needOpenInviteLink(r0)
+            goto L_0x0152
+        L_0x0121:
             java.lang.String r1 = "game"
             boolean r1 = r0.startsWith(r1)
-            if (r1 == 0) goto L_0x0115
+            if (r1 == 0) goto L_0x0135
             org.telegram.ui.Cells.ChatActionCell$ChatActionCellDelegate r0 = r9.delegate
             org.telegram.messenger.MessageObject r1 = r9.currentMessageObject
             int r1 = r1.getReplyMsgId()
             r0.didPressReplyMessage(r9, r1)
-            goto L_0x0132
-        L_0x0115:
+            goto L_0x0152
+        L_0x0135:
             java.lang.String r1 = "http"
             boolean r1 = r0.startsWith(r1)
-            if (r1 == 0) goto L_0x0125
+            if (r1 == 0) goto L_0x0145
             android.content.Context r1 = r9.getContext()
             org.telegram.messenger.browser.Browser.openUrl((android.content.Context) r1, (java.lang.String) r0)
-            goto L_0x0132
-        L_0x0125:
+            goto L_0x0152
+        L_0x0145:
             org.telegram.ui.Cells.ChatActionCell$ChatActionCellDelegate r1 = r9.delegate
             int r0 = java.lang.Integer.parseInt(r0)
             r1.needOpenUserProfile(r0)
-            goto L_0x0132
-        L_0x012f:
+            goto L_0x0152
+        L_0x014f:
             r9.pressedLink = r7
-        L_0x0131:
+        L_0x0151:
             r3 = r2
-        L_0x0132:
+        L_0x0152:
             r2 = r3
-            goto L_0x0139
-        L_0x0134:
+            goto L_0x0159
+        L_0x0154:
             r9.pressedLink = r7
-            goto L_0x0139
-        L_0x0137:
+            goto L_0x0159
+        L_0x0157:
             r9.pressedLink = r7
-        L_0x0139:
-            if (r2 != 0) goto L_0x013f
+        L_0x0159:
+            if (r2 != 0) goto L_0x015f
             boolean r2 = super.onTouchEvent(r10)
-        L_0x013f:
+        L_0x015f:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatActionCell.onTouchEvent(android.view.MotionEvent):boolean");

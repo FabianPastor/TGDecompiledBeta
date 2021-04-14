@@ -8,11 +8,15 @@ public class TLRPC$TL_payments_paymentReceipt extends TLObject {
     public String credentials_title;
     public String currency;
     public int date;
+    public String description;
     public int flags;
     public TLRPC$TL_paymentRequestedInfo info;
     public TLRPC$TL_invoice invoice;
+    public TLRPC$WebDocument photo;
     public int provider_id;
     public TLRPC$TL_shippingOption shipping;
+    public long tip_amount;
+    public String title;
     public long total_amount;
     public ArrayList<TLRPC$User> users = new ArrayList<>();
 
@@ -32,13 +36,21 @@ public class TLRPC$TL_payments_paymentReceipt extends TLObject {
         this.flags = abstractSerializedData.readInt32(z);
         this.date = abstractSerializedData.readInt32(z);
         this.bot_id = abstractSerializedData.readInt32(z);
-        this.invoice = TLRPC$TL_invoice.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.provider_id = abstractSerializedData.readInt32(z);
+        this.title = abstractSerializedData.readString(z);
+        this.description = abstractSerializedData.readString(z);
+        if ((this.flags & 4) != 0) {
+            this.photo = TLRPC$WebDocument.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
+        this.invoice = TLRPC$TL_invoice.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         if ((this.flags & 1) != 0) {
             this.info = TLRPC$TL_paymentRequestedInfo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 2) != 0) {
             this.shipping = TLRPC$TL_shippingOption.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
+        if ((this.flags & 8) != 0) {
+            this.tip_amount = abstractSerializedData.readInt64(z);
         }
         this.currency = abstractSerializedData.readString(z);
         this.total_amount = abstractSerializedData.readInt64(z);
@@ -66,13 +78,21 @@ public class TLRPC$TL_payments_paymentReceipt extends TLObject {
         abstractSerializedData.writeInt32(this.flags);
         abstractSerializedData.writeInt32(this.date);
         abstractSerializedData.writeInt32(this.bot_id);
-        this.invoice.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.provider_id);
+        abstractSerializedData.writeString(this.title);
+        abstractSerializedData.writeString(this.description);
+        if ((this.flags & 4) != 0) {
+            this.photo.serializeToStream(abstractSerializedData);
+        }
+        this.invoice.serializeToStream(abstractSerializedData);
         if ((this.flags & 1) != 0) {
             this.info.serializeToStream(abstractSerializedData);
         }
         if ((this.flags & 2) != 0) {
             this.shipping.serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 8) != 0) {
+            abstractSerializedData.writeInt64(this.tip_amount);
         }
         abstractSerializedData.writeString(this.currency);
         abstractSerializedData.writeInt64(this.total_amount);

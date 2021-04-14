@@ -3,7 +3,9 @@ package j$.util.stream;
 import j$.util.function.p;
 
 public final /* synthetic */ class D implements p {
-    public static final /* synthetic */ D a = new D();
+
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ D var_a = new D();
 
     private /* synthetic */ D() {
     }

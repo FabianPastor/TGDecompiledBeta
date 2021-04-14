@@ -302,4 +302,40 @@ public class ActionBarMenu extends LinearLayout {
             getChildAt(i).setEnabled(z);
         }
     }
+
+    public int getItemsMeasuredWidth() {
+        int childCount = getChildCount();
+        int i = 0;
+        for (int i2 = 0; i2 < childCount; i2++) {
+            View childAt = getChildAt(i2);
+            if (childAt instanceof ActionBarMenuItem) {
+                i += childAt.getMeasuredWidth();
+            }
+        }
+        return i;
+    }
+
+    public boolean searchFieldVisible() {
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = getChildAt(i);
+            if (childAt instanceof ActionBarMenuItem) {
+                ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
+                if (actionBarMenuItem.getSearchContainer() != null && actionBarMenuItem.getSearchContainer().getVisibility() == 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public void translateXItems(int i) {
+        int childCount = getChildCount();
+        for (int i2 = 0; i2 < childCount; i2++) {
+            View childAt = getChildAt(i2);
+            if (childAt instanceof ActionBarMenuItem) {
+                ((ActionBarMenuItem) childAt).setTransitionOffset(i);
+            }
+        }
+    }
 }

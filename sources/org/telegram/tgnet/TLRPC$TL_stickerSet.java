@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_stickerSet extends TLRPC$StickerSet {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -40,6 +40,9 @@ public class TLRPC$TL_stickerSet extends TLRPC$StickerSet {
         if ((this.flags & 16) != 0) {
             this.thumb_dc_id = abstractSerializedData.readInt32(z);
         }
+        if ((this.flags & 16) != 0) {
+            this.thumb_version = abstractSerializedData.readInt32(z);
+        }
         this.count = abstractSerializedData.readInt32(z);
         this.hash = abstractSerializedData.readInt32(z);
     }
@@ -72,6 +75,9 @@ public class TLRPC$TL_stickerSet extends TLRPC$StickerSet {
         }
         if ((this.flags & 16) != 0) {
             abstractSerializedData.writeInt32(this.thumb_dc_id);
+        }
+        if ((this.flags & 16) != 0) {
+            abstractSerializedData.writeInt32(this.thumb_version);
         }
         abstractSerializedData.writeInt32(this.count);
         abstractSerializedData.writeInt32(this.hash);

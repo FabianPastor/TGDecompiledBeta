@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.tgnet.TLRPC$ChannelParticipant;
 import org.telegram.tgnet.TLRPC$TL_channelAdminLogEventsFilter;
@@ -135,13 +136,8 @@ public class AdminLogFilterAlert extends BottomSheet {
         }
         int i8 = i7 + 1;
         this.leavingRow = i7;
-        if (z) {
-            this.callsRow = i8;
-            i8++;
-        } else {
-            this.callsRow = -1;
-        }
-        this.allAdminsRow = i8 + 1;
+        this.callsRow = i8;
+        this.allAdminsRow = i8 + 1 + 1;
         Drawable mutate = context.getResources().getDrawable(NUM).mutate();
         this.shadowDrawable = mutate;
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
@@ -165,7 +161,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                     size -= AndroidUtilities.statusBarHeight;
                 }
                 getMeasuredWidth();
-                int dp = AndroidUtilities.dp(48.0f) + ((AdminLogFilterAlert.this.isMegagroup ? 11 : 7) * AndroidUtilities.dp(48.0f)) + AdminLogFilterAlert.this.backgroundPaddingTop + AndroidUtilities.dp(17.0f);
+                int dp = AndroidUtilities.dp(48.0f) + ((AdminLogFilterAlert.this.isMegagroup ? 11 : 8) * AndroidUtilities.dp(48.0f)) + AdminLogFilterAlert.this.backgroundPaddingTop + AndroidUtilities.dp(17.0f);
                 if (AdminLogFilterAlert.this.currentAdmins != null) {
                     dp += ((AdminLogFilterAlert.this.currentAdmins.size() + 1) * AndroidUtilities.dp(48.0f)) + AndroidUtilities.dp(20.0f);
                 }
@@ -399,7 +395,7 @@ public class AdminLogFilterAlert extends BottomSheet {
                     ((CheckBoxCell) findViewHolderForAdapterPosition2.itemView).setChecked(false, true);
                 }
                 for (int i4 = 0; i4 < this.currentAdmins.size(); i4++) {
-                    TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.currentAdmins.get(i4).user_id));
+                    TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(MessageObject.getPeerId(this.currentAdmins.get(i4).peer)));
                     this.selectedAdmins.put(user.id, user);
                 }
             }
@@ -467,7 +463,7 @@ public class AdminLogFilterAlert extends BottomSheet {
         }
 
         public int getItemCount() {
-            return (AdminLogFilterAlert.this.isMegagroup ? 11 : 7) + (AdminLogFilterAlert.this.currentAdmins != null ? AdminLogFilterAlert.this.currentAdmins.size() + 2 : 0);
+            return (AdminLogFilterAlert.this.isMegagroup ? 11 : 8) + (AdminLogFilterAlert.this.currentAdmins != null ? AdminLogFilterAlert.this.currentAdmins.size() + 2 : 0);
         }
 
         public int getItemViewType(int i) {
@@ -573,8 +569,8 @@ public class AdminLogFilterAlert extends BottomSheet {
                 }
             } else if (itemViewType == 2) {
                 CheckBoxUserCell checkBoxUserCell = (CheckBoxUserCell) viewHolder.itemView;
-                int i = ((TLRPC$ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((adapterPosition - AdminLogFilterAlert.this.allAdminsRow) - 1)).user_id;
-                if (AdminLogFilterAlert.this.selectedAdmins != null && AdminLogFilterAlert.this.selectedAdmins.indexOfKey(i) < 0) {
+                int peerId = MessageObject.getPeerId(((TLRPC$ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((adapterPosition - AdminLogFilterAlert.this.allAdminsRow) - 1)).peer);
+                if (AdminLogFilterAlert.this.selectedAdmins != null && AdminLogFilterAlert.this.selectedAdmins.indexOfKey(peerId) < 0) {
                     z = false;
                 }
                 checkBoxUserCell.setChecked(z, false);
@@ -671,9 +667,9 @@ public class AdminLogFilterAlert extends BottomSheet {
                 }
             } else if (itemViewType == 2) {
                 CheckBoxUserCell checkBoxUserCell = (CheckBoxUserCell) viewHolder.itemView;
-                int i2 = ((TLRPC$ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((i - AdminLogFilterAlert.this.allAdminsRow) - 1)).user_id;
-                TLRPC$User user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Integer.valueOf(i2));
-                boolean z4 = AdminLogFilterAlert.this.selectedAdmins == null || AdminLogFilterAlert.this.selectedAdmins.indexOfKey(i2) >= 0;
+                int peerId = MessageObject.getPeerId(((TLRPC$ChannelParticipant) AdminLogFilterAlert.this.currentAdmins.get((i - AdminLogFilterAlert.this.allAdminsRow) - 1)).peer);
+                TLRPC$User user = MessagesController.getInstance(AdminLogFilterAlert.this.currentAccount).getUser(Integer.valueOf(peerId));
+                boolean z4 = AdminLogFilterAlert.this.selectedAdmins == null || AdminLogFilterAlert.this.selectedAdmins.indexOfKey(peerId) >= 0;
                 if (i != getItemCount() - 1) {
                     z = true;
                 }

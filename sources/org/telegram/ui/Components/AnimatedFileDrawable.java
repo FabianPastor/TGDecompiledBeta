@@ -667,6 +667,11 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
+    public boolean isLoadingStream() {
+        AnimatedFileDrawableStream animatedFileDrawableStream = this.stream;
+        return animatedFileDrawableStream != null && animatedFileDrawableStream.isWaitingForLoad();
+    }
+
     public void stop() {
         this.isRunning = false;
     }

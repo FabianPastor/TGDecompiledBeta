@@ -595,7 +595,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                         PhotoAlbumPickerActivity.this.lambda$null$4$PhotoAlbumPickerActivity(keyEvent);
                     }
                 });
-                this.sendPopupLayout.setShowedFromBotton(false);
+                this.sendPopupLayout.setShownFromBotton(false);
                 this.itemCells = new ActionBarMenuSubItem[2];
                 int i = 0;
                 while (i < 2) {

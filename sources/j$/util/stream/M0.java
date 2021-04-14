@@ -5,7 +5,9 @@ import j$.util.function.CLASSNAMEa;
 import java.util.LinkedHashSet;
 
 public final /* synthetic */ class M0 implements BiConsumer {
-    public static final /* synthetic */ M0 a = new M0();
+
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ M0 var_a = new M0();
 
     private /* synthetic */ M0() {
     }

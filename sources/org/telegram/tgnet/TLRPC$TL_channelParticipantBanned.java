@@ -11,7 +11,7 @@ public class TLRPC$TL_channelParticipantBanned extends TLRPC$ChannelParticipant 
             z2 = false;
         }
         this.left = z2;
-        this.user_id = abstractSerializedData.readInt32(z);
+        this.peer = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.kicked_by = abstractSerializedData.readInt32(z);
         this.date = abstractSerializedData.readInt32(z);
         this.banned_rights = TLRPC$TL_chatBannedRights.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -22,7 +22,7 @@ public class TLRPC$TL_channelParticipantBanned extends TLRPC$ChannelParticipant 
         int i = this.left ? this.flags | 1 : this.flags & -2;
         this.flags = i;
         abstractSerializedData.writeInt32(i);
-        abstractSerializedData.writeInt32(this.user_id);
+        this.peer.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.kicked_by);
         abstractSerializedData.writeInt32(this.date);
         this.banned_rights.serializeToStream(abstractSerializedData);

@@ -4,7 +4,9 @@ import j$.util.function.BiConsumer;
 import j$.util.function.CLASSNAMEa;
 
 public final /* synthetic */ class K implements BiConsumer {
-    public static final /* synthetic */ K a = new K();
+
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ K var_a = new K();
 
     private /* synthetic */ K() {
     }

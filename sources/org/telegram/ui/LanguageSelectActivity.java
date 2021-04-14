@@ -463,13 +463,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 int r0 = r0.size()
                 if (r8 != r0) goto L_0x0038
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165448(0x7var_, float:1.7945113E38)
+                r0 = 2131165449(0x7var_, float:1.7945115E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0109
             L_0x0038:
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165449(0x7var_, float:1.7945115E38)
+                r0 = 2131165450(0x7var_a, float:1.7945117E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0109
@@ -542,7 +542,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 java.lang.String r4 = r0.name
                 r3[r2] = r4
-                r4 = 2131625878(0x7f0e0796, float:1.8878976E38)
+                r4 = 2131625905(0x7f0e07b1, float:1.8879031E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r3[r1] = r4

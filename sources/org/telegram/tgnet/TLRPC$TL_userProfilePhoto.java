@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_userProfilePhoto extends TLRPC$UserProfilePhoto {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -14,6 +14,9 @@ public class TLRPC$TL_userProfilePhoto extends TLRPC$UserProfilePhoto {
         this.photo_id = abstractSerializedData.readInt64(z);
         this.photo_small = TLRPC$FileLocation.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.photo_big = TLRPC$FileLocation.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        if ((this.flags & 2) != 0) {
+            this.stripped_thumb = abstractSerializedData.readByteArray(z);
+        }
         this.dc_id = abstractSerializedData.readInt32(z);
     }
 
@@ -25,6 +28,9 @@ public class TLRPC$TL_userProfilePhoto extends TLRPC$UserProfilePhoto {
         abstractSerializedData.writeInt64(this.photo_id);
         this.photo_small.serializeToStream(abstractSerializedData);
         this.photo_big.serializeToStream(abstractSerializedData);
+        if ((this.flags & 2) != 0) {
+            abstractSerializedData.writeByteArray(this.stripped_thumb);
+        }
         abstractSerializedData.writeInt32(this.dc_id);
     }
 }

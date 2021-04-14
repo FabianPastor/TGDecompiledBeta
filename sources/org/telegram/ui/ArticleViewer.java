@@ -216,6 +216,7 @@ import org.telegram.ui.Components.TextPaintUrlSpan;
 import org.telegram.ui.Components.TypefaceSpan;
 import org.telegram.ui.Components.WebPlayerView;
 import org.telegram.ui.PhotoViewer;
+import org.telegram.ui.PinchToZoomHelper;
 
 public class ArticleViewer implements NotificationCenter.NotificationCenterDelegate {
     public static final Property<WindowView, Float> ARTICLE_VIEWER_INNER_TRANSLATION_X = new AnimationProperties.FloatProperty<WindowView>("innerTranslationX") {
@@ -387,6 +388,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* access modifiers changed from: private */
     public CheckForLongPress pendingCheckForLongPress = null;
     private CheckForTap pendingCheckForTap = null;
+    PinchToZoomHelper pinchToZoomHelper;
     private ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout;
     private Rect popupRect;
     /* access modifiers changed from: private */
@@ -922,6 +924,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+            if (ArticleViewer.this.pinchToZoomHelper.isInOverlayMode()) {
+                motionEvent.offsetLocation(-ArticleViewer.this.containerView.getX(), -ArticleViewer.this.containerView.getY());
+                return ArticleViewer.this.pinchToZoomHelper.onTouchEvent(motionEvent);
+            }
             TextSelectionHelper<Cell>.TextSelectionOverlay overlayView = ArticleViewer.this.textSelectionHelper.getOverlayView(getContext());
             MotionEvent obtain = MotionEvent.obtain(motionEvent);
             obtain.offsetLocation(-ArticleViewer.this.containerView.getX(), -ArticleViewer.this.containerView.getY());
@@ -1518,7 +1524,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         ArticleViewer.this.lambda$showPopup$2$ArticleViewer(keyEvent);
                     }
                 });
-                this.popupLayout.setShowedFromBotton(false);
+                this.popupLayout.setShownFromBotton(false);
                 TextView textView = new TextView(this.parentActivity);
                 this.deleteView = textView;
                 textView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 2));
@@ -5089,6 +5095,29 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
         });
         this.containerView.addView(this.textSelectionHelper.getOverlayView(activity2));
+        PinchToZoomHelper pinchToZoomHelper2 = new PinchToZoomHelper(this.containerView);
+        this.pinchToZoomHelper = pinchToZoomHelper2;
+        pinchToZoomHelper2.setClipBoundsListener(new PinchToZoomHelper.ClipBoundsListener() {
+            public void getClipTopBottom(float[] fArr) {
+                fArr[0] = (float) ArticleViewer.this.currentHeaderHeight;
+                fArr[1] = (float) ArticleViewer.this.listView[0].getMeasuredHeight();
+            }
+        });
+        this.pinchToZoomHelper.setCallback(new PinchToZoomHelper.Callback() {
+            public /* synthetic */ TextureView getCurrentTextureView() {
+                return PinchToZoomHelper.Callback.CC.$default$getCurrentTextureView(this);
+            }
+
+            public /* synthetic */ void onZoomFinished(MessageObject messageObject) {
+                PinchToZoomHelper.Callback.CC.$default$onZoomFinished(this, messageObject);
+            }
+
+            public void onZoomStarted(MessageObject messageObject) {
+                if (ArticleViewer.this.listView[0] != null) {
+                    ArticleViewer.this.listView[0].cancelClickRunnables(true);
+                }
+            }
+        });
         updatePaintColors();
     }
 
@@ -5930,6 +5959,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 i = dp;
             }
             float f = (float) (dp - max);
+            if (f == 0.0f) {
+                f = 1.0f;
+            }
             this.currentHeaderHeight = i;
             float f2 = ((((float) (i - max)) / f) * 0.2f) + 0.8f;
             this.backButton.setScaleX(f2);
@@ -6243,7 +6275,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r12.setDuration(r13)
             android.view.animation.DecelerateInterpolator r13 = r11.interpolator
             r12.setInterpolator(r13)
-            org.telegram.ui.ArticleViewer$20 r13 = new org.telegram.ui.ArticleViewer$20
+            org.telegram.ui.ArticleViewer$22 r13 = new org.telegram.ui.ArticleViewer$22
             r13.<init>()
             r12.addListener(r13)
             long r13 = java.lang.System.currentTimeMillis()
@@ -8467,37 +8499,45 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:25:0x0095, code lost:
-            if (r1 <= ((float) (r0 + org.telegram.messenger.AndroidUtilities.dp(48.0f)))) goto L_0x009b;
+        /* JADX WARNING: Code restructure failed: missing block: B:28:0x00a3, code lost:
+            if (r2 <= ((float) (r0 + org.telegram.messenger.AndroidUtilities.dp(48.0f)))) goto L_0x00a9;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public boolean onTouchEvent(android.view.MotionEvent r13) {
             /*
                 r12 = this;
+                org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
+                org.telegram.ui.PinchToZoomHelper r0 = r0.pinchToZoomHelper
+                org.telegram.messenger.ImageReceiver r1 = r12.imageView
+                r2 = 0
+                boolean r0 = r0.checkPinchToZoom(r13, r12, r1, r2)
+                r1 = 1
+                if (r0 == 0) goto L_0x000f
+                return r1
+            L_0x000f:
                 float r0 = r13.getX()
-                float r1 = r13.getY()
-                org.telegram.ui.ArticleViewer$BlockChannelCell r2 = r12.channelCell
-                int r2 = r2.getVisibility()
-                r3 = 0
-                r4 = 1
-                if (r2 != 0) goto L_0x0060
-                org.telegram.ui.ArticleViewer$BlockChannelCell r2 = r12.channelCell
-                float r2 = r2.getTranslationY()
-                int r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r2 <= 0) goto L_0x0060
-                org.telegram.ui.ArticleViewer$BlockChannelCell r2 = r12.channelCell
-                float r2 = r2.getTranslationY()
+                float r2 = r13.getY()
+                org.telegram.ui.ArticleViewer$BlockChannelCell r3 = r12.channelCell
+                int r3 = r3.getVisibility()
+                r4 = 0
+                if (r3 != 0) goto L_0x006e
+                org.telegram.ui.ArticleViewer$BlockChannelCell r3 = r12.channelCell
+                float r3 = r3.getTranslationY()
+                int r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
+                if (r3 <= 0) goto L_0x006e
+                org.telegram.ui.ArticleViewer$BlockChannelCell r3 = r12.channelCell
+                float r3 = r3.getTranslationY()
                 r5 = 1109131264(0x421CLASSNAME, float:39.0)
                 int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
                 float r5 = (float) r5
-                float r2 = r2 + r5
-                int r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r2 >= 0) goto L_0x0060
+                float r3 = r3 + r5
+                int r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
+                if (r3 >= 0) goto L_0x006e
                 org.telegram.ui.ArticleViewer$WebpageAdapter r0 = r12.parentAdapter
                 org.telegram.tgnet.TLRPC$TL_pageBlockChannel r0 = r0.channelBlock
-                if (r0 == 0) goto L_0x005f
+                if (r0 == 0) goto L_0x006d
                 int r13 = r13.getAction()
-                if (r13 != r4) goto L_0x005f
+                if (r13 != r1) goto L_0x006d
                 org.telegram.ui.ArticleViewer r13 = org.telegram.ui.ArticleViewer.this
                 int r13 = r13.currentAccount
                 org.telegram.messenger.MessagesController r13 = org.telegram.messenger.MessagesController.getInstance(r13)
@@ -8505,81 +8545,81 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.tgnet.TLRPC$TL_pageBlockChannel r0 = r0.channelBlock
                 org.telegram.tgnet.TLRPC$Chat r0 = r0.channel
                 java.lang.String r0 = r0.username
-                org.telegram.ui.ArticleViewer r1 = org.telegram.ui.ArticleViewer.this
-                org.telegram.ui.ActionBar.BaseFragment r1 = r1.parentFragment
-                r2 = 2
-                r13.openByUserName(r0, r1, r2)
+                org.telegram.ui.ArticleViewer r2 = org.telegram.ui.ArticleViewer.this
+                org.telegram.ui.ActionBar.BaseFragment r2 = r2.parentFragment
+                r3 = 2
+                r13.openByUserName(r0, r2, r3)
                 org.telegram.ui.ArticleViewer r13 = org.telegram.ui.ArticleViewer.this
-                r13.close(r3, r4)
-            L_0x005f:
-                return r4
-            L_0x0060:
-                int r2 = r13.getAction()
-                if (r2 != 0) goto L_0x00a4
-                org.telegram.messenger.ImageReceiver r2 = r12.imageView
-                boolean r2 = r2.isInsideImage(r0, r1)
-                if (r2 == 0) goto L_0x00a4
-                int r2 = r12.buttonState
+                r13.close(r4, r1)
+            L_0x006d:
+                return r1
+            L_0x006e:
+                int r3 = r13.getAction()
+                if (r3 != 0) goto L_0x00b2
+                org.telegram.messenger.ImageReceiver r3 = r12.imageView
+                boolean r3 = r3.isInsideImage(r0, r2)
+                if (r3 == 0) goto L_0x00b2
+                int r3 = r12.buttonState
                 r5 = -1
-                if (r2 == r5) goto L_0x0097
-                int r2 = r12.buttonX
-                float r5 = (float) r2
+                if (r3 == r5) goto L_0x00a5
+                int r3 = r12.buttonX
+                float r5 = (float) r3
                 int r5 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-                if (r5 < 0) goto L_0x0097
+                if (r5 < 0) goto L_0x00a5
                 r5 = 1111490560(0x42400000, float:48.0)
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
-                int r2 = r2 + r6
-                float r2 = (float) r2
-                int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-                if (r0 > 0) goto L_0x0097
+                int r3 = r3 + r6
+                float r3 = (float) r3
+                int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
+                if (r0 > 0) goto L_0x00a5
                 int r0 = r12.buttonY
-                float r2 = (float) r0
-                int r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r2 < 0) goto L_0x0097
-                int r2 = org.telegram.messenger.AndroidUtilities.dp(r5)
-                int r0 = r0 + r2
+                float r3 = (float) r0
+                int r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
+                if (r3 < 0) goto L_0x00a5
+                int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                int r0 = r0 + r3
                 float r0 = (float) r0
-                int r0 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
-                if (r0 <= 0) goto L_0x009b
-            L_0x0097:
+                int r0 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
+                if (r0 <= 0) goto L_0x00a9
+            L_0x00a5:
                 int r0 = r12.buttonState
-                if (r0 != 0) goto L_0x00a1
-            L_0x009b:
-                r12.buttonPressed = r4
+                if (r0 != 0) goto L_0x00af
+            L_0x00a9:
+                r12.buttonPressed = r1
                 r12.invalidate()
-                goto L_0x00d3
-            L_0x00a1:
+                goto L_0x00e1
+            L_0x00af:
+                r12.photoPressed = r1
+                goto L_0x00e1
+            L_0x00b2:
+                int r0 = r13.getAction()
+                if (r0 != r1) goto L_0x00d8
+                boolean r0 = r12.photoPressed
+                if (r0 == 0) goto L_0x00c8
                 r12.photoPressed = r4
-                goto L_0x00d3
-            L_0x00a4:
-                int r0 = r13.getAction()
-                if (r0 != r4) goto L_0x00ca
-                boolean r0 = r12.photoPressed
-                if (r0 == 0) goto L_0x00ba
-                r12.photoPressed = r3
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
-                org.telegram.tgnet.TLRPC$TL_pageBlockVideo r1 = r12.currentBlock
-                org.telegram.ui.ArticleViewer$WebpageAdapter r2 = r12.parentAdapter
-                r0.openPhoto(r1, r2)
-                goto L_0x00d3
-            L_0x00ba:
+                org.telegram.tgnet.TLRPC$TL_pageBlockVideo r2 = r12.currentBlock
+                org.telegram.ui.ArticleViewer$WebpageAdapter r3 = r12.parentAdapter
+                r0.openPhoto(r2, r3)
+                goto L_0x00e1
+            L_0x00c8:
                 int r0 = r12.buttonPressed
-                if (r0 != r4) goto L_0x00d3
-                r12.buttonPressed = r3
-                r12.playSoundEffect(r3)
-                r12.didPressedButton(r4)
+                if (r0 != r1) goto L_0x00e1
+                r12.buttonPressed = r4
+                r12.playSoundEffect(r4)
+                r12.didPressedButton(r1)
                 r12.invalidate()
-                goto L_0x00d3
-            L_0x00ca:
+                goto L_0x00e1
+            L_0x00d8:
                 int r0 = r13.getAction()
-                r1 = 3
-                if (r0 != r1) goto L_0x00d3
-                r12.photoPressed = r3
-            L_0x00d3:
+                r2 = 3
+                if (r0 != r2) goto L_0x00e1
+                r12.photoPressed = r4
+            L_0x00e1:
                 boolean r0 = r12.photoPressed
-                if (r0 != 0) goto L_0x0109
+                if (r0 != 0) goto L_0x0119
                 int r0 = r12.buttonPressed
-                if (r0 != 0) goto L_0x0109
+                if (r0 != 0) goto L_0x0119
                 org.telegram.ui.ArticleViewer r5 = org.telegram.ui.ArticleViewer.this
                 org.telegram.ui.ArticleViewer$WebpageAdapter r6 = r12.parentAdapter
                 org.telegram.ui.ArticleViewer$DrawingText r9 = r12.captionLayout
@@ -8588,24 +8628,25 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r7 = r13
                 r8 = r12
                 boolean r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10, r11)
-                if (r0 != 0) goto L_0x0109
+                if (r0 != 0) goto L_0x0119
                 org.telegram.ui.ArticleViewer r5 = org.telegram.ui.ArticleViewer.this
                 org.telegram.ui.ArticleViewer$WebpageAdapter r6 = r12.parentAdapter
                 org.telegram.ui.ArticleViewer$DrawingText r9 = r12.creditLayout
                 int r10 = r12.textX
                 int r0 = r12.textY
-                int r1 = r12.creditOffset
-                int r11 = r0 + r1
+                int r2 = r12.creditOffset
+                int r11 = r0 + r2
                 r7 = r13
                 r8 = r12
                 boolean r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10, r11)
-                if (r0 != 0) goto L_0x0109
+                if (r0 != 0) goto L_0x0119
                 boolean r13 = super.onTouchEvent(r13)
-                if (r13 == 0) goto L_0x010a
-            L_0x0109:
-                r3 = 1
-            L_0x010a:
-                return r3
+                if (r13 == 0) goto L_0x0118
+                goto L_0x0119
+            L_0x0118:
+                r1 = 0
+            L_0x0119:
+                return r1
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.BlockVideoCell.onTouchEvent(android.view.MotionEvent):boolean");
         }
@@ -9078,9 +9119,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (!this.imageView.hasBitmapImage() || this.imageView.getCurrentAlpha() != 1.0f) {
                     canvas.drawRect(this.imageView.getDrawRegion(), ArticleViewer.photoBackgroundPaint);
                 }
-                this.imageView.draw(canvas);
-                if (this.imageView.getVisible()) {
-                    this.radialProgress.draw(canvas);
+                if (!ArticleViewer.this.pinchToZoomHelper.isInOverlayModeFor(this)) {
+                    this.imageView.draw(canvas);
+                    if (this.imageView.getVisible()) {
+                        this.radialProgress.draw(canvas);
+                    }
                 }
                 int i2 = 0;
                 if (this.captionLayout != null) {
@@ -14113,37 +14156,45 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:25:0x0095, code lost:
-            if (r1 <= ((float) (r0 + org.telegram.messenger.AndroidUtilities.dp(48.0f)))) goto L_0x009b;
+        /* JADX WARNING: Code restructure failed: missing block: B:28:0x00a3, code lost:
+            if (r2 <= ((float) (r0 + org.telegram.messenger.AndroidUtilities.dp(48.0f)))) goto L_0x00a9;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public boolean onTouchEvent(android.view.MotionEvent r13) {
             /*
                 r12 = this;
+                org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
+                org.telegram.ui.PinchToZoomHelper r0 = r0.pinchToZoomHelper
+                org.telegram.messenger.ImageReceiver r1 = r12.imageView
+                r2 = 0
+                boolean r0 = r0.checkPinchToZoom(r13, r12, r1, r2)
+                r1 = 1
+                if (r0 == 0) goto L_0x000f
+                return r1
+            L_0x000f:
                 float r0 = r13.getX()
-                float r1 = r13.getY()
-                org.telegram.ui.ArticleViewer$BlockChannelCell r2 = r12.channelCell
-                int r2 = r2.getVisibility()
-                r3 = 0
-                r4 = 1
-                if (r2 != 0) goto L_0x0060
-                org.telegram.ui.ArticleViewer$BlockChannelCell r2 = r12.channelCell
-                float r2 = r2.getTranslationY()
-                int r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r2 <= 0) goto L_0x0060
-                org.telegram.ui.ArticleViewer$BlockChannelCell r2 = r12.channelCell
-                float r2 = r2.getTranslationY()
+                float r2 = r13.getY()
+                org.telegram.ui.ArticleViewer$BlockChannelCell r3 = r12.channelCell
+                int r3 = r3.getVisibility()
+                r4 = 0
+                if (r3 != 0) goto L_0x006e
+                org.telegram.ui.ArticleViewer$BlockChannelCell r3 = r12.channelCell
+                float r3 = r3.getTranslationY()
+                int r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
+                if (r3 <= 0) goto L_0x006e
+                org.telegram.ui.ArticleViewer$BlockChannelCell r3 = r12.channelCell
+                float r3 = r3.getTranslationY()
                 r5 = 1109131264(0x421CLASSNAME, float:39.0)
                 int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
                 float r5 = (float) r5
-                float r2 = r2 + r5
-                int r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r2 >= 0) goto L_0x0060
+                float r3 = r3 + r5
+                int r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
+                if (r3 >= 0) goto L_0x006e
                 org.telegram.ui.ArticleViewer$WebpageAdapter r0 = r12.parentAdapter
                 org.telegram.tgnet.TLRPC$TL_pageBlockChannel r0 = r0.channelBlock
-                if (r0 == 0) goto L_0x005f
+                if (r0 == 0) goto L_0x006d
                 int r13 = r13.getAction()
-                if (r13 != r4) goto L_0x005f
+                if (r13 != r1) goto L_0x006d
                 org.telegram.ui.ArticleViewer r13 = org.telegram.ui.ArticleViewer.this
                 int r13 = r13.currentAccount
                 org.telegram.messenger.MessagesController r13 = org.telegram.messenger.MessagesController.getInstance(r13)
@@ -14151,82 +14202,82 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.tgnet.TLRPC$TL_pageBlockChannel r0 = r0.channelBlock
                 org.telegram.tgnet.TLRPC$Chat r0 = r0.channel
                 java.lang.String r0 = r0.username
-                org.telegram.ui.ArticleViewer r1 = org.telegram.ui.ArticleViewer.this
-                org.telegram.ui.ActionBar.BaseFragment r1 = r1.parentFragment
-                r2 = 2
-                r13.openByUserName(r0, r1, r2)
+                org.telegram.ui.ArticleViewer r2 = org.telegram.ui.ArticleViewer.this
+                org.telegram.ui.ActionBar.BaseFragment r2 = r2.parentFragment
+                r3 = 2
+                r13.openByUserName(r0, r2, r3)
                 org.telegram.ui.ArticleViewer r13 = org.telegram.ui.ArticleViewer.this
-                r13.close(r3, r4)
-            L_0x005f:
-                return r4
-            L_0x0060:
-                int r2 = r13.getAction()
-                if (r2 != 0) goto L_0x00a4
-                org.telegram.messenger.ImageReceiver r2 = r12.imageView
-                boolean r2 = r2.isInsideImage(r0, r1)
-                if (r2 == 0) goto L_0x00a4
-                int r2 = r12.buttonState
+                r13.close(r4, r1)
+            L_0x006d:
+                return r1
+            L_0x006e:
+                int r3 = r13.getAction()
+                if (r3 != 0) goto L_0x00b2
+                org.telegram.messenger.ImageReceiver r3 = r12.imageView
+                boolean r3 = r3.isInsideImage(r0, r2)
+                if (r3 == 0) goto L_0x00b2
+                int r3 = r12.buttonState
                 r5 = -1
-                if (r2 == r5) goto L_0x0097
-                int r2 = r12.buttonX
-                float r5 = (float) r2
+                if (r3 == r5) goto L_0x00a5
+                int r3 = r12.buttonX
+                float r5 = (float) r3
                 int r5 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-                if (r5 < 0) goto L_0x0097
+                if (r5 < 0) goto L_0x00a5
                 r5 = 1111490560(0x42400000, float:48.0)
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
-                int r2 = r2 + r6
-                float r2 = (float) r2
-                int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-                if (r0 > 0) goto L_0x0097
+                int r3 = r3 + r6
+                float r3 = (float) r3
+                int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
+                if (r0 > 0) goto L_0x00a5
                 int r0 = r12.buttonY
-                float r2 = (float) r0
-                int r2 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r2 < 0) goto L_0x0097
-                int r2 = org.telegram.messenger.AndroidUtilities.dp(r5)
-                int r0 = r0 + r2
+                float r3 = (float) r0
+                int r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
+                if (r3 < 0) goto L_0x00a5
+                int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                int r0 = r0 + r3
                 float r0 = (float) r0
-                int r0 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
-                if (r0 <= 0) goto L_0x009b
-            L_0x0097:
+                int r0 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
+                if (r0 <= 0) goto L_0x00a9
+            L_0x00a5:
                 int r0 = r12.buttonState
-                if (r0 != 0) goto L_0x00a1
-            L_0x009b:
-                r12.buttonPressed = r4
+                if (r0 != 0) goto L_0x00af
+            L_0x00a9:
+                r12.buttonPressed = r1
                 r12.invalidate()
-                goto L_0x00d5
-            L_0x00a1:
+                goto L_0x00e3
+            L_0x00af:
+                r12.photoPressed = r1
+                goto L_0x00e3
+            L_0x00b2:
+                int r0 = r13.getAction()
+                if (r0 != r1) goto L_0x00d8
+                boolean r0 = r12.photoPressed
+                if (r0 == 0) goto L_0x00c8
                 r12.photoPressed = r4
-                goto L_0x00d5
-            L_0x00a4:
-                int r0 = r13.getAction()
-                if (r0 != r4) goto L_0x00ca
-                boolean r0 = r12.photoPressed
-                if (r0 == 0) goto L_0x00ba
-                r12.photoPressed = r3
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
-                org.telegram.tgnet.TLRPC$TL_pageBlockPhoto r1 = r12.currentBlock
-                org.telegram.ui.ArticleViewer$WebpageAdapter r2 = r12.parentAdapter
-                r0.openPhoto(r1, r2)
-                goto L_0x00d5
-            L_0x00ba:
+                org.telegram.tgnet.TLRPC$TL_pageBlockPhoto r2 = r12.currentBlock
+                org.telegram.ui.ArticleViewer$WebpageAdapter r3 = r12.parentAdapter
+                r0.openPhoto(r2, r3)
+                goto L_0x00e3
+            L_0x00c8:
                 int r0 = r12.buttonPressed
-                if (r0 != r4) goto L_0x00d5
-                r12.buttonPressed = r3
-                r12.playSoundEffect(r3)
-                r12.didPressedButton(r4)
+                if (r0 != r1) goto L_0x00e3
+                r12.buttonPressed = r4
+                r12.playSoundEffect(r4)
+                r12.didPressedButton(r1)
                 r12.invalidate()
-                goto L_0x00d5
-            L_0x00ca:
+                goto L_0x00e3
+            L_0x00d8:
                 int r0 = r13.getAction()
-                r1 = 3
-                if (r0 != r1) goto L_0x00d5
-                r12.photoPressed = r3
-                r12.buttonPressed = r3
-            L_0x00d5:
+                r2 = 3
+                if (r0 != r2) goto L_0x00e3
+                r12.photoPressed = r4
+                r12.buttonPressed = r4
+            L_0x00e3:
                 boolean r0 = r12.photoPressed
-                if (r0 != 0) goto L_0x010b
+                if (r0 != 0) goto L_0x011b
                 int r0 = r12.buttonPressed
-                if (r0 != 0) goto L_0x010b
+                if (r0 != 0) goto L_0x011b
                 org.telegram.ui.ArticleViewer r5 = org.telegram.ui.ArticleViewer.this
                 org.telegram.ui.ArticleViewer$WebpageAdapter r6 = r12.parentAdapter
                 org.telegram.ui.ArticleViewer$DrawingText r9 = r12.captionLayout
@@ -14235,24 +14286,25 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r7 = r13
                 r8 = r12
                 boolean r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10, r11)
-                if (r0 != 0) goto L_0x010b
+                if (r0 != 0) goto L_0x011b
                 org.telegram.ui.ArticleViewer r5 = org.telegram.ui.ArticleViewer.this
                 org.telegram.ui.ArticleViewer$WebpageAdapter r6 = r12.parentAdapter
                 org.telegram.ui.ArticleViewer$DrawingText r9 = r12.creditLayout
                 int r10 = r12.textX
                 int r0 = r12.textY
-                int r1 = r12.creditOffset
-                int r11 = r0 + r1
+                int r2 = r12.creditOffset
+                int r11 = r0 + r2
                 r7 = r13
                 r8 = r12
                 boolean r0 = r5.checkLayoutForLinks(r6, r7, r8, r9, r10, r11)
-                if (r0 != 0) goto L_0x010b
+                if (r0 != 0) goto L_0x011b
                 boolean r13 = super.onTouchEvent(r13)
-                if (r13 == 0) goto L_0x010c
-            L_0x010b:
-                r3 = 1
-            L_0x010c:
-                return r3
+                if (r13 == 0) goto L_0x011a
+                goto L_0x011b
+            L_0x011a:
+                r1 = 0
+            L_0x011b:
+                return r1
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.BlockPhotoCell.onTouchEvent(android.view.MotionEvent):boolean");
         }
@@ -14735,9 +14787,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (!this.imageView.hasBitmapImage() || this.imageView.getCurrentAlpha() != 1.0f) {
                     canvas.drawRect(this.imageView.getImageX(), this.imageView.getImageY(), this.imageView.getImageX2(), this.imageView.getImageY2(), ArticleViewer.photoBackgroundPaint);
                 }
-                this.imageView.draw(canvas);
-                if (this.imageView.getVisible()) {
-                    this.radialProgress.draw(canvas);
+                if (!ArticleViewer.this.pinchToZoomHelper.isInOverlayModeFor(this)) {
+                    this.imageView.draw(canvas);
+                    if (this.imageView.getVisible()) {
+                        this.radialProgress.draw(canvas);
+                    }
                 }
                 if (!TextUtils.isEmpty(this.currentBlock.url)) {
                     int measuredWidth = getMeasuredWidth() - AndroidUtilities.dp(35.0f);
@@ -15601,7 +15655,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (r4 == 0) goto L_0x0060
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
                 if (r4 != 0) goto L_0x0060
-                r4 = 2131624366(0x7f0e01ae, float:1.887591E38)
+                r4 = 2131624368(0x7f0e01b0, float:1.8875914E38)
                 r7 = 2
                 java.lang.Object[] r7 = new java.lang.Object[r7]
                 org.telegram.messenger.LocaleController r8 = org.telegram.messenger.LocaleController.getInstance()
@@ -15619,7 +15673,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             L_0x0060:
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
                 if (r4 != 0) goto L_0x0074
-                r4 = 2131624365(0x7f0e01ad, float:1.8875908E38)
+                r4 = 2131624367(0x7f0e01af, float:1.8875912E38)
                 java.lang.Object[] r15 = new java.lang.Object[r15]
                 r15[r3] = r0
                 java.lang.String r5 = "ArticleByAuthor"

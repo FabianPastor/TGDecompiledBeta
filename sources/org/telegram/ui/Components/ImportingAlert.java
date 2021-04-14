@@ -23,8 +23,8 @@ import org.telegram.ui.ChatActivity;
 
 public class ImportingAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
     private BottomSheetCell cell;
+    private boolean completed;
     private RLottieDrawable completedDrawable;
-    private boolean compteled;
     private RLottieImageView imageView;
     private TextView[] importCountTextView = new TextView[2];
     private TextView[] infoTextView = new TextView[2];
@@ -95,7 +95,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$ImportingAlert() {
-        if (this.compteled) {
+        if (this.completed) {
             this.imageView.getAnimatedDrawable().setAutoRepeat(0);
             this.imageView.setAnimation(this.completedDrawable);
             this.imageView.playAnimation();
@@ -138,7 +138,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             int r10 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             r6.setTextColor(r10)
             java.lang.String r10 = "ImportImportingTitle"
-            r11 = 2131625776(0x7f0e0730, float:1.887877E38)
+            r11 = 2131625797(0x7f0e0745, float:1.8878812E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
             r6.setText(r10)
             r6.setSingleLine(r8)
@@ -157,7 +157,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             r10 = 1123024896(0x42var_, float:120.0)
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r12 = 2131558448(0x7f0d0030, float:1.8742212E38)
+            r12 = 2131558454(0x7f0d0036, float:1.8742224E38)
             java.lang.String r13 = "NUM"
             r16 = 0
             r17 = 0
@@ -170,7 +170,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             r0.imageView = r6
             r6.setAutoRepeat(r8)
             org.telegram.ui.Components.RLottieImageView r6 = r0.imageView
-            r10 = 2131558449(0x7f0d0031, float:1.8742214E38)
+            r10 = 2131558455(0x7f0d0037, float:1.8742226E38)
             r11 = 120(0x78, float:1.68E-43)
             r6.setAnimation(r10, r11, r11)
             org.telegram.ui.Components.RLottieImageView r6 = r0.imageView
@@ -252,7 +252,7 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             r6.setBackground(r10)
             org.telegram.ui.Components.ImportingAlert$BottomSheetCell r6 = r0.cell
             java.lang.String r10 = "ImportDone"
-            r11 = 2131625760(0x7f0e0720, float:1.8878737E38)
+            r11 = 2131625781(0x7f0e0735, float:1.887878E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r11)
             r6.setText(r10)
             org.telegram.ui.Components.ImportingAlert$BottomSheetCell r6 = r0.cell
@@ -339,13 +339,13 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
             if (r6 != 0) goto L_0x0269
             android.widget.TextView[] r10 = r0.infoTextView
             r10 = r10[r6]
-            r11 = 2131625775(0x7f0e072f, float:1.8878767E38)
+            r11 = 2131625796(0x7f0e0744, float:1.887881E38)
             java.lang.String r12 = "ImportImportingInfo"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r10.setText(r11)
             android.widget.TextView[] r10 = r0.importCountTextView
             r10 = r10[r6]
-            r11 = 2131625759(0x7f0e071f, float:1.8878735E38)
+            r11 = 2131625780(0x7f0e0734, float:1.8878778E38)
             java.lang.Object[] r12 = new java.lang.Object[r3]
             long r13 = r4.getUploadedCount()
             java.lang.String r13 = org.telegram.messenger.AndroidUtilities.formatFileSize(r13)
@@ -360,13 +360,13 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
         L_0x0269:
             android.widget.TextView[] r10 = r0.infoTextView
             r10 = r10[r6]
-            r11 = 2131625761(0x7f0e0721, float:1.887874E38)
+            r11 = 2131625782(0x7f0e0736, float:1.8878782E38)
             java.lang.String r12 = "ImportDoneInfo"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r10.setText(r11)
             android.widget.TextView[] r10 = r0.importCountTextView
             r10 = r10[r6]
-            r11 = 2131625762(0x7f0e0722, float:1.8878741E38)
+            r11 = 2131625783(0x7f0e0737, float:1.8878784E38)
             java.lang.String r12 = "ImportDoneTitle"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r10.setText(r11)
@@ -407,8 +407,8 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
         dismiss();
     }
 
-    public void setCompteled() {
-        this.compteled = true;
+    public void setCompleted() {
+        this.completed = true;
         this.imageView.setAutoRepeat(false);
         this.cell.setVisibility(0);
         AnimatorSet animatorSet = new AnimatorSet();
@@ -431,15 +431,15 @@ public class ImportingAlert extends BottomSheet implements NotificationCenter.No
         }
         SendMessagesHelper.ImportingHistory importingHistory = this.parentFragment.getSendMessagesHelper().getImportingHistory(this.parentFragment.getDialogId());
         if (importingHistory == null) {
-            setCompteled();
+            setCompleted();
             return;
         }
-        if (!this.compteled) {
+        if (!this.completed) {
             double currentFrame = (double) (180 - this.imageView.getAnimatedDrawable().getCurrentFrame());
             Double.isNaN(currentFrame);
             if ((currentFrame * 16.6d) + 3000.0d >= ((double) importingHistory.timeUntilFinish)) {
                 this.imageView.setAutoRepeat(false);
-                this.compteled = true;
+                this.completed = true;
             }
         }
         this.percentTextView.setText(String.format("%d%%", new Object[]{Integer.valueOf(importingHistory.uploadProgress)}));

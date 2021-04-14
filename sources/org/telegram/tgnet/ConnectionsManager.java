@@ -120,7 +120,7 @@ public class ConnectionsManager extends BaseController {
 
     public static native int native_getTimeDifference(int i);
 
-    public static native void native_init(int i, int i2, int i3, int i4, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, String str10, int i5, int i6, boolean z, boolean z2, int i7);
+    public static native void native_init(int i, int i2, int i3, int i4, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, String str10, String str11, int i5, int i6, boolean z, boolean z2, int i7);
 
     public static native int native_isTestBackend(int i);
 
@@ -270,7 +270,7 @@ public class ConnectionsManager extends BaseController {
         if (TextUtils.isEmpty(str10) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
             str10 = SharedConfig.pushStringStatus;
         }
-        init(BuildVars.BUILD_VERSION, 124, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), str10, AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
+        init(BuildVars.BUILD_VERSION, 127, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), str10, AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
     }
 
     public boolean isPushConnectionEnabled() {
@@ -302,29 +302,38 @@ public class ConnectionsManager extends BaseController {
     }
 
     public int sendRequest(TLObject tLObject, RequestDelegate requestDelegate, int i) {
-        return sendRequest(tLObject, requestDelegate, (QuickAckDelegate) null, (WriteToSocketDelegate) null, i, Integer.MAX_VALUE, 1, true);
+        return sendRequest(tLObject, requestDelegate, (RequestDelegateTimestamp) null, (QuickAckDelegate) null, (WriteToSocketDelegate) null, i, Integer.MAX_VALUE, 1, true);
     }
 
     public int sendRequest(TLObject tLObject, RequestDelegate requestDelegate, int i, int i2) {
-        return sendRequest(tLObject, requestDelegate, (QuickAckDelegate) null, (WriteToSocketDelegate) null, i, Integer.MAX_VALUE, i2, true);
+        return sendRequest(tLObject, requestDelegate, (RequestDelegateTimestamp) null, (QuickAckDelegate) null, (WriteToSocketDelegate) null, i, Integer.MAX_VALUE, i2, true);
+    }
+
+    public int sendRequest(TLObject tLObject, RequestDelegateTimestamp requestDelegateTimestamp, int i, int i2, int i3) {
+        return sendRequest(tLObject, (RequestDelegate) null, requestDelegateTimestamp, (QuickAckDelegate) null, (WriteToSocketDelegate) null, i, i3, i2, true);
     }
 
     public int sendRequest(TLObject tLObject, RequestDelegate requestDelegate, QuickAckDelegate quickAckDelegate, int i) {
-        return sendRequest(tLObject, requestDelegate, quickAckDelegate, (WriteToSocketDelegate) null, i, Integer.MAX_VALUE, 1, true);
+        return sendRequest(tLObject, requestDelegate, (RequestDelegateTimestamp) null, quickAckDelegate, (WriteToSocketDelegate) null, i, Integer.MAX_VALUE, 1, true);
     }
 
     public int sendRequest(TLObject tLObject, RequestDelegate requestDelegate, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i, int i2, int i3, boolean z) {
+        return sendRequest(tLObject, requestDelegate, (RequestDelegateTimestamp) null, quickAckDelegate, writeToSocketDelegate, i, i2, i3, z);
+    }
+
+    public int sendRequest(TLObject tLObject, RequestDelegate requestDelegate, RequestDelegateTimestamp requestDelegateTimestamp, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i, int i2, int i3, boolean z) {
         int andIncrement = this.lastRequestToken.getAndIncrement();
-        Utilities.stageQueue.postRunnable(new Runnable(tLObject, andIncrement, requestDelegate, quickAckDelegate, writeToSocketDelegate, i, i2, i3, z) {
+        Utilities.stageQueue.postRunnable(new Runnable(tLObject, andIncrement, requestDelegate, requestDelegateTimestamp, quickAckDelegate, writeToSocketDelegate, i, i2, i3, z) {
             public final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ boolean f$10;
             public final /* synthetic */ int f$2;
             public final /* synthetic */ RequestDelegate f$3;
-            public final /* synthetic */ QuickAckDelegate f$4;
-            public final /* synthetic */ WriteToSocketDelegate f$5;
-            public final /* synthetic */ int f$6;
+            public final /* synthetic */ RequestDelegateTimestamp f$4;
+            public final /* synthetic */ QuickAckDelegate f$5;
+            public final /* synthetic */ WriteToSocketDelegate f$6;
             public final /* synthetic */ int f$7;
             public final /* synthetic */ int f$8;
-            public final /* synthetic */ boolean f$9;
+            public final /* synthetic */ int f$9;
 
             {
                 this.f$1 = r2;
@@ -336,10 +345,11 @@ public class ConnectionsManager extends BaseController {
                 this.f$7 = r8;
                 this.f$8 = r9;
                 this.f$9 = r10;
+                this.f$10 = r11;
             }
 
             public final void run() {
-                ConnectionsManager.this.lambda$sendRequest$2$ConnectionsManager(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
+                ConnectionsManager.this.lambda$sendRequest$2$ConnectionsManager(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10);
             }
         });
         return andIncrement;
@@ -347,7 +357,7 @@ public class ConnectionsManager extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$sendRequest$2 */
-    public /* synthetic */ void lambda$sendRequest$2$ConnectionsManager(TLObject tLObject, int i, RequestDelegate requestDelegate, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i2, int i3, int i4, boolean z) {
+    public /* synthetic */ void lambda$sendRequest$2$ConnectionsManager(TLObject tLObject, int i, RequestDelegate requestDelegate, RequestDelegateTimestamp requestDelegateTimestamp, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i2, int i3, int i4, boolean z) {
         TLObject tLObject2 = tLObject;
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("send request " + tLObject2 + " with token = " + i);
@@ -359,15 +369,17 @@ public class ConnectionsManager extends BaseController {
             tLObject2.serializeToStream(nativeByteBuffer);
             tLObject.freeResources();
             try {
-                native_sendRequest(this.currentAccount, nativeByteBuffer.address, new RequestDelegateInternal(requestDelegate) {
+                native_sendRequest(this.currentAccount, nativeByteBuffer.address, new RequestDelegateInternal(requestDelegate, requestDelegateTimestamp) {
                     public final /* synthetic */ RequestDelegate f$1;
+                    public final /* synthetic */ RequestDelegateTimestamp f$2;
 
                     {
                         this.f$1 = r2;
+                        this.f$2 = r3;
                     }
 
-                    public final void run(long j, int i, String str, int i2) {
-                        ConnectionsManager.lambda$null$1(TLObject.this, this.f$1, j, i, str, i2);
+                    public final void run(long j, int i, String str, int i2, long j2) {
+                        ConnectionsManager.lambda$null$1(TLObject.this, this.f$1, this.f$2, j, i, str, i2, j2);
                     }
                 }, quickAckDelegate, writeToSocketDelegate, i2, i3, i4, z, i);
             } catch (Exception e) {
@@ -379,28 +391,32 @@ public class ConnectionsManager extends BaseController {
         }
     }
 
-    static /* synthetic */ void lambda$null$1(TLObject tLObject, RequestDelegate requestDelegate, long j, int i, String str, int i2) {
+    static /* synthetic */ void lambda$null$1(TLObject tLObject, RequestDelegate requestDelegate, RequestDelegateTimestamp requestDelegateTimestamp, long j, int i, String str, int i2, long j2) {
         TLRPC$TL_error tLRPC$TL_error;
-        TLObject tLObject2 = null;
+        TLObject tLObject2;
+        TLObject tLObject3 = tLObject;
+        String str2 = str;
         if (j != 0) {
             try {
                 NativeByteBuffer wrap = NativeByteBuffer.wrap(j);
                 wrap.reused = true;
-                TLObject deserializeResponse = tLObject.deserializeResponse(wrap, wrap.readInt32(true), true);
+                tLObject2 = tLObject.deserializeResponse(wrap, wrap.readInt32(true), true);
                 tLRPC$TL_error = null;
-                tLObject2 = deserializeResponse;
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
                 return;
             }
-        } else if (str != null) {
-            tLRPC$TL_error = new TLRPC$TL_error();
-            tLRPC$TL_error.code = i;
-            tLRPC$TL_error.text = str;
+        } else if (str2 != null) {
+            TLRPC$TL_error tLRPC$TL_error2 = new TLRPC$TL_error();
+            tLRPC$TL_error2.code = i;
+            tLRPC$TL_error2.text = str2;
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.e(tLObject + " got error " + tLRPC$TL_error.code + " " + tLRPC$TL_error.text);
+                FileLog.e(tLObject + " got error " + tLRPC$TL_error2.code + " " + tLRPC$TL_error2.text);
             }
+            tLRPC$TL_error = tLRPC$TL_error2;
+            tLObject2 = null;
         } else {
+            tLObject2 = null;
             tLRPC$TL_error = null;
         }
         if (tLObject2 != null) {
@@ -409,23 +425,31 @@ public class ConnectionsManager extends BaseController {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("java received " + tLObject2 + " error = " + tLRPC$TL_error);
         }
-        Utilities.stageQueue.postRunnable(new Runnable(tLObject2, tLRPC$TL_error) {
+        Utilities.stageQueue.postRunnable(new Runnable(tLObject2, tLRPC$TL_error, requestDelegateTimestamp, j2) {
             public final /* synthetic */ TLObject f$1;
             public final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ RequestDelegateTimestamp f$3;
+            public final /* synthetic */ long f$4;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r3;
+                this.f$3 = r4;
+                this.f$4 = r5;
             }
 
             public final void run() {
-                ConnectionsManager.lambda$null$0(RequestDelegate.this, this.f$1, this.f$2);
+                ConnectionsManager.lambda$null$0(RequestDelegate.this, this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
-    static /* synthetic */ void lambda$null$0(RequestDelegate requestDelegate, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        requestDelegate.run(tLObject, tLRPC$TL_error);
+    static /* synthetic */ void lambda$null$0(RequestDelegate requestDelegate, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error, RequestDelegateTimestamp requestDelegateTimestamp, long j) {
+        if (requestDelegate != null) {
+            requestDelegate.run(tLObject, tLRPC$TL_error);
+        } else if (requestDelegateTimestamp != null) {
+            requestDelegateTimestamp.run(tLObject, tLRPC$TL_error, j);
+        }
         if (tLObject != null) {
             tLObject.freeResources();
         }
@@ -475,6 +499,8 @@ public class ConnectionsManager extends BaseController {
     public void init(int i, int i2, int i3, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, int i4, int i5, boolean z) {
         String str10;
         String str11;
+        String str12;
+        String str13;
         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
         String string = sharedPreferences.getString("proxy_ip", "");
         String string2 = sharedPreferences.getString("proxy_user", "");
@@ -494,7 +520,17 @@ public class ConnectionsManager extends BaseController {
         } else {
             str11 = str10;
         }
-        native_init(this.currentAccount, i, i2, i3, str, str2, str3, str4, str5, str6, str7, str8, str9, str11, i4, i5, z, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
+        try {
+            str12 = ApplicationLoader.applicationContext.getPackageName();
+        } catch (Throwable unused2) {
+            str12 = "";
+        }
+        if (str12 == null) {
+            str13 = "";
+        } else {
+            str13 = str12;
+        }
+        native_init(this.currentAccount, i, i2, i3, str, str2, str3, str4, str5, str6, str7, str8, str9, str11, str13, i4, i5, z, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
         checkConnection();
     }
 

@@ -3443,21 +3443,21 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r11 = r6
                 r12 = r11
             L_0x0064:
-                r9 = 2131627487(0x7f0e0ddf, float:1.888224E38)
+                r9 = 2131627547(0x7f0e0e1b, float:1.8882362E38)
                 java.lang.String r10 = "StatisticOpenProfile"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165677(0x7var_ed, float:1.7945578E38)
+                r9 = 2131165678(0x7var_ee, float:1.794558E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 2
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r2.add(r9)
-                r9 = 2131627489(0x7f0e0de1, float:1.8882244E38)
+                r9 = 2131627549(0x7f0e0e1d, float:1.8882366E38)
                 java.lang.String r10 = "StatisticSearchUserHistory"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165639(0x7var_c7, float:1.79455E38)
+                r9 = 2131165640(0x7var_c8, float:1.7945503E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 1
@@ -3465,8 +3465,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r2.add(r10)
                 r13 = 300(0x12c, double:1.48E-321)
                 r10 = 3
-                if (r20 == 0) goto L_0x00f1
-                if (r11 != 0) goto L_0x00f1
+                if (r20 == 0) goto L_0x00e9
+                if (r11 != 0) goto L_0x00e9
                 r1 = r0[r4]
                 if (r1 != 0) goto L_0x00bf
                 org.telegram.ui.ActionBar.AlertDialog r1 = new org.telegram.ui.ActionBar.AlertDialog
@@ -3484,23 +3484,20 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 int r4 = r3.id
                 org.telegram.tgnet.TLRPC$InputChannel r2 = r2.getInputChannel((int) r4)
                 r1.channel = r2
-                int r2 = org.telegram.messenger.UserConfig.selectedAccount
-                org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
-                org.telegram.tgnet.TLRPC$User r4 = r7.user
-                int r4 = r4.id
-                org.telegram.tgnet.TLRPC$InputUser r2 = r2.getInputUser((int) r4)
-                r1.user_id = r2
+                org.telegram.tgnet.TLRPC$User r2 = r7.user
+                org.telegram.tgnet.TLRPC$InputPeer r2 = org.telegram.messenger.MessagesController.getInputPeer((org.telegram.tgnet.TLRPC$User) r2)
+                r1.participant = r2
                 int r2 = org.telegram.messenger.UserConfig.selectedAccount
                 org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2)
                 org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$tiUirra-Hnquw9Aq6SGDK2g7O6w r4 = new org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$tiUirra-Hnquw9Aq6SGDK2g7O6w
                 r4.<init>(r8, r0, r3)
                 r2.sendRequest(r1, r4)
                 return
-            L_0x00f1:
-                if (r20 == 0) goto L_0x0143
-                if (r12 != 0) goto L_0x0143
+            L_0x00e9:
+                if (r20 == 0) goto L_0x013b
+                if (r12 != 0) goto L_0x013b
                 r1 = r0[r4]
-                if (r1 != 0) goto L_0x010d
+                if (r1 != 0) goto L_0x0105
                 org.telegram.ui.ActionBar.AlertDialog r1 = new org.telegram.ui.ActionBar.AlertDialog
                 android.view.View r2 = r18.getFragmentView()
                 android.content.Context r2 = r2.getContext()
@@ -3508,7 +3505,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r0[r4] = r1
                 r1 = r0[r4]
                 r1.showDelayed(r13)
-            L_0x010d:
+            L_0x0105:
                 org.telegram.tgnet.TLRPC$TL_channels_getParticipant r1 = new org.telegram.tgnet.TLRPC$TL_channels_getParticipant
                 r1.<init>()
                 int r2 = org.telegram.messenger.UserConfig.selectedAccount
@@ -3521,78 +3518,78 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 int r4 = org.telegram.messenger.UserConfig.selectedAccount
                 org.telegram.messenger.UserConfig r4 = org.telegram.messenger.UserConfig.getInstance(r4)
                 int r4 = r4.clientUserId
-                org.telegram.tgnet.TLRPC$InputUser r2 = r2.getInputUser((int) r4)
-                r1.user_id = r2
+                org.telegram.tgnet.TLRPC$InputPeer r2 = r2.getInputPeer((int) r4)
+                r1.participant = r2
                 int r2 = org.telegram.messenger.UserConfig.selectedAccount
                 org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2)
                 org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$X8qJ6CLASSNAMEfH9aef1NN7BGJsbKK6w r4 = new org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$X8qJ6CLASSNAMEfH9aef1NN7BGJsbKK6w
                 r4.<init>(r8, r0, r3)
                 r2.sendRequest(r1, r4)
                 return
-            L_0x0143:
+            L_0x013b:
                 r10 = r0[r4]
-                if (r10 == 0) goto L_0x014e
+                if (r10 == 0) goto L_0x0146
                 r10 = r0[r4]
                 r10.dismiss()
                 r0[r4] = r6
-            L_0x014e:
-                if (r12 == 0) goto L_0x01aa
-                if (r11 == 0) goto L_0x01aa
+            L_0x0146:
+                if (r12 == 0) goto L_0x01a2
+                if (r11 == 0) goto L_0x01a2
                 int r0 = r12.user_id
                 int r6 = r11.user_id
-                if (r0 == r6) goto L_0x01aa
+                if (r0 == r6) goto L_0x01a2
                 org.telegram.tgnet.TLRPC$ChannelParticipant r0 = r11.channelParticipant
                 org.telegram.tgnet.TLRPC$ChannelParticipant r6 = r12.channelParticipant
                 org.telegram.tgnet.TLRPC$TL_chatAdminRights r6 = r6.admin_rights
-                if (r6 == 0) goto L_0x0166
+                if (r6 == 0) goto L_0x015e
                 boolean r6 = r6.add_admins
-                if (r6 == 0) goto L_0x0166
+                if (r6 == 0) goto L_0x015e
                 r6 = 1
-                goto L_0x0167
-            L_0x0166:
+                goto L_0x015f
+            L_0x015e:
                 r6 = 0
-            L_0x0167:
-                if (r6 == 0) goto L_0x0176
+            L_0x015f:
+                if (r6 == 0) goto L_0x016e
                 boolean r10 = r0 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantCreator
-                if (r10 != 0) goto L_0x0175
+                if (r10 != 0) goto L_0x016d
                 boolean r10 = r0 instanceof org.telegram.tgnet.TLRPC$TL_channelParticipantAdmin
-                if (r10 == 0) goto L_0x0176
+                if (r10 == 0) goto L_0x016e
                 boolean r10 = r0.can_edit
-                if (r10 != 0) goto L_0x0176
-            L_0x0175:
+                if (r10 != 0) goto L_0x016e
+            L_0x016d:
                 r6 = 0
-            L_0x0176:
-                if (r6 == 0) goto L_0x01aa
+            L_0x016e:
+                if (r6 == 0) goto L_0x01a2
                 org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r0.admin_rights
-                if (r0 != 0) goto L_0x017d
-                goto L_0x017e
-            L_0x017d:
+                if (r0 != 0) goto L_0x0175
+                goto L_0x0176
+            L_0x0175:
                 r9 = 0
-            L_0x017e:
-                if (r9 == 0) goto L_0x0186
-                r0 = 2131627346(0x7f0e0d52, float:1.8881954E38)
+            L_0x0176:
+                if (r9 == 0) goto L_0x017e
+                r0 = 2131627395(0x7f0e0d83, float:1.8882053E38)
                 java.lang.String r6 = "SetAsAdmin"
-                goto L_0x018b
-            L_0x0186:
-                r0 = 2131625220(0x7f0e0504, float:1.8877642E38)
+                goto L_0x0183
+            L_0x017e:
+                r0 = 2131625234(0x7f0e0512, float:1.887767E38)
                 java.lang.String r6 = "EditAdminRights"
-            L_0x018b:
+            L_0x0183:
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
                 r1.add(r0)
-                if (r9 == 0) goto L_0x0198
+                if (r9 == 0) goto L_0x0190
                 r0 = 2131165247(0x7var_f, float:1.7944706E38)
-                goto L_0x019b
-            L_0x0198:
+                goto L_0x0193
+            L_0x0190:
                 r0 = 2131165253(0x7var_, float:1.7944718E38)
-            L_0x019b:
+            L_0x0193:
                 java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                 r5.add(r0)
                 java.lang.Integer r0 = java.lang.Integer.valueOf(r4)
                 r2.add(r0)
-                goto L_0x01ab
-            L_0x01aa:
+                goto L_0x01a3
+            L_0x01a2:
                 r9 = 0
-            L_0x01ab:
+            L_0x01a3:
                 org.telegram.ui.ActionBar.AlertDialog$Builder r10 = new org.telegram.ui.ActionBar.AlertDialog$Builder
                 android.app.Activity r0 = r18.getParentActivity()
                 r10.<init>((android.content.Context) r0)

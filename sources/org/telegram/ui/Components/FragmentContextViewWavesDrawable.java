@@ -1,19 +1,13 @@
 package org.telegram.ui.Components;
 
-import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.os.SystemClock;
 import android.view.View;
 import java.util.ArrayList;
-import org.telegram.messenger.AccountInstance;
-import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.VoIPService;
@@ -38,154 +32,352 @@ public class FragmentContextViewWavesDrawable {
     WeavingState previousState;
     float progressToState = 1.0f;
     WeavingState[] states = new WeavingState[4];
-    private final Paint xRefP;
 
     public FragmentContextViewWavesDrawable() {
         new RectF();
         this.path = new Path();
-        Paint paint2 = new Paint(1);
-        this.xRefP = paint2;
         new Paint(1);
-        paint2.setColor(0);
-        paint2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         for (int i = 0; i < 4; i++) {
             this.states[i] = new WeavingState(i);
         }
     }
 
-    public void draw(float f, float f2, float f3, float f4, Canvas canvas, FragmentContextView fragmentContextView, float f5) {
-        boolean z;
-        int i;
-        float f6;
-        FragmentContextView fragmentContextView2 = fragmentContextView;
-        checkColors();
-        if (fragmentContextView2 == null) {
-            z = false;
-        } else {
-            z = this.parents.size() > 0 && fragmentContextView2 == this.parents.get(0);
-        }
-        if (f2 <= f4) {
-            long j = 0;
-            WeavingState weavingState = this.currentState;
-            boolean z2 = (weavingState == null || this.previousState == null || ((weavingState.currentState != 1 || this.previousState.currentState != 0) && (this.previousState.currentState != 1 || this.currentState.currentState != 0))) ? false : true;
-            float f7 = 1.0f;
-            if (z) {
-                long elapsedRealtime = SystemClock.elapsedRealtime();
-                long j2 = elapsedRealtime - this.lastUpdateTime;
-                this.lastUpdateTime = elapsedRealtime;
-                j = j2 > 20 ? 17 : j2;
-                float f8 = this.animateToAmplitude;
-                float f9 = this.amplitude;
-                if (f8 != f9) {
-                    float var_ = this.animateAmplitudeDiff;
-                    float var_ = f9 + (((float) j) * var_);
-                    this.amplitude = var_;
-                    if (var_ > 0.0f) {
-                        if (var_ > f8) {
-                            this.amplitude = f8;
-                        }
-                    } else if (var_ < f8) {
-                        this.amplitude = f8;
-                    }
-                    fragmentContextView.invalidate();
-                }
-                float var_ = this.animateToAmplitude;
-                float var_ = this.amplitude2;
-                if (var_ != var_) {
-                    float var_ = this.animateAmplitudeDiff2;
-                    float var_ = var_ + (((float) j) * var_);
-                    this.amplitude2 = var_;
-                    if (var_ > 0.0f) {
-                        if (var_ > var_) {
-                            this.amplitude2 = var_;
-                        }
-                    } else if (var_ < var_) {
-                        this.amplitude2 = var_;
-                    }
-                    fragmentContextView.invalidate();
-                }
-                if (this.previousState != null) {
-                    float var_ = this.progressToState + (((float) j) / 250.0f);
-                    this.progressToState = var_;
-                    if (var_ > 1.0f) {
-                        this.progressToState = 1.0f;
-                        this.previousState = null;
-                    }
-                    fragmentContextView.invalidate();
-                }
-            }
-            long j3 = j;
-            int i2 = 0;
-            while (i2 < 2) {
-                if (i2 == 0 && this.previousState == null) {
-                    Canvas canvas2 = canvas;
-                    i = i2;
-                } else {
-                    if (i2 == 0) {
-                        f6 = f7 - this.progressToState;
-                        this.previousState.setToPaint(this.paint);
-                    } else {
-                        WeavingState weavingState2 = this.currentState;
-                        if (weavingState2 != null) {
-                            f6 = this.previousState != null ? this.progressToState : 1.0f;
-                            if (z) {
-                                weavingState2.update((int) (f4 - f2), (int) (f3 - f), j3, this.amplitude);
-                            }
-                            this.currentState.setToPaint(this.paint);
-                        } else {
-                            return;
-                        }
-                    }
-                    float var_ = f6;
-                    LineBlobDrawable lineBlobDrawable3 = this.lineBlobDrawable;
-                    lineBlobDrawable3.minRadius = 0.0f;
-                    lineBlobDrawable3.maxRadius = ((float) AndroidUtilities.dp(2.0f)) + (((float) AndroidUtilities.dp(2.0f)) * this.amplitude);
-                    this.lineBlobDrawable1.minRadius = (float) AndroidUtilities.dp(0.0f);
-                    this.lineBlobDrawable1.maxRadius = ((float) AndroidUtilities.dp(3.0f)) + (((float) AndroidUtilities.dp(9.0f)) * this.amplitude);
-                    this.lineBlobDrawable2.minRadius = (float) AndroidUtilities.dp(0.0f);
-                    LineBlobDrawable lineBlobDrawable4 = this.lineBlobDrawable2;
-                    float var_ = this.amplitude;
-                    lineBlobDrawable4.maxRadius = ((float) AndroidUtilities.dp(3.0f)) + (((float) AndroidUtilities.dp(9.0f)) * var_);
-                    if (i2 == 1) {
-                        this.lineBlobDrawable.update(var_, 0.3f);
-                        this.lineBlobDrawable1.update(this.amplitude, 0.7f);
-                        this.lineBlobDrawable2.update(this.amplitude, 0.7f);
-                    }
-                    this.paint.setAlpha((int) (76.0f * var_));
-                    float dp = ((float) AndroidUtilities.dp(6.0f)) * this.amplitude2;
-                    float dp2 = ((float) AndroidUtilities.dp(6.0f)) * this.amplitude2;
-                    float var_ = f;
-                    float var_ = f3;
-                    float var_ = f4;
-                    Canvas canvas3 = canvas;
-                    float var_ = f2;
-                    i = i2;
-                    float var_ = f5;
-                    this.lineBlobDrawable1.draw(var_, f2 - dp, var_, var_, canvas3, this.paint, var_, var_);
-                    this.lineBlobDrawable2.draw(var_, f2 - dp2, var_, var_, canvas3, this.paint, var_, var_);
-                    if (i == 1 && z2) {
-                        this.paint.setAlpha(255);
-                    } else if (i == 1) {
-                        this.paint.setAlpha((int) (255.0f * var_));
-                    } else {
-                        this.paint.setAlpha(255);
-                    }
-                    if (i != 1 || !z2) {
-                        Canvas canvas4 = canvas;
-                        this.lineBlobDrawable.draw(f, f2, f3, f4, canvas, this.paint, f2, f5);
-                    } else {
-                        this.path.reset();
-                        this.path.addCircle(f3 - ((float) AndroidUtilities.dp(18.0f)), f2 + ((f4 - f2) / 2.0f), (f3 - f) * 1.1f * var_, Path.Direction.CW);
-                        canvas.save();
-                        canvas.clipPath(this.path);
-                        this.lineBlobDrawable.draw(f, f2, f3, f4, canvas, this.paint, f2, f5);
-                        canvas.restore();
-                    }
-                }
-                i2 = i + 1;
-                f7 = 1.0f;
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x0074  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00d8  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void draw(float r21, float r22, float r23, float r24, android.graphics.Canvas r25, org.telegram.ui.Components.FragmentContextView r26, float r27) {
+        /*
+            r20 = this;
+            r0 = r20
+            r1 = r26
+            r20.checkColors()
+            r2 = 0
+            r10 = 1
+            if (r1 != 0) goto L_0x000d
+        L_0x000b:
+            r3 = 0
+            goto L_0x001e
+        L_0x000d:
+            java.util.ArrayList<android.view.View> r3 = r0.parents
+            int r3 = r3.size()
+            if (r3 <= 0) goto L_0x000b
+            java.util.ArrayList<android.view.View> r3 = r0.parents
+            java.lang.Object r3 = r3.get(r2)
+            if (r1 != r3) goto L_0x000b
+            r3 = 1
+        L_0x001e:
+            int r4 = (r22 > r24 ? 1 : (r22 == r24 ? 0 : -1))
+            if (r4 <= 0) goto L_0x0023
+            return
+        L_0x0023:
+            r4 = 0
+            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r6 = r0.currentState
+            if (r6 == 0) goto L_0x004d
+            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r7 = r0.previousState
+            if (r7 == 0) goto L_0x004d
+            int r6 = r6.currentState
+            if (r6 != r10) goto L_0x003b
+            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r6 = r0.previousState
+            int r6 = r6.currentState
+            if (r6 == 0) goto L_0x004b
+        L_0x003b:
+            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r6 = r0.previousState
+            int r6 = r6.currentState
+            if (r6 != r10) goto L_0x004d
+            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r6 = r0.currentState
+            int r6 = r6.currentState
+            if (r6 != 0) goto L_0x004d
+        L_0x004b:
+            r11 = 1
+            goto L_0x004e
+        L_0x004d:
+            r11 = 0
+        L_0x004e:
+            if (r3 == 0) goto L_0x006d
+            long r4 = android.os.SystemClock.elapsedRealtime()
+            long r6 = r0.lastUpdateTime
+            long r6 = r4 - r6
+            r0.lastUpdateTime = r4
+            r4 = 20
+            int r8 = (r6 > r4 ? 1 : (r6 == r4 ? 0 : -1))
+            if (r8 <= 0) goto L_0x0063
+            r4 = 17
+            goto L_0x0064
+        L_0x0063:
+            r4 = r6
+        L_0x0064:
+            r6 = 3
+            int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
+            if (r8 >= 0) goto L_0x006d
+            r13 = r4
+            r12 = 0
+            goto L_0x006f
+        L_0x006d:
+            r12 = r3
+            r13 = r4
+        L_0x006f:
+            r15 = 1065353216(0x3var_, float:1.0)
+            r9 = 0
+            if (r12 == 0) goto L_0x00d5
+            float r3 = r0.animateToAmplitude
+            float r4 = r0.amplitude
+            int r5 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
+            if (r5 == 0) goto L_0x0098
+            float r5 = r0.animateAmplitudeDiff
+            float r6 = (float) r13
+            float r6 = r6 * r5
+            float r4 = r4 + r6
+            r0.amplitude = r4
+            int r5 = (r5 > r9 ? 1 : (r5 == r9 ? 0 : -1))
+            if (r5 <= 0) goto L_0x008f
+            int r4 = (r4 > r3 ? 1 : (r4 == r3 ? 0 : -1))
+            if (r4 <= 0) goto L_0x0095
+            r0.amplitude = r3
+            goto L_0x0095
+        L_0x008f:
+            int r4 = (r4 > r3 ? 1 : (r4 == r3 ? 0 : -1))
+            if (r4 >= 0) goto L_0x0095
+            r0.amplitude = r3
+        L_0x0095:
+            r26.invalidate()
+        L_0x0098:
+            float r3 = r0.animateToAmplitude
+            float r4 = r0.amplitude2
+            int r5 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
+            if (r5 == 0) goto L_0x00bc
+            float r5 = r0.animateAmplitudeDiff2
+            float r6 = (float) r13
+            float r6 = r6 * r5
+            float r4 = r4 + r6
+            r0.amplitude2 = r4
+            int r5 = (r5 > r9 ? 1 : (r5 == r9 ? 0 : -1))
+            if (r5 <= 0) goto L_0x00b3
+            int r4 = (r4 > r3 ? 1 : (r4 == r3 ? 0 : -1))
+            if (r4 <= 0) goto L_0x00b9
+            r0.amplitude2 = r3
+            goto L_0x00b9
+        L_0x00b3:
+            int r4 = (r4 > r3 ? 1 : (r4 == r3 ? 0 : -1))
+            if (r4 >= 0) goto L_0x00b9
+            r0.amplitude2 = r3
+        L_0x00b9:
+            r26.invalidate()
+        L_0x00bc:
+            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r3 = r0.previousState
+            if (r3 == 0) goto L_0x00d5
+            float r3 = r0.progressToState
+            float r4 = (float) r13
+            r5 = 1132068864(0x437a0000, float:250.0)
+            float r4 = r4 / r5
+            float r3 = r3 + r4
+            r0.progressToState = r3
+            int r3 = (r3 > r15 ? 1 : (r3 == r15 ? 0 : -1))
+            if (r3 <= 0) goto L_0x00d2
+            r0.progressToState = r15
+            r3 = 0
+            r0.previousState = r3
+        L_0x00d2:
+            r26.invalidate()
+        L_0x00d5:
+            r1 = 2
+            if (r2 >= r1) goto L_0x024c
+            if (r2 != 0) goto L_0x00e3
+            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r1 = r0.previousState
+            if (r1 != 0) goto L_0x00e3
+            r15 = r2
+            r19 = 0
+            goto L_0x0245
+        L_0x00e3:
+            if (r2 != 0) goto L_0x00f3
+            float r1 = r0.progressToState
+            float r1 = r15 - r1
+            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r3 = r0.previousState
+            android.graphics.Paint r4 = r0.paint
+            r3.setToPaint(r4)
+        L_0x00f0:
+            r16 = r1
+            goto L_0x0117
+        L_0x00f3:
+            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r3 = r0.currentState
+            if (r3 != 0) goto L_0x00f8
+            return
+        L_0x00f8:
+            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r1 = r0.previousState
+            if (r1 == 0) goto L_0x00ff
+            float r1 = r0.progressToState
+            goto L_0x0101
+        L_0x00ff:
+            r1 = 1065353216(0x3var_, float:1.0)
+        L_0x0101:
+            if (r12 == 0) goto L_0x010f
+            float r4 = r24 - r22
+            int r4 = (int) r4
+            float r5 = r23 - r21
+            int r5 = (int) r5
+            float r8 = r0.amplitude
+            r6 = r13
+            r3.update(r4, r5, r6, r8)
+        L_0x010f:
+            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r3 = r0.currentState
+            android.graphics.Paint r4 = r0.paint
+            r3.setToPaint(r4)
+            goto L_0x00f0
+        L_0x0117:
+            org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable
+            r1.minRadius = r9
+            r17 = 1073741824(0x40000000, float:2.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r3 = (float) r3
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            float r4 = (float) r4
+            float r5 = r0.amplitude
+            float r4 = r4 * r5
+            float r3 = r3 + r4
+            r1.maxRadius = r3
+            org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable1
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r3 = (float) r3
+            r1.minRadius = r3
+            org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable1
+            r3 = 1077936128(0x40400000, float:3.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r4 = (float) r4
+            r5 = 1091567616(0x41100000, float:9.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r6 = (float) r6
+            float r7 = r0.amplitude
+            float r6 = r6 * r7
+            float r4 = r4 + r6
+            r1.maxRadius = r4
+            org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable2
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            float r4 = (float) r4
+            r1.minRadius = r4
+            org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r3 = (float) r3
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r4 = (float) r4
+            float r5 = r0.amplitude
+            float r4 = r4 * r5
+            float r3 = r3 + r4
+            r1.maxRadius = r3
+            if (r2 != r10) goto L_0x0187
+            if (r12 == 0) goto L_0x0187
+            org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable
+            r3 = 1050253722(0x3e99999a, float:0.3)
+            r1.update(r5, r3)
+            org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable1
+            float r3 = r0.amplitude
+            r4 = 1060320051(0x3var_, float:0.7)
+            r1.update(r3, r4)
+            org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable2
+            float r3 = r0.amplitude
+            r1.update(r3, r4)
+        L_0x0187:
+            android.graphics.Paint r1 = r0.paint
+            r3 = 1117257728(0x42980000, float:76.0)
+            float r3 = r3 * r16
+            int r3 = (int) r3
+            r1.setAlpha(r3)
+            r1 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r3 = (float) r3
+            float r4 = r0.amplitude2
+            float r3 = r3 * r4
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            float r4 = r0.amplitude2
+            float r18 = r1 * r4
+            org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable1
+            float r3 = r22 - r3
+            android.graphics.Paint r7 = r0.paint
+            r8 = r2
+            r2 = r21
+            r4 = r23
+            r5 = r24
+            r6 = r25
+            r15 = r8
+            r8 = r22
+            r19 = 0
+            r9 = r27
+            r1.draw(r2, r3, r4, r5, r6, r7, r8, r9)
+            org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable2
+            float r3 = r22 - r18
+            android.graphics.Paint r7 = r0.paint
+            r1.draw(r2, r3, r4, r5, r6, r7, r8, r9)
+            r1 = 255(0xff, float:3.57E-43)
+            if (r15 != r10) goto L_0x01d3
+            if (r11 == 0) goto L_0x01d3
+            android.graphics.Paint r2 = r0.paint
+            r2.setAlpha(r1)
+            goto L_0x01e5
+        L_0x01d3:
+            if (r15 != r10) goto L_0x01e0
+            android.graphics.Paint r1 = r0.paint
+            r2 = 1132396544(0x437var_, float:255.0)
+            float r2 = r2 * r16
+            int r2 = (int) r2
+            r1.setAlpha(r2)
+            goto L_0x01e5
+        L_0x01e0:
+            android.graphics.Paint r2 = r0.paint
+            r2.setAlpha(r1)
+        L_0x01e5:
+            if (r15 != r10) goto L_0x0230
+            if (r11 == 0) goto L_0x0230
+            android.graphics.Path r1 = r0.path
+            r1.reset()
+            r1 = 1099956224(0x41900000, float:18.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            float r1 = r23 - r1
+            float r2 = r24 - r22
+            float r2 = r2 / r17
+            float r2 = r22 + r2
+            float r3 = r23 - r21
+            r4 = 1066192077(0x3f8ccccd, float:1.1)
+            float r3 = r3 * r4
+            float r3 = r3 * r16
+            android.graphics.Path r4 = r0.path
+            android.graphics.Path$Direction r5 = android.graphics.Path.Direction.CW
+            r4.addCircle(r1, r2, r3, r5)
+            r25.save()
+            android.graphics.Path r1 = r0.path
+            r9 = r25
+            r9.clipPath(r1)
+            org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable
+            android.graphics.Paint r7 = r0.paint
+            r2 = r21
+            r3 = r22
+            r4 = r23
+            r5 = r24
+            r6 = r25
+            r8 = r22
+            r9 = r27
+            r1.draw(r2, r3, r4, r5, r6, r7, r8, r9)
+            r25.restore()
+            goto L_0x0245
+        L_0x0230:
+            org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable
+            android.graphics.Paint r7 = r0.paint
+            r2 = r21
+            r3 = r22
+            r4 = r23
+            r5 = r24
+            r6 = r25
+            r8 = r22
+            r9 = r27
+            r1.draw(r2, r3, r4, r5, r6, r7, r8, r9)
+        L_0x0245:
+            int r2 = r15 + 1
+            r9 = 0
+            r15 = 1065353216(0x3var_, float:1.0)
+            goto L_0x00d5
+        L_0x024c:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.FragmentContextViewWavesDrawable.draw(float, float, float, float, android.graphics.Canvas, org.telegram.ui.Components.FragmentContextView, float):void");
     }
 
     private void checkColors() {
@@ -243,22 +435,34 @@ public class FragmentContextViewWavesDrawable {
     }
 
     public void updateState(boolean z) {
-        if (VoIPService.getSharedInstance() != null) {
-            int callState = VoIPService.getSharedInstance().getCallState();
-            if (callState == 1 || callState == 2 || callState == 6 || callState == 5) {
-                setState(2, z);
-            } else if (VoIPService.getSharedInstance().groupCall != null) {
-                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = VoIPService.getSharedInstance().groupCall.participants.get(AccountInstance.getInstance(VoIPService.getSharedInstance().getAccount()).getUserConfig().getClientUserId());
-                if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(VoIPService.getSharedInstance().getChat())) {
-                    setState(VoIPService.getSharedInstance().isMicMute() ? 1 : 0, z);
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null) {
+            int callState = sharedInstance.getCallState();
+            if (sharedInstance.isSwitchingStream() || !(callState == 1 || callState == 2 || callState == 6 || callState == 5)) {
+                ChatObject.Call call = sharedInstance.groupCall;
+                if (call != null) {
+                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = call.participants.get(sharedInstance.getSelfId());
+                    if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(sharedInstance.getChat())) {
+                        setState(sharedInstance.isMicMute() ? 1 : 0, z);
+                        return;
+                    }
+                    sharedInstance.setMicMute(true, false, false);
+                    setState(3, z);
                     return;
                 }
-                VoIPService.getSharedInstance().setMicMute(true, false, false);
-                setState(3, z);
-            } else {
-                setState(VoIPService.getSharedInstance().isMicMute() ? 1 : 0, z);
+                setState(sharedInstance.isMicMute() ? 1 : 0, z);
+                return;
             }
+            setState(2, z);
         }
+    }
+
+    public int getState() {
+        WeavingState weavingState = this.currentState;
+        if (weavingState != null) {
+            return weavingState.currentState;
+        }
+        return 0;
     }
 
     public static class WeavingState {

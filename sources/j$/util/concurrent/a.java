@@ -6,11 +6,13 @@ import j$.util.function.CLASSNAMEa;
 import java.util.concurrent.ConcurrentMap;
 
 public final /* synthetic */ class a implements BiConsumer {
-    public final /* synthetic */ ConcurrentMap a;
+
+    /* renamed from: a  reason: collision with root package name */
+    public final /* synthetic */ ConcurrentMap var_a;
     public final /* synthetic */ BiFunction b;
 
     public /* synthetic */ a(ConcurrentMap concurrentMap, BiFunction biFunction) {
-        this.a = concurrentMap;
+        this.var_a = concurrentMap;
         this.b = biFunction;
     }
 
@@ -25,7 +27,7 @@ public final /* synthetic */ class a implements BiConsumer {
     public final void accept(java.lang.Object r4, java.lang.Object r5) {
         /*
             r3 = this;
-            java.util.concurrent.ConcurrentMap r0 = r3.a
+            java.util.concurrent.ConcurrentMap r0 = r3.var_a
             j$.util.function.BiFunction r1 = r3.b
         L_0x0004:
             java.lang.Object r2 = r1.apply(r4, r5)

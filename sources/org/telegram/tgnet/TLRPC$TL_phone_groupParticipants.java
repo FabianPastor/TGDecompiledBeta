@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class TLRPC$TL_phone_groupParticipants extends TLObject {
     public static int constructor = -NUM;
+    public ArrayList<TLRPC$Chat> chats = new ArrayList<>();
     public int count;
     public String next_offset;
     public ArrayList<TLRPC$TL_groupCallParticipant> participants = new ArrayList<>();
@@ -42,16 +43,32 @@ public class TLRPC$TL_phone_groupParticipants extends TLObject {
             int readInt323 = abstractSerializedData.readInt32(z);
             if (readInt323 == NUM) {
                 int readInt324 = abstractSerializedData.readInt32(z);
-                while (i < readInt324) {
-                    TLRPC$User TLdeserialize2 = TLRPC$User.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                int i3 = 0;
+                while (i3 < readInt324) {
+                    TLRPC$Chat TLdeserialize2 = TLRPC$Chat.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                     if (TLdeserialize2 != null) {
-                        this.users.add(TLdeserialize2);
-                        i++;
+                        this.chats.add(TLdeserialize2);
+                        i3++;
                     } else {
                         return;
                     }
                 }
-                this.version = abstractSerializedData.readInt32(z);
+                int readInt325 = abstractSerializedData.readInt32(z);
+                if (readInt325 == NUM) {
+                    int readInt326 = abstractSerializedData.readInt32(z);
+                    while (i < readInt326) {
+                        TLRPC$User TLdeserialize3 = TLRPC$User.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                        if (TLdeserialize3 != null) {
+                            this.users.add(TLdeserialize3);
+                            i++;
+                        } else {
+                            return;
+                        }
+                    }
+                    this.version = abstractSerializedData.readInt32(z);
+                } else if (z) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt325)}));
+                }
             } else if (z) {
                 throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt323)}));
             }
@@ -71,10 +88,16 @@ public class TLRPC$TL_phone_groupParticipants extends TLObject {
         }
         abstractSerializedData.writeString(this.next_offset);
         abstractSerializedData.writeInt32(NUM);
-        int size2 = this.users.size();
+        int size2 = this.chats.size();
         abstractSerializedData.writeInt32(size2);
         for (int i2 = 0; i2 < size2; i2++) {
-            this.users.get(i2).serializeToStream(abstractSerializedData);
+            this.chats.get(i2).serializeToStream(abstractSerializedData);
+        }
+        abstractSerializedData.writeInt32(NUM);
+        int size3 = this.users.size();
+        abstractSerializedData.writeInt32(size3);
+        for (int i3 = 0; i3 < size3; i3++) {
+            this.users.get(i3).serializeToStream(abstractSerializedData);
         }
         abstractSerializedData.writeInt32(this.version);
     }

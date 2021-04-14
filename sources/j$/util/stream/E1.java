@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.CLASSNAMEq0;
+import a.CLASSNAMEq0;
 import j$.util.stream.A2;
 import j$.util.stream.CLASSNAMEz1;
 
@@ -13,7 +13,7 @@ class E1 extends CLASSNAMEz1.k<Long> {
         }
 
         public void accept(long j) {
-            this.a.accept(E1.this.l.a(j));
+            this.var_a.accept(E1.this.l.a(j));
         }
     }
 

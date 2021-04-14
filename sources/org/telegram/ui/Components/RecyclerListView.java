@@ -1076,7 +1076,7 @@ public class RecyclerListView extends RecyclerView {
 
     /* access modifiers changed from: protected */
     public void onChildPressed(View view, float f, float f2, boolean z) {
-        if (!this.disableHighlightState) {
+        if (!this.disableHighlightState && view != null) {
             view.setPressed(z);
         }
     }

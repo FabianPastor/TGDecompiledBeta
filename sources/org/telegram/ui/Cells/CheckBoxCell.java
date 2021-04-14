@@ -32,6 +32,8 @@ public class CheckBoxCell extends FrameLayout {
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public CheckBoxCell(Context context, int i, int i2) {
         super(context);
+        String str;
+        String str2;
         Context context2 = context;
         int i3 = i;
         int i4 = i2;
@@ -39,11 +41,11 @@ public class CheckBoxCell extends FrameLayout {
         this.currentType = i3;
         TextView textView2 = new TextView(context2);
         this.textView = textView2;
-        String str = "dialogTextBlack";
+        int i5 = 5;
         boolean z = true;
-        textView2.setTextColor(Theme.getColor(i3 == 1 ? str : "windowBackgroundWhiteBlackText"));
-        this.textView.setLinkTextColor(Theme.getColor(i3 == 1 ? "dialogTextLink" : "windowBackgroundWhiteLinkText"));
-        this.textView.setTag(Integer.valueOf(Theme.getColor(i3 != 1 ? "windowBackgroundWhiteBlackText" : str)));
+        textView2.setTextColor(Theme.getColor((i3 == 1 || i3 == 5) ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
+        this.textView.setLinkTextColor(Theme.getColor((i3 == 1 || i3 == 5) ? "dialogTextLink" : "windowBackgroundWhiteLinkText"));
+        this.textView.setTag(Integer.valueOf(Theme.getColor((i3 == 1 || i3 == 5) ? "dialogTextBlack" : str2)));
         this.textView.setTextSize(1, 16.0f);
         this.textView.setLines(1);
         this.textView.setMaxLines(1);
@@ -60,17 +62,16 @@ public class CheckBoxCell extends FrameLayout {
                 boolean z2 = LocaleController.isRTL;
                 addView(textView3, LayoutHelper.createFrame(-1, -1.0f, (z2 ? 5 : 3) | 48, (float) (z2 ? 0 : 29), 0.0f, (float) (z2 ? 29 : 0), 0.0f));
             } else {
-                int i5 = i3 == 4 ? 56 : 46;
+                int i6 = i3 == 4 ? 56 : 46;
                 TextView textView4 = this.textView;
                 boolean z3 = LocaleController.isRTL;
-                addView(textView4, LayoutHelper.createFrame(-1, -1.0f, (z3 ? 5 : 3) | 48, (float) (z3 ? i4 : i5 + (i4 - 17)), 0.0f, (float) (z3 ? i5 + (i4 - 17) : i4), 0.0f));
+                addView(textView4, LayoutHelper.createFrame(-1, -1.0f, (z3 ? 5 : 3) | 48, (float) (z3 ? i4 : i6 + (i4 - 17)), 0.0f, (float) (z3 ? i6 + (i4 - 17) : i4), 0.0f));
             }
         }
         TextView textView5 = new TextView(context2);
         this.valueTextView = textView5;
-        String str2 = "dialogTextBlue";
-        textView5.setTextColor(Theme.getColor(i3 == 1 ? str2 : "windowBackgroundWhiteValueText"));
-        this.valueTextView.setTag(i3 != 1 ? "windowBackgroundWhiteValueText" : str2);
+        textView5.setTextColor(Theme.getColor((i3 == 1 || i3 == 5) ? "dialogTextBlue" : "windowBackgroundWhiteValueText"));
+        this.valueTextView.setTag((i3 == 1 || i3 == 5) ? "dialogTextBlue" : str);
         this.valueTextView.setTextSize(1, 16.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
@@ -90,21 +91,28 @@ public class CheckBoxCell extends FrameLayout {
             View view = this.checkBox;
             float f2 = (float) 21;
             boolean z4 = LocaleController.isRTL;
-            addView(view, LayoutHelper.createFrame(21, f2, (z4 ? 5 : 3) | 48, (float) (z4 ? 0 : i4), 16.0f, (float) (!z4 ? 0 : i4), 0.0f));
+            addView(view, LayoutHelper.createFrame(21, f2, (!z4 ? 3 : i5) | 48, (float) (z4 ? 0 : i4), 16.0f, (float) (!z4 ? 0 : i4), 0.0f));
             return;
         }
-        CheckBoxSquare checkBoxSquare2 = new CheckBoxSquare(context2, i3 != 1 ? false : z);
+        if (!(i3 == 1 || i3 == 5)) {
+            z = false;
+        }
+        CheckBoxSquare checkBoxSquare2 = new CheckBoxSquare(context2, z);
         this.checkBoxSquare = checkBoxSquare2;
         this.checkBox = checkBoxSquare2;
         this.checkBoxSize = 18;
-        if (i3 == 3) {
-            addView(checkBoxSquare2, LayoutHelper.createFrame(18, (float) 18, 51, 0.0f, 15.0f, 0.0f, 0.0f));
-        } else if (i3 == 2) {
-            addView(checkBoxSquare2, LayoutHelper.createFrame(18, (float) 18, (LocaleController.isRTL ? 5 : 3) | 48, 0.0f, 15.0f, 0.0f, 0.0f));
-        } else {
+        if (i3 == 5) {
             float f3 = (float) 18;
             boolean z5 = LocaleController.isRTL;
-            addView(checkBoxSquare2, LayoutHelper.createFrame(18, f3, (z5 ? 5 : 3) | 48, (float) (z5 ? 0 : i4), 16.0f, (float) (!z5 ? 0 : i4), 0.0f));
+            addView(checkBoxSquare2, LayoutHelper.createFrame(18, f3, (!z5 ? 3 : i5) | 16, (float) (z5 ? 0 : i4), 0.0f, (float) (!z5 ? 0 : i4), 0.0f));
+        } else if (i3 == 3) {
+            addView(checkBoxSquare2, LayoutHelper.createFrame(18, (float) 18, 51, 0.0f, 15.0f, 0.0f, 0.0f));
+        } else if (i3 == 2) {
+            addView(checkBoxSquare2, LayoutHelper.createFrame(18, (float) 18, (!LocaleController.isRTL ? 3 : i5) | 48, 0.0f, 15.0f, 0.0f, 0.0f));
+        } else {
+            float f4 = (float) 18;
+            boolean z6 = LocaleController.isRTL;
+            addView(checkBoxSquare2, LayoutHelper.createFrame(18, f4, (!z6 ? 3 : i5) | 48, (float) (z6 ? 0 : i4), 16.0f, (float) (!z6 ? 0 : i4), 0.0f));
         }
     }
 
@@ -157,10 +165,12 @@ public class CheckBoxCell extends FrameLayout {
             this.textView.setMaxLines(0);
             this.textView.setSingleLine(false);
             this.textView.setEllipsize((TextUtils.TruncateAt) null);
-            this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(5.0f));
-            layoutParams.height = -2;
-            layoutParams.topMargin = AndroidUtilities.dp(10.0f);
-            layoutParams2.topMargin = AndroidUtilities.dp(12.0f);
+            if (this.currentType != 5) {
+                this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(5.0f));
+                layoutParams.height = -2;
+                layoutParams.topMargin = AndroidUtilities.dp(10.0f);
+                layoutParams2.topMargin = AndroidUtilities.dp(12.0f);
+            }
         } else {
             this.textView.setLines(1);
             this.textView.setMaxLines(1);

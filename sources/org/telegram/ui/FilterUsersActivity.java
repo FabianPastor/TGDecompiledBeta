@@ -1019,7 +1019,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
         private ArrayList<TLObject> contacts = new ArrayList<>();
         private Context context;
         private SearchAdapterHelper searchAdapterHelper;
-        private ArrayList<TLObject> searchResult = new ArrayList<>();
+        private ArrayList<Object> searchResult = new ArrayList<>();
         private ArrayList<CharSequence> searchResultNames = new ArrayList<>();
         private Runnable searchRunnable;
         /* access modifiers changed from: private */
@@ -1118,7 +1118,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             if (i != 1) {
                 view = new GraySectionCell(this.context);
             } else {
-                view = new GroupCreateUserCell(this.context, true, 0, true);
+                view = new GroupCreateUserCell(this.context, 1, 0, true);
             }
             return new RecyclerListView.Holder(view);
         }
@@ -1150,13 +1150,13 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 android.view.View r12 = r12.itemView
                 org.telegram.ui.Cells.GraySectionCell r12 = (org.telegram.ui.Cells.GraySectionCell) r12
                 if (r13 != 0) goto L_0x0020
-                r13 = 2131625475(0x7f0e0603, float:1.887816E38)
+                r13 = 2131625489(0x7f0e0611, float:1.8878187E38)
                 java.lang.String r0 = "FilterChatTypes"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)
                 goto L_0x022e
             L_0x0020:
-                r13 = 2131625476(0x7f0e0604, float:1.8878161E38)
+                r13 = 2131625490(0x7f0e0612, float:1.887819E38)
                 java.lang.String r0 = "FilterChats"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)
@@ -1168,7 +1168,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 r3 = 0
                 r4 = 0
                 if (r0 == 0) goto L_0x0119
-                java.util.ArrayList<org.telegram.tgnet.TLObject> r0 = r11.searchResult
+                java.util.ArrayList<java.lang.Object> r0 = r11.searchResult
                 int r0 = r0.size()
                 org.telegram.ui.Adapters.SearchAdapterHelper r1 = r11.searchAdapterHelper
                 java.util.ArrayList r1 = r1.getGlobalSearch()
@@ -1178,7 +1178,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 int r5 = r5.size()
                 if (r13 < 0) goto L_0x005d
                 if (r13 >= r0) goto L_0x005d
-                java.util.ArrayList<org.telegram.tgnet.TLObject> r1 = r11.searchResult
+                java.util.ArrayList<java.lang.Object> r1 = r11.searchResult
                 java.lang.Object r1 = r1.get(r13)
                 goto L_0x0087
             L_0x005d:
@@ -1283,7 +1283,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 boolean r0 = r0.isInclude
                 if (r0 == 0) goto L_0x0176
                 if (r13 != r2) goto L_0x0136
-                r13 = 2131625481(0x7f0e0609, float:1.8878171E38)
+                r13 = 2131625495(0x7f0e0617, float:1.88782E38)
                 java.lang.String r0 = "FilterContacts"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
@@ -1291,7 +1291,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 goto L_0x01a3
             L_0x0136:
                 if (r13 != r1) goto L_0x0146
-                r13 = 2131625511(0x7f0e0627, float:1.8878232E38)
+                r13 = 2131625525(0x7f0e0635, float:1.887826E38)
                 java.lang.String r0 = "FilterNonContacts"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
@@ -1300,7 +1300,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             L_0x0146:
                 r0 = 3
                 if (r13 != r0) goto L_0x0157
-                r13 = 2131625498(0x7f0e061a, float:1.8878206E38)
+                r13 = 2131625512(0x7f0e0628, float:1.8878234E38)
                 java.lang.String r0 = "FilterGroups"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
@@ -1309,14 +1309,14 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             L_0x0157:
                 r0 = 4
                 if (r13 != r0) goto L_0x0168
-                r13 = 2131625472(0x7f0e0600, float:1.8878153E38)
+                r13 = 2131625486(0x7f0e060e, float:1.8878181E38)
                 java.lang.String r0 = "FilterChannels"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
                 java.lang.String r1 = "channels"
                 goto L_0x01a3
             L_0x0168:
-                r13 = 2131625471(0x7f0e05ff, float:1.887815E38)
+                r13 = 2131625485(0x7f0e060d, float:1.887818E38)
                 java.lang.String r0 = "FilterBots"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
@@ -1324,7 +1324,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 goto L_0x01a3
             L_0x0176:
                 if (r13 != r2) goto L_0x0186
-                r13 = 2131625501(0x7f0e061d, float:1.8878212E38)
+                r13 = 2131625515(0x7f0e062b, float:1.887824E38)
                 java.lang.String r0 = "FilterMuted"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
@@ -1332,14 +1332,14 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 goto L_0x01a3
             L_0x0186:
                 if (r13 != r1) goto L_0x0196
-                r13 = 2131625512(0x7f0e0628, float:1.8878234E38)
+                r13 = 2131625526(0x7f0e0636, float:1.8878262E38)
                 java.lang.String r0 = "FilterRead"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ
                 java.lang.String r1 = "read"
                 goto L_0x01a3
             L_0x0196:
-                r13 = 2131625468(0x7f0e05fc, float:1.8878145E38)
+                r13 = 2131625482(0x7f0e060a, float:1.8878173E38)
                 java.lang.String r0 = "FilterArchived"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
@@ -1466,7 +1466,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             if (str == null) {
                 this.searchResult.clear();
                 this.searchResultNames.clear();
-                this.searchAdapterHelper.mergeResults((ArrayList<TLObject>) null);
+                this.searchAdapterHelper.mergeResults((ArrayList<Object>) null);
                 this.searchAdapterHelper.queryServerSearch((String) null, true, true, false, false, false, 0, false, 0, 0);
                 notifyDataSetChanged();
                 return;
@@ -1639,7 +1639,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             updateSearchResults(arrayList, arrayList2);
         }
 
-        private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {
+        private void updateSearchResults(ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2) {
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
                 public final /* synthetic */ ArrayList f$1;
                 public final /* synthetic */ ArrayList f$2;

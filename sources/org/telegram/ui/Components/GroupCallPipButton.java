@@ -15,7 +15,6 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import java.util.Random;
-import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
@@ -721,19 +720,20 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
     }
 
     private void updateButtonState() {
-        if (VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().groupCall != null) {
-            int callState = VoIPService.getSharedInstance().getCallState();
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null && sharedInstance.groupCall != null) {
+            int callState = sharedInstance.getCallState();
             if (callState == 1 || callState == 2 || callState == 6 || callState == 5) {
                 setState(2);
                 return;
             }
-            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = VoIPService.getSharedInstance().groupCall.participants.get(AccountInstance.getInstance(VoIPService.getSharedInstance().getAccount()).getUserConfig().getClientUserId());
-            if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(VoIPService.getSharedInstance().getChat())) {
-                setState(VoIPService.getSharedInstance().isMicMute() ? 1 : 0);
+            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = sharedInstance.groupCall.participants.get(sharedInstance.getSelfId());
+            if (tLRPC$TL_groupCallParticipant == null || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || ChatObject.canManageCalls(sharedInstance.getChat())) {
+                setState(sharedInstance.isMicMute() ? 1 : 0);
                 return;
             }
-            if (!VoIPService.getSharedInstance().isMicMute()) {
-                VoIPService.getSharedInstance().setMicMute(true, false, false);
+            if (!sharedInstance.isMicMute()) {
+                sharedInstance.setMicMute(true, false, false);
             }
             setState(3);
             long uptimeMillis = SystemClock.uptimeMillis();

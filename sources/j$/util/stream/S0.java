@@ -7,7 +7,9 @@ import j$.util.function.m;
 import j$.util.p;
 
 public final /* synthetic */ class S0 implements Predicate {
-    public static final /* synthetic */ S0 a = new S0();
+
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ S0 var_a = new S0();
 
     private /* synthetic */ S0() {
     }

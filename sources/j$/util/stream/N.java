@@ -1,21 +1,25 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEf;
-import j$.util.function.q;
+import j$.util.function.BiConsumer;
+import j$.util.function.CLASSNAMEa;
 
-public final /* synthetic */ class N implements q {
-    public final /* synthetic */ A2 a;
+public final /* synthetic */ class N implements BiConsumer {
 
-    public /* synthetic */ N(A2 a2) {
-        this.a = a2;
+    /* renamed from: a  reason: collision with root package name */
+    public static final /* synthetic */ N var_a = new N();
+
+    private /* synthetic */ N() {
     }
 
-    public final void accept(double d) {
-        this.a.accept(d);
+    public BiConsumer a(BiConsumer biConsumer) {
+        biConsumer.getClass();
+        return new CLASSNAMEa(this, biConsumer);
     }
 
-    public q k(q qVar) {
-        qVar.getClass();
-        return new CLASSNAMEf(this, qVar);
+    public final void accept(Object obj, Object obj2) {
+        long[] jArr = (long[]) obj;
+        long[] jArr2 = (long[]) obj2;
+        jArr[0] = jArr[0] + jArr2[0];
+        jArr[1] = jArr[1] + jArr2[1];
     }
 }

@@ -22,8 +22,11 @@ public class BlobDrawable {
     public static float SCALE_SMALL_MIN = 0.926f;
     private final float L;
     private final float N;
+    public float amplitude;
     private float[] angle;
     private float[] angleNext;
+    private float animateAmplitudeDiff;
+    private float animateToAmplitude;
     public float cubicBezierK = 1.0f;
     private final Matrix m = new Matrix();
     public float maxRadius;
@@ -155,6 +158,42 @@ public class BlobDrawable {
             generateBlob(this.radius, this.angle, i);
             generateBlob(this.radiusNext, this.angleNext, i);
             this.progress[i] = 0.0f;
+        }
+    }
+
+    public void setValue(float f, boolean z) {
+        this.animateToAmplitude = f;
+        if (z) {
+            float f2 = this.amplitude;
+            if (f > f2) {
+                this.animateAmplitudeDiff = (f - f2) / 205.0f;
+            } else {
+                this.animateAmplitudeDiff = (f - f2) / 275.0f;
+            }
+        } else {
+            float f3 = this.amplitude;
+            if (f > f3) {
+                this.animateAmplitudeDiff = (f - f3) / 320.0f;
+            } else {
+                this.animateAmplitudeDiff = (f - f3) / 375.0f;
+            }
+        }
+    }
+
+    public void updateAmplitude(long j) {
+        float f = this.animateToAmplitude;
+        float f2 = this.amplitude;
+        if (f != f2) {
+            float f3 = this.animateAmplitudeDiff;
+            float f4 = f2 + (((float) j) * f3);
+            this.amplitude = f4;
+            if (f3 > 0.0f) {
+                if (f4 > f) {
+                    this.amplitude = f;
+                }
+            } else if (f4 < f) {
+                this.amplitude = f;
+            }
         }
     }
 }

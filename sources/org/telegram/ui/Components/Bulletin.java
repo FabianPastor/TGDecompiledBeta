@@ -156,7 +156,7 @@ public final class Bulletin {
     }
 
     public Bulletin show() {
-        if (!this.showing) {
+        if (!this.showing && this.containerLayout != null) {
             this.showing = true;
             if (this.layout.getParent() == this.parentLayout) {
                 Bulletin bulletin = visibleBulletin;
@@ -354,6 +354,10 @@ public final class Bulletin {
 
     public boolean isShowing() {
         return this.showing;
+    }
+
+    public Layout getLayout() {
+        return this.layout;
     }
 
     /* access modifiers changed from: private */
@@ -1738,6 +1742,7 @@ public final class Bulletin {
                                 textView2.setTypeface(Typeface.SANS_SERIF);
                                 textView2.setTextSize(1, 15.0f);
                                 textView2.setEllipsize(TextUtils.TruncateAt.END);
+                                textView2.setPadding(0, AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f));
                                 addView(textView2, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
                             }
 

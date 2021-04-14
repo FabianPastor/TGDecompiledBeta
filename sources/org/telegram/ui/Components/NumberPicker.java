@@ -17,11 +17,13 @@ import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.Locale;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class NumberPicker extends LinearLayout {
-    private int SELECTOR_MIDDLE_ITEM_INDEX = (3 / 2);
-    private int SELECTOR_WHEEL_ITEM_COUNT = 3;
+    private int SELECTOR_MIDDLE_ITEM_INDEX;
+    private int SELECTOR_WHEEL_ITEM_COUNT;
+    private boolean drawDividers;
     private Scroller mAdjustScroller;
     /* access modifiers changed from: private */
     public int mBottomSelectionDividerBottom;
@@ -36,14 +38,14 @@ public class NumberPicker extends LinearLayout {
     /* access modifiers changed from: private */
     public boolean mIncrementVirtualButtonPressed;
     private boolean mIngonreMoveEvents;
-    private int mInitialScrollOffset = Integer.MIN_VALUE;
+    private int mInitialScrollOffset;
     private TextView mInputText;
     private long mLastDownEventTime;
     private float mLastDownEventY;
     private float mLastDownOrMoveEventY;
-    private int mLastHandledDownDpadKeyCode = -1;
+    private int mLastHandledDownDpadKeyCode;
     /* access modifiers changed from: private */
-    public long mLongPressUpdateInterval = 300;
+    public long mLongPressUpdateInterval;
     private int mMaxHeight;
     private int mMaxValue;
     private int mMaxWidth;
@@ -56,13 +58,13 @@ public class NumberPicker extends LinearLayout {
     private OnValueChangeListener mOnValueChangeListener;
     private PressedStateHelper mPressedStateHelper;
     private int mPreviousScrollerY;
-    private int mScrollState = 0;
+    private int mScrollState;
     private Paint mSelectionDivider;
     private int mSelectionDividerHeight;
     private int mSelectionDividersDistance;
     private int mSelectorElementHeight;
-    private final SparseArray<String> mSelectorIndexToStringCache = new SparseArray<>();
-    private int[] mSelectorIndices = new int[this.SELECTOR_WHEEL_ITEM_COUNT];
+    private final SparseArray<String> mSelectorIndexToStringCache;
+    private int[] mSelectorIndices;
     private int mSelectorTextGapHeight;
     private Paint mSelectorWheelPaint;
     private int mSolidColor;
@@ -130,14 +132,13 @@ public class NumberPicker extends LinearLayout {
             this.mInputText.setSingleLine(true);
             this.mInputText.setTextColor(Theme.getColor("dialogTextBlack"));
             this.mInputText.setBackgroundResource(0);
-            this.mInputText.setTextSize(1, 18.0f);
+            this.mInputText.setTextSize(0, (float) this.mTextSize);
             this.mInputText.setVisibility(4);
             addView(this.mInputText, new LinearLayout.LayoutParams(-1, -2));
             ViewConfiguration viewConfiguration = ViewConfiguration.get(getContext());
             this.mTouchSlop = viewConfiguration.getScaledTouchSlop();
             this.mMinimumFlingVelocity = viewConfiguration.getScaledMinimumFlingVelocity();
             this.mMaximumFlingVelocity = viewConfiguration.getScaledMaximumFlingVelocity() / 8;
-            this.mTextSize = (int) this.mInputText.getTextSize();
             Paint paint2 = new Paint();
             paint2.setAntiAlias(true);
             paint2.setTextAlign(Paint.Align.CENTER);
@@ -190,7 +191,21 @@ public class NumberPicker extends LinearLayout {
     }
 
     public NumberPicker(Context context) {
+        this(context, 18);
+    }
+
+    public NumberPicker(Context context, int i) {
         super(context);
+        this.SELECTOR_WHEEL_ITEM_COUNT = 3;
+        this.SELECTOR_MIDDLE_ITEM_INDEX = 3 / 2;
+        this.mLongPressUpdateInterval = 300;
+        this.mSelectorIndexToStringCache = new SparseArray<>();
+        this.mSelectorIndices = new int[this.SELECTOR_WHEEL_ITEM_COUNT];
+        this.mInitialScrollOffset = Integer.MIN_VALUE;
+        this.mScrollState = 0;
+        this.mLastHandledDownDpadKeyCode = -1;
+        this.drawDividers = true;
+        this.mTextSize = AndroidUtilities.dp((float) i);
         init();
     }
 
@@ -680,11 +695,13 @@ public class NumberPicker extends LinearLayout {
             }
             f += (float) this.mSelectorElementHeight;
         }
-        int i2 = this.mTopSelectionDividerTop;
-        Canvas canvas2 = canvas;
-        canvas2.drawRect(0.0f, (float) i2, (float) getRight(), (float) (this.mSelectionDividerHeight + i2), this.mSelectionDivider);
-        int i3 = this.mBottomSelectionDividerBottom;
-        canvas2.drawRect(0.0f, (float) (i3 - this.mSelectionDividerHeight), (float) getRight(), (float) i3, this.mSelectionDivider);
+        if (this.drawDividers) {
+            int i2 = this.mTopSelectionDividerTop;
+            Canvas canvas2 = canvas;
+            canvas2.drawRect(0.0f, (float) i2, (float) getRight(), (float) (this.mSelectionDividerHeight + i2), this.mSelectionDivider);
+            int i3 = this.mBottomSelectionDividerBottom;
+            canvas2.drawRect(0.0f, (float) (i3 - this.mSelectionDividerHeight), (float) getRight(), (float) i3, this.mSelectionDivider);
+        }
     }
 
     private int makeMeasureSpec(int i, int i2) {
@@ -1034,5 +1051,10 @@ public class NumberPicker extends LinearLayout {
 
     private static String formatNumberWithLocale(int i) {
         return String.format(Locale.getDefault(), "%d", new Object[]{Integer.valueOf(i)});
+    }
+
+    public void setDrawDividers(boolean z) {
+        this.drawDividers = z;
+        invalidate();
     }
 }

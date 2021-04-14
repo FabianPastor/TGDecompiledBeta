@@ -594,6 +594,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
 
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
+        String str;
         super.onAttachedToWindow();
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (!(sharedInstance == null || sharedInstance.groupCall == null)) {
@@ -602,7 +603,15 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
             avatarDrawable.setColor(colorForId);
             avatarDrawable.setInfo(sharedInstance.getChat());
             this.avatarImageView.setImage(ImageLocation.getForLocal(sharedInstance.getChat().photo.photo_small), "50_50", (Drawable) avatarDrawable, (Object) null);
-            this.titleView.setText(sharedInstance.getChat().title);
+            if (!TextUtils.isEmpty(sharedInstance.groupCall.call.title)) {
+                str = sharedInstance.groupCall.call.title;
+            } else {
+                str = sharedInstance.getChat().title;
+            }
+            if (str != null) {
+                str = str.replace("\n", " ").replaceAll(" +", " ").trim();
+            }
+            this.titleView.setText(str);
             updateMembersCount();
             sharedInstance.registerStateListener(this);
             if (VoIPService.getSharedInstance() != null) {
@@ -633,10 +642,10 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null && sharedInstance.groupCall != null) {
             int callState = sharedInstance.getCallState();
-            if (callState == 1 || callState == 2 || callState == 6 || callState == 5) {
-                this.subtitleView.setText(LocaleController.getString("VoipGroupConnecting", NUM));
-            } else {
+            if (sharedInstance.isSwitchingStream() || !(callState == 1 || callState == 2 || callState == 6 || callState == 5)) {
                 this.subtitleView.setText(LocaleController.formatPluralString("Participants", sharedInstance.groupCall.call.participants_count));
+            } else {
+                this.subtitleView.setText(LocaleController.getString("VoipGroupConnecting", NUM));
             }
         }
     }

@@ -35,7 +35,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             r2 = 0
             r0.<init>(r1, r2)
             java.lang.String r3 = "InviteByQRCode"
-            r4 = 2131625818(0x7f0e075a, float:1.8878855E38)
+            r4 = 2131625843(0x7f0e0773, float:1.8878905E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r4 = 1
             r0.setTitle(r3, r4)
@@ -70,7 +70,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
             r6.setAutoRepeat(r4)
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
-            r8 = 2131558463(0x7f0d003f, float:1.8742243E38)
+            r8 = 2131558470(0x7f0d0046, float:1.8742257E38)
             r9 = 60
             r6.setAnimation(r8, r9, r9)
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
@@ -122,7 +122,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             java.lang.String r2 = "fonts/rmedium.ttf"
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r3.setTypeface(r2)
-            r2 = 2131627386(0x7f0e0d7a, float:1.8882035E38)
+            r2 = 2131627435(0x7f0e0dab, float:1.8882134E38)
             java.lang.String r4 = "ShareQrCode"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r3.setText(r2)
@@ -200,7 +200,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             r6.compress(r4, r2, r0)     // Catch:{ all -> 0x0040 }
             r0.close()     // Catch:{ all -> 0x0040 }
             android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0040 }
-            java.lang.String r2 = "org.telegram.messenger.provider"
+            java.lang.String r2 = "org.telegram.messenger.web.provider"
             android.net.Uri r6 = androidx.core.content.FileProvider.getUriForFile(r6, r2, r1)     // Catch:{ all -> 0x0040 }
             r0.close()     // Catch:{ IOException -> 0x0047 }
             return r6
