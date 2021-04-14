@@ -1734,6 +1734,7 @@
     <string name="Gallery">Gallery</string>
     <string name="GalleryInfo">To send images without compression</string>
     <string name="GalleryPermissionText">Tap to allow access to your Gallery</string>
+    <string name="GameCantSendSecretChat">Sorry, games can’t be sent to secret chats.</string>
     <string name="General">General</string>
     <string name="GetQRCode">Get QR code</string>
     <string name="GettingLinkInfo">Getting Link Info...</string>
@@ -1932,6 +1933,8 @@
     <string name="InviteToTelegram">INVITE TO TELEGRAM</string>
     <string name="InviteUser">This user does not have Telegram yet, send an invitation?</string>
     <string name="Invited">invited</string>
+    <string name="InvoiceCantForwardSecretChat">Sorry, invoices can’t be forwarded to secret chats.</string>
+    <string name="InvoiceCantSendSecretChat">Sorry, invoices can’t be sent to secret chats.</string>
     <string name="IsRecordingAudio">%1$s is recording a voice message...</string>
     <string name="IsRecordingRound">%1$s is recording a video message...</string>
     <string name="IsSendingAudio">%1$s is sending audio...</string>
@@ -3076,6 +3079,9 @@
     <string name="PrivacyPaymentsClearAlert">Delete your shipping info and instruct all payment providers to remove your saved credit cards? Note that Telegram never stores your credit card data.</string>
     <string name="PrivacyPaymentsClearAlertText">Are you sure you want to clear your payment and shipping info?</string>
     <string name="PrivacyPaymentsClearAlertTitle">Clear payment info</string>
+    <string name="PrivacyPaymentsPaymentInfoCleared">Payment info cleared.</string>
+    <string name="PrivacyPaymentsPaymentShippingCleared">Payment and shipping info cleared.</string>
+    <string name="PrivacyPaymentsShippingInfoCleared">Shipping info cleared.</string>
     <string name="PrivacyPhone">Phone Number</string>
     <string name="PrivacyPhoneInfo">Users who have your number saved in their contacts will also see it on Telegram.</string>
     <string name="PrivacyPhoneInfo2">You can add users or entire groups as exceptions that will override the settings above.</string>

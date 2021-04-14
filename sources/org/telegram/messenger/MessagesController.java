@@ -27983,7 +27983,7 @@ public class MessagesController extends BaseController implements NotificationCe
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
             TLRPC$TL_restrictionReason tLRPC$TL_restrictionReason = arrayList.get(i);
-            if ("all".equals(tLRPC$TL_restrictionReason.platform) || (!AndroidUtilities.isStandaloneApp() && "android".equals(tLRPC$TL_restrictionReason.platform))) {
+            if ("all".equals(tLRPC$TL_restrictionReason.platform) || (!AndroidUtilities.isStandaloneApp() && !AndroidUtilities.isBetaApp() && "android".equals(tLRPC$TL_restrictionReason.platform))) {
                 return tLRPC$TL_restrictionReason.text;
             }
         }

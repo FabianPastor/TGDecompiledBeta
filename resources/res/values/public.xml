@@ -1409,16 +1409,13 @@
     <public type="layout" name="widget_edititem" id="NUM" />
     <public type="mipmap" name="ic_launcher" id="NUM" />
     <public type="mipmap" name="ic_launcher_round" id="NUM" />
+    <public type="mipmap" name="ic_launcher_sa" id="NUM" />
     <public type="mipmap" name="icon_background" id="NUM" />
     <public type="mipmap" name="icon_background_round" id="NUM" />
+    <public type="mipmap" name="icon_background_sa" id="NUM" />
     <public type="mipmap" name="icon_foreground" id="NUM" />
     <public type="mipmap" name="icon_foreground_round" id="NUM" />
-    <public type="mipmap" name="msg_report_abuse" id="NUM" />
-    <public type="mipmap" name="msg_report_fake" id="NUM" />
-    <public type="mipmap" name="msg_report_other" id="NUM" />
-    <public type="mipmap" name="msg_report_spam" id="NUM" />
-    <public type="mipmap" name="msg_report_violence" id="NUM" />
-    <public type="mipmap" name="msg_report_xxx" id="NUM" />
+    <public type="mipmap" name="icon_foreground_sa" id="NUM" />
     <public type="raw" name="attach_contact" id="NUM" />
     <public type="raw" name="attach_file" id="NUM" />
     <public type="raw" name="attach_gallery" id="NUM" />
@@ -3287,6 +3284,7 @@
     <public type="string" name="Gallery" id="NUM" />
     <public type="string" name="GalleryInfo" id="NUM" />
     <public type="string" name="GalleryPermissionText" id="NUM" />
+    <public type="string" name="GameCantSendSecretChat" id="NUM" />
     <public type="string" name="General" id="NUM" />
     <public type="string" name="GetQRCode" id="NUM" />
     <public type="string" name="GettingLinkInfo" id="NUM" />
@@ -3485,6 +3483,8 @@
     <public type="string" name="InviteToTelegram" id="NUM" />
     <public type="string" name="InviteUser" id="NUM" />
     <public type="string" name="Invited" id="NUM" />
+    <public type="string" name="InvoiceCantForwardSecretChat" id="NUM" />
+    <public type="string" name="InvoiceCantSendSecretChat" id="NUM" />
     <public type="string" name="IsRecordingAudio" id="NUM" />
     <public type="string" name="IsRecordingRound" id="NUM" />
     <public type="string" name="IsSendingAudio" id="NUM" />
@@ -4629,6 +4629,9 @@
     <public type="string" name="PrivacyPaymentsClearAlert" id="NUM" />
     <public type="string" name="PrivacyPaymentsClearAlertText" id="NUM" />
     <public type="string" name="PrivacyPaymentsClearAlertTitle" id="NUM" />
+    <public type="string" name="PrivacyPaymentsPaymentInfoCleared" id="NUM" />
+    <public type="string" name="PrivacyPaymentsPaymentShippingCleared" id="NUM" />
+    <public type="string" name="PrivacyPaymentsShippingInfoCleared" id="NUM" />
     <public type="string" name="PrivacyPhone" id="NUM" />
     <public type="string" name="PrivacyPhoneInfo" id="NUM" />
     <public type="string" name="PrivacyPhoneInfo2" id="NUM" />

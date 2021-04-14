@@ -157,6 +157,7 @@ import org.telegram.ui.Components.NumberPicker;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.LanguageSelectActivity;
 import org.telegram.ui.LaunchActivity;
+import org.telegram.ui.LoginActivity;
 import org.telegram.ui.NotificationsCustomSettingsActivity;
 import org.telegram.ui.NotificationsSettingsActivity;
 import org.telegram.ui.ThemePreviewActivity;
@@ -256,7 +257,22 @@ public class AlertsCreator {
             }
         } else if (!(tLObject2 instanceof TLRPC$TL_account_saveSecureValue) && !(tLObject2 instanceof TLRPC$TL_account_getAuthorizationForm)) {
             boolean z2 = tLObject2 instanceof TLRPC$TL_channels_joinChannel;
-            if (!z2 && !(tLObject2 instanceof TLRPC$TL_channels_editAdmin) && !(tLObject2 instanceof TLRPC$TL_channels_inviteToChannel) && !(tLObject2 instanceof TLRPC$TL_messages_addChatUser) && !(tLObject2 instanceof TLRPC$TL_messages_startBot) && !(tLObject2 instanceof TLRPC$TL_channels_editBanned) && !(tLObject2 instanceof TLRPC$TL_messages_editChatDefaultBannedRights) && !(tLObject2 instanceof TLRPC$TL_messages_editChatAdmin) && !(tLObject2 instanceof TLRPC$TL_messages_migrateChat) && !(tLObject2 instanceof TLRPC$TL_phone_inviteToGroupCall)) {
+            if (z2 || (tLObject2 instanceof TLRPC$TL_channels_editAdmin) || (tLObject2 instanceof TLRPC$TL_channels_inviteToChannel) || (tLObject2 instanceof TLRPC$TL_messages_addChatUser) || (tLObject2 instanceof TLRPC$TL_messages_startBot) || (tLObject2 instanceof TLRPC$TL_channels_editBanned) || (tLObject2 instanceof TLRPC$TL_messages_editChatDefaultBannedRights) || (tLObject2 instanceof TLRPC$TL_messages_editChatAdmin) || (tLObject2 instanceof TLRPC$TL_messages_migrateChat) || (tLObject2 instanceof TLRPC$TL_phone_inviteToGroupCall)) {
+                Object[] objArr3 = objArr2;
+                if (baseFragment2 == null || !str.equals("CHANNELS_TOO_MUCH")) {
+                    if (baseFragment2 != null) {
+                        showAddUserAlert(tLRPC$TL_error2.text, baseFragment2, (objArr3 == null || objArr3.length <= 0) ? false : ((Boolean) objArr3[0]).booleanValue(), tLObject2);
+                    } else if (tLRPC$TL_error2.text.equals("PEER_FLOOD")) {
+                        NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, 1);
+                    }
+                } else if (z2 || (tLObject2 instanceof TLRPC$TL_channels_inviteToChannel)) {
+                    baseFragment2.presentFragment(new TooManyCommunitiesActivity(0));
+                    return null;
+                } else {
+                    baseFragment2.presentFragment(new TooManyCommunitiesActivity(1));
+                    return null;
+                }
+            } else {
                 if (tLObject2 instanceof TLRPC$TL_messages_createChat) {
                     if (str.equals("CHANNELS_TOO_MUCH")) {
                         baseFragment2.presentFragment(new TooManyCommunitiesActivity(2));
@@ -380,17 +396,22 @@ public class AlertsCreator {
                         }
                     } else if (tLObject2 instanceof TLRPC$TL_account_sendChangePhoneCode) {
                         if (str.contains("PHONE_NUMBER_INVALID")) {
-                            showSimpleAlert(baseFragment2, LocaleController.getString("InvalidPhoneNumber", NUM));
-                        } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error2.text.contains("PHONE_CODE_INVALID")) {
-                            showSimpleAlert(baseFragment2, LocaleController.getString("InvalidCode", NUM));
-                        } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EXPIRED")) {
-                            showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
-                        } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
-                            showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
-                        } else if (tLRPC$TL_error2.text.startsWith("PHONE_NUMBER_OCCUPIED")) {
-                            showSimpleAlert(baseFragment2, LocaleController.formatString("ChangePhoneNumberOccupied", NUM, objArr[0]));
+                            LoginActivity.needShowInvalidAlert(baseFragment2, (String) objArr[0], false);
                         } else {
-                            showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM));
+                            Object[] objArr4 = objArr;
+                            if (tLRPC$TL_error2.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error2.text.contains("PHONE_CODE_INVALID")) {
+                                showSimpleAlert(baseFragment2, LocaleController.getString("InvalidCode", NUM));
+                            } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EXPIRED")) {
+                                showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
+                            } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
+                                showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
+                            } else if (tLRPC$TL_error2.text.startsWith("PHONE_NUMBER_OCCUPIED")) {
+                                showSimpleAlert(baseFragment2, LocaleController.formatString("ChangePhoneNumberOccupied", NUM, objArr4[0]));
+                            } else if (tLRPC$TL_error2.text.startsWith("PHONE_NUMBER_BANNED")) {
+                                LoginActivity.needShowInvalidAlert(baseFragment2, (String) objArr4[0], true);
+                            } else {
+                                showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM));
+                            }
                         }
                     } else if (tLObject2 instanceof TLRPC$TL_updateUserName) {
                         str.hashCode();
@@ -434,18 +455,6 @@ public class AlertsCreator {
                     Activity parentActivity = baseFragment.getParentActivity();
                     Toast.makeText(parentActivity, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text, 0).show();
                 }
-                return null;
-            } else if (baseFragment2 == null || !str.equals("CHANNELS_TOO_MUCH")) {
-                if (baseFragment2 != null) {
-                    showAddUserAlert(tLRPC$TL_error2.text, baseFragment2, (objArr2 == null || objArr2.length <= 0) ? false : ((Boolean) objArr2[0]).booleanValue(), tLObject2);
-                } else if (tLRPC$TL_error2.text.equals("PEER_FLOOD")) {
-                    NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, 1);
-                }
-            } else if (z2 || (tLObject2 instanceof TLRPC$TL_channels_inviteToChannel)) {
-                baseFragment2.presentFragment(new TooManyCommunitiesActivity(0));
-                return null;
-            } else {
-                baseFragment2.presentFragment(new TooManyCommunitiesActivity(1));
                 return null;
             }
         } else if (str.contains("PHONE_NUMBER_INVALID")) {
@@ -910,7 +919,7 @@ public class AlertsCreator {
         L_0x0133:
             if (r7 == 0) goto L_0x0171
             if (r24 == 0) goto L_0x0171
-            r2 = 2131627173(0x7f0e0ca5, float:1.8881603E38)
+            r2 = 2131627179(0x7f0e0cab, float:1.8881615E38)
             java.lang.String r6 = "ReportUnrelatedGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r11.setTitle(r2)
@@ -919,7 +928,7 @@ public class AlertsCreator {
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelLocation
             if (r2 == 0) goto L_0x0164
             org.telegram.tgnet.TLRPC$TL_channelLocation r1 = (org.telegram.tgnet.TLRPC$TL_channelLocation) r1
-            r2 = 2131627174(0x7f0e0ca6, float:1.8881605E38)
+            r2 = 2131627180(0x7f0e0cac, float:1.8881617E38)
             java.lang.Object[] r4 = new java.lang.Object[r4]
             java.lang.String r1 = r1.address
             r4[r5] = r1
@@ -929,13 +938,13 @@ public class AlertsCreator {
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0164:
-            r1 = 2131627175(0x7f0e0ca7, float:1.8881607E38)
+            r1 = 2131627181(0x7f0e0cad, float:1.888162E38)
             java.lang.String r2 = "ReportUnrelatedGroupTextNoAddress"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0171:
-            r1 = 2131627166(0x7f0e0c9e, float:1.8881589E38)
+            r1 = 2131627172(0x7f0e0ca4, float:1.88816E38)
             java.lang.String r2 = "ReportSpamTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setTitle(r1)
@@ -943,18 +952,18 @@ public class AlertsCreator {
             if (r1 == 0) goto L_0x0194
             boolean r1 = r7.megagroup
             if (r1 != 0) goto L_0x0194
-            r1 = 2131627162(0x7f0e0c9a, float:1.888158E38)
+            r1 = 2131627168(0x7f0e0ca0, float:1.8881593E38)
             java.lang.String r2 = "ReportSpamAlertChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0194:
-            r1 = 2131627163(0x7f0e0c9b, float:1.8881583E38)
+            r1 = 2131627169(0x7f0e0ca1, float:1.8881595E38)
             java.lang.String r2 = "ReportSpamAlertGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
         L_0x01a0:
-            r1 = 2131627144(0x7f0e0CLASSNAME, float:1.8881544E38)
+            r1 = 2131627150(0x7f0e0c8e, float:1.8881556E38)
             java.lang.String r2 = "ReportChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r12 = r1
@@ -1506,11 +1515,11 @@ public class AlertsCreator {
             org.telegram.ui.ActionBar.AlertDialog$Builder r15 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r11.getParentActivity()
             r15.<init>((android.content.Context) r1)
-            r1 = 2131626535(0x7f0e0a27, float:1.8880309E38)
+            r1 = 2131626538(0x7f0e0a2a, float:1.8880315E38)
             java.lang.String r2 = "OpenUrlTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r15.setTitle(r1)
-            r1 = 2131626532(0x7f0e0a24, float:1.8880303E38)
+            r1 = 2131626535(0x7f0e0a27, float:1.8880309E38)
             java.lang.String r2 = "OpenUrlAlert2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r2 = "%"
@@ -1530,7 +1539,7 @@ public class AlertsCreator {
         L_0x009c:
             r15.setMessage(r3)
             r15.setMessageTextViewClickable(r5)
-            r13 = 2131626519(0x7f0e0a17, float:1.8880276E38)
+            r13 = 2131626522(0x7f0e0a1a, float:1.8880283E38)
             java.lang.String r1 = "Open"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r1, r13)
             org.telegram.ui.Components.-$$Lambda$AlertsCreator$U2MmMIxSeP3iUonn2jcMXTz4tUI r1 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$U2MmMIxSeP3iUonn2jcMXTz4tUI
@@ -1962,17 +1971,17 @@ public class AlertsCreator {
             if (r5 == 0) goto L_0x0159
             boolean r5 = r8.megagroup
             if (r5 == 0) goto L_0x014e
-            r15 = 2131625934(0x7f0e07ce, float:1.887909E38)
+            r15 = 2131625937(0x7f0e07d1, float:1.8879096E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r15)
             r14.setText(r5)
             goto L_0x016e
         L_0x014e:
-            r5 = 2131625932(0x7f0e07cc, float:1.8879086E38)
+            r5 = 2131625935(0x7f0e07cf, float:1.8879092E38)
             java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r3, r5)
             r14.setText(r15)
             goto L_0x016e
         L_0x0159:
-            r15 = 2131625934(0x7f0e07ce, float:1.887909E38)
+            r15 = 2131625937(0x7f0e07d1, float:1.8879096E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r15)
             r14.setText(r5)
             goto L_0x016e
@@ -2413,7 +2422,7 @@ public class AlertsCreator {
             if (r0 == 0) goto L_0x0502
             boolean r0 = r8.megagroup
             if (r0 == 0) goto L_0x04e9
-            r0 = 2131626082(0x7f0e0862, float:1.887939E38)
+            r0 = 2131626085(0x7f0e0865, float:1.8879396E38)
             r1 = 1
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = r8.title
@@ -2490,11 +2499,11 @@ public class AlertsCreator {
             if (r0 == 0) goto L_0x057f
             boolean r0 = r8.megagroup
             if (r0 == 0) goto L_0x0577
-            r0 = 2131625934(0x7f0e07ce, float:1.887909E38)
+            r0 = 2131625937(0x7f0e07d1, float:1.8879096E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r14, r0)
             goto L_0x0525
         L_0x0577:
-            r0 = 2131625932(0x7f0e07cc, float:1.8879086E38)
+            r0 = 2131625935(0x7f0e07cf, float:1.8879092E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r15, r0)
             goto L_0x0525
         L_0x057f:

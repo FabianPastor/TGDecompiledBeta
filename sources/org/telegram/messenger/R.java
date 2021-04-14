@@ -1536,16 +1536,13 @@ public final class R {
     public static final class mipmap {
         public static final int ic_launcher = NUM;
         public static final int ic_launcher_round = NUM;
+        public static final int ic_launcher_sa = NUM;
         public static final int icon_background = NUM;
         public static final int icon_background_round = NUM;
+        public static final int icon_background_sa = NUM;
         public static final int icon_foreground = NUM;
         public static final int icon_foreground_round = NUM;
-        public static final int msg_report_abuse = NUM;
-        public static final int msg_report_fake = NUM;
-        public static final int msg_report_other = NUM;
-        public static final int msg_report_spam = NUM;
-        public static final int msg_report_violence = NUM;
-        public static final int msg_report_xxx = NUM;
+        public static final int icon_foreground_sa = NUM;
 
         private mipmap() {
         }
@@ -3426,6 +3423,7 @@ public final class R {
         public static final int Gallery = NUM;
         public static final int GalleryInfo = NUM;
         public static final int GalleryPermissionText = NUM;
+        public static final int GameCantSendSecretChat = NUM;
         public static final int General = NUM;
         public static final int GetQRCode = NUM;
         public static final int GettingLinkInfo = NUM;
@@ -3624,6 +3622,8 @@ public final class R {
         public static final int InviteToTelegram = NUM;
         public static final int InviteUser = NUM;
         public static final int Invited = NUM;
+        public static final int InvoiceCantForwardSecretChat = NUM;
+        public static final int InvoiceCantSendSecretChat = NUM;
         public static final int IsRecordingAudio = NUM;
         public static final int IsRecordingRound = NUM;
         public static final int IsSendingAudio = NUM;
@@ -4768,6 +4768,9 @@ public final class R {
         public static final int PrivacyPaymentsClearAlert = NUM;
         public static final int PrivacyPaymentsClearAlertText = NUM;
         public static final int PrivacyPaymentsClearAlertTitle = NUM;
+        public static final int PrivacyPaymentsPaymentInfoCleared = NUM;
+        public static final int PrivacyPaymentsPaymentShippingCleared = NUM;
+        public static final int PrivacyPaymentsShippingInfoCleared = NUM;
         public static final int PrivacyPhone = NUM;
         public static final int PrivacyPhoneInfo = NUM;
         public static final int PrivacyPhoneInfo2 = NUM;

@@ -1255,7 +1255,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 this.gravitySensor = null;
             }
             this.proximitySensor = this.sensorManager.getDefaultSensor(8);
-            this.proximityWakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(32, "proximity");
+            this.proximityWakeLock = ((PowerManager) ApplicationLoader.applicationContext.getSystemService("power")).newWakeLock(32, "telegram:proximity_lock");
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
@@ -5734,7 +5734,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r5 = 2
             r4.<init>(r14, r5)     // Catch:{ Exception -> 0x0066 }
             java.lang.String r1 = "Loading"
-            r5 = 2131625981(0x7f0e07fd, float:1.8879185E38)
+            r5 = 2131625984(0x7f0e0800, float:1.8879191E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)     // Catch:{ Exception -> 0x0066 }
             r4.setMessage(r1)     // Catch:{ Exception -> 0x0066 }
             r4.setCanceledOnTouchOutside(r2)     // Catch:{ Exception -> 0x0066 }

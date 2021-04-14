@@ -503,3346 +503,3424 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v0, resolved type: org.telegram.ui.PaymentFormActivity} */
+    /* JADX WARNING: type inference failed for: r14v1, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r14v2 */
+    /* JADX WARNING: type inference failed for: r14v3 */
     /* JADX WARNING: Can't wrap try/catch for region: R(22:287|288|289|290|291|292|293|294|295|296|297|298|299|300|301|302|303|304|(1:306)(5:307|308|309|310|311)|312|(1:314)(1:315)|316) */
-    /* JADX WARNING: Code restructure failed: missing block: B:317:0x0acc, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:317:0x0ada, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:318:0x0acd, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:318:0x0adb, code lost:
         org.telegram.messenger.FileLog.e((java.lang.Throwable) r0);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:453:0x0var_, code lost:
-        if (r9.email_requested == false) goto L_0x0var_;
+    /* JADX WARNING: Code restructure failed: missing block: B:457:0x0f9d, code lost:
+        if (r6.email_requested == false) goto L_0x0f8e;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:78:0x0325, code lost:
-        if (r10.email_requested == false) goto L_0x0316;
+    /* JADX WARNING: Code restructure failed: missing block: B:78:0x0333, code lost:
+        if (r11.email_requested == false) goto L_0x0324;
      */
     /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
     /* JADX WARNING: Failed to insert additional move for type inference */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:292:0x0a8a */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:297:0x0a95 */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:302:0x0aa0 */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:310:0x0abc */
-    /* JADX WARNING: Removed duplicated region for block: B:489:0x12f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:496:0x13a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:501:0x13d1  */
-    /* JADX WARNING: Removed duplicated region for block: B:504:0x13fd  */
-    /* JADX WARNING: Removed duplicated region for block: B:505:0x13ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:508:0x142a  */
-    /* JADX WARNING: Removed duplicated region for block: B:509:0x1461  */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:292:0x0a98 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:297:0x0aa3 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:302:0x0aae */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:310:0x0aca */
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* JADX WARNING: Removed duplicated region for block: B:493:0x1315  */
+    /* JADX WARNING: Removed duplicated region for block: B:500:0x13c7  */
+    /* JADX WARNING: Removed duplicated region for block: B:505:0x13ef  */
+    /* JADX WARNING: Removed duplicated region for block: B:508:0x141b  */
+    /* JADX WARNING: Removed duplicated region for block: B:509:0x141d  */
+    /* JADX WARNING: Removed duplicated region for block: B:512:0x1448  */
+    /* JADX WARNING: Removed duplicated region for block: B:513:0x147f  */
+    /* JADX WARNING: Removed duplicated region for block: B:567:0x18ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:568:0x18da  */
+    /* JADX WARNING: Removed duplicated region for block: B:571:0x18fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:575:0x1912  */
+    /* JADX WARNING: Removed duplicated region for block: B:580:0x192a  */
+    /* JADX WARNING: Removed duplicated region for block: B:589:0x1976  */
+    /* JADX WARNING: Removed duplicated region for block: B:592:0x197c  */
+    /* JADX WARNING: Removed duplicated region for block: B:622:0x1aca  */
     @android.annotation.SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public android.view.View createView(android.content.Context r30) {
+    public android.view.View createView(android.content.Context r35) {
         /*
-            r29 = this;
-            r1 = r29
-            r2 = r30
-            int r0 = r1.currentStep
-            r3 = 6
-            r4 = 5
-            r5 = 4
-            r6 = 3
-            r7 = 2
-            r8 = 1
+            r34 = this;
+            r7 = r34
+            r8 = r35
+            int r0 = r7.currentStep
+            r9 = 6
+            r10 = 5
+            r11 = 4
+            r12 = 3
+            r13 = 2
+            r14 = 1
             if (r0 != 0) goto L_0x001e
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626827(0x7f0e0b4b, float:1.8880901E38)
-            java.lang.String r10 = "PaymentShippingInfo"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r0.setTitle(r9)
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
+            r1 = 2131626830(0x7f0e0b4e, float:1.8880907E38)
+            java.lang.String r2 = "PaymentShippingInfo"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setTitle(r1)
             goto L_0x00d6
         L_0x001e:
-            if (r0 != r8) goto L_0x0030
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626828(0x7f0e0b4c, float:1.8880903E38)
-            java.lang.String r10 = "PaymentShippingMethod"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r0.setTitle(r9)
+            if (r0 != r14) goto L_0x0030
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
+            r1 = 2131626831(0x7f0e0b4f, float:1.888091E38)
+            java.lang.String r2 = "PaymentShippingMethod"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setTitle(r1)
             goto L_0x00d6
         L_0x0030:
-            if (r0 != r7) goto L_0x0042
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626785(0x7f0e0b21, float:1.8880816E38)
-            java.lang.String r10 = "PaymentCardInfo"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r0.setTitle(r9)
+            if (r0 != r13) goto L_0x0042
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
+            r1 = 2131626788(0x7f0e0b24, float:1.8880822E38)
+            java.lang.String r2 = "PaymentCardInfo"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setTitle(r1)
             goto L_0x00d6
         L_0x0042:
-            if (r0 != r6) goto L_0x0054
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626785(0x7f0e0b21, float:1.8880816E38)
-            java.lang.String r10 = "PaymentCardInfo"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r0.setTitle(r9)
+            if (r0 != r12) goto L_0x0054
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
+            r1 = 2131626788(0x7f0e0b24, float:1.8880822E38)
+            java.lang.String r2 = "PaymentCardInfo"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setTitle(r1)
             goto L_0x00d6
         L_0x0054:
-            if (r0 != r5) goto L_0x008d
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
+            if (r0 != r11) goto L_0x008d
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
             boolean r0 = r0.test
             if (r0 == 0) goto L_0x007e
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder
-            r9.<init>()
-            java.lang.String r10 = "Test "
-            r9.append(r10)
-            r10 = 2131626792(0x7f0e0b28, float:1.888083E38)
-            java.lang.String r11 = "PaymentCheckout"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r9.append(r10)
-            java.lang.String r9 = r9.toString()
-            r0.setTitle(r9)
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder
+            r1.<init>()
+            java.lang.String r2 = "Test "
+            r1.append(r2)
+            r2 = 2131626795(0x7f0e0b2b, float:1.8880836E38)
+            java.lang.String r3 = "PaymentCheckout"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.append(r2)
+            java.lang.String r1 = r1.toString()
+            r0.setTitle(r1)
             goto L_0x00d6
         L_0x007e:
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626792(0x7f0e0b28, float:1.888083E38)
-            java.lang.String r10 = "PaymentCheckout"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r0.setTitle(r9)
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
+            r1 = 2131626795(0x7f0e0b2b, float:1.8880836E38)
+            java.lang.String r2 = "PaymentCheckout"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setTitle(r1)
             goto L_0x00d6
         L_0x008d:
-            if (r0 != r4) goto L_0x00c6
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
+            if (r0 != r10) goto L_0x00c6
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
             boolean r0 = r0.test
             if (r0 == 0) goto L_0x00b7
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder
-            r9.<init>()
-            java.lang.String r10 = "Test "
-            r9.append(r10)
-            r10 = 2131626820(0x7f0e0b44, float:1.8880887E38)
-            java.lang.String r11 = "PaymentReceipt"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r9.append(r10)
-            java.lang.String r9 = r9.toString()
-            r0.setTitle(r9)
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder
+            r1.<init>()
+            java.lang.String r2 = "Test "
+            r1.append(r2)
+            r2 = 2131626823(0x7f0e0b47, float:1.8880893E38)
+            java.lang.String r3 = "PaymentReceipt"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.append(r2)
+            java.lang.String r1 = r1.toString()
+            r0.setTitle(r1)
             goto L_0x00d6
         L_0x00b7:
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626820(0x7f0e0b44, float:1.8880887E38)
-            java.lang.String r10 = "PaymentReceipt"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r0.setTitle(r9)
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
+            r1 = 2131626823(0x7f0e0b47, float:1.8880893E38)
+            java.lang.String r2 = "PaymentReceipt"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setTitle(r1)
             goto L_0x00d6
         L_0x00c6:
-            if (r0 != r3) goto L_0x00d6
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626809(0x7f0e0b39, float:1.8880865E38)
-            java.lang.String r10 = "PaymentPassword"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r0.setTitle(r9)
+            if (r0 != r9) goto L_0x00d6
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
+            r1 = 2131626812(0x7f0e0b3c, float:1.888087E38)
+            java.lang.String r2 = "PaymentPassword"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setTitle(r1)
         L_0x00d6:
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131165469(0x7var_d, float:1.7945156E38)
-            r0.setBackButtonImage(r9)
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r0.setAllowOverlayTitle(r8)
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            org.telegram.ui.PaymentFormActivity$1 r9 = new org.telegram.ui.PaymentFormActivity$1
-            r9.<init>()
-            r0.setActionBarMenuOnItemClick(r9)
-            org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
+            r1 = 2131165469(0x7var_d, float:1.7945156E38)
+            r0.setBackButtonImage(r1)
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
+            r0.setAllowOverlayTitle(r14)
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
+            org.telegram.ui.PaymentFormActivity$1 r1 = new org.telegram.ui.PaymentFormActivity$1
+            r1.<init>()
+            r0.setActionBarMenuOnItemClick(r1)
+            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
-            int r9 = r1.currentStep
-            r10 = -1
-            if (r9 == 0) goto L_0x0102
-            if (r9 == r8) goto L_0x0102
-            if (r9 == r7) goto L_0x0102
-            if (r9 == r6) goto L_0x0102
-            if (r9 == r5) goto L_0x0102
-            if (r9 != r3) goto L_0x0144
+            int r1 = r7.currentStep
+            r15 = -1
+            if (r1 == 0) goto L_0x0102
+            if (r1 == r14) goto L_0x0102
+            if (r1 == r13) goto L_0x0102
+            if (r1 == r12) goto L_0x0102
+            if (r1 == r11) goto L_0x0102
+            if (r1 != r9) goto L_0x0144
         L_0x0102:
-            r9 = 2131165499(0x7var_b, float:1.7945217E38)
-            r11 = 1113587712(0x42600000, float:56.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            r12 = 2131625212(0x7f0e04fc, float:1.8877626E38)
-            java.lang.String r13 = "Done"
-            java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItemWithWidth(r8, r9, r11, r12)
-            r1.doneItem = r0
+            r1 = 2131165499(0x7var_b, float:1.7945217E38)
+            r2 = 1113587712(0x42600000, float:56.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r3 = 2131625212(0x7f0e04fc, float:1.8877626E38)
+            java.lang.String r4 = "Done"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItemWithWidth(r14, r1, r2, r3)
+            r7.doneItem = r0
             org.telegram.ui.Components.ContextProgressView r0 = new org.telegram.ui.Components.ContextProgressView
-            r0.<init>(r2, r8)
-            r1.progressView = r0
-            r9 = 0
-            r0.setAlpha(r9)
-            org.telegram.ui.Components.ContextProgressView r0 = r1.progressView
-            r9 = 1036831949(0x3dcccccd, float:0.1)
-            r0.setScaleX(r9)
-            org.telegram.ui.Components.ContextProgressView r0 = r1.progressView
-            r0.setScaleY(r9)
-            org.telegram.ui.Components.ContextProgressView r0 = r1.progressView
-            r0.setVisibility(r5)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r1.doneItem
-            org.telegram.ui.Components.ContextProgressView r9 = r1.progressView
-            r11 = -1082130432(0xffffffffbvar_, float:-1.0)
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11)
-            r0.addView(r9, r11)
+            r0.<init>(r8, r14)
+            r7.progressView = r0
+            r1 = 0
+            r0.setAlpha(r1)
+            org.telegram.ui.Components.ContextProgressView r0 = r7.progressView
+            r1 = 1036831949(0x3dcccccd, float:0.1)
+            r0.setScaleX(r1)
+            org.telegram.ui.Components.ContextProgressView r0 = r7.progressView
+            r0.setScaleY(r1)
+            org.telegram.ui.Components.ContextProgressView r0 = r7.progressView
+            r0.setVisibility(r11)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.doneItem
+            org.telegram.ui.Components.ContextProgressView r1 = r7.progressView
+            r2 = -1082130432(0xffffffffbvar_, float:-1.0)
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r2)
+            r0.addView(r1, r2)
         L_0x0144:
             android.widget.FrameLayout r0 = new android.widget.FrameLayout
-            r0.<init>(r2)
-            r1.fragmentView = r0
-            r9 = r0
-            android.widget.FrameLayout r9 = (android.widget.FrameLayout) r9
-            java.lang.String r11 = "windowBackgroundGray"
-            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r0.setBackgroundColor(r11)
+            r0.<init>(r8)
+            r7.fragmentView = r0
+            r6 = r0
+            android.widget.FrameLayout r6 = (android.widget.FrameLayout) r6
+            java.lang.String r1 = "windowBackgroundGray"
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r0.setBackgroundColor(r1)
             android.widget.ScrollView r0 = new android.widget.ScrollView
-            r0.<init>(r2)
-            r1.scrollView = r0
-            r0.setFillViewport(r8)
-            android.widget.ScrollView r0 = r1.scrollView
-            java.lang.String r11 = "actionBarDefault"
-            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            org.telegram.messenger.AndroidUtilities.setScrollViewEdgeEffectColor((android.widget.ScrollView) r0, (int) r11)
-            android.widget.ScrollView r0 = r1.scrollView
-            r11 = -1
-            r12 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r13 = 51
-            r14 = 0
-            r15 = 0
-            r16 = 0
-            int r4 = r1.currentStep
-            if (r4 != r5) goto L_0x0181
-            r4 = 1111490560(0x42400000, float:48.0)
-            r17 = 1111490560(0x42400000, float:48.0)
-            goto L_0x0184
-        L_0x0181:
-            r4 = 0
-            r17 = 0
+            r0.<init>(r8)
+            r7.scrollView = r0
+            r0.setFillViewport(r14)
+            android.widget.ScrollView r0 = r7.scrollView
+            java.lang.String r1 = "actionBarDefault"
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            org.telegram.messenger.AndroidUtilities.setScrollViewEdgeEffectColor((android.widget.ScrollView) r0, (int) r1)
+            android.widget.ScrollView r0 = r7.scrollView
+            r16 = -1
+            r17 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r18 = 51
+            r19 = 0
+            r20 = 0
+            r21 = 0
+            int r1 = r7.currentStep
+            if (r1 != r11) goto L_0x0184
+            r1 = 1111490560(0x42400000, float:48.0)
+            r22 = 1111490560(0x42400000, float:48.0)
+            goto L_0x0187
         L_0x0184:
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
-            r9.addView(r0, r4)
+            r1 = 0
+            r22 = 0
+        L_0x0187:
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
+            r6.addView(r0, r1)
             android.widget.LinearLayout r0 = new android.widget.LinearLayout
-            r0.<init>(r2)
-            r1.linearLayout2 = r0
-            r0.setOrientation(r8)
-            android.widget.ScrollView r0 = r1.scrollView
-            android.widget.LinearLayout r4 = r1.linearLayout2
-            android.widget.FrameLayout$LayoutParams r11 = new android.widget.FrameLayout$LayoutParams
-            r12 = -2
-            r11.<init>(r10, r12)
-            r0.addView(r4, r11)
-            int r0 = r1.currentStep
-            java.lang.String r13 = ""
-            java.lang.String r4 = "windowBackgroundWhiteBlackText"
-            java.lang.String r14 = "windowBackgroundGrayShadow"
-            java.lang.String r19 = "windowBackgroundWhite"
+            r0.<init>(r8)
+            r7.linearLayout2 = r0
+            r0.setOrientation(r14)
+            android.widget.LinearLayout r0 = r7.linearLayout2
             r5 = 0
-            if (r0 != 0) goto L_0x092e
-            java.util.HashMap r9 = new java.util.HashMap
-            r9.<init>()
-            java.util.HashMap r15 = new java.util.HashMap
-            r15.<init>()
-            java.io.BufferedReader r0 = new java.io.BufferedReader     // Catch:{ Exception -> 0x0219 }
-            java.io.InputStreamReader r11 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x0219 }
-            android.content.res.Resources r20 = r30.getResources()     // Catch:{ Exception -> 0x0219 }
-            android.content.res.AssetManager r3 = r20.getAssets()     // Catch:{ Exception -> 0x0219 }
-            java.lang.String r10 = "countries.txt"
-            java.io.InputStream r3 = r3.open(r10)     // Catch:{ Exception -> 0x0219 }
-            r11.<init>(r3)     // Catch:{ Exception -> 0x0219 }
-            r0.<init>(r11)     // Catch:{ Exception -> 0x0219 }
-        L_0x01d4:
-            java.lang.String r3 = r0.readLine()     // Catch:{ Exception -> 0x0219 }
-            if (r3 == 0) goto L_0x0215
-            java.lang.String r10 = ";"
-            java.lang.String[] r3 = r3.split(r10)     // Catch:{ Exception -> 0x0219 }
-            java.util.ArrayList<java.lang.String> r10 = r1.countriesArray     // Catch:{ Exception -> 0x0219 }
-            r11 = r3[r7]     // Catch:{ Exception -> 0x0219 }
-            r10.add(r5, r11)     // Catch:{ Exception -> 0x0219 }
-            java.util.HashMap<java.lang.String, java.lang.String> r10 = r1.countriesMap     // Catch:{ Exception -> 0x0219 }
-            r11 = r3[r7]     // Catch:{ Exception -> 0x0219 }
-            r12 = r3[r5]     // Catch:{ Exception -> 0x0219 }
-            r10.put(r11, r12)     // Catch:{ Exception -> 0x0219 }
-            java.util.HashMap<java.lang.String, java.lang.String> r10 = r1.codesMap     // Catch:{ Exception -> 0x0219 }
-            r11 = r3[r5]     // Catch:{ Exception -> 0x0219 }
-            r12 = r3[r7]     // Catch:{ Exception -> 0x0219 }
-            r10.put(r11, r12)     // Catch:{ Exception -> 0x0219 }
-            r10 = r3[r8]     // Catch:{ Exception -> 0x0219 }
-            r11 = r3[r7]     // Catch:{ Exception -> 0x0219 }
-            r15.put(r10, r11)     // Catch:{ Exception -> 0x0219 }
-            int r10 = r3.length     // Catch:{ Exception -> 0x0219 }
-            if (r10 <= r6) goto L_0x020c
-            java.util.HashMap<java.lang.String, java.lang.String> r10 = r1.phoneFormatMap     // Catch:{ Exception -> 0x0219 }
-            r11 = r3[r5]     // Catch:{ Exception -> 0x0219 }
-            r12 = r3[r6]     // Catch:{ Exception -> 0x0219 }
-            r10.put(r11, r12)     // Catch:{ Exception -> 0x0219 }
-        L_0x020c:
-            r10 = r3[r8]     // Catch:{ Exception -> 0x0219 }
-            r3 = r3[r7]     // Catch:{ Exception -> 0x0219 }
-            r9.put(r10, r3)     // Catch:{ Exception -> 0x0219 }
-            r12 = -2
-            goto L_0x01d4
-        L_0x0215:
-            r0.close()     // Catch:{ Exception -> 0x0219 }
-            goto L_0x021d
-        L_0x0219:
+            r0.setClipChildren(r5)
+            android.widget.ScrollView r0 = r7.scrollView
+            android.widget.LinearLayout r1 = r7.linearLayout2
+            android.widget.FrameLayout$LayoutParams r2 = new android.widget.FrameLayout$LayoutParams
+            r4 = -2
+            r2.<init>(r15, r4)
+            r0.addView(r1, r2)
+            int r0 = r7.currentStep
+            java.lang.String r3 = ""
+            java.lang.String r2 = "windowBackgroundWhiteBlackText"
+            java.lang.String r10 = "windowBackgroundGrayShadow"
+            java.lang.String r23 = "windowBackgroundWhite"
+            if (r0 != 0) goto L_0x093c
+            java.util.HashMap r6 = new java.util.HashMap
+            r6.<init>()
+            java.util.HashMap r1 = new java.util.HashMap
+            r1.<init>()
+            java.io.BufferedReader r0 = new java.io.BufferedReader     // Catch:{ Exception -> 0x0221 }
+            java.io.InputStreamReader r11 = new java.io.InputStreamReader     // Catch:{ Exception -> 0x0221 }
+            android.content.res.Resources r24 = r35.getResources()     // Catch:{ Exception -> 0x0221 }
+            android.content.res.AssetManager r9 = r24.getAssets()     // Catch:{ Exception -> 0x0221 }
+            java.lang.String r4 = "countries.txt"
+            java.io.InputStream r4 = r9.open(r4)     // Catch:{ Exception -> 0x0221 }
+            r11.<init>(r4)     // Catch:{ Exception -> 0x0221 }
+            r0.<init>(r11)     // Catch:{ Exception -> 0x0221 }
+        L_0x01dc:
+            java.lang.String r4 = r0.readLine()     // Catch:{ Exception -> 0x0221 }
+            if (r4 == 0) goto L_0x021d
+            java.lang.String r9 = ";"
+            java.lang.String[] r4 = r4.split(r9)     // Catch:{ Exception -> 0x0221 }
+            java.util.ArrayList<java.lang.String> r9 = r7.countriesArray     // Catch:{ Exception -> 0x0221 }
+            r11 = r4[r13]     // Catch:{ Exception -> 0x0221 }
+            r9.add(r5, r11)     // Catch:{ Exception -> 0x0221 }
+            java.util.HashMap<java.lang.String, java.lang.String> r9 = r7.countriesMap     // Catch:{ Exception -> 0x0221 }
+            r11 = r4[r13]     // Catch:{ Exception -> 0x0221 }
+            r15 = r4[r5]     // Catch:{ Exception -> 0x0221 }
+            r9.put(r11, r15)     // Catch:{ Exception -> 0x0221 }
+            java.util.HashMap<java.lang.String, java.lang.String> r9 = r7.codesMap     // Catch:{ Exception -> 0x0221 }
+            r11 = r4[r5]     // Catch:{ Exception -> 0x0221 }
+            r15 = r4[r13]     // Catch:{ Exception -> 0x0221 }
+            r9.put(r11, r15)     // Catch:{ Exception -> 0x0221 }
+            r9 = r4[r14]     // Catch:{ Exception -> 0x0221 }
+            r11 = r4[r13]     // Catch:{ Exception -> 0x0221 }
+            r1.put(r9, r11)     // Catch:{ Exception -> 0x0221 }
+            int r9 = r4.length     // Catch:{ Exception -> 0x0221 }
+            if (r9 <= r12) goto L_0x0214
+            java.util.HashMap<java.lang.String, java.lang.String> r9 = r7.phoneFormatMap     // Catch:{ Exception -> 0x0221 }
+            r11 = r4[r5]     // Catch:{ Exception -> 0x0221 }
+            r15 = r4[r12]     // Catch:{ Exception -> 0x0221 }
+            r9.put(r11, r15)     // Catch:{ Exception -> 0x0221 }
+        L_0x0214:
+            r9 = r4[r14]     // Catch:{ Exception -> 0x0221 }
+            r4 = r4[r13]     // Catch:{ Exception -> 0x0221 }
+            r6.put(r9, r4)     // Catch:{ Exception -> 0x0221 }
+            r15 = -1
+            goto L_0x01dc
+        L_0x021d:
+            r0.close()     // Catch:{ Exception -> 0x0221 }
+            goto L_0x0225
+        L_0x0221:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x021d:
-            java.util.ArrayList<java.lang.String> r0 = r1.countriesArray
-            org.telegram.ui.-$$Lambda$Ds7dtVnGrflEw4-LvNOxA0cDT4Y r3 = org.telegram.ui.$$Lambda$Ds7dtVnGrflEw4LvNOxA0cDT4Y.INSTANCE
-            java.util.Collections.sort(r0, r3)
+        L_0x0225:
+            java.util.ArrayList<java.lang.String> r0 = r7.countriesArray
+            org.telegram.ui.-$$Lambda$Ds7dtVnGrflEw4-LvNOxA0cDT4Y r4 = org.telegram.ui.$$Lambda$Ds7dtVnGrflEw4LvNOxA0cDT4Y.INSTANCE
+            java.util.Collections.sort(r0, r4)
             r0 = 10
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = new org.telegram.ui.Components.EditTextBoldCursor[r0]
-            r1.inputFields = r0
+            r7.inputFields = r0
             r0 = 0
-        L_0x022b:
-            r3 = 10
-            if (r0 >= r3) goto L_0x076a
-            if (r0 != 0) goto L_0x0268
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            org.telegram.ui.Cells.HeaderCell r10 = new org.telegram.ui.Cells.HeaderCell
-            r10.<init>(r2)
-            r3[r5] = r10
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r5]
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r10)
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r5]
-            r10 = 2131626821(0x7f0e0b45, float:1.888089E38)
+        L_0x0233:
+            r4 = 10
+            if (r0 >= r4) goto L_0x0778
+            if (r0 != 0) goto L_0x0270
+            org.telegram.ui.Cells.HeaderCell[] r4 = r7.headerCell
+            org.telegram.ui.Cells.HeaderCell r9 = new org.telegram.ui.Cells.HeaderCell
+            r9.<init>(r8)
+            r4[r5] = r9
+            org.telegram.ui.Cells.HeaderCell[] r4 = r7.headerCell
+            r4 = r4[r5]
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r4.setBackgroundColor(r9)
+            org.telegram.ui.Cells.HeaderCell[] r4 = r7.headerCell
+            r4 = r4[r5]
+            r9 = 2131626824(0x7f0e0b48, float:1.8880895E38)
             java.lang.String r11 = "PaymentShippingAddress"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r3.setText(r10)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.HeaderCell[] r10 = r1.headerCell
-            r10 = r10[r5]
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
+            r4.setText(r9)
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            org.telegram.ui.Cells.HeaderCell[] r9 = r7.headerCell
+            r9 = r9[r5]
             r11 = -2
-            r12 = -1
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r12, r11)
-            r3.addView(r10, r7)
-            r3 = 8
-            r11 = -1
-            goto L_0x02ba
-        L_0x0268:
-            r3 = 6
+            r15 = -1
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r11)
+            r4.addView(r9, r13)
+            r4 = 8
+            r13 = -1
+            goto L_0x02c2
+        L_0x0270:
+            r4 = 6
             r11 = -2
-            r12 = -1
-            if (r0 != r3) goto L_0x02b7
-            org.telegram.ui.Cells.ShadowSectionCell[] r3 = r1.sectionCell
-            org.telegram.ui.Cells.ShadowSectionCell r7 = new org.telegram.ui.Cells.ShadowSectionCell
-            r7.<init>(r2)
-            r3[r5] = r7
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.ShadowSectionCell[] r7 = r1.sectionCell
-            r7 = r7[r5]
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r12, r11)
-            r3.addView(r7, r10)
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            org.telegram.ui.Cells.HeaderCell r7 = new org.telegram.ui.Cells.HeaderCell
-            r7.<init>(r2)
-            r3[r8] = r7
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r8]
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r7)
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r8]
-            r7 = 2131626831(0x7f0e0b4f, float:1.888091E38)
-            java.lang.String r10 = "PaymentShippingReceiver"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
-            r3.setText(r7)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.HeaderCell[] r7 = r1.headerCell
-            r7 = r7[r8]
-            r10 = -2
-            r11 = -1
-            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r10)
-            r3.addView(r7, r12)
-            goto L_0x02b8
-        L_0x02b7:
-            r11 = -1
-        L_0x02b8:
-            r3 = 8
-        L_0x02ba:
-            if (r0 != r3) goto L_0x02da
-            android.widget.LinearLayout r3 = new android.widget.LinearLayout
-            r3.<init>(r2)
-            r3.setOrientation(r5)
-            android.widget.LinearLayout r7 = r1.linearLayout2
-            r10 = 50
-            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r10)
-            r7.addView(r3, r12)
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r7)
-        L_0x02d6:
-            r7 = 9
-            goto L_0x0347
-        L_0x02da:
-            r3 = 9
-            if (r0 != r3) goto L_0x02eb
-            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r1.inputFields
-            r7 = 8
-            r3 = r3[r7]
-            android.view.ViewParent r3 = r3.getParent()
-            android.view.ViewGroup r3 = (android.view.ViewGroup) r3
-            goto L_0x02d6
-        L_0x02eb:
-            android.widget.FrameLayout r3 = new android.widget.FrameLayout
-            r3.<init>(r2)
-            android.widget.LinearLayout r7 = r1.linearLayout2
-            r10 = 50
-            r11 = -1
-            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r10)
-            r7.addView(r3, r12)
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r7)
-            r7 = 5
-            if (r0 == r7) goto L_0x0308
-            r7 = 1
-            goto L_0x0309
-        L_0x0308:
-            r7 = 0
-        L_0x0309:
-            if (r7 == 0) goto L_0x0328
-            r10 = 7
-            if (r0 != r10) goto L_0x0318
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r10 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r10 = r10.invoice
-            boolean r10 = r10.phone_requested
-            if (r10 != 0) goto L_0x0318
+            r15 = -1
+            if (r0 != r4) goto L_0x02bf
+            org.telegram.ui.Cells.ShadowSectionCell[] r4 = r7.sectionCell
+            org.telegram.ui.Cells.ShadowSectionCell r9 = new org.telegram.ui.Cells.ShadowSectionCell
+            r9.<init>(r8)
+            r4[r5] = r9
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            org.telegram.ui.Cells.ShadowSectionCell[] r9 = r7.sectionCell
+            r9 = r9[r5]
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r11)
+            r4.addView(r9, r13)
+            org.telegram.ui.Cells.HeaderCell[] r4 = r7.headerCell
+            org.telegram.ui.Cells.HeaderCell r9 = new org.telegram.ui.Cells.HeaderCell
+            r9.<init>(r8)
+            r4[r14] = r9
+            org.telegram.ui.Cells.HeaderCell[] r4 = r7.headerCell
+            r4 = r4[r14]
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r4.setBackgroundColor(r9)
+            org.telegram.ui.Cells.HeaderCell[] r4 = r7.headerCell
+            r4 = r4[r14]
+            r9 = 2131626834(0x7f0e0b52, float:1.8880915E38)
+            java.lang.String r11 = "PaymentShippingReceiver"
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
+            r4.setText(r9)
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            org.telegram.ui.Cells.HeaderCell[] r9 = r7.headerCell
+            r9 = r9[r14]
+            r11 = -2
+            r13 = -1
+            android.widget.LinearLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createLinear(r13, r11)
+            r4.addView(r9, r15)
+            goto L_0x02c0
+        L_0x02bf:
+            r13 = -1
+        L_0x02c0:
+            r4 = 8
+        L_0x02c2:
+            if (r0 != r4) goto L_0x02e5
+            android.widget.LinearLayout r4 = new android.widget.LinearLayout
+            r4.<init>(r8)
+            r4.setClipChildren(r5)
+            r4.setOrientation(r5)
+            android.widget.LinearLayout r9 = r7.linearLayout2
+            r11 = 50
+            android.widget.LinearLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createLinear(r13, r11)
+            r9.addView(r4, r15)
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r4.setBackgroundColor(r9)
+        L_0x02e1:
+            r9 = 9
+            goto L_0x0355
+        L_0x02e5:
+            r4 = 9
+            if (r0 != r4) goto L_0x02f6
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r9 = 8
+            r4 = r4[r9]
+            android.view.ViewParent r4 = r4.getParent()
+            android.view.ViewGroup r4 = (android.view.ViewGroup) r4
+            goto L_0x02e1
+        L_0x02f6:
+            android.widget.FrameLayout r4 = new android.widget.FrameLayout
+            r4.<init>(r8)
+            r4.setClipChildren(r5)
+            android.widget.LinearLayout r9 = r7.linearLayout2
+            r11 = 50
+            r13 = -1
+            android.widget.LinearLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createLinear(r13, r11)
+            r9.addView(r4, r15)
+            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r4.setBackgroundColor(r9)
+            r9 = 5
+            if (r0 == r9) goto L_0x0316
+            r9 = 1
+            goto L_0x0317
         L_0x0316:
-            r7 = 0
-            goto L_0x0328
-        L_0x0318:
-            r10 = 6
-            if (r0 != r10) goto L_0x0328
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r10 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r10 = r10.invoice
-            boolean r11 = r10.phone_requested
-            if (r11 != 0) goto L_0x0328
-            boolean r10 = r10.email_requested
-            if (r10 != 0) goto L_0x0328
-            goto L_0x0316
-        L_0x0328:
-            if (r7 == 0) goto L_0x02d6
-            org.telegram.ui.PaymentFormActivity$2 r7 = new org.telegram.ui.PaymentFormActivity$2
-            r7.<init>(r1, r2)
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r7.setBackgroundColor(r10)
-            java.util.ArrayList<android.view.View> r10 = r1.dividers
-            r10.add(r7)
-            android.widget.FrameLayout$LayoutParams r10 = new android.widget.FrameLayout$LayoutParams
-            r11 = 83
-            r12 = -1
-            r10.<init>(r12, r8, r11)
-            r3.addView(r7, r10)
-            goto L_0x02d6
-        L_0x0347:
-            if (r0 != r7) goto L_0x0353
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            org.telegram.ui.Components.HintEditText r10 = new org.telegram.ui.Components.HintEditText
-            r10.<init>(r2)
-            r7[r0] = r10
-            goto L_0x035c
-        L_0x0353:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            org.telegram.ui.Components.EditTextBoldCursor r10 = new org.telegram.ui.Components.EditTextBoldCursor
-            r10.<init>(r2)
-            r7[r0] = r10
-        L_0x035c:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r0)
-            r7.setTag(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 1098907648(0x41800000, float:16.0)
-            r7.setTextSize(r8, r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            java.lang.String r10 = "windowBackgroundWhiteHintText"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r7.setHintTextColor(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r7.setTextColor(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 0
-            r7.setBackgroundDrawable(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r7.setCursorColor(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 1101004800(0x41a00000, float:20.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r7.setCursorSize(r11)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 1069547520(0x3fCLASSNAME, float:1.5)
-            r7.setCursorWidth(r10)
-            r7 = 4
-            if (r0 != r7) goto L_0x03c8
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$IfUWsdY6A3YdC7z4Rkp3xdEZ1P8 r10 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$IfUWsdY6A3YdC7z4Rkp3xdEZ1P8
-            r10.<init>()
-            r7.setOnTouchListener(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r7.setInputType(r5)
-        L_0x03c8:
-            r7 = 9
-            if (r0 == r7) goto L_0x03e6
-            r7 = 8
-            if (r0 != r7) goto L_0x03d1
-            goto L_0x03e6
-        L_0x03d1:
-            r7 = 7
-            if (r0 != r7) goto L_0x03dc
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r7.setInputType(r8)
-            goto L_0x03ed
-        L_0x03dc:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 16385(0x4001, float:2.296E-41)
-            r7.setInputType(r10)
-            goto L_0x03ed
-        L_0x03e6:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r7.setInputType(r6)
-        L_0x03ed:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 268435461(0x10000005, float:2.5243564E-29)
-            r7.setImeOptions(r10)
+            r9 = 0
+        L_0x0317:
+            if (r9 == 0) goto L_0x0336
+            r11 = 7
+            if (r0 != r11) goto L_0x0326
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r11 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r11 = r11.invoice
+            boolean r11 = r11.phone_requested
+            if (r11 != 0) goto L_0x0326
+        L_0x0324:
+            r9 = 0
+            goto L_0x0336
+        L_0x0326:
+            r11 = 6
+            if (r0 != r11) goto L_0x0336
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r11 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r11 = r11.invoice
+            boolean r13 = r11.phone_requested
+            if (r13 != 0) goto L_0x0336
+            boolean r11 = r11.email_requested
+            if (r11 != 0) goto L_0x0336
+            goto L_0x0324
+        L_0x0336:
+            if (r9 == 0) goto L_0x02e1
+            org.telegram.ui.PaymentFormActivity$2 r9 = new org.telegram.ui.PaymentFormActivity$2
+            r9.<init>(r7, r8)
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r9.setBackgroundColor(r11)
+            java.util.ArrayList<android.view.View> r11 = r7.dividers
+            r11.add(r9)
+            android.widget.FrameLayout$LayoutParams r11 = new android.widget.FrameLayout$LayoutParams
+            r13 = 83
+            r15 = -1
+            r11.<init>(r15, r14, r13)
+            r4.addView(r9, r11)
+            goto L_0x02e1
+        L_0x0355:
+            if (r0 != r9) goto L_0x0361
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            org.telegram.ui.Components.HintEditText r11 = new org.telegram.ui.Components.HintEditText
+            r11.<init>(r8)
+            r9[r0] = r11
+            goto L_0x036a
+        L_0x0361:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            org.telegram.ui.Components.EditTextBoldCursor r11 = new org.telegram.ui.Components.EditTextBoldCursor
+            r11.<init>(r8)
+            r9[r0] = r11
+        L_0x036a:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r0)
+            r9.setTag(r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 1098907648(0x41800000, float:16.0)
+            r9.setTextSize(r14, r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            java.lang.String r11 = "windowBackgroundWhiteHintText"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r9.setHintTextColor(r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r9.setTextColor(r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 0
+            r9.setBackgroundDrawable(r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r9.setCursorColor(r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 1101004800(0x41a00000, float:20.0)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            r9.setCursorSize(r13)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 1069547520(0x3fCLASSNAME, float:1.5)
+            r9.setCursorWidth(r11)
+            r9 = 4
+            if (r0 != r9) goto L_0x03d6
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$IfUWsdY6A3YdC7z4Rkp3xdEZ1P8 r11 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$IfUWsdY6A3YdC7z4Rkp3xdEZ1P8
+            r11.<init>()
+            r9.setOnTouchListener(r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r9.setInputType(r5)
+        L_0x03d6:
+            r9 = 9
+            if (r0 == r9) goto L_0x03f4
+            r9 = 8
+            if (r0 != r9) goto L_0x03df
+            goto L_0x03f4
+        L_0x03df:
+            r9 = 7
+            if (r0 != r9) goto L_0x03ea
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r9.setInputType(r14)
+            goto L_0x03fb
+        L_0x03ea:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 16385(0x4001, float:2.296E-41)
+            r9.setInputType(r11)
+            goto L_0x03fb
+        L_0x03f4:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r9.setInputType(r12)
+        L_0x03fb:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 268435461(0x10000005, float:2.5243564E-29)
+            r9.setImeOptions(r11)
             switch(r0) {
-                case 0: goto L_0x050c;
-                case 1: goto L_0x04e8;
-                case 2: goto L_0x04c4;
-                case 3: goto L_0x04a0;
-                case 4: goto L_0x0467;
-                case 5: goto L_0x0442;
-                case 6: goto L_0x041f;
-                case 7: goto L_0x03fc;
-                default: goto L_0x03fa;
+                case 0: goto L_0x051a;
+                case 1: goto L_0x04f6;
+                case 2: goto L_0x04d2;
+                case 3: goto L_0x04ae;
+                case 4: goto L_0x0475;
+                case 5: goto L_0x0450;
+                case 6: goto L_0x042d;
+                case 7: goto L_0x040a;
+                default: goto L_0x0408;
             }
-        L_0x03fa:
-            goto L_0x052f
-        L_0x03fc:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 2131626826(0x7f0e0b4a, float:1.88809E38)
-            java.lang.String r11 = "PaymentShippingEmailPlaceholder"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r7.setHint(r10)
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x052f
-            java.lang.String r7 = r7.email
-            if (r7 == 0) goto L_0x052f
-            org.telegram.ui.Components.EditTextBoldCursor[] r10 = r1.inputFields
-            r10 = r10[r0]
-            r10.setText(r7)
-            goto L_0x052f
-        L_0x041f:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 2131626829(0x7f0e0b4d, float:1.8880905E38)
-            java.lang.String r11 = "PaymentShippingName"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r7.setHint(r10)
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x052f
-            java.lang.String r7 = r7.name
-            if (r7 == 0) goto L_0x052f
-            org.telegram.ui.Components.EditTextBoldCursor[] r10 = r1.inputFields
-            r10 = r10[r0]
-            r10.setText(r7)
-            goto L_0x052f
-        L_0x0442:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 2131626835(0x7f0e0b53, float:1.8880917E38)
-            java.lang.String r11 = "PaymentShippingZipPlaceholder"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r7.setHint(r10)
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x052f
-            org.telegram.tgnet.TLRPC$TL_postAddress r7 = r7.shipping_address
-            if (r7 == 0) goto L_0x052f
-            org.telegram.ui.Components.EditTextBoldCursor[] r10 = r1.inputFields
-            r10 = r10[r0]
-            java.lang.String r7 = r7.post_code
-            r10.setText(r7)
-            goto L_0x052f
-        L_0x0467:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 2131626825(0x7f0e0b49, float:1.8880897E38)
-            java.lang.String r11 = "PaymentShippingCountry"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r7.setHint(r10)
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x052f
-            org.telegram.tgnet.TLRPC$TL_postAddress r7 = r7.shipping_address
-            if (r7 == 0) goto L_0x052f
-            java.lang.String r7 = r7.country_iso2
-            java.lang.Object r7 = r15.get(r7)
-            java.lang.String r7 = (java.lang.String) r7
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r10 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r10 = r10.saved_info
-            org.telegram.tgnet.TLRPC$TL_postAddress r10 = r10.shipping_address
-            java.lang.String r10 = r10.country_iso2
-            r1.countryName = r10
-            org.telegram.ui.Components.EditTextBoldCursor[] r11 = r1.inputFields
+        L_0x0408:
+            goto L_0x053d
+        L_0x040a:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 2131626829(0x7f0e0b4d, float:1.8880905E38)
+            java.lang.String r13 = "PaymentShippingEmailPlaceholder"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
+            r9.setHint(r11)
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r9 = r9.saved_info
+            if (r9 == 0) goto L_0x053d
+            java.lang.String r9 = r9.email
+            if (r9 == 0) goto L_0x053d
+            org.telegram.ui.Components.EditTextBoldCursor[] r11 = r7.inputFields
             r11 = r11[r0]
-            if (r7 == 0) goto L_0x049a
-            goto L_0x049b
-        L_0x049a:
-            r7 = r10
-        L_0x049b:
-            r11.setText(r7)
-            goto L_0x052f
-        L_0x04a0:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 2131626834(0x7f0e0b52, float:1.8880915E38)
-            java.lang.String r11 = "PaymentShippingStatePlaceholder"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r7.setHint(r10)
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x052f
-            org.telegram.tgnet.TLRPC$TL_postAddress r7 = r7.shipping_address
-            if (r7 == 0) goto L_0x052f
-            org.telegram.ui.Components.EditTextBoldCursor[] r10 = r1.inputFields
-            r10 = r10[r0]
-            java.lang.String r7 = r7.state
-            r10.setText(r7)
-            goto L_0x052f
-        L_0x04c4:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 2131626824(0x7f0e0b48, float:1.8880895E38)
-            java.lang.String r11 = "PaymentShippingCityPlaceholder"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r7.setHint(r10)
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x052f
-            org.telegram.tgnet.TLRPC$TL_postAddress r7 = r7.shipping_address
-            if (r7 == 0) goto L_0x052f
-            org.telegram.ui.Components.EditTextBoldCursor[] r10 = r1.inputFields
-            r10 = r10[r0]
-            java.lang.String r7 = r7.city
-            r10.setText(r7)
-            goto L_0x052f
-        L_0x04e8:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 2131626823(0x7f0e0b47, float:1.8880893E38)
-            java.lang.String r11 = "PaymentShippingAddress2Placeholder"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r7.setHint(r10)
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x052f
-            org.telegram.tgnet.TLRPC$TL_postAddress r7 = r7.shipping_address
-            if (r7 == 0) goto L_0x052f
-            org.telegram.ui.Components.EditTextBoldCursor[] r10 = r1.inputFields
-            r10 = r10[r0]
-            java.lang.String r7 = r7.street_line2
-            r10.setText(r7)
-            goto L_0x052f
-        L_0x050c:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 2131626822(0x7f0e0b46, float:1.8880891E38)
-            java.lang.String r11 = "PaymentShippingAddress1Placeholder"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r7.setHint(r10)
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r7 = r7.saved_info
-            if (r7 == 0) goto L_0x052f
-            org.telegram.tgnet.TLRPC$TL_postAddress r7 = r7.shipping_address
-            if (r7 == 0) goto L_0x052f
-            org.telegram.ui.Components.EditTextBoldCursor[] r10 = r1.inputFields
-            r10 = r10[r0]
-            java.lang.String r7 = r7.street_line1
-            r10.setText(r7)
-        L_0x052f:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r10 = r7[r0]
-            r7 = r7[r0]
-            int r7 = r7.length()
-            r10.setSelection(r7)
-            r7 = 8
-            if (r0 != r7) goto L_0x05b6
-            android.widget.TextView r7 = new android.widget.TextView
-            r7.<init>(r2)
-            r1.textView = r7
-            java.lang.String r10 = "+"
-            r7.setText(r10)
-            android.widget.TextView r7 = r1.textView
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r7.setTextColor(r10)
-            android.widget.TextView r7 = r1.textView
-            r10 = 1098907648(0x41800000, float:16.0)
-            r7.setTextSize(r8, r10)
-            android.widget.TextView r7 = r1.textView
-            r21 = -2
-            r22 = -2
-            r23 = 1101529088(0x41a80000, float:21.0)
-            r24 = 1094713344(0x41400000, float:12.0)
-            r25 = 0
-            r26 = 1086324736(0x40CLASSNAME, float:6.0)
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r21, r22, r23, r24, r25, r26)
-            r3.addView(r7, r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 1092616192(0x41200000, float:10.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r7.setPadding(r10, r5, r5, r5)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 19
-            r7.setGravity(r10)
-            android.text.InputFilter[] r7 = new android.text.InputFilter[r8]
-            android.text.InputFilter$LengthFilter r10 = new android.text.InputFilter$LengthFilter
+            r11.setText(r9)
+            goto L_0x053d
+        L_0x042d:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 2131626832(0x7f0e0b50, float:1.8880911E38)
+            java.lang.String r13 = "PaymentShippingName"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
+            r9.setHint(r11)
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r9 = r9.saved_info
+            if (r9 == 0) goto L_0x053d
+            java.lang.String r9 = r9.name
+            if (r9 == 0) goto L_0x053d
+            org.telegram.ui.Components.EditTextBoldCursor[] r11 = r7.inputFields
+            r11 = r11[r0]
+            r11.setText(r9)
+            goto L_0x053d
+        L_0x0450:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 2131626838(0x7f0e0b56, float:1.8880923E38)
+            java.lang.String r13 = "PaymentShippingZipPlaceholder"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
+            r9.setHint(r11)
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r9 = r9.saved_info
+            if (r9 == 0) goto L_0x053d
+            org.telegram.tgnet.TLRPC$TL_postAddress r9 = r9.shipping_address
+            if (r9 == 0) goto L_0x053d
+            org.telegram.ui.Components.EditTextBoldCursor[] r11 = r7.inputFields
+            r11 = r11[r0]
+            java.lang.String r9 = r9.post_code
+            r11.setText(r9)
+            goto L_0x053d
+        L_0x0475:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 2131626828(0x7f0e0b4c, float:1.8880903E38)
+            java.lang.String r13 = "PaymentShippingCountry"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
+            r9.setHint(r11)
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r9 = r9.saved_info
+            if (r9 == 0) goto L_0x053d
+            org.telegram.tgnet.TLRPC$TL_postAddress r9 = r9.shipping_address
+            if (r9 == 0) goto L_0x053d
+            java.lang.String r9 = r9.country_iso2
+            java.lang.Object r9 = r1.get(r9)
+            java.lang.String r9 = (java.lang.String) r9
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r11 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r11 = r11.saved_info
+            org.telegram.tgnet.TLRPC$TL_postAddress r11 = r11.shipping_address
+            java.lang.String r11 = r11.country_iso2
+            r7.countryName = r11
+            org.telegram.ui.Components.EditTextBoldCursor[] r13 = r7.inputFields
+            r13 = r13[r0]
+            if (r9 == 0) goto L_0x04a8
+            goto L_0x04a9
+        L_0x04a8:
+            r9 = r11
+        L_0x04a9:
+            r13.setText(r9)
+            goto L_0x053d
+        L_0x04ae:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 2131626837(0x7f0e0b55, float:1.8880921E38)
+            java.lang.String r13 = "PaymentShippingStatePlaceholder"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
+            r9.setHint(r11)
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r9 = r9.saved_info
+            if (r9 == 0) goto L_0x053d
+            org.telegram.tgnet.TLRPC$TL_postAddress r9 = r9.shipping_address
+            if (r9 == 0) goto L_0x053d
+            org.telegram.ui.Components.EditTextBoldCursor[] r11 = r7.inputFields
+            r11 = r11[r0]
+            java.lang.String r9 = r9.state
+            r11.setText(r9)
+            goto L_0x053d
+        L_0x04d2:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 2131626827(0x7f0e0b4b, float:1.8880901E38)
+            java.lang.String r13 = "PaymentShippingCityPlaceholder"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
+            r9.setHint(r11)
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r9 = r9.saved_info
+            if (r9 == 0) goto L_0x053d
+            org.telegram.tgnet.TLRPC$TL_postAddress r9 = r9.shipping_address
+            if (r9 == 0) goto L_0x053d
+            org.telegram.ui.Components.EditTextBoldCursor[] r11 = r7.inputFields
+            r11 = r11[r0]
+            java.lang.String r9 = r9.city
+            r11.setText(r9)
+            goto L_0x053d
+        L_0x04f6:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 2131626826(0x7f0e0b4a, float:1.88809E38)
+            java.lang.String r13 = "PaymentShippingAddress2Placeholder"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
+            r9.setHint(r11)
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r9 = r9.saved_info
+            if (r9 == 0) goto L_0x053d
+            org.telegram.tgnet.TLRPC$TL_postAddress r9 = r9.shipping_address
+            if (r9 == 0) goto L_0x053d
+            org.telegram.ui.Components.EditTextBoldCursor[] r11 = r7.inputFields
+            r11 = r11[r0]
+            java.lang.String r9 = r9.street_line2
+            r11.setText(r9)
+            goto L_0x053d
+        L_0x051a:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 2131626825(0x7f0e0b49, float:1.8880897E38)
+            java.lang.String r13 = "PaymentShippingAddress1Placeholder"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
+            r9.setHint(r11)
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r9 = r9.saved_info
+            if (r9 == 0) goto L_0x053d
+            org.telegram.tgnet.TLRPC$TL_postAddress r9 = r9.shipping_address
+            if (r9 == 0) goto L_0x053d
+            org.telegram.ui.Components.EditTextBoldCursor[] r11 = r7.inputFields
+            r11 = r11[r0]
+            java.lang.String r9 = r9.street_line1
+            r11.setText(r9)
+        L_0x053d:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r11 = r9[r0]
+            r9 = r9[r0]
+            int r9 = r9.length()
+            r11.setSelection(r9)
+            r9 = 8
+            if (r0 != r9) goto L_0x05c4
+            android.widget.TextView r9 = new android.widget.TextView
+            r9.<init>(r8)
+            r7.textView = r9
+            java.lang.String r11 = "+"
+            r9.setText(r11)
+            android.widget.TextView r9 = r7.textView
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r9.setTextColor(r11)
+            android.widget.TextView r9 = r7.textView
+            r11 = 1098907648(0x41800000, float:16.0)
+            r9.setTextSize(r14, r11)
+            android.widget.TextView r9 = r7.textView
+            r25 = -2
+            r26 = -2
+            r27 = 1101529088(0x41a80000, float:21.0)
+            r28 = 1094713344(0x41400000, float:12.0)
+            r29 = 0
+            r30 = 1086324736(0x40CLASSNAME, float:6.0)
+            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r25, r26, r27, r28, r29, r30)
+            r4.addView(r9, r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 1092616192(0x41200000, float:10.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            r9.setPadding(r11, r5, r5, r5)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 19
+            r9.setGravity(r11)
+            android.text.InputFilter[] r9 = new android.text.InputFilter[r14]
+            android.text.InputFilter$LengthFilter r11 = new android.text.InputFilter$LengthFilter
+            r13 = 5
+            r11.<init>(r13)
+            r9[r5] = r11
+            org.telegram.ui.Components.EditTextBoldCursor[] r11 = r7.inputFields
+            r11 = r11[r0]
+            r11.setFilters(r9)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r25 = 55
+            r27 = 0
+            r29 = 1101529088(0x41a80000, float:21.0)
+            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r25, r26, r27, r28, r29, r30)
+            r4.addView(r9, r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            org.telegram.ui.PaymentFormActivity$3 r9 = new org.telegram.ui.PaymentFormActivity$3
+            r9.<init>()
+            r4.addTextChangedListener(r9)
+            goto L_0x0630
+        L_0x05c4:
+            r9 = 9
+            if (r0 != r9) goto L_0x05fc
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r9.setPadding(r5, r5, r5, r5)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 19
+            r9.setGravity(r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r25 = -1
+            r26 = -2
+            r27 = 0
+            r28 = 1094713344(0x41400000, float:12.0)
+            r29 = 1101529088(0x41a80000, float:21.0)
+            r30 = 1086324736(0x40CLASSNAME, float:6.0)
+            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r25, r26, r27, r28, r29, r30)
+            r4.addView(r9, r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            org.telegram.ui.PaymentFormActivity$4 r9 = new org.telegram.ui.PaymentFormActivity$4
+            r9.<init>()
+            r4.addTextChangedListener(r9)
+            goto L_0x0630
+        L_0x05fc:
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r11 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            r9.setPadding(r5, r5, r5, r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            boolean r11 = org.telegram.messenger.LocaleController.isRTL
+            if (r11 == 0) goto L_0x0613
             r11 = 5
-            r10.<init>(r11)
-            r7[r5] = r10
-            org.telegram.ui.Components.EditTextBoldCursor[] r10 = r1.inputFields
-            r10 = r10[r0]
-            r10.setFilters(r7)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r21 = 55
-            r23 = 0
-            r25 = 1101529088(0x41a80000, float:21.0)
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r21, r22, r23, r24, r25, r26)
-            r3.addView(r7, r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r1.inputFields
-            r3 = r3[r0]
-            org.telegram.ui.PaymentFormActivity$3 r7 = new org.telegram.ui.PaymentFormActivity$3
-            r7.<init>()
-            r3.addTextChangedListener(r7)
-            goto L_0x0622
-        L_0x05b6:
-            r7 = 9
-            if (r0 != r7) goto L_0x05ee
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r7.setPadding(r5, r5, r5, r5)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 19
-            r7.setGravity(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r21 = -1
-            r22 = -2
-            r23 = 0
-            r24 = 1094713344(0x41400000, float:12.0)
-            r25 = 1101529088(0x41a80000, float:21.0)
-            r26 = 1086324736(0x40CLASSNAME, float:6.0)
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r21, r22, r23, r24, r25, r26)
-            r3.addView(r7, r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r1.inputFields
-            r3 = r3[r0]
-            org.telegram.ui.PaymentFormActivity$4 r7 = new org.telegram.ui.PaymentFormActivity$4
-            r7.<init>()
-            r3.addTextChangedListener(r7)
-            goto L_0x0622
-        L_0x05ee:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r10 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r7.setPadding(r5, r5, r5, r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            boolean r10 = org.telegram.messenger.LocaleController.isRTL
-            if (r10 == 0) goto L_0x0605
-            r10 = 5
-            goto L_0x0606
-        L_0x0605:
-            r10 = 3
-        L_0x0606:
-            r7.setGravity(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r21 = -1
-            r22 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r23 = 51
-            r24 = 1101529088(0x41a80000, float:21.0)
-            r25 = 1094713344(0x41400000, float:12.0)
-            r26 = 1101529088(0x41a80000, float:21.0)
-            r27 = 1086324736(0x40CLASSNAME, float:6.0)
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r21, r22, r23, r24, r25, r26, r27)
-            r3.addView(r7, r10)
-        L_0x0622:
-            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r1.inputFields
-            r3 = r3[r0]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$Olw4mziI4Y7UZ6FQRVf9ETMmZig r7 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$Olw4mziI4Y7UZ6FQRVf9ETMmZig
-            r7.<init>()
-            r3.setOnEditorActionListener(r7)
-            r3 = 9
-            if (r0 != r3) goto L_0x0764
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r3 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r3 = r3.invoice
-            boolean r7 = r3.email_to_provider
-            if (r7 != 0) goto L_0x0659
-            boolean r3 = r3.phone_to_provider
-            if (r3 == 0) goto L_0x063f
-            goto L_0x0659
-        L_0x063f:
-            org.telegram.ui.Cells.ShadowSectionCell[] r3 = r1.sectionCell
-            org.telegram.ui.Cells.ShadowSectionCell r7 = new org.telegram.ui.Cells.ShadowSectionCell
-            r7.<init>(r2)
-            r3[r8] = r7
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.ShadowSectionCell[] r7 = r1.sectionCell
-            r7 = r7[r8]
-            r10 = -2
-            r11 = -1
-            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r10)
-            r3.addView(r7, r12)
-            goto L_0x06f9
-        L_0x0659:
-            r3 = 0
-            r7 = 0
-        L_0x065b:
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r10 = r1.paymentForm
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r10 = r10.users
-            int r10 = r10.size()
-            if (r7 >= r10) goto L_0x067b
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r10 = r1.paymentForm
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r10 = r10.users
-            java.lang.Object r10 = r10.get(r7)
-            org.telegram.tgnet.TLRPC$User r10 = (org.telegram.tgnet.TLRPC$User) r10
-            int r11 = r10.id
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r12 = r1.paymentForm
-            int r12 = r12.provider_id
-            if (r11 != r12) goto L_0x0678
-            r3 = r10
-        L_0x0678:
-            int r7 = r7 + 1
-            goto L_0x065b
-        L_0x067b:
-            if (r3 == 0) goto L_0x0686
-            java.lang.String r7 = r3.first_name
-            java.lang.String r3 = r3.last_name
-            java.lang.String r3 = org.telegram.messenger.ContactsController.formatName(r7, r3)
-            goto L_0x0687
+            goto L_0x0614
+        L_0x0613:
+            r11 = 3
+        L_0x0614:
+            r9.setGravity(r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r9 = r7.inputFields
+            r9 = r9[r0]
+            r25 = -1
+            r26 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r27 = 51
+            r28 = 1101529088(0x41a80000, float:21.0)
+            r29 = 1094713344(0x41400000, float:12.0)
+            r30 = 1101529088(0x41a80000, float:21.0)
+            r31 = 1086324736(0x40CLASSNAME, float:6.0)
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
+            r4.addView(r9, r11)
+        L_0x0630:
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$Olw4mziI4Y7UZ6FQRVf9ETMmZig r9 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$Olw4mziI4Y7UZ6FQRVf9ETMmZig
+            r9.<init>()
+            r4.setOnEditorActionListener(r9)
+            r4 = 9
+            if (r0 != r4) goto L_0x0772
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r4 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r4 = r4.invoice
+            boolean r9 = r4.email_to_provider
+            if (r9 != 0) goto L_0x0667
+            boolean r4 = r4.phone_to_provider
+            if (r4 == 0) goto L_0x064d
+            goto L_0x0667
+        L_0x064d:
+            org.telegram.ui.Cells.ShadowSectionCell[] r4 = r7.sectionCell
+            org.telegram.ui.Cells.ShadowSectionCell r9 = new org.telegram.ui.Cells.ShadowSectionCell
+            r9.<init>(r8)
+            r4[r14] = r9
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            org.telegram.ui.Cells.ShadowSectionCell[] r9 = r7.sectionCell
+            r9 = r9[r14]
+            r11 = -2
+            r13 = -1
+            android.widget.LinearLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createLinear(r13, r11)
+            r4.addView(r9, r15)
+            goto L_0x0707
+        L_0x0667:
+            r4 = 0
+            r9 = 0
+        L_0x0669:
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r11 = r7.paymentForm
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r11 = r11.users
+            int r11 = r11.size()
+            if (r9 >= r11) goto L_0x0689
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r11 = r7.paymentForm
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r11 = r11.users
+            java.lang.Object r11 = r11.get(r9)
+            org.telegram.tgnet.TLRPC$User r11 = (org.telegram.tgnet.TLRPC$User) r11
+            int r13 = r11.id
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r15 = r7.paymentForm
+            int r15 = r15.provider_id
+            if (r13 != r15) goto L_0x0686
+            r4 = r11
         L_0x0686:
-            r3 = r13
-        L_0x0687:
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
-            org.telegram.ui.Cells.TextInfoPrivacyCell r10 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-            r10.<init>(r2)
-            r7[r8] = r10
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
-            r7 = r7[r8]
-            r10 = 2131165450(0x7var_a, float:1.7945117E38)
-            android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r10, (java.lang.String) r14)
-            r7.setBackgroundDrawable(r11)
-            android.widget.LinearLayout r7 = r1.linearLayout2
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r10 = r1.bottomCell
-            r10 = r10[r8]
+            int r9 = r9 + 1
+            goto L_0x0669
+        L_0x0689:
+            if (r4 == 0) goto L_0x0694
+            java.lang.String r9 = r4.first_name
+            java.lang.String r4 = r4.last_name
+            java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r9, r4)
+            goto L_0x0695
+        L_0x0694:
+            r4 = r3
+        L_0x0695:
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r9 = r7.bottomCell
+            org.telegram.ui.Cells.TextInfoPrivacyCell r11 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+            r11.<init>(r8)
+            r9[r14] = r11
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r9 = r7.bottomCell
+            r9 = r9[r14]
+            r11 = 2131165450(0x7var_a, float:1.7945117E38)
+            android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r11, (java.lang.String) r10)
+            r9.setBackgroundDrawable(r13)
+            android.widget.LinearLayout r9 = r7.linearLayout2
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r11 = r7.bottomCell
+            r11 = r11[r14]
+            r13 = -2
+            r15 = -1
+            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r15, r13)
+            r9.addView(r11, r12)
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r9 = r9.invoice
+            boolean r11 = r9.email_to_provider
+            if (r11 == 0) goto L_0x06dc
+            boolean r9 = r9.phone_to_provider
+            if (r9 == 0) goto L_0x06dc
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r9 = r7.bottomCell
+            r9 = r9[r14]
+            r11 = 2131626820(0x7f0e0b44, float:1.8880887E38)
+            java.lang.Object[] r12 = new java.lang.Object[r14]
+            r12[r5] = r4
+            java.lang.String r4 = "PaymentPhoneEmailToProvider"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r4, r11, r12)
+            r9.setText(r4)
+            goto L_0x0707
+        L_0x06dc:
+            if (r11 == 0) goto L_0x06f3
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r9 = r7.bottomCell
+            r9 = r9[r14]
+            r11 = 2131626807(0x7f0e0b37, float:1.888086E38)
+            java.lang.Object[] r12 = new java.lang.Object[r14]
+            r12[r5] = r4
+            java.lang.String r4 = "PaymentEmailToProvider"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r4, r11, r12)
+            r9.setText(r4)
+            goto L_0x0707
+        L_0x06f3:
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r9 = r7.bottomCell
+            r9 = r9[r14]
+            r11 = 2131626821(0x7f0e0b45, float:1.888089E38)
+            java.lang.Object[] r12 = new java.lang.Object[r14]
+            r12[r5] = r4
+            java.lang.String r4 = "PaymentPhoneToProvider"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r4, r11, r12)
+            r9.setText(r4)
+        L_0x0707:
+            org.telegram.ui.Cells.TextCheckCell r4 = new org.telegram.ui.Cells.TextCheckCell
+            r4.<init>(r8)
+            r7.checkCell1 = r4
+            android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
+            r4.setBackgroundDrawable(r9)
+            org.telegram.ui.Cells.TextCheckCell r4 = r7.checkCell1
+            r9 = 2131626835(0x7f0e0b53, float:1.8880917E38)
+            java.lang.String r11 = "PaymentShippingSave"
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
+            boolean r11 = r7.saveShippingInfo
+            r4.setTextAndCheck(r9, r11, r5)
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            org.telegram.ui.Cells.TextCheckCell r9 = r7.checkCell1
             r11 = -2
             r12 = -1
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r12, r11)
-            r7.addView(r10, r6)
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r6 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r6 = r6.invoice
-            boolean r7 = r6.email_to_provider
-            if (r7 == 0) goto L_0x06ce
-            boolean r6 = r6.phone_to_provider
-            if (r6 == 0) goto L_0x06ce
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r6 = r1.bottomCell
-            r6 = r6[r8]
-            r7 = 2131626817(0x7f0e0b41, float:1.888088E38)
-            java.lang.Object[] r10 = new java.lang.Object[r8]
-            r10[r5] = r3
-            java.lang.String r3 = "PaymentPhoneEmailToProvider"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r3, r7, r10)
-            r6.setText(r3)
-            goto L_0x06f9
-        L_0x06ce:
-            if (r7 == 0) goto L_0x06e5
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r6 = r1.bottomCell
-            r6 = r6[r8]
-            r7 = 2131626804(0x7f0e0b34, float:1.8880855E38)
-            java.lang.Object[] r10 = new java.lang.Object[r8]
-            r10[r5] = r3
-            java.lang.String r3 = "PaymentEmailToProvider"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r3, r7, r10)
-            r6.setText(r3)
-            goto L_0x06f9
-        L_0x06e5:
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r6 = r1.bottomCell
-            r6 = r6[r8]
-            r7 = 2131626818(0x7f0e0b42, float:1.8880883E38)
-            java.lang.Object[] r10 = new java.lang.Object[r8]
-            r10[r5] = r3
-            java.lang.String r3 = "PaymentPhoneToProvider"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r3, r7, r10)
-            r6.setText(r3)
-        L_0x06f9:
-            org.telegram.ui.Cells.TextCheckCell r3 = new org.telegram.ui.Cells.TextCheckCell
-            r3.<init>(r2)
-            r1.checkCell1 = r3
-            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
-            r3.setBackgroundDrawable(r6)
-            org.telegram.ui.Cells.TextCheckCell r3 = r1.checkCell1
-            r6 = 2131626832(0x7f0e0b50, float:1.8880911E38)
-            java.lang.String r7 = "PaymentShippingSave"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            boolean r7 = r1.saveShippingInfo
-            r3.setTextAndCheck(r6, r7, r5)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.TextCheckCell r6 = r1.checkCell1
-            r7 = -2
-            r10 = -1
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r7)
-            r3.addView(r6, r11)
-            org.telegram.ui.Cells.TextCheckCell r3 = r1.checkCell1
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$PexWzZmxWLN1J6v8efPEtLRkUHI r6 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$PexWzZmxWLN1J6v8efPEtLRkUHI
-            r6.<init>()
-            r3.setOnClickListener(r6)
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            org.telegram.ui.Cells.TextInfoPrivacyCell r6 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-            r6.<init>(r2)
-            r3[r5] = r6
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            r3 = r3[r5]
-            r6 = 2131165450(0x7var_a, float:1.7945117E38)
-            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r6, (java.lang.String) r14)
-            r3.setBackgroundDrawable(r7)
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            r3 = r3[r5]
-            r6 = 2131626833(0x7f0e0b51, float:1.8880913E38)
-            java.lang.String r7 = "PaymentShippingSaveInfo"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r3.setText(r6)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r6 = r1.bottomCell
-            r6 = r6[r5]
-            r7 = -2
-            r10 = -1
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r7)
-            r3.addView(r6, r11)
-        L_0x0764:
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r12, r11)
+            r4.addView(r9, r13)
+            org.telegram.ui.Cells.TextCheckCell r4 = r7.checkCell1
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$PexWzZmxWLN1J6v8efPEtLRkUHI r9 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$PexWzZmxWLN1J6v8efPEtLRkUHI
+            r9.<init>()
+            r4.setOnClickListener(r9)
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r4 = r7.bottomCell
+            org.telegram.ui.Cells.TextInfoPrivacyCell r9 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+            r9.<init>(r8)
+            r4[r5] = r9
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r4 = r7.bottomCell
+            r4 = r4[r5]
+            r9 = 2131165450(0x7var_a, float:1.7945117E38)
+            android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r9, (java.lang.String) r10)
+            r4.setBackgroundDrawable(r11)
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r4 = r7.bottomCell
+            r4 = r4[r5]
+            r9 = 2131626836(0x7f0e0b54, float:1.888092E38)
+            java.lang.String r11 = "PaymentShippingSaveInfo"
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
+            r4.setText(r9)
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r9 = r7.bottomCell
+            r9 = r9[r5]
+            r11 = -2
+            r12 = -1
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r12, r11)
+            r4.addView(r9, r13)
+        L_0x0772:
             int r0 = r0 + 1
-            r6 = 3
-            r7 = 2
-            goto L_0x022b
-        L_0x076a:
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
+            r12 = 3
+            r13 = 2
+            goto L_0x0233
+        L_0x0778:
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
             boolean r0 = r0.name_requested
-            if (r0 != 0) goto L_0x0783
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r2 = 6
-            r0 = r0[r2]
+            if (r0 != 0) goto L_0x0791
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r1 = 6
+            r0 = r0[r1]
             android.view.ViewParent r0 = r0.getParent()
             android.view.ViewGroup r0 = (android.view.ViewGroup) r0
-            r2 = 8
-            r0.setVisibility(r2)
-            goto L_0x0785
-        L_0x0783:
-            r2 = 8
-        L_0x0785:
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
+            r1 = 8
+            r0.setVisibility(r1)
+            goto L_0x0793
+        L_0x0791:
+            r1 = 8
+        L_0x0793:
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
             boolean r0 = r0.phone_requested
-            if (r0 != 0) goto L_0x079a
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r0 = r0[r2]
+            if (r0 != 0) goto L_0x07a8
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r0 = r0[r1]
             android.view.ViewParent r0 = r0.getParent()
             android.view.ViewGroup r0 = (android.view.ViewGroup) r0
-            r0.setVisibility(r2)
-        L_0x079a:
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
+            r0.setVisibility(r1)
+        L_0x07a8:
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
             boolean r0 = r0.email_requested
-            if (r0 != 0) goto L_0x07b0
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r3 = 7
-            r0 = r0[r3]
-            android.view.ViewParent r0 = r0.getParent()
-            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
-            r0.setVisibility(r2)
-        L_0x07b0:
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
-            boolean r2 = r0.phone_requested
-            if (r2 == 0) goto L_0x07c5
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r3 = 9
-            r0 = r0[r3]
-            r2 = 268435462(0x10000006, float:2.5243567E-29)
-            r0.setImeOptions(r2)
-            goto L_0x07ea
-        L_0x07c5:
-            r2 = 268435462(0x10000006, float:2.5243567E-29)
-            boolean r3 = r0.email_requested
-            if (r3 == 0) goto L_0x07d5
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r3 = 7
-            r0 = r0[r3]
-            r0.setImeOptions(r2)
-            goto L_0x07ea
-        L_0x07d5:
-            boolean r0 = r0.name_requested
-            if (r0 == 0) goto L_0x07e2
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r3 = 6
-            r0 = r0[r3]
-            r0.setImeOptions(r2)
-            goto L_0x07ea
-        L_0x07e2:
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r3 = 5
-            r0 = r0[r3]
-            r0.setImeOptions(r2)
-        L_0x07ea:
-            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
-            r2 = r0[r8]
-            if (r2 == 0) goto L_0x080b
-            r0 = r0[r8]
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r2 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r2 = r2.invoice
-            boolean r3 = r2.name_requested
-            if (r3 != 0) goto L_0x0806
-            boolean r3 = r2.phone_requested
-            if (r3 != 0) goto L_0x0806
-            boolean r2 = r2.email_requested
-            if (r2 == 0) goto L_0x0803
-            goto L_0x0806
-        L_0x0803:
-            r2 = 8
-            goto L_0x0807
-        L_0x0806:
-            r2 = 0
-        L_0x0807:
-            r0.setVisibility(r2)
-            goto L_0x082b
-        L_0x080b:
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r1.bottomCell
-            r2 = r0[r8]
-            if (r2 == 0) goto L_0x082b
-            r0 = r0[r8]
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r2 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r2 = r2.invoice
-            boolean r3 = r2.name_requested
-            if (r3 != 0) goto L_0x0827
-            boolean r3 = r2.phone_requested
-            if (r3 != 0) goto L_0x0827
-            boolean r2 = r2.email_requested
-            if (r2 == 0) goto L_0x0824
-            goto L_0x0827
-        L_0x0824:
-            r2 = 8
-            goto L_0x0828
-        L_0x0827:
-            r2 = 0
-        L_0x0828:
-            r0.setVisibility(r2)
-        L_0x082b:
-            org.telegram.ui.Cells.HeaderCell[] r0 = r1.headerCell
-            r0 = r0[r8]
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r2 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r2 = r2.invoice
-            boolean r3 = r2.name_requested
-            if (r3 != 0) goto L_0x0843
-            boolean r3 = r2.phone_requested
-            if (r3 != 0) goto L_0x0843
-            boolean r2 = r2.email_requested
-            if (r2 == 0) goto L_0x0840
-            goto L_0x0843
-        L_0x0840:
-            r2 = 8
-            goto L_0x0844
-        L_0x0843:
-            r2 = 0
-        L_0x0844:
-            r0.setVisibility(r2)
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
-            boolean r0 = r0.shipping_address_requested
-            if (r0 != 0) goto L_0x08b1
-            org.telegram.ui.Cells.HeaderCell[] r0 = r1.headerCell
-            r0 = r0[r5]
-            r2 = 8
-            r0.setVisibility(r2)
-            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
-            r0 = r0[r5]
-            r0.setVisibility(r2)
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r0 = r0[r5]
-            android.view.ViewParent r0 = r0.getParent()
-            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
-            r0.setVisibility(r2)
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r0 = r0[r8]
-            android.view.ViewParent r0 = r0.getParent()
-            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
-            r0.setVisibility(r2)
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r3 = 2
-            r0 = r0[r3]
-            android.view.ViewParent r0 = r0.getParent()
-            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
-            r0.setVisibility(r2)
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r3 = 3
-            r0 = r0[r3]
-            android.view.ViewParent r0 = r0.getParent()
-            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
-            r0.setVisibility(r2)
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r3 = 4
-            r0 = r0[r3]
-            android.view.ViewParent r0 = r0.getParent()
-            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
-            r0.setVisibility(r2)
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r3 = 5
-            r0 = r0[r3]
-            android.view.ViewParent r0 = r0.getParent()
-            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
-            r0.setVisibility(r2)
-        L_0x08b1:
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.saved_info
-            if (r0 == 0) goto L_0x08c9
-            java.lang.String r0 = r0.phone
-            boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x08c9
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.saved_info
-            java.lang.String r0 = r0.phone
-            r1.fillNumber(r0)
-            goto L_0x08cd
-        L_0x08c9:
-            r2 = 0
-            r1.fillNumber(r2)
-        L_0x08cd:
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r2 = 8
+            if (r0 != 0) goto L_0x07be
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r2 = 7
             r0 = r0[r2]
-            int r0 = r0.length()
-            if (r0 != 0) goto L_0x1b79
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r2 = r0.invoice
-            boolean r2 = r2.phone_requested
-            if (r2 == 0) goto L_0x1b79
-            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.saved_info
-            if (r0 == 0) goto L_0x08ed
-            java.lang.String r0 = r0.phone
-            boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 == 0) goto L_0x1b79
-        L_0x08ed:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0903 }
-            java.lang.String r2 = "phone"
-            java.lang.Object r0 = r0.getSystemService(r2)     // Catch:{ Exception -> 0x0903 }
-            android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x0903 }
-            if (r0 == 0) goto L_0x0907
-            java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x0903 }
-            java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x0903 }
-            r4 = r0
-            goto L_0x0908
-        L_0x0903:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0907:
-            r4 = 0
-        L_0x0908:
-            if (r4 == 0) goto L_0x1b79
-            java.lang.Object r0 = r9.get(r4)
-            java.lang.String r0 = (java.lang.String) r0
-            if (r0 == 0) goto L_0x1b79
-            java.util.ArrayList<java.lang.String> r2 = r1.countriesArray
-            int r2 = r2.indexOf(r0)
-            r3 = -1
-            if (r2 == r3) goto L_0x1b79
-            org.telegram.ui.Components.EditTextBoldCursor[] r2 = r1.inputFields
-            r3 = 8
-            r2 = r2[r3]
-            java.util.HashMap<java.lang.String, java.lang.String> r3 = r1.countriesMap
-            java.lang.Object r0 = r3.get(r0)
-            java.lang.CharSequence r0 = (java.lang.CharSequence) r0
-            r2.setText(r0)
-            goto L_0x1b79
-        L_0x092e:
-            r3 = 9
-            r6 = 2
-            if (r0 != r6) goto L_0x0e66
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_dataJSON r0 = r0.native_params
-            if (r0 == 0) goto L_0x0967
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ Exception -> 0x0963 }
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r3 = r1.paymentForm     // Catch:{ Exception -> 0x0963 }
-            org.telegram.tgnet.TLRPC$TL_dataJSON r3 = r3.native_params     // Catch:{ Exception -> 0x0963 }
-            java.lang.String r3 = r3.data     // Catch:{ Exception -> 0x0963 }
-            r0.<init>(r3)     // Catch:{ Exception -> 0x0963 }
-            java.lang.String r3 = "google_pay_public_key"
-            java.lang.String r3 = r0.optString(r3)     // Catch:{ Exception -> 0x0963 }
-            boolean r6 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x0963 }
-            if (r6 != 0) goto L_0x0952
-            r1.googlePayPublicKey = r3     // Catch:{ Exception -> 0x0963 }
-        L_0x0952:
-            java.lang.String r3 = "acquirer_bank_country"
-            java.lang.String r3 = r0.optString(r3)     // Catch:{ Exception -> 0x0963 }
-            r1.googlePayCountryCode = r3     // Catch:{ Exception -> 0x0963 }
-            java.lang.String r3 = "gpay_parameters"
-            org.json.JSONObject r0 = r0.optJSONObject(r3)     // Catch:{ Exception -> 0x0963 }
-            r1.googlePayParameters = r0     // Catch:{ Exception -> 0x0963 }
-            goto L_0x0967
-        L_0x0963:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0967:
-            boolean r0 = r1.isWebView
-            if (r0 == 0) goto L_0x0a70
-            java.lang.String r0 = r1.googlePayPublicKey
-            if (r0 != 0) goto L_0x0973
-            org.json.JSONObject r0 = r1.googlePayParameters
-            if (r0 == 0) goto L_0x0976
-        L_0x0973:
-            r29.initGooglePay(r30)
-        L_0x0976:
-            r29.createGooglePayButton(r30)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            android.widget.FrameLayout r3 = r1.googlePayContainer
-            r4 = 50
-            r6 = -1
-            android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r4)
-            r0.addView(r3, r4)
-            r1.webviewLoading = r8
-            r1.showEditDoneProgress(r8, r8)
-            org.telegram.ui.Components.ContextProgressView r0 = r1.progressView
-            r0.setVisibility(r5)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r1.doneItem
-            r0.setEnabled(r5)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r1.doneItem
-            android.view.View r0 = r0.getContentView()
-            r3 = 4
-            r0.setVisibility(r3)
-            org.telegram.ui.PaymentFormActivity$5 r0 = new org.telegram.ui.PaymentFormActivity$5
-            r0.<init>(r2)
-            r1.webView = r0
-            android.webkit.WebSettings r0 = r0.getSettings()
-            r0.setJavaScriptEnabled(r8)
-            android.webkit.WebView r0 = r1.webView
-            android.webkit.WebSettings r0 = r0.getSettings()
-            r0.setDomStorageEnabled(r8)
-            int r0 = android.os.Build.VERSION.SDK_INT
-            r3 = 21
-            if (r0 < r3) goto L_0x09cf
-            android.webkit.WebView r3 = r1.webView
-            android.webkit.WebSettings r3 = r3.getSettings()
-            r3.setMixedContentMode(r5)
-            android.webkit.CookieManager r3 = android.webkit.CookieManager.getInstance()
-            android.webkit.WebView r4 = r1.webView
-            r3.setAcceptThirdPartyCookies(r4, r8)
-        L_0x09cf:
-            r3 = 17
-            if (r0 < r3) goto L_0x09e0
-            android.webkit.WebView r0 = r1.webView
-            org.telegram.ui.PaymentFormActivity$TelegramWebviewProxy r3 = new org.telegram.ui.PaymentFormActivity$TelegramWebviewProxy
-            r4 = 0
-            r3.<init>()
-            java.lang.String r4 = "TelegramWebviewProxy"
-            r0.addJavascriptInterface(r3, r4)
-        L_0x09e0:
-            android.webkit.WebView r0 = r1.webView
-            org.telegram.ui.PaymentFormActivity$6 r3 = new org.telegram.ui.PaymentFormActivity$6
-            r3.<init>()
-            r0.setWebViewClient(r3)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            android.webkit.WebView r3 = r1.webView
-            r4 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r6 = -1
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r4)
-            r0.addView(r3, r4)
-            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
-            org.telegram.ui.Cells.ShadowSectionCell r3 = new org.telegram.ui.Cells.ShadowSectionCell
-            r3.<init>(r2)
-            r4 = 2
-            r0[r4] = r3
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.ShadowSectionCell[] r3 = r1.sectionCell
-            r3 = r3[r4]
-            r4 = -2
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r4)
-            r0.addView(r3, r7)
-            org.telegram.ui.Cells.TextCheckCell r0 = new org.telegram.ui.Cells.TextCheckCell
-            r0.<init>(r2)
-            r1.checkCell1 = r0
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
-            r0.setBackgroundDrawable(r3)
-            org.telegram.ui.Cells.TextCheckCell r0 = r1.checkCell1
-            r3 = 2131626788(0x7f0e0b24, float:1.8880822E38)
-            java.lang.String r4 = "PaymentCardSavePaymentInformation"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            boolean r4 = r1.saveCardInfo
-            r0.setTextAndCheck(r3, r4, r5)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextCheckCell r3 = r1.checkCell1
-            r4 = -2
-            r6 = -1
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r4)
-            r0.addView(r3, r7)
-            org.telegram.ui.Cells.TextCheckCell r0 = r1.checkCell1
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$cvL2PmrtAz-lhXkk9DISaHjZOls r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$cvL2PmrtAz-lhXkk9DISaHjZOls
-            r3.<init>()
-            r0.setOnClickListener(r3)
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r1.bottomCell
-            org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-            r3.<init>(r2)
-            r0[r5] = r3
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r1.bottomCell
-            r0 = r0[r5]
-            r3 = 2131165450(0x7var_a, float:1.7945117E38)
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r14)
-            r0.setBackgroundDrawable(r2)
-            r29.updateSavePaymentField()
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r2 = r1.bottomCell
-            r2 = r2[r5]
-            r3 = -2
-            r4 = -1
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r3)
-            r0.addView(r2, r3)
-            goto L_0x1b79
-        L_0x0a70:
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_dataJSON r0 = r0.native_params
-            if (r0 == 0) goto L_0x0ad0
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ Exception -> 0x0acc }
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r3 = r1.paymentForm     // Catch:{ Exception -> 0x0acc }
-            org.telegram.tgnet.TLRPC$TL_dataJSON r3 = r3.native_params     // Catch:{ Exception -> 0x0acc }
-            java.lang.String r3 = r3.data     // Catch:{ Exception -> 0x0acc }
-            r0.<init>(r3)     // Catch:{ Exception -> 0x0acc }
-            java.lang.String r3 = "need_country"
-            boolean r3 = r0.getBoolean(r3)     // Catch:{ Exception -> 0x0a8a }
-            r1.need_card_country = r3     // Catch:{ Exception -> 0x0a8a }
-            goto L_0x0a8c
-        L_0x0a8a:
-            r1.need_card_country = r5     // Catch:{ Exception -> 0x0acc }
-        L_0x0a8c:
-            java.lang.String r3 = "need_zip"
-            boolean r3 = r0.getBoolean(r3)     // Catch:{ Exception -> 0x0a95 }
-            r1.need_card_postcode = r3     // Catch:{ Exception -> 0x0a95 }
-            goto L_0x0a97
-        L_0x0a95:
-            r1.need_card_postcode = r5     // Catch:{ Exception -> 0x0acc }
-        L_0x0a97:
-            java.lang.String r3 = "need_cardholder_name"
-            boolean r3 = r0.getBoolean(r3)     // Catch:{ Exception -> 0x0aa0 }
-            r1.need_card_name = r3     // Catch:{ Exception -> 0x0aa0 }
-            goto L_0x0aa2
-        L_0x0aa0:
-            r1.need_card_name = r5     // Catch:{ Exception -> 0x0acc }
-        L_0x0aa2:
-            java.lang.String r3 = "public_token"
-            boolean r3 = r0.has(r3)     // Catch:{ Exception -> 0x0acc }
-            if (r3 == 0) goto L_0x0ab3
-            java.lang.String r3 = "public_token"
-            java.lang.String r3 = r0.getString(r3)     // Catch:{ Exception -> 0x0acc }
-            r1.providerApiKey = r3     // Catch:{ Exception -> 0x0acc }
-            goto L_0x0abe
-        L_0x0ab3:
-            java.lang.String r3 = "publishable_key"
-            java.lang.String r3 = r0.getString(r3)     // Catch:{ Exception -> 0x0abc }
-            r1.providerApiKey = r3     // Catch:{ Exception -> 0x0abc }
-            goto L_0x0abe
-        L_0x0abc:
-            r1.providerApiKey = r13     // Catch:{ Exception -> 0x0acc }
-        L_0x0abe:
-            java.lang.String r3 = "google_pay_hidden"
-            boolean r0 = r0.optBoolean(r3, r5)     // Catch:{ Exception -> 0x0acc }
-            if (r0 != 0) goto L_0x0ac8
-            r0 = 1
-            goto L_0x0ac9
-        L_0x0ac8:
-            r0 = 0
-        L_0x0ac9:
-            r1.initGooglePay = r0     // Catch:{ Exception -> 0x0acc }
-            goto L_0x0ad0
-        L_0x0acc:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0ad0:
-            boolean r0 = r1.initGooglePay
-            if (r0 == 0) goto L_0x0aef
-            java.lang.String r0 = r1.providerApiKey
-            boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x0ae8
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
-            java.lang.String r0 = r0.native_provider
-            java.lang.String r3 = "stripe"
-            boolean r0 = r3.equals(r0)
-            if (r0 != 0) goto L_0x0aec
-        L_0x0ae8:
-            org.json.JSONObject r0 = r1.googlePayParameters
-            if (r0 == 0) goto L_0x0aef
-        L_0x0aec:
-            r29.initGooglePay(r30)
-        L_0x0aef:
-            r3 = 6
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = new org.telegram.ui.Components.EditTextBoldCursor[r3]
-            r1.inputFields = r0
-            r0 = 0
-        L_0x0af5:
-            if (r0 >= r3) goto L_0x0e30
-            if (r0 != 0) goto L_0x0b2d
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            org.telegram.ui.Cells.HeaderCell r6 = new org.telegram.ui.Cells.HeaderCell
-            r6.<init>(r2)
-            r3[r5] = r6
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r5]
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r6)
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r5]
-            r6 = 2131626791(0x7f0e0b27, float:1.8880828E38)
-            java.lang.String r7 = "PaymentCardTitle"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r3.setText(r6)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.HeaderCell[] r6 = r1.headerCell
-            r6 = r6[r5]
-            r7 = -2
-            r9 = -1
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r7)
-            r3.addView(r6, r10)
-            goto L_0x0b63
-        L_0x0b2d:
-            r3 = 4
-            if (r0 != r3) goto L_0x0b63
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            org.telegram.ui.Cells.HeaderCell r6 = new org.telegram.ui.Cells.HeaderCell
-            r6.<init>(r2)
-            r3[r8] = r6
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r8]
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r6)
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r8]
-            r6 = 2131626782(0x7f0e0b1e, float:1.888081E38)
-            java.lang.String r7 = "PaymentBillingAddress"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r3.setText(r6)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.HeaderCell[] r6 = r1.headerCell
-            r6 = r6[r8]
-            r7 = -2
-            r9 = -1
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r7)
-            r3.addView(r6, r10)
-        L_0x0b63:
-            r3 = 3
-            if (r0 == r3) goto L_0x0b72
-            r3 = 5
-            if (r0 == r3) goto L_0x0b72
-            r3 = 4
-            if (r0 != r3) goto L_0x0b70
-            boolean r3 = r1.need_card_postcode
-            if (r3 == 0) goto L_0x0b72
-        L_0x0b70:
-            r3 = 1
-            goto L_0x0b73
-        L_0x0b72:
-            r3 = 0
-        L_0x0b73:
-            android.widget.FrameLayout r6 = new android.widget.FrameLayout
-            r6.<init>(r2)
-            android.widget.LinearLayout r7 = r1.linearLayout2
-            r9 = 50
-            r10 = -1
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r9)
-            r7.addView(r6, r11)
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r6.setBackgroundColor(r7)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            org.telegram.ui.Components.EditTextBoldCursor r9 = new org.telegram.ui.Components.EditTextBoldCursor
-            r9.<init>(r2)
-            r7[r0] = r9
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r0)
-            r7.setTag(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 1098907648(0x41800000, float:16.0)
-            r7.setTextSize(r8, r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            java.lang.String r9 = "windowBackgroundWhiteHintText"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r7.setHintTextColor(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r7.setTextColor(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 0
-            r7.setBackgroundDrawable(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r7.setCursorColor(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 1101004800(0x41a00000, float:20.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            r7.setCursorSize(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 1069547520(0x3fCLASSNAME, float:1.5)
-            r7.setCursorWidth(r9)
-            r7 = 3
-            if (r0 != r7) goto L_0x0c1b
-            android.text.InputFilter[] r9 = new android.text.InputFilter[r8]
-            android.text.InputFilter$LengthFilter r10 = new android.text.InputFilter$LengthFilter
-            r10.<init>(r7)
-            r9[r5] = r10
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r7.setFilters(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 130(0x82, float:1.82E-43)
-            r7.setInputType(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            android.graphics.Typeface r9 = android.graphics.Typeface.DEFAULT
-            r7.setTypeface(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            android.text.method.PasswordTransformationMethod r9 = android.text.method.PasswordTransformationMethod.getInstance()
-            r7.setTransformationMethod(r9)
-            goto L_0x0c5f
-        L_0x0c1b:
-            if (r0 != 0) goto L_0x0CLASSNAME
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 3
-            r7.setInputType(r9)
-            goto L_0x0c5f
-        L_0x0CLASSNAME:
-            r7 = 4
-            if (r0 != r7) goto L_0x0c3d
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$ufBXhrNbvJlVLqcHkReQdB857HQ r9 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$ufBXhrNbvJlVLqcHkReQdB857HQ
-            r9.<init>()
-            r7.setOnTouchListener(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r7.setInputType(r5)
-            goto L_0x0c5f
-        L_0x0c3d:
-            if (r0 != r8) goto L_0x0CLASSNAME
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 16386(0x4002, float:2.2962E-41)
-            r7.setInputType(r9)
-            goto L_0x0c5f
-        L_0x0CLASSNAME:
-            r7 = 2
-            if (r0 != r7) goto L_0x0CLASSNAME
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 4097(0x1001, float:5.741E-42)
-            r7.setInputType(r9)
-            goto L_0x0c5f
-        L_0x0CLASSNAME:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 16385(0x4001, float:2.296E-41)
-            r7.setInputType(r9)
-        L_0x0c5f:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 268435461(0x10000005, float:2.5243564E-29)
-            r7.setImeOptions(r9)
-            if (r0 == 0) goto L_0x0ccf
-            if (r0 == r8) goto L_0x0cbe
-            r7 = 2
-            if (r0 == r7) goto L_0x0cad
-            r7 = 3
-            if (r0 == r7) goto L_0x0c9c
-            r7 = 4
-            if (r0 == r7) goto L_0x0c8b
-            r7 = 5
-            if (r0 == r7) goto L_0x0c7a
-            goto L_0x0cdf
-        L_0x0c7a:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 2131626835(0x7f0e0b53, float:1.8880917E38)
-            java.lang.String r10 = "PaymentShippingZipPlaceholder"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r7.setHint(r9)
-            goto L_0x0cdf
-        L_0x0c8b:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 2131626825(0x7f0e0b49, float:1.8880897E38)
-            java.lang.String r10 = "PaymentShippingCountry"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r7.setHint(r9)
-            goto L_0x0cdf
-        L_0x0c9c:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 2131626783(0x7f0e0b1f, float:1.8880812E38)
-            java.lang.String r10 = "PaymentCardCvv"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r7.setHint(r9)
-            goto L_0x0cdf
-        L_0x0cad:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 2131626786(0x7f0e0b22, float:1.8880818E38)
-            java.lang.String r10 = "PaymentCardName"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r7.setHint(r9)
-            goto L_0x0cdf
-        L_0x0cbe:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 2131626784(0x7f0e0b20, float:1.8880814E38)
-            java.lang.String r10 = "PaymentCardExpireDate"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r7.setHint(r9)
-            goto L_0x0cdf
-        L_0x0ccf:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 2131626787(0x7f0e0b23, float:1.888082E38)
-            java.lang.String r10 = "PaymentCardNumber"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r7.setHint(r9)
-        L_0x0cdf:
-            if (r0 != 0) goto L_0x0cee
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            org.telegram.ui.PaymentFormActivity$7 r9 = new org.telegram.ui.PaymentFormActivity$7
-            r9.<init>()
-            r7.addTextChangedListener(r9)
-            goto L_0x0cfc
-        L_0x0cee:
-            if (r0 != r8) goto L_0x0cfc
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            org.telegram.ui.PaymentFormActivity$8 r9 = new org.telegram.ui.PaymentFormActivity$8
-            r9.<init>()
-            r7.addTextChangedListener(r9)
-        L_0x0cfc:
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r9 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            r7.setPadding(r5, r5, r5, r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            if (r9 == 0) goto L_0x0d13
-            r9 = 5
-            goto L_0x0d14
-        L_0x0d13:
-            r9 = 3
-        L_0x0d14:
-            r7.setGravity(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            r22 = -1
-            r23 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r24 = 51
-            r25 = 1101529088(0x41a80000, float:21.0)
-            r26 = 1094713344(0x41400000, float:12.0)
-            r27 = 1101529088(0x41a80000, float:21.0)
-            r28 = 1086324736(0x40CLASSNAME, float:6.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28)
-            r6.addView(r7, r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
-            r7 = r7[r0]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$xR8Gbm-NkgnmgJUOUHnvYiFZMuY r9 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$xR8Gbm-NkgnmgJUOUHnvYiFZMuY
-            r9.<init>()
-            r7.setOnEditorActionListener(r9)
-            r7 = 3
-            if (r0 != r7) goto L_0x0d59
-            org.telegram.ui.Cells.ShadowSectionCell[] r7 = r1.sectionCell
-            org.telegram.ui.Cells.ShadowSectionCell r9 = new org.telegram.ui.Cells.ShadowSectionCell
-            r9.<init>(r2)
-            r7[r5] = r9
-            android.widget.LinearLayout r7 = r1.linearLayout2
-            org.telegram.ui.Cells.ShadowSectionCell[] r9 = r1.sectionCell
-            r9 = r9[r5]
-            r10 = -2
-            r11 = -1
-            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r10)
-            r7.addView(r9, r12)
-            goto L_0x0df0
-        L_0x0d59:
-            r7 = 5
-            r10 = -2
-            r11 = -1
-            if (r0 != r7) goto L_0x0dd4
-            org.telegram.ui.Cells.ShadowSectionCell[] r7 = r1.sectionCell
-            org.telegram.ui.Cells.ShadowSectionCell r9 = new org.telegram.ui.Cells.ShadowSectionCell
-            r9.<init>(r2)
-            r12 = 2
-            r7[r12] = r9
-            android.widget.LinearLayout r7 = r1.linearLayout2
-            org.telegram.ui.Cells.ShadowSectionCell[] r9 = r1.sectionCell
-            r9 = r9[r12]
-            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r10)
-            r7.addView(r9, r12)
-            org.telegram.ui.Cells.TextCheckCell r7 = new org.telegram.ui.Cells.TextCheckCell
-            r7.<init>(r2)
-            r1.checkCell1 = r7
-            android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
-            r7.setBackgroundDrawable(r9)
-            org.telegram.ui.Cells.TextCheckCell r7 = r1.checkCell1
-            r9 = 2131626788(0x7f0e0b24, float:1.8880822E38)
-            java.lang.String r10 = "PaymentCardSavePaymentInformation"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            boolean r10 = r1.saveCardInfo
-            r7.setTextAndCheck(r9, r10, r5)
-            android.widget.LinearLayout r7 = r1.linearLayout2
-            org.telegram.ui.Cells.TextCheckCell r9 = r1.checkCell1
-            r10 = -2
-            r11 = -1
-            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r10)
-            r7.addView(r9, r12)
-            org.telegram.ui.Cells.TextCheckCell r7 = r1.checkCell1
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$tYBCHRD5qJE9gLUKdrPoOZY19ls r9 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$tYBCHRD5qJE9gLUKdrPoOZY19ls
-            r9.<init>()
-            r7.setOnClickListener(r9)
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
-            org.telegram.ui.Cells.TextInfoPrivacyCell r9 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-            r9.<init>(r2)
-            r7[r5] = r9
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
-            r7 = r7[r5]
-            r9 = 2131165450(0x7var_a, float:1.7945117E38)
-            android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r9, (java.lang.String) r14)
-            r7.setBackgroundDrawable(r10)
-            r29.updateSavePaymentField()
-            android.widget.LinearLayout r7 = r1.linearLayout2
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r9 = r1.bottomCell
-            r9 = r9[r5]
-            r10 = -2
-            r11 = -1
-            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r10)
-            r7.addView(r9, r12)
-            goto L_0x0df0
-        L_0x0dd4:
-            if (r0 != 0) goto L_0x0df0
-            r29.createGooglePayButton(r30)
-            android.widget.FrameLayout r7 = r1.googlePayContainer
-            r22 = -2
-            r23 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r24 = 21
-            r25 = 0
-            r26 = 0
-            r27 = 1082130432(0x40800000, float:4.0)
-            r28 = 0
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28)
-            r6.addView(r7, r9)
-        L_0x0df0:
-            if (r3 == 0) goto L_0x0e0e
-            org.telegram.ui.PaymentFormActivity$9 r3 = new org.telegram.ui.PaymentFormActivity$9
-            r3.<init>(r1, r2)
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r7)
-            java.util.ArrayList<android.view.View> r7 = r1.dividers
-            r7.add(r3)
-            android.widget.FrameLayout$LayoutParams r7 = new android.widget.FrameLayout$LayoutParams
-            r9 = 83
-            r10 = -1
-            r7.<init>(r10, r8, r9)
-            r6.addView(r3, r7)
-        L_0x0e0e:
-            r3 = 4
-            if (r0 != r3) goto L_0x0e19
-            boolean r3 = r1.need_card_country
-            if (r3 == 0) goto L_0x0e16
-            goto L_0x0e19
-        L_0x0e16:
-            r3 = 8
-            goto L_0x0e28
-        L_0x0e19:
-            r3 = 5
-            if (r0 != r3) goto L_0x0e20
-            boolean r3 = r1.need_card_postcode
-            if (r3 == 0) goto L_0x0e16
-        L_0x0e20:
-            r3 = 2
-            if (r0 != r3) goto L_0x0e2b
-            boolean r3 = r1.need_card_name
-            if (r3 != 0) goto L_0x0e2b
-            goto L_0x0e16
-        L_0x0e28:
-            r6.setVisibility(r3)
-        L_0x0e2b:
-            int r0 = r0 + 1
-            r3 = 6
-            goto L_0x0af5
-        L_0x0e30:
-            boolean r0 = r1.need_card_country
-            if (r0 != 0) goto L_0x0e48
-            boolean r0 = r1.need_card_postcode
-            if (r0 != 0) goto L_0x0e48
-            org.telegram.ui.Cells.HeaderCell[] r0 = r1.headerCell
-            r0 = r0[r8]
-            r2 = 8
-            r0.setVisibility(r2)
-            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
-            r0 = r0[r5]
-            r0.setVisibility(r2)
-        L_0x0e48:
-            boolean r0 = r1.need_card_postcode
-            if (r0 == 0) goto L_0x0e59
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
+            android.view.ViewParent r0 = r0.getParent()
+            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
+            r0.setVisibility(r1)
+        L_0x07be:
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
+            boolean r1 = r0.phone_requested
+            if (r1 == 0) goto L_0x07d3
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r9 = 9
+            r0 = r0[r9]
+            r1 = 268435462(0x10000006, float:2.5243567E-29)
+            r0.setImeOptions(r1)
+            goto L_0x07f8
+        L_0x07d3:
+            r1 = 268435462(0x10000006, float:2.5243567E-29)
+            boolean r2 = r0.email_requested
+            if (r2 == 0) goto L_0x07e3
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r2 = 7
+            r0 = r0[r2]
+            r0.setImeOptions(r1)
+            goto L_0x07f8
+        L_0x07e3:
+            boolean r0 = r0.name_requested
+            if (r0 == 0) goto L_0x07f0
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r2 = 6
+            r0 = r0[r2]
+            r0.setImeOptions(r1)
+            goto L_0x07f8
+        L_0x07f0:
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
             r2 = 5
             r0 = r0[r2]
-            r2 = 268435462(0x10000006, float:2.5243567E-29)
-            r0.setImeOptions(r2)
-            goto L_0x1b79
-        L_0x0e59:
-            r2 = 268435462(0x10000006, float:2.5243567E-29)
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
-            r3 = 3
-            r0 = r0[r3]
-            r0.setImeOptions(r2)
-            goto L_0x1b79
-        L_0x0e66:
-            if (r0 != r8) goto L_0x0var_
-            org.telegram.tgnet.TLRPC$TL_payments_validatedRequestedInfo r0 = r1.requestedInfo
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_shippingOption> r0 = r0.shipping_options
-            int r0 = r0.size()
-            org.telegram.ui.Cells.RadioCell[] r3 = new org.telegram.ui.Cells.RadioCell[r0]
-            r1.radioCells = r3
-            r3 = 0
-        L_0x0e75:
-            if (r3 >= r0) goto L_0x0ee0
-            org.telegram.tgnet.TLRPC$TL_payments_validatedRequestedInfo r4 = r1.requestedInfo
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_shippingOption> r4 = r4.shipping_options
-            java.lang.Object r4 = r4.get(r3)
-            org.telegram.tgnet.TLRPC$TL_shippingOption r4 = (org.telegram.tgnet.TLRPC$TL_shippingOption) r4
-            org.telegram.ui.Cells.RadioCell[] r6 = r1.radioCells
-            org.telegram.ui.Cells.RadioCell r7 = new org.telegram.ui.Cells.RadioCell
-            r7.<init>(r2)
-            r6[r3] = r7
-            org.telegram.ui.Cells.RadioCell[] r6 = r1.radioCells
-            r6 = r6[r3]
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r3)
-            r6.setTag(r7)
-            org.telegram.ui.Cells.RadioCell[] r6 = r1.radioCells
-            r6 = r6[r3]
-            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
-            r6.setBackgroundDrawable(r7)
-            org.telegram.ui.Cells.RadioCell[] r6 = r1.radioCells
-            r6 = r6[r3]
-            r7 = 2
-            java.lang.Object[] r9 = new java.lang.Object[r7]
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r7 = r4.prices
-            java.lang.String r7 = r1.getTotalPriceString(r7)
-            r9[r5] = r7
-            java.lang.String r4 = r4.title
-            r9[r8] = r4
-            java.lang.String r4 = "%s - %s"
-            java.lang.String r4 = java.lang.String.format(r4, r9)
-            if (r3 != 0) goto L_0x0ebd
-            r7 = 1
-            goto L_0x0ebe
-        L_0x0ebd:
-            r7 = 0
-        L_0x0ebe:
-            int r9 = r0 + -1
-            if (r3 == r9) goto L_0x0ec4
-            r9 = 1
-            goto L_0x0ec5
-        L_0x0ec4:
-            r9 = 0
-        L_0x0ec5:
-            r6.setText(r4, r7, r9)
-            org.telegram.ui.Cells.RadioCell[] r4 = r1.radioCells
-            r4 = r4[r3]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$XzomBkzVnAnjaV6SN-Js2LQ2of8 r6 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$XzomBkzVnAnjaV6SN-Js2LQ2of8
+            r0.setImeOptions(r1)
+        L_0x07f8:
+            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r7.sectionCell
+            r1 = r0[r14]
+            if (r1 == 0) goto L_0x0819
+            r0 = r0[r14]
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r1 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r1 = r1.invoice
+            boolean r2 = r1.name_requested
+            if (r2 != 0) goto L_0x0814
+            boolean r2 = r1.phone_requested
+            if (r2 != 0) goto L_0x0814
+            boolean r1 = r1.email_requested
+            if (r1 == 0) goto L_0x0811
+            goto L_0x0814
+        L_0x0811:
+            r1 = 8
+            goto L_0x0815
+        L_0x0814:
+            r1 = 0
+        L_0x0815:
+            r0.setVisibility(r1)
+            goto L_0x0839
+        L_0x0819:
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r7.bottomCell
+            r1 = r0[r14]
+            if (r1 == 0) goto L_0x0839
+            r0 = r0[r14]
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r1 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r1 = r1.invoice
+            boolean r2 = r1.name_requested
+            if (r2 != 0) goto L_0x0835
+            boolean r2 = r1.phone_requested
+            if (r2 != 0) goto L_0x0835
+            boolean r1 = r1.email_requested
+            if (r1 == 0) goto L_0x0832
+            goto L_0x0835
+        L_0x0832:
+            r1 = 8
+            goto L_0x0836
+        L_0x0835:
+            r1 = 0
+        L_0x0836:
+            r0.setVisibility(r1)
+        L_0x0839:
+            org.telegram.ui.Cells.HeaderCell[] r0 = r7.headerCell
+            r0 = r0[r14]
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r1 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r1 = r1.invoice
+            boolean r2 = r1.name_requested
+            if (r2 != 0) goto L_0x0851
+            boolean r2 = r1.phone_requested
+            if (r2 != 0) goto L_0x0851
+            boolean r1 = r1.email_requested
+            if (r1 == 0) goto L_0x084e
+            goto L_0x0851
+        L_0x084e:
+            r1 = 8
+            goto L_0x0852
+        L_0x0851:
+            r1 = 0
+        L_0x0852:
+            r0.setVisibility(r1)
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
+            boolean r0 = r0.shipping_address_requested
+            if (r0 != 0) goto L_0x08bf
+            org.telegram.ui.Cells.HeaderCell[] r0 = r7.headerCell
+            r0 = r0[r5]
+            r1 = 8
+            r0.setVisibility(r1)
+            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r7.sectionCell
+            r0 = r0[r5]
+            r0.setVisibility(r1)
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r0 = r0[r5]
+            android.view.ViewParent r0 = r0.getParent()
+            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
+            r0.setVisibility(r1)
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r0 = r0[r14]
+            android.view.ViewParent r0 = r0.getParent()
+            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
+            r0.setVisibility(r1)
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r2 = 2
+            r0 = r0[r2]
+            android.view.ViewParent r0 = r0.getParent()
+            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
+            r0.setVisibility(r1)
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r2 = 3
+            r0 = r0[r2]
+            android.view.ViewParent r0 = r0.getParent()
+            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
+            r0.setVisibility(r1)
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r2 = 4
+            r0 = r0[r2]
+            android.view.ViewParent r0 = r0.getParent()
+            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
+            r0.setVisibility(r1)
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r2 = 5
+            r0 = r0[r2]
+            android.view.ViewParent r0 = r0.getParent()
+            android.view.ViewGroup r0 = (android.view.ViewGroup) r0
+            r0.setVisibility(r1)
+        L_0x08bf:
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.saved_info
+            if (r0 == 0) goto L_0x08d7
+            java.lang.String r0 = r0.phone
+            boolean r0 = android.text.TextUtils.isEmpty(r0)
+            if (r0 != 0) goto L_0x08d7
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.saved_info
+            java.lang.String r0 = r0.phone
+            r7.fillNumber(r0)
+            goto L_0x08db
+        L_0x08d7:
+            r1 = 0
+            r7.fillNumber(r1)
+        L_0x08db:
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r1 = 8
+            r0 = r0[r1]
+            int r0 = r0.length()
+            if (r0 != 0) goto L_0x1CLASSNAME
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r1 = r0.invoice
+            boolean r1 = r1.phone_requested
+            if (r1 == 0) goto L_0x1CLASSNAME
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.saved_info
+            if (r0 == 0) goto L_0x08fb
+            java.lang.String r0 = r0.phone
+            boolean r0 = android.text.TextUtils.isEmpty(r0)
+            if (r0 == 0) goto L_0x1CLASSNAME
+        L_0x08fb:
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0911 }
+            java.lang.String r1 = "phone"
+            java.lang.Object r0 = r0.getSystemService(r1)     // Catch:{ Exception -> 0x0911 }
+            android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x0911 }
+            if (r0 == 0) goto L_0x0915
+            java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x0911 }
+            java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x0911 }
+            r2 = r0
+            goto L_0x0916
+        L_0x0911:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+        L_0x0915:
+            r2 = 0
+        L_0x0916:
+            if (r2 == 0) goto L_0x1CLASSNAME
+            java.lang.Object r0 = r6.get(r2)
+            java.lang.String r0 = (java.lang.String) r0
+            if (r0 == 0) goto L_0x1CLASSNAME
+            java.util.ArrayList<java.lang.String> r1 = r7.countriesArray
+            int r1 = r1.indexOf(r0)
+            r2 = -1
+            if (r1 == r2) goto L_0x1CLASSNAME
+            org.telegram.ui.Components.EditTextBoldCursor[] r1 = r7.inputFields
+            r2 = 8
+            r1 = r1[r2]
+            java.util.HashMap<java.lang.String, java.lang.String> r2 = r7.countriesMap
+            java.lang.Object r0 = r2.get(r0)
+            java.lang.CharSequence r0 = (java.lang.CharSequence) r0
+            r1.setText(r0)
+            goto L_0x1CLASSNAME
+        L_0x093c:
+            r1 = 2
+            r9 = 9
+            if (r0 != r1) goto L_0x0e7e
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_dataJSON r0 = r0.native_params
+            if (r0 == 0) goto L_0x0975
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ Exception -> 0x0971 }
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r1 = r7.paymentForm     // Catch:{ Exception -> 0x0971 }
+            org.telegram.tgnet.TLRPC$TL_dataJSON r1 = r1.native_params     // Catch:{ Exception -> 0x0971 }
+            java.lang.String r1 = r1.data     // Catch:{ Exception -> 0x0971 }
+            r0.<init>(r1)     // Catch:{ Exception -> 0x0971 }
+            java.lang.String r1 = "google_pay_public_key"
+            java.lang.String r1 = r0.optString(r1)     // Catch:{ Exception -> 0x0971 }
+            boolean r4 = android.text.TextUtils.isEmpty(r1)     // Catch:{ Exception -> 0x0971 }
+            if (r4 != 0) goto L_0x0960
+            r7.googlePayPublicKey = r1     // Catch:{ Exception -> 0x0971 }
+        L_0x0960:
+            java.lang.String r1 = "acquirer_bank_country"
+            java.lang.String r1 = r0.optString(r1)     // Catch:{ Exception -> 0x0971 }
+            r7.googlePayCountryCode = r1     // Catch:{ Exception -> 0x0971 }
+            java.lang.String r1 = "gpay_parameters"
+            org.json.JSONObject r0 = r0.optJSONObject(r1)     // Catch:{ Exception -> 0x0971 }
+            r7.googlePayParameters = r0     // Catch:{ Exception -> 0x0971 }
+            goto L_0x0975
+        L_0x0971:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+        L_0x0975:
+            boolean r0 = r7.isWebView
+            if (r0 == 0) goto L_0x0a7e
+            java.lang.String r0 = r7.googlePayPublicKey
+            if (r0 != 0) goto L_0x0981
+            org.json.JSONObject r0 = r7.googlePayParameters
+            if (r0 == 0) goto L_0x0984
+        L_0x0981:
+            r34.initGooglePay(r35)
+        L_0x0984:
+            r34.createGooglePayButton(r35)
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            android.widget.FrameLayout r1 = r7.googlePayContainer
+            r2 = 50
+            r3 = -1
+            android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r3, r2)
+            r0.addView(r1, r2)
+            r7.webviewLoading = r14
+            r7.showEditDoneProgress(r14, r14)
+            org.telegram.ui.Components.ContextProgressView r0 = r7.progressView
+            r0.setVisibility(r5)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.doneItem
+            r0.setEnabled(r5)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.doneItem
+            android.view.View r0 = r0.getContentView()
+            r1 = 4
+            r0.setVisibility(r1)
+            org.telegram.ui.PaymentFormActivity$5 r0 = new org.telegram.ui.PaymentFormActivity$5
+            r0.<init>(r8)
+            r7.webView = r0
+            android.webkit.WebSettings r0 = r0.getSettings()
+            r0.setJavaScriptEnabled(r14)
+            android.webkit.WebView r0 = r7.webView
+            android.webkit.WebSettings r0 = r0.getSettings()
+            r0.setDomStorageEnabled(r14)
+            int r0 = android.os.Build.VERSION.SDK_INT
+            r1 = 21
+            if (r0 < r1) goto L_0x09dd
+            android.webkit.WebView r1 = r7.webView
+            android.webkit.WebSettings r1 = r1.getSettings()
+            r1.setMixedContentMode(r5)
+            android.webkit.CookieManager r1 = android.webkit.CookieManager.getInstance()
+            android.webkit.WebView r2 = r7.webView
+            r1.setAcceptThirdPartyCookies(r2, r14)
+        L_0x09dd:
+            r1 = 17
+            if (r0 < r1) goto L_0x09ee
+            android.webkit.WebView r0 = r7.webView
+            org.telegram.ui.PaymentFormActivity$TelegramWebviewProxy r1 = new org.telegram.ui.PaymentFormActivity$TelegramWebviewProxy
+            r2 = 0
+            r1.<init>()
+            java.lang.String r2 = "TelegramWebviewProxy"
+            r0.addJavascriptInterface(r1, r2)
+        L_0x09ee:
+            android.webkit.WebView r0 = r7.webView
+            org.telegram.ui.PaymentFormActivity$6 r1 = new org.telegram.ui.PaymentFormActivity$6
+            r1.<init>()
+            r0.setWebViewClient(r1)
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            android.webkit.WebView r1 = r7.webView
+            r2 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r3 = -1
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r2)
+            r0.addView(r1, r2)
+            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r7.sectionCell
+            org.telegram.ui.Cells.ShadowSectionCell r1 = new org.telegram.ui.Cells.ShadowSectionCell
+            r1.<init>(r8)
+            r2 = 2
+            r0[r2] = r1
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.ShadowSectionCell[] r1 = r7.sectionCell
+            r1 = r1[r2]
+            r2 = -2
+            android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear(r3, r2)
+            r0.addView(r1, r4)
+            org.telegram.ui.Cells.TextCheckCell r0 = new org.telegram.ui.Cells.TextCheckCell
+            r0.<init>(r8)
+            r7.checkCell1 = r0
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
+            r0.setBackgroundDrawable(r1)
+            org.telegram.ui.Cells.TextCheckCell r0 = r7.checkCell1
+            r1 = 2131626791(0x7f0e0b27, float:1.8880828E38)
+            java.lang.String r2 = "PaymentCardSavePaymentInformation"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            boolean r2 = r7.saveCardInfo
+            r0.setTextAndCheck(r1, r2, r5)
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextCheckCell r1 = r7.checkCell1
+            r2 = -2
+            r3 = -1
+            android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear(r3, r2)
+            r0.addView(r1, r4)
+            org.telegram.ui.Cells.TextCheckCell r0 = r7.checkCell1
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$cvL2PmrtAz-lhXkk9DISaHjZOls r1 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$cvL2PmrtAz-lhXkk9DISaHjZOls
+            r1.<init>()
+            r0.setOnClickListener(r1)
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r7.bottomCell
+            org.telegram.ui.Cells.TextInfoPrivacyCell r1 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+            r1.<init>(r8)
+            r0[r5] = r1
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r7.bottomCell
+            r0 = r0[r5]
+            r1 = 2131165450(0x7var_a, float:1.7945117E38)
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r10)
+            r0.setBackgroundDrawable(r1)
+            r34.updateSavePaymentField()
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            r1 = r1[r5]
+            r2 = -2
+            r3 = -1
+            android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r3, r2)
+            r0.addView(r1, r2)
+            goto L_0x1CLASSNAME
+        L_0x0a7e:
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_dataJSON r0 = r0.native_params
+            if (r0 == 0) goto L_0x0ade
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ Exception -> 0x0ada }
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r1 = r7.paymentForm     // Catch:{ Exception -> 0x0ada }
+            org.telegram.tgnet.TLRPC$TL_dataJSON r1 = r1.native_params     // Catch:{ Exception -> 0x0ada }
+            java.lang.String r1 = r1.data     // Catch:{ Exception -> 0x0ada }
+            r0.<init>(r1)     // Catch:{ Exception -> 0x0ada }
+            java.lang.String r1 = "need_country"
+            boolean r1 = r0.getBoolean(r1)     // Catch:{ Exception -> 0x0a98 }
+            r7.need_card_country = r1     // Catch:{ Exception -> 0x0a98 }
+            goto L_0x0a9a
+        L_0x0a98:
+            r7.need_card_country = r5     // Catch:{ Exception -> 0x0ada }
+        L_0x0a9a:
+            java.lang.String r1 = "need_zip"
+            boolean r1 = r0.getBoolean(r1)     // Catch:{ Exception -> 0x0aa3 }
+            r7.need_card_postcode = r1     // Catch:{ Exception -> 0x0aa3 }
+            goto L_0x0aa5
+        L_0x0aa3:
+            r7.need_card_postcode = r5     // Catch:{ Exception -> 0x0ada }
+        L_0x0aa5:
+            java.lang.String r1 = "need_cardholder_name"
+            boolean r1 = r0.getBoolean(r1)     // Catch:{ Exception -> 0x0aae }
+            r7.need_card_name = r1     // Catch:{ Exception -> 0x0aae }
+            goto L_0x0ab0
+        L_0x0aae:
+            r7.need_card_name = r5     // Catch:{ Exception -> 0x0ada }
+        L_0x0ab0:
+            java.lang.String r1 = "public_token"
+            boolean r1 = r0.has(r1)     // Catch:{ Exception -> 0x0ada }
+            if (r1 == 0) goto L_0x0ac1
+            java.lang.String r1 = "public_token"
+            java.lang.String r1 = r0.getString(r1)     // Catch:{ Exception -> 0x0ada }
+            r7.providerApiKey = r1     // Catch:{ Exception -> 0x0ada }
+            goto L_0x0acc
+        L_0x0ac1:
+            java.lang.String r1 = "publishable_key"
+            java.lang.String r1 = r0.getString(r1)     // Catch:{ Exception -> 0x0aca }
+            r7.providerApiKey = r1     // Catch:{ Exception -> 0x0aca }
+            goto L_0x0acc
+        L_0x0aca:
+            r7.providerApiKey = r3     // Catch:{ Exception -> 0x0ada }
+        L_0x0acc:
+            java.lang.String r1 = "google_pay_hidden"
+            boolean r0 = r0.optBoolean(r1, r5)     // Catch:{ Exception -> 0x0ada }
+            if (r0 != 0) goto L_0x0ad6
+            r0 = 1
+            goto L_0x0ad7
+        L_0x0ad6:
+            r0 = 0
+        L_0x0ad7:
+            r7.initGooglePay = r0     // Catch:{ Exception -> 0x0ada }
+            goto L_0x0ade
+        L_0x0ada:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+        L_0x0ade:
+            boolean r0 = r7.initGooglePay
+            if (r0 == 0) goto L_0x0afd
+            java.lang.String r0 = r7.providerApiKey
+            boolean r0 = android.text.TextUtils.isEmpty(r0)
+            if (r0 != 0) goto L_0x0af6
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
+            java.lang.String r0 = r0.native_provider
+            java.lang.String r1 = "stripe"
+            boolean r0 = r1.equals(r0)
+            if (r0 != 0) goto L_0x0afa
+        L_0x0af6:
+            org.json.JSONObject r0 = r7.googlePayParameters
+            if (r0 == 0) goto L_0x0afd
+        L_0x0afa:
+            r34.initGooglePay(r35)
+        L_0x0afd:
+            r1 = 6
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = new org.telegram.ui.Components.EditTextBoldCursor[r1]
+            r7.inputFields = r0
+            r0 = 0
+        L_0x0b03:
+            if (r0 >= r1) goto L_0x0e48
+            if (r0 != 0) goto L_0x0b3b
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            org.telegram.ui.Cells.HeaderCell r3 = new org.telegram.ui.Cells.HeaderCell
+            r3.<init>(r8)
+            r1[r5] = r3
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            r1 = r1[r5]
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r1.setBackgroundColor(r3)
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            r1 = r1[r5]
+            r3 = 2131626794(0x7f0e0b2a, float:1.8880834E38)
+            java.lang.String r4 = "PaymentCardTitle"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r1.setText(r3)
+            android.widget.LinearLayout r1 = r7.linearLayout2
+            org.telegram.ui.Cells.HeaderCell[] r3 = r7.headerCell
+            r3 = r3[r5]
+            r4 = -2
+            r6 = -1
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r4)
+            r1.addView(r3, r9)
+            goto L_0x0b71
+        L_0x0b3b:
+            r1 = 4
+            if (r0 != r1) goto L_0x0b71
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            org.telegram.ui.Cells.HeaderCell r3 = new org.telegram.ui.Cells.HeaderCell
+            r3.<init>(r8)
+            r1[r14] = r3
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            r1 = r1[r14]
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r1.setBackgroundColor(r3)
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            r1 = r1[r14]
+            r3 = 2131626785(0x7f0e0b21, float:1.8880816E38)
+            java.lang.String r4 = "PaymentBillingAddress"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r1.setText(r3)
+            android.widget.LinearLayout r1 = r7.linearLayout2
+            org.telegram.ui.Cells.HeaderCell[] r3 = r7.headerCell
+            r3 = r3[r14]
+            r4 = -2
+            r6 = -1
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r4)
+            r1.addView(r3, r9)
+        L_0x0b71:
+            r1 = 3
+            if (r0 == r1) goto L_0x0b80
+            r1 = 5
+            if (r0 == r1) goto L_0x0b80
+            r1 = 4
+            if (r0 != r1) goto L_0x0b7e
+            boolean r1 = r7.need_card_postcode
+            if (r1 == 0) goto L_0x0b80
+        L_0x0b7e:
+            r1 = 1
+            goto L_0x0b81
+        L_0x0b80:
+            r1 = 0
+        L_0x0b81:
+            android.widget.FrameLayout r3 = new android.widget.FrameLayout
+            r3.<init>(r8)
+            r3.setClipChildren(r5)
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r3.setBackgroundColor(r4)
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            r6 = 50
+            r9 = -1
+            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r6)
+            r4.addView(r3, r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            org.telegram.ui.Components.EditTextBoldCursor r6 = new org.telegram.ui.Components.EditTextBoldCursor
+            r6.<init>(r8)
+            r4[r0] = r6
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r0)
+            r4.setTag(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 1098907648(0x41800000, float:16.0)
+            r4.setTextSize(r14, r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            java.lang.String r6 = "windowBackgroundWhiteHintText"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r4.setHintTextColor(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r4.setTextColor(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 0
+            r4.setBackgroundDrawable(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r4.setCursorColor(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 1101004800(0x41a00000, float:20.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r4.setCursorSize(r9)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 1069547520(0x3fCLASSNAME, float:1.5)
+            r4.setCursorWidth(r6)
+            r4 = 3
+            if (r0 != r4) goto L_0x0c2c
+            android.text.InputFilter[] r6 = new android.text.InputFilter[r14]
+            android.text.InputFilter$LengthFilter r9 = new android.text.InputFilter$LengthFilter
+            r9.<init>(r4)
+            r6[r5] = r9
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r4.setFilters(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 130(0x82, float:1.82E-43)
+            r4.setInputType(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            android.graphics.Typeface r6 = android.graphics.Typeface.DEFAULT
+            r4.setTypeface(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            android.text.method.PasswordTransformationMethod r6 = android.text.method.PasswordTransformationMethod.getInstance()
+            r4.setTransformationMethod(r6)
+            goto L_0x0CLASSNAME
+        L_0x0c2c:
+            if (r0 != 0) goto L_0x0CLASSNAME
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 3
+            r4.setInputType(r6)
+            goto L_0x0CLASSNAME
+        L_0x0CLASSNAME:
+            r4 = 4
+            if (r0 != r4) goto L_0x0c4e
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$ufBXhrNbvJlVLqcHkReQdB857HQ r6 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$ufBXhrNbvJlVLqcHkReQdB857HQ
+            r6.<init>()
+            r4.setOnTouchListener(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r4.setInputType(r5)
+            goto L_0x0CLASSNAME
+        L_0x0c4e:
+            if (r0 != r14) goto L_0x0c5a
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 16386(0x4002, float:2.2962E-41)
+            r4.setInputType(r6)
+            goto L_0x0CLASSNAME
+        L_0x0c5a:
+            r4 = 2
+            if (r0 != r4) goto L_0x0CLASSNAME
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 4097(0x1001, float:5.741E-42)
+            r4.setInputType(r6)
+            goto L_0x0CLASSNAME
+        L_0x0CLASSNAME:
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 16385(0x4001, float:2.296E-41)
+            r4.setInputType(r6)
+        L_0x0CLASSNAME:
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 268435461(0x10000005, float:2.5243564E-29)
+            r4.setImeOptions(r6)
+            if (r0 == 0) goto L_0x0ce0
+            if (r0 == r14) goto L_0x0ccf
+            r4 = 2
+            if (r0 == r4) goto L_0x0cbe
+            r4 = 3
+            if (r0 == r4) goto L_0x0cad
+            r4 = 4
+            if (r0 == r4) goto L_0x0c9c
+            r4 = 5
+            if (r0 == r4) goto L_0x0c8b
+            goto L_0x0cf0
+        L_0x0c8b:
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 2131626838(0x7f0e0b56, float:1.8880923E38)
+            java.lang.String r9 = "PaymentShippingZipPlaceholder"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r4.setHint(r6)
+            goto L_0x0cf0
+        L_0x0c9c:
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 2131626828(0x7f0e0b4c, float:1.8880903E38)
+            java.lang.String r9 = "PaymentShippingCountry"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r4.setHint(r6)
+            goto L_0x0cf0
+        L_0x0cad:
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 2131626786(0x7f0e0b22, float:1.8880818E38)
+            java.lang.String r9 = "PaymentCardCvv"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r4.setHint(r6)
+            goto L_0x0cf0
+        L_0x0cbe:
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 2131626789(0x7f0e0b25, float:1.8880824E38)
+            java.lang.String r9 = "PaymentCardName"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r4.setHint(r6)
+            goto L_0x0cf0
+        L_0x0ccf:
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 2131626787(0x7f0e0b23, float:1.888082E38)
+            java.lang.String r9 = "PaymentCardExpireDate"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r4.setHint(r6)
+            goto L_0x0cf0
+        L_0x0ce0:
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 2131626790(0x7f0e0b26, float:1.8880826E38)
+            java.lang.String r9 = "PaymentCardNumber"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r4.setHint(r6)
+        L_0x0cf0:
+            if (r0 != 0) goto L_0x0cff
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            org.telegram.ui.PaymentFormActivity$7 r6 = new org.telegram.ui.PaymentFormActivity$7
+            r6.<init>()
+            r4.addTextChangedListener(r6)
+            goto L_0x0d0d
+        L_0x0cff:
+            if (r0 != r14) goto L_0x0d0d
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            org.telegram.ui.PaymentFormActivity$8 r6 = new org.telegram.ui.PaymentFormActivity$8
+            r6.<init>()
+            r4.addTextChangedListener(r6)
+        L_0x0d0d:
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r6 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r4.setPadding(r5, r5, r5, r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            boolean r6 = org.telegram.messenger.LocaleController.isRTL
+            if (r6 == 0) goto L_0x0d24
+            r6 = 5
+            goto L_0x0d25
+        L_0x0d24:
+            r6 = 3
+        L_0x0d25:
+            r4.setGravity(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            r26 = -1
+            r27 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r28 = 51
+            r29 = 1101529088(0x41a80000, float:21.0)
+            r30 = 1094713344(0x41400000, float:12.0)
+            r31 = 1101529088(0x41a80000, float:21.0)
+            r32 = 1086324736(0x40CLASSNAME, float:6.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
+            r3.addView(r4, r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r0]
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$xR8Gbm-NkgnmgJUOUHnvYiFZMuY r6 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$xR8Gbm-NkgnmgJUOUHnvYiFZMuY
+            r6.<init>()
+            r4.setOnEditorActionListener(r6)
+            r4 = 3
+            if (r0 != r4) goto L_0x0d6a
+            org.telegram.ui.Cells.ShadowSectionCell[] r4 = r7.sectionCell
+            org.telegram.ui.Cells.ShadowSectionCell r6 = new org.telegram.ui.Cells.ShadowSectionCell
+            r6.<init>(r8)
+            r4[r5] = r6
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            org.telegram.ui.Cells.ShadowSectionCell[] r6 = r7.sectionCell
+            r6 = r6[r5]
+            r9 = -2
+            r11 = -1
+            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r9)
+            r4.addView(r6, r12)
+            goto L_0x0e08
+        L_0x0d6a:
+            r4 = 5
+            r9 = -2
+            r11 = -1
+            if (r0 != r4) goto L_0x0de5
+            org.telegram.ui.Cells.ShadowSectionCell[] r4 = r7.sectionCell
+            org.telegram.ui.Cells.ShadowSectionCell r6 = new org.telegram.ui.Cells.ShadowSectionCell
+            r6.<init>(r8)
+            r12 = 2
+            r4[r12] = r6
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            org.telegram.ui.Cells.ShadowSectionCell[] r6 = r7.sectionCell
+            r6 = r6[r12]
+            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r9)
+            r4.addView(r6, r12)
+            org.telegram.ui.Cells.TextCheckCell r4 = new org.telegram.ui.Cells.TextCheckCell
+            r4.<init>(r8)
+            r7.checkCell1 = r4
+            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
+            r4.setBackgroundDrawable(r6)
+            org.telegram.ui.Cells.TextCheckCell r4 = r7.checkCell1
+            r6 = 2131626791(0x7f0e0b27, float:1.8880828E38)
+            java.lang.String r9 = "PaymentCardSavePaymentInformation"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            boolean r9 = r7.saveCardInfo
+            r4.setTextAndCheck(r6, r9, r5)
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            org.telegram.ui.Cells.TextCheckCell r6 = r7.checkCell1
+            r9 = -2
+            r11 = -1
+            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r9)
+            r4.addView(r6, r12)
+            org.telegram.ui.Cells.TextCheckCell r4 = r7.checkCell1
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$tYBCHRD5qJE9gLUKdrPoOZY19ls r6 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$tYBCHRD5qJE9gLUKdrPoOZY19ls
             r6.<init>()
             r4.setOnClickListener(r6)
-            android.widget.LinearLayout r4 = r1.linearLayout2
-            org.telegram.ui.Cells.RadioCell[] r6 = r1.radioCells
-            r6 = r6[r3]
-            r4.addView(r6)
-            int r3 = r3 + 1
-            goto L_0x0e75
-        L_0x0ee0:
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r1.bottomCell
-            org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-            r3.<init>(r2)
-            r0[r5] = r3
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r1.bottomCell
-            r0 = r0[r5]
-            r3 = 2131165450(0x7var_a, float:1.7945117E38)
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r14)
-            r0.setBackgroundDrawable(r2)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r2 = r1.bottomCell
-            r2 = r2[r5]
-            r3 = -2
-            r4 = -1
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r3)
-            r0.addView(r2, r3)
-            goto L_0x1b79
-        L_0x0var_:
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r4 = r7.bottomCell
+            org.telegram.ui.Cells.TextInfoPrivacyCell r6 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+            r6.<init>(r8)
+            r4[r5] = r6
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r4 = r7.bottomCell
+            r4 = r4[r5]
+            r6 = 2131165450(0x7var_a, float:1.7945117E38)
+            android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r6, (java.lang.String) r10)
+            r4.setBackgroundDrawable(r9)
+            r34.updateSavePaymentField()
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r6 = r7.bottomCell
+            r6 = r6[r5]
+            r9 = -2
+            r11 = -1
+            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r9)
+            r4.addView(r6, r12)
+            goto L_0x0e08
+        L_0x0de5:
+            if (r0 != 0) goto L_0x0e08
+            r34.createGooglePayButton(r35)
+            android.widget.FrameLayout r4 = r7.googlePayContainer
+            r26 = -2
+            r27 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            boolean r6 = org.telegram.messenger.LocaleController.isRTL
+            if (r6 == 0) goto L_0x0df6
             r6 = 3
-            if (r0 != r6) goto L_0x1147
-            r6 = 2
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = new org.telegram.ui.Components.EditTextBoldCursor[r6]
-            r1.inputFields = r0
+            goto L_0x0df7
+        L_0x0df6:
+            r6 = 5
+        L_0x0df7:
+            r28 = r6 | 16
+            r29 = 0
+            r30 = 0
+            r31 = 1082130432(0x40800000, float:4.0)
+            r32 = 0
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
+            r3.addView(r4, r6)
+        L_0x0e08:
+            if (r1 == 0) goto L_0x0e26
+            org.telegram.ui.PaymentFormActivity$9 r1 = new org.telegram.ui.PaymentFormActivity$9
+            r1.<init>(r7, r8)
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r1.setBackgroundColor(r4)
+            java.util.ArrayList<android.view.View> r4 = r7.dividers
+            r4.add(r1)
+            android.widget.FrameLayout$LayoutParams r4 = new android.widget.FrameLayout$LayoutParams
+            r6 = 83
+            r9 = -1
+            r4.<init>(r9, r14, r6)
+            r3.addView(r1, r4)
+        L_0x0e26:
+            r1 = 4
+            if (r0 != r1) goto L_0x0e31
+            boolean r1 = r7.need_card_country
+            if (r1 == 0) goto L_0x0e2e
+            goto L_0x0e31
+        L_0x0e2e:
+            r1 = 8
+            goto L_0x0e40
+        L_0x0e31:
+            r1 = 5
+            if (r0 != r1) goto L_0x0e38
+            boolean r1 = r7.need_card_postcode
+            if (r1 == 0) goto L_0x0e2e
+        L_0x0e38:
+            r1 = 2
+            if (r0 != r1) goto L_0x0e43
+            boolean r1 = r7.need_card_name
+            if (r1 != 0) goto L_0x0e43
+            goto L_0x0e2e
+        L_0x0e40:
+            r3.setVisibility(r1)
+        L_0x0e43:
+            int r0 = r0 + 1
+            r1 = 6
+            goto L_0x0b03
+        L_0x0e48:
+            boolean r0 = r7.need_card_country
+            if (r0 != 0) goto L_0x0e60
+            boolean r0 = r7.need_card_postcode
+            if (r0 != 0) goto L_0x0e60
+            org.telegram.ui.Cells.HeaderCell[] r0 = r7.headerCell
+            r0 = r0[r14]
+            r1 = 8
+            r0.setVisibility(r1)
+            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r7.sectionCell
+            r0 = r0[r5]
+            r0.setVisibility(r1)
+        L_0x0e60:
+            boolean r0 = r7.need_card_postcode
+            if (r0 == 0) goto L_0x0e71
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r1 = 5
+            r0 = r0[r1]
+            r1 = 268435462(0x10000006, float:2.5243567E-29)
+            r0.setImeOptions(r1)
+            goto L_0x1CLASSNAME
+        L_0x0e71:
+            r1 = 268435462(0x10000006, float:2.5243567E-29)
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
+            r2 = 3
+            r0 = r0[r2]
+            r0.setImeOptions(r1)
+            goto L_0x1CLASSNAME
+        L_0x0e7e:
+            if (r0 != r14) goto L_0x0var_
+            org.telegram.tgnet.TLRPC$TL_payments_validatedRequestedInfo r0 = r7.requestedInfo
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_shippingOption> r0 = r0.shipping_options
+            int r0 = r0.size()
+            org.telegram.ui.Cells.RadioCell[] r1 = new org.telegram.ui.Cells.RadioCell[r0]
+            r7.radioCells = r1
+            r1 = 0
+        L_0x0e8d:
+            if (r1 >= r0) goto L_0x0ef8
+            org.telegram.tgnet.TLRPC$TL_payments_validatedRequestedInfo r2 = r7.requestedInfo
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_shippingOption> r2 = r2.shipping_options
+            java.lang.Object r2 = r2.get(r1)
+            org.telegram.tgnet.TLRPC$TL_shippingOption r2 = (org.telegram.tgnet.TLRPC$TL_shippingOption) r2
+            org.telegram.ui.Cells.RadioCell[] r3 = r7.radioCells
+            org.telegram.ui.Cells.RadioCell r4 = new org.telegram.ui.Cells.RadioCell
+            r4.<init>(r8)
+            r3[r1] = r4
+            org.telegram.ui.Cells.RadioCell[] r3 = r7.radioCells
+            r3 = r3[r1]
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r1)
+            r3.setTag(r4)
+            org.telegram.ui.Cells.RadioCell[] r3 = r7.radioCells
+            r3 = r3[r1]
+            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
+            r3.setBackgroundDrawable(r4)
+            org.telegram.ui.Cells.RadioCell[] r3 = r7.radioCells
+            r3 = r3[r1]
+            r4 = 2
+            java.lang.Object[] r6 = new java.lang.Object[r4]
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r4 = r2.prices
+            java.lang.String r4 = r7.getTotalPriceString(r4)
+            r6[r5] = r4
+            java.lang.String r2 = r2.title
+            r6[r14] = r2
+            java.lang.String r2 = "%s - %s"
+            java.lang.String r2 = java.lang.String.format(r2, r6)
+            if (r1 != 0) goto L_0x0ed5
+            r4 = 1
+            goto L_0x0ed6
+        L_0x0ed5:
+            r4 = 0
+        L_0x0ed6:
+            int r6 = r0 + -1
+            if (r1 == r6) goto L_0x0edc
+            r6 = 1
+            goto L_0x0edd
+        L_0x0edc:
+            r6 = 0
+        L_0x0edd:
+            r3.setText(r2, r4, r6)
+            org.telegram.ui.Cells.RadioCell[] r2 = r7.radioCells
+            r2 = r2[r1]
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$XzomBkzVnAnjaV6SN-Js2LQ2of8 r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$XzomBkzVnAnjaV6SN-Js2LQ2of8
+            r3.<init>()
+            r2.setOnClickListener(r3)
+            android.widget.LinearLayout r2 = r7.linearLayout2
+            org.telegram.ui.Cells.RadioCell[] r3 = r7.radioCells
+            r3 = r3[r1]
+            r2.addView(r3)
+            int r1 = r1 + 1
+            goto L_0x0e8d
+        L_0x0ef8:
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r7.bottomCell
+            org.telegram.ui.Cells.TextInfoPrivacyCell r1 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+            r1.<init>(r8)
+            r0[r5] = r1
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r7.bottomCell
+            r0 = r0[r5]
+            r1 = 2131165450(0x7var_a, float:1.7945117E38)
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r10)
+            r0.setBackgroundDrawable(r1)
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            r1 = r1[r5]
+            r2 = -2
+            r3 = -1
+            android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r3, r2)
+            r0.addView(r1, r2)
+            goto L_0x1CLASSNAME
+        L_0x0var_:
+            r1 = 3
+            if (r0 != r1) goto L_0x1162
+            r1 = 2
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = new org.telegram.ui.Components.EditTextBoldCursor[r1]
+            r7.inputFields = r0
             r0 = 0
         L_0x0var_:
-            if (r0 >= r6) goto L_0x1b79
+            if (r0 >= r1) goto L_0x1CLASSNAME
             if (r0 != 0) goto L_0x0var_
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            org.telegram.ui.Cells.HeaderCell r6 = new org.telegram.ui.Cells.HeaderCell
-            r6.<init>(r2)
-            r3[r5] = r6
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            org.telegram.ui.Cells.HeaderCell r3 = new org.telegram.ui.Cells.HeaderCell
+            r3.<init>(r8)
+            r1[r5] = r3
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            r1 = r1[r5]
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r1.setBackgroundColor(r3)
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            r1 = r1[r5]
+            r3 = 2131626794(0x7f0e0b2a, float:1.8880834E38)
+            java.lang.String r4 = "PaymentCardTitle"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r1.setText(r3)
+            android.widget.LinearLayout r1 = r7.linearLayout2
+            org.telegram.ui.Cells.HeaderCell[] r3 = r7.headerCell
             r3 = r3[r5]
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r19)
+            r4 = -2
+            r6 = -1
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r4)
+            r1.addView(r3, r9)
+            goto L_0x0var_
+        L_0x0var_:
+            r6 = -1
+        L_0x0var_:
+            android.widget.FrameLayout r1 = new android.widget.FrameLayout
+            r1.<init>(r8)
+            r1.setClipChildren(r5)
+            android.widget.LinearLayout r3 = r7.linearLayout2
+            r4 = 50
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r4)
+            r3.addView(r1, r9)
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r1.setBackgroundColor(r3)
+            if (r0 == r14) goto L_0x0var_
+            r3 = 1
+            goto L_0x0var_
+        L_0x0var_:
+            r3 = 0
+        L_0x0var_:
+            r4 = 7
+            if (r3 == 0) goto L_0x0fa0
+            if (r0 != r4) goto L_0x0var_
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r6 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r6 = r6.invoice
+            boolean r6 = r6.phone_requested
+            if (r6 != 0) goto L_0x0var_
+        L_0x0f8e:
+            r3 = 0
+            goto L_0x0fa0
+        L_0x0var_:
+            r6 = 6
+            if (r0 != r6) goto L_0x0fa0
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r6 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r6 = r6.invoice
+            boolean r9 = r6.phone_requested
+            if (r9 != 0) goto L_0x0fa0
+            boolean r6 = r6.email_requested
+            if (r6 != 0) goto L_0x0fa0
+            goto L_0x0f8e
+        L_0x0fa0:
+            if (r3 == 0) goto L_0x0fbe
+            org.telegram.ui.PaymentFormActivity$10 r3 = new org.telegram.ui.PaymentFormActivity$10
+            r3.<init>(r7, r8)
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r23)
             r3.setBackgroundColor(r6)
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r5]
-            r6 = 2131626791(0x7f0e0b27, float:1.8880828E38)
-            java.lang.String r7 = "PaymentCardTitle"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r3.setText(r6)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.HeaderCell[] r6 = r1.headerCell
-            r6 = r6[r5]
-            r7 = -2
-            r9 = -1
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r7)
-            r3.addView(r6, r10)
-            goto L_0x0f4a
-        L_0x0var_:
-            r9 = -1
-        L_0x0f4a:
-            android.widget.FrameLayout r3 = new android.widget.FrameLayout
-            r3.<init>(r2)
-            android.widget.LinearLayout r6 = r1.linearLayout2
-            r7 = 50
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r7)
-            r6.addView(r3, r10)
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r6)
-            if (r0 == r8) goto L_0x0var_
-            r6 = 1
-            goto L_0x0var_
-        L_0x0var_:
-            r6 = 0
-        L_0x0var_:
-            r7 = 7
-            if (r6 == 0) goto L_0x0var_
-            if (r0 != r7) goto L_0x0var_
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r9 = r9.invoice
-            boolean r9 = r9.phone_requested
-            if (r9 != 0) goto L_0x0var_
-        L_0x0var_:
-            r6 = 0
-            goto L_0x0var_
-        L_0x0var_:
-            r9 = 6
-            if (r0 != r9) goto L_0x0var_
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r9 = r9.invoice
-            boolean r10 = r9.phone_requested
-            if (r10 != 0) goto L_0x0var_
-            boolean r9 = r9.email_requested
-            if (r9 != 0) goto L_0x0var_
-            goto L_0x0var_
-        L_0x0var_:
-            if (r6 == 0) goto L_0x0fa3
-            org.telegram.ui.PaymentFormActivity$10 r6 = new org.telegram.ui.PaymentFormActivity$10
-            r6.<init>(r1, r2)
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r6.setBackgroundColor(r9)
-            java.util.ArrayList<android.view.View> r9 = r1.dividers
-            r9.add(r6)
-            android.widget.FrameLayout$LayoutParams r9 = new android.widget.FrameLayout$LayoutParams
-            r10 = 83
+            java.util.ArrayList<android.view.View> r6 = r7.dividers
+            r6.add(r3)
+            android.widget.FrameLayout$LayoutParams r6 = new android.widget.FrameLayout$LayoutParams
+            r9 = 83
             r11 = -1
-            r9.<init>(r11, r8, r10)
-            r3.addView(r6, r9)
-        L_0x0fa3:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            org.telegram.ui.Components.EditTextBoldCursor r9 = new org.telegram.ui.Components.EditTextBoldCursor
-            r9.<init>(r2)
-            r6[r0] = r9
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r0)
-            r6.setTag(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 1098907648(0x41800000, float:16.0)
-            r6.setTextSize(r8, r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            java.lang.String r9 = "windowBackgroundWhiteHintText"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r6.setHintTextColor(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r6.setTextColor(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 0
-            r6.setBackgroundDrawable(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r6.setCursorColor(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 1101004800(0x41a00000, float:20.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            r6.setCursorSize(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 1069547520(0x3fCLASSNAME, float:1.5)
-            r6.setCursorWidth(r9)
-            if (r0 != 0) goto L_0x1015
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$YMeFnG1zi0SfhsCCk86PBQIPZKI r9 = org.telegram.ui.$$Lambda$PaymentFormActivity$YMeFnG1zi0SfhsCCk86PBQIPZKI.INSTANCE
-            r6.setOnTouchListener(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r6.setInputType(r5)
-            goto L_0x1027
-        L_0x1015:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 129(0x81, float:1.81E-43)
-            r6.setInputType(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            android.graphics.Typeface r9 = android.graphics.Typeface.DEFAULT
-            r6.setTypeface(r9)
-        L_0x1027:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 268435462(0x10000006, float:2.5243567E-29)
-            r6.setImeOptions(r9)
-            if (r0 == 0) goto L_0x104e
-            if (r0 == r8) goto L_0x1036
-            goto L_0x105b
-        L_0x1036:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 2131626010(0x7f0e081a, float:1.8879244E38)
-            java.lang.String r10 = "LoginPassword"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r6.setHint(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r6.requestFocus()
-            goto L_0x105b
-        L_0x104e:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r1.paymentForm
+            r6.<init>(r11, r14, r9)
+            r1.addView(r3, r6)
+        L_0x0fbe:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            org.telegram.ui.Components.EditTextBoldCursor r6 = new org.telegram.ui.Components.EditTextBoldCursor
+            r6.<init>(r8)
+            r3[r0] = r6
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r0)
+            r3.setTag(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 1098907648(0x41800000, float:16.0)
+            r3.setTextSize(r14, r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            java.lang.String r6 = "windowBackgroundWhiteHintText"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r3.setHintTextColor(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r3.setTextColor(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 0
+            r3.setBackgroundDrawable(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r3.setCursorColor(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 1101004800(0x41a00000, float:20.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r3.setCursorSize(r9)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 1069547520(0x3fCLASSNAME, float:1.5)
+            r3.setCursorWidth(r6)
+            if (r0 != 0) goto L_0x1030
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$YMeFnG1zi0SfhsCCk86PBQIPZKI r6 = org.telegram.ui.$$Lambda$PaymentFormActivity$YMeFnG1zi0SfhsCCk86PBQIPZKI.INSTANCE
+            r3.setOnTouchListener(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r3.setInputType(r5)
+            goto L_0x1042
+        L_0x1030:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 129(0x81, float:1.81E-43)
+            r3.setInputType(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            android.graphics.Typeface r6 = android.graphics.Typeface.DEFAULT
+            r3.setTypeface(r6)
+        L_0x1042:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 268435462(0x10000006, float:2.5243567E-29)
+            r3.setImeOptions(r6)
+            if (r0 == 0) goto L_0x1069
+            if (r0 == r14) goto L_0x1051
+            goto L_0x1076
+        L_0x1051:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 2131626013(0x7f0e081d, float:1.887925E38)
+            java.lang.String r9 = "LoginPassword"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r3.setHint(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r3.requestFocus()
+            goto L_0x1076
+        L_0x1069:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r6 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_paymentSavedCredentialsCard r6 = r6.saved_credentials
+            java.lang.String r6 = r6.title
+            r3.setText(r6)
+        L_0x1076:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r3.setPadding(r5, r5, r5, r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            boolean r6 = org.telegram.messenger.LocaleController.isRTL
+            if (r6 == 0) goto L_0x108d
+            r6 = 5
+            goto L_0x108e
+        L_0x108d:
+            r6 = 3
+        L_0x108e:
+            r3.setGravity(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r26 = -1
+            r27 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r28 = 51
+            r29 = 1101529088(0x41a80000, float:21.0)
+            r30 = 1094713344(0x41400000, float:12.0)
+            r31 = 1101529088(0x41a80000, float:21.0)
+            r32 = 1086324736(0x40CLASSNAME, float:6.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
+            r1.addView(r3, r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r1 = r7.inputFields
+            r1 = r1[r0]
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$e9RqJBJ1jQ4PDryfM6w6pSv02Wk r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$e9RqJBJ1jQ4PDryfM6w6pSv02Wk
+            r3.<init>()
+            r1.setOnEditorActionListener(r3)
+            if (r0 != r14) goto L_0x115d
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+            r3.<init>(r8)
+            r1[r5] = r3
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            r1 = r1[r5]
+            r3 = 2131626804(0x7f0e0b34, float:1.8880855E38)
+            java.lang.Object[] r6 = new java.lang.Object[r14]
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r7.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentSavedCredentialsCard r9 = r9.saved_credentials
             java.lang.String r9 = r9.title
-            r6.setText(r9)
-        L_0x105b:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            r6.setPadding(r5, r5, r5, r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            if (r9 == 0) goto L_0x1072
-            r9 = 5
-            goto L_0x1073
-        L_0x1072:
-            r9 = 3
-        L_0x1073:
-            r6.setGravity(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r22 = -1
-            r23 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r24 = 51
-            r25 = 1101529088(0x41a80000, float:21.0)
-            r26 = 1094713344(0x41400000, float:12.0)
-            r27 = 1101529088(0x41a80000, float:21.0)
-            r28 = 1086324736(0x40CLASSNAME, float:6.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28)
-            r3.addView(r6, r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r1.inputFields
-            r3 = r3[r0]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$e9RqJBJ1jQ4PDryfM6w6pSv02Wk r6 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$e9RqJBJ1jQ4PDryfM6w6pSv02Wk
-            r6.<init>()
-            r3.setOnEditorActionListener(r6)
-            if (r0 != r8) goto L_0x1142
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            org.telegram.ui.Cells.TextInfoPrivacyCell r6 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-            r6.<init>(r2)
-            r3[r5] = r6
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            r3 = r3[r5]
-            r6 = 2131626801(0x7f0e0b31, float:1.8880848E38)
-            java.lang.Object[] r9 = new java.lang.Object[r8]
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r10 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_paymentSavedCredentialsCard r10 = r10.saved_credentials
-            java.lang.String r10 = r10.title
-            r9[r5] = r10
-            java.lang.String r10 = "PaymentConfirmationMessage"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r10, r6, r9)
-            r3.setText(r6)
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            r3 = r3[r5]
-            r6 = 2131165449(0x7var_, float:1.7945115E38)
-            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r6, (java.lang.String) r14)
-            r3.setBackgroundDrawable(r6)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r6 = r1.bottomCell
-            r6 = r6[r5]
-            r9 = -2
-            r10 = -1
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r9)
-            r3.addView(r6, r11)
-            org.telegram.ui.Cells.TextSettingsCell[] r3 = r1.settingsCell
-            org.telegram.ui.Cells.TextSettingsCell r6 = new org.telegram.ui.Cells.TextSettingsCell
-            r6.<init>(r2)
-            r3[r5] = r6
-            org.telegram.ui.Cells.TextSettingsCell[] r3 = r1.settingsCell
-            r3 = r3[r5]
-            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
-            r3.setBackgroundDrawable(r6)
-            org.telegram.ui.Cells.TextSettingsCell[] r3 = r1.settingsCell
-            r3 = r3[r5]
-            r6 = 2131626802(0x7f0e0b32, float:1.888085E38)
-            java.lang.String r9 = "PaymentConfirmationNewCard"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
-            r3.setText(r6, r5)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.TextSettingsCell[] r6 = r1.settingsCell
-            r6 = r6[r5]
-            r9 = -2
-            r10 = -1
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r9)
-            r3.addView(r6, r11)
-            org.telegram.ui.Cells.TextSettingsCell[] r3 = r1.settingsCell
-            r3 = r3[r5]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$8oiBrYVovzVK-mug2vbZpERQ3mo r6 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$8oiBrYVovzVK-mug2vbZpERQ3mo
-            r6.<init>()
-            r3.setOnClickListener(r6)
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            org.telegram.ui.Cells.TextInfoPrivacyCell r6 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-            r6.<init>(r2)
-            r3[r8] = r6
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            r3 = r3[r8]
-            r6 = 2131165450(0x7var_a, float:1.7945117E38)
-            android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r6, (java.lang.String) r14)
-            r3.setBackgroundDrawable(r9)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r6 = r1.bottomCell
-            r6 = r6[r8]
-            r9 = -2
-            r10 = -1
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r9)
-            r3.addView(r6, r11)
-        L_0x1142:
-            int r0 = r0 + 1
-            r6 = 2
-            goto L_0x0var_
-        L_0x1147:
-            r6 = 4
-            if (r0 == r6) goto L_0x14a4
-            r6 = 5
-            if (r0 != r6) goto L_0x114f
-            goto L_0x14a4
-        L_0x114f:
-            r6 = 6
-            if (r0 != r6) goto L_0x1b79
-            org.telegram.ui.Cells.EditTextSettingsCell r0 = new org.telegram.ui.Cells.EditTextSettingsCell
-            r0.<init>(r2)
-            r1.codeFieldCell = r0
-            r3 = 2131626771(0x7f0e0b13, float:1.8880788E38)
-            java.lang.String r6 = "PasswordCode"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
-            r0.setTextAndHint(r13, r3, r5)
-            org.telegram.ui.Cells.EditTextSettingsCell r0 = r1.codeFieldCell
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r0.setBackgroundColor(r3)
-            org.telegram.ui.Cells.EditTextSettingsCell r0 = r1.codeFieldCell
-            org.telegram.ui.Components.EditTextBoldCursor r0 = r0.getTextView()
-            r3 = 3
-            r0.setInputType(r3)
-            r3 = 6
-            r0.setImeOptions(r3)
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$uf_8DJOjk5pz_qHwrCln0ooTjmo r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$uf_8DJOjk5pz_qHwrCln0ooTjmo
-            r3.<init>()
-            r0.setOnEditorActionListener(r3)
-            org.telegram.ui.PaymentFormActivity$20 r3 = new org.telegram.ui.PaymentFormActivity$20
-            r3.<init>()
-            r0.addTextChangedListener(r3)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.EditTextSettingsCell r3 = r1.codeFieldCell
-            r6 = -2
-            r7 = -1
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r6)
-            r0.addView(r3, r9)
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r1.bottomCell
-            org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-            r3.<init>(r2)
-            r6 = 2
-            r0[r6] = r3
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r1.bottomCell
-            r0 = r0[r6]
+            r6[r5] = r9
+            java.lang.String r9 = "PaymentConfirmationMessage"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r9, r3, r6)
+            r1.setText(r3)
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            r1 = r1[r5]
             r3 = 2131165449(0x7var_, float:1.7945115E38)
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r14)
-            r0.setBackgroundDrawable(r3)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            r3 = r3[r6]
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r3, (java.lang.String) r10)
+            r1.setBackgroundDrawable(r3)
+            android.widget.LinearLayout r1 = r7.linearLayout2
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r7.bottomCell
+            r3 = r3[r5]
             r6 = -2
-            r7 = -1
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r6)
-            r0.addView(r3, r9)
-            org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
+            r9 = -1
+            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r6)
+            r1.addView(r3, r11)
+            org.telegram.ui.Cells.TextSettingsCell[] r1 = r7.settingsCell
             org.telegram.ui.Cells.TextSettingsCell r3 = new org.telegram.ui.Cells.TextSettingsCell
-            r3.<init>(r2)
-            r0[r8] = r3
-            org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
-            r0 = r0[r8]
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
-            r0.setBackgroundDrawable(r3)
-            org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
-            r0 = r0[r8]
-            r0.setTag(r4)
-            org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
-            r0 = r0[r8]
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r0.setTextColor(r3)
-            org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
-            r0 = r0[r8]
-            r3 = 2131627177(0x7f0e0ca9, float:1.8881611E38)
-            java.lang.String r6 = "ResendCode"
+            r3.<init>(r8)
+            r1[r5] = r3
+            org.telegram.ui.Cells.TextSettingsCell[] r1 = r7.settingsCell
+            r1 = r1[r5]
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
+            r1.setBackgroundDrawable(r3)
+            org.telegram.ui.Cells.TextSettingsCell[] r1 = r7.settingsCell
+            r1 = r1[r5]
+            r3 = 2131626805(0x7f0e0b35, float:1.8880857E38)
+            java.lang.String r6 = "PaymentConfirmationNewCard"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
-            r0.setText(r3, r8)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextSettingsCell[] r3 = r1.settingsCell
-            r3 = r3[r8]
-            r6 = -2
-            r7 = -1
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r6)
-            r0.addView(r3, r9)
-            org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
-            r0 = r0[r8]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$dC-bcnHmtg9qNsLheaWD-lpvjyQ r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$dC-bcnHmtg9qNsLheaWD-lpvjyQ
-            r3.<init>()
-            r0.setOnClickListener(r3)
-            org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
-            org.telegram.ui.Cells.TextSettingsCell r3 = new org.telegram.ui.Cells.TextSettingsCell
-            r3.<init>(r2)
-            r0[r5] = r3
-            org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
-            r0 = r0[r5]
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
-            r0.setBackgroundDrawable(r3)
-            org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
-            r0 = r0[r5]
-            java.lang.String r3 = "windowBackgroundWhiteRedText3"
-            r0.setTag(r3)
-            org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
-            r0 = r0[r5]
-            java.lang.String r3 = "windowBackgroundWhiteRedText3"
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r0.setTextColor(r3)
-            org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
-            r0 = r0[r5]
-            r3 = 2131623939(0x7f0e0003, float:1.8875044E38)
-            java.lang.String r6 = "AbortPassword"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
-            r0.setText(r3, r5)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextSettingsCell[] r3 = r1.settingsCell
+            r1.setText(r3, r5)
+            android.widget.LinearLayout r1 = r7.linearLayout2
+            org.telegram.ui.Cells.TextSettingsCell[] r3 = r7.settingsCell
             r3 = r3[r5]
             r6 = -2
-            r7 = -1
-            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r7, r6)
-            r0.addView(r3, r9)
-            org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
-            r0 = r0[r5]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$bxxexSfbCJYP0TeH1TDVZzLz8kE r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$bxxexSfbCJYP0TeH1TDVZzLz8kE
+            r9 = -1
+            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r6)
+            r1.addView(r3, r11)
+            org.telegram.ui.Cells.TextSettingsCell[] r1 = r7.settingsCell
+            r1 = r1[r5]
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$8oiBrYVovzVK-mug2vbZpERQ3mo r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$8oiBrYVovzVK-mug2vbZpERQ3mo
             r3.<init>()
-            r0.setOnClickListener(r3)
-            r3 = 3
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = new org.telegram.ui.Components.EditTextBoldCursor[r3]
-            r1.inputFields = r0
-            r0 = 0
-        L_0x126e:
-            if (r0 >= r3) goto L_0x149f
-            if (r0 != 0) goto L_0x12a6
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            org.telegram.ui.Cells.HeaderCell r6 = new org.telegram.ui.Cells.HeaderCell
-            r6.<init>(r2)
-            r3[r5] = r6
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r5]
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r6)
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r5]
-            r6 = 2131626816(0x7f0e0b40, float:1.8880879E38)
-            java.lang.String r7 = "PaymentPasswordTitle"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r3.setText(r6)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.HeaderCell[] r6 = r1.headerCell
-            r6 = r6[r5]
-            r7 = -2
+            r1.setOnClickListener(r3)
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+            r3.<init>(r8)
+            r1[r14] = r3
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            r1 = r1[r14]
+            r3 = 2131165450(0x7var_a, float:1.7945117E38)
+            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r3, (java.lang.String) r10)
+            r1.setBackgroundDrawable(r6)
+            android.widget.LinearLayout r1 = r7.linearLayout2
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r7.bottomCell
+            r3 = r3[r14]
+            r6 = -2
             r9 = -1
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r7)
-            r3.addView(r6, r10)
-            goto L_0x12dd
-        L_0x12a6:
-            r3 = 2
-            if (r0 != r3) goto L_0x12dd
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            org.telegram.ui.Cells.HeaderCell r6 = new org.telegram.ui.Cells.HeaderCell
-            r6.<init>(r2)
-            r3[r8] = r6
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r8]
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r6)
-            org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
-            r3 = r3[r8]
-            r6 = 2131626812(0x7f0e0b3c, float:1.888087E38)
-            java.lang.String r7 = "PaymentPasswordEmailTitle"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r3.setText(r6)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.HeaderCell[] r6 = r1.headerCell
-            r6 = r6[r8]
-            r7 = -2
-            r9 = -1
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r7)
-            r3.addView(r6, r10)
-            goto L_0x12de
-        L_0x12dd:
-            r9 = -1
-        L_0x12de:
-            android.widget.FrameLayout r3 = new android.widget.FrameLayout
-            r3.<init>(r2)
-            android.widget.LinearLayout r6 = r1.linearLayout2
-            r7 = 50
-            android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r7)
-            r6.addView(r3, r10)
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r6)
-            if (r0 != 0) goto L_0x1313
-            org.telegram.ui.PaymentFormActivity$21 r6 = new org.telegram.ui.PaymentFormActivity$21
-            r6.<init>(r1, r2)
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r6.setBackgroundColor(r9)
-            java.util.ArrayList<android.view.View> r9 = r1.dividers
-            r9.add(r6)
-            android.widget.FrameLayout$LayoutParams r9 = new android.widget.FrameLayout$LayoutParams
-            r10 = 83
-            r11 = -1
-            r9.<init>(r11, r8, r10)
-            r3.addView(r6, r9)
-        L_0x1313:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            org.telegram.ui.Components.EditTextBoldCursor r9 = new org.telegram.ui.Components.EditTextBoldCursor
-            r9.<init>(r2)
-            r6[r0] = r9
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r0)
-            r6.setTag(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 1098907648(0x41800000, float:16.0)
-            r6.setTextSize(r8, r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            java.lang.String r9 = "windowBackgroundWhiteHintText"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r6.setHintTextColor(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r6.setTextColor(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 0
-            r6.setBackgroundDrawable(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r6.setCursorColor(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 1101004800(0x41a00000, float:20.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            r6.setCursorSize(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 1069547520(0x3fCLASSNAME, float:1.5)
-            r6.setCursorWidth(r9)
-            if (r0 == 0) goto L_0x138b
-            if (r0 != r8) goto L_0x1377
-            goto L_0x138b
-        L_0x1377:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 33
-            r6.setInputType(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 268435462(0x10000006, float:2.5243567E-29)
-            r6.setImeOptions(r9)
-            goto L_0x13a7
-        L_0x138b:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 129(0x81, float:1.81E-43)
-            r6.setInputType(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            android.graphics.Typeface r9 = android.graphics.Typeface.DEFAULT
-            r6.setTypeface(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 268435461(0x10000005, float:2.5243564E-29)
-            r6.setImeOptions(r9)
-        L_0x13a7:
-            if (r0 == 0) goto L_0x13d1
-            if (r0 == r8) goto L_0x13c0
-            r6 = 2
-            if (r0 == r6) goto L_0x13af
-            goto L_0x13e8
-        L_0x13af:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 2131626810(0x7f0e0b3a, float:1.8880867E38)
-            java.lang.String r10 = "PaymentPasswordEmail"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r6.setHint(r9)
-            goto L_0x13e8
-        L_0x13c0:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
-            java.lang.String r10 = "PaymentPasswordReEnter"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r6.setHint(r9)
-            goto L_0x13e8
-        L_0x13d1:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 2131626813(0x7f0e0b3d, float:1.8880873E38)
-            java.lang.String r10 = "PaymentPasswordEnter"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r6.setHint(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r6.requestFocus()
-        L_0x13e8:
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r9 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            r6.setPadding(r5, r5, r5, r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            if (r9 == 0) goto L_0x13ff
-            r9 = 5
-            goto L_0x1400
-        L_0x13ff:
-            r9 = 3
-        L_0x1400:
-            r6.setGravity(r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r0]
-            r22 = -1
-            r23 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r24 = 51
-            r25 = 1101529088(0x41a80000, float:21.0)
-            r26 = 1094713344(0x41400000, float:12.0)
-            r27 = 1101529088(0x41a80000, float:21.0)
-            r28 = 1086324736(0x40CLASSNAME, float:6.0)
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28)
-            r3.addView(r6, r9)
-            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r1.inputFields
-            r3 = r3[r0]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$hqFUiQmF3m-GRr3sxAL-cBdv52o r6 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$hqFUiQmF3m-GRr3sxAL-cBdv52o
-            r6.<init>()
-            r3.setOnEditorActionListener(r6)
-            if (r0 != r8) goto L_0x1461
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            org.telegram.ui.Cells.TextInfoPrivacyCell r6 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-            r6.<init>(r2)
-            r3[r5] = r6
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            r3 = r3[r5]
-            r6 = 2131626814(0x7f0e0b3e, float:1.8880875E38)
-            java.lang.String r9 = "PaymentPasswordInfo"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
-            r3.setText(r6)
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            r3 = r3[r5]
-            r6 = 2131165449(0x7var_, float:1.7945115E38)
-            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r6, (java.lang.String) r14)
-            r3.setBackgroundDrawable(r6)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r6 = r1.bottomCell
-            r6 = r6[r5]
-            r9 = -2
-            r10 = -1
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r9)
-            r3.addView(r6, r11)
-            goto L_0x149a
-        L_0x1461:
-            r3 = 2
-            if (r0 != r3) goto L_0x149a
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            org.telegram.ui.Cells.TextInfoPrivacyCell r6 = new org.telegram.ui.Cells.TextInfoPrivacyCell
-            r6.<init>(r2)
-            r3[r8] = r6
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            r3 = r3[r8]
-            r6 = 2131626811(0x7f0e0b3b, float:1.8880869E38)
-            java.lang.String r9 = "PaymentPasswordEmailInfo"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
-            r3.setText(r6)
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
-            r3 = r3[r8]
-            r6 = 2131165450(0x7var_a, float:1.7945117E38)
-            android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r6, (java.lang.String) r14)
-            r3.setBackgroundDrawable(r9)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            org.telegram.ui.Cells.TextInfoPrivacyCell[] r6 = r1.bottomCell
-            r6 = r6[r8]
-            r9 = -2
-            r10 = -1
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r9)
-            r3.addView(r6, r11)
-        L_0x149a:
+            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r6)
+            r1.addView(r3, r11)
+        L_0x115d:
             int r0 = r0 + 1
-            r3 = 3
-            goto L_0x126e
-        L_0x149f:
-            r29.updatePasswordFields()
-            goto L_0x1b79
-        L_0x14a4:
+            r1 = 2
+            goto L_0x0var_
+        L_0x1162:
+            r1 = 4
+            if (r0 == r1) goto L_0x14c6
+            r1 = 5
+            if (r0 != r1) goto L_0x116a
+            goto L_0x14c6
+        L_0x116a:
+            r1 = 6
+            if (r0 != r1) goto L_0x1CLASSNAME
+            org.telegram.ui.Cells.EditTextSettingsCell r0 = new org.telegram.ui.Cells.EditTextSettingsCell
+            r0.<init>(r8)
+            r7.codeFieldCell = r0
+            r1 = 2131626774(0x7f0e0b16, float:1.8880794E38)
+            java.lang.String r4 = "PasswordCode"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
+            r0.setTextAndHint(r3, r1, r5)
+            org.telegram.ui.Cells.EditTextSettingsCell r0 = r7.codeFieldCell
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r0.setBackgroundColor(r1)
+            org.telegram.ui.Cells.EditTextSettingsCell r0 = r7.codeFieldCell
+            org.telegram.ui.Components.EditTextBoldCursor r0 = r0.getTextView()
+            r1 = 3
+            r0.setInputType(r1)
+            r1 = 6
+            r0.setImeOptions(r1)
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$uf_8DJOjk5pz_qHwrCln0ooTjmo r1 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$uf_8DJOjk5pz_qHwrCln0ooTjmo
+            r1.<init>()
+            r0.setOnEditorActionListener(r1)
+            org.telegram.ui.PaymentFormActivity$20 r1 = new org.telegram.ui.PaymentFormActivity$20
+            r1.<init>()
+            r0.addTextChangedListener(r1)
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.EditTextSettingsCell r1 = r7.codeFieldCell
+            r3 = -2
+            r4 = -1
+            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r3)
+            r0.addView(r1, r6)
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r7.bottomCell
+            org.telegram.ui.Cells.TextInfoPrivacyCell r1 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+            r1.<init>(r8)
+            r3 = 2
+            r0[r3] = r1
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r0 = r7.bottomCell
+            r0 = r0[r3]
+            r1 = 2131165449(0x7var_, float:1.7945115E38)
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r10)
+            r0.setBackgroundDrawable(r1)
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            r1 = r1[r3]
+            r3 = -2
+            r4 = -1
+            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r3)
+            r0.addView(r1, r6)
+            org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
+            org.telegram.ui.Cells.TextSettingsCell r1 = new org.telegram.ui.Cells.TextSettingsCell
+            r1.<init>(r8)
+            r0[r14] = r1
+            org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
+            r0 = r0[r14]
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
+            r0.setBackgroundDrawable(r1)
+            org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
+            r0 = r0[r14]
+            r0.setTag(r2)
+            org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
+            r0 = r0[r14]
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r0.setTextColor(r1)
+            org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
+            r0 = r0[r14]
+            r1 = 2131627183(0x7f0e0caf, float:1.8881623E38)
+            java.lang.String r3 = "ResendCode"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
+            r0.setText(r1, r14)
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextSettingsCell[] r1 = r7.settingsCell
+            r1 = r1[r14]
+            r3 = -2
+            r4 = -1
+            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r3)
+            r0.addView(r1, r6)
+            org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
+            r0 = r0[r14]
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$dC-bcnHmtg9qNsLheaWD-lpvjyQ r1 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$dC-bcnHmtg9qNsLheaWD-lpvjyQ
+            r1.<init>()
+            r0.setOnClickListener(r1)
+            org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
+            org.telegram.ui.Cells.TextSettingsCell r1 = new org.telegram.ui.Cells.TextSettingsCell
+            r1.<init>(r8)
+            r0[r5] = r1
+            org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
+            r0 = r0[r5]
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
+            r0.setBackgroundDrawable(r1)
+            org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
+            r0 = r0[r5]
+            java.lang.String r1 = "windowBackgroundWhiteRedText3"
+            r0.setTag(r1)
+            org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
+            r0 = r0[r5]
+            java.lang.String r1 = "windowBackgroundWhiteRedText3"
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r0.setTextColor(r1)
+            org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
+            r0 = r0[r5]
+            r1 = 2131623939(0x7f0e0003, float:1.8875044E38)
+            java.lang.String r3 = "AbortPassword"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
+            r0.setText(r1, r5)
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextSettingsCell[] r1 = r7.settingsCell
+            r1 = r1[r5]
+            r3 = -2
+            r4 = -1
+            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r3)
+            r0.addView(r1, r6)
+            org.telegram.ui.Cells.TextSettingsCell[] r0 = r7.settingsCell
+            r0 = r0[r5]
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$bxxexSfbCJYP0TeH1TDVZzLz8kE r1 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$bxxexSfbCJYP0TeH1TDVZzLz8kE
+            r1.<init>()
+            r0.setOnClickListener(r1)
+            r1 = 3
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = new org.telegram.ui.Components.EditTextBoldCursor[r1]
+            r7.inputFields = r0
+            r0 = 0
+        L_0x1289:
+            if (r0 >= r1) goto L_0x14c1
+            if (r0 != 0) goto L_0x12c1
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            org.telegram.ui.Cells.HeaderCell r3 = new org.telegram.ui.Cells.HeaderCell
+            r3.<init>(r8)
+            r1[r5] = r3
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            r1 = r1[r5]
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r1.setBackgroundColor(r3)
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            r1 = r1[r5]
+            r3 = 2131626819(0x7f0e0b43, float:1.8880885E38)
+            java.lang.String r4 = "PaymentPasswordTitle"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r1.setText(r3)
+            android.widget.LinearLayout r1 = r7.linearLayout2
+            org.telegram.ui.Cells.HeaderCell[] r3 = r7.headerCell
+            r3 = r3[r5]
+            r4 = -2
+            r6 = -1
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r4)
+            r1.addView(r3, r9)
+            goto L_0x12f8
+        L_0x12c1:
+            r1 = 2
+            if (r0 != r1) goto L_0x12f8
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            org.telegram.ui.Cells.HeaderCell r3 = new org.telegram.ui.Cells.HeaderCell
+            r3.<init>(r8)
+            r1[r14] = r3
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            r1 = r1[r14]
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r1.setBackgroundColor(r3)
+            org.telegram.ui.Cells.HeaderCell[] r1 = r7.headerCell
+            r1 = r1[r14]
+            r3 = 2131626815(0x7f0e0b3f, float:1.8880877E38)
+            java.lang.String r4 = "PaymentPasswordEmailTitle"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r1.setText(r3)
+            android.widget.LinearLayout r1 = r7.linearLayout2
+            org.telegram.ui.Cells.HeaderCell[] r3 = r7.headerCell
+            r3 = r3[r14]
+            r4 = -2
+            r6 = -1
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r4)
+            r1.addView(r3, r9)
+            goto L_0x12f9
+        L_0x12f8:
+            r6 = -1
+        L_0x12f9:
+            android.widget.FrameLayout r1 = new android.widget.FrameLayout
+            r1.<init>(r8)
+            r1.setClipChildren(r5)
+            android.widget.LinearLayout r3 = r7.linearLayout2
+            r4 = 50
+            android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r6, r4)
+            r3.addView(r1, r9)
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r1.setBackgroundColor(r3)
+            if (r0 != 0) goto L_0x1331
+            org.telegram.ui.PaymentFormActivity$21 r3 = new org.telegram.ui.PaymentFormActivity$21
+            r3.<init>(r7, r8)
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r3.setBackgroundColor(r6)
+            java.util.ArrayList<android.view.View> r6 = r7.dividers
+            r6.add(r3)
+            android.widget.FrameLayout$LayoutParams r6 = new android.widget.FrameLayout$LayoutParams
+            r9 = 83
+            r11 = -1
+            r6.<init>(r11, r14, r9)
+            r1.addView(r3, r6)
+        L_0x1331:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            org.telegram.ui.Components.EditTextBoldCursor r6 = new org.telegram.ui.Components.EditTextBoldCursor
+            r6.<init>(r8)
+            r3[r0] = r6
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r0)
+            r3.setTag(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 1098907648(0x41800000, float:16.0)
+            r3.setTextSize(r14, r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            java.lang.String r6 = "windowBackgroundWhiteHintText"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r3.setHintTextColor(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r3.setTextColor(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 0
+            r3.setBackgroundDrawable(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r3.setCursorColor(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 1101004800(0x41a00000, float:20.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r3.setCursorSize(r9)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 1069547520(0x3fCLASSNAME, float:1.5)
+            r3.setCursorWidth(r6)
+            if (r0 == 0) goto L_0x13a9
+            if (r0 != r14) goto L_0x1395
+            goto L_0x13a9
+        L_0x1395:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 33
+            r3.setInputType(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 268435462(0x10000006, float:2.5243567E-29)
+            r3.setImeOptions(r6)
+            goto L_0x13c5
+        L_0x13a9:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 129(0x81, float:1.81E-43)
+            r3.setInputType(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            android.graphics.Typeface r6 = android.graphics.Typeface.DEFAULT
+            r3.setTypeface(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 268435461(0x10000005, float:2.5243564E-29)
+            r3.setImeOptions(r6)
+        L_0x13c5:
+            if (r0 == 0) goto L_0x13ef
+            if (r0 == r14) goto L_0x13de
+            r3 = 2
+            if (r0 == r3) goto L_0x13cd
+            goto L_0x1406
+        L_0x13cd:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 2131626813(0x7f0e0b3d, float:1.8880873E38)
+            java.lang.String r9 = "PaymentPasswordEmail"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r3.setHint(r6)
+            goto L_0x1406
+        L_0x13de:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 2131626818(0x7f0e0b42, float:1.8880883E38)
+            java.lang.String r9 = "PaymentPasswordReEnter"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r3.setHint(r6)
+            goto L_0x1406
+        L_0x13ef:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 2131626816(0x7f0e0b40, float:1.8880879E38)
+            java.lang.String r9 = "PaymentPasswordEnter"
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r3.setHint(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r3.requestFocus()
+        L_0x1406:
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r6 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r3.setPadding(r5, r5, r5, r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            boolean r6 = org.telegram.messenger.LocaleController.isRTL
+            if (r6 == 0) goto L_0x141d
+            r6 = 5
+            goto L_0x141e
+        L_0x141d:
+            r6 = 3
+        L_0x141e:
+            r3.setGravity(r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r3 = r7.inputFields
+            r3 = r3[r0]
+            r26 = -1
+            r27 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r28 = 51
+            r29 = 1101529088(0x41a80000, float:21.0)
+            r30 = 1094713344(0x41400000, float:12.0)
+            r31 = 1101529088(0x41a80000, float:21.0)
+            r32 = 1086324736(0x40CLASSNAME, float:6.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
+            r1.addView(r3, r6)
+            org.telegram.ui.Components.EditTextBoldCursor[] r1 = r7.inputFields
+            r1 = r1[r0]
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$hqFUiQmF3m-GRr3sxAL-cBdv52o r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$hqFUiQmF3m-GRr3sxAL-cBdv52o
+            r3.<init>()
+            r1.setOnEditorActionListener(r3)
+            if (r0 != r14) goto L_0x147f
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+            r3.<init>(r8)
+            r1[r5] = r3
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            r1 = r1[r5]
+            r3 = 2131626817(0x7f0e0b41, float:1.888088E38)
+            java.lang.String r6 = "PaymentPasswordInfo"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
+            r1.setText(r3)
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            r1 = r1[r5]
+            r3 = 2131165449(0x7var_, float:1.7945115E38)
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r3, (java.lang.String) r10)
+            r1.setBackgroundDrawable(r3)
+            android.widget.LinearLayout r1 = r7.linearLayout2
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r7.bottomCell
+            r3 = r3[r5]
+            r6 = -2
+            r9 = -1
+            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r6)
+            r1.addView(r3, r11)
+            goto L_0x14b9
+        L_0x147f:
+            r1 = 2
+            if (r0 != r1) goto L_0x14b9
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
+            r3.<init>(r8)
+            r1[r14] = r3
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            r1 = r1[r14]
+            r3 = 2131626814(0x7f0e0b3e, float:1.8880875E38)
+            java.lang.String r6 = "PaymentPasswordEmailInfo"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
+            r1.setText(r3)
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r1 = r7.bottomCell
+            r1 = r1[r14]
+            r11 = 2131165450(0x7var_a, float:1.7945117E38)
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r11, (java.lang.String) r10)
+            r1.setBackgroundDrawable(r3)
+            android.widget.LinearLayout r1 = r7.linearLayout2
+            org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r7.bottomCell
+            r3 = r3[r14]
+            r6 = -2
+            r9 = -1
+            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r6)
+            r1.addView(r3, r12)
+            goto L_0x14bc
+        L_0x14b9:
+            r11 = 2131165450(0x7var_a, float:1.7945117E38)
+        L_0x14bc:
+            int r0 = r0 + 1
+            r1 = 3
+            goto L_0x1289
+        L_0x14c1:
+            r34.updatePasswordFields()
+            goto L_0x1CLASSNAME
+        L_0x14c6:
+            r11 = 2131165450(0x7var_a, float:1.7945117E38)
             org.telegram.ui.Cells.PaymentInfoCell r0 = new org.telegram.ui.Cells.PaymentInfoCell
-            r0.<init>(r2)
-            r1.paymentInfoCell = r0
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r0.setBackgroundColor(r6)
-            org.telegram.messenger.MessageObject r0 = r1.messageObject
-            if (r0 == 0) goto L_0x14c4
-            org.telegram.ui.Cells.PaymentInfoCell r6 = r1.paymentInfoCell
+            r0.<init>(r8)
+            r7.paymentInfoCell = r0
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r0.setBackgroundColor(r1)
+            org.telegram.messenger.MessageObject r0 = r7.messageObject
+            if (r0 == 0) goto L_0x14e9
+            org.telegram.ui.Cells.PaymentInfoCell r1 = r7.paymentInfoCell
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             org.telegram.tgnet.TLRPC$TL_messageMediaInvoice r0 = (org.telegram.tgnet.TLRPC$TL_messageMediaInvoice) r0
-            java.lang.String r7 = r1.currentBotName
-            r6.setInvoice(r0, r7)
-            goto L_0x14cf
-        L_0x14c4:
-            org.telegram.tgnet.TLRPC$TL_payments_paymentReceipt r0 = r1.paymentReceipt
-            if (r0 == 0) goto L_0x14cf
-            org.telegram.ui.Cells.PaymentInfoCell r6 = r1.paymentInfoCell
-            java.lang.String r7 = r1.currentBotName
-            r6.setReceipt(r0, r7)
-        L_0x14cf:
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.PaymentInfoCell r6 = r1.paymentInfoCell
-            r7 = -2
-            r10 = -1
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r7)
-            r0.addView(r6, r11)
-            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
-            org.telegram.ui.Cells.ShadowSectionCell r6 = new org.telegram.ui.Cells.ShadowSectionCell
-            r6.<init>(r2)
-            r0[r5] = r6
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.ShadowSectionCell[] r6 = r1.sectionCell
-            r6 = r6[r5]
-            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r7)
-            r0.addView(r6, r11)
+            java.lang.String r4 = r7.currentBotName
+            r1.setInvoice(r0, r4)
+            goto L_0x14f4
+        L_0x14e9:
+            org.telegram.tgnet.TLRPC$TL_payments_paymentReceipt r0 = r7.paymentReceipt
+            if (r0 == 0) goto L_0x14f4
+            org.telegram.ui.Cells.PaymentInfoCell r1 = r7.paymentInfoCell
+            java.lang.String r4 = r7.currentBotName
+            r1.setReceipt(r0, r4)
+        L_0x14f4:
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.PaymentInfoCell r1 = r7.paymentInfoCell
+            r4 = -2
+            r12 = -1
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r12, r4)
+            r0.addView(r1, r13)
+            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r7.sectionCell
+            org.telegram.ui.Cells.ShadowSectionCell r1 = new org.telegram.ui.Cells.ShadowSectionCell
+            r1.<init>(r8)
+            r0[r5] = r1
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.ShadowSectionCell[] r1 = r7.sectionCell
+            r1 = r1[r5]
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r12, r4)
+            r0.addView(r1, r13)
             java.util.ArrayList r0 = new java.util.ArrayList
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r6 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r6 = r6.invoice
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r6 = r6.prices
-            r0.<init>(r6)
-            org.telegram.tgnet.TLRPC$TL_shippingOption r6 = r1.shippingOption
-            if (r6 == 0) goto L_0x1506
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r6 = r6.prices
-            r0.addAll(r6)
-        L_0x1506:
-            java.lang.String[] r6 = new java.lang.String[r8]
-            r1.totalPrice = r6
-            r6 = 0
-        L_0x150b:
-            int r7 = r0.size()
-            if (r6 >= r7) goto L_0x1544
-            java.lang.Object r7 = r0.get(r6)
-            org.telegram.tgnet.TLRPC$TL_labeledPrice r7 = (org.telegram.tgnet.TLRPC$TL_labeledPrice) r7
-            org.telegram.ui.Cells.TextPriceCell r10 = new org.telegram.ui.Cells.TextPriceCell
-            r10.<init>(r2)
-            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r10.setBackgroundColor(r11)
-            java.lang.String r11 = r7.label
-            org.telegram.messenger.LocaleController r12 = org.telegram.messenger.LocaleController.getInstance()
-            r15 = r4
-            long r3 = r7.amount
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r7 = r7.invoice
-            java.lang.String r7 = r7.currency
-            java.lang.String r3 = r12.formatCurrencyString(r3, r7)
-            r10.setTextAndValue(r11, r3, r5)
-            android.widget.LinearLayout r3 = r1.linearLayout2
-            r3.addView(r10)
-            int r6 = r6 + 1
-            r4 = r15
-            r3 = 9
-            goto L_0x150b
-        L_0x1544:
-            r15 = r4
-            int r3 = r1.currentStep
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r1 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r1 = r1.invoice
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r1 = r1.prices
+            r0.<init>(r1)
+            org.telegram.tgnet.TLRPC$TL_shippingOption r1 = r7.shippingOption
+            if (r1 == 0) goto L_0x152b
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r1 = r1.prices
+            r0.addAll(r1)
+        L_0x152b:
+            java.lang.String[] r1 = new java.lang.String[r14]
+            r7.totalPrice = r1
+            r1 = 0
+        L_0x1530:
+            int r12 = r0.size()
+            if (r1 >= r12) goto L_0x156b
+            java.lang.Object r12 = r0.get(r1)
+            org.telegram.tgnet.TLRPC$TL_labeledPrice r12 = (org.telegram.tgnet.TLRPC$TL_labeledPrice) r12
+            org.telegram.ui.Cells.TextPriceCell r13 = new org.telegram.ui.Cells.TextPriceCell
+            r13.<init>(r8)
+            int r15 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r13.setBackgroundColor(r15)
+            java.lang.String r15 = r12.label
+            org.telegram.messenger.LocaleController r4 = org.telegram.messenger.LocaleController.getInstance()
+            long r11 = r12.amount
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r9 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r9 = r9.invoice
+            java.lang.String r9 = r9.currency
+            java.lang.String r4 = r4.formatCurrencyString(r11, r9)
+            r13.setTextAndValue(r15, r4, r5)
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            r4.addView(r13)
+            int r1 = r1 + 1
+            r4 = -2
+            r9 = 9
+            r11 = 2131165450(0x7var_a, float:1.7945117E38)
+            goto L_0x1530
+        L_0x156b:
+            int r1 = r7.currentStep
             r4 = 5
-            if (r3 != r4) goto L_0x157f
-            java.lang.Long r3 = r1.tipAmount
-            if (r3 == 0) goto L_0x157f
-            org.telegram.ui.Cells.TextPriceCell r3 = new org.telegram.ui.Cells.TextPriceCell
-            r3.<init>(r2)
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r4)
-            r4 = 2131626839(0x7f0e0b57, float:1.8880926E38)
-            java.lang.String r6 = "PaymentTip"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
-            org.telegram.messenger.LocaleController r6 = org.telegram.messenger.LocaleController.getInstance()
-            java.lang.Long r7 = r1.tipAmount
-            long r10 = r7.longValue()
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r7 = r7.invoice
-            java.lang.String r7 = r7.currency
-            java.lang.String r6 = r6.formatCurrencyString(r10, r7)
-            r3.setTextAndValue(r4, r6, r5)
-            android.widget.LinearLayout r4 = r1.linearLayout2
-            r4.addView(r3)
-        L_0x157f:
-            org.telegram.ui.Cells.TextPriceCell r3 = new org.telegram.ui.Cells.TextPriceCell
-            r3.<init>(r2)
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r3.setBackgroundColor(r4)
-            java.lang.String[] r4 = r1.totalPrice
-            java.lang.String r6 = r1.getTotalPriceString(r0)
-            r4[r5] = r6
-            r4 = 2131626843(0x7f0e0b5b, float:1.8880934E38)
-            java.lang.String r6 = "PaymentTransactionTotal"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
-            java.lang.String[] r6 = r1.totalPrice
-            r6 = r6[r5]
-            r3.setTextAndValue(r4, r6, r8)
-            int r4 = r1.currentStep
-            r6 = 4
-            if (r4 != r6) goto L_0x1815
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r4 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r4 = r4.invoice
-            int r4 = r4.flags
-            r4 = r4 & 256(0x100, float:3.59E-43)
-            if (r4 == 0) goto L_0x1815
-            android.widget.FrameLayout r4 = new android.widget.FrameLayout
-            r4.<init>(r2)
-            android.widget.LinearLayout r6 = r1.linearLayout2
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r7 = r7.invoice
-            java.util.ArrayList<java.lang.Long> r7 = r7.suggested_tip_amounts
-            boolean r7 = r7.isEmpty()
-            if (r7 == 0) goto L_0x15c8
-            r7 = 40
-            goto L_0x15ca
-        L_0x15c8:
-            r7 = 78
-        L_0x15ca:
-            r10 = -1
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r7)
-            r6.addView(r4, r7)
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r4.setBackgroundColor(r6)
-            r4.setClipChildren(r5)
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$VLYtB2G85ebWkqvar_i88M_wSyRU r6 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$VLYtB2G85ebWkqvar_i88M_wSyRU
-            r6.<init>()
-            r4.setOnClickListener(r6)
-            org.telegram.ui.Cells.TextPriceCell r6 = new org.telegram.ui.Cells.TextPriceCell
-            r6.<init>(r2)
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r6.setBackgroundColor(r7)
-            r7 = 2131626840(0x7f0e0b58, float:1.8880928E38)
-            java.lang.String r10 = "PaymentTipOptional"
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
-            r6.setTextAndValue(r7, r13, r5)
-            r4.addView(r6)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = new org.telegram.ui.Components.EditTextBoldCursor[r8]
-            r1.inputFields = r6
-            org.telegram.ui.Components.EditTextBoldCursor r7 = new org.telegram.ui.Components.EditTextBoldCursor
-            r7.<init>(r2)
-            r6[r5] = r7
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r5)
-            r6.setTag(r7)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            r7 = 1098907648(0x41800000, float:16.0)
-            r6.setTextSize(r8, r7)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            java.lang.String r7 = "windowBackgroundWhiteGrayText2"
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
-            r6.setHintTextColor(r7)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            java.lang.String r7 = "windowBackgroundWhiteGrayText2"
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
-            r6.setTextColor(r7)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            r7 = 0
-            r6.setBackgroundDrawable(r7)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r15)
-            r6.setCursorColor(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            r10 = 1101004800(0x41a00000, float:20.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r6.setCursorSize(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            r10 = 1069547520(0x3fCLASSNAME, float:1.5)
-            r6.setCursorWidth(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            r10 = 3
-            r6.setInputType(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            r10 = 268435462(0x10000006, float:2.5243567E-29)
-            r6.setImeOptions(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            org.telegram.messenger.LocaleController r10 = org.telegram.messenger.LocaleController.getInstance()
+            if (r1 != r4) goto L_0x15a5
+            java.lang.Long r1 = r7.tipAmount
+            if (r1 == 0) goto L_0x15a5
+            org.telegram.ui.Cells.TextPriceCell r1 = new org.telegram.ui.Cells.TextPriceCell
+            r1.<init>(r8)
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r1.setBackgroundColor(r4)
+            r4 = 2131626842(0x7f0e0b5a, float:1.8880932E38)
+            java.lang.String r9 = "PaymentTip"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
+            org.telegram.messenger.LocaleController r9 = org.telegram.messenger.LocaleController.getInstance()
+            java.lang.Long r11 = r7.tipAmount
+            long r11 = r11.longValue()
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r13 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r13 = r13.invoice
+            java.lang.String r13 = r13.currency
+            java.lang.String r9 = r9.formatCurrencyString(r11, r13)
+            r1.setTextAndValue(r4, r9, r5)
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            r4.addView(r1)
+        L_0x15a5:
+            org.telegram.ui.Cells.TextPriceCell r9 = new org.telegram.ui.Cells.TextPriceCell
+            r9.<init>(r8)
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r9.setBackgroundColor(r1)
+            java.lang.String[] r1 = r7.totalPrice
+            java.lang.String r4 = r7.getTotalPriceString(r0)
+            r1[r5] = r4
+            r1 = 2131626846(0x7f0e0b5e, float:1.888094E38)
+            java.lang.String r4 = "PaymentTransactionTotal"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
+            java.lang.String[] r4 = r7.totalPrice
+            r4 = r4[r5]
+            r9.setTextAndValue(r1, r4, r14)
+            int r1 = r7.currentStep
+            r4 = 4
+            if (r1 != r4) goto L_0x1866
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r1 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r1 = r1.invoice
+            int r1 = r1.flags
+            r1 = r1 & 256(0x100, float:3.59E-43)
+            if (r1 == 0) goto L_0x1866
+            android.widget.FrameLayout r1 = new android.widget.FrameLayout
+            r1.<init>(r8)
+            r1.setClipChildren(r5)
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r1.setBackgroundColor(r4)
+            android.widget.LinearLayout r4 = r7.linearLayout2
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r11 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r11 = r11.invoice
+            java.util.ArrayList<java.lang.Long> r11 = r11.suggested_tip_amounts
+            boolean r11 = r11.isEmpty()
+            if (r11 == 0) goto L_0x15f8
+            r11 = 40
+            goto L_0x15fa
+        L_0x15f8:
+            r11 = 78
+        L_0x15fa:
+            r12 = -1
+            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear(r12, r11)
+            r4.addView(r1, r11)
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$VLYtB2G85ebWkqvar_i88M_wSyRU r4 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$VLYtB2G85ebWkqvar_i88M_wSyRU
+            r4.<init>()
+            r1.setOnClickListener(r4)
+            org.telegram.ui.Cells.TextPriceCell r4 = new org.telegram.ui.Cells.TextPriceCell
+            r4.<init>(r8)
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r4.setBackgroundColor(r11)
+            r11 = 2131626843(0x7f0e0b5b, float:1.8880934E38)
+            java.lang.String r12 = "PaymentTipOptional"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            r4.setTextAndValue(r11, r3, r5)
+            r1.addView(r4)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = new org.telegram.ui.Components.EditTextBoldCursor[r14]
+            r7.inputFields = r4
+            org.telegram.ui.Components.EditTextBoldCursor r11 = new org.telegram.ui.Components.EditTextBoldCursor
+            r11.<init>(r8)
+            r4[r5] = r11
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r5]
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r5)
+            r4.setTag(r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r5]
+            r11 = 1098907648(0x41800000, float:16.0)
+            r4.setTextSize(r14, r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r5]
+            java.lang.String r11 = "windowBackgroundWhiteGrayText2"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r4.setHintTextColor(r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r5]
+            java.lang.String r11 = "windowBackgroundWhiteGrayText2"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r4.setTextColor(r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r5]
             r11 = 0
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r15 = r1.paymentForm
+            r4.setBackgroundDrawable(r11)
+            org.telegram.ui.Components.EditTextBoldCursor[] r4 = r7.inputFields
+            r4 = r4[r5]
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r4.setCursorColor(r2)
+            org.telegram.ui.Components.EditTextBoldCursor[] r2 = r7.inputFields
+            r2 = r2[r5]
+            r4 = 1101004800(0x41a00000, float:20.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r2.setCursorSize(r4)
+            org.telegram.ui.Components.EditTextBoldCursor[] r2 = r7.inputFields
+            r2 = r2[r5]
+            r4 = 1069547520(0x3fCLASSNAME, float:1.5)
+            r2.setCursorWidth(r4)
+            org.telegram.ui.Components.EditTextBoldCursor[] r2 = r7.inputFields
+            r2 = r2[r5]
+            r4 = 3
+            r2.setInputType(r4)
+            org.telegram.ui.Components.EditTextBoldCursor[] r2 = r7.inputFields
+            r2 = r2[r5]
+            r4 = 268435462(0x10000006, float:2.5243567E-29)
+            r2.setImeOptions(r4)
+            org.telegram.ui.Components.EditTextBoldCursor[] r2 = r7.inputFields
+            r2 = r2[r5]
+            org.telegram.messenger.LocaleController r4 = org.telegram.messenger.LocaleController.getInstance()
+            r12 = 0
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r15 = r7.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r15 = r15.invoice
             java.lang.String r15 = r15.currency
-            java.lang.String r10 = r10.formatCurrencyString(r11, r15)
-            r6.setHint(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            r10 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r6.setPadding(r5, r5, r5, r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            boolean r10 = org.telegram.messenger.LocaleController.isRTL
-            if (r10 == 0) goto L_0x16a3
-            r10 = 3
-            goto L_0x16a4
-        L_0x16a3:
-            r10 = 5
-        L_0x16a4:
-            r6.setGravity(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            r22 = -1
-            r23 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r24 = 51
-            r25 = 1101529088(0x41a80000, float:21.0)
-            r26 = 1091567616(0x41100000, float:9.0)
-            r27 = 1101529088(0x41a80000, float:21.0)
-            r28 = 1065353216(0x3var_, float:1.0)
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28)
-            r4.addView(r6, r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r6 = r1.inputFields
-            r6 = r6[r5]
-            org.telegram.ui.PaymentFormActivity$11 r10 = new org.telegram.ui.PaymentFormActivity$11
-            r10.<init>(r0, r3)
-            r6.addTextChangedListener(r10)
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
+            java.lang.String r4 = r4.formatCurrencyString(r12, r15)
+            r2.setHint(r4)
+            org.telegram.ui.Components.EditTextBoldCursor[] r2 = r7.inputFields
+            r2 = r2[r5]
+            r4 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r2.setPadding(r5, r5, r5, r4)
+            org.telegram.ui.Components.EditTextBoldCursor[] r2 = r7.inputFields
+            r2 = r2[r5]
+            boolean r4 = org.telegram.messenger.LocaleController.isRTL
+            if (r4 == 0) goto L_0x16c9
+            r4 = 3
+            goto L_0x16ca
+        L_0x16c9:
+            r4 = 5
+        L_0x16ca:
+            r2.setGravity(r4)
+            org.telegram.ui.Components.EditTextBoldCursor[] r2 = r7.inputFields
+            r2 = r2[r5]
+            r26 = -1
+            r27 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r28 = 51
+            r29 = 1101529088(0x41a80000, float:21.0)
+            r30 = 1091567616(0x41100000, float:9.0)
+            r31 = 1101529088(0x41a80000, float:21.0)
+            r32 = 1065353216(0x3var_, float:1.0)
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
+            r1.addView(r2, r4)
+            org.telegram.ui.Components.EditTextBoldCursor[] r2 = r7.inputFields
+            r2 = r2[r5]
+            org.telegram.ui.PaymentFormActivity$11 r4 = new org.telegram.ui.PaymentFormActivity$11
+            r4.<init>(r0, r9)
+            r2.addTextChangedListener(r4)
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
             r0 = r0[r5]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$nZ4_szZB3J8cd3WhiD7iwhnvYsk r6 = org.telegram.ui.$$Lambda$PaymentFormActivity$nZ4_szZB3J8cd3WhiD7iwhnvYsk.INSTANCE
-            r0.setOnEditorActionListener(r6)
-            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r1.inputFields
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$nZ4_szZB3J8cd3WhiD7iwhnvYsk r2 = org.telegram.ui.$$Lambda$PaymentFormActivity$nZ4_szZB3J8cd3WhiD7iwhnvYsk.INSTANCE
+            r0.setOnEditorActionListener(r2)
+            org.telegram.ui.Components.EditTextBoldCursor[] r0 = r7.inputFields
             r0 = r0[r5]
             r0.requestFocus()
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r1.paymentForm
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r0 = r7.paymentForm
             org.telegram.tgnet.TLRPC$TL_invoice r0 = r0.invoice
             java.util.ArrayList<java.lang.Long> r0 = r0.suggested_tip_amounts
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x1815
+            if (r0 != 0) goto L_0x1866
             android.widget.HorizontalScrollView r0 = new android.widget.HorizontalScrollView
-            r0.<init>(r2)
+            r0.<init>(r8)
             r0.setHorizontalScrollBarEnabled(r5)
             r0.setVerticalScrollBarEnabled(r5)
             r0.setClipToPadding(r5)
-            r6 = 1101529088(0x41a80000, float:21.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            r10 = 1101529088(0x41a80000, float:21.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r0.setPadding(r6, r5, r10, r5)
-            r0.setFillViewport(r8)
-            r22 = -1
-            r23 = 1106247680(0x41var_, float:30.0)
-            r24 = 51
-            r25 = 0
-            r26 = 1110441984(0x42300000, float:44.0)
-            r27 = 0
-            r28 = 0
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28)
-            r4.addView(r0, r6)
-            int[] r4 = new int[r8]
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r6 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r6 = r6.invoice
-            java.util.ArrayList<java.lang.Long> r6 = r6.suggested_tip_amounts
-            int r6 = r6.size()
-            org.telegram.ui.PaymentFormActivity$12 r10 = new org.telegram.ui.PaymentFormActivity$12
-            r10.<init>(r1, r2, r4, r6)
-            r1.tipLayout = r10
-            r10.setOrientation(r5)
-            android.widget.LinearLayout r10 = r1.tipLayout
-            r11 = 30
-            r12 = 51
-            r15 = -1
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createScroll(r15, r11, r12)
-            r0.addView(r10, r11)
+            r2 = 1101529088(0x41a80000, float:21.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r4 = 1101529088(0x41a80000, float:21.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r0.setPadding(r2, r5, r4, r5)
+            r0.setFillViewport(r14)
+            r26 = -1
+            r27 = 1106247680(0x41var_, float:30.0)
+            r28 = 51
+            r29 = 0
+            r30 = 1110441984(0x42300000, float:44.0)
+            r31 = 0
+            r32 = 0
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
+            r1.addView(r0, r2)
+            int[] r12 = new int[r14]
+            int[] r13 = new int[r14]
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r1 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r1 = r1.invoice
+            java.util.ArrayList<java.lang.Long> r1 = r1.suggested_tip_amounts
+            int r15 = r1.size()
+            org.telegram.ui.PaymentFormActivity$12 r4 = new org.telegram.ui.PaymentFormActivity$12
+            r1 = r4
+            r11 = 2131165450(0x7var_a, float:1.7945117E38)
+            r2 = r34
+            r17 = r3
+            r3 = r35
+            r11 = r4
+            r4 = r15
+            r14 = 0
+            r5 = r12
+            r33 = r6
+            r6 = r13
+            r1.<init>(r2, r3, r4, r5, r6)
+            r7.tipLayout = r11
+            r11.setOrientation(r14)
+            android.widget.LinearLayout r1 = r7.tipLayout
+            r2 = 30
+            r3 = 51
+            r4 = -1
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createScroll(r4, r2, r3)
+            r0.addView(r1, r2)
             java.lang.String r0 = "contacts_inviteBackground"
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-            r10 = 0
-        L_0x1748:
-            if (r10 >= r6) goto L_0x1815
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r11 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r11 = r11.invoice
-            java.util.ArrayList<java.lang.Long> r11 = r11.suggested_tip_amounts
-            java.lang.Object r11 = r11.get(r10)
-            java.lang.Long r11 = (java.lang.Long) r11
-            long r11 = r11.longValue()
-            org.telegram.messenger.LocaleController r15 = org.telegram.messenger.LocaleController.getInstance()
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r7 = r1.paymentForm
-            org.telegram.tgnet.TLRPC$TL_invoice r7 = r7.invoice
-            java.lang.String r7 = r7.currency
-            java.lang.String r7 = r15.formatCurrencyString(r11, r7)
-            android.widget.TextView r15 = new android.widget.TextView
-            r15.<init>(r2)
-            r5 = 1096810496(0x41600000, float:14.0)
-            r15.setTextSize(r8, r5)
-            java.lang.String r5 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r5 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
-            r15.setTypeface(r5)
-            r15.setLines(r8)
-            java.lang.Long r5 = java.lang.Long.valueOf(r11)
-            r15.setTag(r5)
-            r15.setMaxLines(r8)
-            r15.setText(r7)
-            r5 = 1097859072(0x41700000, float:15.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r18 = 1097859072(0x41700000, float:15.0)
-            int r8 = org.telegram.messenger.AndroidUtilities.dp(r18)
-            r18 = r13
-            r13 = 0
-            r15.setPadding(r5, r13, r8, r13)
-            java.lang.String r5 = "chats_secretName"
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-            r15.setTextColor(r5)
-            r5 = 1097859072(0x41700000, float:15.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r8 = 536870911(0x1fffffff, float:1.0842021E-19)
-            r8 = r8 & r0
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createRoundRectDrawable(r5, r8)
-            r15.setBackground(r5)
-            r5 = 1
-            r15.setSingleLine(r5)
-            r5 = 17
-            r15.setGravity(r5)
-            android.widget.LinearLayout r5 = r1.tipLayout
-            r22 = -2
-            r23 = -1
-            r24 = 19
-            r25 = 0
-            r26 = 0
-            int r8 = r6 + -1
-            if (r10 == r8) goto L_0x17d3
-            r27 = 9
-            goto L_0x17d5
-        L_0x17d3:
-            r27 = 0
-        L_0x17d5:
-            r28 = 0
-            android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r22, (int) r23, (int) r24, (int) r25, (int) r26, (int) r27, (int) r28)
-            r5.addView(r15, r8)
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$UOoKIkzkLhnzz156prQysEuP_KE r5 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$UOoKIkzkLhnzz156prQysEuP_KE
-            r5.<init>(r15, r11)
-            r15.setOnClickListener(r5)
             r5 = 0
-            r8 = r4[r5]
-            double r11 = (double) r8
-            android.text.TextPaint r5 = r15.getPaint()
-            float r5 = r5.measureText(r7)
-            double r7 = (double) r5
-            double r7 = java.lang.Math.ceil(r7)
-            r5 = 1106247680(0x41var_, float:30.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r13 = r6
-            double r5 = (double) r5
-            java.lang.Double.isNaN(r5)
-            double r7 = r7 + r5
-            java.lang.Double.isNaN(r11)
-            double r11 = r11 + r7
-            int r5 = (int) r11
-            r6 = 0
-            r4[r6] = r5
-            int r10 = r10 + 1
-            r6 = r13
-            r13 = r18
-            r5 = 0
-            r7 = 0
-            r8 = 1
-            goto L_0x1748
-        L_0x1815:
-            r18 = r13
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            r0.addView(r3)
-            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
-            org.telegram.ui.Cells.ShadowSectionCell r3 = new org.telegram.ui.Cells.ShadowSectionCell
-            r3.<init>(r2)
-            r4 = 2
-            r0[r4] = r3
-            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
-            r0 = r0[r4]
-            r3 = 2131165450(0x7var_a, float:1.7945117E38)
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r14)
-            r0.setBackgroundDrawable(r5)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.ShadowSectionCell[] r3 = r1.sectionCell
-            r3 = r3[r4]
-            r4 = -2
-            r5 = -1
-            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r5, r4)
-            r0.addView(r3, r6)
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
-            org.telegram.ui.Cells.TextDetailSettingsCell r3 = new org.telegram.ui.Cells.TextDetailSettingsCell
-            r3.<init>(r2)
-            r4 = 0
-            r0[r4] = r3
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
-            r0 = r0[r4]
+        L_0x1781:
+            if (r5 >= r15) goto L_0x186b
+            boolean r1 = org.telegram.messenger.LocaleController.isRTL
+            if (r1 == 0) goto L_0x179c
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r1 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r1 = r1.invoice
+            java.util.ArrayList<java.lang.Long> r1 = r1.suggested_tip_amounts
+            int r2 = r15 - r5
             r3 = 1
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r3)
-            r0.setBackgroundDrawable(r5)
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
-            r0 = r0[r4]
-            java.lang.String r5 = r1.cardName
-            r6 = 2131626794(0x7f0e0b2a, float:1.8880834E38)
-            java.lang.String r7 = "PaymentCheckoutMethod"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r7 = 2131165894(0x7var_c6, float:1.7946018E38)
-            r0.setTextAndValueAndIcon(r5, r6, r7, r3)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r3 = r1.detailSettingsCell
-            r3 = r3[r4]
-            r0.addView(r3)
-            int r0 = r1.currentStep
-            r3 = 4
-            if (r0 != r3) goto L_0x1888
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
-            r0 = r0[r4]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$xX7gPqWdjlYfKTgW27OpQdgiH2c r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$xX7gPqWdjlYfKTgW27OpQdgiH2c
-            r3.<init>()
-            r0.setOnClickListener(r3)
-        L_0x1888:
-            r0 = 0
-            r4 = 0
-        L_0x188a:
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r3 = r1.paymentForm
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r3 = r3.users
-            int r3 = r3.size()
-            if (r0 >= r3) goto L_0x18aa
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r3 = r1.paymentForm
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r3 = r3.users
-            java.lang.Object r3 = r3.get(r0)
-            org.telegram.tgnet.TLRPC$User r3 = (org.telegram.tgnet.TLRPC$User) r3
-            int r5 = r3.id
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r6 = r1.paymentForm
-            int r6 = r6.provider_id
-            if (r5 != r6) goto L_0x18a7
-            r4 = r3
-        L_0x18a7:
-            int r0 = r0 + 1
-            goto L_0x188a
-        L_0x18aa:
-            if (r4 == 0) goto L_0x18e6
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
-            org.telegram.ui.Cells.TextDetailSettingsCell r3 = new org.telegram.ui.Cells.TextDetailSettingsCell
-            r3.<init>(r2)
-            r5 = 1
-            r0[r5] = r3
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
-            r0 = r0[r5]
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
+            int r2 = r2 - r3
+            java.lang.Object r1 = r1.get(r2)
+            java.lang.Long r1 = (java.lang.Long) r1
+            long r1 = r1.longValue()
+            goto L_0x17ac
+        L_0x179c:
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r1 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r1 = r1.invoice
+            java.util.ArrayList<java.lang.Long> r1 = r1.suggested_tip_amounts
+            java.lang.Object r1 = r1.get(r5)
+            java.lang.Long r1 = (java.lang.Long) r1
+            long r1 = r1.longValue()
+        L_0x17ac:
+            org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r4 = r7.paymentForm
+            org.telegram.tgnet.TLRPC$TL_invoice r4 = r4.invoice
+            java.lang.String r4 = r4.currency
+            java.lang.String r3 = r3.formatCurrencyString(r1, r4)
+            android.widget.TextView r4 = new android.widget.TextView
+            r4.<init>(r8)
+            r6 = 1096810496(0x41600000, float:14.0)
+            r11 = 1
+            r4.setTextSize(r11, r6)
+            java.lang.String r6 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r6 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
+            r4.setTypeface(r6)
+            r4.setLines(r11)
+            java.lang.Long r6 = java.lang.Long.valueOf(r1)
+            r4.setTag(r6)
+            r4.setMaxLines(r11)
+            r4.setText(r3)
+            r6 = 1097859072(0x41700000, float:15.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r11 = 1097859072(0x41700000, float:15.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            r4.setPadding(r6, r14, r11, r14)
+            java.lang.String r6 = "chats_secretName"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r4.setTextColor(r6)
+            r6 = 1097859072(0x41700000, float:15.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r11 = 536870911(0x1fffffff, float:1.0842021E-19)
+            r11 = r11 & r0
+            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createRoundRectDrawable(r6, r11)
+            r4.setBackground(r6)
+            r6 = 1
+            r4.setSingleLine(r6)
+            r6 = 17
+            r4.setGravity(r6)
+            android.widget.LinearLayout r6 = r7.tipLayout
+            r26 = -2
+            r27 = -1
+            r28 = 19
+            r29 = 0
+            r30 = 0
+            int r11 = r15 + -1
+            if (r5 == r11) goto L_0x1823
+            r31 = 9
+            goto L_0x1825
+        L_0x1823:
+            r31 = 0
+        L_0x1825:
+            r32 = 0
+            android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r26, (int) r27, (int) r28, (int) r29, (int) r30, (int) r31, (int) r32)
+            r6.addView(r4, r11)
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$UOoKIkzkLhnzz156prQysEuP_KE r6 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$UOoKIkzkLhnzz156prQysEuP_KE
+            r6.<init>(r4, r1)
+            r4.setOnClickListener(r6)
+            android.text.TextPaint r1 = r4.getPaint()
+            float r1 = r1.measureText(r3)
+            double r1 = (double) r1
+            double r1 = java.lang.Math.ceil(r1)
+            int r1 = (int) r1
+            r2 = 1106247680(0x41var_, float:30.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r1 = r1 + r2
+            r2 = 2131230938(0x7var_da, float:1.8077943E38)
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r1)
+            r4.setTag(r2, r3)
+            r2 = r12[r14]
+            int r2 = java.lang.Math.max(r2, r1)
+            r12[r14] = r2
+            r2 = r13[r14]
+            int r2 = r2 + r1
+            r13[r14] = r2
+            int r5 = r5 + 1
+            goto L_0x1781
+        L_0x1866:
+            r17 = r3
+            r33 = r6
+            r14 = 0
+        L_0x186b:
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            r0.addView(r9)
+            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r7.sectionCell
+            org.telegram.ui.Cells.ShadowSectionCell r1 = new org.telegram.ui.Cells.ShadowSectionCell
+            r1.<init>(r8)
+            r2 = 2
+            r0[r2] = r1
+            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r7.sectionCell
+            r0 = r0[r2]
+            r1 = 2131165450(0x7var_a, float:1.7945117E38)
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r10)
             r0.setBackgroundDrawable(r3)
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
-            r0 = r0[r5]
-            java.lang.String r3 = r4.first_name
-            java.lang.String r4 = r4.last_name
-            java.lang.String r13 = org.telegram.messenger.ContactsController.formatName(r3, r4)
-            r3 = 2131626799(0x7f0e0b2f, float:1.8880844E38)
-            java.lang.String r4 = "PaymentCheckoutProvider"
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.ShadowSectionCell[] r1 = r7.sectionCell
+            r1 = r1[r2]
+            r2 = -2
+            r3 = -1
+            android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear(r3, r2)
+            r0.addView(r1, r4)
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
+            org.telegram.ui.Cells.TextDetailSettingsCell r1 = new org.telegram.ui.Cells.TextDetailSettingsCell
+            r1.<init>(r8)
+            r0[r14] = r1
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
+            r0 = r0[r14]
+            r1 = 1
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
+            r0.setBackgroundDrawable(r3)
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
+            r0 = r0[r14]
+            java.lang.String r3 = r7.cardName
+            if (r3 == 0) goto L_0x18da
+            int r3 = r3.length()
+            if (r3 <= r1) goto L_0x18da
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder
+            r3.<init>()
+            java.lang.String r4 = r7.cardName
+            java.lang.String r4 = r4.substring(r14, r1)
+            java.lang.String r4 = r4.toUpperCase()
+            r3.append(r4)
+            java.lang.String r4 = r7.cardName
+            java.lang.String r4 = r4.substring(r1)
+            r3.append(r4)
+            java.lang.String r1 = r3.toString()
+            goto L_0x18dc
+        L_0x18da:
+            java.lang.String r1 = r7.cardName
+        L_0x18dc:
+            r3 = 2131626797(0x7f0e0b2d, float:1.888084E38)
+            java.lang.String r4 = "PaymentCheckoutMethod"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r4 = 2131165894(0x7var_c6, float:1.7946018E38)
+            r5 = 1
+            r0.setTextAndValueAndIcon(r1, r3, r4, r5)
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r1 = r7.detailSettingsCell
+            r1 = r1[r14]
+            r0.addView(r1)
+            int r0 = r7.currentStep
+            r1 = 4
+            if (r0 != r1) goto L_0x1906
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
+            r0 = r0[r14]
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$xX7gPqWdjlYfKTgW27OpQdgiH2c r1 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$xX7gPqWdjlYfKTgW27OpQdgiH2c
+            r1.<init>()
+            r0.setOnClickListener(r1)
+        L_0x1906:
+            r0 = 0
+            r5 = 0
+        L_0x1908:
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r1 = r7.paymentForm
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r1 = r1.users
+            int r1 = r1.size()
+            if (r5 >= r1) goto L_0x1928
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r1 = r7.paymentForm
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r1 = r1.users
+            java.lang.Object r1 = r1.get(r5)
+            org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
+            int r3 = r1.id
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r4 = r7.paymentForm
+            int r4 = r4.provider_id
+            if (r3 != r4) goto L_0x1925
+            r0 = r1
+        L_0x1925:
+            int r5 = r5 + 1
+            goto L_0x1908
+        L_0x1928:
+            if (r0 == 0) goto L_0x1976
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r1 = r7.detailSettingsCell
+            org.telegram.ui.Cells.TextDetailSettingsCell r3 = new org.telegram.ui.Cells.TextDetailSettingsCell
+            r3.<init>(r8)
+            r4 = 1
+            r1[r4] = r3
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r1 = r7.detailSettingsCell
+            r1 = r1[r4]
+            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r4)
+            r1.setBackgroundDrawable(r3)
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r1 = r7.detailSettingsCell
+            r1 = r1[r4]
+            java.lang.String r3 = r0.first_name
+            java.lang.String r0 = r0.last_name
+            java.lang.String r3 = org.telegram.messenger.ContactsController.formatName(r3, r0)
+            r0 = 2131626802(0x7f0e0b32, float:1.888085E38)
+            java.lang.String r4 = "PaymentCheckoutProvider"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
             r4 = 2131165899(0x7var_cb, float:1.7946028E38)
-            r0.setTextAndValueAndIcon(r13, r3, r4, r5)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r3 = r1.detailSettingsCell
-            r3 = r3[r5]
-            r0.addView(r3)
-            goto L_0x18e8
-        L_0x18e6:
-            r13 = r18
-        L_0x18e8:
-            org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r0 = r1.validateRequest
-            if (r0 == 0) goto L_0x1a36
+            org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r5 = r7.validateRequest
+            if (r5 == 0) goto L_0x1967
+            org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r5 = r5.info
+            org.telegram.tgnet.TLRPC$TL_postAddress r5 = r5.shipping_address
+            if (r5 != 0) goto L_0x1965
+            org.telegram.tgnet.TLRPC$TL_shippingOption r5 = r7.shippingOption
+            if (r5 == 0) goto L_0x1967
+        L_0x1965:
+            r5 = 1
+            goto L_0x1968
+        L_0x1967:
+            r5 = 0
+        L_0x1968:
+            r1.setTextAndValueAndIcon(r3, r0, r4, r5)
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r1 = r7.detailSettingsCell
+            r4 = 1
+            r1 = r1[r4]
+            r0.addView(r1)
+            goto L_0x1978
+        L_0x1976:
+            r3 = r17
+        L_0x1978:
+            org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r0 = r7.validateRequest
+            if (r0 == 0) goto L_0x1ac5
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.info
             org.telegram.tgnet.TLRPC$TL_postAddress r0 = r0.shipping_address
-            if (r0 == 0) goto L_0x192e
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
-            org.telegram.ui.Cells.TextDetailSettingsCell r3 = new org.telegram.ui.Cells.TextDetailSettingsCell
-            r3.<init>(r2)
+            if (r0 == 0) goto L_0x19be
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
+            org.telegram.ui.Cells.TextDetailSettingsCell r1 = new org.telegram.ui.Cells.TextDetailSettingsCell
+            r1.<init>(r8)
             r4 = 2
-            r0[r4] = r3
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r3 = r1.detailSettingsCell
-            r3 = r3[r4]
-            r0.addView(r3)
-            int r0 = r1.currentStep
-            r3 = 4
-            if (r0 != r3) goto L_0x1923
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            r0[r4] = r1
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r1 = r7.detailSettingsCell
+            r1 = r1[r4]
+            r0.addView(r1)
+            int r0 = r7.currentStep
+            r1 = 4
+            if (r0 != r1) goto L_0x19b3
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            r3 = 1
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r3)
+            r1 = 1
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
             r0.setBackgroundDrawable(r5)
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$aXAUqIs8LZgIjzhMbkZqaWXHupQ r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$aXAUqIs8LZgIjzhMbkZqaWXHupQ
-            r3.<init>()
-            r0.setOnClickListener(r3)
-            goto L_0x192e
-        L_0x1923:
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$aXAUqIs8LZgIjzhMbkZqaWXHupQ r1 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$aXAUqIs8LZgIjzhMbkZqaWXHupQ
+            r1.<init>()
+            r0.setOnClickListener(r1)
+            goto L_0x19be
+        L_0x19b3:
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r0.setBackgroundColor(r3)
-        L_0x192e:
-            org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r0 = r1.validateRequest
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r0.setBackgroundColor(r1)
+        L_0x19be:
+            org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r0 = r7.validateRequest
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.info
             java.lang.String r0 = r0.name
-            if (r0 == 0) goto L_0x1972
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
-            org.telegram.ui.Cells.TextDetailSettingsCell r3 = new org.telegram.ui.Cells.TextDetailSettingsCell
-            r3.<init>(r2)
+            if (r0 == 0) goto L_0x1a02
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
+            org.telegram.ui.Cells.TextDetailSettingsCell r1 = new org.telegram.ui.Cells.TextDetailSettingsCell
+            r1.<init>(r8)
             r4 = 3
-            r0[r4] = r3
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r3 = r1.detailSettingsCell
-            r3 = r3[r4]
-            r0.addView(r3)
-            int r0 = r1.currentStep
-            r3 = 4
-            if (r0 != r3) goto L_0x1967
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            r0[r4] = r1
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r1 = r7.detailSettingsCell
+            r1 = r1[r4]
+            r0.addView(r1)
+            int r0 = r7.currentStep
+            r1 = 4
+            if (r0 != r1) goto L_0x19f7
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            r3 = 1
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r3)
+            r1 = 1
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
             r0.setBackgroundDrawable(r5)
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$TRE2OsVpSnUxqbD-RAp5tffzVyM r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$TRE2OsVpSnUxqbD-RAp5tffzVyM
-            r3.<init>()
-            r0.setOnClickListener(r3)
-            goto L_0x1972
-        L_0x1967:
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$TRE2OsVpSnUxqbD-RAp5tffzVyM r1 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$TRE2OsVpSnUxqbD-RAp5tffzVyM
+            r1.<init>()
+            r0.setOnClickListener(r1)
+            goto L_0x1a02
+        L_0x19f7:
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r0.setBackgroundColor(r3)
-        L_0x1972:
-            org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r0 = r1.validateRequest
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r0.setBackgroundColor(r1)
+        L_0x1a02:
+            org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r0 = r7.validateRequest
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.info
             java.lang.String r0 = r0.phone
-            if (r0 == 0) goto L_0x19b5
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
-            org.telegram.ui.Cells.TextDetailSettingsCell r3 = new org.telegram.ui.Cells.TextDetailSettingsCell
-            r3.<init>(r2)
+            if (r0 == 0) goto L_0x1a45
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
+            org.telegram.ui.Cells.TextDetailSettingsCell r1 = new org.telegram.ui.Cells.TextDetailSettingsCell
+            r1.<init>(r8)
             r4 = 4
-            r0[r4] = r3
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r3 = r1.detailSettingsCell
-            r3 = r3[r4]
-            r0.addView(r3)
-            int r0 = r1.currentStep
-            if (r0 != r4) goto L_0x19aa
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            r0[r4] = r1
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r1 = r7.detailSettingsCell
+            r1 = r1[r4]
+            r0.addView(r1)
+            int r0 = r7.currentStep
+            if (r0 != r4) goto L_0x1a3a
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            r3 = 1
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r3)
+            r1 = 1
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
             r0.setBackgroundDrawable(r5)
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$bJHWj5XWO49_bvTcvyTQyZ9HIbw r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$bJHWj5XWO49_bvTcvyTQyZ9HIbw
-            r3.<init>()
-            r0.setOnClickListener(r3)
-            goto L_0x19b5
-        L_0x19aa:
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$bJHWj5XWO49_bvTcvyTQyZ9HIbw r1 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$bJHWj5XWO49_bvTcvyTQyZ9HIbw
+            r1.<init>()
+            r0.setOnClickListener(r1)
+            goto L_0x1a45
+        L_0x1a3a:
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r0.setBackgroundColor(r3)
-        L_0x19b5:
-            org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r0 = r1.validateRequest
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r0.setBackgroundColor(r1)
+        L_0x1a45:
+            org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r0 = r7.validateRequest
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r0 = r0.info
             java.lang.String r0 = r0.email
-            if (r0 == 0) goto L_0x19f9
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
-            org.telegram.ui.Cells.TextDetailSettingsCell r3 = new org.telegram.ui.Cells.TextDetailSettingsCell
-            r3.<init>(r2)
+            if (r0 == 0) goto L_0x1a89
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
+            org.telegram.ui.Cells.TextDetailSettingsCell r1 = new org.telegram.ui.Cells.TextDetailSettingsCell
+            r1.<init>(r8)
             r4 = 5
-            r0[r4] = r3
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r3 = r1.detailSettingsCell
-            r3 = r3[r4]
-            r0.addView(r3)
-            int r0 = r1.currentStep
-            r3 = 4
-            if (r0 != r3) goto L_0x19ee
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            r0[r4] = r1
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r1 = r7.detailSettingsCell
+            r1 = r1[r4]
+            r0.addView(r1)
+            int r0 = r7.currentStep
+            r1 = 4
+            if (r0 != r1) goto L_0x1a7e
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            r3 = 1
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r3)
+            r1 = 1
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r1)
             r0.setBackgroundDrawable(r5)
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            org.telegram.ui.-$$Lambda$PaymentFormActivity$NzNTAiRglUL0O4tFCLASSNAMEN3JOMeC0 r3 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$NzNTAiRglUL0O4tFCLASSNAMEN3JOMeC0
-            r3.<init>()
-            r0.setOnClickListener(r3)
-            goto L_0x19f9
-        L_0x19ee:
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            org.telegram.ui.-$$Lambda$PaymentFormActivity$NzNTAiRglUL0O4tFCLASSNAMEN3JOMeC0 r1 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$NzNTAiRglUL0O4tFCLASSNAMEN3JOMeC0
+            r1.<init>()
+            r0.setOnClickListener(r1)
+            goto L_0x1a89
+        L_0x1a7e:
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r0.setBackgroundColor(r3)
-        L_0x19f9:
-            org.telegram.tgnet.TLRPC$TL_shippingOption r0 = r1.shippingOption
-            if (r0 == 0) goto L_0x1a33
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
-            org.telegram.ui.Cells.TextDetailSettingsCell r3 = new org.telegram.ui.Cells.TextDetailSettingsCell
-            r3.<init>(r2)
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r0.setBackgroundColor(r1)
+        L_0x1a89:
+            org.telegram.tgnet.TLRPC$TL_shippingOption r0 = r7.shippingOption
+            if (r0 == 0) goto L_0x1ac2
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
+            org.telegram.ui.Cells.TextDetailSettingsCell r1 = new org.telegram.ui.Cells.TextDetailSettingsCell
+            r1.<init>(r8)
             r4 = 6
-            r0[r4] = r3
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            r0[r4] = r1
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r19)
-            r0.setBackgroundColor(r3)
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r23)
+            r0.setBackgroundColor(r1)
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r7.detailSettingsCell
             r0 = r0[r4]
-            org.telegram.tgnet.TLRPC$TL_shippingOption r3 = r1.shippingOption
-            java.lang.String r3 = r3.title
-            r5 = 2131626800(0x7f0e0b30, float:1.8880846E38)
+            org.telegram.tgnet.TLRPC$TL_shippingOption r1 = r7.shippingOption
+            java.lang.String r1 = r1.title
+            r5 = 2131626803(0x7f0e0b33, float:1.8880853E38)
             java.lang.String r6 = "PaymentCheckoutShippingMethod"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r6 = 2131165895(0x7var_c7, float:1.794602E38)
-            r7 = 0
-            r0.setTextAndValueAndIcon(r3, r5, r6, r7)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.TextDetailSettingsCell[] r3 = r1.detailSettingsCell
-            r3 = r3[r4]
-            r0.addView(r3)
-        L_0x1a33:
-            r29.setAddressFields()
-        L_0x1a36:
-            int r0 = r1.currentStep
-            r3 = 4
-            if (r0 != r3) goto L_0x1b52
+            r0.setTextAndValueAndIcon(r1, r5, r6, r14)
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.TextDetailSettingsCell[] r1 = r7.detailSettingsCell
+            r1 = r1[r4]
+            r0.addView(r1)
+        L_0x1ac2:
+            r34.setAddressFields()
+        L_0x1ac5:
+            int r0 = r7.currentStep
+            r1 = 4
+            if (r0 != r1) goto L_0x1bdf
             android.widget.FrameLayout r0 = new android.widget.FrameLayout
-            r0.<init>(r2)
-            r1.bottomLayout = r0
-            int r3 = android.os.Build.VERSION.SDK_INT
+            r0.<init>(r8)
+            r7.bottomLayout = r0
+            int r1 = android.os.Build.VERSION.SDK_INT
             r4 = 21
-            if (r3 < r4) goto L_0x1a58
+            if (r1 < r4) goto L_0x1ae7
             java.lang.String r4 = "listSelectorSDK21"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             java.lang.String r5 = "contacts_inviteBackground"
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable((int) r4, (java.lang.String) r5)
             r0.setBackgroundDrawable(r4)
-            goto L_0x1a61
-        L_0x1a58:
+            goto L_0x1af0
+        L_0x1ae7:
             java.lang.String r4 = "contacts_inviteBackground"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             r0.setBackgroundColor(r4)
-        L_0x1a61:
-            android.widget.FrameLayout r0 = r1.bottomLayout
+        L_0x1af0:
+            android.widget.FrameLayout r0 = r7.bottomLayout
             r4 = 48
             r5 = 80
             r6 = -1
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r4, r5)
-            r9.addView(r0, r4)
-            android.widget.FrameLayout r0 = r1.bottomLayout
+            r5 = r33
+            r5.addView(r0, r4)
+            android.widget.FrameLayout r0 = r7.bottomLayout
             org.telegram.ui.-$$Lambda$PaymentFormActivity$20kIl2YO7mLVnhYjfjMILQmfRgo r4 = new org.telegram.ui.-$$Lambda$PaymentFormActivity$20kIl2YO7mLVnhYjfjMILQmfRgo
-            r4.<init>(r13)
+            r4.<init>(r3)
             r0.setOnClickListener(r4)
             android.widget.TextView r0 = new android.widget.TextView
-            r0.<init>(r2)
-            r1.payTextView = r0
-            java.lang.String r4 = "contacts_inviteText"
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r0.setTextColor(r4)
-            android.widget.TextView r0 = r1.payTextView
-            r4 = 2131626797(0x7f0e0b2d, float:1.888084E38)
-            r5 = 1
-            java.lang.Object[] r6 = new java.lang.Object[r5]
-            java.lang.String[] r7 = r1.totalPrice
-            r8 = 0
-            r7 = r7[r8]
-            r6[r8] = r7
-            java.lang.String r7 = "PaymentCheckoutPay"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r7, r4, r6)
-            r0.setText(r4)
-            android.widget.TextView r0 = r1.payTextView
-            r4 = 1096810496(0x41600000, float:14.0)
-            r0.setTextSize(r5, r4)
-            android.widget.TextView r0 = r1.payTextView
-            r4 = 17
-            r0.setGravity(r4)
-            android.widget.TextView r0 = r1.payTextView
-            java.lang.String r4 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
-            r0.setTypeface(r4)
-            android.widget.FrameLayout r0 = r1.bottomLayout
-            android.widget.TextView r4 = r1.payTextView
-            r5 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r0.<init>(r8)
+            r7.payTextView = r0
+            java.lang.String r3 = "contacts_inviteText"
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+            r0.setTextColor(r3)
+            android.widget.TextView r0 = r7.payTextView
+            r3 = 2131626800(0x7f0e0b30, float:1.8880846E38)
+            r4 = 1
+            java.lang.Object[] r6 = new java.lang.Object[r4]
+            java.lang.String[] r9 = r7.totalPrice
+            r9 = r9[r14]
+            r6[r14] = r9
+            java.lang.String r9 = "PaymentCheckoutPay"
+            java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r9, r3, r6)
+            r0.setText(r3)
+            android.widget.TextView r0 = r7.payTextView
+            r3 = 1096810496(0x41600000, float:14.0)
+            r0.setTextSize(r4, r3)
+            android.widget.TextView r0 = r7.payTextView
+            r3 = 17
+            r0.setGravity(r3)
+            android.widget.TextView r0 = r7.payTextView
+            java.lang.String r3 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3)
+            r0.setTypeface(r3)
+            android.widget.FrameLayout r0 = r7.bottomLayout
+            android.widget.TextView r3 = r7.payTextView
+            r4 = -1082130432(0xffffffffbvar_, float:-1.0)
             r6 = -1
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r5)
-            r0.addView(r4, r5)
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r4)
+            r0.addView(r3, r4)
             org.telegram.ui.Components.ContextProgressView r0 = new org.telegram.ui.Components.ContextProgressView
-            r4 = 0
-            r0.<init>(r2, r4)
-            r1.progressViewButton = r0
-            r4 = 4
-            r0.setVisibility(r4)
+            r0.<init>(r8, r14)
+            r7.progressViewButton = r0
+            r3 = 4
+            r0.setVisibility(r3)
             java.lang.String r0 = "contacts_inviteText"
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
-            org.telegram.ui.Components.ContextProgressView r4 = r1.progressViewButton
-            r5 = 805306367(0x2fffffff, float:4.6566126E-10)
-            r5 = r5 & r0
-            r4.setColors(r5, r0)
-            android.widget.FrameLayout r0 = r1.bottomLayout
-            org.telegram.ui.Components.ContextProgressView r4 = r1.progressViewButton
-            r5 = -1082130432(0xffffffffbvar_, float:-1.0)
+            org.telegram.ui.Components.ContextProgressView r3 = r7.progressViewButton
+            r4 = 805306367(0x2fffffff, float:4.6566126E-10)
+            r4 = r4 & r0
+            r3.setColors(r4, r0)
+            android.widget.FrameLayout r0 = r7.bottomLayout
+            org.telegram.ui.Components.ContextProgressView r3 = r7.progressViewButton
+            r4 = -1082130432(0xffffffffbvar_, float:-1.0)
             r6 = -1
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r5)
-            r0.addView(r4, r5)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r1.doneItem
-            r4 = 0
-            r0.setEnabled(r4)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r1.doneItem
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r4)
+            r0.addView(r3, r4)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.doneItem
+            r0.setEnabled(r14)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.doneItem
             android.view.View r0 = r0.getContentView()
-            r4 = 4
-            r0.setVisibility(r4)
-            org.telegram.ui.PaymentFormActivity$18 r0 = new org.telegram.ui.PaymentFormActivity$18
-            r0.<init>(r1, r2)
-            r1.webView = r0
-            r0.setBackgroundColor(r6)
-            android.webkit.WebView r0 = r1.webView
-            android.webkit.WebSettings r0 = r0.getSettings()
-            r4 = 1
-            r0.setJavaScriptEnabled(r4)
-            android.webkit.WebView r0 = r1.webView
-            android.webkit.WebSettings r0 = r0.getSettings()
-            r0.setDomStorageEnabled(r4)
-            r0 = 21
-            if (r3 < r0) goto L_0x1b35
-            android.webkit.WebView r0 = r1.webView
-            android.webkit.WebSettings r0 = r0.getSettings()
-            r3 = 0
-            r0.setMixedContentMode(r3)
-            android.webkit.CookieManager r0 = android.webkit.CookieManager.getInstance()
-            android.webkit.WebView r3 = r1.webView
-            r0.setAcceptThirdPartyCookies(r3, r4)
-        L_0x1b35:
-            android.webkit.WebView r0 = r1.webView
-            org.telegram.ui.PaymentFormActivity$19 r3 = new org.telegram.ui.PaymentFormActivity$19
-            r3.<init>()
-            r0.setWebViewClient(r3)
-            android.webkit.WebView r0 = r1.webView
-            r3 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r4 = -1
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
-            r9.addView(r0, r3)
-            android.webkit.WebView r0 = r1.webView
-            r3 = 8
+            r3 = 4
             r0.setVisibility(r3)
-        L_0x1b52:
-            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
-            org.telegram.ui.Cells.ShadowSectionCell r3 = new org.telegram.ui.Cells.ShadowSectionCell
-            r3.<init>(r2)
-            r4 = 1
-            r0[r4] = r3
-            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r1.sectionCell
-            r0 = r0[r4]
-            r3 = 2131165450(0x7var_a, float:1.7945117E38)
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r14)
-            r0.setBackgroundDrawable(r2)
-            android.widget.LinearLayout r0 = r1.linearLayout2
-            org.telegram.ui.Cells.ShadowSectionCell[] r2 = r1.sectionCell
-            r2 = r2[r4]
-            r3 = -2
-            r4 = -1
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r3)
-            r0.addView(r2, r3)
-        L_0x1b79:
-            android.view.View r0 = r1.fragmentView
+            org.telegram.ui.PaymentFormActivity$18 r0 = new org.telegram.ui.PaymentFormActivity$18
+            r0.<init>(r7, r8)
+            r7.webView = r0
+            r0.setBackgroundColor(r6)
+            android.webkit.WebView r0 = r7.webView
+            android.webkit.WebSettings r0 = r0.getSettings()
+            r3 = 1
+            r0.setJavaScriptEnabled(r3)
+            android.webkit.WebView r0 = r7.webView
+            android.webkit.WebSettings r0 = r0.getSettings()
+            r0.setDomStorageEnabled(r3)
+            r0 = 21
+            if (r1 < r0) goto L_0x1bc2
+            android.webkit.WebView r0 = r7.webView
+            android.webkit.WebSettings r0 = r0.getSettings()
+            r0.setMixedContentMode(r14)
+            android.webkit.CookieManager r0 = android.webkit.CookieManager.getInstance()
+            android.webkit.WebView r1 = r7.webView
+            r0.setAcceptThirdPartyCookies(r1, r3)
+        L_0x1bc2:
+            android.webkit.WebView r0 = r7.webView
+            org.telegram.ui.PaymentFormActivity$19 r1 = new org.telegram.ui.PaymentFormActivity$19
+            r1.<init>()
+            r0.setWebViewClient(r1)
+            android.webkit.WebView r0 = r7.webView
+            r1 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r3 = -1
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r1)
+            r5.addView(r0, r1)
+            android.webkit.WebView r0 = r7.webView
+            r1 = 8
+            r0.setVisibility(r1)
+        L_0x1bdf:
+            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r7.sectionCell
+            org.telegram.ui.Cells.ShadowSectionCell r1 = new org.telegram.ui.Cells.ShadowSectionCell
+            r1.<init>(r8)
+            r3 = 1
+            r0[r3] = r1
+            org.telegram.ui.Cells.ShadowSectionCell[] r0 = r7.sectionCell
+            r0 = r0[r3]
+            r1 = 2131165450(0x7var_a, float:1.7945117E38)
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r10)
+            r0.setBackgroundDrawable(r1)
+            android.widget.LinearLayout r0 = r7.linearLayout2
+            org.telegram.ui.Cells.ShadowSectionCell[] r1 = r7.sectionCell
+            r1 = r1[r3]
+            r3 = -1
+            android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r3, r2)
+            r0.addView(r1, r2)
+        L_0x1CLASSNAME:
+            android.view.View r0 = r7.fragmentView
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PaymentFormActivity.createView(android.content.Context):android.view.View");
@@ -4027,8 +4105,13 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     /* access modifiers changed from: private */
     /* renamed from: lambda$createView$15 */
     public /* synthetic */ void lambda$createView$15$PaymentFormActivity(TextView textView2, long j, View view) {
-        ((Long) textView2.getTag()).longValue();
-        this.inputFields[0].setText(LocaleController.getInstance().formatCurrencyString(j, this.paymentForm.invoice.currency));
+        long longValue = ((Long) textView2.getTag()).longValue();
+        Long l = this.tipAmount;
+        if (l == null || longValue != l.longValue()) {
+            this.inputFields[0].setText(LocaleController.getInstance().formatCurrencyString(j, false, this.paymentForm.invoice.currency));
+        } else {
+            this.inputFields[0].setText(LocaleController.getInstance().formatCurrencyString(0, false, this.paymentForm.invoice.currency));
+        }
         EditTextBoldCursor[] editTextBoldCursorArr = this.inputFields;
         editTextBoldCursorArr[0].setSelection(editTextBoldCursorArr[0].length());
     }
@@ -4361,9 +4444,9 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x004b A[Catch:{ JSONException -> 0x00b5 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x006a A[Catch:{ JSONException -> 0x00b5 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x00a5 A[Catch:{ JSONException -> 0x00b5 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x004c A[Catch:{ JSONException -> 0x00b6 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x006b A[Catch:{ JSONException -> 0x00b6 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x00a6 A[Catch:{ JSONException -> 0x00b6 }] */
     /* JADX WARNING: Removed duplicated region for block: B:22:? A[RETURN, SYNTHETIC] */
     /* renamed from: lambda$createGooglePayButton$30 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -4373,82 +4456,82 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             android.widget.FrameLayout r5 = r4.googlePayButton
             r0 = 0
             r5.setClickable(r0)
-            org.json.JSONObject r5 = r4.getBaseRequest()     // Catch:{ JSONException -> 0x00b5 }
-            org.json.JSONObject r0 = r4.getBaseCardPaymentMethod()     // Catch:{ JSONException -> 0x00b5 }
-            java.lang.String r1 = r4.googlePayPublicKey     // Catch:{ JSONException -> 0x00b5 }
+            org.json.JSONObject r5 = r4.getBaseRequest()     // Catch:{ JSONException -> 0x00b6 }
+            org.json.JSONObject r0 = r4.getBaseCardPaymentMethod()     // Catch:{ JSONException -> 0x00b6 }
+            java.lang.String r1 = r4.googlePayPublicKey     // Catch:{ JSONException -> 0x00b6 }
             java.lang.String r2 = "tokenizationSpecification"
-            if (r1 == 0) goto L_0x0021
-            org.json.JSONObject r1 = r4.googlePayParameters     // Catch:{ JSONException -> 0x00b5 }
-            if (r1 != 0) goto L_0x0021
-            org.telegram.ui.PaymentFormActivity$22 r1 = new org.telegram.ui.PaymentFormActivity$22     // Catch:{ JSONException -> 0x00b5 }
-            r1.<init>()     // Catch:{ JSONException -> 0x00b5 }
-            r0.put(r2, r1)     // Catch:{ JSONException -> 0x00b5 }
-            goto L_0x0029
-        L_0x0021:
-            org.telegram.ui.PaymentFormActivity$23 r1 = new org.telegram.ui.PaymentFormActivity$23     // Catch:{ JSONException -> 0x00b5 }
-            r1.<init>()     // Catch:{ JSONException -> 0x00b5 }
-            r0.put(r2, r1)     // Catch:{ JSONException -> 0x00b5 }
-        L_0x0029:
+            if (r1 == 0) goto L_0x0022
+            org.json.JSONObject r1 = r4.googlePayParameters     // Catch:{ JSONException -> 0x00b6 }
+            if (r1 != 0) goto L_0x0022
+            org.telegram.ui.PaymentFormActivity$22 r1 = new org.telegram.ui.PaymentFormActivity$22     // Catch:{ JSONException -> 0x00b6 }
+            r1.<init>()     // Catch:{ JSONException -> 0x00b6 }
+            r0.put(r2, r1)     // Catch:{ JSONException -> 0x00b6 }
+            goto L_0x002a
+        L_0x0022:
+            org.telegram.ui.PaymentFormActivity$23 r1 = new org.telegram.ui.PaymentFormActivity$23     // Catch:{ JSONException -> 0x00b6 }
+            r1.<init>()     // Catch:{ JSONException -> 0x00b6 }
+            r0.put(r2, r1)     // Catch:{ JSONException -> 0x00b6 }
+        L_0x002a:
             java.lang.String r1 = "allowedPaymentMethods"
-            org.json.JSONArray r2 = new org.json.JSONArray     // Catch:{ JSONException -> 0x00b5 }
-            r2.<init>()     // Catch:{ JSONException -> 0x00b5 }
-            org.json.JSONArray r0 = r2.put(r0)     // Catch:{ JSONException -> 0x00b5 }
-            r5.put(r1, r0)     // Catch:{ JSONException -> 0x00b5 }
-            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x00b5 }
-            r0.<init>()     // Catch:{ JSONException -> 0x00b5 }
-            java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ JSONException -> 0x00b5 }
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r2 = r4.paymentForm     // Catch:{ JSONException -> 0x00b5 }
-            org.telegram.tgnet.TLRPC$TL_invoice r2 = r2.invoice     // Catch:{ JSONException -> 0x00b5 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r2 = r2.prices     // Catch:{ JSONException -> 0x00b5 }
-            r1.<init>(r2)     // Catch:{ JSONException -> 0x00b5 }
-            org.telegram.tgnet.TLRPC$TL_shippingOption r2 = r4.shippingOption     // Catch:{ JSONException -> 0x00b5 }
-            if (r2 == 0) goto L_0x0050
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r2 = r2.prices     // Catch:{ JSONException -> 0x00b5 }
-            r1.addAll(r2)     // Catch:{ JSONException -> 0x00b5 }
-        L_0x0050:
+            org.json.JSONArray r2 = new org.json.JSONArray     // Catch:{ JSONException -> 0x00b6 }
+            r2.<init>()     // Catch:{ JSONException -> 0x00b6 }
+            org.json.JSONArray r0 = r2.put(r0)     // Catch:{ JSONException -> 0x00b6 }
+            r5.put(r1, r0)     // Catch:{ JSONException -> 0x00b6 }
+            org.json.JSONObject r0 = new org.json.JSONObject     // Catch:{ JSONException -> 0x00b6 }
+            r0.<init>()     // Catch:{ JSONException -> 0x00b6 }
+            java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ JSONException -> 0x00b6 }
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r2 = r4.paymentForm     // Catch:{ JSONException -> 0x00b6 }
+            org.telegram.tgnet.TLRPC$TL_invoice r2 = r2.invoice     // Catch:{ JSONException -> 0x00b6 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r2 = r2.prices     // Catch:{ JSONException -> 0x00b6 }
+            r1.<init>(r2)     // Catch:{ JSONException -> 0x00b6 }
+            org.telegram.tgnet.TLRPC$TL_shippingOption r2 = r4.shippingOption     // Catch:{ JSONException -> 0x00b6 }
+            if (r2 == 0) goto L_0x0051
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_labeledPrice> r2 = r2.prices     // Catch:{ JSONException -> 0x00b6 }
+            r1.addAll(r2)     // Catch:{ JSONException -> 0x00b6 }
+        L_0x0051:
             java.lang.String r2 = "totalPrice"
-            java.lang.String r1 = r4.getTotalPriceDecimalString(r1)     // Catch:{ JSONException -> 0x00b5 }
-            r0.put(r2, r1)     // Catch:{ JSONException -> 0x00b5 }
+            java.lang.String r1 = r4.getTotalPriceDecimalString(r1)     // Catch:{ JSONException -> 0x00b6 }
+            r0.put(r2, r1)     // Catch:{ JSONException -> 0x00b6 }
             java.lang.String r1 = "totalPriceStatus"
             java.lang.String r2 = "FINAL"
-            r0.put(r1, r2)     // Catch:{ JSONException -> 0x00b5 }
-            java.lang.String r1 = r4.googlePayCountryCode     // Catch:{ JSONException -> 0x00b5 }
-            boolean r1 = android.text.TextUtils.isEmpty(r1)     // Catch:{ JSONException -> 0x00b5 }
-            if (r1 != 0) goto L_0x0071
+            r0.put(r1, r2)     // Catch:{ JSONException -> 0x00b6 }
+            java.lang.String r1 = r4.googlePayCountryCode     // Catch:{ JSONException -> 0x00b6 }
+            boolean r1 = android.text.TextUtils.isEmpty(r1)     // Catch:{ JSONException -> 0x00b6 }
+            if (r1 != 0) goto L_0x0072
             java.lang.String r1 = "countryCode"
-            java.lang.String r2 = r4.googlePayCountryCode     // Catch:{ JSONException -> 0x00b5 }
-            r0.put(r1, r2)     // Catch:{ JSONException -> 0x00b5 }
-        L_0x0071:
+            java.lang.String r2 = r4.googlePayCountryCode     // Catch:{ JSONException -> 0x00b6 }
+            r0.put(r1, r2)     // Catch:{ JSONException -> 0x00b6 }
+        L_0x0072:
             java.lang.String r1 = "currencyCode"
-            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r2 = r4.paymentForm     // Catch:{ JSONException -> 0x00b5 }
-            org.telegram.tgnet.TLRPC$TL_invoice r2 = r2.invoice     // Catch:{ JSONException -> 0x00b5 }
-            java.lang.String r2 = r2.currency     // Catch:{ JSONException -> 0x00b5 }
-            r0.put(r1, r2)     // Catch:{ JSONException -> 0x00b5 }
+            org.telegram.tgnet.TLRPC$TL_payments_paymentForm r2 = r4.paymentForm     // Catch:{ JSONException -> 0x00b6 }
+            org.telegram.tgnet.TLRPC$TL_invoice r2 = r2.invoice     // Catch:{ JSONException -> 0x00b6 }
+            java.lang.String r2 = r2.currency     // Catch:{ JSONException -> 0x00b6 }
+            r0.put(r1, r2)     // Catch:{ JSONException -> 0x00b6 }
             java.lang.String r1 = "checkoutOption"
             java.lang.String r2 = "COMPLETE_IMMEDIATE_PURCHASE"
-            r0.put(r1, r2)     // Catch:{ JSONException -> 0x00b5 }
+            r0.put(r1, r2)     // Catch:{ JSONException -> 0x00b6 }
             java.lang.String r1 = "transactionInfo"
-            r5.put(r1, r0)     // Catch:{ JSONException -> 0x00b5 }
+            r5.put(r1, r0)     // Catch:{ JSONException -> 0x00b6 }
             java.lang.String r0 = "merchantInfo"
-            org.json.JSONObject r1 = new org.json.JSONObject     // Catch:{ JSONException -> 0x00b5 }
-            r1.<init>()     // Catch:{ JSONException -> 0x00b5 }
+            org.json.JSONObject r1 = new org.json.JSONObject     // Catch:{ JSONException -> 0x00b6 }
+            r1.<init>()     // Catch:{ JSONException -> 0x00b6 }
             java.lang.String r2 = "merchantName"
-            java.lang.String r3 = r4.currentBotName     // Catch:{ JSONException -> 0x00b5 }
-            org.json.JSONObject r1 = r1.put(r2, r3)     // Catch:{ JSONException -> 0x00b5 }
-            r5.put(r0, r1)     // Catch:{ JSONException -> 0x00b5 }
-            java.lang.String r5 = r5.toString()     // Catch:{ JSONException -> 0x00b5 }
-            com.google.android.gms.wallet.PaymentDataRequest r5 = com.google.android.gms.wallet.PaymentDataRequest.fromJson(r5)     // Catch:{ JSONException -> 0x00b5 }
-            if (r5 == 0) goto L_0x00b9
-            com.google.android.gms.wallet.PaymentsClient r0 = r4.paymentsClient     // Catch:{ JSONException -> 0x00b5 }
-            com.google.android.gms.tasks.Task r5 = r0.loadPaymentData(r5)     // Catch:{ JSONException -> 0x00b5 }
-            android.app.Activity r0 = r4.getParentActivity()     // Catch:{ JSONException -> 0x00b5 }
+            java.lang.String r3 = r4.currentBotName     // Catch:{ JSONException -> 0x00b6 }
+            org.json.JSONObject r1 = r1.put(r2, r3)     // Catch:{ JSONException -> 0x00b6 }
+            r5.put(r0, r1)     // Catch:{ JSONException -> 0x00b6 }
+            java.lang.String r5 = r5.toString()     // Catch:{ JSONException -> 0x00b6 }
+            com.google.android.gms.wallet.PaymentDataRequest r5 = com.google.android.gms.wallet.PaymentDataRequest.fromJson(r5)     // Catch:{ JSONException -> 0x00b6 }
+            if (r5 == 0) goto L_0x00ba
+            com.google.android.gms.wallet.PaymentsClient r0 = r4.paymentsClient     // Catch:{ JSONException -> 0x00b6 }
+            com.google.android.gms.tasks.Task r5 = r0.loadPaymentData(r5)     // Catch:{ JSONException -> 0x00b6 }
+            android.app.Activity r0 = r4.getParentActivity()     // Catch:{ JSONException -> 0x00b6 }
             r1 = 991(0x3df, float:1.389E-42)
-            com.google.android.gms.wallet.AutoResolveHelper.resolveTask(r5, r0, r1)     // Catch:{ JSONException -> 0x00b5 }
-            goto L_0x00b9
-        L_0x00b5:
+            com.google.android.gms.wallet.AutoResolveHelper.resolveTask(r5, r0, r1)     // Catch:{ JSONException -> 0x00b6 }
+            goto L_0x00ba
+        L_0x00b6:
             r5 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)
-        L_0x00b9:
+        L_0x00ba:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PaymentFormActivity.lambda$createGooglePayButton$30$PaymentFormActivity(android.view.View):void");
@@ -4951,7 +5034,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             });
             presentFragment(this.passwordFragment, this.isWebView);
         } else if (i3 == 3) {
-            presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, this.passwordOk ? 4 : 2, this.requestedInfo, this.shippingOption, this.tipAmount, this.paymentJson, this.cardName, this.validateRequest, this.saveCardInfo, this.googlePayCredentials, this.parentFragment), !this.passwordOk);
+            presentFragment(new PaymentFormActivity(this.paymentForm, this.messageObject, this.passwordOk ? 4 : 2, this.requestedInfo, this.shippingOption, this.tipAmount, this.paymentJson, this.cardName, this.validateRequest, this.saveCardInfo, this.googlePayCredentials, this.parentFragment), true);
         } else if (i3 == 4) {
             NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.paymentFinished, new Object[0]);
             finishFragment();
@@ -5469,30 +5552,30 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                 } else {
                     new AsyncTask<Object, Object, String>() {
                         /* access modifiers changed from: protected */
-                        /* JADX WARNING: Code restructure failed: missing block: B:27:0x0124, code lost:
-                            if (r4 != null) goto L_0x013b;
+                        /* JADX WARNING: Code restructure failed: missing block: B:27:0x0125, code lost:
+                            if (r4 != null) goto L_0x013c;
                          */
-                        /* JADX WARNING: Code restructure failed: missing block: B:31:0x0129, code lost:
+                        /* JADX WARNING: Code restructure failed: missing block: B:31:0x012a, code lost:
                             r13 = move-exception;
                          */
-                        /* JADX WARNING: Code restructure failed: missing block: B:32:0x012a, code lost:
-                            if (r5 != null) goto L_0x012c;
+                        /* JADX WARNING: Code restructure failed: missing block: B:32:0x012b, code lost:
+                            if (r5 != null) goto L_0x012d;
                          */
                         /* JADX WARNING: Code restructure failed: missing block: B:34:?, code lost:
                             r5.close();
                          */
-                        /* JADX WARNING: Code restructure failed: missing block: B:43:0x0139, code lost:
-                            if (r4 == null) goto L_0x013e;
+                        /* JADX WARNING: Code restructure failed: missing block: B:43:0x013a, code lost:
+                            if (r4 == null) goto L_0x013f;
                          */
-                        /* JADX WARNING: Code restructure failed: missing block: B:44:0x013b, code lost:
+                        /* JADX WARNING: Code restructure failed: missing block: B:44:0x013c, code lost:
                             r4.disconnect();
                          */
-                        /* JADX WARNING: Code restructure failed: missing block: B:45:0x013e, code lost:
+                        /* JADX WARNING: Code restructure failed: missing block: B:45:0x013f, code lost:
                             return null;
                          */
-                        /* JADX WARNING: Missing exception handler attribute for start block: B:35:0x012f */
-                        /* JADX WARNING: Removed duplicated region for block: B:49:0x0143  */
-                        /* JADX WARNING: Unknown top exception splitter block from list: {B:23:0x0106=Splitter:B:23:0x0106, B:35:0x012f=Splitter:B:35:0x012f} */
+                        /* JADX WARNING: Missing exception handler attribute for start block: B:35:0x0130 */
+                        /* JADX WARNING: Removed duplicated region for block: B:49:0x0144  */
+                        /* JADX WARNING: Unknown top exception splitter block from list: {B:35:0x0130=Splitter:B:35:0x0130, B:23:0x0107=Splitter:B:23:0x0107} */
                         /* Code decompiled incorrectly, please refer to instructions dump. */
                         public java.lang.String doInBackground(java.lang.Object... r13) {
                             /*
@@ -5501,151 +5584,151 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
                                 java.lang.String r0 = "card"
                                 java.lang.String r1 = ""
                                 r2 = 0
-                                org.json.JSONObject r3 = new org.json.JSONObject     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r3.<init>()     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                org.json.JSONObject r4 = new org.json.JSONObject     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r4.<init>()     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
+                                org.json.JSONObject r3 = new org.json.JSONObject     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r3.<init>()     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                org.json.JSONObject r4 = new org.json.JSONObject     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r4.<init>()     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
                                 java.lang.String r5 = "number"
-                                com.stripe.android.model.Card r6 = r7     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                java.lang.String r6 = r6.getNumber()     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r4.put(r5, r6)     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
+                                com.stripe.android.model.Card r6 = r7     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                java.lang.String r6 = r6.getNumber()     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r4.put(r5, r6)     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
                                 java.lang.String r5 = "expiration_month"
-                                java.util.Locale r6 = java.util.Locale.US     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
+                                java.util.Locale r6 = java.util.Locale.US     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
                                 java.lang.String r7 = "%02d"
                                 r8 = 1
-                                java.lang.Object[] r9 = new java.lang.Object[r8]     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                com.stripe.android.model.Card r10 = r7     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                java.lang.Integer r10 = r10.getExpMonth()     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
+                                java.lang.Object[] r9 = new java.lang.Object[r8]     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                com.stripe.android.model.Card r10 = r7     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                java.lang.Integer r10 = r10.getExpMonth()     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
                                 r11 = 0
-                                r9[r11] = r10     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                java.lang.String r6 = java.lang.String.format(r6, r7, r9)     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r4.put(r5, r6)     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
+                                r9[r11] = r10     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                java.lang.String r6 = java.lang.String.format(r6, r7, r9)     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r4.put(r5, r6)     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
                                 java.lang.String r5 = "expiration_year"
-                                java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r6.<init>()     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r6.append(r1)     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                com.stripe.android.model.Card r7 = r7     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                java.lang.Integer r7 = r7.getExpYear()     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r6.append(r7)     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r4.put(r5, r6)     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
+                                java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r6.<init>()     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r6.append(r1)     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                com.stripe.android.model.Card r7 = r7     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                java.lang.Integer r7 = r7.getExpYear()     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r6.append(r7)     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r4.put(r5, r6)     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
                                 java.lang.String r5 = "security_code"
-                                java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r6.<init>()     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r6.append(r1)     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                com.stripe.android.model.Card r7 = r7     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                java.lang.String r7 = r7.getCVC()     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r6.append(r7)     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r4.put(r5, r6)     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                r3.put(r0, r4)     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                org.telegram.ui.PaymentFormActivity r4 = org.telegram.ui.PaymentFormActivity.this     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                org.telegram.tgnet.TLRPC$TL_payments_paymentForm r4 = r4.paymentForm     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                org.telegram.tgnet.TLRPC$TL_invoice r4 = r4.invoice     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                boolean r4 = r4.test     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                if (r4 == 0) goto L_0x0080
-                                java.net.URL r4 = new java.net.URL     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
+                                java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r6.<init>()     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r6.append(r1)     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                com.stripe.android.model.Card r7 = r7     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                java.lang.String r7 = r7.getCVC()     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r6.append(r7)     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r4.put(r5, r6)     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                r3.put(r0, r4)     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                org.telegram.ui.PaymentFormActivity r4 = org.telegram.ui.PaymentFormActivity.this     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                org.telegram.tgnet.TLRPC$TL_payments_paymentForm r4 = r4.paymentForm     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                org.telegram.tgnet.TLRPC$TL_invoice r4 = r4.invoice     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                boolean r4 = r4.test     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                if (r4 == 0) goto L_0x0081
+                                java.net.URL r4 = new java.net.URL     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
                                 java.lang.String r5 = "https://tgb-playground.smart-glocal.com/cds/v1/tokenize/card"
-                                r4.<init>(r5)     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                goto L_0x0087
-                            L_0x0080:
-                                java.net.URL r4 = new java.net.URL     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
+                                r4.<init>(r5)     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                goto L_0x0088
+                            L_0x0081:
+                                java.net.URL r4 = new java.net.URL     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
                                 java.lang.String r5 = "https://tgb.smart-glocal.com/cds/v1/tokenize/card"
-                                r4.<init>(r5)     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                            L_0x0087:
-                                java.net.URLConnection r4 = r4.openConnection()     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
-                                java.net.HttpURLConnection r4 = (java.net.HttpURLConnection) r4     // Catch:{ Exception -> 0x0134, all -> 0x0132 }
+                                r4.<init>(r5)     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                            L_0x0088:
+                                java.net.URLConnection r4 = r4.openConnection()     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
+                                java.net.HttpURLConnection r4 = (java.net.HttpURLConnection) r4     // Catch:{ Exception -> 0x0135, all -> 0x0133 }
                                 r5 = 30000(0x7530, float:4.2039E-41)
-                                r4.setConnectTimeout(r5)     // Catch:{ Exception -> 0x0130 }
+                                r4.setConnectTimeout(r5)     // Catch:{ Exception -> 0x0131 }
                                 r5 = 80000(0x13880, float:1.12104E-40)
-                                r4.setReadTimeout(r5)     // Catch:{ Exception -> 0x0130 }
-                                r4.setUseCaches(r11)     // Catch:{ Exception -> 0x0130 }
-                                r4.setDoOutput(r8)     // Catch:{ Exception -> 0x0130 }
+                                r4.setReadTimeout(r5)     // Catch:{ Exception -> 0x0131 }
+                                r4.setUseCaches(r11)     // Catch:{ Exception -> 0x0131 }
+                                r4.setDoOutput(r8)     // Catch:{ Exception -> 0x0131 }
                                 java.lang.String r5 = "POST"
-                                r4.setRequestMethod(r5)     // Catch:{ Exception -> 0x0130 }
+                                r4.setRequestMethod(r5)     // Catch:{ Exception -> 0x0131 }
                                 java.lang.String r5 = "Content-Type"
                                 java.lang.String r6 = "application/json"
-                                r4.setRequestProperty(r5, r6)     // Catch:{ Exception -> 0x0130 }
+                                r4.setRequestProperty(r5, r6)     // Catch:{ Exception -> 0x0131 }
                                 java.lang.String r5 = "X-PUBLIC-TOKEN"
-                                org.telegram.ui.PaymentFormActivity r6 = org.telegram.ui.PaymentFormActivity.this     // Catch:{ Exception -> 0x0130 }
-                                java.lang.String r6 = r6.providerApiKey     // Catch:{ Exception -> 0x0130 }
-                                r4.setRequestProperty(r5, r6)     // Catch:{ Exception -> 0x0130 }
-                                java.io.OutputStream r5 = r4.getOutputStream()     // Catch:{ Exception -> 0x0130 }
-                                java.lang.String r3 = r3.toString()     // Catch:{ all -> 0x0127 }
+                                org.telegram.ui.PaymentFormActivity r6 = org.telegram.ui.PaymentFormActivity.this     // Catch:{ Exception -> 0x0131 }
+                                java.lang.String r6 = r6.providerApiKey     // Catch:{ Exception -> 0x0131 }
+                                r4.setRequestProperty(r5, r6)     // Catch:{ Exception -> 0x0131 }
+                                java.io.OutputStream r5 = r4.getOutputStream()     // Catch:{ Exception -> 0x0131 }
+                                java.lang.String r3 = r3.toString()     // Catch:{ all -> 0x0128 }
                                 java.lang.String r6 = "UTF-8"
-                                byte[] r3 = r3.getBytes(r6)     // Catch:{ all -> 0x0127 }
-                                r5.write(r3)     // Catch:{ all -> 0x0127 }
-                                if (r5 == 0) goto L_0x00cb
-                                r5.close()     // Catch:{ Exception -> 0x0130 }
-                            L_0x00cb:
-                                int r3 = r4.getResponseCode()     // Catch:{ Exception -> 0x0130 }
+                                byte[] r3 = r3.getBytes(r6)     // Catch:{ all -> 0x0128 }
+                                r5.write(r3)     // Catch:{ all -> 0x0128 }
+                                if (r5 == 0) goto L_0x00cc
+                                r5.close()     // Catch:{ Exception -> 0x0131 }
+                            L_0x00cc:
+                                int r3 = r4.getResponseCode()     // Catch:{ Exception -> 0x0131 }
                                 r5 = 200(0xc8, float:2.8E-43)
-                                if (r3 < r5) goto L_0x0106
+                                if (r3 < r5) goto L_0x0107
                                 r5 = 300(0x12c, float:4.2E-43)
-                                if (r3 >= r5) goto L_0x0106
-                                org.json.JSONObject r1 = new org.json.JSONObject     // Catch:{ Exception -> 0x0130 }
-                                r1.<init>()     // Catch:{ Exception -> 0x0130 }
-                                org.json.JSONObject r3 = new org.json.JSONObject     // Catch:{ Exception -> 0x0130 }
-                                java.io.InputStream r5 = r4.getInputStream()     // Catch:{ Exception -> 0x0130 }
-                                java.lang.String r5 = org.telegram.ui.PaymentFormActivity.getResponseBody(r5)     // Catch:{ Exception -> 0x0130 }
-                                r3.<init>(r5)     // Catch:{ Exception -> 0x0130 }
+                                if (r3 >= r5) goto L_0x0107
+                                org.json.JSONObject r1 = new org.json.JSONObject     // Catch:{ Exception -> 0x0131 }
+                                r1.<init>()     // Catch:{ Exception -> 0x0131 }
+                                org.json.JSONObject r3 = new org.json.JSONObject     // Catch:{ Exception -> 0x0131 }
+                                java.io.InputStream r5 = r4.getInputStream()     // Catch:{ Exception -> 0x0131 }
+                                java.lang.String r5 = org.telegram.ui.PaymentFormActivity.getResponseBody(r5)     // Catch:{ Exception -> 0x0131 }
+                                r3.<init>(r5)     // Catch:{ Exception -> 0x0131 }
                                 java.lang.String r5 = "data"
-                                org.json.JSONObject r3 = r3.getJSONObject(r5)     // Catch:{ Exception -> 0x0130 }
-                                java.lang.String r3 = r3.getString(r13)     // Catch:{ Exception -> 0x0130 }
-                                r1.put(r13, r3)     // Catch:{ Exception -> 0x0130 }
+                                org.json.JSONObject r3 = r3.getJSONObject(r5)     // Catch:{ Exception -> 0x0131 }
+                                java.lang.String r3 = r3.getString(r13)     // Catch:{ Exception -> 0x0131 }
+                                r1.put(r13, r3)     // Catch:{ Exception -> 0x0131 }
                                 java.lang.String r13 = "type"
-                                r1.put(r13, r0)     // Catch:{ Exception -> 0x0130 }
-                                java.lang.String r13 = r1.toString()     // Catch:{ Exception -> 0x0130 }
-                                if (r4 == 0) goto L_0x0105
+                                r1.put(r13, r0)     // Catch:{ Exception -> 0x0131 }
+                                java.lang.String r13 = r1.toString()     // Catch:{ Exception -> 0x0131 }
+                                if (r4 == 0) goto L_0x0106
                                 r4.disconnect()
-                            L_0x0105:
-                                return r13
                             L_0x0106:
-                                boolean r13 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ Exception -> 0x0130 }
-                                if (r13 == 0) goto L_0x0124
-                                java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0130 }
-                                r13.<init>()     // Catch:{ Exception -> 0x0130 }
-                                r13.append(r1)     // Catch:{ Exception -> 0x0130 }
-                                java.io.InputStream r0 = r4.getErrorStream()     // Catch:{ Exception -> 0x0130 }
-                                java.lang.String r0 = org.telegram.ui.PaymentFormActivity.getResponseBody(r0)     // Catch:{ Exception -> 0x0130 }
-                                r13.append(r0)     // Catch:{ Exception -> 0x0130 }
-                                java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0130 }
-                                org.telegram.messenger.FileLog.e((java.lang.String) r13)     // Catch:{ Exception -> 0x0130 }
-                            L_0x0124:
-                                if (r4 == 0) goto L_0x013e
-                                goto L_0x013b
-                            L_0x0127:
+                                return r13
+                            L_0x0107:
+                                boolean r13 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ Exception -> 0x0131 }
+                                if (r13 == 0) goto L_0x0125
+                                java.lang.StringBuilder r13 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0131 }
+                                r13.<init>()     // Catch:{ Exception -> 0x0131 }
+                                r13.append(r1)     // Catch:{ Exception -> 0x0131 }
+                                java.io.InputStream r0 = r4.getErrorStream()     // Catch:{ Exception -> 0x0131 }
+                                java.lang.String r0 = org.telegram.ui.PaymentFormActivity.getResponseBody(r0)     // Catch:{ Exception -> 0x0131 }
+                                r13.append(r0)     // Catch:{ Exception -> 0x0131 }
+                                java.lang.String r13 = r13.toString()     // Catch:{ Exception -> 0x0131 }
+                                org.telegram.messenger.FileLog.e((java.lang.String) r13)     // Catch:{ Exception -> 0x0131 }
+                            L_0x0125:
+                                if (r4 == 0) goto L_0x013f
+                                goto L_0x013c
+                            L_0x0128:
                                 r13 = move-exception
-                                throw r13     // Catch:{ all -> 0x0129 }
-                            L_0x0129:
+                                throw r13     // Catch:{ all -> 0x012a }
+                            L_0x012a:
                                 r13 = move-exception
-                                if (r5 == 0) goto L_0x012f
-                                r5.close()     // Catch:{ all -> 0x012f }
-                            L_0x012f:
-                                throw r13     // Catch:{ Exception -> 0x0130 }
+                                if (r5 == 0) goto L_0x0130
+                                r5.close()     // Catch:{ all -> 0x0130 }
                             L_0x0130:
+                                throw r13     // Catch:{ Exception -> 0x0131 }
+                            L_0x0131:
                                 r13 = move-exception
-                                goto L_0x0136
-                            L_0x0132:
+                                goto L_0x0137
+                            L_0x0133:
                                 r13 = move-exception
-                                goto L_0x0141
-                            L_0x0134:
+                                goto L_0x0142
+                            L_0x0135:
                                 r13 = move-exception
                                 r4 = r2
-                            L_0x0136:
-                                org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)     // Catch:{ all -> 0x013f }
-                                if (r4 == 0) goto L_0x013e
-                            L_0x013b:
+                            L_0x0137:
+                                org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)     // Catch:{ all -> 0x0140 }
+                                if (r4 == 0) goto L_0x013f
+                            L_0x013c:
                                 r4.disconnect()
-                            L_0x013e:
-                                return r2
                             L_0x013f:
+                                return r2
+                            L_0x0140:
                                 r13 = move-exception
                                 r2 = r4
-                            L_0x0141:
-                                if (r2 == 0) goto L_0x0146
+                            L_0x0142:
+                                if (r2 == 0) goto L_0x0147
                                 r2.disconnect()
-                            L_0x0146:
+                            L_0x0147:
                                 throw r13
                             */
                             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PaymentFormActivity.AnonymousClass26.doInBackground(java.lang.Object[]):java.lang.String");

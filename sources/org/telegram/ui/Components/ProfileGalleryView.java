@@ -435,25 +435,6 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     }
 
     public void removeUploadingImage(ImageLocation imageLocation) {
-        int i = 0;
-        while (true) {
-            if (i >= this.imagesLocations.size()) {
-                break;
-            } else if (this.imagesLocations.get(i) == imageLocation) {
-                this.thumbsFileNames.remove(i);
-                this.videoFileNames.remove(i);
-                this.imagesLocations.remove(i);
-                this.thumbsLocations.remove(i);
-                this.videoLocations.remove(i);
-                this.photos.remove(i);
-                this.imagesLocationsSizes.remove(i);
-                this.imagesUploadProgress.remove(i);
-                this.adapter.notifyDataSetChanged();
-                break;
-            } else {
-                i++;
-            }
-        }
         this.uploadingImageLocation = imageLocation;
         this.currentUploadingImageLocation = null;
         this.curreantUploadingThumbLocation = null;

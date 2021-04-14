@@ -343,10 +343,10 @@ public class PinchToZoomHelper {
 
     /* access modifiers changed from: protected */
     public boolean zoomEnabled(View view, ImageReceiver imageReceiver) {
-        if (!(imageReceiver.getDrawable() instanceof AnimatedFileDrawable) || !((AnimatedFileDrawable) imageReceiver.getDrawable()).isLoadingStream()) {
-            return imageReceiver.hasNotThumb();
+        if (imageReceiver.getDrawable() instanceof AnimatedFileDrawable) {
+            return !((AnimatedFileDrawable) imageReceiver.getDrawable()).isLoadingStream();
         }
-        return false;
+        return imageReceiver.hasNotThumb();
     }
 
     private class ZoomOverlayView extends FrameLayout {
