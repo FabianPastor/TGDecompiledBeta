@@ -280,6 +280,6 @@ public class ShareDialogCell extends FrameLayout {
         int top = this.imageView.getTop() + (this.imageView.getMeasuredHeight() / 2);
         Theme.checkboxSquare_checkPaint.setColor(Theme.getColor("dialogRoundCheckBox"));
         Theme.checkboxSquare_checkPaint.setAlpha((int) (this.checkBox.getProgress() * 255.0f));
-        canvas.drawCircle((float) left, (float) top, (float) AndroidUtilities.dp(24.0f), Theme.checkboxSquare_checkPaint);
+        canvas.drawCircle((float) left, (float) top, (float) AndroidUtilities.dp(this.currentType == 2 ? 24.0f : 28.0f), Theme.checkboxSquare_checkPaint);
     }
 }

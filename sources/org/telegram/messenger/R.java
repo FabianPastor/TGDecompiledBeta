@@ -4597,7 +4597,7 @@ public final class R {
         public static final int PaymentTestInvoice = NUM;
         public static final int PaymentTip = NUM;
         public static final int PaymentTipOptional = NUM;
-        public static final int PaymentTransactionMessage = NUM;
+        public static final int PaymentTransactionMessage2 = NUM;
         public static final int PaymentTransactionReview = NUM;
         public static final int PaymentTransactionTotal = NUM;
         public static final int PaymentWarning = NUM;

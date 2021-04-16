@@ -903,7 +903,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3 = r3[r5]
             if (r3 == 0) goto L_0x0387
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r7 = 2131628045(0x7f0e100d, float:1.8883372E38)
+            r7 = 2131628046(0x7f0e100e, float:1.8883374E38)
             java.lang.String r15 = "VoipGroupCopySpeakerLink"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r15, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -1075,7 +1075,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r2.setTextColor(r3)
         L_0x04fd:
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
-            r3 = 2131627423(0x7f0e0d9f, float:1.888211E38)
+            r3 = 2131627424(0x7f0e0da0, float:1.8882112E38)
             java.lang.String r4 = "ShareComment"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r2.setHint(r3)
@@ -1411,14 +1411,14 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     onSend(this.selectedDialogs, this.sendingMessageObjects.size());
                 } else {
                     SwitchView switchView2 = this.switchView;
-                    int access$7400 = switchView2 != null ? switchView2.currentTab : 0;
-                    if (this.sendingText[access$7400] != null) {
+                    int access$7500 = switchView2 != null ? switchView2.currentTab : 0;
+                    if (this.sendingText[access$7500] != null) {
                         while (i < this.selectedDialogs.size()) {
                             long keyAt3 = this.selectedDialogs.keyAt(i);
                             if (this.frameLayout2.getTag() != null && this.commentTextView.length() > 0) {
                                 SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.commentTextView.getText().toString(), keyAt3, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
                             }
-                            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText[access$7400], keyAt3, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+                            SendMessagesHelper.getInstance(this.currentAccount).sendMessage(this.sendingText[access$7500], keyAt3, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
                             i++;
                         }
                     }

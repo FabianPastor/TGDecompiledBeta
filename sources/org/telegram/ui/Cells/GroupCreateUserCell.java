@@ -481,7 +481,7 @@ public class GroupCreateUserCell extends FrameLayout {
             boolean r10 = org.telegram.messenger.UserObject.isUserSelf(r1)
             if (r10 == 0) goto L_0x01e6
             org.telegram.ui.ActionBar.SimpleTextView r3 = r0.nameTextView
-            r4 = 2131627251(0x7f0e0cf3, float:1.8881761E38)
+            r4 = 2131627252(0x7f0e0cf4, float:1.8881763E38)
             java.lang.String r5 = "SavedMessages"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r3.setText(r4, r8)

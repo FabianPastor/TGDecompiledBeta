@@ -1716,7 +1716,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             L_0x002e:
                 org.telegram.messenger.AndroidUtilities.addToClipboard(r2)
                 if (r3 == 0) goto L_0x003d
-                r2 = 2131626892(0x7f0e0b8c, float:1.8881033E38)
+                r2 = 2131626893(0x7f0e0b8d, float:1.8881035E38)
                 java.lang.String r3 = "PhoneCopied"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 goto L_0x006a
@@ -1732,7 +1732,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 java.lang.String r3 = "@"
                 boolean r2 = r2.startsWith(r3)
                 if (r2 == 0) goto L_0x0061
-                r2 = 2131627901(0x7f0e0f7d, float:1.888308E38)
+                r2 = 2131627902(0x7f0e0f7e, float:1.8883082E38)
                 java.lang.String r3 = "UsernameCopied"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 goto L_0x006a
@@ -4951,7 +4951,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x00b7:
             android.app.Activity r1 = r6.parentActivity     // Catch:{ Exception -> 0x00d0 }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131627426(0x7f0e0da2, float:1.8882116E38)
+            r3 = 2131627427(0x7f0e0da3, float:1.8882118E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x00d0 }
             android.content.Intent r0 = android.content.Intent.createChooser(r0, r2)     // Catch:{ Exception -> 0x00d0 }
             r2 = 500(0x1f4, float:7.0E-43)
@@ -14003,7 +14003,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r7 = 0
                 r0.sharedMediaType = r7
                 org.telegram.ui.ActionBar.ActionBarMenuSubItem r8 = r0.allMediaItem
-                r13 = 2131627481(0x7f0e0dd9, float:1.8882228E38)
+                r13 = 2131627482(0x7f0e0dda, float:1.888223E38)
                 java.lang.String r10 = "ShowAllMedia"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r13)
                 r8.setText(r10)
@@ -14212,9 +14212,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r7 = r7.getTotalImageCount()
                 r0.totalImagesCount = r7
             L_0x02ad:
-                r7 = 2131627480(0x7f0e0dd8, float:1.8882226E38)
+                r7 = 2131627481(0x7f0e0dd9, float:1.8882228E38)
                 java.lang.String r9 = "ShowAllGIFs"
-                r11 = 2131627479(0x7f0e0dd7, float:1.8882224E38)
+                r11 = 2131627480(0x7f0e0dd8, float:1.8882226E38)
                 java.lang.String r13 = "ShowAllFiles"
                 r10 = 5
                 if (r1 == 0) goto L_0x03de
@@ -14497,7 +14497,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r3.put(r4, r2)
                 int r1 = r1 + 1
                 r10 = 5
-                r11 = 2131627479(0x7f0e0dd7, float:1.8882224E38)
+                r11 = 2131627480(0x7f0e0dd8, float:1.8882226E38)
                 goto L_0x04a2
             L_0x04d1:
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.imagesArr
@@ -14523,7 +14523,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 if (r2 == 0) goto L_0x050f
                 r0.sharedMediaType = r14
                 org.telegram.ui.ActionBar.ActionBarMenuSubItem r1 = r0.allMediaItem
-                r2 = 2131627479(0x7f0e0dd7, float:1.8882224E38)
+                r2 = 2131627480(0x7f0e0dd8, float:1.8882226E38)
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r13, r2)
                 r1.setText(r2)
                 goto L_0x052a
@@ -15281,7 +15281,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 long r13 = (long) r7
                 r21 = 1000(0x3e8, double:4.94E-321)
                 long r13 = r13 * r21
-                r7 = 2131628307(0x7f0e1113, float:1.8883903E38)
+                r7 = 2131628308(0x7f0e1114, float:1.8883905E38)
                 r9 = 2
                 java.lang.Object[] r15 = new java.lang.Object[r9]
                 org.telegram.messenger.LocaleController r9 = org.telegram.messenger.LocaleController.getInstance()
@@ -16293,7 +16293,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 boolean r5 = r2.self
                 if (r5 == 0) goto L_0x09b5
                 org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-                r5 = 2131627251(0x7f0e0cf3, float:1.8881761E38)
+                r5 = 2131627252(0x7f0e0cf4, float:1.8881763E38)
                 java.lang.String r8 = "SavedMessages"
                 java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r8, r5)
                 r2.setTitle(r5)
@@ -21855,10 +21855,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         /* JADX WARNING: Removed duplicated region for block: B:508:0x0a20  */
         /* JADX WARNING: Removed duplicated region for block: B:516:0x0ad9  */
         /* JADX WARNING: Removed duplicated region for block: B:521:0x0aec  */
-        /* JADX WARNING: Removed duplicated region for block: B:541:0x0b49  */
-        /* JADX WARNING: Removed duplicated region for block: B:546:0x0b58  */
-        /* JADX WARNING: Removed duplicated region for block: B:551:0x0928 A[EDGE_INSN: B:551:0x0928->B:450:0x0928 ?: BREAK  , SYNTHETIC] */
-        /* JADX WARNING: Removed duplicated region for block: B:558:? A[RETURN, SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:539:0x0b3c  */
+        /* JADX WARNING: Removed duplicated region for block: B:543:0x0b4b  */
+        /* JADX WARNING: Removed duplicated region for block: B:548:0x0b5a  */
+        /* JADX WARNING: Removed duplicated region for block: B:553:0x0928 A[EDGE_INSN: B:553:0x0928->B:450:0x0928 ?: BREAK  , SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:560:? A[RETURN, SYNTHETIC] */
         @android.annotation.SuppressLint({"NewApi", "DrawAllocation"})
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onDraw(android.graphics.Canvas r40) {
@@ -21869,16 +21870,16 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 int r0 = r1.animationInProgress
                 r3 = 1
                 java.lang.Integer r4 = java.lang.Integer.valueOf(r3)
-                if (r0 == r3) goto L_0x0b92
+                if (r0 == r3) goto L_0x0b94
                 r5 = 3
-                if (r0 == r5) goto L_0x0b92
+                if (r0 == r5) goto L_0x0b94
                 boolean r6 = r1.isVisible
                 r7 = 2
                 if (r6 != 0) goto L_0x001d
                 if (r0 == r7) goto L_0x001d
                 boolean r0 = r1.pipAnimationInProgress
                 if (r0 != 0) goto L_0x001d
-                goto L_0x0b92
+                goto L_0x0b94
             L_0x001d:
                 boolean r0 = r1.padImageForHorizontalInsets
                 r6 = 0
@@ -23445,11 +23446,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r0.setAlpha(r4)
             L_0x0ae8:
                 int r0 = r1.waitingForDraw
-                if (r0 == 0) goto L_0x0b45
+                if (r0 == 0) goto L_0x0b47
                 r4 = 1
                 int r0 = r0 - r4
                 r1.waitingForDraw = r0
-                if (r0 != 0) goto L_0x0b40
+                if (r0 != 0) goto L_0x0b42
                 android.widget.ImageView r0 = r1.textureImageView
                 if (r0 == 0) goto L_0x0b37
                 android.view.TextureView r0 = r1.videoTextureView     // Catch:{ all -> 0x0b10 }
@@ -23490,22 +23491,23 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r4 = 0
             L_0x0b38:
                 org.telegram.ui.Components.PipVideoView r0 = r1.pipVideoView
+                if (r0 == 0) goto L_0x0b47
                 r0.close()
                 r1.pipVideoView = r4
-                goto L_0x0b45
-            L_0x0b40:
+                goto L_0x0b47
+            L_0x0b42:
                 org.telegram.ui.PhotoViewer$FrameLayoutDrawer r0 = r1.containerView
                 r0.invalidate()
-            L_0x0b45:
+            L_0x0b47:
                 boolean r0 = r1.padImageForHorizontalInsets
-                if (r0 == 0) goto L_0x0b4c
+                if (r0 == 0) goto L_0x0b4e
                 r40.restore()
-            L_0x0b4c:
+            L_0x0b4e:
                 com.google.android.exoplayer2.ui.AspectRatioFrameLayout r0 = r1.aspectRatioFrameLayout
-                if (r0 == 0) goto L_0x0b92
+                if (r0 == 0) goto L_0x0b94
                 org.telegram.ui.Components.VideoForwardDrawable r0 = r1.videoForwardDrawable
                 boolean r0 = r0.isAnimating()
-                if (r0 == 0) goto L_0x0b92
+                if (r0 == 0) goto L_0x0b94
                 com.google.android.exoplayer2.ui.AspectRatioFrameLayout r0 = r1.aspectRatioFrameLayout
                 int r0 = r0.getMeasuredHeight()
                 float r0 = (float) r0
@@ -23534,7 +23536,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 r4.setBounds(r5, r6, r7, r8)
                 org.telegram.ui.Components.VideoForwardDrawable r0 = r1.videoForwardDrawable
                 r0.draw(r2)
-            L_0x0b92:
+            L_0x0b94:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onDraw(android.graphics.Canvas):void");

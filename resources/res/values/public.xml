@@ -4458,7 +4458,7 @@
     <public type="string" name="PaymentTestInvoice" id="NUM" />
     <public type="string" name="PaymentTip" id="NUM" />
     <public type="string" name="PaymentTipOptional" id="NUM" />
-    <public type="string" name="PaymentTransactionMessage" id="NUM" />
+    <public type="string" name="PaymentTransactionMessage2" id="NUM" />
     <public type="string" name="PaymentTransactionReview" id="NUM" />
     <public type="string" name="PaymentTransactionTotal" id="NUM" />
     <public type="string" name="PaymentWarning" id="NUM" />

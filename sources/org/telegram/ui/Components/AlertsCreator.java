@@ -919,7 +919,7 @@ public class AlertsCreator {
         L_0x0133:
             if (r7 == 0) goto L_0x0171
             if (r24 == 0) goto L_0x0171
-            r2 = 2131627179(0x7f0e0cab, float:1.8881615E38)
+            r2 = 2131627180(0x7f0e0cac, float:1.8881617E38)
             java.lang.String r6 = "ReportUnrelatedGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r11.setTitle(r2)
@@ -928,7 +928,7 @@ public class AlertsCreator {
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelLocation
             if (r2 == 0) goto L_0x0164
             org.telegram.tgnet.TLRPC$TL_channelLocation r1 = (org.telegram.tgnet.TLRPC$TL_channelLocation) r1
-            r2 = 2131627180(0x7f0e0cac, float:1.8881617E38)
+            r2 = 2131627181(0x7f0e0cad, float:1.888162E38)
             java.lang.Object[] r4 = new java.lang.Object[r4]
             java.lang.String r1 = r1.address
             r4[r5] = r1
@@ -938,13 +938,13 @@ public class AlertsCreator {
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0164:
-            r1 = 2131627181(0x7f0e0cad, float:1.888162E38)
+            r1 = 2131627182(0x7f0e0cae, float:1.8881621E38)
             java.lang.String r2 = "ReportUnrelatedGroupTextNoAddress"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0171:
-            r1 = 2131627172(0x7f0e0ca4, float:1.88816E38)
+            r1 = 2131627173(0x7f0e0ca5, float:1.8881603E38)
             java.lang.String r2 = "ReportSpamTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setTitle(r1)
@@ -952,18 +952,18 @@ public class AlertsCreator {
             if (r1 == 0) goto L_0x0194
             boolean r1 = r7.megagroup
             if (r1 != 0) goto L_0x0194
-            r1 = 2131627168(0x7f0e0ca0, float:1.8881593E38)
+            r1 = 2131627169(0x7f0e0ca1, float:1.8881595E38)
             java.lang.String r2 = "ReportSpamAlertChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
             goto L_0x01a0
         L_0x0194:
-            r1 = 2131627169(0x7f0e0ca1, float:1.8881595E38)
+            r1 = 2131627170(0x7f0e0ca2, float:1.8881597E38)
             java.lang.String r2 = "ReportSpamAlertGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
         L_0x01a0:
-            r1 = 2131627150(0x7f0e0c8e, float:1.8881556E38)
+            r1 = 2131627151(0x7f0e0c8f, float:1.8881558E38)
             java.lang.String r2 = "ReportChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r12 = r1
@@ -3426,9 +3426,9 @@ public class AlertsCreator {
                 str = LocaleController.formatPluralString("SecondsSchedule", i15);
             }
             if (textView2.getTag() != null) {
-                textView4.setText(LocaleController.formatString("VoipGroupScheduleInfo", NUM, str));
-            } else {
                 textView4.setText(LocaleController.formatString("VoipChannelScheduleInfo", NUM, str));
+            } else {
+                textView4.setText(LocaleController.formatString("VoipGroupScheduleInfo", NUM, str));
             }
         }
         return j4 - currentTimeMillis > 60000;
