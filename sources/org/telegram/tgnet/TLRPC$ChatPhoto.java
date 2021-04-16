@@ -1,11 +1,14 @@
 package org.telegram.tgnet;
 
+import android.graphics.drawable.BitmapDrawable;
+
 public abstract class TLRPC$ChatPhoto extends TLObject {
     public int dc_id;
     public int flags;
     public boolean has_video;
     public TLRPC$FileLocation photo_big;
     public TLRPC$FileLocation photo_small;
+    public BitmapDrawable strippedBitmap;
     public byte[] stripped_thumb;
 
     public static TLRPC$ChatPhoto TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {

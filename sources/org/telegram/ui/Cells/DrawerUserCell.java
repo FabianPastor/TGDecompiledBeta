@@ -3,14 +3,12 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.UserConfig;
@@ -77,7 +75,7 @@ public class DrawerUserCell extends FrameLayout {
             this.avatarDrawable.setInfo(currentUser);
             this.textView.setText(ContactsController.formatName(currentUser.first_name, currentUser.last_name));
             this.imageView.getImageReceiver().setCurrentAccount(i);
-            this.imageView.setImage(ImageLocation.getForUserOrChat(currentUser, 1), "50_50", ImageLocation.getForUserOrChat(currentUser, 2), "50_50", (Drawable) this.avatarDrawable, (Object) currentUser);
+            this.imageView.setForUserOrChat(currentUser, this.avatarDrawable);
             this.checkBox.setVisibility(i == UserConfig.selectedAccount ? 0 : 4);
         }
     }

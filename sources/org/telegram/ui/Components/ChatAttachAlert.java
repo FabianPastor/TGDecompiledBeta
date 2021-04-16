@@ -41,7 +41,6 @@ import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
@@ -589,7 +588,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 this.currentUser = tLRPC$User;
                 this.nameTextView.setText(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
                 this.avatarDrawable.setInfo(tLRPC$User);
-                this.imageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
+                this.imageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
                 requestLayout();
             }
         }

@@ -103,7 +103,7 @@ public class ShareDialogCell extends FrameLayout {
                         this.nameTextView.setText("");
                     }
                 }
-                this.imageView.setImage(ImageLocation.getForUserOrChat(this.user, 1), "50_50", ImageLocation.getForUserOrChat(this.user, 2), "50_50", (Drawable) this.avatarDrawable, (Object) this.user);
+                this.imageView.setForUserOrChat(this.user, this.avatarDrawable);
             } else {
                 this.nameTextView.setText(LocaleController.getString("SavedMessages", NUM));
                 this.avatarDrawable.setAvatarType(1);
@@ -120,7 +120,7 @@ public class ShareDialogCell extends FrameLayout {
                 this.nameTextView.setText("");
             }
             this.avatarDrawable.setInfo(chat);
-            this.imageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+            this.imageView.setForUserOrChat(chat, this.avatarDrawable);
         }
         this.currentDialog = (long) i;
         this.checkBox.setChecked(z, false);

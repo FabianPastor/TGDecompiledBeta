@@ -1,5 +1,10 @@
 package org.telegram.tgnet;
 
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLoader;
+
 public class TLRPC$TL_userProfilePhoto extends TLRPC$UserProfilePhoto {
     public static int constructor = -NUM;
 
@@ -16,6 +21,13 @@ public class TLRPC$TL_userProfilePhoto extends TLRPC$UserProfilePhoto {
         this.photo_big = TLRPC$FileLocation.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         if ((this.flags & 2) != 0) {
             this.stripped_thumb = abstractSerializedData.readByteArray(z);
+            if (Build.VERSION.SDK_INT >= 21) {
+                try {
+                    this.strippedBitmap = new BitmapDrawable(ImageLoader.getStrippedPhotoBitmap(this.stripped_thumb, "b"));
+                } catch (Throwable th) {
+                    FileLog.e(th);
+                }
+            }
         }
         this.dc_id = abstractSerializedData.readInt32(z);
     }

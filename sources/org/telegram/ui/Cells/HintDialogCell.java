@@ -2,13 +2,11 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
@@ -112,7 +110,7 @@ public class HintDialogCell extends FrameLayout {
                 this.nameTextView.setText("");
             }
             this.avatarDrawable.setInfo(this.currentUser);
-            this.imageView.setImage(ImageLocation.getForUserOrChat(this.currentUser, 1), "50_50", ImageLocation.getForUserOrChat(this.currentUser, 2), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
+            this.imageView.setForUserOrChat(this.currentUser, this.avatarDrawable);
         } else {
             TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
             if (charSequence != null) {
@@ -124,7 +122,7 @@ public class HintDialogCell extends FrameLayout {
             }
             this.avatarDrawable.setInfo(chat);
             this.currentUser = null;
-            this.imageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+            this.imageView.setForUserOrChat(chat, this.avatarDrawable);
         }
         if (z) {
             update(0);

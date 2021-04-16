@@ -3,7 +3,6 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLObject;
@@ -93,18 +91,17 @@ public class AccountSelectCell extends FrameLayout {
     }
 
     public void setObject(TLObject tLObject) {
-        TLObject tLObject2 = tLObject;
-        if (tLObject2 instanceof TLRPC$User) {
-            TLRPC$User tLRPC$User = (TLRPC$User) tLObject2;
+        if (tLObject instanceof TLRPC$User) {
+            TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
             this.avatarDrawable.setInfo(tLRPC$User);
             this.infoTextView.setText(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
-            this.imageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
+            this.imageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
             return;
         }
-        TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject2;
+        TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject;
         this.avatarDrawable.setInfo(tLRPC$Chat);
         this.infoTextView.setText(tLRPC$Chat.title);
-        this.imageView.setImage(ImageLocation.getForUserOrChat(tLRPC$Chat, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$Chat);
+        this.imageView.setForUserOrChat(tLRPC$Chat, this.avatarDrawable);
     }
 
     public void setAccount(int i, boolean z) {
@@ -113,7 +110,7 @@ public class AccountSelectCell extends FrameLayout {
         this.avatarDrawable.setInfo(currentUser);
         this.textView.setText(ContactsController.formatName(currentUser.first_name, currentUser.last_name));
         this.imageView.getImageReceiver().setCurrentAccount(i);
-        this.imageView.setImage(ImageLocation.getForUserOrChat(currentUser, 1), "50_50", ImageLocation.getForUserOrChat(currentUser, 2), "50_50", (Drawable) this.avatarDrawable, (Object) currentUser);
+        this.imageView.setForUserOrChat(currentUser, this.avatarDrawable);
         this.checkImageView.setVisibility((!z || i != UserConfig.selectedAccount) ? 4 : 0);
     }
 

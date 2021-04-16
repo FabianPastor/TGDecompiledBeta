@@ -26,7 +26,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
@@ -1838,13 +1837,13 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 if (chat != null) {
                     this.currentChat = chat;
                     if (this.avatarImageView != null) {
-                        this.avatarImageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) new AvatarDrawable(this.currentChat), (Object) chat);
+                        this.avatarImageView.setForUserOrChat(chat, new AvatarDrawable(this.currentChat));
                     }
                 }
             } else if (this.currentUser != null && (user = MessagesController.getInstance(messageObject.currentAccount).getUser(Integer.valueOf(this.currentUser.id))) != null) {
                 this.currentUser = user;
                 if (this.avatarImageView != null) {
-                    this.avatarImageView.setImage(ImageLocation.getForUserOrChat(user, 1), "50_50", ImageLocation.getForUserOrChat(user, 2), "50_50", (Drawable) new AvatarDrawable(this.currentUser), (Object) user);
+                    this.avatarImageView.setForUserOrChat(user, new AvatarDrawable(this.currentUser));
                 }
             }
         }

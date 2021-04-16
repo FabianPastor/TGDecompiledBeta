@@ -12,7 +12,6 @@ import android.widget.FrameLayout;
 import java.util.Random;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -203,30 +202,28 @@ public class AvatarsImageView extends FrameLayout {
     }
 
     public void setObject(int i, int i2, TLObject tLObject) {
-        TLRPC$User tLRPC$User;
         TLRPC$Chat tLRPC$Chat;
         TLRPC$Chat tLRPC$Chat2;
-        TLObject tLObject2 = tLObject;
         int unused = this.animatingStates[i].id = 0;
         DrawingState[] drawingStateArr = this.animatingStates;
-        TLRPC$User tLRPC$User2 = null;
+        TLRPC$User tLRPC$User = null;
         drawingStateArr[i].participant = null;
-        if (tLObject2 == null) {
+        if (tLObject == null) {
             drawingStateArr[i].imageReceiver.setImageBitmap((Drawable) null);
             invalidate();
             return;
         }
         long unused2 = drawingStateArr[i].lastSpeakTime = -1;
-        if (tLObject2 instanceof TLRPC$TL_groupCallParticipant) {
-            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = (TLRPC$TL_groupCallParticipant) tLObject2;
+        if (tLObject instanceof TLRPC$TL_groupCallParticipant) {
+            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = (TLRPC$TL_groupCallParticipant) tLObject;
             this.animatingStates[i].participant = tLRPC$TL_groupCallParticipant;
             int peerId = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
             if (peerId > 0) {
                 TLRPC$User user = MessagesController.getInstance(i2).getUser(Integer.valueOf(peerId));
                 this.animatingStates[i].avatarDrawable.setInfo(user);
-                TLRPC$User tLRPC$User3 = user;
+                TLRPC$User tLRPC$User2 = user;
                 tLRPC$Chat2 = null;
-                tLRPC$User2 = tLRPC$User3;
+                tLRPC$User = tLRPC$User2;
             } else {
                 tLRPC$Chat2 = MessagesController.getInstance(i2).getChat(Integer.valueOf(-peerId));
                 this.animatingStates[i].avatarDrawable.setInfo(tLRPC$Chat2);
@@ -239,25 +236,22 @@ public class AvatarsImageView extends FrameLayout {
                 long unused5 = this.animatingStates[i].lastSpeakTime = (long) tLRPC$TL_groupCallParticipant.active_date;
             }
             int unused6 = this.animatingStates[i].id = peerId;
-            tLRPC$User = tLRPC$User2;
             tLRPC$Chat = tLRPC$Chat2;
-        } else if (tLObject2 instanceof TLRPC$User) {
-            TLRPC$User tLRPC$User4 = (TLRPC$User) tLObject2;
-            this.animatingStates[i].avatarDrawable.setInfo(tLRPC$User4);
-            int unused7 = this.animatingStates[i].id = tLRPC$User4.id;
-            tLRPC$User = tLRPC$User4;
+        } else if (tLObject instanceof TLRPC$User) {
+            TLRPC$User tLRPC$User3 = (TLRPC$User) tLObject;
+            this.animatingStates[i].avatarDrawable.setInfo(tLRPC$User3);
+            int unused7 = this.animatingStates[i].id = tLRPC$User3.id;
+            tLRPC$User = tLRPC$User3;
             tLRPC$Chat = null;
         } else {
-            TLRPC$Chat tLRPC$Chat3 = (TLRPC$Chat) tLObject2;
-            this.animatingStates[i].avatarDrawable.setInfo(tLRPC$Chat3);
-            int unused8 = this.animatingStates[i].id = -tLRPC$Chat3.id;
-            tLRPC$Chat = tLRPC$Chat3;
-            tLRPC$User = null;
+            tLRPC$Chat = (TLRPC$Chat) tLObject;
+            this.animatingStates[i].avatarDrawable.setInfo(tLRPC$Chat);
+            int unused8 = this.animatingStates[i].id = -tLRPC$Chat.id;
         }
         if (tLRPC$User != null) {
-            this.animatingStates[i].imageReceiver.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) this.animatingStates[i].avatarDrawable, (Object) tLRPC$User, 0);
+            this.animatingStates[i].imageReceiver.setForUserOrChat(tLRPC$User, this.animatingStates[i].avatarDrawable);
         } else {
-            this.animatingStates[i].imageReceiver.setImage(ImageLocation.getForUserOrChat(tLRPC$Chat, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat, 2), "50_50", (Drawable) this.animatingStates[i].avatarDrawable, (Object) tLRPC$Chat, 0);
+            this.animatingStates[i].imageReceiver.setForUserOrChat(tLRPC$Chat, this.animatingStates[i].avatarDrawable);
         }
         this.animatingStates[i].imageReceiver.setRoundRadius(AndroidUtilities.dp(this.currentStyle == 4 ? 16.0f : 12.0f));
         float dp = (float) AndroidUtilities.dp(this.currentStyle == 4 ? 32.0f : 24.0f);

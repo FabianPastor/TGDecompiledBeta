@@ -73,7 +73,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
@@ -1094,7 +1093,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 this.mapViewClip.addView(frameLayout4, LayoutHelper.createFrame(62, 76, 49));
                 BackupImageView backupImageView = new BackupImageView(context2);
                 backupImageView.setRoundRadius(AndroidUtilities.dp(26.0f));
-                backupImageView.setImage(ImageLocation.getForUserOrChat(tLRPC$Chat2, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat2, 2), "50_50", (Drawable) new AvatarDrawable(tLRPC$Chat2), (Object) tLRPC$Chat2);
+                backupImageView.setForUserOrChat(tLRPC$Chat2, new AvatarDrawable(tLRPC$Chat2));
                 frameLayout4.addView(backupImageView, LayoutHelper.createFrame(52, 52.0f, 51, 5.0f, 5.0f, 0.0f, 0.0f));
                 this.markerImageView = frameLayout4;
                 frameLayout4.setTag(1);

@@ -407,243 +407,228 @@ public class ProfileSearchCell extends BaseCell {
         this.nameLockLeft += getPaddingLeft();
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:28:0x00ad, code lost:
-        r0 = r14.lastAvatar;
+    /* JADX WARNING: Code restructure failed: missing block: B:28:0x008a, code lost:
+        r0 = r12.lastAvatar;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void update(int r15) {
+    public void update(int r13) {
         /*
-            r14 = this;
-            org.telegram.tgnet.TLRPC$User r0 = r14.user
-            r1 = 2
-            r2 = 0
-            r3 = 0
-            r4 = 1
-            if (r0 == 0) goto L_0x0060
-            org.telegram.ui.Components.AvatarDrawable r5 = r14.avatarDrawable
-            r5.setInfo((org.telegram.tgnet.TLRPC$User) r0)
-            org.telegram.tgnet.TLRPC$User r0 = r14.user
-            boolean r0 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
-            if (r0 == 0) goto L_0x0029
-            org.telegram.ui.Components.AvatarDrawable r0 = r14.avatarDrawable
-            r1 = 12
-            r0.setAvatarType(r1)
-            org.telegram.messenger.ImageReceiver r5 = r14.avatarImage
-            r6 = 0
-            r7 = 0
-            org.telegram.ui.Components.AvatarDrawable r8 = r14.avatarDrawable
-            r9 = 0
-            r10 = 0
-            r11 = 0
-            r5.setImage(r6, r7, r8, r9, r10, r11)
-            goto L_0x009b
-        L_0x0029:
-            boolean r0 = r14.savedMessages
-            if (r0 == 0) goto L_0x003f
-            org.telegram.ui.Components.AvatarDrawable r0 = r14.avatarDrawable
-            r0.setAvatarType(r4)
-            org.telegram.messenger.ImageReceiver r5 = r14.avatarImage
-            r6 = 0
-            r7 = 0
-            org.telegram.ui.Components.AvatarDrawable r8 = r14.avatarDrawable
-            r9 = 0
-            r10 = 0
-            r11 = 0
-            r5.setImage(r6, r7, r8, r9, r10, r11)
-            goto L_0x009b
-        L_0x003f:
-            org.telegram.tgnet.TLRPC$User r0 = r14.user
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r5 = r0.photo
-            if (r5 == 0) goto L_0x0047
-            org.telegram.tgnet.TLRPC$FileLocation r2 = r5.photo_small
-        L_0x0047:
-            org.telegram.messenger.ImageReceiver r5 = r14.avatarImage
-            org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForUserOrChat(r0, r4)
-            org.telegram.tgnet.TLRPC$User r0 = r14.user
-            org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForUserOrChat(r0, r1)
-            org.telegram.ui.Components.AvatarDrawable r10 = r14.avatarDrawable
-            org.telegram.tgnet.TLRPC$User r11 = r14.user
-            r12 = 0
-            java.lang.String r7 = "50_50"
-            java.lang.String r9 = "50_50"
-            r5.setImage((org.telegram.messenger.ImageLocation) r6, (java.lang.String) r7, (org.telegram.messenger.ImageLocation) r8, (java.lang.String) r9, (android.graphics.drawable.Drawable) r10, (java.lang.Object) r11, (int) r12)
-            goto L_0x009b
-        L_0x0060:
-            org.telegram.tgnet.TLRPC$Chat r0 = r14.chat
-            if (r0 == 0) goto L_0x008a
-            org.telegram.tgnet.TLRPC$ChatPhoto r5 = r0.photo
-            if (r5 == 0) goto L_0x006a
-            org.telegram.tgnet.TLRPC$FileLocation r2 = r5.photo_small
-        L_0x006a:
-            org.telegram.ui.Components.AvatarDrawable r5 = r14.avatarDrawable
-            r5.setInfo((org.telegram.tgnet.TLRPC$Chat) r0)
-            org.telegram.messenger.ImageReceiver r6 = r14.avatarImage
-            org.telegram.tgnet.TLRPC$Chat r0 = r14.chat
-            org.telegram.messenger.ImageLocation r7 = org.telegram.messenger.ImageLocation.getForUserOrChat(r0, r4)
-            org.telegram.tgnet.TLRPC$Chat r0 = r14.chat
-            org.telegram.messenger.ImageLocation r9 = org.telegram.messenger.ImageLocation.getForUserOrChat(r0, r1)
-            org.telegram.ui.Components.AvatarDrawable r11 = r14.avatarDrawable
-            org.telegram.tgnet.TLRPC$Chat r12 = r14.chat
-            r13 = 0
-            java.lang.String r8 = "50_50"
-            java.lang.String r10 = "50_50"
-            r6.setImage((org.telegram.messenger.ImageLocation) r7, (java.lang.String) r8, (org.telegram.messenger.ImageLocation) r9, (java.lang.String) r10, (android.graphics.drawable.Drawable) r11, (java.lang.Object) r12, (int) r13)
-            goto L_0x009b
-        L_0x008a:
-            org.telegram.ui.Components.AvatarDrawable r0 = r14.avatarDrawable
-            r0.setInfo(r3, r2, r2)
-            org.telegram.messenger.ImageReceiver r5 = r14.avatarImage
-            r6 = 0
-            r7 = 0
-            org.telegram.ui.Components.AvatarDrawable r8 = r14.avatarDrawable
-            r9 = 0
-            r10 = 0
-            r11 = 0
-            r5.setImage(r6, r7, r8, r9, r10, r11)
-        L_0x009b:
-            if (r15 == 0) goto L_0x0145
-            r0 = r15 & 2
-            if (r0 == 0) goto L_0x00a5
-            org.telegram.tgnet.TLRPC$User r0 = r14.user
-            if (r0 != 0) goto L_0x00ad
-        L_0x00a5:
-            r0 = r15 & 8
-            if (r0 == 0) goto L_0x00cb
-            org.telegram.tgnet.TLRPC$Chat r0 = r14.chat
-            if (r0 == 0) goto L_0x00cb
-        L_0x00ad:
-            org.telegram.tgnet.TLRPC$FileLocation r0 = r14.lastAvatar
-            if (r0 == 0) goto L_0x00b3
-            if (r2 == 0) goto L_0x00c9
-        L_0x00b3:
-            if (r0 != 0) goto L_0x00b7
-            if (r2 != 0) goto L_0x00c9
-        L_0x00b7:
-            if (r0 == 0) goto L_0x00cb
-            if (r2 == 0) goto L_0x00cb
-            long r5 = r0.volume_id
-            long r7 = r2.volume_id
-            int r1 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-            if (r1 != 0) goto L_0x00c9
-            int r0 = r0.local_id
-            int r1 = r2.local_id
-            if (r0 == r1) goto L_0x00cb
-        L_0x00c9:
-            r0 = 1
-            goto L_0x00cc
-        L_0x00cb:
-            r0 = 0
-        L_0x00cc:
-            if (r0 != 0) goto L_0x00e3
-            r1 = r15 & 4
-            if (r1 == 0) goto L_0x00e3
-            org.telegram.tgnet.TLRPC$User r1 = r14.user
-            if (r1 == 0) goto L_0x00e3
-            org.telegram.tgnet.TLRPC$UserStatus r1 = r1.status
-            if (r1 == 0) goto L_0x00dd
-            int r1 = r1.expires
-            goto L_0x00de
-        L_0x00dd:
+            r12 = this;
+            org.telegram.tgnet.TLRPC$User r0 = r12.user
             r1 = 0
-        L_0x00de:
-            int r5 = r14.lastStatus
-            if (r1 == r5) goto L_0x00e3
+            r2 = 0
+            r3 = 1
+            if (r0 == 0) goto L_0x004e
+            org.telegram.ui.Components.AvatarDrawable r4 = r12.avatarDrawable
+            r4.setInfo((org.telegram.tgnet.TLRPC$User) r0)
+            org.telegram.tgnet.TLRPC$User r0 = r12.user
+            boolean r0 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
+            if (r0 == 0) goto L_0x0028
+            org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
+            r4 = 12
+            r0.setAvatarType(r4)
+            org.telegram.messenger.ImageReceiver r5 = r12.avatarImage
+            r6 = 0
+            r7 = 0
+            org.telegram.ui.Components.AvatarDrawable r8 = r12.avatarDrawable
+            r9 = 0
+            r10 = 0
+            r11 = 0
+            r5.setImage(r6, r7, r8, r9, r10, r11)
+            goto L_0x0078
+        L_0x0028:
+            boolean r0 = r12.savedMessages
+            if (r0 == 0) goto L_0x003e
+            org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
+            r0.setAvatarType(r3)
+            org.telegram.messenger.ImageReceiver r4 = r12.avatarImage
+            r5 = 0
+            r6 = 0
+            org.telegram.ui.Components.AvatarDrawable r7 = r12.avatarDrawable
+            r8 = 0
+            r9 = 0
+            r10 = 0
+            r4.setImage(r5, r6, r7, r8, r9, r10)
+            goto L_0x0078
+        L_0x003e:
+            org.telegram.tgnet.TLRPC$User r0 = r12.user
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r4 = r0.photo
+            if (r4 == 0) goto L_0x0046
+            org.telegram.tgnet.TLRPC$FileLocation r1 = r4.photo_small
+        L_0x0046:
+            org.telegram.messenger.ImageReceiver r4 = r12.avatarImage
+            org.telegram.ui.Components.AvatarDrawable r5 = r12.avatarDrawable
+            r4.setForUserOrChat(r0, r5)
+            goto L_0x0078
+        L_0x004e:
+            org.telegram.tgnet.TLRPC$Chat r0 = r12.chat
+            if (r0 == 0) goto L_0x0067
+            org.telegram.tgnet.TLRPC$ChatPhoto r4 = r0.photo
+            if (r4 == 0) goto L_0x0058
+            org.telegram.tgnet.TLRPC$FileLocation r1 = r4.photo_small
+        L_0x0058:
+            org.telegram.ui.Components.AvatarDrawable r4 = r12.avatarDrawable
+            r4.setInfo((org.telegram.tgnet.TLRPC$Chat) r0)
+            org.telegram.messenger.ImageReceiver r0 = r12.avatarImage
+            org.telegram.tgnet.TLRPC$Chat r4 = r12.chat
+            org.telegram.ui.Components.AvatarDrawable r5 = r12.avatarDrawable
+            r0.setForUserOrChat(r4, r5)
+            goto L_0x0078
+        L_0x0067:
+            org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
+            r0.setInfo(r2, r1, r1)
+            org.telegram.messenger.ImageReceiver r4 = r12.avatarImage
+            r5 = 0
+            r6 = 0
+            org.telegram.ui.Components.AvatarDrawable r7 = r12.avatarDrawable
+            r8 = 0
+            r9 = 0
+            r10 = 0
+            r4.setImage(r5, r6, r7, r8, r9, r10)
+        L_0x0078:
+            if (r13 == 0) goto L_0x0122
+            r0 = r13 & 2
+            if (r0 == 0) goto L_0x0082
+            org.telegram.tgnet.TLRPC$User r0 = r12.user
+            if (r0 != 0) goto L_0x008a
+        L_0x0082:
+            r0 = r13 & 8
+            if (r0 == 0) goto L_0x00a8
+            org.telegram.tgnet.TLRPC$Chat r0 = r12.chat
+            if (r0 == 0) goto L_0x00a8
+        L_0x008a:
+            org.telegram.tgnet.TLRPC$FileLocation r0 = r12.lastAvatar
+            if (r0 == 0) goto L_0x0090
+            if (r1 == 0) goto L_0x00a6
+        L_0x0090:
+            if (r0 != 0) goto L_0x0094
+            if (r1 != 0) goto L_0x00a6
+        L_0x0094:
+            if (r0 == 0) goto L_0x00a8
+            if (r1 == 0) goto L_0x00a8
+            long r4 = r0.volume_id
+            long r6 = r1.volume_id
+            int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
+            if (r8 != 0) goto L_0x00a6
+            int r0 = r0.local_id
+            int r4 = r1.local_id
+            if (r0 == r4) goto L_0x00a8
+        L_0x00a6:
             r0 = 1
-        L_0x00e3:
-            if (r0 != 0) goto L_0x00ed
-            r1 = r15 & 1
-            if (r1 == 0) goto L_0x00ed
-            org.telegram.tgnet.TLRPC$User r1 = r14.user
-            if (r1 != 0) goto L_0x00f5
-        L_0x00ed:
-            r1 = r15 & 16
-            if (r1 == 0) goto L_0x011e
-            org.telegram.tgnet.TLRPC$Chat r1 = r14.chat
-            if (r1 == 0) goto L_0x011e
-        L_0x00f5:
-            org.telegram.tgnet.TLRPC$User r1 = r14.user
-            if (r1 == 0) goto L_0x0111
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder
-            r1.<init>()
-            org.telegram.tgnet.TLRPC$User r5 = r14.user
+            goto L_0x00a9
+        L_0x00a8:
+            r0 = 0
+        L_0x00a9:
+            if (r0 != 0) goto L_0x00c0
+            r4 = r13 & 4
+            if (r4 == 0) goto L_0x00c0
+            org.telegram.tgnet.TLRPC$User r4 = r12.user
+            if (r4 == 0) goto L_0x00c0
+            org.telegram.tgnet.TLRPC$UserStatus r4 = r4.status
+            if (r4 == 0) goto L_0x00ba
+            int r4 = r4.expires
+            goto L_0x00bb
+        L_0x00ba:
+            r4 = 0
+        L_0x00bb:
+            int r5 = r12.lastStatus
+            if (r4 == r5) goto L_0x00c0
+            r0 = 1
+        L_0x00c0:
+            if (r0 != 0) goto L_0x00ca
+            r4 = r13 & 1
+            if (r4 == 0) goto L_0x00ca
+            org.telegram.tgnet.TLRPC$User r4 = r12.user
+            if (r4 != 0) goto L_0x00d2
+        L_0x00ca:
+            r4 = r13 & 16
+            if (r4 == 0) goto L_0x00fb
+            org.telegram.tgnet.TLRPC$Chat r4 = r12.chat
+            if (r4 == 0) goto L_0x00fb
+        L_0x00d2:
+            org.telegram.tgnet.TLRPC$User r4 = r12.user
+            if (r4 == 0) goto L_0x00ee
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder
+            r4.<init>()
+            org.telegram.tgnet.TLRPC$User r5 = r12.user
             java.lang.String r5 = r5.first_name
-            r1.append(r5)
-            org.telegram.tgnet.TLRPC$User r5 = r14.user
+            r4.append(r5)
+            org.telegram.tgnet.TLRPC$User r5 = r12.user
             java.lang.String r5 = r5.last_name
-            r1.append(r5)
-            java.lang.String r1 = r1.toString()
-            goto L_0x0115
-        L_0x0111:
-            org.telegram.tgnet.TLRPC$Chat r1 = r14.chat
-            java.lang.String r1 = r1.title
-        L_0x0115:
-            java.lang.String r5 = r14.lastName
-            boolean r1 = r1.equals(r5)
-            if (r1 != 0) goto L_0x011e
+            r4.append(r5)
+            java.lang.String r4 = r4.toString()
+            goto L_0x00f2
+        L_0x00ee:
+            org.telegram.tgnet.TLRPC$Chat r4 = r12.chat
+            java.lang.String r4 = r4.title
+        L_0x00f2:
+            java.lang.String r5 = r12.lastName
+            boolean r4 = r4.equals(r5)
+            if (r4 != 0) goto L_0x00fb
             r0 = 1
+        L_0x00fb:
+            if (r0 != 0) goto L_0x011e
+            boolean r4 = r12.drawCount
+            if (r4 == 0) goto L_0x011e
+            r13 = r13 & 256(0x100, float:3.59E-43)
+            if (r13 == 0) goto L_0x011e
+            int r13 = r12.currentAccount
+            org.telegram.messenger.MessagesController r13 = org.telegram.messenger.MessagesController.getInstance(r13)
+            android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r13 = r13.dialogs_dict
+            long r4 = r12.dialog_id
+            java.lang.Object r13 = r13.get(r4)
+            org.telegram.tgnet.TLRPC$Dialog r13 = (org.telegram.tgnet.TLRPC$Dialog) r13
+            if (r13 == 0) goto L_0x011e
+            int r13 = r13.unread_count
+            int r4 = r12.lastUnreadCount
+            if (r13 == r4) goto L_0x011e
+            goto L_0x011f
         L_0x011e:
-            if (r0 != 0) goto L_0x0141
-            boolean r1 = r14.drawCount
-            if (r1 == 0) goto L_0x0141
-            r15 = r15 & 256(0x100, float:3.59E-43)
-            if (r15 == 0) goto L_0x0141
-            int r15 = r14.currentAccount
-            org.telegram.messenger.MessagesController r15 = org.telegram.messenger.MessagesController.getInstance(r15)
-            android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r15 = r15.dialogs_dict
-            long r5 = r14.dialog_id
-            java.lang.Object r15 = r15.get(r5)
-            org.telegram.tgnet.TLRPC$Dialog r15 = (org.telegram.tgnet.TLRPC$Dialog) r15
-            if (r15 == 0) goto L_0x0141
-            int r15 = r15.unread_count
-            int r1 = r14.lastUnreadCount
-            if (r15 == r1) goto L_0x0141
-            goto L_0x0142
-        L_0x0141:
-            r4 = r0
-        L_0x0142:
-            if (r4 != 0) goto L_0x0145
+            r3 = r0
+        L_0x011f:
+            if (r3 != 0) goto L_0x0122
             return
-        L_0x0145:
-            org.telegram.tgnet.TLRPC$User r15 = r14.user
-            if (r15 == 0) goto L_0x016e
-            org.telegram.tgnet.TLRPC$UserStatus r15 = r15.status
-            if (r15 == 0) goto L_0x0152
-            int r15 = r15.expires
-            r14.lastStatus = r15
-            goto L_0x0154
-        L_0x0152:
-            r14.lastStatus = r3
-        L_0x0154:
-            java.lang.StringBuilder r15 = new java.lang.StringBuilder
-            r15.<init>()
-            org.telegram.tgnet.TLRPC$User r0 = r14.user
+        L_0x0122:
+            org.telegram.tgnet.TLRPC$User r13 = r12.user
+            if (r13 == 0) goto L_0x014b
+            org.telegram.tgnet.TLRPC$UserStatus r13 = r13.status
+            if (r13 == 0) goto L_0x012f
+            int r13 = r13.expires
+            r12.lastStatus = r13
+            goto L_0x0131
+        L_0x012f:
+            r12.lastStatus = r2
+        L_0x0131:
+            java.lang.StringBuilder r13 = new java.lang.StringBuilder
+            r13.<init>()
+            org.telegram.tgnet.TLRPC$User r0 = r12.user
             java.lang.String r0 = r0.first_name
-            r15.append(r0)
-            org.telegram.tgnet.TLRPC$User r0 = r14.user
+            r13.append(r0)
+            org.telegram.tgnet.TLRPC$User r0 = r12.user
             java.lang.String r0 = r0.last_name
-            r15.append(r0)
-            java.lang.String r15 = r15.toString()
-            r14.lastName = r15
-            goto L_0x0176
-        L_0x016e:
-            org.telegram.tgnet.TLRPC$Chat r15 = r14.chat
-            if (r15 == 0) goto L_0x0176
-            java.lang.String r15 = r15.title
-            r14.lastName = r15
-        L_0x0176:
-            r14.lastAvatar = r2
-            int r15 = r14.getMeasuredWidth()
-            if (r15 != 0) goto L_0x0189
-            int r15 = r14.getMeasuredHeight()
-            if (r15 == 0) goto L_0x0185
-            goto L_0x0189
-        L_0x0185:
-            r14.requestLayout()
-            goto L_0x018c
-        L_0x0189:
-            r14.buildLayout()
-        L_0x018c:
-            r14.postInvalidate()
+            r13.append(r0)
+            java.lang.String r13 = r13.toString()
+            r12.lastName = r13
+            goto L_0x0153
+        L_0x014b:
+            org.telegram.tgnet.TLRPC$Chat r13 = r12.chat
+            if (r13 == 0) goto L_0x0153
+            java.lang.String r13 = r13.title
+            r12.lastName = r13
+        L_0x0153:
+            r12.lastAvatar = r1
+            int r13 = r12.getMeasuredWidth()
+            if (r13 != 0) goto L_0x0166
+            int r13 = r12.getMeasuredHeight()
+            if (r13 == 0) goto L_0x0162
+            goto L_0x0166
+        L_0x0162:
+            r12.requestLayout()
+            goto L_0x0169
+        L_0x0166:
+            r12.buildLayout()
+        L_0x0169:
+            r12.postInvalidate()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ProfileSearchCell.update(int):void");

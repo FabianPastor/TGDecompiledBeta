@@ -3624,17 +3624,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (z5 && ((tLRPC$ChannelParticipant2 instanceof TLRPC$TL_channelParticipantCreator) || ((tLRPC$ChannelParticipant2 instanceof TLRPC$TL_channelParticipantAdmin) && !tLRPC$ChannelParticipant2.can_edit))) {
                     z5 = false;
                 }
-                z4 = tLRPC$ChannelParticipant2 instanceof TLRPC$TL_channelParticipantAdmin;
-                z3 = ChatObject.canBlockUsers(this.currentChat) && ((!(tLRPC$ChannelParticipant2 instanceof TLRPC$TL_channelParticipantAdmin) && !(tLRPC$ChannelParticipant2 instanceof TLRPC$TL_channelParticipantCreator)) || tLRPC$ChannelParticipant2.can_edit);
+                boolean z8 = ChatObject.canBlockUsers(this.currentChat) && ((!(tLRPC$ChannelParticipant2 instanceof TLRPC$TL_channelParticipantAdmin) && !(tLRPC$ChannelParticipant2 instanceof TLRPC$TL_channelParticipantCreator)) || tLRPC$ChannelParticipant2.can_edit);
+                z4 = this.currentChat.gigagroup ? false : z8;
+                z3 = tLRPC$ChannelParticipant2 instanceof TLRPC$TL_channelParticipantAdmin;
+                boolean z9 = z8;
                 tLRPC$ChannelParticipant = tLRPC$ChannelParticipant2;
-                z6 = z3;
+                z6 = z9;
             } else {
                 TLRPC$Chat tLRPC$Chat = this.currentChat;
-                boolean z8 = tLRPC$Chat.creator || ((tLRPC$ChatParticipant2 instanceof TLRPC$TL_chatParticipant) && (ChatObject.canBlockUsers(tLRPC$Chat) || tLRPC$ChatParticipant2.inviter_id == getUserConfig().getClientUserId()));
+                boolean z10 = tLRPC$Chat.creator || ((tLRPC$ChatParticipant2 instanceof TLRPC$TL_chatParticipant) && (ChatObject.canBlockUsers(tLRPC$Chat) || tLRPC$ChatParticipant2.inviter_id == getUserConfig().getClientUserId()));
                 z5 = this.currentChat.creator;
-                z4 = tLRPC$ChatParticipant2 instanceof TLRPC$TL_chatParticipantAdmin;
-                z3 = z5;
-                z6 = z8;
+                z3 = tLRPC$ChatParticipant2 instanceof TLRPC$TL_chatParticipantAdmin;
+                z4 = z5;
+                z6 = z10;
                 tLRPC$ChannelParticipant = null;
             }
             if (z2) {
@@ -3654,7 +3656,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 if (z2) {
                     return true;
                 }
-                if (z4) {
+                if (z3) {
                     i = NUM;
                     str = "EditAdminRights";
                 } else {
@@ -3665,7 +3667,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 arrayList2.add(NUM);
                 arrayList3.add(0);
             }
-            if (z3) {
+            if (z4) {
                 if (z2) {
                     return true;
                 }
@@ -3687,7 +3689,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 return false;
             }
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-            builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), AndroidUtilities.toIntArray(arrayList2), new DialogInterface.OnClickListener(arrayList3, tLRPC$ChatParticipant, tLRPC$ChannelParticipant, user, z4) {
+            builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), AndroidUtilities.toIntArray(arrayList2), new DialogInterface.OnClickListener(arrayList3, tLRPC$ChatParticipant, tLRPC$ChannelParticipant, user, z3) {
                 public final /* synthetic */ ArrayList f$1;
                 public final /* synthetic */ TLRPC$ChatParticipant f$2;
                 public final /* synthetic */ TLRPC$ChannelParticipant f$3;

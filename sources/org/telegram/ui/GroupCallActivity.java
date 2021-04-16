@@ -1681,11 +1681,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 if (peerId > 0) {
                     TLRPC$User user = this.accountInstance.getMessagesController().getUser(Integer.valueOf(peerId));
                     this.accountSwitchAvatarDrawable.setInfo(user);
-                    this.accountSwitchImageView.setImage(ImageLocation.getForUserOrChat(user, 1), "50_50", ImageLocation.getForUserOrChat(user, 2), "50_50", (Drawable) this.accountSwitchAvatarDrawable, (Object) user);
+                    this.accountSwitchImageView.setForUserOrChat(user, this.accountSwitchAvatarDrawable);
                 } else {
                     TLRPC$Chat chat2 = this.accountInstance.getMessagesController().getChat(Integer.valueOf(-peerId));
                     this.accountSwitchAvatarDrawable.setInfo(chat2);
-                    this.accountSwitchImageView.setImage(ImageLocation.getForUserOrChat(chat2, 1), "50_50", ImageLocation.getForUserOrChat(chat2, 2), "50_50", (Drawable) this.accountSwitchAvatarDrawable, (Object) chat2);
+                    this.accountSwitchImageView.setForUserOrChat(chat2, this.accountSwitchAvatarDrawable);
                 }
                 this.accountSelectCell.setVisibility(8);
                 this.accountGap.setVisibility(8);
@@ -5179,11 +5179,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     boolean z2 = tLObject2 instanceof TLRPC$User;
                     if (z2) {
                         TLRPC$User tLRPC$User = (TLRPC$User) tLObject2;
-                        backupImageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$User);
+                        backupImageView.setForUserOrChat(tLRPC$User, avatarDrawable);
                         str = UserObject.getFirstName(tLRPC$User);
                     } else {
                         TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) tLObject2;
-                        backupImageView.setImage(ImageLocation.getForUserOrChat(tLRPC$Chat, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat, 2), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$Chat);
+                        backupImageView.setForUserOrChat(tLRPC$Chat, avatarDrawable);
                         str = tLRPC$Chat.title;
                     }
                     TextView textView3 = new TextView(getContext());

@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
@@ -296,11 +295,9 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             }
             this.onlineTextView.setText(LocaleController.formatUserStatus(this.currentAccount, user));
             BackupImageView backupImageView = this.avatarImage;
-            ImageLocation forUserOrChat = ImageLocation.getForUserOrChat(user, 1);
-            ImageLocation forUserOrChat2 = ImageLocation.getForUserOrChat(user, 2);
             AvatarDrawable avatarDrawable2 = new AvatarDrawable(user);
             this.avatarDrawable = avatarDrawable2;
-            backupImageView.setImage(forUserOrChat, "50_50", forUserOrChat2, "50_50", (Drawable) avatarDrawable2, (Object) user);
+            backupImageView.setForUserOrChat(user, avatarDrawable2);
         }
     }
 

@@ -1,5 +1,7 @@
 package org.telegram.tgnet;
 
+import android.graphics.drawable.BitmapDrawable;
+
 public abstract class TLRPC$UserProfilePhoto extends TLObject {
     public int dc_id;
     public int flags;
@@ -7,6 +9,7 @@ public abstract class TLRPC$UserProfilePhoto extends TLObject {
     public TLRPC$FileLocation photo_big;
     public long photo_id;
     public TLRPC$FileLocation photo_small;
+    public BitmapDrawable strippedBitmap;
     public byte[] stripped_thumb;
 
     public static TLRPC$UserProfilePhoto TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
