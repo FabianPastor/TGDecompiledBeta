@@ -1435,6 +1435,7 @@ public class LocaleController {
 
     public String formatCurrencyString(long j, boolean z, boolean z2, boolean z3, String str) {
         double d;
+        int length;
         String upperCase = str.toUpperCase();
         boolean z4 = j < 0;
         long abs = Math.abs(j);
@@ -1711,10 +1712,10 @@ public class LocaleController {
             sb.append(currencyInstance.format(d));
             String sb2 = sb.toString();
             int indexOf = sb2.indexOf(upperCase);
-            if (indexOf < 0 || sb2.charAt(upperCase.length() + indexOf) == ' ') {
+            if (indexOf < 0 || (length = indexOf + upperCase.length()) >= sb2.length() || sb2.charAt(upperCase.length() + length) == ' ') {
                 return sb2;
             }
-            return sb2.substring(0, upperCase.length() + indexOf) + " " + sb2.substring(indexOf + upperCase.length());
+            return sb2.substring(0, upperCase.length() + length) + " " + sb2.substring(length + upperCase.length());
         }
         StringBuilder sb3 = new StringBuilder();
         if (!z4) {
