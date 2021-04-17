@@ -142,8 +142,16 @@ public class RecyclerItemsEnterAnimator {
     }
 
     public void onDetached() {
-        for (int i = 0; i < this.currentAnimations.size(); i++) {
-            this.currentAnimations.get(i).cancel();
+        cancel();
+    }
+
+    public void cancel() {
+        if (!this.currentAnimations.isEmpty()) {
+            ArrayList arrayList = new ArrayList(this.currentAnimations);
+            for (int i = 0; i < arrayList.size(); i++) {
+                ((AnimatorSet) arrayList.get(i)).end();
+                ((AnimatorSet) arrayList.get(i)).cancel();
+            }
         }
         this.currentAnimations.clear();
         for (int i2 = 0; i2 < this.preDrawListeners.size(); i2++) {
@@ -151,6 +159,7 @@ public class RecyclerItemsEnterAnimator {
         }
         this.preDrawListeners.clear();
         this.listAlphaItems.clear();
+        this.listView.invalidate();
         this.invalidateAlpha = true;
     }
 }

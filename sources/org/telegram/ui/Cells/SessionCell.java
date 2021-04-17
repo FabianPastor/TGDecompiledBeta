@@ -2,7 +2,6 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -10,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import java.util.Locale;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -110,10 +108,9 @@ public class SessionCell extends FrameLayout {
 
     public void setSession(TLObject tLObject, boolean z) {
         String str;
-        TLObject tLObject2 = tLObject;
         this.needDivider = z;
-        if (tLObject2 instanceof TLRPC$TL_authorization) {
-            TLRPC$TL_authorization tLRPC$TL_authorization = (TLRPC$TL_authorization) tLObject2;
+        if (tLObject instanceof TLRPC$TL_authorization) {
+            TLRPC$TL_authorization tLRPC$TL_authorization = (TLRPC$TL_authorization) tLObject;
             this.nameTextView.setText(String.format(Locale.US, "%s %s", new Object[]{tLRPC$TL_authorization.app_name, tLRPC$TL_authorization.app_version}));
             if ((tLRPC$TL_authorization.flags & 1) != 0) {
                 setTag("windowBackgroundWhiteValueText");
@@ -167,14 +164,14 @@ public class SessionCell extends FrameLayout {
                 sb2.append(")");
             }
             this.detailTextView.setText(sb2);
-        } else if (tLObject2 instanceof TLRPC$TL_webAuthorization) {
-            TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization = (TLRPC$TL_webAuthorization) tLObject2;
+        } else if (tLObject instanceof TLRPC$TL_webAuthorization) {
+            TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization = (TLRPC$TL_webAuthorization) tLObject;
             TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(tLRPC$TL_webAuthorization.bot_id));
             this.nameTextView.setText(tLRPC$TL_webAuthorization.domain);
             if (user != null) {
                 this.avatarDrawable.setInfo(user);
                 str = UserObject.getFirstName(user);
-                this.imageView.setImage(ImageLocation.getForUserOrChat(user, 1), "50_50", ImageLocation.getForUserOrChat(user, 2), "50_50", (Drawable) this.avatarDrawable, (Object) user);
+                this.imageView.setForUserOrChat(user, this.avatarDrawable);
             } else {
                 str = "";
             }

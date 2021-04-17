@@ -9774,8 +9774,8 @@ public class Theme {
     /* JADX WARNING: Removed duplicated region for block: B:50:0x00ef A[Catch:{ all -> 0x0163 }] */
     /* JADX WARNING: Removed duplicated region for block: B:62:0x0128 A[Catch:{ Exception -> 0x014a }] */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x0156 A[Catch:{ Exception -> 0x0161 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x0188 A[Catch:{ Exception -> 0x0198 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x01a0 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0188 A[Catch:{ Exception -> 0x019f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x01a7 A[ADDED_TO_REGION] */
     /* JADX WARNING: Unknown top exception splitter block from list: {B:38:0x00c4=Splitter:B:38:0x00c4, B:79:0x0176=Splitter:B:79:0x0176} */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private static void applyTheme(org.telegram.ui.ActionBar.Theme.ThemeInfo r6, boolean r7, boolean r8, boolean r9) {
@@ -9788,79 +9788,79 @@ public class Theme {
             r8.destroy()
         L_0x000c:
             r8 = 0
-            java.lang.String r0 = r6.pathToFile     // Catch:{ Exception -> 0x0198 }
+            java.lang.String r0 = r6.pathToFile     // Catch:{ Exception -> 0x019f }
             java.lang.String r1 = "theme"
             r2 = 0
             if (r0 != 0) goto L_0x003a
-            java.lang.String r0 = r6.assetName     // Catch:{ Exception -> 0x0198 }
+            java.lang.String r0 = r6.assetName     // Catch:{ Exception -> 0x019f }
             if (r0 == 0) goto L_0x0019
             goto L_0x003a
         L_0x0019:
             if (r9 != 0) goto L_0x002b
             if (r7 == 0) goto L_0x002b
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x0198 }
-            android.content.SharedPreferences$Editor r0 = r0.edit()     // Catch:{ Exception -> 0x0198 }
-            r0.remove(r1)     // Catch:{ Exception -> 0x0198 }
-            r0.commit()     // Catch:{ Exception -> 0x0198 }
+            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x019f }
+            android.content.SharedPreferences$Editor r0 = r0.edit()     // Catch:{ Exception -> 0x019f }
+            r0.remove(r1)     // Catch:{ Exception -> 0x019f }
+            r0.commit()     // Catch:{ Exception -> 0x019f }
         L_0x002b:
-            java.util.HashMap<java.lang.String, java.lang.Integer> r0 = currentColorsNoAccent     // Catch:{ Exception -> 0x0198 }
-            r0.clear()     // Catch:{ Exception -> 0x0198 }
-            themedWallpaperFileOffset = r8     // Catch:{ Exception -> 0x0198 }
-            themedWallpaperLink = r2     // Catch:{ Exception -> 0x0198 }
-            wallpaper = r2     // Catch:{ Exception -> 0x0198 }
-            themedWallpaper = r2     // Catch:{ Exception -> 0x0198 }
+            java.util.HashMap<java.lang.String, java.lang.Integer> r0 = currentColorsNoAccent     // Catch:{ Exception -> 0x019f }
+            r0.clear()     // Catch:{ Exception -> 0x019f }
+            themedWallpaperFileOffset = r8     // Catch:{ Exception -> 0x019f }
+            themedWallpaperLink = r2     // Catch:{ Exception -> 0x019f }
+            wallpaper = r2     // Catch:{ Exception -> 0x019f }
+            themedWallpaper = r2     // Catch:{ Exception -> 0x019f }
             goto L_0x017a
         L_0x003a:
             if (r9 != 0) goto L_0x0050
             if (r7 == 0) goto L_0x0050
-            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x0198 }
-            android.content.SharedPreferences$Editor r0 = r0.edit()     // Catch:{ Exception -> 0x0198 }
-            java.lang.String r3 = r6.getKey()     // Catch:{ Exception -> 0x0198 }
-            r0.putString(r1, r3)     // Catch:{ Exception -> 0x0198 }
-            r0.commit()     // Catch:{ Exception -> 0x0198 }
+            android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x019f }
+            android.content.SharedPreferences$Editor r0 = r0.edit()     // Catch:{ Exception -> 0x019f }
+            java.lang.String r3 = r6.getKey()     // Catch:{ Exception -> 0x019f }
+            r0.putString(r1, r3)     // Catch:{ Exception -> 0x019f }
+            r0.commit()     // Catch:{ Exception -> 0x019f }
         L_0x0050:
             r0 = 1
-            java.lang.String[] r1 = new java.lang.String[r0]     // Catch:{ Exception -> 0x0198 }
-            java.lang.String r3 = r6.assetName     // Catch:{ Exception -> 0x0198 }
+            java.lang.String[] r1 = new java.lang.String[r0]     // Catch:{ Exception -> 0x019f }
+            java.lang.String r3 = r6.assetName     // Catch:{ Exception -> 0x019f }
             if (r3 == 0) goto L_0x005e
-            java.util.HashMap r3 = getThemeFileValues(r2, r3, r2)     // Catch:{ Exception -> 0x0198 }
-            currentColorsNoAccent = r3     // Catch:{ Exception -> 0x0198 }
+            java.util.HashMap r3 = getThemeFileValues(r2, r3, r2)     // Catch:{ Exception -> 0x019f }
+            currentColorsNoAccent = r3     // Catch:{ Exception -> 0x019f }
             goto L_0x006b
         L_0x005e:
-            java.io.File r3 = new java.io.File     // Catch:{ Exception -> 0x0198 }
-            java.lang.String r4 = r6.pathToFile     // Catch:{ Exception -> 0x0198 }
-            r3.<init>(r4)     // Catch:{ Exception -> 0x0198 }
-            java.util.HashMap r3 = getThemeFileValues(r3, r2, r1)     // Catch:{ Exception -> 0x0198 }
-            currentColorsNoAccent = r3     // Catch:{ Exception -> 0x0198 }
+            java.io.File r3 = new java.io.File     // Catch:{ Exception -> 0x019f }
+            java.lang.String r4 = r6.pathToFile     // Catch:{ Exception -> 0x019f }
+            r3.<init>(r4)     // Catch:{ Exception -> 0x019f }
+            java.util.HashMap r3 = getThemeFileValues(r3, r2, r1)     // Catch:{ Exception -> 0x019f }
+            currentColorsNoAccent = r3     // Catch:{ Exception -> 0x019f }
         L_0x006b:
-            java.util.HashMap<java.lang.String, java.lang.Integer> r3 = currentColorsNoAccent     // Catch:{ Exception -> 0x0198 }
+            java.util.HashMap<java.lang.String, java.lang.Integer> r3 = currentColorsNoAccent     // Catch:{ Exception -> 0x019f }
             java.lang.String r4 = "wallpaperFileOffset"
-            java.lang.Object r3 = r3.get(r4)     // Catch:{ Exception -> 0x0198 }
-            java.lang.Integer r3 = (java.lang.Integer) r3     // Catch:{ Exception -> 0x0198 }
+            java.lang.Object r3 = r3.get(r4)     // Catch:{ Exception -> 0x019f }
+            java.lang.Integer r3 = (java.lang.Integer) r3     // Catch:{ Exception -> 0x019f }
             if (r3 == 0) goto L_0x007d
-            int r3 = r3.intValue()     // Catch:{ Exception -> 0x0198 }
+            int r3 = r3.intValue()     // Catch:{ Exception -> 0x019f }
             goto L_0x007e
         L_0x007d:
             r3 = -1
         L_0x007e:
-            themedWallpaperFileOffset = r3     // Catch:{ Exception -> 0x0198 }
-            r3 = r1[r8]     // Catch:{ Exception -> 0x0198 }
-            boolean r3 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x0198 }
+            themedWallpaperFileOffset = r3     // Catch:{ Exception -> 0x019f }
+            r3 = r1[r8]     // Catch:{ Exception -> 0x019f }
+            boolean r3 = android.text.TextUtils.isEmpty(r3)     // Catch:{ Exception -> 0x019f }
             if (r3 != 0) goto L_0x0168
-            r1 = r1[r8]     // Catch:{ Exception -> 0x0198 }
-            themedWallpaperLink = r1     // Catch:{ Exception -> 0x0198 }
-            java.io.File r1 = new java.io.File     // Catch:{ Exception -> 0x0198 }
-            java.io.File r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ Exception -> 0x0198 }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0198 }
-            r3.<init>()     // Catch:{ Exception -> 0x0198 }
-            java.lang.String r4 = themedWallpaperLink     // Catch:{ Exception -> 0x0198 }
-            java.lang.String r4 = org.telegram.messenger.Utilities.MD5(r4)     // Catch:{ Exception -> 0x0198 }
-            r3.append(r4)     // Catch:{ Exception -> 0x0198 }
+            r1 = r1[r8]     // Catch:{ Exception -> 0x019f }
+            themedWallpaperLink = r1     // Catch:{ Exception -> 0x019f }
+            java.io.File r1 = new java.io.File     // Catch:{ Exception -> 0x019f }
+            java.io.File r2 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()     // Catch:{ Exception -> 0x019f }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x019f }
+            r3.<init>()     // Catch:{ Exception -> 0x019f }
+            java.lang.String r4 = themedWallpaperLink     // Catch:{ Exception -> 0x019f }
+            java.lang.String r4 = org.telegram.messenger.Utilities.MD5(r4)     // Catch:{ Exception -> 0x019f }
+            r3.append(r4)     // Catch:{ Exception -> 0x019f }
             java.lang.String r4 = ".wp"
-            r3.append(r4)     // Catch:{ Exception -> 0x0198 }
-            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x0198 }
-            r1.<init>(r2, r3)     // Catch:{ Exception -> 0x0198 }
-            java.lang.String r1 = r1.getAbsolutePath()     // Catch:{ Exception -> 0x0198 }
+            r3.append(r4)     // Catch:{ Exception -> 0x019f }
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x019f }
+            r1.<init>(r2, r3)     // Catch:{ Exception -> 0x019f }
+            java.lang.String r1 = r1.getAbsolutePath()     // Catch:{ Exception -> 0x019f }
             java.lang.String r2 = r6.pathToWallpaper     // Catch:{ Exception -> 0x00c4 }
             if (r2 == 0) goto L_0x00c4
             boolean r2 = r2.equals(r1)     // Catch:{ Exception -> 0x00c4 }
@@ -9870,7 +9870,7 @@ public class Theme {
             r2.<init>(r3)     // Catch:{ Exception -> 0x00c4 }
             r2.delete()     // Catch:{ Exception -> 0x00c4 }
         L_0x00c4:
-            r6.pathToWallpaper = r1     // Catch:{ Exception -> 0x0198 }
+            r6.pathToWallpaper = r1     // Catch:{ Exception -> 0x019f }
             java.lang.String r1 = themedWallpaperLink     // Catch:{ all -> 0x0163 }
             android.net.Uri r1 = android.net.Uri.parse(r1)     // Catch:{ all -> 0x0163 }
             java.lang.String r2 = "slug"
@@ -9942,7 +9942,7 @@ public class Theme {
             goto L_0x017a
         L_0x0163:
             r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x0198 }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x019f }
             goto L_0x017a
         L_0x0168:
             java.lang.String r0 = r6.pathToWallpaper     // Catch:{ Exception -> 0x0176 }
@@ -9952,37 +9952,40 @@ public class Theme {
             r0.<init>(r1)     // Catch:{ Exception -> 0x0176 }
             r0.delete()     // Catch:{ Exception -> 0x0176 }
         L_0x0176:
-            r6.pathToWallpaper = r2     // Catch:{ Exception -> 0x0198 }
-            themedWallpaperLink = r2     // Catch:{ Exception -> 0x0198 }
+            r6.pathToWallpaper = r2     // Catch:{ Exception -> 0x019f }
+            themedWallpaperLink = r2     // Catch:{ Exception -> 0x019f }
         L_0x017a:
-            if (r9 != 0) goto L_0x0192
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = previousTheme     // Catch:{ Exception -> 0x0198 }
-            if (r0 != 0) goto L_0x0192
-            currentDayTheme = r6     // Catch:{ Exception -> 0x0198 }
-            boolean r0 = isCurrentThemeNight()     // Catch:{ Exception -> 0x0198 }
-            if (r0 == 0) goto L_0x0192
+            if (r9 != 0) goto L_0x0199
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = previousTheme     // Catch:{ Exception -> 0x019f }
+            if (r0 != 0) goto L_0x0199
+            currentDayTheme = r6     // Catch:{ Exception -> 0x019f }
+            boolean r0 = isCurrentThemeNight()     // Catch:{ Exception -> 0x019f }
+            if (r0 == 0) goto L_0x0199
             r0 = 2000(0x7d0, float:2.803E-42)
-            switchNightThemeDelay = r0     // Catch:{ Exception -> 0x0198 }
-            long r0 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x0198 }
-            lastDelayUpdateTime = r0     // Catch:{ Exception -> 0x0198 }
-        L_0x0192:
-            currentTheme = r6     // Catch:{ Exception -> 0x0198 }
-            refreshThemeColors()     // Catch:{ Exception -> 0x0198 }
-            goto L_0x019c
-        L_0x0198:
+            switchNightThemeDelay = r0     // Catch:{ Exception -> 0x019f }
+            long r0 = android.os.SystemClock.elapsedRealtime()     // Catch:{ Exception -> 0x019f }
+            lastDelayUpdateTime = r0     // Catch:{ Exception -> 0x019f }
+            org.telegram.ui.ActionBar.-$$Lambda$YBrwKY5coui7kYPFT6vSXwq9GFM r0 = org.telegram.ui.ActionBar.$$Lambda$YBrwKY5coui7kYPFT6vSXwq9GFM.INSTANCE     // Catch:{ Exception -> 0x019f }
+            r1 = 2100(0x834, double:1.0375E-320)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)     // Catch:{ Exception -> 0x019f }
+        L_0x0199:
+            currentTheme = r6     // Catch:{ Exception -> 0x019f }
+            refreshThemeColors()     // Catch:{ Exception -> 0x019f }
+            goto L_0x01a3
+        L_0x019f:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x019c:
+        L_0x01a3:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = previousTheme
-            if (r0 != 0) goto L_0x01b3
-            if (r7 == 0) goto L_0x01b3
+            if (r0 != 0) goto L_0x01ba
+            if (r7 == 0) goto L_0x01ba
             boolean r7 = switchingNightTheme
-            if (r7 != 0) goto L_0x01b3
+            if (r7 != 0) goto L_0x01ba
             int r7 = r6.account
             org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r7)
             org.telegram.ui.ActionBar.Theme$ThemeAccent r0 = r6.getAccent(r8)
             r7.saveTheme(r6, r0, r9, r8)
-        L_0x01b3:
+        L_0x01ba:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.applyTheme(org.telegram.ui.ActionBar.Theme$ThemeInfo, boolean, boolean, boolean):void");

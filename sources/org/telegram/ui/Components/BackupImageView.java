@@ -12,6 +12,7 @@ import android.view.View;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.SecureDocument;
+import org.telegram.tgnet.TLObject;
 
 public class BackupImageView extends View {
     protected int height = -1;
@@ -44,6 +45,14 @@ public class BackupImageView extends View {
 
     public void setImage(ImageLocation imageLocation, String str, Drawable drawable, int i, Object obj) {
         setImage(imageLocation, str, (ImageLocation) null, (String) null, drawable, (Bitmap) null, (String) null, i, obj);
+    }
+
+    public void setForUserOrChat(TLObject tLObject, AvatarDrawable avatarDrawable) {
+        this.imageReceiver.setForUserOrChat(tLObject, avatarDrawable);
+    }
+
+    public void setForUserOrChat(TLObject tLObject, AvatarDrawable avatarDrawable, Object obj) {
+        this.imageReceiver.setForUserOrChat(tLObject, avatarDrawable, obj);
     }
 
     public void setImageMedia(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Bitmap bitmap, int i, int i2, Object obj) {

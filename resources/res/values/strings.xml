@@ -2908,7 +2908,7 @@
     <string name="PaymentTestInvoice">TEST INVOICE</string>
     <string name="PaymentTip">Tip</string>
     <string name="PaymentTipOptional">Tip (Optional)</string>
-    <string name="PaymentTransactionMessage">Do you really want to transfer %1$s to the %2$s bot for %3$s?</string>
+    <string name="PaymentTransactionMessage2">Transfer **%1$s** to the %2$s bot for **%3$s**?</string>
     <string name="PaymentTransactionReview">Transaction Review</string>
     <string name="PaymentTransactionTotal">Total</string>
     <string name="PaymentWarning">Warning</string>

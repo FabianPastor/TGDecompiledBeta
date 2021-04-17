@@ -1570,7 +1570,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             if (tLRPC$ChatPhoto != null) {
                 this.avatar = tLRPC$ChatPhoto.photo_small;
                 ImageLocation forUserOrChat = ImageLocation.getForUserOrChat(chat, 1);
-                this.avatarImage.setImage(forUserOrChat, "50_50", ImageLocation.getForUserOrChat(this.currentChat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentChat);
+                this.avatarImage.setForUserOrChat(this.currentChat, this.avatarDrawable);
                 if (forUserOrChat != null) {
                     z = true;
                 }

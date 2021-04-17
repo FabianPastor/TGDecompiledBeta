@@ -29,234 +29,227 @@ public class JoinGroupAlert extends BottomSheet {
 
     /* JADX WARNING: Illegal instructions before constructor call */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public JoinGroupAlert(android.content.Context r23, org.telegram.tgnet.TLRPC$ChatInvite r24, java.lang.String r25, org.telegram.ui.ActionBar.BaseFragment r26) {
+    public JoinGroupAlert(android.content.Context r19, org.telegram.tgnet.TLRPC$ChatInvite r20, java.lang.String r21, org.telegram.ui.ActionBar.BaseFragment r22) {
         /*
-            r22 = this;
-            r0 = r22
-            r1 = r23
-            r9 = r24
-            r10 = 0
-            r0.<init>(r1, r10)
-            r0.setApplyBottomPadding(r10)
-            r0.setApplyTopPadding(r10)
-            r2 = r26
-            r0.fragment = r2
-            r0.chatInvite = r9
-            r2 = r25
-            r0.hash = r2
-            android.widget.LinearLayout r11 = new android.widget.LinearLayout
-            r11.<init>(r1)
-            r12 = 1
-            r11.setOrientation(r12)
-            r11.setClickable(r12)
-            r0.setCustomView(r11)
-            org.telegram.ui.Components.BackupImageView r2 = new org.telegram.ui.Components.BackupImageView
-            r2.<init>(r1)
-            r3 = 1108082688(0x420CLASSNAME, float:35.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r2.setRoundRadius(r3)
-            r13 = 70
-            r14 = 70
-            r15 = 49
-            r16 = 0
-            r17 = 29
-            r18 = 0
-            r19 = 0
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r14, (int) r15, (int) r16, (int) r17, (int) r18, (int) r19)
-            r11.addView(r2, r3)
-            org.telegram.tgnet.TLRPC$Chat r3 = r9.chat
-            if (r3 == 0) goto L_0x0072
+            r18 = this;
+            r0 = r18
+            r1 = r19
+            r2 = r20
+            r3 = 0
+            r0.<init>(r1, r3)
+            r0.setApplyBottomPadding(r3)
+            r0.setApplyTopPadding(r3)
+            r4 = r22
+            r0.fragment = r4
+            r0.chatInvite = r2
+            r4 = r21
+            r0.hash = r4
+            android.widget.LinearLayout r4 = new android.widget.LinearLayout
+            r4.<init>(r1)
+            r5 = 1
+            r4.setOrientation(r5)
+            r4.setClickable(r5)
+            r0.setCustomView(r4)
+            org.telegram.ui.Components.BackupImageView r6 = new org.telegram.ui.Components.BackupImageView
+            r6.<init>(r1)
+            r7 = 1108082688(0x420CLASSNAME, float:35.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r6.setRoundRadius(r7)
+            r8 = 70
+            r9 = 70
+            r10 = 49
+            r11 = 0
+            r12 = 29
+            r13 = 0
+            r14 = 0
+            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13, (int) r14)
+            r4.addView(r6, r7)
+            org.telegram.tgnet.TLRPC$Chat r7 = r2.chat
+            if (r7 == 0) goto L_0x005e
             org.telegram.ui.Components.AvatarDrawable r7 = new org.telegram.ui.Components.AvatarDrawable
-            org.telegram.tgnet.TLRPC$Chat r3 = r9.chat
-            r7.<init>((org.telegram.tgnet.TLRPC$Chat) r3)
-            org.telegram.tgnet.TLRPC$Chat r3 = r9.chat
-            java.lang.String r13 = r3.title
-            int r14 = r3.participants_count
-            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForUserOrChat(r3, r12)
-            org.telegram.tgnet.TLRPC$Chat r4 = r9.chat
-            r5 = 2
-            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForUserOrChat(r4, r5)
-            java.lang.String r4 = "50_50"
-            java.lang.String r6 = "50_50"
-            r8 = r24
-            r2.setImage((org.telegram.messenger.ImageLocation) r3, (java.lang.String) r4, (org.telegram.messenger.ImageLocation) r5, (java.lang.String) r6, (android.graphics.drawable.Drawable) r7, (java.lang.Object) r8)
-            goto L_0x0096
-        L_0x0072:
-            org.telegram.ui.Components.AvatarDrawable r3 = new org.telegram.ui.Components.AvatarDrawable
-            r3.<init>()
-            java.lang.String r4 = r9.title
-            r5 = 0
-            r3.setInfo(r10, r4, r5)
-            java.lang.String r13 = r9.title
-            int r14 = r9.participants_count
-            org.telegram.tgnet.TLRPC$Photo r4 = r9.photo
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r4 = r4.sizes
-            r5 = 50
-            org.telegram.tgnet.TLRPC$PhotoSize r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r5)
-            org.telegram.tgnet.TLRPC$Photo r5 = r9.photo
-            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r4, (org.telegram.tgnet.TLRPC$Photo) r5)
-            java.lang.String r5 = "50_50"
-            r2.setImage((org.telegram.messenger.ImageLocation) r4, (java.lang.String) r5, (android.graphics.drawable.Drawable) r3, (java.lang.Object) r9)
-        L_0x0096:
-            android.widget.TextView r2 = new android.widget.TextView
-            r2.<init>(r1)
-            java.lang.String r3 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r3)
-            r2.setTypeface(r3)
-            r3 = 1099431936(0x41880000, float:17.0)
-            r2.setTextSize(r12, r3)
-            java.lang.String r3 = "dialogTextBlack"
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r2.setTextColor(r3)
-            r2.setText(r13)
-            r2.setSingleLine(r12)
-            android.text.TextUtils$TruncateAt r3 = android.text.TextUtils.TruncateAt.END
-            r2.setEllipsize(r3)
-            r15 = -2
-            r16 = -2
-            r17 = 49
-            r18 = 10
-            r19 = 9
-            r20 = 10
-            if (r14 <= 0) goto L_0x00cd
-            r21 = 0
-            goto L_0x00d1
-        L_0x00cd:
-            r3 = 20
-            r21 = 20
-        L_0x00d1:
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r15, (int) r16, (int) r17, (int) r18, (int) r19, (int) r20, (int) r21)
-            r11.addView(r2, r3)
-            if (r14 <= 0) goto L_0x0111
-            android.widget.TextView r2 = new android.widget.TextView
-            r2.<init>(r1)
-            r3 = 1096810496(0x41600000, float:14.0)
-            r2.setTextSize(r12, r3)
-            java.lang.String r3 = "dialogTextGray3"
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r2.setTextColor(r3)
-            r2.setSingleLine(r12)
-            android.text.TextUtils$TruncateAt r3 = android.text.TextUtils.TruncateAt.END
-            r2.setEllipsize(r3)
-            java.lang.String r3 = "Members"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.formatPluralString(r3, r14)
-            r2.setText(r3)
+            org.telegram.tgnet.TLRPC$Chat r8 = r2.chat
+            r7.<init>((org.telegram.tgnet.TLRPC$Chat) r8)
+            org.telegram.tgnet.TLRPC$Chat r8 = r2.chat
+            java.lang.String r9 = r8.title
+            int r10 = r8.participants_count
+            r6.setForUserOrChat(r8, r7, r2)
+            goto L_0x0082
+        L_0x005e:
+            org.telegram.ui.Components.AvatarDrawable r7 = new org.telegram.ui.Components.AvatarDrawable
+            r7.<init>()
+            java.lang.String r8 = r2.title
+            r9 = 0
+            r7.setInfo(r3, r8, r9)
+            java.lang.String r9 = r2.title
+            int r10 = r2.participants_count
+            org.telegram.tgnet.TLRPC$Photo r8 = r2.photo
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r8 = r8.sizes
+            r11 = 50
+            org.telegram.tgnet.TLRPC$PhotoSize r8 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r8, r11)
+            org.telegram.tgnet.TLRPC$Photo r11 = r2.photo
+            org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r8, (org.telegram.tgnet.TLRPC$Photo) r11)
+            java.lang.String r11 = "50_50"
+            r6.setImage((org.telegram.messenger.ImageLocation) r8, (java.lang.String) r11, (android.graphics.drawable.Drawable) r7, (java.lang.Object) r2)
+        L_0x0082:
+            android.widget.TextView r6 = new android.widget.TextView
+            r6.<init>(r1)
+            java.lang.String r7 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r7)
+            r6.setTypeface(r7)
+            r7 = 1099431936(0x41880000, float:17.0)
+            r6.setTextSize(r5, r7)
+            java.lang.String r7 = "dialogTextBlack"
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+            r6.setTextColor(r7)
+            r6.setText(r9)
+            r6.setSingleLine(r5)
+            android.text.TextUtils$TruncateAt r7 = android.text.TextUtils.TruncateAt.END
+            r6.setEllipsize(r7)
+            r11 = -2
             r12 = -2
-            r13 = -2
-            r14 = 49
-            r15 = 10
-            r16 = 3
-            r17 = 10
-            r18 = 20
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17, (int) r18)
-            r11.addView(r2, r3)
-        L_0x0111:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r2 = r9.participants
-            boolean r2 = r2.isEmpty()
-            if (r2 != 0) goto L_0x0163
-            org.telegram.ui.Components.RecyclerListView r2 = new org.telegram.ui.Components.RecyclerListView
-            r2.<init>(r1)
-            r3 = 1090519040(0x41000000, float:8.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r2.setPadding(r10, r10, r10, r3)
-            r2.setNestedScrollingEnabled(r10)
-            r2.setClipToPadding(r10)
-            androidx.recyclerview.widget.LinearLayoutManager r3 = new androidx.recyclerview.widget.LinearLayoutManager
-            android.content.Context r4 = r22.getContext()
-            r3.<init>(r4, r10, r10)
-            r2.setLayoutManager(r3)
-            r2.setHorizontalScrollBarEnabled(r10)
-            r2.setVerticalScrollBarEnabled(r10)
-            org.telegram.ui.Components.JoinGroupAlert$UsersAdapter r3 = new org.telegram.ui.Components.JoinGroupAlert$UsersAdapter
-            r3.<init>(r1)
-            r2.setAdapter(r3)
-            java.lang.String r3 = "dialogScrollGlow"
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r2.setGlowColor(r3)
-            r12 = -2
-            r13 = 90
-            r14 = 49
-            r15 = 0
-            r16 = 0
+            r13 = 49
+            r14 = 10
+            r15 = 9
+            r16 = 10
+            if (r10 <= 0) goto L_0x00b8
             r17 = 0
-            r18 = 7
-            android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17, (int) r18)
-            r11.addView(r2, r3)
-        L_0x0163:
-            android.view.View r2 = new android.view.View
-            r2.<init>(r1)
-            java.lang.String r3 = "dialogShadowLine"
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            r2.setBackgroundColor(r3)
-            android.widget.LinearLayout$LayoutParams r3 = new android.widget.LinearLayout$LayoutParams
-            int r4 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r5 = -1
-            r3.<init>(r5, r4)
-            r11.addView(r2, r3)
-            org.telegram.ui.Components.PickerBottomLayout r2 = new org.telegram.ui.Components.PickerBottomLayout
-            r2.<init>(r1, r10)
+            goto L_0x00bc
+        L_0x00b8:
+            r7 = 20
+            r17 = 20
+        L_0x00bc:
+            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r11, (int) r12, (int) r13, (int) r14, (int) r15, (int) r16, (int) r17)
+            r4.addView(r6, r7)
+            if (r10 <= 0) goto L_0x00fb
+            android.widget.TextView r6 = new android.widget.TextView
+            r6.<init>(r1)
+            r7 = 1096810496(0x41600000, float:14.0)
+            r6.setTextSize(r5, r7)
+            java.lang.String r7 = "dialogTextGray3"
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+            r6.setTextColor(r7)
+            r6.setSingleLine(r5)
+            android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END
+            r6.setEllipsize(r5)
+            java.lang.String r5 = "Members"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.formatPluralString(r5, r10)
+            r6.setText(r5)
+            r7 = -2
+            r8 = -2
+            r9 = 49
+            r10 = 10
+            r11 = 3
+            r12 = 10
+            r13 = 20
+            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r7, (int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13)
+            r4.addView(r6, r5)
+        L_0x00fb:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r5 = r2.participants
+            boolean r5 = r5.isEmpty()
+            if (r5 != 0) goto L_0x014a
+            org.telegram.ui.Components.RecyclerListView r5 = new org.telegram.ui.Components.RecyclerListView
+            r5.<init>(r1)
+            r6 = 1090519040(0x41000000, float:8.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            r5.setPadding(r3, r3, r3, r6)
+            r5.setNestedScrollingEnabled(r3)
+            r5.setClipToPadding(r3)
+            androidx.recyclerview.widget.LinearLayoutManager r6 = new androidx.recyclerview.widget.LinearLayoutManager
+            android.content.Context r7 = r18.getContext()
+            r6.<init>(r7, r3, r3)
+            r5.setLayoutManager(r6)
+            r5.setHorizontalScrollBarEnabled(r3)
+            r5.setVerticalScrollBarEnabled(r3)
+            org.telegram.ui.Components.JoinGroupAlert$UsersAdapter r6 = new org.telegram.ui.Components.JoinGroupAlert$UsersAdapter
+            r6.<init>(r1)
+            r5.setAdapter(r6)
+            java.lang.String r6 = "dialogScrollGlow"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r5.setGlowColor(r6)
+            r7 = -2
+            r8 = 90
+            r9 = 49
+            r10 = 0
+            r11 = 0
+            r12 = 0
+            r13 = 7
+            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r7, (int) r8, (int) r9, (int) r10, (int) r11, (int) r12, (int) r13)
+            r4.addView(r5, r6)
+        L_0x014a:
+            android.view.View r5 = new android.view.View
+            r5.<init>(r1)
+            java.lang.String r6 = "dialogShadowLine"
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r5.setBackgroundColor(r6)
+            android.widget.LinearLayout$LayoutParams r6 = new android.widget.LinearLayout$LayoutParams
+            int r7 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            r8 = -1
+            r6.<init>(r8, r7)
+            r4.addView(r5, r6)
+            org.telegram.ui.Components.PickerBottomLayout r5 = new org.telegram.ui.Components.PickerBottomLayout
+            r5.<init>(r1, r3)
             r1 = 48
-            r3 = 83
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r1, r3)
-            r11.addView(r2, r1)
-            android.widget.TextView r1 = r2.cancelButton
-            r3 = 1099956224(0x41900000, float:18.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r1.setPadding(r4, r10, r5, r10)
-            android.widget.TextView r1 = r2.cancelButton
-            java.lang.String r4 = "dialogTextBlue2"
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r1.setTextColor(r5)
-            android.widget.TextView r1 = r2.cancelButton
-            r5 = 2131624639(0x7f0e02bf, float:1.8876463E38)
-            java.lang.String r6 = "Cancel"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            java.lang.String r5 = r5.toUpperCase()
-            r1.setText(r5)
-            android.widget.TextView r1 = r2.cancelButton
-            org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$AseK4-oUXkiQDAchBqaTq60CJa0 r5 = new org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$AseK4-oUXkiQDAchBqaTq60CJa0
-            r5.<init>()
-            r1.setOnClickListener(r5)
-            android.widget.LinearLayout r1 = r2.doneButton
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r1.setPadding(r5, r10, r3, r10)
-            android.widget.LinearLayout r1 = r2.doneButton
-            r1.setVisibility(r10)
-            android.widget.TextView r1 = r2.doneButtonBadgeTextView
+            r6 = 83
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r1, r6)
+            r4.addView(r5, r1)
+            android.widget.TextView r1 = r5.cancelButton
+            r4 = 1099956224(0x41900000, float:18.0)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r1.setPadding(r6, r3, r7, r3)
+            android.widget.TextView r1 = r5.cancelButton
+            java.lang.String r6 = "dialogTextBlue2"
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r1.setTextColor(r7)
+            android.widget.TextView r1 = r5.cancelButton
+            r7 = 2131624639(0x7f0e02bf, float:1.8876463E38)
+            java.lang.String r8 = "Cancel"
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            java.lang.String r7 = r7.toUpperCase()
+            r1.setText(r7)
+            android.widget.TextView r1 = r5.cancelButton
+            org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$AseK4-oUXkiQDAchBqaTq60CJa0 r7 = new org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$AseK4-oUXkiQDAchBqaTq60CJa0
+            r7.<init>()
+            r1.setOnClickListener(r7)
+            android.widget.LinearLayout r1 = r5.doneButton
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r1.setPadding(r7, r3, r4, r3)
+            android.widget.LinearLayout r1 = r5.doneButton
+            r1.setVisibility(r3)
+            android.widget.TextView r1 = r5.doneButtonBadgeTextView
             r3 = 8
             r1.setVisibility(r3)
-            android.widget.TextView r1 = r2.doneButtonTextView
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            android.widget.TextView r1 = r5.doneButtonTextView
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r1.setTextColor(r3)
-            boolean r1 = r9.channel
-            if (r1 == 0) goto L_0x01ee
-            boolean r1 = r9.megagroup
-            if (r1 == 0) goto L_0x01fc
-        L_0x01ee:
-            org.telegram.tgnet.TLRPC$Chat r1 = r9.chat
+            boolean r1 = r2.channel
+            if (r1 == 0) goto L_0x01d5
+            boolean r1 = r2.megagroup
+            if (r1 == 0) goto L_0x01e3
+        L_0x01d5:
+            org.telegram.tgnet.TLRPC$Chat r1 = r2.chat
             boolean r1 = org.telegram.messenger.ChatObject.isChannel(r1)
-            if (r1 == 0) goto L_0x020f
-            org.telegram.tgnet.TLRPC$Chat r1 = r9.chat
+            if (r1 == 0) goto L_0x01f6
+            org.telegram.tgnet.TLRPC$Chat r1 = r2.chat
             boolean r1 = r1.megagroup
-            if (r1 != 0) goto L_0x020f
-        L_0x01fc:
-            android.widget.TextView r1 = r2.doneButtonTextView
-            r3 = 2131627035(0x7f0e0c1b, float:1.8881323E38)
-            java.lang.String r4 = "ProfileJoinChannel"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            java.lang.String r3 = r3.toUpperCase()
-            r1.setText(r3)
-            goto L_0x021d
-        L_0x020f:
-            android.widget.TextView r1 = r2.doneButtonTextView
-            r3 = 2131625887(0x7f0e079f, float:1.8878995E38)
-            java.lang.String r4 = "JoinGroup"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r1.setText(r3)
-        L_0x021d:
-            android.widget.LinearLayout r1 = r2.doneButton
+            if (r1 != 0) goto L_0x01f6
+        L_0x01e3:
+            android.widget.TextView r1 = r5.doneButtonTextView
+            r2 = 2131627036(0x7f0e0c1c, float:1.8881325E38)
+            java.lang.String r3 = "ProfileJoinChannel"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            java.lang.String r2 = r2.toUpperCase()
+            r1.setText(r2)
+            goto L_0x0204
+        L_0x01f6:
+            android.widget.TextView r1 = r5.doneButtonTextView
+            r2 = 2131625887(0x7f0e079f, float:1.8878995E38)
+            java.lang.String r3 = "JoinGroup"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setText(r2)
+        L_0x0204:
+            android.widget.LinearLayout r1 = r5.doneButton
             org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$lV5gzJCFdYlzirjF_v5fq8Kw-ug r2 = new org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$lV5gzJCFdYlzirjF_v5fq8Kw-ug
             r2.<init>()
             r1.setOnClickListener(r2)

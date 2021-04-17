@@ -24,7 +24,6 @@ import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$User;
@@ -428,7 +427,7 @@ public class DrawerProfileCell extends FrameLayout {
             textView.setText(instance.format("+" + tLRPC$User.phone));
             AvatarDrawable avatarDrawable = new AvatarDrawable(tLRPC$User);
             avatarDrawable.setColor(Theme.getColor("avatar_backgroundInProfileBlue"));
-            this.avatarImageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$User);
+            this.avatarImageView.setForUserOrChat(tLRPC$User, avatarDrawable);
             applyBackground(true);
         }
     }

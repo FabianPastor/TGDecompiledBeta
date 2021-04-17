@@ -2880,7 +2880,6 @@
     <string name="PaymentSuccessfullyPaid">لقد نجحت في تحويل %1$s إلى %2$s مقابل %3$s</string>
     <string name="PaymentSuccessfullyPaidNoItem">لقد نجحت في تحويل %1$s إلى %2$s</string>
     <string name="PaymentTestInvoice">فاتورة تجريبية</string>
-    <string name="PaymentTransactionMessage">هل ترغب حقًا في تحويل %1$s إلى البوت %2$s مقابل %3$s؟</string>
     <string name="PaymentTransactionReview">مراجعة العملية</string>
     <string name="PaymentTransactionTotal">الإجمالي</string>
     <string name="PaymentWarning">تحذير</string>

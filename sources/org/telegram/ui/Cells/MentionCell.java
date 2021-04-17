@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -71,7 +70,7 @@ public class MentionCell extends LinearLayout {
         if (tLRPC$UserProfilePhoto == null || tLRPC$UserProfilePhoto.photo_small == null) {
             this.imageView.setImageDrawable(this.avatarDrawable);
         } else {
-            this.imageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
+            this.imageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
         }
         this.nameTextView.setText(UserObject.getUserName(tLRPC$User));
         if (tLRPC$User.username != null) {
@@ -96,7 +95,7 @@ public class MentionCell extends LinearLayout {
         if (tLRPC$ChatPhoto == null || tLRPC$ChatPhoto.photo_small == null) {
             this.imageView.setImageDrawable(this.avatarDrawable);
         } else {
-            this.imageView.setImage(ImageLocation.getForUserOrChat(tLRPC$Chat, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$Chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$Chat);
+            this.imageView.setForUserOrChat(tLRPC$Chat, this.avatarDrawable);
         }
         this.nameTextView.setText(tLRPC$Chat.title);
         if (tLRPC$Chat.username != null) {
@@ -139,7 +138,7 @@ public class MentionCell extends LinearLayout {
             if (tLRPC$UserProfilePhoto == null || tLRPC$UserProfilePhoto.photo_small == null) {
                 this.imageView.setImageDrawable(this.avatarDrawable);
             } else {
-                this.imageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
+                this.imageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
             }
         } else {
             this.imageView.setVisibility(4);

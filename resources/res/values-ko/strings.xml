@@ -2880,7 +2880,6 @@
     <string name="PaymentSuccessfullyPaid">성공적으로 %2$s에 %1$s어치 %3$s에 대한 금액을 송금하셨습니다</string>
     <string name="PaymentSuccessfullyPaidNoItem">성공적으로 %2$s에 %1$s 금액을 송금하셨습니다</string>
     <string name="PaymentTestInvoice">테스트 인보이스</string>
-    <string name="PaymentTransactionMessage">%3$s에 대한 %1$s 금액을 %2$s 봇에게 전송하시겠습니까?</string>
     <string name="PaymentTransactionReview">거래내역 확인</string>
     <string name="PaymentTransactionTotal">전체</string>
     <string name="PaymentWarning">경고</string>

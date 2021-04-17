@@ -1307,13 +1307,13 @@ public class VoIPService extends VoIPBaseService {
             return
         L_0x000b:
             org.telegram.messenger.ChatObject$Call r0 = r1.groupCall
-            if (r0 == 0) goto L_0x011e
+            if (r0 == 0) goto L_0x011f
             org.telegram.tgnet.TLRPC$GroupCall r0 = r0.call
             long r4 = r0.id
             long r6 = r2.id
             int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
             if (r8 == 0) goto L_0x001b
-            goto L_0x011e
+            goto L_0x011f
         L_0x001b:
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_groupCallDiscarded
             r4 = 2
@@ -1347,10 +1347,10 @@ public class VoIPService extends VoIPBaseService {
             r8 = 1
             if (r7 == r8) goto L_0x004a
             boolean r7 = r1.currentGroupModeStreaming
-            if (r0 == r7) goto L_0x011e
+            if (r0 == r7) goto L_0x011f
         L_0x004a:
             org.telegram.tgnet.TLRPC$TL_dataJSON r2 = r2.params
-            if (r2 == 0) goto L_0x011e
+            if (r2 == 0) goto L_0x011f
             boolean r2 = r1.playedConnectedSound
             if (r2 == 0) goto L_0x0058
             boolean r2 = r1.currentGroupModeStreaming
@@ -1359,85 +1359,85 @@ public class VoIPService extends VoIPBaseService {
         L_0x0058:
             r1.currentGroupModeStreaming = r0
             if (r0 == 0) goto L_0x0063
-            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x011a }
-            r0.prepareForStream()     // Catch:{ Exception -> 0x011a }
-            goto L_0x0116
+            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x011b }
+            r0.prepareForStream()     // Catch:{ Exception -> 0x011b }
+            goto L_0x0117
         L_0x0063:
             java.lang.String r0 = "transport"
-            org.json.JSONObject r0 = r5.getJSONObject(r0)     // Catch:{ Exception -> 0x011a }
+            org.json.JSONObject r0 = r5.getJSONObject(r0)     // Catch:{ Exception -> 0x011b }
             java.lang.String r2 = "ufrag"
-            java.lang.String r2 = r0.getString(r2)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r2 = r0.getString(r2)     // Catch:{ Exception -> 0x011b }
             java.lang.String r5 = "pwd"
-            java.lang.String r5 = r0.getString(r5)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r5 = r0.getString(r5)     // Catch:{ Exception -> 0x011b }
             java.lang.String r7 = "fingerprints"
-            org.json.JSONArray r7 = r0.getJSONArray(r7)     // Catch:{ Exception -> 0x011a }
-            int r8 = r7.length()     // Catch:{ Exception -> 0x011a }
-            org.telegram.messenger.voip.Instance$Fingerprint[] r9 = new org.telegram.messenger.voip.Instance.Fingerprint[r8]     // Catch:{ Exception -> 0x011a }
+            org.json.JSONArray r7 = r0.getJSONArray(r7)     // Catch:{ Exception -> 0x011b }
+            int r8 = r7.length()     // Catch:{ Exception -> 0x011b }
+            org.telegram.messenger.voip.Instance$Fingerprint[] r9 = new org.telegram.messenger.voip.Instance.Fingerprint[r8]     // Catch:{ Exception -> 0x011b }
             r10 = 0
         L_0x0083:
             if (r10 >= r8) goto L_0x00a5
-            org.json.JSONObject r11 = r7.getJSONObject(r10)     // Catch:{ Exception -> 0x011a }
-            org.telegram.messenger.voip.Instance$Fingerprint r12 = new org.telegram.messenger.voip.Instance$Fingerprint     // Catch:{ Exception -> 0x011a }
+            org.json.JSONObject r11 = r7.getJSONObject(r10)     // Catch:{ Exception -> 0x011b }
+            org.telegram.messenger.voip.Instance$Fingerprint r12 = new org.telegram.messenger.voip.Instance$Fingerprint     // Catch:{ Exception -> 0x011b }
             java.lang.String r13 = "hash"
-            java.lang.String r13 = r11.getString(r13)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r13 = r11.getString(r13)     // Catch:{ Exception -> 0x011b }
             java.lang.String r14 = "setup"
-            java.lang.String r14 = r11.getString(r14)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r14 = r11.getString(r14)     // Catch:{ Exception -> 0x011b }
             java.lang.String r15 = "fingerprint"
-            java.lang.String r11 = r11.getString(r15)     // Catch:{ Exception -> 0x011a }
-            r12.<init>(r13, r14, r11)     // Catch:{ Exception -> 0x011a }
-            r9[r10] = r12     // Catch:{ Exception -> 0x011a }
+            java.lang.String r11 = r11.getString(r15)     // Catch:{ Exception -> 0x011b }
+            r12.<init>(r13, r14, r11)     // Catch:{ Exception -> 0x011b }
+            r9[r10] = r12     // Catch:{ Exception -> 0x011b }
             int r10 = r10 + 1
             goto L_0x0083
         L_0x00a5:
             java.lang.String r7 = "candidates"
-            org.json.JSONArray r0 = r0.getJSONArray(r7)     // Catch:{ Exception -> 0x011a }
-            int r7 = r0.length()     // Catch:{ Exception -> 0x011a }
-            org.telegram.messenger.voip.Instance$Candidate[] r8 = new org.telegram.messenger.voip.Instance.Candidate[r7]     // Catch:{ Exception -> 0x011a }
+            org.json.JSONArray r0 = r0.getJSONArray(r7)     // Catch:{ Exception -> 0x011b }
+            int r7 = r0.length()     // Catch:{ Exception -> 0x011b }
+            org.telegram.messenger.voip.Instance$Candidate[] r8 = new org.telegram.messenger.voip.Instance.Candidate[r7]     // Catch:{ Exception -> 0x011b }
         L_0x00b1:
-            if (r6 >= r7) goto L_0x0111
-            org.json.JSONObject r10 = r0.getJSONObject(r6)     // Catch:{ Exception -> 0x011a }
-            org.telegram.messenger.voip.Instance$Candidate r25 = new org.telegram.messenger.voip.Instance$Candidate     // Catch:{ Exception -> 0x011a }
+            if (r6 >= r7) goto L_0x0112
+            org.json.JSONObject r10 = r0.getJSONObject(r6)     // Catch:{ Exception -> 0x011b }
+            org.telegram.messenger.voip.Instance$Candidate r25 = new org.telegram.messenger.voip.Instance$Candidate     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "port"
-            java.lang.String r12 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r12 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "protocol"
-            java.lang.String r13 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r13 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "network"
-            java.lang.String r14 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r14 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "generation"
-            java.lang.String r15 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r15 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "id"
-            java.lang.String r16 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r16 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "component"
-            java.lang.String r17 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r17 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "foundation"
-            java.lang.String r18 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r18 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "priority"
-            java.lang.String r19 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r19 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "ip"
-            java.lang.String r20 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r20 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "type"
-            java.lang.String r21 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r21 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "tcpType"
-            java.lang.String r22 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r22 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "relAddr"
-            java.lang.String r23 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r23 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             java.lang.String r11 = "relPort"
-            java.lang.String r24 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011a }
+            java.lang.String r24 = r10.optString(r11, r3)     // Catch:{ Exception -> 0x011b }
             r11 = r25
-            r11.<init>(r12, r13, r14, r15, r16, r17, r18, r19, r20, r21, r22, r23, r24)     // Catch:{ Exception -> 0x011a }
-            r8[r6] = r25     // Catch:{ Exception -> 0x011a }
+            r11.<init>(r12, r13, r14, r15, r16, r17, r18, r19, r20, r21, r22, r23, r24)     // Catch:{ Exception -> 0x011b }
+            r8[r6] = r25     // Catch:{ Exception -> 0x011b }
             int r6 = r6 + 1
             goto L_0x00b1
-        L_0x0111:
-            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x011a }
-            r0.setJoinResponsePayload(r2, r5, r9, r8)     // Catch:{ Exception -> 0x011a }
-        L_0x0116:
-            r1.dispatchStateChanged(r4)     // Catch:{ Exception -> 0x011a }
-            goto L_0x011e
-        L_0x011a:
+        L_0x0112:
+            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x011b }
+            r0.setJoinResponsePayload(r2, r5, r9, r8)     // Catch:{ Exception -> 0x011b }
+        L_0x0117:
+            r1.dispatchStateChanged(r4)     // Catch:{ Exception -> 0x011b }
+            goto L_0x011f
+        L_0x011b:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x011e:
+        L_0x011f:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.onGroupCallUpdated(org.telegram.tgnet.TLRPC$GroupCall):void");

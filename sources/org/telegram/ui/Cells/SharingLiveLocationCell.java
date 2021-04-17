@@ -13,7 +13,6 @@ import android.widget.FrameLayout;
 import com.google.android.gms.maps.model.LatLng;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
 import org.telegram.messenger.MessageObject;
@@ -125,16 +124,17 @@ public class SharingLiveLocationCell extends FrameLayout {
             TLRPC$User user = MessagesController.getInstance(i).getUser(Integer.valueOf(i2));
             if (user != null) {
                 this.avatarDrawable = new AvatarDrawable(user);
-                String userName = UserObject.getUserName(user);
-                this.avatarImageView.setImage(ImageLocation.getForUserOrChat(user, 1), "50_50", ImageLocation.getForUserOrChat(user, 2), "50_50", (Drawable) this.avatarDrawable, (Object) user);
-                str2 = userName;
+                str2 = UserObject.getUserName(user);
+                this.avatarImageView.setForUserOrChat(user, this.avatarDrawable);
             }
         } else {
             TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Integer.valueOf(-i2));
             if (chat != null) {
-                this.avatarDrawable = new AvatarDrawable(chat);
-                str2 = chat.title;
-                this.avatarImageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+                AvatarDrawable avatarDrawable2 = new AvatarDrawable(chat);
+                this.avatarDrawable = avatarDrawable2;
+                String str3 = chat.title;
+                this.avatarImageView.setForUserOrChat(chat, avatarDrawable2);
+                str2 = str3;
             }
         }
         this.nameTextView.setText(str2);
@@ -170,23 +170,26 @@ public class SharingLiveLocationCell extends FrameLayout {
             combinedDrawable.setIconSize(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f));
             this.avatarImageView.setImageDrawable(combinedDrawable);
         } else {
+            String str3 = "";
             this.avatarDrawable = null;
             if (fromChatId > 0) {
                 TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(fromChatId));
                 if (user != null) {
                     this.avatarDrawable = new AvatarDrawable(user);
-                    str = UserObject.getUserName(user);
-                    this.avatarImageView.setImage(ImageLocation.getForUserOrChat(user, 1), "50_50", ImageLocation.getForUserOrChat(user, 2), "50_50", (Drawable) this.avatarDrawable, (Object) user);
+                    String userName = UserObject.getUserName(user);
+                    this.avatarImageView.setForUserOrChat(user, this.avatarDrawable);
+                    str = userName;
                 }
             } else {
                 TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-fromChatId));
                 if (chat != null) {
-                    this.avatarDrawable = new AvatarDrawable(chat);
-                    str = chat.title;
-                    this.avatarImageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+                    AvatarDrawable avatarDrawable2 = new AvatarDrawable(chat);
+                    this.avatarDrawable = avatarDrawable2;
+                    str3 = chat.title;
+                    this.avatarImageView.setForUserOrChat(chat, avatarDrawable2);
                 }
             }
-            str = "";
+            str = str3;
         }
         this.nameTextView.setText(str);
         this.location.setLatitude(messageObject.messageOwner.media.geo.lat);
@@ -213,14 +216,14 @@ public class SharingLiveLocationCell extends FrameLayout {
             if (user != null) {
                 this.avatarDrawable.setInfo(user);
                 this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
-                this.avatarImageView.setImage(ImageLocation.getForUserOrChat(user, 1), "50_50", ImageLocation.getForUserOrChat(user, 2), "50_50", (Drawable) this.avatarDrawable, (Object) user);
+                this.avatarImageView.setForUserOrChat(user, this.avatarDrawable);
             }
         } else {
             TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
             if (chat != null) {
                 this.avatarDrawable.setInfo(chat);
                 this.nameTextView.setText(chat.title);
-                this.avatarImageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+                this.avatarImageView.setForUserOrChat(chat, this.avatarDrawable);
             }
         }
         LatLng position = liveLocation2.marker.getPosition();
@@ -246,7 +249,7 @@ public class SharingLiveLocationCell extends FrameLayout {
             if (user != null) {
                 this.avatarDrawable.setInfo(user);
                 this.nameTextView.setText(ContactsController.formatName(user.first_name, user.last_name));
-                this.avatarImageView.setImage(ImageLocation.getForUserOrChat(user, 1), "50_50", ImageLocation.getForUserOrChat(user, 2), "50_50", (Drawable) this.avatarDrawable, (Object) user);
+                this.avatarImageView.setForUserOrChat(user, this.avatarDrawable);
                 return;
             }
             return;
@@ -255,7 +258,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         if (chat != null) {
             this.avatarDrawable.setInfo(chat);
             this.nameTextView.setText(chat.title);
-            this.avatarImageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+            this.avatarImageView.setForUserOrChat(chat, this.avatarDrawable);
         }
     }
 

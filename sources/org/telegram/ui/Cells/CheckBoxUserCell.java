@@ -2,14 +2,12 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
@@ -71,7 +69,7 @@ public class CheckBoxUserCell extends FrameLayout {
         this.textView.setText(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
         this.checkBox.setChecked(z, false);
         this.avatarDrawable.setInfo(tLRPC$User);
-        this.imageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
+        this.imageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
         this.needDivider = z2;
         setWillNotDraw(!z2);
     }

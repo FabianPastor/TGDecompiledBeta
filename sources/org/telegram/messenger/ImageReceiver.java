@@ -18,6 +18,7 @@ import android.view.View;
 import androidx.annotation.Keep;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SvgHelper;
+import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
@@ -116,6 +117,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     private int thumbOrientation;
     private BitmapShader thumbShader;
     private int thumbTag;
+    private boolean useRoundForThumb;
     private boolean useSharedAnimationQueue;
 
     public interface ImageReceiverDelegate {
@@ -361,6 +363,97 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         setImage(imageLocation, str, imageLocation2, str2, (Drawable) null, i, str3, obj, i2);
     }
 
+    public void setForUserOrChat(TLObject tLObject, Drawable drawable) {
+        setForUserOrChat(tLObject, drawable, (Object) null);
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:15:0x002e, code lost:
+        if (r2.stripped_thumb != null) goto L_0x001a;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:7:0x0018, code lost:
+        if (r2.stripped_thumb != null) goto L_0x001a;
+     */
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x0035  */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x0043  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void setForUserOrChat(org.telegram.tgnet.TLObject r10, android.graphics.drawable.Drawable r11, java.lang.Object r12) {
+        /*
+            r9 = this;
+            if (r12 != 0) goto L_0x0003
+            r12 = r10
+        L_0x0003:
+            r0 = 1
+            r9.setUseRoundForThumbDrawable(r0)
+            r1 = 0
+            boolean r2 = r10 instanceof org.telegram.tgnet.TLRPC$User
+            r3 = 0
+            if (r2 == 0) goto L_0x001f
+            r2 = r10
+            org.telegram.tgnet.TLRPC$User r2 = (org.telegram.tgnet.TLRPC$User) r2
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r2 = r2.photo
+            if (r2 == 0) goto L_0x001b
+            android.graphics.drawable.BitmapDrawable r1 = r2.strippedBitmap
+            byte[] r2 = r2.stripped_thumb
+            if (r2 == 0) goto L_0x001b
+        L_0x001a:
+            r3 = 1
+        L_0x001b:
+            r8 = r3
+            r3 = r1
+            r1 = r8
+            goto L_0x0033
+        L_0x001f:
+            boolean r2 = r10 instanceof org.telegram.tgnet.TLRPC$Chat
+            if (r2 == 0) goto L_0x0031
+            r2 = r10
+            org.telegram.tgnet.TLRPC$Chat r2 = (org.telegram.tgnet.TLRPC$Chat) r2
+            org.telegram.tgnet.TLRPC$ChatPhoto r2 = r2.photo
+            if (r2 == 0) goto L_0x0031
+            android.graphics.drawable.BitmapDrawable r1 = r2.strippedBitmap
+            byte[] r2 = r2.stripped_thumb
+            if (r2 == 0) goto L_0x001b
+            goto L_0x001a
+        L_0x0031:
+            r3 = r1
+            r1 = 0
+        L_0x0033:
+            if (r3 == 0) goto L_0x0043
+            org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForUserOrChat(r10, r0)
+            r4 = 0
+            r6 = 0
+            java.lang.String r2 = "50_50"
+            r0 = r9
+            r5 = r12
+            r0.setImage(r1, r2, r3, r4, r5, r6)
+            goto L_0x0068
+        L_0x0043:
+            if (r1 == 0) goto L_0x005a
+            org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForUserOrChat(r10, r0)
+            r0 = 2
+            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForUserOrChat(r10, r0)
+            r7 = 0
+            java.lang.String r2 = "50_50"
+            java.lang.String r4 = "50_50"
+            r0 = r9
+            r5 = r11
+            r6 = r12
+            r0.setImage((org.telegram.messenger.ImageLocation) r1, (java.lang.String) r2, (org.telegram.messenger.ImageLocation) r3, (java.lang.String) r4, (android.graphics.drawable.Drawable) r5, (java.lang.Object) r6, (int) r7)
+            goto L_0x0068
+        L_0x005a:
+            org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForUserOrChat(r10, r0)
+            r4 = 0
+            r6 = 0
+            java.lang.String r2 = "50_50"
+            r0 = r9
+            r3 = r11
+            r5 = r12
+            r0.setImage(r1, r2, r3, r4, r5, r6)
+        L_0x0068:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.setForUserOrChat(org.telegram.tgnet.TLObject, android.graphics.drawable.Drawable, java.lang.Object):void");
+    }
+
     public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Drawable drawable, Object obj, int i) {
         setImage((ImageLocation) null, (String) null, imageLocation, str, imageLocation2, str2, drawable, 0, (String) null, obj, i);
     }
@@ -578,15 +671,19 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             this.imageShader = null;
             this.thumbShader = null;
             this.mediaShader = null;
+            if (this.useRoundForThumb && drawable6 != null) {
+                updateDrawableRadius(drawable6);
+            }
             this.currentAlpha = 1.0f;
-            if (drawable6 instanceof SvgHelper.SvgDrawable) {
-                ((SvgHelper.SvgDrawable) drawable6).setParent(this);
+            Drawable drawable7 = this.staticThumbDrawable;
+            if (drawable7 instanceof SvgHelper.SvgDrawable) {
+                ((SvgHelper.SvgDrawable) drawable7).setParent(this);
             }
             ImageReceiverDelegate imageReceiverDelegate3 = this.delegate;
             if (imageReceiverDelegate3 != null) {
-                Drawable drawable7 = this.currentImageDrawable;
-                boolean z8 = (drawable7 == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true;
-                if (drawable7 == null && this.currentMediaDrawable == null) {
+                Drawable drawable8 = this.currentImageDrawable;
+                boolean z8 = (drawable8 == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true;
+                if (drawable8 == null && this.currentMediaDrawable == null) {
                     z2 = false;
                     z = true;
                 } else {
@@ -912,6 +1009,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         }
         drawDrawable(canvas, drawable, i, bitmapShader, i2, i3);
         drawDrawable(canvas, drawable, (int) (((float) i) * this.pressedProgress), bitmapShader, i2, this.animateFromIsPressed);
+    }
+
+    public void setUseRoundForThumbDrawable(boolean z) {
+        this.useRoundForThumb = z;
     }
 
     private void drawDrawable(Canvas canvas, Drawable drawable, int i, BitmapShader bitmapShader, int i2, int i3) {

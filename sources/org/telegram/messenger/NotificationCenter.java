@@ -928,7 +928,7 @@ public class NotificationCenter {
         int i2 = i;
         Object[] objArr2 = objArr;
         boolean z = true;
-        boolean z2 = i2 == startAllHeavyOperations || i2 == stopAllHeavyOperations || i2 == didReplacedPhotoInMemCache;
+        boolean z2 = i2 == startAllHeavyOperations || i2 == stopAllHeavyOperations || i2 == didReplacedPhotoInMemCache || i2 == closeChats;
         ArrayList arrayList = null;
         if (!z2 && !this.allowedNotifications.isEmpty()) {
             int size = this.allowedNotifications.size();

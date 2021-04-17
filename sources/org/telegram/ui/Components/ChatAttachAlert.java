@@ -41,7 +41,6 @@ import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.ContactsController;
-import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
@@ -589,7 +588,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 this.currentUser = tLRPC$User;
                 this.nameTextView.setText(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
                 this.avatarDrawable.setInfo(tLRPC$User);
-                this.imageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$User);
+                this.imageView.setForUserOrChat(tLRPC$User, this.avatarDrawable);
                 requestLayout();
             }
         }
@@ -816,7 +815,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = 2131165479(0x7var_, float:1.7945176E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
-            r1 = 2131627263(0x7f0e0cff, float:1.8881785E38)
+            r1 = 2131627264(0x7f0e0d00, float:1.8881788E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)

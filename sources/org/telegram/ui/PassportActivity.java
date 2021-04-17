@@ -2542,7 +2542,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         BackupImageView backupImageView = new BackupImageView(context2);
         backupImageView.setRoundRadius(AndroidUtilities.dp(32.0f));
         this.passwordAvatarContainer.addView(backupImageView, LayoutHelper.createFrame(64, 64.0f, 17, 0.0f, 8.0f, 0.0f, 0.0f));
-        backupImageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) new AvatarDrawable(tLRPC$User), (Object) tLRPC$User);
+        backupImageView.setForUserOrChat(tLRPC$User, new AvatarDrawable(tLRPC$User));
         TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(context2);
         this.passwordRequestTextView = textInfoPrivacyCell;
         textInfoPrivacyCell.getTextView().setGravity(1);
@@ -2880,143 +2880,132 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
     private void createRequestInterface(Context context) {
         TLRPC$User tLRPC$User;
-        int i;
-        FrameLayout frameLayout;
-        TLRPC$User tLRPC$User2;
-        String str;
-        int i2;
-        FrameLayout frameLayout2;
-        boolean z;
-        boolean z2;
-        TLRPC$User tLRPC$User3;
-        String str2;
-        boolean z3;
         ArrayList arrayList;
+        int i;
+        boolean z;
+        ArrayList arrayList2;
         TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType;
         TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2;
-        ArrayList arrayList2;
-        TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType3;
         ArrayList arrayList3;
-        String str3;
+        TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType3;
+        ArrayList arrayList4;
+        ArrayList arrayList5;
         Context context2 = context;
-        int i3 = 0;
+        int i2 = 0;
         if (this.currentForm != null) {
-            int i4 = 0;
+            int i3 = 0;
             while (true) {
-                if (i4 >= this.currentForm.users.size()) {
+                if (i3 >= this.currentForm.users.size()) {
                     break;
                 }
-                TLRPC$User tLRPC$User4 = this.currentForm.users.get(i4);
-                if (tLRPC$User4.id == this.currentBotId) {
-                    tLRPC$User = tLRPC$User4;
+                TLRPC$User tLRPC$User2 = this.currentForm.users.get(i3);
+                if (tLRPC$User2.id == this.currentBotId) {
+                    tLRPC$User = tLRPC$User2;
                     break;
                 }
-                i4++;
+                i3++;
             }
         }
         tLRPC$User = null;
-        FrameLayout frameLayout3 = (FrameLayout) this.fragmentView;
+        FrameLayout frameLayout = (FrameLayout) this.fragmentView;
         this.actionBar.setTitle(LocaleController.getString("TelegramPassport", NUM));
         this.actionBar.createMenu().addItem(1, NUM);
-        String str4 = "windowBackgroundGrayShadow";
         if (tLRPC$User != null) {
-            FrameLayout frameLayout4 = new FrameLayout(context2);
-            this.linearLayout2.addView(frameLayout4, LayoutHelper.createLinear(-1, 100));
+            FrameLayout frameLayout2 = new FrameLayout(context2);
+            this.linearLayout2.addView(frameLayout2, LayoutHelper.createLinear(-1, 100));
             BackupImageView backupImageView = new BackupImageView(context2);
             backupImageView.setRoundRadius(AndroidUtilities.dp(32.0f));
-            frameLayout4.addView(backupImageView, LayoutHelper.createFrame(64, 64.0f, 17, 0.0f, 8.0f, 0.0f, 0.0f));
-            i = -1;
-            backupImageView.setImage(ImageLocation.getForUserOrChat(tLRPC$User, 1), "50_50", ImageLocation.getForUserOrChat(tLRPC$User, 2), "50_50", (Drawable) new AvatarDrawable(tLRPC$User), (Object) tLRPC$User);
+            frameLayout2.addView(backupImageView, LayoutHelper.createFrame(64, 64.0f, 17, 0.0f, 8.0f, 0.0f, 0.0f));
+            backupImageView.setForUserOrChat(tLRPC$User, new AvatarDrawable(tLRPC$User));
             TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(context2);
             this.bottomCell = textInfoPrivacyCell;
-            textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, str4));
+            textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
             this.bottomCell.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PassportRequest", NUM, UserObject.getFirstName(tLRPC$User))));
             this.bottomCell.getTextView().setGravity(1);
             ((FrameLayout.LayoutParams) this.bottomCell.getTextView().getLayoutParams()).gravity = 1;
             this.linearLayout2.addView(this.bottomCell, LayoutHelper.createLinear(-1, -2));
-        } else {
-            i = -1;
         }
         HeaderCell headerCell2 = new HeaderCell(context2);
         this.headerCell = headerCell2;
         headerCell2.setText(LocaleController.getString("PassportRequestedInformation", NUM));
         this.headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        this.linearLayout2.addView(this.headerCell, LayoutHelper.createLinear(i, -2));
+        this.linearLayout2.addView(this.headerCell, LayoutHelper.createLinear(-1, -2));
         TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm = this.currentForm;
         if (tLRPC$TL_account_authorizationForm != null) {
             int size = tLRPC$TL_account_authorizationForm.required_types.size();
-            ArrayList arrayList4 = new ArrayList();
-            ArrayList arrayList5 = new ArrayList();
+            ArrayList arrayList6 = new ArrayList();
+            ArrayList arrayList7 = new ArrayList();
+            int i4 = 0;
+            boolean z2 = false;
             int i5 = 0;
             int i6 = 0;
-            boolean z4 = false;
-            int i7 = 0;
-            boolean z5 = false;
-            while (i6 < size) {
-                TLRPC$SecureRequiredType tLRPC$SecureRequiredType = this.currentForm.required_types.get(i6);
+            boolean z3 = false;
+            while (i4 < size) {
+                TLRPC$SecureRequiredType tLRPC$SecureRequiredType = this.currentForm.required_types.get(i4);
                 if (tLRPC$SecureRequiredType instanceof TLRPC$TL_secureRequiredType) {
                     TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType4 = (TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType;
                     if (isPersonalDocument(tLRPC$TL_secureRequiredType4.type)) {
-                        arrayList4.add(tLRPC$TL_secureRequiredType4);
-                        i7++;
-                    } else if (isAddressDocument(tLRPC$TL_secureRequiredType4.type)) {
-                        arrayList5.add(tLRPC$TL_secureRequiredType4);
+                        arrayList6.add(tLRPC$TL_secureRequiredType4);
                         i5++;
+                    } else if (isAddressDocument(tLRPC$TL_secureRequiredType4.type)) {
+                        arrayList7.add(tLRPC$TL_secureRequiredType4);
+                        i6++;
                     } else {
                         TLRPC$SecureValueType tLRPC$SecureValueType = tLRPC$TL_secureRequiredType4.type;
                         if (tLRPC$SecureValueType instanceof TLRPC$TL_secureValueTypePersonalDetails) {
-                            z4 = true;
+                            z2 = true;
                         } else if (tLRPC$SecureValueType instanceof TLRPC$TL_secureValueTypeAddress) {
-                            z5 = true;
+                            z3 = true;
                         }
                     }
                 } else if (tLRPC$SecureRequiredType instanceof TLRPC$TL_secureRequiredTypeOneOf) {
                     TLRPC$TL_secureRequiredTypeOneOf tLRPC$TL_secureRequiredTypeOneOf = (TLRPC$TL_secureRequiredTypeOneOf) tLRPC$SecureRequiredType;
                     if (!tLRPC$TL_secureRequiredTypeOneOf.types.isEmpty()) {
-                        TLRPC$SecureRequiredType tLRPC$SecureRequiredType2 = tLRPC$TL_secureRequiredTypeOneOf.types.get(i3);
+                        TLRPC$SecureRequiredType tLRPC$SecureRequiredType2 = tLRPC$TL_secureRequiredTypeOneOf.types.get(i2);
                         if (tLRPC$SecureRequiredType2 instanceof TLRPC$TL_secureRequiredType) {
                             TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType5 = (TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType2;
                             if (isPersonalDocument(tLRPC$TL_secureRequiredType5.type)) {
                                 int size2 = tLRPC$TL_secureRequiredTypeOneOf.types.size();
-                                int i8 = 0;
-                                while (i8 < size2) {
-                                    TLRPC$SecureRequiredType tLRPC$SecureRequiredType3 = tLRPC$TL_secureRequiredTypeOneOf.types.get(i8);
-                                    String str5 = str4;
+                                int i7 = 0;
+                                while (i7 < size2) {
+                                    TLRPC$SecureRequiredType tLRPC$SecureRequiredType3 = tLRPC$TL_secureRequiredTypeOneOf.types.get(i7);
+                                    int i8 = size2;
                                     if (tLRPC$SecureRequiredType3 instanceof TLRPC$TL_secureRequiredType) {
-                                        arrayList4.add((TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType3);
+                                        arrayList6.add((TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType3);
                                     }
-                                    i8++;
-                                    str4 = str5;
+                                    i7++;
+                                    size2 = i8;
                                 }
-                                str3 = str4;
-                                i7++;
-                            } else {
-                                str3 = str4;
-                                if (isAddressDocument(tLRPC$TL_secureRequiredType5.type)) {
-                                    int size3 = tLRPC$TL_secureRequiredTypeOneOf.types.size();
-                                    for (int i9 = 0; i9 < size3; i9++) {
-                                        TLRPC$SecureRequiredType tLRPC$SecureRequiredType4 = tLRPC$TL_secureRequiredTypeOneOf.types.get(i9);
-                                        if (tLRPC$SecureRequiredType4 instanceof TLRPC$TL_secureRequiredType) {
-                                            arrayList5.add((TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType4);
-                                        }
+                                i5++;
+                            } else if (isAddressDocument(tLRPC$TL_secureRequiredType5.type)) {
+                                int size3 = tLRPC$TL_secureRequiredTypeOneOf.types.size();
+                                int i9 = 0;
+                                while (i9 < size3) {
+                                    TLRPC$SecureRequiredType tLRPC$SecureRequiredType4 = tLRPC$TL_secureRequiredTypeOneOf.types.get(i9);
+                                    ArrayList arrayList8 = arrayList6;
+                                    if (tLRPC$SecureRequiredType4 instanceof TLRPC$TL_secureRequiredType) {
+                                        arrayList7.add((TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType4);
                                     }
-                                    i5++;
+                                    i9++;
+                                    arrayList6 = arrayList8;
                                 }
+                                arrayList5 = arrayList6;
+                                i6++;
+                                i4++;
+                                arrayList6 = arrayList5;
+                                i2 = 0;
                             }
-                            i6++;
-                            str4 = str3;
-                            i3 = 0;
                         }
                     }
                 }
-                str3 = str4;
-                i6++;
-                str4 = str3;
-                i3 = 0;
+                arrayList5 = arrayList6;
+                i4++;
+                arrayList6 = arrayList5;
+                i2 = 0;
             }
-            String str6 = str4;
-            boolean z6 = !z4 || i7 > 1;
-            boolean z7 = !z5 || i5 > 1;
+            ArrayList arrayList9 = arrayList6;
+            boolean z4 = !z2 || i5 > 1;
+            boolean z5 = !z3 || i6 > 1;
             int i10 = 0;
             while (i10 < size) {
                 TLRPC$SecureRequiredType tLRPC$SecureRequiredType5 = this.currentForm.required_types.get(i10);
@@ -3025,52 +3014,46 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     TLRPC$SecureValueType tLRPC$SecureValueType2 = tLRPC$TL_secureRequiredType6.type;
                     if ((tLRPC$SecureValueType2 instanceof TLRPC$TL_secureValueTypePhone) || (tLRPC$SecureValueType2 instanceof TLRPC$TL_secureValueTypeEmail)) {
                         tLRPC$TL_secureRequiredType = tLRPC$TL_secureRequiredType6;
-                        arrayList = null;
+                        arrayList2 = null;
                     } else {
                         if (tLRPC$SecureValueType2 instanceof TLRPC$TL_secureValueTypePersonalDetails) {
-                            if (!z6) {
-                                arrayList3 = arrayList4;
+                            if (!z4) {
+                                arrayList4 = arrayList9;
                                 tLRPC$TL_secureRequiredType = tLRPC$TL_secureRequiredType6;
-                                arrayList = arrayList3;
+                                arrayList2 = arrayList4;
                             }
                         } else if (!(tLRPC$SecureValueType2 instanceof TLRPC$TL_secureValueTypeAddress)) {
-                            if (!z6 || !isPersonalDocument(tLRPC$SecureValueType2)) {
-                                if (z7 && isAddressDocument(tLRPC$TL_secureRequiredType6.type)) {
-                                    arrayList2 = new ArrayList();
-                                    arrayList2.add(tLRPC$TL_secureRequiredType6);
+                            if (!z4 || !isPersonalDocument(tLRPC$SecureValueType2)) {
+                                if (z5 && isAddressDocument(tLRPC$TL_secureRequiredType6.type)) {
+                                    arrayList3 = new ArrayList();
+                                    arrayList3.add(tLRPC$TL_secureRequiredType6);
                                     tLRPC$TL_secureRequiredType3 = new TLRPC$TL_secureRequiredType();
                                     tLRPC$TL_secureRequiredType3.type = new TLRPC$TL_secureValueTypeAddress();
                                 }
-                                frameLayout2 = frameLayout3;
-                                tLRPC$User3 = tLRPC$User;
-                                z2 = z6;
-                                z = z7;
-                                str2 = str6;
+                                arrayList = arrayList7;
+                                i = size;
                                 i10++;
-                                str6 = str2;
-                                tLRPC$User = tLRPC$User3;
-                                z6 = z2;
-                                z7 = z;
-                                frameLayout3 = frameLayout2;
+                                size = i;
+                                arrayList7 = arrayList;
                             } else {
-                                arrayList2 = new ArrayList();
-                                arrayList2.add(tLRPC$TL_secureRequiredType6);
+                                arrayList3 = new ArrayList();
+                                arrayList3.add(tLRPC$TL_secureRequiredType6);
                                 tLRPC$TL_secureRequiredType3 = new TLRPC$TL_secureRequiredType();
                                 tLRPC$TL_secureRequiredType3.type = new TLRPC$TL_secureValueTypePersonalDetails();
                             }
                             tLRPC$TL_secureRequiredType = tLRPC$TL_secureRequiredType3;
-                            arrayList = arrayList2;
-                            z3 = true;
-                        } else if (!z7) {
-                            arrayList3 = arrayList5;
+                            arrayList2 = arrayList3;
+                            z = true;
+                        } else if (!z5) {
+                            arrayList4 = arrayList7;
                             tLRPC$TL_secureRequiredType = tLRPC$TL_secureRequiredType6;
-                            arrayList = arrayList3;
+                            arrayList2 = arrayList4;
                         }
-                        arrayList3 = null;
+                        arrayList4 = null;
                         tLRPC$TL_secureRequiredType = tLRPC$TL_secureRequiredType6;
-                        arrayList = arrayList3;
+                        arrayList2 = arrayList4;
                     }
-                    z3 = false;
+                    z = false;
                 } else {
                     if (tLRPC$SecureRequiredType5 instanceof TLRPC$TL_secureRequiredTypeOneOf) {
                         TLRPC$TL_secureRequiredTypeOneOf tLRPC$TL_secureRequiredTypeOneOf2 = (TLRPC$TL_secureRequiredTypeOneOf) tLRPC$SecureRequiredType5;
@@ -3078,15 +3061,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             TLRPC$SecureRequiredType tLRPC$SecureRequiredType6 = tLRPC$TL_secureRequiredTypeOneOf2.types.get(0);
                             if (tLRPC$SecureRequiredType6 instanceof TLRPC$TL_secureRequiredType) {
                                 TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType7 = (TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType6;
-                                if ((z6 && isPersonalDocument(tLRPC$TL_secureRequiredType7.type)) || (z7 && isAddressDocument(tLRPC$TL_secureRequiredType7.type))) {
-                                    ArrayList arrayList6 = new ArrayList();
+                                if ((z4 && isPersonalDocument(tLRPC$TL_secureRequiredType7.type)) || (z5 && isAddressDocument(tLRPC$TL_secureRequiredType7.type))) {
+                                    ArrayList arrayList10 = new ArrayList();
                                     int size4 = tLRPC$TL_secureRequiredTypeOneOf2.types.size();
                                     int i11 = 0;
                                     while (i11 < size4) {
                                         TLRPC$SecureRequiredType tLRPC$SecureRequiredType7 = tLRPC$TL_secureRequiredTypeOneOf2.types.get(i11);
                                         TLRPC$TL_secureRequiredTypeOneOf tLRPC$TL_secureRequiredTypeOneOf3 = tLRPC$TL_secureRequiredTypeOneOf2;
                                         if (tLRPC$SecureRequiredType7 instanceof TLRPC$TL_secureRequiredType) {
-                                            arrayList6.add((TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType7);
+                                            arrayList10.add((TLRPC$TL_secureRequiredType) tLRPC$SecureRequiredType7);
                                         }
                                         i11++;
                                         tLRPC$TL_secureRequiredTypeOneOf2 = tLRPC$TL_secureRequiredTypeOneOf3;
@@ -3098,54 +3081,36 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         tLRPC$TL_secureRequiredType2 = new TLRPC$TL_secureRequiredType();
                                         tLRPC$TL_secureRequiredType2.type = new TLRPC$TL_secureValueTypeAddress();
                                     }
-                                    arrayList = arrayList6;
-                                    z3 = true;
+                                    arrayList2 = arrayList10;
+                                    z = true;
                                     tLRPC$TL_secureRequiredType = tLRPC$TL_secureRequiredType2;
                                 }
                             }
                         }
                     }
-                    frameLayout2 = frameLayout3;
-                    tLRPC$User3 = tLRPC$User;
-                    z2 = z6;
-                    z = z7;
-                    str2 = str6;
+                    arrayList = arrayList7;
+                    i = size;
                     i10++;
-                    str6 = str2;
-                    tLRPC$User = tLRPC$User3;
-                    z6 = z2;
-                    z7 = z;
-                    frameLayout3 = frameLayout2;
+                    size = i;
+                    arrayList7 = arrayList;
                 }
-                z2 = z6;
-                str2 = str6;
-                z = z7;
-                frameLayout2 = frameLayout3;
-                boolean z8 = z3;
-                tLRPC$User3 = tLRPC$User;
-                addField(context, tLRPC$TL_secureRequiredType, arrayList, z8, i10 == size + -1);
+                arrayList = arrayList7;
+                ArrayList arrayList11 = arrayList2;
+                boolean z6 = z;
+                i = size;
+                addField(context, tLRPC$TL_secureRequiredType, arrayList11, z6, i10 == size + -1);
                 i10++;
-                str6 = str2;
-                tLRPC$User = tLRPC$User3;
-                z6 = z2;
-                z7 = z;
-                frameLayout3 = frameLayout2;
+                size = i;
+                arrayList7 = arrayList;
             }
-            frameLayout = frameLayout3;
-            tLRPC$User2 = tLRPC$User;
-            str = str6;
-        } else {
-            str = str4;
-            frameLayout = frameLayout3;
-            tLRPC$User2 = tLRPC$User;
         }
-        if (tLRPC$User2 != null) {
+        if (tLRPC$User != null) {
             TextInfoPrivacyCell textInfoPrivacyCell2 = new TextInfoPrivacyCell(context2);
             this.bottomCell = textInfoPrivacyCell2;
-            textInfoPrivacyCell2.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, str));
+            textInfoPrivacyCell2.setBackgroundDrawable(Theme.getThemedDrawable(context2, NUM, "windowBackgroundGrayShadow"));
             this.bottomCell.setLinkTextColorKey("windowBackgroundWhiteGrayText4");
             if (!TextUtils.isEmpty(this.currentForm.privacy_policy_url)) {
-                String formatString = LocaleController.formatString("PassportPolicy", NUM, UserObject.getFirstName(tLRPC$User2), tLRPC$User2.username);
+                String formatString = LocaleController.formatString("PassportPolicy", NUM, UserObject.getFirstName(tLRPC$User), tLRPC$User.username);
                 SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(formatString);
                 int indexOf = formatString.indexOf(42);
                 int lastIndexOf = formatString.lastIndexOf(42);
@@ -3157,20 +3122,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
                 this.bottomCell.setText(spannableStringBuilder);
             } else {
-                this.bottomCell.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PassportNoPolicy", NUM, UserObject.getFirstName(tLRPC$User2), tLRPC$User2.username)));
+                this.bottomCell.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PassportNoPolicy", NUM, UserObject.getFirstName(tLRPC$User), tLRPC$User.username)));
             }
             this.bottomCell.getTextView().setHighlightColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
             this.bottomCell.getTextView().setGravity(1);
-            i2 = -2;
             this.linearLayout2.addView(this.bottomCell, LayoutHelper.createLinear(-1, -2));
-        } else {
-            i2 = -2;
         }
-        FrameLayout frameLayout5 = new FrameLayout(context2);
-        this.bottomLayout = frameLayout5;
-        frameLayout5.setBackgroundDrawable(Theme.createSelectorWithBackgroundDrawable(Theme.getColor("passport_authorizeBackground"), Theme.getColor("passport_authorizeBackgroundSelected")));
-        FrameLayout frameLayout6 = frameLayout;
-        frameLayout6.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
+        FrameLayout frameLayout3 = new FrameLayout(context2);
+        this.bottomLayout = frameLayout3;
+        frameLayout3.setBackgroundDrawable(Theme.createSelectorWithBackgroundDrawable(Theme.getColor("passport_authorizeBackground"), Theme.getColor("passport_authorizeBackgroundSelected")));
+        frameLayout.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 80));
         this.bottomLayout.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 PassportActivity.this.lambda$createRequestInterface$16$PassportActivity(view);
@@ -3185,14 +3146,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         this.acceptTextView.setTextSize(1, 14.0f);
         this.acceptTextView.setGravity(17);
         this.acceptTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.bottomLayout.addView(this.acceptTextView, LayoutHelper.createFrame(i2, -1, 17));
+        this.bottomLayout.addView(this.acceptTextView, LayoutHelper.createFrame(-2, -1, 17));
         ContextProgressView contextProgressView = new ContextProgressView(context2, 0);
         this.progressViewButton = contextProgressView;
         contextProgressView.setVisibility(4);
         this.bottomLayout.addView(this.progressViewButton, LayoutHelper.createFrame(-1, -1.0f));
         View view = new View(context2);
         view.setBackgroundResource(NUM);
-        frameLayout6.addView(view, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
+        frameLayout.addView(view, LayoutHelper.createFrame(-1, 3.0f, 83, 0.0f, 0.0f, 0.0f, 48.0f));
     }
 
     /* access modifiers changed from: private */
@@ -3480,7 +3441,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.FrameLayout r0 = (android.widget.FrameLayout) r0
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r1 = "TelegramPassport"
-            r2 = 2131627666(0x7f0e0e92, float:1.8882603E38)
+            r2 = 2131627667(0x7f0e0e93, float:1.8882605E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setTitle(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
@@ -3545,7 +3506,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r9)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.deletePassportCell
             java.lang.String r9 = "TelegramPassportDelete"
-            r10 = 2131627669(0x7f0e0e95, float:1.8882609E38)
+            r10 = 2131627670(0x7f0e0e96, float:1.888261E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r10 = 0
             r0.setText(r9, r10)
@@ -10739,7 +10700,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627382(0x7f0e0d76, float:1.8882027E38)
+                r8 = 2131627383(0x7f0e0d77, float:1.8882029E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -10767,7 +10728,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627386(0x7f0e0d7a, float:1.8882035E38)
+                r8 = 2131627387(0x7f0e0d7b, float:1.8882037E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -11790,7 +11751,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         if (r2 != r6) goto L_0x007e
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131627516(0x7f0e0dfc, float:1.8882299E38)
+                                        r3 = 2131627517(0x7f0e0dfd, float:1.88823E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -11898,7 +11859,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                     L_0x0140:
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131627378(0x7f0e0d72, float:1.8882019E38)
+                                        r1 = 2131627379(0x7f0e0d73, float:1.888202E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)

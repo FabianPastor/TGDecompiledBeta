@@ -2880,7 +2880,6 @@
     <string name="PaymentSuccessfullyPaid">Hai trasferito con successo %1$s a %2$s per %3$s</string>
     <string name="PaymentSuccessfullyPaidNoItem">Hai trasferito con successo %1$s a %2$s</string>
     <string name="PaymentTestInvoice">FATTURA DI PROVA</string>
-    <string name="PaymentTransactionMessage">Vuoi davvero trasferire %1$s al bot %2$s per %3$s?</string>
     <string name="PaymentTransactionReview">Riepilogo transazione</string>
     <string name="PaymentTransactionTotal">Totale</string>
     <string name="PaymentWarning">Attenzione</string>

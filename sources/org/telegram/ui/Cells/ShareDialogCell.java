@@ -103,7 +103,7 @@ public class ShareDialogCell extends FrameLayout {
                         this.nameTextView.setText("");
                     }
                 }
-                this.imageView.setImage(ImageLocation.getForUserOrChat(this.user, 1), "50_50", ImageLocation.getForUserOrChat(this.user, 2), "50_50", (Drawable) this.avatarDrawable, (Object) this.user);
+                this.imageView.setForUserOrChat(this.user, this.avatarDrawable);
             } else {
                 this.nameTextView.setText(LocaleController.getString("SavedMessages", NUM));
                 this.avatarDrawable.setAvatarType(1);
@@ -120,7 +120,7 @@ public class ShareDialogCell extends FrameLayout {
                 this.nameTextView.setText("");
             }
             this.avatarDrawable.setInfo(chat);
-            this.imageView.setImage(ImageLocation.getForUserOrChat(chat, 1), "50_50", ImageLocation.getForUserOrChat(chat, 2), "50_50", (Drawable) this.avatarDrawable, (Object) chat);
+            this.imageView.setForUserOrChat(chat, this.avatarDrawable);
         }
         this.currentDialog = (long) i;
         this.checkBox.setChecked(z, false);
@@ -280,6 +280,6 @@ public class ShareDialogCell extends FrameLayout {
         int top = this.imageView.getTop() + (this.imageView.getMeasuredHeight() / 2);
         Theme.checkboxSquare_checkPaint.setColor(Theme.getColor("dialogRoundCheckBox"));
         Theme.checkboxSquare_checkPaint.setAlpha((int) (this.checkBox.getProgress() * 255.0f));
-        canvas.drawCircle((float) left, (float) top, (float) AndroidUtilities.dp(24.0f), Theme.checkboxSquare_checkPaint);
+        canvas.drawCircle((float) left, (float) top, (float) AndroidUtilities.dp(this.currentType == 2 ? 24.0f : 28.0f), Theme.checkboxSquare_checkPaint);
     }
 }
