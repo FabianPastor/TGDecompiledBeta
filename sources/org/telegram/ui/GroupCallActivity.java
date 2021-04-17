@@ -3953,17 +3953,20 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         openShareAlert(false, strArr3[0], strArr3[1], z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x0098  */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x009b  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x009b  */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x009e  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void openShareAlert(boolean r16, java.lang.String r17, java.lang.String r18, boolean r19) {
         /*
             r15 = this;
             r12 = r15
-            r0 = 0
-            if (r19 == 0) goto L_0x001c
-            java.lang.String[] r1 = r12.invites
-            r0 = r1[r0]
+            if (r19 == 0) goto L_0x001e
+            if (r17 == 0) goto L_0x0008
+            r0 = r17
+            goto L_0x000a
+        L_0x0008:
+            r0 = r18
+        L_0x000a:
             org.telegram.messenger.AndroidUtilities.addToClipboard(r0)
             org.telegram.ui.Components.UndoView r1 = r15.getUndoView()
             r2 = 0
@@ -3973,53 +3976,54 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r7 = 0
             r8 = 0
             r1.showWithAction(r2, r4, r5, r6, r7, r8)
-            goto L_0x00a0
-        L_0x001c:
-            org.telegram.ui.LaunchActivity r1 = r12.parentActivity
+            goto L_0x00a3
+        L_0x001e:
+            org.telegram.ui.LaunchActivity r0 = r12.parentActivity
+            r1 = 0
             r2 = 1
-            if (r1 == 0) goto L_0x004a
-            org.telegram.ui.ActionBar.ActionBarLayout r1 = r1.getActionBarLayout()
-            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r1.fragmentsStack
+            if (r0 == 0) goto L_0x004d
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r0.getActionBarLayout()
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             org.telegram.ui.LaunchActivity r3 = r12.parentActivity
             org.telegram.ui.ActionBar.ActionBarLayout r3 = r3.getActionBarLayout()
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r3.fragmentsStack
             int r3 = r3.size()
             int r3 = r3 - r2
-            java.lang.Object r1 = r1.get(r3)
-            org.telegram.ui.ActionBar.BaseFragment r1 = (org.telegram.ui.ActionBar.BaseFragment) r1
-            boolean r3 = r1 instanceof org.telegram.ui.ChatActivity
-            if (r3 == 0) goto L_0x004a
-            org.telegram.ui.ChatActivity r1 = (org.telegram.ui.ChatActivity) r1
-            boolean r1 = r1.needEnterText()
+            java.lang.Object r0 = r0.get(r3)
+            org.telegram.ui.ActionBar.BaseFragment r0 = (org.telegram.ui.ActionBar.BaseFragment) r0
+            boolean r3 = r0 instanceof org.telegram.ui.ChatActivity
+            if (r3 == 0) goto L_0x004d
+            org.telegram.ui.ChatActivity r0 = (org.telegram.ui.ChatActivity) r0
+            boolean r0 = r0.needEnterText()
             r12.anyEnterEventSent = r2
             r12.enterEventSent = r2
-            r13 = r1
-            goto L_0x004b
-        L_0x004a:
+            r13 = r0
+            goto L_0x004e
+        L_0x004d:
             r13 = 0
-        L_0x004b:
-            if (r17 == 0) goto L_0x0054
-            if (r18 != 0) goto L_0x0054
-            r1 = 0
+        L_0x004e:
+            if (r17 == 0) goto L_0x0057
+            if (r18 != 0) goto L_0x0057
+            r0 = 0
             r8 = r17
-            r9 = r1
-            goto L_0x0058
-        L_0x0054:
+            r9 = r0
+            goto L_0x005b
+        L_0x0057:
             r9 = r17
             r8 = r18
-        L_0x0058:
-            if (r9 != 0) goto L_0x006b
-            if (r16 == 0) goto L_0x006b
-            r1 = 2131628059(0x7f0e101b, float:1.88834E38)
+        L_0x005b:
+            if (r9 != 0) goto L_0x006e
+            if (r16 == 0) goto L_0x006e
+            r0 = 2131628059(0x7f0e101b, float:1.88834E38)
             java.lang.Object[] r2 = new java.lang.Object[r2]
-            r2[r0] = r8
-            java.lang.String r0 = "VoipGroupInviteText"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r2)
+            r2[r1] = r8
+            java.lang.String r1 = "VoipGroupInviteText"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r1, r0, r2)
             r5 = r0
-            goto L_0x006c
-        L_0x006b:
+            goto L_0x006f
+        L_0x006e:
             r5 = r8
-        L_0x006c:
+        L_0x006f:
             org.telegram.ui.GroupCallActivity$29 r14 = new org.telegram.ui.GroupCallActivity$29
             android.content.Context r2 = r15.getContext()
             r3 = 0
@@ -4041,14 +4045,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r0.setOnDismissListener(r1)
             org.telegram.ui.-$$Lambda$GroupCallActivity$jCr6VFZXeU1Ui0I8gnYN8PYyt4Y r0 = new org.telegram.ui.-$$Lambda$GroupCallActivity$jCr6VFZXeU1Ui0I8gnYN8PYyt4Y
             r0.<init>()
-            if (r13 == 0) goto L_0x009b
+            if (r13 == 0) goto L_0x009e
             r1 = 200(0xc8, double:9.9E-322)
-            goto L_0x009d
-        L_0x009b:
+            goto L_0x00a0
+        L_0x009e:
             r1 = 0
-        L_0x009d:
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)
         L_0x00a0:
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)
+        L_0x00a3:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCallActivity.openShareAlert(boolean, java.lang.String, java.lang.String, boolean):void");

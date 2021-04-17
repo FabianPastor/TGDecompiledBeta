@@ -2,8 +2,6 @@ package org.telegram.ui.Components;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -11,13 +9,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -45,15 +41,14 @@ import org.telegram.ui.Cells.SharedDocumentCell;
 import org.telegram.ui.Cells.SharedLinkCell;
 import org.telegram.ui.Cells.SharedPhotoVideoCell;
 import org.telegram.ui.ChatActivity;
-import org.telegram.ui.Components.SearchViewPager;
 import org.telegram.ui.Components.ViewPagerFixed;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.FilteredSearchView;
 
 public class SearchViewPager extends ViewPagerFixed implements FilteredSearchView.UiCallback {
-    boolean attached;
+    int animateFromCount = 0;
+    private boolean attached;
     int currentAccount = UserConfig.selectedAccount;
-    ArrayList<SearchResultsEnterAnimator> currentAnimators = new ArrayList<>();
     private ArrayList<FiltersView.MediaFilterData> currentSearchFilters = new ArrayList<>();
     public DialogsSearchAdapter dialogsSearchAdapter;
     public StickerEmptyView emptyView;
@@ -62,6 +57,8 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
     private ActionBarMenuItem forwardItem;
     private ActionBarMenuItem gotoItem;
     private boolean isActionModeShowed;
+    /* access modifiers changed from: private */
+    public RecyclerItemsEnterAnimator itemsEnterAnimator;
     private int keyboardSize;
     /* access modifiers changed from: private */
     public boolean lastSearchScrolledToTop;
@@ -108,33 +105,21 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 }
             }
         };
-        AnonymousClass2 r10 = new RecyclerListView(context) {
+        AnonymousClass2 r11 = new RecyclerListView(context) {
             /* access modifiers changed from: protected */
             public void dispatchDraw(Canvas canvas) {
-                int childCount = getChildCount();
-                for (int i = 0; i < childCount; i++) {
-                    View childAt = getChildAt(i);
-                    RecyclerView.ViewHolder childViewHolder = SearchViewPager.this.searchListView.getChildViewHolder(childAt);
-                    if (childViewHolder != null && !childViewHolder.shouldIgnore()) {
-                        int position = SearchViewPager.this.searchlayoutManager.getPosition(childAt);
-                        int i2 = 0;
-                        while (true) {
-                            if (i2 >= SearchViewPager.this.currentAnimators.size()) {
-                                childAt.setAlpha(1.0f);
-                                break;
-                            } else if (SearchViewPager.this.currentAnimators.get(i2).setup(childAt, position)) {
-                                break;
-                            } else {
-                                i2++;
-                            }
-                        }
-                    }
-                }
+                SearchViewPager.this.itemsEnterAnimator.dispatchDraw();
                 super.dispatchDraw(canvas);
             }
+
+            /* access modifiers changed from: protected */
+            public void onDetachedFromWindow() {
+                super.onDetachedFromWindow();
+                SearchViewPager.this.itemsEnterAnimator.onDetached();
+            }
         };
-        this.searchListView = r10;
-        r10.setPivotY(0.0f);
+        this.searchListView = r11;
+        r11.setPivotY(0.0f);
         this.searchListView.setAdapter(this.dialogsSearchAdapter);
         this.searchListView.setVerticalScrollBarEnabled(true);
         this.searchListView.setInstantClick(true);
@@ -170,7 +155,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         this.searchContainer.addView(this.noMediaFiltersSearchView);
         FlickerLoadingView flickerLoadingView = new FlickerLoadingView(context);
         flickerLoadingView.setViewType(1);
-        AnonymousClass4 r12 = new StickerEmptyView(context, flickerLoadingView, 1) {
+        AnonymousClass4 r13 = new StickerEmptyView(context, flickerLoadingView, 1) {
             public void setVisibility(int i) {
                 if (SearchViewPager.this.noMediaFiltersSearchView.getTag() != null) {
                     super.setVisibility(8);
@@ -179,14 +164,15 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 }
             }
         };
-        this.emptyView = r12;
-        r12.title.setText(LocaleController.getString("NoResult", NUM));
+        this.emptyView = r13;
+        r13.title.setText(LocaleController.getString("NoResult", NUM));
         this.emptyView.subtitle.setVisibility(8);
         this.emptyView.setVisibility(8);
         this.emptyView.addView(flickerLoadingView, 0);
         this.emptyView.showProgress(true, false);
         this.searchContainer.addView(this.emptyView);
         this.searchListView.setEmptyView(this.emptyView);
+        this.itemsEnterAnimator = new RecyclerItemsEnterAnimator(this.searchListView);
         setAdapter(new ViewPagerFixed.Adapter() {
             public int getItemViewType(int i) {
                 if (i == 0) {
@@ -762,109 +748,12 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
     }
 
     public void runResultsEnterAnimation() {
-        final HashSet hashSet = new HashSet();
-        int childCount = this.searchListView.getChildCount();
-        final View view = null;
-        for (int i = 0; i < childCount; i++) {
-            View childAt = this.searchListView.getChildAt(i);
-            int position = this.searchlayoutManager.getPosition(childAt);
-            if (childAt instanceof FlickerLoadingView) {
-                view = childAt;
-            } else {
-                hashSet.add(Integer.valueOf(position));
-            }
-        }
-        if (view != null) {
-            this.searchListView.removeView(view);
-        }
-        this.searchListView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            public boolean onPreDraw() {
-                SearchViewPager.this.searchListView.getViewTreeObserver().removeOnPreDrawListener(this);
-                int childCount = SearchViewPager.this.searchListView.getChildCount();
-                for (int i = 0; i < childCount; i++) {
-                    View childAt = SearchViewPager.this.searchListView.getChildAt(i);
-                    int position = SearchViewPager.this.searchlayoutManager.getPosition(childAt);
-                    if (!hashSet.contains(Integer.valueOf(position))) {
-                        SearchResultsEnterAnimator searchResultsEnterAnimator = new SearchResultsEnterAnimator();
-                        childAt.setAlpha(0.0f);
-                        searchResultsEnterAnimator.position = position;
-                        searchResultsEnterAnimator.valueAnimator.setStartDelay((long) ((int) ((((float) Math.min(SearchViewPager.this.searchListView.getMeasuredHeight(), Math.max(0, childAt.getTop()))) / ((float) SearchViewPager.this.searchListView.getMeasuredHeight())) * 100.0f)));
-                        searchResultsEnterAnimator.valueAnimator.setDuration(200);
-                        searchResultsEnterAnimator.valueAnimator.start();
-                    }
-                }
-                View view = view;
-                if (view != null && view.getParent() == null) {
-                    SearchViewPager.this.searchListView.addView(view);
-                    final RecyclerView.LayoutManager layoutManager = SearchViewPager.this.searchListView.getLayoutManager();
-                    if (layoutManager != null) {
-                        layoutManager.ignoreView(view);
-                        View view2 = view;
-                        ObjectAnimator ofFloat = ObjectAnimator.ofFloat(view2, View.ALPHA, new float[]{view2.getAlpha(), 0.0f});
-                        ofFloat.addListener(new AnimatorListenerAdapter() {
-                            public void onAnimationEnd(Animator animator) {
-                                view.setAlpha(1.0f);
-                                layoutManager.stopIgnoringView(view);
-                                AnonymousClass7 r2 = AnonymousClass7.this;
-                                SearchViewPager.this.searchListView.removeView(view);
-                            }
-                        });
-                        ofFloat.start();
-                    }
-                }
-                return true;
-            }
-        });
-    }
-
-    public void cancelEnterAnimation() {
-        while (this.currentAnimators.size() > 0) {
-            SearchResultsEnterAnimator searchResultsEnterAnimator = this.currentAnimators.get(0);
-            searchResultsEnterAnimator.valueAnimator.cancel();
-            this.currentAnimators.remove(searchResultsEnterAnimator);
-        }
+        this.itemsEnterAnimator.showItemsAnimated(this.animateFromCount);
+        this.animateFromCount = this.dialogsSearchAdapter.getItemCount();
     }
 
     public ViewPagerFixed.TabsView getTabsView() {
         return this.tabsView;
-    }
-
-    private class SearchResultsEnterAnimator {
-        int position;
-        float progress;
-        final ValueAnimator valueAnimator;
-
-        private SearchResultsEnterAnimator() {
-            ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-            this.valueAnimator = ofFloat;
-            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    SearchViewPager.SearchResultsEnterAnimator.this.lambda$new$0$SearchViewPager$SearchResultsEnterAnimator(valueAnimator);
-                }
-            });
-            ofFloat.addListener(new AnimatorListenerAdapter(SearchViewPager.this) {
-                public void onAnimationEnd(Animator animator) {
-                    SearchResultsEnterAnimator searchResultsEnterAnimator = SearchResultsEnterAnimator.this;
-                    SearchViewPager.this.currentAnimators.remove(searchResultsEnterAnimator);
-                }
-            });
-            SearchViewPager.this.currentAnimators.add(this);
-        }
-
-        /* access modifiers changed from: private */
-        /* renamed from: lambda$new$0 */
-        public /* synthetic */ void lambda$new$0$SearchViewPager$SearchResultsEnterAnimator(ValueAnimator valueAnimator2) {
-            this.progress = ((Float) valueAnimator2.getAnimatedValue()).floatValue();
-            SearchViewPager.this.searchListView.invalidate();
-        }
-
-        public boolean setup(View view, int i) {
-            if (this.position != i) {
-                return false;
-            }
-            view.setAlpha(this.progress);
-            return true;
-        }
     }
 
     /* access modifiers changed from: protected */
@@ -877,5 +766,11 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.attached = false;
+    }
+
+    public void cancelEnterAnimation() {
+        this.itemsEnterAnimator.cancel();
+        this.searchListView.invalidate();
+        this.animateFromCount = 0;
     }
 }

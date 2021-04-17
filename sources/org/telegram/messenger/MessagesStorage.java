@@ -12230,7 +12230,8 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v5, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v36, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v6, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v18, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v19, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v20, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v10, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r36v6, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v5, resolved type: int} */
@@ -12251,7 +12252,7 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v14, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v11, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v45, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v56, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v57, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v8, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r55v21, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v12, resolved type: int} */
@@ -12269,7 +12270,7 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v17, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v12, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v47, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v58, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v59, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r55v24, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v16, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v18, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
@@ -12329,8 +12330,8 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v27, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v42, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v60, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v87, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v88, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v89, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v28, resolved type: android.util.LongSparseArray} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v43, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v8, resolved type: int} */
@@ -12385,7 +12386,7 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v29, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v33, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v72, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v89, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v90, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v64, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v73, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v18, resolved type: int} */
@@ -12396,14 +12397,14 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v19, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v32, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v74, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v90, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v91, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v50, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v26, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v35, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v34, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v16, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v75, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v91, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v92, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v33, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v20, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v19, resolved type: int} */
@@ -12416,9 +12417,9 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v18, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v68, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v76, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v93, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v94, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v78, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v97, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v98, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v34, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v21, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v70, resolved type: int} */
@@ -12496,18 +12497,18 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v25, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v32, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v101, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v102, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v103, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v55, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v38, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v26, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v33, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v103, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v104, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v102, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v27, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v34, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v54, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v70, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v104, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v105, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v104, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v59, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v40, resolved type: int} */
@@ -12574,19 +12575,19 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v46, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v28, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v35, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v105, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v106, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v29, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v36, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v131, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v106, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v107, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v92, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v131, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v30, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v37, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v133, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v132, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v107, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v108, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v109, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v134, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v94, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v133, resolved type: int} */
@@ -12595,14 +12596,14 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v32, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v39, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v138, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v109, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v95, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v110, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v95, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v111, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v96, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v135, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v40, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v136, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v112, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v113, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v139, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v97, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v41, resolved type: int} */
@@ -12610,19 +12611,19 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v42, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v142, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v98, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v114, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v115, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v48, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v35, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v36, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v37, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v117, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v118, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v116, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v117, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v118, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v119, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v43, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v122, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v120, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v121, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v144, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v126, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v44, resolved type: int} */
@@ -12635,14 +12636,14 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v38, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v39, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v47, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v125, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v126, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v40, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v48, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v99, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v127, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v128, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v100, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v101, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v130, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v131, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v166, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v49, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v50, resolved type: int} */
@@ -12651,11 +12652,11 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v102, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v51, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v52, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v132, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v53, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v133, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v104, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v53, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v134, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v104, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v135, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v105, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v55, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v150, resolved type: int} */
@@ -12665,55 +12666,55 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v57, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v58, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v50, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v137, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v138, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v59, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v51, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v138, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v139, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v111, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v60, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v52, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v139, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v112, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v140, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v112, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v141, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v113, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v53, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v61, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v62, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v141, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v142, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v114, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v54, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v63, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v142, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v143, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v115, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v64, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v143, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v144, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v116, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v55, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v93, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v144, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v145, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v65, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v117, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v56, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v145, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v146, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v155, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v66, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v49, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v118, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v146, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v67, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v147, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v67, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v148, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v68, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v119, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v148, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v149, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v69, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v120, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v51, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v70, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v57, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v156, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v149, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v168, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v150, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v168, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v151, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v157, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v122, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v58, resolved type: int} */
@@ -12726,7 +12727,8 @@ public class MessagesStorage extends BaseController {
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v53, resolved type: int} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v158, resolved type: org.telegram.tgnet.TLRPC$TL_messages_messages} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v184, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v51, resolved type: java.util.ArrayList} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v56, resolved type: java.util.ArrayList} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v57, resolved type: java.util.ArrayList} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v33, resolved type: android.util.LongSparseArray} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v34, resolved type: android.util.LongSparseArray} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r24v46, resolved type: int} */
@@ -12800,12 +12802,20 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Removed duplicated region for block: B:723:0x10e0 A[Catch:{ Exception -> 0x11be }] */
     /* JADX WARNING: Removed duplicated region for block: B:726:0x10e7 A[SYNTHETIC, Splitter:B:726:0x10e7] */
     /* JADX WARNING: Removed duplicated region for block: B:745:0x1125 A[Catch:{ Exception -> 0x11be }] */
-    /* JADX WARNING: Removed duplicated region for block: B:846:0x1354 A[Catch:{ Exception -> 0x1441 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:879:0x13fc A[Catch:{ Exception -> 0x1487 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:881:0x140f A[Catch:{ Exception -> 0x1487 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:926:0x1518  */
-    /* JADX WARNING: Removed duplicated region for block: B:928:0x153c  */
-    /* JADX WARNING: Removed duplicated region for block: B:929:0x1544  */
+    /* JADX WARNING: Removed duplicated region for block: B:796:0x1262  */
+    /* JADX WARNING: Removed duplicated region for block: B:818:0x12a2  */
+    /* JADX WARNING: Removed duplicated region for block: B:835:0x12f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:840:0x1305 A[SYNTHETIC, Splitter:B:840:0x1305] */
+    /* JADX WARNING: Removed duplicated region for block: B:859:0x1361 A[Catch:{ Exception -> 0x144e }] */
+    /* JADX WARNING: Removed duplicated region for block: B:892:0x1409 A[Catch:{ Exception -> 0x1494 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:894:0x141c A[Catch:{ Exception -> 0x1494 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:907:0x1452 A[Catch:{ Exception -> 0x1494 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:910:0x1464 A[Catch:{ Exception -> 0x1494 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:911:0x1470 A[Catch:{ Exception -> 0x1494 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:914:0x1478 A[Catch:{ Exception -> 0x1494 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:939:0x1525  */
+    /* JADX WARNING: Removed duplicated region for block: B:941:0x1549  */
+    /* JADX WARNING: Removed duplicated region for block: B:942:0x1551  */
     /* JADX WARNING: Unknown variable types count: 2 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public java.lang.Runnable getMessagesInternal(long r48, long r50, int r52, int r53, int r54, int r55, int r56, int r57, boolean r58, boolean r59, int r60, int r61, boolean r62) {
@@ -12846,17 +12856,17 @@ public class MessagesStorage extends BaseController {
             r12 = 1
         L_0x0034:
             long r20 = android.os.SystemClock.elapsedRealtime()
-            java.util.ArrayList r13 = new java.util.ArrayList     // Catch:{ Exception -> 0x14df }
-            r13.<init>()     // Catch:{ Exception -> 0x14df }
-            java.util.ArrayList r9 = new java.util.ArrayList     // Catch:{ Exception -> 0x14df }
-            r9.<init>()     // Catch:{ Exception -> 0x14df }
-            java.util.ArrayList r11 = new java.util.ArrayList     // Catch:{ Exception -> 0x14df }
-            r11.<init>()     // Catch:{ Exception -> 0x14df }
+            java.util.ArrayList r13 = new java.util.ArrayList     // Catch:{ Exception -> 0x14ec }
+            r13.<init>()     // Catch:{ Exception -> 0x14ec }
+            java.util.ArrayList r9 = new java.util.ArrayList     // Catch:{ Exception -> 0x14ec }
+            r9.<init>()     // Catch:{ Exception -> 0x14ec }
+            java.util.ArrayList r11 = new java.util.ArrayList     // Catch:{ Exception -> 0x14ec }
+            r11.<init>()     // Catch:{ Exception -> 0x14ec }
             r24 = r7
-            android.util.SparseArray r7 = new android.util.SparseArray     // Catch:{ Exception -> 0x14df }
-            r7.<init>()     // Catch:{ Exception -> 0x14df }
-            android.util.LongSparseArray r8 = new android.util.LongSparseArray     // Catch:{ Exception -> 0x14df }
-            r8.<init>()     // Catch:{ Exception -> 0x14df }
+            android.util.SparseArray r7 = new android.util.SparseArray     // Catch:{ Exception -> 0x14ec }
+            r7.<init>()     // Catch:{ Exception -> 0x14ec }
+            android.util.LongSparseArray r8 = new android.util.LongSparseArray     // Catch:{ Exception -> 0x14ec }
+            r8.<init>()     // Catch:{ Exception -> 0x14ec }
             if (r59 == 0) goto L_0x01d2
             org.telegram.SQLite.SQLiteDatabase r10 = r15.database     // Catch:{ Exception -> 0x01b8 }
             java.util.Locale r12 = java.util.Locale.US     // Catch:{ Exception -> 0x01b8 }
@@ -13035,7 +13045,7 @@ public class MessagesStorage extends BaseController {
             r4 = r57
             r9 = r3
             r3 = 0
-            goto L_0x12f0
+            goto L_0x12fd
         L_0x01b8:
             r0 = move-exception
             r13 = r47
@@ -13052,7 +13062,7 @@ public class MessagesStorage extends BaseController {
             r39 = 1
         L_0x01ce:
             r3 = r53
-            goto L_0x14f5
+            goto L_0x1502
         L_0x01d2:
             r28 = r13
             int r1 = (int) r5
@@ -13962,7 +13972,7 @@ public class MessagesStorage extends BaseController {
             r9 = r38
             r22 = 0
             r4 = r0
-            goto L_0x14f5
+            goto L_0x1502
         L_0x086b:
             r5 = -1
         L_0x086c:
@@ -14332,7 +14342,7 @@ public class MessagesStorage extends BaseController {
             r4 = r0
             r9 = r38
             r22 = 0
-            goto L_0x14f5
+            goto L_0x1502
         L_0x0b36:
             r0 = move-exception
             r4 = r14
@@ -14349,7 +14359,7 @@ public class MessagesStorage extends BaseController {
             r9 = r38
             r22 = 0
             r25 = 0
-            goto L_0x14f5
+            goto L_0x1502
         L_0x0b4b:
             r0 = move-exception
             r4 = r57
@@ -14361,7 +14371,7 @@ public class MessagesStorage extends BaseController {
             r9 = r38
             r22 = 0
             r25 = 0
-            goto L_0x14f3
+            goto L_0x1500
         L_0x0b5b:
             r13 = r47
             r2 = r52
@@ -14472,7 +14482,7 @@ public class MessagesStorage extends BaseController {
             r34 = r15
             r9 = r38
             r1 = 0
-            goto L_0x14d4
+            goto L_0x14e1
         L_0x0CLASSNAME:
             r0 = move-exception
             r5 = r48
@@ -14498,7 +14508,7 @@ public class MessagesStorage extends BaseController {
             r33 = 0
         L_0x0CLASSNAME:
             r34 = 0
-            goto L_0x14da
+            goto L_0x14e7
         L_0x0c4c:
             r6 = 3
             r8 = 0
@@ -14551,7 +14561,7 @@ public class MessagesStorage extends BaseController {
             r34 = r15
         L_0x0c9d:
             r9 = r38
-            goto L_0x14d4
+            goto L_0x14e1
         L_0x0ca1:
             if (r55 == 0) goto L_0x0d00
             r6 = 6
@@ -14761,55 +14771,55 @@ public class MessagesStorage extends BaseController {
             r39 = 1
         L_0x0e1c:
             r5 = r48
-            goto L_0x14f5
+            goto L_0x1502
         L_0x0e20:
             r32 = r8
-            org.telegram.SQLite.SQLiteDatabase r1 = r13.database     // Catch:{ Exception -> 0x14c5 }
-            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x14c5 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r13.database     // Catch:{ Exception -> 0x14d2 }
+            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x14d2 }
             r6 = 1
-            java.lang.Object[] r7 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x14c5 }
-            java.lang.Long r6 = java.lang.Long.valueOf(r48)     // Catch:{ Exception -> 0x14c5 }
+            java.lang.Object[] r7 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x14d2 }
+            java.lang.Long r6 = java.lang.Long.valueOf(r48)     // Catch:{ Exception -> 0x14d2 }
             r8 = 0
-            r7[r8] = r6     // Catch:{ Exception -> 0x14c5 }
-            java.lang.String r5 = java.lang.String.format(r3, r5, r7)     // Catch:{ Exception -> 0x14c5 }
-            java.lang.Object[] r6 = new java.lang.Object[r8]     // Catch:{ Exception -> 0x14c5 }
-            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r5, r6)     // Catch:{ Exception -> 0x14c5 }
-            boolean r5 = r1.next()     // Catch:{ Exception -> 0x14c5 }
+            r7[r8] = r6     // Catch:{ Exception -> 0x14d2 }
+            java.lang.String r5 = java.lang.String.format(r3, r5, r7)     // Catch:{ Exception -> 0x14d2 }
+            java.lang.Object[] r6 = new java.lang.Object[r8]     // Catch:{ Exception -> 0x14d2 }
+            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r5, r6)     // Catch:{ Exception -> 0x14d2 }
+            boolean r5 = r1.next()     // Catch:{ Exception -> 0x14d2 }
             if (r5 == 0) goto L_0x0e45
             int r5 = r1.intValue(r8)     // Catch:{ Exception -> 0x0d97 }
             goto L_0x0e46
         L_0x0e45:
             r5 = 0
         L_0x0e46:
-            r1.dispose()     // Catch:{ Exception -> 0x14b0 }
-            org.telegram.SQLite.SQLiteDatabase r1 = r13.database     // Catch:{ Exception -> 0x14b0 }
+            r1.dispose()     // Catch:{ Exception -> 0x14bd }
+            org.telegram.SQLite.SQLiteDatabase r1 = r13.database     // Catch:{ Exception -> 0x14bd }
             java.lang.String r6 = "SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention, m.imp, m.forwards, m.replies_data FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid <= %d ORDER BY m.mid DESC LIMIT %d) UNION SELECT * FROM (SELECT m.read_state, m.data, m.send_state, m.mid, m.date, r.random_id, m.replydata, m.media, m.ttl, m.mention, m.imp, m.forwards, m.replies_data FROM messages as m LEFT JOIN randoms as r ON r.mid = m.mid WHERE m.uid = %d AND m.mid > %d ORDER BY m.mid ASC LIMIT %d)"
             r7 = 6
-            java.lang.Object[] r8 = new java.lang.Object[r7]     // Catch:{ Exception -> 0x14b0 }
-            java.lang.Long r7 = java.lang.Long.valueOf(r48)     // Catch:{ Exception -> 0x14b0 }
+            java.lang.Object[] r8 = new java.lang.Object[r7]     // Catch:{ Exception -> 0x14bd }
+            java.lang.Long r7 = java.lang.Long.valueOf(r48)     // Catch:{ Exception -> 0x14bd }
             r10 = 0
-            r8[r10] = r7     // Catch:{ Exception -> 0x14b0 }
-            java.lang.Long r7 = java.lang.Long.valueOf(r24)     // Catch:{ Exception -> 0x14b0 }
+            r8[r10] = r7     // Catch:{ Exception -> 0x14bd }
+            java.lang.Long r7 = java.lang.Long.valueOf(r24)     // Catch:{ Exception -> 0x14bd }
             r10 = 1
-            r8[r10] = r7     // Catch:{ Exception -> 0x14b0 }
+            r8[r10] = r7     // Catch:{ Exception -> 0x14bd }
             int r7 = r2 / 2
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)     // Catch:{ Exception -> 0x14b0 }
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)     // Catch:{ Exception -> 0x14bd }
             r10 = 2
-            r8[r10] = r7     // Catch:{ Exception -> 0x14b0 }
-            java.lang.Long r7 = java.lang.Long.valueOf(r48)     // Catch:{ Exception -> 0x14b0 }
+            r8[r10] = r7     // Catch:{ Exception -> 0x14bd }
+            java.lang.Long r7 = java.lang.Long.valueOf(r48)     // Catch:{ Exception -> 0x14bd }
             r10 = 3
-            r8[r10] = r7     // Catch:{ Exception -> 0x14b0 }
-            java.lang.Long r7 = java.lang.Long.valueOf(r24)     // Catch:{ Exception -> 0x14b0 }
+            r8[r10] = r7     // Catch:{ Exception -> 0x14bd }
+            java.lang.Long r7 = java.lang.Long.valueOf(r24)     // Catch:{ Exception -> 0x14bd }
             r10 = 4
-            r8[r10] = r7     // Catch:{ Exception -> 0x14b0 }
+            r8[r10] = r7     // Catch:{ Exception -> 0x14bd }
             int r7 = r2 / 2
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)     // Catch:{ Exception -> 0x14b0 }
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)     // Catch:{ Exception -> 0x14bd }
             r10 = 5
-            r8[r10] = r7     // Catch:{ Exception -> 0x14b0 }
-            java.lang.String r3 = java.lang.String.format(r3, r6, r8)     // Catch:{ Exception -> 0x14b0 }
+            r8[r10] = r7     // Catch:{ Exception -> 0x14bd }
+            java.lang.String r3 = java.lang.String.format(r3, r6, r8)     // Catch:{ Exception -> 0x14bd }
             r6 = 0
-            java.lang.Object[] r7 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x14b0 }
-            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r3, r7)     // Catch:{ Exception -> 0x14b0 }
+            java.lang.Object[] r7 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x14bd }
+            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r3, r7)     // Catch:{ Exception -> 0x14bd }
             r3 = r53
             r10 = r5
             r33 = r14
@@ -14887,7 +14897,7 @@ public class MessagesStorage extends BaseController {
             r25 = r15
         L_0x0var_:
             r9 = r38
-            goto L_0x14f5
+            goto L_0x1502
         L_0x0f1a:
             r8 = r24
             long r9 = (long) r8
@@ -15003,7 +15013,7 @@ public class MessagesStorage extends BaseController {
             r4 = r0
             r32 = r7
             r5 = r14
-            goto L_0x149a
+            goto L_0x14a7
         L_0x0fef:
             r11 = 6
             boolean r12 = r5.isNull(r11)     // Catch:{ Exception -> 0x1133 }
@@ -15028,7 +15038,7 @@ public class MessagesStorage extends BaseController {
             r1 = r55
             r4 = r0
             r32 = r7
-            goto L_0x149a
+            goto L_0x14a7
         L_0x1023:
             org.telegram.tgnet.TLRPC$Message r11 = r3.replyMessage     // Catch:{ Exception -> 0x1133 }
             if (r11 != 0) goto L_0x0fde
@@ -15183,7 +15193,7 @@ public class MessagesStorage extends BaseController {
         L_0x1133:
             r0 = move-exception
             r30 = r7
-            goto L_0x1241
+            goto L_0x124d
         L_0x1138:
             r0 = move-exception
             r30 = r7
@@ -15207,7 +15217,7 @@ public class MessagesStorage extends BaseController {
             r24 = r14
         L_0x1151:
             r9 = r38
-            goto L_0x1241
+            goto L_0x124d
         L_0x1155:
             r53 = r3
             r55 = r8
@@ -15268,7 +15278,7 @@ public class MessagesStorage extends BaseController {
             goto L_0x11f6
         L_0x11be:
             r0 = move-exception
-            goto L_0x1241
+            goto L_0x124d
         L_0x11c1:
             r0 = move-exception
             r52 = r2
@@ -15284,7 +15294,7 @@ public class MessagesStorage extends BaseController {
             r4 = r0
             r22 = r24
             r32 = r30
-            goto L_0x14f5
+            goto L_0x1502
         L_0x11db:
             r52 = r2
             r53 = r3
@@ -15301,29 +15311,29 @@ public class MessagesStorage extends BaseController {
             r5 = 0
             r24 = 0
         L_0x11f6:
-            if (r5 == 0) goto L_0x1248
-            org.telegram.SQLite.SQLiteDatabase r8 = r13.database     // Catch:{ Exception -> 0x123e }
+            if (r5 == 0) goto L_0x1255
+            org.telegram.SQLite.SQLiteDatabase r8 = r13.database     // Catch:{ Exception -> 0x124a }
             java.lang.String r14 = "UPDATE messages SET mid = ? WHERE mid = ?"
-            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r14)     // Catch:{ Exception -> 0x123e }
-            int r14 = r5.size()     // Catch:{ Exception -> 0x123e }
+            org.telegram.SQLite.SQLitePreparedStatement r8 = r8.executeFast(r14)     // Catch:{ Exception -> 0x124a }
+            int r14 = r5.size()     // Catch:{ Exception -> 0x123d }
             r15 = 0
         L_0x1205:
-            if (r15 >= r14) goto L_0x1236
-            java.lang.Object r18 = r5.get(r15)     // Catch:{ Exception -> 0x123e }
-            java.lang.Long r18 = (java.lang.Long) r18     // Catch:{ Exception -> 0x123e }
+            if (r15 >= r14) goto L_0x1238
+            java.lang.Object r18 = r5.get(r15)     // Catch:{ Exception -> 0x123d }
+            java.lang.Long r18 = (java.lang.Long) r18     // Catch:{ Exception -> 0x123d }
             r19 = r14
-            long r13 = r18.longValue()     // Catch:{ Exception -> 0x123e }
-            r8.requery()     // Catch:{ Exception -> 0x123e }
+            long r13 = r18.longValue()     // Catch:{ Exception -> 0x123d }
+            r8.requery()     // Catch:{ Exception -> 0x123d }
             r18 = r5
-            int r5 = (int) r13     // Catch:{ Exception -> 0x123e }
+            int r5 = (int) r13
             r26 = r2
             r37 = r3
-            long r2 = (long) r5     // Catch:{ Exception -> 0x123e }
+            long r2 = (long) r5
             r5 = 1
-            r8.bindLong(r5, r2)     // Catch:{ Exception -> 0x123e }
+            r8.bindLong(r5, r2)     // Catch:{ Exception -> 0x1236 }
             r2 = 2
-            r8.bindLong(r2, r13)     // Catch:{ Exception -> 0x123e }
-            r8.step()     // Catch:{ Exception -> 0x123e }
+            r8.bindLong(r2, r13)     // Catch:{ Exception -> 0x1236 }
+            r8.step()     // Catch:{ Exception -> 0x1236 }
             int r15 = r15 + 1
             r13 = r47
             r5 = r18
@@ -15332,98 +15342,110 @@ public class MessagesStorage extends BaseController {
             r3 = r37
             goto L_0x1205
         L_0x1236:
+            r0 = move-exception
+            goto L_0x1242
+        L_0x1238:
             r26 = r2
             r37 = r3
-            r8.dispose()     // Catch:{ Exception -> 0x123e }
-            goto L_0x124c
-        L_0x123e:
+            goto L_0x1246
+        L_0x123d:
+            r0 = move-exception
+            r26 = r2
+            r37 = r3
+        L_0x1242:
+            r2 = r0
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ Exception -> 0x124a }
+        L_0x1246:
+            r8.dispose()     // Catch:{ Exception -> 0x124a }
+            goto L_0x1259
+        L_0x124a:
             r0 = move-exception
             r13 = r47
-        L_0x1241:
+        L_0x124d:
             r5 = r48
             r2 = r52
             r3 = r53
             goto L_0x11d2
-        L_0x1248:
+        L_0x1255:
             r26 = r2
             r37 = r3
-        L_0x124c:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r2 = r9.messages     // Catch:{ Exception -> 0x149e }
-            org.telegram.messenger.-$$Lambda$MessagesStorage$O4p3afFRdGYcpD1t3pANaVc_444 r3 = org.telegram.messenger.$$Lambda$MessagesStorage$O4p3afFRdGYcpD1t3pANaVc_444.INSTANCE     // Catch:{ Exception -> 0x149e }
-            java.util.Collections.sort(r2, r3)     // Catch:{ Exception -> 0x149e }
-            if (r40 == 0) goto L_0x1293
+        L_0x1259:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r2 = r9.messages     // Catch:{ Exception -> 0x14ab }
+            org.telegram.messenger.-$$Lambda$MessagesStorage$O4p3afFRdGYcpD1t3pANaVc_444 r3 = org.telegram.messenger.$$Lambda$MessagesStorage$O4p3afFRdGYcpD1t3pANaVc_444.INSTANCE     // Catch:{ Exception -> 0x14ab }
+            java.util.Collections.sort(r2, r3)     // Catch:{ Exception -> 0x14ab }
+            if (r40 == 0) goto L_0x12a0
             r2 = 3
-            if (r4 == r2) goto L_0x1265
+            if (r4 == r2) goto L_0x1272
             r2 = 4
-            if (r4 == r2) goto L_0x1265
+            if (r4 == r2) goto L_0x1272
             r2 = 2
-            if (r4 != r2) goto L_0x1263
-            if (r35 == 0) goto L_0x1263
-            if (r6 != 0) goto L_0x1263
-            goto L_0x1265
-        L_0x1263:
+            if (r4 != r2) goto L_0x1270
+            if (r35 == 0) goto L_0x1270
+            if (r6 != 0) goto L_0x1270
+            goto L_0x1272
+        L_0x1270:
             r1 = 4
-            goto L_0x1280
-        L_0x1265:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r2 = r9.messages     // Catch:{ Exception -> 0x123e }
-            boolean r2 = r2.isEmpty()     // Catch:{ Exception -> 0x123e }
-            if (r2 != 0) goto L_0x1263
-            if (r11 > r1) goto L_0x1271
-            if (r12 >= r1) goto L_0x1263
-        L_0x1271:
-            r37.clear()     // Catch:{ Exception -> 0x123e }
-            r10.clear()     // Catch:{ Exception -> 0x123e }
-            r26.clear()     // Catch:{ Exception -> 0x123e }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r9.messages     // Catch:{ Exception -> 0x123e }
-            r1.clear()     // Catch:{ Exception -> 0x123e }
-            goto L_0x1263
-        L_0x1280:
-            if (r4 == r1) goto L_0x1285
+            goto L_0x128d
+        L_0x1272:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r2 = r9.messages     // Catch:{ Exception -> 0x124a }
+            boolean r2 = r2.isEmpty()     // Catch:{ Exception -> 0x124a }
+            if (r2 != 0) goto L_0x1270
+            if (r11 > r1) goto L_0x127e
+            if (r12 >= r1) goto L_0x1270
+        L_0x127e:
+            r37.clear()     // Catch:{ Exception -> 0x124a }
+            r10.clear()     // Catch:{ Exception -> 0x124a }
+            r26.clear()     // Catch:{ Exception -> 0x124a }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r9.messages     // Catch:{ Exception -> 0x124a }
+            r1.clear()     // Catch:{ Exception -> 0x124a }
+            goto L_0x1270
+        L_0x128d:
+            if (r4 == r1) goto L_0x1292
             r1 = 3
-            if (r4 != r1) goto L_0x1293
-        L_0x1285:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r9.messages     // Catch:{ Exception -> 0x123e }
-            int r1 = r1.size()     // Catch:{ Exception -> 0x123e }
+            if (r4 != r1) goto L_0x12a0
+        L_0x1292:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r9.messages     // Catch:{ Exception -> 0x124a }
+            int r1 = r1.size()     // Catch:{ Exception -> 0x124a }
             r2 = 1
-            if (r1 != r2) goto L_0x1293
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r9.messages     // Catch:{ Exception -> 0x123e }
-            r1.clear()     // Catch:{ Exception -> 0x123e }
-        L_0x1293:
-            if (r30 == 0) goto L_0x12e6
+            if (r1 != r2) goto L_0x12a0
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r9.messages     // Catch:{ Exception -> 0x124a }
+            r1.clear()     // Catch:{ Exception -> 0x124a }
+        L_0x12a0:
+            if (r30 == 0) goto L_0x12f3
             r13 = r47
-            org.telegram.SQLite.SQLiteDatabase r1 = r13.database     // Catch:{ Exception -> 0x12df }
-            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x12df }
+            org.telegram.SQLite.SQLiteDatabase r1 = r13.database     // Catch:{ Exception -> 0x12ec }
+            java.util.Locale r2 = java.util.Locale.US     // Catch:{ Exception -> 0x12ec }
             java.lang.String r3 = "SELECT COUNT(mid) FROM messages WHERE uid = %d AND mention = 1 AND read_state IN(0, 1)"
             r5 = 1
-            java.lang.Object[] r6 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x12df }
-            java.lang.Long r5 = java.lang.Long.valueOf(r48)     // Catch:{ Exception -> 0x12df }
+            java.lang.Object[] r6 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x12ec }
+            java.lang.Long r5 = java.lang.Long.valueOf(r48)     // Catch:{ Exception -> 0x12ec }
             r8 = 0
-            r6[r8] = r5     // Catch:{ Exception -> 0x12df }
-            java.lang.String r2 = java.lang.String.format(r2, r3, r6)     // Catch:{ Exception -> 0x12df }
-            java.lang.Object[] r3 = new java.lang.Object[r8]     // Catch:{ Exception -> 0x12df }
-            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r2, r3)     // Catch:{ Exception -> 0x12df }
-            boolean r2 = r1.next()     // Catch:{ Exception -> 0x12df }
-            if (r2 == 0) goto L_0x12c4
-            int r2 = r1.intValue(r8)     // Catch:{ Exception -> 0x12df }
+            r6[r8] = r5     // Catch:{ Exception -> 0x12ec }
+            java.lang.String r2 = java.lang.String.format(r2, r3, r6)     // Catch:{ Exception -> 0x12ec }
+            java.lang.Object[] r3 = new java.lang.Object[r8]     // Catch:{ Exception -> 0x12ec }
+            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r2, r3)     // Catch:{ Exception -> 0x12ec }
+            boolean r2 = r1.next()     // Catch:{ Exception -> 0x12ec }
+            if (r2 == 0) goto L_0x12d1
+            int r2 = r1.intValue(r8)     // Catch:{ Exception -> 0x12ec }
             r3 = r30
-            if (r3 == r2) goto L_0x12c2
-        L_0x12bf:
+            if (r3 == r2) goto L_0x12cf
+        L_0x12cc:
             int r2 = r3 * -1
-            goto L_0x12c7
-        L_0x12c2:
+            goto L_0x12d4
+        L_0x12cf:
             r2 = r3
-            goto L_0x12c7
-        L_0x12c4:
+            goto L_0x12d4
+        L_0x12d1:
             r3 = r30
-            goto L_0x12bf
-        L_0x12c7:
-            r1.dispose()     // Catch:{ Exception -> 0x12d2 }
+            goto L_0x12cc
+        L_0x12d4:
+            r1.dispose()     // Catch:{ Exception -> 0x12df }
             r1 = r52
             r14 = r55
             r3 = r2
             r2 = r53
-            goto L_0x12f0
-        L_0x12d2:
+            goto L_0x12fd
+        L_0x12df:
             r0 = move-exception
             r5 = r48
             r3 = r53
@@ -15431,219 +15453,219 @@ public class MessagesStorage extends BaseController {
             r4 = r0
             r32 = r2
             r22 = r24
-            goto L_0x132c
-        L_0x12df:
+            goto L_0x1339
+        L_0x12ec:
             r0 = move-exception
             r3 = r30
             r5 = r48
-            goto L_0x14a5
-        L_0x12e6:
+            goto L_0x14b2
+        L_0x12f3:
             r13 = r47
             r3 = r30
             r1 = r52
             r2 = r53
             r14 = r55
-        L_0x12f0:
-            boolean r5 = r37.isEmpty()     // Catch:{ Exception -> 0x1489 }
+        L_0x12fd:
+            boolean r5 = r37.isEmpty()     // Catch:{ Exception -> 0x1496 }
             java.lang.String r6 = ","
-            if (r5 != 0) goto L_0x1445
-            int r5 = r31.size()     // Catch:{ Exception -> 0x1489 }
-            if (r5 <= 0) goto L_0x1330
-            org.telegram.SQLite.SQLiteDatabase r5 = r13.database     // Catch:{ Exception -> 0x1320 }
-            java.util.Locale r8 = java.util.Locale.US     // Catch:{ Exception -> 0x1320 }
+            if (r5 != 0) goto L_0x1452
+            int r5 = r31.size()     // Catch:{ Exception -> 0x1496 }
+            if (r5 <= 0) goto L_0x133d
+            org.telegram.SQLite.SQLiteDatabase r5 = r13.database     // Catch:{ Exception -> 0x132d }
+            java.util.Locale r8 = java.util.Locale.US     // Catch:{ Exception -> 0x132d }
             java.lang.String r11 = "SELECT data, mid, date FROM messages WHERE mid IN(%s)"
             r12 = 1
-            java.lang.Object[] r15 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x1320 }
+            java.lang.Object[] r15 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x132d }
             r12 = r37
-            java.lang.String r12 = android.text.TextUtils.join(r6, r12)     // Catch:{ Exception -> 0x1320 }
+            java.lang.String r12 = android.text.TextUtils.join(r6, r12)     // Catch:{ Exception -> 0x132d }
             r52 = r1
             r1 = 0
-            r15[r1] = r12     // Catch:{ Exception -> 0x131e }
-            java.lang.String r8 = java.lang.String.format(r8, r11, r15)     // Catch:{ Exception -> 0x131e }
-            java.lang.Object[] r11 = new java.lang.Object[r1]     // Catch:{ Exception -> 0x131e }
-            org.telegram.SQLite.SQLiteCursor r1 = r5.queryFinalized(r8, r11)     // Catch:{ Exception -> 0x131e }
-        L_0x131c:
+            r15[r1] = r12     // Catch:{ Exception -> 0x132b }
+            java.lang.String r8 = java.lang.String.format(r8, r11, r15)     // Catch:{ Exception -> 0x132b }
+            java.lang.Object[] r11 = new java.lang.Object[r1]     // Catch:{ Exception -> 0x132b }
+            org.telegram.SQLite.SQLiteCursor r1 = r5.queryFinalized(r8, r11)     // Catch:{ Exception -> 0x132b }
+        L_0x1329:
             r12 = 0
-            goto L_0x134e
-        L_0x131e:
+            goto L_0x135b
+        L_0x132b:
             r0 = move-exception
-            goto L_0x1323
-        L_0x1320:
+            goto L_0x1330
+        L_0x132d:
             r0 = move-exception
             r52 = r1
-        L_0x1323:
+        L_0x1330:
             r5 = r48
             r4 = r0
             r32 = r3
             r1 = r14
             r22 = r24
             r3 = r2
-        L_0x132c:
+        L_0x1339:
             r2 = r52
-            goto L_0x14f5
-        L_0x1330:
+            goto L_0x1502
+        L_0x133d:
             r52 = r1
             r12 = r37
-            org.telegram.SQLite.SQLiteDatabase r1 = r13.database     // Catch:{ Exception -> 0x1441 }
-            java.util.Locale r5 = java.util.Locale.US     // Catch:{ Exception -> 0x1441 }
+            org.telegram.SQLite.SQLiteDatabase r1 = r13.database     // Catch:{ Exception -> 0x144e }
+            java.util.Locale r5 = java.util.Locale.US     // Catch:{ Exception -> 0x144e }
             java.lang.String r8 = "SELECT m.data, m.mid, m.date, r.random_id FROM randoms as r INNER JOIN messages as m ON r.mid = m.mid WHERE r.random_id IN(%s)"
             r11 = 1
-            java.lang.Object[] r15 = new java.lang.Object[r11]     // Catch:{ Exception -> 0x1441 }
-            java.lang.String r11 = android.text.TextUtils.join(r6, r12)     // Catch:{ Exception -> 0x1441 }
+            java.lang.Object[] r15 = new java.lang.Object[r11]     // Catch:{ Exception -> 0x144e }
+            java.lang.String r11 = android.text.TextUtils.join(r6, r12)     // Catch:{ Exception -> 0x144e }
             r12 = 0
-            r15[r12] = r11     // Catch:{ Exception -> 0x1441 }
-            java.lang.String r5 = java.lang.String.format(r5, r8, r15)     // Catch:{ Exception -> 0x1441 }
-            java.lang.Object[] r8 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x1441 }
-            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r5, r8)     // Catch:{ Exception -> 0x1441 }
-        L_0x134e:
-            boolean r5 = r1.next()     // Catch:{ Exception -> 0x1441 }
-            if (r5 == 0) goto L_0x13fc
-            org.telegram.tgnet.NativeByteBuffer r5 = r1.byteBufferValue(r12)     // Catch:{ Exception -> 0x1441 }
-            if (r5 == 0) goto L_0x13e2
-            int r8 = r5.readInt32(r12)     // Catch:{ Exception -> 0x1441 }
-            org.telegram.tgnet.TLRPC$Message r8 = org.telegram.tgnet.TLRPC$Message.TLdeserialize(r5, r8, r12)     // Catch:{ Exception -> 0x1441 }
+            r15[r12] = r11     // Catch:{ Exception -> 0x144e }
+            java.lang.String r5 = java.lang.String.format(r5, r8, r15)     // Catch:{ Exception -> 0x144e }
+            java.lang.Object[] r8 = new java.lang.Object[r12]     // Catch:{ Exception -> 0x144e }
+            org.telegram.SQLite.SQLiteCursor r1 = r1.queryFinalized(r5, r8)     // Catch:{ Exception -> 0x144e }
+        L_0x135b:
+            boolean r5 = r1.next()     // Catch:{ Exception -> 0x144e }
+            if (r5 == 0) goto L_0x1409
+            org.telegram.tgnet.NativeByteBuffer r5 = r1.byteBufferValue(r12)     // Catch:{ Exception -> 0x144e }
+            if (r5 == 0) goto L_0x13ef
+            int r8 = r5.readInt32(r12)     // Catch:{ Exception -> 0x144e }
+            org.telegram.tgnet.TLRPC$Message r8 = org.telegram.tgnet.TLRPC$Message.TLdeserialize(r5, r8, r12)     // Catch:{ Exception -> 0x144e }
             r11 = r36
-            r8.readAttachPath(r5, r11)     // Catch:{ Exception -> 0x1441 }
-            r5.reuse()     // Catch:{ Exception -> 0x1441 }
+            r8.readAttachPath(r5, r11)     // Catch:{ Exception -> 0x144e }
+            r5.reuse()     // Catch:{ Exception -> 0x144e }
             r15 = 1
-            int r5 = r1.intValue(r15)     // Catch:{ Exception -> 0x1441 }
-            r8.id = r5     // Catch:{ Exception -> 0x1441 }
+            int r5 = r1.intValue(r15)     // Catch:{ Exception -> 0x144e }
+            r8.id = r5     // Catch:{ Exception -> 0x144e }
             r5 = 2
-            int r12 = r1.intValue(r5)     // Catch:{ Exception -> 0x1441 }
-            r8.date = r12     // Catch:{ Exception -> 0x1441 }
+            int r12 = r1.intValue(r5)     // Catch:{ Exception -> 0x144e }
+            r8.date = r12     // Catch:{ Exception -> 0x144e }
             r53 = r6
             r5 = r48
-            r8.dialog_id = r5     // Catch:{ Exception -> 0x13df }
+            r8.dialog_id = r5     // Catch:{ Exception -> 0x13ec }
             r12 = r26
-            addUsersAndChatsFromMessage(r8, r10, r12)     // Catch:{ Exception -> 0x13df }
-            int r18 = r31.size()     // Catch:{ Exception -> 0x13df }
-            if (r18 <= 0) goto L_0x13b0
-            int r15 = r8.id     // Catch:{ Exception -> 0x13df }
+            addUsersAndChatsFromMessage(r8, r10, r12)     // Catch:{ Exception -> 0x13ec }
+            int r18 = r31.size()     // Catch:{ Exception -> 0x13ec }
+            if (r18 <= 0) goto L_0x13bd
+            int r15 = r8.id     // Catch:{ Exception -> 0x13ec }
             r55 = r2
             r2 = r31
-            java.lang.Object r15 = r2.get(r15)     // Catch:{ Exception -> 0x13ad }
-            java.util.ArrayList r15 = (java.util.ArrayList) r15     // Catch:{ Exception -> 0x13ad }
+            java.lang.Object r15 = r2.get(r15)     // Catch:{ Exception -> 0x13ba }
+            java.util.ArrayList r15 = (java.util.ArrayList) r15     // Catch:{ Exception -> 0x13ba }
             r31 = r2
             r18 = r3
-            if (r15 == 0) goto L_0x13ee
+            if (r15 == 0) goto L_0x13fb
             r2 = 0
-        L_0x139c:
-            int r3 = r15.size()     // Catch:{ Exception -> 0x1487 }
-            if (r2 >= r3) goto L_0x13ee
-            java.lang.Object r3 = r15.get(r2)     // Catch:{ Exception -> 0x1487 }
-            org.telegram.tgnet.TLRPC$Message r3 = (org.telegram.tgnet.TLRPC$Message) r3     // Catch:{ Exception -> 0x1487 }
-            r3.replyMessage = r8     // Catch:{ Exception -> 0x1487 }
+        L_0x13a9:
+            int r3 = r15.size()     // Catch:{ Exception -> 0x1494 }
+            if (r2 >= r3) goto L_0x13fb
+            java.lang.Object r3 = r15.get(r2)     // Catch:{ Exception -> 0x1494 }
+            org.telegram.tgnet.TLRPC$Message r3 = (org.telegram.tgnet.TLRPC$Message) r3     // Catch:{ Exception -> 0x1494 }
+            r3.replyMessage = r8     // Catch:{ Exception -> 0x1494 }
             int r2 = r2 + 1
-            goto L_0x139c
-        L_0x13ad:
+            goto L_0x13a9
+        L_0x13ba:
             r0 = move-exception
-            goto L_0x1490
-        L_0x13b0:
+            goto L_0x149d
+        L_0x13bd:
             r55 = r2
             r18 = r3
             r2 = 3
-            long r3 = r1.longValue(r2)     // Catch:{ Exception -> 0x1487 }
-            java.lang.Object r15 = r7.get(r3)     // Catch:{ Exception -> 0x1487 }
-            java.util.ArrayList r15 = (java.util.ArrayList) r15     // Catch:{ Exception -> 0x1487 }
-            r7.remove(r3)     // Catch:{ Exception -> 0x1487 }
-            if (r15 == 0) goto L_0x13ee
+            long r3 = r1.longValue(r2)     // Catch:{ Exception -> 0x1494 }
+            java.lang.Object r15 = r7.get(r3)     // Catch:{ Exception -> 0x1494 }
+            java.util.ArrayList r15 = (java.util.ArrayList) r15     // Catch:{ Exception -> 0x1494 }
+            r7.remove(r3)     // Catch:{ Exception -> 0x1494 }
+            if (r15 == 0) goto L_0x13fb
             r3 = 0
-        L_0x13c5:
-            int r4 = r15.size()     // Catch:{ Exception -> 0x1487 }
-            if (r3 >= r4) goto L_0x13ee
-            java.lang.Object r4 = r15.get(r3)     // Catch:{ Exception -> 0x1487 }
-            org.telegram.tgnet.TLRPC$Message r4 = (org.telegram.tgnet.TLRPC$Message) r4     // Catch:{ Exception -> 0x1487 }
-            r4.replyMessage = r8     // Catch:{ Exception -> 0x1487 }
-            org.telegram.tgnet.TLRPC$TL_messageReplyHeader r4 = r4.reply_to     // Catch:{ Exception -> 0x1487 }
-            if (r4 == 0) goto L_0x13db
-            int r2 = r8.id     // Catch:{ Exception -> 0x1487 }
-            r4.reply_to_msg_id = r2     // Catch:{ Exception -> 0x1487 }
-        L_0x13db:
+        L_0x13d2:
+            int r4 = r15.size()     // Catch:{ Exception -> 0x1494 }
+            if (r3 >= r4) goto L_0x13fb
+            java.lang.Object r4 = r15.get(r3)     // Catch:{ Exception -> 0x1494 }
+            org.telegram.tgnet.TLRPC$Message r4 = (org.telegram.tgnet.TLRPC$Message) r4     // Catch:{ Exception -> 0x1494 }
+            r4.replyMessage = r8     // Catch:{ Exception -> 0x1494 }
+            org.telegram.tgnet.TLRPC$TL_messageReplyHeader r4 = r4.reply_to     // Catch:{ Exception -> 0x1494 }
+            if (r4 == 0) goto L_0x13e8
+            int r2 = r8.id     // Catch:{ Exception -> 0x1494 }
+            r4.reply_to_msg_id = r2     // Catch:{ Exception -> 0x1494 }
+        L_0x13e8:
             int r3 = r3 + 1
             r2 = 3
-            goto L_0x13c5
-        L_0x13df:
+            goto L_0x13d2
+        L_0x13ec:
             r0 = move-exception
-            goto L_0x148e
-        L_0x13e2:
+            goto L_0x149b
+        L_0x13ef:
             r55 = r2
             r18 = r3
             r53 = r6
             r12 = r26
             r11 = r36
             r5 = r48
-        L_0x13ee:
+        L_0x13fb:
             r6 = r53
             r2 = r55
             r4 = r57
             r36 = r11
             r26 = r12
             r3 = r18
-            goto L_0x131c
-        L_0x13fc:
+            goto L_0x1329
+        L_0x1409:
             r55 = r2
             r18 = r3
             r53 = r6
             r12 = r26
             r5 = r48
-            r1.dispose()     // Catch:{ Exception -> 0x1487 }
-            int r1 = r7.size()     // Catch:{ Exception -> 0x1487 }
-            if (r1 <= 0) goto L_0x1451
+            r1.dispose()     // Catch:{ Exception -> 0x1494 }
+            int r1 = r7.size()     // Catch:{ Exception -> 0x1494 }
+            if (r1 <= 0) goto L_0x145e
             r1 = 0
-        L_0x1410:
-            int r2 = r7.size()     // Catch:{ Exception -> 0x1487 }
-            if (r1 >= r2) goto L_0x1451
-            java.lang.Object r2 = r7.valueAt(r1)     // Catch:{ Exception -> 0x1487 }
-            java.util.ArrayList r2 = (java.util.ArrayList) r2     // Catch:{ Exception -> 0x1487 }
-            r3 = 0
         L_0x141d:
-            int r4 = r2.size()     // Catch:{ Exception -> 0x1487 }
-            if (r3 >= r4) goto L_0x1438
-            java.lang.Object r4 = r2.get(r3)     // Catch:{ Exception -> 0x1487 }
-            org.telegram.tgnet.TLRPC$Message r4 = (org.telegram.tgnet.TLRPC$Message) r4     // Catch:{ Exception -> 0x1487 }
-            org.telegram.tgnet.TLRPC$TL_messageReplyHeader r4 = r4.reply_to     // Catch:{ Exception -> 0x1487 }
+            int r2 = r7.size()     // Catch:{ Exception -> 0x1494 }
+            if (r1 >= r2) goto L_0x145e
+            java.lang.Object r2 = r7.valueAt(r1)     // Catch:{ Exception -> 0x1494 }
+            java.util.ArrayList r2 = (java.util.ArrayList) r2     // Catch:{ Exception -> 0x1494 }
+            r3 = 0
+        L_0x142a:
+            int r4 = r2.size()     // Catch:{ Exception -> 0x1494 }
+            if (r3 >= r4) goto L_0x1445
+            java.lang.Object r4 = r2.get(r3)     // Catch:{ Exception -> 0x1494 }
+            org.telegram.tgnet.TLRPC$Message r4 = (org.telegram.tgnet.TLRPC$Message) r4     // Catch:{ Exception -> 0x1494 }
+            org.telegram.tgnet.TLRPC$TL_messageReplyHeader r4 = r4.reply_to     // Catch:{ Exception -> 0x1494 }
             r30 = r7
             r7 = 0
-            if (r4 == 0) goto L_0x1433
-            r4.reply_to_random_id = r7     // Catch:{ Exception -> 0x1487 }
-        L_0x1433:
+            if (r4 == 0) goto L_0x1440
+            r4.reply_to_random_id = r7     // Catch:{ Exception -> 0x1494 }
+        L_0x1440:
             int r3 = r3 + 1
             r7 = r30
-            goto L_0x141d
-        L_0x1438:
+            goto L_0x142a
+        L_0x1445:
             r30 = r7
             r7 = 0
             int r1 = r1 + 1
             r7 = r30
-            goto L_0x1410
-        L_0x1441:
+            goto L_0x141d
+        L_0x144e:
             r0 = move-exception
             r5 = r48
-            goto L_0x148e
-        L_0x1445:
+            goto L_0x149b
+        L_0x1452:
             r52 = r1
             r55 = r2
             r18 = r3
             r53 = r6
             r12 = r26
             r5 = r48
-        L_0x1451:
-            boolean r1 = r10.isEmpty()     // Catch:{ Exception -> 0x1487 }
-            if (r1 != 0) goto L_0x1463
+        L_0x145e:
+            boolean r1 = r10.isEmpty()     // Catch:{ Exception -> 0x1494 }
+            if (r1 != 0) goto L_0x1470
             r1 = r53
-            java.lang.String r2 = android.text.TextUtils.join(r1, r10)     // Catch:{ Exception -> 0x1487 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r3 = r9.users     // Catch:{ Exception -> 0x1487 }
-            r13.getUsersInternal(r2, r3)     // Catch:{ Exception -> 0x1487 }
-            goto L_0x1465
-        L_0x1463:
+            java.lang.String r2 = android.text.TextUtils.join(r1, r10)     // Catch:{ Exception -> 0x1494 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r3 = r9.users     // Catch:{ Exception -> 0x1494 }
+            r13.getUsersInternal(r2, r3)     // Catch:{ Exception -> 0x1494 }
+            goto L_0x1472
+        L_0x1470:
             r1 = r53
-        L_0x1465:
-            boolean r2 = r12.isEmpty()     // Catch:{ Exception -> 0x1487 }
-            if (r2 != 0) goto L_0x1474
-            java.lang.String r1 = android.text.TextUtils.join(r1, r12)     // Catch:{ Exception -> 0x1487 }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r2 = r9.chats     // Catch:{ Exception -> 0x1487 }
-            r13.getChatsInternal(r1, r2)     // Catch:{ Exception -> 0x1487 }
-        L_0x1474:
+        L_0x1472:
+            boolean r2 = r12.isEmpty()     // Catch:{ Exception -> 0x1494 }
+            if (r2 != 0) goto L_0x1481
+            java.lang.String r1 = android.text.TextUtils.join(r1, r12)     // Catch:{ Exception -> 0x1494 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r2 = r9.chats     // Catch:{ Exception -> 0x1494 }
+            r13.getChatsInternal(r1, r2)     // Catch:{ Exception -> 0x1494 }
+        L_0x1481:
             r10 = r52
             r11 = r55
             r15 = r14
@@ -15653,40 +15675,40 @@ public class MessagesStorage extends BaseController {
             r23 = r35
             r19 = r39
             r24 = r18
-            goto L_0x1514
-        L_0x1487:
+            goto L_0x1521
+        L_0x1494:
             r0 = move-exception
-            goto L_0x1492
-        L_0x1489:
+            goto L_0x149f
+        L_0x1496:
             r0 = move-exception
             r5 = r48
             r52 = r1
-        L_0x148e:
+        L_0x149b:
             r55 = r2
-        L_0x1490:
+        L_0x149d:
             r18 = r3
-        L_0x1492:
+        L_0x149f:
             r2 = r52
             r3 = r55
             r4 = r0
             r1 = r14
             r32 = r18
-        L_0x149a:
+        L_0x14a7:
             r22 = r24
-            goto L_0x14f5
-        L_0x149e:
+            goto L_0x1502
+        L_0x14ab:
             r0 = move-exception
             r13 = r47
             r5 = r48
             r3 = r30
-        L_0x14a5:
+        L_0x14b2:
             r2 = r52
             r1 = r55
             r4 = r0
             r32 = r3
             r22 = r24
             goto L_0x01ce
-        L_0x14b0:
+        L_0x14bd:
             r0 = move-exception
             r1 = r5
             r10 = r14
@@ -15699,8 +15721,8 @@ public class MessagesStorage extends BaseController {
             r34 = r15
             r1 = r32
             r22 = 0
-            goto L_0x14d8
-        L_0x14c5:
+            goto L_0x14e5
+        L_0x14d2:
             r0 = move-exception
             r5 = r48
             r10 = r14
@@ -15710,16 +15732,16 @@ public class MessagesStorage extends BaseController {
             r33 = r10
             r34 = r15
             r1 = r32
-        L_0x14d4:
+        L_0x14e1:
             r22 = 0
             r25 = 0
-        L_0x14d8:
+        L_0x14e5:
             r32 = 0
-        L_0x14da:
+        L_0x14e7:
             r35 = 0
             r39 = 1
-            goto L_0x14f5
-        L_0x14df:
+            goto L_0x1502
+        L_0x14ec:
             r0 = move-exception
             r2 = r1
             r9 = r3
@@ -15733,9 +15755,9 @@ public class MessagesStorage extends BaseController {
             r33 = 0
             r34 = 0
             r35 = 0
-        L_0x14f3:
+        L_0x1500:
             r39 = 0
-        L_0x14f5:
+        L_0x1502:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r7 = r9.messages
             r7.clear()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r7 = r9.chats
@@ -15751,9 +15773,9 @@ public class MessagesStorage extends BaseController {
             r16 = r34
             r23 = r35
             r19 = r39
-        L_0x1514:
+        L_0x1521:
             boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r1 == 0) goto L_0x153a
+            if (r1 == 0) goto L_0x1547
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             java.lang.String r2 = "messages load time = "
@@ -15766,15 +15788,15 @@ public class MessagesStorage extends BaseController {
             r1.append(r5)
             java.lang.String r1 = r1.toString()
             org.telegram.messenger.FileLog.d(r1)
-        L_0x153a:
-            if (r59 == 0) goto L_0x1544
+        L_0x1547:
+            if (r59 == 0) goto L_0x1551
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r9.messages
             int r1 = r1.size()
             r4 = r1
-            goto L_0x1546
-        L_0x1544:
+            goto L_0x1553
+        L_0x1551:
             r4 = r22
-        L_0x1546:
+        L_0x1553:
             org.telegram.messenger.-$$Lambda$MessagesStorage$cdZr_KsV1Ik59x3djYqTl7xvIqc r26 = new org.telegram.messenger.-$$Lambda$MessagesStorage$cdZr_KsV1Ik59x3djYqTl7xvIqc
             r1 = r26
             r2 = r47

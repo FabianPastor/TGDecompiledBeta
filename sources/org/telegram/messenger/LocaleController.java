@@ -1435,6 +1435,7 @@ public class LocaleController {
 
     public String formatCurrencyString(long j, boolean z, boolean z2, boolean z3, String str) {
         double d;
+        int length;
         String upperCase = str.toUpperCase();
         boolean z4 = j < 0;
         long abs = Math.abs(j);
@@ -1709,16 +1710,21 @@ public class LocaleController {
             }
             sb.append(str4);
             sb.append(currencyInstance.format(d));
-            return sb.toString();
+            String sb2 = sb.toString();
+            int indexOf = sb2.indexOf(upperCase);
+            if (indexOf < 0 || (length = indexOf + upperCase.length()) >= sb2.length() || sb2.charAt(upperCase.length() + length) == ' ') {
+                return sb2;
+            }
+            return sb2.substring(0, upperCase.length() + length) + " " + sb2.substring(length + upperCase.length());
         }
-        StringBuilder sb2 = new StringBuilder();
+        StringBuilder sb3 = new StringBuilder();
         if (!z4) {
             str4 = "";
         }
-        sb2.append(str4);
+        sb3.append(str4);
         Locale locale2 = Locale.US;
-        sb2.append(String.format(locale2, upperCase + str3, new Object[]{Double.valueOf(d)}));
-        return sb2.toString();
+        sb3.append(String.format(locale2, upperCase + str3, new Object[]{Double.valueOf(d)}));
+        return sb3.toString();
     }
 
     public static int getCurrencyExpDivider(String str) {
