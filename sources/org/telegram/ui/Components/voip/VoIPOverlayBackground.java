@@ -14,12 +14,13 @@ import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.Utilities;
 
 public class VoIPOverlayBackground extends ImageView {
+    int blackoutColor = ColorUtils.setAlphaComponent(-16777216, 102);
     float blackoutProgress;
+    boolean imageSet;
     boolean showBlackout;
 
     public VoIPOverlayBackground(Context context) {
         super(context);
-        ColorUtils.setAlphaComponent(-16777216, 102);
         setScaleType(ImageView.ScaleType.CENTER_CROP);
     }
 
@@ -75,7 +76,7 @@ public class VoIPOverlayBackground extends ImageView {
                 }
 
                 public final void run() {
-                    VoIPOverlayBackground.this.lambda$null$0$VoIPOverlayBackground(this.f$1, this.f$2);
+                    VoIPOverlayBackground.this.lambda$setBackground$0$VoIPOverlayBackground(this.f$1, this.f$2);
                 }
             });
         } catch (Throwable unused) {
@@ -83,9 +84,10 @@ public class VoIPOverlayBackground extends ImageView {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$VoIPOverlayBackground(Bitmap bitmap, ImageReceiver.BitmapHolder bitmapHolder) {
+    /* renamed from: lambda$setBackground$0 */
+    public /* synthetic */ void lambda$setBackground$0$VoIPOverlayBackground(Bitmap bitmap, ImageReceiver.BitmapHolder bitmapHolder) {
         setImageBitmap(bitmap);
+        this.imageSet = true;
         bitmapHolder.release();
     }
 

@@ -15,11 +15,14 @@ public abstract class TLRPC$UserProfilePhoto extends TLObject {
     public static TLRPC$UserProfilePhoto TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto;
         switch (i) {
+            case -2100168954:
+                tLRPC$UserProfilePhoto = new TLRPC$TL_userProfilePhoto();
+                break;
             case -1727196013:
                 tLRPC$UserProfilePhoto = new TLRPC$TL_userProfilePhoto_old();
                 break;
             case -865771401:
-                tLRPC$UserProfilePhoto = new TLRPC$TL_userProfilePhoto();
+                tLRPC$UserProfilePhoto = new TLRPC$TL_userProfilePhoto_layer127();
                 break;
             case -715532088:
                 tLRPC$UserProfilePhoto = new TLRPC$TL_userProfilePhoto_layer97();

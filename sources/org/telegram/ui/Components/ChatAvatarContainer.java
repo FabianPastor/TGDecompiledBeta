@@ -66,7 +66,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         super(context);
         this.parentFragment = chatActivity;
         final boolean z2 = chatActivity != null && chatActivity.getChatMode() == 0 && !UserObject.isReplyUser(this.parentFragment.getCurrentUser());
-        this.avatarImageView = new BackupImageView(this, context) {
+        this.avatarImageView = new BackupImageView(context) {
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                 super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
                 if (!z2 || !getImageReceiver().hasNotThumb()) {

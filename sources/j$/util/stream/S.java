@@ -7,12 +7,10 @@ import j$.util.function.Function;
 import j$.util.function.n;
 
 public final /* synthetic */ class S implements n {
-
-    /* renamed from: a  reason: collision with root package name */
-    public final /* synthetic */ BiConsumer var_a;
+    public final /* synthetic */ BiConsumer a;
 
     public /* synthetic */ S(BiConsumer biConsumer) {
-        this.var_a = biConsumer;
+        this.a = biConsumer;
     }
 
     public BiFunction a(Function function) {
@@ -21,7 +19,7 @@ public final /* synthetic */ class S implements n {
     }
 
     public final Object apply(Object obj, Object obj2) {
-        this.var_a.accept(obj, obj2);
+        this.a.accept(obj, obj2);
         return obj;
     }
 }

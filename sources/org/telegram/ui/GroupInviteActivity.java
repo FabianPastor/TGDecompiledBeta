@@ -164,7 +164,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                 builder.setTitle(LocaleController.getString("RevokeLink", NUM));
                 builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener() {
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        GroupInviteActivity.this.lambda$null$0$GroupInviteActivity(dialogInterface, i);
+                        GroupInviteActivity.this.lambda$createView$0$GroupInviteActivity(dialogInterface, i);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -174,8 +174,8 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$GroupInviteActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$GroupInviteActivity(DialogInterface dialogInterface, int i) {
         generateLink(true);
     }
 
@@ -242,14 +242,14 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
             }
 
             public final void run() {
-                GroupInviteActivity.this.lambda$null$2$GroupInviteActivity(this.f$1, this.f$2, this.f$3);
+                GroupInviteActivity.this.lambda$generateLink$2$GroupInviteActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$GroupInviteActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
+    /* renamed from: lambda$generateLink$2 */
+    public /* synthetic */ void lambda$generateLink$2$GroupInviteActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
         if (tLRPC$TL_error == null) {
             this.invite = (TLRPC$TL_chatInviteExported) tLObject;
             if (z) {

@@ -232,6 +232,12 @@ public class GroupCallUserCell extends FrameLayout {
         }
     }
 
+    public void setDrawAvatar(boolean z) {
+        if (this.avatarImageView.getImageReceiver().getVisible() != z) {
+            this.avatarImageView.getImageReceiver().setVisible(z, true);
+        }
+    }
+
     private static class VerifiedDrawable extends Drawable {
         private Drawable[] drawables;
 
@@ -916,7 +922,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 == 0) goto L_0x01b4
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627644(0x7f0e0e7c, float:1.8882558E38)
+            r10 = 2131627673(0x7f0e0e99, float:1.8882617E38)
             java.lang.String r11 = "TapToAddPhotoOrBio"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -924,7 +930,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x01b4:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627645(0x7f0e0e7d, float:1.888256E38)
+            r10 = 2131627674(0x7f0e0e9a, float:1.888262E38)
             java.lang.String r11 = "TapToAddPhotoOrDescription"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -941,7 +947,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 == 0) goto L_0x01e9
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627641(0x7f0e0e79, float:1.8882552E38)
+            r10 = 2131627670(0x7f0e0e96, float:1.888261E38)
             java.lang.String r11 = "TapToAddBio"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -949,7 +955,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x01e9:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627642(0x7f0e0e7a, float:1.8882554E38)
+            r10 = 2131627671(0x7f0e0e97, float:1.8882613E38)
             java.lang.String r11 = "TapToAddDescription"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -965,7 +971,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 != 0) goto L_0x0229
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627643(0x7f0e0e7b, float:1.8882556E38)
+            r10 = 2131627672(0x7f0e0e98, float:1.8882615E38)
             java.lang.String r11 = "TapToAddPhoto"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -978,7 +984,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x0229:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627742(0x7f0e0ede, float:1.8882757E38)
+            r10 = 2131627771(0x7f0e0efb, float:1.8882816E38)
             java.lang.String r11 = "ThisIsYou"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -1094,7 +1100,7 @@ public class GroupCallUserCell extends FrameLayout {
             r13.setLeftDrawable((android.graphics.drawable.Drawable) r14)
             org.telegram.ui.ActionBar.SimpleTextView[] r13 = r0.statusTextView
             r13 = r13[r7]
-            r14 = 2131627529(0x7f0e0e09, float:1.8882325E38)
+            r14 = 2131627558(0x7f0e0e26, float:1.8882384E38)
             java.lang.Object[] r15 = new java.lang.Object[r7]
             if (r2 >= r12) goto L_0x0321
             r11 = 1
@@ -1111,7 +1117,7 @@ public class GroupCallUserCell extends FrameLayout {
             r2.setLeftDrawable((android.graphics.drawable.Drawable) r10)
             org.telegram.ui.ActionBar.SimpleTextView[] r2 = r0.statusTextView
             r2 = r2[r7]
-            r11 = 2131627528(0x7f0e0e08, float:1.8882323E38)
+            r11 = 2131627557(0x7f0e0e25, float:1.8882382E38)
             java.lang.String r12 = "Speaking"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r2.setText(r11)
@@ -1634,5 +1640,13 @@ public class GroupCallUserCell extends FrameLayout {
             }
             accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(16, LocaleController.getString(str, i)));
         }
+    }
+
+    public int getPeerId() {
+        TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.participant;
+        if (tLRPC$TL_groupCallParticipant == null) {
+            return 0;
+        }
+        return MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
     }
 }

@@ -2,6 +2,9 @@ package org.telegram.tgnet;
 
 public class TLRPC$TL_inputPeerPhotoFileLocation extends TLRPC$InputFileLocation {
     public static int constructor = NUM;
+    public boolean big;
+    public TLRPC$InputPeer peer;
+    public long photo_id;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -12,8 +15,7 @@ public class TLRPC$TL_inputPeerPhotoFileLocation extends TLRPC$InputFileLocation
         }
         this.big = z2;
         this.peer = TLRPC$InputPeer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        this.volume_id = abstractSerializedData.readInt64(z);
-        this.local_id = abstractSerializedData.readInt32(z);
+        this.photo_id = abstractSerializedData.readInt64(z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -22,7 +24,6 @@ public class TLRPC$TL_inputPeerPhotoFileLocation extends TLRPC$InputFileLocation
         this.flags = i;
         abstractSerializedData.writeInt32(i);
         this.peer.serializeToStream(abstractSerializedData);
-        abstractSerializedData.writeInt64(this.volume_id);
-        abstractSerializedData.writeInt32(this.local_id);
+        abstractSerializedData.writeInt64(this.photo_id);
     }
 }

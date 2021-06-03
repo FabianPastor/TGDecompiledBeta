@@ -1,5 +1,6 @@
 package org.telegram.ui.Cells;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
@@ -23,15 +24,19 @@ import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_wallPaper;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.BackupImageView;
+import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.Components.RadialProgress2;
 
 public class PatternCell extends BackupImageView implements DownloadController.FileDownloadProgressListener {
     private int TAG;
+    private MotionBackgroundDrawable backgroundDrawable;
     private Paint backgroundPaint;
     private int currentAccount = UserConfig.selectedAccount;
+    private int currentBackgroundColor;
     private int currentGradientAngle;
     private int currentGradientColor1;
     private int currentGradientColor2;
+    private int currentGradientColor3;
     private TLRPC$TL_wallPaper currentPattern;
     private PatternCellDelegate delegate;
     private LinearGradient gradientShader;
@@ -44,9 +49,13 @@ public class PatternCell extends BackupImageView implements DownloadController.F
 
         int getBackgroundGradientAngle();
 
-        int getBackgroundGradientColor();
+        int getBackgroundGradientColor1();
 
-        int getPatternColor();
+        int getBackgroundGradientColor2();
+
+        int getBackgroundGradientColor3();
+
+        int getCheckColor();
 
         TLRPC$TL_wallPaper getSelectedPattern();
     }
@@ -143,30 +152,52 @@ public class PatternCell extends BackupImageView implements DownloadController.F
     }
 
     /* access modifiers changed from: protected */
+    @SuppressLint({"DrawAllocation"})
     public void onDraw(Canvas canvas) {
+        Canvas canvas2 = canvas;
         getImageReceiver().setAlpha(0.8f);
         int backgroundColor = this.delegate.getBackgroundColor();
-        int backgroundGradientColor = this.delegate.getBackgroundGradientColor();
+        int backgroundGradientColor1 = this.delegate.getBackgroundGradientColor1();
+        int backgroundGradientColor2 = this.delegate.getBackgroundGradientColor2();
+        int backgroundGradientColor3 = this.delegate.getBackgroundGradientColor3();
         int backgroundGradientAngle = this.delegate.getBackgroundGradientAngle();
-        int patternColor = this.delegate.getPatternColor();
-        if (backgroundGradientColor == 0) {
+        int checkColor = this.delegate.getCheckColor();
+        if (backgroundGradientColor1 == 0) {
             this.gradientShader = null;
-        } else if (!(this.gradientShader != null && backgroundColor == this.currentGradientColor1 && backgroundGradientColor == this.currentGradientColor2 && backgroundGradientAngle == this.currentGradientAngle)) {
-            this.currentGradientColor1 = backgroundColor;
-            this.currentGradientColor2 = backgroundGradientColor;
+            this.backgroundDrawable = null;
+        } else if (!(this.gradientShader != null && backgroundColor == this.currentBackgroundColor && backgroundGradientColor1 == this.currentGradientColor1 && backgroundGradientColor2 == this.currentGradientColor2 && backgroundGradientColor3 == this.currentGradientColor3 && backgroundGradientAngle == this.currentGradientAngle)) {
+            this.currentBackgroundColor = backgroundColor;
+            this.currentGradientColor1 = backgroundGradientColor1;
+            this.currentGradientColor2 = backgroundGradientColor2;
+            this.currentGradientColor3 = backgroundGradientColor3;
             this.currentGradientAngle = backgroundGradientAngle;
-            Rect gradientPoints = BackgroundGradientDrawable.getGradientPoints(backgroundGradientAngle, getMeasuredWidth(), getMeasuredHeight());
-            this.gradientShader = new LinearGradient((float) gradientPoints.left, (float) gradientPoints.top, (float) gradientPoints.right, (float) gradientPoints.bottom, new int[]{backgroundColor, backgroundGradientColor}, (float[]) null, Shader.TileMode.CLAMP);
+            if (backgroundGradientColor2 != 0) {
+                this.gradientShader = null;
+                MotionBackgroundDrawable motionBackgroundDrawable = new MotionBackgroundDrawable(backgroundColor, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientColor3, true);
+                this.backgroundDrawable = motionBackgroundDrawable;
+                motionBackgroundDrawable.setRoundRadius(AndroidUtilities.dp(6.0f));
+                this.backgroundDrawable.setParentView(this);
+            } else {
+                Rect gradientPoints = BackgroundGradientDrawable.getGradientPoints(backgroundGradientAngle, getMeasuredWidth(), getMeasuredHeight());
+                this.gradientShader = new LinearGradient((float) gradientPoints.left, (float) gradientPoints.top, (float) gradientPoints.right, (float) gradientPoints.bottom, new int[]{backgroundColor, backgroundGradientColor1}, (float[]) null, Shader.TileMode.CLAMP);
+                this.backgroundDrawable = null;
+            }
         }
-        this.backgroundPaint.setShader(this.gradientShader);
-        if (this.gradientShader == null) {
-            this.backgroundPaint.setColor(backgroundColor);
+        MotionBackgroundDrawable motionBackgroundDrawable2 = this.backgroundDrawable;
+        if (motionBackgroundDrawable2 != null) {
+            motionBackgroundDrawable2.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+            this.backgroundDrawable.draw(canvas2);
+        } else {
+            this.backgroundPaint.setShader(this.gradientShader);
+            if (this.gradientShader == null) {
+                this.backgroundPaint.setColor(backgroundColor);
+            }
+            this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+            canvas2.drawRoundRect(this.rect, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.backgroundPaint);
         }
-        this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
-        canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.backgroundPaint);
         super.onDraw(canvas);
-        this.radialProgress.setColors(patternColor, patternColor, -1, -1);
-        this.radialProgress.draw(canvas);
+        this.radialProgress.setColors(checkColor, checkColor, -1, -1);
+        this.radialProgress.draw(canvas2);
     }
 
     /* access modifiers changed from: protected */

@@ -281,7 +281,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         animatorArr[0] = ObjectAnimator.ofFloat(slideView, "translationX", fArr);
         animatorArr[1] = ObjectAnimator.ofFloat(slideView2, "translationX", new float[]{0.0f});
         animatorSet.playTogether(animatorArr);
-        animatorSet.addListener(new AnimatorListenerAdapter(this) {
+        animatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationStart(Animator animator) {
                 slideView2.setVisibility(0);
             }
@@ -414,14 +414,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 }
 
                 public final void run() {
-                    CancelAccountDeletionActivity.PhoneView.this.lambda$null$0$CancelAccountDeletionActivity$PhoneView(this.f$1, this.f$2, this.f$3, this.f$4);
+                    CancelAccountDeletionActivity.PhoneView.this.lambda$onNextPressed$0$CancelAccountDeletionActivity$PhoneView(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$CancelAccountDeletionActivity$PhoneView(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_account_sendConfirmPhoneCode tLRPC$TL_account_sendConfirmPhoneCode) {
+        /* renamed from: lambda$onNextPressed$0 */
+        public /* synthetic */ void lambda$onNextPressed$0$CancelAccountDeletionActivity$PhoneView(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_account_sendConfirmPhoneCode tLRPC$TL_account_sendConfirmPhoneCode) {
             this.nextPressed = false;
             if (tLRPC$TL_error == null) {
                 CancelAccountDeletionActivity.this.fillNextCodeParams(bundle, (TLRPC$TL_auth_sentCode) tLObject);
@@ -498,6 +498,22 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             return true;
         }
 
+        static /* synthetic */ int access$1526(LoginActivitySmsView loginActivitySmsView, double d) {
+            double d2 = (double) loginActivitySmsView.codeTime;
+            Double.isNaN(d2);
+            int i = (int) (d2 - d);
+            loginActivitySmsView.codeTime = i;
+            return i;
+        }
+
+        static /* synthetic */ int access$2126(LoginActivitySmsView loginActivitySmsView, double d) {
+            double d2 = (double) loginActivitySmsView.time;
+            Double.isNaN(d2);
+            int i = (int) (d2 - d);
+            loginActivitySmsView.time = i;
+            return i;
+        }
+
         /* JADX WARNING: Illegal instructions before constructor call */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public LoginActivitySmsView(org.telegram.ui.CancelAccountDeletionActivity r25, android.content.Context r26, int r27) {
@@ -562,12 +578,12 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.TextView r4 = r0.titleTextView
                 boolean r10 = org.telegram.messenger.LocaleController.isRTL
                 r12 = 3
-                if (r10 == 0) goto L_0x0095
+                if (r10 == 0) goto L_0x0091
                 r10 = 5
-                goto L_0x0096
-            L_0x0095:
+                goto L_0x0092
+            L_0x0091:
                 r10 = 3
-            L_0x0096:
+            L_0x0092:
                 r4.setGravity(r10)
                 android.widget.TextView r4 = r0.titleTextView
                 int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
@@ -578,34 +594,34 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r4.setGravity(r10)
                 int r4 = r0.currentType
                 r13 = -2
-                if (r4 != r12) goto L_0x0144
+                if (r4 != r12) goto L_0x0140
                 android.widget.TextView r4 = r0.confirmTextView
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                if (r8 == 0) goto L_0x00b7
+                if (r8 == 0) goto L_0x00b3
                 r8 = 5
-                goto L_0x00b8
-            L_0x00b7:
+                goto L_0x00b4
+            L_0x00b3:
                 r8 = 3
-            L_0x00b8:
+            L_0x00b4:
                 r8 = r8 | 48
                 r4.setGravity(r8)
                 android.widget.FrameLayout r4 = new android.widget.FrameLayout
                 r4.<init>(r2)
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                if (r8 == 0) goto L_0x00c8
+                if (r8 == 0) goto L_0x00c4
                 r8 = 5
-                goto L_0x00c9
-            L_0x00c8:
+                goto L_0x00c5
+            L_0x00c4:
                 r8 = 3
-            L_0x00c9:
+            L_0x00c5:
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r8)
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165906(0x7var_d2, float:1.7946042E38)
+                r14 = 2131165917(0x7var_dd, float:1.7946065E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
-                if (r14 == 0) goto L_0x0113
+                if (r14 == 0) goto L_0x010f
                 r15 = 64
                 r16 = 1117257728(0x42980000, float:76.0)
                 r17 = 19
@@ -619,29 +635,29 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r14 = -1
                 r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
                 boolean r16 = org.telegram.messenger.LocaleController.isRTL
-                if (r16 == 0) goto L_0x0100
+                if (r16 == 0) goto L_0x00fc
                 r16 = 5
-                goto L_0x0102
-            L_0x0100:
+                goto L_0x00fe
+            L_0x00fc:
                 r16 = 3
-            L_0x0102:
+            L_0x00fe:
                 r17 = 1118044160(0x42a40000, float:82.0)
                 r18 = 0
                 r19 = 0
                 r20 = 0
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
                 r4.addView(r8, r14)
-                goto L_0x0249
-            L_0x0113:
+                goto L_0x0245
+            L_0x010f:
                 android.widget.TextView r15 = r0.confirmTextView
                 r16 = -1
                 r17 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-                if (r14 == 0) goto L_0x011e
+                if (r14 == 0) goto L_0x011a
                 r18 = 5
-                goto L_0x0120
-            L_0x011e:
+                goto L_0x011c
+            L_0x011a:
                 r18 = 3
-            L_0x0120:
+            L_0x011c:
                 r19 = 0
                 r20 = 0
                 r21 = 1118044160(0x42a40000, float:82.0)
@@ -656,8 +672,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r22 = 1073741824(0x40000000, float:2.0)
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
                 r4.addView(r8, r14)
-                goto L_0x0249
-            L_0x0144:
+                goto L_0x0245
+            L_0x0140:
                 android.widget.TextView r4 = r0.confirmTextView
                 r4.setGravity(r10)
                 android.widget.FrameLayout r4 = new android.widget.FrameLayout
@@ -666,11 +682,11 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r0.addView(r4, r14)
                 int r14 = r0.currentType
                 java.lang.String r15 = "chats_actionBackground"
-                if (r14 != r3) goto L_0x01c4
+                if (r14 != r3) goto L_0x01c0
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131166051(0x7var_, float:1.7946336E38)
+                r11 = 2131166062(0x7var_e, float:1.7946359E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -691,7 +707,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166049(0x7var_, float:1.7946332E38)
+                r10 = 2131166060(0x7var_c, float:1.7946355E38)
                 r8.setImageResource(r10)
                 org.telegram.ui.Components.RLottieImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -703,17 +719,17 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627383(0x7f0e0d77, float:1.8882029E38)
+                r8 = 2131627411(0x7f0e0d93, float:1.8882086E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-                goto L_0x0227
-            L_0x01c4:
+                goto L_0x0223
+            L_0x01c0:
                 org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
                 org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
-                r18 = 2131558478(0x7f0d004e, float:1.8742273E38)
+                r18 = 2131558479(0x7f0d004f, float:1.8742275E38)
                 r10 = 1111490560(0x42400000, float:48.0)
                 int r20 = org.telegram.messenger.AndroidUtilities.dp(r10)
                 int r21 = org.telegram.messenger.AndroidUtilities.dp(r10)
@@ -744,11 +760,11 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627387(0x7f0e0d7b, float:1.8882037E38)
+                r8 = 2131627415(0x7f0e0d97, float:1.8882094E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-            L_0x0227:
+            L_0x0223:
                 android.widget.TextView r4 = r0.titleTextView
                 r17 = -2
                 r18 = -2
@@ -763,7 +779,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r21 = 17
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
                 r0.addView(r4, r8)
-            L_0x0249:
+            L_0x0245:
                 android.widget.LinearLayout r4 = new android.widget.LinearLayout
                 r4.<init>(r2)
                 r0.codeFieldContainer = r4
@@ -774,13 +790,13 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r10, (int) r3)
                 r0.addView(r4, r10)
                 int r4 = r0.currentType
-                if (r4 != r12) goto L_0x026a
+                if (r4 != r12) goto L_0x0266
                 android.widget.LinearLayout r4 = r0.codeFieldContainer
                 r10 = 8
                 r4.setVisibility(r10)
-            L_0x026a:
+            L_0x0266:
                 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$1 r4 = new org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$1
-                r4.<init>(r0, r2, r1)
+                r4.<init>(r2, r1)
                 r0.timeText = r4
                 int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
                 r4.setTextColor(r5)
@@ -791,17 +807,17 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 int r4 = r0.currentType
                 r5 = 1097859072(0x41700000, float:15.0)
                 r10 = 1092616192(0x41200000, float:10.0)
-                if (r4 != r12) goto L_0x02c8
+                if (r4 != r12) goto L_0x02c4
                 android.widget.TextView r4 = r0.timeText
                 r4.setTextSize(r3, r6)
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x0297
+                if (r6 == 0) goto L_0x0293
                 r6 = 5
-                goto L_0x0298
-            L_0x0297:
+                goto L_0x0294
+            L_0x0293:
                 r6 = 3
-            L_0x0298:
+            L_0x0294:
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r6)
                 org.telegram.ui.CancelAccountDeletionActivity$ProgressView r4 = new org.telegram.ui.CancelAccountDeletionActivity$ProgressView
@@ -809,12 +825,12 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r0.progressView = r4
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x02ae
+                if (r6 == 0) goto L_0x02aa
                 r11 = 5
-                goto L_0x02af
-            L_0x02ae:
+                goto L_0x02ab
+            L_0x02aa:
                 r11 = 3
-            L_0x02af:
+            L_0x02ab:
                 r4.setGravity(r11)
                 org.telegram.ui.CancelAccountDeletionActivity$ProgressView r4 = r0.progressView
                 r17 = -1
@@ -825,8 +841,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r22 = 0
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r17, r18, r19, r20, r21, r22)
                 r0.addView(r4, r6)
-                goto L_0x02ea
-            L_0x02c8:
+                goto L_0x02e6
+            L_0x02c4:
                 android.widget.TextView r4 = r0.timeText
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
@@ -839,9 +855,9 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.TextView r4 = r0.timeText
                 android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r11)
-            L_0x02ea:
+            L_0x02e6:
                 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$2 r4 = new org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$2
-                r4.<init>(r0, r2, r1)
+                r4.<init>(r2, r1)
                 r0.problemText = r4
                 java.lang.String r1 = "windowBackgroundWhiteBlueText4"
                 int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
@@ -860,20 +876,20 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r2 = 49
                 r1.setGravity(r2)
                 int r1 = r0.currentType
-                if (r1 != r3) goto L_0x0331
+                if (r1 != r3) goto L_0x032c
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625171(0x7f0e04d3, float:1.8877542E38)
+                r2 = 2131625187(0x7f0e04e3, float:1.8877575E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x033f
-            L_0x0331:
+                goto L_0x033a
+            L_0x032c:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625170(0x7f0e04d2, float:1.887754E38)
+                r2 = 2131625186(0x7f0e04e2, float:1.8877573E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-            L_0x033f:
+            L_0x033a:
                 android.widget.TextView r1 = r0.problemText
                 r2 = 49
                 android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r2)
@@ -998,14 +1014,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 }
 
                 public final void run() {
-                    CancelAccountDeletionActivity.LoginActivitySmsView.this.lambda$null$2$CancelAccountDeletionActivity$LoginActivitySmsView(this.f$1, this.f$2, this.f$3, this.f$4);
+                    CancelAccountDeletionActivity.LoginActivitySmsView.this.lambda$resendCode$2$CancelAccountDeletionActivity$LoginActivitySmsView(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$CancelAccountDeletionActivity$LoginActivitySmsView(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode) {
+        /* renamed from: lambda$resendCode$2 */
+        public /* synthetic */ void lambda$resendCode$2$CancelAccountDeletionActivity$LoginActivitySmsView(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode) {
             AlertDialog alertDialog;
             this.nextPressed = false;
             if (tLRPC$TL_error == null) {
@@ -1013,7 +1029,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             } else if (!(tLRPC$TL_error.text == null || (alertDialog = (AlertDialog) AlertsCreator.processError(this.this$0.currentAccount, tLRPC$TL_error, this.this$0, tLRPC$TL_auth_resendCode, new Object[0])) == null || !tLRPC$TL_error.text.contains("PHONE_CODE_EXPIRED"))) {
                 alertDialog.setPositiveButtonListener(new DialogInterface.OnClickListener() {
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        CancelAccountDeletionActivity.LoginActivitySmsView.this.lambda$null$1$CancelAccountDeletionActivity$LoginActivitySmsView(dialogInterface, i);
+                        CancelAccountDeletionActivity.LoginActivitySmsView.this.lambda$resendCode$1$CancelAccountDeletionActivity$LoginActivitySmsView(dialogInterface, i);
                     }
                 });
             }
@@ -1021,8 +1037,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$CancelAccountDeletionActivity$LoginActivitySmsView(DialogInterface dialogInterface, int i) {
+        /* renamed from: lambda$resendCode$1 */
+        public /* synthetic */ void lambda$resendCode$1$CancelAccountDeletionActivity$LoginActivitySmsView(DialogInterface dialogInterface, int i) {
             onBackPressed(true);
             this.this$0.finishFragment();
         }
@@ -1254,7 +1270,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                               (wrap: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$4$BP3Pyj-4mAaBNBRIdm3zEzU_pqQ : 0x0002: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$4$BP3Pyj-4mAaBNBRIdm3zEzU_pqQ) = 
                               (r1v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$4 A[THIS])
                              call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$4$BP3Pyj-4mAaBNBRIdm3zEzU_pqQ.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$4):void type: CONSTRUCTOR)
-                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.4.run():void, dex: classes.dex
+                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.4.run():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -1341,7 +1357,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
                             Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$4$BP3Pyj-4mAaBNBRIdm3zEzU_pqQ) = 
                               (r1v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$4 A[THIS])
-                             call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$4$BP3Pyj-4mAaBNBRIdm3zEzU_pqQ.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$4):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.4.run():void, dex: classes.dex
+                             call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$4$BP3Pyj-4mAaBNBRIdm3zEzU_pqQ.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$4):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.4.run():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1373,12 +1389,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                         double currentTimeMillis = (double) System.currentTimeMillis();
                         double access$1400 = LoginActivitySmsView.this.lastCodeTime;
                         Double.isNaN(currentTimeMillis);
-                        double d = currentTimeMillis - access$1400;
                         double unused = LoginActivitySmsView.this.lastCodeTime = currentTimeMillis;
-                        LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
-                        double access$1500 = (double) loginActivitySmsView.codeTime;
-                        Double.isNaN(access$1500);
-                        int unused2 = loginActivitySmsView.codeTime = (int) (access$1500 - d);
+                        LoginActivitySmsView.access$1526(LoginActivitySmsView.this, currentTimeMillis - access$1400);
                         if (LoginActivitySmsView.this.codeTime <= 1000) {
                             LoginActivitySmsView.this.problemText.setVisibility(0);
                             LoginActivitySmsView.this.timeText.setVisibility(8);
@@ -1417,7 +1429,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                   (wrap: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$GM01_sbLXbNCTFz5Tl3sHc_dro8 : 0x000b: CONSTRUCTOR  (r0v2 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$GM01_sbLXbNCTFz5Tl3sHc_dro8) = 
                                   (r1v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
                                  call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$GM01_sbLXbNCTFz5Tl3sHc_dro8.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR)
-                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.run():void, dex: classes.dex
+                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.run():void, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                                 	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -1511,7 +1523,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
                                 Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: CONSTRUCTOR  (r0v2 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$GM01_sbLXbNCTFz5Tl3sHc_dro8) = 
                                   (r1v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
-                                 call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$GM01_sbLXbNCTFz5Tl3sHc_dro8.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.run():void, dex: classes.dex
+                                 call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$GM01_sbLXbNCTFz5Tl3sHc_dro8.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.run():void, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                 	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1548,18 +1560,15 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                             double currentTimeMillis = (double) System.currentTimeMillis();
                             double access$2000 = LoginActivitySmsView.this.lastCurrentTime;
                             Double.isNaN(currentTimeMillis);
-                            LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
-                            double access$2100 = (double) loginActivitySmsView.time;
-                            Double.isNaN(access$2100);
-                            int unused = loginActivitySmsView.time = (int) (access$2100 - (currentTimeMillis - access$2000));
-                            double unused2 = LoginActivitySmsView.this.lastCurrentTime = currentTimeMillis;
+                            LoginActivitySmsView.access$2126(LoginActivitySmsView.this, currentTimeMillis - access$2000);
+                            double unused = LoginActivitySmsView.this.lastCurrentTime = currentTimeMillis;
                             if (LoginActivitySmsView.this.time >= 1000) {
-                                int access$21002 = (LoginActivitySmsView.this.time / 1000) / 60;
-                                int access$21003 = (LoginActivitySmsView.this.time / 1000) - (access$21002 * 60);
+                                int access$2100 = (LoginActivitySmsView.this.time / 1000) / 60;
+                                int access$21002 = (LoginActivitySmsView.this.time / 1000) - (access$2100 * 60);
                                 if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3) {
-                                    LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(access$21002), Integer.valueOf(access$21003)));
+                                    LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(access$2100), Integer.valueOf(access$21002)));
                                 } else if (LoginActivitySmsView.this.nextType == 2) {
-                                    LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(access$21002), Integer.valueOf(access$21003)));
+                                    LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(access$2100), Integer.valueOf(access$21002)));
                                 }
                                 if (LoginActivitySmsView.this.progressView != null) {
                                     LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
@@ -1574,7 +1583,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                             if (LoginActivitySmsView.this.currentType == 3) {
                                 AndroidUtilities.setWaitingForCall(false);
                                 NotificationCenter.getGlobalInstance().removeObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
-                                boolean unused3 = LoginActivitySmsView.this.waitingForEvent = false;
+                                boolean unused2 = LoginActivitySmsView.this.waitingForEvent = false;
                                 LoginActivitySmsView.this.destroyCodeTimer();
                                 LoginActivitySmsView.this.resendCode();
                             } else if (LoginActivitySmsView.this.currentType != 2 && LoginActivitySmsView.this.currentType != 4) {
@@ -1591,22 +1600,22 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                     tLRPC$TL_auth_resendCode.phone_code_hash = LoginActivitySmsView.this.phoneHash;
                                     ConnectionsManager.getInstance(LoginActivitySmsView.this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_resendCode, 
                                     /*  JADX ERROR: Method code generation error
-                                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x01a1: INVOKE  
-                                          (wrap: org.telegram.tgnet.ConnectionsManager : 0x0198: INVOKE  (r1v8 org.telegram.tgnet.ConnectionsManager) = 
-                                          (wrap: int : 0x0194: INVOKE  (r1v7 int) = 
-                                          (wrap: org.telegram.ui.CancelAccountDeletionActivity : 0x0192: IGET  (r1v6 org.telegram.ui.CancelAccountDeletionActivity) = 
-                                          (wrap: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView : 0x0190: IGET  (r1v5 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView) = 
+                                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0197: INVOKE  
+                                          (wrap: org.telegram.tgnet.ConnectionsManager : 0x018e: INVOKE  (r1v8 org.telegram.tgnet.ConnectionsManager) = 
+                                          (wrap: int : 0x018a: INVOKE  (r1v7 int) = 
+                                          (wrap: org.telegram.ui.CancelAccountDeletionActivity : 0x0188: IGET  (r1v6 org.telegram.ui.CancelAccountDeletionActivity) = 
+                                          (wrap: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView : 0x0186: IGET  (r1v5 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView) = 
                                           (r9v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
                                          org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.this$1 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView)
                                          org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this$0 org.telegram.ui.CancelAccountDeletionActivity)
                                          org.telegram.ui.CancelAccountDeletionActivity.access$3200(org.telegram.ui.CancelAccountDeletionActivity):int type: STATIC)
                                          org.telegram.tgnet.ConnectionsManager.getInstance(int):org.telegram.tgnet.ConnectionsManager type: STATIC)
                                           (r0v16 'tLRPC$TL_auth_resendCode' org.telegram.tgnet.TLRPC$TL_auth_resendCode)
-                                          (wrap: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$p4gA82dPNoiCJd5jDOQOxUguwz0 : 0x019e: CONSTRUCTOR  (r2v6 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$p4gA82dPNoiCJd5jDOQOxUguwz0) = 
+                                          (wrap: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$WVIdv2ulpRKL6BE7Ej44TJfk__g : 0x0194: CONSTRUCTOR  (r2v5 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$WVIdv2ulpRKL6BE7Ej44TJfk__g) = 
                                           (r9v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
-                                         call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$p4gA82dPNoiCJd5jDOQOxUguwz0.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR)
+                                         call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$WVIdv2ulpRKL6BE7Ej44TJfk__g.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR)
                                           (2 int)
-                                         org.telegram.tgnet.ConnectionsManager.sendRequest(org.telegram.tgnet.TLObject, org.telegram.tgnet.RequestDelegate, int):int type: VIRTUAL in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.lambda$run$2():void, dex: classes.dex
+                                         org.telegram.tgnet.ConnectionsManager.sendRequest(org.telegram.tgnet.TLObject, org.telegram.tgnet.RequestDelegate, int):int type: VIRTUAL in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.lambda$run$2():void, dex: classes3.dex
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                                         	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -1707,9 +1716,9 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                         	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                         	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x019e: CONSTRUCTOR  (r2v6 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$p4gA82dPNoiCJd5jDOQOxUguwz0) = 
+                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0194: CONSTRUCTOR  (r2v5 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$WVIdv2ulpRKL6BE7Ej44TJfk__g) = 
                                           (r9v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
-                                         call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$p4gA82dPNoiCJd5jDOQOxUguwz0.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.lambda$run$2():void, dex: classes.dex
+                                         call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$WVIdv2ulpRKL6BE7Ej44TJfk__g.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.lambda$run$2():void, dex: classes3.dex
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1718,7 +1727,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                         	... 99 more
-                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$p4gA82dPNoiCJd5jDOQOxUguwz0, state: NOT_LOADED
+                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$WVIdv2ulpRKL6BE7Ej44TJfk__g, state: NOT_LOADED
                                         	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                         	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -1734,12 +1743,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         java.lang.Double.isNaN(r0)
                                         double r2 = r0 - r2
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r4 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                        int r5 = r4.time
-                                        double r5 = (double) r5
-                                        java.lang.Double.isNaN(r5)
-                                        double r5 = r5 - r2
-                                        int r2 = (int) r5
-                                        int unused = r4.time = r2
+                                        org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.access$2126(r4, r2)
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         double unused = r2.lastCurrentTime = r0
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
@@ -1750,7 +1754,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         r4 = 4
                                         r5 = 0
                                         r6 = 2
-                                        if (r0 < r3) goto L_0x00c5
+                                        if (r0 < r3) goto L_0x00bb
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         int r0 = r0.time
                                         int r0 = r0 / r3
@@ -1763,18 +1767,18 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r3 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         int r3 = r3.nextType
                                         r8 = 1
-                                        if (r3 == r4) goto L_0x0082
+                                        if (r3 == r4) goto L_0x0078
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r3 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         int r3 = r3.nextType
-                                        if (r3 != r2) goto L_0x0059
-                                        goto L_0x0082
-                                    L_0x0059:
+                                        if (r3 != r2) goto L_0x004f
+                                        goto L_0x0078
+                                    L_0x004f:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         int r2 = r2.nextType
-                                        if (r2 != r6) goto L_0x00a2
+                                        if (r2 != r6) goto L_0x0098
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131627517(0x7f0e0dfd, float:1.88823E38)
+                                        r3 = 2131627546(0x7f0e0e1a, float:1.888236E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -1783,11 +1787,11 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         java.lang.String r0 = "SmsText"
                                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
                                         r2.setText(r0)
-                                        goto L_0x00a2
-                                    L_0x0082:
+                                        goto L_0x0098
+                                    L_0x0078:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131624626(0x7f0e02b2, float:1.8876437E38)
+                                        r3 = 2131624638(0x7f0e02be, float:1.8876461E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -1796,10 +1800,10 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         java.lang.String r0 = "CallText"
                                         java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
                                         r2.setText(r0)
-                                    L_0x00a2:
+                                    L_0x0098:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         org.telegram.ui.CancelAccountDeletionActivity$ProgressView r0 = r0.progressView
-                                        if (r0 == 0) goto L_0x01a4
+                                        if (r0 == 0) goto L_0x019a
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         org.telegram.ui.CancelAccountDeletionActivity$ProgressView r0 = r0.progressView
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
@@ -1811,20 +1815,20 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         float r2 = r2 / r3
                                         float r1 = r1 - r2
                                         r0.setProgress(r1)
-                                        goto L_0x01a4
-                                    L_0x00c5:
+                                        goto L_0x019a
+                                    L_0x00bb:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         org.telegram.ui.CancelAccountDeletionActivity$ProgressView r0 = r0.progressView
-                                        if (r0 == 0) goto L_0x00d6
+                                        if (r0 == 0) goto L_0x00cc
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         org.telegram.ui.CancelAccountDeletionActivity$ProgressView r0 = r0.progressView
                                         r0.setProgress(r1)
-                                    L_0x00d6:
+                                    L_0x00cc:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         r0.destroyTimer()
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         int r0 = r0.currentType
-                                        if (r0 != r2) goto L_0x0102
+                                        if (r0 != r2) goto L_0x00f8
                                         org.telegram.messenger.AndroidUtilities.setWaitingForCall(r5)
                                         org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
@@ -1836,26 +1840,26 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         r0.destroyCodeTimer()
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         r0.resendCode()
-                                        goto L_0x01a4
-                                    L_0x0102:
+                                        goto L_0x019a
+                                    L_0x00f8:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         int r0 = r0.currentType
-                                        if (r0 == r6) goto L_0x0112
+                                        if (r0 == r6) goto L_0x0108
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         int r0 = r0.currentType
-                                        if (r0 != r4) goto L_0x01a4
-                                    L_0x0112:
+                                        if (r0 != r4) goto L_0x019a
+                                    L_0x0108:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         int r0 = r0.nextType
-                                        if (r0 == r4) goto L_0x0149
+                                        if (r0 == r4) goto L_0x013f
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         int r0 = r0.nextType
-                                        if (r0 != r6) goto L_0x0123
-                                        goto L_0x0149
-                                    L_0x0123:
+                                        if (r0 != r6) goto L_0x0119
+                                        goto L_0x013f
+                                    L_0x0119:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         int r0 = r0.nextType
-                                        if (r0 != r2) goto L_0x01a4
+                                        if (r0 != r2) goto L_0x019a
                                         org.telegram.messenger.AndroidUtilities.setWaitingForSms(r5)
                                         org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
@@ -1867,26 +1871,26 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         r0.destroyCodeTimer()
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         r0.resendCode()
-                                        goto L_0x01a4
-                                    L_0x0149:
+                                        goto L_0x019a
+                                    L_0x013f:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         int r0 = r0.nextType
-                                        if (r0 != r4) goto L_0x0164
+                                        if (r0 != r4) goto L_0x015a
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131624628(0x7f0e02b4, float:1.8876441E38)
+                                        r1 = 2131624643(0x7f0e02c3, float:1.8876472E38)
                                         java.lang.String r2 = "Calling"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
-                                        goto L_0x0176
-                                    L_0x0164:
+                                        goto L_0x016c
+                                    L_0x015a:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131627379(0x7f0e0d73, float:1.888202E38)
+                                        r1 = 2131627407(0x7f0e0d8f, float:1.8882078E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
-                                    L_0x0176:
+                                    L_0x016c:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         r0.createCodeTimer()
                                         org.telegram.tgnet.TLRPC$TL_auth_resendCode r0 = new org.telegram.tgnet.TLRPC$TL_auth_resendCode
@@ -1901,27 +1905,27 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         org.telegram.ui.CancelAccountDeletionActivity r1 = r1.this$0
                                         int r1 = r1.currentAccount
                                         org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
-                                        org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$p4gA82dPNoiCJd5jDOQOxUguwz0 r2 = new org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$p4gA82dPNoiCJd5jDOQOxUguwz0
+                                        org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$WVIdv2ulpRKL6BE7Ej44TJfk__g r2 = new org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$WVIdv2ulpRKL6BE7Ej44TJfk__g
                                         r2.<init>(r9)
                                         r1.sendRequest(r0, r2, r6)
-                                    L_0x01a4:
+                                    L_0x019a:
                                         return
                                     */
                                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.lambda$run$2$CancelAccountDeletionActivity$LoginActivitySmsView$5():void");
                                 }
 
                                 /* access modifiers changed from: private */
-                                /* renamed from: lambda$null$1 */
-                                public /* synthetic */ void lambda$null$1$CancelAccountDeletionActivity$LoginActivitySmsView$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                                /* renamed from: lambda$run$1 */
+                                public /* synthetic */ void lambda$run$1$CancelAccountDeletionActivity$LoginActivitySmsView$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                                     if (tLRPC$TL_error != null && tLRPC$TL_error.text != null) {
                                         AndroidUtilities.runOnUIThread(
                                         /*  JADX ERROR: Method code generation error
                                             jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
-                                              (wrap: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$uU5H3FB2ZiJNSMKRx2Bkbv7Rtqk : 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$uU5H3FB2ZiJNSMKRx2Bkbv7Rtqk) = 
+                                              (wrap: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$srE0mGV00N6pB28v4C-K97mANKc : 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$srE0mGV00N6pB28v4C-K97mANKc) = 
                                               (r0v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
                                               (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
-                                             call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$uU5H3FB2ZiJNSMKRx2Bkbv7Rtqk.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR)
-                                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.lambda$null$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                                             call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$srE0mGV00N6pB28v4C-K97mANKc.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR)
+                                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.lambda$run$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -2013,10 +2017,10 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                             	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                             	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$uU5H3FB2ZiJNSMKRx2Bkbv7Rtqk) = 
+                                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$srE0mGV00N6pB28v4C-K97mANKc) = 
                                               (r0v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
                                               (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
-                                             call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$uU5H3FB2ZiJNSMKRx2Bkbv7Rtqk.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.lambda$null$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                                             call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$srE0mGV00N6pB28v4C-K97mANKc.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.lambda$run$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -2025,7 +2029,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                             	... 90 more
-                                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$uU5H3FB2ZiJNSMKRx2Bkbv7Rtqk, state: NOT_LOADED
+                                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$srE0mGV00N6pB28v4C-K97mANKc, state: NOT_LOADED
                                             	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                             	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -2037,18 +2041,18 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                             if (r2 == 0) goto L_0x000e
                                             java.lang.String r1 = r2.text
                                             if (r1 == 0) goto L_0x000e
-                                            org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$uU5H3FB2ZiJNSMKRx2Bkbv7Rtqk r1 = new org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$uU5H3FB2ZiJNSMKRx2Bkbv7Rtqk
+                                            org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$srE0mGV00N6pB28v4C-K97mANKc r1 = new org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$srE0mGV00N6pB28v4C-K97mANKc
                                             r1.<init>(r0, r2)
                                             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
                                         L_0x000e:
                                             return
                                         */
-                                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.lambda$null$1$CancelAccountDeletionActivity$LoginActivitySmsView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+                                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.lambda$run$1$CancelAccountDeletionActivity$LoginActivitySmsView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
                                     }
 
                                     /* access modifiers changed from: private */
-                                    /* renamed from: lambda$null$0 */
-                                    public /* synthetic */ void lambda$null$0$CancelAccountDeletionActivity$LoginActivitySmsView$5(TLRPC$TL_error tLRPC$TL_error) {
+                                    /* renamed from: lambda$run$0 */
+                                    public /* synthetic */ void lambda$run$0$CancelAccountDeletionActivity$LoginActivitySmsView$5(TLRPC$TL_error tLRPC$TL_error) {
                                         String unused = LoginActivitySmsView.this.lastError = tLRPC$TL_error.text;
                                     }
                                 }, 0, 1000);
@@ -2136,14 +2140,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 }
 
                                 public final void run() {
-                                    CancelAccountDeletionActivity.LoginActivitySmsView.this.lambda$null$6$CancelAccountDeletionActivity$LoginActivitySmsView(this.f$1, this.f$2);
+                                    CancelAccountDeletionActivity.LoginActivitySmsView.this.lambda$onNextPressed$6$CancelAccountDeletionActivity$LoginActivitySmsView(this.f$1, this.f$2);
                                 }
                             });
                         }
 
                         /* access modifiers changed from: private */
-                        /* renamed from: lambda$null$6 */
-                        public /* synthetic */ void lambda$null$6$CancelAccountDeletionActivity$LoginActivitySmsView(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_confirmPhone tLRPC$TL_account_confirmPhone) {
+                        /* renamed from: lambda$onNextPressed$6 */
+                        public /* synthetic */ void lambda$onNextPressed$6$CancelAccountDeletionActivity$LoginActivitySmsView(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_confirmPhone tLRPC$TL_account_confirmPhone) {
                             int i;
                             int i2;
                             this.this$0.needHideProgress();

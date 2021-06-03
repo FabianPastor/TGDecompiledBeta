@@ -27,7 +27,7 @@ public class SettingsSearchCell extends FrameLayout {
     private TextView valueTextView;
 
     public class VerticalImageSpan extends ImageSpan {
-        public VerticalImageSpan(SettingsSearchCell settingsSearchCell, Drawable drawable) {
+        public VerticalImageSpan(Drawable drawable) {
             super(drawable);
         }
 
@@ -114,7 +114,7 @@ public class SettingsSearchCell extends FrameLayout {
                     Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
                     mutate.setBounds(0, 0, mutate.getIntrinsicWidth(), mutate.getIntrinsicHeight());
                     mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), PorterDuff.Mode.MULTIPLY));
-                    spannableStringBuilder.setSpan(new VerticalImageSpan(this, mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
+                    spannableStringBuilder.setSpan(new VerticalImageSpan(mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
                 }
                 spannableStringBuilder.append(strArr[i2]);
             }
@@ -153,7 +153,7 @@ public class SettingsSearchCell extends FrameLayout {
                     Drawable mutate = getContext().getResources().getDrawable(NUM).mutate();
                     mutate.setBounds(0, 0, mutate.getIntrinsicWidth(), mutate.getIntrinsicHeight());
                     mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
-                    spannableStringBuilder.setSpan(new VerticalImageSpan(this, mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
+                    spannableStringBuilder.setSpan(new VerticalImageSpan(mutate), spannableStringBuilder.length() - 2, spannableStringBuilder.length() - 1, 33);
                 }
                 spannableStringBuilder.append(strArr[i]);
             }
@@ -170,7 +170,7 @@ public class SettingsSearchCell extends FrameLayout {
                         Drawable mutate2 = getContext().getResources().getDrawable(NUM).mutate();
                         mutate2.setBounds(0, 0, mutate2.getIntrinsicWidth(), mutate2.getIntrinsicHeight());
                         mutate2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText2"), PorterDuff.Mode.MULTIPLY));
-                        spannableStringBuilder2.setSpan(new VerticalImageSpan(this, mutate2), spannableStringBuilder2.length() - 2, spannableStringBuilder2.length() - 1, 33);
+                        spannableStringBuilder2.setSpan(new VerticalImageSpan(mutate2), spannableStringBuilder2.length() - 2, spannableStringBuilder2.length() - 1, 33);
                     }
                     spannableStringBuilder2.append(strArr[i2]);
                 }

@@ -58,7 +58,7 @@ public class SurfaceTextureHelper {
         return (SurfaceTextureHelper) ThreadUtils.invokeAtFrontUninterruptibly(handler2, new Callable<SurfaceTextureHelper>() {
             public SurfaceTextureHelper call() {
                 try {
-                    return new SurfaceTextureHelper(context2, handler3, z2, yuvConverter3, frameRefMonitor3);
+                    return new SurfaceTextureHelper(EglBase.Context.this, handler3, z2, yuvConverter3, frameRefMonitor3);
                 } catch (RuntimeException e) {
                     Logging.e("SurfaceTextureHelper", str2 + " create failure", e);
                     return null;

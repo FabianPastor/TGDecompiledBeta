@@ -5,13 +5,10 @@ import java.util.Iterator;
 
 public class CallingCodeInfo {
     public String callingCode = "";
+    public ArrayList<String> countries = new ArrayList<>();
     public ArrayList<String> intlPrefixes = new ArrayList<>();
     public ArrayList<RuleSet> ruleSets = new ArrayList<>();
     public ArrayList<String> trunkPrefixes = new ArrayList<>();
-
-    public CallingCodeInfo() {
-        new ArrayList();
-    }
 
     /* access modifiers changed from: package-private */
     public String matchingAccessCode(String str) {

@@ -4,6 +4,7 @@ public class TLRPC$TL_document extends TLRPC$Document {
     public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+        boolean z2 = z;
         this.flags = abstractSerializedData.readInt32(z);
         this.id = abstractSerializedData.readInt64(z);
         this.access_hash = abstractSerializedData.readInt64(z);
@@ -18,15 +19,16 @@ public class TLRPC$TL_document extends TLRPC$Document {
                 int readInt322 = abstractSerializedData.readInt32(z);
                 int i2 = 0;
                 while (i2 < readInt322) {
-                    TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                    int i3 = i2;
+                    TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(0, this.id, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z);
                     if (TLdeserialize != null) {
                         this.thumbs.add(TLdeserialize);
-                        i2++;
+                        i2 = i3 + 1;
                     } else {
                         return;
                     }
                 }
-            } else if (z) {
+            } else if (z2) {
                 throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt32)}));
             } else {
                 return;
@@ -36,17 +38,17 @@ public class TLRPC$TL_document extends TLRPC$Document {
             int readInt323 = abstractSerializedData.readInt32(z);
             if (readInt323 == NUM) {
                 int readInt324 = abstractSerializedData.readInt32(z);
-                int i3 = 0;
-                while (i3 < readInt324) {
-                    TLRPC$VideoSize TLdeserialize2 = TLRPC$VideoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                int i4 = 0;
+                while (i4 < readInt324) {
+                    TLRPC$VideoSize TLdeserialize2 = TLRPC$VideoSize.TLdeserialize(0, this.id, abstractSerializedData, abstractSerializedData.readInt32(z), z);
                     if (TLdeserialize2 != null) {
                         this.video_thumbs.add(TLdeserialize2);
-                        i3++;
+                        i4++;
                     } else {
                         return;
                     }
                 }
-            } else if (z) {
+            } else if (z2) {
                 throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt323)}));
             } else {
                 return;
@@ -57,7 +59,7 @@ public class TLRPC$TL_document extends TLRPC$Document {
         if (readInt325 == NUM) {
             int readInt326 = abstractSerializedData.readInt32(z);
             while (i < readInt326) {
-                TLRPC$DocumentAttribute TLdeserialize3 = TLRPC$DocumentAttribute.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                TLRPC$DocumentAttribute TLdeserialize3 = TLRPC$DocumentAttribute.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z2);
                 if (TLdeserialize3 != null) {
                     this.attributes.add(TLdeserialize3);
                     i++;
@@ -65,7 +67,7 @@ public class TLRPC$TL_document extends TLRPC$Document {
                     return;
                 }
             }
-        } else if (z) {
+        } else if (z2) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt325)}));
         }
     }

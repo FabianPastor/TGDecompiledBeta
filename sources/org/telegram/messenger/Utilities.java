@@ -46,7 +46,13 @@ public class Utilities {
 
     public static native void drawDitheredGradient(Bitmap bitmap, int[] iArr, int i, int i2, int i3, int i4);
 
+    public static native void generateGradient(Bitmap bitmap, boolean z, int i, float f, int i2, int i3, int i4, int[] iArr);
+
     public static native long getDirSize(String str, int i, boolean z);
+
+    public static byte[] intToBytes(int i) {
+        return new byte[]{(byte) (i >>> 24), (byte) (i >>> 16), (byte) (i >>> 8), (byte) i};
+    }
 
     public static native boolean loadWebpImage(Bitmap bitmap, ByteBuffer byteBuffer, int i, BitmapFactory.Options options, boolean z);
 

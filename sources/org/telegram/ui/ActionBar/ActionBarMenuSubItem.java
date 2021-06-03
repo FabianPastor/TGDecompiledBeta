@@ -18,6 +18,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
     private ImageView checkView;
     private int iconColor;
     private ImageView imageView;
+    private int itemHeight;
     private int selectorColor;
     private TextView subtextView;
     private int textColor;
@@ -33,6 +34,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
         this.textColor = Theme.getColor("actionBarDefaultSubmenuItem");
         this.iconColor = Theme.getColor("actionBarDefaultSubmenuItemIcon");
         this.selectorColor = Theme.getColor("dialogButtonSelector");
+        this.itemHeight = 48;
         this.top = z2;
         this.bottom = z3;
         updateBackground();
@@ -64,7 +66,11 @@ public class ActionBarMenuSubItem extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
+        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp((float) this.itemHeight), NUM));
+    }
+
+    public void setItemHeight(int i) {
+        this.itemHeight = i;
     }
 
     public void setChecked(boolean z) {

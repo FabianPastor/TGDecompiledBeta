@@ -475,7 +475,11 @@ public class FastDateParser implements DateParser, Serializable {
         ConcurrentMap<Locale, Strategy> cache = getCache(i);
         Strategy strategy = (Strategy) cache.get(this.locale);
         if (strategy == null) {
-            strategy = i == 15 ? new TimeZoneStrategy(this.locale) : new TextStrategy(i, calendar, this.locale);
+            if (i == 15) {
+                strategy = new TimeZoneStrategy(this.locale);
+            } else {
+                strategy = new TextStrategy(i, calendar, this.locale);
+            }
             Strategy putIfAbsent = cache.putIfAbsent(this.locale, strategy);
             if (putIfAbsent != null) {
                 return putIfAbsent;

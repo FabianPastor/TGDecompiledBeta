@@ -18,14 +18,14 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class TextCell extends FrameLayout {
     private int imageLeft;
-    private ImageView imageView;
+    public final ImageView imageView;
     private boolean inDialogs;
     private int leftPadding;
     private boolean needDivider;
     private int offsetFromImage;
-    private SimpleTextView textView;
+    public final SimpleTextView textView;
     private ImageView valueImageView;
-    private SimpleTextView valueTextView;
+    public final SimpleTextView valueTextView;
 
     public TextCell(Context context) {
         this(context, 23, false);
@@ -39,23 +39,23 @@ public class TextCell extends FrameLayout {
         SimpleTextView simpleTextView = new SimpleTextView(context);
         this.textView = simpleTextView;
         simpleTextView.setTextColor(Theme.getColor(z ? "dialogTextBlack" : "windowBackgroundWhiteBlackText"));
-        this.textView.setTextSize(16);
+        simpleTextView.setTextSize(16);
         int i2 = 5;
-        this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
-        this.textView.setImportantForAccessibility(2);
-        addView(this.textView);
+        simpleTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        simpleTextView.setImportantForAccessibility(2);
+        addView(simpleTextView);
         SimpleTextView simpleTextView2 = new SimpleTextView(context);
         this.valueTextView = simpleTextView2;
         simpleTextView2.setTextColor(Theme.getColor(z ? "dialogTextBlue2" : "windowBackgroundWhiteValueText"));
-        this.valueTextView.setTextSize(16);
-        this.valueTextView.setGravity(LocaleController.isRTL ? 3 : i2);
-        this.valueTextView.setImportantForAccessibility(2);
-        addView(this.valueTextView);
+        simpleTextView2.setTextSize(16);
+        simpleTextView2.setGravity(LocaleController.isRTL ? 3 : i2);
+        simpleTextView2.setImportantForAccessibility(2);
+        addView(simpleTextView2);
         ImageView imageView2 = new ImageView(context);
         this.imageView = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
-        addView(this.imageView);
+        imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
+        addView(imageView2);
         ImageView imageView3 = new ImageView(context);
         this.valueImageView = imageView3;
         imageView3.setScaleType(ImageView.ScaleType.CENTER);

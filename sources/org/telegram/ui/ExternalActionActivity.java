@@ -429,7 +429,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                 }
 
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ExternalActionActivity.this.lambda$null$7$ExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tLRPC$TL_error);
+                    ExternalActionActivity.this.lambda$handleIntent$7$ExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tLRPC$TL_error);
                 }
             });
             return;
@@ -445,14 +445,14 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             }
 
             public final void run() {
-                ExternalActionActivity.this.lambda$null$9$ExternalActionActivity(this.f$1, this.f$2);
+                ExternalActionActivity.this.lambda$handleIntent$9$ExternalActionActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$ExternalActionActivity(AlertDialog alertDialog, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$handleIntent$7 */
+    public /* synthetic */ void lambda$handleIntent$7$ExternalActionActivity(AlertDialog alertDialog, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, i, tLRPC$TL_account_authorizationForm, tLRPC$TL_account_getAuthorizationForm, str, str2) {
             public final /* synthetic */ AlertDialog f$1;
             public final /* synthetic */ TLObject f$2;
@@ -473,14 +473,14 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             }
 
             public final void run() {
-                ExternalActionActivity.this.lambda$null$6$ExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+                ExternalActionActivity.this.lambda$handleIntent$6$ExternalActionActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$ExternalActionActivity(AlertDialog alertDialog, TLObject tLObject, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2) {
+    /* renamed from: lambda$handleIntent$6 */
+    public /* synthetic */ void lambda$handleIntent$6$ExternalActionActivity(AlertDialog alertDialog, TLObject tLObject, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2) {
         TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm2 = tLRPC$TL_account_getAuthorizationForm;
         try {
             alertDialog.dismiss();
@@ -507,8 +507,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$9 */
-    public /* synthetic */ void lambda$null$9$ExternalActionActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$handleIntent$9 */
+    public /* synthetic */ void lambda$handleIntent$9$ExternalActionActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error) {
         try {
             alertDialog.dismiss();
             if ("APP_VERSION_OUTDATED".equals(tLRPC$TL_error.text)) {
@@ -522,7 +522,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                         }
 
                         public final void onDismiss(DialogInterface dialogInterface) {
-                            ExternalActionActivity.this.lambda$null$8$ExternalActionActivity(this.f$1, dialogInterface);
+                            ExternalActionActivity.this.lambda$handleIntent$8$ExternalActionActivity(this.f$1, dialogInterface);
                         }
                     });
                     return;
@@ -546,8 +546,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$ExternalActionActivity(TLRPC$TL_error tLRPC$TL_error, DialogInterface dialogInterface) {
+    /* renamed from: lambda$handleIntent$8 */
+    public /* synthetic */ void lambda$handleIntent$8$ExternalActionActivity(TLRPC$TL_error tLRPC$TL_error, DialogInterface dialogInterface) {
         setResult(1, new Intent().putExtra("error", tLRPC$TL_error.text));
         finish();
     }

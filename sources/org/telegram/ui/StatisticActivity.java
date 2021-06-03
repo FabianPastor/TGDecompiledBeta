@@ -301,7 +301,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
 
                 public final void run() {
-                    StatisticActivity.this.lambda$null$0$StatisticActivity(this.f$1);
+                    StatisticActivity.this.lambda$onFragmentCreate$0$StatisticActivity(this.f$1);
                 }
             });
         }
@@ -352,15 +352,15 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
 
                 public final void run() {
-                    StatisticActivity.this.lambda$null$1$StatisticActivity(this.f$1);
+                    StatisticActivity.this.lambda$onFragmentCreate$1$StatisticActivity(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$StatisticActivity(ChartViewData[] chartViewDataArr) {
+    /* renamed from: lambda$onFragmentCreate$0 */
+    public /* synthetic */ void lambda$onFragmentCreate$0$StatisticActivity(ChartViewData[] chartViewDataArr) {
         this.ivInteractionsData = chartViewDataArr[0];
         this.followersData = chartViewDataArr[1];
         this.topHoursData = chartViewDataArr[2];
@@ -374,8 +374,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$StatisticActivity(ChartViewData[] chartViewDataArr) {
+    /* renamed from: lambda$onFragmentCreate$1 */
+    public /* synthetic */ void lambda$onFragmentCreate$1$StatisticActivity(ChartViewData[] chartViewDataArr) {
         this.growthData = chartViewDataArr[0];
         this.groupMembersData = chartViewDataArr[1];
         this.newMembersBySourceData = chartViewDataArr[2];
@@ -516,7 +516,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2);
         this.layoutManager = linearLayoutManager;
         this.recyclerListView.setLayoutManager(linearLayoutManager);
-        this.animator = new DefaultItemAnimator(this) {
+        this.animator = new DefaultItemAnimator() {
             /* access modifiers changed from: protected */
             public long getAddAnimationDelay(long j, long j2, long j3) {
                 return j;
@@ -654,7 +654,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    StatisticActivity.this.lambda$null$4$StatisticActivity(this.f$1, dialogInterface, i);
+                    StatisticActivity.this.lambda$createView$4$StatisticActivity(this.f$1, dialogInterface, i);
                 }
             });
             showDialog(builder.create());
@@ -663,8 +663,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$StatisticActivity(MessageObject messageObject, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$StatisticActivity(MessageObject messageObject, DialogInterface dialogInterface, int i) {
         if (i == 0) {
             presentFragment(new MessageStatisticActivity(messageObject));
         } else if (i == 1) {
@@ -875,9 +875,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 android.content.Context r5 = r5.getContext()
                 org.telegram.ui.StatisticActivity r2 = org.telegram.ui.StatisticActivity.this
                 org.telegram.ui.Charts.BaseChartView$SharedUiComponents r2 = r2.sharedUi
-                r1.<init>(r4, r5, r6, r2)
+                r1.<init>(r5, r6, r2)
                 r1.setWillNotDraw(r0)
-                goto L_0x00c2
+                goto L_0x00be
             L_0x001a:
                 r1 = 9
                 if (r6 != r1) goto L_0x0032
@@ -885,34 +885,34 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 android.content.Context r5 = r5.getContext()
                 org.telegram.ui.StatisticActivity r6 = org.telegram.ui.StatisticActivity.this
                 org.telegram.tgnet.TLRPC$ChatFull r6 = r6.chat
-                r1.<init>(r4, r5, r6)
+                r1.<init>(r5, r6)
                 r1.setWillNotDraw(r0)
-                goto L_0x00c2
+                goto L_0x00be
             L_0x0032:
                 r1 = 11
                 java.lang.String r2 = "windowBackgroundWhite"
-                if (r6 != r1) goto L_0x004b
+                if (r6 != r1) goto L_0x004a
                 org.telegram.ui.Cells.LoadingCell r1 = new org.telegram.ui.Cells.LoadingCell
                 android.content.Context r5 = r5.getContext()
                 r1.<init>(r5)
                 int r5 = org.telegram.ui.ActionBar.Theme.getColor(r2)
                 r1.setBackgroundColor(r5)
-                goto L_0x00c2
-            L_0x004b:
+                goto L_0x00be
+            L_0x004a:
                 r1 = 12
-                if (r6 != r1) goto L_0x005f
+                if (r6 != r1) goto L_0x005e
                 org.telegram.ui.Cells.EmptyCell r1 = new org.telegram.ui.Cells.EmptyCell
                 android.content.Context r5 = r5.getContext()
                 r6 = 1097859072(0x41700000, float:15.0)
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 r1.<init>(r5, r6)
-                goto L_0x00c2
-            L_0x005f:
+                goto L_0x00be
+            L_0x005e:
                 r3 = 13
-                if (r6 != r3) goto L_0x0085
+                if (r6 != r3) goto L_0x0084
                 org.telegram.ui.StatisticActivity$Adapter$3 r1 = new org.telegram.ui.StatisticActivity$Adapter$3
                 android.content.Context r5 = r5.getContext()
-                r1.<init>(r4, r5)
+                r1.<init>(r5)
                 r1.setWillNotDraw(r0)
                 int r5 = r1.getPaddingLeft()
                 r6 = 1098907648(0x41800000, float:16.0)
@@ -920,17 +920,17 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 int r2 = r1.getRight()
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 r1.setPadding(r5, r0, r2, r6)
-                goto L_0x00c2
-            L_0x0085:
+                goto L_0x00be
+            L_0x0084:
                 r0 = 14
-                if (r6 != r0) goto L_0x0093
+                if (r6 != r0) goto L_0x0092
                 org.telegram.ui.StatisticActivity$OverviewCell r1 = new org.telegram.ui.StatisticActivity$OverviewCell
                 android.content.Context r5 = r5.getContext()
                 r1.<init>(r5)
-                goto L_0x00c2
-            L_0x0093:
+                goto L_0x00be
+            L_0x0092:
                 r0 = 15
-                if (r6 != r0) goto L_0x00b1
+                if (r6 != r0) goto L_0x00ae
                 org.telegram.ui.Cells.ManageChatTextCell r1 = new org.telegram.ui.Cells.ManageChatTextCell
                 android.content.Context r5 = r5.getContext()
                 r1.<init>(r5)
@@ -939,15 +939,15 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 java.lang.String r5 = "windowBackgroundWhiteBlueIcon"
                 java.lang.String r6 = "windowBackgroundWhiteBlueButton"
                 r1.setColors(r5, r6)
-                goto L_0x00c2
-            L_0x00b1:
+                goto L_0x00be
+            L_0x00ae:
                 org.telegram.ui.Cells.ShadowSectionCell r6 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r5 = r5.getContext()
                 java.lang.String r0 = "windowBackgroundGray"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r6.<init>(r5, r1, r0)
                 r1 = r6
-            L_0x00c2:
+            L_0x00be:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r5 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r6 = -1
                 r0 = -2
@@ -1490,14 +1490,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
 
                 public final void run() {
-                    StatisticActivity.ChartCell.this.lambda$null$0$StatisticActivity$ChartCell(this.f$1, this.f$2, this.f$3);
+                    StatisticActivity.ChartCell.this.lambda$onZoomed$0$StatisticActivity$ChartCell(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$StatisticActivity$ChartCell(ChartData chartData, String str, ZoomCancelable zoomCancelable) {
+        /* renamed from: lambda$onZoomed$0 */
+        public /* synthetic */ void lambda$onZoomed$0$StatisticActivity$ChartCell(ChartData chartData, String str, ZoomCancelable zoomCancelable) {
             if (chartData != null) {
                 StatisticActivity.this.childDataCache.put(str, chartData);
             }
@@ -1543,7 +1543,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.chartType = i;
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(1);
-            this.checkboxContainer = new FrameLayout(this, context) {
+            this.checkboxContainer = new FrameLayout(context) {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
                     super.onMeasure(i, i2);
@@ -1835,9 +1835,10 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             baseChartView.transitionMode = 2;
             baseChartView2.transitionMode = 1;
             TransitionParams transitionParams = new TransitionParams();
-            ChartPickerDelegate chartPickerDelegate = baseChartView.pickerDelegate;
+            ChartPickerDelegate chartPickerDelegate = this.chartView.pickerDelegate;
             transitionParams.pickerEndOut = chartPickerDelegate.pickerEnd;
             transitionParams.pickerStartOut = chartPickerDelegate.pickerStart;
+            transitionParams.date = j;
             int binarySearch = Arrays.binarySearch(this.data.chartData.x, j);
             if (binarySearch < 0) {
                 binarySearch = this.data.chartData.x.length - 1;
@@ -1966,10 +1967,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     if (z) {
                         this.chartView.transitionMode = 3;
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                        BaseChartView baseChartView = this.chartView;
-                        TransitionParams transitionParams = new TransitionParams();
-                        baseChartView.transitionParams = transitionParams;
-                        transitionParams.progress = 0.0f;
+                        this.chartView.transitionParams = new TransitionParams();
+                        this.chartView.transitionParams.progress = 0.0f;
                         ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             public final void onAnimationUpdate(ValueAnimator valueAnimator) {
                                 StatisticActivity.BaseChartCell.this.lambda$updateData$5$StatisticActivity$BaseChartCell(valueAnimator);
@@ -2064,7 +2063,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                       (r3v0 'this' org.telegram.ui.StatisticActivity$BaseChartCell$CheckBoxHolder A[THIS])
                       (r4v0 'lineViewData' org.telegram.ui.Charts.view_data.LineViewData)
                      call: org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$7ZK0oJMAzRP6brNIFUjN1_OsCR8.<init>(org.telegram.ui.StatisticActivity$BaseChartCell$CheckBoxHolder, org.telegram.ui.Charts.view_data.LineViewData):void type: CONSTRUCTOR)
-                     android.view.View.setOnClickListener(android.view.View$OnClickListener):void type: VIRTUAL in method: org.telegram.ui.StatisticActivity.BaseChartCell.CheckBoxHolder.setData(org.telegram.ui.Charts.view_data.LineViewData):void, dex: classes.dex
+                     android.view.View.setOnClickListener(android.view.View$OnClickListener):void type: VIRTUAL in method: org.telegram.ui.StatisticActivity.BaseChartCell.CheckBoxHolder.setData(org.telegram.ui.Charts.view_data.LineViewData):void, dex: classes3.dex
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                     	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -2128,7 +2127,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0021: CONSTRUCTOR  (r1v4 org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$7ZK0oJMAzRP6brNIFUjN1_OsCR8) = 
                       (r3v0 'this' org.telegram.ui.StatisticActivity$BaseChartCell$CheckBoxHolder A[THIS])
                       (r4v0 'lineViewData' org.telegram.ui.Charts.view_data.LineViewData)
-                     call: org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$7ZK0oJMAzRP6brNIFUjN1_OsCR8.<init>(org.telegram.ui.StatisticActivity$BaseChartCell$CheckBoxHolder, org.telegram.ui.Charts.view_data.LineViewData):void type: CONSTRUCTOR in method: org.telegram.ui.StatisticActivity.BaseChartCell.CheckBoxHolder.setData(org.telegram.ui.Charts.view_data.LineViewData):void, dex: classes.dex
+                     call: org.telegram.ui.-$$Lambda$StatisticActivity$BaseChartCell$CheckBoxHolder$7ZK0oJMAzRP6brNIFUjN1_OsCR8.<init>(org.telegram.ui.StatisticActivity$BaseChartCell$CheckBoxHolder, org.telegram.ui.Charts.view_data.LineViewData):void type: CONSTRUCTOR in method: org.telegram.ui.StatisticActivity.BaseChartCell.CheckBoxHolder.setData(org.telegram.ui.Charts.view_data.LineViewData):void, dex: classes3.dex
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                     	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                     	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -2372,7 +2371,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r3 = r0
                 r4 = r3
             L_0x005e:
-                org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$gzyB7CyBA6jJQguigeT1JALKKR0 r11 = new org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$gzyB7CyBA6jJQguigeT1JALKKR0
+                org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$NV2AIojOcHRSkIyCilelTPcF2mQ r11 = new org.telegram.ui.-$$Lambda$StatisticActivity$ChartViewData$NV2AIojOcHRSkIyCilelTPcF2mQ
                 r1 = r11
                 r2 = r8
                 r5 = r9
@@ -2385,8 +2384,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$StatisticActivity$ChartViewData(ChartData chartData2, String str, RecyclerListView recyclerListView, DiffUtilsCallback diffUtilsCallback) {
+        /* renamed from: lambda$load$0 */
+        public /* synthetic */ void lambda$load$0$StatisticActivity$ChartViewData(ChartData chartData2, String str, RecyclerListView recyclerListView, DiffUtilsCallback diffUtilsCallback) {
             boolean z = false;
             this.loading = false;
             this.chartData = chartData2;
@@ -2458,14 +2457,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             }
 
             public final void run() {
-                StatisticActivity.this.lambda$null$6$StatisticActivity(this.f$1);
+                StatisticActivity.this.lambda$loadMessages$6$StatisticActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$StatisticActivity(ArrayList arrayList) {
+    /* renamed from: lambda$loadMessages$6 */
+    public /* synthetic */ void lambda$loadMessages$6$StatisticActivity(ArrayList arrayList) {
         int i = 0;
         this.messagesIsLoading = false;
         if (!arrayList.isEmpty()) {
@@ -3443,21 +3442,21 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r11 = r6
                 r12 = r11
             L_0x0064:
-                r9 = 2131627548(0x7f0e0e1c, float:1.8882364E38)
+                r9 = 2131627577(0x7f0e0e39, float:1.8882422E38)
                 java.lang.String r10 = "StatisticOpenProfile"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165678(0x7var_ee, float:1.794558E38)
+                r9 = 2131165679(0x7var_ef, float:1.7945582E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 2
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r2.add(r9)
-                r9 = 2131627550(0x7f0e0e1e, float:1.8882368E38)
+                r9 = 2131627579(0x7f0e0e3b, float:1.8882426E38)
                 java.lang.String r10 = "StatisticSearchUserHistory"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165640(0x7var_c8, float:1.7945503E38)
+                r9 = 2131165641(0x7var_c9, float:1.7945505E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 1
@@ -3567,11 +3566,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r9 = 0
             L_0x0176:
                 if (r9 == 0) goto L_0x017e
-                r0 = 2131627396(0x7f0e0d84, float:1.8882055E38)
+                r0 = 2131627424(0x7f0e0da0, float:1.8882112E38)
                 java.lang.String r6 = "SetAsAdmin"
                 goto L_0x0183
             L_0x017e:
-                r0 = 2131625234(0x7f0e0512, float:1.887767E38)
+                r0 = 2131625250(0x7f0e0522, float:1.8877703E38)
                 java.lang.String r6 = "EditAdminRights"
             L_0x0183:
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
@@ -3634,14 +3633,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
 
                 public final void run() {
-                    StatisticActivity.MemberData.this.lambda$null$0$StatisticActivity$MemberData(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    StatisticActivity.MemberData.this.lambda$onLongClick$0$StatisticActivity$MemberData(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
+        /* renamed from: lambda$onLongClick$0 */
+        public /* synthetic */ void lambda$onLongClick$0$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
             if (!statisticActivity.isFinishing() && statisticActivity.getFragmentView() != null && alertDialogArr[0] != null) {
                 if (tLRPC$TL_error == null) {
                     TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant = new TLRPC$TL_chatChannelParticipant();
@@ -3674,14 +3673,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 }
 
                 public final void run() {
-                    StatisticActivity.MemberData.this.lambda$null$2$StatisticActivity$MemberData(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    StatisticActivity.MemberData.this.lambda$onLongClick$2$StatisticActivity$MemberData(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
+        /* renamed from: lambda$onLongClick$2 */
+        public /* synthetic */ void lambda$onLongClick$2$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
             if (!statisticActivity.isFinishing() && statisticActivity.getFragmentView() != null && alertDialogArr[0] != null) {
                 if (tLRPC$TL_error == null) {
                     TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant = new TLRPC$TL_chatChannelParticipant();
@@ -3727,7 +3726,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     }
                 };
                 final boolean z2 = z;
-                AnonymousClass2 r02 = new ChatRightsEditActivity.ChatRightsEditActivityDelegate(this) {
+                AnonymousClass2 r02 = new ChatRightsEditActivity.ChatRightsEditActivityDelegate() {
                     public void didChangeOwner(TLRPC$User tLRPC$User) {
                     }
 

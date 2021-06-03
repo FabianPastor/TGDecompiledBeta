@@ -432,7 +432,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         recyclerListView2.setAdapter(listAdapter);
         this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
         this.listView.setLayoutAnimation((LayoutAnimationController) null);
-        this.listView.setLayoutManager(new LinearLayoutManager(this, context) {
+        this.listView.setLayoutManager(new LinearLayoutManager(context) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
@@ -536,7 +536,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                             RecyclerListView recyclerListView = new RecyclerListView(ProfileNotificationsActivity.this.getParentActivity());
                             recyclerListView.setLayoutManager(new LinearLayoutManager(context, 1, false));
                             recyclerListView.setClipToPadding(true);
-                            recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter(this) {
+                            recyclerListView.setAdapter(new RecyclerListView.SelectionAdapter() {
                                 public int getItemCount() {
                                     return 100;
                                 }
@@ -546,7 +546,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                 }
 
                                 public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                                    AnonymousClass1 r3 = new TextView(this, parentActivity2) {
+                                    AnonymousClass1 r3 = new TextView(parentActivity2) {
                                         /* access modifiers changed from: protected */
                                         public void onMeasure(int i, int i2) {
                                             super.onMeasure(View.MeasureSpec.makeMeasureSpec(i, NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));

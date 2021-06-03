@@ -75,7 +75,7 @@ public class DataUsageActivity extends BaseFragment {
         /* access modifiers changed from: private */
         public int selectedType;
 
-        public ViewPage(DataUsageActivity dataUsageActivity, Context context) {
+        public ViewPage(Context context) {
             super(context);
         }
     }
@@ -479,20 +479,18 @@ public class DataUsageActivity extends BaseFragment {
             r0.addView(r8, LayoutHelper.createFrame(-1, -1.0f));
             ViewPage[] viewPageArr2 = this.viewPages;
             viewPageArr2[i] = r8;
-            ViewPage viewPage = viewPageArr2[i];
-            AnonymousClass5 r10 = new LinearLayoutManager(this, context, 1, false) {
+            LinearLayoutManager access$2802 = viewPageArr2[i].layoutManager = new LinearLayoutManager(context, 1, false) {
                 public boolean supportsPredictiveItemAnimations() {
                     return false;
                 }
             };
-            LinearLayoutManager unused = viewPage.layoutManager = r10;
             RecyclerListView recyclerListView = new RecyclerListView(context);
-            RecyclerListView unused2 = this.viewPages[i].listView = recyclerListView;
+            RecyclerListView unused = this.viewPages[i].listView = recyclerListView;
             this.viewPages[i].listView.setScrollingTouchSlop(1);
             this.viewPages[i].listView.setItemAnimator((RecyclerView.ItemAnimator) null);
             this.viewPages[i].listView.setClipToPadding(false);
             this.viewPages[i].listView.setSectionsType(2);
-            this.viewPages[i].listView.setLayoutManager(r10);
+            this.viewPages[i].listView.setLayoutManager(access$2802);
             ViewPage[] viewPageArr3 = this.viewPages;
             viewPageArr3[i].addView(viewPageArr3[i].listView, LayoutHelper.createFrame(-1, -1.0f));
             this.viewPages[i].listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(recyclerListView) {
@@ -537,7 +535,7 @@ public class DataUsageActivity extends BaseFragment {
                 }
             });
             if (i == 0 && i2 != -1) {
-                r10.scrollToPositionWithOffset(i2, i3);
+                access$2802.scrollToPositionWithOffset(i2, i3);
             }
             if (i != 0) {
                 this.viewPages[i].setVisibility(8);
@@ -571,7 +569,7 @@ public class DataUsageActivity extends BaseFragment {
                     }
 
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        DataUsageActivity.this.lambda$null$1$DataUsageActivity(this.f$1, dialogInterface, i);
+                        DataUsageActivity.this.lambda$createView$1$DataUsageActivity(this.f$1, dialogInterface, i);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -586,8 +584,8 @@ public class DataUsageActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$DataUsageActivity(ListAdapter listAdapter, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$DataUsageActivity(ListAdapter listAdapter, DialogInterface dialogInterface, int i) {
         StatsController.getInstance(this.currentAccount).resetStats(listAdapter.currentType);
         listAdapter.notifyDataSetChanged();
     }

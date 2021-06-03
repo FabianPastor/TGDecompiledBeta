@@ -270,7 +270,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
         }
     }
 
-    public boolean isEnabled(int i, int i2) {
+    public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
         HashMap<String, ArrayList<TLRPC$TL_contact>> hashMap = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).usersMutualSectionsDict : ContactsController.getInstance(this.currentAccount).usersSectionsDict;
         ArrayList<String> arrayList = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
         if (this.onlyUsers == 0 || this.isAdmin) {

@@ -14,32 +14,32 @@ final class I2 extends E2 {
         this.c.accept(j);
     }
 
-    public void m() {
+    public void l() {
         long[] jArr = (long[]) this.c.e();
         Arrays.sort(jArr);
-        this.var_a.n((long) jArr.length);
+        this.a.m((long) jArr.length);
         int i = 0;
         if (!this.b) {
             int length = jArr.length;
             while (i < length) {
-                this.var_a.accept(jArr[i]);
+                this.a.accept(jArr[i]);
                 i++;
             }
         } else {
             int length2 = jArr.length;
             while (i < length2) {
                 long j = jArr[i];
-                if (this.var_a.p()) {
+                if (this.a.o()) {
                     break;
                 }
-                this.var_a.accept(j);
+                this.a.accept(j);
                 i++;
             }
         }
-        this.var_a.m();
+        this.a.l();
     }
 
-    public void n(long j) {
+    public void m(long j) {
         S2.d dVar;
         if (j < NUM) {
             if (j > 0) {

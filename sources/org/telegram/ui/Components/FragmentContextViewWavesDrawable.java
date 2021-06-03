@@ -27,16 +27,15 @@ public class FragmentContextViewWavesDrawable {
     LineBlobDrawable lineBlobDrawable2 = new LineBlobDrawable(8);
     Paint paint = new Paint(1);
     ArrayList<View> parents = new ArrayList<>();
-    Path path;
+    Path path = new Path();
     WeavingState pausedState;
     WeavingState previousState;
     float progressToState = 1.0f;
+    RectF rect = new RectF();
+    private final Paint selectedPaint = new Paint(1);
     WeavingState[] states = new WeavingState[4];
 
     public FragmentContextViewWavesDrawable() {
-        new RectF();
-        this.path = new Path();
-        new Paint(1);
         for (int i = 0; i < 4; i++) {
             this.states[i] = new WeavingState(i);
         }
@@ -470,6 +469,7 @@ public class FragmentContextViewWavesDrawable {
         String blueKey2 = "voipgroup_topPanelBlue2";
         int color1;
         int color2;
+        int color3;
         /* access modifiers changed from: private */
         public final int currentState;
         private float duration;
@@ -496,21 +496,23 @@ public class FragmentContextViewWavesDrawable {
             if (i == 0) {
                 int color = Theme.getColor(this.greenKey1);
                 this.color1 = color;
-                int color3 = Theme.getColor(this.greenKey2);
-                this.color2 = color3;
-                this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color, color3}, (float[]) null, Shader.TileMode.CLAMP);
+                int color4 = Theme.getColor(this.greenKey2);
+                this.color2 = color4;
+                this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color, color4}, (float[]) null, Shader.TileMode.CLAMP);
             } else if (i == 1) {
-                int color4 = Theme.getColor(this.blueKey1);
-                this.color1 = color4;
-                int color5 = Theme.getColor(this.blueKey2);
-                this.color2 = color5;
-                this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color4, color5}, (float[]) null, Shader.TileMode.CLAMP);
+                int color5 = Theme.getColor(this.blueKey1);
+                this.color1 = color5;
+                int color6 = Theme.getColor(this.blueKey2);
+                this.color2 = color6;
+                this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color5, color6}, (float[]) null, Shader.TileMode.CLAMP);
             } else if (i == 3) {
-                int color6 = Theme.getColor(this.mutedByAdmin);
-                this.color1 = color6;
-                int color7 = Theme.getColor(this.mutedByAdmin2);
-                this.color2 = color7;
-                this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color6, Theme.getColor(this.mutedByAdmin3), color7}, new float[]{0.0f, 0.6f, 1.0f}, Shader.TileMode.CLAMP);
+                int color7 = Theme.getColor(this.mutedByAdmin);
+                this.color1 = color7;
+                int color8 = Theme.getColor(this.mutedByAdmin3);
+                this.color3 = color8;
+                int color9 = Theme.getColor(this.mutedByAdmin2);
+                this.color2 = color9;
+                this.shader = new RadialGradient(200.0f, 200.0f, 200.0f, new int[]{color7, color8, color9}, new float[]{0.0f, 0.6f, 1.0f}, Shader.TileMode.CLAMP);
             }
         }
 

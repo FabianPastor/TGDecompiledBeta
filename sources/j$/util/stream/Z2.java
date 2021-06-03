@@ -4,7 +4,7 @@ import j$.util.Spliterator;
 import j$.util.function.Consumer;
 import j$.util.function.J;
 import j$.util.function.q;
-import j$.util.s;
+import j$.util.r;
 import j$.util.stream.S2;
 
 final class Z2<P_IN> extends W2<P_IN, Double, S2.b> implements Spliterator.a {
@@ -17,7 +17,7 @@ final class Z2<P_IN> extends W2<P_IN, Double, S2.b> implements Spliterator.a {
     }
 
     public /* synthetic */ boolean b(Consumer consumer) {
-        return s.d(this, consumer);
+        return r.e(this, consumer);
     }
 
     /* renamed from: e */
@@ -28,17 +28,17 @@ final class Z2<P_IN> extends W2<P_IN, Double, S2.b> implements Spliterator.a {
             return;
         }
         qVar.getClass();
-        g();
+        h();
         this.b.t0(new CLASSNAMEl0(qVar), this.d);
         this.i = true;
     }
 
     public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        s.a(this, consumer);
+        r.a(this, consumer);
     }
 
     /* access modifiers changed from: package-private */
-    public void i() {
+    public void j() {
         S2.b bVar = new S2.b();
         this.h = bVar;
         this.e = this.b.u0(new T0(bVar));
@@ -47,20 +47,20 @@ final class Z2<P_IN> extends W2<P_IN, Double, S2.b> implements Spliterator.a {
 
     /* access modifiers changed from: package-private */
     public W2 k(Spliterator spliterator) {
-        return new Z2(this.b, spliterator, this.var_a);
+        return new Z2(this.b, spliterator, this.a);
     }
 
-    /* renamed from: o */
+    /* renamed from: n */
     public boolean tryAdvance(q qVar) {
         qVar.getClass();
-        boolean a2 = a();
-        if (a2) {
+        boolean a = a();
+        if (a) {
             S2.b bVar = (S2.b) this.h;
             long j = this.g;
-            int w = bVar.w(j);
-            qVar.accept((bVar.c == 0 && w == 0) ? ((double[]) bVar.e)[(int) j] : ((double[][]) bVar.f)[w][(int) (j - bVar.d[w])]);
+            int v = bVar.v(j);
+            qVar.accept((bVar.c == 0 && v == 0) ? ((double[]) bVar.e)[(int) j] : ((double[][]) bVar.f)[v][(int) (j - bVar.d[v])]);
         }
-        return a2;
+        return a;
     }
 
     public Spliterator.a trySplit() {

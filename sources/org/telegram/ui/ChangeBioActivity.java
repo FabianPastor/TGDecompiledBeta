@@ -248,7 +248,7 @@ public class ChangeBioActivity extends BaseFragment {
                 }
 
                 public final void run() {
-                    ChangeBioActivity.this.lambda$null$2$ChangeBioActivity(this.f$1, this.f$2, this.f$3, this.f$4);
+                    ChangeBioActivity.this.lambda$saveName$2$ChangeBioActivity(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             });
             return;
@@ -265,14 +265,14 @@ public class ChangeBioActivity extends BaseFragment {
             }
 
             public final void run() {
-                ChangeBioActivity.this.lambda$null$3$ChangeBioActivity(this.f$1, this.f$2, this.f$3);
+                ChangeBioActivity.this.lambda$saveName$3$ChangeBioActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$ChangeBioActivity(AlertDialog alertDialog, TLRPC$UserFull tLRPC$UserFull, String str, TLRPC$User tLRPC$User) {
+    /* renamed from: lambda$saveName$2 */
+    public /* synthetic */ void lambda$saveName$2$ChangeBioActivity(AlertDialog alertDialog, TLRPC$UserFull tLRPC$UserFull, String str, TLRPC$User tLRPC$User) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -284,8 +284,8 @@ public class ChangeBioActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$ChangeBioActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_updateProfile tLRPC$TL_account_updateProfile) {
+    /* renamed from: lambda$saveName$3 */
+    public /* synthetic */ void lambda$saveName$3$ChangeBioActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_updateProfile tLRPC$TL_account_updateProfile) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {

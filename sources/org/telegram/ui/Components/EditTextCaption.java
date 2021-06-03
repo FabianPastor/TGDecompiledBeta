@@ -47,6 +47,7 @@ public class EditTextCaption extends EditTextBoldCursor {
     private float offsetY;
     private int selectionEnd = -1;
     private int selectionStart = -1;
+    private int triesCount = 0;
     private int userNameLength;
     private int xOffset;
     private int yOffset;
@@ -137,7 +138,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         int i;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(LocaleController.getString("CreateLink", NUM));
-        AnonymousClass2 r1 = new EditTextBoldCursor(this, getContext()) {
+        AnonymousClass2 r1 = new EditTextBoldCursor(getContext()) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f), NUM));
@@ -293,7 +294,7 @@ public class EditTextCaption extends EditTextBoldCursor {
                 callback.onDestroyActionMode(actionMode);
             }
         };
-        return Build.VERSION.SDK_INT >= 23 ? new ActionMode.Callback2(this) {
+        return Build.VERSION.SDK_INT >= 23 ? new ActionMode.Callback2() {
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 return r0.onCreateActionMode(actionMode, menu);
             }

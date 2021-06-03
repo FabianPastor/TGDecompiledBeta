@@ -191,7 +191,7 @@ public final class BulletinFactory {
             android.app.Activity r1 = r10.getParentActivity()
             r0.<init>(r1)
             java.lang.String r1 = "Hours"
-            r2 = 2131626482(0x7f0e09f2, float:1.8880201E38)
+            r2 = 2131626504(0x7f0e0a08, float:1.8880246E38)
             java.lang.String r3 = "NotificationsMutedForHint"
             r4 = 4
             r5 = 3
@@ -203,7 +203,7 @@ public final class BulletinFactory {
             if (r11 == r6) goto L_0x003a
             if (r11 == r5) goto L_0x0030
             if (r11 != r4) goto L_0x002a
-            r11 = 2131626503(0x7f0e0a07, float:1.8880244E38)
+            r11 = 2131626525(0x7f0e0a1d, float:1.8880289E38)
             java.lang.String r1 = "NotificationsUnmutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r1, r11)
             r1 = 0
@@ -213,7 +213,7 @@ public final class BulletinFactory {
             r10.<init>()
             throw r10
         L_0x0030:
-            r11 = 2131626483(0x7f0e09f3, float:1.8880203E38)
+            r11 = 2131626505(0x7f0e0a09, float:1.8880248E38)
             java.lang.String r1 = "NotificationsMutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r1, r11)
             goto L_0x0064
@@ -240,7 +240,7 @@ public final class BulletinFactory {
             r1 = 1
         L_0x0065:
             if (r1 == 0) goto L_0x0085
-            r1 = 2131558446(0x7f0d002e, float:1.8742208E38)
+            r1 = 2131558447(0x7f0d002f, float:1.874221E38)
             r2 = 5
             java.lang.String[] r2 = new java.lang.String[r2]
             java.lang.String r3 = "Body Main"
@@ -256,7 +256,7 @@ public final class BulletinFactory {
             r0.setAnimation(r1, r2)
             goto L_0x009d
         L_0x0085:
-            r1 = 2131558451(0x7f0d0033, float:1.8742218E38)
+            r1 = 2131558452(0x7f0d0034, float:1.874222E38)
             java.lang.String[] r2 = new java.lang.String[r4]
             java.lang.String r3 = "BODY"
             r2[r7] = r3
@@ -301,7 +301,7 @@ public final class BulletinFactory {
             java.lang.String r1 = "Pin"
             r2 = 0
             r3 = 2
-            r4 = 2131558452(0x7f0d0034, float:1.874222E38)
+            r4 = 2131558453(0x7f0d0035, float:1.8742222E38)
             r5 = 1
             r6 = 28
             if (r10 == 0) goto L_0x004a
@@ -313,12 +313,12 @@ public final class BulletinFactory {
             r10[r5] = r0
             r9.setAnimation(r4, r6, r6, r10)
             android.widget.TextView r10 = r9.titleTextView
-            r0 = 2131626950(0x7f0e0bc6, float:1.888115E38)
+            r0 = 2131626978(0x7f0e0be2, float:1.8881207E38)
             java.lang.String r1 = "PinnedMessagesHidden"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setText(r0)
             android.widget.TextView r10 = r9.subtitleTextView
-            r0 = 2131626951(0x7f0e0bc7, float:1.8881153E38)
+            r0 = 2131626979(0x7f0e0be3, float:1.888121E38)
             java.lang.String r1 = "PinnedMessagesHiddenInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r10.setText(r0)
@@ -340,8 +340,8 @@ public final class BulletinFactory {
             org.telegram.ui.Components.Bulletin$UndoButton r10 = new org.telegram.ui.Components.Bulletin$UndoButton
             android.app.Activity r0 = r8.getParentActivity()
             r10.<init>(r0, r5)
-            r10.setUndoAction(r11)
-            r10.setDelayedAction(r12)
+            org.telegram.ui.Components.Bulletin$UndoButton r10 = r10.setUndoAction(r11)
+            org.telegram.ui.Components.Bulletin$UndoButton r10 = r10.setDelayedAction(r12)
             r9.setButton(r10)
             r10 = 5000(0x1388, float:7.006E-42)
             org.telegram.ui.Components.Bulletin r8 = org.telegram.ui.Components.Bulletin.make((org.telegram.ui.ActionBar.BaseFragment) r8, (org.telegram.ui.Components.Bulletin.Layout) r9, (int) r10)
@@ -413,10 +413,7 @@ public final class BulletinFactory {
         lottieLayout.setAnimation(z ? NUM : NUM, 28, 28, "Pin", "Line");
         lottieLayout.textView.setText(LocaleController.getString(z ? "MessagePinnedHint" : "MessageUnpinnedHint", z ? NUM : NUM));
         if (!z) {
-            Bulletin.UndoButton undoButton = new Bulletin.UndoButton(baseFragment.getParentActivity(), true);
-            undoButton.setUndoAction(runnable);
-            undoButton.setDelayedAction(runnable2);
-            lottieLayout.setButton(undoButton);
+            lottieLayout.setButton(new Bulletin.UndoButton(baseFragment.getParentActivity(), true).setUndoAction(runnable).setDelayedAction(runnable2));
         }
         return Bulletin.make(baseFragment, (Bulletin.Layout) lottieLayout, z ? 1500 : 5000);
     }

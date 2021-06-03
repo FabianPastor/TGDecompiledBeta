@@ -351,7 +351,7 @@ public class DownloadController extends BaseController implements NotificationCe
     public /* synthetic */ void lambda$new$0$DownloadController() {
         getNotificationCenter().addObserver(this, NotificationCenter.fileDidFailToLoad);
         getNotificationCenter().addObserver(this, NotificationCenter.fileDidLoad);
-        getNotificationCenter().addObserver(this, NotificationCenter.FileLoadProgressChanged);
+        getNotificationCenter().addObserver(this, NotificationCenter.fileLoadProgressChanged);
         getNotificationCenter().addObserver(this, NotificationCenter.FileUploadProgressChanged);
         getNotificationCenter().addObserver(this, NotificationCenter.httpFileDidLoad);
         getNotificationCenter().addObserver(this, NotificationCenter.httpFileDidFailedLoad);
@@ -383,14 +383,14 @@ public class DownloadController extends BaseController implements NotificationCe
             }
 
             public final void run() {
-                DownloadController.this.lambda$null$1$DownloadController(this.f$1);
+                DownloadController.this.lambda$loadAutoDownloadConfig$1$DownloadController(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$DownloadController(TLObject tLObject) {
+    /* renamed from: lambda$loadAutoDownloadConfig$1 */
+    public /* synthetic */ void lambda$loadAutoDownloadConfig$1$DownloadController(TLObject tLObject) {
         Preset preset;
         this.loadingAutoDownloadConfig = false;
         getUserConfig().autoDownloadConfigLoadTime = System.currentTimeMillis();
@@ -1275,7 +1275,7 @@ public class DownloadController extends BaseController implements NotificationCe
             this.listenerInProgress = false;
             processLaterArrays();
             checkDownloadFinished(str2, 0);
-        } else if (i == NotificationCenter.FileLoadProgressChanged) {
+        } else if (i == NotificationCenter.fileLoadProgressChanged) {
             this.listenerInProgress = true;
             String str3 = objArr[0];
             ArrayList arrayList4 = this.loadingFileObservers.get(str3);

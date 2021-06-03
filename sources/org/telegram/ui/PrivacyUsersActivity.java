@@ -207,7 +207,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             GroupCreateActivity groupCreateActivity = new GroupCreateActivity(bundle);
             groupCreateActivity.setDelegate((GroupCreateActivity.GroupCreateActivityDelegate) new GroupCreateActivity.GroupCreateActivityDelegate() {
                 public final void didSelectUsers(ArrayList arrayList) {
-                    PrivacyUsersActivity.this.lambda$null$0$PrivacyUsersActivity(arrayList);
+                    PrivacyUsersActivity.this.lambda$createView$0$PrivacyUsersActivity(arrayList);
                 }
             });
             presentFragment(groupCreateActivity);
@@ -230,8 +230,8 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$PrivacyUsersActivity(ArrayList arrayList) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$PrivacyUsersActivity(ArrayList arrayList) {
         Iterator it = arrayList.iterator();
         while (it.hasNext()) {
             Integer num = (Integer) it.next();
@@ -424,10 +424,10 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 r7 = this;
                 r8 = 1
                 java.lang.String r0 = "windowBackgroundWhite"
-                if (r9 == 0) goto L_0x003f
-                if (r9 == r8) goto L_0x0037
+                if (r9 == 0) goto L_0x003d
+                if (r9 == r8) goto L_0x0035
                 r8 = 2
-                if (r9 == r8) goto L_0x0028
+                if (r9 == r8) goto L_0x0026
                 org.telegram.ui.Cells.HeaderCell r8 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r2 = r7.mContext
                 r4 = 21
@@ -440,20 +440,20 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 r8.setBackgroundColor(r9)
                 r9 = 43
                 r8.setHeight(r9)
-                goto L_0x0058
-            L_0x0028:
+                goto L_0x0056
+            L_0x0026:
                 org.telegram.ui.Cells.ManageChatTextCell r8 = new org.telegram.ui.Cells.ManageChatTextCell
                 android.content.Context r9 = r7.mContext
                 r8.<init>(r9)
                 int r9 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r8.setBackgroundColor(r9)
-                goto L_0x0058
-            L_0x0037:
+                goto L_0x0056
+            L_0x0035:
                 org.telegram.ui.Cells.TextInfoPrivacyCell r8 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r9 = r7.mContext
                 r8.<init>(r9)
-                goto L_0x0058
-            L_0x003f:
+                goto L_0x0056
+            L_0x003d:
                 org.telegram.ui.Cells.ManageChatUserCell r9 = new org.telegram.ui.Cells.ManageChatUserCell
                 android.content.Context r1 = r7.mContext
                 r2 = 7
@@ -465,7 +465,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 r8.<init>()
                 r9.setDelegate(r8)
                 r8 = r9
-            L_0x0058:
+            L_0x0056:
                 org.telegram.ui.Components.RecyclerListView$Holder r9 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r9.<init>(r8)
                 return r9

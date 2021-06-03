@@ -94,9 +94,7 @@ public class MrzRecognizer {
             float max = 1500.0f / ((float) Math.max(bitmap.getWidth(), bitmap.getHeight()));
             bitmap = Bitmap.createScaledBitmap(bitmap, Math.round(((float) bitmap.getWidth()) * max), Math.round(((float) bitmap.getHeight()) * max), true);
         }
-        Frame.Builder builder = new Frame.Builder();
-        builder.setBitmap(bitmap);
-        SparseArray<Barcode> detect = build.detect(builder.build());
+        SparseArray<Barcode> detect = build.detect(new Frame.Builder().setBitmap(bitmap).build());
         int i = 0;
         int i2 = 0;
         while (i2 < detect.size()) {

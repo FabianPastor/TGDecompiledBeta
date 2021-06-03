@@ -12,54 +12,50 @@ enum T2 {
     SIZED(3, r11),
     SHORT_CIRCUIT(12, r13);
     
-    static final int f = 0;
+    static final int a = 0;
+    static final int b = 0;
+    static final int c = 0;
+    private static final int d = 0;
+    private static final int e = 0;
+    private static final int f = 0;
     static final int g = 0;
     static final int h = 0;
-    private static final int i = 0;
-    private static final int j = 0;
-    private static final int k = 0;
+    static final int i = 0;
+    static final int j = 0;
+    static final int k = 0;
     static final int l = 0;
     static final int m = 0;
     static final int n = 0;
     static final int o = 0;
     static final int p = 0;
-    static final int q = 0;
-    static final int r = 0;
-    static final int s = 0;
-    static final int t = 0;
-    static final int u = 0;
-
-    /* renamed from: a  reason: collision with root package name */
-    private final Map var_a;
-    private final int b;
-    private final int c;
-    private final int d;
-    private final int e;
+    private final Map r;
+    private final int s;
+    private final int t;
+    private final int u;
+    private final int v;
 
     private static class a {
-
-        /* renamed from: a  reason: collision with root package name */
-        final Map var_a;
+        final Map a;
 
         a(Map map) {
-            this.var_a = map;
+            this.a = map;
         }
 
         /* access modifiers changed from: package-private */
         public a a(b bVar) {
-            this.var_a.put(bVar, 2);
+            this.a.put(bVar, 2);
             return this;
         }
 
         /* access modifiers changed from: package-private */
         public a b(b bVar) {
-            this.var_a.put(bVar, 1);
+            this.a.put(bVar, 1);
             return this;
         }
 
         /* access modifiers changed from: package-private */
         public a c(b bVar) {
-            this.var_a.put(bVar, 3);
+            this.a.put(bVar, 3);
             return this;
         }
     }
@@ -83,54 +79,54 @@ enum T2 {
         b bVar5;
         T2 t24;
         T2 t25;
-        f = b(bVar);
+        a = b(bVar);
         int b2 = b(bVar2);
-        g = b2;
-        h = b(bVar3);
+        b = b2;
+        c = b(bVar3);
         b(bVar4);
         b(bVar5);
         T2[] values = values();
         int i2 = 0;
         for (int i3 = 0; i3 < 5; i3++) {
-            i2 |= values[i3].e;
+            i2 |= values[i3].v;
         }
-        i = i2;
-        j = b2;
+        d = i2;
+        e = b2;
         int i4 = b2 << 1;
-        k = i4;
-        l = b2 | i4;
-        m = t2.c;
-        n = t2.d;
-        o = t22.c;
-        p = t22.d;
-        q = t23.c;
-        r = t23.d;
-        s = t24.c;
-        t = t24.d;
-        u = t25.c;
+        f = i4;
+        g = b2 | i4;
+        h = t2.t;
+        i = t2.u;
+        j = t22.t;
+        k = t22.u;
+        l = t23.t;
+        m = t23.u;
+        n = t24.t;
+        o = t24.u;
+        p = t25.t;
     }
 
     private T2(int i2, a aVar) {
         b[] values = b.values();
         for (int i3 = 0; i3 < 5; i3++) {
             b bVar = values[i3];
-            Map map = aVar.var_a;
+            Map map = aVar.a;
             if (map instanceof j$.util.Map) {
                 ((j$.util.Map) map).putIfAbsent(bVar, 0);
             } else {
                 Map.CC.$default$putIfAbsent(map, bVar, 0);
             }
         }
-        this.var_a = aVar.var_a;
+        this.r = aVar.a;
         int i4 = i2 * 2;
-        this.b = i4;
-        this.c = 1 << i4;
-        this.d = 2 << i4;
-        this.e = 3 << i4;
+        this.s = i4;
+        this.t = 1 << i4;
+        this.u = 2 << i4;
+        this.v = 3 << i4;
     }
 
     static int a(int i2, int i3) {
-        return i2 | (i3 & (i2 == 0 ? i : ((((j & i2) << 1) | i2) | ((k & i2) >> 1)) ^ -1));
+        return i2 | (i3 & (i2 == 0 ? d : ((((e & i2) << 1) | i2) | ((f & i2) >> 1)) ^ -1));
     }
 
     private static int b(b bVar) {
@@ -138,34 +134,35 @@ enum T2 {
         int i2 = 0;
         for (int i3 = 0; i3 < 5; i3++) {
             T2 t2 = values[i3];
-            i2 |= ((Integer) t2.var_a.get(bVar)).intValue() << t2.b;
+            i2 |= ((Integer) t2.r.get(bVar)).intValue() << t2.s;
         }
         return i2;
     }
 
     static int c(Spliterator spliterator) {
         int characteristics = spliterator.characteristics();
-        return ((characteristics & 4) == 0 || spliterator.getComparator() == null) ? f & characteristics : f & characteristics & -5;
+        return ((characteristics & 4) == 0 || spliterator.getComparator() == null) ? a & characteristics : a & characteristics & -5;
     }
 
     private static a f(b bVar) {
-        a aVar = new a(new EnumMap(b.class));
-        aVar.var_a.put(bVar, 1);
+        EnumMap enumMap = new EnumMap(b.class);
+        a aVar = new a(enumMap);
+        enumMap.put(bVar, 1);
         return aVar;
     }
 
     static int g(int i2) {
-        return i2 & ((i2 ^ -1) >> 1) & j;
+        return i2 & ((i2 ^ -1) >> 1) & e;
     }
 
     /* access modifiers changed from: package-private */
     public boolean d(int i2) {
-        return (i2 & this.e) == this.c;
+        return (i2 & this.v) == this.t;
     }
 
     /* access modifiers changed from: package-private */
     public boolean e(int i2) {
-        int i3 = this.e;
+        int i3 = this.v;
         return (i2 & i3) == i3;
     }
 }

@@ -466,15 +466,15 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
                     }
 
                     public final void run() {
-                        StickersSearchAdapter.AnonymousClass1.this.lambda$null$1$StickersSearchAdapter$1(this.f$1, this.f$2);
+                        StickersSearchAdapter.AnonymousClass1.this.lambda$run$1$StickersSearchAdapter$1(this.f$1, this.f$2);
                     }
                 });
             }
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$StickersSearchAdapter$1(TLRPC$TL_messages_searchStickerSets tLRPC$TL_messages_searchStickerSets, TLObject tLObject) {
+        /* renamed from: lambda$run$1 */
+        public /* synthetic */ void lambda$run$1$StickersSearchAdapter$1(TLRPC$TL_messages_searchStickerSets tLRPC$TL_messages_searchStickerSets, TLObject tLObject) {
             if (tLRPC$TL_messages_searchStickerSets.q.equals(StickersSearchAdapter.this.searchQuery)) {
                 clear();
                 StickersSearchAdapter.this.delegate.onSearchStop();
@@ -502,14 +502,14 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
                 }
 
                 public final void run() {
-                    StickersSearchAdapter.AnonymousClass1.this.lambda$null$3$StickersSearchAdapter$1(this.f$1, this.f$2, this.f$3, this.f$4);
+                    StickersSearchAdapter.AnonymousClass1.this.lambda$run$3$StickersSearchAdapter$1(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$3 */
-        public /* synthetic */ void lambda$null$3$StickersSearchAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
+        /* renamed from: lambda$run$3 */
+        public /* synthetic */ void lambda$run$3$StickersSearchAdapter$1(TLRPC$TL_messages_getStickers tLRPC$TL_messages_getStickers, TLObject tLObject, ArrayList arrayList, LongSparseArray longSparseArray) {
             if (tLRPC$TL_messages_getStickers.emoticon.equals(StickersSearchAdapter.this.searchQuery)) {
                 int unused = StickersSearchAdapter.this.reqId2 = 0;
                 if (tLObject instanceof TLRPC$TL_messages_stickers) {
@@ -675,7 +675,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             }
             return new RecyclerListView.Holder(view);
         }
-        AnonymousClass2 r8 = new StickerEmojiCell(this, this.context, false) {
+        AnonymousClass2 r8 = new StickerEmojiCell(this.context, false) {
             public void onMeasure(int i, int i2) {
                 super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
             }
@@ -889,7 +889,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
         L_0x0034:
             int r7 = r2 + r3
             int r7 = r7 + r4
-            if (r5 >= r7) goto L_0x01ad
+            if (r5 >= r7) goto L_0x01ab
             if (r5 >= r3) goto L_0x0049
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_messages_stickerSet> r7 = r0.localPacks
             java.lang.Object r7 = r7.get(r5)
@@ -991,7 +991,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r2 = r2 + r7
             r0.totalItems = r2
             int r6 = r6 + r1
-            goto L_0x01a6
+            goto L_0x01a4
         L_0x0102:
             r16 = r2
             int r7 = r7 - r4
@@ -1003,7 +1003,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
         L_0x0110:
             boolean r1 = r8.isEmpty()
             if (r1 == 0) goto L_0x0118
-            goto L_0x01a6
+            goto L_0x01a4
         L_0x0118:
             int r1 = r8.size()
             float r1 = (float) r1
@@ -1032,7 +1032,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r2 = r8.size()
             r9 = 0
         L_0x014e:
-            if (r9 >= r2) goto L_0x0187
+            if (r9 >= r2) goto L_0x0185
             int r10 = r9 + 1
             int r11 = r0.totalItems
             int r11 = r11 + r10
@@ -1045,33 +1045,31 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.tgnet.TLRPC$Document r9 = (org.telegram.tgnet.TLRPC$Document) r9
             android.util.SparseArray<java.lang.Object> r13 = r0.cache
             r13.put(r11, r9)
-            if (r7 == 0) goto L_0x0172
             android.util.SparseArray<java.lang.Object> r9 = r0.cacheParent
             r9.put(r11, r7)
-        L_0x0172:
             android.util.SparseIntArray r9 = r0.positionToRow
             r9.put(r11, r12)
-            if (r5 < r3) goto L_0x0185
+            if (r5 < r3) goto L_0x0183
             boolean r9 = r7 instanceof org.telegram.tgnet.TLRPC$StickerSetCovered
-            if (r9 == 0) goto L_0x0185
+            if (r9 == 0) goto L_0x0183
             android.util.SparseArray<org.telegram.tgnet.TLRPC$StickerSetCovered> r9 = r0.positionsToSets
             r12 = r7
             org.telegram.tgnet.TLRPC$StickerSetCovered r12 = (org.telegram.tgnet.TLRPC$StickerSetCovered) r12
             r9.put(r11, r12)
-        L_0x0185:
+        L_0x0183:
             r9 = r10
             goto L_0x014e
-        L_0x0187:
+        L_0x0185:
             int r2 = r1 + 1
             r8 = 0
-        L_0x018a:
-            if (r8 >= r2) goto L_0x0196
+        L_0x0188:
+            if (r8 >= r2) goto L_0x0194
             android.util.SparseArray<java.lang.Object> r9 = r0.rowStartPack
             int r10 = r6 + r8
             r9.put(r10, r7)
             int r8 = r8 + 1
-            goto L_0x018a
-        L_0x0196:
+            goto L_0x0188
+        L_0x0194:
             int r7 = r0.totalItems
             org.telegram.ui.Adapters.StickersSearchAdapter$Delegate r8 = r0.delegate
             int r8 = r8.getStickersPerRow()
@@ -1080,12 +1078,12 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r7 = r7 + r1
             r0.totalItems = r7
             int r6 = r6 + r2
-        L_0x01a6:
+        L_0x01a4:
             int r5 = r5 + 1
             r2 = r16
             r1 = 0
             goto L_0x0034
-        L_0x01ad:
+        L_0x01ab:
             super.notifyDataSetChanged()
             return
         */

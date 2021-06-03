@@ -3,12 +3,13 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public class TLRPC$TL_help_appUpdate extends TLRPC$help_AppUpdate {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
     public boolean can_not_skip;
     public TLRPC$Document document;
     public ArrayList<TLRPC$MessageEntity> entities = new ArrayList<>();
     public int flags;
     public int id;
+    public TLRPC$Document sticker;
     public String text;
     public String url;
     public String version;
@@ -39,6 +40,9 @@ public class TLRPC$TL_help_appUpdate extends TLRPC$help_AppUpdate {
             if ((this.flags & 4) != 0) {
                 this.url = abstractSerializedData.readString(z);
             }
+            if ((this.flags & 8) != 0) {
+                this.sticker = TLRPC$Document.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            }
         } else if (z) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
         }
@@ -63,6 +67,9 @@ public class TLRPC$TL_help_appUpdate extends TLRPC$help_AppUpdate {
         }
         if ((this.flags & 4) != 0) {
             abstractSerializedData.writeString(this.url);
+        }
+        if ((this.flags & 8) != 0) {
+            this.sticker.serializeToStream(abstractSerializedData);
         }
     }
 }

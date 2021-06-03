@@ -4,7 +4,7 @@ import j$.util.Spliterator;
 import j$.util.function.Consumer;
 import j$.util.function.J;
 import j$.util.function.w;
-import j$.util.s;
+import j$.util.r;
 import j$.util.stream.S2;
 
 final class a3<P_IN> extends W2<P_IN, Integer, S2.c> implements Spliterator.b {
@@ -17,7 +17,7 @@ final class a3<P_IN> extends W2<P_IN, Integer, S2.c> implements Spliterator.b {
     }
 
     public /* synthetic */ boolean b(Consumer consumer) {
-        return s.e(this, consumer);
+        return r.f(this, consumer);
     }
 
     /* renamed from: c */
@@ -28,30 +28,30 @@ final class a3<P_IN> extends W2<P_IN, Integer, S2.c> implements Spliterator.b {
             return;
         }
         wVar.getClass();
-        g();
+        h();
         this.b.t0(new CLASSNAMEe(wVar), this.d);
         this.i = true;
     }
 
     public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        s.b(this, consumer);
+        r.b(this, consumer);
     }
 
-    /* renamed from: h */
+    /* renamed from: g */
     public boolean tryAdvance(w wVar) {
         wVar.getClass();
-        boolean a2 = a();
-        if (a2) {
+        boolean a = a();
+        if (a) {
             S2.c cVar = (S2.c) this.h;
             long j = this.g;
-            int w = cVar.w(j);
-            wVar.accept((cVar.c == 0 && w == 0) ? ((int[]) cVar.e)[(int) j] : ((int[][]) cVar.f)[w][(int) (j - cVar.d[w])]);
+            int v = cVar.v(j);
+            wVar.accept((cVar.c == 0 && v == 0) ? ((int[]) cVar.e)[(int) j] : ((int[][]) cVar.f)[v][(int) (j - cVar.d[v])]);
         }
-        return a2;
+        return a;
     }
 
     /* access modifiers changed from: package-private */
-    public void i() {
+    public void j() {
         S2.c cVar = new S2.c();
         this.h = cVar;
         this.e = this.b.u0(new L0(cVar));
@@ -60,7 +60,7 @@ final class a3<P_IN> extends W2<P_IN, Integer, S2.c> implements Spliterator.b {
 
     /* access modifiers changed from: package-private */
     public W2 k(Spliterator spliterator) {
-        return new a3(this.b, spliterator, this.var_a);
+        return new a3(this.b, spliterator, this.a);
     }
 
     public Spliterator.b trySplit() {

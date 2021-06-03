@@ -266,18 +266,12 @@ public class SvgHelper {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:10:0x0031, code lost:
-        r8 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:12:?, code lost:
-        r0.close();
-     */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:13:0x0035 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:10:0x0033 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static android.graphics.Bitmap getBitmap(java.io.File r8, int r9, int r10, boolean r11) {
         /*
-            java.io.FileInputStream r0 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0036 }
-            r0.<init>(r8)     // Catch:{ Exception -> 0x0036 }
+            java.io.FileInputStream r0 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0034 }
+            r0.<init>(r8)     // Catch:{ Exception -> 0x0034 }
             javax.xml.parsers.SAXParserFactory r8 = javax.xml.parsers.SAXParserFactory.newInstance()     // Catch:{ all -> 0x002f }
             javax.xml.parsers.SAXParser r8 = r8.newSAXParser()     // Catch:{ all -> 0x002f }
             org.xml.sax.XMLReader r8 = r8.getXMLReader()     // Catch:{ all -> 0x002f }
@@ -294,17 +288,14 @@ public class SvgHelper {
             r9.<init>(r0)     // Catch:{ all -> 0x002f }
             r8.parse(r9)     // Catch:{ all -> 0x002f }
             android.graphics.Bitmap r8 = r7.getBitmap()     // Catch:{ all -> 0x002f }
-            r0.close()     // Catch:{ Exception -> 0x0036 }
+            r0.close()     // Catch:{ Exception -> 0x0034 }
             return r8
         L_0x002f:
             r8 = move-exception
-            throw r8     // Catch:{ all -> 0x0031 }
-        L_0x0031:
-            r8 = move-exception
-            r0.close()     // Catch:{ all -> 0x0035 }
-        L_0x0035:
-            throw r8     // Catch:{ Exception -> 0x0036 }
-        L_0x0036:
+            r0.close()     // Catch:{ all -> 0x0033 }
+        L_0x0033:
+            throw r8     // Catch:{ Exception -> 0x0034 }
+        L_0x0034:
             r8 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
             r8 = 0
@@ -896,20 +887,20 @@ public class SvgHelper {
             int r0 = r2.hashCode()
             r1 = -1
             switch(r0) {
-                case -734239628: goto L_0x006d;
-                case 112785: goto L_0x0062;
-                case 3027034: goto L_0x0057;
-                case 3068707: goto L_0x004c;
-                case 3181155: goto L_0x0041;
-                case 93818879: goto L_0x0036;
-                case 98619139: goto L_0x002b;
+                case -734239628: goto L_0x006c;
+                case 112785: goto L_0x0061;
+                case 3027034: goto L_0x0056;
+                case 3068707: goto L_0x004b;
+                case 3181155: goto L_0x0040;
+                case 93818879: goto L_0x0035;
+                case 98619139: goto L_0x002a;
                 case 113101865: goto L_0x001f;
                 case 828922025: goto L_0x0012;
                 default: goto L_0x000f;
             }
         L_0x000f:
             r2 = -1
-            goto L_0x0078
+            goto L_0x0076
         L_0x0012:
             java.lang.String r0 = "magenta"
             boolean r2 = r2.equals(r0)
@@ -917,118 +908,118 @@ public class SvgHelper {
             goto L_0x000f
         L_0x001b:
             r2 = 8
-            goto L_0x0078
+            goto L_0x0076
         L_0x001f:
             java.lang.String r0 = "white"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0029
+            if (r2 != 0) goto L_0x0028
             goto L_0x000f
-        L_0x0029:
+        L_0x0028:
             r2 = 7
-            goto L_0x0078
-        L_0x002b:
+            goto L_0x0076
+        L_0x002a:
             java.lang.String r0 = "green"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0034
+            if (r2 != 0) goto L_0x0033
             goto L_0x000f
-        L_0x0034:
+        L_0x0033:
             r2 = 6
-            goto L_0x0078
-        L_0x0036:
+            goto L_0x0076
+        L_0x0035:
             java.lang.String r0 = "black"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x003f
+            if (r2 != 0) goto L_0x003e
             goto L_0x000f
-        L_0x003f:
+        L_0x003e:
             r2 = 5
-            goto L_0x0078
-        L_0x0041:
+            goto L_0x0076
+        L_0x0040:
             java.lang.String r0 = "gray"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x004a
+            if (r2 != 0) goto L_0x0049
             goto L_0x000f
-        L_0x004a:
+        L_0x0049:
             r2 = 4
-            goto L_0x0078
-        L_0x004c:
+            goto L_0x0076
+        L_0x004b:
             java.lang.String r0 = "cyan"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0055
+            if (r2 != 0) goto L_0x0054
             goto L_0x000f
-        L_0x0055:
+        L_0x0054:
             r2 = 3
-            goto L_0x0078
-        L_0x0057:
+            goto L_0x0076
+        L_0x0056:
             java.lang.String r0 = "blue"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0060
+            if (r2 != 0) goto L_0x005f
             goto L_0x000f
-        L_0x0060:
+        L_0x005f:
             r2 = 2
-            goto L_0x0078
-        L_0x0062:
+            goto L_0x0076
+        L_0x0061:
             java.lang.String r0 = "red"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x006b
+            if (r2 != 0) goto L_0x006a
             goto L_0x000f
-        L_0x006b:
+        L_0x006a:
             r2 = 1
-            goto L_0x0078
-        L_0x006d:
+            goto L_0x0076
+        L_0x006c:
             java.lang.String r0 = "yellow"
             boolean r2 = r2.equals(r0)
-            if (r2 != 0) goto L_0x0077
+            if (r2 != 0) goto L_0x0075
             goto L_0x000f
-        L_0x0077:
+        L_0x0075:
             r2 = 0
-        L_0x0078:
+        L_0x0076:
             switch(r2) {
-                case 0: goto L_0x00b8;
-                case 1: goto L_0x00b1;
-                case 2: goto L_0x00a9;
-                case 3: goto L_0x00a1;
-                case 4: goto L_0x0099;
-                case 5: goto L_0x0092;
-                case 6: goto L_0x008a;
-                case 7: goto L_0x0085;
-                case 8: goto L_0x007d;
-                default: goto L_0x007b;
+                case 0: goto L_0x00b6;
+                case 1: goto L_0x00af;
+                case 2: goto L_0x00a7;
+                case 3: goto L_0x009f;
+                case 4: goto L_0x0097;
+                case 5: goto L_0x0090;
+                case 6: goto L_0x0088;
+                case 7: goto L_0x0083;
+                case 8: goto L_0x007b;
+                default: goto L_0x0079;
             }
-        L_0x007b:
+        L_0x0079:
             r2 = 0
             return r2
-        L_0x007d:
+        L_0x007b:
             r2 = -65281(0xfffffffffffvar_ff, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0085:
+        L_0x0083:
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
             return r2
-        L_0x008a:
+        L_0x0088:
             r2 = -16711936(0xfffffffffvar_fvar_, float:-1.7146522E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0092:
+        L_0x0090:
             r2 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x0099:
+        L_0x0097:
             r2 = -7829368(0xfffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00a1:
+        L_0x009f:
             r2 = -16711681(0xfffffffffvar_ffff, float:-1.714704E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00a9:
+        L_0x00a7:
             r2 = -16776961(0xfffffffffvar_ff, float:-1.7014636E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00b1:
+        L_0x00af:
             r2 = -65536(0xfffffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00b8:
+        L_0x00b6:
             r2 = -256(0xfffffffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2

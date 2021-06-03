@@ -6,6 +6,7 @@ import j$.util.function.ToDoubleFunction;
 import j$.util.function.ToIntFunction;
 import j$.util.function.ToLongFunction;
 import java.util.Comparator;
+import org.telegram.messenger.ChatObject$Call$$ExternalSynthetic0;
 import org.telegram.ui.ActionBar.Theme;
 
 /* renamed from: org.telegram.ui.-$$Lambda$ThemeActivity$UM18aTc2VkvPUFpY4hL9yY8ZWDA  reason: invalid class name */
@@ -17,7 +18,7 @@ public final /* synthetic */ class $$Lambda$ThemeActivity$UM18aTc2VkvPUFpY4hL9yY
     }
 
     public final int compare(Object obj, Object obj2) {
-        return C$r8$backportedMethods$utility$Integer$2$compare.compare(((Theme.ThemeInfo) obj).sortIndex, ((Theme.ThemeInfo) obj2).sortIndex);
+        return ChatObject$Call$$ExternalSynthetic0.m0(((Theme.ThemeInfo) obj).sortIndex, ((Theme.ThemeInfo) obj2).sortIndex);
     }
 
     public /* synthetic */ Comparator reversed() {

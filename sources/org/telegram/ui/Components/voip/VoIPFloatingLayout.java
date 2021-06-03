@@ -27,7 +27,8 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 
 public class VoIPFloatingLayout extends FrameLayout {
-    private boolean active;
+    private final float FLOATING_MODE_SCALE = 0.23f;
+    private boolean active = true;
     public boolean alwaysFloating;
     public int bottomOffset;
     float bottomPadding;
@@ -42,17 +43,25 @@ public class VoIPFloatingLayout extends FrameLayout {
     boolean moving;
     ValueAnimator mutedAnimator;
     Drawable mutedDrawable;
-    Paint mutedPaint;
-    float mutedProgress;
-    private ValueAnimator.AnimatorUpdateListener mutedUpdateListener;
+    Paint mutedPaint = new Paint(1);
+    float mutedProgress = 0.0f;
+    private ValueAnimator.AnimatorUpdateListener mutedUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+            VoIPFloatingLayout.this.lambda$new$1$VoIPFloatingLayout(valueAnimator);
+        }
+    };
     /* access modifiers changed from: private */
-    public float overrideCornerRadius;
+    public float overrideCornerRadius = -1.0f;
     final Path path = new Path();
     /* access modifiers changed from: private */
-    public ValueAnimator.AnimatorUpdateListener progressUpdateListener;
+    public ValueAnimator.AnimatorUpdateListener progressUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+            VoIPFloatingLayout.this.lambda$new$0$VoIPFloatingLayout(valueAnimator);
+        }
+    };
     final RectF rectF = new RectF();
-    public float relativePositionToSetX;
-    float relativePositionToSetY;
+    public float relativePositionToSetX = -1.0f;
+    float relativePositionToSetY = -1.0f;
     float rightPadding;
     public float savedRelativePositionX;
     public float savedRelativePositionY;
@@ -67,12 +76,13 @@ public class VoIPFloatingLayout extends FrameLayout {
     public boolean switchingToFloatingMode;
     public boolean switchingToPip;
     View.OnClickListener tapListener;
-    float toFloatingModeProgress;
+    float toFloatingModeProgress = 0.0f;
     float topPadding;
     float touchSlop;
     private boolean uiVisible;
     public float updatePositionFromX;
     public float updatePositionFromY;
+    final Paint xRefPaint = new Paint(1);
 
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
         return true;
@@ -94,24 +104,6 @@ public class VoIPFloatingLayout extends FrameLayout {
 
     public VoIPFloatingLayout(Context context) {
         super(context);
-        new Paint(1);
-        this.mutedPaint = new Paint(1);
-        this.relativePositionToSetX = -1.0f;
-        this.relativePositionToSetY = -1.0f;
-        this.toFloatingModeProgress = 0.0f;
-        this.mutedProgress = 0.0f;
-        this.overrideCornerRadius = -1.0f;
-        this.active = true;
-        this.progressUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                VoIPFloatingLayout.this.lambda$new$0$VoIPFloatingLayout(valueAnimator);
-            }
-        };
-        this.mutedUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                VoIPFloatingLayout.this.lambda$new$1$VoIPFloatingLayout(valueAnimator);
-            }
-        };
         this.touchSlop = (float) ViewConfiguration.get(context).getScaledTouchSlop();
         if (Build.VERSION.SDK_INT >= 21) {
             setOutlineProvider(new ViewOutlineProvider() {

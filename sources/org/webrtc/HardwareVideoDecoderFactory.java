@@ -19,98 +19,105 @@ public class HardwareVideoDecoderFactory extends MediaCodecVideoDecoderFactory {
         }
 
         /* JADX WARNING: Can't fix incorrect switch cases order */
-        /* JADX WARNING: Code restructure failed: missing block: B:20:0x0046, code lost:
-            if (r3.equals("video/avc") == false) goto L_0x0028;
+        /* JADX WARNING: Code restructure failed: missing block: B:25:0x0055, code lost:
+            if (r3.equals("video/avc") == false) goto L_0x0037;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public boolean test(android.media.MediaCodecInfo r8) {
             /*
                 r7 = this;
-                boolean r0 = org.webrtc.MediaCodecUtils.isHardwareAccelerated(r8)
+                org.telegram.messenger.voip.VoIPService r0 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
                 r1 = 0
-                if (r0 != 0) goto L_0x0008
+                if (r0 == 0) goto L_0x0010
+                org.telegram.messenger.voip.VoIPService r0 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+                org.telegram.messenger.ChatObject$Call r0 = r0.groupCall
+                if (r0 == 0) goto L_0x0010
                 return r1
-            L_0x0008:
+            L_0x0010:
+                boolean r0 = org.webrtc.MediaCodecUtils.isHardwareAccelerated(r8)
+                if (r0 != 0) goto L_0x0017
+                return r1
+            L_0x0017:
                 java.lang.String[] r8 = r8.getSupportedTypes()
-                if (r8 == 0) goto L_0x0066
+                if (r8 == 0) goto L_0x0075
                 int r0 = r8.length
-                if (r0 != 0) goto L_0x0012
-                goto L_0x0066
-            L_0x0012:
+                if (r0 != 0) goto L_0x0021
+                goto L_0x0075
+            L_0x0021:
                 org.telegram.messenger.voip.Instance$ServerConfig r0 = org.telegram.messenger.voip.Instance.getGlobalServerConfig()
                 r2 = 0
-            L_0x0017:
+            L_0x0026:
                 int r3 = r8.length
                 r4 = 1
-                if (r2 >= r3) goto L_0x0065
+                if (r2 >= r3) goto L_0x0074
                 r3 = r8[r2]
                 r3.hashCode()
                 r5 = -1
                 int r6 = r3.hashCode()
                 switch(r6) {
-                    case -1662541442: goto L_0x0049;
-                    case 1331836730: goto L_0x0040;
-                    case 1599127256: goto L_0x0035;
-                    case 1599127257: goto L_0x002a;
-                    default: goto L_0x0028;
+                    case -1662541442: goto L_0x0058;
+                    case 1331836730: goto L_0x004f;
+                    case 1599127256: goto L_0x0044;
+                    case 1599127257: goto L_0x0039;
+                    default: goto L_0x0037;
                 }
-            L_0x0028:
+            L_0x0037:
                 r4 = -1
-                goto L_0x0053
-            L_0x002a:
+                goto L_0x0062
+            L_0x0039:
                 java.lang.String r4 = "video/x-vnd.on2.vp9"
                 boolean r3 = r3.equals(r4)
-                if (r3 != 0) goto L_0x0033
-                goto L_0x0028
-            L_0x0033:
+                if (r3 != 0) goto L_0x0042
+                goto L_0x0037
+            L_0x0042:
                 r4 = 3
-                goto L_0x0053
-            L_0x0035:
+                goto L_0x0062
+            L_0x0044:
                 java.lang.String r4 = "video/x-vnd.on2.vp8"
                 boolean r3 = r3.equals(r4)
-                if (r3 != 0) goto L_0x003e
-                goto L_0x0028
-            L_0x003e:
+                if (r3 != 0) goto L_0x004d
+                goto L_0x0037
+            L_0x004d:
                 r4 = 2
-                goto L_0x0053
-            L_0x0040:
+                goto L_0x0062
+            L_0x004f:
                 java.lang.String r6 = "video/avc"
                 boolean r3 = r3.equals(r6)
-                if (r3 != 0) goto L_0x0053
-                goto L_0x0028
-            L_0x0049:
+                if (r3 != 0) goto L_0x0062
+                goto L_0x0037
+            L_0x0058:
                 java.lang.String r4 = "video/hevc"
                 boolean r3 = r3.equals(r4)
-                if (r3 != 0) goto L_0x0052
-                goto L_0x0028
-            L_0x0052:
+                if (r3 != 0) goto L_0x0061
+                goto L_0x0037
+            L_0x0061:
                 r4 = 0
-            L_0x0053:
+            L_0x0062:
                 switch(r4) {
-                    case 0: goto L_0x0062;
-                    case 1: goto L_0x005f;
-                    case 2: goto L_0x005c;
-                    case 3: goto L_0x0059;
-                    default: goto L_0x0056;
+                    case 0: goto L_0x0071;
+                    case 1: goto L_0x006e;
+                    case 2: goto L_0x006b;
+                    case 3: goto L_0x0068;
+                    default: goto L_0x0065;
                 }
-            L_0x0056:
+            L_0x0065:
                 int r2 = r2 + 1
-                goto L_0x0017
-            L_0x0059:
+                goto L_0x0026
+            L_0x0068:
                 boolean r8 = r0.enable_vp9_decoder
                 return r8
-            L_0x005c:
+            L_0x006b:
                 boolean r8 = r0.enable_vp8_decoder
                 return r8
-            L_0x005f:
+            L_0x006e:
                 boolean r8 = r0.enable_h264_decoder
                 return r8
-            L_0x0062:
+            L_0x0071:
                 boolean r8 = r0.enable_h265_decoder
                 return r8
-            L_0x0065:
+            L_0x0074:
                 return r4
-            L_0x0066:
+            L_0x0075:
                 return r1
             */
             throw new UnsupportedOperationException("Method not decompiled: org.webrtc.HardwareVideoDecoderFactory.AnonymousClass1.test(android.media.MediaCodecInfo):boolean");

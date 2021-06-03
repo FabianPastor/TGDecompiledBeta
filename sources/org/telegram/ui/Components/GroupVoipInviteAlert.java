@@ -457,14 +457,14 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             }
 
             public final void run() {
-                GroupVoipInviteAlert.this.lambda$null$3$GroupVoipInviteAlert(this.f$1, this.f$2, this.f$3);
+                GroupVoipInviteAlert.this.lambda$loadChatParticipants$3$GroupVoipInviteAlert(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$GroupVoipInviteAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants) {
+    /* renamed from: lambda$loadChatParticipants$3 */
+    public /* synthetic */ void lambda$loadChatParticipants$3$GroupVoipInviteAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_channels_getParticipants tLRPC$TL_channels_getParticipants) {
         int i;
         SparseArray<TLObject> sparseArray;
         ArrayList<TLObject> arrayList;
@@ -532,7 +532,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                         }
 
                         public final int compare(Object obj, Object obj2) {
-                            return GroupVoipInviteAlert.this.lambda$null$2$GroupVoipInviteAlert(this.f$1, (TLObject) obj, (TLObject) obj2);
+                            return GroupVoipInviteAlert.this.lambda$loadChatParticipants$2$GroupVoipInviteAlert(this.f$1, (TLObject) obj, (TLObject) obj2);
                         }
 
                         public /* synthetic */ java.util.Comparator reversed() {
@@ -594,8 +594,8 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ int lambda$null$2$GroupVoipInviteAlert(int i, TLObject tLObject, TLObject tLObject2) {
+    /* renamed from: lambda$loadChatParticipants$2 */
+    public /* synthetic */ int lambda$loadChatParticipants$2$GroupVoipInviteAlert(int i, TLObject tLObject, TLObject tLObject2) {
         int i2;
         int i3;
         TLRPC$UserStatus tLRPC$UserStatus;
@@ -783,7 +783,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                     }
 
                     public final void run() {
-                        GroupVoipInviteAlert.SearchAdapter.this.lambda$null$1$GroupVoipInviteAlert$SearchAdapter(this.f$1, this.f$2, this.f$3);
+                        GroupVoipInviteAlert.SearchAdapter.this.lambda$processSearch$1$GroupVoipInviteAlert$SearchAdapter(this.f$1, this.f$2, this.f$3);
                     }
                 });
             } else {
@@ -800,9 +800,9 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
          */
         /* JADX WARNING: Removed duplicated region for block: B:50:0x00f5 A[LOOP:1: B:32:0x00a1->B:50:0x00f5, LOOP_END] */
         /* JADX WARNING: Removed duplicated region for block: B:59:0x00f1 A[SYNTHETIC] */
-        /* renamed from: lambda$null$1 */
+        /* renamed from: lambda$processSearch$1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$null$1$GroupVoipInviteAlert$SearchAdapter(java.lang.String r19, int r20, java.util.ArrayList r21) {
+        public /* synthetic */ void lambda$processSearch$1$GroupVoipInviteAlert$SearchAdapter(java.lang.String r19, int r20, java.util.ArrayList r21) {
             /*
                 r18 = this;
                 r0 = r18
@@ -933,7 +933,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 r0.updateSearchResults(r3, r1)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.SearchAdapter.lambda$null$1$GroupVoipInviteAlert$SearchAdapter(java.lang.String, int, java.util.ArrayList):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupVoipInviteAlert.SearchAdapter.lambda$processSearch$1$GroupVoipInviteAlert$SearchAdapter(java.lang.String, int, java.util.ArrayList):void");
         }
 
         private void updateSearchResults(ArrayList<TLObject> arrayList, int i) {
@@ -1069,7 +1069,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 android.content.Context r0 = r2.mContext
                 r1 = 0
                 r4.<init>(r0, r3, r3, r1)
-                r3 = 2131165756(0x7var_c, float:1.7945738E38)
+                r3 = 2131165760(0x7var_, float:1.7945746E38)
                 r4.setCustomRightImage(r3)
                 java.lang.String r3 = "voipgroup_nameText"
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
@@ -1111,7 +1111,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 org.telegram.ui.Cells.GraySectionCell r14 = (org.telegram.ui.Cells.GraySectionCell) r14
                 int r0 = r13.groupStartRow
                 if (r15 != r0) goto L_0x0021
-                r15 = 2131624720(0x7f0e0310, float:1.8876628E38)
+                r15 = 2131624736(0x7f0e0320, float:1.887666E38)
                 java.lang.String r0 = "ChannelMembers"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -1119,7 +1119,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
             L_0x0021:
                 int r0 = r13.globalStartRow
                 if (r15 != r0) goto L_0x0133
-                r15 = 2131625694(0x7f0e06de, float:1.8878603E38)
+                r15 = 2131625710(0x7f0e06ee, float:1.8878636E38)
                 java.lang.String r0 = "GlobalSearch"
                 java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r0, r15)
                 r14.setText(r15)
@@ -1358,7 +1358,7 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
                 android.content.Context r3 = r5.mContext
                 r4 = 0
                 r7.<init>(r3, r0, r1, r4)
-                r0 = 2131165756(0x7var_c, float:1.7945738E38)
+                r0 = 2131165760(0x7var_, float:1.7945746E38)
                 r7.setCustomRightImage(r0)
                 java.lang.String r0 = "voipgroup_nameText"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)

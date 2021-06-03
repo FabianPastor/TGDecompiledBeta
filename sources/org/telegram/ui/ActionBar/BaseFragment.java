@@ -51,11 +51,14 @@ public abstract class BaseFragment {
     /* access modifiers changed from: protected */
     public View fragmentView;
     protected boolean hasOwnBackground;
-    protected boolean inBubbleMode;
+    /* access modifiers changed from: protected */
+    public boolean inBubbleMode;
     /* access modifiers changed from: protected */
     public boolean inPreviewMode;
     private boolean isFinished;
-    protected boolean isPaused;
+    /* access modifiers changed from: protected */
+    public boolean isPaused;
+    protected Dialog parentDialog;
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
     protected Dialog visibleDialog;
@@ -343,7 +346,12 @@ public abstract class BaseFragment {
     }
 
     public void finishFragment() {
-        finishFragment(true);
+        Dialog dialog = this.parentDialog;
+        if (dialog != null) {
+            dialog.dismiss();
+        } else {
+            finishFragment(true);
+        }
     }
 
     public void finishFragment(boolean z) {
@@ -357,7 +365,12 @@ public abstract class BaseFragment {
     public void removeSelfFromStack() {
         ActionBarLayout actionBarLayout;
         if (!this.isFinished && (actionBarLayout = this.parentLayout) != null) {
-            actionBarLayout.removeFragmentFromStack(this);
+            Dialog dialog = this.parentDialog;
+            if (dialog != null) {
+                dialog.dismiss();
+            } else {
+                actionBarLayout.removeFragmentFromStack(this);
+            }
         }
     }
 
@@ -664,5 +677,61 @@ public abstract class BaseFragment {
         if (actionBarLayout != null) {
             actionBarLayout.setFragmentPanTranslationOffset(i);
         }
+    }
+
+    public ActionBarLayout[] showAsSheet(BaseFragment baseFragment) {
+        if (getParentActivity() == null) {
+            return null;
+        }
+        ActionBarLayout[] actionBarLayoutArr = {new ActionBarLayout(getParentActivity())};
+        AnonymousClass1 r1 = new BottomSheet(getParentActivity(), true, actionBarLayoutArr, baseFragment) {
+            final /* synthetic */ ActionBarLayout[] val$actionBarLayout;
+            final /* synthetic */ BaseFragment val$fragment;
+
+            /* access modifiers changed from: protected */
+            public boolean canDismissWithSwipe() {
+                return false;
+            }
+
+            {
+                this.val$actionBarLayout = r4;
+                this.val$fragment = r5;
+                r4[0].init(new ArrayList());
+                r4[0].addFragmentToStack(r5);
+                r4[0].showLastFragment();
+                ActionBarLayout actionBarLayout = r4[0];
+                int i = this.backgroundPaddingLeft;
+                actionBarLayout.setPadding(i, 0, i, 0);
+                this.containerView = r4[0];
+                setApplyBottomPadding(false);
+                setApplyBottomPadding(false);
+                setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    public final void onDismiss(DialogInterface dialogInterface) {
+                        BaseFragment.this.onFragmentDestroy();
+                    }
+                });
+            }
+
+            public void onBackPressed() {
+                ActionBarLayout[] actionBarLayoutArr = this.val$actionBarLayout;
+                if (actionBarLayoutArr[0] == null || actionBarLayoutArr[0].fragmentsStack.size() <= 1) {
+                    super.onBackPressed();
+                } else {
+                    this.val$actionBarLayout[0].onBackPressed();
+                }
+            }
+
+            public void dismiss() {
+                super.dismiss();
+                this.val$actionBarLayout[0] = null;
+            }
+        };
+        baseFragment.setParentDialog(r1);
+        r1.show();
+        return actionBarLayoutArr;
+    }
+
+    private void setParentDialog(Dialog dialog) {
+        this.parentDialog = dialog;
     }
 }

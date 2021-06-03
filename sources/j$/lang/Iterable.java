@@ -3,7 +3,7 @@ package j$.lang;
 import j$.util.DesugarCollections;
 import j$.util.Spliterator;
 import j$.util.function.Consumer;
-import j$.util.v;
+import j$.util.u;
 import java.util.Iterator;
 
 public interface Iterable<T> {
@@ -11,7 +11,7 @@ public interface Iterable<T> {
     /* renamed from: j$.lang.Iterable$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {
         public static void $default$forEach(Iterable iterable, Consumer consumer) {
-            if (DesugarCollections.var_a.isInstance(iterable)) {
+            if (DesugarCollections.a.isInstance(iterable)) {
                 DesugarCollections.c(iterable, consumer);
                 return;
             }
@@ -22,7 +22,7 @@ public interface Iterable<T> {
         }
 
         public static Spliterator $default$spliterator(Iterable iterable) {
-            return v.n(iterable.iterator(), 0);
+            return u.o(iterable.iterator(), 0);
         }
     }
 

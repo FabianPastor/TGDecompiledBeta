@@ -482,7 +482,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), PorterDuff.Mode.MULTIPLY));
         this.writeButton.setScaleType(ImageView.ScaleType.CENTER);
         if (i >= 21) {
-            this.writeButton.setOutlineProvider(new ViewOutlineProvider(this) {
+            this.writeButton.setOutlineProvider(new ViewOutlineProvider() {
                 @SuppressLint({"NewApi"})
                 public void getOutline(View view, Outline outline) {
                     outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -552,14 +552,14 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         }
         AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate() {
             public final void didSelectDate(boolean z, int i) {
-                PhotoAlbumPickerActivity.this.lambda$null$2$PhotoAlbumPickerActivity(z, i);
+                PhotoAlbumPickerActivity.this.lambda$createView$2$PhotoAlbumPickerActivity(z, i);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$PhotoAlbumPickerActivity(boolean z, int i) {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$PhotoAlbumPickerActivity(boolean z, int i) {
         sendSelectedPhotos(this.selectedPhotos, this.selectedPhotosOrder, z, i);
         finishFragment();
     }
@@ -592,7 +592,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 });
                 this.sendPopupLayout.setDispatchKeyEventListener(new ActionBarPopupWindow.OnDispatchKeyEventListener() {
                     public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-                        PhotoAlbumPickerActivity.this.lambda$null$4$PhotoAlbumPickerActivity(keyEvent);
+                        PhotoAlbumPickerActivity.this.lambda$createView$4$PhotoAlbumPickerActivity(keyEvent);
                     }
                 });
                 this.sendPopupLayout.setShownFromBotton(false);
@@ -620,7 +620,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                             }
 
                             public final void onClick(View view) {
-                                PhotoAlbumPickerActivity.this.lambda$null$6$PhotoAlbumPickerActivity(this.f$1, view);
+                                PhotoAlbumPickerActivity.this.lambda$createView$6$PhotoAlbumPickerActivity(this.f$1, view);
                             }
                         });
                     }
@@ -649,8 +649,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$PhotoAlbumPickerActivity(KeyEvent keyEvent) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$PhotoAlbumPickerActivity(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.sendPopupWindow) != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -658,8 +658,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$PhotoAlbumPickerActivity(int i, View view) {
+    /* renamed from: lambda$createView$6 */
+    public /* synthetic */ void lambda$createView$6$PhotoAlbumPickerActivity(int i, View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -667,7 +667,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         if (i == 0) {
             AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate() {
                 public final void didSelectDate(boolean z, int i) {
-                    PhotoAlbumPickerActivity.this.lambda$null$5$PhotoAlbumPickerActivity(z, i);
+                    PhotoAlbumPickerActivity.this.lambda$createView$5$PhotoAlbumPickerActivity(z, i);
                 }
             });
         } else if (i == 1) {
@@ -677,8 +677,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$PhotoAlbumPickerActivity(boolean z, int i) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$PhotoAlbumPickerActivity(boolean z, int i) {
         sendSelectedPhotos(this.selectedPhotos, this.selectedPhotosOrder, z, i);
         finishFragment();
     }
@@ -899,7 +899,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     /* access modifiers changed from: private */
     public void openPhotoPicker(MediaController.AlbumEntry albumEntry, int i) {
         if (albumEntry != null) {
-            PhotoPickerActivity photoPickerActivity = new PhotoPickerActivity(i, albumEntry, this.selectedPhotos, this.selectedPhotosOrder, this.selectPhotoType, this.allowCaption, this.chatActivity);
+            PhotoPickerActivity photoPickerActivity = new PhotoPickerActivity(i, albumEntry, this.selectedPhotos, this.selectedPhotosOrder, this.selectPhotoType, this.allowCaption, this.chatActivity, false);
             Editable text = this.commentTextView.getText();
             this.caption = text;
             photoPickerActivity.setCaption(text);
@@ -921,9 +921,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
 
                 public void onCaptionChanged(CharSequence charSequence) {
-                    EditTextEmoji access$200 = PhotoAlbumPickerActivity.this.commentTextView;
-                    CharSequence unused = PhotoAlbumPickerActivity.this.caption = charSequence;
-                    access$200.setText(charSequence);
+                    PhotoAlbumPickerActivity.this.commentTextView.setText(PhotoAlbumPickerActivity.this.caption = charSequence);
                 }
             });
             photoPickerActivity.setMaxSelectedPhotos(this.maxSelectedPhotos, this.allowOrder);
@@ -953,16 +951,14 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
 
                 public void onCaptionChanged(CharSequence charSequence) {
-                    EditTextEmoji access$200 = PhotoAlbumPickerActivity.this.commentTextView;
-                    CharSequence unused = PhotoAlbumPickerActivity.this.caption = charSequence;
-                    access$200.setText(charSequence);
+                    PhotoAlbumPickerActivity.this.commentTextView.setText(PhotoAlbumPickerActivity.this.caption = charSequence);
                 }
             });
             photoPickerSearchActivity.setMaxSelectedPhotos(this.maxSelectedPhotos, this.allowOrder);
             presentFragment(photoPickerSearchActivity);
             return;
         }
-        PhotoPickerActivity photoPickerActivity2 = new PhotoPickerActivity(0, albumEntry, hashMap, arrayList, this.selectPhotoType, this.allowCaption, this.chatActivity);
+        PhotoPickerActivity photoPickerActivity2 = new PhotoPickerActivity(0, albumEntry, hashMap, arrayList, this.selectPhotoType, this.allowCaption, this.chatActivity, false);
         Editable text3 = this.commentTextView.getText();
         this.caption = text3;
         photoPickerActivity2.setCaption(text3);
@@ -982,9 +978,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             }
 
             public void onCaptionChanged(CharSequence charSequence) {
-                EditTextEmoji access$200 = PhotoAlbumPickerActivity.this.commentTextView;
-                CharSequence unused = PhotoAlbumPickerActivity.this.caption = charSequence;
-                access$200.setText(charSequence);
+                PhotoAlbumPickerActivity.this.commentTextView.setText(PhotoAlbumPickerActivity.this.caption = charSequence);
             }
         });
         photoPickerActivity2.setMaxSelectedPhotos(this.maxSelectedPhotos, this.allowOrder);

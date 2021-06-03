@@ -19,9 +19,10 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import androidx.multidex.MultiDex;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.installations.FirebaseInstallations;
 import java.io.File;
+import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.Components.ForegroundDetector;
@@ -195,6 +196,7 @@ public class ApplicationLoader extends Application {
         try {
             LocaleController.getInstance().onDeviceConfigurationChange(configuration);
             AndroidUtilities.checkDisplaySize(applicationContext, configuration);
+            VideoCapturerDevice.checkScreenCapturerSize();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -203,14 +205,14 @@ public class ApplicationLoader extends Application {
     private void initPlayServices() {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                ApplicationLoader.this.lambda$initPlayServices$3$ApplicationLoader();
+                ApplicationLoader.this.lambda$initPlayServices$2$ApplicationLoader();
             }
         }, 1000);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initPlayServices$3 */
-    public /* synthetic */ void lambda$initPlayServices$3$ApplicationLoader() {
+    /* renamed from: lambda$initPlayServices$2 */
+    public /* synthetic */ void lambda$initPlayServices$2$ApplicationLoader() {
         boolean checkPlayServices = checkPlayServices();
         hasPlayServices = checkPlayServices;
         if (checkPlayServices) {
@@ -222,7 +224,7 @@ public class ApplicationLoader extends Application {
             } else if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("GCM Registration not found.");
             }
-            Utilities.globalQueue.postRunnable($$Lambda$ApplicationLoader$DwvxY6zuKaa_RTCmuug62P5rQS8.INSTANCE);
+            Utilities.globalQueue.postRunnable($$Lambda$ApplicationLoader$L1Kxv3czXMk_jNWLP2gmgiHCrPM.INSTANCE);
             return;
         }
         if (BuildVars.LOGS_ENABLED) {
@@ -232,22 +234,23 @@ public class ApplicationLoader extends Application {
         GcmPushListenerService.sendRegistrationToServer((String) null);
     }
 
-    static /* synthetic */ void lambda$null$2() {
+    static /* synthetic */ void lambda$initPlayServices$1() {
         try {
-            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener($$Lambda$ApplicationLoader$TGgQsUU5oTyRg2IG0AheDEoqUo.INSTANCE).addOnFailureListener($$Lambda$ApplicationLoader$LpCD4w9w61F3DUVxHcv7_NlH_oY.INSTANCE);
+            FirebaseInstallations.getInstance().getId().addOnCompleteListener($$Lambda$ApplicationLoader$uH1noiBBUj9vNZJEae0KZQ4oQc.INSTANCE);
         } catch (Throwable th) {
             FileLog.e(th);
         }
     }
 
-    static /* synthetic */ void lambda$null$0(InstanceIdResult instanceIdResult) {
-        String token = instanceIdResult.getToken();
-        if (!TextUtils.isEmpty(token)) {
-            GcmPushListenerService.sendRegistrationToServer(token);
+    static /* synthetic */ void lambda$initPlayServices$0(Task task) {
+        if (task.isSuccessful()) {
+            String str = (String) task.getResult();
+            if (!TextUtils.isEmpty(str)) {
+                GcmPushListenerService.sendRegistrationToServer(str);
+                return;
+            }
+            return;
         }
-    }
-
-    static /* synthetic */ void lambda$null$1(Exception exc) {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("Failed to get regid");
         }

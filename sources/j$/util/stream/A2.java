@@ -1,35 +1,35 @@
 package j$.util.stream;
 
 import j$.util.function.C;
-import j$.util.function.CLASSNAMEe;
 import j$.util.function.CLASSNAMEf;
 import j$.util.function.CLASSNAMEg;
 import j$.util.function.CLASSNAMEh;
 import j$.util.function.Consumer;
 import j$.util.function.q;
 import j$.util.function.w;
-import j$.util.k;
 
 interface A2<T> extends Consumer<T> {
 
     public static abstract class a<E_OUT> implements e {
-
-        /* renamed from: a  reason: collision with root package name */
-        protected final A2 var_a;
+        protected final A2 a;
 
         public a(A2 a2) {
             a2.getClass();
-            this.var_a = a2;
+            this.a = a2;
         }
 
         public /* synthetic */ void accept(int i) {
-            k.a(this);
+            j$.time.a.a(this);
             throw null;
         }
 
         public /* synthetic */ void accept(long j) {
-            k.b(this);
+            j$.time.a.b(this);
             throw null;
+        }
+
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
 
         /* renamed from: b */
@@ -37,47 +37,44 @@ interface A2<T> extends Consumer<T> {
             Q1.a(this, d);
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
-        }
-
-        public q k(q qVar) {
+        public q j(q qVar) {
             qVar.getClass();
             return new CLASSNAMEf(this, qVar);
         }
 
-        public void m() {
-            this.var_a.m();
+        public void l() {
+            this.a.l();
         }
 
-        public void n(long j) {
-            this.var_a.n(j);
+        public void m(long j) {
+            this.a.m(j);
         }
 
-        public boolean p() {
-            return this.var_a.p();
+        public boolean o() {
+            return this.a.o();
         }
     }
 
     public static abstract class b<E_OUT> implements f {
-
-        /* renamed from: a  reason: collision with root package name */
-        protected final A2 var_a;
+        protected final A2 a;
 
         public b(A2 a2) {
             a2.getClass();
-            this.var_a = a2;
+            this.a = a2;
         }
 
         public /* synthetic */ void accept(double d) {
-            k.c(this);
+            j$.time.a.c(this);
             throw null;
         }
 
         public /* synthetic */ void accept(long j) {
-            k.b(this);
+            j$.time.a.b(this);
             throw null;
+        }
+
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
 
         /* renamed from: b */
@@ -85,47 +82,44 @@ interface A2<T> extends Consumer<T> {
             Q1.b(this, num);
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
-        }
-
-        public w l(w wVar) {
+        public w k(w wVar) {
             wVar.getClass();
             return new CLASSNAMEg(this, wVar);
         }
 
-        public void m() {
-            this.var_a.m();
+        public void l() {
+            this.a.l();
         }
 
-        public void n(long j) {
-            this.var_a.n(j);
+        public void m(long j) {
+            this.a.m(j);
         }
 
-        public boolean p() {
-            return this.var_a.p();
+        public boolean o() {
+            return this.a.o();
         }
     }
 
     public static abstract class c<E_OUT> implements g {
-
-        /* renamed from: a  reason: collision with root package name */
-        protected final A2 var_a;
+        protected final A2 a;
 
         public c(A2 a2) {
             a2.getClass();
-            this.var_a = a2;
+            this.a = a2;
         }
 
         public /* synthetic */ void accept(double d) {
-            k.c(this);
+            j$.time.a.c(this);
             throw null;
         }
 
         public /* synthetic */ void accept(int i) {
-            k.a(this);
+            j$.time.a.a(this);
             throw null;
+        }
+
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
 
         /* renamed from: b */
@@ -133,69 +127,61 @@ interface A2<T> extends Consumer<T> {
             Q1.c(this, l);
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
-        }
-
-        public C g(C c) {
+        public C f(C c) {
             c.getClass();
             return new CLASSNAMEh(this, c);
         }
 
-        public void m() {
-            this.var_a.m();
+        public void l() {
+            this.a.l();
         }
 
-        public void n(long j) {
-            this.var_a.n(j);
+        public void m(long j) {
+            this.a.m(j);
         }
 
-        public boolean p() {
-            return this.var_a.p();
+        public boolean o() {
+            return this.a.o();
         }
     }
 
     public static abstract class d<T, E_OUT> implements A2<T> {
-
-        /* renamed from: a  reason: collision with root package name */
-        protected final A2 var_a;
+        protected final A2 a;
 
         public d(A2 a2) {
             a2.getClass();
-            this.var_a = a2;
+            this.a = a2;
         }
 
         public /* synthetic */ void accept(double d) {
-            k.c(this);
+            j$.time.a.c(this);
             throw null;
         }
 
         public /* synthetic */ void accept(int i) {
-            k.a(this);
+            j$.time.a.a(this);
             throw null;
         }
 
         public /* synthetic */ void accept(long j) {
-            k.b(this);
+            j$.time.a.b(this);
             throw null;
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
 
-        public void m() {
-            this.var_a.m();
+        public void l() {
+            this.a.l();
         }
 
-        public void n(long j) {
-            this.var_a.n(j);
+        public void m(long j) {
+            this.a.m(j);
         }
 
-        public boolean p() {
-            return this.var_a.p();
+        public boolean o() {
+            return this.a.o();
         }
     }
 
@@ -217,9 +203,9 @@ interface A2<T> extends Consumer<T> {
 
     void accept(long j);
 
-    void m();
+    void l();
 
-    void n(long j);
+    void m(long j);
 
-    boolean p();
+    boolean o();
 }

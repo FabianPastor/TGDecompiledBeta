@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 final class L2 extends D1.h<Long> {
     L2(CLASSNAMEh1 h1Var) {
-        super(h1Var, U2.LONG_VALUE, T2.q | T2.o);
+        super(h1Var, U2.LONG_VALUE, T2.l | T2.j);
     }
 
     public R1 D0(T1 t1, Spliterator spliterator, x xVar) {
@@ -23,9 +23,6 @@ final class L2 extends D1.h<Long> {
 
     public A2 G0(int i, A2 a2) {
         a2.getClass();
-        if (T2.SORTED.d(i)) {
-            return a2;
-        }
-        return T2.SIZED.d(i) ? new Q2(a2) : new I2(a2);
+        return T2.SORTED.d(i) ? a2 : T2.SIZED.d(i) ? new Q2(a2) : new I2(a2);
     }
 }

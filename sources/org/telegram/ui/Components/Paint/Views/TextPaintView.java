@@ -179,11 +179,11 @@ public class TextPaintView extends EntityView {
 
     /* access modifiers changed from: protected */
     public TextViewSelectionView createSelectionView() {
-        return new TextViewSelectionView(this, getContext());
+        return new TextViewSelectionView(getContext());
     }
 
     public class TextViewSelectionView extends EntityView.SelectionView {
-        public TextViewSelectionView(TextPaintView textPaintView, Context context) {
+        public TextViewSelectionView(Context context) {
             super(context);
         }
 

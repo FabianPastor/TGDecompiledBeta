@@ -351,6 +351,7 @@ class Camera2Session implements CameraSession {
     /* access modifiers changed from: private */
     public int getFrameOrientation() {
         int orientation = this.orientationHelper.getOrientation();
+        OrientationHelper.cameraOrientation = orientation;
         if (this.isCameraFrontFacing) {
             orientation = 360 - orientation;
         }

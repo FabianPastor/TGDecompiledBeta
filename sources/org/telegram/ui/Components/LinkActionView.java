@@ -69,6 +69,7 @@ public class LinkActionView extends LinearLayout {
     /* access modifiers changed from: private */
     public QRCodeBottomSheet qrCodeBottomSheet;
     private final TextView removeView;
+    private boolean revoked;
     private final TextView shareView;
     /* access modifiers changed from: private */
     public int usersCount;
@@ -282,7 +283,7 @@ public class LinkActionView extends LinearLayout {
         builder.setMessage(LocaleController.getString("DeleteLinkHelp", NUM));
         builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                LinkActionView.this.lambda$null$3$LinkActionView(dialogInterface, i);
+                LinkActionView.this.lambda$new$3$LinkActionView(dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -290,8 +291,8 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$LinkActionView(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$new$3 */
+    public /* synthetic */ void lambda$new$3$LinkActionView(DialogInterface dialogInterface, int i) {
         Delegate delegate2 = this.delegate;
         if (delegate2 != null) {
             delegate2.removeLink();
@@ -310,7 +311,7 @@ public class LinkActionView extends LinearLayout {
                 actionBarPopupWindowLayout.addView(actionBarMenuSubItem, LayoutHelper.createLinear(-1, 48));
                 actionBarMenuSubItem.setOnClickListener(new View.OnClickListener() {
                     public final void onClick(View view) {
-                        LinkActionView.this.lambda$null$5$LinkActionView(view);
+                        LinkActionView.this.lambda$new$5$LinkActionView(view);
                     }
                 });
             }
@@ -319,7 +320,7 @@ public class LinkActionView extends LinearLayout {
             actionBarPopupWindowLayout.addView(actionBarMenuSubItem2, LayoutHelper.createLinear(-1, 48));
             actionBarMenuSubItem2.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
-                    LinkActionView.this.lambda$null$6$LinkActionView(view);
+                    LinkActionView.this.lambda$new$6$LinkActionView(view);
                 }
             });
             if (!this.hideRevokeOption) {
@@ -328,7 +329,7 @@ public class LinkActionView extends LinearLayout {
                 actionBarMenuSubItem3.setColors(Theme.getColor("windowBackgroundWhiteRedText"), Theme.getColor("windowBackgroundWhiteRedText"));
                 actionBarMenuSubItem3.setOnClickListener(new View.OnClickListener() {
                     public final void onClick(View view) {
-                        LinkActionView.this.lambda$null$7$LinkActionView(view);
+                        LinkActionView.this.lambda$new$7$LinkActionView(view);
                     }
                 });
                 actionBarPopupWindowLayout.addView(actionBarMenuSubItem3, LayoutHelper.createLinear(-1, 48));
@@ -358,7 +359,7 @@ public class LinkActionView extends LinearLayout {
                         canvas.restore();
                     }
                 };
-                final AnonymousClass2 r8 = new ViewTreeObserver.OnPreDrawListener(this) {
+                final AnonymousClass2 r8 = new ViewTreeObserver.OnPreDrawListener() {
                     public boolean onPreDraw() {
                         r0.invalidate();
                         return true;
@@ -395,7 +396,7 @@ public class LinkActionView extends LinearLayout {
                 this.actionBarPopupWindow.setSoftInputMode(0);
                 actionBarPopupWindowLayout.setDispatchKeyEventListener(new ActionBarPopupWindow.OnDispatchKeyEventListener() {
                     public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-                        LinkActionView.this.lambda$null$8$LinkActionView(keyEvent);
+                        LinkActionView.this.lambda$new$8$LinkActionView(keyEvent);
                     }
                 });
                 if (AndroidUtilities.isTablet()) {
@@ -408,8 +409,8 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$LinkActionView(View view) {
+    /* renamed from: lambda$new$5 */
+    public /* synthetic */ void lambda$new$5$LinkActionView(View view) {
         ActionBarPopupWindow actionBarPopupWindow2 = this.actionBarPopupWindow;
         if (actionBarPopupWindow2 != null) {
             actionBarPopupWindow2.dismiss();
@@ -418,14 +419,14 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$LinkActionView(View view) {
+    /* renamed from: lambda$new$6 */
+    public /* synthetic */ void lambda$new$6$LinkActionView(View view) {
         showQrCode();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$LinkActionView(View view) {
+    /* renamed from: lambda$new$7 */
+    public /* synthetic */ void lambda$new$7$LinkActionView(View view) {
         ActionBarPopupWindow actionBarPopupWindow2 = this.actionBarPopupWindow;
         if (actionBarPopupWindow2 != null) {
             actionBarPopupWindow2.dismiss();
@@ -434,8 +435,8 @@ public class LinkActionView extends LinearLayout {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$LinkActionView(KeyEvent keyEvent) {
+    /* renamed from: lambda$new$8 */
+    public /* synthetic */ void lambda$new$8$LinkActionView(KeyEvent keyEvent) {
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && this.actionBarPopupWindow.isShowing()) {
             this.actionBarPopupWindow.dismiss(true);
         }
@@ -519,6 +520,7 @@ public class LinkActionView extends LinearLayout {
     }
 
     public void setRevoke(boolean z) {
+        this.revoked = z;
         if (z) {
             this.optionsView.setVisibility(8);
             this.shareView.setVisibility(8);
@@ -662,14 +664,14 @@ public class LinkActionView extends LinearLayout {
             }
 
             public final void run() {
-                LinkActionView.this.lambda$null$11$LinkActionView(this.f$1, this.f$2, this.f$3);
+                LinkActionView.this.lambda$loadUsers$11$LinkActionView(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$LinkActionView(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
+    /* renamed from: lambda$loadUsers$11 */
+    public /* synthetic */ void lambda$loadUsers$11$LinkActionView(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported) {
         this.loadingImporters = false;
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_chatInviteImporters tLRPC$TL_messages_chatInviteImporters = (TLRPC$TL_messages_chatInviteImporters) tLObject;

@@ -35,7 +35,9 @@ public class PermanentLinkBottomSheet extends BottomSheet {
     private int chatId;
     private BaseFragment fragment;
     private final RLottieImageView imageView;
+    TLRPC$ChatFull info;
     TLRPC$TL_chatInviteExported invite;
+    private boolean isChannel;
     private final LinkActionView linkActionView;
     boolean linkGenerating;
     RLottieDrawable linkIcon;
@@ -51,7 +53,10 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported;
         Context context2 = context;
         TLRPC$ChatFull tLRPC$ChatFull2 = tLRPC$ChatFull;
+        boolean z3 = z2;
+        this.info = tLRPC$ChatFull2;
         this.chatId = i;
+        this.isChannel = z3;
         setAllowNestedScroll(true);
         setApplyBottomPadding(false);
         LinkActionView linkActionView2 = new LinkActionView(context, baseFragment, this, i, true, z2);
@@ -90,7 +95,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         TextView textView2 = new TextView(context2);
         this.subtitle = textView2;
-        if (z2) {
+        if (z3) {
             i2 = NUM;
             str = "LinkInfoChannel";
         } else {
@@ -194,14 +199,14 @@ public class PermanentLinkBottomSheet extends BottomSheet {
             }
 
             public final void run() {
-                PermanentLinkBottomSheet.this.lambda$null$2$PermanentLinkBottomSheet(this.f$1, this.f$2, this.f$3);
+                PermanentLinkBottomSheet.this.lambda$generateLink$2$PermanentLinkBottomSheet(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$PermanentLinkBottomSheet(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
+    /* renamed from: lambda$generateLink$2 */
+    public /* synthetic */ void lambda$generateLink$2$PermanentLinkBottomSheet(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
         if (tLRPC$TL_error == null) {
             this.invite = (TLRPC$TL_chatInviteExported) tLObject;
             TLRPC$ChatFull chatFull = MessagesController.getInstance(this.currentAccount).getChatFull(this.chatId);

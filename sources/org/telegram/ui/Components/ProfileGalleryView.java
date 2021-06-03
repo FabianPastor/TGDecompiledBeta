@@ -27,6 +27,7 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$ChatFull;
+import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated;
 import org.telegram.tgnet.TLRPC$VideoSize;
@@ -48,9 +49,12 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     /* access modifiers changed from: private */
     public int currentAccount = UserConfig.selectedAccount;
     ImageLocation currentUploadingImageLocation;
-    private long dialogId;
+    /* access modifiers changed from: private */
+    public long dialogId;
     private final PointF downPoint = new PointF();
     private boolean forceResetPosition;
+    /* access modifiers changed from: private */
+    public boolean hasActiveVideo;
     /* access modifiers changed from: private */
     public ArrayList<ImageLocation> imagesLocations = new ArrayList<>();
     /* access modifiers changed from: private */
@@ -102,9 +106,29 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         void onVideoSet();
     }
 
+    public void setHasActiveVideo(boolean z) {
+        this.hasActiveVideo = z;
+    }
+
+    public View findVideoActiveView() {
+        if (!this.hasActiveVideo) {
+            return null;
+        }
+        for (int i = 0; i < getChildCount(); i++) {
+            View childAt = getChildAt(i);
+            if (childAt instanceof TextureStubView) {
+                return childAt;
+            }
+        }
+        return null;
+    }
+
     private static class Item {
         /* access modifiers changed from: private */
         public AvatarImageView imageView;
+        boolean isActiveVideo;
+        /* access modifiers changed from: private */
+        public View textureViewStubView;
 
         private Item() {
         }
@@ -130,12 +154,18 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                 ImageLocation imageLocation;
                 if (i2 == 0) {
                     int realPosition = ProfileGalleryView.this.adapter.getRealPosition(i);
+                    if (ProfileGalleryView.this.hasActiveVideo) {
+                        realPosition--;
+                    }
                     ProfileGalleryView.this.getCurrentItemView();
                     int childCount = ProfileGalleryView.this.getChildCount();
                     for (int i3 = 0; i3 < childCount; i3++) {
                         View childAt = ProfileGalleryView.this.getChildAt(i3);
                         if (childAt instanceof BackupImageView) {
                             int realPosition2 = ProfileGalleryView.this.adapter.getRealPosition(ProfileGalleryView.this.adapter.imageViews.indexOf(childAt));
+                            if (ProfileGalleryView.this.hasActiveVideo) {
+                                realPosition2--;
+                            }
                             ImageReceiver imageReceiver = ((BackupImageView) childAt).getImageReceiver();
                             boolean allowStartAnimation = imageReceiver.getAllowStartAnimation();
                             if (realPosition2 == realPosition) {
@@ -165,7 +195,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         setAdapter((CircularViewPager.Adapter) viewPagerAdapter);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.dialogPhotosLoaded);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.reloadDialogPhotos);
     }
 
@@ -227,7 +257,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         });
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.dialogPhotosLoaded);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.reloadDialogPhotos);
         MessagesController.getInstance(this.currentAccount).loadDialogPhotos((int) j, 80, 0, true, i);
     }
@@ -235,7 +265,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     public void onDestroy() {
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.dialogPhotosLoaded);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.reloadDialogPhotos);
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -283,9 +313,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         }
         if (this.parentListView.getScrollState() == 0 || this.isScrollingListView || !this.isSwipingViewPager) {
             int action = motionEvent.getAction();
-            PinchToZoomHelper pinchToZoomHelper2 = this.pinchToZoomHelper;
-            if (pinchToZoomHelper2 != null) {
-                if (action != 0 && this.isDownReleased && !pinchToZoomHelper2.isInOverlayMode()) {
+            if (!(this.pinchToZoomHelper == null || getCurrentItemView() == null)) {
+                if (action != 0 && this.isDownReleased && !this.pinchToZoomHelper.isInOverlayMode()) {
                     this.pinchToZoomHelper.checkPinchToZoom(MotionEvent.obtain(0, 0, 3, 0.0f, 0.0f, 0), this, getCurrentItemView().getImageReceiver(), (MessageObject) null);
                 } else if (this.pinchToZoomHelper.checkPinchToZoom(motionEvent, this, getCurrentItemView().getImageReceiver(), (MessageObject) null)) {
                     if (!this.isDownReleased) {
@@ -373,7 +402,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
 
     public void setChatInfo(TLRPC$ChatFull tLRPC$ChatFull) {
         this.chatInfo = tLRPC$ChatFull;
-        if (!this.photos.isEmpty() && this.photos.get(0) == null && this.chatInfo != null && FileLoader.isSamePhoto(this.imagesLocations.get(0).location, this.chatInfo.chat_photo)) {
+        if (!this.photos.isEmpty() && this.photos.get(0) == null && this.chatInfo != null && FileLoader.isSamePhoto((TLRPC$FileLocation) this.imagesLocations.get(0).location, this.chatInfo.chat_photo)) {
             this.photos.set(0, this.chatInfo.chat_photo);
             if (!this.chatInfo.chat_photo.video_sizes.isEmpty()) {
                 TLRPC$VideoSize tLRPC$VideoSize = this.chatInfo.chat_photo.video_sizes.get(0);
@@ -472,7 +501,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
 
     public boolean isLoadingCurrentVideo() {
         BackupImageView currentItemView;
-        if (this.videoLocations.get(getRealPosition()) == null || (currentItemView = getCurrentItemView()) == null) {
+        if (this.videoLocations.get(this.hasActiveVideo ? getRealPosition() - 1 : getRealPosition()) == null || (currentItemView = getCurrentItemView()) == null) {
             return false;
         }
         AnimatedFileDrawable animation = currentItemView.getImageReceiver().getAnimation();
@@ -492,7 +521,17 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     }
 
     public boolean isCurrentItemVideo() {
-        return this.videoLocations.get(getRealPosition()) != null;
+        int realPosition = getRealPosition();
+        if (this.hasActiveVideo) {
+            if (realPosition == 0) {
+                return false;
+            }
+            realPosition--;
+        }
+        if (this.videoLocations.get(realPosition) != null) {
+            return true;
+        }
+        return false;
     }
 
     public ImageLocation getCurrentVideoLocation(ImageLocation imageLocation, ImageLocation imageLocation2) {
@@ -536,7 +575,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     }
 
     public int getRealCount() {
-        return this.photos.size();
+        int size = this.photos.size();
+        return this.hasActiveVideo ? size + 1 : size;
     }
 
     public int getRealPosition(int i) {
@@ -713,7 +753,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             if (r6 == 0) goto L_0x00dc
             org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r9 = r8.location
             org.telegram.tgnet.TLRPC$Photo r6 = r6.chat_photo
-            boolean r6 = org.telegram.messenger.FileLoader.isSamePhoto(r9, r6)
+            boolean r6 = org.telegram.messenger.FileLoader.isSamePhoto((org.telegram.tgnet.TLRPC$FileLocation) r9, (org.telegram.tgnet.TLRPC$Photo) r6)
             if (r6 == 0) goto L_0x00dc
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r6 = r0.photos
             org.telegram.tgnet.TLRPC$ChatFull r9 = r0.chatInfo
@@ -978,7 +1018,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             int r5 = r5 + 1
             goto L_0x026a
         L_0x029d:
-            int r2 = org.telegram.messenger.NotificationCenter.FileLoadProgressChanged
+            int r2 = org.telegram.messenger.NotificationCenter.fileLoadProgressChanged
             if (r1 != r2) goto L_0x02f1
             r1 = r19[r5]
             java.lang.String r1 = (java.lang.String) r1
@@ -1047,6 +1087,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         public final ArrayList<BackupImageView> imageViews = new ArrayList<>();
         /* access modifiers changed from: private */
         public final ArrayList<Item> objects = new ArrayList<>();
+        private final ActionBar parentActionBar;
         /* access modifiers changed from: private */
         public BackupImageView parentAvatarImageView;
         private final Paint placeholderPaint;
@@ -1054,6 +1095,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         public ViewPagerAdapter(Context context2, ProfileActivity.AvatarImageView avatarImageView, ActionBar actionBar) {
             this.context = context2;
             this.parentAvatarImageView = avatarImageView;
+            this.parentActionBar = actionBar;
             Paint paint = new Paint(1);
             this.placeholderPaint = paint;
             paint.setColor(-16777216);
@@ -1064,7 +1106,17 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         }
 
         public boolean isViewFromObject(View view, Object obj) {
-            return view == ((Item) obj).imageView;
+            Item item = (Item) obj;
+            if (item.isActiveVideo) {
+                if (view == item.textureViewStubView) {
+                    return true;
+                }
+                return false;
+            } else if (view == item.imageView) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         public int getItemPosition(Object obj) {
@@ -1075,332 +1127,386 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             return indexOf;
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x0210  */
-        /* JADX WARNING: Removed duplicated region for block: B:58:0x0213  */
+        /* JADX WARNING: Removed duplicated region for block: B:75:0x0292  */
+        /* JADX WARNING: Removed duplicated region for block: B:77:0x0295  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public org.telegram.ui.Components.ProfileGalleryView.Item instantiateItem(android.view.ViewGroup r23, int r24) {
+        public org.telegram.ui.Components.ProfileGalleryView.Item instantiateItem(android.view.ViewGroup r24, int r25) {
             /*
-                r22 = this;
-                r0 = r22
+                r23 = this;
+                r0 = r23
                 r1 = r24
-                java.util.ArrayList<org.telegram.ui.Components.ProfileGalleryView$Item> r2 = r0.objects
-                java.lang.Object r2 = r2.get(r1)
-                org.telegram.ui.Components.ProfileGalleryView$Item r2 = (org.telegram.ui.Components.ProfileGalleryView.Item) r2
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r3 = r2.imageView
-                if (r3 != 0) goto L_0x0029
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r3 = new org.telegram.ui.Components.ProfileGalleryView$AvatarImageView
+                r2 = r25
+                java.util.ArrayList<org.telegram.ui.Components.ProfileGalleryView$Item> r3 = r0.objects
+                java.lang.Object r3 = r3.get(r2)
+                org.telegram.ui.Components.ProfileGalleryView$Item r3 = (org.telegram.ui.Components.ProfileGalleryView.Item) r3
+                int r4 = r0.getRealPosition(r2)
+                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
+                boolean r5 = r5.hasActiveVideo
+                r6 = 1
+                if (r5 == 0) goto L_0x0043
+                if (r4 != 0) goto L_0x0043
+                r3.isActiveVideo = r6
+                android.view.View r2 = r3.textureViewStubView
+                if (r2 != 0) goto L_0x0031
+                org.telegram.ui.Components.ProfileGalleryView$TextureStubView r2 = new org.telegram.ui.Components.ProfileGalleryView$TextureStubView
                 org.telegram.ui.Components.ProfileGalleryView r4 = org.telegram.ui.Components.ProfileGalleryView.this
                 android.content.Context r5 = r0.context
-                android.graphics.Paint r6 = r0.placeholderPaint
-                r3.<init>(r5, r1, r6)
-                org.telegram.ui.Components.ProfileGalleryView.AvatarImageView unused = r2.imageView = r3
-                java.util.ArrayList<org.telegram.ui.Components.BackupImageView> r3 = r0.imageViews
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r4 = r2.imageView
-                r3.set(r1, r4)
-            L_0x0029:
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r3 = r2.imageView
-                android.view.ViewParent r3 = r3.getParent()
-                if (r3 != 0) goto L_0x003c
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r3 = r2.imageView
-                r4 = r23
-                r4.addView(r3)
-            L_0x003c:
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r3 = r2.imageView
-                org.telegram.messenger.ImageReceiver r3 = r3.getImageReceiver()
-                r4 = 1
-                r3.setAllowDecodeSingleFrame(r4)
-                int r1 = r0.getRealPosition(r1)
-                r3 = 2
-                java.lang.String r5 = "b"
-                r6 = 0
-                r7 = 0
-                if (r1 != 0) goto L_0x019c
-                org.telegram.ui.Components.BackupImageView r8 = r0.parentAvatarImageView
-                if (r8 != 0) goto L_0x0059
-                r8 = r6
-                goto L_0x0061
-            L_0x0059:
-                org.telegram.messenger.ImageReceiver r8 = r8.getImageReceiver()
-                android.graphics.drawable.Drawable r8 = r8.getDrawable()
-            L_0x0061:
-                boolean r9 = r8 instanceof org.telegram.ui.Components.AnimatedFileDrawable
-                if (r9 == 0) goto L_0x0082
+                r2.<init>(r5)
+                android.view.View unused = r3.textureViewStubView = r2
+            L_0x0031:
+                android.view.View r2 = r3.textureViewStubView
+                android.view.ViewParent r2 = r2.getParent()
+                if (r2 != 0) goto L_0x0042
+                android.view.View r2 = r3.textureViewStubView
+                r1.addView(r2)
+            L_0x0042:
+                return r3
+            L_0x0043:
+                r5 = 0
+                r3.isActiveVideo = r5
+                android.view.View r7 = r3.textureViewStubView
+                if (r7 == 0) goto L_0x005d
+                android.view.View r7 = r3.textureViewStubView
+                android.view.ViewParent r7 = r7.getParent()
+                if (r7 == 0) goto L_0x005d
+                android.view.View r7 = r3.textureViewStubView
+                r1.removeView(r7)
+            L_0x005d:
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r7 = r3.imageView
+                if (r7 != 0) goto L_0x007a
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r7 = new org.telegram.ui.Components.ProfileGalleryView$AvatarImageView
+                org.telegram.ui.Components.ProfileGalleryView r8 = org.telegram.ui.Components.ProfileGalleryView.this
+                android.content.Context r9 = r0.context
+                android.graphics.Paint r10 = r0.placeholderPaint
+                r7.<init>(r9, r2, r10)
+                org.telegram.ui.Components.ProfileGalleryView.AvatarImageView unused = r3.imageView = r7
+                java.util.ArrayList<org.telegram.ui.Components.BackupImageView> r7 = r0.imageViews
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r8 = r3.imageView
+                r7.set(r2, r8)
+            L_0x007a:
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r2 = r3.imageView
+                android.view.ViewParent r2 = r2.getParent()
+                if (r2 != 0) goto L_0x008b
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r2 = r3.imageView
+                r1.addView(r2)
+            L_0x008b:
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r1 = r3.imageView
+                org.telegram.messenger.ImageReceiver r1 = r1.getImageReceiver()
+                r1.setAllowDecodeSingleFrame(r6)
+                org.telegram.ui.Components.ProfileGalleryView r1 = org.telegram.ui.Components.ProfileGalleryView.this
+                boolean r1 = r1.hasActiveVideo
+                if (r1 == 0) goto L_0x00a0
+                int r4 = r4 + -1
+            L_0x00a0:
+                r1 = 2
+                java.lang.String r2 = "avatar_"
+                java.lang.String r7 = "b"
+                r8 = 0
+                if (r4 != 0) goto L_0x0209
+                org.telegram.ui.Components.BackupImageView r9 = r0.parentAvatarImageView
+                if (r9 != 0) goto L_0x00ae
                 r9 = r8
-                org.telegram.ui.Components.AnimatedFileDrawable r9 = (org.telegram.ui.Components.AnimatedFileDrawable) r9
-                boolean r10 = r9.hasBitmap()
-                if (r10 == 0) goto L_0x0082
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r5 = r2.imageView
-                r5.setImageDrawable(r8)
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r5 = r2.imageView
-                r9.addSecondParentView(r5)
-                r9.setInvalidateParentViewWithSecond(r4)
-                r5 = 0
-                goto L_0x0203
-            L_0x0082:
-                org.telegram.ui.Components.ProfileGalleryView r8 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r8 = r8.videoLocations
-                java.lang.Object r8 = r8.get(r1)
-                r10 = r8
-                org.telegram.messenger.ImageLocation r10 = (org.telegram.messenger.ImageLocation) r10
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r8 = r2.imageView
-                if (r10 == 0) goto L_0x0097
-                r9 = 1
-                goto L_0x0098
-            L_0x0097:
-                r9 = 0
-            L_0x0098:
-                r8.isVideo = r9
-                org.telegram.ui.Components.ProfileGalleryView r8 = org.telegram.ui.Components.ProfileGalleryView.this
-                boolean r8 = r8.isProfileFragment
-                if (r8 == 0) goto L_0x00ac
-                if (r10 == 0) goto L_0x00ac
-                int r8 = r10.imageType
-                if (r8 != r3) goto L_0x00ac
-                java.lang.String r8 = "g"
-                r13 = r8
-                goto L_0x00ad
-            L_0x00ac:
-                r13 = r6
-            L_0x00ad:
-                org.telegram.ui.Components.ProfileGalleryView r8 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r8 = r8.thumbsLocations
-                java.lang.Object r8 = r8.get(r1)
-                org.telegram.messenger.ImageLocation r8 = (org.telegram.messenger.ImageLocation) r8
-                org.telegram.ui.Components.BackupImageView r9 = r0.parentAvatarImageView
-                if (r9 == 0) goto L_0x00d3
-                org.telegram.ui.Components.ProfileGalleryView r9 = org.telegram.ui.Components.ProfileGalleryView.this
-                boolean r9 = r9.createThumbFromParent
-                if (r9 != 0) goto L_0x00c6
-                goto L_0x00d3
-            L_0x00c6:
-                org.telegram.ui.Components.BackupImageView r9 = r0.parentAvatarImageView
+                goto L_0x00b6
+            L_0x00ae:
                 org.telegram.messenger.ImageReceiver r9 = r9.getImageReceiver()
-                android.graphics.Bitmap r9 = r9.getBitmap()
-                r16 = r9
-                goto L_0x00d5
-            L_0x00d3:
-                r16 = r6
-            L_0x00d5:
-                if (r16 == 0) goto L_0x010f
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r11 = r2.imageView
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r5 = r5.videoLocations
-                java.lang.Object r5 = r5.get(r1)
-                r12 = r5
-                org.telegram.messenger.ImageLocation r12 = (org.telegram.messenger.ImageLocation) r12
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r5 = r5.imagesLocations
-                java.lang.Object r5 = r5.get(r1)
-                r14 = r5
-                org.telegram.messenger.ImageLocation r14 = (org.telegram.messenger.ImageLocation) r14
-                r15 = 0
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r5 = r5.imagesLocationsSizes
-                java.lang.Object r5 = r5.get(r1)
-                java.lang.Integer r5 = (java.lang.Integer) r5
-                int r17 = r5.intValue()
-                r18 = 1
-                r19 = r8
-                r11.setImageMedia(r12, r13, r14, r15, r16, r17, r18, r19)
-                goto L_0x0202
-            L_0x010f:
+                android.graphics.drawable.Drawable r9 = r9.getDrawable()
+            L_0x00b6:
+                boolean r10 = r9 instanceof org.telegram.ui.Components.AnimatedFileDrawable
+                if (r10 == 0) goto L_0x00d7
+                r10 = r9
+                org.telegram.ui.Components.AnimatedFileDrawable r10 = (org.telegram.ui.Components.AnimatedFileDrawable) r10
+                boolean r11 = r10.hasBitmap()
+                if (r11 == 0) goto L_0x00d7
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r2 = r3.imageView
+                r2.setImageDrawable(r9)
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r2 = r3.imageView
+                r10.addSecondParentView(r2)
+                r10.setInvalidateParentViewWithSecond(r6)
+                r2 = 0
+                goto L_0x0285
+            L_0x00d7:
                 org.telegram.ui.Components.ProfileGalleryView r9 = org.telegram.ui.Components.ProfileGalleryView.this
-                org.telegram.messenger.ImageLocation r9 = r9.uploadingImageLocation
-                if (r9 == 0) goto L_0x0159
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r11 = r2.imageView
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r5 = r5.videoLocations
-                java.lang.Object r5 = r5.get(r1)
-                r12 = r5
-                org.telegram.messenger.ImageLocation r12 = (org.telegram.messenger.ImageLocation) r12
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r5 = r5.imagesLocations
-                java.lang.Object r5 = r5.get(r1)
-                r14 = r5
-                org.telegram.messenger.ImageLocation r14 = (org.telegram.messenger.ImageLocation) r14
-                r15 = 0
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                org.telegram.messenger.ImageLocation r16 = r5.uploadingImageLocation
-                r17 = 0
+                java.util.ArrayList r9 = r9.videoLocations
+                java.lang.Object r9 = r9.get(r4)
+                r11 = r9
+                org.telegram.messenger.ImageLocation r11 = (org.telegram.messenger.ImageLocation) r11
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r9 = r3.imageView
+                if (r11 == 0) goto L_0x00ec
+                r10 = 1
+                goto L_0x00ed
+            L_0x00ec:
+                r10 = 0
+            L_0x00ed:
+                r9.isVideo = r10
+                org.telegram.ui.Components.ProfileGalleryView r9 = org.telegram.ui.Components.ProfileGalleryView.this
+                boolean r9 = r9.isProfileFragment
+                if (r9 == 0) goto L_0x0101
+                if (r11 == 0) goto L_0x0101
+                int r9 = r11.imageType
+                if (r9 != r1) goto L_0x0101
+                java.lang.String r9 = "g"
+                r14 = r9
+                goto L_0x0102
+            L_0x0101:
+                r14 = r8
+            L_0x0102:
+                org.telegram.ui.Components.ProfileGalleryView r9 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r9 = r9.thumbsLocations
+                java.lang.Object r9 = r9.get(r4)
+                org.telegram.messenger.ImageLocation r9 = (org.telegram.messenger.ImageLocation) r9
+                org.telegram.ui.Components.BackupImageView r10 = r0.parentAvatarImageView
+                if (r10 == 0) goto L_0x0128
+                org.telegram.ui.Components.ProfileGalleryView r10 = org.telegram.ui.Components.ProfileGalleryView.this
+                boolean r10 = r10.createThumbFromParent
+                if (r10 != 0) goto L_0x011b
+                goto L_0x0128
+            L_0x011b:
+                org.telegram.ui.Components.BackupImageView r10 = r0.parentAvatarImageView
+                org.telegram.messenger.ImageReceiver r10 = r10.getImageReceiver()
+                android.graphics.Bitmap r10 = r10.getBitmap()
+                r17 = r10
+                goto L_0x012a
+            L_0x0128:
+                r17 = r8
+            L_0x012a:
+                java.lang.StringBuilder r10 = new java.lang.StringBuilder
+                r10.<init>()
+                r10.append(r2)
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                long r12 = r2.dialogId
+                r10.append(r12)
+                java.lang.String r22 = r10.toString()
+                if (r17 == 0) goto L_0x017a
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r12 = r3.imageView
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r2 = r2.videoLocations
+                java.lang.Object r2 = r2.get(r4)
+                r13 = r2
+                org.telegram.messenger.ImageLocation r13 = (org.telegram.messenger.ImageLocation) r13
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r2 = r2.imagesLocations
+                java.lang.Object r2 = r2.get(r4)
+                r15 = r2
+                org.telegram.messenger.ImageLocation r15 = (org.telegram.messenger.ImageLocation) r15
+                r16 = 0
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r2 = r2.imagesLocationsSizes
+                java.lang.Object r2 = r2.get(r4)
+                java.lang.Integer r2 = (java.lang.Integer) r2
+                int r18 = r2.intValue()
+                r19 = 1
+                r20 = r22
+                r12.setImageMedia(r13, r14, r15, r16, r17, r18, r19, r20)
+                goto L_0x0284
+            L_0x017a:
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                org.telegram.messenger.ImageLocation r2 = r2.uploadingImageLocation
+                if (r2 == 0) goto L_0x01c3
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r12 = r3.imageView
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r2 = r2.videoLocations
+                java.lang.Object r2 = r2.get(r4)
+                r13 = r2
+                org.telegram.messenger.ImageLocation r13 = (org.telegram.messenger.ImageLocation) r13
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r2 = r2.imagesLocations
+                java.lang.Object r2 = r2.get(r4)
+                r15 = r2
+                org.telegram.messenger.ImageLocation r15 = (org.telegram.messenger.ImageLocation) r15
+                r16 = 0
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                org.telegram.messenger.ImageLocation r17 = r2.uploadingImageLocation
                 r18 = 0
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r5 = r5.imagesLocationsSizes
-                java.lang.Object r5 = r5.get(r1)
-                java.lang.Integer r5 = (java.lang.Integer) r5
-                int r19 = r5.intValue()
-                r20 = 1
-                r21 = r8
-                r11.setImageMedia(r12, r13, r14, r15, r16, r17, r18, r19, r20, r21)
-                goto L_0x0202
-            L_0x0159:
-                org.telegram.tgnet.TLRPC$PhotoSize r9 = r8.photoSize
+                r19 = 0
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r2 = r2.imagesLocationsSizes
+                java.lang.Object r2 = r2.get(r4)
+                java.lang.Integer r2 = (java.lang.Integer) r2
+                int r20 = r2.intValue()
+                r21 = 1
+                r12.setImageMedia(r13, r14, r15, r16, r17, r18, r19, r20, r21, r22)
+                goto L_0x0284
+            L_0x01c3:
+                org.telegram.tgnet.TLRPC$PhotoSize r2 = r9.photoSize
+                boolean r2 = r2 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
+                if (r2 == 0) goto L_0x01cc
+                r16 = r7
+                goto L_0x01ce
+            L_0x01cc:
+                r16 = r8
+            L_0x01ce:
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r10 = r3.imageView
+                r12 = 0
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r2 = r2.imagesLocations
+                java.lang.Object r2 = r2.get(r4)
+                r13 = r2
+                org.telegram.messenger.ImageLocation r13 = (org.telegram.messenger.ImageLocation) r13
+                r14 = 0
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r2 = r2.thumbsLocations
+                java.lang.Object r2 = r2.get(r4)
+                r15 = r2
+                org.telegram.messenger.ImageLocation r15 = (org.telegram.messenger.ImageLocation) r15
+                r17 = 0
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r2 = r2.imagesLocationsSizes
+                java.lang.Object r2 = r2.get(r4)
+                java.lang.Integer r2 = (java.lang.Integer) r2
+                int r18 = r2.intValue()
+                r19 = 1
+                r20 = r22
+                r10.setImageMedia(r11, r12, r13, r14, r15, r16, r17, r18, r19, r20)
+                goto L_0x0284
+            L_0x0209:
+                org.telegram.ui.Components.ProfileGalleryView r9 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r9 = r9.videoLocations
+                java.lang.Object r9 = r9.get(r4)
+                r11 = r9
+                org.telegram.messenger.ImageLocation r11 = (org.telegram.messenger.ImageLocation) r11
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r9 = r3.imageView
+                if (r11 == 0) goto L_0x021e
+                r10 = 1
+                goto L_0x021f
+            L_0x021e:
+                r10 = 0
+            L_0x021f:
+                r9.isVideo = r10
+                org.telegram.ui.Components.ProfileGalleryView r9 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r9 = r9.thumbsLocations
+                java.lang.Object r9 = r9.get(r4)
+                org.telegram.messenger.ImageLocation r9 = (org.telegram.messenger.ImageLocation) r9
+                org.telegram.tgnet.TLRPC$PhotoSize r9 = r9.photoSize
                 boolean r9 = r9 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
-                if (r9 == 0) goto L_0x0161
-                r15 = r5
-                goto L_0x0162
-            L_0x0161:
-                r15 = r6
-            L_0x0162:
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r9 = r2.imageView
-                r11 = 0
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r5 = r5.imagesLocations
-                java.lang.Object r5 = r5.get(r1)
-                r12 = r5
-                org.telegram.messenger.ImageLocation r12 = (org.telegram.messenger.ImageLocation) r12
-                r13 = 0
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r5 = r5.thumbsLocations
-                java.lang.Object r5 = r5.get(r1)
-                r14 = r5
-                org.telegram.messenger.ImageLocation r14 = (org.telegram.messenger.ImageLocation) r14
-                r16 = 0
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r5 = r5.imagesLocationsSizes
-                java.lang.Object r5 = r5.get(r1)
-                java.lang.Integer r5 = (java.lang.Integer) r5
-                int r17 = r5.intValue()
-                r18 = 1
-                r19 = r8
-                r9.setImageMedia(r10, r11, r12, r13, r14, r15, r16, r17, r18, r19)
-                goto L_0x0202
-            L_0x019c:
-                org.telegram.ui.Components.ProfileGalleryView r8 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r8 = r8.videoLocations
-                java.lang.Object r8 = r8.get(r1)
-                r10 = r8
-                org.telegram.messenger.ImageLocation r10 = (org.telegram.messenger.ImageLocation) r10
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r8 = r2.imageView
-                if (r10 == 0) goto L_0x01b1
-                r9 = 1
-                goto L_0x01b2
-            L_0x01b1:
-                r9 = 0
-            L_0x01b2:
-                r8.isVideo = r9
-                org.telegram.ui.Components.ProfileGalleryView r8 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r8 = r8.thumbsLocations
-                java.lang.Object r8 = r8.get(r1)
-                org.telegram.messenger.ImageLocation r8 = (org.telegram.messenger.ImageLocation) r8
-                org.telegram.tgnet.TLRPC$PhotoSize r9 = r8.photoSize
-                boolean r9 = r9 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
-                if (r9 == 0) goto L_0x01c8
-                r15 = r5
-                goto L_0x01c9
-            L_0x01c8:
-                r15 = r6
-            L_0x01c9:
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r9 = r2.imageView
-                r11 = 0
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r5 = r5.imagesLocations
-                java.lang.Object r5 = r5.get(r1)
-                r12 = r5
-                org.telegram.messenger.ImageLocation r12 = (org.telegram.messenger.ImageLocation) r12
-                r13 = 0
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r5 = r5.thumbsLocations
-                java.lang.Object r5 = r5.get(r1)
-                r14 = r5
-                org.telegram.messenger.ImageLocation r14 = (org.telegram.messenger.ImageLocation) r14
-                r16 = 0
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r5 = r5.imagesLocationsSizes
-                java.lang.Object r5 = r5.get(r1)
-                java.lang.Integer r5 = (java.lang.Integer) r5
-                int r17 = r5.intValue()
-                r18 = 1
-                r19 = r8
-                r9.setImageMedia(r10, r11, r12, r13, r14, r15, r16, r17, r18, r19)
-            L_0x0202:
-                r5 = 1
-            L_0x0203:
+                if (r9 == 0) goto L_0x0236
+                r16 = r7
+                goto L_0x0238
+            L_0x0236:
+                r16 = r8
+            L_0x0238:
+                java.lang.StringBuilder r7 = new java.lang.StringBuilder
+                r7.<init>()
+                r7.append(r2)
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                long r8 = r2.dialogId
+                r7.append(r8)
+                java.lang.String r20 = r7.toString()
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r10 = r3.imageView
+                r12 = 0
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r2 = r2.imagesLocations
+                java.lang.Object r2 = r2.get(r4)
+                r13 = r2
+                org.telegram.messenger.ImageLocation r13 = (org.telegram.messenger.ImageLocation) r13
+                r14 = 0
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r2 = r2.thumbsLocations
+                java.lang.Object r2 = r2.get(r4)
+                r15 = r2
+                org.telegram.messenger.ImageLocation r15 = (org.telegram.messenger.ImageLocation) r15
+                r17 = 0
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r2 = r2.imagesLocationsSizes
+                java.lang.Object r2 = r2.get(r4)
+                java.lang.Integer r2 = (java.lang.Integer) r2
+                int r18 = r2.intValue()
+                r19 = 1
+                r10.setImageMedia(r11, r12, r13, r14, r15, r16, r17, r18, r19, r20)
+            L_0x0284:
+                r2 = 1
+            L_0x0285:
+                org.telegram.ui.Components.ProfileGalleryView r7 = org.telegram.ui.Components.ProfileGalleryView.this
+                java.util.ArrayList r7 = r7.imagesUploadProgress
+                java.lang.Object r7 = r7.get(r4)
+                if (r7 == 0) goto L_0x0292
+                goto L_0x0293
+            L_0x0292:
+                r6 = r2
+            L_0x0293:
+                if (r6 == 0) goto L_0x030d
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r2 = r3.imageView
                 org.telegram.ui.Components.ProfileGalleryView r6 = org.telegram.ui.Components.ProfileGalleryView.this
-                java.util.ArrayList r6 = r6.imagesUploadProgress
-                java.lang.Object r6 = r6.get(r1)
-                if (r6 == 0) goto L_0x0210
-                goto L_0x0211
-            L_0x0210:
-                r4 = r5
-            L_0x0211:
-                if (r4 == 0) goto L_0x028b
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r4 = r2.imageView
-                org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
-                android.util.SparseArray r5 = r5.radialProgresses
-                java.lang.Object r5 = r5.get(r1)
-                org.telegram.ui.Components.RadialProgress2 r5 = (org.telegram.ui.Components.RadialProgress2) r5
-                org.telegram.ui.Components.RadialProgress2 unused = r4.radialProgress = r5
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r4 = r2.imageView
-                org.telegram.ui.Components.RadialProgress2 r4 = r4.radialProgress
-                if (r4 != 0) goto L_0x0278
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r4 = r2.imageView
-                org.telegram.ui.Components.RadialProgress2 r5 = new org.telegram.ui.Components.RadialProgress2
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r6 = r2.imageView
-                r5.<init>(r6)
-                org.telegram.ui.Components.RadialProgress2 unused = r4.radialProgress = r5
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r4 = r2.imageView
-                org.telegram.ui.Components.RadialProgress2 r4 = r4.radialProgress
-                r5 = 0
-                r4.setOverrideAlpha(r5)
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r4 = r2.imageView
-                org.telegram.ui.Components.RadialProgress2 r4 = r4.radialProgress
-                r5 = 10
-                r4.setIcon(r5, r7, r7)
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r4 = r2.imageView
-                org.telegram.ui.Components.RadialProgress2 r4 = r4.radialProgress
+                android.util.SparseArray r6 = r6.radialProgresses
+                java.lang.Object r6 = r6.get(r4)
+                org.telegram.ui.Components.RadialProgress2 r6 = (org.telegram.ui.Components.RadialProgress2) r6
+                org.telegram.ui.Components.RadialProgress2 unused = r2.radialProgress = r6
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r2 = r3.imageView
+                org.telegram.ui.Components.RadialProgress2 r2 = r2.radialProgress
+                if (r2 != 0) goto L_0x02fa
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r2 = r3.imageView
+                org.telegram.ui.Components.RadialProgress2 r6 = new org.telegram.ui.Components.RadialProgress2
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r7 = r3.imageView
+                r6.<init>(r7)
+                org.telegram.ui.Components.RadialProgress2 unused = r2.radialProgress = r6
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r2 = r3.imageView
+                org.telegram.ui.Components.RadialProgress2 r2 = r2.radialProgress
+                r6 = 0
+                r2.setOverrideAlpha(r6)
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r2 = r3.imageView
+                org.telegram.ui.Components.RadialProgress2 r2 = r2.radialProgress
+                r6 = 10
+                r2.setIcon(r6, r5, r5)
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r2 = r3.imageView
+                org.telegram.ui.Components.RadialProgress2 r2 = r2.radialProgress
                 r5 = 1107296256(0x42000000, float:32.0)
                 r6 = -1
-                r4.setColors((int) r5, (int) r5, (int) r6, (int) r6)
-                org.telegram.ui.Components.ProfileGalleryView r4 = org.telegram.ui.Components.ProfileGalleryView.this
-                android.util.SparseArray r4 = r4.radialProgresses
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r5 = r2.imageView
+                r2.setColors((int) r5, (int) r5, (int) r6, (int) r6)
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                android.util.SparseArray r2 = r2.radialProgresses
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r5 = r3.imageView
                 org.telegram.ui.Components.RadialProgress2 r5 = r5.radialProgress
-                r4.append(r1, r5)
-            L_0x0278:
-                org.telegram.ui.Components.ProfileGalleryView r1 = org.telegram.ui.Components.ProfileGalleryView.this
-                boolean r1 = r1.invalidateWithParent
-                if (r1 == 0) goto L_0x0286
-                org.telegram.ui.Components.ProfileGalleryView r1 = org.telegram.ui.Components.ProfileGalleryView.this
-                r1.invalidate()
-                goto L_0x028b
-            L_0x0286:
-                org.telegram.ui.Components.ProfileGalleryView r1 = org.telegram.ui.Components.ProfileGalleryView.this
-                r1.postInvalidateOnAnimation()
-            L_0x028b:
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r1 = r2.imageView
-                org.telegram.messenger.ImageReceiver r1 = r1.getImageReceiver()
+                r2.append(r4, r5)
+            L_0x02fa:
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                boolean r2 = r2.invalidateWithParent
+                if (r2 == 0) goto L_0x0308
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                r2.invalidate()
+                goto L_0x030d
+            L_0x0308:
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                r2.postInvalidateOnAnimation()
+            L_0x030d:
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r2 = r3.imageView
+                org.telegram.messenger.ImageReceiver r2 = r2.getImageReceiver()
                 org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1 r4 = new org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1
                 r4.<init>()
-                r1.setDelegate(r4)
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r1 = r2.imageView
-                org.telegram.messenger.ImageReceiver r1 = r1.getImageReceiver()
-                r1.setCrossfadeAlpha(r3)
-                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r1 = r2.imageView
-                org.telegram.ui.Components.ProfileGalleryView r3 = org.telegram.ui.Components.ProfileGalleryView.this
-                int r3 = r3.roundTopRadius
+                r2.setDelegate(r4)
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r2 = r3.imageView
+                org.telegram.messenger.ImageReceiver r2 = r2.getImageReceiver()
+                r2.setCrossfadeAlpha(r1)
+                org.telegram.ui.Components.ProfileGalleryView$AvatarImageView r1 = r3.imageView
+                org.telegram.ui.Components.ProfileGalleryView r2 = org.telegram.ui.Components.ProfileGalleryView.this
+                int r2 = r2.roundTopRadius
                 org.telegram.ui.Components.ProfileGalleryView r4 = org.telegram.ui.Components.ProfileGalleryView.this
                 int r4 = r4.roundTopRadius
                 org.telegram.ui.Components.ProfileGalleryView r5 = org.telegram.ui.Components.ProfileGalleryView.this
                 int r5 = r5.roundBottomRadius
                 org.telegram.ui.Components.ProfileGalleryView r6 = org.telegram.ui.Components.ProfileGalleryView.this
                 int r6 = r6.roundBottomRadius
-                r1.setRoundRadius(r3, r4, r5, r6)
-                return r2
+                r1.setRoundRadius(r2, r4, r5, r6)
+                return r3
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.instantiateItem(android.view.ViewGroup, int):org.telegram.ui.Components.ProfileGalleryView$Item");
         }
 
         public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
-            AvatarImageView access$500 = ((Item) obj).imageView;
-            if (access$500.getImageReceiver().hasStaticThumb()) {
-                Drawable drawable = access$500.getImageReceiver().getDrawable();
-                if (drawable instanceof AnimatedFileDrawable) {
-                    ((AnimatedFileDrawable) drawable).removeSecondParentView(access$500);
-                }
+            Item item = (Item) obj;
+            if (item.textureViewStubView != null) {
+                viewGroup.removeView(item.textureViewStubView);
             }
-            access$500.setRoundRadius(0);
-            viewGroup.removeView(access$500);
-            access$500.getImageReceiver().cancelLoadImage();
+            if (!item.isActiveVideo) {
+                AvatarImageView access$600 = item.imageView;
+                if (access$600.getImageReceiver().hasStaticThumb()) {
+                    Drawable drawable = access$600.getImageReceiver().getDrawable();
+                    if (drawable instanceof AnimatedFileDrawable) {
+                        ((AnimatedFileDrawable) drawable).removeSecondParentView(access$600);
+                    }
+                }
+                access$600.setRoundRadius(0);
+                viewGroup.removeView(access$600);
+                access$600.getImageReceiver().cancelLoadImage();
+            }
         }
 
         public CharSequence getPageTitle(int i) {
@@ -1415,8 +1521,12 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             }
             this.objects.clear();
             this.imageViews.clear();
-            int size = ProfileGalleryView.this.imagesLocations.size() + (getExtraCount() * 2);
-            for (int i2 = 0; i2 < size; i2++) {
+            int size = ProfileGalleryView.this.imagesLocations.size();
+            if (ProfileGalleryView.this.hasActiveVideo) {
+                size++;
+            }
+            int extraCount = size + (getExtraCount() * 2);
+            for (int i2 = 0; i2 < extraCount; i2++) {
                 this.objects.add(new Item());
                 this.imageViews.add((Object) null);
             }
@@ -1424,7 +1534,11 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         }
 
         public int getExtraCount() {
-            if (ProfileGalleryView.this.imagesLocations.size() >= 2) {
+            int size = ProfileGalleryView.this.imagesLocations.size();
+            if (ProfileGalleryView.this.hasActiveVideo) {
+                size++;
+            }
+            if (size >= 2) {
                 return ProfileGalleryView.this.getOffscreenPageLimit();
             }
             return 0;
@@ -1432,15 +1546,22 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     }
 
     public void setData(long j) {
-        if (this.dialogId == j) {
-            resetCurrentItem();
+        setData(j, false);
+    }
+
+    public void setData(long j, boolean z) {
+        if (this.dialogId != j || z) {
+            this.forceResetPosition = true;
+            this.adapter.notifyDataSetChanged();
+            reset();
+            this.dialogId = j;
+            if (j != 0) {
+                MessagesController.getInstance(this.currentAccount).loadDialogPhotos((int) j, 80, 0, true, this.parentClassGuid);
+                return;
+            }
             return;
         }
-        this.forceResetPosition = true;
-        this.adapter.notifyDataSetChanged();
-        reset();
-        this.dialogId = j;
-        MessagesController.getInstance(this.currentAccount).loadDialogPhotos((int) j, 80, 0, true, this.parentClassGuid);
+        resetCurrentItem();
     }
 
     private void reset() {
@@ -1462,10 +1583,10 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         if (this.adapter != null) {
             for (int i3 = 0; i3 < this.adapter.objects.size(); i3++) {
                 if (((Item) this.adapter.objects.get(i3)).imageView != null) {
-                    AvatarImageView access$500 = ((Item) this.adapter.objects.get(i3)).imageView;
+                    AvatarImageView access$600 = ((Item) this.adapter.objects.get(i3)).imageView;
                     int i4 = this.roundTopRadius;
                     int i5 = this.roundBottomRadius;
-                    access$500.setRoundRadius(i4, i4, i5, i5);
+                    access$600.setRoundRadius(i4, i4, i5, i5);
                 }
             }
         }
@@ -1507,8 +1628,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         private long firstDrawTime = -1;
         public boolean isVideo;
         private final Paint placeholderPaint;
-        /* access modifiers changed from: private */
-        public final int position;
+        private final int position;
         /* access modifiers changed from: private */
         public RadialProgress2 radialProgress;
         private ValueAnimator radialProgressHideAnimator;
@@ -1539,7 +1659,10 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             PinchToZoomHelper pinchToZoomHelper = ProfileGalleryView.this.pinchToZoomHelper;
             if (pinchToZoomHelper == null || !pinchToZoomHelper.isInOverlayMode()) {
                 if (this.radialProgress != null) {
-                    int realPosition = ProfileGalleryView.this.getRealPosition(this.position);
+                    final int realPosition = ProfileGalleryView.this.getRealPosition(this.position);
+                    if (ProfileGalleryView.this.hasActiveVideo) {
+                        realPosition--;
+                    }
                     Drawable drawable = getImageReceiver().getDrawable();
                     long j = 0;
                     if (!(realPosition >= ProfileGalleryView.this.imagesUploadProgress.size() || ProfileGalleryView.this.imagesUploadProgress.get(realPosition) == null ? !(drawable == null || (this.isVideo && (!(drawable instanceof AnimatedFileDrawable) || ((AnimatedFileDrawable) drawable).getDurationMs() <= 0))) : ((Float) ProfileGalleryView.this.imagesUploadProgress.get(realPosition)).floatValue() >= 1.0f)) {
@@ -1577,9 +1700,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                         this.radialProgressHideAnimator.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
                                 RadialProgress2 unused = AvatarImageView.this.radialProgress = null;
-                                SparseArray access$1400 = ProfileGalleryView.this.radialProgresses;
-                                AvatarImageView avatarImageView = AvatarImageView.this;
-                                access$1400.delete(ProfileGalleryView.this.getRealPosition(avatarImageView.position));
+                                ProfileGalleryView.this.radialProgresses.delete(realPosition);
                             }
                         });
                         this.radialProgressHideAnimator.start();
@@ -1632,5 +1753,11 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
 
     public void setInvalidateWithParent(boolean z) {
         this.invalidateWithParent = z;
+    }
+
+    private class TextureStubView extends View {
+        public TextureStubView(Context context) {
+            super(context);
+        }
     }
 }

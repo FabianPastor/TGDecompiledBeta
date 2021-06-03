@@ -40,6 +40,15 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.UsersAlertBase;
 
 public class UsersAlertBase extends BottomSheet {
+    public static final Property<UsersAlertBase, Float> COLOR_PROGRESS = new AnimationProperties.FloatProperty<UsersAlertBase>("colorProgress") {
+        public void setValue(UsersAlertBase usersAlertBase, float f) {
+            usersAlertBase.setColorProgress(f);
+        }
+
+        public Float get(UsersAlertBase usersAlertBase) {
+            return Float.valueOf(usersAlertBase.getColorProgress());
+        }
+    };
     /* access modifiers changed from: private */
     public int backgroundColor;
     private float colorProgress;
@@ -122,7 +131,7 @@ public class UsersAlertBase extends BottomSheet {
         this.emptyView.showProgress(true, false);
         this.emptyView.setColors(this.keyNameText, this.keyLastSeenText, this.keyInviteMembersBackground, this.keySearchBackground);
         this.containerView.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 62.0f, 0.0f, 0.0f));
-        AnonymousClass1 r14 = new RecyclerListView(this, context) {
+        AnonymousClass1 r14 = new RecyclerListView(context) {
             /* access modifiers changed from: protected */
             public boolean allowSelectChildAtPosition(float f, float f2) {
                 return f2 >= ((float) (AndroidUtilities.dp(58.0f) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
@@ -330,18 +339,6 @@ public class UsersAlertBase extends BottomSheet {
             this.clearSearchImageView.callOnClick();
             AndroidUtilities.hideKeyboard(this.searchEditText);
         }
-    }
-
-    static {
-        new AnimationProperties.FloatProperty<UsersAlertBase>("colorProgress") {
-            public void setValue(UsersAlertBase usersAlertBase, float f) {
-                usersAlertBase.setColorProgress(f);
-            }
-
-            public Float get(UsersAlertBase usersAlertBase) {
-                return Float.valueOf(usersAlertBase.getColorProgress());
-            }
-        };
     }
 
     /* access modifiers changed from: private */

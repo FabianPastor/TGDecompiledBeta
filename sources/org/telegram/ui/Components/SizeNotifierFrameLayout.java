@@ -23,6 +23,7 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     protected AdjustPanLayoutHelper adjustPanLayoutHelper;
     private Drawable backgroundDrawable;
     private int backgroundTranslationY;
+    private float bgAngle;
     private int bottomClip;
     private SizeNotifierFrameLayoutDelegate delegate;
     protected int keyboardHeight;
@@ -66,14 +67,17 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     }
 
     public void setBackgroundImage(Drawable drawable, boolean z) {
+        if (drawable instanceof MotionBackgroundDrawable) {
+            ((MotionBackgroundDrawable) drawable).setParentView(this);
+        }
         this.backgroundDrawable = drawable;
         if (z) {
             if (this.parallaxEffect == null) {
                 WallpaperParallaxEffect wallpaperParallaxEffect = new WallpaperParallaxEffect(getContext());
                 this.parallaxEffect = wallpaperParallaxEffect;
                 wallpaperParallaxEffect.setCallback(new WallpaperParallaxEffect.Callback() {
-                    public final void onOffsetsChanged(int i, int i2) {
-                        SizeNotifierFrameLayout.this.lambda$setBackgroundImage$0$SizeNotifierFrameLayout(i, i2);
+                    public final void onOffsetsChanged(int i, int i2, float f) {
+                        SizeNotifierFrameLayout.this.lambda$setBackgroundImage$0$SizeNotifierFrameLayout(i, i2, f);
                     }
                 });
                 if (!(getMeasuredWidth() == 0 || getMeasuredHeight() == 0)) {
@@ -98,9 +102,10 @@ public class SizeNotifierFrameLayout extends FrameLayout {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$setBackgroundImage$0 */
-    public /* synthetic */ void lambda$setBackgroundImage$0$SizeNotifierFrameLayout(int i, int i2) {
+    public /* synthetic */ void lambda$setBackgroundImage$0$SizeNotifierFrameLayout(int i, int i2, float f) {
         this.translationX = (float) i;
         this.translationY = (float) i2;
+        this.bgAngle = f;
         invalidate();
     }
 
@@ -210,6 +215,9 @@ public class SizeNotifierFrameLayout extends FrameLayout {
             if (Theme.isAnimatingColor()) {
                 this.oldBackgroundDrawable = this.backgroundDrawable;
             }
+            if (cachedWallpaperNonBlocking instanceof MotionBackgroundDrawable) {
+                ((MotionBackgroundDrawable) cachedWallpaperNonBlocking).setParentView(this);
+            }
             this.backgroundDrawable = cachedWallpaperNonBlocking;
         }
         ActionBarLayout actionBarLayout = this.parentLayout;
@@ -223,7 +231,34 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                 } else {
                     drawable.setAlpha((int) (255.0f * themeAnimationValue));
                 }
-                if (drawable instanceof ColorDrawable) {
+                if (drawable instanceof MotionBackgroundDrawable) {
+                    MotionBackgroundDrawable motionBackgroundDrawable = (MotionBackgroundDrawable) drawable;
+                    if (motionBackgroundDrawable.hasPattern()) {
+                        int currentActionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
+                        int measuredHeight = getRootView().getMeasuredHeight() - currentActionBarHeight;
+                        float max = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) measuredHeight) / ((float) drawable.getIntrinsicHeight()));
+                        int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * max * this.parallaxScale));
+                        int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * max * this.parallaxScale));
+                        int measuredWidth = ((getMeasuredWidth() - ceil) / 2) + ((int) this.translationX);
+                        int i2 = this.backgroundTranslationY + ((measuredHeight - ceil2) / 2) + currentActionBarHeight + ((int) this.translationY);
+                        canvas.save();
+                        canvas.clipRect(0, currentActionBarHeight, ceil, getMeasuredHeight() - this.bottomClip);
+                        drawable.setBounds(measuredWidth, i2, ceil + measuredWidth, ceil2 + i2);
+                        drawable.draw(canvas);
+                        canvas.restore();
+                    } else {
+                        if (this.bottomClip != 0) {
+                            canvas.save();
+                            canvas.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - this.bottomClip);
+                        }
+                        motionBackgroundDrawable.setTranslationYAndRotation(this.backgroundTranslationY);
+                        drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight() - this.backgroundTranslationY);
+                        drawable.draw(canvas);
+                        if (this.bottomClip != 0) {
+                            canvas.restore();
+                        }
+                    }
+                } else if (drawable instanceof ColorDrawable) {
                     if (this.bottomClip != 0) {
                         canvas.save();
                         canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - this.bottomClip);
@@ -252,16 +287,16 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                         drawable.draw(canvas);
                         canvas.restore();
                     } else {
-                        int currentActionBarHeight = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
-                        int measuredHeight = getRootView().getMeasuredHeight() - currentActionBarHeight;
-                        float max = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) measuredHeight) / ((float) drawable.getIntrinsicHeight()));
-                        int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * max * this.parallaxScale));
-                        int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * max * this.parallaxScale));
-                        int measuredWidth = ((getMeasuredWidth() - ceil) / 2) + ((int) this.translationX);
-                        int i2 = this.backgroundTranslationY + ((measuredHeight - ceil2) / 2) + currentActionBarHeight + ((int) this.translationY);
+                        int currentActionBarHeight2 = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
+                        int measuredHeight2 = getRootView().getMeasuredHeight() - currentActionBarHeight2;
+                        float max2 = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) measuredHeight2) / ((float) drawable.getIntrinsicHeight()));
+                        int ceil3 = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * max2 * this.parallaxScale));
+                        int ceil4 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * max2 * this.parallaxScale));
+                        int measuredWidth2 = ((getMeasuredWidth() - ceil3) / 2) + ((int) this.translationX);
+                        int i3 = this.backgroundTranslationY + ((measuredHeight2 - ceil4) / 2) + currentActionBarHeight2 + ((int) this.translationY);
                         canvas.save();
-                        canvas.clipRect(0, currentActionBarHeight, ceil, getMeasuredHeight() - this.bottomClip);
-                        drawable.setBounds(measuredWidth, i2, ceil + measuredWidth, ceil2 + i2);
+                        canvas.clipRect(0, currentActionBarHeight2, ceil3, getMeasuredHeight() - this.bottomClip);
+                        drawable.setBounds(measuredWidth2, i3, ceil3 + measuredWidth2, ceil4 + i3);
                         drawable.draw(canvas);
                         canvas.restore();
                     }

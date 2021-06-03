@@ -35,19 +35,19 @@ public class QRCodeBottomSheet extends BottomSheet {
             r2 = 0
             r0.<init>(r1, r2)
             java.lang.String r3 = "InviteByQRCode"
-            r4 = 2131625843(0x7f0e0773, float:1.8878905E38)
+            r4 = 2131625859(0x7f0e0783, float:1.8878938E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r4 = 1
             r0.setTitle(r3, r4)
             org.telegram.ui.Components.QRCodeBottomSheet$1 r3 = new org.telegram.ui.Components.QRCodeBottomSheet$1
-            r3.<init>(r0, r1)
+            r3.<init>(r1)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.FIT_XY
             r3.setScaleType(r5)
             int r5 = android.os.Build.VERSION.SDK_INT
             r6 = 21
             if (r5 < r6) goto L_0x0030
             org.telegram.ui.Components.QRCodeBottomSheet$2 r5 = new org.telegram.ui.Components.QRCodeBottomSheet$2
-            r5.<init>(r0)
+            r5.<init>()
             r3.setOutlineProvider(r5)
             r3.setClipToOutline(r4)
         L_0x0030:
@@ -70,7 +70,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
             r6.setAutoRepeat(r4)
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
-            r8 = 2131558470(0x7f0d0046, float:1.8742257E38)
+            r8 = 2131558471(0x7f0d0047, float:1.8742259E38)
             r9 = 60
             r6.setAnimation(r8, r9, r9)
             org.telegram.ui.Components.RLottieImageView r6 = r0.iconImage
@@ -122,7 +122,7 @@ public class QRCodeBottomSheet extends BottomSheet {
             java.lang.String r2 = "fonts/rmedium.ttf"
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r2)
             r3.setTypeface(r2)
-            r2 = 2131627436(0x7f0e0dac, float:1.8882136E38)
+            r2 = 2131627464(0x7f0e0dc8, float:1.8882193E38)
             java.lang.String r4 = "ShareQrCode"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r3.setText(r2)
@@ -164,13 +164,7 @@ public class QRCodeBottomSheet extends BottomSheet {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:18:0x0042, code lost:
-        r6 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:20:?, code lost:
-        r0.close();
-     */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:21:0x0046 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:18:0x0044 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.net.Uri getImageUri(android.graphics.Bitmap r6) {
         /*
@@ -194,25 +188,22 @@ public class QRCodeBottomSheet extends BottomSheet {
             java.io.File r1 = new java.io.File
             java.lang.String r4 = "qr_tmp.png"
             r1.<init>(r0, r4)
-            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ IOException -> 0x0047 }
-            r0.<init>(r1)     // Catch:{ IOException -> 0x0047 }
+            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ IOException -> 0x0045 }
+            r0.<init>(r1)     // Catch:{ IOException -> 0x0045 }
             android.graphics.Bitmap$CompressFormat r4 = android.graphics.Bitmap.CompressFormat.PNG     // Catch:{ all -> 0x0040 }
             r6.compress(r4, r2, r0)     // Catch:{ all -> 0x0040 }
             r0.close()     // Catch:{ all -> 0x0040 }
             android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0040 }
             java.lang.String r2 = "org.telegram.messenger.beta.provider"
             android.net.Uri r6 = androidx.core.content.FileProvider.getUriForFile(r6, r2, r1)     // Catch:{ all -> 0x0040 }
-            r0.close()     // Catch:{ IOException -> 0x0047 }
+            r0.close()     // Catch:{ IOException -> 0x0045 }
             return r6
         L_0x0040:
             r6 = move-exception
-            throw r6     // Catch:{ all -> 0x0042 }
-        L_0x0042:
-            r6 = move-exception
-            r0.close()     // Catch:{ all -> 0x0046 }
-        L_0x0046:
-            throw r6     // Catch:{ IOException -> 0x0047 }
-        L_0x0047:
+            r0.close()     // Catch:{ all -> 0x0044 }
+        L_0x0044:
+            throw r6     // Catch:{ IOException -> 0x0045 }
+        L_0x0045:
             r6 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)
             return r3

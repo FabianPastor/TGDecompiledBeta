@@ -18,6 +18,7 @@ public class ID3v1Info extends AudioInfo {
     public ID3v1Info(InputStream inputStream) throws IOException {
         if (isID3v1StartPosition(inputStream)) {
             this.brand = "ID3";
+            this.version = "1.0";
             byte[] readBytes = readBytes(inputStream, 128);
             this.title = extractString(readBytes, 3, 30);
             this.artist = extractString(readBytes, 33, 30);
@@ -33,6 +34,7 @@ public class ID3v1Info extends AudioInfo {
                 this.genre = genre.getDescription();
             }
             if (readBytes[125] == 0 && readBytes[126] != 0) {
+                this.version = "1.1";
                 this.track = (short) (readBytes[126] & 255);
             }
         }

@@ -136,7 +136,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
         public void sendSticker(TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, int i) {
             if (StickersAlert.this.delegate != null) {
-                StickersAlert.this.delegate.onStickerSelected(tLRPC$Document, str, obj, StickersAlert.this.clearsInputField, z, i);
+                StickersAlert.this.delegate.onStickerSelected(tLRPC$Document, str, obj, (MessageObject.SendAnimationData) null, StickersAlert.this.clearsInputField, z, i);
                 StickersAlert.this.dismiss();
             }
         }
@@ -193,7 +193,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
         boolean isInScheduleMode();
 
-        void onStickerSelected(TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, boolean z2, int i);
+        void onStickerSelected(TLRPC$Document tLRPC$Document, String str, Object obj, MessageObject.SendAnimationData sendAnimationData, boolean z, boolean z2, int i);
     }
 
     public interface StickersAlertInstallDelegate {
@@ -303,14 +303,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run() {
-                StickersAlert.this.lambda$null$0$StickersAlert(this.f$1, this.f$2, this.f$3);
+                StickersAlert.this.lambda$new$0$StickersAlert(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_getAttachedStickers tLRPC$TL_messages_getAttachedStickers) {
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_getAttachedStickers tLRPC$TL_messages_getAttachedStickers) {
         this.reqId = 0;
         if (tLRPC$TL_error == null) {
             TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
@@ -417,14 +417,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run() {
-                StickersAlert.this.lambda$null$3$StickersAlert(this.f$1, this.f$2, this.f$3);
+                StickersAlert.this.lambda$loadStickerSet$3$StickersAlert(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, MediaDataController mediaDataController) {
+    /* renamed from: lambda$loadStickerSet$3 */
+    public /* synthetic */ void lambda$loadStickerSet$3$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, MediaDataController mediaDataController) {
         this.reqId = 0;
         if (tLRPC$TL_error == null) {
             if (Build.VERSION.SDK_INT >= 19) {
@@ -824,7 +824,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.adapter = gridAdapter;
         recyclerListView2.setAdapter(gridAdapter);
         this.gridView.setVerticalScrollBarEnabled(false);
-        this.gridView.addItemDecoration(new RecyclerView.ItemDecoration(this) {
+        this.gridView.addItemDecoration(new RecyclerView.ItemDecoration() {
             public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
                 rect.left = 0;
                 rect.right = 0;
@@ -1036,7 +1036,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     /* access modifiers changed from: private */
     /* renamed from: lambda$init$10 */
     public /* synthetic */ void lambda$init$10$StickersAlert(View view) {
-        this.delegate.onStickerSelected(this.selectedSticker, (String) null, this.stickerSet, this.clearsInputField, true, 0);
+        this.delegate.onStickerSelected(this.selectedSticker, (String) null, this.stickerSet, (MessageObject.SendAnimationData) null, this.clearsInputField, true, 0);
         dismiss();
     }
 
@@ -1203,7 +1203,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r1 = r0.set
             boolean r1 = r1.masks
-            r6 = 2131627125(0x7f0e0CLASSNAME, float:1.8881506E38)
+            r6 = 2131627153(0x7f0e0CLASSNAME, float:1.8881562E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r1 == 0) goto L_0x00d1
             java.lang.Object[] r1 = new java.lang.Object[r5]
@@ -1270,7 +1270,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.notifyDataSetChanged()
             goto L_0x0162
         L_0x014d:
-            r0 = 2131624912(0x7f0e03d0, float:1.8877017E38)
+            r0 = 2131624928(0x7f0e03e0, float:1.887705E38)
             java.lang.String r2 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -1296,15 +1296,15 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             tLRPC$TL_messages_installStickerSet.stickerset = this.inputStickerSet;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_installStickerSet, new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    StickersAlert.this.lambda$null$12$StickersAlert(tLObject, tLRPC$TL_error);
+                    StickersAlert.this.lambda$updateFields$12$StickersAlert(tLObject, tLRPC$TL_error);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$12 */
-    public /* synthetic */ void lambda$null$12$StickersAlert(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$updateFields$12 */
+    public /* synthetic */ void lambda$updateFields$12$StickersAlert(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -1315,14 +1315,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run() {
-                StickersAlert.this.lambda$null$11$StickersAlert(this.f$1, this.f$2);
+                StickersAlert.this.lambda$updateFields$11$StickersAlert(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$updateFields$11 */
+    public /* synthetic */ void lambda$updateFields$11$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         boolean z = this.stickerSet.set.masks;
         if (tLRPC$TL_error == null) {
             try {

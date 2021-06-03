@@ -89,9 +89,7 @@ public class Camera1Enumerator implements CameraEnumerator {
             Logging.d("Camera1Enumerator", "Opening camera with index " + i);
             Camera open = Camera.open(i);
             Camera.Parameters parameters = open.getParameters();
-            if (open != null) {
-                open.release();
-            }
+            open.release();
             ArrayList arrayList = new ArrayList();
             try {
                 List<int[]> supportedPreviewFpsRange = parameters.getSupportedPreviewFpsRange();

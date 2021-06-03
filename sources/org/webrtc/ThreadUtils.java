@@ -118,7 +118,7 @@ public class ThreadUtils {
             }
         } else {
             final AnonymousClass1Result r0 = new Object() {
-                public Object value;
+                public V value;
             };
             final AnonymousClass1CaughtException r1 = new Object() {
                 Exception e;
@@ -127,7 +127,7 @@ public class ThreadUtils {
             handler.post(new Runnable() {
                 public void run() {
                     try {
-                        r0.value = callable.call();
+                        AnonymousClass1Result.this.value = callable.call();
                     } catch (Exception e) {
                         r1.e = e;
                     }

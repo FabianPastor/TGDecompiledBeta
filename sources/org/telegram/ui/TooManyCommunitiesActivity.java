@@ -146,9 +146,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 }
             }
         });
-        ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, NUM);
-        addItem.setIsSearchField(true);
-        addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             boolean expanded = false;
 
             public void onSearchCollapse() {
@@ -191,8 +189,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 }
             }
         });
-        addItem.setContentDescription(LocaleController.getString("Search", NUM));
-        addItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        actionBarMenuItemSearchListener.setContentDescription(LocaleController.getString("Search", NUM));
+        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", NUM));
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         RecyclerListView recyclerListView = new RecyclerListView(context);
@@ -240,7 +238,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         frameLayout.addView(this.searchViewContainer);
         loadInactiveChannels();
         this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        AnonymousClass5 r3 = new FrameLayout(this, context) {
+        AnonymousClass5 r3 = new FrameLayout(context) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
@@ -379,15 +377,15 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 }
 
                 public final void run() {
-                    TooManyCommunitiesActivity.this.lambda$null$4$TooManyCommunitiesActivity(this.f$1, this.f$2);
+                    TooManyCommunitiesActivity.this.lambda$loadInactiveChannels$4$TooManyCommunitiesActivity(this.f$1, this.f$2);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$TooManyCommunitiesActivity(ArrayList arrayList, TLRPC$TL_messages_inactiveChats tLRPC$TL_messages_inactiveChats) {
+    /* renamed from: lambda$loadInactiveChannels$4 */
+    public /* synthetic */ void lambda$loadInactiveChannels$4$TooManyCommunitiesActivity(ArrayList arrayList, TLRPC$TL_messages_inactiveChats tLRPC$TL_messages_inactiveChats) {
         this.inactiveChatsSignatures.clear();
         this.inactiveChats.clear();
         this.inactiveChatsSignatures.addAll(arrayList);
@@ -398,7 +396,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             this.enterAnimator = ofFloat;
             ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    TooManyCommunitiesActivity.this.lambda$null$3$TooManyCommunitiesActivity(valueAnimator);
+                    TooManyCommunitiesActivity.this.lambda$loadInactiveChannels$3$TooManyCommunitiesActivity(valueAnimator);
                 }
             });
             this.enterAnimator.setDuration(100);
@@ -417,8 +415,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$TooManyCommunitiesActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$loadInactiveChannels$3 */
+    public /* synthetic */ void lambda$loadInactiveChannels$3$TooManyCommunitiesActivity(ValueAnimator valueAnimator) {
         this.enterProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         int childCount = this.listView.getChildCount();
         for (int i = 0; i < childCount; i++) {
@@ -495,9 +493,9 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             /*
                 r7 = this;
                 r0 = 1
-                if (r9 == r0) goto L_0x007d
+                if (r9 == r0) goto L_0x007a
                 r1 = 2
-                if (r9 == r1) goto L_0x004e
+                if (r9 == r1) goto L_0x004d
                 r1 = 3
                 if (r9 == r1) goto L_0x0029
                 r1 = 5
@@ -506,14 +504,14 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 android.content.Context r8 = r8.getContext()
                 r1 = 0
                 r9.<init>(r8, r0, r1, r1)
-                goto L_0x00df
+                goto L_0x00dc
             L_0x0018:
                 org.telegram.ui.Cells.EmptyCell r9 = new org.telegram.ui.Cells.EmptyCell
                 android.content.Context r8 = r8.getContext()
                 r0 = 1094713344(0x41400000, float:12.0)
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
                 r9.<init>(r8, r0)
-                goto L_0x00df
+                goto L_0x00dc
             L_0x0029:
                 org.telegram.ui.Cells.HeaderCell r9 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r2 = r8.getContext()
@@ -525,17 +523,17 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r3, r4, r5, r6)
                 r8 = 54
                 r9.setHeight(r8)
-                r8 = 2131625815(0x7f0e0757, float:1.8878849E38)
+                r8 = 2131625831(0x7f0e0767, float:1.8878881E38)
                 java.lang.String r0 = "InactiveChats"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r9.setText(r8)
-                goto L_0x00df
-            L_0x004e:
+                goto L_0x00dc
+            L_0x004d:
                 org.telegram.ui.Cells.ShadowSectionCell r9 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r1 = r8.getContext()
                 r9.<init>(r1)
                 android.content.Context r8 = r8.getContext()
-                r1 = 2131165449(0x7var_, float:1.7945115E38)
+                r1 = 2131165450(0x7var_a, float:1.7945117E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -546,8 +544,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r8)
                 r1.setFullsize(r0)
                 r9.setBackground(r1)
-                goto L_0x00df
-            L_0x007d:
+                goto L_0x00dc
+            L_0x007a:
                 org.telegram.ui.TooManyCommunitiesActivity r9 = org.telegram.ui.TooManyCommunitiesActivity.this
                 org.telegram.ui.Cells.TooManyCommunitiesHintCell r1 = new org.telegram.ui.Cells.TooManyCommunitiesHintCell
                 android.content.Context r8 = r8.getContext()
@@ -557,22 +555,22 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.Cells.TooManyCommunitiesHintCell r9 = r8.hintCell
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
-                if (r8 != 0) goto L_0x00a1
-                r8 = 2131627761(0x7f0e0ef1, float:1.8882796E38)
+                if (r8 != 0) goto L_0x009e
+                r8 = 2131627790(0x7f0e0f0e, float:1.8882854E38)
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
-                goto L_0x00b6
-            L_0x00a1:
-                if (r8 != r0) goto L_0x00ad
-                r8 = 2131627760(0x7f0e0ef0, float:1.8882794E38)
+                goto L_0x00b3
+            L_0x009e:
+                if (r8 != r0) goto L_0x00aa
+                r8 = 2131627789(0x7f0e0f0d, float:1.8882852E38)
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
-                goto L_0x00b6
-            L_0x00ad:
-                r8 = 2131627759(0x7f0e0eef, float:1.8882792E38)
+                goto L_0x00b3
+            L_0x00aa:
+                r8 = 2131627788(0x7f0e0f0c, float:1.888285E38)
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
-            L_0x00b6:
+            L_0x00b3:
                 org.telegram.ui.TooManyCommunitiesActivity r0 = org.telegram.ui.TooManyCommunitiesActivity.this
                 org.telegram.ui.Cells.TooManyCommunitiesHintCell r0 = r0.hintCell
                 r0.setMessageText(r8)
@@ -589,7 +587,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r0 = org.telegram.ui.TooManyCommunitiesActivity.this
                 org.telegram.ui.Cells.TooManyCommunitiesHintCell r0 = r0.hintCell
                 r0.setLayoutParams(r8)
-            L_0x00df:
+            L_0x00dc:
                 org.telegram.ui.Components.RecyclerListView$Holder r8 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r8.<init>(r9)
                 return r8
@@ -773,7 +771,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                         z = true;
                         if (z) {
                             arrayList.add(tLRPC$Chat);
-                            arrayList2.add(TooManyCommunitiesActivity.this.inactiveChatsSignatures.get(i4));
+                            arrayList2.add((String) TooManyCommunitiesActivity.this.inactiveChatsSignatures.get(i4));
                             break;
                         }
                     }

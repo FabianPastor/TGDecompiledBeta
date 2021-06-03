@@ -50,7 +50,7 @@ public class ChartData {
                     i2 = i3;
                 }
             } else {
-                Line line = new Line(this);
+                Line line = new Line();
                 this.lines.add(line);
                 int length2 = jSONArray2.length() - 1;
                 line.id = jSONArray2.getString(0);
@@ -238,7 +238,7 @@ public class ChartData {
         public SegmentTree segmentTree;
         public int[] y;
 
-        public Line(ChartData chartData) {
+        public Line() {
         }
     }
 }

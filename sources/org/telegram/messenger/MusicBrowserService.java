@@ -223,14 +223,14 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             }
 
             public final void run() {
-                MusicBrowserService.this.lambda$null$0$MusicBrowserService(this.f$1, this.f$2);
+                MusicBrowserService.this.lambda$onLoadChildren$0$MusicBrowserService(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$MusicBrowserService(String str, MediaBrowserService.Result result) {
+    /* renamed from: lambda$onLoadChildren$0 */
+    public /* synthetic */ void lambda$onLoadChildren$0$MusicBrowserService(String str, MediaBrowserService.Result result) {
         this.chatsLoaded = true;
         this.loadingChats = false;
         loadChildrenImpl(str, result);

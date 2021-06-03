@@ -39,7 +39,7 @@ public class TableLayout extends View {
         }
 
         public Bounds getBounds() {
-            return new Bounds(this) {
+            return new Bounds() {
                 private int size;
 
                 /* access modifiers changed from: protected */
@@ -66,6 +66,17 @@ public class TableLayout extends View {
             };
         }
     };
+    public static final Alignment BOTTOM;
+    public static final Alignment CENTER = new Alignment() {
+        public int getAlignmentValue(Child child, int i) {
+            return i >> 1;
+        }
+
+        /* access modifiers changed from: package-private */
+        public int getGravityOffset(Child child, int i) {
+            return i >> 1;
+        }
+    };
     public static final Alignment END;
     public static final Alignment FILL = new Alignment() {
         public int getAlignmentValue(Child child, int i) {
@@ -82,7 +93,10 @@ public class TableLayout extends View {
         }
     };
     private static final Alignment LEADING;
+    public static final Alignment LEFT;
+    public static final Alignment RIGHT;
     public static final Alignment START;
+    public static final Alignment TOP;
     private static final Alignment TRAILING;
     static final Alignment UNDEFINED_ALIGNMENT = new Alignment() {
         public int getAlignmentValue(Child child, int i) {
@@ -95,9 +109,9 @@ public class TableLayout extends View {
         }
     };
     /* access modifiers changed from: private */
-    public Path backgroundPath;
+    public Path backgroundPath = new Path();
     private ArrayList<Child> cellsToFixHeight = new ArrayList<>();
-    private ArrayList<Child> childrens;
+    private ArrayList<Child> childrens = new ArrayList<>();
     private int colCount;
     /* access modifiers changed from: private */
     public TableLayoutDelegate delegate;
@@ -110,6 +124,7 @@ public class TableLayout extends View {
     public int itemPaddingLeft = AndroidUtilities.dp(8.0f);
     /* access modifiers changed from: private */
     public int itemPaddingTop = AndroidUtilities.dp(7.0f);
+    private Path linePath = new Path();
     private int mAlignmentMode = 1;
     private int mDefaultGap;
     private final Axis mHorizontalAxis = new Axis(true);
@@ -118,9 +133,9 @@ public class TableLayout extends View {
     private boolean mUseDefaultMargins = false;
     private final Axis mVerticalAxis = new Axis(false);
     /* access modifiers changed from: private */
-    public float[] radii;
+    public float[] radii = new float[8];
     /* access modifiers changed from: private */
-    public RectF rect;
+    public RectF rect = new RectF();
     private ArrayList<Point> rowSpans = new ArrayList<>();
     /* access modifiers changed from: private */
     public TextSelectionHelper.ArticleTextSelectionHelper textSelectionHelper;
@@ -139,11 +154,6 @@ public class TableLayout extends View {
 
     static boolean canStretch(int i) {
         return (i & 2) != 0;
-    }
-
-    static /* synthetic */ void access$1800(String str) {
-        handleInvalidParams(str);
-        throw null;
     }
 
     public class Child {
@@ -169,6 +179,12 @@ public class TableLayout extends View {
         public int textY;
         public int x;
         public int y;
+
+        static /* synthetic */ int access$1520(Child child, int i) {
+            int i2 = child.measuredHeight - i;
+            child.measuredHeight = i2;
+            return i2;
+        }
 
         public Child(int i) {
             this.index = i;
@@ -616,11 +632,6 @@ public class TableLayout extends View {
 
     public TableLayout(Context context, TableLayoutDelegate tableLayoutDelegate, TextSelectionHelper.ArticleTextSelectionHelper articleTextSelectionHelper) {
         super(context);
-        new Path();
-        this.backgroundPath = new Path();
-        this.rect = new RectF();
-        this.radii = new float[8];
-        this.childrens = new ArrayList<>();
         this.textSelectionHelper = articleTextSelectionHelper;
         setRowCount(Integer.MIN_VALUE);
         setColumnCount(Integer.MIN_VALUE);
@@ -732,8 +743,13 @@ public class TableLayout extends View {
 
     /* access modifiers changed from: package-private */
     public int getMargin1(Child child, boolean z, boolean z2) {
+        int i;
         LayoutParams layoutParams = child.getLayoutParams();
-        int i = z ? z2 ? layoutParams.leftMargin : layoutParams.rightMargin : z2 ? layoutParams.topMargin : layoutParams.bottomMargin;
+        if (z) {
+            i = z2 ? layoutParams.leftMargin : layoutParams.rightMargin;
+        } else {
+            i = z2 ? layoutParams.topMargin : layoutParams.bottomMargin;
+        }
         return i == Integer.MIN_VALUE ? getDefaultMargin(child, layoutParams, z, z2) : i;
     }
 
@@ -851,7 +867,8 @@ public class TableLayout extends View {
         }
     }
 
-    private static void handleInvalidParams(String str) {
+    /* access modifiers changed from: private */
+    public static void handleInvalidParams(String str) {
         throw new IllegalArgumentException(str + ". ");
     }
 
@@ -1092,7 +1109,7 @@ public class TableLayout extends View {
                                 }
                                 size2--;
                             }
-                            int unused = child5.measuredHeight = child5.measuredHeight - access$1500;
+                            Child.access$1520(child5, access$1500);
                             child5.measure(child5.measuredWidth, child5.measuredHeight, true);
                         } else if (child2.layoutParams.rowSpec.span.min < child5.layoutParams.rowSpec.span.min) {
                             child5.y -= access$1500;
@@ -1198,15 +1215,13 @@ public class TableLayout extends View {
         }
 
         public void setCount(int i) {
-            if (i == Integer.MIN_VALUE || i >= getMaxIndex()) {
-                this.definedCount = i;
-                return;
+            if (i != Integer.MIN_VALUE && i < getMaxIndex()) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(this.horizontal ? "column" : "row");
+                sb.append("Count must be greater than or equal to the maximum of all grid indices (and spans) defined in the LayoutParams of each child");
+                TableLayout.handleInvalidParams(sb.toString());
             }
-            StringBuilder sb = new StringBuilder();
-            sb.append(this.horizontal ? "column" : "row");
-            sb.append("Count must be greater than or equal to the maximum of all grid indices (and spans) defined in the LayoutParams of each child");
-            TableLayout.access$1800(sb.toString());
-            throw null;
+            this.definedCount = i;
         }
 
         public void setOrderPreserved(boolean z) {
@@ -1710,13 +1725,14 @@ public class TableLayout extends View {
 
     public static class LayoutParams extends ViewGroup.MarginLayoutParams {
         private static final Interval DEFAULT_SPAN;
+        private static final int DEFAULT_SPAN_SIZE;
         public Spec columnSpec;
         public Spec rowSpec;
 
         static {
             Interval interval = new Interval(Integer.MIN_VALUE, -NUM);
             DEFAULT_SPAN = interval;
-            interval.size();
+            DEFAULT_SPAN_SIZE = interval.size();
         }
 
         private LayoutParams(int i, int i2, int i3, int i4, int i5, int i6, Spec spec, Spec spec2) {
@@ -2091,21 +2107,23 @@ public class TableLayout extends View {
             }
         };
         TRAILING = r1;
+        TOP = r0;
+        BOTTOM = r1;
         START = r0;
         END = r1;
-        createSwitchingAlignment(r0);
-        createSwitchingAlignment(r1);
+        LEFT = createSwitchingAlignment(r0);
+        RIGHT = createSwitchingAlignment(r1);
     }
 
     private static Alignment createSwitchingAlignment(final Alignment alignment) {
         return new Alignment() {
             /* access modifiers changed from: package-private */
             public int getGravityOffset(Child child, int i) {
-                return alignment.getGravityOffset(child, i);
+                return Alignment.this.getGravityOffset(child, i);
             }
 
             public int getAlignmentValue(Child child, int i) {
-                return alignment.getAlignmentValue(child, i);
+                return Alignment.this.getAlignmentValue(child, i);
             }
         };
     }

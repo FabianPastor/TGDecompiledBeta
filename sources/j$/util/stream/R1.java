@@ -46,7 +46,7 @@ interface R1<T> {
 
         Object e();
 
-        void h(Object obj);
+        void g(Object obj);
 
         Spliterator.d spliterator();
     }
@@ -57,13 +57,13 @@ interface R1<T> {
 
     void forEach(Consumer consumer);
 
-    void j(Object[] objArr, int i);
+    void i(Object[] objArr, int i);
 
-    int o();
+    int n();
 
-    Object[] q(x xVar);
+    Object[] p(x xVar);
 
-    R1 r(long j, long j2, x xVar);
+    R1 q(long j, long j2, x xVar);
 
     Spliterator spliterator();
 }

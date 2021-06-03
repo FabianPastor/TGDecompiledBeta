@@ -176,7 +176,7 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
             if (z2) {
                 imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
             } else {
-                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document);
+                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document, tLRPC$StickerSetCovered.set.thumb_version);
             }
             ImageLocation imageLocation2 = imageLocation;
             if (!z2 || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {

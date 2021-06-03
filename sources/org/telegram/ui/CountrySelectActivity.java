@@ -86,9 +86,7 @@ public class CountrySelectActivity extends BaseFragment {
                 }
             }
         });
-        ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, NUM);
-        addItem.setIsSearchField(true);
-        addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 boolean unused = CountrySelectActivity.this.searching = true;
             }
@@ -108,8 +106,7 @@ public class CountrySelectActivity extends BaseFragment {
                     boolean unused = CountrySelectActivity.this.searchWas = true;
                 }
             }
-        });
-        addItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        }).setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.searching = false;
         this.searchWas = false;
         CountryAdapter countryAdapter = new CountryAdapter(context);
@@ -244,7 +241,7 @@ public class CountrySelectActivity extends BaseFragment {
             return null;
         }
 
-        public boolean isEnabled(int i, int i2) {
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
             return i2 < this.countries.get(this.sortedCountries.get(i)).size();
         }
 

@@ -198,7 +198,7 @@ public class StickerSetCell extends FrameLayout {
         if (z2) {
             imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
         } else {
-            imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document);
+            imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document, tLRPC$TL_messages_stickerSet.set.thumb_version);
         }
         if (!z2 || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
             if (imageLocation == null || imageLocation.imageType != 1) {

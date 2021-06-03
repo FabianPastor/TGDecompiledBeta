@@ -17,7 +17,7 @@ public class TLRPC$TL_photo extends TLRPC$Photo {
             int readInt323 = abstractSerializedData.readInt32(z);
             int i2 = 0;
             while (i2 < readInt323) {
-                TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(this.id, 0, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize != null) {
                     this.sizes.add(TLdeserialize);
                     i2++;
@@ -30,7 +30,7 @@ public class TLRPC$TL_photo extends TLRPC$Photo {
                 if (readInt324 == NUM) {
                     int readInt325 = abstractSerializedData.readInt32(z);
                     while (i < readInt325) {
-                        TLRPC$VideoSize TLdeserialize2 = TLRPC$VideoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                        TLRPC$VideoSize TLdeserialize2 = TLRPC$VideoSize.TLdeserialize(this.id, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z);
                         if (TLdeserialize2 != null) {
                             this.video_sizes.add(TLdeserialize2);
                             i++;

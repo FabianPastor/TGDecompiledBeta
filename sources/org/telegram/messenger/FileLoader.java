@@ -16,6 +16,7 @@ import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileUploadOperation;
 import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$ChatPhoto;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
 import org.telegram.tgnet.TLRPC$FileLocation;
@@ -38,6 +39,7 @@ import org.telegram.tgnet.TLRPC$TL_photoPathSize;
 import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$TL_secureFile;
 import org.telegram.tgnet.TLRPC$TL_videoSize;
+import org.telegram.tgnet.TLRPC$UserProfilePhoto;
 import org.telegram.tgnet.TLRPC$WebDocument;
 import org.telegram.tgnet.TLRPC$WebPage;
 
@@ -1470,6 +1472,10 @@ public class FileLoader extends BaseController {
     }
 
     public static File getPathToAttach(TLObject tLObject, String str, boolean z) {
+        return getPathToAttach(tLObject, (String) null, str, z);
+    }
+
+    public static File getPathToAttach(TLObject tLObject, String str, String str2, boolean z) {
         File directory;
         File file = null;
         if (z) {
@@ -1487,7 +1493,7 @@ public class FileLoader extends BaseController {
                     directory = getDirectory(3);
                 }
             } else if (tLObject instanceof TLRPC$Photo) {
-                return getPathToAttach(getClosestPhotoSizeWithSize(((TLRPC$Photo) tLObject).sizes, AndroidUtilities.getPhotoSize()), str, false);
+                return getPathToAttach(getClosestPhotoSizeWithSize(((TLRPC$Photo) tLObject).sizes, AndroidUtilities.getPhotoSize()), str2, false);
             } else {
                 if (tLObject instanceof TLRPC$PhotoSize) {
                     TLRPC$PhotoSize tLRPC$PhotoSize = (TLRPC$PhotoSize) tLObject;
@@ -1514,6 +1520,11 @@ public class FileLoader extends BaseController {
                     } else {
                         directory = getDirectory(0);
                     }
+                } else if ((tLObject instanceof TLRPC$UserProfilePhoto) || (tLObject instanceof TLRPC$ChatPhoto)) {
+                    if (str == null) {
+                        str = "s";
+                    }
+                    file = "s".equals(str) ? getDirectory(4) : getDirectory(0);
                 } else if (tLObject instanceof WebFile) {
                     WebFile webFile = (WebFile) tLObject;
                     if (webFile.mime_type.startsWith("image/")) {
@@ -1534,7 +1545,7 @@ public class FileLoader extends BaseController {
         if (file == null) {
             return new File("");
         }
-        return new File(file, getAttachFileName(tLObject, str));
+        return new File(file, getAttachFileName(tLObject, str2));
     }
 
     public static TLRPC$PhotoSize getClosestPhotoSizeWithSize(ArrayList<TLRPC$PhotoSize> arrayList, int i) {
@@ -1676,7 +1687,6 @@ public class FileLoader extends BaseController {
         if (str == null) {
             return "";
         }
-        str.hashCode();
         char c = 65535;
         switch (str.hashCode()) {
             case 187091926:
@@ -1732,19 +1742,23 @@ public class FileLoader extends BaseController {
     }
 
     public static String getAttachFileName(TLObject tLObject, String str) {
-        String str2 = "";
+        return getAttachFileName(tLObject, (String) null, str);
+    }
+
+    public static String getAttachFileName(TLObject tLObject, String str, String str2) {
+        String str3 = "";
         if (tLObject instanceof TLRPC$Document) {
             TLRPC$Document tLRPC$Document = (TLRPC$Document) tLObject;
             String documentFileName = getDocumentFileName(tLRPC$Document);
             int lastIndexOf = documentFileName.lastIndexOf(46);
             if (lastIndexOf != -1) {
-                str2 = documentFileName.substring(lastIndexOf);
+                str3 = documentFileName.substring(lastIndexOf);
             }
-            if (str2.length() <= 1) {
-                str2 = getExtensionByMimeType(tLRPC$Document.mime_type);
+            if (str3.length() <= 1) {
+                str3 = getExtensionByMimeType(tLRPC$Document.mime_type);
             }
-            if (str2.length() > 1) {
-                return tLRPC$Document.dc_id + "_" + tLRPC$Document.id + str2;
+            if (str3.length() > 1) {
+                return tLRPC$Document.dc_id + "_" + tLRPC$Document.id + str3;
             }
             return tLRPC$Document.dc_id + "_" + tLRPC$Document.id;
         } else if (tLObject instanceof SecureDocument) {
@@ -1760,48 +1774,90 @@ public class FileLoader extends BaseController {
             TLRPC$PhotoSize tLRPC$PhotoSize = (TLRPC$PhotoSize) tLObject;
             TLRPC$FileLocation tLRPC$FileLocation = tLRPC$PhotoSize.location;
             if (tLRPC$FileLocation == null || (tLRPC$FileLocation instanceof TLRPC$TL_fileLocationUnavailable)) {
-                return str2;
+                return str3;
             }
             StringBuilder sb = new StringBuilder();
             sb.append(tLRPC$PhotoSize.location.volume_id);
             sb.append("_");
             sb.append(tLRPC$PhotoSize.location.local_id);
             sb.append(".");
-            if (str == null) {
-                str = "jpg";
+            if (str2 == null) {
+                str2 = "jpg";
             }
-            sb.append(str);
+            sb.append(str2);
             return sb.toString();
         } else if (tLObject instanceof TLRPC$TL_videoSize) {
             TLRPC$TL_videoSize tLRPC$TL_videoSize = (TLRPC$TL_videoSize) tLObject;
             TLRPC$FileLocation tLRPC$FileLocation2 = tLRPC$TL_videoSize.location;
             if (tLRPC$FileLocation2 == null || (tLRPC$FileLocation2 instanceof TLRPC$TL_fileLocationUnavailable)) {
-                return str2;
+                return str3;
             }
             StringBuilder sb2 = new StringBuilder();
             sb2.append(tLRPC$TL_videoSize.location.volume_id);
             sb2.append("_");
             sb2.append(tLRPC$TL_videoSize.location.local_id);
             sb2.append(".");
-            if (str == null) {
-                str = "mp4";
+            if (str2 == null) {
+                str2 = "mp4";
             }
-            sb2.append(str);
+            sb2.append(str2);
             return sb2.toString();
-        } else if (!(tLObject instanceof TLRPC$FileLocation) || (tLObject instanceof TLRPC$TL_fileLocationUnavailable)) {
-            return str2;
-        } else {
+        } else if (tLObject instanceof TLRPC$FileLocation) {
+            if (tLObject instanceof TLRPC$TL_fileLocationUnavailable) {
+                return str3;
+            }
             TLRPC$FileLocation tLRPC$FileLocation3 = (TLRPC$FileLocation) tLObject;
             StringBuilder sb3 = new StringBuilder();
             sb3.append(tLRPC$FileLocation3.volume_id);
             sb3.append("_");
             sb3.append(tLRPC$FileLocation3.local_id);
             sb3.append(".");
-            if (str == null) {
-                str = "jpg";
+            if (str2 == null) {
+                str2 = "jpg";
             }
-            sb3.append(str);
+            sb3.append(str2);
             return sb3.toString();
+        } else if (tLObject instanceof TLRPC$UserProfilePhoto) {
+            if (str == null) {
+                str = "s";
+            }
+            TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = (TLRPC$UserProfilePhoto) tLObject;
+            if (tLRPC$UserProfilePhoto.photo_small == null) {
+                StringBuilder sb4 = new StringBuilder();
+                sb4.append(tLRPC$UserProfilePhoto.photo_id);
+                sb4.append("_");
+                sb4.append(str);
+                sb4.append(".");
+                if (str2 == null) {
+                    str2 = "jpg";
+                }
+                sb4.append(str2);
+                return sb4.toString();
+            } else if ("s".equals(str)) {
+                return getAttachFileName(tLRPC$UserProfilePhoto.photo_small, str2);
+            } else {
+                return getAttachFileName(tLRPC$UserProfilePhoto.photo_big, str2);
+            }
+        } else if (!(tLObject instanceof TLRPC$ChatPhoto)) {
+            return str3;
+        } else {
+            TLRPC$ChatPhoto tLRPC$ChatPhoto = (TLRPC$ChatPhoto) tLObject;
+            if (tLRPC$ChatPhoto.photo_small == null) {
+                StringBuilder sb5 = new StringBuilder();
+                sb5.append(tLRPC$ChatPhoto.photo_id);
+                sb5.append("_");
+                sb5.append(str);
+                sb5.append(".");
+                if (str2 == null) {
+                    str2 = "jpg";
+                }
+                sb5.append(str2);
+                return sb5.toString();
+            } else if ("s".equals(str)) {
+                return getAttachFileName(tLRPC$ChatPhoto.photo_small, str2);
+            } else {
+                return getAttachFileName(tLRPC$ChatPhoto.photo_big, str2);
+            }
         }
     }
 
@@ -1897,6 +1953,28 @@ public class FileLoader extends BaseController {
         return true;
     }
 
+    public static boolean isSamePhoto(TLObject tLObject, TLObject tLObject2) {
+        if ((tLObject == null && tLObject2 != null) || (tLObject != null && tLObject2 == null)) {
+            return false;
+        }
+        if (tLObject == null && tLObject2 == null) {
+            return true;
+        }
+        if (tLObject.getClass() != tLObject2.getClass()) {
+            return false;
+        }
+        if (tLObject instanceof TLRPC$UserProfilePhoto) {
+            if (((TLRPC$UserProfilePhoto) tLObject).photo_id == ((TLRPC$UserProfilePhoto) tLObject2).photo_id) {
+                return true;
+            }
+            return false;
+        } else if (!(tLObject instanceof TLRPC$ChatPhoto) || ((TLRPC$ChatPhoto) tLObject).photo_id != ((TLRPC$ChatPhoto) tLObject2).photo_id) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public static boolean isSamePhoto(TLRPC$FileLocation tLRPC$FileLocation, TLRPC$Photo tLRPC$Photo) {
         if (tLRPC$FileLocation != null && (tLRPC$Photo instanceof TLRPC$TL_photo)) {
             int size = tLRPC$Photo.sizes.size();
@@ -1908,5 +1986,18 @@ public class FileLoader extends BaseController {
             }
         }
         return false;
+    }
+
+    public static long getPhotoId(TLObject tLObject) {
+        if (tLObject instanceof TLRPC$Photo) {
+            return ((TLRPC$Photo) tLObject).id;
+        }
+        if (tLObject instanceof TLRPC$ChatPhoto) {
+            return ((TLRPC$ChatPhoto) tLObject).photo_id;
+        }
+        if (tLObject instanceof TLRPC$UserProfilePhoto) {
+            return ((TLRPC$UserProfilePhoto) tLObject).photo_id;
+        }
+        return 0;
     }
 }

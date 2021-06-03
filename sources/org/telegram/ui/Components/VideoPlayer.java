@@ -1049,6 +1049,8 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     }
 
     private class VisualizerBufferSink implements TeeAudioProcessor.AudioBufferSink {
+        private final int BUFFER_SIZE = 1024;
+        private final int MAX_BUFFER_SIZE = 8192;
         ByteBuffer byteBuffer;
         FourierTransform.FFT fft = new FourierTransform.FFT(1024, 48000.0f);
         long lastUpdateTime;

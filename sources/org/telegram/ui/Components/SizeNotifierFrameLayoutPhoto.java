@@ -12,6 +12,7 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
     private SizeNotifierFrameLayoutPhotoDelegate delegate;
     private int keyboardHeight;
     private Rect rect = new Rect();
+    private boolean useSmoothKeyboard;
     private boolean withoutWindow;
 
     public interface SizeNotifierFrameLayoutPhotoDelegate {
@@ -20,6 +21,7 @@ public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
 
     public SizeNotifierFrameLayoutPhoto(Context context, boolean z) {
         super(context);
+        this.useSmoothKeyboard = z;
     }
 
     public void setDelegate(SizeNotifierFrameLayoutPhotoDelegate sizeNotifierFrameLayoutPhotoDelegate) {

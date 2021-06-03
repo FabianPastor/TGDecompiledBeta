@@ -232,9 +232,7 @@ public class ViewPagerFixed extends FrameLayout {
         if (this.adapter != null && (tabsView2 = this.tabsView) != null) {
             tabsView2.removeTabs();
             for (int i = 0; i < this.adapter.getItemCount(); i++) {
-                TabsView tabsView3 = this.tabsView;
-                this.adapter.getItemId(i);
-                tabsView3.addTab(i, this.adapter.getItemTitle(i));
+                this.tabsView.addTab(this.adapter.getItemId(i), this.adapter.getItemTitle(i));
             }
         }
     }
@@ -637,18 +635,17 @@ public class ViewPagerFixed extends FrameLayout {
                     if (elapsedRealtime > 17) {
                         elapsedRealtime = 17;
                     }
+                    TabsView.access$2816(TabsView.this, ((float) elapsedRealtime) / 200.0f);
                     TabsView tabsView = TabsView.this;
-                    float unused = tabsView.animationTime = tabsView.animationTime + (((float) elapsedRealtime) / 200.0f);
-                    TabsView tabsView2 = TabsView.this;
-                    tabsView2.setAnimationIdicatorProgress(tabsView2.interpolator.getInterpolation(TabsView.this.animationTime));
+                    tabsView.setAnimationIdicatorProgress(tabsView.interpolator.getInterpolation(TabsView.this.animationTime));
                     if (TabsView.this.animationTime > 1.0f) {
-                        float unused2 = TabsView.this.animationTime = 1.0f;
+                        float unused = TabsView.this.animationTime = 1.0f;
                     }
                     if (TabsView.this.animationTime < 1.0f) {
                         AndroidUtilities.runOnUIThread(TabsView.this.animationRunnable);
                         return;
                     }
-                    boolean unused3 = TabsView.this.animatingIndicator = false;
+                    boolean unused2 = TabsView.this.animatingIndicator = false;
                     TabsView.this.setEnabled(true);
                     if (TabsView.this.delegate != null) {
                         TabsView.this.delegate.onPageScrolled(1.0f);
@@ -672,6 +669,7 @@ public class ViewPagerFixed extends FrameLayout {
         public Paint deletePaint = new TextPaint(1);
         /* access modifiers changed from: private */
         public float editingAnimationProgress;
+        private boolean editingForwardAnimation;
         /* access modifiers changed from: private */
         public float editingStartAnimationProgress;
         private float hideProgress;
@@ -679,6 +677,7 @@ public class ViewPagerFixed extends FrameLayout {
         private boolean ignoreLayout;
         /* access modifiers changed from: private */
         public CubicBezierInterpolator interpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
+        private boolean invalidated;
         /* access modifiers changed from: private */
         public boolean isEditing;
         /* access modifiers changed from: private */
@@ -726,6 +725,12 @@ public class ViewPagerFixed extends FrameLayout {
         }
 
         static /* synthetic */ void lambda$setIsEditing$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        }
+
+        static /* synthetic */ float access$2816(TabsView tabsView, float f) {
+            float f2 = tabsView.animationTime + f;
+            tabsView.animationTime = f2;
+            return f2;
         }
 
         private static class Tab {
@@ -1344,6 +1349,7 @@ public class ViewPagerFixed extends FrameLayout {
                     this.ignoreLayout = false;
                 }
                 updateTabsWidths();
+                this.invalidated = false;
             }
             super.onMeasure(i, i2);
         }
@@ -1444,6 +1450,7 @@ public class ViewPagerFixed extends FrameLayout {
 
         public void setIsEditing(boolean z) {
             this.isEditing = z;
+            this.editingForwardAnimation = true;
             this.listView.invalidateViews();
             invalidate();
             if (!this.isEditing && this.orderChanged) {

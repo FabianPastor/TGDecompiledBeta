@@ -14,20 +14,26 @@ public class ID3v2Info extends AudioInfo {
     private final Level debugLevel;
 
     static class AttachedPicture {
+        final String description;
         final byte[] imageData;
+        final String imageType;
         final byte type;
 
         public AttachedPicture(byte b, String str, String str2, byte[] bArr) {
             this.type = b;
+            this.description = str;
+            this.imageType = str2;
             this.imageData = bArr;
         }
     }
 
     static class CommentOrUnsynchronizedLyrics {
         final String description;
+        final String language;
         final String text;
 
         public CommentOrUnsynchronizedLyrics(String str, String str2, String str3) {
+            this.language = str;
             this.description = str2;
             this.text = str3;
         }
@@ -50,7 +56,7 @@ public class ID3v2Info extends AudioInfo {
         if (isID3v2StartPosition(inputStream)) {
             ID3v2TagHeader iD3v2TagHeader = new ID3v2TagHeader(inputStream);
             this.brand = "ID3";
-            String.format("2.%d.%d", new Object[]{Integer.valueOf(iD3v2TagHeader.getVersion()), Integer.valueOf(iD3v2TagHeader.getRevision())});
+            this.version = String.format("2.%d.%d", new Object[]{Integer.valueOf(iD3v2TagHeader.getVersion()), Integer.valueOf(iD3v2TagHeader.getRevision())});
             ID3v2TagBody tagBody = iD3v2TagHeader.tagBody(inputStream);
             while (true) {
                 try {

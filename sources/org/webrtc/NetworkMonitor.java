@@ -202,17 +202,13 @@ public class NetworkMonitor {
     }
 
     private void updateObserverActiveNetworkList(long j) {
-        List<NetworkChangeDetector.NetworkInformation> list;
+        List<NetworkChangeDetector.NetworkInformation> activeNetworkList;
         synchronized (this.networkChangeDetectorLock) {
             NetworkChangeDetector networkChangeDetector2 = this.networkChangeDetector;
-            if (networkChangeDetector2 == null) {
-                list = null;
-            } else {
-                list = networkChangeDetector2.getActiveNetworkList();
-            }
+            activeNetworkList = networkChangeDetector2 == null ? null : networkChangeDetector2.getActiveNetworkList();
         }
-        if (list != null && list.size() != 0) {
-            nativeNotifyOfActiveNetworkList(j, (NetworkChangeDetector.NetworkInformation[]) list.toArray(new NetworkChangeDetector.NetworkInformation[list.size()]));
+        if (activeNetworkList != null && activeNetworkList.size() != 0) {
+            nativeNotifyOfActiveNetworkList(j, (NetworkChangeDetector.NetworkInformation[]) activeNetworkList.toArray(new NetworkChangeDetector.NetworkInformation[activeNetworkList.size()]));
         }
     }
 

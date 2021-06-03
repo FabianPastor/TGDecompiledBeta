@@ -52,6 +52,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     public int connectionsHeaderRow;
     /* access modifiers changed from: private */
     public int currentConnectionState;
+    private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     /* access modifiers changed from: private */
@@ -263,7 +264,10 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         this.listView = recyclerListView;
         ((DefaultItemAnimator) recyclerListView.getItemAnimator()).setDelayAnimations(false);
         this.listView.setVerticalScrollBarEnabled(false);
-        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+        RecyclerListView recyclerListView2 = this.listView;
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
+        this.layoutManager = linearLayoutManager;
+        recyclerListView2.setLayoutManager(linearLayoutManager);
         ((FrameLayout) this.fragmentView).addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
@@ -396,7 +400,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                ProxyListActivity.this.lambda$null$1$ProxyListActivity(this.f$1, this.f$2, dialogInterface, i);
+                ProxyListActivity.this.lambda$createView$1$ProxyListActivity(this.f$1, this.f$2, dialogInterface, i);
             }
         });
         showDialog(builder.create());
@@ -404,8 +408,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$ProxyListActivity(SharedConfig.ProxyInfo proxyInfo, int i, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$ProxyListActivity(SharedConfig.ProxyInfo proxyInfo, int i, DialogInterface dialogInterface, int i2) {
         SharedConfig.deleteProxy(proxyInfo);
         if (SharedConfig.currentProxy == null) {
             this.useProxyForCalls = false;
@@ -503,7 +507,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                             }
 
                             public final void run() {
-                                ProxyListActivity.lambda$null$3(SharedConfig.ProxyInfo.this, this.f$1);
+                                ProxyListActivity.lambda$checkProxyList$3(SharedConfig.ProxyInfo.this, this.f$1);
                             }
                         });
                     }
@@ -512,7 +516,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         }
     }
 
-    static /* synthetic */ void lambda$null$3(SharedConfig.ProxyInfo proxyInfo, long j) {
+    static /* synthetic */ void lambda$checkProxyList$3(SharedConfig.ProxyInfo proxyInfo, long j) {
         proxyInfo.availableCheckTime = SystemClock.elapsedRealtime();
         proxyInfo.checking = false;
         if (j == -1) {

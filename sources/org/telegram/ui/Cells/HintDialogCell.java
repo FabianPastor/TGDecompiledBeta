@@ -22,19 +22,18 @@ import org.telegram.ui.Components.LayoutHelper;
 public class HintDialogCell extends FrameLayout {
     private AvatarDrawable avatarDrawable = new AvatarDrawable();
     CounterView counterView;
-    private int currentAccount;
+    private int currentAccount = UserConfig.selectedAccount;
     private TLRPC$User currentUser;
     private long dialog_id;
     private BackupImageView imageView;
     private int lastUnreadCount;
     private TextView nameTextView;
+    private RectF rect = new RectF();
     float showOnlineProgress;
     boolean wasDraw;
 
     public HintDialogCell(Context context) {
         super(context);
-        new RectF();
-        this.currentAccount = UserConfig.selectedAccount;
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(27.0f));

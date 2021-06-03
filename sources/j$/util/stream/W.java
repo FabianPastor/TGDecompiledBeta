@@ -4,9 +4,7 @@ import j$.util.function.J;
 import j$.util.stream.CLASSNAMEu1;
 
 public final /* synthetic */ class W implements J {
-
-    /* renamed from: a  reason: collision with root package name */
-    public static final /* synthetic */ W var_a = new W();
+    public static final /* synthetic */ W a = new W();
 
     private /* synthetic */ W() {
     }

@@ -7,6 +7,7 @@ public abstract class TLRPC$ChatPhoto extends TLObject {
     public int flags;
     public boolean has_video;
     public TLRPC$FileLocation photo_big;
+    public long photo_id;
     public TLRPC$FileLocation photo_small;
     public BitmapDrawable strippedBitmap;
     public byte[] stripped_thumb;
@@ -17,6 +18,9 @@ public abstract class TLRPC$ChatPhoto extends TLObject {
             case -770990276:
                 tLRPC$ChatPhoto = new TLRPC$TL_chatPhoto_layer126();
                 break;
+            case 476978193:
+                tLRPC$ChatPhoto = new TLRPC$TL_chatPhoto();
+                break;
             case 935395612:
                 tLRPC$ChatPhoto = new TLRPC$TL_chatPhotoEmpty();
                 break;
@@ -24,7 +28,7 @@ public abstract class TLRPC$ChatPhoto extends TLObject {
                 tLRPC$ChatPhoto = new TLRPC$TL_chatPhoto_layer115();
                 break;
             case 1200680453:
-                tLRPC$ChatPhoto = new TLRPC$TL_chatPhoto();
+                tLRPC$ChatPhoto = new TLRPC$TL_chatPhoto_layer127();
                 break;
             case 1632839530:
                 tLRPC$ChatPhoto = new TLRPC$TL_chatPhoto_layer97();

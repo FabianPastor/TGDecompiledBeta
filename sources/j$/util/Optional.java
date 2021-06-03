@@ -1,24 +1,23 @@
 package j$.util;
 
+import j$.time.a;
 import java.util.NoSuchElementException;
 
 public final class Optional<T> {
-    private static final Optional b = new Optional();
-
-    /* renamed from: a  reason: collision with root package name */
-    private final Object var_a;
+    private static final Optional a = new Optional();
+    private final Object b;
 
     private Optional() {
-        this.var_a = null;
+        this.b = null;
     }
 
     private Optional(Object obj) {
         obj.getClass();
-        this.var_a = obj;
+        this.b = obj;
     }
 
     public static Optional empty() {
-        return b;
+        return a;
     }
 
     public static Optional of(Object obj) {
@@ -32,11 +31,11 @@ public final class Optional<T> {
         if (!(obj instanceof Optional)) {
             return false;
         }
-        return k.r(this.var_a, ((Optional) obj).var_a);
+        return a.u(this.b, ((Optional) obj).b);
     }
 
     public Object get() {
-        Object obj = this.var_a;
+        Object obj = this.b;
         if (obj != null) {
             return obj;
         }
@@ -44,19 +43,19 @@ public final class Optional<T> {
     }
 
     public int hashCode() {
-        Object obj = this.var_a;
-        if (obj != null) {
-            return obj.hashCode();
+        Object obj = this.b;
+        if (obj == null) {
+            return 0;
         }
-        return 0;
+        return obj.hashCode();
     }
 
     public boolean isPresent() {
-        return this.var_a != null;
+        return this.b != null;
     }
 
     public String toString() {
-        Object obj = this.var_a;
+        Object obj = this.b;
         if (obj == null) {
             return "Optional.empty";
         }

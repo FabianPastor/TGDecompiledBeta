@@ -33,6 +33,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,8 +44,10 @@ import java.util.Iterator;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.DialogObject;
+import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
@@ -123,6 +126,7 @@ import org.telegram.ui.Components.ProxyDrawable;
 import org.telegram.ui.Components.PullForegroundDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RLottieImageView;
+import org.telegram.ui.Components.RadialProgress2;
 import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
 import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
 import org.telegram.ui.Components.RecyclerListView;
@@ -138,6 +142,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     /* access modifiers changed from: private */
     public static final Interpolator interpolator = $$Lambda$DialogsActivity$xOEuGfWASgHbeYQu20ZPCmNt81M.INSTANCE;
     public static float viewOffset = 0.0f;
+    private final String ACTION_MODE_SEARCH_DIALOGS_TAG = "search_dialogs_action_mode";
     public final Property<DialogsActivity, Float> SCROLL_Y = new AnimationProperties.FloatProperty<DialogsActivity>("animationValue") {
         public void setValue(DialogsActivity dialogsActivity, float f) {
             dialogsActivity.setScrollY(f);
@@ -155,6 +160,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     private String addToGroupAlertString;
     /* access modifiers changed from: private */
     public float additionalFloatingTranslation;
+    /* access modifiers changed from: private */
+    public float additionalFloatingTranslation2;
     /* access modifiers changed from: private */
     public float additionalOffset;
     private boolean afterSignup;
@@ -383,7 +390,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     /* access modifiers changed from: private */
     public UndoView[] undoView = new UndoView[2];
     /* access modifiers changed from: private */
+    public FrameLayout updateLayout;
+    /* access modifiers changed from: private */
+    public AnimatorSet updateLayoutAnimator;
+    /* access modifiers changed from: private */
+    public RadialProgress2 updateLayoutIcon;
+    /* access modifiers changed from: private */
     public boolean updatePullAfterScroll;
+    /* access modifiers changed from: private */
+    public TextView updateTextView;
     /* access modifiers changed from: private */
     public ViewPage[] viewPages;
     /* access modifiers changed from: private */
@@ -395,27 +410,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList<Long> arrayList, CharSequence charSequence, boolean z);
     }
 
-    static /* synthetic */ boolean lambda$createActionMode$9(View view, MotionEvent motionEvent) {
+    static /* synthetic */ boolean lambda$createActionMode$10(View view, MotionEvent motionEvent) {
         return true;
     }
 
     static /* synthetic */ float lambda$static$0(float f) {
         float f2 = f - 1.0f;
         return (f2 * f2 * f2 * f2 * f2) + 1.0f;
-    }
-
-    public void setShowSearch(String str, int i) {
-        if (!this.searching) {
-            this.initialSearchType = i;
-            this.actionBar.openSearchField(str, false);
-            return;
-        }
-        if (!this.searchItem.getSearchField().getText().toString().equals(str)) {
-            this.searchItem.getSearchField().setText(str);
-        }
-        if (this.searchViewPager.getTabsView().getCurrentTabId() != i) {
-            this.searchViewPager.getTabsView().scrollToTab(i, i);
-        }
     }
 
     private class ViewPage extends FrameLayout {
@@ -460,7 +461,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             return i;
         }
 
-        public ViewPage(DialogsActivity dialogsActivity, Context context) {
+        public ViewPage(Context context) {
             super(context);
         }
 
@@ -1357,6 +1358,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         private boolean firstLayout = true;
         private boolean ignoreLayout;
         private int lastListPadding;
+        private int lastTop;
         Paint paint = new Paint();
         private final ViewPage parentPage;
         RectF rectF = new RectF();
@@ -1523,6 +1525,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         public void onLayout(boolean z, int i, int i2, int i3, int i4) {
             super.onLayout(z, i, i2, i3, i4);
             this.lastListPadding = getPaddingTop();
+            this.lastTop = i2;
             float unused = DialogsActivity.this.scrollAdditionalOffset = 0.0f;
             if (!(DialogsActivity.this.dialogRemoveFinished == 0 && DialogsActivity.this.dialogInsertFinished == 0 && DialogsActivity.this.dialogChangeFinished == 0) && !this.parentPage.dialogsItemAnimator.isRunning()) {
                 DialogsActivity.this.onDialogAnimationFinished();
@@ -1635,45 +1638,43 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 View findViewByPosition = (linearLayoutManager = (LinearLayoutManager) getLayoutManager()).findViewByPosition(findFirstVisibleItemPosition);
                 int dp = (int) (((float) AndroidUtilities.dp(SharedConfig.useThreeLinesLayout ? 78.0f : 72.0f)) * 0.85f);
                 int top = (findViewByPosition.getTop() - paddingTop) + findViewByPosition.getMeasuredHeight();
-                if (findViewByPosition != null) {
-                    long currentTimeMillis = System.currentTimeMillis() - DialogsActivity.this.startArchivePullingTime;
-                    if (top < dp || currentTimeMillis < 200) {
-                        boolean unused6 = DialogsActivity.this.disableActionBarScrolling = true;
-                        smoothScrollBy(0, top, CubicBezierInterpolator.EASE_OUT_QUINT);
-                        int unused7 = this.parentPage.archivePullViewState = 2;
-                    } else if (this.parentPage.archivePullViewState != 1) {
-                        if (getViewOffset() == 0.0f) {
-                            boolean unused8 = DialogsActivity.this.disableActionBarScrolling = true;
-                            smoothScrollBy(0, findViewByPosition.getTop() - paddingTop, CubicBezierInterpolator.EASE_OUT_QUINT);
-                        }
-                        if (!DialogsActivity.this.canShowHiddenArchive) {
-                            boolean unused9 = DialogsActivity.this.canShowHiddenArchive = true;
-                            performHapticFeedback(3, 2);
-                            if (this.parentPage.pullForegroundDrawable != null) {
-                                this.parentPage.pullForegroundDrawable.colorize(true);
-                            }
-                        }
-                        ((DialogCell) findViewByPosition).startOutAnimation();
-                        int unused10 = this.parentPage.archivePullViewState = 1;
+                long currentTimeMillis = System.currentTimeMillis() - DialogsActivity.this.startArchivePullingTime;
+                if (top < dp || currentTimeMillis < 200) {
+                    boolean unused6 = DialogsActivity.this.disableActionBarScrolling = true;
+                    smoothScrollBy(0, top, CubicBezierInterpolator.EASE_OUT_QUINT);
+                    int unused7 = this.parentPage.archivePullViewState = 2;
+                } else if (this.parentPage.archivePullViewState != 1) {
+                    if (getViewOffset() == 0.0f) {
+                        boolean unused8 = DialogsActivity.this.disableActionBarScrolling = true;
+                        smoothScrollBy(0, findViewByPosition.getTop() - paddingTop, CubicBezierInterpolator.EASE_OUT_QUINT);
                     }
-                    if (getViewOffset() != 0.0f) {
-                        ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{getViewOffset(), 0.0f});
-                        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                DialogsActivity.DialogsRecyclerView.this.lambda$onTouchEvent$0$DialogsActivity$DialogsRecyclerView(valueAnimator);
-                            }
-                        });
-                        ofFloat.setDuration(Math.max(100, (long) (350.0f - ((getViewOffset() / ((float) PullForegroundDrawable.getMaxOverscroll())) * 120.0f))));
-                        ofFloat.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
-                        setScrollEnabled(false);
-                        ofFloat.addListener(new AnimatorListenerAdapter() {
-                            public void onAnimationEnd(Animator animator) {
-                                super.onAnimationEnd(animator);
-                                DialogsRecyclerView.this.setScrollEnabled(true);
-                            }
-                        });
-                        ofFloat.start();
+                    if (!DialogsActivity.this.canShowHiddenArchive) {
+                        boolean unused9 = DialogsActivity.this.canShowHiddenArchive = true;
+                        performHapticFeedback(3, 2);
+                        if (this.parentPage.pullForegroundDrawable != null) {
+                            this.parentPage.pullForegroundDrawable.colorize(true);
+                        }
                     }
+                    ((DialogCell) findViewByPosition).startOutAnimation();
+                    int unused10 = this.parentPage.archivePullViewState = 1;
+                }
+                if (getViewOffset() != 0.0f) {
+                    ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{getViewOffset(), 0.0f});
+                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            DialogsActivity.DialogsRecyclerView.this.lambda$onTouchEvent$0$DialogsActivity$DialogsRecyclerView(valueAnimator);
+                        }
+                    });
+                    ofFloat.setDuration(Math.max(100, (long) (350.0f - ((getViewOffset() / ((float) PullForegroundDrawable.getMaxOverscroll())) * 120.0f))));
+                    ofFloat.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
+                    setScrollEnabled(false);
+                    ofFloat.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            super.onAnimationEnd(animator);
+                            DialogsRecyclerView.this.setScrollEnabled(true);
+                        }
+                    });
+                    ofFloat.start();
                 }
             }
             return onTouchEvent;
@@ -1738,7 +1739,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     if (view2 instanceof DialogCell) {
                         DialogCell dialogCell = (DialogCell) view2;
                         long dialogId = dialogCell.getDialogId();
-                        if (DialogsActivity.this.actionBar.isActionModeShowed()) {
+                        MessagesController.DialogFilter dialogFilter = null;
+                        if (DialogsActivity.this.actionBar.isActionModeShowed((String) null)) {
                             TLRPC$Dialog tLRPC$Dialog2 = DialogsActivity.this.getMessagesController().dialogs_dict.get(dialogId);
                             if (!DialogsActivity.this.allowMoving || tLRPC$Dialog2 == null || !DialogsActivity.this.isDialogPinned(tLRPC$Dialog2) || DialogObject.isFolderDialogId(dialogId)) {
                                 return 0;
@@ -1750,7 +1752,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         } else if (!(DialogsActivity.this.filterTabsView != null && DialogsActivity.this.filterTabsView.getVisibility() == 0 && SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 5) && DialogsActivity.this.allowSwipeDuringCurrentTouch && (!((dialogId == ((long) DialogsActivity.this.getUserConfig().clientUserId) || dialogId == 777000) && SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 2) && (!DialogsActivity.this.getMessagesController().isPromoDialog(dialogId, false) || DialogsActivity.this.getMessagesController().promoDialogType == 1))) {
                             boolean z = DialogsActivity.this.folderId == 0 && (SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 3 || SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 1 || SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 0 || SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 4);
                             if (SharedConfig.getChatSwipeAction(DialogsActivity.this.currentAccount) == 1) {
-                                MessagesController.DialogFilter dialogFilter = null;
                                 if (DialogsActivity.this.viewPages[0].dialogsType == 7 || DialogsActivity.this.viewPages[0].dialogsType == 8) {
                                     dialogFilter = DialogsActivity.this.getMessagesController().selectedDialogFilter[DialogsActivity.this.viewPages[0].dialogsType == 8 ? (char) 1 : 0];
                                 }
@@ -1982,7 +1983,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         }
 
                         public final void run() {
-                            DialogsActivity.SwipeController.this.lambda$null$0$DialogsActivity$SwipeController(this.f$1, this.f$2);
+                            DialogsActivity.SwipeController.this.lambda$onSwiped$0$DialogsActivity$SwipeController(this.f$1, this.f$2);
                         }
                     });
                 }
@@ -1994,8 +1995,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$DialogsActivity$SwipeController(TLRPC$Dialog tLRPC$Dialog, int i) {
+        /* renamed from: lambda$onSwiped$0 */
+        public /* synthetic */ void lambda$onSwiped$0$DialogsActivity$SwipeController(TLRPC$Dialog tLRPC$Dialog, int i) {
             boolean unused = DialogsActivity.this.dialogsListFrozen = true;
             DialogsActivity.this.getMessagesController().addDialogToFolder(tLRPC$Dialog.id, 0, i, 0);
             boolean unused2 = DialogsActivity.this.dialogsListFrozen = false;
@@ -2118,7 +2119,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             getNotificationCenter().addObserver(this, NotificationCenter.needDeleteDialog);
             getNotificationCenter().addObserver(this, NotificationCenter.folderBecomeEmpty);
             getNotificationCenter().addObserver(this, NotificationCenter.newSuggestionsAvailable);
+            getNotificationCenter().addObserver(this, NotificationCenter.fileDidLoad);
+            getNotificationCenter().addObserver(this, NotificationCenter.fileDidFailToLoad);
+            getNotificationCenter().addObserver(this, NotificationCenter.fileLoadProgressChanged);
             NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didSetPasscode);
+            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.appUpdateAvailable);
         }
         getNotificationCenter().addObserver(this, NotificationCenter.messagesDeleted);
         getNotificationCenter().addObserver(this, NotificationCenter.didClearDatabase);
@@ -2176,7 +2181,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             getNotificationCenter().removeObserver(this, NotificationCenter.folderBecomeEmpty);
             getNotificationCenter().removeObserver(this, NotificationCenter.newSuggestionsAvailable);
             getNotificationCenter().removeObserver(this, NotificationCenter.messagesDeleted);
+            getNotificationCenter().removeObserver(this, NotificationCenter.fileDidLoad);
+            getNotificationCenter().removeObserver(this, NotificationCenter.fileDidFailToLoad);
+            getNotificationCenter().removeObserver(this, NotificationCenter.fileLoadProgressChanged);
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didSetPasscode);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.appUpdateAvailable);
         }
         getNotificationCenter().removeObserver(this, NotificationCenter.didClearDatabase);
         ChatActivityEnterView chatActivityEnterView = this.commentView;
@@ -2224,25 +2233,25 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         return r0;
     }
 
-    /* JADX WARNING: type inference failed for: r12v1, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r12v1, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r12v7 */
     /* JADX WARNING: type inference failed for: r12v8 */
-    /* JADX WARNING: Removed duplicated region for block: B:171:0x07ab  */
-    /* JADX WARNING: Removed duplicated region for block: B:174:0x07b8  */
-    /* JADX WARNING: Removed duplicated region for block: B:181:0x07d0 A[LOOP:2: B:180:0x07ce->B:181:0x07d0, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:184:0x07f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:192:0x0868  */
-    /* JADX WARNING: Removed duplicated region for block: B:193:0x086b  */
-    /* JADX WARNING: Removed duplicated region for block: B:196:0x0878  */
-    /* JADX WARNING: Removed duplicated region for block: B:204:0x08f9  */
-    /* JADX WARNING: Removed duplicated region for block: B:205:0x0905  */
-    /* JADX WARNING: Removed duplicated region for block: B:213:0x092e  */
+    /* JADX WARNING: Removed duplicated region for block: B:171:0x07c1  */
+    /* JADX WARNING: Removed duplicated region for block: B:174:0x07ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:185:0x080a  */
+    /* JADX WARNING: Removed duplicated region for block: B:189:0x08a9 A[LOOP:2: B:188:0x08a7->B:189:0x08a9, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:192:0x08d0  */
+    /* JADX WARNING: Removed duplicated region for block: B:200:0x0941  */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x0944  */
+    /* JADX WARNING: Removed duplicated region for block: B:204:0x0951  */
+    /* JADX WARNING: Removed duplicated region for block: B:212:0x09d2  */
+    /* JADX WARNING: Removed duplicated region for block: B:213:0x09de  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public android.view.View createView(android.content.Context r40) {
+    public android.view.View createView(android.content.Context r42) {
         /*
-            r39 = this;
-            r10 = r39
-            r11 = r40
+            r41 = this;
+            r10 = r41
+            r11 = r42
             r12 = 0
             r10.searching = r12
             r10.searchWas = r12
@@ -2250,7 +2259,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r10.pacmanAnimation = r13
             java.util.ArrayList<java.lang.Long> r0 = r10.selectedDialogs
             r0.clear()
-            android.view.ViewConfiguration r0 = android.view.ViewConfiguration.get(r40)
+            android.view.ViewConfiguration r0 = android.view.ViewConfiguration.get(r42)
             int r0 = r0.getScaledMaximumFlingVelocity()
             r10.maximumVelocity = r0
             org.telegram.ui.-$$Lambda$DialogsActivity$Qx9c2SGTz8VEtmWATYZYK47zjCk r0 = new org.telegram.ui.-$$Lambda$DialogsActivity$Qx9c2SGTz8VEtmWATYZYK47zjCk
@@ -2259,7 +2268,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r6 = r0.createMenu()
             boolean r0 = r10.onlySelect
-            r14 = 2131625212(0x7f0e04fc, float:1.8877626E38)
+            r14 = 2131625228(0x7f0e050c, float:1.8877658E38)
             java.lang.String r15 = "Done"
             r9 = 0
             r8 = 2
@@ -2278,7 +2287,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r16 = org.telegram.ui.ActionBar.Theme.getColor(r0)
             r17 = 1
             r0 = r4
-            r1 = r40
+            r1 = r42
             r13 = r4
             r4 = r16
             r12 = 1
@@ -2312,12 +2321,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r10.proxyDrawable = r0
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.addItem((int) r8, (android.graphics.drawable.Drawable) r0)
             r10.proxyItem = r0
-            r1 = 2131627049(0x7f0e0CLASSNAME, float:1.8881351E38)
+            r1 = 2131627077(0x7f0e0CLASSNAME, float:1.8881408E38)
             java.lang.String r2 = "ProxySettings"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
             org.telegram.ui.Components.RLottieDrawable r0 = new org.telegram.ui.Components.RLottieDrawable
-            r19 = 2131558461(0x7f0d003d, float:1.8742238E38)
+            r19 = 2131558462(0x7f0d003e, float:1.874224E38)
             r1 = 1105199104(0x41e00000, float:28.0)
             int r21 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r22 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -2328,7 +2337,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r18.<init>((int) r19, (java.lang.String) r20, (int) r21, (int) r22, (boolean) r23, (int[]) r24)
             r10.passcodeDrawable = r0
             org.telegram.ui.Components.RLottieDrawable r0 = new org.telegram.ui.Components.RLottieDrawable
-            r26 = 2131558460(0x7f0d003c, float:1.8742236E38)
+            r26 = 2131558461(0x7f0d003d, float:1.8742238E38)
             int r28 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r29 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r30 = 1
@@ -2348,64 +2357,64 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0 = 0
             r12 = 1
         L_0x00f7:
-            r1 = 2131165479(0x7var_, float:1.7945176E38)
+            r1 = 2131165480(0x7var_, float:1.7945178E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r6.addItem((int) r0, (int) r1)
-            r1.setIsSearchField(r12, r12)
-            org.telegram.ui.DialogsActivity$3 r0 = new org.telegram.ui.DialogsActivity$3
-            r0.<init>()
-            r1.setActionBarMenuItemSearchListener(r0)
-            r10.searchItem = r1
-            java.lang.String r0 = "Search"
-            r2 = 2131627264(0x7f0e0d00, float:1.8881788E38)
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r0, r2)
-            r1.setSearchFieldHint(r3)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r10.searchItem
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)
-            r1.setContentDescription(r0)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r1.setIsSearchField(r12, r12)
+            org.telegram.ui.DialogsActivity$3 r1 = new org.telegram.ui.DialogsActivity$3
+            r1.<init>()
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setActionBarMenuItemSearchListener(r1)
+            r10.searchItem = r0
+            java.lang.String r1 = "Search"
+            r2 = 2131627292(0x7f0e0d1c, float:1.8881844E38)
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r1, r2)
+            r0.setSearchFieldHint(r3)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r10.searchItem
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
+            r0.setContentDescription(r1)
             boolean r0 = r10.onlySelect
             java.lang.String r13 = "actionBarDefault"
             r5 = 10
             r4 = 3
-            if (r0 == 0) goto L_0x0171
+            if (r0 == 0) goto L_0x0173
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131165469(0x7var_d, float:1.7945156E38)
+            r1 = 2131165470(0x7var_e, float:1.7945158E38)
             r0.setBackButtonImage(r1)
             int r0 = r10.initialDialogsType
-            if (r0 != r4) goto L_0x0148
+            if (r0 != r4) goto L_0x014a
             java.lang.String r1 = r10.selectAlertString
-            if (r1 != 0) goto L_0x0148
+            if (r1 != 0) goto L_0x014a
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131625573(0x7f0e0665, float:1.8878358E38)
+            r1 = 2131625589(0x7f0e0675, float:1.887839E38)
             java.lang.String r2 = "ForwardTo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            goto L_0x0167
-        L_0x0148:
-            if (r0 != r5) goto L_0x0159
+            goto L_0x0169
+        L_0x014a:
+            if (r0 != r5) goto L_0x015b
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131627328(0x7f0e0d40, float:1.8881917E38)
+            r1 = 2131627356(0x7f0e0d5c, float:1.8881974E38)
             java.lang.String r2 = "SelectChats"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            goto L_0x0167
-        L_0x0159:
+            goto L_0x0169
+        L_0x015b:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131627327(0x7f0e0d3f, float:1.8881915E38)
+            r1 = 2131627355(0x7f0e0d5b, float:1.8881972E38)
             java.lang.String r2 = "SelectChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-        L_0x0167:
+        L_0x0169:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r13)
             r0.setBackgroundColor(r1)
-            goto L_0x01d8
-        L_0x0171:
+            goto L_0x01da
+        L_0x0173:
             java.lang.String r0 = r10.searchString
-            if (r0 != 0) goto L_0x0195
+            if (r0 != 0) goto L_0x0197
             int r0 = r10.folderId
-            if (r0 == 0) goto L_0x017a
-            goto L_0x0195
-        L_0x017a:
+            if (r0 == 0) goto L_0x017c
+            goto L_0x0197
+        L_0x017c:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             org.telegram.ui.ActionBar.MenuDrawable r1 = new org.telegram.ui.ActionBar.MenuDrawable
             r1.<init>()
@@ -2416,44 +2425,44 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             java.lang.String r2 = "AccDescrOpenMenu"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setBackButtonContentDescription(r1)
-            goto L_0x01a2
-        L_0x0195:
+            goto L_0x01a4
+        L_0x0197:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             org.telegram.ui.ActionBar.BackDrawable r1 = new org.telegram.ui.ActionBar.BackDrawable
             r2 = 0
             r1.<init>(r2)
             r10.backDrawable = r1
             r0.setBackButtonDrawable(r1)
-        L_0x01a2:
+        L_0x01a4:
             int r0 = r10.folderId
-            if (r0 == 0) goto L_0x01b5
+            if (r0 == 0) goto L_0x01b7
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131624305(0x7f0e0171, float:1.8875786E38)
+            r1 = 2131624312(0x7f0e0178, float:1.88758E38)
             java.lang.String r2 = "ArchivedChats"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            goto L_0x01cf
-        L_0x01b5:
+            goto L_0x01d1
+        L_0x01b7:
             boolean r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION
-            if (r0 == 0) goto L_0x01c1
+            if (r0 == 0) goto L_0x01c3
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             java.lang.String r1 = "Telegram Beta"
             r0.setTitle(r1)
-            goto L_0x01cf
-        L_0x01c1:
+            goto L_0x01d1
+        L_0x01c3:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             r1 = 2131624282(0x7f0e015a, float:1.887574E38)
             java.lang.String r2 = "AppName"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-        L_0x01cf:
+        L_0x01d1:
             int r0 = r10.folderId
-            if (r0 != 0) goto L_0x01d8
+            if (r0 != 0) goto L_0x01da
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             r0.setSupportsHolidayImage(r12)
-        L_0x01d8:
+        L_0x01da:
             boolean r0 = r10.onlySelect
-            if (r0 != 0) goto L_0x01ec
+            if (r0 != 0) goto L_0x01ee
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             r1 = 0
             r0.setAddToContainer(r1)
@@ -2461,20 +2470,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0.setCastShadows(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             r0.setClipContent(r12)
-        L_0x01ec:
+        L_0x01ee:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             org.telegram.ui.-$$Lambda$DialogsActivity$JSCaSgR2t00VtHN1RM1I7hZoKos r1 = new org.telegram.ui.-$$Lambda$DialogsActivity$JSCaSgR2t00VtHN1RM1I7hZoKos
             r1.<init>()
             r0.setTitleActionRunnable(r1)
             int r0 = r10.initialDialogsType
-            if (r0 != 0) goto L_0x0228
+            if (r0 != 0) goto L_0x022a
             int r0 = r10.folderId
-            if (r0 != 0) goto L_0x0228
+            if (r0 != 0) goto L_0x022a
             boolean r0 = r10.onlySelect
-            if (r0 != 0) goto L_0x0228
+            if (r0 != 0) goto L_0x022a
             java.lang.String r0 = r10.searchString
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 == 0) goto L_0x0228
+            if (r0 == 0) goto L_0x022a
             org.telegram.ui.DialogsActivity$4 r0 = new org.telegram.ui.DialogsActivity$4
             r0.<init>()
             r10.scrimPaint = r0
@@ -2488,12 +2497,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.DialogsActivity$6 r1 = new org.telegram.ui.DialogsActivity$6
             r1.<init>()
             r0.setDelegate(r1)
-        L_0x0228:
+        L_0x022a:
             boolean r0 = r10.allowSwitchAccount
             r17 = 1113587712(0x42600000, float:56.0)
-            if (r0 == 0) goto L_0x02b1
+            if (r0 == 0) goto L_0x02c5
             int r0 = org.telegram.messenger.UserConfig.getActivatedAccountsCount()
-            if (r0 <= r12) goto L_0x02b1
+            if (r0 <= r12) goto L_0x02c5
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r17)
             r1 = 0
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.addItemWithWidth(r12, r1, r0)
@@ -2514,20 +2523,27 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r5 = 17
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r6, r5)
             r2.addView(r1, r3)
-            org.telegram.messenger.UserConfig r2 = r39.getUserConfig()
+            org.telegram.messenger.UserConfig r2 = r41.getUserConfig()
             org.telegram.tgnet.TLRPC$User r2 = r2.getCurrentUser()
             r0.setInfo((org.telegram.tgnet.TLRPC$User) r2)
             org.telegram.messenger.ImageReceiver r3 = r1.getImageReceiver()
             int r5 = r10.currentAccount
             r3.setCurrentAccount(r5)
-            r1.setForUserOrChat(r2, r0)
+            org.telegram.messenger.ImageLocation r19 = org.telegram.messenger.ImageLocation.getForUserOrChat(r2, r12)
+            org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForUserOrChat(r2, r8)
+            java.lang.String r20 = "50_50"
+            java.lang.String r22 = "50_50"
+            r18 = r1
+            r23 = r0
+            r24 = r2
+            r18.setImage((org.telegram.messenger.ImageLocation) r19, (java.lang.String) r20, (org.telegram.messenger.ImageLocation) r21, (java.lang.String) r22, (android.graphics.drawable.Drawable) r23, (java.lang.Object) r24)
             r0 = 0
-        L_0x0282:
-            if (r0 >= r4) goto L_0x02b1
+        L_0x0296:
+            if (r0 >= r4) goto L_0x02c5
             org.telegram.messenger.AccountInstance r1 = org.telegram.messenger.AccountInstance.getInstance(r0)
             org.telegram.messenger.UserConfig r1 = r1.getUserConfig()
             org.telegram.tgnet.TLRPC$User r1 = r1.getCurrentUser()
-            if (r1 == 0) goto L_0x02ae
+            if (r1 == 0) goto L_0x02c2
             org.telegram.ui.Cells.AccountSelectCell r1 = new org.telegram.ui.Cells.AccountSelectCell
             r2 = 0
             r1.<init>(r11, r2)
@@ -2539,14 +2555,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r6 = 1111490560(0x42400000, float:48.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r2.addSubItem((int) r3, (android.view.View) r1, (int) r5, (int) r6)
-        L_0x02ae:
+        L_0x02c2:
             int r0 = r0 + 1
-            goto L_0x0282
-        L_0x02b1:
+            goto L_0x0296
+        L_0x02c5:
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             r0.setAllowOverlayTitle(r12)
             androidx.recyclerview.widget.RecyclerView r0 = r10.sideMenu
-            if (r0 == 0) goto L_0x02d7
+            if (r0 == 0) goto L_0x02eb
             java.lang.String r1 = "chats_menuBackground"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setBackgroundColor(r1)
@@ -2557,30 +2573,31 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             androidx.recyclerview.widget.RecyclerView r0 = r10.sideMenu
             androidx.recyclerview.widget.RecyclerView$Adapter r0 = r0.getAdapter()
             r0.notifyDataSetChanged()
-        L_0x02d7:
-            r39.createActionMode()
+        L_0x02eb:
+            r0 = 0
+            r10.createActionMode(r0)
             org.telegram.ui.DialogsActivity$ContentView r6 = new org.telegram.ui.DialogsActivity$ContentView
             r6.<init>(r11)
             r10.fragmentView = r6
             int r0 = r10.folderId
-            if (r0 != 0) goto L_0x02ef
+            if (r0 != 0) goto L_0x0304
             int r0 = r10.initialDialogsType
-            if (r0 != 0) goto L_0x02ef
+            if (r0 != 0) goto L_0x0304
             boolean r0 = r10.onlySelect
-            if (r0 != 0) goto L_0x02ef
+            if (r0 != 0) goto L_0x0304
             r5 = 2
-            goto L_0x02f0
-        L_0x02ef:
+            goto L_0x0305
+        L_0x0304:
             r5 = 1
-        L_0x02f0:
+        L_0x0305:
             org.telegram.ui.DialogsActivity$ViewPage[] r0 = new org.telegram.ui.DialogsActivity.ViewPage[r5]
             r10.viewPages = r0
             r3 = 0
-        L_0x02f5:
+        L_0x030a:
             r2 = -1082130432(0xffffffffbvar_, float:-1.0)
             r1 = -2
             r0 = -1
-            if (r3 >= r5) goto L_0x04f7
+            if (r3 >= r5) goto L_0x050d
             org.telegram.ui.DialogsActivity$7 r14 = new org.telegram.ui.DialogsActivity$7
             r14.<init>(r11)
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r0, r2)
@@ -2632,12 +2649,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1.setLayoutManager(r4)
             org.telegram.ui.DialogsActivity$DialogsRecyclerView r1 = r14.listView
             boolean r4 = org.telegram.messenger.LocaleController.isRTL
-            if (r4 == 0) goto L_0x039b
+            if (r4 == 0) goto L_0x03b0
             r4 = 1
-            goto L_0x039c
-        L_0x039b:
+            goto L_0x03b1
+        L_0x03b0:
             r4 = 2
-        L_0x039c:
+        L_0x03b1:
             r1.setVerticalScrollbarPosition(r4)
             org.telegram.ui.DialogsActivity$DialogsRecyclerView r1 = r14.listView
             android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r0, r2)
@@ -2655,7 +2672,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.DialogsActivity.SwipeController unused = r14.swipeController = r0
             org.telegram.ui.Components.RecyclerItemsEnterAnimator r0 = new org.telegram.ui.Components.RecyclerItemsEnterAnimator
             org.telegram.ui.DialogsActivity$DialogsRecyclerView r1 = r14.listView
-            r0.<init>(r1)
+            r2 = 0
+            r0.<init>(r1, r2)
             org.telegram.ui.Components.RecyclerItemsEnterAnimator unused = r14.recyclerItemsEnterAnimator = r0
             androidx.recyclerview.widget.ItemTouchHelper r0 = new androidx.recyclerview.widget.ItemTouchHelper
             org.telegram.ui.DialogsActivity$SwipeController r1 = r14.swipeController
@@ -2669,17 +2687,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1.<init>(r14)
             r0.setOnScrollListener(r1)
             boolean r0 = org.telegram.messenger.SharedConfig.archiveHidden
-            if (r0 == 0) goto L_0x03ff
+            if (r0 == 0) goto L_0x0415
             r0 = 2
-            goto L_0x0400
-        L_0x03ff:
+            goto L_0x0416
+        L_0x0415:
             r0 = 0
-        L_0x0400:
+        L_0x0416:
             int unused = r14.archivePullViewState = r0
             org.telegram.ui.Components.PullForegroundDrawable r0 = r14.pullForegroundDrawable
-            if (r0 != 0) goto L_0x044c
+            if (r0 != 0) goto L_0x0462
             int r0 = r10.folderId
-            if (r0 != 0) goto L_0x044c
+            if (r0 != 0) goto L_0x0462
             org.telegram.ui.DialogsActivity$13 r0 = new org.telegram.ui.DialogsActivity$13
             r1 = 2131624075(0x7f0e008b, float:1.887532E38)
             java.lang.String r2 = "AccSwipeForArchive"
@@ -2687,52 +2705,52 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r2 = 2131624074(0x7f0e008a, float:1.8875317E38)
             java.lang.String r4 = "AccReleaseForArchive"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
-            r0.<init>(r10, r1, r2, r14)
+            r0.<init>(r1, r2, r14)
             org.telegram.ui.Components.PullForegroundDrawable unused = r14.pullForegroundDrawable = r0
-            boolean r0 = r39.hasHiddenArchive()
-            if (r0 == 0) goto L_0x0435
+            boolean r0 = r41.hasHiddenArchive()
+            if (r0 == 0) goto L_0x044b
             org.telegram.ui.Components.PullForegroundDrawable r0 = r14.pullForegroundDrawable
             r0.showHidden()
-            goto L_0x043c
-        L_0x0435:
+            goto L_0x0452
+        L_0x044b:
             org.telegram.ui.Components.PullForegroundDrawable r0 = r14.pullForegroundDrawable
             r0.doNotShow()
-        L_0x043c:
+        L_0x0452:
             org.telegram.ui.Components.PullForegroundDrawable r0 = r14.pullForegroundDrawable
             int r1 = r14.archivePullViewState
-            if (r1 == 0) goto L_0x0448
+            if (r1 == 0) goto L_0x045e
             r1 = 1
-            goto L_0x0449
-        L_0x0448:
+            goto L_0x045f
+        L_0x045e:
             r1 = 0
-        L_0x0449:
+        L_0x045f:
             r0.setWillDraw(r1)
-        L_0x044c:
+        L_0x0462:
             org.telegram.ui.DialogsActivity$14 r8 = new org.telegram.ui.DialogsActivity$14
             int r4 = r14.dialogsType
             int r2 = r10.folderId
             boolean r1 = r10.onlySelect
             java.util.ArrayList<java.lang.Long> r0 = r10.selectedDialogs
             int r9 = r10.currentAccount
-            r23 = r0
+            r22 = r0
             r0 = r8
-            r24 = r1
-            r1 = r39
-            r25 = r2
-            r2 = r39
+            r23 = r1
+            r1 = r41
+            r24 = r2
+            r2 = r41
             r26 = r3
-            r3 = r40
-            r18 = r5
+            r3 = r42
+            r19 = r5
             r12 = 10
-            r5 = r25
+            r5 = r24
             r12 = r6
-            r6 = r24
-            r24 = r13
+            r6 = r23
+            r23 = r13
             r13 = 8
-            r7 = r23
+            r7 = r22
             r13 = r8
             r8 = r9
-            r21 = 0
+            r20 = 0
             r9 = r14
             r0.<init>(r1, r2, r3, r4, r5, r6, r7, r8, r9)
             org.telegram.ui.Adapters.DialogsAdapter unused = r14.dialogsAdapter = r13
@@ -2740,15 +2758,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             boolean r1 = r10.afterSignup
             r0.setForceShowEmptyCell(r1)
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x04a3
+            if (r0 == 0) goto L_0x04b9
             long r0 = r10.openedDialogId
             r2 = 0
             int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 == 0) goto L_0x04a3
+            if (r4 == 0) goto L_0x04b9
             org.telegram.ui.Adapters.DialogsAdapter r0 = r14.dialogsAdapter
             long r1 = r10.openedDialogId
             r0.setOpenedDialogId(r1)
-        L_0x04a3:
+        L_0x04b9:
             org.telegram.ui.Adapters.DialogsAdapter r0 = r14.dialogsAdapter
             org.telegram.ui.Components.PullForegroundDrawable r1 = r14.pullForegroundDrawable
             r0.setArchivedPullDrawable(r1)
@@ -2757,51 +2775,51 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0.setAdapter(r1)
             org.telegram.ui.DialogsActivity$DialogsRecyclerView r0 = r14.listView
             int r1 = r10.folderId
-            if (r1 != 0) goto L_0x04c6
+            if (r1 != 0) goto L_0x04dc
             org.telegram.ui.Components.FlickerLoadingView r1 = r14.progressView
-            goto L_0x04c7
-        L_0x04c6:
+            goto L_0x04dd
+        L_0x04dc:
             r1 = 0
-        L_0x04c7:
+        L_0x04dd:
             r0.setEmptyView(r1)
             org.telegram.ui.Components.RecyclerAnimationScrollHelper r0 = new org.telegram.ui.Components.RecyclerAnimationScrollHelper
             org.telegram.ui.DialogsActivity$DialogsRecyclerView r1 = r14.listView
             androidx.recyclerview.widget.LinearLayoutManager r2 = r14.layoutManager
             r0.<init>(r1, r2)
             org.telegram.ui.Components.RecyclerAnimationScrollHelper unused = r14.scrollHelper = r0
-            if (r26 == 0) goto L_0x04e5
+            if (r26 == 0) goto L_0x04fb
             org.telegram.ui.DialogsActivity$ViewPage[] r0 = r10.viewPages
             r0 = r0[r26]
             r1 = 8
             r0.setVisibility(r1)
-        L_0x04e5:
+        L_0x04fb:
             int r3 = r26 + 1
             r6 = r12
-            r5 = r18
-            r13 = r24
+            r5 = r19
+            r13 = r23
             r4 = 3
             r7 = 8
             r8 = 2
             r9 = 0
             r12 = 1
-            r14 = 2131625212(0x7f0e04fc, float:1.8877626E38)
-            goto L_0x02f5
-        L_0x04f7:
+            r14 = 2131625228(0x7f0e050c, float:1.8877658E38)
+            goto L_0x030a
+        L_0x050d:
             r12 = r6
-            r24 = r13
-            r21 = 0
+            r23 = r13
+            r20 = 0
             java.lang.String r3 = r10.searchString
-            if (r3 == 0) goto L_0x0502
+            if (r3 == 0) goto L_0x0518
             r3 = 2
-            goto L_0x0509
-        L_0x0502:
+            goto L_0x051f
+        L_0x0518:
             boolean r3 = r10.onlySelect
-            if (r3 != 0) goto L_0x0508
+            if (r3 != 0) goto L_0x051e
             r3 = 1
-            goto L_0x0509
-        L_0x0508:
+            goto L_0x051f
+        L_0x051e:
             r3 = 0
-        L_0x0509:
+        L_0x051f:
             org.telegram.ui.Components.SearchViewPager r7 = new org.telegram.ui.Components.SearchViewPager
             int r4 = r10.initialDialogsType
             int r5 = r10.folderId
@@ -2810,9 +2828,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r8 = -1
             r0 = r7
             r9 = -2
-            r1 = r40
+            r1 = r42
             r13 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r2 = r39
+            r2 = r41
             r0.<init>(r1, r2, r3, r4, r5, r6)
             r10.searchViewPager = r7
             r12.addView(r7)
@@ -2832,14 +2850,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1.<init>()
             r0.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListenerExtended) r1)
             org.telegram.ui.Components.SearchViewPager r0 = r10.searchViewPager
-            org.telegram.ui.-$$Lambda$DialogsActivity$9BZKks1l13cel3V-cpOskDp_uvY r1 = new org.telegram.ui.-$$Lambda$DialogsActivity$9BZKks1l13cel3V-cpOskDp_uvY
+            org.telegram.ui.-$$Lambda$DialogsActivity$PqziollX1gMjbm4dhiIbHygR6Z8 r1 = new org.telegram.ui.-$$Lambda$DialogsActivity$PqziollX1gMjbm4dhiIbHygR6Z8
             r1.<init>()
             r0.setFilteredSearchViewDelegate(r1)
             org.telegram.ui.Components.SearchViewPager r0 = r10.searchViewPager
             r1 = 8
             r0.setVisibility(r1)
             org.telegram.ui.Adapters.FiltersView r0 = new org.telegram.ui.Adapters.FiltersView
-            android.app.Activity r1 = r39.getParentActivity()
+            android.app.Activity r1 = r41.getParentActivity()
             r0.<init>(r1)
             r10.filtersView = r0
             org.telegram.ui.-$$Lambda$DialogsActivity$P9xYAyGRu_Y4WiebF4gZ35grh_U r1 = new org.telegram.ui.-$$Lambda$DialogsActivity$P9xYAyGRu_Y4WiebF4gZ35grh_U
@@ -2856,63 +2874,63 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0.<init>(r11)
             r10.floatingButtonContainer = r0
             boolean r1 = r10.onlySelect
-            if (r1 == 0) goto L_0x0590
+            if (r1 == 0) goto L_0x05a6
             int r1 = r10.initialDialogsType
             r2 = 10
-            if (r1 != r2) goto L_0x0594
-        L_0x0590:
+            if (r1 != r2) goto L_0x05aa
+        L_0x05a6:
             int r1 = r10.folderId
-            if (r1 == 0) goto L_0x0597
-        L_0x0594:
+            if (r1 == 0) goto L_0x05ad
+        L_0x05aa:
             r7 = 8
-            goto L_0x0598
-        L_0x0597:
+            goto L_0x05ae
+        L_0x05ad:
             r7 = 0
-        L_0x0598:
+        L_0x05ae:
             r0.setVisibility(r7)
             android.widget.FrameLayout r0 = r10.floatingButtonContainer
             int r6 = android.os.Build.VERSION.SDK_INT
             r7 = 21
-            if (r6 < r7) goto L_0x05a6
+            if (r6 < r7) goto L_0x05bc
             r3 = 56
-            goto L_0x05a8
-        L_0x05a6:
+            goto L_0x05be
+        L_0x05bc:
             r3 = 60
-        L_0x05a8:
-            int r32 = r3 + 20
-            if (r6 < r7) goto L_0x05af
+        L_0x05be:
+            int r34 = r3 + 20
+            if (r6 < r7) goto L_0x05c5
             r3 = 56
-            goto L_0x05b1
-        L_0x05af:
+            goto L_0x05c7
+        L_0x05c5:
             r3 = 60
-        L_0x05b1:
+        L_0x05c7:
             int r3 = r3 + 20
             float r3 = (float) r3
             boolean r4 = org.telegram.messenger.LocaleController.isRTL
-            if (r4 == 0) goto L_0x05ba
+            if (r4 == 0) goto L_0x05d0
             r5 = 3
-            goto L_0x05bb
-        L_0x05ba:
+            goto L_0x05d1
+        L_0x05d0:
             r5 = 5
-        L_0x05bb:
-            r34 = r5 | 80
+        L_0x05d1:
+            r36 = r5 | 80
             r5 = 1082130432(0x40800000, float:4.0)
-            if (r4 == 0) goto L_0x05c4
-            r35 = 1082130432(0x40800000, float:4.0)
-            goto L_0x05c6
-        L_0x05c4:
-            r35 = 0
-        L_0x05c6:
-            r36 = 0
-            if (r4 == 0) goto L_0x05cd
-            r37 = 0
-            goto L_0x05cf
-        L_0x05cd:
+            if (r4 == 0) goto L_0x05da
             r37 = 1082130432(0x40800000, float:4.0)
-        L_0x05cf:
+            goto L_0x05dc
+        L_0x05da:
+            r37 = 0
+        L_0x05dc:
             r38 = 0
-            r33 = r3
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r32, r33, r34, r35, r36, r37, r38)
+            if (r4 == 0) goto L_0x05e3
+            r39 = 0
+            goto L_0x05e5
+        L_0x05e3:
+            r39 = 1082130432(0x40800000, float:4.0)
+        L_0x05e5:
+            r40 = 0
+            r35 = r3
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r34, r35, r36, r37, r38, r39, r40)
             r12.addView(r0, r3)
             android.widget.FrameLayout r0 = r10.floatingButtonContainer
             org.telegram.ui.-$$Lambda$DialogsActivity$IytOkq_hVLb_L5wWv2AeJatOt8Q r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$IytOkq_hVLb_L5wWv2AeJatOt8Q
@@ -2929,9 +2947,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             java.lang.String r4 = "chats_actionPressedBackground"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r0, r3, r4)
-            if (r6 >= r7) goto L_0x0633
-            android.content.res.Resources r3 = r40.getResources()
-            r4 = 2131165419(0x7var_eb, float:1.7945055E38)
+            if (r6 >= r7) goto L_0x0649
+            android.content.res.Resources r3 = r42.getResources()
+            r4 = 2131165420(0x7var_ec, float:1.7945057E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
@@ -2946,7 +2964,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r17)
             r1.setIconSize(r0, r3)
             r0 = r1
-        L_0x0633:
+        L_0x0649:
             org.telegram.ui.Components.RLottieImageView r1 = r10.floatingButton
             r1.setBackgroundDrawable(r0)
             org.telegram.ui.Components.RLottieImageView r0 = r10.floatingButton
@@ -2958,28 +2976,28 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0.setColorFilter(r1)
             int r0 = r10.initialDialogsType
             r1 = 10
-            if (r0 != r1) goto L_0x0665
+            if (r0 != r1) goto L_0x067b
             org.telegram.ui.Components.RLottieImageView r0 = r10.floatingButton
-            r1 = 2131165416(0x7var_e8, float:1.7945048E38)
+            r1 = 2131165417(0x7var_e9, float:1.794505E38)
             r0.setImageResource(r1)
             android.widget.FrameLayout r0 = r10.floatingButtonContainer
-            r1 = 2131625212(0x7f0e04fc, float:1.8877626E38)
+            r1 = 2131625228(0x7f0e050c, float:1.8877658E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r15, r1)
             r0.setContentDescription(r1)
-            goto L_0x067f
-        L_0x0665:
+            goto L_0x0695
+        L_0x067b:
             org.telegram.ui.Components.RLottieImageView r0 = r10.floatingButton
-            r1 = 2131558532(0x7f0d0084, float:1.8742382E38)
+            r1 = 2131558534(0x7f0d0086, float:1.8742387E38)
             r3 = 52
             r4 = 52
             r0.setAnimation(r1, r3, r4)
             android.widget.FrameLayout r0 = r10.floatingButtonContainer
-            r1 = 2131626235(0x7f0e08fb, float:1.88797E38)
+            r1 = 2131626257(0x7f0e0911, float:1.8879745E38)
             java.lang.String r3 = "NewMessageTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setContentDescription(r1)
-        L_0x067f:
-            if (r6 < r7) goto L_0x06e9
+        L_0x0695:
+            if (r6 < r7) goto L_0x06ff
             android.animation.StateListAnimator r0 = new android.animation.StateListAnimator
             r0.<init>()
             r1 = 1
@@ -3022,53 +3040,53 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1.setStateListAnimator(r0)
             org.telegram.ui.Components.RLottieImageView r0 = r10.floatingButton
             org.telegram.ui.DialogsActivity$18 r1 = new org.telegram.ui.DialogsActivity$18
-            r1.<init>(r10)
+            r1.<init>()
             r0.setOutlineProvider(r1)
-            goto L_0x06ea
-        L_0x06e9:
+            goto L_0x0700
+        L_0x06ff:
             r15 = 2
-        L_0x06ea:
+        L_0x0700:
             android.widget.FrameLayout r0 = r10.floatingButtonContainer
             org.telegram.ui.Components.RLottieImageView r1 = r10.floatingButton
-            if (r6 < r7) goto L_0x06f3
-            r25 = 56
-            goto L_0x06f5
-        L_0x06f3:
-            r25 = 60
-        L_0x06f5:
-            if (r6 < r7) goto L_0x06fa
+            if (r6 < r7) goto L_0x0709
+            r33 = 56
+            goto L_0x070b
+        L_0x0709:
+            r33 = 60
+        L_0x070b:
+            if (r6 < r7) goto L_0x0710
             r2 = 56
-            goto L_0x06fc
-        L_0x06fa:
+            goto L_0x0712
+        L_0x0710:
             r2 = 60
-        L_0x06fc:
+        L_0x0712:
             float r2 = (float) r2
-            r27 = 51
-            r28 = 1092616192(0x41200000, float:10.0)
-            r29 = 1086324736(0x40CLASSNAME, float:6.0)
-            r30 = 1092616192(0x41200000, float:10.0)
-            r31 = 0
-            r26 = r2
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
+            r35 = 51
+            r36 = 1092616192(0x41200000, float:10.0)
+            r37 = 1086324736(0x40CLASSNAME, float:6.0)
+            r38 = 1092616192(0x41200000, float:10.0)
+            r39 = 0
+            r34 = r2
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r33, r34, r35, r36, r37, r38, r39)
             r0.addView(r1, r2)
             r0 = 0
             r10.searchTabsView = r0
             boolean r0 = r10.onlySelect
-            if (r0 != 0) goto L_0x0760
+            if (r0 != 0) goto L_0x0776
             int r0 = r10.initialDialogsType
-            if (r0 != 0) goto L_0x0760
+            if (r0 != 0) goto L_0x0776
             org.telegram.ui.Components.FragmentContextView r0 = new org.telegram.ui.Components.FragmentContextView
             r1 = 1
             r0.<init>(r11, r10, r1)
             r10.fragmentLocationContextView = r0
-            r25 = -1
-            r26 = 1108869120(0x42180000, float:38.0)
-            r27 = 51
-            r28 = 0
-            r29 = -1039138816(0xffffffffCLASSNAME, float:-36.0)
-            r30 = 0
+            r26 = -1
+            r27 = 1108869120(0x42180000, float:38.0)
+            r28 = 51
+            r29 = 0
+            r30 = -1039138816(0xffffffffCLASSNAME, float:-36.0)
             r31 = 0
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
+            r32 = 0
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
             r0.setLayoutParams(r1)
             org.telegram.ui.Components.FragmentContextView r0 = r10.fragmentLocationContextView
             r12.addView(r0)
@@ -3076,7 +3094,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1 = 0
             r0.<init>(r11, r10, r1)
             r10.fragmentContextView = r0
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r26, r27, r28, r29, r30, r31, r32)
             r0.setLayoutParams(r1)
             org.telegram.ui.Components.FragmentContextView r0 = r10.fragmentContextView
             r12.addView(r0)
@@ -3086,21 +3104,21 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.Components.FragmentContextView r0 = r10.fragmentLocationContextView
             org.telegram.ui.Components.FragmentContextView r1 = r10.fragmentContextView
             r0.setAdditionalContextView(r1)
-            goto L_0x07a6
-        L_0x0760:
+            goto L_0x07bc
+        L_0x0776:
             int r0 = r10.initialDialogsType
             r1 = 3
-            if (r0 != r1) goto L_0x07a6
+            if (r0 != r1) goto L_0x07bc
             org.telegram.ui.Components.ChatActivityEnterView r0 = r10.commentView
-            if (r0 == 0) goto L_0x076c
+            if (r0 == 0) goto L_0x0782
             r0.onDestroy()
-        L_0x076c:
+        L_0x0782:
             org.telegram.ui.DialogsActivity$20 r8 = new org.telegram.ui.DialogsActivity$20
-            android.app.Activity r2 = r39.getParentActivity()
+            android.app.Activity r2 = r41.getParentActivity()
             r4 = 0
             r5 = 0
             r0 = r8
-            r1 = r39
+            r1 = r41
             r3 = r12
             r0.<init>(r2, r3, r4, r5)
             r10.commentView = r8
@@ -3122,34 +3140,120 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.DialogsActivity$21 r1 = new org.telegram.ui.DialogsActivity$21
             r1.<init>()
             r0.setDelegate(r1)
-            goto L_0x07a7
-        L_0x07a6:
+            goto L_0x07bd
+        L_0x07bc:
             r3 = -1
-        L_0x07a7:
+        L_0x07bd:
             org.telegram.ui.Components.FilterTabsView r0 = r10.filterTabsView
-            if (r0 == 0) goto L_0x07b4
+            if (r0 == 0) goto L_0x07ca
             r1 = 1110441984(0x42300000, float:44.0)
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r1)
             r12.addView(r0, r1)
-        L_0x07b4:
+        L_0x07ca:
             boolean r0 = r10.onlySelect
-            if (r0 != 0) goto L_0x07cd
+            if (r0 != 0) goto L_0x07e3
             r0 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r0)
             boolean r1 = r10.inPreviewMode
-            if (r1 == 0) goto L_0x07c8
-            if (r6 < r7) goto L_0x07c8
+            if (r1 == 0) goto L_0x07de
+            if (r6 < r7) goto L_0x07de
             int r1 = org.telegram.messenger.AndroidUtilities.statusBarHeight
             r0.topMargin = r1
-        L_0x07c8:
+        L_0x07de:
             org.telegram.ui.ActionBar.ActionBar r1 = r10.actionBar
             r12.addView(r1, r0)
-        L_0x07cd:
+        L_0x07e3:
+            java.lang.String r0 = r10.searchString
+            if (r0 != 0) goto L_0x08a6
+            int r0 = r10.initialDialogsType
+            if (r0 != 0) goto L_0x08a6
+            org.telegram.ui.DialogsActivity$22 r0 = new org.telegram.ui.DialogsActivity$22
+            r0.<init>(r11)
+            r10.updateLayout = r0
+            r1 = 0
+            r0.setWillNotDraw(r1)
+            android.widget.FrameLayout r0 = r10.updateLayout
+            r1 = 4
+            r0.setVisibility(r1)
+            android.widget.FrameLayout r0 = r10.updateLayout
+            r1 = 1111490560(0x42400000, float:48.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            r0.setTranslationY(r1)
+            if (r6 < r7) goto L_0x081a
+            android.widget.FrameLayout r0 = r10.updateLayout
+            java.lang.String r1 = "listSelectorSDK21"
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r2 = 0
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable((int) r1, (java.lang.String) r2)
+            r0.setBackground(r1)
+        L_0x081a:
+            android.widget.FrameLayout r0 = r10.updateLayout
+            r1 = 48
+            r2 = 83
+            r3 = -1
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r1, r2)
+            r12.addView(r0, r1)
+            android.widget.FrameLayout r0 = r10.updateLayout
+            org.telegram.ui.-$$Lambda$DialogsActivity$nm-Dps6hr6Rmz25i1wqbt2oTMjw r1 = new org.telegram.ui.-$$Lambda$DialogsActivity$nm-Dps6hr6Rmz25i1wqbt2oTMjw
+            r1.<init>()
+            r0.setOnClickListener(r1)
+            org.telegram.ui.Components.RadialProgress2 r0 = new org.telegram.ui.Components.RadialProgress2
+            android.widget.FrameLayout r1 = r10.updateLayout
+            r0.<init>(r1)
+            r10.updateLayoutIcon = r0
+            r0.setColors((int) r3, (int) r3, (int) r3, (int) r3)
+            org.telegram.ui.Components.RadialProgress2 r0 = r10.updateLayoutIcon
+            r1 = 1093664768(0x41300000, float:11.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            r0.setCircleRadius(r1)
+            org.telegram.ui.Components.RadialProgress2 r0 = r10.updateLayoutIcon
+            r0.setAsMini()
+            org.telegram.ui.Components.RadialProgress2 r0 = r10.updateLayoutIcon
+            r1 = 15
+            r2 = 1
+            r3 = 0
+            r0.setIcon(r1, r2, r3)
+            android.widget.TextView r0 = new android.widget.TextView
+            r0.<init>(r11)
+            r10.updateTextView = r0
+            r1 = 1097859072(0x41700000, float:15.0)
+            r0.setTextSize(r2, r1)
+            android.widget.TextView r0 = r10.updateTextView
+            java.lang.String r1 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r1)
+            r0.setTypeface(r1)
+            android.widget.TextView r0 = r10.updateTextView
+            r1 = 2131624288(0x7f0e0160, float:1.8875751E38)
+            java.lang.String r2 = "AppUpdateNow"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            java.lang.String r1 = r1.toUpperCase()
+            r0.setText(r1)
+            android.widget.TextView r0 = r10.updateTextView
+            r1 = -1
+            r0.setTextColor(r1)
+            android.widget.TextView r0 = r10.updateTextView
+            r1 = 1106247680(0x41var_, float:30.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            r2 = 0
+            r0.setPadding(r1, r2, r2, r2)
+            android.widget.FrameLayout r0 = r10.updateLayout
+            android.widget.TextView r1 = r10.updateTextView
+            r2 = -2
+            r3 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r4 = 17
+            r5 = 0
+            r6 = 0
+            r7 = 0
+            r8 = 0
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3, r4, r5, r6, r7, r8)
+            r0.addView(r1, r2)
+        L_0x08a6:
             r0 = 0
-        L_0x07ce:
-            if (r0 >= r15) goto L_0x07f3
+        L_0x08a7:
+            if (r0 >= r15) goto L_0x08cc
             org.telegram.ui.Components.UndoView[] r1 = r10.undoView
-            org.telegram.ui.DialogsActivity$22 r2 = new org.telegram.ui.DialogsActivity$22
+            org.telegram.ui.DialogsActivity$23 r2 = new org.telegram.ui.DialogsActivity$23
             r2.<init>(r11)
             r1[r0] = r2
             org.telegram.ui.Components.UndoView[] r1 = r10.undoView
@@ -3164,10 +3268,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r3, r4, r5, r6, r7, r8)
             r12.addView(r1, r2)
             int r0 = r0 + 1
-            goto L_0x07ce
-        L_0x07f3:
+            goto L_0x08a7
+        L_0x08cc:
             int r0 = r10.folderId
-            if (r0 == 0) goto L_0x0842
+            if (r0 == 0) goto L_0x091b
             org.telegram.ui.DialogsActivity$ViewPage[] r0 = r10.viewPages
             r1 = 0
             r0 = r0[r1]
@@ -3197,12 +3301,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r2 = 1
             r0.setSearchTextColor(r1, r2)
-        L_0x0842:
+        L_0x091b:
             boolean r0 = r10.onlySelect
-            if (r0 != 0) goto L_0x0862
+            if (r0 != 0) goto L_0x093b
             int r0 = r10.initialDialogsType
-            if (r0 != 0) goto L_0x0862
-            org.telegram.ui.DialogsActivity$23 r0 = new org.telegram.ui.DialogsActivity$23
+            if (r0 != 0) goto L_0x093b
+            org.telegram.ui.DialogsActivity$24 r0 = new org.telegram.ui.DialogsActivity$24
             r0.<init>(r11)
             r10.blurredView = r0
             r1 = 8
@@ -3212,20 +3316,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r2 = -1
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r2, r1)
             r12.addView(r0, r1)
-        L_0x0862:
+        L_0x093b:
             android.graphics.Paint r0 = r10.actionBarDefaultPaint
             int r1 = r10.folderId
-            if (r1 != 0) goto L_0x086b
-            r1 = r24
-            goto L_0x086d
-        L_0x086b:
+            if (r1 != 0) goto L_0x0944
+            r1 = r23
+            goto L_0x0946
+        L_0x0944:
             java.lang.String r1 = "actionBarDefaultArchived"
-        L_0x086d:
+        L_0x0946:
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setColor(r1)
             boolean r0 = r10.inPreviewMode
-            if (r0 == 0) goto L_0x08ef
-            org.telegram.messenger.UserConfig r0 = r39.getUserConfig()
+            if (r0 == 0) goto L_0x09c8
+            org.telegram.messenger.UserConfig r0 = r41.getUserConfig()
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             org.telegram.ui.Components.ChatAvatarContainer r1 = new org.telegram.ui.Components.ChatAvatarContainer
             org.telegram.ui.ActionBar.ActionBar r2 = r10.actionBar
@@ -3267,31 +3371,31 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
             r0.setOccupyStatusBar(r3)
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r24)
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r23)
             r0.setBackgroundColor(r1)
             org.telegram.ui.Components.FragmentContextView r0 = r10.fragmentContextView
-            if (r0 == 0) goto L_0x08e8
+            if (r0 == 0) goto L_0x09c1
             r12.removeView(r0)
-        L_0x08e8:
+        L_0x09c1:
             org.telegram.ui.Components.FragmentContextView r0 = r10.fragmentLocationContextView
-            if (r0 == 0) goto L_0x08ef
+            if (r0 == 0) goto L_0x09c8
             r12.removeView(r0)
-        L_0x08ef:
+        L_0x09c8:
             r0 = 0
             r10.searchIsShowed = r0
             r10.updateFilterTabs(r0, r0)
             java.lang.String r1 = r10.searchString
-            if (r1 == 0) goto L_0x0905
+            if (r1 == 0) goto L_0x09de
             r1 = 1
             r10.showSearch(r1, r0)
             org.telegram.ui.ActionBar.ActionBar r1 = r10.actionBar
             java.lang.String r2 = r10.searchString
             r1.openSearchField(r2, r0)
-            goto L_0x092a
-        L_0x0905:
+            goto L_0x0a03
+        L_0x09de:
             r1 = 1
             java.lang.String r2 = r10.initialSearchString
-            if (r2 == 0) goto L_0x0927
+            if (r2 == 0) goto L_0x0a00
             r10.showSearch(r1, r0)
             org.telegram.ui.ActionBar.ActionBar r1 = r10.actionBar
             java.lang.String r2 = r10.initialSearchString
@@ -3299,35 +3403,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1 = 0
             r10.initialSearchString = r1
             org.telegram.ui.Components.FilterTabsView r1 = r10.filterTabsView
-            if (r1 == 0) goto L_0x092a
+            if (r1 == 0) goto L_0x0a03
             r2 = 1110441984(0x42300000, float:44.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r2 = -r2
             float r2 = (float) r2
             r1.setTranslationY(r2)
-            goto L_0x092a
-        L_0x0927:
+            goto L_0x0a03
+        L_0x0a00:
             r10.showSearch(r0, r0)
-        L_0x092a:
-            int r0 = r10.folderId
-            if (r0 == 0) goto L_0x0952
-            org.telegram.ui.Adapters.FiltersView$MediaFilterData r0 = new org.telegram.ui.Adapters.FiltersView$MediaFilterData
-            r2 = 2131165342(0x7var_e, float:1.7944898E38)
-            r3 = 2131165342(0x7var_e, float:1.7944898E38)
-            r1 = 2131624302(0x7f0e016e, float:1.887578E38)
-            java.lang.String r4 = "ArchiveSearchFilter"
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r1)
-            r5 = 0
-            r6 = 7
-            r1 = r0
-            r1.<init>(r2, r3, r4, r5, r6)
-            r1 = 0
-            r0.removable = r1
-            org.telegram.ui.ActionBar.ActionBar r1 = r10.actionBar
-            r1.setSearchFilter(r0)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r10.searchItem
-            r0.collapseSearchFilters()
-        L_0x0952:
+        L_0x0a03:
+            r10.updateMenuButton(r0)
             android.view.View r0 = r10.fragmentView
             return r0
         */
@@ -3401,8 +3487,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$createView$6 */
-    public /* synthetic */ void lambda$createView$6$DialogsActivity(boolean z, ArrayList arrayList, ArrayList arrayList2) {
-        updateFiltersView(z, arrayList, arrayList2, true);
+    public /* synthetic */ void lambda$createView$6$DialogsActivity(boolean z, ArrayList arrayList, ArrayList arrayList2, boolean z2) {
+        updateFiltersView(z, arrayList, arrayList2, z2, true);
     }
 
     /* access modifiers changed from: private */
@@ -3421,6 +3507,72 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             presentFragment(new ContactsActivity(bundle));
         } else if (this.delegate != null && !this.selectedDialogs.isEmpty()) {
             this.delegate.didSelectDialogs(this, this.selectedDialogs, (CharSequence) null, false);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$9 */
+    public /* synthetic */ void lambda$createView$9$DialogsActivity(View view) {
+        if (SharedConfig.isAppUpdateAvailable()) {
+            AndroidUtilities.openForView(SharedConfig.pendingAppUpdate.document, true, getParentActivity());
+        }
+    }
+
+    private void updateAppUpdateViews(boolean z) {
+        boolean z2;
+        if (this.updateLayout != null) {
+            if (SharedConfig.isAppUpdateAvailable()) {
+                FileLoader.getAttachFileName(SharedConfig.pendingAppUpdate.document);
+                z2 = FileLoader.getPathToAttach(SharedConfig.pendingAppUpdate.document, true).exists();
+            } else {
+                z2 = false;
+            }
+            if (z2) {
+                if (this.updateLayout.getTag() == null) {
+                    AnimatorSet animatorSet = this.updateLayoutAnimator;
+                    if (animatorSet != null) {
+                        animatorSet.cancel();
+                    }
+                    this.updateLayout.setVisibility(0);
+                    this.updateLayout.setTag(1);
+                    if (z) {
+                        AnimatorSet animatorSet2 = new AnimatorSet();
+                        this.updateLayoutAnimator = animatorSet2;
+                        animatorSet2.setDuration(180);
+                        this.updateLayoutAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+                        this.updateLayoutAnimator.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.updateLayout, View.TRANSLATION_Y, new float[]{0.0f})});
+                        this.updateLayoutAnimator.addListener(new AnimatorListenerAdapter() {
+                            public void onAnimationEnd(Animator animator) {
+                                AnimatorSet unused = DialogsActivity.this.updateLayoutAnimator = null;
+                            }
+                        });
+                        this.updateLayoutAnimator.start();
+                        return;
+                    }
+                    this.updateLayout.setTranslationY(0.0f);
+                }
+            } else if (this.updateLayout.getTag() != null) {
+                this.updateLayout.setTag((Object) null);
+                if (z) {
+                    AnimatorSet animatorSet3 = new AnimatorSet();
+                    this.updateLayoutAnimator = animatorSet3;
+                    animatorSet3.setDuration(180);
+                    this.updateLayoutAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+                    this.updateLayoutAnimator.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.updateLayout, View.TRANSLATION_Y, new float[]{(float) AndroidUtilities.dp(48.0f)})});
+                    this.updateLayoutAnimator.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            if (DialogsActivity.this.updateLayout.getTag() == null) {
+                                DialogsActivity.this.updateLayout.setVisibility(4);
+                            }
+                            AnimatorSet unused = DialogsActivity.this.updateLayoutAnimator = null;
+                        }
+                    });
+                    this.updateLayoutAnimator.start();
+                    return;
+                }
+                this.updateLayout.setTranslationY((float) AndroidUtilities.dp(48.0f));
+                this.updateLayout.setVisibility(4);
+            }
         }
     }
 
@@ -3452,122 +3604,137 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:45:0x0089  */
-    /* JADX WARNING: Removed duplicated region for block: B:47:0x0090  */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x009d  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x009e  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x00a5  */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x00b2  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void updateFiltersView(boolean r10, java.util.ArrayList<java.lang.Object> r11, java.util.ArrayList<org.telegram.ui.Adapters.FiltersView.DateData> r12, boolean r13) {
+    public void updateFiltersView(boolean r11, java.util.ArrayList<java.lang.Object> r12, java.util.ArrayList<org.telegram.ui.Adapters.FiltersView.DateData> r13, boolean r14, boolean r15) {
         /*
-            r9 = this;
-            boolean r0 = r9.searchIsShowed
-            if (r0 == 0) goto L_0x00aa
-            boolean r0 = r9.onlySelect
+            r10 = this;
+            boolean r0 = r10.searchIsShowed
+            if (r0 == 0) goto L_0x00bf
+            boolean r0 = r10.onlySelect
             if (r0 == 0) goto L_0x000a
-            goto L_0x00aa
+            goto L_0x00bf
         L_0x000a:
-            org.telegram.ui.Components.SearchViewPager r0 = r9.searchViewPager
+            org.telegram.ui.Components.SearchViewPager r0 = r10.searchViewPager
             java.util.ArrayList r0 = r0.getCurrentSearchFilters()
             r1 = 0
             r2 = 0
             r3 = 0
             r4 = 0
             r5 = 0
-        L_0x0015:
-            int r6 = r0.size()
-            r7 = 1
-            if (r2 >= r6) goto L_0x0046
-            java.lang.Object r6 = r0.get(r2)
-            org.telegram.ui.Adapters.FiltersView$MediaFilterData r6 = (org.telegram.ui.Adapters.FiltersView.MediaFilterData) r6
-            boolean r6 = r6.isMedia()
-            if (r6 == 0) goto L_0x002a
-            r3 = 1
-            goto L_0x0043
-        L_0x002a:
-            java.lang.Object r6 = r0.get(r2)
-            org.telegram.ui.Adapters.FiltersView$MediaFilterData r6 = (org.telegram.ui.Adapters.FiltersView.MediaFilterData) r6
-            int r6 = r6.filterType
-            r8 = 4
-            if (r6 != r8) goto L_0x0037
+            r6 = 0
+        L_0x0016:
+            int r7 = r0.size()
+            r8 = 1
+            if (r2 >= r7) goto L_0x0054
+            java.lang.Object r7 = r0.get(r2)
+            org.telegram.ui.Adapters.FiltersView$MediaFilterData r7 = (org.telegram.ui.Adapters.FiltersView.MediaFilterData) r7
+            boolean r7 = r7.isMedia()
+            if (r7 == 0) goto L_0x002b
             r4 = 1
-            goto L_0x0043
-        L_0x0037:
-            java.lang.Object r6 = r0.get(r2)
-            org.telegram.ui.Adapters.FiltersView$MediaFilterData r6 = (org.telegram.ui.Adapters.FiltersView.MediaFilterData) r6
-            int r6 = r6.filterType
-            r8 = 6
-            if (r6 != r8) goto L_0x0043
+            goto L_0x0051
+        L_0x002b:
+            java.lang.Object r7 = r0.get(r2)
+            org.telegram.ui.Adapters.FiltersView$MediaFilterData r7 = (org.telegram.ui.Adapters.FiltersView.MediaFilterData) r7
+            int r7 = r7.filterType
+            r9 = 4
+            if (r7 != r9) goto L_0x0038
             r5 = 1
-        L_0x0043:
+            goto L_0x0051
+        L_0x0038:
+            java.lang.Object r7 = r0.get(r2)
+            org.telegram.ui.Adapters.FiltersView$MediaFilterData r7 = (org.telegram.ui.Adapters.FiltersView.MediaFilterData) r7
+            int r7 = r7.filterType
+            r9 = 6
+            if (r7 != r9) goto L_0x0045
+            r6 = 1
+            goto L_0x0051
+        L_0x0045:
+            java.lang.Object r7 = r0.get(r2)
+            org.telegram.ui.Adapters.FiltersView$MediaFilterData r7 = (org.telegram.ui.Adapters.FiltersView.MediaFilterData) r7
+            int r7 = r7.filterType
+            r9 = 7
+            if (r7 != r9) goto L_0x0051
+            r3 = 1
+        L_0x0051:
             int r2 = r2 + 1
-            goto L_0x0015
-        L_0x0046:
-            if (r11 == 0) goto L_0x004e
-            boolean r0 = r11.isEmpty()
-            if (r0 == 0) goto L_0x0056
-        L_0x004e:
-            if (r12 == 0) goto L_0x0058
+            goto L_0x0016
+        L_0x0054:
+            if (r3 == 0) goto L_0x0057
+            r14 = 0
+        L_0x0057:
+            if (r12 == 0) goto L_0x005f
             boolean r0 = r12.isEmpty()
-            if (r0 != 0) goto L_0x0058
-        L_0x0056:
+            if (r0 == 0) goto L_0x0069
+        L_0x005f:
+            if (r13 == 0) goto L_0x0067
+            boolean r0 = r13.isEmpty()
+            if (r0 == 0) goto L_0x0069
+        L_0x0067:
+            if (r14 == 0) goto L_0x006b
+        L_0x0069:
             r0 = 1
-            goto L_0x0059
-        L_0x0058:
+            goto L_0x006c
+        L_0x006b:
             r0 = 0
-        L_0x0059:
+        L_0x006c:
             r2 = 0
-            if (r3 != 0) goto L_0x0061
-            if (r0 != 0) goto L_0x0061
-            if (r10 == 0) goto L_0x0061
-            goto L_0x0086
-        L_0x0061:
-            if (r0 == 0) goto L_0x0086
-            if (r11 == 0) goto L_0x006e
-            boolean r10 = r11.isEmpty()
-            if (r10 != 0) goto L_0x006e
-            if (r4 != 0) goto L_0x006e
-            goto L_0x006f
-        L_0x006e:
-            r11 = r2
-        L_0x006f:
-            if (r12 == 0) goto L_0x007a
-            boolean r10 = r12.isEmpty()
-            if (r10 != 0) goto L_0x007a
-            if (r5 != 0) goto L_0x007a
-            goto L_0x007b
-        L_0x007a:
+            if (r4 != 0) goto L_0x0074
+            if (r0 != 0) goto L_0x0074
+            if (r11 == 0) goto L_0x0074
+            goto L_0x009b
+        L_0x0074:
+            if (r0 == 0) goto L_0x009b
+            if (r12 == 0) goto L_0x0081
+            boolean r11 = r12.isEmpty()
+            if (r11 != 0) goto L_0x0081
+            if (r5 != 0) goto L_0x0081
+            goto L_0x0082
+        L_0x0081:
             r12 = r2
-        L_0x007b:
-            if (r11 != 0) goto L_0x007f
-            if (r12 == 0) goto L_0x0086
-        L_0x007f:
-            org.telegram.ui.Adapters.FiltersView r10 = r9.filtersView
-            r10.setUsersAndDates(r11, r12)
-            r10 = 1
-            goto L_0x0087
-        L_0x0086:
-            r10 = 0
-        L_0x0087:
-            if (r10 != 0) goto L_0x008e
-            org.telegram.ui.Adapters.FiltersView r11 = r9.filtersView
-            r11.setUsersAndDates(r2, r2)
+        L_0x0082:
+            if (r13 == 0) goto L_0x008d
+            boolean r11 = r13.isEmpty()
+            if (r11 != 0) goto L_0x008d
+            if (r6 != 0) goto L_0x008d
+            goto L_0x008e
+        L_0x008d:
+            r13 = r2
         L_0x008e:
-            if (r13 != 0) goto L_0x0099
-            org.telegram.ui.Adapters.FiltersView r11 = r9.filtersView
-            androidx.recyclerview.widget.RecyclerView$Adapter r11 = r11.getAdapter()
-            r11.notifyDataSetChanged()
-        L_0x0099:
-            org.telegram.ui.Components.ViewPagerFixed$TabsView r11 = r9.searchTabsView
-            if (r11 == 0) goto L_0x00a0
-            r11.hide(r10, r7)
-        L_0x00a0:
-            org.telegram.ui.Adapters.FiltersView r11 = r9.filtersView
-            r11.setEnabled(r10)
-            org.telegram.ui.Adapters.FiltersView r10 = r9.filtersView
-            r10.setVisibility(r1)
-        L_0x00aa:
+            if (r12 != 0) goto L_0x0094
+            if (r13 != 0) goto L_0x0094
+            if (r14 == 0) goto L_0x009b
+        L_0x0094:
+            org.telegram.ui.Adapters.FiltersView r11 = r10.filtersView
+            r11.setUsersAndDates(r12, r13, r14)
+            r11 = 1
+            goto L_0x009c
+        L_0x009b:
+            r11 = 0
+        L_0x009c:
+            if (r11 != 0) goto L_0x00a3
+            org.telegram.ui.Adapters.FiltersView r12 = r10.filtersView
+            r12.setUsersAndDates(r2, r2, r1)
+        L_0x00a3:
+            if (r15 != 0) goto L_0x00ae
+            org.telegram.ui.Adapters.FiltersView r12 = r10.filtersView
+            androidx.recyclerview.widget.RecyclerView$Adapter r12 = r12.getAdapter()
+            r12.notifyDataSetChanged()
+        L_0x00ae:
+            org.telegram.ui.Components.ViewPagerFixed$TabsView r12 = r10.searchTabsView
+            if (r12 == 0) goto L_0x00b5
+            r12.hide(r11, r8)
+        L_0x00b5:
+            org.telegram.ui.Adapters.FiltersView r12 = r10.filtersView
+            r12.setEnabled(r11)
+            org.telegram.ui.Adapters.FiltersView r11 = r10.filtersView
+            r11.setVisibility(r1)
+        L_0x00bf:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.updateFiltersView(boolean, java.util.ArrayList, java.util.ArrayList, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.updateFiltersView(boolean, java.util.ArrayList, java.util.ArrayList, boolean, boolean):void");
     }
 
     private void addSearchFilter(FiltersView.MediaFilterData mediaFilterData) {
@@ -3586,13 +3753,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             currentSearchFilters.add(mediaFilterData);
             this.actionBar.setSearchFilter(mediaFilterData);
             this.actionBar.setSearchFieldText("");
-            updateFiltersView(true, (ArrayList<Object>) null, (ArrayList<FiltersView.DateData>) null, true);
+            updateFiltersView(true, (ArrayList<Object>) null, (ArrayList<FiltersView.DateData>) null, false, true);
         }
     }
 
-    private void createActionMode() {
-        if (!this.actionBar.actionModeIsExist((String) null)) {
-            ActionBarMenu createActionMode = this.actionBar.createActionMode();
+    private void createActionMode(String str) {
+        if (!this.actionBar.actionModeIsExist(str)) {
+            ActionBarMenu createActionMode = this.actionBar.createActionMode(false, str);
             createActionMode.setBackground((Drawable) null);
             NumberTextView numberTextView = new NumberTextView(createActionMode.getContext());
             this.selectedDialogsCountTextView = numberTextView;
@@ -3600,7 +3767,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             this.selectedDialogsCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.selectedDialogsCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
             createActionMode.addView(this.selectedDialogsCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
-            this.selectedDialogsCountTextView.setOnTouchListener($$Lambda$DialogsActivity$_46UWFkMiHPNOe0V5byjIcXuRA.INSTANCE);
+            this.selectedDialogsCountTextView.setOnTouchListener($$Lambda$DialogsActivity$pdHcyGSEvIjwCvaZNRNhjyoQAaA.INSTANCE);
             this.pinItem = createActionMode.addItemWithWidth(100, NUM, AndroidUtilities.dp(54.0f));
             this.muteItem = createActionMode.addItemWithWidth(104, NUM, AndroidUtilities.dp(54.0f));
             this.archive2Item = createActionMode.addItemWithWidth(107, NUM, AndroidUtilities.dp(54.0f));
@@ -3618,115 +3785,117 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             this.actionModeViews.add(this.muteItem);
             this.actionModeViews.add(this.deleteItem);
             this.actionModeViews.add(addItemWithWidth);
-            this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-                public void onItemClick(int i) {
-                    int i2 = i;
-                    if (i2 == 201 || (i2 == 200 && DialogsActivity.this.searchViewPager != null)) {
-                        DialogsActivity.this.searchViewPager.onActionBarItemClick(i2);
-                    } else if (i2 == -1) {
-                        if (DialogsActivity.this.filterTabsView != null && DialogsActivity.this.filterTabsView.isEditing()) {
-                            DialogsActivity.this.filterTabsView.setIsEditing(false);
-                            DialogsActivity.this.showDoneItem(false);
-                        } else if (DialogsActivity.this.actionBar.isActionModeShowed()) {
-                            if (DialogsActivity.this.searchViewPager == null || DialogsActivity.this.searchViewPager.getVisibility() != 0) {
-                                DialogsActivity.this.hideActionMode(true);
-                            } else {
-                                DialogsActivity.this.searchViewPager.hideActionMode();
-                            }
-                        } else if (DialogsActivity.this.onlySelect || DialogsActivity.this.folderId != 0) {
-                            DialogsActivity.this.finishFragment();
-                        } else if (DialogsActivity.this.parentLayout != null) {
-                            DialogsActivity.this.parentLayout.getDrawerLayoutContainer().openDrawer(false);
-                        }
-                    } else if (i2 == 1) {
-                        SharedConfig.appLocked = !SharedConfig.appLocked;
-                        SharedConfig.saveConfig();
-                        DialogsActivity.this.updatePasscodeButton(true);
-                    } else if (i2 == 2) {
-                        DialogsActivity.this.presentFragment(new ProxyListActivity());
-                    } else if (i2 < 10 || i2 >= 13) {
-                        if (i2 == 109) {
-                            DialogsActivity dialogsActivity = DialogsActivity.this;
-                            FiltersListBottomSheet filtersListBottomSheet = new FiltersListBottomSheet(dialogsActivity, dialogsActivity.selectedDialogs);
-                            filtersListBottomSheet.setDelegate(new FiltersListBottomSheet.FiltersListBottomSheetDelegate() {
-                                public final void didSelectFilter(MessagesController.DialogFilter dialogFilter) {
-                                    DialogsActivity.AnonymousClass24.this.lambda$onItemClick$0$DialogsActivity$24(dialogFilter);
+            if (str == null) {
+                this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
+                    public void onItemClick(int i) {
+                        int i2 = i;
+                        if (i2 == 201 || (i2 == 200 && DialogsActivity.this.searchViewPager != null)) {
+                            DialogsActivity.this.searchViewPager.onActionBarItemClick(i2);
+                        } else if (i2 == -1) {
+                            if (DialogsActivity.this.filterTabsView != null && DialogsActivity.this.filterTabsView.isEditing()) {
+                                DialogsActivity.this.filterTabsView.setIsEditing(false);
+                                DialogsActivity.this.showDoneItem(false);
+                            } else if (DialogsActivity.this.actionBar.isActionModeShowed()) {
+                                if (DialogsActivity.this.searchViewPager == null || DialogsActivity.this.searchViewPager.getVisibility() != 0 || !DialogsActivity.this.searchViewPager.actionModeShowing()) {
+                                    DialogsActivity.this.hideActionMode(true);
+                                } else {
+                                    DialogsActivity.this.searchViewPager.hideActionMode();
                                 }
-                            });
-                            DialogsActivity.this.showDialog(filtersListBottomSheet);
-                        } else if (i2 == 110) {
-                            MessagesController.DialogFilter dialogFilter = DialogsActivity.this.getMessagesController().dialogFilters.get(DialogsActivity.this.viewPages[0].selectedType);
-                            DialogsActivity dialogsActivity2 = DialogsActivity.this;
-                            ArrayList<Integer> dialogsCount = FiltersListBottomSheet.getDialogsCount(dialogsActivity2, dialogFilter, dialogsActivity2.selectedDialogs, false, false);
-                            if ((dialogFilter != null ? dialogFilter.neverShow.size() : 0) + dialogsCount.size() > 100) {
-                                DialogsActivity dialogsActivity3 = DialogsActivity.this;
-                                dialogsActivity3.showDialog(AlertsCreator.createSimpleAlert(dialogsActivity3.getParentActivity(), LocaleController.getString("FilterAddToAlertFullTitle", NUM), LocaleController.getString("FilterAddToAlertFullText", NUM)).create());
-                                return;
+                            } else if (DialogsActivity.this.onlySelect || DialogsActivity.this.folderId != 0) {
+                                DialogsActivity.this.finishFragment();
+                            } else if (DialogsActivity.this.parentLayout != null) {
+                                DialogsActivity.this.parentLayout.getDrawerLayoutContainer().openDrawer(false);
                             }
-                            if (!dialogsCount.isEmpty()) {
-                                dialogFilter.neverShow.addAll(dialogsCount);
-                                for (int i3 = 0; i3 < dialogsCount.size(); i3++) {
-                                    Integer num = dialogsCount.get(i3);
-                                    dialogFilter.alwaysShow.remove(num);
-                                    dialogFilter.pinnedDialogs.remove((long) num.intValue());
+                        } else if (i2 == 1) {
+                            SharedConfig.appLocked = !SharedConfig.appLocked;
+                            SharedConfig.saveConfig();
+                            DialogsActivity.this.updatePasscodeButton(true);
+                        } else if (i2 == 2) {
+                            DialogsActivity.this.presentFragment(new ProxyListActivity());
+                        } else if (i2 < 10 || i2 >= 13) {
+                            if (i2 == 109) {
+                                DialogsActivity dialogsActivity = DialogsActivity.this;
+                                FiltersListBottomSheet filtersListBottomSheet = new FiltersListBottomSheet(dialogsActivity, dialogsActivity.selectedDialogs);
+                                filtersListBottomSheet.setDelegate(new FiltersListBottomSheet.FiltersListBottomSheetDelegate() {
+                                    public final void didSelectFilter(MessagesController.DialogFilter dialogFilter) {
+                                        DialogsActivity.AnonymousClass27.this.lambda$onItemClick$0$DialogsActivity$27(dialogFilter);
+                                    }
+                                });
+                                DialogsActivity.this.showDialog(filtersListBottomSheet);
+                            } else if (i2 == 110) {
+                                MessagesController.DialogFilter dialogFilter = DialogsActivity.this.getMessagesController().dialogFilters.get(DialogsActivity.this.viewPages[0].selectedType);
+                                DialogsActivity dialogsActivity2 = DialogsActivity.this;
+                                ArrayList<Integer> dialogsCount = FiltersListBottomSheet.getDialogsCount(dialogsActivity2, dialogFilter, dialogsActivity2.selectedDialogs, false, false);
+                                if ((dialogFilter != null ? dialogFilter.neverShow.size() : 0) + dialogsCount.size() > 100) {
+                                    DialogsActivity dialogsActivity3 = DialogsActivity.this;
+                                    dialogsActivity3.showDialog(AlertsCreator.createSimpleAlert(dialogsActivity3.getParentActivity(), LocaleController.getString("FilterAddToAlertFullTitle", NUM), LocaleController.getString("FilterAddToAlertFullText", NUM)).create());
+                                    return;
                                 }
-                                FilterCreateActivity.saveFilterToServer(dialogFilter, dialogFilter.flags, dialogFilter.name, dialogFilter.alwaysShow, dialogFilter.neverShow, dialogFilter.pinnedDialogs, false, false, true, false, false, DialogsActivity.this, (Runnable) null);
+                                if (!dialogsCount.isEmpty()) {
+                                    dialogFilter.neverShow.addAll(dialogsCount);
+                                    for (int i3 = 0; i3 < dialogsCount.size(); i3++) {
+                                        Integer num = dialogsCount.get(i3);
+                                        dialogFilter.alwaysShow.remove(num);
+                                        dialogFilter.pinnedDialogs.remove((long) num.intValue());
+                                    }
+                                    FilterCreateActivity.saveFilterToServer(dialogFilter, dialogFilter.flags, dialogFilter.name, dialogFilter.alwaysShow, dialogFilter.neverShow, dialogFilter.pinnedDialogs, false, false, true, false, false, DialogsActivity.this, (Runnable) null);
+                                }
+                                DialogsActivity.this.getUndoView().showWithAction(dialogsCount.size() == 1 ? (long) dialogsCount.get(0).intValue() : 0, 21, Integer.valueOf(dialogsCount.size()), dialogFilter, (Runnable) null, (Runnable) null);
+                                DialogsActivity.this.hideActionMode(false);
+                            } else if (i2 == 100 || i2 == 101 || i2 == 102 || i2 == 103 || i2 == 104 || i2 == 105 || i2 == 106 || i2 == 107 || i2 == 108) {
+                                DialogsActivity dialogsActivity4 = DialogsActivity.this;
+                                dialogsActivity4.perfromSelectedDialogsAction(dialogsActivity4.selectedDialogs, i2, true);
                             }
-                            DialogsActivity.this.getUndoView().showWithAction(dialogsCount.size() == 1 ? (long) dialogsCount.get(0).intValue() : 0, 21, Integer.valueOf(dialogsCount.size()), dialogFilter, (Runnable) null, (Runnable) null);
-                            DialogsActivity.this.hideActionMode(false);
-                        } else if (i2 == 100 || i2 == 101 || i2 == 102 || i2 == 103 || i2 == 104 || i2 == 105 || i2 == 106 || i2 == 107 || i2 == 108) {
-                            DialogsActivity dialogsActivity4 = DialogsActivity.this;
-                            dialogsActivity4.perfromSelectedDialogsAction(dialogsActivity4.selectedDialogs, i2, true);
+                        } else if (DialogsActivity.this.getParentActivity() != null) {
+                            DialogsActivityDelegate access$23700 = DialogsActivity.this.delegate;
+                            LaunchActivity launchActivity = (LaunchActivity) DialogsActivity.this.getParentActivity();
+                            launchActivity.switchToAccount(i2 - 10, true);
+                            DialogsActivity dialogsActivity5 = new DialogsActivity(DialogsActivity.this.arguments);
+                            dialogsActivity5.setDelegate(access$23700);
+                            launchActivity.presentFragment(dialogsActivity5, false, true);
                         }
-                    } else if (DialogsActivity.this.getParentActivity() != null) {
-                        DialogsActivityDelegate access$23700 = DialogsActivity.this.delegate;
-                        LaunchActivity launchActivity = (LaunchActivity) DialogsActivity.this.getParentActivity();
-                        launchActivity.switchToAccount(i2 - 10, true);
-                        DialogsActivity dialogsActivity5 = new DialogsActivity(DialogsActivity.this.arguments);
-                        dialogsActivity5.setDelegate(access$23700);
-                        launchActivity.presentFragment(dialogsActivity5, false, true);
                     }
-                }
 
-                /* access modifiers changed from: private */
-                /* renamed from: lambda$onItemClick$0 */
-                public /* synthetic */ void lambda$onItemClick$0$DialogsActivity$24(MessagesController.DialogFilter dialogFilter) {
-                    ArrayList<Integer> arrayList;
-                    long j;
-                    ArrayList<Integer> arrayList2;
-                    MessagesController.DialogFilter dialogFilter2 = dialogFilter;
-                    DialogsActivity dialogsActivity = DialogsActivity.this;
-                    ArrayList<Integer> dialogsCount = FiltersListBottomSheet.getDialogsCount(dialogsActivity, dialogFilter2, dialogsActivity.selectedDialogs, true, false);
-                    if ((dialogFilter2 != null ? dialogFilter2.alwaysShow.size() : 0) + dialogsCount.size() > 100) {
-                        DialogsActivity dialogsActivity2 = DialogsActivity.this;
-                        dialogsActivity2.showDialog(AlertsCreator.createSimpleAlert(dialogsActivity2.getParentActivity(), LocaleController.getString("FilterAddToAlertFullTitle", NUM), LocaleController.getString("FilterRemoveFromAlertFullText", NUM)).create());
-                        return;
-                    }
-                    if (dialogFilter2 != null) {
-                        if (!dialogsCount.isEmpty()) {
-                            for (int i = 0; i < dialogsCount.size(); i++) {
-                                dialogFilter2.neverShow.remove(dialogsCount.get(i));
+                    /* access modifiers changed from: private */
+                    /* renamed from: lambda$onItemClick$0 */
+                    public /* synthetic */ void lambda$onItemClick$0$DialogsActivity$27(MessagesController.DialogFilter dialogFilter) {
+                        ArrayList<Integer> arrayList;
+                        long j;
+                        ArrayList<Integer> arrayList2;
+                        MessagesController.DialogFilter dialogFilter2 = dialogFilter;
+                        DialogsActivity dialogsActivity = DialogsActivity.this;
+                        ArrayList<Integer> dialogsCount = FiltersListBottomSheet.getDialogsCount(dialogsActivity, dialogFilter2, dialogsActivity.selectedDialogs, true, false);
+                        if ((dialogFilter2 != null ? dialogFilter2.alwaysShow.size() : 0) + dialogsCount.size() > 100) {
+                            DialogsActivity dialogsActivity2 = DialogsActivity.this;
+                            dialogsActivity2.showDialog(AlertsCreator.createSimpleAlert(dialogsActivity2.getParentActivity(), LocaleController.getString("FilterAddToAlertFullTitle", NUM), LocaleController.getString("FilterRemoveFromAlertFullText", NUM)).create());
+                            return;
+                        }
+                        if (dialogFilter2 != null) {
+                            if (!dialogsCount.isEmpty()) {
+                                for (int i = 0; i < dialogsCount.size(); i++) {
+                                    dialogFilter2.neverShow.remove(dialogsCount.get(i));
+                                }
+                                dialogFilter2.alwaysShow.addAll(dialogsCount);
+                                arrayList = dialogsCount;
+                                FilterCreateActivity.saveFilterToServer(dialogFilter, dialogFilter2.flags, dialogFilter2.name, dialogFilter2.alwaysShow, dialogFilter2.neverShow, dialogFilter2.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, (Runnable) null);
+                            } else {
+                                arrayList = dialogsCount;
                             }
-                            dialogFilter2.alwaysShow.addAll(dialogsCount);
-                            arrayList = dialogsCount;
-                            FilterCreateActivity.saveFilterToServer(dialogFilter, dialogFilter2.flags, dialogFilter2.name, dialogFilter2.alwaysShow, dialogFilter2.neverShow, dialogFilter2.pinnedDialogs, false, false, true, true, false, DialogsActivity.this, (Runnable) null);
+                            if (arrayList.size() == 1) {
+                                arrayList2 = arrayList;
+                                j = (long) arrayList2.get(0).intValue();
+                            } else {
+                                arrayList2 = arrayList;
+                                j = 0;
+                            }
+                            DialogsActivity.this.getUndoView().showWithAction(j, 20, Integer.valueOf(arrayList2.size()), dialogFilter, (Runnable) null, (Runnable) null);
                         } else {
-                            arrayList = dialogsCount;
+                            DialogsActivity.this.presentFragment(new FilterCreateActivity((MessagesController.DialogFilter) null, dialogsCount));
                         }
-                        if (arrayList.size() == 1) {
-                            arrayList2 = arrayList;
-                            j = (long) arrayList2.get(0).intValue();
-                        } else {
-                            arrayList2 = arrayList;
-                            j = 0;
-                        }
-                        DialogsActivity.this.getUndoView().showWithAction(j, 20, Integer.valueOf(arrayList2.size()), dialogFilter, (Runnable) null, (Runnable) null);
-                    } else {
-                        DialogsActivity.this.presentFragment(new FilterCreateActivity((MessagesController.DialogFilter) null, dialogsCount));
+                        DialogsActivity.this.hideActionMode(true);
                     }
-                    DialogsActivity.this.hideActionMode(true);
-                }
-            });
+                });
+            }
         }
     }
 
@@ -3972,47 +4141,47 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x0211  */
-    /* JADX WARNING: Removed duplicated region for block: B:119:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x021e  */
+    /* JADX WARNING: Removed duplicated region for block: B:123:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:52:0x00b3  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0139  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x01ae  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x0142  */
+    /* JADX WARNING: Removed duplicated region for block: B:99:0x01bb  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onResume() {
         /*
-            r10 = this;
+            r11 = this;
             super.onResume()
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r10.parentLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r11.parentLayout
             boolean r0 = r0.isInPreviewMode()
             r1 = 0
             if (r0 != 0) goto L_0x0022
-            android.view.View r0 = r10.blurredView
+            android.view.View r0 = r11.blurredView
             if (r0 == 0) goto L_0x0022
             int r0 = r0.getVisibility()
             if (r0 != 0) goto L_0x0022
-            android.view.View r0 = r10.blurredView
+            android.view.View r0 = r11.blurredView
             r2 = 8
             r0.setVisibility(r2)
-            android.view.View r0 = r10.blurredView
+            android.view.View r0 = r11.blurredView
             r0.setBackground(r1)
         L_0x0022:
-            org.telegram.ui.Components.FilterTabsView r0 = r10.filterTabsView
+            org.telegram.ui.Components.FilterTabsView r0 = r11.filterTabsView
             r2 = 1
             r3 = 0
             if (r0 == 0) goto L_0x0058
             int r0 = r0.getVisibility()
             if (r0 != 0) goto L_0x0058
-            org.telegram.ui.ActionBar.ActionBarLayout r0 = r10.parentLayout
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r11.parentLayout
             org.telegram.ui.ActionBar.DrawerLayoutContainer r0 = r0.getDrawerLayoutContainer()
-            org.telegram.ui.DialogsActivity$ViewPage[] r4 = r10.viewPages
+            org.telegram.ui.DialogsActivity$ViewPage[] r4 = r11.viewPages
             r4 = r4[r3]
             int r4 = r4.selectedType
-            org.telegram.ui.Components.FilterTabsView r5 = r10.filterTabsView
+            org.telegram.ui.Components.FilterTabsView r5 = r11.filterTabsView
             int r5 = r5.getFirstTabId()
             if (r4 == r5) goto L_0x0054
-            boolean r4 = r10.searchIsShowed
+            boolean r4 = r11.searchIsShowed
             if (r4 != 0) goto L_0x0054
-            int r4 = r10.currentAccount
+            int r4 = r11.currentAccount
             int r4 = org.telegram.messenger.SharedConfig.getChatSwipeAction(r4)
             r5 = 5
             if (r4 == r5) goto L_0x0052
@@ -4025,11 +4194,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x0055:
             r0.setAllowOpenDrawerBySwipe(r4)
         L_0x0058:
-            org.telegram.ui.DialogsActivity$ViewPage[] r0 = r10.viewPages
+            org.telegram.ui.DialogsActivity$ViewPage[] r0 = r11.viewPages
             if (r0 == 0) goto L_0x006e
             r0 = 0
         L_0x005d:
-            org.telegram.ui.DialogsActivity$ViewPage[] r4 = r10.viewPages
+            org.telegram.ui.DialogsActivity$ViewPage[] r4 = r11.viewPages
             int r5 = r4.length
             if (r0 >= r5) goto L_0x006e
             r4 = r4[r0]
@@ -4038,25 +4207,25 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r0 = r0 + 1
             goto L_0x005d
         L_0x006e:
-            org.telegram.ui.Components.ChatActivityEnterView r0 = r10.commentView
+            org.telegram.ui.Components.ChatActivityEnterView r0 = r11.commentView
             if (r0 == 0) goto L_0x0075
             r0.onResume()
         L_0x0075:
-            boolean r0 = r10.onlySelect
+            boolean r0 = r11.onlySelect
             if (r0 != 0) goto L_0x0085
-            int r0 = r10.folderId
+            int r0 = r11.folderId
             if (r0 != 0) goto L_0x0085
-            org.telegram.messenger.MediaDataController r0 = r10.getMediaDataController()
+            org.telegram.messenger.MediaDataController r0 = r11.getMediaDataController()
             r4 = 4
             r0.checkStickers(r4)
         L_0x0085:
-            org.telegram.ui.Components.SearchViewPager r0 = r10.searchViewPager
+            org.telegram.ui.Components.SearchViewPager r0 = r11.searchViewPager
             if (r0 == 0) goto L_0x008c
             r0.onResume()
         L_0x008c:
-            boolean r0 = r10.afterSignup
+            boolean r0 = r11.afterSignup
             if (r0 != 0) goto L_0x009b
-            org.telegram.messenger.UserConfig r0 = r10.getUserConfig()
+            org.telegram.messenger.UserConfig r0 = r11.getUserConfig()
             org.telegram.tgnet.TLRPC$TL_help_termsOfService r0 = r0.unacceptedTermsOfService
             if (r0 != 0) goto L_0x0099
             goto L_0x009d
@@ -4064,186 +4233,191 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0 = 0
             goto L_0x009e
         L_0x009b:
-            r10.afterSignup = r3
+            r11.afterSignup = r3
         L_0x009d:
             r0 = 1
         L_0x009e:
             r4 = 2131624282(0x7f0e015a, float:1.887574E38)
             java.lang.String r5 = "AppName"
-            if (r0 == 0) goto L_0x0139
-            boolean r0 = r10.checkPermission
-            if (r0 == 0) goto L_0x0139
-            boolean r0 = r10.onlySelect
-            if (r0 != 0) goto L_0x0139
+            if (r0 == 0) goto L_0x0142
+            boolean r0 = r11.checkPermission
+            if (r0 == 0) goto L_0x0142
+            boolean r0 = r11.onlySelect
+            if (r0 != 0) goto L_0x0142
             int r0 = android.os.Build.VERSION.SDK_INT
             r6 = 23
-            if (r0 < r6) goto L_0x0139
-            android.app.Activity r0 = r10.getParentActivity()
-            if (r0 == 0) goto L_0x01a7
-            r10.checkPermission = r3
-            java.lang.String r6 = "android.permission.READ_CONTACTS"
-            int r7 = r0.checkSelfPermission(r6)
-            if (r7 == 0) goto L_0x00c5
-            r7 = 1
+            if (r0 < r6) goto L_0x0142
+            android.app.Activity r6 = r11.getParentActivity()
+            if (r6 == 0) goto L_0x01b4
+            r11.checkPermission = r3
+            java.lang.String r7 = "android.permission.READ_CONTACTS"
+            int r8 = r6.checkSelfPermission(r7)
+            if (r8 == 0) goto L_0x00c5
+            r8 = 1
             goto L_0x00c6
         L_0x00c5:
-            r7 = 0
+            r8 = 0
         L_0x00c6:
-            java.lang.String r8 = "android.permission.WRITE_EXTERNAL_STORAGE"
-            int r9 = r0.checkSelfPermission(r8)
-            if (r9 == 0) goto L_0x00d0
-            r9 = 1
-            goto L_0x00d1
+            r9 = 28
+            java.lang.String r10 = "android.permission.WRITE_EXTERNAL_STORAGE"
+            if (r0 <= r9) goto L_0x00d0
+            boolean r0 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
+            if (r0 == 0) goto L_0x00d8
         L_0x00d0:
-            r9 = 0
-        L_0x00d1:
-            if (r7 != 0) goto L_0x00d5
-            if (r9 == 0) goto L_0x01a7
-        L_0x00d5:
-            r10.askingForPermissions = r2
-            if (r7 == 0) goto L_0x00ff
-            boolean r7 = r10.askAboutContacts
-            if (r7 == 0) goto L_0x00ff
-            org.telegram.messenger.UserConfig r7 = r10.getUserConfig()
-            boolean r7 = r7.syncContacts
-            if (r7 == 0) goto L_0x00ff
-            boolean r6 = r0.shouldShowRequestPermissionRationale(r6)
-            if (r6 == 0) goto L_0x00ff
-            org.telegram.ui.-$$Lambda$DialogsActivity$NDjkpRJiaIxLmVxhQl2rcKvq5v4 r1 = new org.telegram.ui.-$$Lambda$DialogsActivity$NDjkpRJiaIxLmVxhQl2rcKvq5v4
-            r1.<init>()
-            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = org.telegram.ui.Components.AlertsCreator.createContactsPermissionDialog(r0, r1)
+            int r0 = r6.checkSelfPermission(r10)
+            if (r0 == 0) goto L_0x00d8
+            r0 = 1
+            goto L_0x00d9
+        L_0x00d8:
+            r0 = 0
+        L_0x00d9:
+            if (r8 != 0) goto L_0x00dd
+            if (r0 == 0) goto L_0x01b4
+        L_0x00dd:
+            r11.askingForPermissions = r2
+            if (r8 == 0) goto L_0x0107
+            boolean r8 = r11.askAboutContacts
+            if (r8 == 0) goto L_0x0107
+            org.telegram.messenger.UserConfig r8 = r11.getUserConfig()
+            boolean r8 = r8.syncContacts
+            if (r8 == 0) goto L_0x0107
+            boolean r7 = r6.shouldShowRequestPermissionRationale(r7)
+            if (r7 == 0) goto L_0x0107
+            org.telegram.ui.-$$Lambda$DialogsActivity$mZjpCr720r4IPLccOQwURIFckA0 r0 = new org.telegram.ui.-$$Lambda$DialogsActivity$mZjpCr720r4IPLccOQwURIFckA0
+            r0.<init>()
+            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = org.telegram.ui.Components.AlertsCreator.createContactsPermissionDialog(r6, r0)
             org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
-            r10.permissionDialog = r0
-            r10.showDialog(r0)
-            goto L_0x01a7
-        L_0x00ff:
-            if (r9 == 0) goto L_0x0135
-            boolean r6 = r0.shouldShowRequestPermissionRationale(r8)
-            if (r6 == 0) goto L_0x0135
-            org.telegram.ui.ActionBar.AlertDialog$Builder r6 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            r6.<init>((android.content.Context) r0)
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r6.setTitle(r0)
-            r0 = 2131626890(0x7f0e0b8a, float:1.8881029E38)
-            java.lang.String r4 = "PermissionStorage"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
-            r6.setMessage(r0)
-            r0 = 2131626507(0x7f0e0a0b, float:1.8880252E38)
-            java.lang.String r4 = "OK"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
-            r6.setPositiveButton(r0, r1)
-            org.telegram.ui.ActionBar.AlertDialog r0 = r6.create()
-            r10.permissionDialog = r0
-            r10.showDialog(r0)
-            goto L_0x01a7
-        L_0x0135:
-            r10.askForPermissons(r2)
-            goto L_0x01a7
-        L_0x0139:
-            boolean r0 = r10.onlySelect
-            if (r0 != 0) goto L_0x01a7
+            r11.permissionDialog = r0
+            r11.showDialog(r0)
+            goto L_0x01b4
+        L_0x0107:
+            if (r0 == 0) goto L_0x013e
+            boolean r0 = r6.shouldShowRequestPermissionRationale(r10)
+            if (r0 == 0) goto L_0x013e
+            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            r0.<init>((android.content.Context) r6)
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r0.setTitle(r4)
+            r4 = 2131626912(0x7f0e0ba0, float:1.8881074E38)
+            java.lang.String r5 = "PermissionStorage"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r0.setMessage(r4)
+            r4 = 2131626529(0x7f0e0a21, float:1.8880297E38)
+            java.lang.String r5 = "OK"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r0.setPositiveButton(r4, r1)
+            org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
+            r11.permissionDialog = r0
+            r11.showDialog(r0)
+            goto L_0x01b4
+        L_0x013e:
+            r11.askForPermissons(r2)
+            goto L_0x01b4
+        L_0x0142:
+            boolean r0 = r11.onlySelect
+            if (r0 != 0) goto L_0x01b4
             boolean r0 = org.telegram.messenger.XiaomiUtilities.isMIUI()
-            if (r0 == 0) goto L_0x01a7
+            if (r0 == 0) goto L_0x01b4
             int r0 = android.os.Build.VERSION.SDK_INT
             r1 = 19
-            if (r0 < r1) goto L_0x01a7
+            if (r0 < r1) goto L_0x01b4
             r0 = 10020(0x2724, float:1.4041E-41)
             boolean r0 = org.telegram.messenger.XiaomiUtilities.isCustomPermissionGranted(r0)
-            if (r0 != 0) goto L_0x01a7
-            android.app.Activity r0 = r10.getParentActivity()
-            if (r0 != 0) goto L_0x0158
+            if (r0 != 0) goto L_0x01b4
+            android.app.Activity r0 = r11.getParentActivity()
+            if (r0 != 0) goto L_0x0161
             return
-        L_0x0158:
+        L_0x0161:
             android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalNotificationsSettings()
             java.lang.String r1 = "askedAboutMiuiLockscreen"
             boolean r0 = r0.getBoolean(r1, r3)
-            if (r0 == 0) goto L_0x0165
+            if (r0 == 0) goto L_0x016e
             return
-        L_0x0165:
+        L_0x016e:
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            android.app.Activity r1 = r10.getParentActivity()
+            android.app.Activity r1 = r11.getParentActivity()
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
-            r0.setTitle(r1)
-            r1 = 2131626891(0x7f0e0b8b, float:1.888103E38)
+            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r0.setTitle(r1)
+            r1 = 2131626913(0x7f0e0ba1, float:1.8881076E38)
             java.lang.String r4 = "PermissionXiaomiLockscreen"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
-            r0.setMessage(r1)
-            r1 = 2131626889(0x7f0e0b89, float:1.8881027E38)
+            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r0.setMessage(r1)
+            r1 = 2131626911(0x7f0e0b9f, float:1.8881072E38)
             java.lang.String r4 = "PermissionOpenSettings"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
-            org.telegram.ui.-$$Lambda$DialogsActivity$P7XKAmT26raLlvar_AlrL62XLpQ8 r4 = new org.telegram.ui.-$$Lambda$DialogsActivity$P7XKAmT26raLlvar_AlrL62XLpQ8
+            org.telegram.ui.-$$Lambda$DialogsActivity$lzw09syq6rl0qUFn3II1pvD8w70 r4 = new org.telegram.ui.-$$Lambda$DialogsActivity$lzw09syq6rl0qUFn3II1pvD8w70
             r4.<init>()
-            r0.setPositiveButton(r1, r4)
-            r1 = 2131624984(0x7f0e0418, float:1.8877163E38)
+            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r0.setPositiveButton(r1, r4)
+            r1 = 2131625000(0x7f0e0428, float:1.8877196E38)
             java.lang.String r4 = "ContactsPermissionAlertNotNow"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
-            org.telegram.ui.-$$Lambda$DialogsActivity$tmX8hHmbkMGLu5yCBS8o2Ti7cuA r4 = org.telegram.ui.$$Lambda$DialogsActivity$tmX8hHmbkMGLu5yCBS8o2Ti7cuA.INSTANCE
-            r0.setNegativeButton(r1, r4)
+            org.telegram.ui.-$$Lambda$DialogsActivity$ilxOfJA0tIm_rfnhWJ6WLKeQIIo r4 = org.telegram.ui.$$Lambda$DialogsActivity$ilxOfJA0tIm_rfnhWJ6WLKeQIIo.INSTANCE
+            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = r0.setNegativeButton(r1, r4)
             org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
-            r10.showDialog(r0)
-        L_0x01a7:
-            r10.showFiltersHint()
-            org.telegram.ui.DialogsActivity$ViewPage[] r0 = r10.viewPages
-            if (r0 == 0) goto L_0x0202
+            r11.showDialog(r0)
+        L_0x01b4:
+            r11.showFiltersHint()
+            org.telegram.ui.DialogsActivity$ViewPage[] r0 = r11.viewPages
+            if (r0 == 0) goto L_0x020f
             r0 = 0
-        L_0x01af:
-            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r10.viewPages
+        L_0x01bc:
+            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r11.viewPages
             int r4 = r1.length
-            if (r0 >= r4) goto L_0x0202
+            if (r0 >= r4) goto L_0x020f
             r1 = r1[r0]
             int r1 = r1.dialogsType
-            if (r1 != 0) goto L_0x01e6
-            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r10.viewPages
+            if (r1 != 0) goto L_0x01f3
+            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r11.viewPages
             r1 = r1[r0]
             int r1 = r1.archivePullViewState
             r4 = 2
-            if (r1 != r4) goto L_0x01e6
-            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r10.viewPages
+            if (r1 != r4) goto L_0x01f3
+            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r11.viewPages
             r1 = r1[r0]
             androidx.recyclerview.widget.LinearLayoutManager r1 = r1.layoutManager
             int r1 = r1.findFirstVisibleItemPosition()
-            if (r1 != 0) goto L_0x01e6
-            boolean r1 = r10.hasHiddenArchive()
-            if (r1 == 0) goto L_0x01e6
-            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r10.viewPages
+            if (r1 != 0) goto L_0x01f3
+            boolean r1 = r11.hasHiddenArchive()
+            if (r1 == 0) goto L_0x01f3
+            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r11.viewPages
             r1 = r1[r0]
             androidx.recyclerview.widget.LinearLayoutManager r1 = r1.layoutManager
             r1.scrollToPositionWithOffset(r2, r3)
-        L_0x01e6:
-            if (r0 != 0) goto L_0x01f4
-            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r10.viewPages
+        L_0x01f3:
+            if (r0 != 0) goto L_0x0201
+            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r11.viewPages
             r1 = r1[r0]
             org.telegram.ui.Adapters.DialogsAdapter r1 = r1.dialogsAdapter
             r1.resume()
-            goto L_0x01ff
-        L_0x01f4:
-            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r10.viewPages
+            goto L_0x020c
+        L_0x0201:
+            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r11.viewPages
             r1 = r1[r0]
             org.telegram.ui.Adapters.DialogsAdapter r1 = r1.dialogsAdapter
             r1.pause()
-        L_0x01ff:
+        L_0x020c:
             int r0 = r0 + 1
-            goto L_0x01af
-        L_0x0202:
-            r10.showNextSupportedSuggestion()
-            org.telegram.ui.DialogsActivity$25 r0 = new org.telegram.ui.DialogsActivity$25
+            goto L_0x01bc
+        L_0x020f:
+            r11.showNextSupportedSuggestion()
+            org.telegram.ui.DialogsActivity$28 r0 = new org.telegram.ui.DialogsActivity$28
             r0.<init>()
-            org.telegram.ui.Components.Bulletin.addDelegate((org.telegram.ui.ActionBar.BaseFragment) r10, (org.telegram.ui.Components.Bulletin.Delegate) r0)
-            boolean r0 = r10.searchIsShowed
-            if (r0 == 0) goto L_0x021a
-            android.app.Activity r0 = r10.getParentActivity()
-            int r1 = r10.classGuid
+            org.telegram.ui.Components.Bulletin.addDelegate((org.telegram.ui.ActionBar.BaseFragment) r11, (org.telegram.ui.Components.Bulletin.Delegate) r0)
+            boolean r0 = r11.searchIsShowed
+            if (r0 == 0) goto L_0x0227
+            android.app.Activity r0 = r11.getParentActivity()
+            int r1 = r11.classGuid
             org.telegram.messenger.AndroidUtilities.requestAdjustResize(r0, r1)
-        L_0x021a:
+        L_0x0227:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.onResume():void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onResume$10 */
-    public /* synthetic */ void lambda$onResume$10$DialogsActivity(int i) {
+    /* renamed from: lambda$onResume$11 */
+    public /* synthetic */ void lambda$onResume$11$DialogsActivity(int i) {
         this.askAboutContacts = i != 0;
         MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askAboutContacts", this.askAboutContacts).commit();
         askForPermissons(false);
@@ -4255,9 +4429,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
      */
     /* JADX WARNING: Failed to process nested try/catch */
     /* JADX WARNING: Missing exception handler attribute for start block: B:4:0x000e */
-    /* renamed from: lambda$onResume$11 */
+    /* renamed from: lambda$onResume$12 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$onResume$11$DialogsActivity(android.content.DialogInterface r2, int r3) {
+    public /* synthetic */ void lambda$onResume$12$DialogsActivity(android.content.DialogInterface r2, int r3) {
         /*
             r1 = this;
             android.content.Intent r2 = org.telegram.messenger.XiaomiUtilities.getPermissionManagerIntent()
@@ -4288,7 +4462,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x003f:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.lambda$onResume$11$DialogsActivity(android.content.DialogInterface, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.lambda$onResume$12$DialogsActivity(android.content.DialogInterface, int):void");
     }
 
     public boolean presentFragment(BaseFragment baseFragment) {
@@ -4360,6 +4534,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             if (this.searchViewPager.getVisibility() == 0) {
                 this.searchViewPager.hideActionMode();
+                hideActionMode(true);
             } else {
                 hideActionMode(true);
             }
@@ -4429,12 +4604,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             this.selectedDialogs.remove(Long.valueOf(j));
             if (view instanceof DialogCell) {
                 ((DialogCell) view).setChecked(false, true);
+            } else if (view instanceof ProfileSearchCell) {
+                ((ProfileSearchCell) view).setChecked(false, true);
             }
             return false;
         }
         this.selectedDialogs.add(Long.valueOf(j));
         if (view instanceof DialogCell) {
             ((DialogCell) view).setChecked(true, true);
+        } else if (view instanceof ProfileSearchCell) {
+            ((ProfileSearchCell) view).setChecked(true, true);
         }
         return true;
     }
@@ -4444,568 +4623,589 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         this.actionBar.openSearchField(str, false);
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v2, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v9, resolved type: boolean} */
-    /* JADX WARNING: type inference failed for: r3v0 */
-    /* JADX WARNING: type inference failed for: r3v3 */
-    /* JADX WARNING: type inference failed for: r3v10 */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v1, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v3, resolved type: boolean} */
+    /* JADX WARNING: type inference failed for: r8v0 */
+    /* JADX WARNING: type inference failed for: r8v2 */
+    /* JADX WARNING: type inference failed for: r8v4 */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void showSearch(boolean r17, boolean r18) {
+    public void showSearch(boolean r19, boolean r20) {
         /*
-            r16 = this;
-            r0 = r16
-            r1 = r17
-            int r2 = r0.initialDialogsType
-            r3 = 0
-            if (r2 == 0) goto L_0x000e
-            r4 = 3
-            if (r2 == r4) goto L_0x000e
-            r2 = 0
+            r18 = this;
+            r6 = r18
+            r7 = r19
+            int r0 = r6.initialDialogsType
+            r8 = 0
+            if (r0 == 0) goto L_0x000e
+            r1 = 3
+            if (r0 == r1) goto L_0x000e
+            r0 = 0
             goto L_0x0010
         L_0x000e:
-            r2 = r18
+            r0 = r20
         L_0x0010:
-            android.animation.AnimatorSet r4 = r0.searchAnimator
-            r5 = 0
-            if (r4 == 0) goto L_0x001a
-            r4.cancel()
-            r0.searchAnimator = r5
+            android.animation.AnimatorSet r1 = r6.searchAnimator
+            r9 = 0
+            if (r1 == 0) goto L_0x001a
+            r1.cancel()
+            r6.searchAnimator = r9
         L_0x001a:
-            android.animation.Animator r4 = r0.tabsAlphaAnimator
-            if (r4 == 0) goto L_0x0023
-            r4.cancel()
-            r0.tabsAlphaAnimator = r5
+            android.animation.Animator r1 = r6.tabsAlphaAnimator
+            if (r1 == 0) goto L_0x0023
+            r1.cancel()
+            r6.tabsAlphaAnimator = r9
         L_0x0023:
-            r0.searchIsShowed = r1
-            r4 = 1110441984(0x42300000, float:44.0)
-            r6 = -1
-            r7 = 1
-            if (r1 == 0) goto L_0x00ee
-            boolean r8 = r0.searchFiltersWasShowed
-            if (r8 == 0) goto L_0x0031
-            r8 = 0
+            r6.searchIsShowed = r7
+            r1 = 1110441984(0x42300000, float:44.0)
+            r10 = -1
+            r11 = 1
+            if (r7 == 0) goto L_0x0112
+            boolean r2 = r6.searchFiltersWasShowed
+            if (r2 == 0) goto L_0x0031
+            r2 = 0
             goto L_0x0035
         L_0x0031:
-            boolean r8 = r16.onlyDialogsAdapter()
+            boolean r2 = r18.onlyDialogsAdapter()
         L_0x0035:
-            org.telegram.ui.Components.SearchViewPager r9 = r0.searchViewPager
-            r9.showOnlyDialogsAdapter(r8)
-            r9 = r8 ^ 1
-            r0.whiteActionBar = r9
-            if (r9 == 0) goto L_0x0042
-            r0.searchFiltersWasShowed = r7
+            org.telegram.ui.Components.SearchViewPager r3 = r6.searchViewPager
+            r3.showOnlyDialogsAdapter(r2)
+            r3 = r2 ^ 1
+            r6.whiteActionBar = r3
+            if (r3 == 0) goto L_0x0042
+            r6.searchFiltersWasShowed = r11
         L_0x0042:
-            android.view.View r9 = r0.fragmentView
-            org.telegram.ui.DialogsActivity$ContentView r9 = (org.telegram.ui.DialogsActivity.ContentView) r9
-            org.telegram.ui.Components.ViewPagerFixed$TabsView r10 = r0.searchTabsView
-            if (r10 != 0) goto L_0x0082
-            if (r8 != 0) goto L_0x0082
-            org.telegram.ui.Components.SearchViewPager r8 = r0.searchViewPager
-            org.telegram.ui.Components.ViewPagerFixed$TabsView r8 = r8.createTabsView()
-            r0.searchTabsView = r8
-            org.telegram.ui.Adapters.FiltersView r8 = r0.filtersView
-            if (r8 == 0) goto L_0x006b
-            r8 = 0
+            android.view.View r3 = r6.fragmentView
+            org.telegram.ui.DialogsActivity$ContentView r3 = (org.telegram.ui.DialogsActivity.ContentView) r3
+            org.telegram.ui.Components.ViewPagerFixed$TabsView r4 = r6.searchTabsView
+            if (r4 != 0) goto L_0x0082
+            if (r2 != 0) goto L_0x0082
+            org.telegram.ui.Components.SearchViewPager r2 = r6.searchViewPager
+            org.telegram.ui.Components.ViewPagerFixed$TabsView r2 = r2.createTabsView()
+            r6.searchTabsView = r2
+            org.telegram.ui.Adapters.FiltersView r2 = r6.filtersView
+            if (r2 == 0) goto L_0x006b
+            r2 = 0
         L_0x0059:
-            int r10 = r9.getChildCount()
-            if (r8 >= r10) goto L_0x006b
-            android.view.View r10 = r9.getChildAt(r8)
-            org.telegram.ui.Adapters.FiltersView r11 = r0.filtersView
-            if (r10 != r11) goto L_0x0068
+            int r4 = r3.getChildCount()
+            if (r2 >= r4) goto L_0x006b
+            android.view.View r4 = r3.getChildAt(r2)
+            org.telegram.ui.Adapters.FiltersView r5 = r6.filtersView
+            if (r4 != r5) goto L_0x0068
             goto L_0x006c
         L_0x0068:
-            int r8 = r8 + 1
+            int r2 = r2 + 1
             goto L_0x0059
         L_0x006b:
-            r8 = -1
+            r2 = -1
         L_0x006c:
-            if (r8 <= 0) goto L_0x0078
-            org.telegram.ui.Components.ViewPagerFixed$TabsView r10 = r0.searchTabsView
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r4)
-            r9.addView(r10, r8, r11)
+            if (r2 <= 0) goto L_0x0078
+            org.telegram.ui.Components.ViewPagerFixed$TabsView r4 = r6.searchTabsView
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r1)
+            r3.addView(r4, r2, r5)
             goto L_0x0097
         L_0x0078:
-            org.telegram.ui.Components.ViewPagerFixed$TabsView r8 = r0.searchTabsView
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r4)
-            r9.addView(r8, r10)
+            org.telegram.ui.Components.ViewPagerFixed$TabsView r2 = r6.searchTabsView
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r1)
+            r3.addView(r2, r4)
             goto L_0x0097
         L_0x0082:
-            if (r10 == 0) goto L_0x0097
-            if (r8 == 0) goto L_0x0097
-            android.view.ViewParent r8 = r10.getParent()
-            boolean r9 = r8 instanceof android.view.ViewGroup
-            if (r9 == 0) goto L_0x0095
-            android.view.ViewGroup r8 = (android.view.ViewGroup) r8
-            org.telegram.ui.Components.ViewPagerFixed$TabsView r9 = r0.searchTabsView
-            r8.removeView(r9)
+            if (r4 == 0) goto L_0x0097
+            if (r2 == 0) goto L_0x0097
+            android.view.ViewParent r2 = r4.getParent()
+            boolean r3 = r2 instanceof android.view.ViewGroup
+            if (r3 == 0) goto L_0x0095
+            android.view.ViewGroup r2 = (android.view.ViewGroup) r2
+            org.telegram.ui.Components.ViewPagerFixed$TabsView r3 = r6.searchTabsView
+            r2.removeView(r3)
         L_0x0095:
-            r0.searchTabsView = r5
+            r6.searchTabsView = r9
         L_0x0097:
-            org.telegram.ui.ActionBar.ActionBarMenuItem r8 = r0.searchItem
-            org.telegram.ui.Components.EditTextBoldCursor r8 = r8.getSearchField()
-            boolean r9 = r0.whiteActionBar
-            if (r9 == 0) goto L_0x00be
-            java.lang.String r9 = "windowBackgroundWhiteBlackText"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r8.setTextColor(r9)
-            java.lang.String r9 = "player_time"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r8.setHintTextColor(r9)
-            java.lang.String r9 = "chat_messagePanelCursor"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r8.setCursorColor(r9)
-            goto L_0x00d7
-        L_0x00be:
-            java.lang.String r9 = "actionBarDefaultSearch"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r8.setCursorColor(r10)
-            java.lang.String r10 = "actionBarDefaultSearchPlaceholder"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r8.setHintTextColor(r10)
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r8.setTextColor(r9)
-        L_0x00d7:
-            org.telegram.ui.Components.SearchViewPager r8 = r0.searchViewPager
-            android.view.View r9 = r0.fragmentView
-            org.telegram.ui.DialogsActivity$ContentView r9 = (org.telegram.ui.DialogsActivity.ContentView) r9
-            int r9 = r9.getKeyboardHeight()
-            r8.setKeyboardHeight(r9)
-            org.telegram.ui.ActionBar.ActionBarLayout r8 = r0.parentLayout
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r8 = r8.getDrawerLayoutContainer()
-            r8.setAllowOpenDrawerBySwipe(r7)
-            goto L_0x0118
-        L_0x00ee:
-            org.telegram.ui.Components.FilterTabsView r8 = r0.filterTabsView
-            if (r8 == 0) goto L_0x0118
-            org.telegram.ui.ActionBar.ActionBarLayout r8 = r0.parentLayout
-            org.telegram.ui.ActionBar.DrawerLayoutContainer r8 = r8.getDrawerLayoutContainer()
-            org.telegram.ui.DialogsActivity$ViewPage[] r9 = r0.viewPages
-            r9 = r9[r3]
-            int r9 = r9.selectedType
-            org.telegram.ui.Components.FilterTabsView r10 = r0.filterTabsView
-            int r10 = r10.getFirstTabId()
-            if (r9 == r10) goto L_0x0114
-            int r9 = r0.currentAccount
-            int r9 = org.telegram.messenger.SharedConfig.getChatSwipeAction(r9)
-            r10 = 5
-            if (r9 == r10) goto L_0x0112
-            goto L_0x0114
-        L_0x0112:
-            r9 = 0
-            goto L_0x0115
-        L_0x0114:
-            r9 = 1
-        L_0x0115:
-            r8.setAllowOpenDrawerBySwipe(r9)
-        L_0x0118:
-            if (r2 == 0) goto L_0x012e
-            org.telegram.ui.Components.SearchViewPager r8 = r0.searchViewPager
-            org.telegram.ui.Adapters.DialogsSearchAdapter r8 = r8.dialogsSearchAdapter
-            boolean r8 = r8.hasRecentSearch()
-            if (r8 == 0) goto L_0x012e
-            android.app.Activity r8 = r16.getParentActivity()
-            int r9 = r0.classGuid
-            org.telegram.messenger.AndroidUtilities.setAdjustResizeToNothing(r8, r9)
-            goto L_0x0137
-        L_0x012e:
-            android.app.Activity r8 = r16.getParentActivity()
-            int r9 = r0.classGuid
-            org.telegram.messenger.AndroidUtilities.requestAdjustResize(r8, r9)
-        L_0x0137:
-            if (r1 != 0) goto L_0x0144
-            org.telegram.ui.Components.FilterTabsView r8 = r0.filterTabsView
-            if (r8 == 0) goto L_0x0144
-            boolean r9 = r0.canShowFilterTabsView
-            if (r9 == 0) goto L_0x0144
-            r8.setVisibility(r3)
-        L_0x0144:
-            r8 = 1063675494(0x3var_, float:0.9)
-            r9 = 0
-            r10 = 1065353216(0x3var_, float:1.0)
-            if (r2 == 0) goto L_0x0340
-            if (r1 == 0) goto L_0x0168
-            org.telegram.ui.Components.SearchViewPager r2 = r0.searchViewPager
-            r2.setVisibility(r3)
-            org.telegram.ui.Components.SearchViewPager r2 = r0.searchViewPager
-            r2.reset()
-            r0.updateFiltersView(r7, r5, r5, r3)
-            org.telegram.ui.Components.ViewPagerFixed$TabsView r2 = r0.searchTabsView
-            if (r2 == 0) goto L_0x017a
-            r2.hide(r3, r3)
-            org.telegram.ui.Components.ViewPagerFixed$TabsView r2 = r0.searchTabsView
-            r2.setVisibility(r3)
-            goto L_0x017a
-        L_0x0168:
-            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r0.viewPages
-            r2 = r2[r3]
-            org.telegram.ui.DialogsActivity$DialogsRecyclerView r2 = r2.listView
-            r2.setVisibility(r3)
-            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r0.viewPages
-            r2 = r2[r3]
-            r2.setVisibility(r3)
-        L_0x017a:
-            r0.setDialogsListFrozen(r7)
-            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r0.viewPages
-            r2 = r2[r3]
-            org.telegram.ui.DialogsActivity$DialogsRecyclerView r2 = r2.listView
-            r2.setVerticalScrollBarEnabled(r3)
-            org.telegram.ui.Components.SearchViewPager r2 = r0.searchViewPager
-            java.lang.String r4 = "windowBackgroundWhite"
-            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r2.setBackgroundColor(r11)
-            android.animation.AnimatorSet r2 = new android.animation.AnimatorSet
-            r2.<init>()
-            r0.searchAnimator = r2
-            java.util.ArrayList r2 = new java.util.ArrayList
-            r2.<init>()
-            org.telegram.ui.DialogsActivity$ViewPage[] r11 = r0.viewPages
-            r11 = r11[r3]
-            android.util.Property r12 = android.view.View.ALPHA
-            float[] r13 = new float[r7]
-            if (r1 == 0) goto L_0x01ac
-            r14 = 0
-            goto L_0x01ae
-        L_0x01ac:
-            r14 = 1065353216(0x3var_, float:1.0)
-        L_0x01ae:
-            r13[r3] = r14
-            android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r11, r12, r13)
-            r2.add(r11)
-            org.telegram.ui.DialogsActivity$ViewPage[] r11 = r0.viewPages
-            r11 = r11[r3]
-            android.util.Property r12 = android.view.View.SCALE_X
-            float[] r13 = new float[r7]
-            if (r1 == 0) goto L_0x01c5
-            r14 = 1063675494(0x3var_, float:0.9)
-            goto L_0x01c7
-        L_0x01c5:
-            r14 = 1065353216(0x3var_, float:1.0)
-        L_0x01c7:
-            r13[r3] = r14
-            android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r11, r12, r13)
-            r2.add(r11)
-            org.telegram.ui.DialogsActivity$ViewPage[] r11 = r0.viewPages
-            r11 = r11[r3]
-            android.util.Property r12 = android.view.View.SCALE_Y
-            float[] r13 = new float[r7]
-            if (r1 == 0) goto L_0x01db
-            goto L_0x01dd
-        L_0x01db:
-            r8 = 1065353216(0x3var_, float:1.0)
-        L_0x01dd:
-            r13[r3] = r8
-            android.animation.ObjectAnimator r8 = android.animation.ObjectAnimator.ofFloat(r11, r12, r13)
-            r2.add(r8)
-            org.telegram.ui.Components.SearchViewPager r8 = r0.searchViewPager
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r7]
-            if (r1 == 0) goto L_0x01f1
-            r13 = 1065353216(0x3var_, float:1.0)
-            goto L_0x01f2
-        L_0x01f1:
-            r13 = 0
-        L_0x01f2:
-            r12[r3] = r13
-            android.animation.ObjectAnimator r8 = android.animation.ObjectAnimator.ofFloat(r8, r11, r12)
-            r2.add(r8)
-            org.telegram.ui.Components.SearchViewPager r8 = r0.searchViewPager
-            android.util.Property r11 = android.view.View.SCALE_X
-            float[] r12 = new float[r7]
-            r13 = 1065772646(0x3var_, float:1.05)
-            if (r1 == 0) goto L_0x0209
-            r14 = 1065353216(0x3var_, float:1.0)
-            goto L_0x020c
-        L_0x0209:
-            r14 = 1065772646(0x3var_, float:1.05)
-        L_0x020c:
-            r12[r3] = r14
-            android.animation.ObjectAnimator r8 = android.animation.ObjectAnimator.ofFloat(r8, r11, r12)
-            r2.add(r8)
-            org.telegram.ui.Components.SearchViewPager r8 = r0.searchViewPager
-            android.util.Property r11 = android.view.View.SCALE_Y
-            float[] r12 = new float[r7]
-            if (r1 == 0) goto L_0x021f
-            r13 = 1065353216(0x3var_, float:1.0)
-        L_0x021f:
-            r12[r3] = r13
-            android.animation.ObjectAnimator r8 = android.animation.ObjectAnimator.ofFloat(r8, r11, r12)
-            r2.add(r8)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r8 = r0.passcodeItem
-            if (r8 == 0) goto L_0x0243
-            org.telegram.ui.Components.RLottieImageView r8 = r8.getIconView()
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r7]
-            if (r1 == 0) goto L_0x0238
-            r13 = 0
-            goto L_0x023a
-        L_0x0238:
-            r13 = 1065353216(0x3var_, float:1.0)
-        L_0x023a:
-            r12[r3] = r13
-            android.animation.ObjectAnimator r8 = android.animation.ObjectAnimator.ofFloat(r8, r11, r12)
-            r2.add(r8)
-        L_0x0243:
-            org.telegram.ui.Components.FilterTabsView r8 = r0.filterTabsView
-            r11 = 100
-            if (r8 == 0) goto L_0x0273
-            int r8 = r8.getVisibility()
-            if (r8 != 0) goto L_0x0273
-            org.telegram.ui.Components.FilterTabsView r8 = r0.filterTabsView
-            org.telegram.ui.Components.RecyclerListView r8 = r8.getTabsContainer()
-            android.util.Property r13 = android.view.View.ALPHA
-            float[] r14 = new float[r7]
-            if (r1 == 0) goto L_0x025d
-            r15 = 0
-            goto L_0x025f
-        L_0x025d:
-            r15 = 1065353216(0x3var_, float:1.0)
-        L_0x025f:
-            r14[r3] = r15
-            android.animation.ObjectAnimator r8 = android.animation.ObjectAnimator.ofFloat(r8, r13, r14)
-            android.animation.ObjectAnimator r8 = r8.setDuration(r11)
-            r0.tabsAlphaAnimator = r8
-            org.telegram.ui.DialogsActivity$26 r13 = new org.telegram.ui.DialogsActivity$26
-            r13.<init>()
-            r8.addListener(r13)
-        L_0x0273:
-            r8 = 2
-            float[] r8 = new float[r8]
-            float r13 = r0.searchAnimationProgress
-            r8[r3] = r13
-            if (r1 == 0) goto L_0x027e
-            r9 = 1065353216(0x3var_, float:1.0)
-        L_0x027e:
-            r8[r7] = r9
-            android.animation.ValueAnimator r8 = android.animation.ValueAnimator.ofFloat(r8)
-            org.telegram.ui.-$$Lambda$DialogsActivity$45OcTdZUTTV2reEKNqEj5e_B8Mk r9 = new org.telegram.ui.-$$Lambda$DialogsActivity$45OcTdZUTTV2reEKNqEj5e_B8Mk
-            r9.<init>()
-            r8.addUpdateListener(r9)
-            r2.add(r8)
-            android.animation.AnimatorSet r8 = r0.searchAnimator
-            r8.playTogether(r2)
-            android.animation.AnimatorSet r2 = r0.searchAnimator
-            r13 = 180(0xb4, double:8.9E-322)
-            if (r1 == 0) goto L_0x029d
-            r8 = 200(0xc8, double:9.9E-322)
-            goto L_0x029e
-        L_0x029d:
-            r8 = r13
-        L_0x029e:
-            r2.setDuration(r8)
-            android.animation.AnimatorSet r2 = r0.searchAnimator
-            org.telegram.ui.Components.CubicBezierInterpolator r8 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT
-            r2.setInterpolator(r8)
-            boolean r2 = r0.filterTabsViewIsVisible
-            if (r2 == 0) goto L_0x02f5
-            int r2 = r0.folderId
-            if (r2 != 0) goto L_0x02b3
-            java.lang.String r2 = "actionBarDefault"
-            goto L_0x02b5
-        L_0x02b3:
-            java.lang.String r2 = "actionBarDefaultArchived"
-        L_0x02b5:
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r6.searchItem
+            org.telegram.ui.Components.EditTextBoldCursor r2 = r2.getSearchField()
+            boolean r3 = r6.whiteActionBar
+            if (r3 == 0) goto L_0x00bd
+            java.lang.String r3 = "windowBackgroundWhiteBlackText"
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+            r2.setTextColor(r3)
+            java.lang.String r3 = "player_time"
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+            r2.setHintTextColor(r3)
+            java.lang.String r3 = "chat_messagePanelCursor"
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+            r2.setCursorColor(r3)
+            goto L_0x00d6
+        L_0x00bd:
+            java.lang.String r3 = "actionBarDefaultSearch"
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+            r2.setCursorColor(r4)
+            java.lang.String r4 = "actionBarDefaultSearchPlaceholder"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            int r8 = android.graphics.Color.red(r2)
-            int r9 = android.graphics.Color.red(r4)
-            int r8 = r8 - r9
-            int r8 = java.lang.Math.abs(r8)
-            int r9 = android.graphics.Color.green(r2)
-            int r10 = android.graphics.Color.green(r4)
-            int r9 = r9 - r10
-            int r9 = java.lang.Math.abs(r9)
-            int r8 = r8 + r9
-            int r2 = android.graphics.Color.blue(r2)
-            int r4 = android.graphics.Color.blue(r4)
-            int r2 = r2 - r4
-            int r2 = java.lang.Math.abs(r2)
-            int r8 = r8 + r2
-            float r2 = (float) r8
-            r4 = 1132396544(0x437var_, float:255.0)
-            float r2 = r2 / r4
-            r4 = 1050253722(0x3e99999a, float:0.3)
-            int r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r2 <= 0) goto L_0x02f2
+            r2.setHintTextColor(r4)
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
+            r2.setTextColor(r3)
+        L_0x00d6:
+            org.telegram.ui.Components.SearchViewPager r2 = r6.searchViewPager
+            android.view.View r3 = r6.fragmentView
+            org.telegram.ui.DialogsActivity$ContentView r3 = (org.telegram.ui.DialogsActivity.ContentView) r3
+            int r3 = r3.getKeyboardHeight()
+            r2.setKeyboardHeight(r3)
+            org.telegram.ui.ActionBar.ActionBarLayout r2 = r6.parentLayout
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r2 = r2.getDrawerLayoutContainer()
+            r2.setAllowOpenDrawerBySwipe(r11)
+            org.telegram.ui.Components.SearchViewPager r2 = r6.searchViewPager
+            r2.clear()
+            int r2 = r6.folderId
+            if (r2 == 0) goto L_0x013c
+            org.telegram.ui.Adapters.FiltersView$MediaFilterData r2 = new org.telegram.ui.Adapters.FiltersView$MediaFilterData
+            r13 = 2131165343(0x7var_f, float:1.79449E38)
+            r14 = 2131165343(0x7var_f, float:1.79449E38)
+            r3 = 2131624309(0x7f0e0175, float:1.8875794E38)
+            java.lang.String r4 = "ArchiveSearchFilter"
+            java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r16 = 0
+            r17 = 7
+            r12 = r2
+            r12.<init>(r13, r14, r15, r16, r17)
+            r6.addSearchFilter(r2)
+            goto L_0x013c
+        L_0x0112:
+            org.telegram.ui.Components.FilterTabsView r2 = r6.filterTabsView
+            if (r2 == 0) goto L_0x013c
+            org.telegram.ui.ActionBar.ActionBarLayout r2 = r6.parentLayout
+            org.telegram.ui.ActionBar.DrawerLayoutContainer r2 = r2.getDrawerLayoutContainer()
+            org.telegram.ui.DialogsActivity$ViewPage[] r3 = r6.viewPages
+            r3 = r3[r8]
+            int r3 = r3.selectedType
+            org.telegram.ui.Components.FilterTabsView r4 = r6.filterTabsView
+            int r4 = r4.getFirstTabId()
+            if (r3 == r4) goto L_0x0138
+            int r3 = r6.currentAccount
+            int r3 = org.telegram.messenger.SharedConfig.getChatSwipeAction(r3)
+            r4 = 5
+            if (r3 == r4) goto L_0x0136
+            goto L_0x0138
+        L_0x0136:
+            r3 = 0
+            goto L_0x0139
+        L_0x0138:
             r3 = 1
-        L_0x02f2:
-            r0.searchAnimationTabsDelayedCrossfade = r3
-            goto L_0x02f7
-        L_0x02f5:
-            r0.searchAnimationTabsDelayedCrossfade = r7
-        L_0x02f7:
-            if (r1 != 0) goto L_0x031c
-            android.animation.AnimatorSet r2 = r0.searchAnimator
-            r3 = 20
-            r2.setStartDelay(r3)
-            android.animation.Animator r2 = r0.tabsAlphaAnimator
-            if (r2 == 0) goto L_0x031c
-            boolean r3 = r0.searchAnimationTabsDelayedCrossfade
-            if (r3 == 0) goto L_0x0313
-            r3 = 80
-            r2.setStartDelay(r3)
-            android.animation.Animator r2 = r0.tabsAlphaAnimator
-            r2.setDuration(r11)
-            goto L_0x031c
-        L_0x0313:
-            if (r1 == 0) goto L_0x0318
-            r8 = 200(0xc8, double:9.9E-322)
-            goto L_0x0319
-        L_0x0318:
-            r8 = r13
-        L_0x0319:
-            r2.setDuration(r8)
-        L_0x031c:
-            android.animation.AnimatorSet r2 = r0.searchAnimator
-            org.telegram.ui.DialogsActivity$27 r3 = new org.telegram.ui.DialogsActivity$27
-            r3.<init>(r1)
-            r2.addListener(r3)
-            org.telegram.messenger.NotificationCenter r2 = r16.getNotificationCenter()
-            int r3 = r0.animationIndex
-            int r2 = r2.setAnimationInProgress(r3, r5)
-            r0.animationIndex = r2
-            android.animation.AnimatorSet r2 = r0.searchAnimator
-            r2.start()
-            android.animation.Animator r2 = r0.tabsAlphaAnimator
-            if (r2 == 0) goto L_0x0404
-            r2.start()
-            goto L_0x0404
-        L_0x0340:
-            r0.setDialogsListFrozen(r3)
-            if (r1 == 0) goto L_0x0351
-            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r0.viewPages
-            r2 = r2[r3]
-            org.telegram.ui.DialogsActivity$DialogsRecyclerView r2 = r2.listView
-            r2.hide()
-            goto L_0x035c
-        L_0x0351:
-            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r0.viewPages
-            r2 = r2[r3]
-            org.telegram.ui.DialogsActivity$DialogsRecyclerView r2 = r2.listView
-            r2.show()
-        L_0x035c:
-            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r0.viewPages
-            r2 = r2[r3]
-            if (r1 == 0) goto L_0x0364
+        L_0x0139:
+            r2.setAllowOpenDrawerBySwipe(r3)
+        L_0x013c:
+            if (r0 == 0) goto L_0x0152
+            org.telegram.ui.Components.SearchViewPager r2 = r6.searchViewPager
+            org.telegram.ui.Adapters.DialogsSearchAdapter r2 = r2.dialogsSearchAdapter
+            boolean r2 = r2.hasRecentSearch()
+            if (r2 == 0) goto L_0x0152
+            android.app.Activity r2 = r18.getParentActivity()
+            int r3 = r6.classGuid
+            org.telegram.messenger.AndroidUtilities.setAdjustResizeToNothing(r2, r3)
+            goto L_0x015b
+        L_0x0152:
+            android.app.Activity r2 = r18.getParentActivity()
+            int r3 = r6.classGuid
+            org.telegram.messenger.AndroidUtilities.requestAdjustResize(r2, r3)
+        L_0x015b:
+            if (r7 != 0) goto L_0x0168
+            org.telegram.ui.Components.FilterTabsView r2 = r6.filterTabsView
+            if (r2 == 0) goto L_0x0168
+            boolean r3 = r6.canShowFilterTabsView
+            if (r3 == 0) goto L_0x0168
+            r2.setVisibility(r8)
+        L_0x0168:
+            r12 = 1063675494(0x3var_, float:0.9)
+            r13 = 0
+            r14 = 1065353216(0x3var_, float:1.0)
+            if (r0 == 0) goto L_0x036a
+            if (r7 == 0) goto L_0x0193
+            org.telegram.ui.Components.SearchViewPager r0 = r6.searchViewPager
+            r0.setVisibility(r8)
+            org.telegram.ui.Components.SearchViewPager r0 = r6.searchViewPager
+            r0.reset()
+            r1 = 1
+            r2 = 0
+            r3 = 0
+            r4 = 0
             r5 = 0
-            goto L_0x0366
-        L_0x0364:
+            r0 = r18
+            r0.updateFiltersView(r1, r2, r3, r4, r5)
+            org.telegram.ui.Components.ViewPagerFixed$TabsView r0 = r6.searchTabsView
+            if (r0 == 0) goto L_0x01a5
+            r0.hide(r8, r8)
+            org.telegram.ui.Components.ViewPagerFixed$TabsView r0 = r6.searchTabsView
+            r0.setVisibility(r8)
+            goto L_0x01a5
+        L_0x0193:
+            org.telegram.ui.DialogsActivity$ViewPage[] r0 = r6.viewPages
+            r0 = r0[r8]
+            org.telegram.ui.DialogsActivity$DialogsRecyclerView r0 = r0.listView
+            r0.setVisibility(r8)
+            org.telegram.ui.DialogsActivity$ViewPage[] r0 = r6.viewPages
+            r0 = r0[r8]
+            r0.setVisibility(r8)
+        L_0x01a5:
+            r6.setDialogsListFrozen(r11)
+            org.telegram.ui.DialogsActivity$ViewPage[] r0 = r6.viewPages
+            r0 = r0[r8]
+            org.telegram.ui.DialogsActivity$DialogsRecyclerView r0 = r0.listView
+            r0.setVerticalScrollBarEnabled(r8)
+            org.telegram.ui.Components.SearchViewPager r0 = r6.searchViewPager
+            java.lang.String r1 = "windowBackgroundWhite"
+            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r0.setBackgroundColor(r2)
+            android.animation.AnimatorSet r0 = new android.animation.AnimatorSet
+            r0.<init>()
+            r6.searchAnimator = r0
+            java.util.ArrayList r0 = new java.util.ArrayList
+            r0.<init>()
+            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r6.viewPages
+            r2 = r2[r8]
+            android.util.Property r3 = android.view.View.ALPHA
+            float[] r4 = new float[r11]
+            if (r7 == 0) goto L_0x01d6
+            r5 = 0
+            goto L_0x01d8
+        L_0x01d6:
             r5 = 1065353216(0x3var_, float:1.0)
-        L_0x0366:
-            r2.setAlpha(r5)
-            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r0.viewPages
-            r2 = r2[r3]
-            if (r1 == 0) goto L_0x0373
+        L_0x01d8:
+            r4[r8] = r5
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r3, r4)
+            r0.add(r2)
+            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r6.viewPages
+            r2 = r2[r8]
+            android.util.Property r3 = android.view.View.SCALE_X
+            float[] r4 = new float[r11]
+            if (r7 == 0) goto L_0x01ef
             r5 = 1063675494(0x3var_, float:0.9)
-            goto L_0x0375
-        L_0x0373:
+            goto L_0x01f1
+        L_0x01ef:
             r5 = 1065353216(0x3var_, float:1.0)
-        L_0x0375:
-            r2.setScaleX(r5)
-            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r0.viewPages
-            r2 = r2[r3]
-            if (r1 == 0) goto L_0x037f
-            goto L_0x0381
-        L_0x037f:
-            r8 = 1065353216(0x3var_, float:1.0)
-        L_0x0381:
-            r2.setScaleY(r8)
-            org.telegram.ui.Components.SearchViewPager r2 = r0.searchViewPager
-            if (r1 == 0) goto L_0x038b
+        L_0x01f1:
+            r4[r8] = r5
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r3, r4)
+            r0.add(r2)
+            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r6.viewPages
+            r2 = r2[r8]
+            android.util.Property r3 = android.view.View.SCALE_Y
+            float[] r4 = new float[r11]
+            if (r7 == 0) goto L_0x0205
+            goto L_0x0207
+        L_0x0205:
+            r12 = 1065353216(0x3var_, float:1.0)
+        L_0x0207:
+            r4[r8] = r12
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r3, r4)
+            r0.add(r2)
+            org.telegram.ui.Components.SearchViewPager r2 = r6.searchViewPager
+            android.util.Property r3 = android.view.View.ALPHA
+            float[] r4 = new float[r11]
+            if (r7 == 0) goto L_0x021b
             r5 = 1065353216(0x3var_, float:1.0)
-            goto L_0x038c
-        L_0x038b:
+            goto L_0x021c
+        L_0x021b:
             r5 = 0
-        L_0x038c:
-            r2.setAlpha(r5)
-            org.telegram.ui.Adapters.FiltersView r2 = r0.filtersView
-            if (r1 == 0) goto L_0x0396
+        L_0x021c:
+            r4[r8] = r5
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r3, r4)
+            r0.add(r2)
+            org.telegram.ui.Components.SearchViewPager r2 = r6.searchViewPager
+            android.util.Property r3 = android.view.View.SCALE_X
+            float[] r4 = new float[r11]
+            r5 = 1065772646(0x3var_, float:1.05)
+            if (r7 == 0) goto L_0x0233
+            r12 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0236
+        L_0x0233:
+            r12 = 1065772646(0x3var_, float:1.05)
+        L_0x0236:
+            r4[r8] = r12
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r3, r4)
+            r0.add(r2)
+            org.telegram.ui.Components.SearchViewPager r2 = r6.searchViewPager
+            android.util.Property r3 = android.view.View.SCALE_Y
+            float[] r4 = new float[r11]
+            if (r7 == 0) goto L_0x0249
             r5 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0397
-        L_0x0396:
+        L_0x0249:
+            r4[r8] = r5
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r3, r4)
+            r0.add(r2)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r6.passcodeItem
+            if (r2 == 0) goto L_0x026d
+            org.telegram.ui.Components.RLottieImageView r2 = r2.getIconView()
+            android.util.Property r3 = android.view.View.ALPHA
+            float[] r4 = new float[r11]
+            if (r7 == 0) goto L_0x0262
             r5 = 0
-        L_0x0397:
-            r2.setAlpha(r5)
-            org.telegram.ui.Components.SearchViewPager r2 = r0.searchViewPager
-            r5 = 1066192077(0x3f8ccccd, float:1.1)
-            if (r1 == 0) goto L_0x03a4
-            r7 = 1065353216(0x3var_, float:1.0)
-            goto L_0x03a7
-        L_0x03a4:
-            r7 = 1066192077(0x3f8ccccd, float:1.1)
-        L_0x03a7:
-            r2.setScaleX(r7)
-            org.telegram.ui.Components.SearchViewPager r2 = r0.searchViewPager
-            if (r1 == 0) goto L_0x03b0
+            goto L_0x0264
+        L_0x0262:
             r5 = 1065353216(0x3var_, float:1.0)
-        L_0x03b0:
-            r2.setScaleY(r5)
-            org.telegram.ui.Components.FilterTabsView r2 = r0.filterTabsView
-            if (r2 == 0) goto L_0x03db
+        L_0x0264:
+            r4[r8] = r5
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r3, r4)
+            r0.add(r2)
+        L_0x026d:
+            org.telegram.ui.Components.FilterTabsView r2 = r6.filterTabsView
+            r3 = 100
+            if (r2 == 0) goto L_0x029d
             int r2 = r2.getVisibility()
-            if (r2 != 0) goto L_0x03db
-            org.telegram.ui.Components.FilterTabsView r2 = r0.filterTabsView
-            if (r1 == 0) goto L_0x03c8
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r4 = -r4
-            float r4 = (float) r4
-            goto L_0x03c9
-        L_0x03c8:
-            r4 = 0
-        L_0x03c9:
-            r2.setTranslationY(r4)
-            org.telegram.ui.Components.FilterTabsView r2 = r0.filterTabsView
+            if (r2 != 0) goto L_0x029d
+            org.telegram.ui.Components.FilterTabsView r2 = r6.filterTabsView
             org.telegram.ui.Components.RecyclerListView r2 = r2.getTabsContainer()
-            if (r1 == 0) goto L_0x03d6
-            r4 = 0
-            goto L_0x03d8
-        L_0x03d6:
-            r4 = 1065353216(0x3var_, float:1.0)
-        L_0x03d8:
-            r2.setAlpha(r4)
-        L_0x03db:
-            org.telegram.ui.Components.FilterTabsView r2 = r0.filterTabsView
-            r4 = 8
-            if (r2 == 0) goto L_0x03ee
-            boolean r5 = r0.canShowFilterTabsView
-            if (r5 == 0) goto L_0x03eb
-            if (r1 != 0) goto L_0x03eb
-            r2.setVisibility(r3)
-            goto L_0x03ee
-        L_0x03eb:
-            r2.setVisibility(r4)
-        L_0x03ee:
-            org.telegram.ui.Components.SearchViewPager r2 = r0.searchViewPager
-            if (r1 == 0) goto L_0x03f3
-            goto L_0x03f5
+            android.util.Property r5 = android.view.View.ALPHA
+            float[] r12 = new float[r11]
+            if (r7 == 0) goto L_0x0287
+            r15 = 0
+            goto L_0x0289
+        L_0x0287:
+            r15 = 1065353216(0x3var_, float:1.0)
+        L_0x0289:
+            r12[r8] = r15
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r5, r12)
+            android.animation.ObjectAnimator r2 = r2.setDuration(r3)
+            r6.tabsAlphaAnimator = r2
+            org.telegram.ui.DialogsActivity$29 r5 = new org.telegram.ui.DialogsActivity$29
+            r5.<init>()
+            r2.addListener(r5)
+        L_0x029d:
+            r2 = 2
+            float[] r2 = new float[r2]
+            float r5 = r6.searchAnimationProgress
+            r2[r8] = r5
+            if (r7 == 0) goto L_0x02a8
+            r13 = 1065353216(0x3var_, float:1.0)
+        L_0x02a8:
+            r2[r11] = r13
+            android.animation.ValueAnimator r2 = android.animation.ValueAnimator.ofFloat(r2)
+            org.telegram.ui.-$$Lambda$DialogsActivity$YwOBX7k33LXQ6YHy1ClRJ4tfaL0 r5 = new org.telegram.ui.-$$Lambda$DialogsActivity$YwOBX7k33LXQ6YHy1ClRJ4tfaL0
+            r5.<init>()
+            r2.addUpdateListener(r5)
+            r0.add(r2)
+            android.animation.AnimatorSet r2 = r6.searchAnimator
+            r2.playTogether(r0)
+            android.animation.AnimatorSet r0 = r6.searchAnimator
+            r14 = 180(0xb4, double:8.9E-322)
+            if (r7 == 0) goto L_0x02c7
+            r12 = 200(0xc8, double:9.9E-322)
+            goto L_0x02c8
+        L_0x02c7:
+            r12 = r14
+        L_0x02c8:
+            r0.setDuration(r12)
+            android.animation.AnimatorSet r0 = r6.searchAnimator
+            org.telegram.ui.Components.CubicBezierInterpolator r2 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT
+            r0.setInterpolator(r2)
+            boolean r0 = r6.filterTabsViewIsVisible
+            if (r0 == 0) goto L_0x031f
+            int r0 = r6.folderId
+            if (r0 != 0) goto L_0x02dd
+            java.lang.String r0 = "actionBarDefault"
+            goto L_0x02df
+        L_0x02dd:
+            java.lang.String r0 = "actionBarDefaultArchived"
+        L_0x02df:
+            int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            int r2 = android.graphics.Color.red(r0)
+            int r5 = android.graphics.Color.red(r1)
+            int r2 = r2 - r5
+            int r2 = java.lang.Math.abs(r2)
+            int r5 = android.graphics.Color.green(r0)
+            int r12 = android.graphics.Color.green(r1)
+            int r5 = r5 - r12
+            int r5 = java.lang.Math.abs(r5)
+            int r2 = r2 + r5
+            int r0 = android.graphics.Color.blue(r0)
+            int r1 = android.graphics.Color.blue(r1)
+            int r0 = r0 - r1
+            int r0 = java.lang.Math.abs(r0)
+            int r2 = r2 + r0
+            float r0 = (float) r2
+            r1 = 1132396544(0x437var_, float:255.0)
+            float r0 = r0 / r1
+            r1 = 1050253722(0x3e99999a, float:0.3)
+            int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
+            if (r0 <= 0) goto L_0x031c
+            r8 = 1
+        L_0x031c:
+            r6.searchAnimationTabsDelayedCrossfade = r8
+            goto L_0x0321
+        L_0x031f:
+            r6.searchAnimationTabsDelayedCrossfade = r11
+        L_0x0321:
+            if (r7 != 0) goto L_0x0346
+            android.animation.AnimatorSet r0 = r6.searchAnimator
+            r1 = 20
+            r0.setStartDelay(r1)
+            android.animation.Animator r0 = r6.tabsAlphaAnimator
+            if (r0 == 0) goto L_0x0346
+            boolean r1 = r6.searchAnimationTabsDelayedCrossfade
+            if (r1 == 0) goto L_0x033d
+            r1 = 80
+            r0.setStartDelay(r1)
+            android.animation.Animator r0 = r6.tabsAlphaAnimator
+            r0.setDuration(r3)
+            goto L_0x0346
+        L_0x033d:
+            if (r7 == 0) goto L_0x0342
+            r12 = 200(0xc8, double:9.9E-322)
+            goto L_0x0343
+        L_0x0342:
+            r12 = r14
+        L_0x0343:
+            r0.setDuration(r12)
+        L_0x0346:
+            android.animation.AnimatorSet r0 = r6.searchAnimator
+            org.telegram.ui.DialogsActivity$30 r1 = new org.telegram.ui.DialogsActivity$30
+            r1.<init>(r7)
+            r0.addListener(r1)
+            org.telegram.messenger.NotificationCenter r0 = r18.getNotificationCenter()
+            int r1 = r6.animationIndex
+            int r0 = r0.setAnimationInProgress(r1, r9)
+            r6.animationIndex = r0
+            android.animation.AnimatorSet r0 = r6.searchAnimator
+            r0.start()
+            android.animation.Animator r0 = r6.tabsAlphaAnimator
+            if (r0 == 0) goto L_0x042e
+            r0.start()
+            goto L_0x042e
+        L_0x036a:
+            r6.setDialogsListFrozen(r8)
+            if (r7 == 0) goto L_0x037b
+            org.telegram.ui.DialogsActivity$ViewPage[] r0 = r6.viewPages
+            r0 = r0[r8]
+            org.telegram.ui.DialogsActivity$DialogsRecyclerView r0 = r0.listView
+            r0.hide()
+            goto L_0x0386
+        L_0x037b:
+            org.telegram.ui.DialogsActivity$ViewPage[] r0 = r6.viewPages
+            r0 = r0[r8]
+            org.telegram.ui.DialogsActivity$DialogsRecyclerView r0 = r0.listView
+            r0.show()
+        L_0x0386:
+            org.telegram.ui.DialogsActivity$ViewPage[] r0 = r6.viewPages
+            r0 = r0[r8]
+            if (r7 == 0) goto L_0x038e
+            r2 = 0
+            goto L_0x0390
+        L_0x038e:
+            r2 = 1065353216(0x3var_, float:1.0)
+        L_0x0390:
+            r0.setAlpha(r2)
+            org.telegram.ui.DialogsActivity$ViewPage[] r0 = r6.viewPages
+            r0 = r0[r8]
+            if (r7 == 0) goto L_0x039d
+            r2 = 1063675494(0x3var_, float:0.9)
+            goto L_0x039f
+        L_0x039d:
+            r2 = 1065353216(0x3var_, float:1.0)
+        L_0x039f:
+            r0.setScaleX(r2)
+            org.telegram.ui.DialogsActivity$ViewPage[] r0 = r6.viewPages
+            r0 = r0[r8]
+            if (r7 == 0) goto L_0x03a9
+            goto L_0x03ab
+        L_0x03a9:
+            r12 = 1065353216(0x3var_, float:1.0)
+        L_0x03ab:
+            r0.setScaleY(r12)
+            org.telegram.ui.Components.SearchViewPager r0 = r6.searchViewPager
+            if (r7 == 0) goto L_0x03b5
+            r2 = 1065353216(0x3var_, float:1.0)
+            goto L_0x03b6
+        L_0x03b5:
+            r2 = 0
+        L_0x03b6:
+            r0.setAlpha(r2)
+            org.telegram.ui.Adapters.FiltersView r0 = r6.filtersView
+            if (r7 == 0) goto L_0x03c0
+            r2 = 1065353216(0x3var_, float:1.0)
+            goto L_0x03c1
+        L_0x03c0:
+            r2 = 0
+        L_0x03c1:
+            r0.setAlpha(r2)
+            org.telegram.ui.Components.SearchViewPager r0 = r6.searchViewPager
+            r2 = 1066192077(0x3f8ccccd, float:1.1)
+            if (r7 == 0) goto L_0x03ce
+            r3 = 1065353216(0x3var_, float:1.0)
+            goto L_0x03d1
+        L_0x03ce:
+            r3 = 1066192077(0x3f8ccccd, float:1.1)
+        L_0x03d1:
+            r0.setScaleX(r3)
+            org.telegram.ui.Components.SearchViewPager r0 = r6.searchViewPager
+            if (r7 == 0) goto L_0x03da
+            r2 = 1065353216(0x3var_, float:1.0)
+        L_0x03da:
+            r0.setScaleY(r2)
+            org.telegram.ui.Components.FilterTabsView r0 = r6.filterTabsView
+            if (r0 == 0) goto L_0x0405
+            int r0 = r0.getVisibility()
+            if (r0 != 0) goto L_0x0405
+            org.telegram.ui.Components.FilterTabsView r0 = r6.filterTabsView
+            if (r7 == 0) goto L_0x03f2
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            int r1 = -r1
+            float r1 = (float) r1
+            goto L_0x03f3
+        L_0x03f2:
+            r1 = 0
         L_0x03f3:
-            r3 = 8
-        L_0x03f5:
-            r2.setVisibility(r3)
-            if (r1 == 0) goto L_0x03fc
-            r9 = 1065353216(0x3var_, float:1.0)
-        L_0x03fc:
-            r0.setSearchAnimationProgress(r9)
-            android.view.View r2 = r0.fragmentView
-            r2.invalidate()
-        L_0x0404:
-            int r2 = r0.initialSearchType
-            if (r2 < 0) goto L_0x040d
-            org.telegram.ui.Components.SearchViewPager r3 = r0.searchViewPager
-            r3.setPosition(r2)
-        L_0x040d:
-            if (r1 != 0) goto L_0x0411
-            r0.initialSearchType = r6
-        L_0x0411:
+            r0.setTranslationY(r1)
+            org.telegram.ui.Components.FilterTabsView r0 = r6.filterTabsView
+            org.telegram.ui.Components.RecyclerListView r0 = r0.getTabsContainer()
+            if (r7 == 0) goto L_0x0400
+            r1 = 0
+            goto L_0x0402
+        L_0x0400:
+            r1 = 1065353216(0x3var_, float:1.0)
+        L_0x0402:
+            r0.setAlpha(r1)
+        L_0x0405:
+            org.telegram.ui.Components.FilterTabsView r0 = r6.filterTabsView
+            r1 = 8
+            if (r0 == 0) goto L_0x0418
+            boolean r2 = r6.canShowFilterTabsView
+            if (r2 == 0) goto L_0x0415
+            if (r7 != 0) goto L_0x0415
+            r0.setVisibility(r8)
+            goto L_0x0418
+        L_0x0415:
+            r0.setVisibility(r1)
+        L_0x0418:
+            org.telegram.ui.Components.SearchViewPager r0 = r6.searchViewPager
+            if (r7 == 0) goto L_0x041d
+            goto L_0x041f
+        L_0x041d:
+            r8 = 8
+        L_0x041f:
+            r0.setVisibility(r8)
+            if (r7 == 0) goto L_0x0426
+            r13 = 1065353216(0x3var_, float:1.0)
+        L_0x0426:
+            r6.setSearchAnimationProgress(r13)
+            android.view.View r0 = r6.fragmentView
+            r0.invalidate()
+        L_0x042e:
+            int r0 = r6.initialSearchType
+            if (r0 < 0) goto L_0x0437
+            org.telegram.ui.Components.SearchViewPager r1 = r6.searchViewPager
+            r1.setPosition(r0)
+        L_0x0437:
+            if (r7 != 0) goto L_0x043b
+            r6.initialSearchType = r10
+        L_0x043b:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.showSearch(boolean, boolean):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showSearch$13 */
-    public /* synthetic */ void lambda$showSearch$13$DialogsActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$showSearch$14 */
+    public /* synthetic */ void lambda$showSearch$14$DialogsActivity(ValueAnimator valueAnimator) {
         setSearchAnimationProgress(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 
@@ -5074,7 +5274,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
 
                     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        DialogsActivity.this.lambda$updateFilterTabsVisibility$14$DialogsActivity(this.f$1, this.f$2, valueAnimator);
+                        DialogsActivity.this.lambda$updateFilterTabsVisibility$15$DialogsActivity(this.f$1, this.f$2, valueAnimator);
                     }
                 });
                 this.filtersTabAnimator.setDuration(220);
@@ -5101,8 +5301,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateFilterTabsVisibility$14 */
-    public /* synthetic */ void lambda$updateFilterTabsVisibility$14$DialogsActivity(boolean z, float f, ValueAnimator valueAnimator) {
+    /* renamed from: lambda$updateFilterTabsVisibility$15 */
+    public /* synthetic */ void lambda$updateFilterTabsVisibility$15$DialogsActivity(boolean z, float f, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.filterTabsProgress = floatValue;
         if (!z) {
@@ -5315,7 +5515,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (r10 != 0) goto L_0x0132
             if (r12 == 0) goto L_0x013c
         L_0x0132:
-            org.telegram.ui.-$$Lambda$DialogsActivity$2fZnUzi7QumW83eBA6HmZeI5dOY r15 = new org.telegram.ui.-$$Lambda$DialogsActivity$2fZnUzi7QumW83eBA6HmZeI5dOY
+            org.telegram.ui.-$$Lambda$DialogsActivity$nFb_oFsS014GmIQEt-lrjnLHitY r15 = new org.telegram.ui.-$$Lambda$DialogsActivity$nFb_oFsS014GmIQEt-lrjnLHitY
             r8 = r15
             r9 = r14
             r8.<init>(r10, r11, r12, r13)
@@ -5327,8 +5527,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkListLoad$15 */
-    public /* synthetic */ void lambda$checkListLoad$15$DialogsActivity(boolean z, boolean z2, boolean z3, boolean z4) {
+    /* renamed from: lambda$checkListLoad$16 */
+    public /* synthetic */ void lambda$checkListLoad$16$DialogsActivity(boolean z, boolean z2, boolean z3, boolean z4) {
         if (z) {
             getMessagesController().loadDialogs(this.folderId, -1, 100, z2);
         }
@@ -5337,47 +5537,50 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:93:0x0187 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x0188  */
+    /* JADX WARNING: Removed duplicated region for block: B:101:0x01a7 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:102:0x01a8  */
+    /* JADX WARNING: Removed duplicated region for block: B:168:? A[ADDED_TO_REGION, RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x019a A[ADDED_TO_REGION] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private void onItemClick(android.view.View r18, int r19, androidx.recyclerview.widget.RecyclerView.Adapter r20) {
+    private void onItemClick(android.view.View r19, int r20, androidx.recyclerview.widget.RecyclerView.Adapter r21) {
         /*
-            r17 = this;
-            r6 = r17
-            r0 = r18
-            r1 = r19
-            r2 = r20
-            android.app.Activity r3 = r17.getParentActivity()
+            r18 = this;
+            r6 = r18
+            r0 = r19
+            r1 = r20
+            r2 = r21
+            android.app.Activity r3 = r18.getParentActivity()
             if (r3 != 0) goto L_0x000f
             return
         L_0x000f:
             boolean r3 = r2 instanceof org.telegram.ui.Adapters.DialogsAdapter
             r4 = 32
+            r5 = 0
             r7 = 0
-            r5 = 1
-            r9 = 0
-            if (r3 == 0) goto L_0x00ec
-            r10 = r2
-            org.telegram.ui.Adapters.DialogsAdapter r10 = (org.telegram.ui.Adapters.DialogsAdapter) r10
-            org.telegram.tgnet.TLObject r1 = r10.getItem(r1)
-            boolean r10 = r1 instanceof org.telegram.tgnet.TLRPC$User
-            if (r10 == 0) goto L_0x002b
+            r9 = 1
+            r10 = 0
+            if (r3 == 0) goto L_0x00ed
+            r11 = r2
+            org.telegram.ui.Adapters.DialogsAdapter r11 = (org.telegram.ui.Adapters.DialogsAdapter) r11
+            org.telegram.tgnet.TLObject r1 = r11.getItem(r1)
+            boolean r11 = r1 instanceof org.telegram.tgnet.TLRPC$User
+            if (r11 == 0) goto L_0x002c
             org.telegram.tgnet.TLRPC$User r1 = (org.telegram.tgnet.TLRPC$User) r1
             int r1 = r1.id
-        L_0x0028:
-            long r10 = (long) r1
-            goto L_0x0181
-        L_0x002b:
-            boolean r10 = r1 instanceof org.telegram.tgnet.TLRPC$Dialog
-            if (r10 == 0) goto L_0x0065
+        L_0x0029:
+            long r11 = (long) r1
+            goto L_0x01a1
+        L_0x002c:
+            boolean r11 = r1 instanceof org.telegram.tgnet.TLRPC$Dialog
+            if (r11 == 0) goto L_0x0066
             org.telegram.tgnet.TLRPC$Dialog r1 = (org.telegram.tgnet.TLRPC$Dialog) r1
-            boolean r10 = r1 instanceof org.telegram.tgnet.TLRPC$TL_dialogFolder
-            if (r10 == 0) goto L_0x0057
+            boolean r11 = r1 instanceof org.telegram.tgnet.TLRPC$TL_dialogFolder
+            if (r11 == 0) goto L_0x0058
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            boolean r0 = r0.isActionModeShowed()
-            if (r0 == 0) goto L_0x003e
+            boolean r0 = r0.isActionModeShowed(r5)
+            if (r0 == 0) goto L_0x003f
             return
-        L_0x003e:
+        L_0x003f:
             org.telegram.tgnet.TLRPC$TL_dialogFolder r1 = (org.telegram.tgnet.TLRPC$TL_dialogFolder) r1
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
@@ -5389,68 +5592,68 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1.<init>(r0)
             r6.presentFragment(r1)
             return
-        L_0x0057:
-            long r10 = r1.id
-            org.telegram.ui.ActionBar.ActionBar r12 = r6.actionBar
-            boolean r12 = r12.isActionModeShowed()
-            if (r12 == 0) goto L_0x0181
-            r6.showOrUpdateActionMode(r1, r0)
+        L_0x0058:
+            long r11 = r1.id
+            org.telegram.ui.ActionBar.ActionBar r1 = r6.actionBar
+            boolean r1 = r1.isActionModeShowed(r5)
+            if (r1 == 0) goto L_0x01a1
+            r6.showOrUpdateActionMode(r11, r0)
             return
-        L_0x0065:
-            boolean r10 = r1 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlChat
-            if (r10 == 0) goto L_0x006f
+        L_0x0066:
+            boolean r11 = r1 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlChat
+            if (r11 == 0) goto L_0x0070
             org.telegram.tgnet.TLRPC$TL_recentMeUrlChat r1 = (org.telegram.tgnet.TLRPC$TL_recentMeUrlChat) r1
             int r1 = r1.chat_id
-        L_0x006d:
+        L_0x006e:
             int r1 = -r1
-            goto L_0x0028
-        L_0x006f:
-            boolean r10 = r1 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlUser
-            if (r10 == 0) goto L_0x0078
+            goto L_0x0029
+        L_0x0070:
+            boolean r11 = r1 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlUser
+            if (r11 == 0) goto L_0x0079
             org.telegram.tgnet.TLRPC$TL_recentMeUrlUser r1 = (org.telegram.tgnet.TLRPC$TL_recentMeUrlUser) r1
             int r1 = r1.user_id
-            goto L_0x0028
-        L_0x0078:
-            boolean r10 = r1 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlChatInvite
-            if (r10 == 0) goto L_0x00be
+            goto L_0x0029
+        L_0x0079:
+            boolean r11 = r1 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlChatInvite
+            if (r11 == 0) goto L_0x00bf
             org.telegram.tgnet.TLRPC$TL_recentMeUrlChatInvite r1 = (org.telegram.tgnet.TLRPC$TL_recentMeUrlChatInvite) r1
-            org.telegram.tgnet.TLRPC$ChatInvite r10 = r1.chat_invite
-            org.telegram.tgnet.TLRPC$Chat r11 = r10.chat
-            if (r11 != 0) goto L_0x008c
-            boolean r12 = r10.channel
-            if (r12 == 0) goto L_0x009a
-            boolean r12 = r10.megagroup
-            if (r12 != 0) goto L_0x009a
-        L_0x008c:
-            if (r11 == 0) goto L_0x00b6
-            boolean r11 = org.telegram.messenger.ChatObject.isChannel(r11)
-            if (r11 == 0) goto L_0x009a
-            org.telegram.tgnet.TLRPC$Chat r11 = r10.chat
-            boolean r11 = r11.megagroup
-            if (r11 == 0) goto L_0x00b6
-        L_0x009a:
+            org.telegram.tgnet.TLRPC$ChatInvite r11 = r1.chat_invite
+            org.telegram.tgnet.TLRPC$Chat r12 = r11.chat
+            if (r12 != 0) goto L_0x008d
+            boolean r13 = r11.channel
+            if (r13 == 0) goto L_0x009b
+            boolean r13 = r11.megagroup
+            if (r13 != 0) goto L_0x009b
+        L_0x008d:
+            if (r12 == 0) goto L_0x00b7
+            boolean r12 = org.telegram.messenger.ChatObject.isChannel(r12)
+            if (r12 == 0) goto L_0x009b
+            org.telegram.tgnet.TLRPC$Chat r12 = r11.chat
+            boolean r12 = r12.megagroup
+            if (r12 == 0) goto L_0x00b7
+        L_0x009b:
             java.lang.String r0 = r1.url
             r1 = 47
             int r1 = r0.indexOf(r1)
-            if (r1 <= 0) goto L_0x00a9
-            int r1 = r1 + r5
+            if (r1 <= 0) goto L_0x00aa
+            int r1 = r1 + r9
             java.lang.String r0 = r0.substring(r1)
-        L_0x00a9:
+        L_0x00aa:
             org.telegram.ui.Components.JoinGroupAlert r1 = new org.telegram.ui.Components.JoinGroupAlert
-            android.app.Activity r2 = r17.getParentActivity()
-            r1.<init>(r2, r10, r0, r6)
+            android.app.Activity r2 = r18.getParentActivity()
+            r1.<init>(r2, r11, r0, r6)
             r6.showDialog(r1)
             return
-        L_0x00b6:
-            org.telegram.tgnet.TLRPC$Chat r1 = r10.chat
-            if (r1 == 0) goto L_0x00bd
+        L_0x00b7:
+            org.telegram.tgnet.TLRPC$Chat r1 = r11.chat
+            if (r1 == 0) goto L_0x00be
             int r1 = r1.id
-            goto L_0x006d
-        L_0x00bd:
-            return
+            goto L_0x006e
         L_0x00be:
+            return
+        L_0x00bf:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlStickerSet
-            if (r0 == 0) goto L_0x00e7
+            if (r0 == 0) goto L_0x00e8
             org.telegram.tgnet.TLRPC$TL_recentMeUrlStickerSet r1 = (org.telegram.tgnet.TLRPC$TL_recentMeUrlStickerSet) r1
             org.telegram.tgnet.TLRPC$StickerSetCovered r0 = r1.set
             org.telegram.tgnet.TLRPC$StickerSet r0 = r0.set
@@ -5461,249 +5664,263 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             long r0 = r0.access_hash
             r3.access_hash = r0
             org.telegram.ui.Components.StickersAlert r7 = new org.telegram.ui.Components.StickersAlert
-            android.app.Activity r1 = r17.getParentActivity()
+            android.app.Activity r1 = r18.getParentActivity()
             r4 = 0
             r5 = 0
             r0 = r7
-            r2 = r17
+            r2 = r18
             r0.<init>(r1, r2, r3, r4, r5)
             r6.showDialog(r7)
             return
-        L_0x00e7:
+        L_0x00e8:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_recentMeUrlUnknown
-            if (r0 == 0) goto L_0x00eb
-        L_0x00eb:
-            return
+            if (r0 == 0) goto L_0x00ec
         L_0x00ec:
-            org.telegram.ui.Components.SearchViewPager r10 = r6.searchViewPager
-            org.telegram.ui.Adapters.DialogsSearchAdapter r10 = r10.dialogsSearchAdapter
-            if (r2 != r10) goto L_0x0180
-            java.lang.Object r10 = r10.getItem(r1)
+            return
+        L_0x00ed:
             org.telegram.ui.Components.SearchViewPager r11 = r6.searchViewPager
             org.telegram.ui.Adapters.DialogsSearchAdapter r11 = r11.dialogsSearchAdapter
-            boolean r1 = r11.isGlobalSearch(r1)
-            boolean r11 = r10 instanceof org.telegram.tgnet.TLRPC$User
-            if (r11 == 0) goto L_0x0112
-            org.telegram.tgnet.TLRPC$User r10 = (org.telegram.tgnet.TLRPC$User) r10
-            int r11 = r10.id
-            long r11 = (long) r11
-            boolean r13 = r6.onlySelect
-            if (r13 != 0) goto L_0x010f
-            r6.searchDialogId = r11
-            r6.searchObject = r10
-        L_0x010f:
-            r10 = r11
+            if (r2 != r11) goto L_0x01a0
+            java.lang.Object r11 = r11.getItem(r1)
+            org.telegram.ui.Components.SearchViewPager r12 = r6.searchViewPager
+            org.telegram.ui.Adapters.DialogsSearchAdapter r12 = r12.dialogsSearchAdapter
+            boolean r1 = r12.isGlobalSearch(r1)
+            boolean r12 = r11 instanceof org.telegram.tgnet.TLRPC$User
+            if (r12 == 0) goto L_0x0114
+            org.telegram.tgnet.TLRPC$User r11 = (org.telegram.tgnet.TLRPC$User) r11
+            int r12 = r11.id
+            long r12 = (long) r12
+            boolean r14 = r6.onlySelect
+            if (r14 != 0) goto L_0x0110
+            r6.searchDialogId = r12
+            r6.searchObject = r11
+        L_0x0110:
+            r11 = r12
+        L_0x0111:
+            r13 = 0
+            goto L_0x0184
+        L_0x0114:
+            boolean r12 = r11 instanceof org.telegram.tgnet.TLRPC$Chat
+            if (r12 == 0) goto L_0x0127
+            org.telegram.tgnet.TLRPC$Chat r11 = (org.telegram.tgnet.TLRPC$Chat) r11
+            int r12 = r11.id
+            int r12 = -r12
+            long r12 = (long) r12
+            boolean r14 = r6.onlySelect
+            if (r14 != 0) goto L_0x0110
+            r6.searchDialogId = r12
+            r6.searchObject = r11
+            goto L_0x0110
+        L_0x0127:
+            boolean r12 = r11 instanceof org.telegram.tgnet.TLRPC$EncryptedChat
+            if (r12 == 0) goto L_0x013a
+            org.telegram.tgnet.TLRPC$EncryptedChat r11 = (org.telegram.tgnet.TLRPC$EncryptedChat) r11
+            int r12 = r11.id
+            long r12 = (long) r12
+            long r12 = r12 << r4
+            boolean r14 = r6.onlySelect
+            if (r14 != 0) goto L_0x0110
+            r6.searchDialogId = r12
+            r6.searchObject = r11
+            goto L_0x0110
+        L_0x013a:
+            boolean r12 = r11 instanceof org.telegram.messenger.MessageObject
+            if (r12 == 0) goto L_0x0159
+            org.telegram.messenger.MessageObject r11 = (org.telegram.messenger.MessageObject) r11
+            long r12 = r11.getDialogId()
+            int r11 = r11.getId()
+            org.telegram.ui.Components.SearchViewPager r14 = r6.searchViewPager
+            org.telegram.ui.Adapters.DialogsSearchAdapter r14 = r14.dialogsSearchAdapter
+            java.lang.String r15 = r14.getLastSearchString()
+            r14.addHashtagsFromMessage(r15)
+            r16 = r12
+            r13 = r11
+            r11 = r16
+            goto L_0x0184
+        L_0x0159:
+            boolean r12 = r11 instanceof java.lang.String
+            if (r12 == 0) goto L_0x0182
+            java.lang.String r11 = (java.lang.String) r11
+            org.telegram.ui.Components.SearchViewPager r12 = r6.searchViewPager
+            org.telegram.ui.Adapters.DialogsSearchAdapter r12 = r12.dialogsSearchAdapter
+            boolean r12 = r12.isHashtagSearch()
+            if (r12 == 0) goto L_0x016f
+            org.telegram.ui.ActionBar.ActionBar r12 = r6.actionBar
+            r12.openSearchField(r11, r10)
             goto L_0x0182
-        L_0x0112:
-            boolean r11 = r10 instanceof org.telegram.tgnet.TLRPC$Chat
-            if (r11 == 0) goto L_0x0125
-            org.telegram.tgnet.TLRPC$Chat r10 = (org.telegram.tgnet.TLRPC$Chat) r10
-            int r11 = r10.id
-            int r11 = -r11
-            long r11 = (long) r11
-            boolean r13 = r6.onlySelect
-            if (r13 != 0) goto L_0x010f
-            r6.searchDialogId = r11
-            r6.searchObject = r10
-            goto L_0x010f
-        L_0x0125:
-            boolean r11 = r10 instanceof org.telegram.tgnet.TLRPC$EncryptedChat
-            if (r11 == 0) goto L_0x0138
-            org.telegram.tgnet.TLRPC$EncryptedChat r10 = (org.telegram.tgnet.TLRPC$EncryptedChat) r10
-            int r11 = r10.id
-            long r11 = (long) r11
-            long r11 = r11 << r4
-            boolean r13 = r6.onlySelect
-            if (r13 != 0) goto L_0x010f
-            r6.searchDialogId = r11
-            r6.searchObject = r10
-            goto L_0x010f
-        L_0x0138:
-            boolean r11 = r10 instanceof org.telegram.messenger.MessageObject
-            if (r11 == 0) goto L_0x0155
-            org.telegram.messenger.MessageObject r10 = (org.telegram.messenger.MessageObject) r10
-            long r11 = r10.getDialogId()
-            int r10 = r10.getId()
-            org.telegram.ui.Components.SearchViewPager r13 = r6.searchViewPager
-            org.telegram.ui.Adapters.DialogsSearchAdapter r13 = r13.dialogsSearchAdapter
-            java.lang.String r14 = r13.getLastSearchString()
-            r13.addHashtagsFromMessage(r14)
-            r15 = r11
-            r12 = r10
-            r10 = r15
-            goto L_0x0183
-        L_0x0155:
-            boolean r11 = r10 instanceof java.lang.String
-            if (r11 == 0) goto L_0x017e
-            java.lang.String r10 = (java.lang.String) r10
-            org.telegram.ui.Components.SearchViewPager r11 = r6.searchViewPager
-            org.telegram.ui.Adapters.DialogsSearchAdapter r11 = r11.dialogsSearchAdapter
-            boolean r11 = r11.isHashtagSearch()
-            if (r11 == 0) goto L_0x016b
-            org.telegram.ui.ActionBar.ActionBar r11 = r6.actionBar
-            r11.openSearchField(r10, r9)
-            goto L_0x017e
-        L_0x016b:
-            java.lang.String r11 = "section"
-            boolean r11 = r10.equals(r11)
-            if (r11 != 0) goto L_0x017e
-            org.telegram.ui.NewContactActivity r11 = new org.telegram.ui.NewContactActivity
-            r11.<init>()
-            r11.setInitialPhoneNumber(r10, r5)
-            r6.presentFragment(r11)
-        L_0x017e:
-            r10 = r7
-            goto L_0x0182
-        L_0x0180:
-            r10 = r7
-        L_0x0181:
-            r1 = 0
+        L_0x016f:
+            java.lang.String r12 = "section"
+            boolean r12 = r11.equals(r12)
+            if (r12 != 0) goto L_0x0182
+            org.telegram.ui.NewContactActivity r12 = new org.telegram.ui.NewContactActivity
+            r12.<init>()
+            r12.setInitialPhoneNumber(r11, r9)
+            r6.presentFragment(r12)
         L_0x0182:
-            r12 = 0
-        L_0x0183:
-            int r13 = (r10 > r7 ? 1 : (r10 == r7 ? 0 : -1))
-            if (r13 != 0) goto L_0x0188
+            r11 = r7
+            goto L_0x0111
+        L_0x0184:
+            int r14 = (r11 > r7 ? 1 : (r11 == r7 ? 0 : -1))
+            if (r14 == 0) goto L_0x01a3
+            org.telegram.ui.ActionBar.ActionBar r14 = r6.actionBar
+            boolean r14 = r14.isActionModeShowed()
+            if (r14 == 0) goto L_0x01a3
+            org.telegram.ui.ActionBar.ActionBar r1 = r6.actionBar
+            java.lang.String r2 = "search_dialogs_action_mode"
+            boolean r1 = r1.isActionModeShowed(r2)
+            if (r1 == 0) goto L_0x019f
+            if (r13 != 0) goto L_0x019f
+            r6.showOrUpdateActionMode(r11, r0)
+        L_0x019f:
             return
-        L_0x0188:
+        L_0x01a0:
+            r11 = r7
+        L_0x01a1:
+            r1 = 0
+            r13 = 0
+        L_0x01a3:
+            int r14 = (r11 > r7 ? 1 : (r11 == r7 ? 0 : -1))
+            if (r14 != 0) goto L_0x01a8
+            return
+        L_0x01a8:
             boolean r7 = r6.onlySelect
-            if (r7 == 0) goto L_0x01b7
-            boolean r1 = r6.validateSlowModeDialog(r10)
-            if (r1 != 0) goto L_0x0193
+            if (r7 == 0) goto L_0x01d7
+            boolean r1 = r6.validateSlowModeDialog(r11)
+            if (r1 != 0) goto L_0x01b3
             return
-        L_0x0193:
+        L_0x01b3:
             java.util.ArrayList<java.lang.Long> r1 = r6.selectedDialogs
             boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x01b2
-            boolean r0 = r6.addOrRemoveSelectedDialog(r10, r0)
+            if (r1 != 0) goto L_0x01d2
+            boolean r0 = r6.addOrRemoveSelectedDialog(r11, r0)
             org.telegram.ui.Components.SearchViewPager r1 = r6.searchViewPager
             org.telegram.ui.Adapters.DialogsSearchAdapter r1 = r1.dialogsSearchAdapter
-            if (r2 != r1) goto L_0x01ad
+            if (r2 != r1) goto L_0x01cd
             org.telegram.ui.ActionBar.ActionBar r1 = r6.actionBar
             r1.closeSearchField()
-            r6.findAndUpdateCheckBox(r10, r0)
-        L_0x01ad:
-            r17.updateSelectedCount()
-            goto L_0x02a2
-        L_0x01b2:
-            r6.didSelectResult(r10, r5, r9)
-            goto L_0x02a2
-        L_0x01b7:
+            r6.findAndUpdateCheckBox(r11, r0)
+        L_0x01cd:
+            r18.updateSelectedCount()
+            goto L_0x02c0
+        L_0x01d2:
+            r6.didSelectResult(r11, r9, r10)
+            goto L_0x02c0
+        L_0x01d7:
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
-            int r7 = (int) r10
-            long r13 = r10 >> r4
-            int r4 = (int) r13
-            if (r7 == 0) goto L_0x01f1
-            if (r7 <= 0) goto L_0x01cb
+            int r7 = (int) r11
+            long r14 = r11 >> r4
+            int r4 = (int) r14
+            if (r7 == 0) goto L_0x0210
+            if (r7 <= 0) goto L_0x01ea
             java.lang.String r4 = "user_id"
             r0.putInt(r4, r7)
-            goto L_0x01f6
-        L_0x01cb:
-            if (r12 == 0) goto L_0x01ea
-            org.telegram.messenger.MessagesController r4 = r17.getMessagesController()
+            goto L_0x0215
+        L_0x01ea:
+            if (r13 == 0) goto L_0x0209
+            org.telegram.messenger.MessagesController r4 = r18.getMessagesController()
             int r8 = -r7
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             org.telegram.tgnet.TLRPC$Chat r4 = r4.getChat(r8)
-            if (r4 == 0) goto L_0x01ea
+            if (r4 == 0) goto L_0x0209
             org.telegram.tgnet.TLRPC$InputChannel r8 = r4.migrated_to
-            if (r8 == 0) goto L_0x01ea
+            if (r8 == 0) goto L_0x0209
             java.lang.String r8 = "migrated_to"
             r0.putInt(r8, r7)
             org.telegram.tgnet.TLRPC$InputChannel r4 = r4.migrated_to
             int r4 = r4.channel_id
             int r7 = -r4
-        L_0x01ea:
+        L_0x0209:
             int r4 = -r7
             java.lang.String r8 = "chat_id"
             r0.putInt(r8, r4)
-            goto L_0x01f6
-        L_0x01f1:
+            goto L_0x0215
+        L_0x0210:
             java.lang.String r8 = "enc_id"
             r0.putInt(r8, r4)
-        L_0x01f6:
-            if (r12 == 0) goto L_0x01fe
+        L_0x0215:
+            if (r13 == 0) goto L_0x021d
             java.lang.String r1 = "message_id"
-            r0.putInt(r1, r12)
-            goto L_0x0214
-        L_0x01fe:
-            if (r1 != 0) goto L_0x0204
-            r17.closeSearch()
-            goto L_0x0214
-        L_0x0204:
+            r0.putInt(r1, r13)
+            goto L_0x0232
+        L_0x021d:
+            if (r1 != 0) goto L_0x0223
+            r18.closeSearch()
+            goto L_0x0232
+        L_0x0223:
             org.telegram.tgnet.TLObject r1 = r6.searchObject
-            if (r1 == 0) goto L_0x0214
+            if (r1 == 0) goto L_0x0232
             org.telegram.ui.Components.SearchViewPager r4 = r6.searchViewPager
             org.telegram.ui.Adapters.DialogsSearchAdapter r4 = r4.dialogsSearchAdapter
-            long r12 = r6.searchDialogId
-            r4.putRecentSearch(r12, r1)
-            r1 = 0
-            r6.searchObject = r1
-        L_0x0214:
+            long r13 = r6.searchDialogId
+            r4.putRecentSearch(r13, r1)
+            r6.searchObject = r5
+        L_0x0232:
             boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r1 == 0) goto L_0x0244
-            long r12 = r6.openedDialogId
-            int r1 = (r12 > r10 ? 1 : (r12 == r10 ? 0 : -1))
-            if (r1 != 0) goto L_0x0227
+            if (r1 == 0) goto L_0x0262
+            long r4 = r6.openedDialogId
+            int r1 = (r4 > r11 ? 1 : (r4 == r11 ? 0 : -1))
+            if (r1 != 0) goto L_0x0245
             org.telegram.ui.Components.SearchViewPager r1 = r6.searchViewPager
             org.telegram.ui.Adapters.DialogsSearchAdapter r1 = r1.dialogsSearchAdapter
-            if (r2 == r1) goto L_0x0227
+            if (r2 == r1) goto L_0x0245
             return
-        L_0x0227:
+        L_0x0245:
             org.telegram.ui.DialogsActivity$ViewPage[] r1 = r6.viewPages
-            if (r1 == 0) goto L_0x023f
+            if (r1 == 0) goto L_0x025d
             r1 = 0
-        L_0x022c:
+        L_0x024a:
             org.telegram.ui.DialogsActivity$ViewPage[] r2 = r6.viewPages
             int r4 = r2.length
-            if (r1 >= r4) goto L_0x023f
+            if (r1 >= r4) goto L_0x025d
             r2 = r2[r1]
             org.telegram.ui.Adapters.DialogsAdapter r2 = r2.dialogsAdapter
-            r6.openedDialogId = r10
-            r2.setOpenedDialogId(r10)
+            r6.openedDialogId = r11
+            r2.setOpenedDialogId(r11)
             int r1 = r1 + 1
-            goto L_0x022c
-        L_0x023f:
+            goto L_0x024a
+        L_0x025d:
             r1 = 512(0x200, float:7.175E-43)
             r6.updateVisibleRows(r1)
-        L_0x0244:
+        L_0x0262:
             org.telegram.ui.Components.SearchViewPager r1 = r6.searchViewPager
             boolean r1 = r1.actionModeShowing()
-            if (r1 == 0) goto L_0x0251
+            if (r1 == 0) goto L_0x026f
             org.telegram.ui.Components.SearchViewPager r1 = r6.searchViewPager
             r1.hideActionMode()
-        L_0x0251:
+        L_0x026f:
             java.lang.String r1 = r6.searchString
-            if (r1 == 0) goto L_0x0273
-            org.telegram.messenger.MessagesController r1 = r17.getMessagesController()
+            if (r1 == 0) goto L_0x0291
+            org.telegram.messenger.MessagesController r1 = r18.getMessagesController()
             boolean r1 = r1.checkCanOpenChat(r0, r6)
-            if (r1 == 0) goto L_0x02a2
-            org.telegram.messenger.NotificationCenter r1 = r17.getNotificationCenter()
+            if (r1 == 0) goto L_0x02c0
+            org.telegram.messenger.NotificationCenter r1 = r18.getNotificationCenter()
             int r2 = org.telegram.messenger.NotificationCenter.closeChats
-            java.lang.Object[] r3 = new java.lang.Object[r9]
+            java.lang.Object[] r3 = new java.lang.Object[r10]
             r1.postNotificationName(r2, r3)
             org.telegram.ui.ChatActivity r1 = new org.telegram.ui.ChatActivity
             r1.<init>(r0)
             r6.presentFragment(r1)
-            goto L_0x02a2
-        L_0x0273:
-            org.telegram.messenger.MessagesController r1 = r17.getMessagesController()
+            goto L_0x02c0
+        L_0x0291:
+            org.telegram.messenger.MessagesController r1 = r18.getMessagesController()
             boolean r1 = r1.checkCanOpenChat(r0, r6)
-            if (r1 == 0) goto L_0x02a2
+            if (r1 == 0) goto L_0x02c0
             org.telegram.ui.ChatActivity r1 = new org.telegram.ui.ChatActivity
             r1.<init>(r0)
-            if (r3 == 0) goto L_0x029f
-            if (r7 <= 0) goto L_0x029f
-            org.telegram.messenger.MessagesController r0 = r17.getMessagesController()
+            if (r3 == 0) goto L_0x02bd
+            if (r7 <= 0) goto L_0x02bd
+            org.telegram.messenger.MessagesController r0 = r18.getMessagesController()
             android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r0 = r0.dialogs_dict
-            java.lang.Object r0 = r0.get(r10)
-            if (r0 != 0) goto L_0x029f
-            org.telegram.messenger.MediaDataController r0 = r17.getMediaDataController()
+            java.lang.Object r0 = r0.get(r11)
+            if (r0 != 0) goto L_0x02bd
+            org.telegram.messenger.MediaDataController r0 = r18.getMediaDataController()
             org.telegram.tgnet.TLRPC$Document r0 = r0.getGreetingsSticker()
-            if (r0 == 0) goto L_0x029f
-            r1.setPreloadedSticker(r0, r5)
-        L_0x029f:
+            if (r0 == 0) goto L_0x02bd
+            r1.setPreloadedSticker(r0, r9)
+        L_0x02bd:
             r6.presentFragment(r1)
-        L_0x02a2:
+        L_0x02c0:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.onItemClick(android.view.View, int, androidx.recyclerview.widget.RecyclerView$Adapter):void");
@@ -5741,94 +5958,94 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r9 = 0
             r0 = 1
             if (r11 != r8) goto L_0x011d
-            java.lang.Object r6 = r8.getItem(r7)
-            org.telegram.ui.Components.SearchViewPager r7 = r5.searchViewPager
-            org.telegram.ui.Adapters.DialogsSearchAdapter r7 = r7.dialogsSearchAdapter
-            boolean r7 = r7.isRecentSearchDisplayed()
-            if (r7 == 0) goto L_0x011c
-            org.telegram.ui.ActionBar.AlertDialog$Builder r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            android.app.Activity r8 = r5.getParentActivity()
-            r7.<init>((android.content.Context) r8)
-            r8 = 2131624908(0x7f0e03cc, float:1.887701E38)
+            java.lang.Object r8 = r8.getItem(r7)
+            org.telegram.ui.Components.SearchViewPager r2 = r5.searchViewPager
+            org.telegram.ui.Adapters.DialogsSearchAdapter r2 = r2.dialogsSearchAdapter
+            boolean r2 = r2.isRecentSearchDisplayed()
+            if (r2 == 0) goto L_0x011d
+            org.telegram.ui.ActionBar.AlertDialog$Builder r6 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            android.app.Activity r7 = r5.getParentActivity()
+            r6.<init>((android.content.Context) r7)
+            r7 = 2131624924(0x7f0e03dc, float:1.8877041E38)
             java.lang.String r10 = "ClearSearchSingleAlertTitle"
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
-            r7.setTitle(r8)
-            boolean r8 = r6 instanceof org.telegram.tgnet.TLRPC$Chat
-            r10 = 2131624909(0x7f0e03cd, float:1.8877011E38)
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
+            r6.setTitle(r7)
+            boolean r7 = r8 instanceof org.telegram.tgnet.TLRPC$Chat
+            r10 = 2131624925(0x7f0e03dd, float:1.8877043E38)
             java.lang.String r11 = "ClearSearchSingleChatAlertText"
-            if (r8 == 0) goto L_0x0074
-            org.telegram.tgnet.TLRPC$Chat r6 = (org.telegram.tgnet.TLRPC$Chat) r6
-            java.lang.Object[] r8 = new java.lang.Object[r0]
-            java.lang.String r2 = r6.title
-            r8[r1] = r2
-            java.lang.String r8 = org.telegram.messenger.LocaleController.formatString(r11, r10, r8)
-            r7.setMessage(r8)
-            int r6 = r6.id
-            int r6 = -r6
+            if (r7 == 0) goto L_0x0074
+            org.telegram.tgnet.TLRPC$Chat r8 = (org.telegram.tgnet.TLRPC$Chat) r8
+            java.lang.Object[] r7 = new java.lang.Object[r0]
+            java.lang.String r2 = r8.title
+            r7[r1] = r2
+            java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r11, r10, r7)
+            r6.setMessage(r7)
+            int r7 = r8.id
+            int r7 = -r7
         L_0x0072:
-            long r10 = (long) r6
+            long r7 = (long) r7
             goto L_0x00e1
         L_0x0074:
-            boolean r8 = r6 instanceof org.telegram.tgnet.TLRPC$User
-            r2 = 2131624910(0x7f0e03ce, float:1.8877013E38)
+            boolean r7 = r8 instanceof org.telegram.tgnet.TLRPC$User
+            r2 = 2131624926(0x7f0e03de, float:1.8877045E38)
             java.lang.String r3 = "ClearSearchSingleUserAlertText"
-            if (r8 == 0) goto L_0x00b4
-            org.telegram.tgnet.TLRPC$User r6 = (org.telegram.tgnet.TLRPC$User) r6
-            int r8 = r6.id
+            if (r7 == 0) goto L_0x00b4
+            org.telegram.tgnet.TLRPC$User r8 = (org.telegram.tgnet.TLRPC$User) r8
+            int r7 = r8.id
             org.telegram.messenger.UserConfig r4 = r5.getUserConfig()
             int r4 = r4.clientUserId
-            if (r8 != r4) goto L_0x009e
-            java.lang.Object[] r8 = new java.lang.Object[r0]
-            r2 = 2131627252(0x7f0e0cf4, float:1.8881763E38)
+            if (r7 != r4) goto L_0x009e
+            java.lang.Object[] r7 = new java.lang.Object[r0]
+            r2 = 2131627280(0x7f0e0d10, float:1.888182E38)
             java.lang.String r3 = "SavedMessages"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            r8[r1] = r2
-            java.lang.String r8 = org.telegram.messenger.LocaleController.formatString(r11, r10, r8)
-            r7.setMessage(r8)
+            r7[r1] = r2
+            java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r11, r10, r7)
+            r6.setMessage(r7)
             goto L_0x00b1
         L_0x009e:
-            java.lang.Object[] r8 = new java.lang.Object[r0]
-            java.lang.String r10 = r6.first_name
-            java.lang.String r11 = r6.last_name
+            java.lang.Object[] r7 = new java.lang.Object[r0]
+            java.lang.String r10 = r8.first_name
+            java.lang.String r11 = r8.last_name
             java.lang.String r10 = org.telegram.messenger.ContactsController.formatName(r10, r11)
-            r8[r1] = r10
-            java.lang.String r8 = org.telegram.messenger.LocaleController.formatString(r3, r2, r8)
-            r7.setMessage(r8)
+            r7[r1] = r10
+            java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r3, r2, r7)
+            r6.setMessage(r7)
         L_0x00b1:
-            int r6 = r6.id
+            int r7 = r8.id
             goto L_0x0072
         L_0x00b4:
-            boolean r8 = r6 instanceof org.telegram.tgnet.TLRPC$EncryptedChat
-            if (r8 == 0) goto L_0x011c
-            org.telegram.tgnet.TLRPC$EncryptedChat r6 = (org.telegram.tgnet.TLRPC$EncryptedChat) r6
-            org.telegram.messenger.MessagesController r8 = r5.getMessagesController()
-            int r10 = r6.user_id
+            boolean r7 = r8 instanceof org.telegram.tgnet.TLRPC$EncryptedChat
+            if (r7 == 0) goto L_0x011c
+            org.telegram.tgnet.TLRPC$EncryptedChat r8 = (org.telegram.tgnet.TLRPC$EncryptedChat) r8
+            org.telegram.messenger.MessagesController r7 = r5.getMessagesController()
+            int r10 = r8.user_id
             java.lang.Integer r10 = java.lang.Integer.valueOf(r10)
-            org.telegram.tgnet.TLRPC$User r8 = r8.getUser(r10)
+            org.telegram.tgnet.TLRPC$User r7 = r7.getUser(r10)
             java.lang.Object[] r10 = new java.lang.Object[r0]
-            java.lang.String r11 = r8.first_name
-            java.lang.String r8 = r8.last_name
-            java.lang.String r8 = org.telegram.messenger.ContactsController.formatName(r11, r8)
-            r10[r1] = r8
-            java.lang.String r8 = org.telegram.messenger.LocaleController.formatString(r3, r2, r10)
-            r7.setMessage(r8)
-            int r6 = r6.id
-            long r10 = (long) r6
-            r6 = 32
-            long r10 = r10 << r6
+            java.lang.String r11 = r7.first_name
+            java.lang.String r7 = r7.last_name
+            java.lang.String r7 = org.telegram.messenger.ContactsController.formatName(r11, r7)
+            r10[r1] = r7
+            java.lang.String r7 = org.telegram.messenger.LocaleController.formatString(r3, r2, r10)
+            r6.setMessage(r7)
+            int r7 = r8.id
+            long r7 = (long) r7
+            r10 = 32
+            long r7 = r7 << r10
         L_0x00e1:
-            r6 = 2131624907(0x7f0e03cb, float:1.8877007E38)
-            java.lang.String r8 = "ClearSearchRemove"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
-            java.lang.String r6 = r6.toUpperCase()
-            org.telegram.ui.-$$Lambda$DialogsActivity$IyAX8fYw6Iiuw3CGEFmvN2MOHd4 r8 = new org.telegram.ui.-$$Lambda$DialogsActivity$IyAX8fYw6Iiuw3CGEFmvN2MOHd4
-            r8.<init>(r10)
-            r7.setPositiveButton(r6, r8)
-            r6 = 2131624639(0x7f0e02bf, float:1.8876463E38)
+            r10 = 2131624923(0x7f0e03db, float:1.887704E38)
+            java.lang.String r11 = "ClearSearchRemove"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            java.lang.String r10 = r10.toUpperCase()
+            org.telegram.ui.-$$Lambda$DialogsActivity$wJ4m9MM1WylNTejSipAEEm44WyE r11 = new org.telegram.ui.-$$Lambda$DialogsActivity$wJ4m9MM1WylNTejSipAEEm44WyE
+            r11.<init>(r7)
+            r6.setPositiveButton(r10, r11)
+            r7 = 2131624654(0x7f0e02ce, float:1.8876494E38)
             java.lang.String r8 = "Cancel"
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
-            r7.setNegativeButton(r6, r9)
-            org.telegram.ui.ActionBar.AlertDialog r6 = r7.create()
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
+            r6.setNegativeButton(r7, r9)
+            org.telegram.ui.ActionBar.AlertDialog r6 = r6.create()
             r5.showDialog(r6)
             r7 = -1
             android.view.View r6 = r6.getButton(r7)
@@ -5842,45 +6059,63 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x011c:
             return r1
         L_0x011d:
-            org.telegram.ui.ActionBar.ActionBar r8 = r5.actionBar
-            boolean r8 = r8.isSearchFieldVisible()
-            if (r8 == 0) goto L_0x0126
+            org.telegram.ui.Components.SearchViewPager r8 = r5.searchViewPager
+            org.telegram.ui.Adapters.DialogsSearchAdapter r8 = r8.dialogsSearchAdapter
+            if (r11 != r8) goto L_0x013b
+            boolean r7 = r6 instanceof org.telegram.ui.Cells.ProfileSearchCell
+            r8 = 0
+            if (r7 == 0) goto L_0x0131
+            r7 = r6
+            org.telegram.ui.Cells.ProfileSearchCell r7 = (org.telegram.ui.Cells.ProfileSearchCell) r7
+            long r10 = r7.getDialogId()
+            goto L_0x0132
+        L_0x0131:
+            r10 = r8
+        L_0x0132:
+            int r7 = (r10 > r8 ? 1 : (r10 == r8 ? 0 : -1))
+            if (r7 == 0) goto L_0x013a
+            r5.showOrUpdateActionMode(r10, r6)
+            return r0
+        L_0x013a:
             return r1
-        L_0x0126:
+        L_0x013b:
             org.telegram.ui.Adapters.DialogsAdapter r11 = (org.telegram.ui.Adapters.DialogsAdapter) r11
             int r8 = r5.currentAccount
             int r2 = r5.folderId
             boolean r3 = r5.dialogsListFrozen
             java.util.ArrayList r8 = r5.getDialogsArray(r8, r10, r2, r3)
             int r7 = r11.fixPosition(r7)
-            if (r7 < 0) goto L_0x01e4
+            if (r7 < 0) goto L_0x01fe
             int r10 = r8.size()
-            if (r7 < r10) goto L_0x0140
-            goto L_0x01e4
-        L_0x0140:
+            if (r7 < r10) goto L_0x0155
+            goto L_0x01fe
+        L_0x0155:
             java.lang.Object r7 = r8.get(r7)
             org.telegram.tgnet.TLRPC$Dialog r7 = (org.telegram.tgnet.TLRPC$Dialog) r7
+            if (r7 != 0) goto L_0x015e
+            return r1
+        L_0x015e:
             boolean r8 = r5.onlySelect
-            if (r8 == 0) goto L_0x0167
+            if (r8 == 0) goto L_0x017f
             int r8 = r5.initialDialogsType
             r9 = 3
-            if (r8 == r9) goto L_0x0154
+            if (r8 == r9) goto L_0x016c
             r9 = 10
-            if (r8 == r9) goto L_0x0154
+            if (r8 == r9) goto L_0x016c
             return r1
-        L_0x0154:
+        L_0x016c:
             long r8 = r7.id
             boolean r8 = r5.validateSlowModeDialog(r8)
-            if (r8 != 0) goto L_0x015d
+            if (r8 != 0) goto L_0x0175
             return r1
-        L_0x015d:
+        L_0x0175:
             long r7 = r7.id
             r5.addOrRemoveSelectedDialog(r7, r6)
             r5.updateSelectedCount()
-            goto L_0x01e3
-        L_0x0167:
+            goto L_0x01fd
+        L_0x017f:
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_dialogFolder
-            if (r8 == 0) goto L_0x01d1
+            if (r8 == 0) goto L_0x01e9
             r7 = 2
             r6.performHapticFeedback(r1, r7)
             org.telegram.ui.ActionBar.BottomSheet$Builder r6 = new org.telegram.ui.ActionBar.BottomSheet$Builder
@@ -5888,78 +6123,79 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r6.<init>(r8)
             org.telegram.messenger.MessagesStorage r8 = r5.getMessagesStorage()
             int r8 = r8.getArchiveUnreadCount()
-            if (r8 == 0) goto L_0x0184
+            if (r8 == 0) goto L_0x019c
             r8 = 1
-            goto L_0x0185
-        L_0x0184:
+            goto L_0x019d
+        L_0x019c:
             r8 = 0
-        L_0x0185:
+        L_0x019d:
             int[] r10 = new int[r7]
-            if (r8 == 0) goto L_0x018d
-            r11 = 2131165679(0x7var_ef, float:1.7945582E38)
-            goto L_0x018e
-        L_0x018d:
+            if (r8 == 0) goto L_0x01a5
+            r11 = 2131165680(0x7var_f0, float:1.7945584E38)
+            goto L_0x01a6
+        L_0x01a5:
             r11 = 0
-        L_0x018e:
+        L_0x01a6:
             r10[r1] = r11
             boolean r11 = org.telegram.messenger.SharedConfig.archiveHidden
-            if (r11 == 0) goto L_0x0198
-            r11 = 2131165351(0x7var_a7, float:1.7944917E38)
-            goto L_0x019b
-        L_0x0198:
-            r11 = 2131165356(0x7var_ac, float:1.7944927E38)
-        L_0x019b:
+            if (r11 == 0) goto L_0x01b0
+            r11 = 2131165352(0x7var_a8, float:1.7944919E38)
+            goto L_0x01b3
+        L_0x01b0:
+            r11 = 2131165357(0x7var_ad, float:1.7944929E38)
+        L_0x01b3:
             r10[r0] = r11
             java.lang.CharSequence[] r7 = new java.lang.CharSequence[r7]
-            if (r8 == 0) goto L_0x01aa
-            r8 = 2131626046(0x7f0e083e, float:1.8879317E38)
+            if (r8 == 0) goto L_0x01c2
+            r8 = 2131626062(0x7f0e084e, float:1.887935E38)
             java.lang.String r9 = "MarkAllAsRead"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r8)
-        L_0x01aa:
+        L_0x01c2:
             r7[r1] = r9
             boolean r8 = org.telegram.messenger.SharedConfig.archiveHidden
-            if (r8 == 0) goto L_0x01b6
-            r8 = 2131626930(0x7f0e0bb2, float:1.888111E38)
+            if (r8 == 0) goto L_0x01ce
+            r8 = 2131626952(0x7f0e0bc8, float:1.8881155E38)
             java.lang.String r9 = "PinInTheList"
-            goto L_0x01bb
-        L_0x01b6:
-            r8 = 2131625743(0x7f0e070f, float:1.8878703E38)
+            goto L_0x01d3
+        L_0x01ce:
+            r8 = 2131625759(0x7f0e071f, float:1.8878735E38)
             java.lang.String r9 = "HideAboveTheList"
-        L_0x01bb:
+        L_0x01d3:
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r7[r0] = r8
-            org.telegram.ui.-$$Lambda$DialogsActivity$zKp89BPYgR6VryTBsugo3e3SclI r8 = new org.telegram.ui.-$$Lambda$DialogsActivity$zKp89BPYgR6VryTBsugo3e3SclI
+            org.telegram.ui.-$$Lambda$DialogsActivity$0KQnNnGrKQHe_2ZNFAcIivzC4k0 r8 = new org.telegram.ui.-$$Lambda$DialogsActivity$0KQnNnGrKQHe_2ZNFAcIivzC4k0
             r8.<init>()
             r6.setItems(r7, r10, r8)
             org.telegram.ui.ActionBar.BottomSheet r6 = r6.create()
             r5.showDialog(r6)
             return r1
-        L_0x01d1:
+        L_0x01e9:
             org.telegram.ui.ActionBar.ActionBar r8 = r5.actionBar
             boolean r8 = r8.isActionModeShowed()
-            if (r8 == 0) goto L_0x01e0
+            if (r8 == 0) goto L_0x01f8
             boolean r8 = r5.isDialogPinned(r7)
-            if (r8 == 0) goto L_0x01e0
+            if (r8 == 0) goto L_0x01f8
             return r1
-        L_0x01e0:
+        L_0x01f8:
+            long r7 = r7.id
             r5.showOrUpdateActionMode(r7, r6)
-        L_0x01e3:
+        L_0x01fd:
             return r0
-        L_0x01e4:
+        L_0x01fe:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.onItemLongClick(android.view.View, int, float, float, int, androidx.recyclerview.widget.RecyclerView$Adapter):boolean");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onItemLongClick$16 */
-    public /* synthetic */ void lambda$onItemLongClick$16$DialogsActivity(long j, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$onItemLongClick$17 */
+    public /* synthetic */ void lambda$onItemLongClick$17$DialogsActivity(long j, DialogInterface dialogInterface, int i) {
         this.searchViewPager.dialogsSearchAdapter.removeRecentSearch(j);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onItemLongClick$17 */
-    public /* synthetic */ void lambda$onItemLongClick$17$DialogsActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$onItemLongClick$18 */
+    public /* synthetic */ void lambda$onItemLongClick$18$DialogsActivity(DialogInterface dialogInterface, int i) {
         if (i == 0) {
             getMessagesStorage().readAllDialogs(1);
         } else if (i == 1 && this.viewPages != null) {
@@ -6027,7 +6263,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* access modifiers changed from: private */
     public void updateFloatingButtonOffset() {
-        this.floatingButtonContainer.setTranslationY(this.floatingButtonTranslation - (this.additionalFloatingTranslation * (1.0f - this.floatingButtonHideProgress)));
+        this.floatingButtonContainer.setTranslationY(this.floatingButtonTranslation - (Math.max(this.additionalFloatingTranslation, this.additionalFloatingTranslation2) * (1.0f - this.floatingButtonHideProgress)));
     }
 
     /* access modifiers changed from: private */
@@ -6047,14 +6283,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         this.dialogChangeFinished = 0;
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                DialogsActivity.this.lambda$onDialogAnimationFinished$18$DialogsActivity();
+                DialogsActivity.this.lambda$onDialogAnimationFinished$19$DialogsActivity();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onDialogAnimationFinished$18 */
-    public /* synthetic */ void lambda$onDialogAnimationFinished$18$DialogsActivity() {
+    /* renamed from: lambda$onDialogAnimationFinished$19 */
+    public /* synthetic */ void lambda$onDialogAnimationFinished$19$DialogsActivity() {
         ArrayList<TLRPC$Dialog> arrayList;
         if (!(this.viewPages == null || this.folderId == 0 || ((arrayList = this.frozenDialogsList) != null && !arrayList.isEmpty()))) {
             int i = 0;
@@ -6175,7 +6411,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         this.actionBarColorAnimator = ofFloat;
         ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                DialogsActivity.this.lambda$hideActionMode$19$DialogsActivity(valueAnimator);
+                DialogsActivity.this.lambda$hideActionMode$20$DialogsActivity(valueAnimator);
             }
         });
         this.actionBarColorAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
@@ -6214,8 +6450,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$hideActionMode$19 */
-    public /* synthetic */ void lambda$hideActionMode$19$DialogsActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$hideActionMode$20 */
+    public /* synthetic */ void lambda$hideActionMode$20$DialogsActivity(ValueAnimator valueAnimator) {
         this.progressToActionMode = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         for (int i = 0; i < this.actionBar.getChildCount(); i++) {
             if (!(this.actionBar.getChildAt(i).getVisibility() != 0 || this.actionBar.getChildAt(i) == this.actionBar.getActionMode() || this.actionBar.getChildAt(i) == this.actionBar.getBackButton())) {
@@ -6230,7 +6466,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     private int getPinnedCount() {
         ArrayList<TLRPC$Dialog> arrayList;
-        if (this.viewPages[0].dialogsType == 7 || this.viewPages[0].dialogsType == 8) {
+        if ((this.viewPages[0].dialogsType == 7 || this.viewPages[0].dialogsType == 8) && (!this.actionBar.isActionModeShowed() || this.actionBar.isActionModeShowed((String) null))) {
             arrayList = getDialogsArray(this.currentAccount, this.viewPages[0].dialogsType, this.folderId, this.dialogsListFrozen);
         } else {
             arrayList = getMessagesController().getDialogs(this.folderId);
@@ -6253,11 +6489,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* access modifiers changed from: private */
     public boolean isDialogPinned(TLRPC$Dialog tLRPC$Dialog) {
-        MessagesController.DialogFilter dialogFilter;
-        if (this.viewPages[0].dialogsType == 7 || this.viewPages[0].dialogsType == 8) {
+        MessagesController.DialogFilter dialogFilter = null;
+        if ((this.viewPages[0].dialogsType == 7 || this.viewPages[0].dialogsType == 8) && (!this.actionBar.isActionModeShowed() || this.actionBar.isActionModeShowed((String) null))) {
             dialogFilter = getMessagesController().selectedDialogFilter[this.viewPages[0].dialogsType == 8 ? (char) 1 : 0];
-        } else {
-            dialogFilter = null;
         }
         if (dialogFilter == null) {
             return tLRPC$Dialog.pinned;
@@ -6268,22 +6502,22 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         return false;
     }
 
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v17, resolved type: boolean} */
+    /* JADX WARNING: type inference failed for: r15v0 */
+    /* JADX WARNING: type inference failed for: r15v1, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r15v11 */
+    /* JADX WARNING: type inference failed for: r15v18 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x0381  */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x0386  */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x038c  */
-    /* JADX WARNING: Removed duplicated region for block: B:169:0x0410  */
-    /* JADX WARNING: Removed duplicated region for block: B:232:0x05b6  */
-    /* JADX WARNING: Removed duplicated region for block: B:235:0x05cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:253:0x0632  */
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* JADX WARNING: Removed duplicated region for block: B:175:0x0414  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void perfromSelectedDialogsAction(java.util.ArrayList<java.lang.Long> r39, int r40, boolean r41) {
+    public void perfromSelectedDialogsAction(java.util.ArrayList<java.lang.Long> r40, int r41, boolean r42) {
         /*
-            r38 = this;
-            r13 = r38
-            r7 = r39
-            r14 = r40
-            android.app.Activity r0 = r38.getParentActivity()
+            r39 = this;
+            r13 = r39
+            r7 = r40
+            r14 = r41
+            android.app.Activity r0 = r39.getParentActivity()
             if (r0 != 0) goto L_0x000d
             return
         L_0x000d:
@@ -6293,296 +6527,307 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r0 = r0.dialogsType
             r1 = 7
             r2 = 8
+            r8 = 0
             r12 = 1
-            if (r0 == r1) goto L_0x0029
+            if (r0 == r1) goto L_0x0027
             org.telegram.ui.DialogsActivity$ViewPage[] r0 = r13.viewPages
             r0 = r0[r15]
             int r0 = r0.dialogsType
-            if (r0 != r2) goto L_0x0027
-            goto L_0x0029
+            if (r0 != r2) goto L_0x0038
         L_0x0027:
-            r9 = 0
-            goto L_0x003f
-        L_0x0029:
-            org.telegram.messenger.MessagesController r0 = r38.getMessagesController()
-            org.telegram.messenger.MessagesController$DialogFilter[] r0 = r0.selectedDialogFilter
+            org.telegram.ui.ActionBar.ActionBar r0 = r13.actionBar
+            boolean r0 = r0.isActionModeShowed()
+            if (r0 == 0) goto L_0x003a
+            org.telegram.ui.ActionBar.ActionBar r0 = r13.actionBar
+            boolean r0 = r0.isActionModeShowed(r8)
+            if (r0 == 0) goto L_0x0038
+            goto L_0x003a
+        L_0x0038:
+            r0 = 0
+            goto L_0x003b
+        L_0x003a:
+            r0 = 1
+        L_0x003b:
+            if (r0 == 0) goto L_0x0054
+            org.telegram.messenger.MessagesController r1 = r39.getMessagesController()
+            org.telegram.messenger.MessagesController$DialogFilter[] r1 = r1.selectedDialogFilter
             org.telegram.ui.DialogsActivity$ViewPage[] r3 = r13.viewPages
             r3 = r3[r15]
             int r3 = r3.dialogsType
-            if (r3 != r2) goto L_0x003b
-            r3 = 1
-            goto L_0x003c
-        L_0x003b:
+            if (r3 != r2) goto L_0x004f
+            r2 = 1
+            goto L_0x0050
+        L_0x004f:
+            r2 = 0
+        L_0x0050:
+            r1 = r1[r2]
+            r9 = r1
+            goto L_0x0055
+        L_0x0054:
+            r9 = r8
+        L_0x0055:
+            int r10 = r40.size()
+            r1 = 105(0x69, float:1.47E-43)
+            if (r14 == r1) goto L_0x06df
+            r1 = 107(0x6b, float:1.5E-43)
+            if (r14 != r1) goto L_0x0063
+            goto L_0x06df
+        L_0x0063:
+            java.lang.String r1 = "Cancel"
+            r11 = 108(0x6c, float:1.51E-43)
+            r5 = 100
+            if (r14 == r5) goto L_0x006d
+            if (r14 != r11) goto L_0x01bd
+        L_0x006d:
+            int r11 = r13.canPinCount
+            if (r11 == 0) goto L_0x01bd
+            org.telegram.messenger.MessagesController r11 = r39.getMessagesController()
+            int r4 = r13.folderId
+            java.util.ArrayList r4 = r11.getDialogs(r4)
+            int r11 = r4.size()
             r3 = 0
-        L_0x003c:
-            r0 = r0[r3]
-            r9 = r0
-        L_0x003f:
-            int r10 = r39.size()
-            r0 = 105(0x69, float:1.47E-43)
-            if (r14 == r0) goto L_0x06d0
-            r0 = 107(0x6b, float:1.5E-43)
-            if (r14 != r0) goto L_0x004d
-            goto L_0x06d0
-        L_0x004d:
-            java.lang.String r0 = "Cancel"
-            r6 = 108(0x6c, float:1.51E-43)
-            r4 = 100
-            if (r14 == r4) goto L_0x0057
-            if (r14 != r6) goto L_0x01b7
-        L_0x0057:
-            int r6 = r13.canPinCount
-            if (r6 == 0) goto L_0x01b7
-            org.telegram.messenger.MessagesController r6 = r38.getMessagesController()
-            int r3 = r13.folderId
-            java.util.ArrayList r3 = r6.getDialogs(r3)
-            int r6 = r3.size()
-            r11 = 0
             r21 = 0
             r22 = 0
-        L_0x006e:
-            if (r11 >= r6) goto L_0x00a8
-            java.lang.Object r23 = r3.get(r11)
-            r5 = r23
-            org.telegram.tgnet.TLRPC$Dialog r5 = (org.telegram.tgnet.TLRPC$Dialog) r5
-            boolean r8 = r5 instanceof org.telegram.tgnet.TLRPC$TL_dialogFolder
-            if (r8 == 0) goto L_0x007f
-            r41 = r3
-            goto L_0x009f
-        L_0x007f:
-            r41 = r3
-            long r2 = r5.id
-            int r3 = (int) r2
-            boolean r2 = r13.isDialogPinned(r5)
-            if (r2 == 0) goto L_0x0092
-            if (r3 != 0) goto L_0x008f
+        L_0x0084:
+            if (r3 >= r11) goto L_0x00bd
+            java.lang.Object r23 = r4.get(r3)
+            r2 = r23
+            org.telegram.tgnet.TLRPC$Dialog r2 = (org.telegram.tgnet.TLRPC$Dialog) r2
+            boolean r6 = r2 instanceof org.telegram.tgnet.TLRPC$TL_dialogFolder
+            if (r6 == 0) goto L_0x0093
+            goto L_0x00a3
+        L_0x0093:
+            long r5 = r2.id
+            int r6 = (int) r5
+            boolean r5 = r13.isDialogPinned(r2)
+            if (r5 == 0) goto L_0x00a6
+            if (r6 != 0) goto L_0x00a1
             int r22 = r22 + 1
-            goto L_0x009f
-        L_0x008f:
+            goto L_0x00a3
+        L_0x00a1:
             int r21 = r21 + 1
-            goto L_0x009f
-        L_0x0092:
-            org.telegram.messenger.MessagesController r2 = r38.getMessagesController()
-            long r4 = r5.id
-            boolean r2 = r2.isPromoDialog(r4, r15)
-            if (r2 != 0) goto L_0x009f
-            goto L_0x00a8
-        L_0x009f:
-            int r11 = r11 + 1
-            r3 = r41
-            r2 = 8
-            r4 = 100
-            goto L_0x006e
-        L_0x00a8:
+        L_0x00a3:
+            r27 = r9
+            goto L_0x00b5
+        L_0x00a6:
+            org.telegram.messenger.MessagesController r5 = r39.getMessagesController()
+            r27 = r9
+            long r8 = r2.id
+            boolean r2 = r5.isPromoDialog(r8, r15)
+            if (r2 != 0) goto L_0x00b5
+            goto L_0x00bf
+        L_0x00b5:
+            int r3 = r3 + 1
+            r9 = r27
+            r5 = 100
+            r8 = 0
+            goto L_0x0084
+        L_0x00bd:
+            r27 = r9
+        L_0x00bf:
             r2 = 0
             r3 = 0
             r4 = 0
             r5 = 0
-        L_0x00ac:
-            if (r2 >= r10) goto L_0x00eb
+        L_0x00c3:
+            if (r2 >= r10) goto L_0x0106
             java.lang.Object r6 = r7.get(r2)
             java.lang.Long r6 = (java.lang.Long) r6
-            r41 = r2
-            long r1 = r6.longValue()
-            org.telegram.messenger.MessagesController r6 = r38.getMessagesController()
+            long r8 = r6.longValue()
+            org.telegram.messenger.MessagesController r6 = r39.getMessagesController()
             android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r6 = r6.dialogs_dict
-            java.lang.Object r6 = r6.get(r1)
+            java.lang.Object r6 = r6.get(r8)
             org.telegram.tgnet.TLRPC$Dialog r6 = (org.telegram.tgnet.TLRPC$Dialog) r6
-            if (r6 == 0) goto L_0x00e7
+            if (r6 == 0) goto L_0x00ff
             boolean r6 = r13.isDialogPinned(r6)
-            if (r6 == 0) goto L_0x00cf
-            goto L_0x00e7
-        L_0x00cf:
-            int r2 = (int) r1
-            if (r2 != 0) goto L_0x00d5
-            int r4 = r4 + 1
-            goto L_0x00d7
-        L_0x00d5:
+            if (r6 == 0) goto L_0x00e4
+            goto L_0x00ff
+        L_0x00e4:
+            int r6 = (int) r8
+            if (r6 != 0) goto L_0x00ea
             int r3 = r3 + 1
-        L_0x00d7:
-            if (r9 == 0) goto L_0x00e7
-            java.util.ArrayList<java.lang.Integer> r1 = r9.alwaysShow
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
-            boolean r1 = r1.contains(r2)
-            if (r1 == 0) goto L_0x00e7
+            goto L_0x00ec
+        L_0x00ea:
+            int r4 = r4 + 1
+        L_0x00ec:
+            if (r27 == 0) goto L_0x00ff
+            r8 = r27
+            java.util.ArrayList<java.lang.Integer> r9 = r8.alwaysShow
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
+            boolean r6 = r9.contains(r6)
+            if (r6 == 0) goto L_0x0101
             int r5 = r5 + 1
-        L_0x00e7:
-            int r2 = r41 + 1
-            r1 = 7
-            goto L_0x00ac
-        L_0x00eb:
-            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r13.viewPages
-            r1 = r1[r15]
-            int r1 = r1.dialogsType
-            r2 = 7
-            if (r1 == r2) goto L_0x0118
-            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r13.viewPages
-            r1 = r1[r15]
-            int r1 = r1.dialogsType
-            r2 = 8
-            if (r1 != r2) goto L_0x0103
-            goto L_0x0118
-        L_0x0103:
-            int r1 = r13.folderId
-            if (r1 != 0) goto L_0x0111
-            if (r9 == 0) goto L_0x010a
-            goto L_0x0111
-        L_0x010a:
-            org.telegram.messenger.MessagesController r1 = r38.getMessagesController()
-            int r1 = r1.maxPinnedDialogsCount
-            goto L_0x0122
-        L_0x0111:
-            org.telegram.messenger.MessagesController r1 = r38.getMessagesController()
-            int r1 = r1.maxFolderPinnedDialogsCount
-            goto L_0x0122
-        L_0x0118:
-            java.util.ArrayList<java.lang.Integer> r1 = r9.alwaysShow
-            int r1 = r1.size()
+            goto L_0x0101
+        L_0x00ff:
+            r8 = r27
+        L_0x0101:
+            int r2 = r2 + 1
+            r27 = r8
+            goto L_0x00c3
+        L_0x0106:
+            r8 = r27
+            if (r0 == 0) goto L_0x0115
+            java.util.ArrayList<java.lang.Integer> r0 = r8.alwaysShow
+            int r0 = r0.size()
             r2 = 100
-            int r1 = 100 - r1
-        L_0x0122:
-            int r4 = r4 + r22
-            if (r4 > r1) goto L_0x012f
-            int r3 = r3 + r21
-            int r3 = r3 - r5
-            if (r3 <= r1) goto L_0x012c
-            goto L_0x012f
-        L_0x012c:
-            r4 = -1
-            goto L_0x02c3
-        L_0x012f:
+            int r0 = 100 - r0
+            goto L_0x0129
+        L_0x0115:
             int r0 = r13.folderId
+            if (r0 != 0) goto L_0x0123
+            if (r8 == 0) goto L_0x011c
+            goto L_0x0123
+        L_0x011c:
+            org.telegram.messenger.MessagesController r0 = r39.getMessagesController()
+            int r0 = r0.maxPinnedDialogsCount
+            goto L_0x0129
+        L_0x0123:
+            org.telegram.messenger.MessagesController r0 = r39.getMessagesController()
+            int r0 = r0.maxFolderPinnedDialogsCount
+        L_0x0129:
+            int r3 = r3 + r22
+            if (r3 > r0) goto L_0x0136
+            int r4 = r4 + r21
+            int r4 = r4 - r5
+            if (r4 <= r0) goto L_0x0133
+            goto L_0x0136
+        L_0x0133:
+            r4 = -1
+            goto L_0x02ca
+        L_0x0136:
+            int r1 = r13.folderId
             java.lang.String r2 = "Chats"
-            if (r0 != 0) goto L_0x0187
-            if (r9 == 0) goto L_0x0138
-            goto L_0x0187
-        L_0x0138:
-            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            android.app.Activity r3 = r38.getParentActivity()
-            r0.<init>((android.content.Context) r3)
+            if (r1 != 0) goto L_0x018e
+            if (r8 == 0) goto L_0x013f
+            goto L_0x018e
+        L_0x013f:
+            org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            android.app.Activity r3 = r39.getParentActivity()
+            r1.<init>((android.content.Context) r3)
             r3 = 2131624282(0x7f0e015a, float:1.887574E38)
             java.lang.String r4 = "AppName"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r0.setTitle(r3)
-            r3 = 2131626939(0x7f0e0bbb, float:1.8881128E38)
+            r1.setTitle(r3)
+            r3 = 2131626961(0x7f0e0bd1, float:1.8881173E38)
             java.lang.Object[] r4 = new java.lang.Object[r12]
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1)
-            r4[r15] = r1
-            java.lang.String r1 = "PinToTopLimitReached2"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4)
-            r0.setMessage(r1)
-            r1 = 2131625552(0x7f0e0650, float:1.8878315E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r2, r0)
+            r4[r15] = r0
+            java.lang.String r0 = "PinToTopLimitReached2"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
+            r1.setMessage(r0)
+            r0 = 2131625568(0x7f0e0660, float:1.8878348E38)
             java.lang.String r2 = "FiltersSetupPinAlert"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            org.telegram.ui.-$$Lambda$DialogsActivity$rbcvPmoCwYWKH17gIXkUJmFVgcI r2 = new org.telegram.ui.-$$Lambda$DialogsActivity$rbcvPmoCwYWKH17gIXkUJmFVgcI
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
+            org.telegram.ui.-$$Lambda$DialogsActivity$HBsMUgEjjCxvar_yG4jV6Z-YkH6o r2 = new org.telegram.ui.-$$Lambda$DialogsActivity$HBsMUgEjjCxvar_yG4jV6Z-YkH6o
             r2.<init>()
-            r0.setNegativeButton(r1, r2)
-            r1 = 2131626507(0x7f0e0a0b, float:1.8880252E38)
+            r1.setNegativeButton(r0, r2)
+            r0 = 2131626529(0x7f0e0a21, float:1.8880297E38)
             java.lang.String r2 = "OK"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r2 = 0
-            r0.setPositiveButton(r1, r2)
-            org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
+            r1.setPositiveButton(r0, r2)
+            org.telegram.ui.ActionBar.AlertDialog r0 = r1.create()
             r13.showDialog(r0)
-            goto L_0x019b
-        L_0x0187:
-            r0 = 2131626929(0x7f0e0bb1, float:1.8881108E38)
+            goto L_0x01a2
+        L_0x018e:
+            r1 = 2131626951(0x7f0e0bc7, float:1.8881153E38)
             java.lang.Object[] r3 = new java.lang.Object[r12]
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1)
-            r3[r15] = r1
-            java.lang.String r1 = "PinFolderLimitReached"
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r1, r0, r3)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r2, r0)
+            r3[r15] = r0
+            java.lang.String r0 = "PinFolderLimitReached"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r1, r3)
             org.telegram.ui.Components.AlertsCreator.showSimpleAlert(r13, r0)
-        L_0x019b:
+        L_0x01a2:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r13.pinItem
             r1 = 1073741824(0x40000000, float:2.0)
             org.telegram.messenger.AndroidUtilities.shakeView(r0, r1, r15)
-            android.app.Activity r0 = r38.getParentActivity()
+            android.app.Activity r0 = r39.getParentActivity()
             java.lang.String r1 = "vibrator"
             java.lang.Object r0 = r0.getSystemService(r1)
             android.os.Vibrator r0 = (android.os.Vibrator) r0
-            if (r0 == 0) goto L_0x01b6
+            if (r0 == 0) goto L_0x01bc
             r1 = 200(0xc8, double:9.9E-322)
             r0.vibrate(r1)
-        L_0x01b6:
+        L_0x01bc:
             return
-        L_0x01b7:
-            r1 = 102(0x66, float:1.43E-43)
-            if (r14 == r1) goto L_0x01bf
+        L_0x01bd:
+            r8 = r9
+            r0 = 102(0x66, float:1.43E-43)
+            if (r14 == r0) goto L_0x01c6
             r2 = 103(0x67, float:1.44E-43)
-            if (r14 != r2) goto L_0x0293
-        L_0x01bf:
-            if (r10 <= r12) goto L_0x0293
-            if (r41 == 0) goto L_0x0293
+            if (r14 != r2) goto L_0x029a
+        L_0x01c6:
+            if (r10 <= r12) goto L_0x029a
+            if (r42 == 0) goto L_0x029a
             org.telegram.ui.ActionBar.AlertDialog$Builder r2 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            android.app.Activity r3 = r38.getParentActivity()
+            android.app.Activity r3 = r39.getParentActivity()
             r2.<init>((android.content.Context) r3)
-            if (r14 != r1) goto L_0x0205
-            r1 = 2131625120(0x7f0e04a0, float:1.8877439E38)
+            if (r14 != r0) goto L_0x020c
+            r0 = 2131625136(0x7f0e04b0, float:1.8877471E38)
             java.lang.Object[] r3 = new java.lang.Object[r12]
             java.lang.String r4 = "ChatsSelected"
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r10)
             r3[r15] = r4
             java.lang.String r4 = "DeleteFewChatsTitle"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3)
-            r2.setTitle(r1)
-            r1 = 2131624335(0x7f0e018f, float:1.8875847E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r4, r0, r3)
+            r2.setTitle(r0)
+            r0 = 2131624342(0x7f0e0196, float:1.887586E38)
             java.lang.String r3 = "AreYouSureDeleteFewChats"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-            r2.setMessage(r1)
-            r1 = 2131625090(0x7f0e0482, float:1.8877378E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
+            r2.setMessage(r0)
+            r0 = 2131625106(0x7f0e0492, float:1.887741E38)
             java.lang.String r3 = "Delete"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-            org.telegram.ui.-$$Lambda$DialogsActivity$cG96tNBt-pFMm5_FY7kn-3-84RI r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$cG96tNBt-pFMm5_FY7kn-3-84RI
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
+            org.telegram.ui.-$$Lambda$DialogsActivity$Q4f8IfXVbjBGp-OJEwMH2dpG9xI r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$Q4f8IfXVbjBGp-OJEwMH2dpG9xI
             r3.<init>(r7, r14)
-            r2.setPositiveButton(r1, r3)
-        L_0x0201:
-            r1 = 2131624639(0x7f0e02bf, float:1.8876463E38)
-            goto L_0x0271
-        L_0x0205:
-            int r1 = r13.canClearCacheCount
-            if (r1 == 0) goto L_0x023d
-            r1 = 2131624892(0x7f0e03bc, float:1.8876977E38)
+            r2.setPositiveButton(r0, r3)
+        L_0x0208:
+            r0 = 2131624654(0x7f0e02ce, float:1.8876494E38)
+            goto L_0x0278
+        L_0x020c:
+            int r0 = r13.canClearCacheCount
+            if (r0 == 0) goto L_0x0244
+            r0 = 2131624908(0x7f0e03cc, float:1.887701E38)
             java.lang.Object[] r3 = new java.lang.Object[r12]
             java.lang.String r4 = "ChatsSelectedClearCache"
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r10)
             r3[r15] = r4
             java.lang.String r4 = "ClearCacheFewChatsTitle"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3)
-            r2.setTitle(r1)
-            r1 = 2131624323(0x7f0e0183, float:1.8875822E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r4, r0, r3)
+            r2.setTitle(r0)
+            r0 = 2131624330(0x7f0e018a, float:1.8875837E38)
             java.lang.String r3 = "AreYouSureClearHistoryCacheFewChats"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-            r2.setMessage(r1)
-            r1 = 2131624896(0x7f0e03c0, float:1.8876985E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
+            r2.setMessage(r0)
+            r0 = 2131624912(0x7f0e03d0, float:1.8877017E38)
             java.lang.String r3 = "ClearHistoryCache"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-            org.telegram.ui.-$$Lambda$DialogsActivity$Q4f8IfXVbjBGp-OJEwMH2dpG9xI r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$Q4f8IfXVbjBGp-OJEwMH2dpG9xI
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
+            org.telegram.ui.-$$Lambda$DialogsActivity$9G8EMqqXKxqv5mT2kZ50FISGA_8 r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$9G8EMqqXKxqv5mT2kZ50FISGA_8
             r3.<init>(r7, r14)
-            r2.setPositiveButton(r1, r3)
-            goto L_0x0201
-        L_0x023d:
-            r1 = 2131624894(0x7f0e03be, float:1.887698E38)
+            r2.setPositiveButton(r0, r3)
+            goto L_0x0208
+        L_0x0244:
+            r0 = 2131624910(0x7f0e03ce, float:1.8877013E38)
             java.lang.Object[] r3 = new java.lang.Object[r12]
             java.lang.String r4 = "ChatsSelectedClear"
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r10)
             r3[r15] = r4
             java.lang.String r4 = "ClearFewChatsTitle"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3)
-            r2.setTitle(r1)
-            r1 = 2131624325(0x7f0e0185, float:1.8875827E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r4, r0, r3)
+            r2.setTitle(r0)
+            r0 = 2131624332(0x7f0e018c, float:1.887584E38)
             java.lang.String r3 = "AreYouSureClearHistoryFewChats"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-            r2.setMessage(r1)
-            r1 = 2131624895(0x7f0e03bf, float:1.8876983E38)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
+            r2.setMessage(r0)
+            r0 = 2131624911(0x7f0e03cf, float:1.8877015E38)
             java.lang.String r3 = "ClearHistory"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-            org.telegram.ui.-$$Lambda$DialogsActivity$9G8EMqqXKxqv5mT2kZ50FISGA_8 r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$9G8EMqqXKxqv5mT2kZ50FISGA_8
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
+            org.telegram.ui.-$$Lambda$DialogsActivity$1jM5FlvHaecgO3PuiZoeupJnW7E r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$1jM5FlvHaecgO3PuiZoeupJnW7E
             r3.<init>(r7, r14)
-            r2.setPositiveButton(r1, r3)
-            goto L_0x0201
-        L_0x0271:
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r1)
+            r2.setPositiveButton(r0, r3)
+            goto L_0x0208
+        L_0x0278:
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r1 = 0
             r2.setNegativeButton(r0, r1)
             org.telegram.ui.ActionBar.AlertDialog r0 = r2.create()
@@ -6590,672 +6835,663 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r4 = -1
             android.view.View r0 = r0.getButton(r4)
             android.widget.TextView r0 = (android.widget.TextView) r0
-            if (r0 == 0) goto L_0x0292
+            if (r0 == 0) goto L_0x0299
             java.lang.String r1 = "dialogTextRed2"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setTextColor(r1)
-        L_0x0292:
+        L_0x0299:
             return
-        L_0x0293:
+        L_0x029a:
             r4 = -1
-            r1 = 106(0x6a, float:1.49E-43)
-            if (r14 != r1) goto L_0x02c3
-            if (r41 == 0) goto L_0x02c3
-            if (r10 != r12) goto L_0x02b4
+            r0 = 106(0x6a, float:1.49E-43)
+            if (r14 != r0) goto L_0x02ca
+            if (r42 == 0) goto L_0x02ca
+            if (r10 != r12) goto L_0x02bb
             java.lang.Object r0 = r7.get(r15)
             java.lang.Long r0 = (java.lang.Long) r0
             long r0 = r0.longValue()
-            org.telegram.messenger.MessagesController r2 = r38.getMessagesController()
+            org.telegram.messenger.MessagesController r2 = r39.getMessagesController()
             int r1 = (int) r0
             java.lang.Integer r0 = java.lang.Integer.valueOf(r1)
             org.telegram.tgnet.TLRPC$User r8 = r2.getUser(r0)
-            goto L_0x02b5
-        L_0x02b4:
+            goto L_0x02bc
+        L_0x02bb:
             r8 = 0
-        L_0x02b5:
+        L_0x02bc:
             int r0 = r13.canReportSpamCount
-            if (r0 == 0) goto L_0x02ba
+            if (r0 == 0) goto L_0x02c1
             r15 = 1
-        L_0x02ba:
-            org.telegram.ui.-$$Lambda$DialogsActivity$UupvtsF4qpvz52M_gjvpzQUqRYw r0 = new org.telegram.ui.-$$Lambda$DialogsActivity$UupvtsF4qpvz52M_gjvpzQUqRYw
+        L_0x02c1:
+            org.telegram.ui.-$$Lambda$DialogsActivity$3Mb-N685fdWCEh-UD5mclbUTicA r0 = new org.telegram.ui.-$$Lambda$DialogsActivity$3Mb-N685fdWCEh-UD5mclbUTicA
             r0.<init>(r7)
             org.telegram.ui.Components.AlertsCreator.createBlockDialogAlert(r13, r10, r15, r8, r0)
             return
-        L_0x02c3:
-            r1 = 2147483647(0x7fffffff, float:NaN)
-            if (r9 == 0) goto L_0x02f3
+        L_0x02ca:
+            r0 = 2147483647(0x7fffffff, float:NaN)
+            if (r8 == 0) goto L_0x02fa
             r2 = 100
-            if (r14 == r2) goto L_0x02d0
+            if (r14 == r2) goto L_0x02d7
             r2 = 108(0x6c, float:1.51E-43)
-            if (r14 != r2) goto L_0x02f3
-        L_0x02d0:
+            if (r14 != r2) goto L_0x02fa
+        L_0x02d7:
             int r2 = r13.canPinCount
-            if (r2 == 0) goto L_0x02f3
-            android.util.LongSparseArray<java.lang.Integer> r2 = r9.pinnedDialogs
+            if (r2 == 0) goto L_0x02fa
+            android.util.LongSparseArray<java.lang.Integer> r2 = r8.pinnedDialogs
             int r2 = r2.size()
             r3 = 0
-        L_0x02db:
-            if (r3 >= r2) goto L_0x02f0
-            android.util.LongSparseArray<java.lang.Integer> r5 = r9.pinnedDialogs
+        L_0x02e2:
+            if (r3 >= r2) goto L_0x02f7
+            android.util.LongSparseArray<java.lang.Integer> r5 = r8.pinnedDialogs
             java.lang.Object r5 = r5.valueAt(r3)
             java.lang.Integer r5 = (java.lang.Integer) r5
             int r5 = r5.intValue()
-            int r1 = java.lang.Math.min(r1, r5)
+            int r0 = java.lang.Math.min(r0, r5)
             int r3 = r3 + 1
-            goto L_0x02db
-        L_0x02f0:
+            goto L_0x02e2
+        L_0x02f7:
             int r2 = r13.canPinCount
-            int r1 = r1 - r2
-        L_0x02f3:
-            r8 = r1
+            int r0 = r0 - r2
+        L_0x02fa:
+            r9 = r0
             r11 = 0
-        L_0x02f5:
-            if (r11 >= r10) goto L_0x065e
+            r19 = 0
+        L_0x02fe:
+            if (r11 >= r10) goto L_0x0658
             java.lang.Object r2 = r7.get(r11)
             java.lang.Long r2 = (java.lang.Long) r2
             long r5 = r2.longValue()
-            org.telegram.messenger.MessagesController r2 = r38.getMessagesController()
+            org.telegram.messenger.MessagesController r2 = r39.getMessagesController()
             android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r2 = r2.dialogs_dict
             java.lang.Object r2 = r2.get(r5)
             org.telegram.tgnet.TLRPC$Dialog r2 = (org.telegram.tgnet.TLRPC$Dialog) r2
-            if (r2 != 0) goto L_0x031e
-        L_0x030f:
-            r21 = r0
-            r7 = 100
-            r16 = 3
-        L_0x0315:
-            r18 = 2
-        L_0x0317:
-            r19 = -1
-            r26 = 2131624639(0x7f0e02bf, float:1.8876463E38)
-            goto L_0x0653
+            if (r2 != 0) goto L_0x0327
+            r16 = r1
+        L_0x031a:
+            r15 = 100
+            r17 = 2
         L_0x031e:
+            r21 = -1
+            r27 = 103(0x67, float:1.44E-43)
+            r29 = 2131624654(0x7f0e02ce, float:1.8876494E38)
+            goto L_0x064f
+        L_0x0327:
             int r3 = (int) r5
-            r19 = 32
-            r21 = r2
-            long r1 = r5 >> r19
-            int r2 = (int) r1
-            if (r3 == 0) goto L_0x034b
-            if (r3 <= 0) goto L_0x0339
-            org.telegram.messenger.MessagesController r1 = r38.getMessagesController()
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r3)
-            org.telegram.tgnet.TLRPC$User r1 = r1.getUser(r2)
-            r4 = r1
-            r1 = 0
-            goto L_0x036e
-        L_0x0339:
-            org.telegram.messenger.MessagesController r1 = r38.getMessagesController()
-            int r2 = -r3
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
-            org.telegram.tgnet.TLRPC$Chat r1 = r1.getChat(r2)
+            r21 = 32
             r22 = r1
+            long r0 = r5 >> r21
+            int r1 = (int) r0
+            if (r3 == 0) goto L_0x0356
+            if (r3 <= 0) goto L_0x0344
+            org.telegram.messenger.MessagesController r0 = r39.getMessagesController()
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r3)
+            org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
+            r4 = r0
+            r1 = 0
+            r27 = 0
+            goto L_0x037c
+        L_0x0344:
+            org.telegram.messenger.MessagesController r0 = r39.getMessagesController()
+            int r1 = -r3
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+            org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r1)
+            r27 = r0
             r1 = 0
             r4 = 0
-            goto L_0x0370
-        L_0x034b:
-            org.telegram.messenger.MessagesController r1 = r38.getMessagesController()
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
-            org.telegram.tgnet.TLRPC$EncryptedChat r1 = r1.getEncryptedChat(r2)
-            if (r1 == 0) goto L_0x0368
-            org.telegram.messenger.MessagesController r2 = r38.getMessagesController()
-            int r4 = r1.user_id
+            goto L_0x037c
+        L_0x0356:
+            org.telegram.messenger.MessagesController r0 = r39.getMessagesController()
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+            org.telegram.tgnet.TLRPC$EncryptedChat r0 = r0.getEncryptedChat(r1)
+            if (r0 == 0) goto L_0x0373
+            org.telegram.messenger.MessagesController r1 = r39.getMessagesController()
+            int r4 = r0.user_id
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
-            org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r4)
-            goto L_0x036d
-        L_0x0368:
-            org.telegram.tgnet.TLRPC$TL_userEmpty r2 = new org.telegram.tgnet.TLRPC$TL_userEmpty
-            r2.<init>()
-        L_0x036d:
-            r4 = r2
-        L_0x036e:
-            r22 = 0
-        L_0x0370:
-            if (r22 != 0) goto L_0x0375
-            if (r4 != 0) goto L_0x0375
-            goto L_0x030f
-        L_0x0375:
-            if (r4 == 0) goto L_0x0386
-            boolean r2 = r4.bot
-            if (r2 == 0) goto L_0x0386
-            boolean r2 = org.telegram.messenger.MessagesController.isSupportUser(r4)
-            if (r2 != 0) goto L_0x0386
-            r2 = 100
+            org.telegram.tgnet.TLRPC$User r1 = r1.getUser(r4)
+            goto L_0x0378
+        L_0x0373:
+            org.telegram.tgnet.TLRPC$TL_userEmpty r1 = new org.telegram.tgnet.TLRPC$TL_userEmpty
+            r1.<init>()
+        L_0x0378:
+            r4 = r1
+            r27 = 0
+            r1 = r0
+        L_0x037c:
+            if (r27 != 0) goto L_0x0383
+            if (r4 != 0) goto L_0x0383
+        L_0x0380:
+            r16 = r22
+            goto L_0x031a
+        L_0x0383:
+            if (r4 == 0) goto L_0x0394
+            boolean r0 = r4.bot
+            if (r0 == 0) goto L_0x0394
+            boolean r0 = org.telegram.messenger.MessagesController.isSupportUser(r4)
+            if (r0 != 0) goto L_0x0394
+            r0 = 100
             r25 = 1
-            goto L_0x038a
-        L_0x0386:
-            r2 = 100
+            goto L_0x0398
+        L_0x0394:
+            r0 = 100
             r25 = 0
-        L_0x038a:
-            if (r14 == r2) goto L_0x05b6
-            r15 = 108(0x6c, float:1.51E-43)
-            if (r14 != r15) goto L_0x039d
-            r2 = r13
-            r4 = r21
-            r13 = 103(0x67, float:1.44E-43)
-            r16 = 3
-            r18 = 2
-            r20 = 102(0x66, float:1.43E-43)
-            goto L_0x05c7
-        L_0x039d:
-            r1 = 101(0x65, float:1.42E-43)
-            if (r14 != r1) goto L_0x0440
-            int r1 = r13.canReadCount
-            if (r1 == 0) goto L_0x0431
-            r1 = 2
-            r13.debugLastUpdateAction = r1
-            if (r9 == 0) goto L_0x03e7
-            int r1 = r9.flags
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ
-            r1 = r1 & r3
-            if (r1 == 0) goto L_0x03e7
-            int r1 = r13.currentAccount
-            r4 = r21
-            boolean r1 = r9.alwaysShow(r1, r4)
-            if (r1 != 0) goto L_0x03e9
+        L_0x0398:
+            if (r14 == r0) goto L_0x05b3
+            r0 = 108(0x6c, float:1.51E-43)
+            if (r14 != r0) goto L_0x03a8
+            r16 = r22
+            r4 = 2131624654(0x7f0e02ce, float:1.8876494E38)
+            r12 = 3
+            r17 = 2
+            goto L_0x05bd
+        L_0x03a8:
+            r0 = 101(0x65, float:1.42E-43)
+            if (r14 != r0) goto L_0x0443
+            int r0 = r13.canReadCount
+            if (r0 == 0) goto L_0x0434
+            r0 = 2
+            r13.debugLastUpdateAction = r0
+            if (r8 == 0) goto L_0x03ed
+            int r0 = r8.flags
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ
+            r0 = r0 & r1
+            if (r0 == 0) goto L_0x03ed
+            int r0 = r13.currentAccount
+            boolean r0 = r8.alwaysShow(r0, r2)
+            if (r0 != 0) goto L_0x03ed
             r13.setDialogsListFrozen(r12)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r0 = r13.frozenDialogsList
+            if (r0 == 0) goto L_0x03ed
+            r0 = 0
+        L_0x03cc:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r13.frozenDialogsList
-            if (r1 == 0) goto L_0x03e9
-            r1 = 0
-        L_0x03c3:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r3 = r13.frozenDialogsList
-            int r3 = r3.size()
-            if (r1 >= r3) goto L_0x03df
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r3 = r13.frozenDialogsList
-            java.lang.Object r3 = r3.get(r1)
-            org.telegram.tgnet.TLRPC$Dialog r3 = (org.telegram.tgnet.TLRPC$Dialog) r3
-            long r2 = r3.id
-            int r21 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
-            if (r21 != 0) goto L_0x03da
-            goto L_0x03e0
-        L_0x03da:
-            int r1 = r1 + 1
-            r2 = 100
-            goto L_0x03c3
-        L_0x03df:
-            r1 = -1
-        L_0x03e0:
-            if (r1 >= 0) goto L_0x03ea
-            r2 = 0
-            r13.setDialogsListFrozen(r2, r2)
-            goto L_0x03ea
+            int r1 = r1.size()
+            if (r0 >= r1) goto L_0x03e6
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r13.frozenDialogsList
+            java.lang.Object r1 = r1.get(r0)
+            org.telegram.tgnet.TLRPC$Dialog r1 = (org.telegram.tgnet.TLRPC$Dialog) r1
+            long r3 = r1.id
+            int r1 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+            if (r1 != 0) goto L_0x03e3
+            goto L_0x03e7
+        L_0x03e3:
+            int r0 = r0 + 1
+            goto L_0x03cc
+        L_0x03e6:
+            r0 = -1
         L_0x03e7:
-            r4 = r21
-        L_0x03e9:
-            r1 = -1
-        L_0x03ea:
-            org.telegram.messenger.MessagesController r2 = r38.getMessagesController()
-            r2.markMentionsAsRead(r5)
-            org.telegram.messenger.MessagesController r26 = r38.getMessagesController()
-            int r2 = r4.top_message
-            int r3 = r4.last_message_date
-            r32 = 0
+            if (r0 >= 0) goto L_0x03ee
+            r13.setDialogsListFrozen(r15, r15)
+            goto L_0x03ee
+        L_0x03ed:
+            r0 = -1
+        L_0x03ee:
+            org.telegram.messenger.MessagesController r1 = r39.getMessagesController()
+            r1.markMentionsAsRead(r5)
+            org.telegram.messenger.MessagesController r27 = r39.getMessagesController()
+            int r1 = r2.top_message
+            int r2 = r2.last_message_date
             r33 = 0
-            r35 = 0
-            r36 = 1
-            r37 = 0
-            r27 = r5
-            r29 = r2
-            r30 = r2
-            r31 = r3
-            r26.markDialogAsRead(r27, r29, r30, r31, r32, r33, r35, r36, r37)
-            if (r1 < 0) goto L_0x030f
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r2 = r13.frozenDialogsList
-            r2.remove(r1)
-            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r13.viewPages
-            r3 = 0
-            r2 = r2[r3]
-            org.telegram.ui.Components.DialogsItemAnimator r2 = r2.dialogsItemAnimator
-            r2.prepareForRemove()
-            org.telegram.ui.DialogsActivity$ViewPage[] r2 = r13.viewPages
-            r2 = r2[r3]
-            org.telegram.ui.Adapters.DialogsAdapter r2 = r2.dialogsAdapter
-            r2.notifyItemRemoved(r1)
-            r1 = 2
-            r13.dialogRemoveFinished = r1
-            goto L_0x030f
-        L_0x0431:
-            org.telegram.messenger.MessagesController r26 = r38.getMessagesController()
-            r29 = 0
+            r34 = 0
+            r36 = 0
+            r37 = 1
+            r38 = 0
+            r28 = r5
+            r30 = r1
+            r31 = r1
+            r32 = r2
+            r27.markDialogAsRead(r28, r30, r31, r32, r33, r34, r36, r37, r38)
+            if (r0 < 0) goto L_0x0380
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r13.frozenDialogsList
+            r1.remove(r0)
+            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r13.viewPages
+            r1 = r1[r15]
+            org.telegram.ui.Components.DialogsItemAnimator r1 = r1.dialogsItemAnimator
+            r1.prepareForRemove()
+            org.telegram.ui.DialogsActivity$ViewPage[] r1 = r13.viewPages
+            r1 = r1[r15]
+            org.telegram.ui.Adapters.DialogsAdapter r1 = r1.dialogsAdapter
+            r1.notifyItemRemoved(r0)
+            r0 = 2
+            r13.dialogRemoveFinished = r0
+            goto L_0x0380
+        L_0x0434:
+            org.telegram.messenger.MessagesController r27 = r39.getMessagesController()
             r30 = 0
-            r27 = r5
-            r26.markDialogAsUnread(r27, r29, r30)
-            goto L_0x030f
-        L_0x0440:
-            r1 = 102(0x66, float:1.43E-43)
-            if (r14 == r1) goto L_0x0491
-            r1 = 103(0x67, float:1.44E-43)
-            if (r14 != r1) goto L_0x0449
-            goto L_0x0491
-        L_0x0449:
-            r1 = 104(0x68, float:1.46E-43)
-            if (r14 != r1) goto L_0x030f
-            if (r10 != r12) goto L_0x0460
-            int r1 = r13.canMuteCount
-            if (r1 != r12) goto L_0x0460
+            r31 = 0
+            r28 = r5
+            r27.markDialogAsUnread(r28, r30, r31)
+            goto L_0x0380
+        L_0x0443:
+            r0 = 102(0x66, float:1.43E-43)
+            if (r14 == r0) goto L_0x0494
+            r0 = 103(0x67, float:1.44E-43)
+            if (r14 != r0) goto L_0x044c
+            goto L_0x0494
+        L_0x044c:
+            r0 = 104(0x68, float:1.46E-43)
+            if (r14 != r0) goto L_0x0380
+            if (r10 != r12) goto L_0x0463
+            int r0 = r13.canMuteCount
+            if (r0 != r12) goto L_0x0463
             org.telegram.ui.ActionBar.BottomSheet r0 = org.telegram.ui.Components.AlertsCreator.createMuteAlert(r13, r5)
-            org.telegram.ui.-$$Lambda$DialogsActivity$ZB8AWUpkbuPAOK4bRNdLp1j-uZo r1 = new org.telegram.ui.-$$Lambda$DialogsActivity$ZB8AWUpkbuPAOK4bRNdLp1j-uZo
+            org.telegram.ui.-$$Lambda$DialogsActivity$0JBl_RZTKJfi0tHKtUC8w2Tnp_o r1 = new org.telegram.ui.-$$Lambda$DialogsActivity$0JBl_RZTKJfi0tHKtUC8w2Tnp_o
             r1.<init>()
             r13.showDialog(r0, r1)
             return
-        L_0x0460:
-            int r1 = r13.canUnmuteCount
-            if (r1 == 0) goto L_0x047a
-            org.telegram.messenger.MessagesController r1 = r38.getMessagesController()
-            boolean r1 = r1.isDialogMuted(r5)
-            if (r1 != 0) goto L_0x0470
-            goto L_0x030f
-        L_0x0470:
-            org.telegram.messenger.NotificationsController r1 = r38.getNotificationsController()
-            r2 = 4
-            r1.setDialogNotificationsSettings(r5, r2)
-            goto L_0x030f
-        L_0x047a:
-            r2 = 4
-            org.telegram.messenger.MessagesController r1 = r38.getMessagesController()
-            boolean r1 = r1.isDialogMuted(r5)
-            if (r1 == 0) goto L_0x0487
-            goto L_0x030f
-        L_0x0487:
-            org.telegram.messenger.NotificationsController r1 = r38.getNotificationsController()
-            r3 = 3
-            r1.setDialogNotificationsSettings(r5, r3)
-            goto L_0x030f
-        L_0x0491:
-            r2 = 4
-            r16 = 3
-            if (r10 != r12) goto L_0x0514
-            r1 = 102(0x66, float:1.43E-43)
-            if (r14 != r1) goto L_0x04e3
-            boolean r1 = r13.canDeletePsaSelected
-            if (r1 == 0) goto L_0x04e3
-            org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            android.app.Activity r2 = r38.getParentActivity()
-            r1.<init>((android.content.Context) r2)
-            r2 = 2131627052(0x7f0e0c2c, float:1.8881358E38)
-            java.lang.String r3 = "PsaHideChatAlertTitle"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            r1.setTitle(r2)
-            r2 = 2131627051(0x7f0e0c2b, float:1.8881356E38)
-            java.lang.String r3 = "PsaHideChatAlertText"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            r1.setMessage(r2)
-            r2 = 2131627050(0x7f0e0c2a, float:1.8881353E38)
-            java.lang.String r3 = "PsaHide"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            org.telegram.ui.-$$Lambda$DialogsActivity$7kClodAM7xplpYvcvZbezXcnudE r3 = new org.telegram.ui.-$$Lambda$DialogsActivity$7kClodAM7xplpYvcvZbezXcnudE
-            r3.<init>()
-            r1.setPositiveButton(r2, r3)
-            r4 = 2131624639(0x7f0e02bf, float:1.8876463E38)
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r4)
+        L_0x0463:
+            int r0 = r13.canUnmuteCount
+            if (r0 == 0) goto L_0x047d
+            org.telegram.messenger.MessagesController r0 = r39.getMessagesController()
+            boolean r0 = r0.isDialogMuted(r5)
+            if (r0 != 0) goto L_0x0473
+            goto L_0x0380
+        L_0x0473:
+            org.telegram.messenger.NotificationsController r0 = r39.getNotificationsController()
+            r1 = 4
+            r0.setDialogNotificationsSettings(r5, r1)
+            goto L_0x0380
+        L_0x047d:
+            r1 = 4
+            org.telegram.messenger.MessagesController r0 = r39.getMessagesController()
+            boolean r0 = r0.isDialogMuted(r5)
+            if (r0 == 0) goto L_0x048a
+            goto L_0x0380
+        L_0x048a:
+            org.telegram.messenger.NotificationsController r0 = r39.getNotificationsController()
+            r2 = 3
+            r0.setDialogNotificationsSettings(r5, r2)
+            goto L_0x0380
+        L_0x0494:
+            r1 = 4
+            r2 = 3
+            if (r10 != r12) goto L_0x0518
+            r0 = 102(0x66, float:1.43E-43)
+            if (r14 != r0) goto L_0x04e7
+            boolean r0 = r13.canDeletePsaSelected
+            if (r0 == 0) goto L_0x04e7
+            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            android.app.Activity r1 = r39.getParentActivity()
+            r0.<init>((android.content.Context) r1)
+            r1 = 2131627080(0x7f0e0CLASSNAME, float:1.8881414E38)
+            java.lang.String r2 = "PsaHideChatAlertTitle"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setTitle(r1)
+            r1 = 2131627079(0x7f0e0CLASSNAME, float:1.8881412E38)
+            java.lang.String r2 = "PsaHideChatAlertText"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            r0.setMessage(r1)
+            r1 = 2131627078(0x7f0e0CLASSNAME, float:1.888141E38)
+            java.lang.String r2 = "PsaHide"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+            org.telegram.ui.-$$Lambda$DialogsActivity$Zbfi1uyPvMFs3utKcS67BIt4w3Q r2 = new org.telegram.ui.-$$Lambda$DialogsActivity$Zbfi1uyPvMFs3utKcS67BIt4w3Q
+            r2.<init>()
+            r0.setPositiveButton(r1, r2)
+            r1 = r22
+            r4 = 2131624654(0x7f0e02ce, float:1.8876494E38)
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r4)
             r2 = 0
-            r1.setNegativeButton(r0, r2)
-            org.telegram.ui.ActionBar.AlertDialog r0 = r1.create()
+            r0.setNegativeButton(r1, r2)
+            org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()
             r13.showDialog(r0)
-            goto L_0x0513
-        L_0x04e3:
+            goto L_0x0517
+        L_0x04e7:
             r0 = 103(0x67, float:1.44E-43)
-            if (r14 != r0) goto L_0x04e9
+            if (r14 != r0) goto L_0x04ed
             r7 = 1
-            goto L_0x04ea
-        L_0x04e9:
+            goto L_0x04ee
+        L_0x04ed:
             r7 = 0
-        L_0x04ea:
-            r1 = 102(0x66, float:1.43E-43)
-            if (r3 != 0) goto L_0x04f0
+        L_0x04ee:
+            r0 = 102(0x66, float:1.43E-43)
+            if (r3 != 0) goto L_0x04f4
             r8 = 1
-            goto L_0x04f1
-        L_0x04f0:
-            r8 = 0
-        L_0x04f1:
-            if (r14 != r1) goto L_0x04f4
             goto L_0x04f5
         L_0x04f4:
-            r12 = 0
+            r8 = 0
         L_0x04f5:
-            org.telegram.ui.-$$Lambda$DialogsActivity$A_sA0CqHJs1cp856RoU7FxbeJDQ r9 = new org.telegram.ui.-$$Lambda$DialogsActivity$A_sA0CqHJs1cp856RoU7FxbeJDQ
+            if (r14 != r0) goto L_0x04f8
+            goto L_0x04f9
+        L_0x04f8:
+            r12 = 0
+        L_0x04f9:
+            org.telegram.ui.-$$Lambda$DialogsActivity$L_HLIrYOU2Un5cCG_QNr8BCB77g r9 = new org.telegram.ui.-$$Lambda$DialogsActivity$L_HLIrYOU2Un5cCG_QNr8BCB77g
             r0 = r9
-            r1 = r38
-            r2 = r40
-            r3 = r22
-            r23 = r4
+            r1 = r39
+            r2 = r41
+            r3 = r27
+            r26 = r4
             r4 = r5
             r6 = r25
             r0.<init>(r2, r3, r4, r6)
-            r0 = r38
+            r0 = r39
             r1 = r7
-            r2 = r22
-            r3 = r23
+            r2 = r27
+            r3 = r26
             r4 = r8
             r5 = r12
             r6 = r9
             org.telegram.ui.Components.AlertsCreator.createClearOrDeleteDialogAlert(r0, r1, r2, r3, r4, r5, r6)
-        L_0x0513:
+        L_0x0517:
             return
-        L_0x0514:
-            r4 = 2131624639(0x7f0e02bf, float:1.8876463E38)
-            org.telegram.messenger.MessagesController r1 = r38.getMessagesController()
-            boolean r1 = r1.isPromoDialog(r5, r12)
-            if (r1 == 0) goto L_0x052e
-            org.telegram.messenger.MessagesController r1 = r38.getMessagesController()
-            r1.hidePromoDialog()
-        L_0x0528:
-            r21 = r0
-            r7 = 100
-            goto L_0x0315
-        L_0x052e:
-            r1 = 103(0x67, float:1.44E-43)
-            if (r14 != r1) goto L_0x0540
-            int r2 = r13.canClearCacheCount
-            if (r2 == 0) goto L_0x0540
-            org.telegram.messenger.MessagesController r2 = r38.getMessagesController()
+        L_0x0518:
+            r16 = r22
+            r4 = 2131624654(0x7f0e02ce, float:1.8876494E38)
+            org.telegram.messenger.MessagesController r0 = r39.getMessagesController()
+            boolean r0 = r0.isPromoDialog(r5, r12)
+            if (r0 == 0) goto L_0x0530
+            org.telegram.messenger.MessagesController r0 = r39.getMessagesController()
+            r0.hidePromoDialog()
+            goto L_0x031a
+        L_0x0530:
+            r0 = 103(0x67, float:1.44E-43)
+            if (r14 != r0) goto L_0x0542
+            int r1 = r13.canClearCacheCount
+            if (r1 == 0) goto L_0x0542
+            org.telegram.messenger.MessagesController r1 = r39.getMessagesController()
             r3 = 2
-            r4 = 0
-            r2.deleteDialog(r5, r3, r4)
-            goto L_0x0528
-        L_0x0540:
-            r4 = 0
-            r18 = 2
-            if (r14 != r1) goto L_0x0550
-            org.telegram.messenger.MessagesController r2 = r38.getMessagesController()
-            r2.deleteDialog(r5, r12, r4)
-            r21 = r0
-            goto L_0x05d4
-        L_0x0550:
-            if (r22 == 0) goto L_0x057f
-            boolean r2 = org.telegram.messenger.ChatObject.isNotInChat(r22)
-            if (r2 == 0) goto L_0x0560
-            org.telegram.messenger.MessagesController r2 = r38.getMessagesController()
-            r2.deleteDialog(r5, r4, r4)
-            goto L_0x0590
-        L_0x0560:
-            org.telegram.messenger.MessagesController r2 = r38.getMessagesController()
-            org.telegram.messenger.UserConfig r3 = r38.getUserConfig()
+            r1.deleteDialog(r5, r3, r15)
+            goto L_0x031a
+        L_0x0542:
+            r17 = 2
+            if (r14 != r0) goto L_0x054f
+            org.telegram.messenger.MessagesController r1 = r39.getMessagesController()
+            r1.deleteDialog(r5, r12, r15)
+            goto L_0x05c7
+        L_0x054f:
+            if (r27 == 0) goto L_0x057e
+            boolean r1 = org.telegram.messenger.ChatObject.isNotInChat(r27)
+            if (r1 == 0) goto L_0x055f
+            org.telegram.messenger.MessagesController r1 = r39.getMessagesController()
+            r1.deleteDialog(r5, r15, r15)
+            goto L_0x058e
+        L_0x055f:
+            org.telegram.messenger.MessagesController r1 = r39.getMessagesController()
+            org.telegram.messenger.UserConfig r3 = r39.getUserConfig()
             int r3 = r3.getClientUserId()
             java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-            org.telegram.tgnet.TLRPC$User r2 = r2.getUser(r3)
-            org.telegram.messenger.MessagesController r3 = r38.getMessagesController()
+            org.telegram.tgnet.TLRPC$User r1 = r1.getUser(r3)
+            org.telegram.messenger.MessagesController r3 = r39.getMessagesController()
             long r12 = -r5
-            int r4 = (int) r12
+            int r13 = (int) r12
             r12 = 0
-            r3.deleteParticipantFromChat(r4, r2, r12)
-            goto L_0x0590
-        L_0x057f:
-            org.telegram.messenger.MessagesController r2 = r38.getMessagesController()
-            r4 = 0
-            r2.deleteDialog(r5, r4, r4)
-            if (r25 == 0) goto L_0x0590
-            org.telegram.messenger.MessagesController r2 = r38.getMessagesController()
-            r2.blockPeer(r3)
-        L_0x0590:
-            boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r2 == 0) goto L_0x05a9
-            org.telegram.messenger.NotificationCenter r2 = r38.getNotificationCenter()
+            r3.deleteParticipantFromChat(r13, r1, r12)
+            goto L_0x058e
+        L_0x057e:
+            org.telegram.messenger.MessagesController r1 = r39.getMessagesController()
+            r1.deleteDialog(r5, r15, r15)
+            if (r25 == 0) goto L_0x058e
+            org.telegram.messenger.MessagesController r1 = r39.getMessagesController()
+            r1.blockPeer(r3)
+        L_0x058e:
+            boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r1 == 0) goto L_0x05a6
+            org.telegram.messenger.NotificationCenter r1 = r39.getNotificationCenter()
             int r3 = org.telegram.messenger.NotificationCenter.closeChats
-            r4 = 1
-            java.lang.Object[] r12 = new java.lang.Object[r4]
-            java.lang.Long r4 = java.lang.Long.valueOf(r5)
-            r5 = 0
-            r12[r5] = r4
-            r2.postNotificationName(r3, r12)
-        L_0x05a9:
-            r7 = 100
-            r19 = -1
-            r26 = 2131624639(0x7f0e02bf, float:1.8876463E38)
-            r13 = r38
-            r21 = r0
-            goto L_0x0653
-        L_0x05b6:
-            r4 = r21
-            r12 = 2131624639(0x7f0e02bf, float:1.8876463E38)
-            r13 = 103(0x67, float:1.44E-43)
-            r15 = 108(0x6c, float:1.51E-43)
-            r16 = 3
-            r18 = 2
-            r20 = 102(0x66, float:1.43E-43)
-            r2 = r38
+            r12 = 1
+            java.lang.Object[] r13 = new java.lang.Object[r12]
+            java.lang.Long r5 = java.lang.Long.valueOf(r5)
+            r13[r15] = r5
+            r1.postNotificationName(r3, r13)
+        L_0x05a6:
+            r15 = 100
+            r21 = -1
+            r27 = 103(0x67, float:1.44E-43)
+            r29 = 2131624654(0x7f0e02ce, float:1.8876494E38)
+            r13 = r39
+            goto L_0x064f
+        L_0x05b3:
+            r16 = r22
+            r4 = 2131624654(0x7f0e02ce, float:1.8876494E38)
+            r12 = 3
+            r17 = 2
+            r13 = r39
+        L_0x05bd:
+            int r0 = r13.canPinCount
+            if (r0 == 0) goto L_0x062d
+            boolean r0 = r13.isDialogPinned(r2)
+            if (r0 == 0) goto L_0x05cb
         L_0x05c7:
-            int r12 = r2.canPinCount
-            if (r12 == 0) goto L_0x0632
-            boolean r4 = r2.isDialogPinned(r4)
-            if (r4 == 0) goto L_0x05d8
-            r21 = r0
-            r13 = r2
-        L_0x05d4:
-            r7 = 100
-            goto L_0x0317
-        L_0x05d8:
-            r4 = 1
-            r12 = 1
-            r21 = r0
-            if (r10 != r12) goto L_0x05e0
-            r12 = 1
-            goto L_0x05e1
-        L_0x05e0:
-            r12 = 0
-        L_0x05e1:
-            r0 = r38
-            r15 = r1
-            r13 = r2
-            r17 = 4
-            r24 = 100
+            r15 = 100
+            goto L_0x031e
+        L_0x05cb:
+            int r19 = r19 + 1
+            r22 = 1
+            r0 = 1
+            r2 = 103(0x67, float:1.44E-43)
+            if (r10 != r0) goto L_0x05d7
+            r23 = 1
+            goto L_0x05d9
+        L_0x05d7:
+            r23 = 0
+        L_0x05d9:
+            r24 = 102(0x66, float:1.43E-43)
+            r25 = 100
+            r0 = r39
+            r12 = r1
+            r27 = 103(0x67, float:1.44E-43)
             r1 = r5
-            r25 = r3
-            r26 = 2131624639(0x7f0e02bf, float:1.8876463E38)
-            r3 = r4
+            r28 = r3
+            r29 = 2131624654(0x7f0e02ce, float:1.8876494E38)
+            r3 = r22
+            r21 = -1
+            r4 = r8
             r6 = 100
-            r19 = -1
-            r4 = r9
-            r5 = r8
-            r7 = 100
-            r6 = r12
+            r5 = r9
+            r15 = 100
+            r6 = r23
             r0.pinDialog(r1, r3, r4, r5, r6)
-            if (r9 == 0) goto L_0x0653
-            int r8 = r8 + 1
-            if (r15 == 0) goto L_0x061c
-            java.util.ArrayList<java.lang.Integer> r0 = r9.alwaysShow
-            int r1 = r15.user_id
+            if (r8 == 0) goto L_0x064f
+            int r9 = r9 + 1
+            if (r12 == 0) goto L_0x0617
+            java.util.ArrayList<java.lang.Integer> r0 = r8.alwaysShow
+            int r1 = r12.user_id
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             boolean r0 = r0.contains(r1)
-            if (r0 != 0) goto L_0x0653
-            java.util.ArrayList<java.lang.Integer> r0 = r9.alwaysShow
-            int r1 = r15.user_id
+            if (r0 != 0) goto L_0x064f
+            java.util.ArrayList<java.lang.Integer> r0 = r8.alwaysShow
+            int r1 = r12.user_id
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r0.add(r1)
-            goto L_0x0653
-        L_0x061c:
-            java.util.ArrayList<java.lang.Integer> r0 = r9.alwaysShow
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r25)
+            goto L_0x064f
+        L_0x0617:
+            java.util.ArrayList<java.lang.Integer> r0 = r8.alwaysShow
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r28)
             boolean r0 = r0.contains(r1)
-            if (r0 != 0) goto L_0x0653
-            java.util.ArrayList<java.lang.Integer> r0 = r9.alwaysShow
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r25)
+            if (r0 != 0) goto L_0x064f
+            java.util.ArrayList<java.lang.Integer> r0 = r8.alwaysShow
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r28)
             r0.add(r1)
-            goto L_0x0653
-        L_0x0632:
-            r21 = r0
-            r13 = r2
-            r7 = 100
-            r19 = -1
-            r26 = 2131624639(0x7f0e02bf, float:1.8876463E38)
-            boolean r0 = r13.isDialogPinned(r4)
-            if (r0 != 0) goto L_0x0643
-            goto L_0x0653
-        L_0x0643:
+            goto L_0x064f
+        L_0x062d:
+            r15 = 100
+            r21 = -1
+            r27 = 103(0x67, float:1.44E-43)
+            r29 = 2131624654(0x7f0e02ce, float:1.8876494E38)
+            boolean r0 = r13.isDialogPinned(r2)
+            if (r0 != 0) goto L_0x063d
+            goto L_0x064f
+        L_0x063d:
+            int r19 = r19 + 1
             r3 = 0
             r0 = 1
-            if (r10 != r0) goto L_0x0649
+            if (r10 != r0) goto L_0x0645
             r12 = 1
-            goto L_0x064a
-        L_0x0649:
+            goto L_0x0646
+        L_0x0645:
             r12 = 0
-        L_0x064a:
-            r0 = r38
+        L_0x0646:
+            r0 = r39
             r1 = r5
-            r4 = r9
-            r5 = r8
+            r4 = r8
+            r5 = r9
             r6 = r12
             r0.pinDialog(r1, r3, r4, r5, r6)
-        L_0x0653:
+        L_0x064f:
             int r11 = r11 + 1
-            r7 = r39
-            r0 = r21
+            r1 = r16
             r4 = -1
             r12 = 1
             r15 = 0
-            goto L_0x02f5
-        L_0x065e:
+            goto L_0x02fe
+        L_0x0658:
             r0 = 104(0x68, float:1.46E-43)
-            r7 = 100
+            r15 = 100
             r12 = 1
-            if (r14 != r0) goto L_0x0679
-            if (r10 != r12) goto L_0x066b
+            if (r14 != r0) goto L_0x0673
+            if (r10 != r12) goto L_0x0665
             int r0 = r13.canMuteCount
-            if (r0 == r12) goto L_0x0679
-        L_0x066b:
+            if (r0 == r12) goto L_0x0673
+        L_0x0665:
             int r0 = r13.canUnmuteCount
-            if (r0 != 0) goto L_0x0671
+            if (r0 != 0) goto L_0x066b
             r0 = 1
-            goto L_0x0672
-        L_0x0671:
+            goto L_0x066c
+        L_0x066b:
             r0 = 0
-        L_0x0672:
+        L_0x066c:
             org.telegram.ui.Components.Bulletin r0 = org.telegram.ui.Components.BulletinFactory.createMuteBulletin((org.telegram.ui.ActionBar.BaseFragment) r13, (boolean) r0)
             r0.show()
-        L_0x0679:
-            r8 = 108(0x6c, float:1.51E-43)
-            if (r14 == r7) goto L_0x0683
-            if (r14 != r8) goto L_0x0680
-            goto L_0x0683
-        L_0x0680:
-            r15 = 108(0x6c, float:1.51E-43)
-            goto L_0x06bf
-        L_0x0683:
-            if (r9 == 0) goto L_0x06b1
-            int r1 = r9.flags
-            java.lang.String r2 = r9.name
-            java.util.ArrayList<java.lang.Integer> r3 = r9.alwaysShow
-            java.util.ArrayList<java.lang.Integer> r4 = r9.neverShow
-            android.util.LongSparseArray<java.lang.Integer> r5 = r9.pinnedDialogs
-            r6 = 0
-            r10 = 0
-            r11 = 1
-            r15 = 1
-            r16 = 0
-            r17 = 0
-            r0 = r9
-            r8 = 100
-            r9 = 108(0x6c, float:1.51E-43)
-            r7 = r10
-            r10 = 100
-            r8 = r11
+        L_0x0673:
             r11 = 108(0x6c, float:1.51E-43)
-            r9 = r15
-            r15 = 100
-            r10 = r16
+            if (r14 == r15) goto L_0x067d
+            if (r14 != r11) goto L_0x067a
+            goto L_0x067d
+        L_0x067a:
             r15 = 108(0x6c, float:1.51E-43)
-            r11 = r38
-            r12 = r17
+            goto L_0x06ce
+        L_0x067d:
+            r9 = 0
+            if (r8 == 0) goto L_0x06a8
+            int r1 = r8.flags
+            java.lang.String r2 = r8.name
+            java.util.ArrayList<java.lang.Integer> r3 = r8.alwaysShow
+            java.util.ArrayList<java.lang.Integer> r4 = r8.neverShow
+            android.util.LongSparseArray<java.lang.Integer> r5 = r8.pinnedDialogs
+            r6 = 0
+            r7 = 0
+            r16 = 1
+            r17 = 1
+            r18 = 0
+            r20 = 0
+            r0 = r8
+            r8 = r16
+            r9 = r17
+            r10 = r18
+            r15 = 108(0x6c, float:1.51E-43)
+            r11 = r39
+            r12 = r20
             org.telegram.ui.FilterCreateActivity.saveFilterToServer(r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12)
-            goto L_0x06bf
-        L_0x06b1:
+            r2 = 0
+            goto L_0x06b6
+        L_0x06a8:
             r15 = 108(0x6c, float:1.51E-43)
-            org.telegram.messenger.MessagesController r0 = r38.getMessagesController()
+            org.telegram.messenger.MessagesController r0 = r39.getMessagesController()
             int r1 = r13.folderId
             r2 = 0
             r4 = 0
             r0.reorderPinnedDialogs(r1, r4, r2)
-        L_0x06bf:
-            if (r14 == r15) goto L_0x06cb
+        L_0x06b6:
+            boolean r0 = r13.searchIsShowed
+            if (r0 == 0) goto L_0x06ce
+            org.telegram.ui.Components.UndoView r0 = r39.getUndoView()
+            int r1 = r13.canPinCount
+            if (r1 == 0) goto L_0x06c5
+            r1 = 78
+            goto L_0x06c7
+        L_0x06c5:
+            r1 = 79
+        L_0x06c7:
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r19)
+            r0.showWithAction((long) r2, (int) r1, (java.lang.Object) r4)
+        L_0x06ce:
+            if (r14 == r15) goto L_0x06da
             r0 = 100
-            if (r14 == r0) goto L_0x06cb
+            if (r14 == r0) goto L_0x06da
             r0 = 102(0x66, float:1.43E-43)
-            if (r14 == r0) goto L_0x06cb
+            if (r14 == r0) goto L_0x06da
             r15 = 1
-            goto L_0x06cc
-        L_0x06cb:
+            goto L_0x06db
+        L_0x06da:
             r15 = 0
-        L_0x06cc:
+        L_0x06db:
             r13.hideActionMode(r15)
             return
-        L_0x06d0:
-            r16 = 3
-            r18 = 2
-            java.util.ArrayList r7 = new java.util.ArrayList
-            r0 = r39
-            r7.<init>(r0)
-            org.telegram.messenger.MessagesController r0 = r38.getMessagesController()
+        L_0x06df:
+            r17 = 2
+            java.util.ArrayList r8 = new java.util.ArrayList
+            r8.<init>(r7)
+            org.telegram.messenger.MessagesController r0 = r39.getMessagesController()
             int r1 = r13.canUnarchiveCount
-            if (r1 != 0) goto L_0x06e5
+            if (r1 != 0) goto L_0x06f0
             r2 = 1
-            goto L_0x06e6
-        L_0x06e5:
+            goto L_0x06f1
+        L_0x06f0:
             r2 = 0
-        L_0x06e6:
+        L_0x06f1:
             r3 = -1
             r4 = 0
             r5 = 0
-            r1 = r7
+            r1 = r8
             r0.addDialogToFolder(r1, r2, r3, r4, r5)
             int r0 = r13.canUnarchiveCount
-            if (r0 != 0) goto L_0x073e
+            if (r0 != 0) goto L_0x0749
             android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()
             java.lang.String r1 = "archivehint_l"
             r2 = 0
             boolean r3 = r0.getBoolean(r1, r2)
-            if (r3 != 0) goto L_0x0706
+            if (r3 != 0) goto L_0x0711
             boolean r2 = org.telegram.messenger.SharedConfig.archiveHidden
-            if (r2 == 0) goto L_0x0704
-            goto L_0x0706
-        L_0x0704:
+            if (r2 == 0) goto L_0x070f
+            goto L_0x0711
+        L_0x070f:
             r12 = 0
-            goto L_0x0707
-        L_0x0706:
+            goto L_0x0712
+        L_0x0711:
             r12 = 1
-        L_0x0707:
-            if (r12 != 0) goto L_0x0716
+        L_0x0712:
+            if (r12 != 0) goto L_0x0721
             android.content.SharedPreferences$Editor r0 = r0.edit()
             r2 = 1
             android.content.SharedPreferences$Editor r0 = r0.putBoolean(r1, r2)
             r0.commit()
-            goto L_0x0717
-        L_0x0716:
-            r2 = 1
-        L_0x0717:
-            if (r12 == 0) goto L_0x0724
-            int r0 = r7.size()
-            if (r0 <= r2) goto L_0x0721
-            r6 = 4
             goto L_0x0722
         L_0x0721:
-            r6 = 2
+            r2 = 1
         L_0x0722:
-            r3 = r6
-            goto L_0x072e
-        L_0x0724:
-            int r0 = r7.size()
+            if (r12 == 0) goto L_0x072f
+            int r0 = r8.size()
             if (r0 <= r2) goto L_0x072c
-            r11 = 5
+            r6 = 4
             goto L_0x072d
         L_0x072c:
-            r11 = 3
+            r6 = 2
         L_0x072d:
+            r3 = r6
+            goto L_0x0739
+        L_0x072f:
+            int r0 = r8.size()
+            if (r0 <= r2) goto L_0x0737
+            r11 = 5
+            goto L_0x0738
+        L_0x0737:
+            r11 = 3
+        L_0x0738:
             r3 = r11
-        L_0x072e:
-            org.telegram.ui.Components.UndoView r0 = r38.getUndoView()
+        L_0x0739:
+            org.telegram.ui.Components.UndoView r0 = r39.getUndoView()
             r1 = 0
             r4 = 0
-            org.telegram.ui.-$$Lambda$DialogsActivity$qqy7snf7UwUqOC0du2S0FkqX1tc r5 = new org.telegram.ui.-$$Lambda$DialogsActivity$qqy7snf7UwUqOC0du2S0FkqX1tc
-            r5.<init>(r7)
+            org.telegram.ui.-$$Lambda$DialogsActivity$tEoRBuncTKMZrNNp7TCwOYgiRxs r5 = new org.telegram.ui.-$$Lambda$DialogsActivity$tEoRBuncTKMZrNNp7TCwOYgiRxs
+            r5.<init>(r8)
             r0.showWithAction(r1, r3, r4, r5)
-            goto L_0x076f
-        L_0x073e:
-            org.telegram.messenger.MessagesController r0 = r38.getMessagesController()
+            goto L_0x077a
+        L_0x0749:
+            org.telegram.messenger.MessagesController r0 = r39.getMessagesController()
             int r1 = r13.folderId
             java.util.ArrayList r0 = r0.getDialogs(r1)
             org.telegram.ui.DialogsActivity$ViewPage[] r1 = r13.viewPages
-            if (r1 == 0) goto L_0x076f
+            if (r1 == 0) goto L_0x077a
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x076f
+            if (r0 == 0) goto L_0x077a
             org.telegram.ui.DialogsActivity$ViewPage[] r0 = r13.viewPages
             r1 = 0
             r0 = r0[r1]
@@ -7267,11 +7503,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.Components.FlickerLoadingView r0 = r0.progressView
             r2 = 4
             r0.setVisibility(r2)
-            r38.finishFragment()
-            goto L_0x0770
-        L_0x076f:
+            r39.finishFragment()
+            goto L_0x077b
+        L_0x077a:
             r1 = 0
-        L_0x0770:
+        L_0x077b:
             r13.hideActionMode(r1)
             return
         */
@@ -7279,20 +7515,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$perfromSelectedDialogsAction$20 */
-    public /* synthetic */ void lambda$perfromSelectedDialogsAction$20$DialogsActivity(ArrayList arrayList) {
+    /* renamed from: lambda$perfromSelectedDialogsAction$21 */
+    public /* synthetic */ void lambda$perfromSelectedDialogsAction$21$DialogsActivity(ArrayList arrayList) {
         getMessagesController().addDialogToFolder(arrayList, this.folderId == 0 ? 0 : 1, -1, (ArrayList<TLRPC$TL_inputFolderPeer>) null, 0);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$perfromSelectedDialogsAction$21 */
-    public /* synthetic */ void lambda$perfromSelectedDialogsAction$21$DialogsActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$perfromSelectedDialogsAction$22 */
+    public /* synthetic */ void lambda$perfromSelectedDialogsAction$22$DialogsActivity(DialogInterface dialogInterface, int i) {
         presentFragment(new FiltersSetupActivity());
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$perfromSelectedDialogsAction$22 */
-    public /* synthetic */ void lambda$perfromSelectedDialogsAction$22$DialogsActivity(ArrayList arrayList, int i, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$perfromSelectedDialogsAction$23 */
+    public /* synthetic */ void lambda$perfromSelectedDialogsAction$23$DialogsActivity(ArrayList arrayList, int i, DialogInterface dialogInterface, int i2) {
         getMessagesController().setDialogsInTransaction(true);
         perfromSelectedDialogsAction(arrayList, i, false);
         getMessagesController().setDialogsInTransaction(false);
@@ -7305,12 +7541,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$perfromSelectedDialogsAction$23 */
-    public /* synthetic */ void lambda$perfromSelectedDialogsAction$23$DialogsActivity(ArrayList arrayList, int i, DialogInterface dialogInterface, int i2) {
-        perfromSelectedDialogsAction(arrayList, i, false);
-    }
-
-    /* access modifiers changed from: private */
     /* renamed from: lambda$perfromSelectedDialogsAction$24 */
     public /* synthetic */ void lambda$perfromSelectedDialogsAction$24$DialogsActivity(ArrayList arrayList, int i, DialogInterface dialogInterface, int i2) {
         perfromSelectedDialogsAction(arrayList, i, false);
@@ -7318,7 +7548,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$perfromSelectedDialogsAction$25 */
-    public /* synthetic */ void lambda$perfromSelectedDialogsAction$25$DialogsActivity(ArrayList arrayList, boolean z, boolean z2) {
+    public /* synthetic */ void lambda$perfromSelectedDialogsAction$25$DialogsActivity(ArrayList arrayList, int i, DialogInterface dialogInterface, int i2) {
+        perfromSelectedDialogsAction(arrayList, i, false);
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$perfromSelectedDialogsAction$26 */
+    public /* synthetic */ void lambda$perfromSelectedDialogsAction$26$DialogsActivity(ArrayList arrayList, boolean z, boolean z2) {
         int size = arrayList.size();
         for (int i = 0; i < size; i++) {
             ArrayList arrayList2 = arrayList;
@@ -7336,15 +7572,15 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$perfromSelectedDialogsAction$26 */
-    public /* synthetic */ void lambda$perfromSelectedDialogsAction$26$DialogsActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$perfromSelectedDialogsAction$27 */
+    public /* synthetic */ void lambda$perfromSelectedDialogsAction$27$DialogsActivity(DialogInterface dialogInterface, int i) {
         getMessagesController().hidePromoDialog();
         hideActionMode(false);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$perfromSelectedDialogsAction$28 */
-    public /* synthetic */ void lambda$perfromSelectedDialogsAction$28$DialogsActivity(int i, TLRPC$Chat tLRPC$Chat, long j, boolean z, boolean z2) {
+    /* renamed from: lambda$perfromSelectedDialogsAction$29 */
+    public /* synthetic */ void lambda$perfromSelectedDialogsAction$29$DialogsActivity(int i, TLRPC$Chat tLRPC$Chat, long j, boolean z, boolean z2) {
         int i2;
         int i3;
         int i4;
@@ -7378,9 +7614,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             i2 = -1;
             UndoView undoView2 = getUndoView();
             int i7 = i5 == 103 ? 0 : 1;
-            $$Lambda$DialogsActivity$NhjayaBpBDhSPbDjvqJHKORzXQg r15 = r0;
+            $$Lambda$DialogsActivity$0KcGvKMskCJmEt6B9B8gPdHMgg r15 = r0;
             int i8 = i2;
-            $$Lambda$DialogsActivity$NhjayaBpBDhSPbDjvqJHKORzXQg r0 = new Runnable(i, j, z2, tLRPC$Chat, z) {
+            $$Lambda$DialogsActivity$0KcGvKMskCJmEt6B9B8gPdHMgg r0 = new Runnable(i, j, z2, tLRPC$Chat, z) {
                 public final /* synthetic */ int f$1;
                 public final /* synthetic */ long f$2;
                 public final /* synthetic */ boolean f$3;
@@ -7396,7 +7632,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
 
                 public final void run() {
-                    DialogsActivity.this.lambda$null$27$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    DialogsActivity.this.lambda$perfromSelectedDialogsAction$28$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             };
             undoView2.showWithAction(j2, i7, (Runnable) r15);
@@ -7433,8 +7669,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$27 */
-    public /* synthetic */ void lambda$null$27$DialogsActivity(int i, long j, boolean z, TLRPC$Chat tLRPC$Chat, boolean z2) {
+    /* renamed from: lambda$perfromSelectedDialogsAction$28 */
+    public /* synthetic */ void lambda$perfromSelectedDialogsAction$28$DialogsActivity(int i, long j, boolean z, TLRPC$Chat tLRPC$Chat, boolean z2) {
         if (i == 103) {
             getMessagesController().deleteDialog(j, 1, z);
             return;
@@ -7456,12 +7692,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$perfromSelectedDialogsAction$29 */
-    public /* synthetic */ void lambda$perfromSelectedDialogsAction$29$DialogsActivity(DialogInterface dialogInterface) {
+    /* renamed from: lambda$perfromSelectedDialogsAction$30 */
+    public /* synthetic */ void lambda$perfromSelectedDialogsAction$30$DialogsActivity(DialogInterface dialogInterface) {
         hideActionMode(true);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x014b  */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x014d  */
     /* JADX WARNING: Removed duplicated region for block: B:76:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void pinDialog(long r16, boolean r18, org.telegram.messenger.MessagesController.DialogFilter r19, int r20, boolean r21) {
@@ -7593,13 +7829,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r2 = r2 + 1
             goto L_0x00c3
         L_0x00da:
-            if (r14 != 0) goto L_0x014e
-            if (r13 < 0) goto L_0x0148
+            if (r14 != 0) goto L_0x0150
+            if (r13 < 0) goto L_0x014a
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Dialog> r1 = r0.frozenDialogsList
-            if (r1 == 0) goto L_0x0139
-            if (r12 < 0) goto L_0x0139
-            if (r13 == r12) goto L_0x0139
+            if (r1 == 0) goto L_0x013b
+            if (r12 < 0) goto L_0x013b
+            if (r13 == r12) goto L_0x013b
             java.lang.Object r2 = r1.remove(r13)
+            org.telegram.tgnet.TLRPC$Dialog r2 = (org.telegram.tgnet.TLRPC$Dialog) r2
             r1.add(r12, r2)
             org.telegram.ui.DialogsActivity$ViewPage[] r1 = r0.viewPages
             r1 = r1[r10]
@@ -7622,41 +7859,41 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.DialogsActivity$ViewPage[] r2 = r0.viewPages
             r2 = r2[r10]
             int r2 = r2.dialogsType
-            if (r2 != 0) goto L_0x012d
+            if (r2 != 0) goto L_0x012f
             boolean r2 = r15.hasHiddenArchive()
-            if (r2 == 0) goto L_0x012d
+            if (r2 == 0) goto L_0x012f
             r2 = 1
-            goto L_0x012e
-        L_0x012d:
+            goto L_0x0130
+        L_0x012f:
             r2 = 0
-        L_0x012e:
+        L_0x0130:
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
             float r3 = r3.getTranslationY()
             int r3 = (int) r3
             r1.scrollToPositionWithOffset(r2, r3)
-            goto L_0x0149
-        L_0x0139:
-            if (r12 < 0) goto L_0x0148
-            if (r13 != r12) goto L_0x0148
-            org.telegram.ui.-$$Lambda$DialogsActivity$Gsi1CUlTtt0zfJ0wG0AVmyDSUu8 r1 = new org.telegram.ui.-$$Lambda$DialogsActivity$Gsi1CUlTtt0zfJ0wG0AVmyDSUu8
+            goto L_0x014b
+        L_0x013b:
+            if (r12 < 0) goto L_0x014a
+            if (r13 != r12) goto L_0x014a
+            org.telegram.ui.-$$Lambda$DialogsActivity$qLbCvby-0Xeo1VwfzvTwgAaGh_0 r1 = new org.telegram.ui.-$$Lambda$DialogsActivity$qLbCvby-0Xeo1VwfzvTwgAaGh_0
             r1.<init>()
             r2 = 200(0xc8, double:9.9E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r2)
-            goto L_0x0149
-        L_0x0148:
+            goto L_0x014b
+        L_0x014a:
             r11 = 0
-        L_0x0149:
-            if (r11 != 0) goto L_0x014e
+        L_0x014b:
+            if (r11 != 0) goto L_0x0150
             r15.setDialogsListFrozen(r10)
-        L_0x014e:
+        L_0x0150:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.DialogsActivity.pinDialog(long, boolean, org.telegram.messenger.MessagesController$DialogFilter, int, boolean):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$pinDialog$30 */
-    public /* synthetic */ void lambda$pinDialog$30$DialogsActivity() {
+    /* renamed from: lambda$pinDialog$31 */
+    public /* synthetic */ void lambda$pinDialog$31$DialogsActivity() {
         setDialogsListFrozen(false);
     }
 
@@ -7904,11 +8141,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         return false;
     }
 
-    private void showOrUpdateActionMode(TLRPC$Dialog tLRPC$Dialog, View view) {
-        addOrRemoveSelectedDialog(tLRPC$Dialog.id, view);
+    private void showOrUpdateActionMode(long j, View view) {
+        addOrRemoveSelectedDialog(j, view);
         boolean z = true;
         if (!this.actionBar.isActionModeShowed()) {
-            createActionMode();
+            if (this.searchIsShowed) {
+                createActionMode("search_dialogs_action_mode");
+                if (this.actionBar.getBackButton().getDrawable() instanceof MenuDrawable) {
+                    this.actionBar.setBackButtonDrawable(new BackDrawable(false));
+                }
+            } else {
+                createActionMode((String) null);
+            }
+            AndroidUtilities.hideKeyboard(this.fragmentView.findFocus());
             this.actionBar.setActionModeOverrideColor(Theme.getColor("windowBackgroundWhite"));
             this.actionBar.showActionMode();
             resetScroll();
@@ -7929,17 +8174,19 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
                 updateVisibleRows(131072);
             }
-            AnimatorSet animatorSet = new AnimatorSet();
-            ArrayList arrayList = new ArrayList();
-            for (int i2 = 0; i2 < this.actionModeViews.size(); i2++) {
-                View view2 = this.actionModeViews.get(i2);
-                view2.setPivotY((float) (ActionBar.getCurrentActionBarHeight() / 2));
-                AndroidUtilities.clearDrawableAnimation(view2);
-                arrayList.add(ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{0.1f, 1.0f}));
+            if (!this.searchIsShowed) {
+                AnimatorSet animatorSet = new AnimatorSet();
+                ArrayList arrayList = new ArrayList();
+                for (int i2 = 0; i2 < this.actionModeViews.size(); i2++) {
+                    View view2 = this.actionModeViews.get(i2);
+                    view2.setPivotY((float) (ActionBar.getCurrentActionBarHeight() / 2));
+                    AndroidUtilities.clearDrawableAnimation(view2);
+                    arrayList.add(ObjectAnimator.ofFloat(view2, View.SCALE_Y, new float[]{0.1f, 1.0f}));
+                }
+                animatorSet.playTogether(arrayList);
+                animatorSet.setDuration(200);
+                animatorSet.start();
             }
-            animatorSet.playTogether(arrayList);
-            animatorSet.setDuration(200);
-            animatorSet.start();
             ValueAnimator valueAnimator = this.actionBarColorAnimator;
             if (valueAnimator != null) {
                 valueAnimator.cancel();
@@ -7948,7 +8195,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             this.actionBarColorAnimator = ofFloat;
             ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    DialogsActivity.this.lambda$showOrUpdateActionMode$31$DialogsActivity(valueAnimator);
+                    DialogsActivity.this.lambda$showOrUpdateActionMode$32$DialogsActivity(valueAnimator);
                 }
             });
             this.actionBarColorAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
@@ -7978,8 +8225,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showOrUpdateActionMode$31 */
-    public /* synthetic */ void lambda$showOrUpdateActionMode$31$DialogsActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$showOrUpdateActionMode$32 */
+    public /* synthetic */ void lambda$showOrUpdateActionMode$32$DialogsActivity(ValueAnimator valueAnimator) {
         this.progressToActionMode = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         for (int i = 0; i < this.actionBar.getChildCount(); i++) {
             if (!(this.actionBar.getChildAt(i).getVisibility() != 0 || this.actionBar.getChildAt(i) == this.actionBar.getActionMode() || this.actionBar.getChildAt(i) == this.actionBar.getBackButton())) {
@@ -8207,7 +8454,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (z) {
                     AlertDialog create = AlertsCreator.createContactsPermissionDialog(parentActivity, new MessagesStorage.IntCallback() {
                         public final void run(int i) {
-                            DialogsActivity.this.lambda$askForPermissons$32$DialogsActivity(i);
+                            DialogsActivity.this.lambda$askForPermissons$33$DialogsActivity(i);
                         }
                     }).create();
                     this.permissionDialog = create;
@@ -8218,7 +8465,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 arrayList.add("android.permission.WRITE_CONTACTS");
                 arrayList.add("android.permission.GET_ACCOUNTS");
             }
-            if (parentActivity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") != 0) {
+            if ((Build.VERSION.SDK_INT <= 28 || BuildVars.NO_SCOPED_STORAGE) && parentActivity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") != 0) {
                 arrayList.add("android.permission.READ_EXTERNAL_STORAGE");
                 arrayList.add("android.permission.WRITE_EXTERNAL_STORAGE");
             }
@@ -8235,8 +8482,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$askForPermissons$32 */
-    public /* synthetic */ void lambda$askForPermissons$32$DialogsActivity(int i) {
+    /* renamed from: lambda$askForPermissons$33 */
+    public /* synthetic */ void lambda$askForPermissons$33$DialogsActivity(int i) {
         this.askAboutContacts = i != 0;
         MessagesController.getGlobalNotificationsSettings().edit().putBoolean("askAboutContacts", this.askAboutContacts).commit();
         askForPermissons(false);
@@ -8453,7 +8700,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         } else if (i == NotificationCenter.needDeleteDialog) {
             if (this.fragmentView != null && !this.isPaused) {
                 long longValue2 = objArr[0].longValue();
-                $$Lambda$DialogsActivity$52c0GLLCogKjOD19Lda8tHbfc3M r3 = new Runnable(objArr[2], longValue2, objArr[3].booleanValue(), objArr[1]) {
+                $$Lambda$DialogsActivity$ypvnDkjVoeu_LUa1oBNxsIdFwRs r3 = new Runnable(objArr[2], longValue2, objArr[3].booleanValue(), objArr[1]) {
                     public final /* synthetic */ TLRPC$Chat f$1;
                     public final /* synthetic */ long f$2;
                     public final /* synthetic */ boolean f$3;
@@ -8467,7 +8714,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
 
                     public final void run() {
-                        DialogsActivity.this.lambda$didReceivedNotification$33$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4);
+                        DialogsActivity.this.lambda$didReceivedNotification$34$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4);
                     }
                 };
                 if (this.undoView[0] != null) {
@@ -8492,22 +8739,31 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             if (this.searchIsShowed && this.searchViewPager != null) {
                 this.searchViewPager.messagesDeleted(objArr[1].intValue(), objArr[0]);
             }
-        } else if (i == NotificationCenter.didClearDatabase && this.viewPages != null) {
-            while (true) {
-                ViewPage[] viewPageArr4 = this.viewPages;
-                if (i5 < viewPageArr4.length) {
-                    viewPageArr4[i5].dialogsAdapter.didDatabaseCleared();
-                    i5++;
-                } else {
-                    return;
+        } else if (i == NotificationCenter.didClearDatabase) {
+            if (this.viewPages != null) {
+                while (true) {
+                    ViewPage[] viewPageArr4 = this.viewPages;
+                    if (i5 < viewPageArr4.length) {
+                        viewPageArr4[i5].dialogsAdapter.didDatabaseCleared();
+                        i5++;
+                    } else {
+                        return;
+                    }
                 }
+            }
+        } else if (i == NotificationCenter.appUpdateAvailable) {
+            updateMenuButton(true);
+        } else if (i == NotificationCenter.fileDidLoad || i == NotificationCenter.fileDidFailToLoad || i == NotificationCenter.fileLoadProgressChanged) {
+            String str = objArr[0];
+            if (SharedConfig.isAppUpdateAvailable() && FileLoader.getAttachFileName(SharedConfig.pendingAppUpdate.document).equals(str)) {
+                updateMenuButton(true);
             }
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$33 */
-    public /* synthetic */ void lambda$didReceivedNotification$33$DialogsActivity(TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$User tLRPC$User) {
+    /* renamed from: lambda$didReceivedNotification$34 */
+    public /* synthetic */ void lambda$didReceivedNotification$34$DialogsActivity(TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$User tLRPC$User) {
         if (tLRPC$Chat == null) {
             getMessagesController().deleteDialog(j, 0, z);
             if (tLRPC$User != null && tLRPC$User.bot) {
@@ -8519,6 +8775,30 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             getMessagesController().deleteParticipantFromChat((int) (-j), getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), (TLRPC$Chat) null, (TLRPC$ChatFull) null, z, z);
         }
         getMessagesController().checkIfFolderEmpty(this.folderId);
+    }
+
+    private void updateMenuButton(boolean z) {
+        int i;
+        if (this.menuDrawable != null && this.updateLayout != null) {
+            float f = 0.0f;
+            if (SharedConfig.isAppUpdateAvailable()) {
+                String attachFileName = FileLoader.getAttachFileName(SharedConfig.pendingAppUpdate.document);
+                if (getFileLoader().isLoadingFile(attachFileName)) {
+                    i = MenuDrawable.TYPE_UDPATE_DOWNLOADING;
+                    Float fileProgress = ImageLoader.getInstance().getFileProgress(attachFileName);
+                    if (fileProgress != null) {
+                        f = fileProgress.floatValue();
+                    }
+                } else {
+                    i = MenuDrawable.TYPE_UDPATE_AVAILABLE;
+                }
+            } else {
+                i = MenuDrawable.TYPE_DEFAULT;
+            }
+            updateAppUpdateViews(z);
+            this.menuDrawable.setType(i, z);
+            this.menuDrawable.setUpdateDownloadProgress(f, z);
+        }
     }
 
     private void showNextSupportedSuggestion() {
@@ -8550,27 +8830,27 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setPositiveButton(LocaleController.getString("GoToSettings", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                DialogsActivity.this.lambda$showSuggestion$34$DialogsActivity(dialogInterface, i);
+                DialogsActivity.this.lambda$showSuggestion$35$DialogsActivity(dialogInterface, i);
             }
         });
         showDialog(builder.create(), new DialogInterface.OnDismissListener() {
             public final void onDismiss(DialogInterface dialogInterface) {
-                DialogsActivity.this.lambda$showSuggestion$35$DialogsActivity(dialogInterface);
+                DialogsActivity.this.lambda$showSuggestion$36$DialogsActivity(dialogInterface);
             }
         });
         return true;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showSuggestion$34 */
-    public /* synthetic */ void lambda$showSuggestion$34$DialogsActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$showSuggestion$35 */
+    public /* synthetic */ void lambda$showSuggestion$35$DialogsActivity(DialogInterface dialogInterface, int i) {
         presentFragment(new PrivacySettingsActivity());
         AndroidUtilities.scrollToFragmentRow(this.parentLayout, "newChatsRow");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showSuggestion$35 */
-    public /* synthetic */ void lambda$showSuggestion$35$DialogsActivity(DialogInterface dialogInterface) {
+    /* renamed from: lambda$showSuggestion$36 */
+    public /* synthetic */ void lambda$showSuggestion$36$DialogsActivity(DialogInterface dialogInterface) {
         onSuggestionDismiss();
     }
 
@@ -8581,7 +8861,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 globalMainSettings.edit().putBoolean("filterhint", true).commit();
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public final void run() {
-                        DialogsActivity.this.lambda$showFiltersHint$37$DialogsActivity();
+                        DialogsActivity.this.lambda$showFiltersHint$38$DialogsActivity();
                     }
                 }, 1000);
             }
@@ -8589,17 +8869,17 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$36 */
-    public /* synthetic */ void lambda$null$36$DialogsActivity() {
+    /* renamed from: lambda$showFiltersHint$37 */
+    public /* synthetic */ void lambda$showFiltersHint$37$DialogsActivity() {
         presentFragment(new FiltersSetupActivity());
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showFiltersHint$37 */
-    public /* synthetic */ void lambda$showFiltersHint$37$DialogsActivity() {
+    /* renamed from: lambda$showFiltersHint$38 */
+    public /* synthetic */ void lambda$showFiltersHint$38$DialogsActivity() {
         getUndoView().showWithAction(0, 15, (Runnable) null, new Runnable() {
             public final void run() {
-                DialogsActivity.this.lambda$null$36$DialogsActivity();
+                DialogsActivity.this.lambda$showFiltersHint$37$DialogsActivity();
             }
         });
     }
@@ -8727,7 +9007,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
             ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    DialogsActivity.this.lambda$hideFloatingButton$38$DialogsActivity(valueAnimator);
+                    DialogsActivity.this.lambda$hideFloatingButton$39$DialogsActivity(valueAnimator);
                 }
             });
             animatorSet.playTogether(new Animator[]{ofFloat});
@@ -8739,8 +9019,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$hideFloatingButton$38 */
-    public /* synthetic */ void lambda$hideFloatingButton$38$DialogsActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$hideFloatingButton$39 */
+    public /* synthetic */ void lambda$hideFloatingButton$39$DialogsActivity(ValueAnimator valueAnimator) {
         this.floatingButtonHideProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.floatingButtonTranslation = ((float) AndroidUtilities.dp(100.0f)) * this.floatingButtonHideProgress;
         updateFloatingButtonOffset();
@@ -8836,19 +9116,23 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                                 }
                             }
                         }
-                        if (!this.dialogsListFrozen) {
-                            if (childAt instanceof UserCell) {
-                                ((UserCell) childAt).update(i);
-                            } else if (childAt instanceof ProfileSearchCell) {
-                                ((ProfileSearchCell) childAt).update(i);
-                            } else if (childAt instanceof RecyclerListView) {
-                                RecyclerListView recyclerListView = (RecyclerListView) childAt;
-                                int childCount2 = recyclerListView.getChildCount();
-                                for (int i4 = 0; i4 < childCount2; i4++) {
-                                    View childAt2 = recyclerListView.getChildAt(i4);
-                                    if (childAt2 instanceof HintDialogCell) {
-                                        ((HintDialogCell) childAt2).update(i);
-                                    }
+                        if (childAt instanceof UserCell) {
+                            ((UserCell) childAt).update(i);
+                        } else if (childAt instanceof ProfileSearchCell) {
+                            ProfileSearchCell profileSearchCell = (ProfileSearchCell) childAt;
+                            profileSearchCell.update(i);
+                            ArrayList<Long> arrayList2 = this.selectedDialogs;
+                            if (arrayList2 != null) {
+                                profileSearchCell.setChecked(arrayList2.contains(Long.valueOf(profileSearchCell.getDialogId())), false);
+                            }
+                        }
+                        if (!this.dialogsListFrozen && (childAt instanceof RecyclerListView)) {
+                            RecyclerListView recyclerListView = (RecyclerListView) childAt;
+                            int childCount2 = recyclerListView.getChildCount();
+                            for (int i4 = 0; i4 < childCount2; i4++) {
+                                View childAt2 = recyclerListView.getChildAt(i4);
+                                if (childAt2 instanceof HintDialogCell) {
+                                    ((HintDialogCell) childAt2).update(i);
                                 }
                             }
                         }
@@ -8959,7 +9243,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        DialogsActivity.this.lambda$didSelectResult$41$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tLRPC$TL_error);
+                        DialogsActivity.this.lambda$didSelectResult$42$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, tLObject, tLRPC$TL_error);
                     }
                 });
                 try {
@@ -9031,7 +9315,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    DialogsActivity.this.lambda$didSelectResult$42$DialogsActivity(this.f$1, dialogInterface, i);
+                    DialogsActivity.this.lambda$didSelectResult$43$DialogsActivity(this.f$1, dialogInterface, i);
                 }
             });
             builder3.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -9040,8 +9324,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didSelectResult$41 */
-    public /* synthetic */ void lambda$didSelectResult$41$DialogsActivity(AlertDialog alertDialog, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$TL_messages_checkHistoryImportPeer tLRPC$TL_messages_checkHistoryImportPeer, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$didSelectResult$42 */
+    public /* synthetic */ void lambda$didSelectResult$42$DialogsActivity(AlertDialog alertDialog, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$TL_messages_checkHistoryImportPeer tLRPC$TL_messages_checkHistoryImportPeer, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, tLRPC$User, tLRPC$Chat, j, z, tLRPC$TL_error, tLRPC$TL_messages_checkHistoryImportPeer) {
             public final /* synthetic */ AlertDialog f$1;
             public final /* synthetic */ TLObject f$2;
@@ -9064,14 +9348,14 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
 
             public final void run() {
-                DialogsActivity.this.lambda$null$40$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+                DialogsActivity.this.lambda$didSelectResult$41$DialogsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$40 */
-    public /* synthetic */ void lambda$null$40$DialogsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_messages_checkHistoryImportPeer tLRPC$TL_messages_checkHistoryImportPeer) {
+    /* renamed from: lambda$didSelectResult$41 */
+    public /* synthetic */ void lambda$didSelectResult$41$DialogsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, long j, boolean z, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_messages_checkHistoryImportPeer tLRPC$TL_messages_checkHistoryImportPeer) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -9089,7 +9373,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
 
                 public final void run() {
-                    DialogsActivity.this.lambda$null$39$DialogsActivity(this.f$1, this.f$2);
+                    DialogsActivity.this.lambda$didSelectResult$40$DialogsActivity(this.f$1, this.f$2);
                 }
             });
             return;
@@ -9099,8 +9383,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$39 */
-    public /* synthetic */ void lambda$null$39$DialogsActivity(long j, boolean z) {
+    /* renamed from: lambda$didSelectResult$40 */
+    public /* synthetic */ void lambda$didSelectResult$40$DialogsActivity(long j, boolean z) {
         setDialogsListFrozen(true);
         ArrayList arrayList = new ArrayList();
         arrayList.add(Long.valueOf(j));
@@ -9108,8 +9392,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didSelectResult$42 */
-    public /* synthetic */ void lambda$didSelectResult$42$DialogsActivity(long j, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$didSelectResult$43 */
+    public /* synthetic */ void lambda$didSelectResult$43$DialogsActivity(long j, DialogInterface dialogInterface, int i) {
         didSelectResult(j, false, false);
     }
 
@@ -9119,9 +9403,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         RecyclerListView recyclerListView;
-        $$Lambda$DialogsActivity$xquEdLxCvYu7uGPA1kg_YZkyUAA r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$DialogsActivity$BJHRPwADovh7b2JJ5MOsk3ZsOXc r10 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
-                DialogsActivity.this.lambda$getThemeDescriptions$43$DialogsActivity();
+                DialogsActivity.this.lambda$getThemeDescriptions$44$DialogsActivity();
             }
         };
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
@@ -9160,7 +9444,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_AM_TOPBACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultTop"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_AM_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultSelector"));
         arrayList.add(new ThemeDescription(this.selectedDialogsCountTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultIcon"));
-        $$Lambda$DialogsActivity$xquEdLxCvYu7uGPA1kg_YZkyUAA r7 = r10;
+        $$Lambda$DialogsActivity$BJHRPwADovh7b2JJ5MOsk3ZsOXc r7 = r10;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "actionBarDefaultSubmenuBackground"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "actionBarDefaultSubmenuItem"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "actionBarDefaultSubmenuItemIcon"));
@@ -9253,7 +9537,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             }
             i++;
         }
-        $$Lambda$DialogsActivity$xquEdLxCvYu7uGPA1kg_YZkyUAA r72 = r10;
+        $$Lambda$DialogsActivity$BJHRPwADovh7b2JJ5MOsk3ZsOXc r72 = r10;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r72, "avatar_backgroundRed"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r72, "avatar_backgroundOrange"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r72, "avatar_backgroundViolet"));
@@ -9308,7 +9592,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 arrayList.add(new ThemeDescription((View) this.viewPages[i2].listView, 0, new Class[]{DialogCell.class}, new RLottieDrawable[]{Theme.dialogs_unarchiveDrawable}, "Box1", "chats_archiveIcon"));
                 arrayList.add(new ThemeDescription((View) this.viewPages[i2].listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
                 ThemeDescription themeDescription = r1;
-                $$Lambda$DialogsActivity$xquEdLxCvYu7uGPA1kg_YZkyUAA r8 = r10;
+                $$Lambda$DialogsActivity$BJHRPwADovh7b2JJ5MOsk3ZsOXc r8 = r10;
                 int i3 = i2;
                 ThemeDescription themeDescription2 = new ThemeDescription((View) this.viewPages[i2].listView, 0, new Class[]{UserCell.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r8, "windowBackgroundWhiteGrayText");
                 arrayList.add(themeDescription);
@@ -9325,7 +9609,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 i2 = i3 + 1;
             }
         }
-        $$Lambda$DialogsActivity$xquEdLxCvYu7uGPA1kg_YZkyUAA r73 = r10;
+        $$Lambda$DialogsActivity$BJHRPwADovh7b2JJ5MOsk3ZsOXc r73 = r10;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r73, "chats_archivePullDownBackground"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r73, "chats_archivePullDownBackgroundActive"));
         arrayList.add(new ThemeDescription(this.sideMenu, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_menuBackground"));
@@ -9462,7 +9746,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             arrayList.add(new ThemeDescription((View) this.commentView, ThemeDescription.FLAG_HINTTEXTCOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"messageEditText"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_messagePanelHint"));
             arrayList.add(new ThemeDescription((View) this.commentView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{ChatActivityEnterView.class}, new String[]{"sendButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_messagePanelSend"));
         }
-        $$Lambda$DialogsActivity$xquEdLxCvYu7uGPA1kg_YZkyUAA r74 = r10;
+        $$Lambda$DialogsActivity$BJHRPwADovh7b2JJ5MOsk3ZsOXc r74 = r10;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r74, "actionBarTipBackground"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r74, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r74, "player_time"));
@@ -9500,8 +9784,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$43 */
-    public /* synthetic */ void lambda$getThemeDescriptions$43$DialogsActivity() {
+    /* renamed from: lambda$getThemeDescriptions$44 */
+    public /* synthetic */ void lambda$getThemeDescriptions$44$DialogsActivity() {
         DialogsSearchAdapter dialogsSearchAdapter;
         RecyclerListView innerListView;
         ViewGroup viewGroup;
@@ -9642,7 +9926,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         this.slideBackTransitionAnimator = ofFloat2;
         ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                DialogsActivity.this.lambda$getCustomSlideTransition$44$DialogsActivity(valueAnimator);
+                DialogsActivity.this.lambda$getCustomSlideTransition$45$DialogsActivity(valueAnimator);
             }
         });
         this.slideBackTransitionAnimator.setInterpolator(CubicBezierInterpolator.EASE_OUT);
@@ -9652,8 +9936,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getCustomSlideTransition$44 */
-    public /* synthetic */ void lambda$getCustomSlideTransition$44$DialogsActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$getCustomSlideTransition$45 */
+    public /* synthetic */ void lambda$getCustomSlideTransition$45$DialogsActivity(ValueAnimator valueAnimator) {
         setSlideTransitionProgress(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 
@@ -9774,6 +10058,20 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 }
             }
             setSlideTransitionProgress(1.0f - f);
+        }
+    }
+
+    public void setShowSearch(String str, int i) {
+        if (!this.searching) {
+            this.initialSearchType = i;
+            this.actionBar.openSearchField(str, false);
+            return;
+        }
+        if (!this.searchItem.getSearchField().getText().toString().equals(str)) {
+            this.searchItem.getSearchField().setText(str);
+        }
+        if (this.searchViewPager.getTabsView().getCurrentTabId() != i) {
+            this.searchViewPager.getTabsView().scrollToTab(i, i);
         }
     }
 }

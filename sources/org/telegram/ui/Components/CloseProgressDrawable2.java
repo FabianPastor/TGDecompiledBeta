@@ -10,9 +10,10 @@ import org.telegram.messenger.AndroidUtilities;
 public class CloseProgressDrawable2 extends Drawable {
     private float angle;
     private boolean animating;
+    private DecelerateInterpolator interpolator = new DecelerateInterpolator();
     private long lastFrameTime;
     private Paint paint = new Paint(1);
-    private RectF rect;
+    private RectF rect = new RectF();
     private int side;
 
     public int getOpacity() {
@@ -23,8 +24,6 @@ public class CloseProgressDrawable2 extends Drawable {
     }
 
     public CloseProgressDrawable2() {
-        new DecelerateInterpolator();
-        this.rect = new RectF();
         this.paint.setColor(-1);
         this.paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.paint.setStrokeCap(Paint.Cap.ROUND);

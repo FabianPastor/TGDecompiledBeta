@@ -615,7 +615,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(this.floatingButtonIcon, "translationZ", new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(this.floatingButtonIcon, "translationZ", new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.floatingButtonContainer.setStateListAnimator(stateListAnimator);
-            this.floatingButtonContainer.setOutlineProvider(new ViewOutlineProvider(this) {
+            this.floatingButtonContainer.setOutlineProvider(new ViewOutlineProvider() {
                 @SuppressLint({"NewApi"})
                 public void getOutline(View view, Outline outline) {
                     outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -665,11 +665,11 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public /* synthetic */ void lambda$createView$4$GroupCreateFinalActivity(View view) {
         this.imageUpdater.openMenu(this.avatar != null, new Runnable() {
             public final void run() {
-                GroupCreateFinalActivity.this.lambda$null$2$GroupCreateFinalActivity();
+                GroupCreateFinalActivity.this.lambda$createView$2$GroupCreateFinalActivity();
             }
         }, new DialogInterface.OnDismissListener() {
             public final void onDismiss(DialogInterface dialogInterface) {
-                GroupCreateFinalActivity.this.lambda$null$3$GroupCreateFinalActivity(dialogInterface);
+                GroupCreateFinalActivity.this.lambda$createView$3$GroupCreateFinalActivity(dialogInterface);
             }
         });
         this.cameraDrawable.setCurrentFrame(0);
@@ -678,8 +678,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$GroupCreateFinalActivity() {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$GroupCreateFinalActivity() {
         this.avatar = null;
         this.avatarBig = null;
         this.inputPhoto = null;
@@ -693,8 +693,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$GroupCreateFinalActivity(DialogInterface dialogInterface) {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$GroupCreateFinalActivity(DialogInterface dialogInterface) {
         this.cameraDrawable.setCustomEndFrame(86);
         this.avatarEditor.playAnimation();
     }
@@ -707,7 +707,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             locationActivity.setDialogId(0);
             locationActivity.setDelegate(new LocationActivity.LocationActivityDelegate() {
                 public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-                    GroupCreateFinalActivity.this.lambda$null$5$GroupCreateFinalActivity(tLRPC$MessageMedia, i, z, i2);
+                    GroupCreateFinalActivity.this.lambda$createView$5$GroupCreateFinalActivity(tLRPC$MessageMedia, i, z, i2);
                 }
             });
             presentFragment(locationActivity);
@@ -715,8 +715,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$GroupCreateFinalActivity(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$GroupCreateFinalActivity(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
         this.currentGroupCreateLocation.setLatitude(tLRPC$MessageMedia.geo.lat);
         this.currentGroupCreateLocation.setLongitude(tLRPC$MessageMedia.geo._long);
         this.currentGroupCreateAddress = tLRPC$MessageMedia.address;
@@ -1027,27 +1027,27 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 org.telegram.ui.Cells.TextSettingsCell r5 = new org.telegram.ui.Cells.TextSettingsCell
                 android.content.Context r6 = r4.context
                 r5.<init>(r6)
-                goto L_0x0052
+                goto L_0x0050
             L_0x0010:
                 org.telegram.ui.Cells.GroupCreateUserCell r5 = new org.telegram.ui.Cells.GroupCreateUserCell
                 android.content.Context r6 = r4.context
                 r0 = 3
                 r1 = 0
                 r5.<init>(r6, r1, r0, r1)
-                goto L_0x0052
+                goto L_0x0050
             L_0x001a:
                 org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r6 = r4.context
                 r5.<init>(r6)
                 r6 = 46
                 r5.setHeight(r6)
-                goto L_0x0052
+                goto L_0x0050
             L_0x0027:
                 org.telegram.ui.Cells.ShadowSectionCell r6 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r0 = r4.context
                 r6.<init>(r0)
                 android.content.Context r0 = r4.context
-                r1 = 2131165451(0x7var_b, float:1.794512E38)
+                r1 = 2131165452(0x7var_c, float:1.7945122E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -1059,7 +1059,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 r1.setFullsize(r5)
                 r6.setBackgroundDrawable(r1)
                 r5 = r6
-            L_0x0052:
+            L_0x0050:
                 org.telegram.ui.Components.RecyclerListView$Holder r6 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r6.<init>(r5)
                 return r6

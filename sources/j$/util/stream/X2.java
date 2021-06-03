@@ -1,7 +1,6 @@
 package j$.util.stream;
 
 import j$.util.function.C;
-import j$.util.function.CLASSNAMEe;
 import j$.util.function.CLASSNAMEf;
 import j$.util.function.CLASSNAMEg;
 import j$.util.function.CLASSNAMEh;
@@ -10,9 +9,7 @@ import j$.util.function.q;
 import j$.util.function.w;
 
 abstract class X2 {
-
-    /* renamed from: a  reason: collision with root package name */
-    int var_a;
+    int a;
 
     static final class a extends d<q> implements q {
         final double[] c;
@@ -36,7 +33,7 @@ abstract class X2 {
             }
         }
 
-        public q k(q qVar) {
+        public q j(q qVar) {
             qVar.getClass();
             return new CLASSNAMEf(this, qVar);
         }
@@ -63,7 +60,7 @@ abstract class X2 {
             }
         }
 
-        public w l(w wVar) {
+        public w k(w wVar) {
             wVar.getClass();
             return new CLASSNAMEg(this, wVar);
         }
@@ -90,7 +87,7 @@ abstract class X2 {
             }
         }
 
-        public C g(C c2) {
+        public C f(C c2) {
             c2.getClass();
             return new CLASSNAMEh(this, c2);
         }
@@ -115,14 +112,13 @@ abstract class X2 {
 
         public void accept(Object obj) {
             Object[] objArr = this.b;
-            int i = this.var_a;
-            this.var_a = i + 1;
+            int i = this.a;
+            this.a = i + 1;
             objArr[i] = obj;
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
     }
 

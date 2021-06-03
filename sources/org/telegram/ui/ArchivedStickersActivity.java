@@ -258,14 +258,14 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
             }
 
             public final void run() {
-                ArchivedStickersActivity.this.lambda$null$1$ArchivedStickersActivity(this.f$1, this.f$2);
+                ArchivedStickersActivity.this.lambda$getStickers$1$ArchivedStickersActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$ArchivedStickersActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$getStickers$1 */
+    public /* synthetic */ void lambda$getStickers$1$ArchivedStickersActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             lambda$processResponse$3((TLRPC$TL_messages_archivedStickers) tLObject);
         }

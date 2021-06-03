@@ -31,7 +31,7 @@ public class GraySectionCell extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
-        AnonymousClass1 r14 = new TextView(this, getContext()) {
+        AnonymousClass1 r14 = new TextView(getContext()) {
             public CharSequence getAccessibilityClassName() {
                 return Button.class.getName();
             }

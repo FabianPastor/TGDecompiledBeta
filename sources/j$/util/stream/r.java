@@ -3,9 +3,7 @@ package j$.util.stream;
 import j$.util.function.G;
 
 public final /* synthetic */ class r implements G {
-
-    /* renamed from: a  reason: collision with root package name */
-    public static final /* synthetic */ r var_a = new r();
+    public static final /* synthetic */ r a = new r();
 
     private /* synthetic */ r() {
     }

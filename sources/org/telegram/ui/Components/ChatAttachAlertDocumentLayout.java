@@ -1,24 +1,25 @@
 package org.telegram.ui.Components;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,50 +33,69 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Locale;
+import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$messages_Messages;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
+import org.telegram.ui.Adapters.FiltersView;
+import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.SharedDocumentCell;
 import org.telegram.ui.Components.ChatAttachAlert;
 import org.telegram.ui.Components.ChatAttachAlertDocumentLayout;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.FilteredSearchView;
 
 public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLayout {
+    /* access modifiers changed from: private */
+    public float additionalTranslationY;
     private boolean allowMusic;
-    private boolean canSelectOnlyImageFiles;
+    /* access modifiers changed from: private */
+    public boolean canSelectOnlyImageFiles;
     /* access modifiers changed from: private */
     public File currentDir;
     /* access modifiers changed from: private */
     public DocumentSelectActivityDelegate delegate;
-    private ImageView emptyImageView;
     /* access modifiers changed from: private */
-    public TextView emptySubtitleTextView;
-    private TextView emptyTitleTextView;
-    private LinearLayout emptyView;
+    public StickerEmptyView emptyView;
+    /* access modifiers changed from: private */
+    public FiltersView filtersView;
+    /* access modifiers changed from: private */
+    public AnimatorSet filtersViewAnimator;
     private boolean hasFiles;
     /* access modifiers changed from: private */
     public ArrayList<HistoryEntry> history = new ArrayList<>();
     private boolean ignoreLayout;
     /* access modifiers changed from: private */
     public ArrayList<ListItem> items = new ArrayList<>();
-    private LinearLayoutManager layoutManager;
+    /* access modifiers changed from: private */
+    public LinearLayoutManager layoutManager;
     /* access modifiers changed from: private */
     public ListAdapter listAdapter;
     /* access modifiers changed from: private */
     public RecyclerListView listView;
+    /* access modifiers changed from: private */
+    public FlickerLoadingView loadingView;
     private int maxSelectedFiles = -1;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
@@ -121,6 +141,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     /* access modifiers changed from: private */
     public HashMap<String, ListItem> selectedFiles = new HashMap<>();
     private ArrayList<String> selectedFilesOrder = new ArrayList<>();
+    /* access modifiers changed from: private */
+    public HashMap<FilteredSearchView.MessageHashId, MessageObject> selectedMessages = new HashMap<>();
     private boolean sendPressed;
     /* access modifiers changed from: private */
     public boolean sortByName;
@@ -135,7 +157,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             }
         }
 
-        void didSelectFiles(ArrayList<String> arrayList, String str, boolean z, int i);
+        void didSelectFiles(ArrayList<String> arrayList, String str, ArrayList<MessageObject> arrayList2, boolean z, int i);
 
         void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> arrayList, boolean z, int i);
 
@@ -169,16 +191,16 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
 
     private static class HistoryEntry {
         File dir;
+        int scrollItem;
+        int scrollOffset;
         String title;
 
         private HistoryEntry() {
         }
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public ChatAttachAlertDocumentLayout(ChatAttachAlert chatAttachAlert, Context context, boolean z) {
         super(chatAttachAlert, context);
-        Context context2 = context;
         this.allowMusic = z;
         this.sortByName = SharedConfig.sortFilesByName;
         loadRecentFiles();
@@ -199,9 +221,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             ApplicationLoader.applicationContext.registerReceiver(this.receiver, intentFilter);
         }
         ActionBarMenu createMenu = this.parentAlert.actionBar.createMenu();
-        ActionBarMenuItem addItem = createMenu.addItem(0, NUM);
-        addItem.setIsSearchField(true);
-        addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem actionBarMenuItemSearchListener = createMenu.addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 boolean unused = ChatAttachAlertDocumentLayout.this.searching = true;
                 ChatAttachAlertDocumentLayout.this.sortItem.setVisibility(8);
@@ -216,55 +236,51 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                     ChatAttachAlertDocumentLayout.this.listView.setAdapter(ChatAttachAlertDocumentLayout.this.listAdapter);
                 }
                 ChatAttachAlertDocumentLayout.this.listAdapter.notifyDataSetChanged();
-                ChatAttachAlertDocumentLayout.this.searchAdapter.search((String) null);
+                ChatAttachAlertDocumentLayout.this.searchAdapter.search((String) null, true);
             }
 
             public void onTextChanged(EditText editText) {
-                ChatAttachAlertDocumentLayout.this.searchAdapter.search(editText.getText().toString());
+                ChatAttachAlertDocumentLayout.this.searchAdapter.search(editText.getText().toString(), false);
+            }
+
+            public void onSearchFilterCleared(FiltersView.MediaFilterData mediaFilterData) {
+                ChatAttachAlertDocumentLayout.this.searchAdapter.removeSearchFilter(mediaFilterData);
+                ChatAttachAlertDocumentLayout.this.searchAdapter.search(ChatAttachAlertDocumentLayout.this.searchItem.getSearchField().getText().toString(), false);
+                ChatAttachAlertDocumentLayout.this.searchAdapter.updateFiltersView(true, (ArrayList<Object>) null, (ArrayList<FiltersView.DateData>) null, true);
             }
         });
-        this.searchItem = addItem;
-        addItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        this.searchItem = actionBarMenuItemSearchListener;
+        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.searchItem.setContentDescription(LocaleController.getString("Search", NUM));
         EditTextBoldCursor searchField = this.searchItem.getSearchField();
         searchField.setTextColor(Theme.getColor("dialogTextBlack"));
         searchField.setCursorColor(Theme.getColor("dialogTextBlack"));
         searchField.setHintTextColor(Theme.getColor("chat_messagePanelHint"));
-        ActionBarMenuItem addItem2 = createMenu.addItem(6, this.sortByName ? NUM : NUM);
-        this.sortItem = addItem2;
-        addItem2.setContentDescription(LocaleController.getString("AccDescrContactSorting", NUM));
-        LinearLayout linearLayout = new LinearLayout(context2);
-        this.emptyView = linearLayout;
-        linearLayout.setOrientation(1);
-        this.emptyView.setGravity(17);
+        ActionBarMenuItem addItem = createMenu.addItem(6, this.sortByName ? NUM : NUM);
+        this.sortItem = addItem;
+        addItem.setContentDescription(LocaleController.getString("AccDescrContactSorting", NUM));
+        FlickerLoadingView flickerLoadingView = new FlickerLoadingView(context);
+        this.loadingView = flickerLoadingView;
+        addView(flickerLoadingView);
+        AnonymousClass3 r13 = new StickerEmptyView(context, this.loadingView, 1) {
+            public void setTranslationY(float f) {
+                super.setTranslationY(f + ChatAttachAlertDocumentLayout.this.additionalTranslationY);
+            }
+
+            public float getTranslationY() {
+                return super.getTranslationY() - ChatAttachAlertDocumentLayout.this.additionalTranslationY;
+            }
+        };
+        this.emptyView = r13;
+        addView(r13, LayoutHelper.createFrame(-1, -1.0f));
         this.emptyView.setVisibility(8);
-        addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
         this.emptyView.setOnTouchListener($$Lambda$ChatAttachAlertDocumentLayout$UzXO3YpFzwU2u1b1zfUtDODa94.INSTANCE);
-        ImageView imageView = new ImageView(context2);
-        this.emptyImageView = imageView;
-        imageView.setImageResource(NUM);
-        this.emptyImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogEmptyImage"), PorterDuff.Mode.MULTIPLY));
-        this.emptyView.addView(this.emptyImageView, LayoutHelper.createLinear(-2, -2));
-        TextView textView = new TextView(context2);
-        this.emptyTitleTextView = textView;
-        textView.setTextColor(Theme.getColor("dialogEmptyText"));
-        this.emptyTitleTextView.setGravity(17);
-        this.emptyTitleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.emptyTitleTextView.setTextSize(1, 17.0f);
-        this.emptyTitleTextView.setPadding(AndroidUtilities.dp(40.0f), 0, AndroidUtilities.dp(40.0f), 0);
-        this.emptyView.addView(this.emptyTitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 11, 0, 0));
-        TextView textView2 = new TextView(context2);
-        this.emptySubtitleTextView = textView2;
-        textView2.setTextColor(Theme.getColor("dialogEmptyText"));
-        this.emptySubtitleTextView.setGravity(17);
-        this.emptySubtitleTextView.setTextSize(1, 15.0f);
-        this.emptySubtitleTextView.setPadding(AndroidUtilities.dp(40.0f), 0, AndroidUtilities.dp(40.0f), 0);
-        this.emptyView.addView(this.emptySubtitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 6, 0, 0));
-        RecyclerListView recyclerListView = new RecyclerListView(context2);
+        RecyclerListView recyclerListView = new RecyclerListView(context);
         this.listView = recyclerListView;
-        recyclerListView.setVerticalScrollBarEnabled(false);
+        recyclerListView.setSectionsType(2);
+        this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView2 = this.listView;
-        AnonymousClass3 r0 = new FillLastLinearLayoutManager(context, 1, false, AndroidUtilities.dp(56.0f), this.listView) {
+        AnonymousClass4 r2 = new FillLastLinearLayoutManager(context, 1, false, AndroidUtilities.dp(56.0f), this.listView) {
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int i) {
                 AnonymousClass1 r2 = new LinearSmoothScroller(recyclerView.getContext()) {
                     public int calculateDyToMakeVisible(View view, int i) {
@@ -280,22 +296,30 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 startSmoothScroll(r2);
             }
         };
-        this.layoutManager = r0;
-        recyclerListView2.setLayoutManager(r0);
-        this.listView.setEmptyView(this.emptyView);
+        this.layoutManager = r2;
+        recyclerListView2.setLayoutManager(r2);
         this.listView.setClipToPadding(false);
         RecyclerListView recyclerListView3 = this.listView;
-        ListAdapter listAdapter2 = new ListAdapter(context2);
+        ListAdapter listAdapter2 = new ListAdapter(context);
         this.listAdapter = listAdapter2;
         recyclerListView3.setAdapter(listAdapter2);
         this.listView.setPadding(0, 0, 0, AndroidUtilities.dp(48.0f));
         addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
-        this.searchAdapter = new SearchAdapter(context2);
+        this.searchAdapter = new SearchAdapter(context);
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 ChatAttachAlertDocumentLayout chatAttachAlertDocumentLayout = ChatAttachAlertDocumentLayout.this;
                 chatAttachAlertDocumentLayout.parentAlert.updateLayout(chatAttachAlertDocumentLayout, true, i2);
                 ChatAttachAlertDocumentLayout.this.updateEmptyViewPosition();
+                if (ChatAttachAlertDocumentLayout.this.listView.getAdapter() == ChatAttachAlertDocumentLayout.this.searchAdapter) {
+                    int findFirstVisibleItemPosition = ChatAttachAlertDocumentLayout.this.layoutManager.findFirstVisibleItemPosition();
+                    int findLastVisibleItemPosition = ChatAttachAlertDocumentLayout.this.layoutManager.findLastVisibleItemPosition();
+                    int abs = Math.abs(findLastVisibleItemPosition - findFirstVisibleItemPosition) + 1;
+                    int itemCount = recyclerView.getAdapter().getItemCount();
+                    if (abs > 0 && findLastVisibleItemPosition >= itemCount - 10) {
+                        ChatAttachAlertDocumentLayout.this.searchAdapter.loadMore();
+                    }
+                }
             }
 
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
@@ -328,6 +352,17 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 return ChatAttachAlertDocumentLayout.this.lambda$new$2$ChatAttachAlertDocumentLayout(view, i);
             }
         });
+        FiltersView filtersView2 = new FiltersView(context);
+        this.filtersView = filtersView2;
+        filtersView2.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
+            public final void onItemClick(View view, int i) {
+                ChatAttachAlertDocumentLayout.this.lambda$new$3$ChatAttachAlertDocumentLayout(view, i);
+            }
+        });
+        this.filtersView.setBackgroundColor(Theme.getColor("dialogBackground"));
+        addView(this.filtersView, LayoutHelper.createFrame(-1, -2, 48));
+        this.filtersView.setTranslationY((float) (-AndroidUtilities.dp(44.0f)));
+        this.filtersView.setVisibility(4);
         listRoots();
         updateSearchButton();
         updateEmptyView();
@@ -339,130 +374,145 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     /* JADX WARNING: Unknown variable types count: 1 */
     /* renamed from: lambda$new$1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$new$1$ChatAttachAlertDocumentLayout(android.view.View r12, int r13) {
+    public /* synthetic */ void lambda$new$1$ChatAttachAlertDocumentLayout(android.view.View r13, int r14) {
         /*
-            r11 = this;
-            org.telegram.ui.Components.RecyclerListView r0 = r11.listView
+            r12 = this;
+            org.telegram.ui.Components.RecyclerListView r0 = r12.listView
             androidx.recyclerview.widget.RecyclerView$Adapter r0 = r0.getAdapter()
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListAdapter r1 = r11.listAdapter
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListAdapter r1 = r12.listAdapter
             if (r0 != r1) goto L_0x000f
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r13 = r1.getItem(r13)
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r14 = r1.getItem(r14)
             goto L_0x0015
         L_0x000f:
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$SearchAdapter r0 = r11.searchAdapter
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r13 = r0.getItem(r13)
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$SearchAdapter r0 = r12.searchAdapter
+            java.lang.Object r14 = r0.getItem(r14)
         L_0x0015:
-            if (r13 != 0) goto L_0x0018
-            return
-        L_0x0018:
-            java.io.File r0 = r13.file
+            boolean r0 = r14 instanceof org.telegram.ui.Components.ChatAttachAlertDocumentLayout.ListItem
+            if (r0 == 0) goto L_0x010d
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r14 = (org.telegram.ui.Components.ChatAttachAlertDocumentLayout.ListItem) r14
+            java.io.File r0 = r14.file
             r1 = 0
             r2 = 0
-            if (r0 != 0) goto L_0x00a7
-            int r12 = r13.icon
-            r13 = 2131165405(0x7var_dd, float:1.7945026E38)
+            if (r0 != 0) goto L_0x00bb
+            int r13 = r14.icon
+            r14 = 2131165406(0x7var_de, float:1.7945028E38)
             r0 = 1
-            if (r12 != r13) goto L_0x006b
-            java.util.HashMap r12 = new java.util.HashMap
-            r12.<init>()
-            java.util.ArrayList r13 = new java.util.ArrayList
+            if (r13 != r14) goto L_0x006f
+            java.util.HashMap r13 = new java.util.HashMap
             r13.<init>()
-            org.telegram.ui.Components.ChatAttachAlert r3 = r11.parentAlert
+            java.util.ArrayList r14 = new java.util.ArrayList
+            r14.<init>()
+            org.telegram.ui.Components.ChatAttachAlert r3 = r12.parentAlert
             org.telegram.ui.ActionBar.BaseFragment r3 = r3.baseFragment
             boolean r4 = r3 instanceof org.telegram.ui.ChatActivity
-            if (r4 == 0) goto L_0x003b
+            if (r4 == 0) goto L_0x003e
             r1 = r3
             org.telegram.ui.ChatActivity r1 = (org.telegram.ui.ChatActivity) r1
-        L_0x003b:
+        L_0x003e:
             r10 = r1
             org.telegram.ui.PhotoPickerActivity r1 = new org.telegram.ui.PhotoPickerActivity
             r4 = 0
             org.telegram.messenger.MediaController$AlbumEntry r5 = org.telegram.messenger.MediaController.allMediaAlbumEntry
             r8 = 0
-            if (r10 == 0) goto L_0x0046
+            if (r10 == 0) goto L_0x0049
             r9 = 1
-            goto L_0x0047
-        L_0x0046:
+            goto L_0x004a
+        L_0x0049:
             r9 = 0
-        L_0x0047:
+        L_0x004a:
+            r11 = 0
             r3 = r1
-            r6 = r12
-            r7 = r13
-            r3.<init>(r4, r5, r6, r7, r8, r9, r10)
+            r6 = r13
+            r7 = r14
+            r3.<init>(r4, r5, r6, r7, r8, r9, r10, r11)
             r1.setDocumentsPicker(r0)
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$5 r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$5
-            r0.<init>(r12, r13)
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$6 r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$6
+            r0.<init>(r13, r14)
             r1.setDelegate(r0)
-            int r12 = r11.maxSelectedFiles
-            r1.setMaxSelectedPhotos(r12, r2)
-            org.telegram.ui.Components.ChatAttachAlert r12 = r11.parentAlert
-            org.telegram.ui.ActionBar.BaseFragment r12 = r12.baseFragment
-            r12.presentFragment(r1)
-            org.telegram.ui.Components.ChatAttachAlert r12 = r11.parentAlert
-            r12.dismiss()
-            goto L_0x00f0
-        L_0x006b:
-            r13 = 2131165407(0x7var_df, float:1.794503E38)
-            if (r12 != r13) goto L_0x0079
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$DocumentSelectActivityDelegate r12 = r11.delegate
-            if (r12 == 0) goto L_0x00f0
-            r12.startMusicSelectActivity()
-            goto L_0x00f0
-        L_0x0079:
-            int r12 = r11.getTopForScroll()
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r13 = r11.history
-            int r1 = r13.size()
+            int r13 = r12.maxSelectedFiles
+            r1.setMaxSelectedPhotos(r13, r2)
+            org.telegram.ui.Components.ChatAttachAlert r13 = r12.parentAlert
+            org.telegram.ui.ActionBar.BaseFragment r13 = r13.baseFragment
+            r13.presentFragment(r1)
+            org.telegram.ui.Components.ChatAttachAlert r13 = r12.parentAlert
+            r13.dismiss()
+            goto L_0x0110
+        L_0x006f:
+            r14 = 2131165408(0x7var_e0, float:1.7945032E38)
+            if (r13 != r14) goto L_0x007d
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$DocumentSelectActivityDelegate r13 = r12.delegate
+            if (r13 == 0) goto L_0x0110
+            r13.startMusicSelectActivity()
+            goto L_0x0110
+        L_0x007d:
+            boolean r14 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
+            if (r14 != 0) goto L_0x008d
+            r14 = 2131165409(0x7var_e1, float:1.7945034E38)
+            if (r13 != r14) goto L_0x008d
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$DocumentSelectActivityDelegate r13 = r12.delegate
+            r13.startDocumentSelectActivity()
+            goto L_0x0110
+        L_0x008d:
+            int r13 = r12.getTopForScroll()
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r14 = r12.history
+            int r1 = r14.size()
             int r1 = r1 - r0
-            java.lang.Object r13 = r13.remove(r1)
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry r13 = (org.telegram.ui.Components.ChatAttachAlertDocumentLayout.HistoryEntry) r13
-            org.telegram.ui.Components.ChatAttachAlert r0 = r11.parentAlert
+            java.lang.Object r14 = r14.remove(r1)
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry r14 = (org.telegram.ui.Components.ChatAttachAlertDocumentLayout.HistoryEntry) r14
+            org.telegram.ui.Components.ChatAttachAlert r0 = r12.parentAlert
             org.telegram.ui.ActionBar.ActionBar r0 = r0.actionBar
-            java.lang.String r1 = r13.title
+            java.lang.String r1 = r14.title
             r0.setTitle(r1)
-            java.io.File r13 = r13.dir
-            if (r13 == 0) goto L_0x009b
-            r11.listFiles(r13)
-            goto L_0x009e
-        L_0x009b:
-            r11.listRoots()
-        L_0x009e:
-            r11.updateSearchButton()
-            androidx.recyclerview.widget.LinearLayoutManager r13 = r11.layoutManager
-            r13.scrollToPositionWithOffset(r2, r12)
-            goto L_0x00f0
-        L_0x00a7:
+            java.io.File r14 = r14.dir
+            if (r14 == 0) goto L_0x00af
+            r12.listFiles(r14)
+            goto L_0x00b2
+        L_0x00af:
+            r12.listRoots()
+        L_0x00b2:
+            r12.updateSearchButton()
+            androidx.recyclerview.widget.LinearLayoutManager r14 = r12.layoutManager
+            r14.scrollToPositionWithOffset(r2, r13)
+            goto L_0x0110
+        L_0x00bb:
             boolean r3 = r0.isDirectory()
-            if (r3 == 0) goto L_0x00ed
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry r12 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry
-            r12.<init>()
-            org.telegram.ui.Components.RecyclerListView r1 = r11.listView
+            if (r3 == 0) goto L_0x0109
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry r13 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry
+            r13.<init>()
+            org.telegram.ui.Components.RecyclerListView r1 = r12.listView
             android.view.View r1 = r1.getChildAt(r2)
-            org.telegram.ui.Components.RecyclerListView r2 = r11.listView
+            org.telegram.ui.Components.RecyclerListView r2 = r12.listView
             androidx.recyclerview.widget.RecyclerView$ViewHolder r2 = r2.findContainingViewHolder(r1)
-            r2.getAdapterPosition()
-            r1.getTop()
-            java.io.File r1 = r11.currentDir
-            r12.dir = r1
-            org.telegram.ui.Components.ChatAttachAlert r1 = r11.parentAlert
+            if (r2 == 0) goto L_0x0110
+            int r2 = r2.getAdapterPosition()
+            r13.scrollItem = r2
+            int r1 = r1.getTop()
+            r13.scrollOffset = r1
+            java.io.File r1 = r12.currentDir
+            r13.dir = r1
+            org.telegram.ui.Components.ChatAttachAlert r1 = r12.parentAlert
             org.telegram.ui.ActionBar.ActionBar r1 = r1.actionBar
             java.lang.String r1 = r1.getTitle()
-            r12.title = r1
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r1 = r11.history
-            r1.add(r12)
-            boolean r0 = r11.listFiles(r0)
-            if (r0 != 0) goto L_0x00e3
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r13 = r11.history
-            r13.remove(r12)
+            r13.title = r1
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r1 = r12.history
+            r1.add(r13)
+            boolean r0 = r12.listFiles(r0)
+            if (r0 != 0) goto L_0x00ff
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$HistoryEntry> r14 = r12.history
+            r14.remove(r13)
             return
-        L_0x00e3:
-            org.telegram.ui.Components.ChatAttachAlert r12 = r11.parentAlert
-            org.telegram.ui.ActionBar.ActionBar r12 = r12.actionBar
-            java.lang.String r13 = r13.title
-            r12.setTitle(r13)
-            goto L_0x00f0
-        L_0x00ed:
-            r11.onItemClick(r12, r13)
-        L_0x00f0:
+        L_0x00ff:
+            org.telegram.ui.Components.ChatAttachAlert r13 = r12.parentAlert
+            org.telegram.ui.ActionBar.ActionBar r13 = r13.actionBar
+            java.lang.String r14 = r14.title
+            r13.setTitle(r14)
+            goto L_0x0110
+        L_0x0109:
+            r12.onItemClick(r13, r14)
+            goto L_0x0110
+        L_0x010d:
+            r12.onItemClick(r13, r14)
+        L_0x0110:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.lambda$new$1$ChatAttachAlertDocumentLayout(android.view.View, int):void");
@@ -471,15 +521,22 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$2 */
     public /* synthetic */ boolean lambda$new$2$ChatAttachAlertDocumentLayout(View view, int i) {
-        ListItem listItem;
+        Object obj;
         RecyclerView.Adapter adapter = this.listView.getAdapter();
         ListAdapter listAdapter2 = this.listAdapter;
         if (adapter == listAdapter2) {
-            listItem = listAdapter2.getItem(i);
+            obj = listAdapter2.getItem(i);
         } else {
-            listItem = this.searchAdapter.getItem(i);
+            obj = this.searchAdapter.getItem(i);
         }
-        return onItemClick(view, listItem);
+        return onItemClick(view, obj);
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$3 */
+    public /* synthetic */ void lambda$new$3$ChatAttachAlertDocumentLayout(View view, int i) {
+        this.filtersView.cancelClickRunnables(true);
+        this.searchAdapter.addSearchFilter(this.filtersView.getFilterAt(i));
     }
 
     /* access modifiers changed from: package-private */
@@ -602,6 +659,11 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r5.setPadding(r1, r4, r1, r0)
             r3.ignoreLayout = r1
         L_0x0067:
+            org.telegram.ui.Adapters.FiltersView r4 = r3.filtersView
+            android.view.ViewGroup$LayoutParams r4 = r4.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r4 = (android.widget.FrameLayout.LayoutParams) r4
+            int r5 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
+            r4.topMargin = r5
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.onPreMeasure(int, int):void");
@@ -625,54 +687,74 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
 
     /* access modifiers changed from: package-private */
     public int getSelectedItemsCount() {
-        return this.selectedFiles.size();
+        return this.selectedFiles.size() + this.selectedMessages.size();
     }
 
     /* access modifiers changed from: package-private */
     public void sendSelectedItems(boolean z, int i) {
-        if (this.selectedFiles.size() != 0 && this.delegate != null && !this.sendPressed) {
+        if ((this.selectedFiles.size() != 0 || this.selectedMessages.size() != 0) && this.delegate != null && !this.sendPressed) {
             this.sendPressed = true;
-            this.delegate.didSelectFiles(new ArrayList(this.selectedFilesOrder), this.parentAlert.commentTextView.getText().toString(), z, i);
+            ArrayList arrayList = new ArrayList();
+            for (FilteredSearchView.MessageHashId messageHashId : this.selectedMessages.keySet()) {
+                arrayList.add(this.selectedMessages.get(messageHashId));
+            }
+            this.delegate.didSelectFiles(new ArrayList(this.selectedFilesOrder), this.parentAlert.commentTextView.getText().toString(), arrayList, z, i);
             this.parentAlert.dismiss();
         }
     }
 
-    private boolean onItemClick(View view, ListItem listItem) {
-        File file;
+    private boolean onItemClick(View view, Object obj) {
         boolean z;
         int i;
-        if (listItem == null || (file = listItem.file) == null || file.isDirectory()) {
-            return false;
-        }
-        String absolutePath = listItem.file.getAbsolutePath();
-        if (this.selectedFiles.containsKey(absolutePath)) {
-            this.selectedFiles.remove(absolutePath);
-            this.selectedFilesOrder.remove(absolutePath);
-            z = false;
-        } else if (!listItem.file.canRead()) {
-            showErrorBox(LocaleController.getString("AccessError", NUM));
-            return false;
-        } else if (this.canSelectOnlyImageFiles && listItem.thumb == null) {
-            showErrorBox(LocaleController.formatString("PassportUploadNotImage", NUM, new Object[0]));
-            return false;
-        } else if (listItem.file.length() > NUM) {
-            showErrorBox(LocaleController.formatString("FileUploadLimit", NUM, AndroidUtilities.formatFileSize(NUM)));
-            return false;
-        } else if (this.maxSelectedFiles >= 0 && this.selectedFiles.size() >= (i = this.maxSelectedFiles)) {
-            showErrorBox(LocaleController.formatString("PassportUploadMaxReached", NUM, LocaleController.formatPluralString("Files", i)));
-            return false;
-        } else if (listItem.file.length() == 0) {
-            return false;
+        boolean z2 = false;
+        if (obj instanceof ListItem) {
+            ListItem listItem = (ListItem) obj;
+            File file = listItem.file;
+            if (file == null || file.isDirectory()) {
+                return false;
+            }
+            String absolutePath = listItem.file.getAbsolutePath();
+            if (this.selectedFiles.containsKey(absolutePath)) {
+                this.selectedFiles.remove(absolutePath);
+                this.selectedFilesOrder.remove(absolutePath);
+                z = false;
+            } else if (!listItem.file.canRead()) {
+                showErrorBox(LocaleController.getString("AccessError", NUM));
+                return false;
+            } else if (this.canSelectOnlyImageFiles && listItem.thumb == null) {
+                showErrorBox(LocaleController.formatString("PassportUploadNotImage", NUM, new Object[0]));
+                return false;
+            } else if (listItem.file.length() > NUM) {
+                showErrorBox(LocaleController.formatString("FileUploadLimit", NUM, AndroidUtilities.formatFileSize(NUM)));
+                return false;
+            } else if (this.maxSelectedFiles >= 0 && this.selectedFiles.size() >= (i = this.maxSelectedFiles)) {
+                showErrorBox(LocaleController.formatString("PassportUploadMaxReached", NUM, LocaleController.formatPluralString("Files", i)));
+                return false;
+            } else if (listItem.file.length() == 0) {
+                return false;
+            } else {
+                this.selectedFiles.put(absolutePath, listItem);
+                this.selectedFilesOrder.add(absolutePath);
+                z = true;
+            }
+            this.scrolling = false;
+            z2 = z;
         } else {
-            this.selectedFiles.put(absolutePath, listItem);
-            this.selectedFilesOrder.add(absolutePath);
-            z = true;
+            MessageObject messageObject = (MessageObject) obj;
+            FilteredSearchView.MessageHashId messageHashId = new FilteredSearchView.MessageHashId(messageObject.getId(), messageObject.getDialogId());
+            if (this.selectedMessages.containsKey(messageHashId)) {
+                this.selectedMessages.remove(messageHashId);
+            } else if (this.selectedMessages.size() >= 100) {
+                return false;
+            } else {
+                this.selectedMessages.put(messageHashId, messageObject);
+                z2 = true;
+            }
         }
-        this.scrolling = false;
         if (view instanceof SharedDocumentCell) {
-            ((SharedDocumentCell) view).setChecked(z, true);
+            ((SharedDocumentCell) view).setChecked(z2, true);
         }
-        this.parentAlert.updateCountButton(z ? 1 : 2);
+        this.parentAlert.updateCountButton(z2 ? 1 : 2);
         return true;
     }
 
@@ -718,20 +800,22 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     public void loadRecentFiles() {
         try {
             File[] listFiles = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).listFiles();
-            for (File file : listFiles) {
-                if (!file.isDirectory()) {
-                    ListItem listItem = new ListItem();
-                    listItem.title = file.getName();
-                    listItem.file = file;
-                    String name = file.getName();
-                    String[] split = name.split("\\.");
-                    listItem.ext = split.length > 1 ? split[split.length - 1] : "?";
-                    listItem.subtitle = AndroidUtilities.formatFileSize(file.length());
-                    String lowerCase = name.toLowerCase();
-                    if (lowerCase.endsWith(".jpg") || lowerCase.endsWith(".png") || lowerCase.endsWith(".gif") || lowerCase.endsWith(".jpeg")) {
-                        listItem.thumb = file.getAbsolutePath();
+            if (listFiles != null) {
+                for (File file : listFiles) {
+                    if (!file.isDirectory()) {
+                        ListItem listItem = new ListItem();
+                        listItem.title = file.getName();
+                        listItem.file = file;
+                        String name = file.getName();
+                        String[] split = name.split("\\.");
+                        listItem.ext = split.length > 1 ? split[split.length - 1] : "?";
+                        listItem.subtitle = AndroidUtilities.formatFileSize(file.length());
+                        String lowerCase = name.toLowerCase();
+                        if (lowerCase.endsWith(".jpg") || lowerCase.endsWith(".png") || lowerCase.endsWith(".gif") || lowerCase.endsWith(".jpeg")) {
+                            listItem.thumb = file.getAbsolutePath();
+                        }
+                        this.recentItems.add(listItem);
                     }
-                    this.recentItems.add(listItem);
                 }
             }
             sortRecentItems();
@@ -743,7 +827,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     private void sortRecentItems() {
         Collections.sort(this.recentItems, new Object() {
             public final int compare(Object obj, Object obj2) {
-                return ChatAttachAlertDocumentLayout.this.lambda$sortRecentItems$3$ChatAttachAlertDocumentLayout((ChatAttachAlertDocumentLayout.ListItem) obj, (ChatAttachAlertDocumentLayout.ListItem) obj2);
+                return ChatAttachAlertDocumentLayout.this.lambda$sortRecentItems$4$ChatAttachAlertDocumentLayout((ChatAttachAlertDocumentLayout.ListItem) obj, (ChatAttachAlertDocumentLayout.ListItem) obj2);
             }
 
             public /* synthetic */ Comparator reversed() {
@@ -777,8 +861,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$sortRecentItems$3 */
-    public /* synthetic */ int lambda$sortRecentItems$3$ChatAttachAlertDocumentLayout(ListItem listItem, ListItem listItem2) {
+    /* renamed from: lambda$sortRecentItems$4 */
+    public /* synthetic */ int lambda$sortRecentItems$4$ChatAttachAlertDocumentLayout(ListItem listItem, ListItem listItem2) {
         if (this.sortByName) {
             return listItem.file.getName().compareToIgnoreCase(listItem2.file.getName());
         }
@@ -794,7 +878,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         if (this.currentDir != null) {
             Collections.sort(this.items, new Object() {
                 public final int compare(Object obj, Object obj2) {
-                    return ChatAttachAlertDocumentLayout.this.lambda$sortFileItems$4$ChatAttachAlertDocumentLayout((ChatAttachAlertDocumentLayout.ListItem) obj, (ChatAttachAlertDocumentLayout.ListItem) obj2);
+                    return ChatAttachAlertDocumentLayout.this.lambda$sortFileItems$5$ChatAttachAlertDocumentLayout((ChatAttachAlertDocumentLayout.ListItem) obj, (ChatAttachAlertDocumentLayout.ListItem) obj2);
                 }
 
                 public /* synthetic */ java.util.Comparator reversed() {
@@ -829,27 +913,22 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$sortFileItems$4 */
-    public /* synthetic */ int lambda$sortFileItems$4$ChatAttachAlertDocumentLayout(ListItem listItem, ListItem listItem2) {
+    /* renamed from: lambda$sortFileItems$5 */
+    public /* synthetic */ int lambda$sortFileItems$5$ChatAttachAlertDocumentLayout(ListItem listItem, ListItem listItem2) {
         File file = listItem.file;
         if (file == null) {
             return -1;
         }
-        File file2 = listItem2.file;
-        if (file2 == null) {
+        if (listItem2.file == null) {
             return 1;
         }
-        if (file == null && file2 == null) {
-            return 0;
-        }
         boolean isDirectory = file.isDirectory();
-        boolean isDirectory2 = listItem2.file.isDirectory();
-        if (isDirectory != isDirectory2) {
+        if (isDirectory != listItem2.file.isDirectory()) {
             if (isDirectory) {
                 return -1;
             }
             return 1;
-        } else if ((isDirectory && isDirectory2) || this.sortByName) {
+        } else if (isDirectory || this.sortByName) {
             return listItem.file.getName().compareToIgnoreCase(listItem2.file.getName());
         } else {
             long lastModified = listItem.file.lastModified();
@@ -879,6 +958,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     /* access modifiers changed from: package-private */
     public void onShow() {
         this.selectedFiles.clear();
+        this.selectedMessages.clear();
+        this.searchAdapter.currentSearchFilters.clear();
         this.selectedFilesOrder.clear();
         this.history.clear();
         listRoots();
@@ -899,48 +980,34 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     public void updateEmptyViewPosition() {
         View childAt;
         if (this.emptyView.getVisibility() == 0 && (childAt = this.listView.getChildAt(0)) != null) {
-            LinearLayout linearLayout = this.emptyView;
-            linearLayout.setTranslationY((float) (((linearLayout.getMeasuredHeight() - getMeasuredHeight()) + childAt.getTop()) / 2));
+            float translationY = this.emptyView.getTranslationY();
+            this.additionalTranslationY = (float) (((this.emptyView.getMeasuredHeight() - getMeasuredHeight()) + childAt.getTop()) / 2);
+            this.emptyView.setTranslationY(translationY);
         }
     }
 
     /* access modifiers changed from: private */
     public void updateEmptyView() {
-        boolean z;
-        if (this.searching) {
-            this.emptyTitleTextView.setText(LocaleController.getString("NoFilesFound", NUM));
-        } else {
-            this.emptyTitleTextView.setText(LocaleController.getString("NoFilesFound", NUM));
-            this.emptySubtitleTextView.setText(LocaleController.getString("NoFilesInfo", NUM));
-        }
         RecyclerView.Adapter adapter = this.listView.getAdapter();
         SearchAdapter searchAdapter2 = this.searchAdapter;
         int i = 0;
-        if (adapter == searchAdapter2) {
-            z = searchAdapter2.searchResult.isEmpty();
-        } else {
-            z = this.listAdapter.getItemCount() == 1;
+        boolean z = true;
+        if (adapter != searchAdapter2 ? this.listAdapter.getItemCount() != 1 : !searchAdapter2.searchResult.isEmpty() || !this.searchAdapter.sections.isEmpty()) {
+            z = false;
         }
-        LinearLayout linearLayout = this.emptyView;
+        StickerEmptyView stickerEmptyView = this.emptyView;
         if (!z) {
             i = 8;
         }
-        linearLayout.setVisibility(i);
+        stickerEmptyView.setVisibility(i);
         updateEmptyViewPosition();
     }
 
     /* access modifiers changed from: private */
     public void updateSearchButton() {
         ActionBarMenuItem actionBarMenuItem = this.searchItem;
-        if (actionBarMenuItem != null) {
-            if (!actionBarMenuItem.isSearchFieldVisible()) {
-                this.searchItem.setVisibility(this.hasFiles ? 0 : 8);
-            }
-            if (this.history.isEmpty()) {
-                this.searchItem.setSearchFieldHint(LocaleController.getString("SearchRecentFiles", NUM));
-            } else {
-                this.searchItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
-            }
+        if (actionBarMenuItem != null && !actionBarMenuItem.isSearchFieldVisible()) {
+            this.searchItem.setVisibility((this.hasFiles || this.history.isEmpty()) ? 0 : 8);
         }
     }
 
@@ -1064,277 +1131,291 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     private void showErrorBox(String str) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle(LocaleController.getString("AppName", NUM));
-        builder.setMessage(str);
-        builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-        builder.show();
+        new AlertDialog.Builder(getContext()).setTitle(LocaleController.getString("AppName", NUM)).setMessage(str).setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null).show();
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x018f A[Catch:{ Exception -> 0x01ae }] */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x01dd  */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x020d  */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x0220 A[SYNTHETIC, Splitter:B:83:0x0220] */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x01b1 A[Catch:{ Exception -> 0x01d0 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x01ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x022f  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x0243 A[SYNTHETIC, Splitter:B:87:0x0243] */
     @android.annotation.SuppressLint({"NewApi"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void listRoots() {
         /*
-            r13 = this;
-            java.lang.String r0 = "Telegram"
-            r1 = 0
-            r13.currentDir = r1
-            r2 = 0
-            r13.hasFiles = r2
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r2 = r13.items
-            r2.clear()
-            java.util.HashSet r2 = new java.util.HashSet
-            r2.<init>()
-            java.io.File r3 = android.os.Environment.getExternalStorageDirectory()
-            java.lang.String r3 = r3.getPath()
-            android.os.Environment.isExternalStorageRemovable()
-            java.lang.String r4 = android.os.Environment.getExternalStorageState()
-            java.lang.String r5 = "mounted"
-            boolean r5 = r4.equals(r5)
-            r6 = 2131625448(0x7f0e05e8, float:1.8878104E38)
-            java.lang.String r7 = "ExternalFolderInfo"
-            r8 = 2131165406(0x7var_de, float:1.7945028E38)
-            r9 = 2131627263(0x7f0e0cff, float:1.8881785E38)
-            java.lang.String r10 = "SdCard"
-            if (r5 != 0) goto L_0x003e
-            java.lang.String r5 = "mounted_ro"
-            boolean r4 = r4.equals(r5)
-            if (r4 == 0) goto L_0x0081
-        L_0x003e:
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r4 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
+            r16 = this;
+            r1 = r16
+            java.lang.String r2 = "Telegram"
+            r3 = 0
+            r1.currentDir = r3
+            r0 = 0
+            r1.hasFiles = r0
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r0 = r1.items
+            r0.clear()
+            java.util.HashSet r4 = new java.util.HashSet
             r4.<init>()
-            boolean r5 = android.os.Environment.isExternalStorageRemovable()
-            if (r5 == 0) goto L_0x0058
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r10, r9)
-            r4.title = r5
-            r4.icon = r8
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r4.subtitle = r5
-            goto L_0x0073
-        L_0x0058:
-            r5 = 2131625826(0x7f0e0762, float:1.887887E38)
-            java.lang.String r11 = "InternalStorage"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
-            r4.title = r5
-            r5 = 2131165408(0x7var_e0, float:1.7945032E38)
-            r4.icon = r5
-            r5 = 2131625825(0x7f0e0761, float:1.8878869E38)
-            java.lang.String r11 = "InternalFolderInfo"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
-            r4.subtitle = r5
-        L_0x0073:
-            java.io.File r5 = android.os.Environment.getExternalStorageDirectory()
-            r4.file = r5
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r5 = r13.items
-            r5.add(r4)
-            r2.add(r3)
-        L_0x0081:
-            java.io.BufferedReader r3 = new java.io.BufferedReader     // Catch:{ Exception -> 0x0171, all -> 0x016e }
-            java.io.FileReader r4 = new java.io.FileReader     // Catch:{ Exception -> 0x0171, all -> 0x016e }
-            java.lang.String r5 = "/proc/mounts"
-            r4.<init>(r5)     // Catch:{ Exception -> 0x0171, all -> 0x016e }
-            r3.<init>(r4)     // Catch:{ Exception -> 0x0171, all -> 0x016e }
-        L_0x008d:
-            java.lang.String r4 = r3.readLine()     // Catch:{ Exception -> 0x016c }
-            if (r4 == 0) goto L_0x0168
-            java.lang.String r5 = "vfat"
-            boolean r5 = r4.contains(r5)     // Catch:{ Exception -> 0x016c }
-            if (r5 != 0) goto L_0x00a3
-            java.lang.String r5 = "/mnt"
-            boolean r5 = r4.contains(r5)     // Catch:{ Exception -> 0x016c }
-            if (r5 == 0) goto L_0x008d
-        L_0x00a3:
-            boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x016c }
-            if (r5 == 0) goto L_0x00aa
-            org.telegram.messenger.FileLog.d(r4)     // Catch:{ Exception -> 0x016c }
-        L_0x00aa:
-            java.util.StringTokenizer r5 = new java.util.StringTokenizer     // Catch:{ Exception -> 0x016c }
-            java.lang.String r11 = " "
-            r5.<init>(r4, r11)     // Catch:{ Exception -> 0x016c }
-            r5.nextToken()     // Catch:{ Exception -> 0x016c }
-            java.lang.String r5 = r5.nextToken()     // Catch:{ Exception -> 0x016c }
-            boolean r11 = r2.contains(r5)     // Catch:{ Exception -> 0x016c }
-            if (r11 == 0) goto L_0x00bf
-            goto L_0x008d
-        L_0x00bf:
-            java.lang.String r11 = "/dev/block/vold"
-            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016c }
-            if (r11 == 0) goto L_0x008d
-            java.lang.String r11 = "/mnt/secure"
-            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016c }
-            if (r11 != 0) goto L_0x008d
-            java.lang.String r11 = "/mnt/asec"
-            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016c }
-            if (r11 != 0) goto L_0x008d
-            java.lang.String r11 = "/mnt/obb"
-            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016c }
-            if (r11 != 0) goto L_0x008d
-            java.lang.String r11 = "/dev/mapper"
-            boolean r11 = r4.contains(r11)     // Catch:{ Exception -> 0x016c }
-            if (r11 != 0) goto L_0x008d
-            java.lang.String r11 = "tmpfs"
-            boolean r4 = r4.contains(r11)     // Catch:{ Exception -> 0x016c }
-            if (r4 != 0) goto L_0x008d
-            java.io.File r4 = new java.io.File     // Catch:{ Exception -> 0x016c }
-            r4.<init>(r5)     // Catch:{ Exception -> 0x016c }
-            boolean r4 = r4.isDirectory()     // Catch:{ Exception -> 0x016c }
-            if (r4 != 0) goto L_0x0126
-            r4 = 47
-            int r4 = r5.lastIndexOf(r4)     // Catch:{ Exception -> 0x016c }
-            r11 = -1
-            if (r4 == r11) goto L_0x0126
-            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x016c }
-            r11.<init>()     // Catch:{ Exception -> 0x016c }
-            java.lang.String r12 = "/storage/"
-            r11.append(r12)     // Catch:{ Exception -> 0x016c }
-            int r4 = r4 + 1
-            java.lang.String r4 = r5.substring(r4)     // Catch:{ Exception -> 0x016c }
-            r11.append(r4)     // Catch:{ Exception -> 0x016c }
-            java.lang.String r4 = r11.toString()     // Catch:{ Exception -> 0x016c }
-            java.io.File r11 = new java.io.File     // Catch:{ Exception -> 0x016c }
-            r11.<init>(r4)     // Catch:{ Exception -> 0x016c }
-            boolean r11 = r11.isDirectory()     // Catch:{ Exception -> 0x016c }
-            if (r11 == 0) goto L_0x0126
-            r5 = r4
-        L_0x0126:
-            r2.add(r5)     // Catch:{ Exception -> 0x016c }
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r4 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem     // Catch:{ Exception -> 0x0162 }
-            r4.<init>()     // Catch:{ Exception -> 0x0162 }
-            java.lang.String r11 = r5.toLowerCase()     // Catch:{ Exception -> 0x0162 }
-            java.lang.String r12 = "sd"
-            boolean r11 = r11.contains(r12)     // Catch:{ Exception -> 0x0162 }
-            if (r11 == 0) goto L_0x0141
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r10, r9)     // Catch:{ Exception -> 0x0162 }
-            r4.title = r11     // Catch:{ Exception -> 0x0162 }
-            goto L_0x014c
-        L_0x0141:
-            java.lang.String r11 = "ExternalStorage"
-            r12 = 2131625449(0x7f0e05e9, float:1.8878106E38)
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r12)     // Catch:{ Exception -> 0x0162 }
-            r4.title = r11     // Catch:{ Exception -> 0x0162 }
-        L_0x014c:
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r7, r6)     // Catch:{ Exception -> 0x0162 }
-            r4.subtitle = r11     // Catch:{ Exception -> 0x0162 }
-            r4.icon = r8     // Catch:{ Exception -> 0x0162 }
-            java.io.File r11 = new java.io.File     // Catch:{ Exception -> 0x0162 }
-            r11.<init>(r5)     // Catch:{ Exception -> 0x0162 }
-            r4.file = r11     // Catch:{ Exception -> 0x0162 }
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r5 = r13.items     // Catch:{ Exception -> 0x0162 }
-            r5.add(r4)     // Catch:{ Exception -> 0x0162 }
-            goto L_0x008d
-        L_0x0162:
-            r4 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)     // Catch:{ Exception -> 0x016c }
-            goto L_0x008d
-        L_0x0168:
-            r3.close()     // Catch:{ Exception -> 0x017c }
-            goto L_0x0180
+            boolean r0 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
+            r5 = 2131625841(0x7f0e0771, float:1.8878901E38)
+            java.lang.String r6 = "InternalFolderInfo"
+            r7 = 2131165409(0x7var_e1, float:1.7945034E38)
+            r8 = 2131625842(0x7f0e0772, float:1.8878903E38)
+            java.lang.String r9 = "InternalStorage"
+            if (r0 != 0) goto L_0x003f
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
+            r0.<init>()
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r8)
+            r0.title = r4
+            r0.icon = r7
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r5)
+            r0.subtitle = r4
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r4 = r1.items
+            r4.add(r0)
+            goto L_0x01a2
+        L_0x003f:
+            java.io.File r0 = android.os.Environment.getExternalStorageDirectory()
+            java.lang.String r0 = r0.getPath()
+            java.lang.String r10 = android.os.Environment.getExternalStorageState()
+            java.lang.String r11 = "mounted"
+            boolean r11 = r10.equals(r11)
+            r12 = 2131625464(0x7f0e05f8, float:1.8878137E38)
+            java.lang.String r13 = "ExternalFolderInfo"
+            r14 = 2131165407(0x7var_df, float:1.794503E38)
+            r15 = 2131627291(0x7f0e0d1b, float:1.8881842E38)
+            java.lang.String r5 = "SdCard"
+            if (r11 != 0) goto L_0x0068
+            java.lang.String r11 = "mounted_ro"
+            boolean r10 = r10.equals(r11)
+            if (r10 == 0) goto L_0x00a1
+        L_0x0068:
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r10 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
+            r10.<init>()
+            boolean r11 = android.os.Environment.isExternalStorageRemovable()
+            if (r11 == 0) goto L_0x0082
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r5, r15)
+            r10.title = r6
+            r10.icon = r14
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r13, r12)
+            r10.subtitle = r6
+            goto L_0x0093
+        L_0x0082:
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
+            r10.title = r8
+            r10.icon = r7
+            r7 = 2131625841(0x7f0e0771, float:1.8878901E38)
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)
+            r10.subtitle = r6
+        L_0x0093:
+            java.io.File r6 = android.os.Environment.getExternalStorageDirectory()
+            r10.file = r6
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r6 = r1.items
+            r6.add(r10)
+            r4.add(r0)
+        L_0x00a1:
+            java.io.BufferedReader r6 = new java.io.BufferedReader     // Catch:{ Exception -> 0x0192, all -> 0x018e }
+            java.io.FileReader r0 = new java.io.FileReader     // Catch:{ Exception -> 0x0192, all -> 0x018e }
+            java.lang.String r7 = "/proc/mounts"
+            r0.<init>(r7)     // Catch:{ Exception -> 0x0192, all -> 0x018e }
+            r6.<init>(r0)     // Catch:{ Exception -> 0x0192, all -> 0x018e }
+        L_0x00ad:
+            java.lang.String r0 = r6.readLine()     // Catch:{ Exception -> 0x018c }
+            if (r0 == 0) goto L_0x0188
+            java.lang.String r7 = "vfat"
+            boolean r7 = r0.contains(r7)     // Catch:{ Exception -> 0x018c }
+            if (r7 != 0) goto L_0x00c3
+            java.lang.String r7 = "/mnt"
+            boolean r7 = r0.contains(r7)     // Catch:{ Exception -> 0x018c }
+            if (r7 == 0) goto L_0x00ad
+        L_0x00c3:
+            boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x018c }
+            if (r7 == 0) goto L_0x00ca
+            org.telegram.messenger.FileLog.d(r0)     // Catch:{ Exception -> 0x018c }
+        L_0x00ca:
+            java.util.StringTokenizer r7 = new java.util.StringTokenizer     // Catch:{ Exception -> 0x018c }
+            java.lang.String r8 = " "
+            r7.<init>(r0, r8)     // Catch:{ Exception -> 0x018c }
+            r7.nextToken()     // Catch:{ Exception -> 0x018c }
+            java.lang.String r7 = r7.nextToken()     // Catch:{ Exception -> 0x018c }
+            boolean r8 = r4.contains(r7)     // Catch:{ Exception -> 0x018c }
+            if (r8 == 0) goto L_0x00df
+            goto L_0x00ad
+        L_0x00df:
+            java.lang.String r8 = "/dev/block/vold"
+            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x018c }
+            if (r8 == 0) goto L_0x00ad
+            java.lang.String r8 = "/mnt/secure"
+            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x018c }
+            if (r8 != 0) goto L_0x00ad
+            java.lang.String r8 = "/mnt/asec"
+            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x018c }
+            if (r8 != 0) goto L_0x00ad
+            java.lang.String r8 = "/mnt/obb"
+            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x018c }
+            if (r8 != 0) goto L_0x00ad
+            java.lang.String r8 = "/dev/mapper"
+            boolean r8 = r0.contains(r8)     // Catch:{ Exception -> 0x018c }
+            if (r8 != 0) goto L_0x00ad
+            java.lang.String r8 = "tmpfs"
+            boolean r0 = r0.contains(r8)     // Catch:{ Exception -> 0x018c }
+            if (r0 != 0) goto L_0x00ad
+            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x018c }
+            r0.<init>(r7)     // Catch:{ Exception -> 0x018c }
+            boolean r0 = r0.isDirectory()     // Catch:{ Exception -> 0x018c }
+            if (r0 != 0) goto L_0x0146
+            r0 = 47
+            int r0 = r7.lastIndexOf(r0)     // Catch:{ Exception -> 0x018c }
+            r8 = -1
+            if (r0 == r8) goto L_0x0146
+            java.lang.StringBuilder r8 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x018c }
+            r8.<init>()     // Catch:{ Exception -> 0x018c }
+            java.lang.String r9 = "/storage/"
+            r8.append(r9)     // Catch:{ Exception -> 0x018c }
+            int r0 = r0 + 1
+            java.lang.String r0 = r7.substring(r0)     // Catch:{ Exception -> 0x018c }
+            r8.append(r0)     // Catch:{ Exception -> 0x018c }
+            java.lang.String r0 = r8.toString()     // Catch:{ Exception -> 0x018c }
+            java.io.File r8 = new java.io.File     // Catch:{ Exception -> 0x018c }
+            r8.<init>(r0)     // Catch:{ Exception -> 0x018c }
+            boolean r8 = r8.isDirectory()     // Catch:{ Exception -> 0x018c }
+            if (r8 == 0) goto L_0x0146
+            r7 = r0
+        L_0x0146:
+            r4.add(r7)     // Catch:{ Exception -> 0x018c }
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem     // Catch:{ Exception -> 0x0182 }
+            r0.<init>()     // Catch:{ Exception -> 0x0182 }
+            java.lang.String r8 = r7.toLowerCase()     // Catch:{ Exception -> 0x0182 }
+            java.lang.String r9 = "sd"
+            boolean r8 = r8.contains(r9)     // Catch:{ Exception -> 0x0182 }
+            if (r8 == 0) goto L_0x0161
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r5, r15)     // Catch:{ Exception -> 0x0182 }
+            r0.title = r8     // Catch:{ Exception -> 0x0182 }
+            goto L_0x016c
+        L_0x0161:
+            java.lang.String r8 = "ExternalStorage"
+            r9 = 2131625465(0x7f0e05f9, float:1.8878139E38)
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0182 }
+            r0.title = r8     // Catch:{ Exception -> 0x0182 }
         L_0x016c:
-            r2 = move-exception
-            goto L_0x0173
-        L_0x016e:
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r13, r12)     // Catch:{ Exception -> 0x0182 }
+            r0.subtitle = r8     // Catch:{ Exception -> 0x0182 }
+            r0.icon = r14     // Catch:{ Exception -> 0x0182 }
+            java.io.File r8 = new java.io.File     // Catch:{ Exception -> 0x0182 }
+            r8.<init>(r7)     // Catch:{ Exception -> 0x0182 }
+            r0.file = r8     // Catch:{ Exception -> 0x0182 }
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r7 = r1.items     // Catch:{ Exception -> 0x0182 }
+            r7.add(r0)     // Catch:{ Exception -> 0x0182 }
+            goto L_0x00ad
+        L_0x0182:
             r0 = move-exception
-            goto L_0x021e
-        L_0x0171:
-            r2 = move-exception
-            r3 = r1
-        L_0x0173:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)     // Catch:{ all -> 0x021c }
-            if (r3 == 0) goto L_0x0180
-            r3.close()     // Catch:{ Exception -> 0x017c }
-            goto L_0x0180
-        L_0x017c:
-            r2 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x0180:
-            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x01ae }
-            java.io.File r3 = android.os.Environment.getExternalStorageDirectory()     // Catch:{ Exception -> 0x01ae }
-            r2.<init>(r3, r0)     // Catch:{ Exception -> 0x01ae }
-            boolean r3 = r2.exists()     // Catch:{ Exception -> 0x01ae }
-            if (r3 == 0) goto L_0x01b2
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r3 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem     // Catch:{ Exception -> 0x01ae }
-            r3.<init>()     // Catch:{ Exception -> 0x01ae }
-            r3.title = r0     // Catch:{ Exception -> 0x01ae }
-            java.lang.String r0 = "AppFolderInfo"
-            r4 = 2131624281(0x7f0e0159, float:1.8875737E38)
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r4)     // Catch:{ Exception -> 0x01ae }
-            r3.subtitle = r0     // Catch:{ Exception -> 0x01ae }
-            r0 = 2131165404(0x7var_dc, float:1.7945024E38)
-            r3.icon = r0     // Catch:{ Exception -> 0x01ae }
-            r3.file = r2     // Catch:{ Exception -> 0x01ae }
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r0 = r13.items     // Catch:{ Exception -> 0x01ae }
-            r0.add(r3)     // Catch:{ Exception -> 0x01ae }
-            goto L_0x01b2
-        L_0x01ae:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x018c }
+            goto L_0x00ad
+        L_0x0188:
+            r6.close()     // Catch:{ Exception -> 0x019d }
+            goto L_0x01a2
+        L_0x018c:
+            r0 = move-exception
+            goto L_0x0194
+        L_0x018e:
+            r0 = move-exception
+            r2 = r0
+            goto L_0x0241
+        L_0x0192:
+            r0 = move-exception
+            r6 = r3
+        L_0x0194:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x023e }
+            if (r6 == 0) goto L_0x01a2
+            r6.close()     // Catch:{ Exception -> 0x019d }
+            goto L_0x01a2
+        L_0x019d:
+            r0 = move-exception
+            r4 = r0
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)
+        L_0x01a2:
+            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x01d0 }
+            java.io.File r4 = android.os.Environment.getExternalStorageDirectory()     // Catch:{ Exception -> 0x01d0 }
+            r0.<init>(r4, r2)     // Catch:{ Exception -> 0x01d0 }
+            boolean r4 = r0.exists()     // Catch:{ Exception -> 0x01d0 }
+            if (r4 == 0) goto L_0x01d4
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r4 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem     // Catch:{ Exception -> 0x01d0 }
+            r4.<init>()     // Catch:{ Exception -> 0x01d0 }
+            r4.title = r2     // Catch:{ Exception -> 0x01d0 }
+            java.lang.String r2 = "AppFolderInfo"
+            r5 = 2131624281(0x7f0e0159, float:1.8875737E38)
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r5)     // Catch:{ Exception -> 0x01d0 }
+            r4.subtitle = r2     // Catch:{ Exception -> 0x01d0 }
+            r2 = 2131165405(0x7var_dd, float:1.7945026E38)
+            r4.icon = r2     // Catch:{ Exception -> 0x01d0 }
+            r4.file = r0     // Catch:{ Exception -> 0x01d0 }
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r0 = r1.items     // Catch:{ Exception -> 0x01d0 }
+            r0.add(r4)     // Catch:{ Exception -> 0x01d0 }
+            goto L_0x01d4
+        L_0x01d0:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x01b2:
+        L_0x01d4:
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
             r0.<init>()
-            r2 = 2131625667(0x7f0e06c3, float:1.8878548E38)
-            java.lang.String r3 = "Gallery"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r2 = 2131625683(0x7f0e06d3, float:1.887858E38)
+            java.lang.String r4 = "Gallery"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.title = r2
-            r2 = 2131625668(0x7f0e06c4, float:1.887855E38)
-            java.lang.String r3 = "GalleryInfo"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r2 = 2131625684(0x7f0e06d4, float:1.8878583E38)
+            java.lang.String r4 = "GalleryInfo"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.subtitle = r2
-            r2 = 2131165405(0x7var_dd, float:1.7945026E38)
+            r2 = 2131165406(0x7var_de, float:1.7945028E38)
             r0.icon = r2
-            r0.file = r1
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r2 = r13.items
+            r0.file = r3
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r2 = r1.items
             r2.add(r0)
-            boolean r0 = r13.allowMusic
-            if (r0 == 0) goto L_0x0204
+            boolean r0 = r1.allowMusic
+            if (r0 == 0) goto L_0x0226
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
             r0.<init>()
-            r2 = 2131624391(0x7f0e01c7, float:1.887596E38)
-            java.lang.String r3 = "AttachMusic"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r2 = 2131624398(0x7f0e01ce, float:1.8875975E38)
+            java.lang.String r4 = "AttachMusic"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.title = r2
-            r2 = 2131626204(0x7f0e08dc, float:1.8879638E38)
-            java.lang.String r3 = "MusicInfo"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r2 = 2131626226(0x7f0e08f2, float:1.8879682E38)
+            java.lang.String r4 = "MusicInfo"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.subtitle = r2
-            r2 = 2131165407(0x7var_df, float:1.794503E38)
+            r2 = 2131165408(0x7var_e0, float:1.7945032E38)
             r0.icon = r2
-            r0.file = r1
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r1 = r13.items
-            r1.add(r0)
-        L_0x0204:
-            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r0 = r13.recentItems
+            r0.file = r3
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r2 = r1.items
+            r2.add(r0)
+        L_0x0226:
+            java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r0 = r1.recentItems
             boolean r0 = r0.isEmpty()
-            r1 = 1
-            if (r0 != 0) goto L_0x020f
-            r13.hasFiles = r1
-        L_0x020f:
-            org.telegram.ui.Components.RecyclerListView r0 = r13.listView
+            r2 = 1
+            if (r0 != 0) goto L_0x0231
+            r1.hasFiles = r2
+        L_0x0231:
+            org.telegram.ui.Components.RecyclerListView r0 = r1.listView
             org.telegram.messenger.AndroidUtilities.clearDrawableAnimation(r0)
-            r13.scrolling = r1
-            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListAdapter r0 = r13.listAdapter
+            r1.scrolling = r2
+            org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListAdapter r0 = r1.listAdapter
             r0.notifyDataSetChanged()
             return
-        L_0x021c:
+        L_0x023e:
             r0 = move-exception
-            r1 = r3
-        L_0x021e:
-            if (r1 == 0) goto L_0x0228
-            r1.close()     // Catch:{ Exception -> 0x0224 }
-            goto L_0x0228
-        L_0x0224:
-            r1 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-        L_0x0228:
-            goto L_0x022a
-        L_0x0229:
-            throw r0
-        L_0x022a:
-            goto L_0x0229
+            r2 = r0
+            r3 = r6
+        L_0x0241:
+            if (r3 == 0) goto L_0x024c
+            r3.close()     // Catch:{ Exception -> 0x0247 }
+            goto L_0x024c
+        L_0x0247:
+            r0 = move-exception
+            r3 = r0
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
+        L_0x024c:
+            goto L_0x024e
+        L_0x024d:
+            throw r2
+        L_0x024e:
+            goto L_0x024d
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.listRoots():void");
     }
@@ -1437,21 +1518,65 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         }
     }
 
-    public class SearchAdapter extends RecyclerListView.SelectionAdapter {
+    public class SearchAdapter extends RecyclerListView.SectionsAdapter {
+        /* access modifiers changed from: private */
+        public int animationIndex = -1;
+        private Runnable clearCurrentResultsRunnable = new Runnable() {
+            public void run() {
+                if (SearchAdapter.this.isLoading) {
+                    SearchAdapter.this.messages.clear();
+                    SearchAdapter.this.sections.clear();
+                    SearchAdapter.this.sectionArrays.clear();
+                    SearchAdapter.this.notifyDataSetChanged();
+                }
+            }
+        };
+        private String currentDataQuery;
+        private long currentSearchDialogId;
+        private FiltersView.MediaFilterData currentSearchFilter;
+        /* access modifiers changed from: private */
+        public ArrayList<FiltersView.MediaFilterData> currentSearchFilters = new ArrayList<>();
+        private long currentSearchMaxDate;
+        private long currentSearchMinDate;
+        private boolean endReached;
+        private boolean firstLoading = true;
+        /* access modifiers changed from: private */
+        public boolean isLoading;
+        private String lastMessagesSearchString;
+        private String lastSearchFilterQueryString;
+        private Runnable localSearchRunnable;
+        private ArrayList<Object> localTipChats = new ArrayList<>();
+        private ArrayList<FiltersView.DateData> localTipDates = new ArrayList<>();
         private Context mContext;
+        /* access modifiers changed from: private */
+        public final FilteredSearchView.MessageHashId messageHashIdTmp = new FilteredSearchView.MessageHashId(0, 0);
+        public ArrayList<MessageObject> messages = new ArrayList<>();
+        public SparseArray<MessageObject> messagesById = new SparseArray<>();
+        private int nextSearchRate;
+        private int requestIndex;
         /* access modifiers changed from: private */
         public ArrayList<ListItem> searchResult = new ArrayList<>();
         private Runnable searchRunnable;
+        public HashMap<String, ArrayList<MessageObject>> sectionArrays = new HashMap<>();
+        public ArrayList<String> sections = new ArrayList<>();
+
+        public String getLetter(int i) {
+            return null;
+        }
+
+        public int getPositionForScrollProgress(float f) {
+            return 0;
+        }
 
         public SearchAdapter(Context context) {
             this.mContext = context;
         }
 
-        public void search(String str) {
-            Runnable runnable = this.searchRunnable;
+        public void search(String str, boolean z) {
+            Runnable runnable = this.localSearchRunnable;
             if (runnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(runnable);
-                this.searchRunnable = null;
+                this.localSearchRunnable = null;
             }
             if (TextUtils.isEmpty(str)) {
                 if (!this.searchResult.isEmpty()) {
@@ -1461,21 +1586,44 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                     ChatAttachAlertDocumentLayout.this.listView.setAdapter(ChatAttachAlertDocumentLayout.this.listAdapter);
                 }
                 notifyDataSetChanged();
-                return;
+            } else {
+                $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$SVXF_0LRGzSJ2PW8PyIx1rhcirA r0 = new Runnable(str) {
+                    public final /* synthetic */ String f$1;
+
+                    {
+                        this.f$1 = r2;
+                    }
+
+                    public final void run() {
+                        ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$search$1$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1);
+                    }
+                };
+                this.localSearchRunnable = r0;
+                AndroidUtilities.runOnUIThread(r0, 300);
             }
-            $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$SVXF_0LRGzSJ2PW8PyIx1rhcirA r0 = new Runnable(str) {
-                public final /* synthetic */ String f$1;
-
-                {
-                    this.f$1 = r2;
+            if (!ChatAttachAlertDocumentLayout.this.canSelectOnlyImageFiles && ChatAttachAlertDocumentLayout.this.history.isEmpty()) {
+                long j = 0;
+                long j2 = 0;
+                int i = 0;
+                for (int i2 = 0; i2 < this.currentSearchFilters.size(); i2++) {
+                    FiltersView.MediaFilterData mediaFilterData = this.currentSearchFilters.get(i2);
+                    int i3 = mediaFilterData.filterType;
+                    if (i3 == 4) {
+                        TLObject tLObject = mediaFilterData.chat;
+                        if (tLObject instanceof TLRPC$User) {
+                            i = ((TLRPC$User) tLObject).id;
+                        } else if (tLObject instanceof TLRPC$Chat) {
+                            i = -((TLRPC$Chat) tLObject).id;
+                        }
+                    } else if (i3 == 6) {
+                        FiltersView.DateData dateData = mediaFilterData.dateData;
+                        long j3 = dateData.minDate;
+                        j2 = dateData.maxDate;
+                        j = j3;
+                    }
                 }
-
-                public final void run() {
-                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$search$1$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1);
-                }
-            };
-            this.searchRunnable = r0;
-            AndroidUtilities.runOnUIThread(r0, 300);
+                searchGlobal((long) i, j, j2, FiltersView.filters[2], str, z);
+            }
         }
 
         /* access modifiers changed from: private */
@@ -1485,24 +1633,26 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             if (ChatAttachAlertDocumentLayout.this.history.isEmpty()) {
                 arrayList.addAll(0, ChatAttachAlertDocumentLayout.this.recentItems);
             }
-            Utilities.searchQueue.postRunnable(new Runnable(str, arrayList) {
+            Utilities.searchQueue.postRunnable(new Runnable(str, !this.currentSearchFilters.isEmpty(), arrayList) {
                 public final /* synthetic */ String f$1;
-                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ boolean f$2;
+                public final /* synthetic */ ArrayList f$3;
 
                 {
                     this.f$1 = r2;
                     this.f$2 = r3;
+                    this.f$3 = r4;
                 }
 
                 public final void run() {
-                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$null$0$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2);
+                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$search$0$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$ChatAttachAlertDocumentLayout$SearchAdapter(String str, ArrayList arrayList) {
+        /* renamed from: lambda$search$0 */
+        public /* synthetic */ void lambda$search$0$ChatAttachAlertDocumentLayout$SearchAdapter(String str, boolean z, ArrayList arrayList) {
             String lowerCase = str.trim().toLowerCase();
             if (lowerCase.length() == 0) {
                 updateSearchResults(new ArrayList(), str);
@@ -1519,103 +1669,1017 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 strArr[1] = translitString;
             }
             ArrayList arrayList2 = new ArrayList();
-            for (int i2 = 0; i2 < arrayList.size(); i2++) {
-                ListItem listItem = (ListItem) arrayList.get(i2);
-                File file = listItem.file;
-                if (file != null && !file.isDirectory()) {
-                    int i3 = 0;
-                    while (true) {
-                        if (i3 >= i) {
-                            break;
+            if (!z) {
+                for (int i2 = 0; i2 < arrayList.size(); i2++) {
+                    ListItem listItem = (ListItem) arrayList.get(i2);
+                    File file = listItem.file;
+                    if (file != null && !file.isDirectory()) {
+                        int i3 = 0;
+                        while (true) {
+                            if (i3 >= i) {
+                                break;
+                            }
+                            String str2 = strArr[i3];
+                            String str3 = listItem.title;
+                            if (str3 != null ? str3.toLowerCase().contains(str2) : false) {
+                                arrayList2.add(listItem);
+                                break;
+                            }
+                            i3++;
                         }
-                        String str2 = strArr[i3];
-                        String str3 = listItem.title;
-                        if (str3 != null ? str3.toLowerCase().contains(str2) : false) {
-                            arrayList2.add(listItem);
-                            break;
-                        }
-                        i3++;
                     }
                 }
             }
             updateSearchResults(arrayList2, str);
         }
 
-        private void updateSearchResults(ArrayList<ListItem> arrayList, String str) {
-            AndroidUtilities.runOnUIThread(new Runnable(str, arrayList) {
-                public final /* synthetic */ String f$1;
-                public final /* synthetic */ ArrayList f$2;
+        public void loadMore() {
+            if (!ChatAttachAlertDocumentLayout.this.searchAdapter.isLoading && !ChatAttachAlertDocumentLayout.this.searchAdapter.endReached) {
+                searchGlobal(this.currentSearchDialogId, this.currentSearchMinDate, this.currentSearchMaxDate, this.currentSearchFilter, this.lastMessagesSearchString, false);
+            }
+        }
+
+        public void removeSearchFilter(FiltersView.MediaFilterData mediaFilterData) {
+            this.currentSearchFilters.remove(mediaFilterData);
+        }
+
+        /* access modifiers changed from: private */
+        public void addSearchFilter(FiltersView.MediaFilterData mediaFilterData) {
+            if (!this.currentSearchFilters.isEmpty()) {
+                int i = 0;
+                while (i < this.currentSearchFilters.size()) {
+                    if (!mediaFilterData.isSameType(this.currentSearchFilters.get(i))) {
+                        i++;
+                    } else {
+                        return;
+                    }
+                }
+            }
+            this.currentSearchFilters.add(mediaFilterData);
+            ChatAttachAlertDocumentLayout.this.parentAlert.actionBar.setSearchFilter(mediaFilterData);
+            ChatAttachAlertDocumentLayout.this.parentAlert.actionBar.setSearchFieldText("");
+            updateFiltersView(true, (ArrayList<Object>) null, (ArrayList<FiltersView.DateData>) null, true);
+        }
+
+        /* access modifiers changed from: private */
+        /* JADX WARNING: Removed duplicated region for block: B:41:0x0085  */
+        /* JADX WARNING: Removed duplicated region for block: B:46:0x00a5  */
+        /* JADX WARNING: Removed duplicated region for block: B:99:? A[ORIG_RETURN, RETURN, SYNTHETIC] */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public void updateFiltersView(boolean r9, java.util.ArrayList<java.lang.Object> r10, java.util.ArrayList<org.telegram.ui.Adapters.FiltersView.DateData> r11, boolean r12) {
+            /*
+                r8 = this;
+                r0 = 0
+                r1 = 0
+                r2 = 0
+                r3 = 0
+                r4 = 0
+            L_0x0005:
+                java.util.ArrayList<org.telegram.ui.Adapters.FiltersView$MediaFilterData> r5 = r8.currentSearchFilters
+                int r5 = r5.size()
+                r6 = 4
+                r7 = 1
+                if (r1 >= r5) goto L_0x003e
+                java.util.ArrayList<org.telegram.ui.Adapters.FiltersView$MediaFilterData> r5 = r8.currentSearchFilters
+                java.lang.Object r5 = r5.get(r1)
+                org.telegram.ui.Adapters.FiltersView$MediaFilterData r5 = (org.telegram.ui.Adapters.FiltersView.MediaFilterData) r5
+                boolean r5 = r5.isMedia()
+                if (r5 == 0) goto L_0x001f
+                r2 = 1
+                goto L_0x003b
+            L_0x001f:
+                java.util.ArrayList<org.telegram.ui.Adapters.FiltersView$MediaFilterData> r5 = r8.currentSearchFilters
+                java.lang.Object r5 = r5.get(r1)
+                org.telegram.ui.Adapters.FiltersView$MediaFilterData r5 = (org.telegram.ui.Adapters.FiltersView.MediaFilterData) r5
+                int r5 = r5.filterType
+                if (r5 != r6) goto L_0x002d
+                r3 = 1
+                goto L_0x003b
+            L_0x002d:
+                java.util.ArrayList<org.telegram.ui.Adapters.FiltersView$MediaFilterData> r5 = r8.currentSearchFilters
+                java.lang.Object r5 = r5.get(r1)
+                org.telegram.ui.Adapters.FiltersView$MediaFilterData r5 = (org.telegram.ui.Adapters.FiltersView.MediaFilterData) r5
+                int r5 = r5.filterType
+                r6 = 6
+                if (r5 != r6) goto L_0x003b
+                r4 = 1
+            L_0x003b:
+                int r1 = r1 + 1
+                goto L_0x0005
+            L_0x003e:
+                if (r10 == 0) goto L_0x0046
+                boolean r1 = r10.isEmpty()
+                if (r1 == 0) goto L_0x004e
+            L_0x0046:
+                if (r11 == 0) goto L_0x0050
+                boolean r1 = r11.isEmpty()
+                if (r1 != 0) goto L_0x0050
+            L_0x004e:
+                r1 = 1
+                goto L_0x0051
+            L_0x0050:
+                r1 = 0
+            L_0x0051:
+                r5 = 0
+                if (r2 != 0) goto L_0x0059
+                if (r1 != 0) goto L_0x0059
+                if (r9 == 0) goto L_0x0059
+                goto L_0x0082
+            L_0x0059:
+                if (r1 == 0) goto L_0x0082
+                if (r10 == 0) goto L_0x0066
+                boolean r9 = r10.isEmpty()
+                if (r9 != 0) goto L_0x0066
+                if (r3 != 0) goto L_0x0066
+                goto L_0x0067
+            L_0x0066:
+                r10 = r5
+            L_0x0067:
+                if (r11 == 0) goto L_0x0072
+                boolean r9 = r11.isEmpty()
+                if (r9 != 0) goto L_0x0072
+                if (r4 != 0) goto L_0x0072
+                goto L_0x0073
+            L_0x0072:
+                r11 = r5
+            L_0x0073:
+                if (r10 != 0) goto L_0x0077
+                if (r11 == 0) goto L_0x0082
+            L_0x0077:
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r9 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Adapters.FiltersView r9 = r9.filtersView
+                r9.setUsersAndDates(r10, r11, r0)
+                r9 = 1
+                goto L_0x0083
+            L_0x0082:
+                r9 = 0
+            L_0x0083:
+                if (r9 != 0) goto L_0x008e
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r10 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Adapters.FiltersView r10 = r10.filtersView
+                r10.setUsersAndDates(r5, r5, r0)
+            L_0x008e:
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r10 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Adapters.FiltersView r10 = r10.filtersView
+                r10.setEnabled(r9)
+                if (r9 == 0) goto L_0x00a5
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r10 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Adapters.FiltersView r10 = r10.filtersView
+                java.lang.Object r10 = r10.getTag()
+                if (r10 != 0) goto L_0x00b3
+            L_0x00a5:
+                if (r9 != 0) goto L_0x00b4
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r10 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Adapters.FiltersView r10 = r10.filtersView
+                java.lang.Object r10 = r10.getTag()
+                if (r10 != 0) goto L_0x00b4
+            L_0x00b3:
+                return
+            L_0x00b4:
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r10 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Adapters.FiltersView r10 = r10.filtersView
+                if (r9 == 0) goto L_0x00c0
+                java.lang.Integer r5 = java.lang.Integer.valueOf(r7)
+            L_0x00c0:
+                r10.setTag(r5)
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r10 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                android.animation.AnimatorSet r10 = r10.filtersViewAnimator
+                if (r10 == 0) goto L_0x00d4
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r10 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                android.animation.AnimatorSet r10 = r10.filtersViewAnimator
+                r10.cancel()
+            L_0x00d4:
+                r10 = 1110441984(0x42300000, float:44.0)
+                r11 = 0
+                if (r12 == 0) goto L_0x0194
+                if (r9 == 0) goto L_0x00e4
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r12 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Adapters.FiltersView r12 = r12.filtersView
+                r12.setVisibility(r0)
+            L_0x00e4:
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r12 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                android.animation.AnimatorSet r1 = new android.animation.AnimatorSet
+                r1.<init>()
+                android.animation.AnimatorSet unused = r12.filtersViewAnimator = r1
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r12 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                android.animation.AnimatorSet r12 = r12.filtersViewAnimator
+                android.animation.Animator[] r1 = new android.animation.Animator[r6]
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r2 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Components.RecyclerListView r2 = r2.listView
+                android.util.Property r3 = android.view.View.TRANSLATION_Y
+                float[] r4 = new float[r7]
+                if (r9 == 0) goto L_0x0108
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                float r5 = (float) r5
+                goto L_0x0109
+            L_0x0108:
+                r5 = 0
+            L_0x0109:
+                r4[r0] = r5
+                android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r3, r4)
+                r1[r0] = r2
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r2 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Adapters.FiltersView r2 = r2.filtersView
+                android.util.Property r3 = android.view.View.TRANSLATION_Y
+                float[] r4 = new float[r7]
+                if (r9 == 0) goto L_0x011f
+                r5 = 0
+                goto L_0x0125
+            L_0x011f:
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                int r5 = -r5
+                float r5 = (float) r5
+            L_0x0125:
+                r4[r0] = r5
+                android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r3, r4)
+                r1[r7] = r2
+                r2 = 2
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r3 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Components.FlickerLoadingView r3 = r3.loadingView
+                android.util.Property r4 = android.view.View.TRANSLATION_Y
+                float[] r5 = new float[r7]
+                if (r9 == 0) goto L_0x0140
+                int r6 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                float r6 = (float) r6
+                goto L_0x0141
+            L_0x0140:
+                r6 = 0
+            L_0x0141:
+                r5[r0] = r6
+                android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5)
+                r1[r2] = r3
+                r2 = 3
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r3 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Components.StickerEmptyView r3 = r3.emptyView
+                android.util.Property r4 = android.view.View.TRANSLATION_Y
+                float[] r5 = new float[r7]
+                if (r9 == 0) goto L_0x015b
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                float r11 = (float) r9
+            L_0x015b:
+                r5[r0] = r11
+                android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5)
+                r1[r2] = r9
+                r12.playTogether(r1)
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r9 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                android.animation.AnimatorSet r9 = r9.filtersViewAnimator
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout$SearchAdapter$2 r10 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$SearchAdapter$2
+                r10.<init>()
+                r9.addListener(r10)
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r9 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                android.animation.AnimatorSet r9 = r9.filtersViewAnimator
+                org.telegram.ui.Components.CubicBezierInterpolator r10 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_OUT
+                r9.setInterpolator(r10)
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r9 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                android.animation.AnimatorSet r9 = r9.filtersViewAnimator
+                r10 = 180(0xb4, double:8.9E-322)
+                r9.setDuration(r10)
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r9 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                android.animation.AnimatorSet r9 = r9.filtersViewAnimator
+                r9.start()
+                goto L_0x01f5
+            L_0x0194:
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r12 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Adapters.FiltersView r12 = r12.filtersView
+                androidx.recyclerview.widget.RecyclerView$Adapter r12 = r12.getAdapter()
+                r12.notifyDataSetChanged()
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r12 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Components.RecyclerListView r12 = r12.listView
+                if (r9 == 0) goto L_0x01af
+                int r1 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                float r1 = (float) r1
+                goto L_0x01b0
+            L_0x01af:
+                r1 = 0
+            L_0x01b0:
+                r12.setTranslationY(r1)
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r12 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Adapters.FiltersView r12 = r12.filtersView
+                if (r9 == 0) goto L_0x01bd
+                r1 = 0
+                goto L_0x01c3
+            L_0x01bd:
+                int r1 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                int r1 = -r1
+                float r1 = (float) r1
+            L_0x01c3:
+                r12.setTranslationY(r1)
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r12 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Components.FlickerLoadingView r12 = r12.loadingView
+                if (r9 == 0) goto L_0x01d4
+                int r1 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                float r1 = (float) r1
+                goto L_0x01d5
+            L_0x01d4:
+                r1 = 0
+            L_0x01d5:
+                r12.setTranslationY(r1)
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r12 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Components.StickerEmptyView r12 = r12.emptyView
+                if (r9 == 0) goto L_0x01e5
+                int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                float r11 = (float) r10
+            L_0x01e5:
+                r12.setTranslationY(r11)
+                org.telegram.ui.Components.ChatAttachAlertDocumentLayout r10 = org.telegram.ui.Components.ChatAttachAlertDocumentLayout.this
+                org.telegram.ui.Adapters.FiltersView r10 = r10.filtersView
+                if (r9 == 0) goto L_0x01f1
+                goto L_0x01f2
+            L_0x01f1:
+                r0 = 4
+            L_0x01f2:
+                r10.setVisibility(r0)
+            L_0x01f5:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.SearchAdapter.updateFiltersView(boolean, java.util.ArrayList, java.util.ArrayList, boolean):void");
+        }
+
+        private void searchGlobal(long j, long j2, long j3, FiltersView.MediaFilterData mediaFilterData, String str, boolean z) {
+            String str2;
+            boolean z2;
+            long j4 = j;
+            long j5 = j2;
+            long j6 = j3;
+            FiltersView.MediaFilterData mediaFilterData2 = mediaFilterData;
+            String format = String.format(Locale.ENGLISH, "%d%d%d%d%s", new Object[]{Long.valueOf(j), Long.valueOf(j2), Long.valueOf(j3), Integer.valueOf(mediaFilterData2.filterType), str});
+            String str3 = this.lastSearchFilterQueryString;
+            boolean z3 = str3 != null && str3.equals(format);
+            if (z3 || !z) {
+                str2 = format;
+                z2 = false;
+            } else {
+                str2 = format;
+                z2 = true;
+            }
+            if (j4 == this.currentSearchDialogId && this.currentSearchMinDate == j5) {
+                int i = (this.currentSearchMaxDate > j6 ? 1 : (this.currentSearchMaxDate == j6 ? 0 : -1));
+            }
+            this.currentSearchFilter = mediaFilterData2;
+            this.currentSearchDialogId = j4;
+            this.currentSearchMinDate = j5;
+            this.currentSearchMaxDate = j6;
+            Runnable runnable = this.searchRunnable;
+            if (runnable != null) {
+                AndroidUtilities.cancelRunOnUIThread(runnable);
+            }
+            AndroidUtilities.cancelRunOnUIThread(this.clearCurrentResultsRunnable);
+            if (!z3 || !z) {
+                if (z2) {
+                    this.messages.clear();
+                    this.sections.clear();
+                    this.sectionArrays.clear();
+                    this.isLoading = true;
+                    ChatAttachAlertDocumentLayout.this.emptyView.setVisibility(0);
+                    notifyDataSetChanged();
+                    this.requestIndex++;
+                    this.firstLoading = true;
+                    if (ChatAttachAlertDocumentLayout.this.listView.getPinnedHeader() != null) {
+                        ChatAttachAlertDocumentLayout.this.listView.getPinnedHeader().setAlpha(0.0f);
+                    }
+                    this.localTipChats.clear();
+                    this.localTipDates.clear();
+                }
+                this.isLoading = true;
+                notifyDataSetChanged();
+                if (!z3) {
+                    this.clearCurrentResultsRunnable.run();
+                    ChatAttachAlertDocumentLayout.this.emptyView.showProgress(true, !z);
+                }
+                if (TextUtils.isEmpty(str)) {
+                    this.localTipDates.clear();
+                    this.localTipChats.clear();
+                    updateFiltersView(false, (ArrayList<Object>) null, (ArrayList<FiltersView.DateData>) null, true);
+                }
+                int i2 = this.requestIndex + 1;
+                this.requestIndex = i2;
+                $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$cZXo8Z1zdIhBeBIhlmvMGF7iHgw r15 = r0;
+                $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$cZXo8Z1zdIhBeBIhlmvMGF7iHgw r0 = new Runnable(j, str, mediaFilterData, AccountInstance.getInstance(UserConfig.selectedAccount), j2, j3, z3, str2, i2) {
+                    public final /* synthetic */ long f$1;
+                    public final /* synthetic */ String f$2;
+                    public final /* synthetic */ FiltersView.MediaFilterData f$3;
+                    public final /* synthetic */ AccountInstance f$4;
+                    public final /* synthetic */ long f$5;
+                    public final /* synthetic */ long f$6;
+                    public final /* synthetic */ boolean f$7;
+                    public final /* synthetic */ String f$8;
+                    public final /* synthetic */ int f$9;
+
+                    {
+                        this.f$1 = r2;
+                        this.f$2 = r4;
+                        this.f$3 = r5;
+                        this.f$4 = r6;
+                        this.f$5 = r7;
+                        this.f$6 = r9;
+                        this.f$7 = r11;
+                        this.f$8 = r12;
+                        this.f$9 = r13;
+                    }
+
+                    public final void run() {
+                        ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$searchGlobal$4$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
+                    }
+                };
+                this.searchRunnable = r15;
+                AndroidUtilities.runOnUIThread(r15, (!z3 || this.messages.isEmpty()) ? 350 : 0);
+                ChatAttachAlertDocumentLayout.this.loadingView.setViewType(3);
+            }
+        }
+
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v3, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v5, resolved type: org.telegram.tgnet.TLRPC$TL_messages_search} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v6, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v7, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v8, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v9, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+        /* access modifiers changed from: private */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* renamed from: lambda$searchGlobal$4 */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public /* synthetic */ void lambda$searchGlobal$4$ChatAttachAlertDocumentLayout$SearchAdapter(long r21, java.lang.String r23, org.telegram.ui.Adapters.FiltersView.MediaFilterData r24, org.telegram.messenger.AccountInstance r25, long r26, long r28, boolean r30, java.lang.String r31, int r32) {
+            /*
+                r20 = this;
+                r12 = r20
+                r6 = r21
+                r3 = r23
+                r0 = r24
+                r1 = 20
+                r2 = 0
+                r4 = 1000(0x3e8, double:4.94E-321)
+                r8 = 0
+                r10 = 0
+                int r11 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
+                if (r11 == 0) goto L_0x006a
+                org.telegram.tgnet.TLRPC$TL_messages_search r11 = new org.telegram.tgnet.TLRPC$TL_messages_search
+                r11.<init>()
+                r11.q = r3
+                r11.limit = r1
+                org.telegram.tgnet.TLRPC$MessagesFilter r0 = r0.filter
+                r11.filter = r0
+                org.telegram.messenger.MessagesController r0 = r25.getMessagesController()
+                int r1 = (int) r6
+                org.telegram.tgnet.TLRPC$InputPeer r0 = r0.getInputPeer((int) r1)
+                r11.peer = r0
+                int r0 = (r26 > r8 ? 1 : (r26 == r8 ? 0 : -1))
+                if (r0 <= 0) goto L_0x0035
+                long r0 = r26 / r4
+                int r1 = (int) r0
+                r11.min_date = r1
+            L_0x0035:
+                int r0 = (r28 > r8 ? 1 : (r28 == r8 ? 0 : -1))
+                if (r0 <= 0) goto L_0x003e
+                long r0 = r28 / r4
+                int r1 = (int) r0
+                r11.max_date = r1
+            L_0x003e:
+                if (r30 == 0) goto L_0x0065
+                java.lang.String r0 = r12.lastMessagesSearchString
+                boolean r0 = r3.equals(r0)
+                if (r0 == 0) goto L_0x0065
+                java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r12.messages
+                boolean r0 = r0.isEmpty()
+                if (r0 != 0) goto L_0x0065
+                java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r12.messages
+                int r1 = r0.size()
+                int r1 = r1 + -1
+                java.lang.Object r0 = r0.get(r1)
+                org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
+                int r0 = r0.getId()
+                r11.offset_id = r0
+                goto L_0x0067
+            L_0x0065:
+                r11.offset_id = r2
+            L_0x0067:
+                r13 = r11
+                goto L_0x0100
+            L_0x006a:
+                boolean r11 = android.text.TextUtils.isEmpty(r23)
+                if (r11 != 0) goto L_0x008d
+                java.util.ArrayList r10 = new java.util.ArrayList
+                r10.<init>()
+                java.util.ArrayList r17 = new java.util.ArrayList
+                r17.<init>()
+                java.util.ArrayList r18 = new java.util.ArrayList
+                r18.<init>()
+                org.telegram.messenger.MessagesStorage r13 = r25.getMessagesStorage()
+                r14 = 0
+                r19 = -1
+                r15 = r23
+                r16 = r10
+                r13.localSearch(r14, r15, r16, r17, r18, r19)
+            L_0x008d:
+                org.telegram.tgnet.TLRPC$TL_messages_searchGlobal r11 = new org.telegram.tgnet.TLRPC$TL_messages_searchGlobal
+                r11.<init>()
+                r11.limit = r1
+                r11.q = r3
+                org.telegram.tgnet.TLRPC$MessagesFilter r0 = r0.filter
+                r11.filter = r0
+                int r0 = (r26 > r8 ? 1 : (r26 == r8 ? 0 : -1))
+                if (r0 <= 0) goto L_0x00a3
+                long r0 = r26 / r4
+                int r1 = (int) r0
+                r11.min_date = r1
+            L_0x00a3:
+                int r0 = (r28 > r8 ? 1 : (r28 == r8 ? 0 : -1))
+                if (r0 <= 0) goto L_0x00ac
+                long r0 = r28 / r4
+                int r1 = (int) r0
+                r11.max_date = r1
+            L_0x00ac:
+                if (r30 == 0) goto L_0x00f3
+                java.lang.String r0 = r12.lastMessagesSearchString
+                boolean r0 = r3.equals(r0)
+                if (r0 == 0) goto L_0x00f3
+                java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r12.messages
+                boolean r0 = r0.isEmpty()
+                if (r0 != 0) goto L_0x00f3
+                java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r12.messages
+                int r1 = r0.size()
+                int r1 = r1 + -1
+                java.lang.Object r0 = r0.get(r1)
+                org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
+                int r1 = r0.getId()
+                r11.offset_id = r1
+                int r1 = r12.nextSearchRate
+                r11.offset_rate = r1
+                org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
+                org.telegram.tgnet.TLRPC$Peer r0 = r0.peer_id
+                int r1 = r0.channel_id
+                if (r1 == 0) goto L_0x00e0
+            L_0x00de:
+                int r0 = -r1
+                goto L_0x00e7
+            L_0x00e0:
+                int r1 = r0.chat_id
+                if (r1 == 0) goto L_0x00e5
+                goto L_0x00de
+            L_0x00e5:
+                int r0 = r0.user_id
+            L_0x00e7:
+                org.telegram.messenger.MessagesController r1 = r25.getMessagesController()
+                org.telegram.tgnet.TLRPC$InputPeer r0 = r1.getInputPeer((int) r0)
+                r11.offset_peer = r0
+                goto L_0x0067
+            L_0x00f3:
+                r11.offset_rate = r2
+                r11.offset_id = r2
+                org.telegram.tgnet.TLRPC$TL_inputPeerEmpty r0 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty
+                r0.<init>()
+                r11.offset_peer = r0
+                goto L_0x0067
+            L_0x0100:
+                r12.lastMessagesSearchString = r3
+                r0 = r31
+                r12.lastSearchFilterQueryString = r0
+                java.util.ArrayList r11 = new java.util.ArrayList
+                r11.<init>()
+                java.lang.String r0 = r12.lastMessagesSearchString
+                org.telegram.ui.Adapters.FiltersView.fillTipDates(r0, r11)
+                org.telegram.tgnet.ConnectionsManager r14 = r25.getConnectionsManager()
+                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$obxFiEGr-eW7zt4KfvEib5HcL-A r15 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$obxFiEGr-eW7zt4KfvEib5HcL-A
+                r0 = r15
+                r1 = r20
+                r2 = r25
+                r3 = r23
+                r4 = r32
+                r5 = r30
+                r6 = r21
+                r8 = r26
+                r0.<init>(r2, r3, r4, r5, r6, r8, r10, r11)
+                r14.sendRequest(r13, r15)
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.SearchAdapter.lambda$searchGlobal$4$ChatAttachAlertDocumentLayout$SearchAdapter(long, java.lang.String, org.telegram.ui.Adapters.FiltersView$MediaFilterData, org.telegram.messenger.AccountInstance, long, long, boolean, java.lang.String, int):void");
+        }
+
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$searchGlobal$3 */
+        public /* synthetic */ void lambda$searchGlobal$3$ChatAttachAlertDocumentLayout$SearchAdapter(AccountInstance accountInstance, String str, int i, boolean z, long j, long j2, ArrayList arrayList, ArrayList arrayList2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            ArrayList arrayList3 = new ArrayList();
+            if (tLRPC$TL_error == null) {
+                TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
+                int size = tLRPC$messages_Messages.messages.size();
+                for (int i2 = 0; i2 < size; i2++) {
+                    MessageObject messageObject = new MessageObject(accountInstance.getCurrentAccount(), tLRPC$messages_Messages.messages.get(i2), false, true);
+                    messageObject.setQuery(str);
+                    arrayList3.add(messageObject);
+                }
+            }
+            String str2 = str;
+            AndroidUtilities.runOnUIThread(new Runnable(i, tLRPC$TL_error, tLObject, accountInstance, z, str, arrayList3, j, j2, arrayList, arrayList2) {
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ ArrayList f$10;
+                public final /* synthetic */ ArrayList f$11;
+                public final /* synthetic */ TLRPC$TL_error f$2;
+                public final /* synthetic */ TLObject f$3;
+                public final /* synthetic */ AccountInstance f$4;
+                public final /* synthetic */ boolean f$5;
+                public final /* synthetic */ String f$6;
+                public final /* synthetic */ ArrayList f$7;
+                public final /* synthetic */ long f$8;
+                public final /* synthetic */ long f$9;
 
                 {
                     this.f$1 = r2;
                     this.f$2 = r3;
+                    this.f$3 = r4;
+                    this.f$4 = r5;
+                    this.f$5 = r6;
+                    this.f$6 = r7;
+                    this.f$7 = r8;
+                    this.f$8 = r9;
+                    this.f$9 = r11;
+                    this.f$10 = r13;
+                    this.f$11 = r14;
                 }
 
                 public final void run() {
-                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$updateSearchResults$2$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2);
+                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$searchGlobal$2$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$updateSearchResults$2 */
-        public /* synthetic */ void lambda$updateSearchResults$2$ChatAttachAlertDocumentLayout$SearchAdapter(String str, ArrayList arrayList) {
-            if (ChatAttachAlertDocumentLayout.this.searching) {
-                if (ChatAttachAlertDocumentLayout.this.listView.getAdapter() != ChatAttachAlertDocumentLayout.this.searchAdapter) {
-                    ChatAttachAlertDocumentLayout.this.listView.setAdapter(ChatAttachAlertDocumentLayout.this.searchAdapter);
+        /* renamed from: lambda$searchGlobal$2 */
+        public /* synthetic */ void lambda$searchGlobal$2$ChatAttachAlertDocumentLayout$SearchAdapter(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, AccountInstance accountInstance, boolean z, String str, ArrayList arrayList, long j, long j2, ArrayList arrayList2, ArrayList arrayList3) {
+            boolean z2;
+            String str2 = str;
+            ArrayList arrayList4 = arrayList2;
+            if (i == this.requestIndex) {
+                this.isLoading = false;
+                if (tLRPC$TL_error != null) {
+                    ChatAttachAlertDocumentLayout.this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", NUM));
+                    ChatAttachAlertDocumentLayout.this.emptyView.subtitle.setVisibility(0);
+                    ChatAttachAlertDocumentLayout.this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", NUM));
+                    ChatAttachAlertDocumentLayout.this.emptyView.showProgress(false, true);
+                    return;
                 }
-                ChatAttachAlertDocumentLayout.this.emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoFilesFoundInfo", NUM, str)));
+                ChatAttachAlertDocumentLayout.this.emptyView.showProgress(false);
+                TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
+                this.nextSearchRate = tLRPC$messages_Messages.next_rate;
+                accountInstance.getMessagesStorage().putUsersAndChats(tLRPC$messages_Messages.users, tLRPC$messages_Messages.chats, true, true);
+                accountInstance.getMessagesController().putUsers(tLRPC$messages_Messages.users, false);
+                accountInstance.getMessagesController().putChats(tLRPC$messages_Messages.chats, false);
+                if (!z) {
+                    this.messages.clear();
+                    this.messagesById.clear();
+                    this.sections.clear();
+                    this.sectionArrays.clear();
+                }
+                int i2 = tLRPC$messages_Messages.count;
+                this.currentDataQuery = str2;
+                int size = arrayList.size();
+                for (int i3 = 0; i3 < size; i3++) {
+                    MessageObject messageObject = (MessageObject) arrayList.get(i3);
+                    ArrayList arrayList5 = this.sectionArrays.get(messageObject.monthKey);
+                    if (arrayList5 == null) {
+                        arrayList5 = new ArrayList();
+                        this.sectionArrays.put(messageObject.monthKey, arrayList5);
+                        this.sections.add(messageObject.monthKey);
+                    }
+                    arrayList5.add(messageObject);
+                    this.messages.add(messageObject);
+                    this.messagesById.put(messageObject.getId(), messageObject);
+                }
+                if (this.messages.size() > i2) {
+                    i2 = this.messages.size();
+                }
+                this.endReached = this.messages.size() >= i2;
+                if (this.messages.isEmpty()) {
+                    if (TextUtils.isEmpty(this.currentDataQuery) && j == 0 && j2 == 0) {
+                        ChatAttachAlertDocumentLayout.this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle", NUM));
+                        ChatAttachAlertDocumentLayout.this.emptyView.subtitle.setVisibility(0);
+                        ChatAttachAlertDocumentLayout.this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitleFiles", NUM));
+                    } else {
+                        ChatAttachAlertDocumentLayout.this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", NUM));
+                        ChatAttachAlertDocumentLayout.this.emptyView.subtitle.setVisibility(0);
+                        ChatAttachAlertDocumentLayout.this.emptyView.subtitle.setText(LocaleController.getString("SearchEmptyViewFilteredSubtitle2", NUM));
+                    }
+                }
+                if (!z) {
+                    this.localTipChats.clear();
+                    if (arrayList4 != null) {
+                        this.localTipChats.addAll(arrayList4);
+                    }
+                    if (str.length() >= 3 && (LocaleController.getString("SavedMessages", NUM).toLowerCase().startsWith(str2) || "saved messages".startsWith(str2))) {
+                        int i4 = 0;
+                        while (true) {
+                            if (i4 < this.localTipChats.size()) {
+                                if ((this.localTipChats.get(i4) instanceof TLRPC$User) && UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == ((TLRPC$User) this.localTipChats.get(i4)).id) {
+                                    z2 = true;
+                                    break;
+                                }
+                                i4++;
+                            } else {
+                                z2 = false;
+                                break;
+                            }
+                        }
+                        if (!z2) {
+                            this.localTipChats.add(0, UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser());
+                        }
+                    }
+                    this.localTipDates.clear();
+                    this.localTipDates.addAll(arrayList3);
+                    updateFiltersView(TextUtils.isEmpty(this.currentDataQuery), this.localTipChats, this.localTipDates, true);
+                }
+                this.firstLoading = false;
+                final View view = null;
+                final int i5 = -1;
+                for (int i6 = 0; i6 < size; i6++) {
+                    View childAt = ChatAttachAlertDocumentLayout.this.listView.getChildAt(i6);
+                    if (childAt instanceof FlickerLoadingView) {
+                        i5 = ChatAttachAlertDocumentLayout.this.listView.getChildAdapterPosition(childAt);
+                        view = childAt;
+                    }
+                }
+                if (view != null) {
+                    ChatAttachAlertDocumentLayout.this.listView.removeView(view);
+                }
+                if ((ChatAttachAlertDocumentLayout.this.loadingView.getVisibility() == 0 && ChatAttachAlertDocumentLayout.this.listView.getChildCount() <= 1) || view != null) {
+                    final AccountInstance accountInstance2 = accountInstance;
+                    ChatAttachAlertDocumentLayout.this.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        public boolean onPreDraw() {
+                            ChatAttachAlertDocumentLayout.this.getViewTreeObserver().removeOnPreDrawListener(this);
+                            int childCount = ChatAttachAlertDocumentLayout.this.listView.getChildCount();
+                            AnimatorSet animatorSet = new AnimatorSet();
+                            for (int i = 0; i < childCount; i++) {
+                                View childAt = ChatAttachAlertDocumentLayout.this.listView.getChildAt(i);
+                                if (view == null || ChatAttachAlertDocumentLayout.this.listView.getChildAdapterPosition(childAt) >= i5) {
+                                    childAt.setAlpha(0.0f);
+                                    ObjectAnimator ofFloat = ObjectAnimator.ofFloat(childAt, View.ALPHA, new float[]{0.0f, 1.0f});
+                                    ofFloat.setStartDelay((long) ((int) ((((float) Math.min(ChatAttachAlertDocumentLayout.this.listView.getMeasuredHeight(), Math.max(0, childAt.getTop()))) / ((float) ChatAttachAlertDocumentLayout.this.listView.getMeasuredHeight())) * 100.0f)));
+                                    ofFloat.setDuration(200);
+                                    animatorSet.playTogether(new Animator[]{ofFloat});
+                                }
+                            }
+                            animatorSet.addListener(new AnimatorListenerAdapter() {
+                                public void onAnimationEnd(Animator animator) {
+                                    accountInstance2.getNotificationCenter().onAnimationFinish(SearchAdapter.this.animationIndex);
+                                }
+                            });
+                            int unused = SearchAdapter.this.animationIndex = accountInstance2.getNotificationCenter().setAnimationInProgress(SearchAdapter.this.animationIndex, (int[]) null);
+                            animatorSet.start();
+                            View view = view;
+                            if (view != null && view.getParent() == null) {
+                                ChatAttachAlertDocumentLayout.this.listView.addView(view);
+                                final RecyclerView.LayoutManager layoutManager = ChatAttachAlertDocumentLayout.this.listView.getLayoutManager();
+                                if (layoutManager != null) {
+                                    layoutManager.ignoreView(view);
+                                    View view2 = view;
+                                    ObjectAnimator ofFloat2 = ObjectAnimator.ofFloat(view2, View.ALPHA, new float[]{view2.getAlpha(), 0.0f});
+                                    ofFloat2.addListener(new AnimatorListenerAdapter() {
+                                        public void onAnimationEnd(Animator animator) {
+                                            view.setAlpha(1.0f);
+                                            layoutManager.stopIgnoringView(view);
+                                            ChatAttachAlertDocumentLayout.this.listView.removeView(view);
+                                        }
+                                    });
+                                    ofFloat2.start();
+                                }
+                            }
+                            return true;
+                        }
+                    });
+                }
+                notifyDataSetChanged();
+            }
+        }
+
+        private void updateSearchResults(ArrayList<ListItem> arrayList, String str) {
+            AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
+                public final /* synthetic */ ArrayList f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run() {
+                    ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$updateSearchResults$5$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1);
+                }
+            });
+        }
+
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$updateSearchResults$5 */
+        public /* synthetic */ void lambda$updateSearchResults$5$ChatAttachAlertDocumentLayout$SearchAdapter(ArrayList arrayList) {
+            if (ChatAttachAlertDocumentLayout.this.searching && ChatAttachAlertDocumentLayout.this.listView.getAdapter() != ChatAttachAlertDocumentLayout.this.searchAdapter) {
+                ChatAttachAlertDocumentLayout.this.listView.setAdapter(ChatAttachAlertDocumentLayout.this.searchAdapter);
             }
             this.searchResult = arrayList;
             notifyDataSetChanged();
         }
 
-        public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-            return viewHolder.getItemViewType() == 0;
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
+            int itemViewType = viewHolder.getItemViewType();
+            return itemViewType == 1 || itemViewType == 4;
         }
 
-        public int getItemCount() {
-            return this.searchResult.size() + 1;
-        }
-
-        public ListItem getItem(int i) {
-            if (i < this.searchResult.size()) {
-                return this.searchResult.get(i);
+        public int getSectionCount() {
+            if (!this.sections.isEmpty()) {
+                return 2 + this.sections.size() + (this.endReached ^ true ? 1 : 0);
             }
-            return null;
+            return 2;
         }
 
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View view;
+        public Object getItem(int i, int i2) {
+            ArrayList arrayList;
             if (i != 0) {
-                view = new View(this.mContext);
+                int i3 = i - 1;
+                if (i3 >= this.sections.size() || (arrayList = this.sectionArrays.get(this.sections.get(i3))) == null) {
+                    return null;
+                }
+                return arrayList.get(i2 - ((i3 != 0 || !this.searchResult.isEmpty()) ? 1 : 0));
+            } else if (i2 < this.searchResult.size()) {
+                return this.searchResult.get(i2);
             } else {
-                view = new SharedDocumentCell(this.mContext, 1);
-            }
-            return new RecyclerListView.Holder(view);
-        }
-
-        public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-            if (viewHolder.getItemViewType() == 0) {
-                ListItem item = getItem(i);
-                SharedDocumentCell sharedDocumentCell = (SharedDocumentCell) viewHolder.itemView;
-                int i2 = item.icon;
-                if (i2 != 0) {
-                    sharedDocumentCell.setTextAndValueAndTypeAndThumb(item.title, item.subtitle, (String) null, (String) null, i2, false);
-                } else {
-                    SharedDocumentCell sharedDocumentCell2 = sharedDocumentCell;
-                    sharedDocumentCell2.setTextAndValueAndTypeAndThumb(item.title, item.subtitle, item.ext.toUpperCase().substring(0, Math.min(item.ext.length(), 4)), item.thumb, 0, false);
-                }
-                if (item.file != null) {
-                    sharedDocumentCell.setChecked(ChatAttachAlertDocumentLayout.this.selectedFiles.containsKey(item.file.toString()), !ChatAttachAlertDocumentLayout.this.scrolling);
-                } else {
-                    sharedDocumentCell.setChecked(false, !ChatAttachAlertDocumentLayout.this.scrolling);
-                }
+                return null;
             }
         }
 
-        public int getItemViewType(int i) {
-            return i < this.searchResult.size() ? 0 : 1;
+        public int getCountForSection(int i) {
+            if (i == 0) {
+                return this.searchResult.size();
+            }
+            int i2 = i - 1;
+            int i3 = 1;
+            if (i2 >= this.sections.size()) {
+                return 1;
+            }
+            ArrayList arrayList = this.sectionArrays.get(this.sections.get(i2));
+            if (arrayList == null) {
+                return 0;
+            }
+            int size = arrayList.size();
+            if (i2 == 0 && this.searchResult.isEmpty()) {
+                i3 = 0;
+            }
+            return size + i3;
+        }
+
+        public View getSectionHeaderView(int i, View view) {
+            String str;
+            GraySectionCell graySectionCell = (GraySectionCell) view;
+            if (graySectionCell == null) {
+                graySectionCell = new GraySectionCell(this.mContext);
+                graySectionCell.setBackgroundColor(Theme.getColor("graySection") & -NUM);
+            }
+            if (i == 0 || (i == 1 && this.searchResult.isEmpty())) {
+                graySectionCell.setAlpha(0.0f);
+                return graySectionCell;
+            }
+            int i2 = i - 1;
+            if (i2 < this.sections.size()) {
+                graySectionCell.setAlpha(1.0f);
+                ArrayList arrayList = this.sectionArrays.get(this.sections.get(i2));
+                if (arrayList != null) {
+                    MessageObject messageObject = (MessageObject) arrayList.get(0);
+                    if (i2 != 0 || this.searchResult.isEmpty()) {
+                        str = LocaleController.formatSectionDate((long) messageObject.messageOwner.date);
+                    } else {
+                        str = LocaleController.getString("GlobalSearch", NUM);
+                    }
+                    graySectionCell.setText(str);
+                }
+            }
+            return view;
+        }
+
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v1, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v1, resolved type: org.telegram.ui.Cells.SharedDocumentCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v6, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v8, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v10, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v11, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r4, int r5) {
+            /*
+                r3 = this;
+                if (r5 == 0) goto L_0x0032
+                r4 = 2
+                r0 = 1
+                if (r5 == r0) goto L_0x0022
+                if (r5 == r4) goto L_0x0013
+                r1 = 4
+                if (r5 == r1) goto L_0x0022
+                android.view.View r4 = new android.view.View
+                android.content.Context r5 = r3.mContext
+                r4.<init>(r5)
+                goto L_0x0039
+            L_0x0013:
+                org.telegram.ui.Components.FlickerLoadingView r4 = new org.telegram.ui.Components.FlickerLoadingView
+                android.content.Context r5 = r3.mContext
+                r4.<init>(r5)
+                r5 = 3
+                r4.setViewType(r5)
+                r4.setIsSingleCell(r0)
+                goto L_0x0039
+            L_0x0022:
+                org.telegram.ui.Cells.SharedDocumentCell r1 = new org.telegram.ui.Cells.SharedDocumentCell
+                android.content.Context r2 = r3.mContext
+                if (r5 != r0) goto L_0x0029
+                r4 = 1
+            L_0x0029:
+                r1.<init>(r2, r4)
+                r4 = 0
+                r1.setDrawDownloadIcon(r4)
+                r4 = r1
+                goto L_0x0039
+            L_0x0032:
+                org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
+                android.content.Context r5 = r3.mContext
+                r4.<init>(r5)
+            L_0x0039:
+                androidx.recyclerview.widget.RecyclerView$LayoutParams r5 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                r0 = -1
+                r1 = -2
+                r5.<init>((int) r0, (int) r1)
+                r4.setLayoutParams(r5)
+                org.telegram.ui.Components.RecyclerListView$Holder r5 = new org.telegram.ui.Components.RecyclerListView$Holder
+                r5.<init>(r4)
+                return r5
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.SearchAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
+        }
+
+        public void onBindViewHolder(int i, int i2, RecyclerView.ViewHolder viewHolder) {
+            String str;
+            int itemViewType = viewHolder.getItemViewType();
+            if (itemViewType != 2 && itemViewType != 3) {
+                boolean z = false;
+                if (itemViewType == 0) {
+                    int i3 = i - 1;
+                    ArrayList arrayList = this.sectionArrays.get(this.sections.get(i3));
+                    if (arrayList != null) {
+                        MessageObject messageObject = (MessageObject) arrayList.get(0);
+                        if (i3 != 0 || this.searchResult.isEmpty()) {
+                            str = LocaleController.formatSectionDate((long) messageObject.messageOwner.date);
+                        } else {
+                            str = LocaleController.getString("GlobalSearch", NUM);
+                        }
+                        ((GraySectionCell) viewHolder.itemView).setText(str);
+                    }
+                } else if (itemViewType == 1 || itemViewType == 4) {
+                    final SharedDocumentCell sharedDocumentCell = (SharedDocumentCell) viewHolder.itemView;
+                    if (i == 0) {
+                        ListItem listItem = (ListItem) getItem(i2);
+                        SharedDocumentCell sharedDocumentCell2 = (SharedDocumentCell) viewHolder.itemView;
+                        int i4 = listItem.icon;
+                        if (i4 != 0) {
+                            sharedDocumentCell2.setTextAndValueAndTypeAndThumb(listItem.title, listItem.subtitle, (String) null, (String) null, i4, false);
+                        } else {
+                            sharedDocumentCell2.setTextAndValueAndTypeAndThumb(listItem.title, listItem.subtitle, listItem.ext.toUpperCase().substring(0, Math.min(listItem.ext.length(), 4)), listItem.thumb, 0, false);
+                        }
+                        if (listItem.file != null) {
+                            sharedDocumentCell2.setChecked(ChatAttachAlertDocumentLayout.this.selectedFiles.containsKey(listItem.file.toString()), !ChatAttachAlertDocumentLayout.this.scrolling);
+                        } else {
+                            sharedDocumentCell2.setChecked(false, !ChatAttachAlertDocumentLayout.this.scrolling);
+                        }
+                    } else {
+                        int i5 = i - 1;
+                        if (i5 != 0 || !this.searchResult.isEmpty()) {
+                            i2--;
+                        }
+                        ArrayList arrayList2 = this.sectionArrays.get(this.sections.get(i5));
+                        if (arrayList2 != null) {
+                            final MessageObject messageObject2 = (MessageObject) arrayList2.get(i2);
+                            final boolean z2 = sharedDocumentCell.getMessage() != null && sharedDocumentCell.getMessage().getId() == messageObject2.getId();
+                            if (i2 != arrayList2.size() - 1 || (i5 == this.sections.size() - 1 && this.isLoading)) {
+                                z = true;
+                            }
+                            sharedDocumentCell.setDocument(messageObject2, z);
+                            sharedDocumentCell.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                public boolean onPreDraw() {
+                                    sharedDocumentCell.getViewTreeObserver().removeOnPreDrawListener(this);
+                                    if (ChatAttachAlertDocumentLayout.this.parentAlert.actionBar.isActionModeShowed()) {
+                                        SearchAdapter.this.messageHashIdTmp.set(messageObject2.getId(), messageObject2.getDialogId());
+                                        sharedDocumentCell.setChecked(ChatAttachAlertDocumentLayout.this.selectedMessages.containsKey(SearchAdapter.this.messageHashIdTmp), z2);
+                                        return true;
+                                    }
+                                    sharedDocumentCell.setChecked(false, z2);
+                                    return true;
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        public int getItemViewType(int i, int i2) {
+            if (i == 0) {
+                return 1;
+            }
+            if (i == getSectionCount() - 1) {
+                return 3;
+            }
+            int i3 = i - 1;
+            if (i3 < this.sections.size()) {
+                return ((i3 != 0 || !this.searchResult.isEmpty()) && i2 == 0) ? 0 : 4;
+            }
+            return 2;
         }
 
         public void notifyDataSetChanged() {
@@ -1628,9 +2692,6 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
         arrayList.add(new ThemeDescription(this.searchItem.getSearchField(), ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"));
-        arrayList.add(new ThemeDescription(this.emptyImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogEmptyImage"));
-        arrayList.add(new ThemeDescription(this.emptyTitleTextView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogEmptyText"));
-        arrayList.add(new ThemeDescription(this.emptySubtitleTextView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogEmptyText"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogScrollGlow"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_CELLBACKGROUNDCOLOR, new Class[]{ShadowSectionCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGray"));

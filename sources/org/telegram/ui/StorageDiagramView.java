@@ -310,7 +310,7 @@ public class StorageDiagramView extends View {
                     StorageDiagramView.this.lambda$update$0$StorageDiagramView(this.f$1, valueAnimator);
                 }
             });
-            this.valueAnimator.addListener(new AnimatorListenerAdapter(this) {
+            this.valueAnimator.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     int i = 0;
                     while (true) {

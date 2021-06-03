@@ -26,6 +26,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
+import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
@@ -379,7 +380,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                         }
 
                         public final void run() {
-                            IntroActivity.this.lambda$null$3$IntroActivity(this.f$1, this.f$2);
+                            IntroActivity.this.lambda$checkContinueText$3$IntroActivity(this.f$1, this.f$2);
                         }
                     });
                 }
@@ -388,8 +389,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$IntroActivity(TLRPC$LangPackString tLRPC$LangPackString, String str) {
+    /* renamed from: lambda$checkContinueText$3 */
+    public /* synthetic */ void lambda$checkContinueText$3$IntroActivity(TLRPC$LangPackString tLRPC$LangPackString, String str) {
         if (!this.destroyed) {
             this.textView.setText(tLRPC$LangPackString.value);
             MessagesController.getGlobalMainSettings().edit().putString("language_showed2", str.toLowerCase()).commit();
@@ -420,7 +421,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         public Object instantiateItem(ViewGroup viewGroup, int i) {
             final TextView textView = new TextView(viewGroup.getContext());
             final TextView textView2 = new TextView(viewGroup.getContext());
-            AnonymousClass1 r2 = new FrameLayout(this, viewGroup.getContext()) {
+            AnonymousClass1 r2 = new FrameLayout(viewGroup.getContext()) {
                 /* access modifiers changed from: protected */
                 public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                     int dp = (((((i4 - i2) / 4) * 3) - AndroidUtilities.dp(275.0f)) / 2) + AndroidUtilities.dp(166.0f);
@@ -482,7 +483,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                               (r5v0 'this' org.telegram.ui.IntroActivity$EGLThread$1 A[THIS])
                              call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR)
                               (16 long)
-                             org.telegram.messenger.DispatchQueue.postRunnable(java.lang.Runnable, long):boolean type: VIRTUAL in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes.dex
+                             org.telegram.messenger.DispatchQueue.postRunnable(java.lang.Runnable, long):boolean type: VIRTUAL in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -553,7 +554,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
                             Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00bd: CONSTRUCTOR  (r1v9 org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY) = 
                               (r5v0 'this' org.telegram.ui.IntroActivity$EGLThread$1 A[THIS])
-                             call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes.dex
+                             call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -666,6 +667,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 public EGLDisplay eglDisplay;
                 /* access modifiers changed from: private */
                 public EGLSurface eglSurface;
+                private GL gl;
                 /* access modifiers changed from: private */
                 public boolean initied;
                 private SurfaceTexture surfaceTexture;
@@ -732,7 +734,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                                 finish();
                                 return false;
                             } else {
-                                this.eglContext.getGL();
+                                this.gl = this.eglContext.getGL();
                                 GLES20.glGenTextures(23, this.textures, 0);
                                 loadTexture(NUM, 0);
                                 loadTexture(NUM, 1);

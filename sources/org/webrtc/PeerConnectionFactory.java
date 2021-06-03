@@ -258,8 +258,6 @@ public class PeerConnectionFactory {
         public PeerConnectionFactory createPeerConnectionFactory() {
             long j;
             long j2;
-            long j3;
-            long j4;
             PeerConnectionFactory.checkInitializeHasBeenCalled();
             if (this.audioDeviceModule == null) {
                 this.audioDeviceModule = JavaAudioDeviceModule.builder(ContextUtils.getApplicationContext()).createAudioDeviceModule();
@@ -272,35 +270,27 @@ public class PeerConnectionFactory {
             VideoEncoderFactory videoEncoderFactory2 = this.videoEncoderFactory;
             VideoDecoderFactory videoDecoderFactory2 = this.videoDecoderFactory;
             AudioProcessingFactory audioProcessingFactory2 = this.audioProcessingFactory;
-            long j5 = 0;
-            if (audioProcessingFactory2 == null) {
-                j = 0;
-            } else {
-                j = audioProcessingFactory2.createNative();
-            }
+            long j3 = 0;
+            long createNative = audioProcessingFactory2 == null ? 0 : audioProcessingFactory2.createNative();
             FecControllerFactoryFactoryInterface fecControllerFactoryFactoryInterface = this.fecControllerFactoryFactory;
-            if (fecControllerFactoryFactoryInterface == null) {
-                j2 = 0;
-            } else {
-                j2 = fecControllerFactoryFactoryInterface.createNative();
-            }
+            long createNative2 = fecControllerFactoryFactoryInterface == null ? 0 : fecControllerFactoryFactoryInterface.createNative();
             NetworkControllerFactoryFactory networkControllerFactoryFactory2 = this.networkControllerFactoryFactory;
             if (networkControllerFactoryFactory2 == null) {
-                j3 = 0;
+                j = 0;
             } else {
-                j3 = networkControllerFactoryFactory2.createNativeNetworkControllerFactory();
+                j = networkControllerFactoryFactory2.createNativeNetworkControllerFactory();
             }
             NetworkStatePredictorFactoryFactory networkStatePredictorFactoryFactory2 = this.networkStatePredictorFactoryFactory;
             if (networkStatePredictorFactoryFactory2 == null) {
-                j4 = 0;
+                j2 = 0;
             } else {
-                j4 = networkStatePredictorFactoryFactory2.createNativeNetworkStatePredictorFactory();
+                j2 = networkStatePredictorFactoryFactory2.createNativeNetworkStatePredictorFactory();
             }
             NetEqFactoryFactory netEqFactoryFactory = this.neteqFactoryFactory;
             if (netEqFactoryFactory != null) {
-                j5 = netEqFactoryFactory.createNativeNetEqFactory();
+                j3 = netEqFactoryFactory.createNativeNetEqFactory();
             }
-            return PeerConnectionFactory.nativeCreatePeerConnectionFactory(applicationContext, options2, nativeAudioDeviceModulePointer, createNativeAudioEncoderFactory, createNativeAudioDecoderFactory, videoEncoderFactory2, videoDecoderFactory2, j, j2, j3, j4, j5);
+            return PeerConnectionFactory.nativeCreatePeerConnectionFactory(applicationContext, options2, nativeAudioDeviceModulePointer, createNativeAudioEncoderFactory, createNativeAudioDecoderFactory, videoEncoderFactory2, videoDecoderFactory2, createNative, createNative2, j, j2, j3);
         }
     }
 

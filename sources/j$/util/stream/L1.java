@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import a.H;
+import j$.E;
 import j$.util.function.CLASSNAMEf;
 import j$.util.function.q;
 import j$.util.function.s;
@@ -18,9 +18,9 @@ class L1 extends M1<Double> implements A2.e {
     }
 
     public void accept(double d2) {
-        if (!this.var_a && ((H) this.d).b(d2) == this.c.var_a) {
-            this.var_a = true;
-            this.b = this.c.b;
+        if (!this.a && ((E) this.d).b(d2) == this.c.b) {
+            this.a = true;
+            this.b = this.c.c;
         }
     }
 
@@ -29,7 +29,7 @@ class L1 extends M1<Double> implements A2.e {
         Q1.a(this, d2);
     }
 
-    public q k(q qVar) {
+    public q j(q qVar) {
         qVar.getClass();
         return new CLASSNAMEf(this, qVar);
     }

@@ -44,6 +44,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             stickerEmptyView.progressBar.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
         }
     };
+    private final String stickerSetName = "tg_placeholders";
     private int stickerType;
     public BackupImageView stickerView;
     private LoadingStickerDrawable stubDrawable;

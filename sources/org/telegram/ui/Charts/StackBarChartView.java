@@ -182,10 +182,13 @@ public class StackBarChartView extends BaseChartView<StackBarChartData, StackBar
                 f = ((StackBarChartData) t).xPercentage[1] * f2;
             }
             float f4 = (((float) i) + f3) / (f2 - f);
+            this.selectedCoordinate = f4;
             if (f4 < 0.0f) {
                 this.selectedIndex = 0;
+                this.selectedCoordinate = 0.0f;
             } else if (f4 > 1.0f) {
                 this.selectedIndex = ((StackBarChartData) t).x.length - 1;
+                this.selectedCoordinate = 1.0f;
             } else {
                 int findIndex = ((StackBarChartData) t).findIndex(this.startXIndex, this.endXIndex, f4);
                 this.selectedIndex = findIndex;

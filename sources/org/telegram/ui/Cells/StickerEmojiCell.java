@@ -13,6 +13,7 @@ import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
@@ -74,6 +75,21 @@ public class StickerEmojiCell extends FrameLayout {
 
     public void setSticker(TLRPC$Document tLRPC$Document, Object obj, boolean z) {
         setSticker(tLRPC$Document, obj, (String) null, z);
+    }
+
+    public MessageObject.SendAnimationData getSendAnimationData() {
+        ImageReceiver imageReceiver = this.imageView.getImageReceiver();
+        if (!imageReceiver.hasNotThumb()) {
+            return null;
+        }
+        MessageObject.SendAnimationData sendAnimationData = new MessageObject.SendAnimationData();
+        int[] iArr = new int[2];
+        this.imageView.getLocationInWindow(iArr);
+        sendAnimationData.x = imageReceiver.getCenterX() + ((float) iArr[0]);
+        sendAnimationData.y = imageReceiver.getCenterY() + ((float) iArr[1]);
+        sendAnimationData.width = imageReceiver.getImageWidth();
+        sendAnimationData.height = imageReceiver.getImageHeight();
+        return sendAnimationData;
     }
 
     public void setSticker(TLRPC$Document tLRPC$Document, Object obj, String str, boolean z) {

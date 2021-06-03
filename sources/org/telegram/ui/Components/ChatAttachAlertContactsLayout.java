@@ -66,6 +66,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
     public static class UserCell extends FrameLayout {
         private AvatarDrawable avatarDrawable = new AvatarDrawable();
         private BackupImageView avatarImageView;
+        private int currentAccount = UserConfig.selectedAccount;
         private int currentId;
         private CharSequence currentName;
         private CharSequence currentStatus;
@@ -83,13 +84,12 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
         public UserCell(Context context) {
             super(context);
-            int i = UserConfig.selectedAccount;
             BackupImageView backupImageView = new BackupImageView(context);
             this.avatarImageView = backupImageView;
             backupImageView.setRoundRadius(AndroidUtilities.dp(23.0f));
             BackupImageView backupImageView2 = this.avatarImageView;
             boolean z = LocaleController.isRTL;
-            int i2 = 5;
+            int i = 5;
             addView(backupImageView2, LayoutHelper.createFrame(46, 46.0f, (z ? 5 : 3) | 48, z ? 0.0f : 14.0f, 9.0f, z ? 14.0f : 0.0f, 0.0f));
             SimpleTextView simpleTextView = new SimpleTextView(context);
             this.nameTextView = simpleTextView;
@@ -107,7 +107,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
             SimpleTextView simpleTextView4 = this.statusTextView;
             boolean z3 = LocaleController.isRTL;
-            addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (!z3 ? 3 : i2) | 48, z3 ? 28.0f : 72.0f, 36.0f, z3 ? 72.0f : 28.0f, 0.0f));
+            addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (!z3 ? 3 : i) | 48, z3 ? 28.0f : 72.0f, 36.0f, z3 ? 72.0f : 28.0f, 0.0f));
         }
 
         public void setCurrentId(int i) {
@@ -286,7 +286,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 boolean r12 = android.text.TextUtils.isEmpty(r12)
                 if (r12 == 0) goto L_0x00e6
                 org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-                r0 = 2131626506(0x7f0e0a0a, float:1.888025E38)
+                r0 = 2131626528(0x7f0e0a20, float:1.8880295E38)
                 java.lang.String r1 = "NumberUnknown"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r12.setText(r0)
@@ -494,7 +494,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             PhonebookShareAlert phonebookShareAlert = new PhonebookShareAlert(this.parentAlert.baseFragment, contact, (TLRPC$User) null, (Uri) null, (File) null, str2, str);
             phonebookShareAlert.setDelegate(new PhonebookShareAlertDelegate() {
                 public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
-                    ChatAttachAlertContactsLayout.this.lambda$null$0$ChatAttachAlertContactsLayout(tLRPC$User, z, i);
+                    ChatAttachAlertContactsLayout.this.lambda$new$0$ChatAttachAlertContactsLayout(tLRPC$User, z, i);
                 }
             });
             phonebookShareAlert.show();
@@ -502,8 +502,8 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$ChatAttachAlertContactsLayout(TLRPC$User tLRPC$User, boolean z, int i) {
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$ChatAttachAlertContactsLayout(TLRPC$User tLRPC$User, boolean z, int i) {
         this.parentAlert.dismiss();
         this.delegate.didSelectContact(tLRPC$User, z, i);
     }
@@ -719,7 +719,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             return null;
         }
 
-        public boolean isEnabled(int i, int i2) {
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
             if (i == 0 || i == getSectionCount() - 1) {
                 return false;
             }
@@ -878,7 +878,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 }
 
                 public final void run() {
-                    ChatAttachAlertContactsLayout.ShareSearchAdapter.this.lambda$null$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    ChatAttachAlertContactsLayout.ShareSearchAdapter.this.lambda$processSearch$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             });
         }
@@ -907,9 +907,9 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         /* JADX WARNING: Removed duplicated region for block: B:116:0x0234 A[SYNTHETIC] */
         /* JADX WARNING: Removed duplicated region for block: B:70:0x018c A[LOOP:1: B:27:0x00a5->B:70:0x018c, LOOP_END] */
         /* JADX WARNING: Unknown variable types count: 1 */
-        /* renamed from: lambda$null$1 */
+        /* renamed from: lambda$processSearch$1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$null$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(java.lang.String r19, java.util.ArrayList r20, java.util.ArrayList r21, int r22, int r23) {
+        public /* synthetic */ void lambda$processSearch$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(java.lang.String r19, java.util.ArrayList r20, java.util.ArrayList r21, int r22, int r23) {
             /*
                 r18 = this;
                 r0 = r18
@@ -1217,7 +1217,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r0.updateSearchResults(r4, r2, r3, r5)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertContactsLayout.ShareSearchAdapter.lambda$null$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(java.lang.String, java.util.ArrayList, java.util.ArrayList, int, int):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertContactsLayout.ShareSearchAdapter.lambda$processSearch$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(java.lang.String, java.util.ArrayList, java.util.ArrayList, int, int):void");
         }
 
         private void updateSearchResults(String str, ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2, int i) {

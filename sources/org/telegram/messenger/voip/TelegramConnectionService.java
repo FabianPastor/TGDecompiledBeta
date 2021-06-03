@@ -45,8 +45,8 @@ public class TelegramConnectionService extends ConnectionService {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.e("onCreateIncomingConnectionFailed ");
         }
-        if (VoIPBaseService.getSharedInstance() != null) {
-            VoIPBaseService.getSharedInstance().callFailedFromConnectionService();
+        if (VoIPService.getSharedInstance() != null) {
+            VoIPService.getSharedInstance().callFailedFromConnectionService();
         }
     }
 
@@ -54,8 +54,8 @@ public class TelegramConnectionService extends ConnectionService {
         if (BuildVars.LOGS_ENABLED) {
             FileLog.e("onCreateOutgoingConnectionFailed ");
         }
-        if (VoIPBaseService.getSharedInstance() != null) {
-            VoIPBaseService.getSharedInstance().callFailedFromConnectionService();
+        if (VoIPService.getSharedInstance() != null) {
+            VoIPService.getSharedInstance().callFailedFromConnectionService();
         }
     }
 

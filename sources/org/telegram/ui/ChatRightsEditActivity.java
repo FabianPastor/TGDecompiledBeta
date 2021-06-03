@@ -158,10 +158,10 @@ public class ChatRightsEditActivity extends BaseFragment {
         void didSetRights(int i, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, String str);
     }
 
-    static /* synthetic */ void lambda$null$1(DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createView$1(DialogInterface dialogInterface, int i) {
     }
 
-    static /* synthetic */ void lambda$null$3(DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$createView$3(DialogInterface dialogInterface, int i) {
     }
 
     public ChatRightsEditActivity(int i, int i2, TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights2, String str, int i3, boolean z, boolean z2) {
@@ -430,7 +430,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 onDonePressed();
             }
         } else if (i == this.transferOwnerRow) {
-            lambda$null$8((TLRPC$InputCheckPasswordSRP) null, (TwoStepVerificationActivity) null);
+            lambda$initTransfer$8((TLRPC$InputCheckPasswordSRP) null, (TwoStepVerificationActivity) null);
         } else if (i == this.untilDateRow) {
             if (getParentActivity() != null) {
                 BottomSheet.Builder builder = new BottomSheet.Builder(context);
@@ -471,7 +471,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                         }
 
                         public final void onClick(View view) {
-                            ChatRightsEditActivity.this.lambda$null$5$ChatRightsEditActivity(this.f$1, view);
+                            ChatRightsEditActivity.this.lambda$createView$5$ChatRightsEditActivity(this.f$1, view);
                         }
                     });
                 }
@@ -617,8 +617,8 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$ChatRightsEditActivity(BottomSheet.Builder builder, View view) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$ChatRightsEditActivity(BottomSheet.Builder builder, View view) {
         int intValue = ((Integer) view.getTag()).intValue();
         if (intValue == 0) {
             this.bannedRights.until_date = 0;
@@ -637,7 +637,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             try {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getParentActivity(), new DatePickerDialog.OnDateSetListener() {
                     public final void onDateSet(DatePicker datePicker, int i, int i2, int i3) {
-                        ChatRightsEditActivity.this.lambda$null$2$ChatRightsEditActivity(datePicker, i, i2, i3);
+                        ChatRightsEditActivity.this.lambda$createView$2$ChatRightsEditActivity(datePicker, i, i2, i3);
                     }
                 }, instance.get(1), instance.get(2), instance.get(5));
                 DatePicker datePicker = datePickerDialog.getDatePicker();
@@ -655,7 +655,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 instance2.set(14, instance2.getMaximum(14));
                 datePicker.setMaxDate(instance2.getTimeInMillis());
                 datePickerDialog.setButton(-1, LocaleController.getString("Set", NUM), datePickerDialog);
-                datePickerDialog.setButton(-2, LocaleController.getString("Cancel", NUM), $$Lambda$ChatRightsEditActivity$bMJNQn0Pb9ynDRXjzBotMOWC1A.INSTANCE);
+                datePickerDialog.setButton(-2, LocaleController.getString("Cancel", NUM), $$Lambda$ChatRightsEditActivity$QNSCir05BR7MQk6rsQsXjUwcNM.INSTANCE);
                 if (Build.VERSION.SDK_INT >= 21) {
                     datePickerDialog.setOnShowListener(new DialogInterface.OnShowListener(datePicker) {
                         public final /* synthetic */ DatePicker f$0;
@@ -665,7 +665,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                         }
 
                         public final void onShow(DialogInterface dialogInterface) {
-                            ChatRightsEditActivity.lambda$null$4(this.f$0, dialogInterface);
+                            ChatRightsEditActivity.lambda$createView$4(this.f$0, dialogInterface);
                         }
                     });
                 }
@@ -678,8 +678,8 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$ChatRightsEditActivity(DatePicker datePicker, int i, int i2, int i3) {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$ChatRightsEditActivity(DatePicker datePicker, int i, int i2, int i3) {
         Calendar instance = Calendar.getInstance();
         instance.clear();
         instance.set(i, i2, i3);
@@ -692,11 +692,11 @@ public class ChatRightsEditActivity extends BaseFragment {
                 }
 
                 public final void onTimeSet(TimePicker timePicker, int i, int i2) {
-                    ChatRightsEditActivity.this.lambda$null$0$ChatRightsEditActivity(this.f$1, timePicker, i, i2);
+                    ChatRightsEditActivity.this.lambda$createView$0$ChatRightsEditActivity(this.f$1, timePicker, i, i2);
                 }
             }, 0, 0, true);
             timePickerDialog.setButton(-1, LocaleController.getString("Set", NUM), timePickerDialog);
-            timePickerDialog.setButton(-2, LocaleController.getString("Cancel", NUM), $$Lambda$ChatRightsEditActivity$2_eBqNOMD0Noq1YTuCLASSNAMEa3XBek.INSTANCE);
+            timePickerDialog.setButton(-2, LocaleController.getString("Cancel", NUM), $$Lambda$ChatRightsEditActivity$Sg0CLASSNAMEV9cMM9jcdAbLtVcuUA88.INSTANCE);
             showDialog(timePickerDialog);
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -704,13 +704,13 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$ChatRightsEditActivity(int i, TimePicker timePicker, int i2, int i3) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$ChatRightsEditActivity(int i, TimePicker timePicker, int i2, int i3) {
         this.bannedRights.until_date = i + (i2 * 3600) + (i3 * 60);
         this.listViewAdapter.notifyItemChanged(this.untilDateRow);
     }
 
-    static /* synthetic */ void lambda$null$4(DatePicker datePicker, DialogInterface dialogInterface) {
+    static /* synthetic */ void lambda$createView$4(DatePicker datePicker, DialogInterface dialogInterface) {
         int childCount = datePicker.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View childAt = datePicker.getChildAt(i);
@@ -752,7 +752,7 @@ public class ChatRightsEditActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     /* renamed from: initTransfer */
-    public void lambda$null$8(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity) {
+    public void lambda$initTransfer$8(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity) {
         TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP2;
         if (getParentActivity() != null) {
             if (tLRPC$InputCheckPasswordSRP == null || ChatObject.isChannel(this.currentChat)) {
@@ -812,7 +812,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         if (i != 0) {
             this.chatId = i;
             this.currentChat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(i));
-            lambda$null$8(tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity);
+            lambda$initTransfer$8(tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity);
         }
     }
 
@@ -833,14 +833,14 @@ public class ChatRightsEditActivity extends BaseFragment {
             }
 
             public final void run() {
-                ChatRightsEditActivity.this.lambda$null$13$ChatRightsEditActivity(this.f$1, this.f$2, this.f$3, this.f$4);
+                ChatRightsEditActivity.this.lambda$initTransfer$13$ChatRightsEditActivity(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$13 */
-    public /* synthetic */ void lambda$null$13$ChatRightsEditActivity(TLRPC$TL_error tLRPC$TL_error, TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TLRPC$TL_channels_editCreator tLRPC$TL_channels_editCreator) {
+    /* renamed from: lambda$initTransfer$13 */
+    public /* synthetic */ void lambda$initTransfer$13$ChatRightsEditActivity(TLRPC$TL_error tLRPC$TL_error, TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TLRPC$TL_channels_editCreator tLRPC$TL_channels_editCreator) {
         int i;
         TLRPC$TL_error tLRPC$TL_error2 = tLRPC$TL_error;
         TwoStepVerificationActivity twoStepVerificationActivity2 = twoStepVerificationActivity;
@@ -857,7 +857,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("EditAdminTransferReadyAlertText", NUM, this.currentChat.title, UserObject.getFirstName(this.currentUser))));
                         builder.setPositiveButton(LocaleController.getString("EditAdminTransferChangeOwner", NUM), new DialogInterface.OnClickListener() {
                             public final void onClick(DialogInterface dialogInterface, int i) {
-                                ChatRightsEditActivity.this.lambda$null$9$ChatRightsEditActivity(dialogInterface, i);
+                                ChatRightsEditActivity.this.lambda$initTransfer$9$ChatRightsEditActivity(dialogInterface, i);
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -926,7 +926,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     if ("PASSWORD_MISSING".equals(tLRPC$TL_error2.text)) {
                         builder2.setPositiveButton(LocaleController.getString("EditAdminTransferSetPassword", NUM), new DialogInterface.OnClickListener() {
                             public final void onClick(DialogInterface dialogInterface, int i) {
-                                ChatRightsEditActivity.this.lambda$null$10$ChatRightsEditActivity(dialogInterface, i);
+                                ChatRightsEditActivity.this.lambda$initTransfer$10$ChatRightsEditActivity(dialogInterface, i);
                             }
                         });
                         builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -952,7 +952,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                         }
 
                         public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                            ChatRightsEditActivity.this.lambda$null$12$ChatRightsEditActivity(this.f$1, tLObject, tLRPC$TL_error);
+                            ChatRightsEditActivity.this.lambda$initTransfer$12$ChatRightsEditActivity(this.f$1, tLObject, tLRPC$TL_error);
                         }
                     }, 8);
                 } else if (tLRPC$TL_error2.text.equals("CHANNELS_TOO_MUCH")) {
@@ -974,8 +974,8 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$9 */
-    public /* synthetic */ void lambda$null$9$ChatRightsEditActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$initTransfer$9 */
+    public /* synthetic */ void lambda$initTransfer$9$ChatRightsEditActivity(DialogInterface dialogInterface, int i) {
         TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
         twoStepVerificationActivity.setDelegate(new TwoStepVerificationActivity.TwoStepVerificationActivityDelegate(twoStepVerificationActivity) {
             public final /* synthetic */ TwoStepVerificationActivity f$1;
@@ -985,21 +985,21 @@ public class ChatRightsEditActivity extends BaseFragment {
             }
 
             public final void didEnterPassword(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP) {
-                ChatRightsEditActivity.this.lambda$null$8$ChatRightsEditActivity(this.f$1, tLRPC$InputCheckPasswordSRP);
+                ChatRightsEditActivity.this.lambda$initTransfer$8$ChatRightsEditActivity(this.f$1, tLRPC$InputCheckPasswordSRP);
             }
         });
         presentFragment(twoStepVerificationActivity);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$ChatRightsEditActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$initTransfer$10 */
+    public /* synthetic */ void lambda$initTransfer$10$ChatRightsEditActivity(DialogInterface dialogInterface, int i) {
         presentFragment(new TwoStepVerificationSetupActivity(6, (TLRPC$TL_account_password) null));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$12 */
-    public /* synthetic */ void lambda$null$12$ChatRightsEditActivity(TwoStepVerificationActivity twoStepVerificationActivity, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$initTransfer$12 */
+    public /* synthetic */ void lambda$initTransfer$12$ChatRightsEditActivity(TwoStepVerificationActivity twoStepVerificationActivity, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, twoStepVerificationActivity) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -1012,19 +1012,19 @@ public class ChatRightsEditActivity extends BaseFragment {
             }
 
             public final void run() {
-                ChatRightsEditActivity.this.lambda$null$11$ChatRightsEditActivity(this.f$1, this.f$2, this.f$3);
+                ChatRightsEditActivity.this.lambda$initTransfer$11$ChatRightsEditActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$ChatRightsEditActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TwoStepVerificationActivity twoStepVerificationActivity) {
+    /* renamed from: lambda$initTransfer$11 */
+    public /* synthetic */ void lambda$initTransfer$11$ChatRightsEditActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TwoStepVerificationActivity twoStepVerificationActivity) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
             twoStepVerificationActivity.setCurrentPasswordInfo((byte[]) null, tLRPC$TL_account_password);
             TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$TL_account_password);
-            lambda$null$8(twoStepVerificationActivity.getNewSrpPassword(), twoStepVerificationActivity);
+            lambda$initTransfer$8(twoStepVerificationActivity.getNewSrpPassword(), twoStepVerificationActivity);
         }
     }
 
@@ -1257,13 +1257,13 @@ public class ChatRightsEditActivity extends BaseFragment {
             return
         L_0x003e:
             int r0 = r13.currentType
-            if (r0 != 0) goto L_0x0114
+            if (r0 != 0) goto L_0x0113
             int r0 = r13.rankRow
-            if (r0 == r2) goto L_0x007f
+            if (r0 == r2) goto L_0x007e
             java.lang.String r0 = r13.currentRank
             int r2 = r0.length()
             int r0 = r0.codePointCount(r4, r2)
-            if (r0 <= r1) goto L_0x007f
+            if (r0 <= r1) goto L_0x007e
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
             int r1 = r13.rankRow
             r0.smoothScrollToPosition(r1)
@@ -1271,57 +1271,57 @@ public class ChatRightsEditActivity extends BaseFragment {
             java.lang.String r1 = "vibrator"
             java.lang.Object r0 = r0.getSystemService(r1)
             android.os.Vibrator r0 = (android.os.Vibrator) r0
-            if (r0 == 0) goto L_0x006d
+            if (r0 == 0) goto L_0x006c
             r1 = 200(0xc8, double:9.9E-322)
             r0.vibrate(r1)
-        L_0x006d:
+        L_0x006c:
             org.telegram.ui.Components.RecyclerListView r0 = r13.listView
             int r1 = r13.rankHeaderRow
             androidx.recyclerview.widget.RecyclerView$ViewHolder r0 = r0.findViewHolderForAdapterPosition(r1)
-            if (r0 == 0) goto L_0x007e
+            if (r0 == 0) goto L_0x007d
             android.view.View r0 = r0.itemView
             r1 = 1073741824(0x40000000, float:2.0)
             org.telegram.messenger.AndroidUtilities.shakeView(r0, r1, r4)
-        L_0x007e:
+        L_0x007d:
             return
-        L_0x007f:
+        L_0x007e:
             boolean r0 = r13.isChannel
-            if (r0 == 0) goto L_0x008a
+            if (r0 == 0) goto L_0x0089
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r13.adminRights
             r0.ban_users = r4
             r0.pin_messages = r4
-            goto L_0x0090
-        L_0x008a:
+            goto L_0x008f
+        L_0x0089:
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r13.adminRights
             r0.edit_messages = r4
             r0.post_messages = r4
-        L_0x0090:
+        L_0x008f:
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r13.adminRights
             boolean r1 = r0.change_info
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.post_messages
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.edit_messages
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.delete_messages
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.ban_users
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.invite_users
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.pin_messages
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.add_admins
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.anonymous
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             boolean r1 = r0.manage_call
-            if (r1 != 0) goto L_0x00bd
+            if (r1 != 0) goto L_0x00bc
             r0.other = r3
-            goto L_0x00bf
-        L_0x00bd:
+            goto L_0x00be
+        L_0x00bc:
             r0.other = r4
-        L_0x00bf:
+        L_0x00be:
             int r0 = r13.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r0)
             int r6 = r13.chatId
@@ -1333,40 +1333,40 @@ public class ChatRightsEditActivity extends BaseFragment {
             boolean r12 = r13.isAddingNew
             r5.setUserAdminRole(r6, r7, r8, r9, r10, r11, r12)
             org.telegram.ui.ChatRightsEditActivity$ChatRightsEditActivityDelegate r0 = r13.delegate
-            if (r0 == 0) goto L_0x0159
+            if (r0 == 0) goto L_0x0158
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r1 = r13.adminRights
             boolean r2 = r1.change_info
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.post_messages
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.edit_messages
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.delete_messages
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.ban_users
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.invite_users
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.pin_messages
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.add_admins
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.anonymous
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.manage_call
-            if (r2 != 0) goto L_0x010c
+            if (r2 != 0) goto L_0x010b
             boolean r2 = r1.other
-            if (r2 == 0) goto L_0x010b
-            goto L_0x010c
-        L_0x010b:
+            if (r2 == 0) goto L_0x010a
+            goto L_0x010b
+        L_0x010a:
             r3 = 0
-        L_0x010c:
+        L_0x010b:
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r2 = r13.bannedRights
             java.lang.String r4 = r13.currentRank
             r0.didSetRights(r3, r1, r2, r4)
-            goto L_0x0159
-        L_0x0114:
-            if (r0 != r3) goto L_0x0159
+            goto L_0x0158
+        L_0x0113:
+            if (r0 != r3) goto L_0x0158
             int r0 = r13.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r0)
             int r6 = r13.chatId
@@ -1378,30 +1378,30 @@ public class ChatRightsEditActivity extends BaseFragment {
             r5.setParticipantBannedRole(r6, r7, r8, r9, r10, r11)
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r0 = r13.bannedRights
             boolean r1 = r0.send_messages
-            if (r1 != 0) goto L_0x014e
+            if (r1 != 0) goto L_0x014d
             boolean r1 = r0.send_stickers
-            if (r1 != 0) goto L_0x014e
+            if (r1 != 0) goto L_0x014d
             boolean r1 = r0.embed_links
-            if (r1 != 0) goto L_0x014e
+            if (r1 != 0) goto L_0x014d
             boolean r1 = r0.send_media
-            if (r1 != 0) goto L_0x014e
+            if (r1 != 0) goto L_0x014d
             boolean r1 = r0.send_gifs
-            if (r1 != 0) goto L_0x014e
+            if (r1 != 0) goto L_0x014d
             boolean r1 = r0.send_games
-            if (r1 != 0) goto L_0x014e
+            if (r1 != 0) goto L_0x014d
             boolean r1 = r0.send_inline
-            if (r1 == 0) goto L_0x014b
-            goto L_0x014e
-        L_0x014b:
+            if (r1 == 0) goto L_0x014a
+            goto L_0x014d
+        L_0x014a:
             r0.until_date = r4
             r3 = 2
-        L_0x014e:
+        L_0x014d:
             org.telegram.ui.ChatRightsEditActivity$ChatRightsEditActivityDelegate r1 = r13.delegate
-            if (r1 == 0) goto L_0x0159
+            if (r1 == 0) goto L_0x0158
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r2 = r13.adminRights
             java.lang.String r4 = r13.currentRank
             r1.didSetRights(r3, r2, r0, r4)
-        L_0x0159:
+        L_0x0158:
             r13.finishFragment()
             return
         */
@@ -1567,16 +1567,16 @@ public class ChatRightsEditActivity extends BaseFragment {
                 r6 = this;
                 java.lang.String r7 = "windowBackgroundWhite"
                 switch(r8) {
-                    case 0: goto L_0x0083;
-                    case 1: goto L_0x006c;
-                    case 2: goto L_0x005d;
-                    case 3: goto L_0x0045;
-                    case 4: goto L_0x0036;
-                    case 5: goto L_0x002e;
-                    case 6: goto L_0x001f;
-                    default: goto L_0x0006;
+                    case 0: goto L_0x0080;
+                    case 1: goto L_0x006a;
+                    case 2: goto L_0x005b;
+                    case 3: goto L_0x0044;
+                    case 4: goto L_0x0035;
+                    case 5: goto L_0x002d;
+                    case 6: goto L_0x001e;
+                    default: goto L_0x0005;
                 }
-            L_0x0006:
+            L_0x0005:
                 org.telegram.ui.Cells.PollEditTextCell r8 = new org.telegram.ui.Cells.PollEditTextCell
                 android.content.Context r0 = r6.mContext
                 r1 = 0
@@ -1586,27 +1586,27 @@ public class ChatRightsEditActivity extends BaseFragment {
                 org.telegram.ui.ChatRightsEditActivity$ListAdapter$1 r7 = new org.telegram.ui.ChatRightsEditActivity$ListAdapter$1
                 r7.<init>()
                 r8.addTextWatcher(r7)
-                goto L_0x0093
-            L_0x001f:
+                goto L_0x0090
+            L_0x001e:
                 org.telegram.ui.Cells.TextDetailCell r8 = new org.telegram.ui.Cells.TextDetailCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x0093
-            L_0x002e:
+                goto L_0x0090
+            L_0x002d:
                 org.telegram.ui.Cells.ShadowSectionCell r8 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
-                goto L_0x0093
-            L_0x0036:
+                goto L_0x0090
+            L_0x0035:
                 org.telegram.ui.Cells.TextCheckCell2 r8 = new org.telegram.ui.Cells.TextCheckCell2
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x0093
-            L_0x0045:
+                goto L_0x0090
+            L_0x0044:
                 org.telegram.ui.Cells.HeaderCell r8 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r1 = r6.mContext
                 r3 = 21
@@ -1617,25 +1617,25 @@ public class ChatRightsEditActivity extends BaseFragment {
                 r0.<init>(r1, r2, r3, r4, r5)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x0093
-            L_0x005d:
+                goto L_0x0090
+            L_0x005b:
                 org.telegram.ui.Cells.TextSettingsCell r8 = new org.telegram.ui.Cells.TextSettingsCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x0093
-            L_0x006c:
+                goto L_0x0090
+            L_0x006a:
                 org.telegram.ui.Cells.TextInfoPrivacyCell r8 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
                 android.content.Context r7 = r6.mContext
-                r0 = 2131165450(0x7var_a, float:1.7945117E38)
+                r0 = 2131165451(0x7var_b, float:1.794512E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r0, (java.lang.String) r1)
                 r8.setBackgroundDrawable(r7)
-                goto L_0x0093
-            L_0x0083:
+                goto L_0x0090
+            L_0x0080:
                 org.telegram.ui.Cells.UserCell2 r8 = new org.telegram.ui.Cells.UserCell2
                 android.content.Context r0 = r6.mContext
                 r1 = 4
@@ -1643,7 +1643,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 r8.<init>(r0, r1, r2)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-            L_0x0093:
+            L_0x0090:
                 org.telegram.ui.Components.RecyclerListView$Holder r7 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r7.<init>(r8)
                 return r7

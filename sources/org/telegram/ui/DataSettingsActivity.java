@@ -74,6 +74,7 @@ public class DataSettingsActivity extends BaseFragment {
     public int enableMkvRow;
     /* access modifiers changed from: private */
     public int enableStreamRow;
+    private LinearLayoutManager layoutManager;
     private ListAdapter listAdapter;
     private RecyclerListView listView;
     /* access modifiers changed from: private */
@@ -240,7 +241,10 @@ public class DataSettingsActivity extends BaseFragment {
         RecyclerListView recyclerListView = new RecyclerListView(context);
         this.listView = recyclerListView;
         recyclerListView.setVerticalScrollBarEnabled(false);
-        this.listView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+        RecyclerListView recyclerListView2 = this.listView;
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
+        this.layoutManager = linearLayoutManager;
+        recyclerListView2.setLayoutManager(linearLayoutManager);
         ((FrameLayout) this.fragmentView).addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended(context) {
@@ -325,7 +329,7 @@ public class DataSettingsActivity extends BaseFragment {
                 builder.setMessage(LocaleController.getString("ResetAutomaticMediaDownloadAlert", NUM));
                 builder.setPositiveButton(LocaleController.getString("Reset", NUM), new DialogInterface.OnClickListener() {
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        DataSettingsActivity.this.lambda$null$0$DataSettingsActivity(dialogInterface, i);
+                        DataSettingsActivity.this.lambda$createView$0$DataSettingsActivity(dialogInterface, i);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -359,7 +363,7 @@ public class DataSettingsActivity extends BaseFragment {
                     }
 
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        DataSettingsActivity.this.lambda$null$1$DataSettingsActivity(this.f$1, this.f$2, dialogInterface, i);
+                        DataSettingsActivity.this.lambda$createView$1$DataSettingsActivity(this.f$1, this.f$2, dialogInterface, i);
                     }
                 });
                 setVisibleDialog(createSingleChoiceDialog);
@@ -376,7 +380,7 @@ public class DataSettingsActivity extends BaseFragment {
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    DataSettingsActivity.this.lambda$null$1$DataSettingsActivity(this.f$1, this.f$2, dialogInterface, i);
+                    DataSettingsActivity.this.lambda$createView$1$DataSettingsActivity(this.f$1, this.f$2, dialogInterface, i);
                 }
             });
             setVisibleDialog(createSingleChoiceDialog2);
@@ -424,7 +428,7 @@ public class DataSettingsActivity extends BaseFragment {
                     }
 
                     public final void onClick(View view) {
-                        DataSettingsActivity.this.lambda$null$2$DataSettingsActivity(this.f$1, this.f$2, view);
+                        DataSettingsActivity.this.lambda$createView$2$DataSettingsActivity(this.f$1, this.f$2, view);
                     }
                 });
             }
@@ -462,7 +466,7 @@ public class DataSettingsActivity extends BaseFragment {
             builder3.setMessage(LocaleController.getString("AreYouSureClearDrafts", NUM));
             builder3.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    DataSettingsActivity.this.lambda$null$5$DataSettingsActivity(dialogInterface, i);
+                    DataSettingsActivity.this.lambda$createView$5$DataSettingsActivity(dialogInterface, i);
                 }
             });
             builder3.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -476,8 +480,8 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$DataSettingsActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$0 */
+    public /* synthetic */ void lambda$createView$0$DataSettingsActivity(DialogInterface dialogInterface, int i) {
         String str;
         DownloadController.Preset preset;
         DownloadController.Preset preset2;
@@ -515,8 +519,8 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$DataSettingsActivity(SharedPreferences sharedPreferences, int i, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$createView$1 */
+    public /* synthetic */ void lambda$createView$1$DataSettingsActivity(SharedPreferences sharedPreferences, int i, DialogInterface dialogInterface, int i2) {
         int i3 = 3;
         if (i2 == 0) {
             i3 = 0;
@@ -533,8 +537,8 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$DataSettingsActivity(String str, AlertDialog.Builder builder, View view) {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$DataSettingsActivity(String str, AlertDialog.Builder builder, View view) {
         SharedConfig.storageCacheDir = str;
         SharedConfig.saveConfig();
         ImageLoader.getInstance().checkMediaPaths();
@@ -543,27 +547,27 @@ public class DataSettingsActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$DataSettingsActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$DataSettingsActivity(DialogInterface dialogInterface, int i) {
         getConnectionsManager().sendRequest(new TLRPC$TL_messages_clearAllDrafts(), new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                DataSettingsActivity.this.lambda$null$4$DataSettingsActivity(tLObject, tLRPC$TL_error);
+                DataSettingsActivity.this.lambda$createView$4$DataSettingsActivity(tLObject, tLRPC$TL_error);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$DataSettingsActivity() {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$DataSettingsActivity() {
         getMediaDataController().clearAllDrafts(true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$DataSettingsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$DataSettingsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                DataSettingsActivity.this.lambda$null$3$DataSettingsActivity();
+                DataSettingsActivity.this.lambda$createView$3$DataSettingsActivity();
             }
         });
     }

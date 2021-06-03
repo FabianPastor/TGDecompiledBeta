@@ -103,7 +103,6 @@ public class ActionBar extends FrameLayout {
         }
 
         public void onItemClick(int i) {
-            throw null;
         }
     }
 
@@ -181,6 +180,10 @@ public class ActionBar extends FrameLayout {
             backDrawable.setRotation(isActionModeShowed() ? 1.0f : 0.0f, false);
             backDrawable.setRotatedColor(this.itemsActionModeColor);
             backDrawable.setColor(this.itemsColor);
+        } else if (drawable instanceof MenuDrawable) {
+            MenuDrawable menuDrawable = (MenuDrawable) drawable;
+            menuDrawable.setBackColor(this.actionBarColor);
+            menuDrawable.setIconColor(this.itemsColor);
         }
     }
 
@@ -491,8 +494,7 @@ public class ActionBar extends FrameLayout {
         this.actionModeTag = str;
         AnonymousClass1 r4 = new ActionBarMenu(getContext(), this) {
             public void setBackgroundColor(int i) {
-                int unused = ActionBar.this.actionModeColor = i;
-                super.setBackgroundColor(i);
+                super.setBackgroundColor(ActionBar.this.actionModeColor = i);
             }
         };
         this.actionMode = r4;
@@ -832,10 +834,46 @@ public class ActionBar extends FrameLayout {
     public void setBackgroundColor(int i) {
         this.actionBarColor = i;
         super.setBackgroundColor(i);
+        ImageView imageView = this.backButtonImageView;
+        if (imageView != null) {
+            Drawable drawable = imageView.getDrawable();
+            if (drawable instanceof MenuDrawable) {
+                ((MenuDrawable) drawable).setBackColor(i);
+            }
+        }
     }
 
     public boolean isActionModeShowed() {
         return this.actionMode != null && this.actionModeVisible;
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:4:0x0008, code lost:
+        r0 = r1.actionModeTag;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean isActionModeShowed(java.lang.String r2) {
+        /*
+            r1 = this;
+            org.telegram.ui.ActionBar.ActionBarMenu r0 = r1.actionMode
+            if (r0 == 0) goto L_0x0018
+            boolean r0 = r1.actionModeVisible
+            if (r0 == 0) goto L_0x0018
+            java.lang.String r0 = r1.actionModeTag
+            if (r0 != 0) goto L_0x000e
+            if (r2 == 0) goto L_0x0016
+        L_0x000e:
+            if (r0 == 0) goto L_0x0018
+            boolean r2 = r0.equals(r2)
+            if (r2 == 0) goto L_0x0018
+        L_0x0016:
+            r2 = 1
+            goto L_0x0019
+        L_0x0018:
+            r2 = 0
+        L_0x0019:
+            return r2
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBar.isActionModeShowed(java.lang.String):boolean");
     }
 
     public void onSearchFieldVisibilityChanged(final boolean z) {
@@ -899,7 +937,7 @@ public class ActionBar extends FrameLayout {
             animatorSet4.playTogether(animatorArr3);
             i++;
         }
-        this.searchVisibleAnimator.addListener(new AnimatorListenerAdapter(this) {
+        this.searchVisibleAnimator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 for (int i = 0; i < arrayList.size(); i++) {
                     View view = (View) arrayList.get(i);
@@ -908,6 +946,14 @@ public class ActionBar extends FrameLayout {
                         view.setAlpha(0.0f);
                     } else {
                         view.setAlpha(1.0f);
+                    }
+                }
+                if (z) {
+                    if (ActionBar.this.titleTextView[0] != null) {
+                        ActionBar.this.titleTextView[0].setVisibility(8);
+                    }
+                    if (ActionBar.this.titleTextView[1] != null) {
+                        ActionBar.this.titleTextView[1].setVisibility(8);
                     }
                 }
             }

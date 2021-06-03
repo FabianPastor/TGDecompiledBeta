@@ -328,7 +328,7 @@ public class ContentPreviewViewer {
                         }
 
                         public final void didSelectDate(boolean z, int i) {
-                            ContentPreviewViewer.AnonymousClass1.lambda$null$3(ContentPreviewViewer.ContentPreviewViewerDelegate.this, this.f$1, this.f$2, this.f$3, z, i);
+                            ContentPreviewViewer.AnonymousClass1.lambda$run$3(ContentPreviewViewer.ContentPreviewViewerDelegate.this, this.f$1, this.f$2, this.f$3, z, i);
                         }
                     });
                 }
@@ -338,7 +338,7 @@ public class ContentPreviewViewer {
         /* JADX WARNING: type inference failed for: r2v0, types: [org.telegram.tgnet.TLRPC$BotInlineResult] */
         /* JADX WARNING: Unknown variable types count: 1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        static /* synthetic */ void lambda$null$3(org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r0, org.telegram.tgnet.TLRPC$Document r1, org.telegram.tgnet.TLRPC$BotInlineResult r2, java.lang.Object r3, boolean r4, int r5) {
+        static /* synthetic */ void lambda$run$3(org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r0, org.telegram.tgnet.TLRPC$Document r1, org.telegram.tgnet.TLRPC$BotInlineResult r2, java.lang.Object r3, boolean r4, int r5) {
             /*
                 if (r1 == 0) goto L_0x0003
                 goto L_0x0004
@@ -348,7 +348,7 @@ public class ContentPreviewViewer {
                 r0.sendGif(r1, r3, r4, r5)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.AnonymousClass1.lambda$null$3(org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate, org.telegram.tgnet.TLRPC$Document, org.telegram.tgnet.TLRPC$BotInlineResult, java.lang.Object, boolean, int):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.AnonymousClass1.lambda$run$3(org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate, org.telegram.tgnet.TLRPC$Document, org.telegram.tgnet.TLRPC$BotInlineResult, java.lang.Object, boolean, int):void");
         }
 
         /* access modifiers changed from: private */
@@ -469,10 +469,10 @@ public class ContentPreviewViewer {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x0138  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x013e  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0160  */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x0185  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x0132  */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x0138  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x015a  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x017f  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouch(android.view.MotionEvent r15, org.telegram.ui.Components.RecyclerListView r16, int r17, java.lang.Object r18, org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r19) {
         /*
@@ -485,27 +485,27 @@ public class ContentPreviewViewer {
             r2 = 0
             if (r1 != 0) goto L_0x0012
             boolean r1 = r14.isVisible()
-            if (r1 == 0) goto L_0x026a
+            if (r1 == 0) goto L_0x0264
         L_0x0012:
             int r1 = r15.getAction()
             r3 = 0
             r8 = 1
-            if (r1 == r8) goto L_0x0228
+            if (r1 == r8) goto L_0x0222
             int r1 = r15.getAction()
             r4 = 3
-            if (r1 == r4) goto L_0x0228
+            if (r1 == r4) goto L_0x0222
             int r1 = r15.getAction()
             r4 = 6
             if (r1 != r4) goto L_0x002a
-            goto L_0x0228
+            goto L_0x0222
         L_0x002a:
             int r1 = r15.getAction()
-            if (r1 == 0) goto L_0x026a
+            if (r1 == 0) goto L_0x0264
             boolean r1 = r7.isVisible
             r4 = 2
-            if (r1 == 0) goto L_0x01ed
+            if (r1 == 0) goto L_0x01e7
             int r1 = r15.getAction()
-            if (r1 != r4) goto L_0x01ec
+            if (r1 != r4) goto L_0x01e6
             int r1 = r7.currentContentType
             if (r1 != r8) goto L_0x00b7
             org.telegram.ui.ActionBar.BottomSheet r0 = r7.visibleDialog
@@ -577,103 +577,97 @@ public class ContentPreviewViewer {
             int r5 = r16.getChildCount()
             r6 = 0
         L_0x00c6:
-            if (r6 >= r5) goto L_0x01ec
-            boolean r9 = r0 instanceof org.telegram.ui.Components.RecyclerListView
-            if (r9 == 0) goto L_0x00d1
+            if (r6 >= r5) goto L_0x01e6
             android.view.View r9 = r0.getChildAt(r6)
-            goto L_0x00d2
-        L_0x00d1:
-            r9 = r3
-        L_0x00d2:
-            if (r9 != 0) goto L_0x00d5
+            if (r9 != 0) goto L_0x00cf
             return r2
-        L_0x00d5:
+        L_0x00cf:
             int r10 = r9.getTop()
             int r11 = r9.getBottom()
             int r12 = r9.getLeft()
             int r13 = r9.getRight()
-            if (r10 > r4) goto L_0x01e6
-            if (r11 < r4) goto L_0x01e6
-            if (r12 > r1) goto L_0x01e6
-            if (r13 >= r1) goto L_0x00ef
-            goto L_0x01e6
-        L_0x00ef:
+            if (r10 > r4) goto L_0x01e0
+            if (r11 < r4) goto L_0x01e0
+            if (r12 > r1) goto L_0x01e0
+            if (r13 >= r1) goto L_0x00e9
+            goto L_0x01e0
+        L_0x00e9:
             boolean r0 = r9 instanceof org.telegram.ui.Cells.StickerEmojiCell
             r1 = -1
-            if (r0 == 0) goto L_0x00fb
+            if (r0 == 0) goto L_0x00f5
             org.telegram.messenger.ImageReceiver r0 = r7.centerImage
             r0.setRoundRadius((int) r2)
-        L_0x00f9:
+        L_0x00f3:
             r10 = 0
-            goto L_0x012c
-        L_0x00fb:
+            goto L_0x0126
+        L_0x00f5:
             boolean r0 = r9 instanceof org.telegram.ui.Cells.StickerCell
-            if (r0 == 0) goto L_0x0105
+            if (r0 == 0) goto L_0x00ff
             org.telegram.messenger.ImageReceiver r0 = r7.centerImage
             r0.setRoundRadius((int) r2)
-            goto L_0x00f9
-        L_0x0105:
+            goto L_0x00f3
+        L_0x00ff:
             boolean r0 = r9 instanceof org.telegram.ui.Cells.ContextLinkCell
-            if (r0 == 0) goto L_0x012b
+            if (r0 == 0) goto L_0x0125
             r0 = r9
             org.telegram.ui.Cells.ContextLinkCell r0 = (org.telegram.ui.Cells.ContextLinkCell) r0
             boolean r4 = r0.isSticker()
-            if (r4 == 0) goto L_0x0118
+            if (r4 == 0) goto L_0x0112
             org.telegram.messenger.ImageReceiver r0 = r7.centerImage
             r0.setRoundRadius((int) r2)
-            goto L_0x00f9
-        L_0x0118:
+            goto L_0x00f3
+        L_0x0112:
             boolean r0 = r0.isGif()
-            if (r0 == 0) goto L_0x012b
+            if (r0 == 0) goto L_0x0125
             org.telegram.messenger.ImageReceiver r0 = r7.centerImage
             r4 = 1086324736(0x40CLASSNAME, float:6.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r0.setRoundRadius((int) r4)
             r10 = 1
-            goto L_0x012c
-        L_0x012b:
+            goto L_0x0126
+        L_0x0125:
             r10 = -1
-        L_0x012c:
-            if (r10 == r1) goto L_0x01ec
+        L_0x0126:
+            if (r10 == r1) goto L_0x01e6
             android.view.View r0 = r7.currentPreviewCell
-            if (r9 != r0) goto L_0x0134
-            goto L_0x01ec
-        L_0x0134:
+            if (r9 != r0) goto L_0x012e
+            goto L_0x01e6
+        L_0x012e:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
-            if (r1 == 0) goto L_0x013e
+            if (r1 == 0) goto L_0x0138
             org.telegram.ui.Cells.StickerEmojiCell r0 = (org.telegram.ui.Cells.StickerEmojiCell) r0
             r0.setScaled(r2)
-            goto L_0x0151
-        L_0x013e:
+            goto L_0x014b
+        L_0x0138:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerCell
-            if (r1 == 0) goto L_0x0148
+            if (r1 == 0) goto L_0x0142
             org.telegram.ui.Cells.StickerCell r0 = (org.telegram.ui.Cells.StickerCell) r0
             r0.setScaled(r2)
-            goto L_0x0151
-        L_0x0148:
+            goto L_0x014b
+        L_0x0142:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.ContextLinkCell
-            if (r1 == 0) goto L_0x0151
+            if (r1 == 0) goto L_0x014b
             org.telegram.ui.Cells.ContextLinkCell r0 = (org.telegram.ui.Cells.ContextLinkCell) r0
             r0.setScaled(r2)
-        L_0x0151:
+        L_0x014b:
             r7.currentPreviewCell = r9
             r9 = r17
             r14.setKeyboardHeight(r9)
             r7.clearsInputField = r2
             android.view.View r0 = r7.currentPreviewCell
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
-            if (r1 == 0) goto L_0x0185
+            if (r1 == 0) goto L_0x017f
             r9 = r0
             org.telegram.ui.Cells.StickerEmojiCell r9 = (org.telegram.ui.Cells.StickerEmojiCell) r9
             org.telegram.tgnet.TLRPC$Document r1 = r9.getSticker()
             org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r7.delegate
-            if (r0 == 0) goto L_0x0171
+            if (r0 == 0) goto L_0x016b
             java.lang.String r0 = r0.getQuery(r2)
             r2 = r0
-            goto L_0x0172
-        L_0x0171:
+            goto L_0x016c
+        L_0x016b:
             r2 = r3
-        L_0x0172:
+        L_0x016c:
             r3 = 0
             boolean r5 = r9.isRecent()
             java.lang.Object r6 = r9.getParentObject()
@@ -681,21 +675,21 @@ public class ContentPreviewViewer {
             r4 = r10
             r0.open(r1, r2, r3, r4, r5, r6)
             r9.setScaled(r8)
-            goto L_0x01e5
-        L_0x0185:
+            goto L_0x01df
+        L_0x017f:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerCell
-            if (r1 == 0) goto L_0x01b0
+            if (r1 == 0) goto L_0x01aa
             r9 = r0
             org.telegram.ui.Cells.StickerCell r9 = (org.telegram.ui.Cells.StickerCell) r9
             org.telegram.tgnet.TLRPC$Document r1 = r9.getSticker()
             org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r7.delegate
-            if (r0 == 0) goto L_0x019a
+            if (r0 == 0) goto L_0x0194
             java.lang.String r0 = r0.getQuery(r2)
             r2 = r0
-            goto L_0x019b
-        L_0x019a:
+            goto L_0x0195
+        L_0x0194:
             r2 = r3
-        L_0x019b:
+        L_0x0195:
             r3 = 0
             r5 = 0
             java.lang.Object r6 = r9.getParentObject()
@@ -705,49 +699,49 @@ public class ContentPreviewViewer {
             r9.setScaled(r8)
             boolean r0 = r9.isClearsInputField()
             r7.clearsInputField = r0
-            goto L_0x01e5
-        L_0x01b0:
+            goto L_0x01df
+        L_0x01aa:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.ContextLinkCell
-            if (r1 == 0) goto L_0x01e5
+            if (r1 == 0) goto L_0x01df
             r9 = r0
             org.telegram.ui.Cells.ContextLinkCell r9 = (org.telegram.ui.Cells.ContextLinkCell) r9
             org.telegram.tgnet.TLRPC$Document r1 = r9.getDocument()
             org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r7.delegate
-            if (r0 == 0) goto L_0x01c5
+            if (r0 == 0) goto L_0x01bf
             java.lang.String r0 = r0.getQuery(r8)
             r2 = r0
-            goto L_0x01c6
-        L_0x01c5:
+            goto L_0x01c0
+        L_0x01bf:
             r2 = r3
-        L_0x01c6:
+        L_0x01c0:
             org.telegram.tgnet.TLRPC$BotInlineResult r3 = r9.getBotInlineResult()
             r5 = 0
             org.telegram.tgnet.TLRPC$BotInlineResult r0 = r9.getBotInlineResult()
-            if (r0 == 0) goto L_0x01d6
+            if (r0 == 0) goto L_0x01d0
             org.telegram.tgnet.TLRPC$User r0 = r9.getInlineBot()
-            goto L_0x01da
-        L_0x01d6:
+            goto L_0x01d4
+        L_0x01d0:
             java.lang.Object r0 = r9.getParentObject()
-        L_0x01da:
+        L_0x01d4:
             r6 = r0
             r0 = r14
             r4 = r10
             r0.open(r1, r2, r3, r4, r5, r6)
-            if (r10 == r8) goto L_0x01e5
+            if (r10 == r8) goto L_0x01df
             r9.setScaled(r8)
-        L_0x01e5:
+        L_0x01df:
             return r8
-        L_0x01e6:
+        L_0x01e0:
             r9 = r17
             int r6 = r6 + 1
             goto L_0x00c6
-        L_0x01ec:
+        L_0x01e6:
             return r8
-        L_0x01ed:
+        L_0x01e7:
             java.lang.Runnable r0 = r7.openPreviewRunnable
-            if (r0 == 0) goto L_0x026a
+            if (r0 == 0) goto L_0x0264
             int r0 = r15.getAction()
-            if (r0 != r4) goto L_0x0220
+            if (r0 != r4) goto L_0x021a
             int r0 = r7.startX
             float r0 = (float) r0
             float r1 = r15.getX()
@@ -763,52 +757,52 @@ public class ContentPreviewViewer {
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             double r4 = (double) r4
             int r6 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r6 <= 0) goto L_0x026a
+            if (r6 <= 0) goto L_0x0264
             java.lang.Runnable r0 = r7.openPreviewRunnable
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
             r7.openPreviewRunnable = r3
-            goto L_0x026a
-        L_0x0220:
+            goto L_0x0264
+        L_0x021a:
             java.lang.Runnable r0 = r7.openPreviewRunnable
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
             r7.openPreviewRunnable = r3
-            goto L_0x026a
-        L_0x0228:
+            goto L_0x0264
+        L_0x0222:
             org.telegram.ui.-$$Lambda$ContentPreviewViewer$fTVdUVOkyauWT6lnO5eDqKhjScQ r1 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$fTVdUVOkyauWT6lnO5eDqKhjScQ
             r4 = r18
             r1.<init>(r4)
             r4 = 150(0x96, double:7.4E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r4)
             java.lang.Runnable r0 = r7.openPreviewRunnable
-            if (r0 == 0) goto L_0x023e
+            if (r0 == 0) goto L_0x0238
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
             r7.openPreviewRunnable = r3
-            goto L_0x026a
-        L_0x023e:
+            goto L_0x0264
+        L_0x0238:
             boolean r0 = r14.isVisible()
-            if (r0 == 0) goto L_0x026a
+            if (r0 == 0) goto L_0x0264
             r14.close()
             android.view.View r0 = r7.currentPreviewCell
-            if (r0 == 0) goto L_0x026a
+            if (r0 == 0) goto L_0x0264
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
-            if (r1 == 0) goto L_0x0255
+            if (r1 == 0) goto L_0x024f
             org.telegram.ui.Cells.StickerEmojiCell r0 = (org.telegram.ui.Cells.StickerEmojiCell) r0
             r0.setScaled(r2)
-            goto L_0x0268
-        L_0x0255:
+            goto L_0x0262
+        L_0x024f:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerCell
-            if (r1 == 0) goto L_0x025f
+            if (r1 == 0) goto L_0x0259
             org.telegram.ui.Cells.StickerCell r0 = (org.telegram.ui.Cells.StickerCell) r0
             r0.setScaled(r2)
-            goto L_0x0268
-        L_0x025f:
+            goto L_0x0262
+        L_0x0259:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.ContextLinkCell
-            if (r1 == 0) goto L_0x0268
+            if (r1 == 0) goto L_0x0262
             org.telegram.ui.Cells.ContextLinkCell r0 = (org.telegram.ui.Cells.ContextLinkCell) r0
             r0.setScaled(r2)
-        L_0x0268:
+        L_0x0262:
             r7.currentPreviewCell = r3
-        L_0x026a:
+        L_0x0264:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onTouch(android.view.MotionEvent, org.telegram.ui.Components.RecyclerListView, int, java.lang.Object, org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate):boolean");
@@ -820,8 +814,8 @@ public class ContentPreviewViewer {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x0098 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x0099  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x0093 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x0094  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onInterceptTouchEvent(android.view.MotionEvent r9, org.telegram.ui.Components.RecyclerListView r10, int r11, org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r12) {
         /*
@@ -829,7 +823,7 @@ public class ContentPreviewViewer {
             r8.delegate = r12
             int r12 = r9.getAction()
             r0 = 0
-            if (r12 != 0) goto L_0x00b0
+            if (r12 != 0) goto L_0x00ab
             float r12 = r9.getX()
             int r12 = (int) r12
             float r9 = r9.getY()
@@ -837,75 +831,71 @@ public class ContentPreviewViewer {
             int r1 = r10.getChildCount()
             r2 = 0
         L_0x0018:
-            if (r2 >= r1) goto L_0x00b0
-            r3 = 0
-            boolean r4 = r10 instanceof org.telegram.ui.Components.RecyclerListView
-            if (r4 == 0) goto L_0x0023
+            if (r2 >= r1) goto L_0x00ab
             android.view.View r3 = r10.getChildAt(r2)
-        L_0x0023:
-            if (r3 != 0) goto L_0x0026
+            if (r3 != 0) goto L_0x0021
             return r0
-        L_0x0026:
+        L_0x0021:
             int r4 = r3.getTop()
             int r5 = r3.getBottom()
             int r6 = r3.getLeft()
             int r7 = r3.getRight()
-            if (r4 > r9) goto L_0x00ac
-            if (r5 < r9) goto L_0x00ac
-            if (r6 > r12) goto L_0x00ac
-            if (r7 >= r12) goto L_0x0040
-            goto L_0x00ac
-        L_0x0040:
+            if (r4 > r9) goto L_0x00a7
+            if (r5 < r9) goto L_0x00a7
+            if (r6 > r12) goto L_0x00a7
+            if (r7 >= r12) goto L_0x003b
+            goto L_0x00a7
+        L_0x003b:
             boolean r1 = r3 instanceof org.telegram.ui.Cells.StickerEmojiCell
             r2 = -1
             r4 = 1
-            if (r1 == 0) goto L_0x0056
+            if (r1 == 0) goto L_0x0051
             r1 = r3
             org.telegram.ui.Cells.StickerEmojiCell r1 = (org.telegram.ui.Cells.StickerEmojiCell) r1
             boolean r1 = r1.showingBitmap()
-            if (r1 == 0) goto L_0x0095
+            if (r1 == 0) goto L_0x0090
             org.telegram.messenger.ImageReceiver r1 = r8.centerImage
             r1.setRoundRadius((int) r0)
-        L_0x0054:
+        L_0x004f:
             r1 = 0
-            goto L_0x0096
-        L_0x0056:
+            goto L_0x0091
+        L_0x0051:
             boolean r1 = r3 instanceof org.telegram.ui.Cells.StickerCell
-            if (r1 == 0) goto L_0x0069
+            if (r1 == 0) goto L_0x0064
             r1 = r3
             org.telegram.ui.Cells.StickerCell r1 = (org.telegram.ui.Cells.StickerCell) r1
             boolean r1 = r1.showingBitmap()
-            if (r1 == 0) goto L_0x0095
+            if (r1 == 0) goto L_0x0090
             org.telegram.messenger.ImageReceiver r1 = r8.centerImage
             r1.setRoundRadius((int) r0)
-            goto L_0x0054
-        L_0x0069:
+            goto L_0x004f
+        L_0x0064:
             boolean r1 = r3 instanceof org.telegram.ui.Cells.ContextLinkCell
-            if (r1 == 0) goto L_0x0095
+            if (r1 == 0) goto L_0x0090
             r1 = r3
             org.telegram.ui.Cells.ContextLinkCell r1 = (org.telegram.ui.Cells.ContextLinkCell) r1
             boolean r5 = r1.showingBitmap()
-            if (r5 == 0) goto L_0x0095
+            if (r5 == 0) goto L_0x0090
             boolean r5 = r1.isSticker()
-            if (r5 == 0) goto L_0x0082
+            if (r5 == 0) goto L_0x007d
             org.telegram.messenger.ImageReceiver r1 = r8.centerImage
             r1.setRoundRadius((int) r0)
-            goto L_0x0054
-        L_0x0082:
+            goto L_0x004f
+        L_0x007d:
             boolean r1 = r1.isGif()
-            if (r1 == 0) goto L_0x0095
+            if (r1 == 0) goto L_0x0090
             org.telegram.messenger.ImageReceiver r1 = r8.centerImage
             r5 = 1086324736(0x40CLASSNAME, float:6.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             r1.setRoundRadius((int) r5)
             r1 = 1
-            goto L_0x0096
-        L_0x0095:
+            goto L_0x0091
+        L_0x0090:
             r1 = -1
-        L_0x0096:
-            if (r1 != r2) goto L_0x0099
+        L_0x0091:
+            if (r1 != r2) goto L_0x0094
             return r0
-        L_0x0099:
+        L_0x0094:
             r8.startX = r12
             r8.startY = r9
             r8.currentPreviewCell = r3
@@ -915,10 +905,10 @@ public class ContentPreviewViewer {
             r10 = 200(0xc8, double:9.9E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r9, r10)
             return r4
-        L_0x00ac:
+        L_0x00a7:
             int r2 = r2 + 1
             goto L_0x0018
-        L_0x00b0:
+        L_0x00ab:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onInterceptTouchEvent(android.view.MotionEvent, org.telegram.ui.Components.RecyclerListView, int, org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate):boolean");

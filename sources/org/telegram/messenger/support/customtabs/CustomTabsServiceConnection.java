@@ -9,7 +9,7 @@ public abstract class CustomTabsServiceConnection implements ServiceConnection {
     public abstract void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient);
 
     public final void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-        onCustomTabsServiceConnected(componentName, new CustomTabsClient(this, ICustomTabsService.Stub.asInterface(iBinder), componentName) {
+        onCustomTabsServiceConnected(componentName, new CustomTabsClient(ICustomTabsService.Stub.asInterface(iBinder), componentName) {
         });
     }
 }

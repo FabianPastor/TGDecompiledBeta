@@ -62,6 +62,7 @@ public class ChangeUsernameActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public CharSequence infoText;
     private String lastCheckName;
+    private boolean lastNameAvailable;
 
     static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
         return true;
@@ -257,6 +258,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.checkReqId, true);
             }
         }
+        this.lastNameAvailable = false;
         if (str != null) {
             if (str.startsWith("_") || str.endsWith("_")) {
                 this.checkTextView.setText(LocaleController.getString("UsernameInvalid", NUM));
@@ -355,14 +357,14 @@ public class ChangeUsernameActivity extends BaseFragment {
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ChangeUsernameActivity.this.lambda$null$3$ChangeUsernameActivity(this.f$1, tLObject, tLRPC$TL_error);
+                ChangeUsernameActivity.this.lambda$checkUserName$3$ChangeUsernameActivity(this.f$1, tLObject, tLRPC$TL_error);
             }
         }, 2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$ChangeUsernameActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$checkUserName$3 */
+    public /* synthetic */ void lambda$checkUserName$3$ChangeUsernameActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error, tLObject) {
             public final /* synthetic */ String f$1;
             public final /* synthetic */ TLRPC$TL_error f$2;
@@ -375,14 +377,14 @@ public class ChangeUsernameActivity extends BaseFragment {
             }
 
             public final void run() {
-                ChangeUsernameActivity.this.lambda$null$2$ChangeUsernameActivity(this.f$1, this.f$2, this.f$3);
+                ChangeUsernameActivity.this.lambda$checkUserName$2$ChangeUsernameActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$ChangeUsernameActivity(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$checkUserName$2 */
+    public /* synthetic */ void lambda$checkUserName$2$ChangeUsernameActivity(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.checkReqId = 0;
         String str2 = this.lastCheckName;
         if (str2 != null && str2.equals(str)) {
@@ -390,11 +392,13 @@ public class ChangeUsernameActivity extends BaseFragment {
                 this.checkTextView.setText(LocaleController.getString("UsernameInUse", NUM));
                 this.checkTextView.setTag("windowBackgroundWhiteRedText4");
                 this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
+                this.lastNameAvailable = false;
                 return;
             }
             this.checkTextView.setText(LocaleController.formatString("UsernameAvailable", NUM, str));
             this.checkTextView.setTag("windowBackgroundWhiteGreenText");
             this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGreenText"));
+            this.lastNameAvailable = true;
         }
     }
 
@@ -463,7 +467,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 }
 
                 public final void run() {
-                    ChangeUsernameActivity.this.lambda$null$5$ChangeUsernameActivity(this.f$1, this.f$2);
+                    ChangeUsernameActivity.this.lambda$saveName$5$ChangeUsernameActivity(this.f$1, this.f$2);
                 }
             });
         } else {
@@ -479,15 +483,15 @@ public class ChangeUsernameActivity extends BaseFragment {
                 }
 
                 public final void run() {
-                    ChangeUsernameActivity.this.lambda$null$6$ChangeUsernameActivity(this.f$1, this.f$2, this.f$3);
+                    ChangeUsernameActivity.this.lambda$saveName$6$ChangeUsernameActivity(this.f$1, this.f$2, this.f$3);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$ChangeUsernameActivity(AlertDialog alertDialog, TLRPC$User tLRPC$User) {
+    /* renamed from: lambda$saveName$5 */
+    public /* synthetic */ void lambda$saveName$5$ChangeUsernameActivity(AlertDialog alertDialog, TLRPC$User tLRPC$User) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {
@@ -502,8 +506,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$6 */
-    public /* synthetic */ void lambda$null$6$ChangeUsernameActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername) {
+    /* renamed from: lambda$saveName$6 */
+    public /* synthetic */ void lambda$saveName$6$ChangeUsernameActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername) {
         try {
             alertDialog.dismiss();
         } catch (Exception e) {

@@ -66,7 +66,9 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     private ImageReceiver imageReceiver;
     private boolean openWithFrontfaceCamera;
     public BaseFragment parentFragment;
+    private File picturePath = null;
     private boolean searchAvailable;
+    private boolean showingFromDialog;
     private TLRPC$PhotoSize smallPhoto;
     private boolean uploadAfterSelect;
     private TLRPC$InputFile uploadedPhoto;
@@ -260,7 +262,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         if (this.parentFragment != null) {
             final HashMap hashMap = new HashMap();
             final ArrayList arrayList = new ArrayList();
-            PhotoPickerActivity photoPickerActivity = new PhotoPickerActivity(0, (MediaController.AlbumEntry) null, hashMap, arrayList, 1, false, (ChatActivity) null);
+            PhotoPickerActivity photoPickerActivity = new PhotoPickerActivity(0, (MediaController.AlbumEntry) null, hashMap, arrayList, 1, false, (ChatActivity) null, this.forceDarkTheme);
             photoPickerActivity.setDelegate(new PhotoPickerActivity.PhotoPickerActivityDelegate() {
                 private boolean sendPressed;
 
@@ -305,7 +307,11 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             });
             photoPickerActivity.setMaxSelectedPhotos(1, false);
             photoPickerActivity.setInitialSearchString(this.delegate.getInitialSearchString());
-            this.parentFragment.presentFragment(photoPickerActivity);
+            if (this.showingFromDialog) {
+                this.parentFragment.showAsSheet(photoPickerActivity);
+            } else {
+                this.parentFragment.presentFragment(photoPickerActivity);
+            }
         }
     }
 
@@ -329,7 +335,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     private void createChatAttachView() {
         BaseFragment baseFragment = this.parentFragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null && this.chatAttachAlert == null) {
-            ChatAttachAlert chatAttachAlert2 = new ChatAttachAlert(this.parentFragment.getParentActivity(), this.parentFragment, this.forceDarkTheme);
+            ChatAttachAlert chatAttachAlert2 = new ChatAttachAlert(this.parentFragment.getParentActivity(), this.parentFragment, this.forceDarkTheme, this.showingFromDialog);
             this.chatAttachAlert = chatAttachAlert2;
             chatAttachAlert2.setAvatarPicker(this.canSelectVideo ? 2 : 1, this.searchAvailable);
             this.chatAttachAlert.setDelegate(new ChatAttachAlert.ChatAttachViewDelegate() {
@@ -340,7 +346,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     return false;
                 }
 
-                public void didPressedButton(int i, boolean z, boolean z2, int i2) {
+                public void didPressedButton(int i, boolean z, boolean z2, int i2, boolean z3) {
                     BaseFragment baseFragment = ImageUpdater.this.parentFragment;
                     if (baseFragment != null && baseFragment.getParentActivity() != null && ImageUpdater.this.chatAttachAlert != null) {
                         if (i == 8 || i == 7) {
@@ -403,9 +409,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                             ImageUpdater.this.didSelectPhotos(arrayList);
                             return;
                         }
-                        if (ImageUpdater.this.chatAttachAlert != null) {
-                            ImageUpdater.this.chatAttachAlert.dismissWithButtonClick(i);
-                        }
+                        ImageUpdater.this.chatAttachAlert.dismissWithButtonClick(i);
                         processSelectedAttach(i);
                     }
                 }
@@ -477,6 +481,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                                     this.imageReceiver.setImage(ImageLocation.getForPhoto(closestPhotoSizeWithSize, sendingMediaInfo.searchImage.photo), (String) null, (Drawable) null, "jpg", (Object) null, 1);
                                 }
                             }
+                            loadBitmap = null;
                         } else if (searchImage.imageUrl != null) {
                             File file = new File(FileLoader.getDirectory(4), Utilities.MD5(sendingMediaInfo.searchImage.imageUrl) + "." + ImageLoader.getHttpUrlExtension(sendingMediaInfo.searchImage.imageUrl, "jpg"));
                             this.finalPath = file.getAbsolutePath();
@@ -489,7 +494,6 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                                 loadBitmap = ImageLoader.loadBitmap(file.getAbsolutePath(), (Uri) null, 800.0f, 800.0f, true);
                             }
                         }
-                        loadBitmap = null;
                     }
                     messageObject = null;
                 }
@@ -570,7 +574,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     public void openGallery() {
         BaseFragment baseFragment = this.parentFragment;
         if (baseFragment != null) {
-            if (Build.VERSION.SDK_INT < 23 || baseFragment == null || baseFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
+            if (Build.VERSION.SDK_INT < 23 || baseFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
                 PhotoAlbumPickerActivity photoAlbumPickerActivity = new PhotoAlbumPickerActivity(this.canSelectVideo ? PhotoAlbumPickerActivity.SELECT_TYPE_AVATAR_VIDEO : PhotoAlbumPickerActivity.SELECT_TYPE_AVATAR, false, false, (ChatActivity) null);
                 photoAlbumPickerActivity.setAllowSearchImages(this.searchAvailable);
                 photoAlbumPickerActivity.setDelegate(new PhotoAlbumPickerActivity.PhotoAlbumPickerActivityDelegate() {
@@ -625,7 +629,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
                 PhotoCropActivity photoCropActivity = new PhotoCropActivity(bundle);
                 photoCropActivity.setDelegate(this);
-                launchActivity.lambda$runLinkRequest$41(photoCropActivity);
+                launchActivity.lambda$runLinkRequest$42(photoCropActivity);
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -649,7 +653,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 return false;
             }
 
-            public void sendButtonPressed(int i, VideoEditedInfo videoEditedInfo, boolean z, int i2) {
+            public void sendButtonPressed(int i, VideoEditedInfo videoEditedInfo, boolean z, int i2, boolean z2) {
                 Bitmap bitmap;
                 MediaController.PhotoEntry photoEntry = (MediaController.PhotoEntry) arrayList.get(0);
                 String str = photoEntry.imagePath;
@@ -914,5 +918,9 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
 
     public void setForceDarkTheme(boolean z) {
         this.forceDarkTheme = z;
+    }
+
+    public void setShowingFromDialog(boolean z) {
+        this.showingFromDialog = z;
     }
 }

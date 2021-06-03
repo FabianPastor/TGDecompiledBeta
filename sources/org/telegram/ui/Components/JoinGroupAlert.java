@@ -202,7 +202,7 @@ public class JoinGroupAlert extends BottomSheet {
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r1.setTextColor(r7)
             android.widget.TextView r1 = r5.cancelButton
-            r7 = 2131624639(0x7f0e02bf, float:1.8876463E38)
+            r7 = 2131624654(0x7f0e02ce, float:1.8876494E38)
             java.lang.String r8 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -236,7 +236,7 @@ public class JoinGroupAlert extends BottomSheet {
             if (r1 != 0) goto L_0x01f6
         L_0x01e3:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131627036(0x7f0e0c1c, float:1.8881325E38)
+            r2 = 2131627064(0x7f0e0CLASSNAME, float:1.8881382E38)
             java.lang.String r3 = "ProfileJoinChannel"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
@@ -244,7 +244,7 @@ public class JoinGroupAlert extends BottomSheet {
             goto L_0x0204
         L_0x01f6:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131625887(0x7f0e079f, float:1.8878995E38)
+            r2 = 2131625903(0x7f0e07af, float:1.8879027E38)
             java.lang.String r3 = "JoinGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -278,14 +278,14 @@ public class JoinGroupAlert extends BottomSheet {
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                JoinGroupAlert.this.lambda$null$2$JoinGroupAlert(this.f$1, tLObject, tLRPC$TL_error);
+                JoinGroupAlert.this.lambda$new$2$JoinGroupAlert(this.f$1, tLObject, tLRPC$TL_error);
             }
         }, 2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$JoinGroupAlert(TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$new$2 */
+    public /* synthetic */ void lambda$new$2$JoinGroupAlert(TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC$Updates) tLObject, false);
         }
@@ -301,14 +301,14 @@ public class JoinGroupAlert extends BottomSheet {
             }
 
             public final void run() {
-                JoinGroupAlert.this.lambda$null$1$JoinGroupAlert(this.f$1, this.f$2, this.f$3);
+                JoinGroupAlert.this.lambda$new$1$JoinGroupAlert(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$1 */
-    public /* synthetic */ void lambda$null$1$JoinGroupAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite) {
+    /* renamed from: lambda$new$1 */
+    public /* synthetic */ void lambda$new$1$JoinGroupAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
             if (tLRPC$TL_error == null) {

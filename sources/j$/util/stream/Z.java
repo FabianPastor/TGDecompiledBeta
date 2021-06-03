@@ -8,9 +8,7 @@ import j$.util.stream.R1;
 import j$.util.stream.S1;
 
 public final /* synthetic */ class Z implements n {
-
-    /* renamed from: a  reason: collision with root package name */
-    public static final /* synthetic */ Z var_a = new Z();
+    public static final /* synthetic */ Z a = new Z();
 
     private /* synthetic */ Z() {
     }

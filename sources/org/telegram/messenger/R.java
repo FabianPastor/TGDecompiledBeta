@@ -74,6 +74,7 @@ public final class R {
         public static final int fontProviderFetchTimeout = NUM;
         public static final int fontProviderPackage = NUM;
         public static final int fontProviderQuery = NUM;
+        public static final int fontProviderSystemFontFamily = NUM;
         public static final int fontStyle = NUM;
         public static final int fontVariationSettings = NUM;
         public static final int fontWeight = NUM;
@@ -264,6 +265,7 @@ public final class R {
         public static final int bar_selector_lock = NUM;
         public static final int bar_selector_style = NUM;
         public static final int bar_selector_white = NUM;
+        public static final int bg_rotate_large = NUM;
         public static final int bg_voip_icon_btn = NUM;
         public static final int blockpanel = NUM;
         public static final int blockpanel_shadow = NUM;
@@ -707,6 +709,9 @@ public final class R {
         public static final int msg_block2 = NUM;
         public static final int msg_calendar = NUM;
         public static final int msg_callback = NUM;
+        public static final int msg_calls_minimize = NUM;
+        public static final int msg_calls_pin = NUM;
+        public static final int msg_calls_unpin = NUM;
         public static final int msg_cancel = NUM;
         public static final int msg_channel = NUM;
         public static final int msg_check = NUM;
@@ -772,6 +777,7 @@ public final class R {
         public static final int msg_photo_shadow = NUM;
         public static final int msg_photoeditor = NUM;
         public static final int msg_pin = NUM;
+        public static final int msg_pin_filled = NUM;
         public static final int msg_pin_mini = NUM;
         public static final int msg_pollstop = NUM;
         public static final int msg_psa = NUM;
@@ -798,6 +804,8 @@ public final class R {
         public static final int msg_round_play_m = NUM;
         public static final int msg_satellite = NUM;
         public static final int msg_schedule = NUM;
+        public static final int msg_screencast = NUM;
+        public static final int msg_screencast_off = NUM;
         public static final int msg_search = NUM;
         public static final int msg_sendphoto = NUM;
         public static final int msg_share = NUM;
@@ -825,8 +833,12 @@ public final class R {
         public static final int msg_videocall = NUM;
         public static final int msg_viewreplies = NUM;
         public static final int msg_views = NUM;
+        public static final int msg_voice_bluetooth = NUM;
+        public static final int msg_voice_headphones = NUM;
         public static final int msg_voice_muted = NUM;
+        public static final int msg_voice_phone = NUM;
         public static final int msg_voice_pip = NUM;
+        public static final int msg_voice_speaker = NUM;
         public static final int msg_voice_unmuted = NUM;
         public static final int msg_voicechat = NUM;
         public static final int msg_voicechat2 = NUM;
@@ -1061,6 +1073,9 @@ public final class R {
         public static final int tabs_reorder = NUM;
         public static final int theme_picker = NUM;
         public static final int theme_preview_image = NUM;
+        public static final int themes_addcolor = NUM;
+        public static final int themes_deletecolor = NUM;
+        public static final int themes_swapcolor = NUM;
         public static final int tip1 = NUM;
         public static final int tip2 = NUM;
         public static final int tip3 = NUM;
@@ -1108,6 +1123,7 @@ public final class R {
         public static final int voice_volume_speaker = NUM;
         public static final int voicechat_active = NUM;
         public static final int voicechat_muted = NUM;
+        public static final int voicechat_screencast = NUM;
         public static final int volume_off = NUM;
         public static final int volume_on = NUM;
         public static final int wall_selection = NUM;
@@ -1138,87 +1154,51 @@ public final class R {
         public static final int zoom_slide = NUM;
         public static final int zoom_slide_a = NUM;
         /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__1__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__1__1 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__2__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__2__1 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__3__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__3__1 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__4__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__4__1 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__5__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__5__1 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__6__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__6__1 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__6__2 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__6__3 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__7__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__7__1 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__7__2 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__7__3 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__8__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_error_to_fp__8__1 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__1__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__2__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__3__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__4__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__5__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__6__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__6__1 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__6__2 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__6__3 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__6__4 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__6__5 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__7__0 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__7__1 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__7__2 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__7__3 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__7__4 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__7__5 = NUM;
-        /* added by JADX */
-        public static final int $$fingerprint_dialog_fp_to_error__8__0 = NUM;
-        /* added by JADX */
         public static final int $fingerprint_dialog_error_to_fp__0 = NUM;
         /* added by JADX */
         public static final int $fingerprint_dialog_error_to_fp__1 = NUM;
         /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__10 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__11 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__12 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__13 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__14 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__15 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__16 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__17 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__18 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__19 = NUM;
+        /* added by JADX */
         public static final int $fingerprint_dialog_error_to_fp__2 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__20 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__21 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__22 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__23 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__24 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__25 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__26 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__27 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__28 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_error_to_fp__29 = NUM;
         /* added by JADX */
         public static final int $fingerprint_dialog_error_to_fp__3 = NUM;
         /* added by JADX */
@@ -1238,7 +1218,43 @@ public final class R {
         /* added by JADX */
         public static final int $fingerprint_dialog_fp_to_error__1 = NUM;
         /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__10 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__11 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__12 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__13 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__14 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__15 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__16 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__17 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__18 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__19 = NUM;
+        /* added by JADX */
         public static final int $fingerprint_dialog_fp_to_error__2 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__20 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__21 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__22 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__23 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__24 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__25 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__26 = NUM;
+        /* added by JADX */
+        public static final int $fingerprint_dialog_fp_to_error__27 = NUM;
         /* added by JADX */
         public static final int $fingerprint_dialog_fp_to_error__3 = NUM;
         /* added by JADX */
@@ -1458,10 +1474,15 @@ public final class R {
         public static final int tag_accessibility_clickable_spans = NUM;
         public static final int tag_accessibility_heading = NUM;
         public static final int tag_accessibility_pane_title = NUM;
+        public static final int tag_on_apply_window_listener = NUM;
+        public static final int tag_on_receive_content_listener = NUM;
+        public static final int tag_on_receive_content_mime_types = NUM;
         public static final int tag_screen_reader_focusable = NUM;
+        public static final int tag_state_description = NUM;
         public static final int tag_transition_group = NUM;
         public static final int tag_unhandled_key_event_manager = NUM;
         public static final int tag_unhandled_key_listeners = NUM;
+        public static final int tag_window_insets_animation_callback = NUM;
         public static final int terrain = NUM;
         public static final int test = NUM;
         public static final int text = NUM;
@@ -1558,6 +1579,7 @@ public final class R {
         public static final int audio_speed = NUM;
         public static final int audio_stop_speed = NUM;
         public static final int camera = NUM;
+        public static final int camera_flip = NUM;
         public static final int camera_outline = NUM;
         public static final int channel_create = NUM;
         public static final int chat_audio_record_delete = NUM;
@@ -1657,6 +1679,7 @@ public final class R {
         public static final int utyan_gigagroup = NUM;
         public static final int utyan_private = NUM;
         public static final int utyan_schedule = NUM;
+        public static final int voice_mini = NUM;
         public static final int voice_muted = NUM;
         public static final int voice_outlined = NUM;
         public static final int voice_outlined2 = NUM;
@@ -2037,6 +2060,13 @@ public final class R {
         public static final int AppFolderInfo = NUM;
         public static final int AppName = NUM;
         public static final int AppNameBeta = NUM;
+        public static final int AppUpdate = NUM;
+        public static final int AppUpdateChangelogEmpty = NUM;
+        public static final int AppUpdateDownloadNow = NUM;
+        public static final int AppUpdateDownloading = NUM;
+        public static final int AppUpdateNow = NUM;
+        public static final int AppUpdateRemindMeLater = NUM;
+        public static final int AppUpdateVersionAndSize = NUM;
         public static final int Appearance = NUM;
         public static final int ApplyLocalizationFile = NUM;
         public static final int ApplyTheme = NUM;
@@ -2274,6 +2304,7 @@ public final class R {
         public static final int BackgroundColorPreviewLine2 = NUM;
         public static final int BackgroundColorSinglePreviewLine1 = NUM;
         public static final int BackgroundColorSinglePreviewLine2 = NUM;
+        public static final int BackgroundColors = NUM;
         public static final int BackgroundHexColorCode = NUM;
         public static final int BackgroundIntensity = NUM;
         public static final int BackgroundMotion = NUM;
@@ -2283,6 +2314,10 @@ public final class R {
         public static final int BackgroundPreviewLine2 = NUM;
         public static final int BackgroundRestricted = NUM;
         public static final int BackgroundSearchColor = NUM;
+        public static final int BackgroundToChats = NUM;
+        public static final int BackgroundToGroup = NUM;
+        public static final int BackgroundToSavedMessages = NUM;
+        public static final int BackgroundToUser = NUM;
         public static final int BadgeNumber = NUM;
         public static final int BadgeNumberMutedChats = NUM;
         public static final int BadgeNumberShow = NUM;
@@ -2381,6 +2416,9 @@ public final class R {
         public static final int CallReportSent = NUM;
         public static final int CallText = NUM;
         public static final int CallViaTelegram = NUM;
+        public static final int CallViedeoPin = NUM;
+        public static final int CallViedeoPreviewTitle = NUM;
+        public static final int CallViedeoUnpin = NUM;
         public static final int Calling = NUM;
         public static final int Calls = NUM;
         public static final int CallsDataUsage = NUM;
@@ -2413,6 +2451,7 @@ public final class R {
         public static final int CardNumberCopied = NUM;
         public static final int Change = NUM;
         public static final int ChangeChatBackground = NUM;
+        public static final int ChangeColorToColor = NUM;
         public static final int ChangeLanguageLater = NUM;
         public static final int ChangePasscode = NUM;
         public static final int ChangePasscodeInfo = NUM;
@@ -3846,6 +3885,12 @@ public final class R {
         public static final int MegaPublic = NUM;
         public static final int MegaPublicInfo = NUM;
         public static final int MegaUsernameHelp = NUM;
+        public static final int MembersAreSpeakingToast_few = NUM;
+        public static final int MembersAreSpeakingToast_many = NUM;
+        public static final int MembersAreSpeakingToast_one = NUM;
+        public static final int MembersAreSpeakingToast_other = NUM;
+        public static final int MembersAreSpeakingToast_two = NUM;
+        public static final int MembersAreSpeakingToast_zero = NUM;
         public static final int MembersCountSelected_few = NUM;
         public static final int MembersCountSelected_many = NUM;
         public static final int MembersCountSelected_one = NUM;
@@ -4694,6 +4739,12 @@ public final class R {
         public static final int PinToTopLimitReached2 = NUM;
         public static final int Ping = NUM;
         public static final int Pink = NUM;
+        public static final int PinnedDialogsCount_few = NUM;
+        public static final int PinnedDialogsCount_many = NUM;
+        public static final int PinnedDialogsCount_one = NUM;
+        public static final int PinnedDialogsCount_other = NUM;
+        public static final int PinnedDialogsCount_two = NUM;
+        public static final int PinnedDialogsCount_zero = NUM;
         public static final int PinnedMessage = NUM;
         public static final int PinnedMessages = NUM;
         public static final int PinnedMessagesCount_few = NUM;
@@ -5192,6 +5243,7 @@ public final class R {
         public static final int ShareSendTo = NUM;
         public static final int ShareTelegram = NUM;
         public static final int ShareTheme = NUM;
+        public static final int ShareVideo = NUM;
         public static final int ShareYouLocationInfo = NUM;
         public static final int ShareYouLocationInline = NUM;
         public static final int ShareYouLocationTitle = NUM;
@@ -5569,6 +5621,12 @@ public final class R {
         public static final int UnpinMessage = NUM;
         public static final int UnpinMessageAlert = NUM;
         public static final int UnpinMessageAlertTitle = NUM;
+        public static final int UnpinnedDialogsCount_few = NUM;
+        public static final int UnpinnedDialogsCount_many = NUM;
+        public static final int UnpinnedDialogsCount_one = NUM;
+        public static final int UnpinnedDialogsCount_other = NUM;
+        public static final int UnpinnedDialogsCount_two = NUM;
+        public static final int UnpinnedDialogsCount_zero = NUM;
         public static final int UnreadMessages = NUM;
         public static final int UnsupportedAttachment = NUM;
         public static final int UnsupportedMedia = NUM;
@@ -5696,6 +5754,8 @@ public final class R {
         public static final int VideoCaption = NUM;
         public static final int VideoDoesNotSupportStreaming = NUM;
         public static final int VideoMessagesAutodownload = NUM;
+        public static final int VideoPreview = NUM;
+        public static final int VideoPreviewDesrciption = NUM;
         public static final int VideoQualityIsTooLow = NUM;
         public static final int VideoSavedHint = NUM;
         public static final int VideoSavedToDownloadsHint = NUM;
@@ -5757,17 +5817,25 @@ public final class R {
         public static final int VoipAudioRoutingBluetooth = NUM;
         public static final int VoipAudioRoutingEarpiece = NUM;
         public static final int VoipAudioRoutingHeadset = NUM;
+        public static final int VoipAudioRoutingPhone = NUM;
         public static final int VoipAudioRoutingSpeaker = NUM;
         public static final int VoipBusy = NUM;
         public static final int VoipCallEnded = NUM;
+        public static final int VoipCamera = NUM;
         public static final int VoipChannelScheduleInfo = NUM;
         public static final int VoipChannelStart2 = NUM;
+        public static final int VoipChatActiveChats = NUM;
+        public static final int VoipChatChatJoined = NUM;
         public static final int VoipChatDisplayedAs = NUM;
         public static final int VoipChatJoin = NUM;
         public static final int VoipChatLateBy = NUM;
+        public static final int VoipChatRecentCalls = NUM;
         public static final int VoipChatReminderHint = NUM;
         public static final int VoipChatShare = NUM;
+        public static final int VoipChatStartScreenCapture = NUM;
         public static final int VoipChatStartsIn = NUM;
+        public static final int VoipChatStopScreenCapture = NUM;
+        public static final int VoipChatUserJoined = NUM;
         public static final int VoipConnecting = NUM;
         public static final int VoipDeclineCall = NUM;
         public static final int VoipEditBio = NUM;
@@ -5786,6 +5854,7 @@ public final class R {
         public static final int VoipGroupAddMemberTitle = NUM;
         public static final int VoipGroupAllCanSpeak = NUM;
         public static final int VoipGroupAllowToSpeak = NUM;
+        public static final int VoipGroupAudio = NUM;
         public static final int VoipGroupAudioRecordSaved = NUM;
         public static final int VoipGroupAudioRecordStarted = NUM;
         public static final int VoipGroupBioEditAlertText = NUM;
@@ -5894,6 +5963,7 @@ public final class R {
         public static final int VoipMutedTapForSpeak = NUM;
         public static final int VoipMutedTapedForSpeak = NUM;
         public static final int VoipMutedTapedForSpeakInfo = NUM;
+        public static final int VoipNeedCameraPermission = NUM;
         public static final int VoipNeedMicCameraPermission = NUM;
         public static final int VoipNeedMicPermission = NUM;
         public static final int VoipNotificationSettings = NUM;
@@ -5921,6 +5991,7 @@ public final class R {
         public static final int VoipRequesting = NUM;
         public static final int VoipRinging = NUM;
         public static final int VoipRingtoneInfo = NUM;
+        public static final int VoipSelectAudioOutput = NUM;
         public static final int VoipSetNewPhoto = NUM;
         public static final int VoipSettingsRingtone = NUM;
         public static final int VoipSpeaker = NUM;
@@ -6177,7 +6248,7 @@ public final class R {
         public static final int[] FeatureParam = {NUM, NUM};
         public static final int FeatureParam_paramName = 0;
         public static final int FeatureParam_paramValue = 1;
-        public static final int[] FontFamily = {NUM, NUM, NUM, NUM, NUM, NUM};
+        public static final int[] FontFamily = {NUM, NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int[] FontFamilyFont = {16844082, 16844083, 16844095, 16844143, 16844144, NUM, NUM, NUM, NUM, NUM};
         public static final int FontFamilyFont_android_font = 0;
         public static final int FontFamilyFont_android_fontStyle = 2;
@@ -6195,6 +6266,7 @@ public final class R {
         public static final int FontFamily_fontProviderFetchTimeout = 3;
         public static final int FontFamily_fontProviderPackage = 4;
         public static final int FontFamily_fontProviderQuery = 5;
+        public static final int FontFamily_fontProviderSystemFontFamily = 6;
         public static final int[] GlobalSearch = {NUM, NUM, NUM, NUM, NUM, NUM};
         public static final int[] GlobalSearchCorpus = {NUM};
         public static final int GlobalSearchCorpus_allowShortcuts = 0;

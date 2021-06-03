@@ -4,7 +4,7 @@ public abstract class TLRPC$help_AppUpdate extends TLObject {
     public static TLRPC$help_AppUpdate TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$help_AppUpdate tLRPC$help_AppUpdate;
         if (i != -NUM) {
-            tLRPC$help_AppUpdate = i != NUM ? null : new TLRPC$TL_help_appUpdate();
+            tLRPC$help_AppUpdate = i != -NUM ? null : new TLRPC$TL_help_appUpdate();
         } else {
             tLRPC$help_AppUpdate = new TLRPC$TL_help_noAppUpdate();
         }

@@ -159,9 +159,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
             }
         });
         this.hasOwnBackground = true;
-        ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, NUM);
-        addItem.setIsSearchField(true);
-        addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 DialogOrContactPickerActivity.this.dialogsActivity.getActionBar().openSearchField("", false);
                 DialogOrContactPickerActivity.this.contactsActivity.getActionBar().openSearchField("", false);
@@ -178,8 +176,8 @@ public class DialogOrContactPickerActivity extends BaseFragment {
                 DialogOrContactPickerActivity.this.contactsActivity.getActionBar().setSearchFieldText(editText.getText().toString());
             }
         });
-        this.searchItem = addItem;
-        addItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        this.searchItem = actionBarMenuItemSearchListener;
+        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", NUM));
         ScrollSlidingTextTabStrip scrollSlidingTextTabStrip2 = new ScrollSlidingTextTabStrip(context);
         this.scrollSlidingTextTabStrip = scrollSlidingTextTabStrip2;
         scrollSlidingTextTabStrip2.setUseSameWidth(true);

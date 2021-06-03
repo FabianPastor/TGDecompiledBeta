@@ -1,7 +1,7 @@
 package j$.util;
 
 import j$.util.function.UnaryOperator;
-import j$.util.v;
+import j$.util.u;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -40,7 +40,7 @@ public interface List<E> extends Collection<E> {
 
         public static Spliterator $default$spliterator(java.util.List list) {
             list.getClass();
-            return new v.i((Collection) list, 16);
+            return new u.i((Collection) list, 16);
         }
     }
 

@@ -31,6 +31,8 @@ public interface Stream<T> extends CLASSNAMEl1<T, Stream<T>> {
 
     boolean c0(Predicate predicate);
 
+    /* synthetic */ void close();
+
     long count();
 
     Stream distinct();

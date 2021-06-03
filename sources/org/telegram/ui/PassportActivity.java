@@ -407,10 +407,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         /* access modifiers changed from: private */
         public TextView valueTextView;
 
-        public TextDetailSecureCell(PassportActivity passportActivity, Context context) {
+        public TextDetailSecureCell(Context context) {
             super(context);
             int i = 21;
-            int i2 = passportActivity.currentActivityType == 8 ? 21 : 51;
+            int i2 = PassportActivity.this.currentActivityType == 8 ? 21 : 51;
             TextView textView2 = new TextView(context);
             this.textView = textView2;
             textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
@@ -642,26 +642,26 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     /* JADX INFO: this call moved to the top of the method (can break code semantics) */
     /* JADX WARNING: Can't fix incorrect switch cases order */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x0149 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x015b A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x0160 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x0165 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x0170 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0171 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x017b A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x0185 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x018f A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x0199 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x01a3 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x01ac A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x01ba A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x01bc A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x01c1 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x01d4 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x01e7 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x0203 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x0216 A[Catch:{ Exception -> 0x023f }] */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x0231 A[Catch:{ Exception -> 0x023f }] */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x0148 A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x015a A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x015f A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x0164 A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x016f A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0170 A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x017a A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x0184 A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x018e A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x0198 A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x01a2 A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x01ab A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x01b9 A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x01bb A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x01c0 A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x01d3 A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x01e6 A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x0201 A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x0214 A[Catch:{ Exception -> 0x023d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x022f A[Catch:{ Exception -> 0x023d }] */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public PassportActivity(int r20, int r21, java.lang.String r22, java.lang.String r23, java.lang.String r24, java.lang.String r25, java.lang.String r26, org.telegram.tgnet.TLRPC$TL_account_authorizationForm r27, org.telegram.tgnet.TLRPC$TL_account_password r28) {
@@ -692,23 +692,23 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r10.currentPublicKey = r0
             r0 = r26
             r10.currentCallbackUrl = r0
-            if (r20 != 0) goto L_0x023f
+            if (r20 != 0) goto L_0x023d
             java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r0 = r11.errors
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x023f
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r0 = r11.errors     // Catch:{ Exception -> 0x023f }
-            org.telegram.ui.PassportActivity$2 r1 = new org.telegram.ui.PassportActivity$2     // Catch:{ Exception -> 0x023f }
-            r1.<init>()     // Catch:{ Exception -> 0x023f }
-            java.util.Collections.sort(r0, r1)     // Catch:{ Exception -> 0x023f }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r0 = r11.errors     // Catch:{ Exception -> 0x023f }
-            int r0 = r0.size()     // Catch:{ Exception -> 0x023f }
+            if (r0 != 0) goto L_0x023d
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r0 = r11.errors     // Catch:{ Exception -> 0x023d }
+            org.telegram.ui.PassportActivity$2 r1 = new org.telegram.ui.PassportActivity$2     // Catch:{ Exception -> 0x023d }
+            r1.<init>()     // Catch:{ Exception -> 0x023d }
+            java.util.Collections.sort(r0, r1)     // Catch:{ Exception -> 0x023d }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r0 = r11.errors     // Catch:{ Exception -> 0x023d }
+            int r0 = r0.size()     // Catch:{ Exception -> 0x023d }
             r2 = 0
         L_0x0048:
-            if (r2 >= r0) goto L_0x023f
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r3 = r11.errors     // Catch:{ Exception -> 0x023f }
-            java.lang.Object r3 = r3.get(r2)     // Catch:{ Exception -> 0x023f }
-            org.telegram.tgnet.TLRPC$SecureValueError r3 = (org.telegram.tgnet.TLRPC$SecureValueError) r3     // Catch:{ Exception -> 0x023f }
-            boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorFrontSide     // Catch:{ Exception -> 0x023f }
+            if (r2 >= r0) goto L_0x023d
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$SecureValueError> r3 = r11.errors     // Catch:{ Exception -> 0x023d }
+            java.lang.Object r3 = r3.get(r2)     // Catch:{ Exception -> 0x023d }
+            org.telegram.tgnet.TLRPC$SecureValueError r3 = (org.telegram.tgnet.TLRPC$SecureValueError) r3     // Catch:{ Exception -> 0x023d }
+            boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorFrontSide     // Catch:{ Exception -> 0x023d }
             java.lang.String r5 = "data"
             r6 = 0
             java.lang.String r7 = "error_all"
@@ -717,281 +717,281 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r12 = "front"
             java.lang.String r14 = "files"
             java.lang.String r15 = "translation"
-            if (r4 == 0) goto L_0x007b
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorFrontSide r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorFrontSide) r3     // Catch:{ Exception -> 0x023f }
-            org.telegram.tgnet.TLRPC$SecureValueType r4 = r3.type     // Catch:{ Exception -> 0x023f }
-            java.lang.String r4 = r10.getNameForType(r4)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
-            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023f }
+            if (r4 == 0) goto L_0x007a
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorFrontSide r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorFrontSide) r3     // Catch:{ Exception -> 0x023d }
+            org.telegram.tgnet.TLRPC$SecureValueType r4 = r3.type     // Catch:{ Exception -> 0x023d }
+            java.lang.String r4 = r10.getNameForType(r4)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
+            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023d }
             r21 = r12
-        L_0x0074:
+        L_0x0073:
             r18 = r6
             r6 = r3
             r3 = r18
-            goto L_0x013f
-        L_0x007b:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorReverseSide     // Catch:{ Exception -> 0x023f }
-            if (r1 == 0) goto L_0x008e
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorReverseSide r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorReverseSide) r3     // Catch:{ Exception -> 0x023f }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
-            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023f }
+            goto L_0x013e
+        L_0x007a:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorReverseSide     // Catch:{ Exception -> 0x023d }
+            if (r1 == 0) goto L_0x008d
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorReverseSide r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorReverseSide) r3     // Catch:{ Exception -> 0x023d }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
+            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023d }
             r21 = r9
-            goto L_0x0074
-        L_0x008e:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorSelfie     // Catch:{ Exception -> 0x023f }
-            if (r1 == 0) goto L_0x00a1
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorSelfie r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorSelfie) r3     // Catch:{ Exception -> 0x023f }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
-            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023f }
+            goto L_0x0073
+        L_0x008d:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorSelfie     // Catch:{ Exception -> 0x023d }
+            if (r1 == 0) goto L_0x00a0
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorSelfie r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorSelfie) r3     // Catch:{ Exception -> 0x023d }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
+            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023d }
             r21 = r8
-            goto L_0x0074
-        L_0x00a1:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFile     // Catch:{ Exception -> 0x023f }
-            if (r1 == 0) goto L_0x00b4
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFile r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFile) r3     // Catch:{ Exception -> 0x023f }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
-            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023f }
+            goto L_0x0073
+        L_0x00a0:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFile     // Catch:{ Exception -> 0x023d }
+            if (r1 == 0) goto L_0x00b3
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFile r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFile) r3     // Catch:{ Exception -> 0x023d }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
+            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023d }
             r21 = r15
-            goto L_0x0074
-        L_0x00b4:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFiles     // Catch:{ Exception -> 0x023f }
-            if (r1 == 0) goto L_0x00c7
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFiles r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFiles) r3     // Catch:{ Exception -> 0x023f }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
+            goto L_0x0073
+        L_0x00b3:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFiles     // Catch:{ Exception -> 0x023d }
+            if (r1 == 0) goto L_0x00c6
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFiles r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorTranslationFiles) r3     // Catch:{ Exception -> 0x023d }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
             r3 = r6
             r21 = r15
-            goto L_0x013f
-        L_0x00c7:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorFile     // Catch:{ Exception -> 0x023f }
-            if (r1 == 0) goto L_0x00da
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorFile r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorFile) r3     // Catch:{ Exception -> 0x023f }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
-            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023f }
+            goto L_0x013e
+        L_0x00c6:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorFile     // Catch:{ Exception -> 0x023d }
+            if (r1 == 0) goto L_0x00d9
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorFile r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorFile) r3     // Catch:{ Exception -> 0x023d }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
+            byte[] r3 = r3.file_hash     // Catch:{ Exception -> 0x023d }
             r21 = r14
-            goto L_0x0074
-        L_0x00da:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorFiles     // Catch:{ Exception -> 0x023f }
-            if (r1 == 0) goto L_0x00ec
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorFiles r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorFiles) r3     // Catch:{ Exception -> 0x023f }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
+            goto L_0x0073
+        L_0x00d9:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorFiles     // Catch:{ Exception -> 0x023d }
+            if (r1 == 0) goto L_0x00eb
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorFiles r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorFiles) r3     // Catch:{ Exception -> 0x023d }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
             r3 = r6
             r21 = r14
-            goto L_0x013f
-        L_0x00ec:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueError     // Catch:{ Exception -> 0x023f }
-            if (r1 == 0) goto L_0x0100
-            org.telegram.tgnet.TLRPC$TL_secureValueError r3 = (org.telegram.tgnet.TLRPC$TL_secureValueError) r3     // Catch:{ Exception -> 0x023f }
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
-            byte[] r3 = r3.hash     // Catch:{ Exception -> 0x023f }
+            goto L_0x013e
+        L_0x00eb:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueError     // Catch:{ Exception -> 0x023d }
+            if (r1 == 0) goto L_0x00ff
+            org.telegram.tgnet.TLRPC$TL_secureValueError r3 = (org.telegram.tgnet.TLRPC$TL_secureValueError) r3     // Catch:{ Exception -> 0x023d }
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
+            byte[] r3 = r3.hash     // Catch:{ Exception -> 0x023d }
             r21 = r7
-            goto L_0x0074
-        L_0x0100:
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorData     // Catch:{ Exception -> 0x023f }
-            if (r1 == 0) goto L_0x0237
-            org.telegram.tgnet.TLRPC$TL_secureValueErrorData r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorData) r3     // Catch:{ Exception -> 0x023f }
+            goto L_0x0073
+        L_0x00ff:
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_secureValueErrorData     // Catch:{ Exception -> 0x023d }
+            if (r1 == 0) goto L_0x0235
+            org.telegram.tgnet.TLRPC$TL_secureValueErrorData r3 = (org.telegram.tgnet.TLRPC$TL_secureValueErrorData) r3     // Catch:{ Exception -> 0x023d }
             r1 = 0
-        L_0x0107:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_secureValue> r4 = r11.values     // Catch:{ Exception -> 0x023f }
-            int r4 = r4.size()     // Catch:{ Exception -> 0x023f }
-            if (r1 >= r4) goto L_0x012a
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_secureValue> r4 = r11.values     // Catch:{ Exception -> 0x023f }
-            java.lang.Object r4 = r4.get(r1)     // Catch:{ Exception -> 0x023f }
-            org.telegram.tgnet.TLRPC$TL_secureValue r4 = (org.telegram.tgnet.TLRPC$TL_secureValue) r4     // Catch:{ Exception -> 0x023f }
-            org.telegram.tgnet.TLRPC$TL_secureData r4 = r4.data     // Catch:{ Exception -> 0x023f }
-            if (r4 == 0) goto L_0x0127
-            byte[] r4 = r4.data_hash     // Catch:{ Exception -> 0x023f }
-            byte[] r6 = r3.data_hash     // Catch:{ Exception -> 0x023f }
-            boolean r4 = java.util.Arrays.equals(r4, r6)     // Catch:{ Exception -> 0x023f }
-            if (r4 == 0) goto L_0x0127
+        L_0x0106:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_secureValue> r4 = r11.values     // Catch:{ Exception -> 0x023d }
+            int r4 = r4.size()     // Catch:{ Exception -> 0x023d }
+            if (r1 >= r4) goto L_0x0129
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_secureValue> r4 = r11.values     // Catch:{ Exception -> 0x023d }
+            java.lang.Object r4 = r4.get(r1)     // Catch:{ Exception -> 0x023d }
+            org.telegram.tgnet.TLRPC$TL_secureValue r4 = (org.telegram.tgnet.TLRPC$TL_secureValue) r4     // Catch:{ Exception -> 0x023d }
+            org.telegram.tgnet.TLRPC$TL_secureData r4 = r4.data     // Catch:{ Exception -> 0x023d }
+            if (r4 == 0) goto L_0x0126
+            byte[] r4 = r4.data_hash     // Catch:{ Exception -> 0x023d }
+            byte[] r6 = r3.data_hash     // Catch:{ Exception -> 0x023d }
+            boolean r4 = java.util.Arrays.equals(r4, r6)     // Catch:{ Exception -> 0x023d }
+            if (r4 == 0) goto L_0x0126
             r1 = 1
-            goto L_0x012b
-        L_0x0127:
+            goto L_0x012a
+        L_0x0126:
             int r1 = r1 + 1
-            goto L_0x0107
-        L_0x012a:
+            goto L_0x0106
+        L_0x0129:
             r1 = 0
-        L_0x012b:
-            if (r1 != 0) goto L_0x012f
-            goto L_0x0237
-        L_0x012f:
-            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023f }
-            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023f }
-            java.lang.String r6 = r3.field     // Catch:{ Exception -> 0x023f }
-            byte[] r3 = r3.data_hash     // Catch:{ Exception -> 0x023f }
+        L_0x012a:
+            if (r1 != 0) goto L_0x012e
+            goto L_0x0235
+        L_0x012e:
+            org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type     // Catch:{ Exception -> 0x023d }
+            java.lang.String r4 = r10.getNameForType(r1)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r1 = r3.text     // Catch:{ Exception -> 0x023d }
+            java.lang.String r6 = r3.field     // Catch:{ Exception -> 0x023d }
+            byte[] r3 = r3.data_hash     // Catch:{ Exception -> 0x023d }
             r21 = r5
-            goto L_0x0074
-        L_0x013f:
-            java.util.HashMap<java.lang.String, java.util.HashMap<java.lang.String, java.lang.String>> r13 = r10.errorsMap     // Catch:{ Exception -> 0x023f }
-            java.lang.Object r13 = r13.get(r4)     // Catch:{ Exception -> 0x023f }
-            java.util.HashMap r13 = (java.util.HashMap) r13     // Catch:{ Exception -> 0x023f }
-            if (r13 != 0) goto L_0x015b
-            java.util.HashMap r13 = new java.util.HashMap     // Catch:{ Exception -> 0x023f }
-            r13.<init>()     // Catch:{ Exception -> 0x023f }
+            goto L_0x0073
+        L_0x013e:
+            java.util.HashMap<java.lang.String, java.util.HashMap<java.lang.String, java.lang.String>> r13 = r10.errorsMap     // Catch:{ Exception -> 0x023d }
+            java.lang.Object r13 = r13.get(r4)     // Catch:{ Exception -> 0x023d }
+            java.util.HashMap r13 = (java.util.HashMap) r13     // Catch:{ Exception -> 0x023d }
+            if (r13 != 0) goto L_0x015a
+            java.util.HashMap r13 = new java.util.HashMap     // Catch:{ Exception -> 0x023d }
+            r13.<init>()     // Catch:{ Exception -> 0x023d }
             r23 = r0
-            java.util.HashMap<java.lang.String, java.util.HashMap<java.lang.String, java.lang.String>> r0 = r10.errorsMap     // Catch:{ Exception -> 0x023f }
-            r0.put(r4, r13)     // Catch:{ Exception -> 0x023f }
-            java.util.HashMap<java.lang.String, java.lang.String> r0 = r10.mainErrorsMap     // Catch:{ Exception -> 0x023f }
-            r0.put(r4, r1)     // Catch:{ Exception -> 0x023f }
-            goto L_0x015d
-        L_0x015b:
+            java.util.HashMap<java.lang.String, java.util.HashMap<java.lang.String, java.lang.String>> r0 = r10.errorsMap     // Catch:{ Exception -> 0x023d }
+            r0.put(r4, r13)     // Catch:{ Exception -> 0x023d }
+            java.util.HashMap<java.lang.String, java.lang.String> r0 = r10.mainErrorsMap     // Catch:{ Exception -> 0x023d }
+            r0.put(r4, r1)     // Catch:{ Exception -> 0x023d }
+            goto L_0x015c
+        L_0x015a:
             r23 = r0
-        L_0x015d:
+        L_0x015c:
             r0 = 2
-            if (r6 == 0) goto L_0x0165
-            java.lang.String r4 = android.util.Base64.encodeToString(r6, r0)     // Catch:{ Exception -> 0x023f }
-            goto L_0x0167
-        L_0x0165:
+            if (r6 == 0) goto L_0x0164
+            java.lang.String r4 = android.util.Base64.encodeToString(r6, r0)     // Catch:{ Exception -> 0x023d }
+            goto L_0x0166
+        L_0x0164:
             java.lang.String r4 = ""
-        L_0x0167:
+        L_0x0166:
             r16 = -1
-            int r17 = r21.hashCode()     // Catch:{ Exception -> 0x023f }
+            int r17 = r21.hashCode()     // Catch:{ Exception -> 0x023d }
             switch(r17) {
-                case -1840647503: goto L_0x01ac;
-                case -906020504: goto L_0x01a3;
-                case 3076010: goto L_0x0199;
-                case 97434231: goto L_0x018f;
-                case 97705513: goto L_0x0185;
-                case 329856746: goto L_0x017b;
-                case 1099846370: goto L_0x0171;
-                default: goto L_0x0170;
-            }     // Catch:{ Exception -> 0x023f }
+                case -1840647503: goto L_0x01ab;
+                case -906020504: goto L_0x01a2;
+                case 3076010: goto L_0x0198;
+                case 97434231: goto L_0x018e;
+                case 97705513: goto L_0x0184;
+                case 329856746: goto L_0x017a;
+                case 1099846370: goto L_0x0170;
+                default: goto L_0x016f;
+            }     // Catch:{ Exception -> 0x023d }
+        L_0x016f:
+            goto L_0x01b5
         L_0x0170:
-            goto L_0x01b6
-        L_0x0171:
             r0 = r21
-            boolean r0 = r0.equals(r9)     // Catch:{ Exception -> 0x023f }
-            if (r0 == 0) goto L_0x01b6
+            boolean r0 = r0.equals(r9)     // Catch:{ Exception -> 0x023d }
+            if (r0 == 0) goto L_0x01b5
             r0 = 5
-            goto L_0x01b7
-        L_0x017b:
+            goto L_0x01b6
+        L_0x017a:
             r0 = r21
-            boolean r0 = r0.equals(r7)     // Catch:{ Exception -> 0x023f }
-            if (r0 == 0) goto L_0x01b6
+            boolean r0 = r0.equals(r7)     // Catch:{ Exception -> 0x023d }
+            if (r0 == 0) goto L_0x01b5
             r0 = 6
-            goto L_0x01b7
-        L_0x0185:
+            goto L_0x01b6
+        L_0x0184:
             r0 = r21
-            boolean r0 = r0.equals(r12)     // Catch:{ Exception -> 0x023f }
-            if (r0 == 0) goto L_0x01b6
+            boolean r0 = r0.equals(r12)     // Catch:{ Exception -> 0x023d }
+            if (r0 == 0) goto L_0x01b5
             r0 = 4
-            goto L_0x01b7
-        L_0x018f:
+            goto L_0x01b6
+        L_0x018e:
             r0 = r21
-            boolean r0 = r0.equals(r14)     // Catch:{ Exception -> 0x023f }
-            if (r0 == 0) goto L_0x01b6
+            boolean r0 = r0.equals(r14)     // Catch:{ Exception -> 0x023d }
+            if (r0 == 0) goto L_0x01b5
             r0 = 1
-            goto L_0x01b7
-        L_0x0199:
+            goto L_0x01b6
+        L_0x0198:
             r0 = r21
-            boolean r0 = r0.equals(r5)     // Catch:{ Exception -> 0x023f }
-            if (r0 == 0) goto L_0x01b6
+            boolean r0 = r0.equals(r5)     // Catch:{ Exception -> 0x023d }
+            if (r0 == 0) goto L_0x01b5
             r0 = 0
-            goto L_0x01b7
-        L_0x01a3:
+            goto L_0x01b6
+        L_0x01a2:
             r5 = r21
-            boolean r5 = r5.equals(r8)     // Catch:{ Exception -> 0x023f }
-            if (r5 == 0) goto L_0x01b6
-            goto L_0x01b7
-        L_0x01ac:
+            boolean r5 = r5.equals(r8)     // Catch:{ Exception -> 0x023d }
+            if (r5 == 0) goto L_0x01b5
+            goto L_0x01b6
+        L_0x01ab:
             r5 = r21
-            boolean r0 = r5.equals(r15)     // Catch:{ Exception -> 0x023f }
-            if (r0 == 0) goto L_0x01b6
+            boolean r0 = r5.equals(r15)     // Catch:{ Exception -> 0x023d }
+            if (r0 == 0) goto L_0x01b5
             r0 = 3
-            goto L_0x01b7
-        L_0x01b6:
+            goto L_0x01b6
+        L_0x01b5:
             r0 = -1
-        L_0x01b7:
+        L_0x01b6:
             switch(r0) {
-                case 0: goto L_0x0231;
-                case 1: goto L_0x0216;
-                case 2: goto L_0x0203;
-                case 3: goto L_0x01e7;
-                case 4: goto L_0x01d4;
-                case 5: goto L_0x01c1;
-                case 6: goto L_0x01bc;
-                default: goto L_0x01ba;
-            }     // Catch:{ Exception -> 0x023f }
-        L_0x01ba:
-            goto L_0x0239
-        L_0x01bc:
-            r13.put(r7, r1)     // Catch:{ Exception -> 0x023f }
-            goto L_0x0239
-        L_0x01c1:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023f }
-            r0.<init>()     // Catch:{ Exception -> 0x023f }
-            r0.append(r9)     // Catch:{ Exception -> 0x023f }
-            r0.append(r4)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023f }
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
-            goto L_0x0239
-        L_0x01d4:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023f }
-            r0.<init>()     // Catch:{ Exception -> 0x023f }
-            r0.append(r12)     // Catch:{ Exception -> 0x023f }
-            r0.append(r4)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023f }
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
-            goto L_0x0239
-        L_0x01e7:
-            if (r6 == 0) goto L_0x01fc
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023f }
-            r0.<init>()     // Catch:{ Exception -> 0x023f }
-            r0.append(r15)     // Catch:{ Exception -> 0x023f }
-            r0.append(r4)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023f }
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
-            goto L_0x0239
-        L_0x01fc:
+                case 0: goto L_0x022f;
+                case 1: goto L_0x0214;
+                case 2: goto L_0x0201;
+                case 3: goto L_0x01e6;
+                case 4: goto L_0x01d3;
+                case 5: goto L_0x01c0;
+                case 6: goto L_0x01bb;
+                default: goto L_0x01b9;
+            }     // Catch:{ Exception -> 0x023d }
+        L_0x01b9:
+            goto L_0x0237
+        L_0x01bb:
+            r13.put(r7, r1)     // Catch:{ Exception -> 0x023d }
+            goto L_0x0237
+        L_0x01c0:
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023d }
+            r0.<init>()     // Catch:{ Exception -> 0x023d }
+            r0.append(r9)     // Catch:{ Exception -> 0x023d }
+            r0.append(r4)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023d }
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
+            goto L_0x0237
+        L_0x01d3:
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023d }
+            r0.<init>()     // Catch:{ Exception -> 0x023d }
+            r0.append(r12)     // Catch:{ Exception -> 0x023d }
+            r0.append(r4)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023d }
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
+            goto L_0x0237
+        L_0x01e6:
+            if (r6 == 0) goto L_0x01fb
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023d }
+            r0.<init>()     // Catch:{ Exception -> 0x023d }
+            r0.append(r15)     // Catch:{ Exception -> 0x023d }
+            r0.append(r4)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023d }
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
+            goto L_0x0237
+        L_0x01fb:
             java.lang.String r0 = "translation_all"
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
-            goto L_0x0239
-        L_0x0203:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023f }
-            r0.<init>()     // Catch:{ Exception -> 0x023f }
-            r0.append(r8)     // Catch:{ Exception -> 0x023f }
-            r0.append(r4)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023f }
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
-            goto L_0x0239
-        L_0x0216:
-            if (r6 == 0) goto L_0x022b
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023f }
-            r0.<init>()     // Catch:{ Exception -> 0x023f }
-            r0.append(r14)     // Catch:{ Exception -> 0x023f }
-            r0.append(r4)     // Catch:{ Exception -> 0x023f }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023f }
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
-            goto L_0x0239
-        L_0x022b:
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
+            goto L_0x0237
+        L_0x0201:
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023d }
+            r0.<init>()     // Catch:{ Exception -> 0x023d }
+            r0.append(r8)     // Catch:{ Exception -> 0x023d }
+            r0.append(r4)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023d }
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
+            goto L_0x0237
+        L_0x0214:
+            if (r6 == 0) goto L_0x0229
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x023d }
+            r0.<init>()     // Catch:{ Exception -> 0x023d }
+            r0.append(r14)     // Catch:{ Exception -> 0x023d }
+            r0.append(r4)     // Catch:{ Exception -> 0x023d }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x023d }
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
+            goto L_0x0237
+        L_0x0229:
             java.lang.String r0 = "files_all"
-            r13.put(r0, r1)     // Catch:{ Exception -> 0x023f }
-            goto L_0x0239
-        L_0x0231:
-            if (r3 == 0) goto L_0x0239
-            r13.put(r3, r1)     // Catch:{ Exception -> 0x023f }
-            goto L_0x0239
-        L_0x0237:
+            r13.put(r0, r1)     // Catch:{ Exception -> 0x023d }
+            goto L_0x0237
+        L_0x022f:
+            if (r3 == 0) goto L_0x0237
+            r13.put(r3, r1)     // Catch:{ Exception -> 0x023d }
+            goto L_0x0237
+        L_0x0235:
             r23 = r0
-        L_0x0239:
+        L_0x0237:
             int r2 = r2 + 1
             r0 = r23
             goto L_0x0048
-        L_0x023f:
+        L_0x023d:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.<init>(int, int, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, org.telegram.tgnet.TLRPC$TL_account_authorizationForm, org.telegram.tgnet.TLRPC$TL_account_password):void");
@@ -1139,7 +1139,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    static /* synthetic */ void lambda$null$0(TLObject tLObject) {
+    static /* synthetic */ void lambda$new$0(TLObject tLObject) {
         if (tLObject instanceof TLRPC$TL_help_passportConfig) {
             TLRPC$TL_help_passportConfig tLRPC$TL_help_passportConfig = (TLRPC$TL_help_passportConfig) tLObject;
             SharedConfig.setPassportConfig(tLRPC$TL_help_passportConfig.countries_langs.data, tLRPC$TL_help_passportConfig.hash);
@@ -1277,7 +1277,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r1 = org.telegram.ui.PassportActivity.this
                     org.telegram.ui.Components.EditTextBoldCursor[] r1 = r1.inputFields
                     r1 = r1[r12]
-                    r2 = 2131626772(0x7f0e0b14, float:1.888079E38)
+                    r2 = 2131626794(0x7f0e0b2a, float:1.8880834E38)
                     java.lang.String r3 = "PassportUseLatinOnly"
                     java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                     r1.setErrorText(r2)
@@ -1349,7 +1349,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r0 = org.telegram.ui.PassportActivity.this
                     android.app.Activity r0 = r0.getParentActivity()
                     r13.<init>((android.content.Context) r0)
-                    r0 = 2131626718(0x7f0e0ade, float:1.888068E38)
+                    r0 = 2131626740(0x7f0e0af4, float:1.8880725E38)
                     java.lang.Object[] r1 = new java.lang.Object[r9]
                     r1[r8] = r2
                     r1[r11] = r3
@@ -1361,7 +1361,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     java.lang.String r1 = "AppName"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     r13.setTitle(r0)
-                    r0 = 2131625212(0x7f0e04fc, float:1.8877626E38)
+                    r0 = 2131625228(0x7f0e050c, float:1.8877658E38)
                     java.lang.String r1 = "Done"
                     java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     org.telegram.ui.-$$Lambda$PassportActivity$3$ncxI1nQh6qvD1Chi9RgN1WB6iuI r15 = new org.telegram.ui.-$$Lambda$PassportActivity$3$ncxI1nQh6qvD1Chi9RgN1WB6iuI
@@ -1371,7 +1371,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     r6 = r27
                     r0.<init>(r2, r3, r4, r5, r6)
                     r13.setPositiveButton(r14, r15)
-                    r0 = 2131625214(0x7f0e04fe, float:1.887763E38)
+                    r0 = 2131625230(0x7f0e050e, float:1.8877662E38)
                     java.lang.String r1 = "Edit"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     org.telegram.ui.-$$Lambda$PassportActivity$3$KwVL_83qCsZr-goHF2MdOvo6dKk r1 = new org.telegram.ui.-$$Lambda$PassportActivity$3$KwVL_83qCsZr-goHF2MdOvo6dKk
@@ -1738,7 +1738,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r2 = org.telegram.ui.PassportActivity.this
                     android.app.Activity r2 = r2.getParentActivity()
                     r1.<init>(r2)
-                    r2 = 2131626662(0x7f0e0aa6, float:1.8880567E38)
+                    r2 = 2131626684(0x7f0e0abc, float:1.8880611E38)
                     java.lang.String r7 = "PassportInfo2"
                     java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r7, r2)
                     android.text.SpannableStringBuilder r7 = new android.text.SpannableStringBuilder
@@ -1754,7 +1754,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     int r3 = r9 + 1
                     r7.replace(r9, r3, r8)
                     org.telegram.ui.PassportActivity$3$1 r3 = new org.telegram.ui.PassportActivity$3$1
-                    r8 = 2131626664(0x7f0e0aa8, float:1.888057E38)
+                    r8 = 2131626686(0x7f0e0abe, float:1.8880615E38)
                     java.lang.String r10 = "PassportInfoUrl"
                     java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                     r3.<init>(r8)
@@ -1786,11 +1786,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     android.app.Activity r3 = r3.getParentActivity()
                     r2.<init>((android.content.Context) r3)
                     r2.setView(r1)
-                    r1 = 2131626663(0x7f0e0aa7, float:1.8880569E38)
+                    r1 = 2131626685(0x7f0e0abd, float:1.8880613E38)
                     java.lang.String r3 = "PassportInfoTitle"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                     r2.setTitle(r1)
-                    r1 = 2131624912(0x7f0e03d0, float:1.8877017E38)
+                    r1 = 2131624928(0x7f0e03e0, float:1.887705E38)
                     java.lang.String r3 = "Close"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                     r2.setNegativeButton(r1, r5)
@@ -2101,14 +2101,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void run() {
-                        PassportActivity.AnonymousClass3.this.lambda$null$5$PassportActivity$3(this.f$1, this.f$2, this.f$3, this.f$4);
+                        PassportActivity.AnonymousClass3.this.lambda$onItemClick$5$PassportActivity$3(this.f$1, this.f$2, this.f$3, this.f$4);
                     }
                 });
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$null$5 */
-            public /* synthetic */ void lambda$null$5$PassportActivity$3(TLRPC$TL_error tLRPC$TL_error, Runnable runnable, ErrorRunnable errorRunnable, TLRPC$TL_account_verifyEmail tLRPC$TL_account_verifyEmail) {
+            /* renamed from: lambda$onItemClick$5 */
+            public /* synthetic */ void lambda$onItemClick$5$PassportActivity$3(TLRPC$TL_error tLRPC$TL_error, Runnable runnable, ErrorRunnable errorRunnable, TLRPC$TL_account_verifyEmail tLRPC$TL_account_verifyEmail) {
                 TLRPC$TL_error tLRPC$TL_error2 = tLRPC$TL_error;
                 if (tLRPC$TL_error2 == null) {
                     PassportActivity.this.delegate.saveValue(PassportActivity.this.currentType, (String) PassportActivity.this.currentValues.get("email"), (String) null, (TLRPC$TL_secureRequiredType) null, (String) null, (ArrayList<SecureDocument>) null, (SecureDocument) null, (ArrayList<SecureDocument>) null, (SecureDocument) null, (SecureDocument) null, runnable, errorRunnable);
@@ -2147,7 +2147,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             this.fragmentView = frameLayout;
             FrameLayout frameLayout2 = frameLayout;
             frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
-            AnonymousClass5 r02 = new ScrollView(this, context) {
+            AnonymousClass5 r02 = new ScrollView(context) {
                 /* access modifiers changed from: protected */
                 public boolean onRequestFocusInDescendants(int i, Rect rect) {
                     return false;
@@ -2420,14 +2420,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                PassportActivity.this.lambda$null$3$PassportActivity(this.f$1);
+                PassportActivity.this.lambda$loadPasswordInfo$3$PassportActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$PassportActivity(TLObject tLObject) {
+    /* renamed from: lambda$loadPasswordInfo$3 */
+    public /* synthetic */ void lambda$loadPasswordInfo$3$PassportActivity(TLObject tLObject) {
         if (tLObject != null) {
             TLRPC$TL_account_password tLRPC$TL_account_password = (TLRPC$TL_account_password) tLObject;
             this.currentPassword = tLRPC$TL_account_password;
@@ -2610,7 +2610,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     return PassportActivity.this.lambda$createPasswordInterface$7$PassportActivity(textView, i, keyEvent);
                 }
             });
-            this.inputFields[i3].setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
+            this.inputFields[i3].setCustomSelectionActionModeCallback(new ActionMode.Callback() {
                 public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                     return false;
                 }
@@ -2677,7 +2677,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             needShowProgress();
             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_auth_requestPasswordRecovery(), new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    PassportActivity.this.lambda$null$10$PassportActivity(tLObject, tLRPC$TL_error);
+                    PassportActivity.this.lambda$createPasswordInterface$10$PassportActivity(tLObject, tLRPC$TL_error);
                 }
             }, 10), this.classGuid);
         } else if (getParentActivity() != null) {
@@ -2685,7 +2685,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             builder.setNegativeButton(LocaleController.getString("RestorePasswordResetAccount", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$null$11$PassportActivity(dialogInterface, i);
+                    PassportActivity.this.lambda$createPasswordInterface$11$PassportActivity(dialogInterface, i);
                 }
             });
             builder.setTitle(LocaleController.getString("RestorePasswordNoEmailTitle", NUM));
@@ -2695,8 +2695,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createPasswordInterface$10 */
+    public /* synthetic */ void lambda$createPasswordInterface$10$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -2707,14 +2707,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                PassportActivity.this.lambda$null$9$PassportActivity(this.f$1, this.f$2);
+                PassportActivity.this.lambda$createPasswordInterface$9$PassportActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$9 */
-    public /* synthetic */ void lambda$null$9$PassportActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$createPasswordInterface$9 */
+    public /* synthetic */ void lambda$createPasswordInterface$9$PassportActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         String str;
         needHideProgress();
         if (tLRPC$TL_error == null) {
@@ -2730,7 +2730,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$null$8$PassportActivity(this.f$1, dialogInterface, i);
+                    PassportActivity.this.lambda$createPasswordInterface$8$PassportActivity(this.f$1, dialogInterface, i);
                 }
             });
             Dialog showDialog = showDialog(builder.create());
@@ -2752,16 +2752,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$PassportActivity(TLRPC$TL_auth_passwordRecovery tLRPC$TL_auth_passwordRecovery, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createPasswordInterface$8 */
+    public /* synthetic */ void lambda$createPasswordInterface$8$PassportActivity(TLRPC$TL_auth_passwordRecovery tLRPC$TL_auth_passwordRecovery, DialogInterface dialogInterface, int i) {
         TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
         tLRPC$TL_account_password.email_unconfirmed_pattern = tLRPC$TL_auth_passwordRecovery.email_pattern;
         presentFragment(new TwoStepVerificationSetupActivity(this.currentAccount, 4, tLRPC$TL_account_password));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$PassportActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createPasswordInterface$11 */
+    public /* synthetic */ void lambda$createPasswordInterface$11$PassportActivity(DialogInterface dialogInterface, int i) {
         Activity parentActivity = getParentActivity();
         Browser.openUrl((Context) parentActivity, "https://telegram.org/deactivate?phone=" + UserConfig.getInstance(this.currentAccount).getClientPhone());
     }
@@ -3215,7 +3215,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
             HashMap hashMap = this.errorsMap.get(getNameForType(tLRPC$TL_secureRequiredType.type));
             if (hashMap == null || hashMap.isEmpty()) {
-                arrayList2.add(new Object(this, valueByType, tLRPC$TL_secureRequiredType.selfie_required, tLRPC$TL_secureRequiredType.translation_required) {
+                arrayList2.add(new Object(valueByType, tLRPC$TL_secureRequiredType.selfie_required, tLRPC$TL_secureRequiredType.translation_required) {
                     boolean selfie_required;
                     boolean translation_required;
                     TLRPC$TL_secureValue value;
@@ -3391,14 +3391,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
         ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_acceptAuthorization, new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PassportActivity.this.lambda$null$15$PassportActivity(tLObject, tLRPC$TL_error);
+                PassportActivity.this.lambda$createRequestInterface$15$PassportActivity(tLObject, tLRPC$TL_error);
             }
         }), this.classGuid);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$15 */
-    public /* synthetic */ void lambda$null$15$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createRequestInterface$15 */
+    public /* synthetic */ void lambda$createRequestInterface$15$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
             public final /* synthetic */ TLRPC$TL_error f$1;
 
@@ -3407,14 +3407,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                PassportActivity.this.lambda$null$14$PassportActivity(this.f$1);
+                PassportActivity.this.lambda$createRequestInterface$14$PassportActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$14 */
-    public /* synthetic */ void lambda$null$14$PassportActivity(TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createRequestInterface$14 */
+    public /* synthetic */ void lambda$createRequestInterface$14$PassportActivity(TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             this.ignoreOnFailure = true;
             callCallback(true);
@@ -3429,8 +3429,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x02d1  */
-    /* JADX WARNING: Removed duplicated region for block: B:17:0x02d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x02cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x02ce  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void createManageInterface(android.content.Context r20) {
         /*
@@ -3441,19 +3441,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.FrameLayout r0 = (android.widget.FrameLayout) r0
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r1 = "TelegramPassport"
-            r2 = 2131627667(0x7f0e0e93, float:1.8882605E38)
+            r2 = 2131627696(0x7f0e0eb0, float:1.8882664E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setTitle(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
             r8 = 1
-            r1 = 2131165969(0x7var_, float:1.794617E38)
+            r1 = 2131165980(0x7var_c, float:1.7946192E38)
             r0.addItem((int) r8, (int) r1)
             org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
             r0.<init>(r7)
             r6.headerCell = r0
             java.lang.String r1 = "PassportProvidedInformation"
-            r2 = 2131626742(0x7f0e0af6, float:1.8880729E38)
+            r2 = 2131626764(0x7f0e0b0c, float:1.8880773E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setText(r1)
             org.telegram.ui.Cells.HeaderCell r0 = r6.headerCell
@@ -3469,7 +3469,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.ShadowSectionCell r0 = new org.telegram.ui.Cells.ShadowSectionCell
             r0.<init>(r7)
             r6.sectionCell = r0
-            r1 = 2131165449(0x7var_, float:1.7945115E38)
+            r1 = 2131165450(0x7var_a, float:1.7945117E38)
             java.lang.String r4 = "windowBackgroundGrayShadow"
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r1, (java.lang.String) r4)
             r0.setBackgroundDrawable(r1)
@@ -3484,7 +3484,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r1)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.addDocumentCell
             java.lang.String r1 = "PassportNoDocumentsAdd"
-            r5 = 2131626725(0x7f0e0ae5, float:1.8880694E38)
+            r5 = 2131626747(0x7f0e0afb, float:1.8880739E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r1, r5)
             r0.setText(r9, r8)
             android.widget.LinearLayout r0 = r6.linearLayout2
@@ -3506,7 +3506,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r9)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.deletePassportCell
             java.lang.String r9 = "TelegramPassportDelete"
-            r10 = 2131627670(0x7f0e0e96, float:1.888261E38)
+            r10 = 2131627699(0x7f0e0eb3, float:1.888267E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r10 = 0
             r0.setText(r9, r10)
@@ -3521,7 +3521,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.ShadowSectionCell r0 = new org.telegram.ui.Cells.ShadowSectionCell
             r0.<init>(r7)
             r6.addDocumentSectionCell = r0
-            r9 = 2131165450(0x7var_a, float:1.7945117E38)
+            r9 = 2131165451(0x7var_b, float:1.794512E38)
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r9, (java.lang.String) r4)
             r0.setBackgroundDrawable(r11)
             android.widget.LinearLayout r0 = r6.linearLayout2
@@ -3539,7 +3539,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r9, (java.lang.String) r4)
             r0.setBackgroundDrawable(r4)
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 == 0) goto L_0x0131
+            if (r0 == 0) goto L_0x012e
             android.widget.LinearLayout r0 = r6.linearLayout2
             android.widget.LinearLayout r4 = r6.emptyLayout
             android.widget.LinearLayout$LayoutParams r9 = new android.widget.LinearLayout$LayoutParams
@@ -3549,8 +3549,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             int r12 = r12 - r13
             r9.<init>(r2, r12)
             r0.addView(r4, r9)
-            goto L_0x0146
-        L_0x0131:
+            goto L_0x0143
+        L_0x012e:
             android.widget.LinearLayout r0 = r6.linearLayout2
             android.widget.LinearLayout r4 = r6.emptyLayout
             android.widget.LinearLayout$LayoutParams r9 = new android.widget.LinearLayout$LayoutParams
@@ -3560,11 +3560,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             int r12 = r12 - r13
             r9.<init>(r2, r12)
             r0.addView(r4, r9)
-        L_0x0146:
+        L_0x0143:
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.emptyImageView = r0
-            r2 = 2131165856(0x7var_a0, float:1.794594E38)
+            r2 = 2131165867(0x7var_ab, float:1.7945963E38)
             r0.setImageResource(r2)
             android.widget.ImageView r0 = r6.emptyImageView
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -3593,7 +3593,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.graphics.Typeface r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r0.setTypeface(r9)
             android.widget.TextView r0 = r6.emptyTextView1
-            r9 = 2131626724(0x7f0e0ae4, float:1.8880692E38)
+            r9 = 2131626746(0x7f0e0afa, float:1.8880737E38)
             java.lang.String r12 = "PassportNoDocuments"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r12, r9)
             r0.setText(r9)
@@ -3624,7 +3624,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r0.setPadding(r9, r10, r2, r10)
             android.widget.TextView r0 = r6.emptyTextView2
-            r2 = 2131626726(0x7f0e0ae6, float:1.8880696E38)
+            r2 = 2131626748(0x7f0e0afc, float:1.888074E38)
             java.lang.String r9 = "PassportNoDocumentsInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r2)
             r0.setText(r2)
@@ -3671,15 +3671,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_secureValue> r0 = r0.values
             int r9 = r0.size()
             r11 = 0
-        L_0x025f:
-            if (r11 >= r9) goto L_0x02de
+        L_0x025a:
+            if (r11 >= r9) goto L_0x02d9
             org.telegram.tgnet.TLRPC$TL_account_authorizationForm r0 = r6.currentForm
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_secureValue> r0 = r0.values
             java.lang.Object r0 = r0.get(r11)
             org.telegram.tgnet.TLRPC$TL_secureValue r0 = (org.telegram.tgnet.TLRPC$TL_secureValue) r0
             org.telegram.tgnet.TLRPC$SecureValueType r1 = r0.type
             boolean r1 = r6.isPersonalDocument(r1)
-            if (r1 == 0) goto L_0x0298
+            if (r1 == 0) goto L_0x0293
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r2 = new org.telegram.tgnet.TLRPC$TL_secureRequiredType
@@ -3694,15 +3694,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails r2 = new org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
             r2.<init>()
             r0.type = r2
-        L_0x0294:
+        L_0x028f:
             r2 = r0
             r3 = r1
             r4 = 1
-            goto L_0x02cd
-        L_0x0298:
+            goto L_0x02c8
+        L_0x0293:
             org.telegram.tgnet.TLRPC$SecureValueType r1 = r0.type
             boolean r1 = r6.isAddressDocument(r1)
-            if (r1 == 0) goto L_0x02c0
+            if (r1 == 0) goto L_0x02bb
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r2 = new org.telegram.tgnet.TLRPC$TL_secureRequiredType
@@ -3716,8 +3716,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress r2 = new org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress
             r2.<init>()
             r0.type = r2
-            goto L_0x0294
-        L_0x02c0:
+            goto L_0x028f
+        L_0x02bb:
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r1 = new org.telegram.tgnet.TLRPC$TL_secureRequiredType
             r1.<init>()
             org.telegram.tgnet.TLRPC$SecureValueType r0 = r0.type
@@ -3726,20 +3726,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r3 = r0
             r2 = r1
             r4 = 0
-        L_0x02cd:
+        L_0x02c8:
             int r0 = r9 + -1
-            if (r11 != r0) goto L_0x02d3
+            if (r11 != r0) goto L_0x02ce
             r5 = 1
-            goto L_0x02d4
-        L_0x02d3:
+            goto L_0x02cf
+        L_0x02ce:
             r5 = 0
-        L_0x02d4:
+        L_0x02cf:
             r0 = r19
             r1 = r20
             r0.addField(r1, r2, r3, r4, r5)
             int r11 = r11 + 1
-            goto L_0x025f
-        L_0x02de:
+            goto L_0x025a
+        L_0x02d9:
             r19.updateManageVisibility()
             return
         */
@@ -3760,7 +3760,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         builder.setMessage(LocaleController.getString("TelegramPassportDeleteAlert", NUM));
         builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                PassportActivity.this.lambda$null$20$PassportActivity(dialogInterface, i);
+                PassportActivity.this.lambda$createManageInterface$20$PassportActivity(dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -3773,8 +3773,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$20 */
-    public /* synthetic */ void lambda$null$20$PassportActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createManageInterface$20 */
+    public /* synthetic */ void lambda$createManageInterface$20$PassportActivity(DialogInterface dialogInterface, int i) {
         TLRPC$TL_account_deleteSecureValue tLRPC$TL_account_deleteSecureValue = new TLRPC$TL_account_deleteSecureValue();
         for (int i2 = 0; i2 < this.currentForm.values.size(); i2++) {
             tLRPC$TL_account_deleteSecureValue.types.add(this.currentForm.values.get(i2).type);
@@ -3782,24 +3782,24 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         needShowProgress();
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_deleteSecureValue, new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                PassportActivity.this.lambda$null$19$PassportActivity(tLObject, tLRPC$TL_error);
+                PassportActivity.this.lambda$createManageInterface$19$PassportActivity(tLObject, tLRPC$TL_error);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$19 */
-    public /* synthetic */ void lambda$null$19$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createManageInterface$19 */
+    public /* synthetic */ void lambda$createManageInterface$19$PassportActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                PassportActivity.this.lambda$null$18$PassportActivity();
+                PassportActivity.this.lambda$createManageInterface$18$PassportActivity();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$18 */
-    public /* synthetic */ void lambda$null$18$PassportActivity() {
+    /* renamed from: lambda$createManageInterface$18 */
+    public /* synthetic */ void lambda$createManageInterface$18$PassportActivity() {
         int i = 0;
         while (i < this.linearLayout2.getChildCount()) {
             View childAt = this.linearLayout2.getChildAt(i);
@@ -4132,7 +4132,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r2 = r25
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
             java.lang.String r3 = "PassportPhone"
-            r4 = 2131626733(0x7f0e0aed, float:1.888071E38)
+            r4 = 2131626755(0x7f0e0b03, float:1.8880755E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r0.setTitle(r3)
             java.util.HashMap r0 = new java.util.HashMap
@@ -4199,7 +4199,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setTextColor(r8)
             android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
             r7.setBackgroundDrawable(r8)
-            r8 = 2131626737(0x7f0e0af1, float:1.8880719E38)
+            r8 = 2131626759(0x7f0e0b07, float:1.8880763E38)
             java.lang.Object[] r9 = new java.lang.Object[r5]
             org.telegram.PhoneFormat.PhoneFormat r10 = org.telegram.PhoneFormat.PhoneFormat.getInstance()
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -4224,12 +4224,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r0.<init>(r2)
             r1.bottomCell = r0
-            r7 = 2131165450(0x7var_a, float:1.7945117E38)
+            r7 = 2131165451(0x7var_b, float:1.794512E38)
             java.lang.String r10 = "windowBackgroundGrayShadow"
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r7, (java.lang.String) r10)
             r0.setBackgroundDrawable(r11)
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r1.bottomCell
-            r11 = 2131626739(0x7f0e0af3, float:1.8880723E38)
+            r11 = 2131626761(0x7f0e0b09, float:1.8880767E38)
             java.lang.String r13 = "PassportPhoneUseSameInfo"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
             r0.setText(r11)
@@ -4240,7 +4240,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
             r0.<init>(r2)
             r1.headerCell = r0
-            r11 = 2131626736(0x7f0e0af0, float:1.8880717E38)
+            r11 = 2131626758(0x7f0e0b06, float:1.8880761E38)
             java.lang.String r13 = "PassportPhoneUseOther"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
             r0.setText(r11)
@@ -4255,23 +4255,23 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Components.EditTextBoldCursor[] r0 = new org.telegram.ui.Components.EditTextBoldCursor[r3]
             r1.inputFields = r0
             r0 = 0
-        L_0x0139:
+        L_0x0136:
             r13 = 0
-            if (r0 >= r3) goto L_0x0378
-            if (r0 != r4) goto L_0x0148
+            if (r0 >= r3) goto L_0x0373
+            if (r0 != r4) goto L_0x0145
             org.telegram.ui.Components.EditTextBoldCursor[] r14 = r1.inputFields
             org.telegram.ui.Components.HintEditText r15 = new org.telegram.ui.Components.HintEditText
             r15.<init>(r2)
             r14[r0] = r15
-            goto L_0x0151
-        L_0x0148:
+            goto L_0x014e
+        L_0x0145:
             org.telegram.ui.Components.EditTextBoldCursor[] r14 = r1.inputFields
             org.telegram.ui.Components.EditTextBoldCursor r15 = new org.telegram.ui.Components.EditTextBoldCursor
             r15.<init>(r2)
             r14[r0] = r15
-        L_0x0151:
+        L_0x014e:
             r14 = 50
-            if (r0 != r5) goto L_0x016e
+            if (r0 != r5) goto L_0x016b
             android.widget.LinearLayout r15 = new android.widget.LinearLayout
             r15.<init>(r2)
             r15.setOrientation(r6)
@@ -4280,16 +4280,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r9.addView(r15, r14)
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             r15.setBackgroundColor(r9)
-            goto L_0x0191
-        L_0x016e:
-            if (r0 != r4) goto L_0x017c
+            goto L_0x018e
+        L_0x016b:
+            if (r0 != r4) goto L_0x0179
             org.telegram.ui.Components.EditTextBoldCursor[] r9 = r1.inputFields
             r9 = r9[r5]
             android.view.ViewParent r9 = r9.getParent()
             r15 = r9
             android.view.ViewGroup r15 = (android.view.ViewGroup) r15
-            goto L_0x0191
-        L_0x017c:
+            goto L_0x018e
+        L_0x0179:
             android.widget.FrameLayout r15 = new android.widget.FrameLayout
             r15.<init>(r2)
             android.widget.LinearLayout r9 = r1.linearLayout2
@@ -4297,7 +4297,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r9.addView(r15, r14)
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             r15.setBackgroundColor(r9)
-        L_0x0191:
+        L_0x018e:
             org.telegram.ui.Components.EditTextBoldCursor[] r9 = r1.inputFields
             r9 = r9[r0]
             java.lang.Integer r14 = java.lang.Integer.valueOf(r0)
@@ -4332,7 +4332,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7 = r7[r0]
             r8 = 1069547520(0x3fCLASSNAME, float:1.5)
             r7.setCursorWidth(r8)
-            if (r0 != 0) goto L_0x0216
+            if (r0 != 0) goto L_0x0211
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             org.telegram.ui.-$$Lambda$PassportActivity$UFQIIKSJn3CkjdV_3Ag816ilcUc r8 = new org.telegram.ui.-$$Lambda$PassportActivity$UFQIIKSJn3CkjdV_3Ag816ilcUc
@@ -4340,7 +4340,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setOnTouchListener(r8)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r8 = 2131624870(0x7f0e03a6, float:1.8876932E38)
+            r8 = 2131624886(0x7f0e03b6, float:1.8876964E38)
             java.lang.String r13 = "ChooseCountry"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r13, r8)
             r7.setText(r8)
@@ -4350,23 +4350,23 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r7.setFocusable(r6)
-            goto L_0x0234
-        L_0x0216:
+            goto L_0x022f
+        L_0x0211:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r7.setInputType(r3)
-            if (r0 != r4) goto L_0x022a
+            if (r0 != r4) goto L_0x0225
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r8 = 268435462(0x10000006, float:2.5243567E-29)
             r7.setImeOptions(r8)
-            goto L_0x0234
-        L_0x022a:
+            goto L_0x022f
+        L_0x0225:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r8 = 268435461(0x10000005, float:2.5243564E-29)
             r7.setImeOptions(r8)
-        L_0x0234:
+        L_0x022f:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r8 = r7[r0]
             r7 = r7[r0]
@@ -4374,7 +4374,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r8.setSelection(r7)
             r7 = 19
             r8 = 5
-            if (r0 != r5) goto L_0x02b6
+            if (r0 != r5) goto L_0x02b1
             android.widget.TextView r13 = new android.widget.TextView
             r13.<init>(r2)
             r1.plusTextView = r13
@@ -4420,9 +4420,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.PassportActivity$9 r8 = new org.telegram.ui.PassportActivity$9
             r8.<init>()
             r7.addTextChangedListener(r8)
-            goto L_0x0335
-        L_0x02b6:
-            if (r0 != r4) goto L_0x0302
+            goto L_0x0330
+        L_0x02b1:
+            if (r0 != r4) goto L_0x02fd
             org.telegram.ui.Components.EditTextBoldCursor[] r8 = r1.inputFields
             r8 = r8[r0]
             r8.setPadding(r6, r6, r6, r6)
@@ -4435,7 +4435,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setHintText(r8)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r8 = 2131626833(0x7f0e0b51, float:1.8880913E38)
+            r8 = 2131626855(0x7f0e0b67, float:1.8880958E38)
             java.lang.String r9 = "PaymentShippingPhoneNumber"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r7.setHint(r8)
@@ -4454,8 +4454,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.PassportActivity$10 r8 = new org.telegram.ui.PassportActivity$10
             r8.<init>()
             r7.addTextChangedListener(r8)
-            goto L_0x0335
-        L_0x0302:
+            goto L_0x0330
+        L_0x02fd:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             r9 = 1086324736(0x40CLASSNAME, float:6.0)
@@ -4464,11 +4464,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             boolean r9 = org.telegram.messenger.LocaleController.isRTL
-            if (r9 == 0) goto L_0x0318
-            goto L_0x0319
-        L_0x0318:
+            if (r9 == 0) goto L_0x0313
+            goto L_0x0314
+        L_0x0313:
             r8 = 3
-        L_0x0319:
+        L_0x0314:
             r7.setGravity(r8)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
@@ -4481,20 +4481,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r23 = 1086324736(0x40CLASSNAME, float:6.0)
             android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
             r15.addView(r7, r8)
-        L_0x0335:
+        L_0x0330:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             org.telegram.ui.-$$Lambda$PassportActivity$xSwOrzrcqcdvqMcV1h4WRijNrh0 r8 = new org.telegram.ui.-$$Lambda$PassportActivity$xSwOrzrcqcdvqMcV1h4WRijNrh0
             r8.<init>()
             r7.setOnEditorActionListener(r8)
-            if (r0 != r4) goto L_0x034f
+            if (r0 != r4) goto L_0x034a
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
             org.telegram.ui.-$$Lambda$PassportActivity$SSEze-zMVIbPKw3xzG3VNR8rJtk r8 = new org.telegram.ui.-$$Lambda$PassportActivity$SSEze-zMVIbPKw3xzG3VNR8rJtk
             r8.<init>()
             r7.setOnKeyListener(r8)
-        L_0x034f:
-            if (r0 != 0) goto L_0x036f
+        L_0x034a:
+            if (r0 != 0) goto L_0x036a
             android.view.View r7 = new android.view.View
             r7.<init>(r2)
             java.util.ArrayList<android.view.View> r8 = r1.dividers
@@ -4507,53 +4507,53 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r13 = -1
             r8.<init>(r13, r5, r9)
             r15.addView(r7, r8)
-        L_0x036f:
+        L_0x036a:
             int r0 = r0 + 1
-            r7 = 2131165450(0x7var_a, float:1.7945117E38)
+            r7 = 2131165451(0x7var_b, float:1.794512E38)
             r8 = -1
             r9 = -2
-            goto L_0x0139
-        L_0x0378:
+            goto L_0x0136
+        L_0x0373:
             r8 = r13
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x038f }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x038a }
             java.lang.String r3 = "phone"
-            java.lang.Object r0 = r0.getSystemService(r3)     // Catch:{ Exception -> 0x038f }
-            android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x038f }
-            if (r0 == 0) goto L_0x0393
-            java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x038f }
-            java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x038f }
+            java.lang.Object r0 = r0.getSystemService(r3)     // Catch:{ Exception -> 0x038a }
+            android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x038a }
+            if (r0 == 0) goto L_0x038e
+            java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x038a }
+            java.lang.String r0 = r0.toUpperCase()     // Catch:{ Exception -> 0x038a }
             r13 = r0
-            goto L_0x0394
-        L_0x038f:
+            goto L_0x038f
+        L_0x038a:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0393:
+        L_0x038e:
             r13 = r8
-        L_0x0394:
-            if (r13 == 0) goto L_0x03b8
+        L_0x038f:
+            if (r13 == 0) goto L_0x03b3
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r1.languageMap
             java.lang.Object r0 = r0.get(r13)
             java.lang.String r0 = (java.lang.String) r0
-            if (r0 == 0) goto L_0x03b8
+            if (r0 == 0) goto L_0x03b3
             java.util.ArrayList<java.lang.String> r3 = r1.countriesArray
             int r3 = r3.indexOf(r0)
             r4 = -1
-            if (r3 == r4) goto L_0x03b8
+            if (r3 == r4) goto L_0x03b3
             org.telegram.ui.Components.EditTextBoldCursor[] r3 = r1.inputFields
             r3 = r3[r5]
             java.util.HashMap<java.lang.String, java.lang.String> r4 = r1.countriesMap
             java.lang.Object r0 = r4.get(r0)
             java.lang.CharSequence r0 = (java.lang.CharSequence) r0
             r3.setText(r0)
-        L_0x03b8:
+        L_0x03b3:
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = new org.telegram.ui.Cells.TextInfoPrivacyCell
             r0.<init>(r2)
             r1.bottomCell = r0
-            r3 = 2131165450(0x7var_a, float:1.7945117E38)
+            r3 = 2131165451(0x7var_b, float:1.794512E38)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r10)
             r0.setBackgroundDrawable(r2)
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r1.bottomCell
-            r2 = 2131626735(0x7f0e0aef, float:1.8880715E38)
+            r2 = 2131626757(0x7f0e0b05, float:1.888076E38)
             java.lang.String r3 = "PassportPhoneUploadInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -4586,7 +4586,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(false);
             countrySelectActivity.setCountrySelectActivityDelegate(new CountrySelectActivity.CountrySelectActivityDelegate() {
                 public final void didSelectCountry(String str, String str2) {
-                    PassportActivity.this.lambda$null$28$PassportActivity(str, str2);
+                    PassportActivity.this.lambda$createPhoneInterface$28$PassportActivity(str, str2);
                 }
             });
             presentFragment(countrySelectActivity);
@@ -4595,8 +4595,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$28 */
-    public /* synthetic */ void lambda$null$28$PassportActivity(String str, String str2) {
+    /* renamed from: lambda$createPhoneInterface$28 */
+    public /* synthetic */ void lambda$createPhoneInterface$28$PassportActivity(String str, String str2) {
         this.inputFields[0].setText(str);
         if (this.countriesArray.indexOf(str) != -1) {
             this.ignoreOnTextChange = true;
@@ -4608,7 +4608,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                PassportActivity.this.lambda$null$27$PassportActivity();
+                PassportActivity.this.lambda$createPhoneInterface$27$PassportActivity();
             }
         }, 300);
         this.inputFields[2].requestFocus();
@@ -4617,8 +4617,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$27 */
-    public /* synthetic */ void lambda$null$27$PassportActivity() {
+    /* renamed from: lambda$createPhoneInterface$27 */
+    public /* synthetic */ void lambda$createPhoneInterface$27$PassportActivity() {
         AndroidUtilities.showKeyboard(this.inputFields[2]);
     }
 
@@ -4816,7 +4816,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         while (i3 < i2) {
             final EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
             this.inputFields[i3] = editTextBoldCursor;
-            AnonymousClass11 r13 = new FrameLayout(this, context2) {
+            AnonymousClass11 r13 = new FrameLayout(context2) {
                 private StaticLayout errorLayout;
                 float offsetX;
 
@@ -5060,7 +5060,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             CountrySelectActivity countrySelectActivity = new CountrySelectActivity(false);
             countrySelectActivity.setCountrySelectActivityDelegate(new CountrySelectActivity.CountrySelectActivityDelegate() {
                 public final void didSelectCountry(String str, String str2) {
-                    PassportActivity.this.lambda$null$34$PassportActivity(str, str2);
+                    PassportActivity.this.lambda$createAddressInterface$34$PassportActivity(str, str2);
                 }
             });
             presentFragment(countrySelectActivity);
@@ -5069,8 +5069,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$34 */
-    public /* synthetic */ void lambda$null$34$PassportActivity(String str, String str2) {
+    /* renamed from: lambda$createAddressInterface$34 */
+    public /* synthetic */ void lambda$createAddressInterface$34$PassportActivity(String str, String str2) {
         this.inputFields[5].setText(str);
         this.currentCitizeship = str2;
     }
@@ -5236,22 +5236,22 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:126:0x0218, code lost:
-        if (r6 != 5) goto L_0x022a;
+    /* JADX WARNING: Code restructure failed: missing block: B:126:0x0216, code lost:
+        if (r6 != 5) goto L_0x0228;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:167:0x028e, code lost:
-        if (r8 > 24) goto L_0x029a;
+    /* JADX WARNING: Code restructure failed: missing block: B:167:0x028c, code lost:
+        if (r8 > 24) goto L_0x0298;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:171:0x0298, code lost:
-        if (r8 < 2) goto L_0x029a;
+    /* JADX WARNING: Code restructure failed: missing block: B:171:0x0296, code lost:
+        if (r8 < 2) goto L_0x0298;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:176:0x02a8, code lost:
-        if (r8 < 2) goto L_0x029a;
+    /* JADX WARNING: Code restructure failed: missing block: B:176:0x02a6, code lost:
+        if (r8 < 2) goto L_0x0298;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:180:0x02b1, code lost:
-        if (r8 > 10) goto L_0x029a;
+    /* JADX WARNING: Code restructure failed: missing block: B:180:0x02af, code lost:
+        if (r8 > 10) goto L_0x0298;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:134:0x022d  */
+    /* JADX WARNING: Removed duplicated region for block: B:134:0x022b  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean checkFieldsForError() {
         /*
@@ -5259,16 +5259,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r0 = r13.currentDocumentsType
             r1 = 0
             r2 = 1
-            if (r0 == 0) goto L_0x01a1
+            if (r0 == 0) goto L_0x019f
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r13.errorsValues
             java.lang.String r3 = "error_all"
             boolean r0 = r0.containsKey(r3)
-            if (r0 != 0) goto L_0x019b
+            if (r0 != 0) goto L_0x0199
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r13.errorsValues
             java.lang.String r3 = "error_document_all"
             boolean r0 = r0.containsKey(r3)
             if (r0 == 0) goto L_0x001c
-            goto L_0x019b
+            goto L_0x0199
         L_0x001c:
             org.telegram.ui.Cells.TextSettingsCell r0 = r13.uploadDocumentCell
             if (r0 == 0) goto L_0x006d
@@ -5310,20 +5310,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r13.errorsValues
             java.lang.String r3 = "files_all"
             boolean r0 = r0.containsKey(r3)
-            if (r0 != 0) goto L_0x0195
+            if (r0 != 0) goto L_0x0193
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r13.errorsValues
             java.lang.String r3 = "translation_all"
             boolean r0 = r0.containsKey(r3)
-            if (r0 == 0) goto L_0x0084
-            goto L_0x0195
-        L_0x0084:
+            if (r0 == 0) goto L_0x0083
+            goto L_0x0193
+        L_0x0083:
             org.telegram.ui.Cells.TextDetailSettingsCell r0 = r13.uploadFrontCell
-            if (r0 == 0) goto L_0x00bd
+            if (r0 == 0) goto L_0x00bc
             org.telegram.messenger.SecureDocument r3 = r13.frontDocument
-            if (r3 != 0) goto L_0x0090
+            if (r3 != 0) goto L_0x008f
             r13.onFieldError(r0)
             return r2
-        L_0x0090:
+        L_0x008f:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r3 = "front"
@@ -5334,28 +5334,28 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r0 = r0.toString()
             java.util.HashMap<java.lang.String, java.lang.String> r3 = r13.errorsValues
             boolean r0 = r3.containsKey(r0)
-            if (r0 == 0) goto L_0x00bd
+            if (r0 == 0) goto L_0x00bc
             java.util.HashMap<org.telegram.messenger.SecureDocument, org.telegram.ui.PassportActivity$SecureDocumentCell> r0 = r13.documentsCells
             org.telegram.messenger.SecureDocument r1 = r13.frontDocument
             java.lang.Object r0 = r0.get(r1)
             android.view.View r0 = (android.view.View) r0
             r13.onFieldError(r0)
             return r2
-        L_0x00bd:
+        L_0x00bc:
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r0 = r13.currentDocumentsType
             org.telegram.tgnet.TLRPC$SecureValueType r0 = r0.type
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeIdentityCard
-            if (r3 != 0) goto L_0x00c9
+            if (r3 != 0) goto L_0x00c8
             boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeDriverLicense
-            if (r0 == 0) goto L_0x0102
-        L_0x00c9:
+            if (r0 == 0) goto L_0x0101
+        L_0x00c8:
             org.telegram.ui.Cells.TextDetailSettingsCell r0 = r13.uploadReverseCell
-            if (r0 == 0) goto L_0x0102
+            if (r0 == 0) goto L_0x0101
             org.telegram.messenger.SecureDocument r3 = r13.reverseDocument
-            if (r3 != 0) goto L_0x00d5
+            if (r3 != 0) goto L_0x00d4
             r13.onFieldError(r0)
             return r2
-        L_0x00d5:
+        L_0x00d4:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r3 = "reverse"
@@ -5366,23 +5366,23 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r0 = r0.toString()
             java.util.HashMap<java.lang.String, java.lang.String> r3 = r13.errorsValues
             boolean r0 = r3.containsKey(r0)
-            if (r0 == 0) goto L_0x0102
+            if (r0 == 0) goto L_0x0101
             java.util.HashMap<org.telegram.messenger.SecureDocument, org.telegram.ui.PassportActivity$SecureDocumentCell> r0 = r13.documentsCells
             org.telegram.messenger.SecureDocument r1 = r13.reverseDocument
             java.lang.Object r0 = r0.get(r1)
             android.view.View r0 = (android.view.View) r0
             r13.onFieldError(r0)
             return r2
-        L_0x0102:
+        L_0x0101:
             org.telegram.ui.Cells.TextDetailSettingsCell r0 = r13.uploadSelfieCell
-            if (r0 == 0) goto L_0x013f
+            if (r0 == 0) goto L_0x013e
             int r3 = r13.currentBotId
-            if (r3 == 0) goto L_0x013f
+            if (r3 == 0) goto L_0x013e
             org.telegram.messenger.SecureDocument r3 = r13.selfieDocument
-            if (r3 != 0) goto L_0x0112
+            if (r3 != 0) goto L_0x0111
             r13.onFieldError(r0)
             return r2
-        L_0x0112:
+        L_0x0111:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r3 = "selfie"
@@ -5393,30 +5393,30 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r0 = r0.toString()
             java.util.HashMap<java.lang.String, java.lang.String> r3 = r13.errorsValues
             boolean r0 = r3.containsKey(r0)
-            if (r0 == 0) goto L_0x013f
+            if (r0 == 0) goto L_0x013e
             java.util.HashMap<org.telegram.messenger.SecureDocument, org.telegram.ui.PassportActivity$SecureDocumentCell> r0 = r13.documentsCells
             org.telegram.messenger.SecureDocument r1 = r13.selfieDocument
             java.lang.Object r0 = r0.get(r1)
             android.view.View r0 = (android.view.View) r0
             r13.onFieldError(r0)
             return r2
-        L_0x013f:
+        L_0x013e:
             org.telegram.ui.Cells.TextSettingsCell r0 = r13.uploadTranslationCell
-            if (r0 == 0) goto L_0x01a1
+            if (r0 == 0) goto L_0x019f
             int r0 = r13.currentBotId
-            if (r0 == 0) goto L_0x01a1
+            if (r0 == 0) goto L_0x019f
             java.util.ArrayList<org.telegram.messenger.SecureDocument> r0 = r13.translationDocuments
             boolean r0 = r0.isEmpty()
-            if (r0 == 0) goto L_0x0155
+            if (r0 == 0) goto L_0x0154
             org.telegram.ui.Cells.TextSettingsCell r0 = r13.uploadTranslationCell
             r13.onFieldError(r0)
             return r2
-        L_0x0155:
+        L_0x0154:
             java.util.ArrayList<org.telegram.messenger.SecureDocument> r0 = r13.translationDocuments
             int r0 = r0.size()
             r3 = 0
-        L_0x015c:
-            if (r3 >= r0) goto L_0x01a1
+        L_0x015b:
+            if (r3 >= r0) goto L_0x019f
             java.util.ArrayList<org.telegram.messenger.SecureDocument> r4 = r13.translationDocuments
             java.lang.Object r4 = r4.get(r3)
             org.telegram.messenger.SecureDocument r4 = (org.telegram.messenger.SecureDocument) r4
@@ -5427,246 +5427,246 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r6 = r13.getDocumentHash(r4)
             r5.append(r6)
             java.lang.String r5 = r5.toString()
-            if (r5 == 0) goto L_0x0192
+            if (r5 == 0) goto L_0x0190
             java.util.HashMap<java.lang.String, java.lang.String> r6 = r13.errorsValues
             boolean r5 = r6.containsKey(r5)
-            if (r5 == 0) goto L_0x0192
+            if (r5 == 0) goto L_0x0190
             java.util.HashMap<org.telegram.messenger.SecureDocument, org.telegram.ui.PassportActivity$SecureDocumentCell> r0 = r13.documentsCells
             java.lang.Object r0 = r0.get(r4)
             android.view.View r0 = (android.view.View) r0
             r13.onFieldError(r0)
             return r2
-        L_0x0192:
+        L_0x0190:
             int r3 = r3 + 1
-            goto L_0x015c
-        L_0x0195:
+            goto L_0x015b
+        L_0x0193:
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r13.bottomCell
             r13.onFieldError(r0)
             return r2
-        L_0x019b:
+        L_0x0199:
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r13.topErrorCell
             r13.onFieldError(r0)
             return r2
-        L_0x01a1:
+        L_0x019f:
             r0 = 0
-        L_0x01a2:
+        L_0x01a0:
             r3 = 2
-            if (r0 >= r3) goto L_0x02cc
+            if (r0 >= r3) goto L_0x02ca
             r4 = 0
-            if (r0 != 0) goto L_0x01ab
+            if (r0 != 0) goto L_0x01a9
             org.telegram.ui.Components.EditTextBoldCursor[] r5 = r13.inputFields
-            goto L_0x01b9
-        L_0x01ab:
+            goto L_0x01b7
+        L_0x01a9:
             org.telegram.ui.Cells.TextInfoPrivacyCell r5 = r13.nativeInfoCell
-            if (r5 == 0) goto L_0x01b8
+            if (r5 == 0) goto L_0x01b6
             int r5 = r5.getVisibility()
-            if (r5 != 0) goto L_0x01b8
+            if (r5 != 0) goto L_0x01b6
             org.telegram.ui.Components.EditTextBoldCursor[] r5 = r13.inputExtraFields
-            goto L_0x01b9
-        L_0x01b8:
+            goto L_0x01b7
+        L_0x01b6:
             r5 = r4
-        L_0x01b9:
-            if (r5 != 0) goto L_0x01bd
-            goto L_0x02c8
-        L_0x01bd:
+        L_0x01b7:
+            if (r5 != 0) goto L_0x01bb
+            goto L_0x02c6
+        L_0x01bb:
             r6 = 0
-        L_0x01be:
+        L_0x01bc:
             int r7 = r5.length
-            if (r6 >= r7) goto L_0x02c8
+            if (r6 >= r7) goto L_0x02c6
             r7 = r5[r6]
             boolean r7 = r7.hasErrorText()
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r13.errorsValues
             boolean r8 = r8.isEmpty()
             r9 = 4
             r10 = 3
-            if (r8 != 0) goto L_0x024c
+            if (r8 != 0) goto L_0x024a
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r8 = r13.currentType
             org.telegram.tgnet.TLRPC$SecureValueType r8 = r8.type
             boolean r11 = r8 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
             java.lang.String r12 = "country_code"
-            if (r11 == 0) goto L_0x0209
-            if (r0 != 0) goto L_0x01f9
+            if (r11 == 0) goto L_0x0207
+            if (r0 != 0) goto L_0x01f7
             switch(r6) {
-                case 0: goto L_0x01f6;
-                case 1: goto L_0x01f3;
-                case 2: goto L_0x01f0;
-                case 3: goto L_0x01ed;
-                case 4: goto L_0x01ea;
-                case 5: goto L_0x022b;
-                case 6: goto L_0x01e7;
-                case 7: goto L_0x01e4;
-                case 8: goto L_0x01e1;
-                default: goto L_0x01e0;
+                case 0: goto L_0x01f4;
+                case 1: goto L_0x01f1;
+                case 2: goto L_0x01ee;
+                case 3: goto L_0x01eb;
+                case 4: goto L_0x01e8;
+                case 5: goto L_0x0229;
+                case 6: goto L_0x01e5;
+                case 7: goto L_0x01e2;
+                case 8: goto L_0x01df;
+                default: goto L_0x01de;
             }
-        L_0x01e0:
-            goto L_0x022a
-        L_0x01e1:
+        L_0x01de:
+            goto L_0x0228
+        L_0x01df:
             java.lang.String r12 = "expiry_date"
-            goto L_0x022b
-        L_0x01e4:
+            goto L_0x0229
+        L_0x01e2:
             java.lang.String r12 = "document_no"
-            goto L_0x022b
-        L_0x01e7:
+            goto L_0x0229
+        L_0x01e5:
             java.lang.String r12 = "residence_country_code"
-            goto L_0x022b
-        L_0x01ea:
+            goto L_0x0229
+        L_0x01e8:
             java.lang.String r12 = "gender"
-            goto L_0x022b
-        L_0x01ed:
+            goto L_0x0229
+        L_0x01eb:
             java.lang.String r12 = "birth_date"
-            goto L_0x022b
-        L_0x01f0:
+            goto L_0x0229
+        L_0x01ee:
             java.lang.String r12 = "last_name"
-            goto L_0x022b
-        L_0x01f3:
+            goto L_0x0229
+        L_0x01f1:
             java.lang.String r12 = "middle_name"
-            goto L_0x022b
-        L_0x01f6:
+            goto L_0x0229
+        L_0x01f4:
             java.lang.String r12 = "first_name"
-            goto L_0x022b
-        L_0x01f9:
-            if (r6 == 0) goto L_0x0206
-            if (r6 == r2) goto L_0x0203
-            if (r6 == r3) goto L_0x0200
-            goto L_0x022a
-        L_0x0200:
+            goto L_0x0229
+        L_0x01f7:
+            if (r6 == 0) goto L_0x0204
+            if (r6 == r2) goto L_0x0201
+            if (r6 == r3) goto L_0x01fe
+            goto L_0x0228
+        L_0x01fe:
             java.lang.String r12 = "last_name_native"
-            goto L_0x022b
-        L_0x0203:
+            goto L_0x0229
+        L_0x0201:
             java.lang.String r12 = "middle_name_native"
-            goto L_0x022b
-        L_0x0206:
+            goto L_0x0229
+        L_0x0204:
             java.lang.String r12 = "first_name_native"
-            goto L_0x022b
-        L_0x0209:
+            goto L_0x0229
+        L_0x0207:
             boolean r8 = r8 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeAddress
-            if (r8 == 0) goto L_0x022a
-            if (r6 == 0) goto L_0x0227
-            if (r6 == r2) goto L_0x0224
-            if (r6 == r3) goto L_0x0221
-            if (r6 == r10) goto L_0x021e
-            if (r6 == r9) goto L_0x021b
+            if (r8 == 0) goto L_0x0228
+            if (r6 == 0) goto L_0x0225
+            if (r6 == r2) goto L_0x0222
+            if (r6 == r3) goto L_0x021f
+            if (r6 == r10) goto L_0x021c
+            if (r6 == r9) goto L_0x0219
             r8 = 5
-            if (r6 == r8) goto L_0x022b
-            goto L_0x022a
-        L_0x021b:
+            if (r6 == r8) goto L_0x0229
+            goto L_0x0228
+        L_0x0219:
             java.lang.String r12 = "state"
-            goto L_0x022b
-        L_0x021e:
+            goto L_0x0229
+        L_0x021c:
             java.lang.String r12 = "city"
-            goto L_0x022b
-        L_0x0221:
+            goto L_0x0229
+        L_0x021f:
             java.lang.String r12 = "post_code"
-            goto L_0x022b
-        L_0x0224:
+            goto L_0x0229
+        L_0x0222:
             java.lang.String r12 = "street_line2"
-            goto L_0x022b
-        L_0x0227:
+            goto L_0x0229
+        L_0x0225:
             java.lang.String r12 = "street_line1"
-            goto L_0x022b
-        L_0x022a:
+            goto L_0x0229
+        L_0x0228:
             r12 = r4
-        L_0x022b:
-            if (r12 == 0) goto L_0x024c
+        L_0x0229:
+            if (r12 == 0) goto L_0x024a
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r13.errorsValues
             java.lang.Object r8 = r8.get(r12)
             java.lang.String r8 = (java.lang.String) r8
             boolean r11 = android.text.TextUtils.isEmpty(r8)
-            if (r11 != 0) goto L_0x024c
+            if (r11 != 0) goto L_0x024a
             r11 = r5[r6]
             android.text.Editable r11 = r11.getText()
             java.lang.String r11 = r11.toString()
             boolean r8 = r8.equals(r11)
-            if (r8 == 0) goto L_0x024c
+            if (r8 == 0) goto L_0x024a
             r7 = 1
-        L_0x024c:
+        L_0x024a:
             boolean r8 = r13.documentOnly
             r11 = 7
-            if (r8 == 0) goto L_0x0259
+            if (r8 == 0) goto L_0x0257
             org.telegram.tgnet.TLRPC$TL_secureRequiredType r8 = r13.currentDocumentsType
-            if (r8 == 0) goto L_0x0259
-            if (r6 >= r11) goto L_0x0259
-            goto L_0x02c4
-        L_0x0259:
-            if (r7 != 0) goto L_0x02bc
+            if (r8 == 0) goto L_0x0257
+            if (r6 >= r11) goto L_0x0257
+            goto L_0x02c2
+        L_0x0257:
+            if (r7 != 0) goto L_0x02ba
             r8 = r5[r6]
             int r8 = r8.length()
             int r12 = r13.currentActivityType
-            if (r12 != r2) goto L_0x0291
+            if (r12 != r2) goto L_0x028f
             r9 = 8
-            if (r6 != r9) goto L_0x026b
-            goto L_0x02c4
-        L_0x026b:
-            if (r0 != 0) goto L_0x0273
-            if (r6 == 0) goto L_0x027b
-            if (r6 == r3) goto L_0x027b
-            if (r6 == r2) goto L_0x027b
-        L_0x0273:
-            if (r0 != r2) goto L_0x028a
-            if (r6 == 0) goto L_0x027b
-            if (r6 == r2) goto L_0x027b
-            if (r6 != r3) goto L_0x028a
-        L_0x027b:
+            if (r6 != r9) goto L_0x0269
+            goto L_0x02c2
+        L_0x0269:
+            if (r0 != 0) goto L_0x0271
+            if (r6 == 0) goto L_0x0279
+            if (r6 == r3) goto L_0x0279
+            if (r6 == r2) goto L_0x0279
+        L_0x0271:
+            if (r0 != r2) goto L_0x0288
+            if (r6 == 0) goto L_0x0279
+            if (r6 == r2) goto L_0x0279
+            if (r6 != r3) goto L_0x0288
+        L_0x0279:
             r9 = 255(0xff, float:3.57E-43)
-            if (r8 <= r9) goto L_0x0280
+            if (r8 <= r9) goto L_0x027e
             r7 = 1
-        L_0x0280:
-            if (r0 != 0) goto L_0x0284
-            if (r6 == r2) goto L_0x0288
-        L_0x0284:
-            if (r0 != r2) goto L_0x02b4
-            if (r6 != r2) goto L_0x02b4
-        L_0x0288:
+        L_0x027e:
+            if (r0 != 0) goto L_0x0282
+            if (r6 == r2) goto L_0x0286
+        L_0x0282:
+            if (r0 != r2) goto L_0x02b2
+            if (r6 != r2) goto L_0x02b2
+        L_0x0286:
             r9 = 1
-            goto L_0x02b5
-        L_0x028a:
-            if (r6 != r11) goto L_0x02b4
+            goto L_0x02b3
+        L_0x0288:
+            if (r6 != r11) goto L_0x02b2
             r9 = 24
-            if (r8 <= r9) goto L_0x02b4
-            goto L_0x029a
-        L_0x0291:
-            if (r12 != r3) goto L_0x02b4
-            if (r6 != r2) goto L_0x0296
-            goto L_0x02c4
-        L_0x0296:
-            if (r6 != r10) goto L_0x029c
-            if (r8 >= r3) goto L_0x02b4
-        L_0x029a:
+            if (r8 <= r9) goto L_0x02b2
+            goto L_0x0298
+        L_0x028f:
+            if (r12 != r3) goto L_0x02b2
+            if (r6 != r2) goto L_0x0294
+            goto L_0x02c2
+        L_0x0294:
+            if (r6 != r10) goto L_0x029a
+            if (r8 >= r3) goto L_0x02b2
+        L_0x0298:
             r7 = 1
-            goto L_0x02b4
-        L_0x029c:
-            if (r6 != r9) goto L_0x02ab
+            goto L_0x02b2
+        L_0x029a:
+            if (r6 != r9) goto L_0x02a9
             java.lang.String r9 = r13.currentCitizeship
             java.lang.String r10 = "US"
             boolean r9 = r10.equals(r9)
-            if (r9 == 0) goto L_0x02c4
-            if (r8 >= r3) goto L_0x02b4
-            goto L_0x029a
-        L_0x02ab:
-            if (r6 != r3) goto L_0x02b4
-            if (r8 < r3) goto L_0x029a
+            if (r9 == 0) goto L_0x02c2
+            if (r8 >= r3) goto L_0x02b2
+            goto L_0x0298
+        L_0x02a9:
+            if (r6 != r3) goto L_0x02b2
+            if (r8 < r3) goto L_0x0298
             r9 = 10
-            if (r8 <= r9) goto L_0x02b4
-            goto L_0x029a
-        L_0x02b4:
+            if (r8 <= r9) goto L_0x02b2
+            goto L_0x0298
+        L_0x02b2:
             r9 = 0
-        L_0x02b5:
-            if (r7 != 0) goto L_0x02bc
-            if (r9 != 0) goto L_0x02bc
-            if (r8 != 0) goto L_0x02bc
+        L_0x02b3:
+            if (r7 != 0) goto L_0x02ba
+            if (r9 != 0) goto L_0x02ba
+            if (r8 != 0) goto L_0x02ba
             r7 = 1
-        L_0x02bc:
-            if (r7 == 0) goto L_0x02c4
+        L_0x02ba:
+            if (r7 == 0) goto L_0x02c2
             r0 = r5[r6]
             r13.onFieldError(r0)
             return r2
-        L_0x02c4:
+        L_0x02c2:
             int r6 = r6 + 1
-            goto L_0x01be
-        L_0x02c8:
+            goto L_0x01bc
+        L_0x02c6:
             int r0 = r0 + 1
-            goto L_0x01a2
-        L_0x02cc:
+            goto L_0x01a0
+        L_0x02ca:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.checkFieldsForError():boolean");
@@ -5850,7 +5850,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (i3 < i2) {
                 final EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
                 this.inputFields[i3] = editTextBoldCursor;
-                AnonymousClass15 r4 = new FrameLayout(this, context2) {
+                AnonymousClass15 r4 = new FrameLayout(context2) {
                     private StaticLayout errorLayout;
                     private float offsetX;
 
@@ -6101,7 +6101,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 while (i6 < i5) {
                     final EditTextBoldCursor editTextBoldCursor2 = new EditTextBoldCursor(context2);
                     this.inputExtraFields[i6] = editTextBoldCursor2;
-                    AnonymousClass18 r7 = new FrameLayout(this, context2) {
+                    AnonymousClass18 r7 = new FrameLayout(context2) {
                         private StaticLayout errorLayout;
                         private float offsetX;
 
@@ -6365,7 +6365,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void didSelectCountry(String str, String str2) {
-                    PassportActivity.this.lambda$null$45$PassportActivity(this.f$1, str, str2);
+                    PassportActivity.this.lambda$createIdentityInterface$45$PassportActivity(this.f$1, str, str2);
                 }
             });
             presentFragment(countrySelectActivity);
@@ -6374,8 +6374,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$45 */
-    public /* synthetic */ void lambda$null$45$PassportActivity(View view, String str, String str2) {
+    /* renamed from: lambda$createIdentityInterface$45 */
+    public /* synthetic */ void lambda$createIdentityInterface$45$PassportActivity(View view, String str, String str2) {
         int intValue = ((Integer) view.getTag()).intValue();
         EditTextBoldCursor editTextBoldCursor = this.inputFields[intValue];
         if (intValue == 5) {
@@ -6440,7 +6440,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void didSelectDate(int i, int i2, int i3) {
-                        PassportActivity.this.lambda$null$47$PassportActivity(this.f$1, this.f$2, i, i2, i3);
+                        PassportActivity.this.lambda$createIdentityInterface$47$PassportActivity(this.f$1, this.f$2, i, i2, i3);
                     }
                 });
                 if (intValue == 8) {
@@ -6452,7 +6452,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         }
 
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            PassportActivity.this.lambda$null$48$PassportActivity(this.f$1, dialogInterface, i);
+                            PassportActivity.this.lambda$createIdentityInterface$48$PassportActivity(this.f$1, dialogInterface, i);
                         }
                     });
                 }
@@ -6465,8 +6465,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$47 */
-    public /* synthetic */ void lambda$null$47$PassportActivity(int i, EditTextBoldCursor editTextBoldCursor, int i2, int i3, int i4) {
+    /* renamed from: lambda$createIdentityInterface$47 */
+    public /* synthetic */ void lambda$createIdentityInterface$47$PassportActivity(int i, EditTextBoldCursor editTextBoldCursor, int i2, int i3, int i4) {
         if (i == 8) {
             int[] iArr = this.currentExpireDate;
             iArr[0] = i2;
@@ -6477,8 +6477,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$48 */
-    public /* synthetic */ void lambda$null$48$PassportActivity(EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createIdentityInterface$48 */
+    public /* synthetic */ void lambda$createIdentityInterface$48$PassportActivity(EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface, int i) {
         int[] iArr = this.currentExpireDate;
         iArr[2] = 0;
         iArr[1] = 0;
@@ -6497,7 +6497,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             builder.setTitle(LocaleController.getString("PassportSelectGender", NUM));
             builder.setItems(new CharSequence[]{LocaleController.getString("PassportMale", NUM), LocaleController.getString("PassportFemale", NUM)}, new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$null$50$PassportActivity(dialogInterface, i);
+                    PassportActivity.this.lambda$createIdentityInterface$50$PassportActivity(dialogInterface, i);
                 }
             });
             builder.setPositiveButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -6507,8 +6507,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$50 */
-    public /* synthetic */ void lambda$null$50$PassportActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createIdentityInterface$50 */
+    public /* synthetic */ void lambda$createIdentityInterface$50$PassportActivity(DialogInterface dialogInterface, int i) {
         if (i == 0) {
             this.currentGender = "male";
             this.inputFields[4].setText(LocaleController.getString("PassportMale", NUM));
@@ -6588,9 +6588,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     public void updateUploadText(int r9) {
         /*
             r8 = this;
-            r0 = 2131626768(0x7f0e0b10, float:1.8880782E38)
+            r0 = 2131626790(0x7f0e0b26, float:1.8880826E38)
             java.lang.String r1 = "PassportUploadAdditinalDocument"
-            r2 = 2131626769(0x7f0e0b11, float:1.8880784E38)
+            r2 = 2131626791(0x7f0e0b27, float:1.8880828E38)
             java.lang.String r3 = "PassportUploadDocument"
             r4 = 1
             r5 = 0
@@ -6670,19 +6670,19 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r0 == 0) goto L_0x0092
             goto L_0x00a8
         L_0x0092:
-            r0 = 2131626653(0x7f0e0a9d, float:1.8880548E38)
+            r0 = 2131626675(0x7f0e0ab3, float:1.8880593E38)
             java.lang.String r1 = "PassportFrontSide"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r1 = 2131626654(0x7f0e0a9e, float:1.888055E38)
+            r1 = 2131626676(0x7f0e0ab4, float:1.8880595E38)
             java.lang.String r2 = "PassportFrontSideInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r9.setTextAndValue(r0, r1, r4)
             goto L_0x00bd
         L_0x00a8:
-            r0 = 2131626711(0x7f0e0ad7, float:1.8880666E38)
+            r0 = 2131626733(0x7f0e0aed, float:1.888071E38)
             java.lang.String r1 = "PassportMainPage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r1 = 2131626712(0x7f0e0ad8, float:1.8880668E38)
+            r1 = 2131626734(0x7f0e0aee, float:1.8880713E38)
             java.lang.String r2 = "PassportMainPageInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r9.setTextAndValue(r0, r1, r4)
@@ -6893,7 +6893,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7[r3] = r5
             r7[r4] = r5
             r7[r5] = r5
-            r7 = 2131626727(0x7f0e0ae7, float:1.8880698E38)
+            r7 = 2131626749(0x7f0e0afd, float:1.8880743E38)
             java.lang.String r0 = "PassportNoExpireDate"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -6903,7 +6903,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.equals(r7)
             if (r0 == 0) goto L_0x00c9
             r6.currentGender = r7
-            r7 = 2131626713(0x7f0e0ad9, float:1.888067E38)
+            r7 = 2131626735(0x7f0e0aef, float:1.8880715E38)
             java.lang.String r0 = "PassportMale"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -6913,7 +6913,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.equals(r7)
             if (r0 == 0) goto L_0x00ef
             r6.currentGender = r7
-            r7 = 2131626652(0x7f0e0a9c, float:1.8880546E38)
+            r7 = 2131626674(0x7f0e0ab2, float:1.888059E38)
             java.lang.String r0 = "PassportFemale"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -7121,7 +7121,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                PassportActivity.this.lambda$null$56$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
+                PassportActivity.this.lambda$addDocumentView$56$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
             }
         });
         showDialog(builder.create());
@@ -7129,8 +7129,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$56 */
-    public /* synthetic */ void lambda$null$56$PassportActivity(SecureDocument secureDocument, int i, SecureDocumentCell secureDocumentCell, String str, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$addDocumentView$56 */
+    public /* synthetic */ void lambda$addDocumentView$56$PassportActivity(SecureDocument secureDocument, int i, SecureDocumentCell secureDocumentCell, String str, DialogInterface dialogInterface, int i2) {
         this.documentsCells.remove(secureDocument);
         if (i == 1) {
             this.selfieDocument = null;
@@ -7284,7 +7284,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     /* JADX WARNING: Removed duplicated region for block: B:231:0x0456  */
     /* JADX WARNING: Removed duplicated region for block: B:255:0x04c8  */
     /* JADX WARNING: Removed duplicated region for block: B:296:0x057b  */
-    /* JADX WARNING: Removed duplicated region for block: B:297:0x057f  */
+    /* JADX WARNING: Removed duplicated region for block: B:297:0x057e  */
     /* JADX WARNING: Removed duplicated region for block: B:39:0x00d2  */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x010b  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -7401,7 +7401,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r3 = 0
             r7.languageMap = r3
         L_0x00cb:
-            r5 = 2131626645(0x7f0e0a95, float:1.8880532E38)
+            r5 = 2131626667(0x7f0e0aab, float:1.8880577E38)
             java.lang.String r14 = "PassportDocuments"
             if (r9 == 0) goto L_0x010b
             org.telegram.tgnet.TLRPC$SecureValueType r0 = r8.type
@@ -7770,7 +7770,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0395 }
             if (r2 == 0) goto L_0x0360
             java.lang.String r2 = "PassportMale"
-            r4 = 2131626713(0x7f0e0ad9, float:1.888067E38)
+            r4 = 2131626735(0x7f0e0aef, float:1.8880715E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r4)     // Catch:{ Exception -> 0x0395 }
             r12.append(r2)     // Catch:{ Exception -> 0x0395 }
             goto L_0x0392
@@ -7779,7 +7779,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r2 = r2.equals(r4)     // Catch:{ Exception -> 0x0395 }
             if (r2 == 0) goto L_0x0392
             java.lang.String r2 = "PassportFemale"
-            r4 = 2131626652(0x7f0e0a9c, float:1.8880546E38)
+            r4 = 2131626674(0x7f0e0ab2, float:1.888059E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r4)     // Catch:{ Exception -> 0x0395 }
             r12.append(r2)     // Catch:{ Exception -> 0x0395 }
             goto L_0x0392
@@ -7925,7 +7925,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x04c5
             if (r11 != 0) goto L_0x046c
-            r0 = 2131626731(0x7f0e0aeb, float:1.8880706E38)
+            r0 = 2131626753(0x7f0e0b01, float:1.8880751E38)
             java.lang.String r1 = "PassportPersonalDetailsInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x0467:
@@ -7937,7 +7937,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r2 = 8
             if (r1 != r2) goto L_0x047c
             r2 = r26
-            r1 = 2131626645(0x7f0e0a95, float:1.8880532E38)
+            r1 = 2131626667(0x7f0e0aab, float:1.8880577E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x0467
         L_0x047c:
@@ -7947,33 +7947,33 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$SecureValueType r1 = r11.type
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePassport
             if (r2 == 0) goto L_0x0491
-            r0 = 2131626661(0x7f0e0aa5, float:1.8880564E38)
+            r0 = 2131626683(0x7f0e0abb, float:1.888061E38)
             java.lang.String r1 = "PassportIdentityPassport"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x0491:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeInternalPassport
             if (r2 == 0) goto L_0x049f
-            r0 = 2131626660(0x7f0e0aa4, float:1.8880562E38)
+            r0 = 2131626682(0x7f0e0aba, float:1.8880607E38)
             java.lang.String r1 = "PassportIdentityInternalPassport"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x049f:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeDriverLicense
             if (r2 == 0) goto L_0x04ad
-            r0 = 2131626658(0x7f0e0aa2, float:1.8880558E38)
+            r0 = 2131626680(0x7f0e0ab8, float:1.8880603E38)
             java.lang.String r1 = "PassportIdentityDriverLicence"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x04ad:
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeIdentityCard
             if (r1 == 0) goto L_0x04c5
-            r0 = 2131626659(0x7f0e0aa3, float:1.888056E38)
+            r0 = 2131626681(0x7f0e0ab9, float:1.8880605E38)
             java.lang.String r1 = "PassportIdentityID"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
         L_0x04bb:
-            r0 = 2131626657(0x7f0e0aa1, float:1.8880556E38)
+            r0 = 2131626679(0x7f0e0ab7, float:1.88806E38)
             java.lang.String r1 = "PassportIdentityDocumentInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
@@ -7988,7 +7988,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x04c5
             if (r11 != 0) goto L_0x04e2
-            r0 = 2131626621(0x7f0e0a7d, float:1.8880483E38)
+            r0 = 2131626643(0x7f0e0a93, float:1.8880528E38)
             java.lang.String r1 = "PassportAddressNoUploadInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0467
@@ -7996,7 +7996,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             int r1 = r7.currentActivityType
             r4 = 8
             if (r1 != r4) goto L_0x04f1
-            r1 = 2131626645(0x7f0e0a95, float:1.8880532E38)
+            r1 = 2131626667(0x7f0e0aab, float:1.8880577E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x0467
         L_0x04f1:
@@ -8005,40 +8005,40 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$SecureValueType r1 = r11.type
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeRentalAgreement
             if (r3 == 0) goto L_0x0505
-            r0 = 2131626595(0x7f0e0a63, float:1.888043E38)
+            r0 = 2131626617(0x7f0e0a79, float:1.8880475E38)
             java.lang.String r1 = "PassportAddAgreementInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x0505:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeUtilityBill
             if (r3 == 0) goto L_0x0513
-            r0 = 2131626599(0x7f0e0a67, float:1.8880439E38)
+            r0 = 2131626621(0x7f0e0a7d, float:1.8880483E38)
             java.lang.String r1 = "PassportAddBillInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x0513:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePassportRegistration
             if (r3 == 0) goto L_0x0521
-            r0 = 2131626609(0x7f0e0a71, float:1.888046E38)
+            r0 = 2131626631(0x7f0e0a87, float:1.8880504E38)
             java.lang.String r1 = "PassportAddPassportRegistrationInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x0521:
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeTemporaryRegistration
             if (r3 == 0) goto L_0x052f
-            r0 = 2131626611(0x7f0e0a73, float:1.8880463E38)
+            r0 = 2131626633(0x7f0e0a89, float:1.8880508E38)
             java.lang.String r1 = "PassportAddTemporaryRegistrationInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x052f:
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeBankStatement
             if (r1 == 0) goto L_0x056f
-            r0 = 2131626597(0x7f0e0a65, float:1.8880435E38)
+            r0 = 2131626619(0x7f0e0a7b, float:1.888048E38)
             java.lang.String r1 = "PassportAddBankInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
         L_0x053d:
-            r0 = 2131626620(0x7f0e0a7c, float:1.8880481E38)
+            r0 = 2131626642(0x7f0e0a92, float:1.8880526E38)
             java.lang.String r1 = "PassportAddressInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
@@ -8048,7 +8048,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r3 == 0) goto L_0x055c
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x056f
-            r0 = 2131626734(0x7f0e0aee, float:1.8880713E38)
+            r0 = 2131626756(0x7f0e0b04, float:1.8880757E38)
             java.lang.String r1 = "PassportPhoneInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x056f
@@ -8057,7 +8057,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r1 == 0) goto L_0x056f
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x056f
-            r0 = 2131626648(0x7f0e0a98, float:1.8880538E38)
+            r0 = 2131626670(0x7f0e0aae, float:1.8880583E38)
             java.lang.String r1 = "PassportEmailInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x056f:
@@ -8067,32 +8067,32 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x0572:
             r1.setValue(r0)
             android.widget.TextView r0 = r1.valueTextView
-            if (r6 == 0) goto L_0x057f
+            if (r6 == 0) goto L_0x057e
             java.lang.String r3 = "windowBackgroundWhiteRedText3"
-            goto L_0x0582
-        L_0x057f:
+            goto L_0x0580
+        L_0x057e:
             java.lang.String r3 = "windowBackgroundWhiteGrayText2"
-        L_0x0582:
+        L_0x0580:
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             r0.setTextColor(r3)
-            if (r6 != 0) goto L_0x059f
+            if (r6 != 0) goto L_0x059d
             int r0 = r7.currentActivityType
             r3 = 8
-            if (r0 == r3) goto L_0x059f
-            if (r36 == 0) goto L_0x0595
-            if (r11 != 0) goto L_0x0599
-        L_0x0595:
-            if (r36 != 0) goto L_0x059f
-            if (r19 == 0) goto L_0x059f
-        L_0x0599:
-            if (r11 == 0) goto L_0x059d
-            if (r23 == 0) goto L_0x059f
-        L_0x059d:
+            if (r0 == r3) goto L_0x059d
+            if (r36 == 0) goto L_0x0593
+            if (r11 != 0) goto L_0x0597
+        L_0x0593:
+            if (r36 != 0) goto L_0x059d
+            if (r19 == 0) goto L_0x059d
+        L_0x0597:
+            if (r11 == 0) goto L_0x059b
+            if (r23 == 0) goto L_0x059d
+        L_0x059b:
             r6 = 1
-            goto L_0x05a0
-        L_0x059f:
+            goto L_0x059e
+        L_0x059d:
             r6 = 0
-        L_0x05a0:
+        L_0x059e:
             r1.setChecked(r6)
             return
         */
@@ -8638,14 +8638,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                PassportActivity.this.lambda$null$59$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+                PassportActivity.this.lambda$deleteValueInternal$59$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$59 */
-    public /* synthetic */ void lambda$null$59$PassportActivity(TLRPC$TL_error tLRPC$TL_error, ErrorRunnable errorRunnable, boolean z, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2, boolean z2, ArrayList arrayList, Runnable runnable) {
+    /* renamed from: lambda$deleteValueInternal$59 */
+    public /* synthetic */ void lambda$deleteValueInternal$59$PassportActivity(TLRPC$TL_error tLRPC$TL_error, ErrorRunnable errorRunnable, boolean z, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType2, boolean z2, ArrayList arrayList, Runnable runnable) {
         String str;
         TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType3;
         TLRPC$TL_secureData tLRPC$TL_secureData;
@@ -8750,13 +8750,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x0012:
             org.telegram.ui.PassportActivity$TextDetailSecureCell r9 = new org.telegram.ui.PassportActivity$TextDetailSecureCell
             r3 = r17
-            r9.<init>(r8, r3)
+            r9.<init>(r3)
             r3 = 1
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r3)
             r9.setBackgroundDrawable(r4)
             org.telegram.tgnet.TLRPC$SecureValueType r4 = r1.type
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
-            r10 = 2131626767(0x7f0e0b0f, float:1.888078E38)
+            r10 = 2131626789(0x7f0e0b25, float:1.8880824E38)
             java.lang.String r11 = "PassportTwoDocuments"
             r12 = 2
             java.lang.String r13 = ""
@@ -8792,12 +8792,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4)
             goto L_0x008b
         L_0x0078:
-            r4 = 2131626656(0x7f0e0aa0, float:1.8880554E38)
+            r4 = 2131626678(0x7f0e0ab6, float:1.8880599E38)
             java.lang.String r5 = "PassportIdentityDocument"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x008b
         L_0x0082:
-            r4 = 2131626730(0x7f0e0aea, float:1.8880704E38)
+            r4 = 2131626752(0x7f0e0b00, float:1.888075E38)
             java.lang.String r5 = "PassportPersonalDetails"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x008b:
@@ -8838,12 +8838,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4)
             goto L_0x00f2
         L_0x00df:
-            r4 = 2131626748(0x7f0e0afc, float:1.888074E38)
+            r4 = 2131626770(0x7f0e0b12, float:1.8880786E38)
             java.lang.String r5 = "PassportResidentialAddress"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x00f2
         L_0x00e9:
-            r4 = 2131626618(0x7f0e0a7a, float:1.8880477E38)
+            r4 = 2131626640(0x7f0e0a90, float:1.8880522E38)
             java.lang.String r5 = "PassportAddress"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x00f2:
@@ -8853,7 +8853,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x00f8:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePhone
             if (r5 == 0) goto L_0x010b
-            r4 = 2131626733(0x7f0e0aed, float:1.888071E38)
+            r4 = 2131626755(0x7f0e0b03, float:1.8880755E38)
             java.lang.String r5 = "PassportPhone"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = r21 ^ 1
@@ -8862,7 +8862,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x010b:
             boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeEmail
             if (r4 == 0) goto L_0x011d
-            r4 = 2131626646(0x7f0e0a96, float:1.8880534E38)
+            r4 = 2131626668(0x7f0e0aac, float:1.8880579E38)
             java.lang.String r5 = "PassportEmail"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = r21 ^ 1
@@ -9024,7 +9024,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        PassportActivity.this.lambda$null$63$PassportActivity(this.f$1, this.f$2, dialogInterface, i);
+                        PassportActivity.this.lambda$addField$63$PassportActivity(this.f$1, this.f$2, dialogInterface, i);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -9085,7 +9085,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    PassportActivity.this.lambda$null$61$PassportActivity(this.f$1, this.f$2, this.f$3, dialogInterface, i);
+                    PassportActivity.this.lambda$addField$61$PassportActivity(this.f$1, this.f$2, this.f$3, dialogInterface, i);
                 }
             });
             showDialog(builder2.create());
@@ -9095,14 +9095,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$61 */
-    public /* synthetic */ void lambda$null$61$PassportActivity(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$addField$61 */
+    public /* synthetic */ void lambda$addField$61$PassportActivity(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
         openTypeActivity(tLRPC$TL_secureRequiredType, (TLRPC$TL_secureRequiredType) arrayList.get(i), arrayList, z);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$63 */
-    public /* synthetic */ void lambda$null$63$PassportActivity(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, boolean z, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$addField$63 */
+    public /* synthetic */ void lambda$addField$63$PassportActivity(TLRPC$TL_secureRequiredType tLRPC$TL_secureRequiredType, boolean z, DialogInterface dialogInterface, int i) {
         needShowProgress();
         deleteValueInternal(tLRPC$TL_secureRequiredType, (TLRPC$TL_secureRequiredType) null, (ArrayList<TLRPC$TL_secureRequiredType>) null, true, new Runnable() {
             public final void run() {
@@ -9110,14 +9110,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
         }, new ErrorRunnable() {
             public final void onError(String str, String str2) {
-                PassportActivity.this.lambda$null$62$PassportActivity(str, str2);
+                PassportActivity.this.lambda$addField$62$PassportActivity(str, str2);
             }
         }, z);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$62 */
-    public /* synthetic */ void lambda$null$62$PassportActivity(String str, String str2) {
+    /* renamed from: lambda$addField$62 */
+    public /* synthetic */ void lambda$addField$62$PassportActivity(String str, String str2) {
         needHideProgress();
     }
 
@@ -9439,14 +9439,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                PassportActivity.this.lambda$null$65$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                PassportActivity.this.lambda$startPhoneVerification$65$PassportActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$65 */
-    public /* synthetic */ void lambda$null$65$PassportActivity(TLRPC$TL_error tLRPC$TL_error, String str, PassportActivityDelegate passportActivityDelegate, TLObject tLObject, TLRPC$TL_account_sendVerifyPhoneCode tLRPC$TL_account_sendVerifyPhoneCode) {
+    /* renamed from: lambda$startPhoneVerification$65 */
+    public /* synthetic */ void lambda$startPhoneVerification$65$PassportActivity(TLRPC$TL_error tLRPC$TL_error, String str, PassportActivityDelegate passportActivityDelegate, TLObject tLObject, TLRPC$TL_account_sendVerifyPhoneCode tLRPC$TL_account_sendVerifyPhoneCode) {
         String str2 = str;
         if (tLRPC$TL_error == null) {
             HashMap hashMap = new HashMap();
@@ -9850,7 +9850,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
             animatorSet.setDuration(300);
             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(slideView, "translationX", new float[]{(float) (-AndroidUtilities.displaySize.x)}), ObjectAnimator.ofFloat(slideView2, "translationX", new float[]{0.0f})});
-            animatorSet.addListener(new AnimatorListenerAdapter(this) {
+            animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationStart(Animator animator) {
                     slideView2.setVisibility(0);
                 }
@@ -9927,7 +9927,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
     private void createChatAttachView() {
         if (getParentActivity() != null && this.chatAttachAlert == null) {
-            ChatAttachAlert chatAttachAlert2 = new ChatAttachAlert(getParentActivity(), this, false);
+            ChatAttachAlert chatAttachAlert2 = new ChatAttachAlert(getParentActivity(), this, false, false);
             this.chatAttachAlert = chatAttachAlert2;
             chatAttachAlert2.setDelegate(new ChatAttachAlert.ChatAttachViewDelegate() {
                 public void didSelectBot(TLRPC$User tLRPC$User) {
@@ -9941,7 +9941,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     ChatAttachAlert.ChatAttachViewDelegate.CC.$default$openAvatarsSearch(this);
                 }
 
-                public void didPressedButton(int i, boolean z, boolean z2, int i2) {
+                public void didPressedButton(int i, boolean z, boolean z2, int i2, boolean z3) {
                     if (PassportActivity.this.getParentActivity() != null && PassportActivity.this.chatAttachAlert != null) {
                         if (i == 8 || i == 7) {
                             if (i != 8) {
@@ -10207,7 +10207,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void run() {
-                        PassportActivity.this.lambda$null$70$PassportActivity(this.f$1, this.f$2);
+                        PassportActivity.this.lambda$processSelectedFiles$70$PassportActivity(this.f$1, this.f$2);
                     }
                 });
                 if (z && !z2) {
@@ -10223,7 +10223,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                     }
 
                                     public final void run() {
-                                        PassportActivity.this.lambda$null$71$PassportActivity(this.f$1);
+                                        PassportActivity.this.lambda$processSelectedFiles$71$PassportActivity(this.f$1);
                                     }
                                 });
                                 z2 = true;
@@ -10244,8 +10244,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$70 */
-    public /* synthetic */ void lambda$null$70$PassportActivity(SecureDocument secureDocument, int i) {
+    /* renamed from: lambda$processSelectedFiles$70 */
+    public /* synthetic */ void lambda$processSelectedFiles$70$PassportActivity(SecureDocument secureDocument, int i) {
         int i2 = this.uploadingFileType;
         if (i2 == 1) {
             SecureDocument secureDocument2 = this.selfieDocument;
@@ -10290,8 +10290,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$71 */
-    public /* synthetic */ void lambda$null$71$PassportActivity(MrzRecognizer.Result result) {
+    /* renamed from: lambda$processSelectedFiles$71 */
+    public /* synthetic */ void lambda$processSelectedFiles$71$PassportActivity(MrzRecognizer.Result result) {
         int i;
         int i2;
         int i3 = result.type;
@@ -10458,6 +10458,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         public int codeTime = 15000;
         private Timer codeTimer;
         private TextView confirmTextView;
+        private Bundle currentParams;
         /* access modifiers changed from: private */
         public boolean ignoreOnTextChange;
         /* access modifiers changed from: private */
@@ -10501,6 +10502,22 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
 
         public boolean needBackButton() {
             return true;
+        }
+
+        static /* synthetic */ int access$10026(PhoneConfirmationView phoneConfirmationView, double d) {
+            double d2 = (double) phoneConfirmationView.codeTime;
+            Double.isNaN(d2);
+            int i = (int) (d2 - d);
+            phoneConfirmationView.codeTime = i;
+            return i;
+        }
+
+        static /* synthetic */ int access$10626(PhoneConfirmationView phoneConfirmationView, double d) {
+            double d2 = (double) phoneConfirmationView.time;
+            Double.isNaN(d2);
+            int i = (int) (d2 - d);
+            phoneConfirmationView.time = i;
+            return i;
         }
 
         /* JADX WARNING: Illegal instructions before constructor call */
@@ -10559,12 +10576,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.TextView r4 = r0.titleTextView
                 boolean r10 = org.telegram.messenger.LocaleController.isRTL
                 r12 = 3
-                if (r10 == 0) goto L_0x007d
+                if (r10 == 0) goto L_0x007b
                 r10 = 5
-                goto L_0x007e
-            L_0x007d:
+                goto L_0x007c
+            L_0x007b:
                 r10 = 3
-            L_0x007e:
+            L_0x007c:
                 r4.setGravity(r10)
                 android.widget.TextView r4 = r0.titleTextView
                 int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
@@ -10575,34 +10592,34 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r4.setGravity(r10)
                 int r4 = r0.verificationType
                 r13 = -2
-                if (r4 != r12) goto L_0x012c
+                if (r4 != r12) goto L_0x012a
                 android.widget.TextView r4 = r0.confirmTextView
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                if (r8 == 0) goto L_0x009f
+                if (r8 == 0) goto L_0x009d
                 r8 = 5
-                goto L_0x00a0
-            L_0x009f:
+                goto L_0x009e
+            L_0x009d:
                 r8 = 3
-            L_0x00a0:
+            L_0x009e:
                 r8 = r8 | 48
                 r4.setGravity(r8)
                 android.widget.FrameLayout r4 = new android.widget.FrameLayout
                 r4.<init>(r2)
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                if (r8 == 0) goto L_0x00b0
+                if (r8 == 0) goto L_0x00ae
                 r8 = 5
-                goto L_0x00b1
-            L_0x00b0:
+                goto L_0x00af
+            L_0x00ae:
                 r8 = 3
-            L_0x00b1:
+            L_0x00af:
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r8)
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165906(0x7var_d2, float:1.7946042E38)
+                r14 = 2131165917(0x7var_dd, float:1.7946065E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
-                if (r14 == 0) goto L_0x00fb
+                if (r14 == 0) goto L_0x00f9
                 r15 = 64
                 r16 = 1117257728(0x42980000, float:76.0)
                 r17 = 19
@@ -10616,29 +10633,29 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r14 = -1
                 r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
                 boolean r16 = org.telegram.messenger.LocaleController.isRTL
-                if (r16 == 0) goto L_0x00e8
+                if (r16 == 0) goto L_0x00e6
                 r16 = 5
-                goto L_0x00ea
-            L_0x00e8:
+                goto L_0x00e8
+            L_0x00e6:
                 r16 = 3
-            L_0x00ea:
+            L_0x00e8:
                 r17 = 1118044160(0x42a40000, float:82.0)
                 r18 = 0
                 r19 = 0
                 r20 = 0
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
                 r4.addView(r8, r14)
-                goto L_0x0210
-            L_0x00fb:
+                goto L_0x020e
+            L_0x00f9:
                 android.widget.TextView r15 = r0.confirmTextView
                 r16 = -1
                 r17 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-                if (r14 == 0) goto L_0x0106
+                if (r14 == 0) goto L_0x0104
                 r18 = 5
-                goto L_0x0108
-            L_0x0106:
+                goto L_0x0106
+            L_0x0104:
                 r18 = 3
-            L_0x0108:
+            L_0x0106:
                 r19 = 0
                 r20 = 0
                 r21 = 1118044160(0x42a40000, float:82.0)
@@ -10653,8 +10670,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r22 = 1073741824(0x40000000, float:2.0)
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
                 r4.addView(r8, r14)
-                goto L_0x0210
-            L_0x012c:
+                goto L_0x020e
+            L_0x012a:
                 android.widget.TextView r4 = r0.confirmTextView
                 r4.setGravity(r10)
                 android.widget.FrameLayout r4 = new android.widget.FrameLayout
@@ -10663,11 +10680,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r0.addView(r4, r14)
                 int r14 = r0.verificationType
                 java.lang.String r15 = "chats_actionBackground"
-                if (r14 != r3) goto L_0x01ac
+                if (r14 != r3) goto L_0x01aa
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131166051(0x7var_, float:1.7946336E38)
+                r11 = 2131166062(0x7var_e, float:1.7946359E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -10688,7 +10705,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166049(0x7var_, float:1.7946332E38)
+                r10 = 2131166060(0x7var_c, float:1.7946355E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -10700,16 +10717,16 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627383(0x7f0e0d77, float:1.8882029E38)
+                r8 = 2131627411(0x7f0e0d93, float:1.8882086E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-                goto L_0x01ee
-            L_0x01ac:
+                goto L_0x01ec
+            L_0x01aa:
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166050(0x7var_, float:1.7946334E38)
+                r10 = 2131166061(0x7var_d, float:1.7946357E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -10728,11 +10745,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131627387(0x7f0e0d7b, float:1.8882037E38)
+                r8 = 2131627415(0x7f0e0d97, float:1.8882094E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-            L_0x01ee:
+            L_0x01ec:
                 android.widget.TextView r4 = r0.titleTextView
                 r17 = -2
                 r18 = -2
@@ -10747,7 +10764,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r21 = 17
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
                 r0.addView(r4, r8)
-            L_0x0210:
+            L_0x020e:
                 android.widget.LinearLayout r4 = new android.widget.LinearLayout
                 r4.<init>(r2)
                 r0.codeFieldContainer = r4
@@ -10758,13 +10775,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r10, (int) r3)
                 r0.addView(r4, r10)
                 int r4 = r0.verificationType
-                if (r4 != r12) goto L_0x0231
+                if (r4 != r12) goto L_0x022f
                 android.widget.LinearLayout r4 = r0.codeFieldContainer
                 r10 = 8
                 r4.setVisibility(r10)
-            L_0x0231:
+            L_0x022f:
                 org.telegram.ui.PassportActivity$PhoneConfirmationView$1 r4 = new org.telegram.ui.PassportActivity$PhoneConfirmationView$1
-                r4.<init>(r0, r2, r1)
+                r4.<init>(r2, r1)
                 r0.timeText = r4
                 int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
                 r4.setTextColor(r5)
@@ -10775,17 +10792,17 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 int r4 = r0.verificationType
                 r5 = 1097859072(0x41700000, float:15.0)
                 r10 = 1092616192(0x41200000, float:10.0)
-                if (r4 != r12) goto L_0x028f
+                if (r4 != r12) goto L_0x028d
                 android.widget.TextView r4 = r0.timeText
                 r4.setTextSize(r3, r6)
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x025e
+                if (r6 == 0) goto L_0x025c
                 r6 = 5
-                goto L_0x025f
-            L_0x025e:
+                goto L_0x025d
+            L_0x025c:
                 r6 = 3
-            L_0x025f:
+            L_0x025d:
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r6)
                 org.telegram.ui.PassportActivity$ProgressView r4 = new org.telegram.ui.PassportActivity$ProgressView
@@ -10793,12 +10810,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r0.progressView = r4
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x0275
+                if (r6 == 0) goto L_0x0273
                 r11 = 5
-                goto L_0x0276
-            L_0x0275:
+                goto L_0x0274
+            L_0x0273:
                 r11 = 3
-            L_0x0276:
+            L_0x0274:
                 r4.setGravity(r11)
                 org.telegram.ui.PassportActivity$ProgressView r4 = r0.progressView
                 r17 = -1
@@ -10809,8 +10826,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r22 = 0
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r17, r18, r19, r20, r21, r22)
                 r0.addView(r4, r6)
-                goto L_0x02b1
-            L_0x028f:
+                goto L_0x02af
+            L_0x028d:
                 android.widget.TextView r4 = r0.timeText
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
@@ -10823,9 +10840,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.TextView r4 = r0.timeText
                 android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r11)
-            L_0x02b1:
+            L_0x02af:
                 org.telegram.ui.PassportActivity$PhoneConfirmationView$2 r4 = new org.telegram.ui.PassportActivity$PhoneConfirmationView$2
-                r4.<init>(r0, r2, r1)
+                r4.<init>(r2, r1)
                 r0.problemText = r4
                 java.lang.String r1 = "windowBackgroundWhiteBlueText4"
                 int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
@@ -10844,20 +10861,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r2 = 49
                 r1.setGravity(r2)
                 int r1 = r0.verificationType
-                if (r1 != r3) goto L_0x02f8
+                if (r1 != r3) goto L_0x02f5
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625171(0x7f0e04d3, float:1.8877542E38)
+                r2 = 2131625187(0x7f0e04e3, float:1.8877575E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x0306
-            L_0x02f8:
+                goto L_0x0303
+            L_0x02f5:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625170(0x7f0e04d2, float:1.887754E38)
+                r2 = 2131625186(0x7f0e04e2, float:1.8877573E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-            L_0x0306:
+            L_0x0303:
                 android.widget.TextView r1 = r0.problemText
                 r2 = 49
                 android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r2)
@@ -10979,14 +10996,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void run() {
-                    PassportActivity.PhoneConfirmationView.this.lambda$null$2$PassportActivity$PhoneConfirmationView(this.f$1, this.f$2, this.f$3, this.f$4);
+                    PassportActivity.PhoneConfirmationView.this.lambda$resendCode$2$PassportActivity$PhoneConfirmationView(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$2 */
-        public /* synthetic */ void lambda$null$2$PassportActivity$PhoneConfirmationView(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode) {
+        /* renamed from: lambda$resendCode$2 */
+        public /* synthetic */ void lambda$resendCode$2$PassportActivity$PhoneConfirmationView(TLRPC$TL_error tLRPC$TL_error, Bundle bundle, TLObject tLObject, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode) {
             this.nextPressed = false;
             if (tLRPC$TL_error == null) {
                 this.this$0.fillNextCodeParams(bundle, (TLRPC$TL_auth_sentCode) tLObject, true);
@@ -10995,7 +11012,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 if (alertDialog != null && tLRPC$TL_error.text.contains("PHONE_CODE_EXPIRED")) {
                     alertDialog.setPositiveButtonListener(new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            PassportActivity.PhoneConfirmationView.this.lambda$null$1$PassportActivity$PhoneConfirmationView(dialogInterface, i);
+                            PassportActivity.PhoneConfirmationView.this.lambda$resendCode$1$PassportActivity$PhoneConfirmationView(dialogInterface, i);
                         }
                     });
                 }
@@ -11004,8 +11021,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$1 */
-        public /* synthetic */ void lambda$null$1$PassportActivity$PhoneConfirmationView(DialogInterface dialogInterface, int i) {
+        /* renamed from: lambda$resendCode$1 */
+        public /* synthetic */ void lambda$resendCode$1$PassportActivity$PhoneConfirmationView(DialogInterface dialogInterface, int i) {
             onBackPressed(true);
             this.this$0.finishFragment();
         }
@@ -11028,6 +11045,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     AndroidUtilities.setWaitingForCall(true);
                     NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveCall);
                 }
+                this.currentParams = bundle2;
                 this.phone = bundle2.getString("phone");
                 this.phoneHash = bundle2.getString("phoneHash");
                 int i4 = bundle2.getInt("timeout");
@@ -11231,7 +11249,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                               (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE : 0x0002: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE) = 
                               (r1v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$4 A[THIS])
                              call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$4):void type: CONSTRUCTOR)
-                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.4.run():void, dex: classes.dex
+                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.4.run():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -11318,7 +11336,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
                             Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r0v0 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE) = 
                               (r1v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$4 A[THIS])
-                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$4):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.4.run():void, dex: classes.dex
+                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$4$o5mR7u8NMM8qwhYoUt8EfGmxkmE.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$4):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.4.run():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -11350,12 +11368,8 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                         double currentTimeMillis = (double) System.currentTimeMillis();
                         double access$9900 = PhoneConfirmationView.this.lastCodeTime;
                         Double.isNaN(currentTimeMillis);
-                        double d = currentTimeMillis - access$9900;
                         double unused = PhoneConfirmationView.this.lastCodeTime = currentTimeMillis;
-                        PhoneConfirmationView phoneConfirmationView = PhoneConfirmationView.this;
-                        double access$10000 = (double) phoneConfirmationView.codeTime;
-                        Double.isNaN(access$10000);
-                        int unused2 = phoneConfirmationView.codeTime = (int) (access$10000 - d);
+                        PhoneConfirmationView.access$10026(PhoneConfirmationView.this, currentTimeMillis - access$9900);
                         if (PhoneConfirmationView.this.codeTime <= 1000) {
                             PhoneConfirmationView.this.problemText.setVisibility(0);
                             PhoneConfirmationView.this.timeText.setVisibility(8);
@@ -11391,18 +11405,15 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             double currentTimeMillis = (double) System.currentTimeMillis();
                             double access$10500 = PhoneConfirmationView.this.lastCurrentTime;
                             Double.isNaN(currentTimeMillis);
-                            PhoneConfirmationView phoneConfirmationView = PhoneConfirmationView.this;
-                            double access$10600 = (double) phoneConfirmationView.time;
-                            Double.isNaN(access$10600);
-                            int unused = phoneConfirmationView.time = (int) (access$10600 - (currentTimeMillis - access$10500));
-                            double unused2 = PhoneConfirmationView.this.lastCurrentTime = currentTimeMillis;
+                            PhoneConfirmationView.access$10626(PhoneConfirmationView.this, currentTimeMillis - access$10500);
+                            double unused = PhoneConfirmationView.this.lastCurrentTime = currentTimeMillis;
                             AndroidUtilities.runOnUIThread(
                             /*  JADX ERROR: Method code generation error
-                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0032: INVOKE  
-                                  (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk : 0x002f: CONSTRUCTOR  (r0v4 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk) = 
-                                  (r7v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
+                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0028: INVOKE  
+                                  (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk : 0x0025: CONSTRUCTOR  (r0v4 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk) = 
+                                  (r5v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
                                  call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR)
-                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.run():void, dex: classes.dex
+                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.run():void, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                                 	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -11494,9 +11505,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                 	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                 	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x002f: CONSTRUCTOR  (r0v4 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk) = 
-                                  (r7v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
-                                 call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.run():void, dex: classes.dex
+                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0025: CONSTRUCTOR  (r0v4 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk) = 
+                                  (r5v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
+                                 call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.run():void, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                 	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -11526,16 +11537,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 java.lang.Double.isNaN(r0)
                                 double r2 = r0 - r2
                                 org.telegram.ui.PassportActivity$PhoneConfirmationView r4 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
-                                int r5 = r4.time
-                                double r5 = (double) r5
-                                java.lang.Double.isNaN(r5)
-                                double r5 = r5 - r2
-                                int r2 = (int) r5
-                                int unused = r4.time = r2
+                                org.telegram.ui.PassportActivity.PhoneConfirmationView.access$10626(r4, r2)
                                 org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                 double unused = r2.lastCurrentTime = r0
                                 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk r0 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$ztSmGzWH6G14gNQqa25F6uGLRwk
-                                r0.<init>(r7)
+                                r0.<init>(r5)
                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
                                 return
                             */
@@ -11594,11 +11600,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                          org.telegram.ui.PassportActivity.access$11700(org.telegram.ui.PassportActivity):int type: STATIC)
                                          org.telegram.tgnet.ConnectionsManager.getInstance(int):org.telegram.tgnet.ConnectionsManager type: STATIC)
                                           (r0v14 'tLRPC$TL_auth_resendCode' org.telegram.tgnet.TLRPC$TL_auth_resendCode)
-                                          (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc : 0x017a: CONSTRUCTOR  (r2v1 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc) = 
+                                          (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c : 0x017a: CONSTRUCTOR  (r2v1 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c) = 
                                           (r9v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
-                                         call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR)
+                                         call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR)
                                           (2 int)
-                                         org.telegram.tgnet.ConnectionsManager.sendRequest(org.telegram.tgnet.TLObject, org.telegram.tgnet.RequestDelegate, int):int type: VIRTUAL in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$2():void, dex: classes.dex
+                                         org.telegram.tgnet.ConnectionsManager.sendRequest(org.telegram.tgnet.TLObject, org.telegram.tgnet.RequestDelegate, int):int type: VIRTUAL in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$2():void, dex: classes3.dex
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                                         	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -11699,9 +11705,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                         	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                         	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x017a: CONSTRUCTOR  (r2v1 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc) = 
+                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x017a: CONSTRUCTOR  (r2v1 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c) = 
                                           (r9v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
-                                         call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$2():void, dex: classes.dex
+                                         call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$2():void, dex: classes3.dex
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -11710,7 +11716,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                         	... 99 more
-                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc, state: NOT_LOADED
+                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c, state: NOT_LOADED
                                         	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                         	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -11751,7 +11757,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         if (r2 != r6) goto L_0x007e
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131627517(0x7f0e0dfd, float:1.88823E38)
+                                        r3 = 2131627546(0x7f0e0e1a, float:1.888236E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -11764,7 +11770,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                     L_0x005e:
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131624626(0x7f0e02b2, float:1.8876437E38)
+                                        r3 = 2131624638(0x7f0e02be, float:1.8876461E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -11851,7 +11857,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         if (r0 != r4) goto L_0x0140
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131624628(0x7f0e02b4, float:1.8876441E38)
+                                        r1 = 2131624643(0x7f0e02c3, float:1.8876472E38)
                                         java.lang.String r2 = "Calling"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -11859,7 +11865,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                     L_0x0140:
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131627379(0x7f0e0d73, float:1.888202E38)
+                                        r1 = 2131627407(0x7f0e0d8f, float:1.8882078E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -11878,7 +11884,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         org.telegram.ui.PassportActivity r1 = r1.this$0
                                         int r1 = r1.currentAccount
                                         org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
-                                        org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc r2 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$XMGi4e6r4PPsKMYFXnk3tNdcnkc
+                                        org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c r2 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$3wGyCA9lL_d-eEno1v7wyzcuH-c
                                         r2.<init>(r9)
                                         r1.sendRequest(r0, r2, r6)
                                     L_0x0180:
@@ -11888,17 +11894,17 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 }
 
                                 /* access modifiers changed from: private */
-                                /* renamed from: lambda$null$1 */
-                                public /* synthetic */ void lambda$null$1$PassportActivity$PhoneConfirmationView$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                                /* renamed from: lambda$run$1 */
+                                public /* synthetic */ void lambda$run$1$PassportActivity$PhoneConfirmationView$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                                     if (tLRPC$TL_error != null && tLRPC$TL_error.text != null) {
                                         AndroidUtilities.runOnUIThread(
                                         /*  JADX ERROR: Method code generation error
                                             jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
-                                              (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss : 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss) = 
+                                              (wrap: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI : 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI) = 
                                               (r0v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
                                               (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
-                                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR)
-                                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$null$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR)
+                                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -11990,10 +11996,10 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                             	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                             	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss) = 
+                                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI) = 
                                               (r0v0 'this' org.telegram.ui.PassportActivity$PhoneConfirmationView$5 A[THIS])
                                               (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
-                                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$null$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                                             call: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI.<init>(org.telegram.ui.PassportActivity$PhoneConfirmationView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR in method: org.telegram.ui.PassportActivity.PhoneConfirmationView.5.lambda$run$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes3.dex
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -12002,7 +12008,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                             	... 90 more
-                                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss, state: NOT_LOADED
+                                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI, state: NOT_LOADED
                                             	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                             	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -12014,18 +12020,18 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                             if (r2 == 0) goto L_0x000e
                                             java.lang.String r1 = r2.text
                                             if (r1 == 0) goto L_0x000e
-                                            org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss r1 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$hn1Eze9_DvdvdtOKWalKkxmmIss
+                                            org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI r1 = new org.telegram.ui.-$$Lambda$PassportActivity$PhoneConfirmationView$5$9T_gNZZ7tamQQqDryFJ_NSfkLgI
                                             r1.<init>(r0, r2)
                                             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
                                         L_0x000e:
                                             return
                                         */
-                                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.PhoneConfirmationView.AnonymousClass5.lambda$null$1$PassportActivity$PhoneConfirmationView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+                                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PassportActivity.PhoneConfirmationView.AnonymousClass5.lambda$run$1$PassportActivity$PhoneConfirmationView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
                                     }
 
                                     /* access modifiers changed from: private */
-                                    /* renamed from: lambda$null$0 */
-                                    public /* synthetic */ void lambda$null$0$PassportActivity$PhoneConfirmationView$5(TLRPC$TL_error tLRPC$TL_error) {
+                                    /* renamed from: lambda$run$0 */
+                                    public /* synthetic */ void lambda$run$0$PassportActivity$PhoneConfirmationView$5(TLRPC$TL_error tLRPC$TL_error) {
                                         String unused = PhoneConfirmationView.this.lastError = tLRPC$TL_error.text;
                                     }
                                 }, 0, 1000);
@@ -12115,14 +12121,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                 }
 
                                 public final void run() {
-                                    PassportActivity.PhoneConfirmationView.this.lambda$null$6$PassportActivity$PhoneConfirmationView(this.f$1, this.f$2);
+                                    PassportActivity.PhoneConfirmationView.this.lambda$onNextPressed$6$PassportActivity$PhoneConfirmationView(this.f$1, this.f$2);
                                 }
                             });
                         }
 
                         /* access modifiers changed from: private */
-                        /* renamed from: lambda$null$6 */
-                        public /* synthetic */ void lambda$null$6$PassportActivity$PhoneConfirmationView(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_verifyPhone tLRPC$TL_account_verifyPhone) {
+                        /* renamed from: lambda$onNextPressed$6 */
+                        public /* synthetic */ void lambda$onNextPressed$6$PassportActivity$PhoneConfirmationView(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_verifyPhone tLRPC$TL_account_verifyPhone) {
                             int i;
                             int i2;
                             this.this$0.needHideProgress();
@@ -12193,6 +12199,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                             ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_cancelCode, $$Lambda$PassportActivity$PhoneConfirmationView$X8GN5IHsg2faXLHa_dxkaMl41M.INSTANCE, 2);
                             destroyTimer();
                             destroyCodeTimer();
+                            this.currentParams = null;
                             int i = this.verificationType;
                             if (i == 2) {
                                 AndroidUtilities.setWaitingForSms(false);

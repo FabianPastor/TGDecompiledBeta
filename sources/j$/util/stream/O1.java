@@ -4,20 +4,18 @@ import j$.util.Spliterator;
 import j$.util.function.J;
 
 final class O1<T> implements g3<T, Boolean> {
-
-    /* renamed from: a  reason: collision with root package name */
-    private final U2 var_a;
+    private final U2 a;
     final N1 b;
     final J c;
 
     O1(U2 u2, N1 n1, J j) {
-        this.var_a = u2;
+        this.a = u2;
         this.b = n1;
         this.c = j;
     }
 
     public int b() {
-        return T2.u | T2.r;
+        return T2.p | T2.m;
     }
 
     public Object c(T1 t1, Spliterator spliterator) {

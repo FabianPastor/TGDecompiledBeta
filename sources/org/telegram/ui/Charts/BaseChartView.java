@@ -53,6 +53,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     public static final int SIGNATURE_TEXT_HEIGHT = AndroidUtilities.dp(18.0f);
     private static final float SIGNATURE_TEXT_SIZE = AndroidUtilities.dpf2(12.0f);
     public static final boolean USE_LINES;
+    private final int ANIM_DURATION = 400;
     ValueAnimator alphaAnimator;
     ValueAnimator alphaBottomAnimator;
     public boolean animateLegentTo = false;
@@ -140,6 +141,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     public int pikerHeight = AndroidUtilities.dp(46.0f);
     boolean postTransition = false;
     Paint ripplePaint = new Paint(1);
+    protected float selectedCoordinate = -1.0f;
     protected int selectedIndex = -1;
     Paint selectedLinePaint = new Paint();
     public float selectionA = 0.0f;
@@ -1100,7 +1102,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             android.graphics.Paint r3 = r0.emptyPaint
             r7.drawBitmap(r1, r4, r2, r3)
             T r1 = r0.chartData
-            if (r1 == 0) goto L_0x035f
+            if (r1 == 0) goto L_0x0361
             android.graphics.Rect r1 = r0.pickerRect
             r1.set(r12, r9, r11, r8)
             org.telegram.ui.Charts.ChartPickerDelegate r1 = r0.pickerDelegate
@@ -1135,7 +1137,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             r21 = r2
             r22 = r6
             r23 = r15
-            RoundedRect(r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27)
+            android.graphics.Path r1 = RoundedRect(r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27)
             android.graphics.Paint r2 = r0.pickerSelectorPaint
             r7.drawPath(r1, r2)
             android.graphics.Path r1 = r0.pathTmp
@@ -1163,7 +1165,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             r21 = r2
             r22 = r6
             r23 = r15
-            RoundedRect(r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27)
+            android.graphics.Path r1 = RoundedRect(r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27)
             android.graphics.Paint r2 = r0.pickerSelectorPaint
             r7.drawPath(r1, r2)
             android.graphics.Rect r1 = r0.pickerRect
@@ -1245,14 +1247,14 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             r4 = 1
             int r3 = r3 >> r4
             int r2 = r2 + r3
-            if (r1 == 0) goto L_0x0307
-            goto L_0x0345
-        L_0x0307:
+            if (r1 == 0) goto L_0x0309
+            goto L_0x0347
+        L_0x0309:
             org.telegram.ui.Charts.ChartPickerDelegate r1 = r0.pickerDelegate
             org.telegram.ui.Charts.ChartPickerDelegate$CapturesData r1 = r1.getLeftCaptured()
             org.telegram.ui.Charts.ChartPickerDelegate r4 = r0.pickerDelegate
             org.telegram.ui.Charts.ChartPickerDelegate$CapturesData r4 = r4.getRightCaptured()
-            if (r1 == 0) goto L_0x032c
+            if (r1 == 0) goto L_0x032e
             android.graphics.Rect r5 = r0.pickerRect
             int r5 = r5.left
             int r6 = DP_5
@@ -1267,8 +1269,8 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             float r10 = r10 - r1
             android.graphics.Paint r1 = r0.ripplePaint
             r7.drawCircle(r5, r6, r10, r1)
-        L_0x032c:
-            if (r4 == 0) goto L_0x0345
+        L_0x032e:
+            if (r4 == 0) goto L_0x0347
             android.graphics.Rect r1 = r0.pickerRect
             int r1 = r1.right
             int r5 = DP_5
@@ -1283,7 +1285,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             float r3 = r3 - r4
             android.graphics.Paint r4 = r0.ripplePaint
             r7.drawCircle(r1, r2, r3, r4)
-        L_0x0345:
+        L_0x0347:
             org.telegram.ui.Charts.ChartPickerDelegate r1 = r0.pickerDelegate
             android.graphics.Rect r1 = r1.leftPickerArea
             int r2 = PICKER_CAPTURE_WIDTH
@@ -1297,7 +1299,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             int r3 = r11 - r3
             int r11 = r11 + r2
             r1.set(r3, r9, r11, r8)
-        L_0x035f:
+        L_0x0361:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.BaseChartView.drawPicker(android.graphics.Canvas):void");
@@ -1538,10 +1540,13 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             float f = this.chartFullWidth;
             float f2 = (this.pickerDelegate.pickerStart * f) - HORIZONTAL_PADDING;
             float f3 = (((float) i) + f2) / f;
+            this.selectedCoordinate = f3;
             if (f3 < 0.0f) {
                 this.selectedIndex = 0;
+                this.selectedCoordinate = 0.0f;
             } else if (f3 > 1.0f) {
                 this.selectedIndex = t.x.length - 1;
+                this.selectedCoordinate = 1.0f;
             } else {
                 int findIndex = t.findIndex(this.startXIndex, this.endXIndex, f3);
                 this.selectedIndex = findIndex;

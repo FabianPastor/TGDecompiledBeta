@@ -14,12 +14,22 @@ public abstract class TLRPC$WallPaper extends TLObject {
 
     public static TLRPC$WallPaper TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$WallPaper tLRPC$WallPaper;
-        if (i == -NUM) {
-            tLRPC$WallPaper = new TLRPC$TL_wallPaperNoFile();
-        } else if (i != -NUM) {
-            tLRPC$WallPaper = i != -NUM ? null : new TLRPC$TL_wallPaper_layer94();
-        } else {
-            tLRPC$WallPaper = new TLRPC$TL_wallPaper();
+        switch (i) {
+            case -1963717851:
+                tLRPC$WallPaper = new TLRPC$TL_wallPaperNoFile_layer128();
+                break;
+            case -1539849235:
+                tLRPC$WallPaper = new TLRPC$TL_wallPaper();
+                break;
+            case -528465642:
+                tLRPC$WallPaper = new TLRPC$TL_wallPaperNoFile();
+                break;
+            case -263220756:
+                tLRPC$WallPaper = new TLRPC$TL_wallPaper_layer94();
+                break;
+            default:
+                tLRPC$WallPaper = null;
+                break;
         }
         if (tLRPC$WallPaper != null || !z) {
             if (tLRPC$WallPaper != null) {

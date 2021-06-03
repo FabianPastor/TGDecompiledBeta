@@ -183,6 +183,12 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$ChannelCreateActivity(TLRPC$TL_error tLRPC$TL_error) {
+        this.canCreatePublic = tLRPC$TL_error == null || !tLRPC$TL_error.text.equals("CHANNELS_ADMIN_PUBLIC_TOO_MUCH");
+    }
+
+    /* access modifiers changed from: private */
     /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$ChannelCreateActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
@@ -193,15 +199,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
 
             public final void run() {
-                ChannelCreateActivity.this.lambda$null$0$ChannelCreateActivity(this.f$1);
+                ChannelCreateActivity.this.lambda$new$0$ChannelCreateActivity(this.f$1);
             }
         });
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$ChannelCreateActivity(TLRPC$TL_error tLRPC$TL_error) {
-        this.canCreatePublic = tLRPC$TL_error == null || !tLRPC$TL_error.text.equals("CHANNELS_ADMIN_PUBLIC_TOO_MUCH");
     }
 
     public boolean onFragmentCreate() {
@@ -673,7 +673,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     return ChannelCreateActivity.this.lambda$createView$7$ChannelCreateActivity(textView, i, keyEvent);
                 }
             });
-            this.descriptionTextView.addTextChangedListener(new TextWatcher(this) {
+            this.descriptionTextView.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable editable) {
                 }
 
@@ -833,11 +833,11 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     public /* synthetic */ void lambda$createView$5$ChannelCreateActivity(View view) {
         this.imageUpdater.openMenu(this.avatar != null, new Runnable() {
             public final void run() {
-                ChannelCreateActivity.this.lambda$null$3$ChannelCreateActivity();
+                ChannelCreateActivity.this.lambda$createView$3$ChannelCreateActivity();
             }
         }, new DialogInterface.OnDismissListener() {
             public final void onDismiss(DialogInterface dialogInterface) {
-                ChannelCreateActivity.this.lambda$null$4$ChannelCreateActivity(dialogInterface);
+                ChannelCreateActivity.this.lambda$createView$4$ChannelCreateActivity(dialogInterface);
             }
         });
         this.cameraDrawable.setCurrentFrame(0);
@@ -846,8 +846,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$ChannelCreateActivity() {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$ChannelCreateActivity() {
         this.avatar = null;
         this.avatarBig = null;
         this.inputPhoto = null;
@@ -861,8 +861,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$ChannelCreateActivity(DialogInterface dialogInterface) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$ChannelCreateActivity(DialogInterface dialogInterface) {
         this.cameraDrawable.setCustomEndFrame(86);
         this.avatarEditor.playAnimation();
     }
@@ -940,14 +940,14 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
 
             public final void run() {
-                ChannelCreateActivity.this.lambda$null$10$ChannelCreateActivity(this.f$1, this.f$2);
+                ChannelCreateActivity.this.lambda$generateLink$10$ChannelCreateActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$ChannelCreateActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$generateLink$10 */
+    public /* synthetic */ void lambda$generateLink$10$ChannelCreateActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
             this.invite = (TLRPC$TL_chatInviteExported) ((TLRPC$TL_messages_exportedChatInvites) tLObject).invites.get(0);
         }
@@ -1255,14 +1255,14 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
 
             public final void run() {
-                ChannelCreateActivity.this.lambda$null$17$ChannelCreateActivity(this.f$1);
+                ChannelCreateActivity.this.lambda$loadAdminedChannels$17$ChannelCreateActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$17 */
-    public /* synthetic */ void lambda$null$17$ChannelCreateActivity(TLObject tLObject) {
+    /* renamed from: lambda$loadAdminedChannels$17 */
+    public /* synthetic */ void lambda$loadAdminedChannels$17$ChannelCreateActivity(TLObject tLObject) {
         this.loadingAdminedChannels = false;
         if (tLObject != null && getParentActivity() != null) {
             for (int i = 0; i < this.adminedChannelCells.size(); i++) {
@@ -1273,7 +1273,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             for (int i2 = 0; i2 < tLRPC$TL_messages_chats.chats.size(); i2++) {
                 AdminedChannelCell adminedChannelCell = new AdminedChannelCell(getParentActivity(), new View.OnClickListener() {
                     public final void onClick(View view) {
-                        ChannelCreateActivity.this.lambda$null$16$ChannelCreateActivity(view);
+                        ChannelCreateActivity.this.lambda$loadAdminedChannels$16$ChannelCreateActivity(view);
                     }
                 });
                 TLRPC$Chat tLRPC$Chat = tLRPC$TL_messages_chats.chats.get(i2);
@@ -1290,8 +1290,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$16 */
-    public /* synthetic */ void lambda$null$16$ChannelCreateActivity(View view) {
+    /* renamed from: lambda$loadAdminedChannels$16 */
+    public /* synthetic */ void lambda$loadAdminedChannels$16$ChannelCreateActivity(View view) {
         TLRPC$Chat currentChannel = ((AdminedChannelCell) view.getParent()).getCurrentChannel();
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("AppName", NUM));
@@ -1309,40 +1309,40 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                ChannelCreateActivity.this.lambda$null$15$ChannelCreateActivity(this.f$1, dialogInterface, i);
+                ChannelCreateActivity.this.lambda$loadAdminedChannels$15$ChannelCreateActivity(this.f$1, dialogInterface, i);
             }
         });
         showDialog(builder.create());
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$15 */
-    public /* synthetic */ void lambda$null$15$ChannelCreateActivity(TLRPC$Chat tLRPC$Chat, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$loadAdminedChannels$15 */
+    public /* synthetic */ void lambda$loadAdminedChannels$15$ChannelCreateActivity(TLRPC$Chat tLRPC$Chat, DialogInterface dialogInterface, int i) {
         TLRPC$TL_channels_updateUsername tLRPC$TL_channels_updateUsername = new TLRPC$TL_channels_updateUsername();
         tLRPC$TL_channels_updateUsername.channel = MessagesController.getInputChannel(tLRPC$Chat);
         tLRPC$TL_channels_updateUsername.username = "";
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_channels_updateUsername, new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ChannelCreateActivity.this.lambda$null$14$ChannelCreateActivity(tLObject, tLRPC$TL_error);
+                ChannelCreateActivity.this.lambda$loadAdminedChannels$14$ChannelCreateActivity(tLObject, tLRPC$TL_error);
             }
         }, 64);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$14 */
-    public /* synthetic */ void lambda$null$14$ChannelCreateActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$loadAdminedChannels$14 */
+    public /* synthetic */ void lambda$loadAdminedChannels$14$ChannelCreateActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject instanceof TLRPC$TL_boolTrue) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
-                    ChannelCreateActivity.this.lambda$null$13$ChannelCreateActivity();
+                    ChannelCreateActivity.this.lambda$loadAdminedChannels$13$ChannelCreateActivity();
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$13 */
-    public /* synthetic */ void lambda$null$13$ChannelCreateActivity() {
+    /* renamed from: lambda$loadAdminedChannels$13 */
+    public /* synthetic */ void lambda$loadAdminedChannels$13$ChannelCreateActivity() {
         this.canCreatePublic = true;
         if (this.descriptionTextView.length() > 0) {
             checkUserName(this.descriptionTextView.getText().toString());
@@ -1438,14 +1438,14 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ChannelCreateActivity.this.lambda$null$20$ChannelCreateActivity(this.f$1, tLObject, tLRPC$TL_error);
+                ChannelCreateActivity.this.lambda$checkUserName$20$ChannelCreateActivity(this.f$1, tLObject, tLRPC$TL_error);
             }
         }, 2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$20 */
-    public /* synthetic */ void lambda$null$20$ChannelCreateActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$checkUserName$20 */
+    public /* synthetic */ void lambda$checkUserName$20$ChannelCreateActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error, tLObject) {
             public final /* synthetic */ String f$1;
             public final /* synthetic */ TLRPC$TL_error f$2;
@@ -1458,14 +1458,14 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             }
 
             public final void run() {
-                ChannelCreateActivity.this.lambda$null$19$ChannelCreateActivity(this.f$1, this.f$2, this.f$3);
+                ChannelCreateActivity.this.lambda$checkUserName$19$ChannelCreateActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$19 */
-    public /* synthetic */ void lambda$null$19$ChannelCreateActivity(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$checkUserName$19 */
+    public /* synthetic */ void lambda$checkUserName$19$ChannelCreateActivity(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.checkReqId = 0;
         String str2 = this.lastCheckName;
         if (str2 != null && str2.equals(str)) {

@@ -14,6 +14,11 @@ public class PhotoFilterBlurControl extends FrameLayout {
     private static final float BlurInsetProximity = ((float) AndroidUtilities.dp(20.0f));
     private static final float BlurViewCenterInset = ((float) AndroidUtilities.dp(30.0f));
     private static final float BlurViewRadiusInset = ((float) AndroidUtilities.dp(30.0f));
+    private final int GestureStateBegan = 1;
+    private final int GestureStateCancelled = 4;
+    private final int GestureStateChanged = 2;
+    private final int GestureStateEnded = 3;
+    private final int GestureStateFailed = 5;
     private BlurViewActiveControl activeControl;
     private Size actualAreaSize = new Size();
     private float angle;

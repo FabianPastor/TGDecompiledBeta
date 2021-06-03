@@ -54,7 +54,7 @@ public class MaxFileSizeCell extends FrameLayout {
         this.sizeTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
         this.sizeTextView.setImportantForAccessibility(2);
         addView(this.sizeTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : i) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
-        AnonymousClass1 r0 = new SeekBarView(this, context) {
+        AnonymousClass1 r0 = new SeekBarView(context) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 0) {
                     getParent().requestDisallowInterceptTouchEvent(true);

@@ -59,6 +59,7 @@
     <public type="attr" name="fontProviderFetchTimeout" id="NUM" />
     <public type="attr" name="fontProviderPackage" id="NUM" />
     <public type="attr" name="fontProviderQuery" id="NUM" />
+    <public type="attr" name="fontProviderSystemFontFamily" id="NUM" />
     <public type="attr" name="fontStyle" id="NUM" />
     <public type="attr" name="fontVariationSettings" id="NUM" />
     <public type="attr" name="fontWeight" id="NUM" />
@@ -186,47 +187,29 @@
     <public type="dimen" name="notification_subtext_size" id="NUM" />
     <public type="dimen" name="notification_top_pad" id="NUM" />
     <public type="dimen" name="notification_top_pad_large_text" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__1__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__1__1" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__2__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__2__1" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__3__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__3__1" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__4__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__4__1" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__5__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__5__1" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__6__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__6__1" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__6__2" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__6__3" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__7__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__7__1" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__7__2" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__7__3" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__8__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_error_to_fp__8__1" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__1__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__2__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__3__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__4__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__5__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__6__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__6__1" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__6__2" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__6__3" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__6__4" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__6__5" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__7__0" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__7__1" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__7__2" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__7__3" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__7__4" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__7__5" id="NUM" />
-    <public type="drawable" name="$$fingerprint_dialog_fp_to_error__8__0" id="NUM" />
     <public type="drawable" name="$fingerprint_dialog_error_to_fp__0" id="NUM" />
     <public type="drawable" name="$fingerprint_dialog_error_to_fp__1" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__10" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__11" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__12" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__13" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__14" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__15" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__16" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__17" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__18" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__19" id="NUM" />
     <public type="drawable" name="$fingerprint_dialog_error_to_fp__2" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__20" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__21" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__22" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__23" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__24" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__25" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__26" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__27" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__28" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_error_to_fp__29" id="NUM" />
     <public type="drawable" name="$fingerprint_dialog_error_to_fp__3" id="NUM" />
     <public type="drawable" name="$fingerprint_dialog_error_to_fp__4" id="NUM" />
     <public type="drawable" name="$fingerprint_dialog_error_to_fp__5" id="NUM" />
@@ -236,7 +219,25 @@
     <public type="drawable" name="$fingerprint_dialog_error_to_fp__9" id="NUM" />
     <public type="drawable" name="$fingerprint_dialog_fp_to_error__0" id="NUM" />
     <public type="drawable" name="$fingerprint_dialog_fp_to_error__1" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__10" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__11" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__12" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__13" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__14" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__15" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__16" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__17" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__18" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__19" id="NUM" />
     <public type="drawable" name="$fingerprint_dialog_fp_to_error__2" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__20" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__21" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__22" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__23" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__24" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__25" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__26" id="NUM" />
+    <public type="drawable" name="$fingerprint_dialog_fp_to_error__27" id="NUM" />
     <public type="drawable" name="$fingerprint_dialog_fp_to_error__3" id="NUM" />
     <public type="drawable" name="$fingerprint_dialog_fp_to_error__4" id="NUM" />
     <public type="drawable" name="$fingerprint_dialog_fp_to_error__5" id="NUM" />
@@ -283,6 +284,7 @@
     <public type="drawable" name="bar_selector_lock" id="NUM" />
     <public type="drawable" name="bar_selector_style" id="NUM" />
     <public type="drawable" name="bar_selector_white" id="NUM" />
+    <public type="drawable" name="bg_rotate_large" id="NUM" />
     <public type="drawable" name="bg_voip_icon_btn" id="NUM" />
     <public type="drawable" name="blockpanel" id="NUM" />
     <public type="drawable" name="blockpanel_shadow" id="NUM" />
@@ -726,6 +728,9 @@
     <public type="drawable" name="msg_block2" id="NUM" />
     <public type="drawable" name="msg_calendar" id="NUM" />
     <public type="drawable" name="msg_callback" id="NUM" />
+    <public type="drawable" name="msg_calls_minimize" id="NUM" />
+    <public type="drawable" name="msg_calls_pin" id="NUM" />
+    <public type="drawable" name="msg_calls_unpin" id="NUM" />
     <public type="drawable" name="msg_cancel" id="NUM" />
     <public type="drawable" name="msg_channel" id="NUM" />
     <public type="drawable" name="msg_check" id="NUM" />
@@ -791,6 +796,7 @@
     <public type="drawable" name="msg_photo_shadow" id="NUM" />
     <public type="drawable" name="msg_photoeditor" id="NUM" />
     <public type="drawable" name="msg_pin" id="NUM" />
+    <public type="drawable" name="msg_pin_filled" id="NUM" />
     <public type="drawable" name="msg_pin_mini" id="NUM" />
     <public type="drawable" name="msg_pollstop" id="NUM" />
     <public type="drawable" name="msg_psa" id="NUM" />
@@ -817,6 +823,8 @@
     <public type="drawable" name="msg_round_play_m" id="NUM" />
     <public type="drawable" name="msg_satellite" id="NUM" />
     <public type="drawable" name="msg_schedule" id="NUM" />
+    <public type="drawable" name="msg_screencast" id="NUM" />
+    <public type="drawable" name="msg_screencast_off" id="NUM" />
     <public type="drawable" name="msg_search" id="NUM" />
     <public type="drawable" name="msg_sendphoto" id="NUM" />
     <public type="drawable" name="msg_share" id="NUM" />
@@ -844,8 +852,12 @@
     <public type="drawable" name="msg_videocall" id="NUM" />
     <public type="drawable" name="msg_viewreplies" id="NUM" />
     <public type="drawable" name="msg_views" id="NUM" />
+    <public type="drawable" name="msg_voice_bluetooth" id="NUM" />
+    <public type="drawable" name="msg_voice_headphones" id="NUM" />
     <public type="drawable" name="msg_voice_muted" id="NUM" />
+    <public type="drawable" name="msg_voice_phone" id="NUM" />
     <public type="drawable" name="msg_voice_pip" id="NUM" />
+    <public type="drawable" name="msg_voice_speaker" id="NUM" />
     <public type="drawable" name="msg_voice_unmuted" id="NUM" />
     <public type="drawable" name="msg_voicechat" id="NUM" />
     <public type="drawable" name="msg_voicechat2" id="NUM" />
@@ -1080,6 +1092,9 @@
     <public type="drawable" name="tabs_reorder" id="NUM" />
     <public type="drawable" name="theme_picker" id="NUM" />
     <public type="drawable" name="theme_preview_image" id="NUM" />
+    <public type="drawable" name="themes_addcolor" id="NUM" />
+    <public type="drawable" name="themes_deletecolor" id="NUM" />
+    <public type="drawable" name="themes_swapcolor" id="NUM" />
     <public type="drawable" name="tip1" id="NUM" />
     <public type="drawable" name="tip2" id="NUM" />
     <public type="drawable" name="tip3" id="NUM" />
@@ -1127,6 +1142,7 @@
     <public type="drawable" name="voice_volume_speaker" id="NUM" />
     <public type="drawable" name="voicechat_active" id="NUM" />
     <public type="drawable" name="voicechat_muted" id="NUM" />
+    <public type="drawable" name="voicechat_screencast" id="NUM" />
     <public type="drawable" name="volume_off" id="NUM" />
     <public type="drawable" name="volume_on" id="NUM" />
     <public type="drawable" name="wall_selection" id="NUM" />
@@ -1355,10 +1371,15 @@
     <public type="id" name="tag_accessibility_clickable_spans" id="NUM" />
     <public type="id" name="tag_accessibility_heading" id="NUM" />
     <public type="id" name="tag_accessibility_pane_title" id="NUM" />
+    <public type="id" name="tag_on_apply_window_listener" id="NUM" />
+    <public type="id" name="tag_on_receive_content_listener" id="NUM" />
+    <public type="id" name="tag_on_receive_content_mime_types" id="NUM" />
     <public type="id" name="tag_screen_reader_focusable" id="NUM" />
+    <public type="id" name="tag_state_description" id="NUM" />
     <public type="id" name="tag_transition_group" id="NUM" />
     <public type="id" name="tag_unhandled_key_event_manager" id="NUM" />
     <public type="id" name="tag_unhandled_key_listeners" id="NUM" />
+    <public type="id" name="tag_window_insets_animation_callback" id="NUM" />
     <public type="id" name="terrain" id="NUM" />
     <public type="id" name="test" id="NUM" />
     <public type="id" name="text" id="NUM" />
@@ -1425,6 +1446,7 @@
     <public type="raw" name="audio_speed" id="NUM" />
     <public type="raw" name="audio_stop_speed" id="NUM" />
     <public type="raw" name="camera" id="NUM" />
+    <public type="raw" name="camera_flip" id="NUM" />
     <public type="raw" name="camera_outline" id="NUM" />
     <public type="raw" name="channel_create" id="NUM" />
     <public type="raw" name="chat_audio_record_delete" id="NUM" />
@@ -1524,6 +1546,7 @@
     <public type="raw" name="utyan_gigagroup" id="NUM" />
     <public type="raw" name="utyan_private" id="NUM" />
     <public type="raw" name="utyan_schedule" id="NUM" />
+    <public type="raw" name="voice_mini" id="NUM" />
     <public type="raw" name="voice_muted" id="NUM" />
     <public type="raw" name="voice_outlined" id="NUM" />
     <public type="raw" name="voice_outlined2" id="NUM" />
@@ -1898,6 +1921,13 @@
     <public type="string" name="AppFolderInfo" id="NUM" />
     <public type="string" name="AppName" id="NUM" />
     <public type="string" name="AppNameBeta" id="NUM" />
+    <public type="string" name="AppUpdate" id="NUM" />
+    <public type="string" name="AppUpdateChangelogEmpty" id="NUM" />
+    <public type="string" name="AppUpdateDownloadNow" id="NUM" />
+    <public type="string" name="AppUpdateDownloading" id="NUM" />
+    <public type="string" name="AppUpdateNow" id="NUM" />
+    <public type="string" name="AppUpdateRemindMeLater" id="NUM" />
+    <public type="string" name="AppUpdateVersionAndSize" id="NUM" />
     <public type="string" name="Appearance" id="NUM" />
     <public type="string" name="ApplyLocalizationFile" id="NUM" />
     <public type="string" name="ApplyTheme" id="NUM" />
@@ -2135,6 +2165,7 @@
     <public type="string" name="BackgroundColorPreviewLine2" id="NUM" />
     <public type="string" name="BackgroundColorSinglePreviewLine1" id="NUM" />
     <public type="string" name="BackgroundColorSinglePreviewLine2" id="NUM" />
+    <public type="string" name="BackgroundColors" id="NUM" />
     <public type="string" name="BackgroundHexColorCode" id="NUM" />
     <public type="string" name="BackgroundIntensity" id="NUM" />
     <public type="string" name="BackgroundMotion" id="NUM" />
@@ -2144,6 +2175,10 @@
     <public type="string" name="BackgroundPreviewLine2" id="NUM" />
     <public type="string" name="BackgroundRestricted" id="NUM" />
     <public type="string" name="BackgroundSearchColor" id="NUM" />
+    <public type="string" name="BackgroundToChats" id="NUM" />
+    <public type="string" name="BackgroundToGroup" id="NUM" />
+    <public type="string" name="BackgroundToSavedMessages" id="NUM" />
+    <public type="string" name="BackgroundToUser" id="NUM" />
     <public type="string" name="BadgeNumber" id="NUM" />
     <public type="string" name="BadgeNumberMutedChats" id="NUM" />
     <public type="string" name="BadgeNumberShow" id="NUM" />
@@ -2242,6 +2277,9 @@
     <public type="string" name="CallReportSent" id="NUM" />
     <public type="string" name="CallText" id="NUM" />
     <public type="string" name="CallViaTelegram" id="NUM" />
+    <public type="string" name="CallViedeoPin" id="NUM" />
+    <public type="string" name="CallViedeoPreviewTitle" id="NUM" />
+    <public type="string" name="CallViedeoUnpin" id="NUM" />
     <public type="string" name="Calling" id="NUM" />
     <public type="string" name="Calls" id="NUM" />
     <public type="string" name="CallsDataUsage" id="NUM" />
@@ -2274,6 +2312,7 @@
     <public type="string" name="CardNumberCopied" id="NUM" />
     <public type="string" name="Change" id="NUM" />
     <public type="string" name="ChangeChatBackground" id="NUM" />
+    <public type="string" name="ChangeColorToColor" id="NUM" />
     <public type="string" name="ChangeLanguageLater" id="NUM" />
     <public type="string" name="ChangePasscode" id="NUM" />
     <public type="string" name="ChangePasscodeInfo" id="NUM" />
@@ -3707,6 +3746,12 @@
     <public type="string" name="MegaPublic" id="NUM" />
     <public type="string" name="MegaPublicInfo" id="NUM" />
     <public type="string" name="MegaUsernameHelp" id="NUM" />
+    <public type="string" name="MembersAreSpeakingToast_few" id="NUM" />
+    <public type="string" name="MembersAreSpeakingToast_many" id="NUM" />
+    <public type="string" name="MembersAreSpeakingToast_one" id="NUM" />
+    <public type="string" name="MembersAreSpeakingToast_other" id="NUM" />
+    <public type="string" name="MembersAreSpeakingToast_two" id="NUM" />
+    <public type="string" name="MembersAreSpeakingToast_zero" id="NUM" />
     <public type="string" name="MembersCountSelected_few" id="NUM" />
     <public type="string" name="MembersCountSelected_many" id="NUM" />
     <public type="string" name="MembersCountSelected_one" id="NUM" />
@@ -4555,6 +4600,12 @@
     <public type="string" name="PinToTopLimitReached2" id="NUM" />
     <public type="string" name="Ping" id="NUM" />
     <public type="string" name="Pink" id="NUM" />
+    <public type="string" name="PinnedDialogsCount_few" id="NUM" />
+    <public type="string" name="PinnedDialogsCount_many" id="NUM" />
+    <public type="string" name="PinnedDialogsCount_one" id="NUM" />
+    <public type="string" name="PinnedDialogsCount_other" id="NUM" />
+    <public type="string" name="PinnedDialogsCount_two" id="NUM" />
+    <public type="string" name="PinnedDialogsCount_zero" id="NUM" />
     <public type="string" name="PinnedMessage" id="NUM" />
     <public type="string" name="PinnedMessages" id="NUM" />
     <public type="string" name="PinnedMessagesCount_few" id="NUM" />
@@ -5053,6 +5104,7 @@
     <public type="string" name="ShareSendTo" id="NUM" />
     <public type="string" name="ShareTelegram" id="NUM" />
     <public type="string" name="ShareTheme" id="NUM" />
+    <public type="string" name="ShareVideo" id="NUM" />
     <public type="string" name="ShareYouLocationInfo" id="NUM" />
     <public type="string" name="ShareYouLocationInline" id="NUM" />
     <public type="string" name="ShareYouLocationTitle" id="NUM" />
@@ -5430,6 +5482,12 @@
     <public type="string" name="UnpinMessage" id="NUM" />
     <public type="string" name="UnpinMessageAlert" id="NUM" />
     <public type="string" name="UnpinMessageAlertTitle" id="NUM" />
+    <public type="string" name="UnpinnedDialogsCount_few" id="NUM" />
+    <public type="string" name="UnpinnedDialogsCount_many" id="NUM" />
+    <public type="string" name="UnpinnedDialogsCount_one" id="NUM" />
+    <public type="string" name="UnpinnedDialogsCount_other" id="NUM" />
+    <public type="string" name="UnpinnedDialogsCount_two" id="NUM" />
+    <public type="string" name="UnpinnedDialogsCount_zero" id="NUM" />
     <public type="string" name="UnreadMessages" id="NUM" />
     <public type="string" name="UnsupportedAttachment" id="NUM" />
     <public type="string" name="UnsupportedMedia" id="NUM" />
@@ -5557,6 +5615,8 @@
     <public type="string" name="VideoCaption" id="NUM" />
     <public type="string" name="VideoDoesNotSupportStreaming" id="NUM" />
     <public type="string" name="VideoMessagesAutodownload" id="NUM" />
+    <public type="string" name="VideoPreview" id="NUM" />
+    <public type="string" name="VideoPreviewDesrciption" id="NUM" />
     <public type="string" name="VideoQualityIsTooLow" id="NUM" />
     <public type="string" name="VideoSavedHint" id="NUM" />
     <public type="string" name="VideoSavedToDownloadsHint" id="NUM" />
@@ -5618,17 +5678,25 @@
     <public type="string" name="VoipAudioRoutingBluetooth" id="NUM" />
     <public type="string" name="VoipAudioRoutingEarpiece" id="NUM" />
     <public type="string" name="VoipAudioRoutingHeadset" id="NUM" />
+    <public type="string" name="VoipAudioRoutingPhone" id="NUM" />
     <public type="string" name="VoipAudioRoutingSpeaker" id="NUM" />
     <public type="string" name="VoipBusy" id="NUM" />
     <public type="string" name="VoipCallEnded" id="NUM" />
+    <public type="string" name="VoipCamera" id="NUM" />
     <public type="string" name="VoipChannelScheduleInfo" id="NUM" />
     <public type="string" name="VoipChannelStart2" id="NUM" />
+    <public type="string" name="VoipChatActiveChats" id="NUM" />
+    <public type="string" name="VoipChatChatJoined" id="NUM" />
     <public type="string" name="VoipChatDisplayedAs" id="NUM" />
     <public type="string" name="VoipChatJoin" id="NUM" />
     <public type="string" name="VoipChatLateBy" id="NUM" />
+    <public type="string" name="VoipChatRecentCalls" id="NUM" />
     <public type="string" name="VoipChatReminderHint" id="NUM" />
     <public type="string" name="VoipChatShare" id="NUM" />
+    <public type="string" name="VoipChatStartScreenCapture" id="NUM" />
     <public type="string" name="VoipChatStartsIn" id="NUM" />
+    <public type="string" name="VoipChatStopScreenCapture" id="NUM" />
+    <public type="string" name="VoipChatUserJoined" id="NUM" />
     <public type="string" name="VoipConnecting" id="NUM" />
     <public type="string" name="VoipDeclineCall" id="NUM" />
     <public type="string" name="VoipEditBio" id="NUM" />
@@ -5647,6 +5715,7 @@
     <public type="string" name="VoipGroupAddMemberTitle" id="NUM" />
     <public type="string" name="VoipGroupAllCanSpeak" id="NUM" />
     <public type="string" name="VoipGroupAllowToSpeak" id="NUM" />
+    <public type="string" name="VoipGroupAudio" id="NUM" />
     <public type="string" name="VoipGroupAudioRecordSaved" id="NUM" />
     <public type="string" name="VoipGroupAudioRecordStarted" id="NUM" />
     <public type="string" name="VoipGroupBioEditAlertText" id="NUM" />
@@ -5755,6 +5824,7 @@
     <public type="string" name="VoipMutedTapForSpeak" id="NUM" />
     <public type="string" name="VoipMutedTapedForSpeak" id="NUM" />
     <public type="string" name="VoipMutedTapedForSpeakInfo" id="NUM" />
+    <public type="string" name="VoipNeedCameraPermission" id="NUM" />
     <public type="string" name="VoipNeedMicCameraPermission" id="NUM" />
     <public type="string" name="VoipNeedMicPermission" id="NUM" />
     <public type="string" name="VoipNotificationSettings" id="NUM" />
@@ -5782,6 +5852,7 @@
     <public type="string" name="VoipRequesting" id="NUM" />
     <public type="string" name="VoipRinging" id="NUM" />
     <public type="string" name="VoipRingtoneInfo" id="NUM" />
+    <public type="string" name="VoipSelectAudioOutput" id="NUM" />
     <public type="string" name="VoipSetNewPhoto" id="NUM" />
     <public type="string" name="VoipSettingsRingtone" id="NUM" />
     <public type="string" name="VoipSpeaker" id="NUM" />

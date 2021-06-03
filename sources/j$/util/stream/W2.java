@@ -1,16 +1,14 @@
 package j$.util.stream;
 
+import j$.time.a;
 import j$.util.Spliterator;
 import j$.util.function.J;
 import j$.util.function.o;
-import j$.util.k;
 import j$.util.stream.CLASSNAMEj1;
 import java.util.Comparator;
 
 abstract class W2<P_IN, P_OUT, T_BUFFER extends CLASSNAMEj1> implements Spliterator<P_OUT> {
-
-    /* renamed from: a  reason: collision with root package name */
-    final boolean var_a;
+    final boolean a;
     final T1 b;
     private J c;
     Spliterator d;
@@ -24,23 +22,23 @@ abstract class W2<P_IN, P_OUT, T_BUFFER extends CLASSNAMEj1> implements Splitera
         this.b = t1;
         this.c = null;
         this.d = spliterator;
-        this.var_a = z;
+        this.a = z;
     }
 
     W2(T1 t1, J j, boolean z) {
         this.b = t1;
         this.c = j;
         this.d = null;
-        this.var_a = z;
+        this.a = z;
     }
 
     private boolean f() {
         while (this.h.count() == 0) {
-            if (this.e.p() || !this.f.a()) {
+            if (this.e.o() || !this.f.a()) {
                 if (this.i) {
                     return false;
                 }
-                this.e.m();
+                this.e.l();
                 this.i = true;
             }
         }
@@ -66,54 +64,54 @@ abstract class W2<P_IN, P_OUT, T_BUFFER extends CLASSNAMEj1> implements Splitera
         } else if (this.i) {
             return false;
         } else {
-            g();
-            i();
+            h();
+            j();
             this.g = 0;
-            this.e.n(this.d.getExactSizeIfKnown());
+            this.e.m(this.d.getExactSizeIfKnown());
             return f();
         }
     }
 
     public final int characteristics() {
-        g();
-        int g2 = T2.g(this.b.r0()) & T2.f;
+        h();
+        int g2 = T2.g(this.b.r0()) & T2.a;
         return (g2 & 64) != 0 ? (g2 & -16449) | (this.d.characteristics() & 16448) : g2;
     }
 
     public final long estimateSize() {
-        g();
+        h();
         return this.d.estimateSize();
     }
 
-    /* access modifiers changed from: package-private */
-    public final void g() {
-        if (this.d == null) {
-            this.d = (Spliterator) this.c.get();
-            this.c = null;
-        }
-    }
-
     public Comparator getComparator() {
-        if (k.f(this, 4)) {
+        if (a.f(this, 4)) {
             return null;
         }
         throw new IllegalStateException();
     }
 
     public final long getExactSizeIfKnown() {
-        g();
+        h();
         if (T2.SIZED.d(this.b.r0())) {
             return this.d.getExactSizeIfKnown();
         }
         return -1;
     }
 
+    /* access modifiers changed from: package-private */
+    public final void h() {
+        if (this.d == null) {
+            this.d = (Spliterator) this.c.get();
+            this.c = null;
+        }
+    }
+
     public /* synthetic */ boolean hasCharacteristics(int i2) {
-        return k.f(this, i2);
+        return a.f(this, i2);
     }
 
     /* access modifiers changed from: package-private */
-    public abstract void i();
+    public abstract void j();
 
     /* access modifiers changed from: package-private */
     public abstract W2 k(Spliterator spliterator);
@@ -123,10 +121,10 @@ abstract class W2<P_IN, P_OUT, T_BUFFER extends CLASSNAMEj1> implements Splitera
     }
 
     public Spliterator trySplit() {
-        if (!this.var_a || this.i) {
+        if (!this.a || this.i) {
             return null;
         }
-        g();
+        h();
         Spliterator trySplit = this.d.trySplit();
         if (trySplit == null) {
             return null;

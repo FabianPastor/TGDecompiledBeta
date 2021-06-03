@@ -109,7 +109,10 @@ public final class FingerprintManagerCompat {
     }
 
     public static final class AuthenticationResult {
+        private CryptoObject mCryptoObject;
+
         public AuthenticationResult(CryptoObject cryptoObject) {
+            this.mCryptoObject = cryptoObject;
         }
     }
 
@@ -161,19 +164,19 @@ public final class FingerprintManagerCompat {
         private static FingerprintManagerCompatApi23.AuthenticationCallback wrapCallback(final AuthenticationCallback authenticationCallback) {
             return new FingerprintManagerCompatApi23.AuthenticationCallback() {
                 public void onAuthenticationError(int i, CharSequence charSequence) {
-                    authenticationCallback.onAuthenticationError(i, charSequence);
+                    AuthenticationCallback.this.onAuthenticationError(i, charSequence);
                 }
 
                 public void onAuthenticationHelp(int i, CharSequence charSequence) {
-                    authenticationCallback.onAuthenticationHelp(i, charSequence);
+                    AuthenticationCallback.this.onAuthenticationHelp(i, charSequence);
                 }
 
                 public void onAuthenticationSucceeded(FingerprintManagerCompatApi23.AuthenticationResultInternal authenticationResultInternal) {
-                    authenticationCallback.onAuthenticationSucceeded(new AuthenticationResult(Api23FingerprintManagerCompatImpl.unwrapCryptoObject(authenticationResultInternal.getCryptoObject())));
+                    AuthenticationCallback.this.onAuthenticationSucceeded(new AuthenticationResult(Api23FingerprintManagerCompatImpl.unwrapCryptoObject(authenticationResultInternal.getCryptoObject())));
                 }
 
                 public void onAuthenticationFailed() {
-                    authenticationCallback.onAuthenticationFailed();
+                    AuthenticationCallback.this.onAuthenticationFailed();
                 }
             };
         }

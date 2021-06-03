@@ -1,12 +1,10 @@
 package j$.util.function;
 
 public final /* synthetic */ class l implements Predicate {
-
-    /* renamed from: a  reason: collision with root package name */
-    public final /* synthetic */ Predicate var_a;
+    public final /* synthetic */ Predicate a;
 
     public /* synthetic */ l(Predicate predicate) {
-        this.var_a = predicate;
+        this.a = predicate;
     }
 
     public Predicate a(Predicate predicate) {
@@ -24,6 +22,6 @@ public final /* synthetic */ class l implements Predicate {
     }
 
     public final boolean test(Object obj) {
-        return !this.var_a.test(obj);
+        return !this.a.test(obj);
     }
 }

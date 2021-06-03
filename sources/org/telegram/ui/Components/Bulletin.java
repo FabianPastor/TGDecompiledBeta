@@ -389,6 +389,12 @@ public final class Bulletin {
         /* access modifiers changed from: protected */
         public abstract void onPressedStateChanged(boolean z);
 
+        static /* synthetic */ float access$1424(ParentLayout parentLayout, float f) {
+            float f2 = parentLayout.translationX - f;
+            parentLayout.translationX = f2;
+            return f2;
+        }
+
         public ParentLayout(final Layout layout2) {
             super(layout2.getContext());
             this.layout = layout2;
@@ -403,11 +409,7 @@ public final class Bulletin {
                 }
 
                 public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-                    Layout layout = layout2;
-                    ParentLayout parentLayout = ParentLayout.this;
-                    float access$1400 = parentLayout.translationX - f;
-                    float unused = parentLayout.translationX = access$1400;
-                    layout.setTranslationX(access$1400);
+                    layout2.setTranslationX(ParentLayout.access$1424(ParentLayout.this, f));
                     if (ParentLayout.this.translationX != 0.0f && ((ParentLayout.this.translationX >= 0.0f || !ParentLayout.this.needLeftAlphaAnimation) && (ParentLayout.this.translationX <= 0.0f || !ParentLayout.this.needRightAlphaAnimation))) {
                         return true;
                     }
@@ -961,7 +963,7 @@ public final class Bulletin {
                     ofFloat.setDuration(this.duration);
                     ofFloat.setInterpolator(Easings.easeOutQuad);
                     if (!(runnable == null && runnable2 == null)) {
-                        ofFloat.addListener(new AnimatorListenerAdapter(this) {
+                        ofFloat.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationStart(Animator animator) {
                                 Runnable runnable = runnable;
                                 if (runnable != null) {
@@ -1096,7 +1098,7 @@ public final class Bulletin {
                             if (r6 == 0) goto L_0x0038
                         L_0x0030:
                             org.telegram.ui.Components.Bulletin$Layout$DefaultTransition$1 r0 = new org.telegram.ui.Components.Bulletin$Layout$DefaultTransition$1
-                            r0.<init>(r3, r5, r6)
+                            r0.<init>(r5, r6)
                             r8.addListener(r0)
                         L_0x0038:
                             if (r7 == 0) goto L_0x0042
@@ -1115,7 +1117,7 @@ public final class Bulletin {
                         ofFloat.setDuration(175);
                         ofFloat.setInterpolator(Easings.easeInQuad);
                         if (!(runnable == null && runnable2 == null)) {
-                            ofFloat.addListener(new AnimatorListenerAdapter(this) {
+                            ofFloat.addListener(new AnimatorListenerAdapter() {
                                 public void onAnimationStart(Animator animator) {
                                     Runnable runnable = runnable;
                                     if (runnable != null) {
@@ -1243,7 +1245,7 @@ public final class Bulletin {
                                 if (r6 == 0) goto L_0x0027
                             L_0x001f:
                                 org.telegram.ui.Components.Bulletin$Layout$DefaultTransition$2 r0 = new org.telegram.ui.Components.Bulletin$Layout$DefaultTransition$2
-                                r0.<init>(r3, r5, r6)
+                                r0.<init>(r5, r6)
                                 r8.addListener(r0)
                             L_0x0027:
                                 if (r7 == 0) goto L_0x0031

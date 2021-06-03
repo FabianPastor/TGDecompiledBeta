@@ -23,6 +23,7 @@ import org.telegram.ui.ActionBar.Theme;
 public class NumberPicker extends LinearLayout {
     private int SELECTOR_MIDDLE_ITEM_INDEX;
     private int SELECTOR_WHEEL_ITEM_COUNT;
+    private SeekBarAccessibilityDelegate accessibilityDelegate;
     private boolean drawDividers;
     private Scroller mAdjustScroller;
     /* access modifiers changed from: private */
@@ -100,6 +101,20 @@ public class NumberPicker extends LinearLayout {
         return 0.9f;
     }
 
+    /* JADX WARNING: type inference failed for: r2v2, types: [boolean, byte] */
+    static /* synthetic */ boolean access$380(NumberPicker numberPicker, int i) {
+        ? r2 = (byte) (i ^ numberPicker.mIncrementVirtualButtonPressed);
+        numberPicker.mIncrementVirtualButtonPressed = r2;
+        return r2;
+    }
+
+    /* JADX WARNING: type inference failed for: r2v2, types: [boolean, byte] */
+    static /* synthetic */ boolean access$580(NumberPicker numberPicker, int i) {
+        ? r2 = (byte) (i ^ numberPicker.mDecrementVirtualButtonPressed);
+        numberPicker.mDecrementVirtualButtonPressed = r2;
+        return r2;
+    }
+
     public void setItemCount(int i) {
         if (this.SELECTOR_WHEEL_ITEM_COUNT != i) {
             this.SELECTOR_WHEEL_ITEM_COUNT = i;
@@ -150,7 +165,7 @@ public class NumberPicker extends LinearLayout {
             this.mAdjustScroller = new Scroller(getContext(), new DecelerateInterpolator(2.5f));
             updateInputTextView();
             setImportantForAccessibility(1);
-            setAccessibilityDelegate(new SeekBarAccessibilityDelegate() {
+            AnonymousClass1 r0 = new SeekBarAccessibilityDelegate() {
                 /* access modifiers changed from: protected */
                 public boolean canScrollBackward(View view) {
                     return true;
@@ -170,7 +185,9 @@ public class NumberPicker extends LinearLayout {
                     NumberPicker numberPicker = NumberPicker.this;
                     return numberPicker.getContentDescription(numberPicker.mValue);
                 }
-            });
+            };
+            this.accessibilityDelegate = r0;
+            setAccessibilityDelegate(r0);
             return;
         }
         throw new IllegalArgumentException("minHeight > maxHeight");
@@ -959,6 +976,8 @@ public class NumberPicker extends LinearLayout {
     }
 
     class PressedStateHelper implements Runnable {
+        private final int MODE_PRESS = 1;
+        private final int MODE_TAPPED = 2;
         private int mManagedButton;
         private int mMode;
 
@@ -1014,18 +1033,16 @@ public class NumberPicker extends LinearLayout {
                     if (!NumberPicker.this.mIncrementVirtualButtonPressed) {
                         NumberPicker.this.postDelayed(this, (long) ViewConfiguration.getPressedStateDuration());
                     }
+                    NumberPicker.access$380(NumberPicker.this, 1);
                     NumberPicker numberPicker3 = NumberPicker.this;
-                    boolean unused3 = numberPicker3.mIncrementVirtualButtonPressed = !numberPicker3.mIncrementVirtualButtonPressed;
-                    NumberPicker numberPicker4 = NumberPicker.this;
-                    numberPicker4.invalidate(0, numberPicker4.mBottomSelectionDividerBottom, NumberPicker.this.getRight(), NumberPicker.this.getBottom());
+                    numberPicker3.invalidate(0, numberPicker3.mBottomSelectionDividerBottom, NumberPicker.this.getRight(), NumberPicker.this.getBottom());
                 } else if (i3 == 2) {
                     if (!NumberPicker.this.mDecrementVirtualButtonPressed) {
                         NumberPicker.this.postDelayed(this, (long) ViewConfiguration.getPressedStateDuration());
                     }
-                    NumberPicker numberPicker5 = NumberPicker.this;
-                    boolean unused4 = numberPicker5.mDecrementVirtualButtonPressed = !numberPicker5.mDecrementVirtualButtonPressed;
-                    NumberPicker numberPicker6 = NumberPicker.this;
-                    numberPicker6.invalidate(0, 0, numberPicker6.getRight(), NumberPicker.this.mTopSelectionDividerTop);
+                    NumberPicker.access$580(NumberPicker.this, 1);
+                    NumberPicker numberPicker4 = NumberPicker.this;
+                    numberPicker4.invalidate(0, 0, numberPicker4.getRight(), NumberPicker.this.mTopSelectionDividerTop);
                 }
             }
         }

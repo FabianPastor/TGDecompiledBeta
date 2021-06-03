@@ -100,14 +100,14 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
             }
 
             public final void run() {
-                BaseLocationAdapter.this.lambda$null$0$BaseLocationAdapter(this.f$1, this.f$2);
+                BaseLocationAdapter.this.lambda$searchDelayed$0$BaseLocationAdapter(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$BaseLocationAdapter(String str, Location location) {
+    /* renamed from: lambda$searchDelayed$0 */
+    public /* synthetic */ void lambda$searchDelayed$0$BaseLocationAdapter(String str, Location location) {
         this.searchRunnable = null;
         this.lastSearchLocation = null;
         searchPlacesWithQuery(str, location, true);
@@ -138,15 +138,15 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
                 }
 
                 public final void run() {
-                    BaseLocationAdapter.this.lambda$null$2$BaseLocationAdapter(this.f$1);
+                    BaseLocationAdapter.this.lambda$searchBotUser$2$BaseLocationAdapter(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$BaseLocationAdapter(TLObject tLObject) {
+    /* renamed from: lambda$searchBotUser$2 */
+    public /* synthetic */ void lambda$searchBotUser$2$BaseLocationAdapter(TLObject tLObject) {
         TLRPC$TL_contacts_resolvedPeer tLRPC$TL_contacts_resolvedPeer = (TLRPC$TL_contacts_resolvedPeer) tLObject;
         MessagesController.getInstance(this.currentAccount).putUsers(tLRPC$TL_contacts_resolvedPeer.users, false);
         MessagesController.getInstance(this.currentAccount).putChats(tLRPC$TL_contacts_resolvedPeer.chats, false);
@@ -245,14 +245,14 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
             }
 
             public final void run() {
-                BaseLocationAdapter.this.lambda$null$4$BaseLocationAdapter(this.f$1, this.f$2, this.f$3);
+                BaseLocationAdapter.this.lambda$searchPlacesWithQuery$4$BaseLocationAdapter(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$BaseLocationAdapter(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+    /* renamed from: lambda$searchPlacesWithQuery$4 */
+    public /* synthetic */ void lambda$searchPlacesWithQuery$4$BaseLocationAdapter(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.currentRequestNum = 0;
         this.searching = false;
         this.places.clear();

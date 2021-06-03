@@ -1,15 +1,14 @@
 package j$.util.concurrent;
 
-import a.P0;
-import a.R0;
-import a.T0;
+import j$.M0;
+import j$.O0;
+import j$.Q0;
 import j$.util.Spliterator;
 import j$.util.function.C;
 import j$.util.function.Consumer;
 import j$.util.function.q;
 import j$.util.function.w;
-import j$.util.k;
-import j$.util.s;
+import j$.util.r;
 import j$.util.stream.Q1;
 import java.io.ObjectStreamField;
 import java.security.AccessController;
@@ -23,15 +22,13 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 public class e extends Random {
-    private static final AtomicInteger d = new AtomicInteger();
-    private static final AtomicLong e;
-    private static final ThreadLocal f = new ThreadLocal();
-    private static final ThreadLocal g = new a();
-
-    /* renamed from: a  reason: collision with root package name */
-    long var_a;
-    int b;
-    boolean c = true;
+    private static final AtomicInteger a = new AtomicInteger();
+    private static final AtomicLong b;
+    private static final ThreadLocal c = new ThreadLocal();
+    private static final ThreadLocal d = new a();
+    long e;
+    int f;
+    boolean g = true;
 
     class a extends ThreadLocal<e> {
         a() {
@@ -44,15 +41,13 @@ public class e extends Random {
     }
 
     static final class b implements Spliterator.a {
-
-        /* renamed from: a  reason: collision with root package name */
-        long var_a;
+        long a;
         final long b;
         final double c;
         final double d;
 
         b(long j, long j2, double d2, double d3) {
-            this.var_a = j;
+            this.a = j;
             this.b = j2;
             this.c = d2;
             this.d = d3;
@@ -60,17 +55,17 @@ public class e extends Random {
 
         /* renamed from: a */
         public b trySplit() {
-            long j = this.var_a;
+            long j = this.a;
             long j2 = (this.b + j) >>> 1;
             if (j2 <= j) {
                 return null;
             }
-            this.var_a = j2;
+            this.a = j2;
             return new b(j, j2, this.c, this.d);
         }
 
         public /* synthetic */ boolean b(Consumer consumer) {
-            return s.d(this, consumer);
+            return r.e(this, consumer);
         }
 
         public int characteristics() {
@@ -80,10 +75,10 @@ public class e extends Random {
         /* renamed from: e */
         public void forEachRemaining(q qVar) {
             qVar.getClass();
-            long j = this.var_a;
+            long j = this.a;
             long j2 = this.b;
             if (j < j2) {
-                this.var_a = j2;
+                this.a = j2;
                 double d2 = this.c;
                 double d3 = this.d;
                 e b2 = e.b();
@@ -95,11 +90,11 @@ public class e extends Random {
         }
 
         public long estimateSize() {
-            return this.b - this.var_a;
+            return this.b - this.a;
         }
 
         public /* synthetic */ void forEachRemaining(Consumer consumer) {
-            s.a(this, consumer);
+            r.a(this, consumer);
         }
 
         public Comparator getComparator() {
@@ -107,36 +102,34 @@ public class e extends Random {
         }
 
         public /* synthetic */ long getExactSizeIfKnown() {
-            return k.e(this);
+            return j$.time.a.e(this);
         }
 
         public /* synthetic */ boolean hasCharacteristics(int i) {
-            return k.f(this, i);
+            return j$.time.a.f(this, i);
         }
 
-        /* renamed from: o */
+        /* renamed from: n */
         public boolean tryAdvance(q qVar) {
             qVar.getClass();
-            long j = this.var_a;
+            long j = this.a;
             if (j >= this.b) {
                 return false;
             }
             qVar.accept(e.b().d(this.c, this.d));
-            this.var_a = j + 1;
+            this.a = j + 1;
             return true;
         }
     }
 
     static final class c implements Spliterator.b {
-
-        /* renamed from: a  reason: collision with root package name */
-        long var_a;
+        long a;
         final long b;
         final int c;
         final int d;
 
         c(long j, long j2, int i, int i2) {
-            this.var_a = j;
+            this.a = j;
             this.b = j2;
             this.c = i;
             this.d = i2;
@@ -144,26 +137,26 @@ public class e extends Random {
 
         /* renamed from: a */
         public c trySplit() {
-            long j = this.var_a;
+            long j = this.a;
             long j2 = (this.b + j) >>> 1;
             if (j2 <= j) {
                 return null;
             }
-            this.var_a = j2;
+            this.a = j2;
             return new c(j, j2, this.c, this.d);
         }
 
         public /* synthetic */ boolean b(Consumer consumer) {
-            return s.e(this, consumer);
+            return r.f(this, consumer);
         }
 
         /* renamed from: c */
         public void forEachRemaining(w wVar) {
             wVar.getClass();
-            long j = this.var_a;
+            long j = this.a;
             long j2 = this.b;
             if (j < j2) {
-                this.var_a = j2;
+                this.a = j2;
                 int i = this.c;
                 int i2 = this.d;
                 e b2 = e.b();
@@ -179,11 +172,23 @@ public class e extends Random {
         }
 
         public long estimateSize() {
-            return this.b - this.var_a;
+            return this.b - this.a;
         }
 
         public /* synthetic */ void forEachRemaining(Consumer consumer) {
-            s.b(this, consumer);
+            r.b(this, consumer);
+        }
+
+        /* renamed from: g */
+        public boolean tryAdvance(w wVar) {
+            wVar.getClass();
+            long j = this.a;
+            if (j >= this.b) {
+                return false;
+            }
+            wVar.accept(e.b().e(this.c, this.d));
+            this.a = j + 1;
+            return true;
         }
 
         public Comparator getComparator() {
@@ -191,36 +196,22 @@ public class e extends Random {
         }
 
         public /* synthetic */ long getExactSizeIfKnown() {
-            return k.e(this);
-        }
-
-        /* renamed from: h */
-        public boolean tryAdvance(w wVar) {
-            wVar.getClass();
-            long j = this.var_a;
-            if (j >= this.b) {
-                return false;
-            }
-            wVar.accept(e.b().e(this.c, this.d));
-            this.var_a = j + 1;
-            return true;
+            return j$.time.a.e(this);
         }
 
         public /* synthetic */ boolean hasCharacteristics(int i) {
-            return k.f(this, i);
+            return j$.time.a.f(this, i);
         }
     }
 
     static final class d implements Spliterator.c {
-
-        /* renamed from: a  reason: collision with root package name */
-        long var_a;
+        long a;
         final long b;
         final long c;
         final long d;
 
         d(long j, long j2, long j3, long j4) {
-            this.var_a = j;
+            this.a = j;
             this.b = j2;
             this.c = j3;
             this.d = j4;
@@ -228,17 +219,17 @@ public class e extends Random {
 
         /* renamed from: a */
         public d trySplit() {
-            long j = this.var_a;
+            long j = this.a;
             long j2 = (this.b + j) >>> 1;
             if (j2 <= j) {
                 return null;
             }
-            this.var_a = j2;
+            this.a = j2;
             return new d(j, j2, this.c, this.d);
         }
 
         public /* synthetic */ boolean b(Consumer consumer) {
-            return s.f(this, consumer);
+            return r.g(this, consumer);
         }
 
         public int characteristics() {
@@ -248,10 +239,10 @@ public class e extends Random {
         /* renamed from: d */
         public void forEachRemaining(C c2) {
             c2.getClass();
-            long j = this.var_a;
+            long j = this.a;
             long j2 = this.b;
             if (j < j2) {
-                this.var_a = j2;
+                this.a = j2;
                 long j3 = this.c;
                 long j4 = this.d;
                 e b2 = e.b();
@@ -263,11 +254,11 @@ public class e extends Random {
         }
 
         public long estimateSize() {
-            return this.b - this.var_a;
+            return this.b - this.a;
         }
 
         public /* synthetic */ void forEachRemaining(Consumer consumer) {
-            s.c(this, consumer);
+            r.c(this, consumer);
         }
 
         public Comparator getComparator() {
@@ -275,22 +266,22 @@ public class e extends Random {
         }
 
         public /* synthetic */ long getExactSizeIfKnown() {
-            return k.e(this);
+            return j$.time.a.e(this);
         }
 
         public /* synthetic */ boolean hasCharacteristics(int i) {
-            return k.f(this, i);
+            return j$.time.a.f(this, i);
         }
 
-        /* renamed from: j */
+        /* renamed from: i */
         public boolean tryAdvance(C c2) {
             c2.getClass();
-            long j = this.var_a;
+            long j = this.a;
             if (j >= this.b) {
                 return false;
             }
             c2.accept(e.b().f(this.c, this.d));
-            this.var_a = j + 1;
+            this.a = j + 1;
             return true;
         }
     }
@@ -306,7 +297,7 @@ public class e extends Random {
         } else {
             j = i(System.nanoTime()) ^ i(System.currentTimeMillis());
         }
-        e = new AtomicLong(j);
+        b = new AtomicLong(j);
         new ObjectStreamField("rnd", Long.TYPE);
         new ObjectStreamField("initialized", Boolean.TYPE);
     }
@@ -321,31 +312,31 @@ public class e extends Random {
         int i2 = i ^ (i << 13);
         int i3 = i2 ^ (i2 >>> 17);
         int i4 = i3 ^ (i3 << 5);
-        ((e) g.get()).b = i4;
+        ((e) d.get()).f = i4;
         return i4;
     }
 
     public static e b() {
-        e eVar = (e) g.get();
-        if (eVar.b == 0) {
+        e eVar = (e) d.get();
+        if (eVar.f == 0) {
             g();
         }
         return eVar;
     }
 
     static final int c() {
-        return ((e) g.get()).b;
+        return ((e) d.get()).f;
     }
 
     static final void g() {
-        int addAndGet = d.addAndGet(-NUM);
+        int addAndGet = a.addAndGet(-NUM);
         if (addAndGet == 0) {
             addAndGet = 1;
         }
-        long i = i(e.getAndAdd(-4942790177534073029L));
-        e eVar = (e) g.get();
-        eVar.var_a = i;
-        eVar.b = addAndGet;
+        long i = i(b.getAndAdd(-4942790177534073029L));
+        e eVar = (e) d.get();
+        eVar.e = i;
+        eVar.f = addAndGet;
     }
 
     private static int h(long j) {
@@ -372,7 +363,7 @@ public class e extends Random {
     }
 
     public DoubleStream doubles() {
-        return P0.m0(Q1.o(new b(0, Long.MAX_VALUE, Double.MAX_VALUE, 0.0d), false));
+        return M0.m0(Q1.o(new b(0, Long.MAX_VALUE, Double.MAX_VALUE, 0.0d), false));
     }
 
     /* access modifiers changed from: package-private */
@@ -439,18 +430,18 @@ public class e extends Random {
     }
 
     public IntStream ints() {
-        return R0.m0(Q1.p(new c(0, Long.MAX_VALUE, Integer.MAX_VALUE, 0), false));
+        return O0.m0(Q1.p(new c(0, Long.MAX_VALUE, Integer.MAX_VALUE, 0), false));
     }
 
     /* access modifiers changed from: package-private */
     public final long j() {
-        long j = this.var_a - 7046029254386353131L;
-        this.var_a = j;
+        long j = this.e - 7046029254386353131L;
+        this.e = j;
         return j;
     }
 
     public LongStream longs() {
-        return T0.m0(Q1.q(new d(0, Long.MAX_VALUE, Long.MAX_VALUE, 0), false));
+        return Q0.m0(Q1.q(new d(0, Long.MAX_VALUE, Long.MAX_VALUE, 0), false));
     }
 
     /* access modifiers changed from: protected */
@@ -473,7 +464,7 @@ public class e extends Random {
     }
 
     public double nextGaussian() {
-        ThreadLocal threadLocal = f;
+        ThreadLocal threadLocal = c;
         Double d2 = (Double) threadLocal.get();
         if (d2 != null) {
             threadLocal.set((Object) null);
@@ -485,7 +476,7 @@ public class e extends Random {
             double d3 = (nextDouble2 * nextDouble2) + (nextDouble * nextDouble);
             if (d3 < 1.0d && d3 != 0.0d) {
                 double sqrt = StrictMath.sqrt((StrictMath.log(d3) * -2.0d) / d3);
-                f.set(new Double(nextDouble2 * sqrt));
+                c.set(new Double(nextDouble2 * sqrt));
                 return nextDouble * sqrt;
             }
         }
@@ -521,49 +512,49 @@ public class e extends Random {
     }
 
     public void setSeed(long j) {
-        if (this.c) {
+        if (this.g) {
             throw new UnsupportedOperationException();
         }
     }
 
     public DoubleStream doubles(double d2, double d3) {
         if (d2 < d3) {
-            return P0.m0(Q1.o(new b(0, Long.MAX_VALUE, d2, d3), false));
+            return M0.m0(Q1.o(new b(0, Long.MAX_VALUE, d2, d3), false));
         }
         throw new IllegalArgumentException("bound must be greater than origin");
     }
 
     public IntStream ints(int i, int i2) {
         if (i < i2) {
-            return R0.m0(Q1.p(new c(0, Long.MAX_VALUE, i, i2), false));
+            return O0.m0(Q1.p(new c(0, Long.MAX_VALUE, i, i2), false));
         }
         throw new IllegalArgumentException("bound must be greater than origin");
     }
 
     public LongStream longs(long j) {
         if (j >= 0) {
-            return T0.m0(Q1.q(new d(0, j, Long.MAX_VALUE, 0), false));
+            return Q0.m0(Q1.q(new d(0, j, Long.MAX_VALUE, 0), false));
         }
         throw new IllegalArgumentException("size must be non-negative");
     }
 
     public DoubleStream doubles(long j) {
         if (j >= 0) {
-            return P0.m0(Q1.o(new b(0, j, Double.MAX_VALUE, 0.0d), false));
+            return M0.m0(Q1.o(new b(0, j, Double.MAX_VALUE, 0.0d), false));
         }
         throw new IllegalArgumentException("size must be non-negative");
     }
 
     public IntStream ints(long j) {
         if (j >= 0) {
-            return R0.m0(Q1.p(new c(0, j, Integer.MAX_VALUE, 0), false));
+            return O0.m0(Q1.p(new c(0, j, Integer.MAX_VALUE, 0), false));
         }
         throw new IllegalArgumentException("size must be non-negative");
     }
 
     public LongStream longs(long j, long j2) {
         if (j < j2) {
-            return T0.m0(Q1.q(new d(0, Long.MAX_VALUE, j, j2), false));
+            return Q0.m0(Q1.q(new d(0, Long.MAX_VALUE, j, j2), false));
         }
         throw new IllegalArgumentException("bound must be greater than origin");
     }
@@ -572,7 +563,7 @@ public class e extends Random {
         if (j < 0) {
             throw new IllegalArgumentException("size must be non-negative");
         } else if (d2 < d3) {
-            return P0.m0(Q1.o(new b(0, j, d2, d3), false));
+            return M0.m0(Q1.o(new b(0, j, d2, d3), false));
         } else {
             throw new IllegalArgumentException("bound must be greater than origin");
         }
@@ -582,7 +573,7 @@ public class e extends Random {
         if (j < 0) {
             throw new IllegalArgumentException("size must be non-negative");
         } else if (i < i2) {
-            return R0.m0(Q1.p(new c(0, j, i, i2), false));
+            return O0.m0(Q1.p(new c(0, j, i, i2), false));
         } else {
             throw new IllegalArgumentException("bound must be greater than origin");
         }
@@ -592,7 +583,7 @@ public class e extends Random {
         if (j < 0) {
             throw new IllegalArgumentException("size must be non-negative");
         } else if (j2 < j3) {
-            return T0.m0(Q1.q(new d(0, j, j2, j3), false));
+            return Q0.m0(Q1.q(new d(0, j, j2, j3), false));
         } else {
             throw new IllegalArgumentException("bound must be greater than origin");
         }

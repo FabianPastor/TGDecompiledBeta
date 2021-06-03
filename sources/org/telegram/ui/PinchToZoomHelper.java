@@ -122,6 +122,18 @@ public class PinchToZoomHelper {
     public void drawOverlays(Canvas canvas, float f, float f2, float f3, float f4, float f5) {
     }
 
+    static /* synthetic */ float access$1416(PinchToZoomHelper pinchToZoomHelper, float f) {
+        float f2 = pinchToZoomHelper.progressToFullView + f;
+        pinchToZoomHelper.progressToFullView = f2;
+        return f2;
+    }
+
+    static /* synthetic */ float access$616(PinchToZoomHelper pinchToZoomHelper, float f) {
+        float f2 = pinchToZoomHelper.enterProgress + f;
+        pinchToZoomHelper.enterProgress = f2;
+        return f2;
+    }
+
     public PinchToZoomHelper(ViewGroup viewGroup) {
         this.parentView = viewGroup;
     }
@@ -216,7 +228,7 @@ public class PinchToZoomHelper {
             int[] iArr = new int[1];
             ImageLocation imageLocation = getImageLocation(messageObject2, iArr);
             if (imageLocation != null) {
-                this.fullImage.setImage(imageLocation, (String) null, (ImageLocation) null, (String) null, (Drawable) null, iArr[0], (String) null, messageObject2, (messageObject2 == null || !messageObject2.isWebpage()) ? 0 : 1);
+                this.fullImage.setImage(imageLocation, (String) null, (ImageLocation) null, (String) null, (Drawable) null, iArr[0], (String) null, messageObject2, messageObject2.isWebpage() ? 1 : 0);
                 this.fullImage.setCrossfadeAlpha((byte) 2);
             }
             updateViewsLocation();
@@ -368,7 +380,7 @@ public class PinchToZoomHelper {
             if (Build.VERSION.SDK_INT >= 21) {
                 FrameLayout frameLayout = new FrameLayout(context);
                 this.videoPlayerContainer = frameLayout;
-                frameLayout.setOutlineProvider(new ViewOutlineProvider(this, PinchToZoomHelper.this) {
+                frameLayout.setOutlineProvider(new ViewOutlineProvider(PinchToZoomHelper.this) {
                     @TargetApi(21)
                     public void getOutline(View view, Outline outline) {
                         ImageReceiver imageReceiver = (ImageReceiver) view.getTag(NUM);
@@ -448,7 +460,7 @@ public class PinchToZoomHelper {
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Code restructure failed: missing block: B:10:0x0050, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:10:0x004b, code lost:
             r4 = r13.this$0;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -458,26 +470,24 @@ public class PinchToZoomHelper {
                 org.telegram.ui.PinchToZoomHelper r0 = org.telegram.ui.PinchToZoomHelper.this
                 android.animation.ValueAnimator r1 = r0.finishTransition
                 r2 = 1065353216(0x3var_, float:1.0)
-                if (r1 != 0) goto L_0x0032
+                if (r1 != 0) goto L_0x002d
                 float r0 = r0.enterProgress
                 int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-                if (r0 == 0) goto L_0x0032
+                if (r0 == 0) goto L_0x002d
                 org.telegram.ui.PinchToZoomHelper r0 = org.telegram.ui.PinchToZoomHelper.this
-                float r1 = r0.enterProgress
-                r3 = 1033171465(0x3d94var_, float:0.07272727)
-                float r1 = r1 + r3
-                float unused = r0.enterProgress = r1
+                r1 = 1033171465(0x3d94var_, float:0.07272727)
+                org.telegram.ui.PinchToZoomHelper.access$616(r0, r1)
                 org.telegram.ui.PinchToZoomHelper r0 = org.telegram.ui.PinchToZoomHelper.this
                 float r0 = r0.enterProgress
                 int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-                if (r0 <= 0) goto L_0x002d
+                if (r0 <= 0) goto L_0x0028
                 org.telegram.ui.PinchToZoomHelper r0 = org.telegram.ui.PinchToZoomHelper.this
                 float unused = r0.enterProgress = r2
-                goto L_0x0032
-            L_0x002d:
+                goto L_0x002d
+            L_0x0028:
                 org.telegram.ui.PinchToZoomHelper r0 = org.telegram.ui.PinchToZoomHelper.this
                 r0.invalidateViews()
-            L_0x0032:
+            L_0x002d:
                 org.telegram.ui.PinchToZoomHelper r0 = org.telegram.ui.PinchToZoomHelper.this
                 float r0 = r0.finishProgress
                 org.telegram.ui.Components.CubicBezierInterpolator r1 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
@@ -489,10 +499,10 @@ public class PinchToZoomHelper {
                 float r1 = (float) r1
                 r3 = 0
                 int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-                if (r4 == 0) goto L_0x0094
+                if (r4 == 0) goto L_0x008f
                 org.telegram.ui.PinchToZoomHelper r4 = org.telegram.ui.PinchToZoomHelper.this
                 org.telegram.ui.PinchToZoomHelper$ClipBoundsListener r5 = r4.clipBoundsListener
-                if (r5 == 0) goto L_0x0094
+                if (r5 == 0) goto L_0x008f
                 float[] r1 = r4.clipTopBottom
                 r5.getClipTopBottom(r1)
                 r14.save()
@@ -519,13 +529,13 @@ public class PinchToZoomHelper {
                 r14.restore()
                 r11 = r1
                 r12 = r4
-                goto L_0x009c
-            L_0x0094:
+                goto L_0x0097
+            L_0x008f:
                 r13.drawImage(r14)
                 super.dispatchDraw(r14)
                 r12 = r1
                 r11 = 0
-            L_0x009c:
+            L_0x0097:
                 org.telegram.ui.PinchToZoomHelper r1 = org.telegram.ui.PinchToZoomHelper.this
                 float r1 = r1.parentOffsetX
                 int r3 = r13.getLeft()
@@ -560,10 +570,9 @@ public class PinchToZoomHelper {
                 canvas.translate((pinchToZoomHelper3.pinchTranslationX * pinchToZoomHelper3.finishProgress) + left, (pinchToZoomHelper4.pinchTranslationY * pinchToZoomHelper4.finishProgress) + top);
                 if (PinchToZoomHelper.this.fullImage != null && PinchToZoomHelper.this.fullImage.hasNotThumb()) {
                     if (PinchToZoomHelper.this.progressToFullView != 1.0f) {
-                        PinchToZoomHelper pinchToZoomHelper5 = PinchToZoomHelper.this;
-                        float unused2 = pinchToZoomHelper5.progressToFullView = pinchToZoomHelper5.progressToFullView + 0.10666667f;
+                        PinchToZoomHelper.access$1416(PinchToZoomHelper.this, 0.10666667f);
                         if (PinchToZoomHelper.this.progressToFullView > 1.0f) {
-                            float unused3 = PinchToZoomHelper.this.progressToFullView = 1.0f;
+                            float unused2 = PinchToZoomHelper.this.progressToFullView = 1.0f;
                         } else {
                             PinchToZoomHelper.this.invalidateViews();
                         }
@@ -586,21 +595,21 @@ public class PinchToZoomHelper {
                 }
                 if (PinchToZoomHelper.this.isHardwareVideo) {
                     FrameLayout frameLayout = this.videoPlayerContainer;
-                    PinchToZoomHelper pinchToZoomHelper6 = PinchToZoomHelper.this;
-                    frameLayout.setPivotX(pinchToZoomHelper6.pinchCenterX - pinchToZoomHelper6.imageX);
+                    PinchToZoomHelper pinchToZoomHelper5 = PinchToZoomHelper.this;
+                    frameLayout.setPivotX(pinchToZoomHelper5.pinchCenterX - pinchToZoomHelper5.imageX);
                     FrameLayout frameLayout2 = this.videoPlayerContainer;
-                    PinchToZoomHelper pinchToZoomHelper7 = PinchToZoomHelper.this;
-                    frameLayout2.setPivotY(pinchToZoomHelper7.pinchCenterY - pinchToZoomHelper7.imageY);
+                    PinchToZoomHelper pinchToZoomHelper6 = PinchToZoomHelper.this;
+                    frameLayout2.setPivotY(pinchToZoomHelper6.pinchCenterY - pinchToZoomHelper6.imageY);
                     this.videoPlayerContainer.setScaleY(access$700);
                     this.videoPlayerContainer.setScaleX(access$700);
                     FrameLayout frameLayout3 = this.videoPlayerContainer;
                     float f2 = access$1500 + left;
-                    PinchToZoomHelper pinchToZoomHelper8 = PinchToZoomHelper.this;
-                    frameLayout3.setTranslationX(f2 + (pinchToZoomHelper8.pinchTranslationX * access$700 * pinchToZoomHelper8.finishProgress));
+                    PinchToZoomHelper pinchToZoomHelper7 = PinchToZoomHelper.this;
+                    frameLayout3.setTranslationX(f2 + (pinchToZoomHelper7.pinchTranslationX * access$700 * pinchToZoomHelper7.finishProgress));
                     FrameLayout frameLayout4 = this.videoPlayerContainer;
                     float f3 = access$1600 + top;
-                    PinchToZoomHelper pinchToZoomHelper9 = PinchToZoomHelper.this;
-                    frameLayout4.setTranslationY(f3 + (pinchToZoomHelper9.pinchTranslationY * access$700 * pinchToZoomHelper9.finishProgress));
+                    PinchToZoomHelper pinchToZoomHelper8 = PinchToZoomHelper.this;
+                    frameLayout4.setTranslationY(f3 + (pinchToZoomHelper8.pinchTranslationY * access$700 * pinchToZoomHelper8.finishProgress));
                 } else if (PinchToZoomHelper.this.childImage != null) {
                     if (PinchToZoomHelper.this.progressToFullView != 1.0f) {
                         PinchToZoomHelper.this.childImage.draw(canvas);

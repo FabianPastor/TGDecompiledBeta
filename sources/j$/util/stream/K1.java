@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import a.CLASSNAMEm0;
+import j$.CLASSNAMEj0;
 import j$.util.function.C;
 import j$.util.function.CLASSNAMEh;
 import j$.util.function.E;
@@ -18,9 +18,9 @@ class K1 extends M1<Long> implements A2.g {
     }
 
     public void accept(long j) {
-        if (!this.var_a && ((CLASSNAMEm0) this.d).b(j) == this.c.var_a) {
-            this.var_a = true;
-            this.b = this.c.b;
+        if (!this.a && ((CLASSNAMEj0) this.d).b(j) == this.c.b) {
+            this.a = true;
+            this.b = this.c.c;
         }
     }
 
@@ -29,7 +29,7 @@ class K1 extends M1<Long> implements A2.g {
         Q1.c(this, l);
     }
 
-    public C g(C c2) {
+    public C f(C c2) {
         c2.getClass();
         return new CLASSNAMEh(this, c2);
     }

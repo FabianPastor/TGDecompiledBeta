@@ -43,10 +43,10 @@ public class LocationSharingService extends Service implements NotificationCente
     /* renamed from: lambda$onCreate$1 */
     public /* synthetic */ void lambda$onCreate$1$LocationSharingService() {
         this.handler.postDelayed(this.runnable, 1000);
-        Utilities.stageQueue.postRunnable($$Lambda$LocationSharingService$1XLzPxBQ4xTL_XwIW8HEDwn_inU.INSTANCE);
+        Utilities.stageQueue.postRunnable($$Lambda$LocationSharingService$SKICh6z98ZyghBU5kqQN8wd42l8.INSTANCE);
     }
 
-    static /* synthetic */ void lambda$null$0() {
+    static /* synthetic */ void lambda$onCreate$0() {
         for (int i = 0; i < 3; i++) {
             LocationController.getInstance(i).update();
         }

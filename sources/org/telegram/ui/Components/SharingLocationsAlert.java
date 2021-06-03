@@ -280,7 +280,7 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             FrameLayout frameLayout;
             if (i != 0) {
-                frameLayout = new FrameLayout(this, this.context) {
+                frameLayout = new FrameLayout(this.context) {
                     /* access modifiers changed from: protected */
                     public void onMeasure(int i, int i2) {
                         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f) + 1, NUM));

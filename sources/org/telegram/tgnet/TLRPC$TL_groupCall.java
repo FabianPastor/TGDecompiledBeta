@@ -1,25 +1,23 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = false;
+        boolean z2 = true;
         this.join_muted = (readInt32 & 2) != 0;
         this.can_change_join_muted = (readInt32 & 4) != 0;
         this.join_date_asc = (readInt32 & 64) != 0;
-        if ((readInt32 & 256) != 0) {
-            z2 = true;
+        this.schedule_start_subscribed = (readInt32 & 256) != 0;
+        if ((readInt32 & 512) == 0) {
+            z2 = false;
         }
-        this.schedule_start_subscribed = z2;
+        this.can_start_video = z2;
         this.id = abstractSerializedData.readInt64(z);
         this.access_hash = abstractSerializedData.readInt64(z);
         this.participants_count = abstractSerializedData.readInt32(z);
-        if ((this.flags & 1) != 0) {
-            this.params = TLRPC$TL_dataJSON.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        }
         if ((this.flags & 8) != 0) {
             this.title = abstractSerializedData.readString(z);
         }
@@ -45,13 +43,12 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         this.flags = i3;
         int i4 = this.schedule_start_subscribed ? i3 | 256 : i3 & -257;
         this.flags = i4;
-        abstractSerializedData.writeInt32(i4);
+        int i5 = this.can_start_video ? i4 | 512 : i4 & -513;
+        this.flags = i5;
+        abstractSerializedData.writeInt32(i5);
         abstractSerializedData.writeInt64(this.id);
         abstractSerializedData.writeInt64(this.access_hash);
         abstractSerializedData.writeInt32(this.participants_count);
-        if ((this.flags & 1) != 0) {
-            this.params.serializeToStream(abstractSerializedData);
-        }
         if ((this.flags & 8) != 0) {
             abstractSerializedData.writeString(this.title);
         }

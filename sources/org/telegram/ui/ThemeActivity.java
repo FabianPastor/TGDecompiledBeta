@@ -117,6 +117,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     public int enableAnimationsRow;
     private GpsLocationListener gpsLocationListener = new GpsLocationListener();
     boolean hasThemeAccents;
+    private LinearLayoutManager layoutManager;
     /* access modifiers changed from: private */
     public ListAdapter listAdapter;
     /* access modifiers changed from: private */
@@ -1005,7 +1006,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         this.fragmentView = frameLayout;
         RecyclerListView recyclerListView = new RecyclerListView(context);
         this.listView = recyclerListView;
-        recyclerListView.setLayoutManager(new LinearLayoutManager(context, 1, false));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
+        this.layoutManager = linearLayoutManager;
+        recyclerListView.setLayoutManager(linearLayoutManager);
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setAdapter(this.listAdapter);
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
@@ -1064,7 +1067,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 builder.setTitle(LocaleController.getString("DistanceUnitsTitle", NUM));
                 builder.setItems(new CharSequence[]{LocaleController.getString("DistanceUnitsAutomatic", NUM), LocaleController.getString("DistanceUnitsKilometers", NUM), LocaleController.getString("DistanceUnitsMiles", NUM)}, new DialogInterface.OnClickListener() {
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        ThemeActivity.this.lambda$null$2$ThemeActivity(dialogInterface, i);
+                        ThemeActivity.this.lambda$createView$2$ThemeActivity(dialogInterface, i);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -1093,7 +1096,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         }
 
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            ThemeActivity.this.lambda$null$3$ThemeActivity(this.f$1, dialogInterface, i);
+                            ThemeActivity.this.lambda$createView$3$ThemeActivity(this.f$1, dialogInterface, i);
                         }
                     });
                     builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -1192,7 +1195,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         }
 
                         public final void onTimeSet(TimePicker timePicker, int i, int i2) {
-                            ThemeActivity.this.lambda$null$4$ThemeActivity(this.f$1, this.f$2, timePicker, i, i2);
+                            ThemeActivity.this.lambda$createView$4$ThemeActivity(this.f$1, this.f$2, timePicker, i, i2);
                         }
                     }, i2, i3 - (i2 * 60), true));
                 }
@@ -1203,8 +1206,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$ThemeActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$createView$2 */
+    public /* synthetic */ void lambda$createView$2$ThemeActivity(DialogInterface dialogInterface, int i) {
         SharedConfig.setDistanceSystemType(i);
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.distanceRow);
         if (findViewHolderForAdapterPosition != null) {
@@ -1213,8 +1216,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$ThemeActivity(int i, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$createView$3 */
+    public /* synthetic */ void lambda$createView$3$ThemeActivity(int i, DialogInterface dialogInterface, int i2) {
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putInt("sortContactsBy", i2);
         edit.commit();
@@ -1225,8 +1228,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$4 */
-    public /* synthetic */ void lambda$null$4$ThemeActivity(int i, TextSettingsCell textSettingsCell, TimePicker timePicker, int i2, int i3) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$ThemeActivity(int i, TextSettingsCell textSettingsCell, TimePicker timePicker, int i2, int i3) {
         int i4 = (i2 * 60) + i3;
         if (i == this.scheduleFromRow) {
             Theme.autoNightDayStartTime = i4;
@@ -1379,14 +1382,14 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             }
 
             public final void run() {
-                ThemeActivity.this.lambda$null$7$ThemeActivity(this.f$1);
+                ThemeActivity.this.lambda$updateSunTime$7$ThemeActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$ThemeActivity(String str) {
+    /* renamed from: lambda$updateSunTime$7 */
+    public /* synthetic */ void lambda$updateSunTime$7$ThemeActivity(String str) {
         RecyclerListView.Holder holder;
         Theme.autoNightCityName = str;
         if (str == null) {
@@ -1666,13 +1669,12 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         public void showOptionsForTheme(Theme.ThemeInfo themeInfo) {
             int[] iArr;
             CharSequence[] charSequenceArr;
-            String str;
             if (ThemeActivity.this.getParentActivity() == null) {
                 return;
             }
             if ((themeInfo.info == null || themeInfo.themeLoaded) && ThemeActivity.this.currentType != 1) {
                 AlertDialog.Builder builder = new AlertDialog.Builder((Context) ThemeActivity.this.getParentActivity());
-                String str2 = null;
+                String str = null;
                 boolean z = false;
                 if (themeInfo.pathToFile == null) {
                     charSequenceArr = new CharSequence[]{null, LocaleController.getString("ExportTheme", NUM)};
@@ -1684,18 +1686,13 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     charSequenceArr2[0] = LocaleController.getString("ShareFile", NUM);
                     charSequenceArr2[1] = LocaleController.getString("ExportTheme", NUM);
                     TLRPC$TL_theme tLRPC$TL_theme2 = themeInfo.info;
-                    if (tLRPC$TL_theme2 == null || (!tLRPC$TL_theme2.isDefault && tLRPC$TL_theme2.creator)) {
-                        str = LocaleController.getString("Edit", NUM);
-                    } else {
-                        str = null;
-                    }
-                    charSequenceArr2[2] = str;
+                    charSequenceArr2[2] = (tLRPC$TL_theme2 == null || (!tLRPC$TL_theme2.isDefault && tLRPC$TL_theme2.creator)) ? LocaleController.getString("Edit", NUM) : null;
                     TLRPC$TL_theme tLRPC$TL_theme3 = themeInfo.info;
                     charSequenceArr2[3] = (tLRPC$TL_theme3 == null || !tLRPC$TL_theme3.creator) ? null : LocaleController.getString("ThemeSetUrl", NUM);
                     if (z2) {
-                        str2 = LocaleController.getString("Delete", NUM);
+                        str = LocaleController.getString("Delete", NUM);
                     }
-                    charSequenceArr2[4] = str2;
+                    charSequenceArr2[4] = str;
                     iArr = new int[]{NUM, NUM, NUM, NUM, NUM};
                     z = z2;
                     charSequenceArr = charSequenceArr2;
@@ -1906,7 +1903,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0164:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x017a }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131627427(0x7f0e0da3, float:1.8882118E38)
+                r0 = 2131627455(0x7f0e0dbf, float:1.8882175E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x017a }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x017a }
                 r10 = 500(0x1f4, float:7.0E-43)
@@ -1949,21 +1946,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131625149(0x7f0e04bd, float:1.8877498E38)
+                r10 = 2131625165(0x7f0e04cd, float:1.887753E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131625148(0x7f0e04bc, float:1.8877496E38)
+                r10 = 2131625164(0x7f0e04cc, float:1.8877528E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131625090(0x7f0e0482, float:1.8877378E38)
+                r10 = 2131625106(0x7f0e0492, float:1.887741E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
-                org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$gl_JCjakwPx0TsvL6FtpACBSXUc r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$gl_JCjakwPx0TsvL6FtpACBSXUc
+                org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$4GGCTaKlztIhin-v1UmHzaQzF6I r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$4GGCTaKlztIhin-v1UmHzaQzF6I
                 r0.<init>(r8)
                 r9.setPositiveButton(r10, r0)
-                r8 = 2131624639(0x7f0e02bf, float:1.8876463E38)
+                r8 = 2131624654(0x7f0e02ce, float:1.8876494E38)
                 java.lang.String r10 = "Cancel"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r9.setNegativeButton(r8, r1)
@@ -1984,8 +1981,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$ThemeActivity$ListAdapter(Theme.ThemeInfo themeInfo, DialogInterface dialogInterface, int i) {
+        /* renamed from: lambda$showOptionsForTheme$0 */
+        public /* synthetic */ void lambda$showOptionsForTheme$0$ThemeActivity$ListAdapter(Theme.ThemeInfo themeInfo, DialogInterface dialogInterface, int i) {
             MessagesController.getInstance(themeInfo.account).saveTheme(themeInfo, (Theme.ThemeAccent) null, themeInfo == Theme.getCurrentNightTheme(), true);
             if (Theme.deleteTheme(themeInfo)) {
                 ThemeActivity.this.parentLayout.rebuildAllFragmentViews(true, true);
@@ -2065,7 +2062,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         }
 
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            ThemeActivity.ListAdapter.this.lambda$null$4$ThemeActivity$ListAdapter(this.f$1, this.f$2, dialogInterface, i);
+                            ThemeActivity.ListAdapter.this.lambda$onCreateViewHolder$4$ThemeActivity$ListAdapter(this.f$1, this.f$2, dialogInterface, i);
                         }
                     });
                     AlertDialog create = builder.create();
@@ -2078,8 +2075,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$4 */
-        public /* synthetic */ void lambda$null$4$ThemeActivity$ListAdapter(Theme.ThemeAccent themeAccent, ThemeAccentsListAdapter themeAccentsListAdapter, DialogInterface dialogInterface, int i) {
+        /* renamed from: lambda$onCreateViewHolder$4 */
+        public /* synthetic */ void lambda$onCreateViewHolder$4$ThemeActivity$ListAdapter(Theme.ThemeAccent themeAccent, ThemeAccentsListAdapter themeAccentsListAdapter, DialogInterface dialogInterface, int i) {
             if (ThemeActivity.this.getParentActivity() != null) {
                 int i2 = 2;
                 if (i == 0) {
@@ -2112,7 +2109,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         }
 
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            ThemeActivity.ListAdapter.this.lambda$null$3$ThemeActivity$ListAdapter(this.f$1, this.f$2, dialogInterface, i);
+                            ThemeActivity.ListAdapter.this.lambda$onCreateViewHolder$3$ThemeActivity$ListAdapter(this.f$1, this.f$2, dialogInterface, i);
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -2127,8 +2124,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$3 */
-        public /* synthetic */ void lambda$null$3$ThemeActivity$ListAdapter(ThemeAccentsListAdapter themeAccentsListAdapter, Theme.ThemeAccent themeAccent, DialogInterface dialogInterface, int i) {
+        /* renamed from: lambda$onCreateViewHolder$3 */
+        public /* synthetic */ void lambda$onCreateViewHolder$3$ThemeActivity$ListAdapter(ThemeAccentsListAdapter themeAccentsListAdapter, Theme.ThemeAccent themeAccent, DialogInterface dialogInterface, int i) {
             if (Theme.deleteThemeAccent(themeAccentsListAdapter.currentTheme, themeAccent, true)) {
                 Theme.refreshThemeColors();
                 NotificationCenter globalInstance = NotificationCenter.getGlobalInstance();
@@ -2196,7 +2193,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 9:
-                    view = new ChatListCell(this, this.mContext) {
+                    view = new ChatListCell(this.mContext) {
                         /* access modifiers changed from: protected */
                         public void didSelectChatType(boolean z) {
                             SharedConfig.setUseThreeLinesLayout(z);
@@ -2232,7 +2229,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     recyclerListView.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(148.0f)));
                     break;
                 case 12:
-                    recyclerListView = new TintRecyclerListView(this, this.mContext) {
+                    recyclerListView = new TintRecyclerListView(this.mContext) {
                         public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                             if (!(getParent() == null || getParent().getParent() == null)) {
                                 getParent().getParent().requestDisallowInterceptTouchEvent(canScrollHorizontally(-1));

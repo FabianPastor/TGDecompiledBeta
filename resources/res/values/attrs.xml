@@ -11,18 +11,18 @@
         <enum name="holo_light" value="1" />
     </attr>
     <attr name="buttonSize" format="reference">
-        <enum name="icon_only" value="2" />
         <enum name="standard" value="0" />
         <enum name="wide" value="1" />
+        <enum name="icon_only" value="2" />
     </attr>
     <attr name="buyButtonAppearance">
+        <enum name="google_wallet_classic" value="1" />
+        <enum name="google_wallet_grayscale" value="2" />
+        <enum name="google_wallet_monochrome" value="3" />
         <enum name="android_pay_dark" value="4" />
         <enum name="android_pay_light" value="5" />
         <enum name="android_pay_light_with_border" value="6" />
         <enum name="classic" value="1" />
-        <enum name="google_wallet_classic" value="1" />
-        <enum name="google_wallet_grayscale" value="2" />
-        <enum name="google_wallet_monochrome" value="3" />
         <enum name="grayscale" value="2" />
         <enum name="monochrome" value="3" />
     </attr>
@@ -31,13 +31,13 @@
         <enum name="wrap_content" value="-2" />
     </attr>
     <attr name="buyButtonText">
-        <enum name="book_now" value="3" />
-        <enum name="buy_now" value="2" />
         <enum name="buy_with" value="5" />
-        <enum name="buy_with_google" value="1" />
-        <enum name="donate_with" value="7" />
-        <enum name="donate_with_google" value="4" />
         <enum name="logo_only" value="6" />
+        <enum name="donate_with" value="7" />
+        <enum name="buy_with_google" value="1" />
+        <enum name="buy_now" value="2" />
+        <enum name="book_now" value="3" />
+        <enum name="donate_with_google" value="4" />
     </attr>
     <attr name="buyButtonWidth" format="dimension">
         <enum name="match_parent" value="-1" />
@@ -60,9 +60,9 @@
     <attr name="circleCrop" format="boolean">
     </attr>
     <attr name="colorScheme" format="reference">
-        <enum name="auto" value="2" />
         <enum name="dark" value="0" />
         <enum name="light" value="1" />
+        <enum name="auto" value="2" />
     </attr>
     <attr name="contentProviderUri" format="string">
     </attr>
@@ -73,8 +73,8 @@
     <attr name="corpusVersion" format="string">
     </attr>
     <attr name="customThemeStyle">
-        <enum name="googleMaterial2" value="2" />
         <enum name="material" value="1" />
+        <enum name="googleMaterial2" value="2" />
     </attr>
     <attr name="defaultIntentAction" format="string">
     </attr>
@@ -86,17 +86,17 @@
     </attr>
     <attr name="environment">
         <enum name="production" value="1" />
+        <enum name="test" value="3" />
         <enum name="sandbox" value="0" />
         <enum name="strict_sandbox" value="2" />
-        <enum name="test" value="3" />
     </attr>
     <attr name="featureType">
+        <enum name="match_global_nicknames" value="1" />
         <enum name="demote_common_words" value="2" />
         <enum name="demote_rfCLASSNAME_hostnames" value="3" />
-        <enum name="index_entity_types" value="6" />
-        <enum name="match_global_nicknames" value="1" />
-        <enum name="omnibox_title_section" value="5" />
         <enum name="omnibox_url_section" value="4" />
+        <enum name="omnibox_title_section" value="5" />
+        <enum name="index_entity_types" value="6" />
     </attr>
     <attr name="font" format="reference">
     </attr>
@@ -105,8 +105,8 @@
     <attr name="fontProviderCerts" format="reference">
     </attr>
     <attr name="fontProviderFetchStrategy">
-        <enum name="async" value="1" />
         <enum name="blocking" value="0" />
+        <enum name="async" value="1" />
     </attr>
     <attr name="fontProviderFetchTimeout" format="integer">
         <enum name="forever" value="-1" />
@@ -115,9 +115,11 @@
     </attr>
     <attr name="fontProviderQuery" format="string">
     </attr>
+    <attr name="fontProviderSystemFontFamily" format="string">
+    </attr>
     <attr name="fontStyle">
-        <enum name="italic" value="1" />
         <enum name="normal" value="0" />
+        <enum name="italic" value="1" />
     </attr>
     <attr name="fontVariationSettings" format="string">
     </attr>
@@ -132,9 +134,9 @@
     <attr name="imageAspectRatio" format="float">
     </attr>
     <attr name="imageAspectRatioAdjust">
-        <enum name="adjust_height" value="2" />
-        <enum name="adjust_width" value="1" />
         <enum name="none" value="0" />
+        <enum name="adjust_width" value="1" />
+        <enum name="adjust_height" value="2" />
     </attr>
     <attr name="indexPrefixes" format="boolean">
     </attr>
@@ -153,52 +155,52 @@
     <attr name="layout_anchor" format="reference">
     </attr>
     <attr name="layout_anchorGravity">
+        <flag name="top" value="30" />
         <flag name="bottom" value="50" />
-        <flag name="center" value="11" />
-        <flag name="center_horizontal" value="1" />
-        <flag name="center_vertical" value="10" />
-        <flag name="clip_horizontal" value="8" />
-        <flag name="clip_vertical" value="80" />
-        <flag name="end" value="800005" />
-        <flag name="fill" value="77" />
-        <flag name="fill_horizontal" value="7" />
-        <flag name="fill_vertical" value="70" />
         <flag name="left" value="3" />
         <flag name="right" value="5" />
+        <flag name="center_vertical" value="10" />
+        <flag name="fill_vertical" value="70" />
+        <flag name="center_horizontal" value="1" />
+        <flag name="fill_horizontal" value="7" />
+        <flag name="center" value="11" />
+        <flag name="fill" value="77" />
+        <flag name="clip_vertical" value="80" />
+        <flag name="clip_horizontal" value="8" />
         <flag name="start" value="800003" />
-        <flag name="top" value="30" />
+        <flag name="end" value="800005" />
     </attr>
     <attr name="layout_behavior" format="string">
     </attr>
     <attr name="layout_dodgeInsetEdges">
-        <flag name="all" value="77" />
-        <flag name="bottom" value="50" />
-        <flag name="end" value="800005" />
-        <flag name="left" value="3" />
         <flag name="none" value="0" />
+        <flag name="top" value="30" />
+        <flag name="bottom" value="50" />
+        <flag name="left" value="3" />
         <flag name="right" value="5" />
         <flag name="start" value="800003" />
-        <flag name="top" value="30" />
+        <flag name="end" value="800005" />
+        <flag name="all" value="77" />
     </attr>
     <attr name="layout_insetEdge">
-        <enum name="bottom" value="50" />
-        <enum name="end" value="800005" />
-        <enum name="left" value="3" />
         <enum name="none" value="0" />
+        <enum name="top" value="30" />
+        <enum name="bottom" value="50" />
+        <enum name="left" value="3" />
         <enum name="right" value="5" />
         <enum name="start" value="800003" />
-        <enum name="top" value="30" />
+        <enum name="end" value="800005" />
     </attr>
     <attr name="layout_keyline" format="integer">
     </attr>
     <attr name="liteMode" format="boolean">
     </attr>
     <attr name="mapType">
-        <enum name="hybrid" value="4" />
         <enum name="none" value="0" />
         <enum name="normal" value="1" />
         <enum name="satellite" value="2" />
         <enum name="terrain" value="3" />
+        <enum name="hybrid" value="4" />
     </attr>
     <attr name="maskedWalletDetailsBackground" format="reference|color">
     </attr>
@@ -209,10 +211,10 @@
     <attr name="maskedWalletDetailsHeaderTextAppearance" format="reference">
     </attr>
     <attr name="maskedWalletDetailsLogoImageType">
-        <enum name="android_pay" value="3" />
-        <enum name="classic" value="1" />
         <enum name="google_wallet_classic" value="1" />
         <enum name="google_wallet_monochrome" value="2" />
+        <enum name="android_pay" value="3" />
+        <enum name="classic" value="1" />
         <enum name="monochrome" value="2" />
     </attr>
     <attr name="maskedWalletDetailsLogoTextColor" format="color">
@@ -240,24 +242,24 @@
     <attr name="sectionContent" format="string">
     </attr>
     <attr name="sectionFormat">
-        <enum name="date" value="4" />
-        <enum name="html" value="1" />
         <enum name="plain" value="0" />
+        <enum name="html" value="1" />
         <enum name="rfCLASSNAME" value="2" />
         <enum name="url" value="3" />
+        <enum name="date" value="4" />
     </attr>
     <attr name="sectionId" format="string">
     </attr>
     <attr name="sectionType">
+        <enum name="text1" value="0" />
+        <enum name="text2" value="1" />
         <enum name="icon_uri" value="2" />
         <enum name="intent_action" value="3" />
-        <enum name="intent_activity" value="8" />
         <enum name="intent_data" value="4" />
         <enum name="intent_data_id" value="5" />
         <enum name="intent_extra_data" value="6" />
         <enum name="large_icon_uri" value="7" />
-        <enum name="text1" value="0" />
-        <enum name="text2" value="1" />
+        <enum name="intent_activity" value="8" />
         <enum name="thing_proto" value="9" />
     </attr>
     <attr name="sectionWeight" format="integer">
@@ -267,8 +269,8 @@
     <attr name="settingsDescription" format="string">
     </attr>
     <attr name="sourceClass">
-        <enum name="contact" value="1" />
         <enum name="email" value="0" />
+        <enum name="contact" value="1" />
         <enum name="instant_message" value="2" />
     </attr>
     <attr name="statusBarBackground" format="reference|color">
@@ -278,8 +280,8 @@
     <attr name="toAddressesSection" format="string">
     </attr>
     <attr name="toolbarTextColorStyle">
-        <enum name="dark" value="2" />
         <enum name="light" value="1" />
+        <enum name="dark" value="2" />
     </attr>
     <attr name="trimmable" format="boolean">
     </attr>
@@ -310,8 +312,8 @@
     <attr name="userInputValue" format="string">
     </attr>
     <attr name="windowTransitionStyle">
-        <enum name="none" value="2" />
         <enum name="slide" value="1" />
+        <enum name="none" value="2" />
     </attr>
     <attr name="zOrderOnTop" format="boolean">
     </attr>

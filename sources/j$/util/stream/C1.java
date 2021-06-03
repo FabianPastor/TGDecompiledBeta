@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import a.CLASSNAMEa0;
+import j$.X;
 import j$.util.Spliterator;
 import j$.util.function.A;
 import j$.util.function.BiConsumer;
@@ -11,10 +11,10 @@ import j$.util.function.w;
 import j$.util.function.x;
 import j$.util.function.y;
 import j$.util.function.z;
-import j$.util.n;
+import j$.util.m;
+import j$.util.o;
 import j$.util.p;
-import j$.util.q;
-import j$.util.t;
+import j$.util.s;
 
 public interface C1 extends CLASSNAMEl1<Integer, C1> {
     void E(w wVar);
@@ -33,7 +33,7 @@ public interface C1 extends CLASSNAMEl1<Integer, C1> {
 
     C1 X(y yVar);
 
-    q Z(v vVar);
+    p Z(v vVar);
 
     C1 a0(w wVar);
 
@@ -41,7 +41,7 @@ public interface C1 extends CLASSNAMEl1<Integer, C1> {
 
     H1 asLongStream();
 
-    p average();
+    o average();
 
     boolean b(y yVar);
 
@@ -51,23 +51,23 @@ public interface C1 extends CLASSNAMEl1<Integer, C1> {
 
     C1 distinct();
 
-    q findAny();
+    p findAny();
 
-    q findFirst();
+    p findFirst();
 
     H1 h(z zVar);
 
-    CLASSNAMEs1 i0(CLASSNAMEa0 a0Var);
+    CLASSNAMEs1 i0(X x);
 
-    t.b iterator();
+    s.b iterator();
 
     Object j0(J j, H h, BiConsumer biConsumer);
 
     C1 limit(long j);
 
-    q max();
+    p max();
 
-    q min();
+    p min();
 
     C1 parallel();
 
@@ -81,9 +81,9 @@ public interface C1 extends CLASSNAMEl1<Integer, C1> {
 
     int sum();
 
-    n summaryStatistics();
+    m summaryStatistics();
 
     int[] toArray();
 
-    C1 y(A a2);
+    C1 y(A a);
 }

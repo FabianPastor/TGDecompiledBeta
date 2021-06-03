@@ -54,10 +54,6 @@ public class ShareActivity extends Activity {
         TLRPC$Message TLdeserialize = TLRPC$Message.TLdeserialize(serializedData, serializedData.readInt32(false), false);
         TLdeserialize.readAttachPath(serializedData, 0);
         serializedData.cleanup();
-        if (TLdeserialize == null) {
-            finish();
-            return;
-        }
         String string2 = sharedPreferences.getString(queryParameter + "_link", (String) null);
         MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, TLdeserialize, false, true);
         messageObject.messageOwner.with_my_score = true;

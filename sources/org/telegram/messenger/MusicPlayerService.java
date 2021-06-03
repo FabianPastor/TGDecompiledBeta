@@ -304,12 +304,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
             f = 1.0f;
             RemoteViews remoteViews = new RemoteViews(getApplicationContext().getPackageName(), NUM);
             RemoteViews remoteViews2 = supportBigNotifications ? new RemoteViews(getApplicationContext().getPackageName(), NUM) : null;
-            NotificationCompat.Builder builder2 = new NotificationCompat.Builder(getApplicationContext());
-            builder2.setSmallIcon(NUM);
-            builder2.setContentIntent(activity);
-            builder2.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-            builder2.setContentTitle(str);
-            Notification build2 = builder2.build();
+            Notification build2 = new NotificationCompat.Builder(getApplicationContext()).setSmallIcon(NUM).setContentIntent(activity).setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL).setContentTitle(str).build();
             build2.contentView = remoteViews;
             if (supportBigNotifications) {
                 build2.bigContentView = remoteViews2;

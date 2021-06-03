@@ -91,8 +91,8 @@ public class PhotoPickerSearchActivity extends BaseFragment {
     }
 
     public PhotoPickerSearchActivity(HashMap<Object, Object> hashMap, ArrayList<Object> arrayList, int i, boolean z, ChatActivity chatActivity) {
-        this.imagesSearch = new PhotoPickerActivity(0, (MediaController.AlbumEntry) null, hashMap, arrayList, i, z, chatActivity);
-        this.gifsSearch = new PhotoPickerActivity(1, (MediaController.AlbumEntry) null, hashMap, arrayList, i, z, chatActivity);
+        this.imagesSearch = new PhotoPickerActivity(0, (MediaController.AlbumEntry) null, hashMap, arrayList, i, z, chatActivity, false);
+        this.gifsSearch = new PhotoPickerActivity(1, (MediaController.AlbumEntry) null, hashMap, arrayList, i, z, chatActivity, false);
     }
 
     public View createView(Context context) {
@@ -118,9 +118,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
             }
         });
         this.hasOwnBackground = true;
-        ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, NUM);
-        addItem.setIsSearchField(true);
-        addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 PhotoPickerSearchActivity.this.imagesSearch.getActionBar().openSearchField("", false);
                 PhotoPickerSearchActivity.this.gifsSearch.getActionBar().openSearchField("", false);
@@ -142,8 +140,8 @@ public class PhotoPickerSearchActivity extends BaseFragment {
                 PhotoPickerSearchActivity.this.gifsSearch.getActionBar().onSearchPressed();
             }
         });
-        this.searchItem = addItem;
-        addItem.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", NUM));
+        this.searchItem = actionBarMenuItemSearchListener;
+        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("SearchImagesTitle", NUM));
         EditTextBoldCursor searchField = this.searchItem.getSearchField();
         searchField.setTextColor(Theme.getColor("dialogTextBlack"));
         searchField.setCursorColor(Theme.getColor("dialogTextBlack"));

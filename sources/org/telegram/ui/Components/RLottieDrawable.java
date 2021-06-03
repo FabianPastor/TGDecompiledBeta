@@ -90,6 +90,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     public Runnable uiRunnableCacheFinished;
     /* access modifiers changed from: private */
     public Runnable uiRunnableGenerateCache;
+    private Runnable uiRunnableLastFrame;
     protected Runnable uiRunnableNoFrame;
     private HashMap<Integer, Integer> vibrationPattern;
     protected boolean waitingForNextTask;
@@ -202,6 +203,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.uiRunnable = new Runnable() {
             public void run() {
                 boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
+                RLottieDrawable.this.invalidateInternal();
+                RLottieDrawable.this.decodeFrameFinishedInternal();
+            }
+        };
+        this.uiRunnableLastFrame = new Runnable() {
+            public void run() {
+                boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
+                RLottieDrawable.this.isRunning = false;
                 RLottieDrawable.this.invalidateInternal();
                 RLottieDrawable.this.decodeFrameFinishedInternal();
             }
@@ -448,6 +457,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 RLottieDrawable.this.decodeFrameFinishedInternal();
             }
         };
+        this.uiRunnableLastFrame = new Runnable() {
+            public void run() {
+                boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
+                RLottieDrawable.this.isRunning = false;
+                RLottieDrawable.this.invalidateInternal();
+                RLottieDrawable.this.decodeFrameFinishedInternal();
+            }
+        };
         this.uiRunnableGenerateCache = new Runnable() {
             public void run() {
                 if (!RLottieDrawable.this.isRecycled) {
@@ -681,14 +698,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.nativePtr = createWithJson(str, "dice", this.metaData, (int[]) null);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                RLottieDrawable.this.lambda$null$0$RLottieDrawable();
+                RLottieDrawable.this.lambda$setBaseDice$0$RLottieDrawable();
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$RLottieDrawable() {
+    /* renamed from: lambda$setBaseDice$0 */
+    public /* synthetic */ void lambda$setBaseDice$0$RLottieDrawable() {
         this.loadingInBackground = false;
         if (this.secondLoadingInBackground || !this.destroyAfterLoading) {
             this.timeBetweenFrames = Math.max(16, (int) (1000.0f / ((float) this.metaData[1])));
@@ -735,7 +752,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         if (this.destroyAfterLoading) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
-                    RLottieDrawable.this.lambda$null$2$RLottieDrawable();
+                    RLottieDrawable.this.lambda$setDiceNumber$2$RLottieDrawable();
                 }
             });
             return;
@@ -750,14 +767,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             }
 
             public final void run() {
-                RLottieDrawable.this.lambda$null$3$RLottieDrawable(this.f$1);
+                RLottieDrawable.this.lambda$setDiceNumber$3$RLottieDrawable(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$RLottieDrawable() {
+    /* renamed from: lambda$setDiceNumber$2 */
+    public /* synthetic */ void lambda$setDiceNumber$2$RLottieDrawable() {
         this.secondLoadingInBackground = false;
         if (!this.loadingInBackground && this.destroyAfterLoading) {
             recycle();
@@ -765,8 +782,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$RLottieDrawable(int[] iArr) {
+    /* renamed from: lambda$setDiceNumber$3 */
+    public /* synthetic */ void lambda$setDiceNumber$3$RLottieDrawable(int[] iArr) {
         this.secondLoadingInBackground = false;
         if (this.destroyAfterLoading) {
             recycle();
@@ -807,6 +824,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.uiRunnable = new Runnable() {
             public void run() {
                 boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
+                RLottieDrawable.this.invalidateInternal();
+                RLottieDrawable.this.decodeFrameFinishedInternal();
+            }
+        };
+        this.uiRunnableLastFrame = new Runnable() {
+            public void run() {
+                boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
+                RLottieDrawable.this.isRunning = false;
                 RLottieDrawable.this.invalidateInternal();
                 RLottieDrawable.this.decodeFrameFinishedInternal();
             }
@@ -1012,7 +1037,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x006a A[SYNTHETIC, Splitter:B:31:0x006a] */
+    /* JADX WARNING: Removed duplicated region for block: B:30:0x0068 A[SYNTHETIC, Splitter:B:30:0x0068] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.lang.String readRes(java.io.File r7, int r8) {
         /*
@@ -1027,57 +1052,56 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         L_0x0013:
             r1 = 0
             if (r7 == 0) goto L_0x001c
-            java.io.FileInputStream r8 = new java.io.FileInputStream     // Catch:{ all -> 0x0067 }
-            r8.<init>(r7)     // Catch:{ all -> 0x0067 }
+            java.io.FileInputStream r8 = new java.io.FileInputStream     // Catch:{ all -> 0x0065 }
+            r8.<init>(r7)     // Catch:{ all -> 0x0065 }
             goto L_0x0026
         L_0x001c:
-            android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0067 }
-            android.content.res.Resources r7 = r7.getResources()     // Catch:{ all -> 0x0067 }
-            java.io.InputStream r8 = r7.openRawResource(r8)     // Catch:{ all -> 0x0067 }
+            android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0065 }
+            android.content.res.Resources r7 = r7.getResources()     // Catch:{ all -> 0x0065 }
+            java.io.InputStream r8 = r7.openRawResource(r8)     // Catch:{ all -> 0x0065 }
         L_0x0026:
-            java.lang.ThreadLocal<byte[]> r7 = bufferLocal     // Catch:{ all -> 0x0068 }
-            java.lang.Object r7 = r7.get()     // Catch:{ all -> 0x0068 }
-            byte[] r7 = (byte[]) r7     // Catch:{ all -> 0x0068 }
+            java.lang.ThreadLocal<byte[]> r7 = bufferLocal     // Catch:{ all -> 0x0066 }
+            java.lang.Object r7 = r7.get()     // Catch:{ all -> 0x0066 }
+            byte[] r7 = (byte[]) r7     // Catch:{ all -> 0x0066 }
             r2 = 0
             if (r7 != 0) goto L_0x003a
             r7 = 4096(0x1000, float:5.74E-42)
-            byte[] r7 = new byte[r7]     // Catch:{ all -> 0x0068 }
-            java.lang.ThreadLocal<byte[]> r3 = bufferLocal     // Catch:{ all -> 0x0068 }
-            r3.set(r7)     // Catch:{ all -> 0x0068 }
+            byte[] r7 = new byte[r7]     // Catch:{ all -> 0x0066 }
+            java.lang.ThreadLocal<byte[]> r3 = bufferLocal     // Catch:{ all -> 0x0066 }
+            r3.set(r7)     // Catch:{ all -> 0x0066 }
         L_0x003a:
             r3 = 0
         L_0x003b:
-            int r4 = r7.length     // Catch:{ all -> 0x0068 }
-            int r4 = r8.read(r7, r2, r4)     // Catch:{ all -> 0x0068 }
+            int r4 = r7.length     // Catch:{ all -> 0x0066 }
+            int r4 = r8.read(r7, r2, r4)     // Catch:{ all -> 0x0066 }
             if (r4 < 0) goto L_0x005c
-            int r5 = r0.length     // Catch:{ all -> 0x0068 }
+            int r5 = r0.length     // Catch:{ all -> 0x0066 }
             int r6 = r3 + r4
             if (r5 >= r6) goto L_0x0055
-            int r5 = r0.length     // Catch:{ all -> 0x0068 }
+            int r5 = r0.length     // Catch:{ all -> 0x0066 }
             int r5 = r5 * 2
-            byte[] r5 = new byte[r5]     // Catch:{ all -> 0x0068 }
-            java.lang.System.arraycopy(r0, r2, r5, r2, r3)     // Catch:{ all -> 0x0068 }
-            java.lang.ThreadLocal<byte[]> r0 = readBufferLocal     // Catch:{ all -> 0x0068 }
-            r0.set(r5)     // Catch:{ all -> 0x0068 }
+            byte[] r5 = new byte[r5]     // Catch:{ all -> 0x0066 }
+            java.lang.System.arraycopy(r0, r2, r5, r2, r3)     // Catch:{ all -> 0x0066 }
+            java.lang.ThreadLocal<byte[]> r0 = readBufferLocal     // Catch:{ all -> 0x0066 }
+            r0.set(r5)     // Catch:{ all -> 0x0066 }
             r0 = r5
         L_0x0055:
             if (r4 <= 0) goto L_0x003b
-            java.lang.System.arraycopy(r7, r2, r0, r3, r4)     // Catch:{ all -> 0x0068 }
+            java.lang.System.arraycopy(r7, r2, r0, r3, r4)     // Catch:{ all -> 0x0066 }
             r3 = r6
             goto L_0x003b
         L_0x005c:
-            if (r8 == 0) goto L_0x0061
-            r8.close()     // Catch:{ all -> 0x0061 }
-        L_0x0061:
+            r8.close()     // Catch:{ all -> 0x005f }
+        L_0x005f:
             java.lang.String r7 = new java.lang.String
             r7.<init>(r0, r2, r3)
             return r7
-        L_0x0067:
+        L_0x0065:
             r8 = r1
-        L_0x0068:
-            if (r8 == 0) goto L_0x006d
-            r8.close()     // Catch:{ all -> 0x006d }
-        L_0x006d:
+        L_0x0066:
+            if (r8 == 0) goto L_0x006b
+            r8.close()     // Catch:{ all -> 0x006b }
+        L_0x006b:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.RLottieDrawable.readRes(java.io.File, int):java.lang.String");

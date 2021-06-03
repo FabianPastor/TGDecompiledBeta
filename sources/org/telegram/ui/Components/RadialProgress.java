@@ -18,7 +18,6 @@ public class RadialProgress {
     private float animatedProgressValue = 0.0f;
     private float animationProgressStart = 0.0f;
     private Drawable checkBackgroundDrawable;
-    private CheckDrawable checkDrawable;
     private RectF cicleRect = new RectF();
     private Drawable currentDrawable;
     private Drawable currentMiniDrawable;
@@ -45,12 +44,6 @@ public class RadialProgress {
     private RectF progressRect = new RectF();
     private float radOffset = 0.0f;
 
-    private class CheckDrawable extends Drawable {
-        public boolean updateAnimation(long j) {
-            throw null;
-        }
-    }
-
     public RadialProgress(View view) {
         if (decelerateInterpolator == null) {
             decelerateInterpolator = new DecelerateInterpolator();
@@ -67,10 +60,6 @@ public class RadialProgress {
         this.miniProgressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.miniProgressBackgroundPaint = new Paint(1);
         this.parent = view;
-    }
-
-    public void setStrokeWidth(int i) {
-        this.progressPaint.setStrokeWidth((float) i);
     }
 
     public void setProgressRect(int i, int i2, int i3, int i4) {
@@ -150,7 +139,6 @@ public class RadialProgress {
                 invalidateParent();
             }
         } else {
-            this.checkDrawable.updateAnimation(j);
             throw null;
         }
     }

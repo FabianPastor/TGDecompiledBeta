@@ -15,9 +15,12 @@ public class CrossOutDrawable extends Drawable {
     String colorKey;
     boolean cross;
     Drawable iconDrawable;
+    private float lenOffsetBottom;
+    private float lenOffsetTop;
     Paint paint = new Paint(1);
     float progress;
     RectF rectF = new RectF();
+    private float xOffset;
     final Paint xRefPaint;
 
     public int getOpacity() {
@@ -45,25 +48,29 @@ public class CrossOutDrawable extends Drawable {
     }
 
     public void setCrossOut(boolean z, boolean z2) {
-        this.cross = z;
-        float f = 0.0f;
-        if (!z2) {
-            if (z) {
-                f = 1.0f;
+        if (this.cross != z) {
+            this.cross = z;
+            float f = 0.0f;
+            if (!z2) {
+                if (z) {
+                    f = 1.0f;
+                }
+                this.progress = f;
+            } else {
+                if (!z) {
+                    f = 1.0f;
+                }
+                this.progress = f;
             }
-            this.progress = f;
-        } else {
-            if (!z) {
-                f = 1.0f;
-            }
-            this.progress = f;
+            invalidateSelf();
         }
-        invalidateSelf();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x003f  */
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x005e  */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x0064  */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0039  */
+    /* JADX WARNING: Removed duplicated region for block: B:16:0x003b  */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x0043  */
+    /* JADX WARNING: Removed duplicated region for block: B:22:0x005c  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x0062  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void draw(android.graphics.Canvas r13) {
         /*
@@ -98,27 +105,30 @@ public class CrossOutDrawable extends Drawable {
             r12.progress = r2
         L_0x0035:
             java.lang.String r0 = r12.colorKey
+            if (r0 != 0) goto L_0x003b
+            r0 = -1
+            goto L_0x003f
+        L_0x003b:
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
+        L_0x003f:
             int r1 = r12.color
-            if (r1 == r0) goto L_0x0058
+            if (r1 == r0) goto L_0x0056
             r12.color = r0
             android.graphics.Paint r1 = r12.paint
             r1.setColor(r0)
-            android.graphics.drawable.Drawable r0 = r12.iconDrawable
-            android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r4 = r12.colorKey
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            android.graphics.drawable.Drawable r1 = r12.iconDrawable
+            android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
             android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r1.<init>(r4, r5)
-            r0.setColorFilter(r1)
-        L_0x0058:
+            r4.<init>(r0, r5)
+            r1.setColorFilter(r4)
+        L_0x0056:
             float r0 = r12.progress
             int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 != 0) goto L_0x0064
+            if (r0 != 0) goto L_0x0062
             android.graphics.drawable.Drawable r0 = r12.iconDrawable
             r0.draw(r13)
             return
-        L_0x0064:
+        L_0x0062:
             android.graphics.RectF r0 = r12.rectF
             android.graphics.drawable.Drawable r1 = r12.iconDrawable
             android.graphics.Rect r1 = r1.getBounds()
@@ -134,6 +144,10 @@ public class CrossOutDrawable extends Drawable {
             r1 = 1083179008(0x40900000, float:4.5)
             float r2 = org.telegram.messenger.AndroidUtilities.dpf2(r1)
             float r0 = r0 + r2
+            float r2 = r12.xOffset
+            float r0 = r0 + r2
+            float r2 = r12.lenOffsetTop
+            float r0 = r0 + r2
             android.graphics.RectF r2 = r12.rectF
             float r2 = r2.top
             float r1 = org.telegram.messenger.AndroidUtilities.dpf2(r1)
@@ -141,11 +155,17 @@ public class CrossOutDrawable extends Drawable {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r3)
             float r1 = (float) r1
             float r2 = r2 - r1
+            float r1 = r12.lenOffsetTop
+            float r2 = r2 + r1
             android.graphics.RectF r1 = r12.rectF
             float r1 = r1.right
             r4 = 1077936128(0x40400000, float:3.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r5 = (float) r5
+            float r1 = r1 - r5
+            float r5 = r12.xOffset
+            float r1 = r1 + r5
+            float r5 = r12.lenOffsetBottom
             float r1 = r1 - r5
             android.graphics.RectF r5 = r12.rectF
             float r5 = r5.bottom
@@ -155,8 +175,10 @@ public class CrossOutDrawable extends Drawable {
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             float r4 = (float) r4
             float r5 = r5 - r4
+            float r4 = r12.lenOffsetBottom
+            float r5 = r5 - r4
             boolean r4 = r12.cross
-            if (r4 == 0) goto L_0x00c2
+            if (r4 == 0) goto L_0x00d2
             float r1 = r1 - r0
             float r3 = r12.progress
             float r1 = r1 * r3
@@ -164,8 +186,8 @@ public class CrossOutDrawable extends Drawable {
             float r5 = r5 - r2
             float r5 = r5 * r3
             float r5 = r5 + r2
-            goto L_0x00d1
-        L_0x00c2:
+            goto L_0x00e1
+        L_0x00d2:
             float r4 = r1 - r0
             float r6 = r12.progress
             float r7 = r3 - r6
@@ -175,7 +197,7 @@ public class CrossOutDrawable extends Drawable {
             float r3 = r3 - r6
             float r4 = r4 * r3
             float r2 = r2 + r4
-        L_0x00d1:
+        L_0x00e1:
             android.graphics.Paint r3 = r12.paint
             float r3 = r3.getStrokeWidth()
             float r8 = r2 - r3
@@ -208,5 +230,16 @@ public class CrossOutDrawable extends Drawable {
 
     public int getIntrinsicWidth() {
         return this.iconDrawable.getIntrinsicWidth();
+    }
+
+    public void setOffsets(float f, float f2, float f3) {
+        this.xOffset = f;
+        this.lenOffsetTop = f2;
+        this.lenOffsetBottom = f3;
+        invalidateSelf();
+    }
+
+    public float getProgress() {
+        return this.progress;
     }
 }

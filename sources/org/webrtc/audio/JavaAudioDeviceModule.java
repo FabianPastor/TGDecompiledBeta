@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioDeviceInfo;
 import android.media.AudioManager;
+import android.os.Build;
 import java.util.concurrent.ScheduledExecutorService;
 import org.webrtc.JniCommon;
 import org.webrtc.Logging;
@@ -85,6 +86,7 @@ public class JavaAudioDeviceModule implements AudioDeviceModule {
         private ScheduledExecutorService scheduler;
         private boolean useHardwareAcousticEchoCanceler;
         private boolean useHardwareNoiseSuppressor;
+        private boolean useLowLatency;
         private boolean useStereoInput;
         private boolean useStereoOutput;
 
@@ -98,6 +100,7 @@ public class JavaAudioDeviceModule implements AudioDeviceModule {
             this.audioManager = audioManager2;
             this.inputSampleRate = WebRtcAudioManager.getSampleRate(audioManager2);
             this.outputSampleRate = WebRtcAudioManager.getSampleRate(audioManager2);
+            this.useLowLatency = false;
         }
 
         public Builder setScheduler(ScheduledExecutorService scheduledExecutorService) {
@@ -187,6 +190,11 @@ public class JavaAudioDeviceModule implements AudioDeviceModule {
             return this;
         }
 
+        public Builder setUseLowLatency(boolean z) {
+            this.useLowLatency = z;
+            return this;
+        }
+
         public Builder setAudioAttributes(AudioAttributes audioAttributes2) {
             this.audioAttributes = audioAttributes2;
             return this;
@@ -210,12 +218,15 @@ public class JavaAudioDeviceModule implements AudioDeviceModule {
                 }
                 Logging.d("JavaAudioDeviceModule", "HW AEC will not be used.");
             }
+            if (this.useLowLatency && Build.VERSION.SDK_INT >= 26) {
+                Logging.d("JavaAudioDeviceModule", "Low latency mode will be used.");
+            }
             ScheduledExecutorService scheduledExecutorService = this.scheduler;
             if (scheduledExecutorService == null) {
                 scheduledExecutorService = WebRtcAudioRecord.newDefaultScheduler();
             }
             WebRtcAudioRecord webRtcAudioRecord = new WebRtcAudioRecord(this.context, scheduledExecutorService, this.audioManager, this.audioSource, this.audioFormat, this.audioRecordErrorCallback, this.audioRecordStateCallback, this.samplesReadyCallback, this.useHardwareAcousticEchoCanceler, this.useHardwareNoiseSuppressor);
-            return new JavaAudioDeviceModule(this.context, this.audioManager, webRtcAudioRecord, new WebRtcAudioTrack(this.context, this.audioManager, this.audioAttributes, this.audioTrackErrorCallback, this.audioTrackStateCallback), this.inputSampleRate, this.outputSampleRate, this.useStereoInput, this.useStereoOutput);
+            return new JavaAudioDeviceModule(this.context, this.audioManager, webRtcAudioRecord, new WebRtcAudioTrack(this.context, this.audioManager, this.audioAttributes, this.audioTrackErrorCallback, this.audioTrackStateCallback, this.useLowLatency), this.inputSampleRate, this.outputSampleRate, this.useStereoInput, this.useStereoOutput);
         }
     }
 

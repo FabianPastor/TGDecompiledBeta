@@ -13,6 +13,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DocumentObject;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.SvgHelper;
@@ -25,6 +26,7 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class StickerCell extends FrameLayout {
+    private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
     private boolean clearsInputField;
     private BackupImageView imageView;
     private long lastUpdateTime;
@@ -32,10 +34,7 @@ public class StickerCell extends FrameLayout {
     private float scale;
     private boolean scaled;
     private TLRPC$Document sticker;
-
-    static {
-        new AccelerateInterpolator(0.5f);
-    }
+    private long time = 0;
 
     public StickerCell(Context context) {
         super(context);
@@ -128,6 +127,21 @@ public class StickerCell extends FrameLayout {
 
     public boolean showingBitmap() {
         return this.imageView.getImageReceiver().getBitmap() != null;
+    }
+
+    public MessageObject.SendAnimationData getSendAnimationData() {
+        ImageReceiver imageReceiver = this.imageView.getImageReceiver();
+        if (!imageReceiver.hasNotThumb()) {
+            return null;
+        }
+        MessageObject.SendAnimationData sendAnimationData = new MessageObject.SendAnimationData();
+        int[] iArr = new int[2];
+        this.imageView.getLocationInWindow(iArr);
+        sendAnimationData.x = imageReceiver.getCenterX() + ((float) iArr[0]);
+        sendAnimationData.y = imageReceiver.getCenterY() + ((float) iArr[1]);
+        sendAnimationData.width = imageReceiver.getImageWidth();
+        sendAnimationData.height = imageReceiver.getImageHeight();
+        return sendAnimationData;
     }
 
     /* access modifiers changed from: protected */

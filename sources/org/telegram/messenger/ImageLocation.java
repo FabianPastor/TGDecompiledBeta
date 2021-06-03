@@ -46,6 +46,7 @@ public class ImageLocation {
     public SecureDocument secureDocument;
     public TLRPC$InputStickerSet stickerSet;
     public String thumbSize;
+    public int thumbVersion;
     public long videoSeekTo;
     public WebFile webFile;
 
@@ -142,7 +143,9 @@ public class ImageLocation {
             if (i2 == 0) {
                 i2 = tLRPC$FileLocation.dc_id;
             }
-            return getForPhoto(tLRPC$FileLocation, 0, (TLRPC$Photo) null, (TLRPC$Document) null, tLRPC$TL_inputPeerUser, i, i2, (TLRPC$InputStickerSet) null, (String) null);
+            ImageLocation forPhoto = getForPhoto(tLRPC$FileLocation, 0, (TLRPC$Photo) null, (TLRPC$Document) null, tLRPC$TL_inputPeerUser, i, i2, (TLRPC$InputStickerSet) null, (String) null);
+            forPhoto.photoId = tLRPC$User.photo.photo_id;
+            return forPhoto;
         } else if (tLRPC$UserProfilePhoto.stripped_thumb == null) {
             return null;
         } else {
@@ -181,7 +184,9 @@ public class ImageLocation {
             if (i2 == 0) {
                 i2 = tLRPC$FileLocation.dc_id;
             }
-            return getForPhoto(tLRPC$FileLocation, 0, (TLRPC$Photo) null, (TLRPC$Document) null, tLRPC$InputPeer2, i, i2, (TLRPC$InputStickerSet) null, (String) null);
+            ImageLocation forPhoto = getForPhoto(tLRPC$FileLocation, 0, (TLRPC$Photo) null, (TLRPC$Document) null, tLRPC$InputPeer2, i, i2, (TLRPC$InputStickerSet) null, (String) null);
+            forPhoto.photoId = tLRPC$Chat.photo.photo_id;
+            return forPhoto;
         } else if (tLRPC$ChatPhoto.stripped_thumb == null) {
             return null;
         } else {
@@ -194,7 +199,7 @@ public class ImageLocation {
         }
     }
 
-    public static ImageLocation getForSticker(TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$Document tLRPC$Document) {
+    public static ImageLocation getForSticker(TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$Document tLRPC$Document, int i) {
         TLRPC$InputStickerSet inputStickerSet;
         if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize)) {
             ImageLocation imageLocation = new ImageLocation();
@@ -207,6 +212,7 @@ public class ImageLocation {
             if (MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
                 forPhoto.imageType = 1;
             }
+            forPhoto.thumbVersion = i;
             return forPhoto;
         }
     }

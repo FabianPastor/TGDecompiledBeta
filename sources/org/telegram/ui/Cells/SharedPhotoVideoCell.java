@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Property;
@@ -81,7 +83,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
             backupImageView.getImageReceiver().setNeedsQualityThumb(true);
             this.imageView.getImageReceiver().setShouldGenerateQualityThumb(true);
             this.container.addView(this.imageView, LayoutHelper.createFrame(-1, -1.0f));
-            AnonymousClass1 r1 = new FrameLayout(this, context, SharedPhotoVideoCell.this) {
+            AnonymousClass1 r1 = new FrameLayout(context, SharedPhotoVideoCell.this) {
                 private RectF rect = new RectF();
 
                 /* access modifiers changed from: protected */
@@ -196,10 +198,12 @@ public class SharedPhotoVideoCell extends FrameLayout {
                 if (closestPhotoSizeWithSize != closestPhotoSizeWithSize2) {
                     tLRPC$PhotoSize = closestPhotoSizeWithSize2;
                 }
-                if (closestPhotoSizeWithSize != null) {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, document), "b", ApplicationLoader.applicationContext.getResources().getDrawable(NUM), (Bitmap) null, (String) null, 0, messageObject);
-                } else {
+                if (closestPhotoSizeWithSize == null) {
                     this.imageView.setImageResource(NUM);
+                } else if (messageObject.strippedThumb != null) {
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, document), "100_100", (String) null, (Drawable) messageObject.strippedThumb, (Object) messageObject);
+                } else {
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, document), "b", ApplicationLoader.applicationContext.getResources().getDrawable(NUM), (Bitmap) null, (String) null, 0, messageObject);
                 }
             } else {
                 TLRPC$MessageMedia tLRPC$MessageMedia = messageObject.messageOwner.media;
@@ -215,10 +219,19 @@ public class SharedPhotoVideoCell extends FrameLayout {
                     if (closestPhotoSizeWithSize4 != closestPhotoSizeWithSize3) {
                         tLRPC$PhotoSize = closestPhotoSizeWithSize3;
                     }
-                    this.imageView.getImageReceiver().setImage(ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject.photoThumbsObject), "100_100", ImageLocation.getForObject(tLRPC$PhotoSize, messageObject.photoThumbsObject), "b", closestPhotoSizeWithSize4 != null ? closestPhotoSizeWithSize4.size : 0, (String) null, messageObject, messageObject.shouldEncryptPhotoOrVideo() ? 2 : 1);
-                    return;
+                    if (messageObject.strippedThumb != null) {
+                        this.imageView.getImageReceiver().setImage(ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject.photoThumbsObject), "100_100", (ImageLocation) null, (String) null, messageObject.strippedThumb, closestPhotoSizeWithSize4 != null ? closestPhotoSizeWithSize4.size : 0, (String) null, messageObject, messageObject.shouldEncryptPhotoOrVideo() ? 2 : 1);
+                    } else {
+                        this.imageView.getImageReceiver().setImage(ImageLocation.getForObject(closestPhotoSizeWithSize4, messageObject.photoThumbsObject), "100_100", ImageLocation.getForObject(tLRPC$PhotoSize, messageObject.photoThumbsObject), "b", closestPhotoSizeWithSize4 != null ? closestPhotoSizeWithSize4.size : 0, (String) null, messageObject, messageObject.shouldEncryptPhotoOrVideo() ? 2 : 1);
+                    }
+                } else {
+                    BitmapDrawable bitmapDrawable = messageObject.strippedThumb;
+                    if (bitmapDrawable != null) {
+                        this.imageView.setImage((ImageLocation) null, (String) null, (ImageLocation) null, (String) null, bitmapDrawable, (Bitmap) null, (String) null, 0, messageObject);
+                    } else {
+                        this.imageView.setImage((ImageLocation) null, (String) null, ImageLocation.getForObject(closestPhotoSizeWithSize3, messageObject.photoThumbsObject), "b", ApplicationLoader.applicationContext.getResources().getDrawable(NUM), (Bitmap) null, (String) null, 0, messageObject);
+                    }
                 }
-                this.imageView.setImage((ImageLocation) null, (String) null, ImageLocation.getForObject(closestPhotoSizeWithSize3, messageObject.photoThumbsObject), "b", ApplicationLoader.applicationContext.getResources().getDrawable(NUM), (Bitmap) null, (String) null, 0, messageObject);
             }
         }
 

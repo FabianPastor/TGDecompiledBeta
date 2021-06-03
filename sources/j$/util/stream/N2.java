@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.util.k;
+import j$.time.a;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -16,29 +16,29 @@ final class N2<T> extends F2<T> {
         this.d.add(obj);
     }
 
-    public void m() {
-        k.B(this.d, this.b);
-        this.var_a.n((long) this.d.size());
+    public void l() {
+        a.B(this.d, this.b);
+        this.a.m((long) this.d.size());
         if (!this.c) {
             ArrayList arrayList = this.d;
-            A2 a2 = this.var_a;
+            A2 a2 = this.a;
             a2.getClass();
-            k.s(arrayList, new CLASSNAMEb(a2));
+            a.r(arrayList, new CLASSNAMEb(a2));
         } else {
             Iterator it = this.d.iterator();
             while (it.hasNext()) {
                 Object next = it.next();
-                if (this.var_a.p()) {
+                if (this.a.o()) {
                     break;
                 }
-                this.var_a.accept(next);
+                this.a.accept(next);
             }
         }
-        this.var_a.m();
+        this.a.l();
         this.d = null;
     }
 
-    public void n(long j) {
+    public void m(long j) {
         ArrayList arrayList;
         if (j < NUM) {
             if (j >= 0) {

@@ -29,6 +29,7 @@ public class BotHelpCell extends View {
     private int textX;
     private int textY;
     private LinkPath urlPath = new LinkPath();
+    public boolean wasDraw;
     private int width;
 
     public interface BotHelpCellDelegate {
@@ -54,7 +55,7 @@ public class BotHelpCell extends View {
         int i;
         if (str == null || str.length() == 0) {
             setVisibility(8);
-        } else if (str == null || !str.equals(this.oldText)) {
+        } else if (!str.equals(this.oldText)) {
             this.oldText = str;
             setVisibility(0);
             if (AndroidUtilities.isTablet()) {
@@ -288,11 +289,13 @@ public class BotHelpCell extends View {
             staticLayout.draw(canvas);
         }
         canvas.restore();
+        this.wasDraw = true;
     }
 
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        this.wasDraw = false;
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {

@@ -1,67 +1,72 @@
 package j$.util;
 
-import j$.util.function.C;
-import j$.util.function.CLASSNAMEg;
-import j$.util.function.CLASSNAMEh;
-import j$.util.function.w;
+import java.util.NoSuchElementException;
 
-public class o implements C, w {
-    private long count;
-    private long max = Long.MIN_VALUE;
-    private long min = Long.MAX_VALUE;
-    private long sum;
+public final class o {
+    private static final o a = new o();
+    private final boolean b;
+    private final double c;
 
-    public void accept(int i) {
-        accept((long) i);
+    private o() {
+        this.b = false;
+        this.c = Double.NaN;
     }
 
-    public void accept(long j) {
-        this.count++;
-        this.sum += j;
-        this.min = Math.min(this.min, j);
-        this.max = Math.max(this.max, j);
+    private o(double d) {
+        this.b = true;
+        this.c = d;
     }
 
-    public void b(o oVar) {
-        this.count += oVar.count;
-        this.sum += oVar.sum;
-        this.min = Math.min(this.min, oVar.min);
-        this.max = Math.max(this.max, oVar.max);
+    public static o a() {
+        return a;
     }
 
-    public C g(C c) {
-        c.getClass();
-        return new CLASSNAMEh(this, c);
+    public static o d(double d) {
+        return new o(d);
     }
 
-    public w l(w wVar) {
-        wVar.getClass();
-        return new CLASSNAMEg(this, wVar);
+    public double b() {
+        if (this.b) {
+            return this.c;
+        }
+        throw new NoSuchElementException("No value present");
+    }
+
+    public boolean c() {
+        return this.b;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof o)) {
+            return false;
+        }
+        o oVar = (o) obj;
+        boolean z = this.b;
+        if (!z || !oVar.b) {
+            if (z == oVar.b) {
+                return true;
+            }
+        } else if (Double.compare(this.c, oVar.c) == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public int hashCode() {
+        if (!this.b) {
+            return 0;
+        }
+        long doubleToLongBits = Double.doubleToLongBits(this.c);
+        return (int) (doubleToLongBits ^ (doubleToLongBits >>> 32));
     }
 
     public String toString() {
-        double d;
-        Object[] objArr = new Object[6];
-        objArr[0] = getClass().getSimpleName();
-        objArr[1] = Long.valueOf(this.count);
-        objArr[2] = Long.valueOf(this.sum);
-        objArr[3] = Long.valueOf(this.min);
-        long j = this.count;
-        if (j > 0) {
-            double d2 = (double) this.sum;
-            double d3 = (double) j;
-            Double.isNaN(d2);
-            Double.isNaN(d3);
-            Double.isNaN(d2);
-            Double.isNaN(d3);
-            Double.isNaN(d2);
-            Double.isNaN(d3);
-            d = d2 / d3;
-        } else {
-            d = 0.0d;
+        if (!this.b) {
+            return "OptionalDouble.empty";
         }
-        objArr[4] = Double.valueOf(d);
-        objArr[5] = Long.valueOf(this.max);
-        return String.format("%s{count=%d, sum=%d, min=%d, average=%f, max=%d}", objArr);
+        return String.format("OptionalDouble[%s]", new Object[]{Double.valueOf(this.c)});
     }
 }

@@ -65,15 +65,17 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
     }
 
     public synchronized void startCapture(int i, int i2, int i3) {
-        checkNotDisposed();
-        this.width = i;
-        this.height = i2;
-        MediaProjection mediaProjection2 = this.mediaProjectionManager.getMediaProjection(-1, this.mediaProjectionPermissionResultData);
-        this.mediaProjection = mediaProjection2;
-        mediaProjection2.registerCallback(this.mediaProjectionCallback, this.surfaceTextureHelper.getHandler());
-        createVirtualDisplay();
-        this.capturerObserver.onCapturerStarted(true);
-        this.surfaceTextureHelper.startListening(this);
+        if (this.mediaProjection == null) {
+            checkNotDisposed();
+            this.width = i;
+            this.height = i2;
+            MediaProjection mediaProjection2 = this.mediaProjectionManager.getMediaProjection(-1, this.mediaProjectionPermissionResultData);
+            this.mediaProjection = mediaProjection2;
+            mediaProjection2.registerCallback(this.mediaProjectionCallback, this.surfaceTextureHelper.getHandler());
+            createVirtualDisplay();
+            this.capturerObserver.onCapturerStarted(true);
+            this.surfaceTextureHelper.startListening(this);
+        }
     }
 
     public synchronized void stopCapture() {

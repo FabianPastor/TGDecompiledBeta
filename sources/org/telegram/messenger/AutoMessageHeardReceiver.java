@@ -46,7 +46,7 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
                                 }
 
                                 public final void run() {
-                                    AutoMessageHeardReceiver.lambda$null$0(AccountInstance.this, this.f$1, this.f$2, this.f$3, this.f$4);
+                                    AutoMessageHeardReceiver.lambda$onReceive$0(AccountInstance.this, this.f$1, this.f$2, this.f$3, this.f$4);
                                 }
                             });
                         }
@@ -82,7 +82,7 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
                             }
 
                             public final void run() {
-                                AutoMessageHeardReceiver.lambda$null$2(AccountInstance.this, this.f$1, this.f$2, this.f$3, this.f$4);
+                                AutoMessageHeardReceiver.lambda$onReceive$2(AccountInstance.this, this.f$1, this.f$2, this.f$3, this.f$4);
                             }
                         });
                     }
@@ -93,13 +93,13 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
         }
     }
 
-    static /* synthetic */ void lambda$null$0(AccountInstance accountInstance, TLRPC$User tLRPC$User, int i, long j, int i2) {
+    static /* synthetic */ void lambda$onReceive$0(AccountInstance accountInstance, TLRPC$User tLRPC$User, int i, long j, int i2) {
         TLRPC$User tLRPC$User2 = tLRPC$User;
         accountInstance.getMessagesController().putUser(tLRPC$User, true);
         MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, 0, true, 0);
     }
 
-    static /* synthetic */ void lambda$null$2(AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, int i, long j, int i2) {
+    static /* synthetic */ void lambda$onReceive$2(AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, int i, long j, int i2) {
         TLRPC$Chat tLRPC$Chat2 = tLRPC$Chat;
         accountInstance.getMessagesController().putChat(tLRPC$Chat, true);
         MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, 0, true, 0);

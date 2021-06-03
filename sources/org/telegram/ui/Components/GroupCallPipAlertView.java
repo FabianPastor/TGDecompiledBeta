@@ -21,7 +21,6 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.voip.VoIPBaseService;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.voip.VoIPButtonsLayout;
@@ -29,7 +28,7 @@ import org.telegram.ui.Components.voip.VoIPToggleButton;
 import org.telegram.ui.GroupCallActivity;
 import org.telegram.ui.LaunchActivity;
 
-public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseService.StateListener, NotificationCenter.NotificationCenterDelegate {
+public class GroupCallPipAlertView extends LinearLayout implements VoIPService.StateListener, NotificationCenter.NotificationCenterDelegate {
     BackupImageView avatarImageView;
     int currentAccount;
     float cx;
@@ -50,23 +49,23 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
     TextView titleView;
 
     public /* synthetic */ void onCameraSwitch(boolean z) {
-        VoIPBaseService.StateListener.CC.$default$onCameraSwitch(this, z);
+        VoIPService.StateListener.CC.$default$onCameraSwitch(this, z);
     }
 
     public /* synthetic */ void onMediaStateUpdated(int i, int i2) {
-        VoIPBaseService.StateListener.CC.$default$onMediaStateUpdated(this, i, i2);
+        VoIPService.StateListener.CC.$default$onMediaStateUpdated(this, i, i2);
     }
 
     public /* synthetic */ void onScreenOnChange(boolean z) {
-        VoIPBaseService.StateListener.CC.$default$onScreenOnChange(this, z);
+        VoIPService.StateListener.CC.$default$onScreenOnChange(this, z);
     }
 
     public /* synthetic */ void onSignalBarsCountChanged(int i) {
-        VoIPBaseService.StateListener.CC.$default$onSignalBarsCountChanged(this, i);
+        VoIPService.StateListener.CC.$default$onSignalBarsCountChanged(this, i);
     }
 
     public /* synthetic */ void onVideoAvailableChange(boolean z) {
-        VoIPBaseService.StateListener.CC.$default$onVideoAvailableChange(this, z);
+        VoIPService.StateListener.CC.$default$onVideoAvailableChange(this, z);
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
@@ -76,7 +75,7 @@ public class GroupCallPipAlertView extends LinearLayout implements VoIPBaseServi
         setOrientation(1);
         this.currentAccount = i;
         this.paint.setAlpha(234);
-        AnonymousClass1 r2 = new FrameLayout(this, context2) {
+        AnonymousClass1 r2 = new FrameLayout(context2) {
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                 super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
                 if (Build.VERSION.SDK_INT >= 21) {

@@ -2299,7 +2299,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                         TextSelectionHelper.ChatListTextSelectionHelper.lambda$onExitSelectionMode$1(ChatMessageCell.this, this.f$1, valueAnimator);
                     }
                 });
-                ofFloat.addListener(new AnimatorListenerAdapter(this) {
+                ofFloat.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         chatMessageCell.setSelectedBackgroundProgress(0.0f);
                     }

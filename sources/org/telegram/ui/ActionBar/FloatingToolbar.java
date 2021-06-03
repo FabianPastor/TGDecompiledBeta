@@ -37,6 +37,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import androidx.core.util.ObjectsCompat$$ExternalSynthetic0;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -157,7 +158,7 @@ public final class FloatingToolbar {
         for (int i = 0; i < size; i++) {
             MenuItem menuItem = list.get(i);
             MenuItem menuItem2 = this.mShowingMenuItems.get(i);
-            if (menuItem.getItemId() != menuItem2.getItemId() || !TextUtils.equals(menuItem.getTitle(), menuItem2.getTitle()) || !C$r8$backportedMethods$utility$Objects$2$equals.equals(menuItem.getIcon(), menuItem2.getIcon()) || menuItem.getGroupId() != menuItem2.getGroupId()) {
+            if (menuItem.getItemId() != menuItem2.getItemId() || !TextUtils.equals(menuItem.getTitle(), menuItem2.getTitle()) || !ObjectsCompat$$ExternalSynthetic0.m0(menuItem.getIcon(), menuItem2.getIcon()) || menuItem.getGroupId() != menuItem2.getGroupId()) {
                 return false;
             }
         }
@@ -947,7 +948,7 @@ public final class FloatingToolbar {
         }
 
         private OverflowPanel createOverflowPanel() {
-            OverflowPanel overflowPanel = new OverflowPanel(this, this);
+            OverflowPanel overflowPanel = new OverflowPanel(this);
             overflowPanel.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
             overflowPanel.setDivider((Drawable) null);
             overflowPanel.setDividerHeight(0);
@@ -1162,11 +1163,11 @@ public final class FloatingToolbar {
         private final class OverflowPanel extends ListView {
             private final FloatingToolbarPopup mPopup;
 
-            OverflowPanel(FloatingToolbarPopup floatingToolbarPopup, FloatingToolbarPopup floatingToolbarPopup2) {
-                super(floatingToolbarPopup2.mContext);
-                this.mPopup = floatingToolbarPopup2;
+            OverflowPanel(FloatingToolbarPopup floatingToolbarPopup) {
+                super(floatingToolbarPopup.mContext);
+                this.mPopup = floatingToolbarPopup;
                 setVerticalScrollBarEnabled(false);
-                setOutlineProvider(new ViewOutlineProvider(this, floatingToolbarPopup) {
+                setOutlineProvider(new ViewOutlineProvider(FloatingToolbarPopup.this) {
                     public void getOutline(View view, Outline outline) {
                         outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.dp(6.0f));
                     }
@@ -1193,9 +1194,11 @@ public final class FloatingToolbar {
         }
 
         private final class LogAccelerateInterpolator implements Interpolator {
+            private final int BASE;
             private final float LOGS_SCALE;
 
-            private LogAccelerateInterpolator(FloatingToolbarPopup floatingToolbarPopup) {
+            private LogAccelerateInterpolator() {
+                this.BASE = 100;
                 this.LOGS_SCALE = 1.0f / computeLog(1.0f, 100);
             }
 

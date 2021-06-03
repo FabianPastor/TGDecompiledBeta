@@ -53,7 +53,6 @@ import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.messenger.voip.VoIPBaseService;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -77,7 +76,7 @@ import org.telegram.ui.GroupCallActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.LocationActivity;
 
-public class FragmentContextView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, VoIPBaseService.StateListener {
+public class FragmentContextView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, VoIPService.StateListener {
     /* access modifiers changed from: private */
     public final int account;
     private FragmentContextView additionalContextView;
@@ -162,23 +161,23 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     public /* synthetic */ void onCameraSwitch(boolean z) {
-        VoIPBaseService.StateListener.CC.$default$onCameraSwitch(this, z);
+        VoIPService.StateListener.CC.$default$onCameraSwitch(this, z);
     }
 
     public /* synthetic */ void onMediaStateUpdated(int i, int i2) {
-        VoIPBaseService.StateListener.CC.$default$onMediaStateUpdated(this, i, i2);
+        VoIPService.StateListener.CC.$default$onMediaStateUpdated(this, i, i2);
     }
 
     public /* synthetic */ void onScreenOnChange(boolean z) {
-        VoIPBaseService.StateListener.CC.$default$onScreenOnChange(this, z);
+        VoIPService.StateListener.CC.$default$onScreenOnChange(this, z);
     }
 
     public /* synthetic */ void onSignalBarsCountChanged(int i) {
-        VoIPBaseService.StateListener.CC.$default$onSignalBarsCountChanged(this, i);
+        VoIPService.StateListener.CC.$default$onSignalBarsCountChanged(this, i);
     }
 
     public /* synthetic */ void onVideoAvailableChange(boolean z) {
-        VoIPBaseService.StateListener.CC.$default$onVideoAvailableChange(this, z);
+        VoIPService.StateListener.CC.$default$onVideoAvailableChange(this, z);
     }
 
     /* access modifiers changed from: protected */
@@ -371,7 +370,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         };
         this.titleTextView = r8;
         addView(r8, LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
-        AnonymousClass5 r82 = new AudioPlayerAlert.ClippingTextViewSwitcher(this, context2) {
+        AnonymousClass5 r82 = new AudioPlayerAlert.ClippingTextViewSwitcher(context2) {
             /* access modifiers changed from: protected */
             public TextView createTextView() {
                 TextView textView = new TextView(context2);
@@ -663,7 +662,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             }
             builder.setPositiveButton(LocaleController.getString("Stop", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    FragmentContextView.this.lambda$null$5$FragmentContextView(dialogInterface, i);
+                    FragmentContextView.this.lambda$new$5$FragmentContextView(dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -680,8 +679,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$5 */
-    public /* synthetic */ void lambda$null$5$FragmentContextView(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$new$5 */
+    public /* synthetic */ void lambda$new$5$FragmentContextView(DialogInterface dialogInterface, int i) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment instanceof DialogsActivity) {
             for (int i2 = 0; i2 < 3; i2++) {
@@ -782,7 +781,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             ImportingAlert importingAlert = new ImportingAlert(getContext(), (ChatActivity) this.fragment);
             importingAlert.setOnHideListener(new DialogInterface.OnDismissListener() {
                 public final void onDismiss(DialogInterface dialogInterface) {
-                    FragmentContextView.this.lambda$null$7$FragmentContextView(dialogInterface);
+                    FragmentContextView.this.lambda$new$7$FragmentContextView(dialogInterface);
                 }
             });
             this.fragment.showDialog(importingAlert);
@@ -791,8 +790,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$FragmentContextView(DialogInterface dialogInterface) {
+    /* renamed from: lambda$new$7 */
+    public /* synthetic */ void lambda$new$7$FragmentContextView(DialogInterface dialogInterface) {
         checkImport(false);
     }
 
@@ -836,7 +835,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     SendMessagesHelper.getInstance(LocationController.SharingLocationInfo.this.messageObject.currentAccount).sendMessage(tLRPC$MessageMedia, this.f$1, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2);
                 }
             });
-            launchActivity.lambda$runLinkRequest$41(locationActivity);
+            launchActivity.lambda$runLinkRequest$42(locationActivity);
         }
     }
 
@@ -2144,7 +2143,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             goto L_0x01fb
         L_0x01ed:
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628096(0x7f0e1040, float:1.8883475E38)
+            r9 = 2131628142(0x7f0e106e, float:1.8883568E38)
             java.lang.String r11 = "VoipGroupScheduledVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2165,7 +2164,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             android.widget.TextView r6 = r0.joinButton
             r6.setVisibility(r5)
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r6 = r0.titleTextView
-            r9 = 2131628125(0x7f0e105d, float:1.8883534E38)
+            r9 = 2131628171(0x7f0e108b, float:1.8883627E38)
             java.lang.String r11 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r6.setText(r9, r5)
@@ -2173,7 +2172,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             int r4 = r4.participants_count
             if (r4 != 0) goto L_0x023d
             org.telegram.ui.Components.AudioPlayerAlert$ClippingTextViewSwitcher r4 = r0.subtitleTextView
-            r6 = 2131626102(0x7f0e0876, float:1.887943E38)
+            r6 = 2131626124(0x7f0e088c, float:1.8879475E38)
             java.lang.String r9 = "MembersTalkingNobody"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
             r4.setText(r6, r5)
@@ -2382,8 +2381,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     this.subtitleTextView.setTranslationX(0.0f);
                 }
                 float f2 = (float) i5;
-                this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, 51, f2, 5.0f, 36.0f, 0.0f));
-                this.subtitleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, 51, f2, 25.0f, 36.0f, 0.0f));
+                this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, 51, f2, 5.0f, call.isScheduled() ? 90.0f : 36.0f, 0.0f));
+                this.subtitleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 20.0f, 51, f2, 25.0f, call.isScheduled() ? 90.0f : 36.0f, 0.0f));
                 return;
             }
             return;

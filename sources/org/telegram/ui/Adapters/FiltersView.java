@@ -86,16 +86,17 @@ public class FiltersView extends RecyclerListView {
                     }
                     if (tLObject instanceof TLRPC$Chat) {
                         TLObject tLObject3 = mediaFilterData2.chat;
-                        if (tLObject3 instanceof TLRPC$Chat) {
-                            if (((TLRPC$Chat) tLObject).id == ((TLRPC$Chat) tLObject3).id) {
-                                return true;
-                            }
+                        if (!(tLObject3 instanceof TLRPC$Chat) || ((TLRPC$Chat) tLObject).id != ((TLRPC$Chat) tLObject3).id) {
                             return false;
                         }
+                        return true;
                     }
-                }
-                if (i3 == 6) {
+                } else if (i3 == 6) {
                     return mediaFilterData.title.equals(mediaFilterData2.title);
+                } else {
+                    if (i3 == 7) {
+                        return true;
+                    }
                 }
             }
             return false;
@@ -125,7 +126,7 @@ public class FiltersView extends RecyclerListView {
         r0.setOrientation(0);
         setLayoutManager(this.layoutManager);
         setAdapter(new Adapter());
-        addItemDecoration(new RecyclerView.ItemDecoration(this) {
+        addItemDecoration(new RecyclerView.ItemDecoration() {
             public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
                 super.getItemOffsets(rect, view, recyclerView, state);
                 int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
@@ -138,7 +139,9 @@ public class FiltersView extends RecyclerListView {
                 }
             }
         });
-        setItemAnimator(new DefaultItemAnimator(this) {
+        setItemAnimator(new DefaultItemAnimator() {
+            private final float scaleFrom = 0.0f;
+
             /* access modifiers changed from: protected */
             public long getAddAnimationDelay(long j, long j2, long j3) {
                 return 0;
@@ -230,7 +233,7 @@ public class FiltersView extends RecyclerListView {
         return this.usersFilters.get(i);
     }
 
-    public void setUsersAndDates(ArrayList<Object> arrayList, ArrayList<DateData> arrayList2) {
+    public void setUsersAndDates(ArrayList<Object> arrayList, ArrayList<DateData> arrayList2, boolean z) {
         String str;
         this.oldItems.clear();
         this.oldItems.addAll(this.usersFilters);
@@ -267,6 +270,9 @@ public class FiltersView extends RecyclerListView {
                 mediaFilterData3.setDate(dateData);
                 this.usersFilters.add(mediaFilterData3);
             }
+        }
+        if (z) {
+            this.usersFilters.add(new MediaFilterData(NUM, NUM, LocaleController.getString("ArchiveSearchFilter", NUM), (TLRPC$MessagesFilter) null, 7));
         }
         if (getAdapter() != null) {
             UpdateCallback updateCallback = new UpdateCallback(getAdapter());
@@ -569,7 +575,7 @@ public class FiltersView extends RecyclerListView {
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            ViewHolder viewHolder = new ViewHolder(FiltersView.this, new FilterView(viewGroup.getContext()));
+            ViewHolder viewHolder = new ViewHolder(new FilterView(viewGroup.getContext()));
             RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(-2, AndroidUtilities.dp(32.0f));
             layoutParams.topMargin = AndroidUtilities.dp(6.0f);
             viewHolder.itemView.setLayoutParams(layoutParams);
@@ -587,7 +593,8 @@ public class FiltersView extends RecyclerListView {
 
     public static class FilterView extends FrameLayout {
         BackupImageView avatarImageView;
-        Drawable thumbDrawable;
+        MediaFilterData data;
+        CombinedDrawable thumbDrawable;
         TextView titleView;
 
         public FilterView(Context context) {
@@ -606,29 +613,46 @@ public class FiltersView extends RecyclerListView {
         public void updateColors() {
             setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(28.0f), Theme.getColor("groupcreate_spanBackground")));
             this.titleView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-            Drawable drawable = this.thumbDrawable;
-            if (drawable != null) {
-                Theme.setCombinedDrawableColor(drawable, Theme.getColor("avatar_backgroundBlue"), false);
-                Theme.setCombinedDrawableColor(this.thumbDrawable, Theme.getColor("avatar_actionBarIconBlue"), true);
+            CombinedDrawable combinedDrawable = this.thumbDrawable;
+            if (combinedDrawable == null) {
+                return;
             }
+            if (this.data.filterType == 7) {
+                Theme.setCombinedDrawableColor(combinedDrawable, Theme.getColor("avatar_backgroundArchived"), false);
+                Theme.setCombinedDrawableColor(this.thumbDrawable, Theme.getColor("avatar_actionBarIconBlue"), true);
+                return;
+            }
+            Theme.setCombinedDrawableColor(combinedDrawable, Theme.getColor("avatar_backgroundBlue"), false);
+            Theme.setCombinedDrawableColor(this.thumbDrawable, Theme.getColor("avatar_actionBarIconBlue"), true);
         }
 
         public void setData(MediaFilterData mediaFilterData) {
+            this.data = mediaFilterData;
             this.avatarImageView.getImageReceiver().clearImage();
-            CombinedDrawable createCircleDrawableWithIcon = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), mediaFilterData.iconResFilled);
-            this.thumbDrawable = createCircleDrawableWithIcon;
-            Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, Theme.getColor("avatar_backgroundBlue"), false);
+            if (mediaFilterData.filterType == 7) {
+                CombinedDrawable createCircleDrawableWithIcon = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);
+                this.thumbDrawable = createCircleDrawableWithIcon;
+                createCircleDrawableWithIcon.setIconSize(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
+                Theme.setCombinedDrawableColor(this.thumbDrawable, Theme.getColor("avatar_backgroundArchived"), false);
+                Theme.setCombinedDrawableColor(this.thumbDrawable, Theme.getColor("avatar_actionBarIconBlue"), true);
+                this.avatarImageView.setImageDrawable(this.thumbDrawable);
+                this.titleView.setText(mediaFilterData.title);
+                return;
+            }
+            CombinedDrawable createCircleDrawableWithIcon2 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), mediaFilterData.iconResFilled);
+            this.thumbDrawable = createCircleDrawableWithIcon2;
+            Theme.setCombinedDrawableColor(createCircleDrawableWithIcon2, Theme.getColor("avatar_backgroundBlue"), false);
             Theme.setCombinedDrawableColor(this.thumbDrawable, Theme.getColor("avatar_actionBarIconBlue"), true);
             if (mediaFilterData.filterType == 4) {
                 TLObject tLObject = mediaFilterData.chat;
                 if (tLObject instanceof TLRPC$User) {
                     TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
                     if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == tLRPC$User.id) {
-                        CombinedDrawable createCircleDrawableWithIcon2 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);
-                        createCircleDrawableWithIcon2.setIconSize(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
-                        Theme.setCombinedDrawableColor(createCircleDrawableWithIcon2, Theme.getColor("avatar_backgroundSaved"), false);
-                        Theme.setCombinedDrawableColor(createCircleDrawableWithIcon2, Theme.getColor("avatar_actionBarIconBlue"), true);
-                        this.avatarImageView.setImageDrawable(createCircleDrawableWithIcon2);
+                        CombinedDrawable createCircleDrawableWithIcon3 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);
+                        createCircleDrawableWithIcon3.setIconSize(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
+                        Theme.setCombinedDrawableColor(createCircleDrawableWithIcon3, Theme.getColor("avatar_backgroundSaved"), false);
+                        Theme.setCombinedDrawableColor(createCircleDrawableWithIcon3, Theme.getColor("avatar_actionBarIconBlue"), true);
+                        this.avatarImageView.setImageDrawable(createCircleDrawableWithIcon3);
                     } else {
                         this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16.0f));
                         this.avatarImageView.getImageReceiver().setForUserOrChat(tLRPC$User, this.thumbDrawable);
@@ -647,7 +671,7 @@ public class FiltersView extends RecyclerListView {
     private class ViewHolder extends RecyclerView.ViewHolder {
         FilterView filterView;
 
-        public ViewHolder(FiltersView filtersView, FilterView filterView2) {
+        public ViewHolder(FilterView filterView2) {
             super(filterView2);
             this.filterView = filterView2;
         }
@@ -658,11 +682,13 @@ public class FiltersView extends RecyclerListView {
         public DateData dateData;
         public final TLRPC$MessagesFilter filter;
         public final int filterType;
+        public final int iconRes;
         public final int iconResFilled;
         public boolean removable = true;
         public final String title;
 
         public MediaFilterData(int i, int i2, String str, TLRPC$MessagesFilter tLRPC$MessagesFilter, int i3) {
+            this.iconRes = i;
             this.iconResFilled = i2;
             this.title = str;
             this.filter = tLRPC$MessagesFilter;

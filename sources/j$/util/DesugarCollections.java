@@ -1,8 +1,8 @@
 package j$.util;
 
-import a.CLASSNAMEt;
-import a.CLASSNAMEv;
-import a.P;
+import j$.CLASSNAMEq;
+import j$.CLASSNAMEs;
+import j$.M;
 import j$.util.Collection;
 import j$.util.List;
 import j$.util.function.BiConsumer;
@@ -26,9 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class DesugarCollections {
-
-    /* renamed from: a  reason: collision with root package name */
-    public static final Class var_a;
+    public static final Class a;
     static final Class b = Collections.synchronizedList(new LinkedList()).getClass();
     private static final Field c;
     private static final Field d;
@@ -38,9 +36,7 @@ public class DesugarCollections {
     public static final Constructor f;
 
     private static class a<K, V> implements Map<K, V>, Serializable, Map {
-
-        /* renamed from: a  reason: collision with root package name */
-        private final Map var_a;
+        private final Map a;
         final Object b = this;
         private transient Set c;
         private transient Set d;
@@ -48,7 +44,7 @@ public class DesugarCollections {
 
         a(Map map) {
             map.getClass();
-            this.var_a = map;
+            this.a = map;
         }
 
         private Set a(Set set, Object obj) {
@@ -64,23 +60,23 @@ public class DesugarCollections {
 
         public void clear() {
             synchronized (this.b) {
-                this.var_a.clear();
+                this.a.clear();
             }
         }
 
         public Object compute(Object obj, BiFunction biFunction) {
             Object g;
             synchronized (this.b) {
-                g = k.g(this.var_a, obj, biFunction);
+                g = j$.time.a.g(this.a, obj, biFunction);
             }
             return g;
         }
 
         public Object compute(Object obj, java.util.function.BiFunction biFunction) {
             Object g;
-            BiFunction b2 = CLASSNAMEv.b(biFunction);
+            BiFunction b2 = CLASSNAMEs.b(biFunction);
             synchronized (this.b) {
-                g = k.g(this.var_a, obj, b2);
+                g = j$.time.a.g(this.a, obj, b2);
             }
             return g;
         }
@@ -88,16 +84,16 @@ public class DesugarCollections {
         public Object computeIfAbsent(Object obj, Function function) {
             Object h;
             synchronized (this.b) {
-                h = k.h(this.var_a, obj, function);
+                h = j$.time.a.h(this.a, obj, function);
             }
             return h;
         }
 
         public Object computeIfAbsent(Object obj, java.util.function.Function function) {
             Object h;
-            Function c2 = P.c(function);
+            Function c2 = M.c(function);
             synchronized (this.b) {
-                h = k.h(this.var_a, obj, c2);
+                h = j$.time.a.h(this.a, obj, c2);
             }
             return h;
         }
@@ -105,16 +101,16 @@ public class DesugarCollections {
         public Object computeIfPresent(Object obj, BiFunction biFunction) {
             Object i;
             synchronized (this.b) {
-                i = k.i(this.var_a, obj, biFunction);
+                i = j$.time.a.i(this.a, obj, biFunction);
             }
             return i;
         }
 
         public Object computeIfPresent(Object obj, java.util.function.BiFunction biFunction) {
             Object i;
-            BiFunction b2 = CLASSNAMEv.b(biFunction);
+            BiFunction b2 = CLASSNAMEs.b(biFunction);
             synchronized (this.b) {
-                i = k.i(this.var_a, obj, b2);
+                i = j$.time.a.i(this.a, obj, b2);
             }
             return i;
         }
@@ -122,7 +118,7 @@ public class DesugarCollections {
         public boolean containsKey(Object obj) {
             boolean containsKey;
             synchronized (this.b) {
-                containsKey = this.var_a.containsKey(obj);
+                containsKey = this.a.containsKey(obj);
             }
             return containsKey;
         }
@@ -130,7 +126,7 @@ public class DesugarCollections {
         public boolean containsValue(Object obj) {
             boolean containsValue;
             synchronized (this.b) {
-                containsValue = this.var_a.containsValue(obj);
+                containsValue = this.a.containsValue(obj);
             }
             return containsValue;
         }
@@ -139,7 +135,7 @@ public class DesugarCollections {
             Set set;
             synchronized (this.b) {
                 if (this.d == null) {
-                    this.d = a(this.var_a.entrySet(), this.b);
+                    this.d = a(this.a.entrySet(), this.b);
                 }
                 set = this.d;
             }
@@ -152,44 +148,44 @@ public class DesugarCollections {
                 return true;
             }
             synchronized (this.b) {
-                equals = this.var_a.equals(obj);
+                equals = this.a.equals(obj);
             }
             return equals;
         }
 
         public void forEach(BiConsumer biConsumer) {
             synchronized (this.b) {
-                k.t(this.var_a, biConsumer);
+                j$.time.a.s(this.a, biConsumer);
             }
         }
 
         public void forEach(java.util.function.BiConsumer biConsumer) {
-            BiConsumer b2 = CLASSNAMEt.b(biConsumer);
+            BiConsumer b2 = CLASSNAMEq.b(biConsumer);
             synchronized (this.b) {
-                k.t(this.var_a, b2);
+                j$.time.a.s(this.a, b2);
             }
         }
 
         public Object get(Object obj) {
             Object obj2;
             synchronized (this.b) {
-                obj2 = this.var_a.get(obj);
+                obj2 = this.a.get(obj);
             }
             return obj2;
         }
 
         public Object getOrDefault(Object obj, Object obj2) {
-            Object u;
+            Object t;
             synchronized (this.b) {
-                u = k.u(this.var_a, obj, obj2);
+                t = j$.time.a.t(this.a, obj, obj2);
             }
-            return u;
+            return t;
         }
 
         public int hashCode() {
             int hashCode;
             synchronized (this.b) {
-                hashCode = this.var_a.hashCode();
+                hashCode = this.a.hashCode();
             }
             return hashCode;
         }
@@ -197,7 +193,7 @@ public class DesugarCollections {
         public boolean isEmpty() {
             boolean isEmpty;
             synchronized (this.b) {
-                isEmpty = this.var_a.isEmpty();
+                isEmpty = this.a.isEmpty();
             }
             return isEmpty;
         }
@@ -206,7 +202,7 @@ public class DesugarCollections {
             Set set;
             synchronized (this.b) {
                 if (this.c == null) {
-                    this.c = a(this.var_a.keySet(), this.b);
+                    this.c = a(this.a.keySet(), this.b);
                 }
                 set = this.c;
             }
@@ -216,16 +212,16 @@ public class DesugarCollections {
         public Object merge(Object obj, Object obj2, BiFunction biFunction) {
             Object v;
             synchronized (this.b) {
-                v = k.v(this.var_a, obj, obj2, biFunction);
+                v = j$.time.a.v(this.a, obj, obj2, biFunction);
             }
             return v;
         }
 
         public Object merge(Object obj, Object obj2, java.util.function.BiFunction biFunction) {
             Object v;
-            BiFunction b2 = CLASSNAMEv.b(biFunction);
+            BiFunction b2 = CLASSNAMEs.b(biFunction);
             synchronized (this.b) {
-                v = k.v(this.var_a, obj, obj2, b2);
+                v = j$.time.a.v(this.a, obj, obj2, b2);
             }
             return v;
         }
@@ -233,21 +229,21 @@ public class DesugarCollections {
         public Object put(Object obj, Object obj2) {
             Object put;
             synchronized (this.b) {
-                put = this.var_a.put(obj, obj2);
+                put = this.a.put(obj, obj2);
             }
             return put;
         }
 
         public void putAll(Map map) {
             synchronized (this.b) {
-                this.var_a.putAll(map);
+                this.a.putAll(map);
             }
         }
 
         public Object putIfAbsent(Object obj, Object obj2) {
             Object w;
             synchronized (this.b) {
-                w = k.w(this.var_a, obj, obj2);
+                w = j$.time.a.w(this.a, obj, obj2);
             }
             return w;
         }
@@ -255,7 +251,7 @@ public class DesugarCollections {
         public Object remove(Object obj) {
             Object remove;
             synchronized (this.b) {
-                remove = this.var_a.remove(obj);
+                remove = this.a.remove(obj);
             }
             return remove;
         }
@@ -263,7 +259,7 @@ public class DesugarCollections {
         public boolean remove(Object obj, Object obj2) {
             boolean x;
             synchronized (this.b) {
-                x = k.x(this.var_a, obj, obj2);
+                x = j$.time.a.x(this.a, obj, obj2);
             }
             return x;
         }
@@ -271,7 +267,7 @@ public class DesugarCollections {
         public Object replace(Object obj, Object obj2) {
             Object y;
             synchronized (this.b) {
-                y = k.y(this.var_a, obj, obj2);
+                y = j$.time.a.y(this.a, obj, obj2);
             }
             return y;
         }
@@ -279,28 +275,28 @@ public class DesugarCollections {
         public boolean replace(Object obj, Object obj2, Object obj3) {
             boolean z;
             synchronized (this.b) {
-                z = k.z(this.var_a, obj, obj2, obj3);
+                z = j$.time.a.z(this.a, obj, obj2, obj3);
             }
             return z;
         }
 
         public void replaceAll(BiFunction biFunction) {
             synchronized (this.b) {
-                k.A(this.var_a, biFunction);
+                j$.time.a.A(this.a, biFunction);
             }
         }
 
         public void replaceAll(java.util.function.BiFunction biFunction) {
-            BiFunction b2 = CLASSNAMEv.b(biFunction);
+            BiFunction b2 = CLASSNAMEs.b(biFunction);
             synchronized (this.b) {
-                k.A(this.var_a, b2);
+                j$.time.a.A(this.a, b2);
             }
         }
 
         public int size() {
             int size;
             synchronized (this.b) {
-                size = this.var_a.size();
+                size = this.a.size();
             }
             return size;
         }
@@ -308,7 +304,7 @@ public class DesugarCollections {
         public String toString() {
             String obj;
             synchronized (this.b) {
-                obj = this.var_a.toString();
+                obj = this.a.toString();
             }
             return obj;
         }
@@ -319,7 +315,7 @@ public class DesugarCollections {
             synchronized (this.b) {
                 try {
                     if (this.e == null) {
-                        Collection values = this.var_a.values();
+                        Collection values = this.a.values();
                         Object obj = this.b;
                         if (DesugarCollections.e == null) {
                             collection2 = Collections.synchronizedCollection(values);
@@ -352,7 +348,7 @@ public class DesugarCollections {
         Constructor<?> constructor;
         Class<Object> cls = Object.class;
         Class<?> cls2 = Collections.synchronizedCollection(new ArrayList()).getClass();
-        var_a = cls2;
+        a = cls2;
         Constructor<?> constructor2 = null;
         try {
             field = cls2.getDeclaredField("mutex");
@@ -398,14 +394,14 @@ public class DesugarCollections {
         Field field = c;
         if (field == null) {
             try {
-                k.s((Collection) d.get(iterable), consumer);
+                j$.time.a.r((Collection) d.get(iterable), consumer);
             } catch (IllegalAccessException e2) {
                 throw new Error("Runtime illegal access in synchronized collection forEach fall-back.", e2);
             }
         } else {
             try {
                 synchronized (field.get(iterable)) {
-                    k.s((Collection) d.get(iterable), consumer);
+                    j$.time.a.r((Collection) d.get(iterable), consumer);
                 }
             } catch (IllegalAccessException e3) {
                 throw new Error("Runtime illegal access in synchronized collection forEach.", e3);
@@ -469,14 +465,14 @@ public class DesugarCollections {
         Field field = c;
         if (field == null) {
             try {
-                k.B((java.util.List) d.get(list), comparator);
+                j$.time.a.B((java.util.List) d.get(list), comparator);
             } catch (IllegalAccessException e2) {
                 throw new Error("Runtime illegal access in synchronized collection sort fall-back.", e2);
             }
         } else {
             try {
                 synchronized (field.get(list)) {
-                    k.B((java.util.List) d.get(list), comparator);
+                    j$.time.a.B((java.util.List) d.get(list), comparator);
                 }
             } catch (IllegalAccessException e3) {
                 throw new Error("Runtime illegal access in synchronized list sort.", e3);

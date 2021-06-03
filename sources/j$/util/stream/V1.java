@@ -1,13 +1,12 @@
 package j$.util.stream;
 
+import j$.time.a;
 import j$.util.function.C;
-import j$.util.function.CLASSNAMEe;
 import j$.util.function.CLASSNAMEh;
 import j$.util.function.Consumer;
 import j$.util.function.I;
 import j$.util.function.J;
 import j$.util.function.n;
-import j$.util.k;
 import j$.util.stream.A2;
 
 class V1 extends CLASSNAMEv2<R> implements CLASSNAMEu2<Long, R, V1>, A2.g {
@@ -22,17 +21,21 @@ class V1 extends CLASSNAMEv2<R> implements CLASSNAMEu2<Long, R, V1>, A2.g {
     }
 
     public /* synthetic */ void accept(double d2) {
-        k.c(this);
+        a.c(this);
         throw null;
     }
 
     public /* synthetic */ void accept(int i) {
-        k.a(this);
+        a.a(this);
         throw null;
     }
 
     public void accept(long j) {
-        this.c.accept(this.var_a, j);
+        this.c.accept(this.a, j);
+    }
+
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
     }
 
     /* renamed from: b */
@@ -40,28 +43,23 @@ class V1 extends CLASSNAMEv2<R> implements CLASSNAMEu2<Long, R, V1>, A2.g {
         Q1.c(this, l);
     }
 
-    public Consumer f(Consumer consumer) {
-        consumer.getClass();
-        return new CLASSNAMEe(this, consumer);
-    }
-
-    public C g(C c2) {
+    public C f(C c2) {
         c2.getClass();
         return new CLASSNAMEh(this, c2);
     }
 
-    public void i(CLASSNAMEu2 u2Var) {
-        this.var_a = this.d.apply(this.var_a, ((V1) u2Var).var_a);
+    public void h(CLASSNAMEu2 u2Var) {
+        this.a = this.d.apply(this.a, ((V1) u2Var).a);
     }
 
-    public void m() {
+    public void l() {
     }
 
-    public void n(long j) {
-        this.var_a = this.b.get();
+    public void m(long j) {
+        this.a = this.b.get();
     }
 
-    public /* synthetic */ boolean p() {
+    public /* synthetic */ boolean o() {
         return false;
     }
 }

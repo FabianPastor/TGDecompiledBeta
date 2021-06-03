@@ -8,6 +8,7 @@ public class TLRPC$TL_phone_joinGroupCall extends TLObject {
     public TLRPC$InputPeer join_as;
     public boolean muted;
     public TLRPC$TL_dataJSON params;
+    public boolean video_stopped;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         return TLRPC$Updates.TLdeserialize(abstractSerializedData, i, z);
@@ -17,7 +18,9 @@ public class TLRPC$TL_phone_joinGroupCall extends TLObject {
         abstractSerializedData.writeInt32(constructor);
         int i = this.muted ? this.flags | 1 : this.flags & -2;
         this.flags = i;
-        abstractSerializedData.writeInt32(i);
+        int i2 = this.video_stopped ? i | 4 : i & -5;
+        this.flags = i2;
+        abstractSerializedData.writeInt32(i2);
         this.call.serializeToStream(abstractSerializedData);
         this.join_as.serializeToStream(abstractSerializedData);
         if ((this.flags & 2) != 0) {

@@ -5,19 +5,17 @@ import j$.util.function.Consumer;
 import j$.util.function.q;
 
 public final /* synthetic */ class j implements q {
-
-    /* renamed from: a  reason: collision with root package name */
-    public final /* synthetic */ Consumer var_a;
+    public final /* synthetic */ Consumer a;
 
     public /* synthetic */ j(Consumer consumer) {
-        this.var_a = consumer;
+        this.a = consumer;
     }
 
     public final void accept(double d) {
-        this.var_a.accept(Double.valueOf(d));
+        this.a.accept(Double.valueOf(d));
     }
 
-    public q k(q qVar) {
+    public q j(q qVar) {
         qVar.getClass();
         return new CLASSNAMEf(this, qVar);
     }

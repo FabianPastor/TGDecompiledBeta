@@ -67,6 +67,10 @@ public class RadioButton extends View {
         }
     }
 
+    public int getColor() {
+        return this.color;
+    }
+
     public void setColor(int i, int i2) {
         this.color = i;
         this.checkedColor = i2;
