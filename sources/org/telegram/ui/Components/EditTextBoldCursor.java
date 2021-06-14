@@ -467,7 +467,11 @@ public class EditTextBoldCursor extends EditText {
 
     /* access modifiers changed from: protected */
     public void onFocusChanged(boolean z, int i, Rect rect2) {
-        super.onFocusChanged(z, i, rect2);
+        try {
+            super.onFocusChanged(z, i, rect2);
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
         checkHeaderVisibility(true);
     }
 

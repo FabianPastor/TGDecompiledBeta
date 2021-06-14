@@ -449,11 +449,13 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     ViewTreeObserver.OnPreDrawListener requestFullscreenListener;
     /* access modifiers changed from: private */
     public ValueAnimator scheduleAnimator;
-    private TextView scheduleButtonTextView;
+    /* access modifiers changed from: private */
+    public TextView scheduleButtonTextView;
     /* access modifiers changed from: private */
     public float scheduleButtonsScale;
     private boolean scheduleHasFewPeers;
-    private TextView scheduleInfoTextView;
+    /* access modifiers changed from: private */
+    public TextView scheduleInfoTextView;
     private TLRPC$InputPeer schedulePeer;
     /* access modifiers changed from: private */
     public int scheduleStartAt;
@@ -593,37 +595,37 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         VoIPService.StateListener.CC.$default$onVideoAvailableChange(this, z);
     }
 
-    static /* synthetic */ float access$12416(GroupCallActivity groupCallActivity, float f) {
+    static /* synthetic */ float access$12516(GroupCallActivity groupCallActivity, float f) {
         float f2 = groupCallActivity.switchProgress + f;
         groupCallActivity.switchProgress = f2;
         return f2;
     }
 
-    static /* synthetic */ float access$13016(GroupCallActivity groupCallActivity, float f) {
+    static /* synthetic */ float access$13116(GroupCallActivity groupCallActivity, float f) {
         float f2 = groupCallActivity.showWavesProgress + f;
         groupCallActivity.showWavesProgress = f2;
         return f2;
     }
 
-    static /* synthetic */ float access$13024(GroupCallActivity groupCallActivity, float f) {
+    static /* synthetic */ float access$13124(GroupCallActivity groupCallActivity, float f) {
         float f2 = groupCallActivity.showWavesProgress - f;
         groupCallActivity.showWavesProgress = f2;
         return f2;
     }
 
-    static /* synthetic */ float access$13116(GroupCallActivity groupCallActivity, float f) {
+    static /* synthetic */ float access$13216(GroupCallActivity groupCallActivity, float f) {
         float f2 = groupCallActivity.showLightingProgress + f;
         groupCallActivity.showLightingProgress = f2;
         return f2;
     }
 
-    static /* synthetic */ float access$13124(GroupCallActivity groupCallActivity, float f) {
+    static /* synthetic */ float access$13224(GroupCallActivity groupCallActivity, float f) {
         float f2 = groupCallActivity.showLightingProgress - f;
         groupCallActivity.showLightingProgress = f2;
         return f2;
     }
 
-    static /* synthetic */ float access$9716(GroupCallActivity groupCallActivity, float f) {
+    static /* synthetic */ float access$9816(GroupCallActivity groupCallActivity, float f) {
         float f2 = groupCallActivity.amplitude + f;
         groupCallActivity.amplitude = f2;
         return f2;
@@ -2582,7 +2584,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             int r3 = org.telegram.messenger.NotificationCenter.didEndCall
             r2.addObserver(r8, r3)
             android.content.res.Resources r2 = r41.getResources()
-            r3 = 2131166022(0x7var_, float:1.7946278E38)
+            r3 = 2131166021(0x7var_, float:1.7946276E38)
             android.graphics.drawable.Drawable r2 = r2.getDrawable(r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r8.shadowDrawable = r2
@@ -4274,7 +4276,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     /* renamed from: lambda$new$22 */
     public /* synthetic */ void lambda$new$22$GroupCallActivity(Context context, View view) {
         ChatObject.Call call2 = this.call;
-        if (call2 != null) {
+        if (call2 != null && !this.renderersContainer.inFullscreenMode) {
             if (call2.call.join_muted) {
                 this.everyoneItem.setColors(Theme.getColor("voipgroup_actionBarItems"), Theme.getColor("voipgroup_actionBarItems"));
                 this.everyoneItem.setChecked(false);
@@ -4830,6 +4832,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             f2 = 1.05f * cubicBezierInterpolator.getInterpolation(this.switchToButtonProgress / 0.6f);
             f = this.switchToButtonProgress / 0.6f;
         }
+        float dp = isLandscapeMode ? (((float) AndroidUtilities.dp(52.0f)) * f2) / ((float) (this.muteButton.getMeasuredWidth() - AndroidUtilities.dp(8.0f))) : f2;
         float f5 = 1.0f - f;
         this.leaveButton.setAlpha(f);
         VoIPToggleButton voIPToggleButton = this.soundButton;
@@ -4849,8 +4852,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         this.leaveButton.setScaleY(f2);
         this.soundButton.setScaleX(f2);
         this.soundButton.setScaleY(f2);
-        this.muteButton.setScaleX(f2);
-        this.muteButton.setScaleY(f2);
+        this.muteButton.setScaleX(dp);
+        this.muteButton.setScaleY(dp);
         this.scheduleButtonTextView.setScaleX(f5);
         this.scheduleButtonTextView.setScaleY(f5);
         this.scheduleButtonTextView.setAlpha(f5);

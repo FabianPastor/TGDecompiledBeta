@@ -352,7 +352,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x011c:
         L_0x011d:
             android.view.Window r0 = r23.getWindow()
-            r8 = 2131166099(0x7var_, float:1.7946434E38)
+            r8 = 2131166098(0x7var_, float:1.7946432E38)
             r0.setBackgroundDrawableResource(r8)
             java.lang.String r0 = org.telegram.messenger.SharedConfig.passcodeHash
             int r0 = r0.length()

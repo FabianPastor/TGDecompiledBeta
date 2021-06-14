@@ -54,6 +54,7 @@ import org.telegram.ui.Components.CrossOutDrawable;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.GroupCallFullscreenAdapter;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.voip.GroupCallStatusIcon;
 import org.telegram.ui.GroupCallActivity;
@@ -1869,7 +1870,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                 int peerId = MessageObject.getPeerId(this.participant.participant.peer);
                 ChatObject.VideoParticipant videoParticipant2 = this.participant;
                 if (videoParticipant2.participant.self && videoParticipant2.presentation) {
-                    this.imageReceiver.setImageBitmap(getContext().getResources().getDrawable(NUM));
+                    this.imageReceiver.setImageBitmap((Drawable) new MotionBackgroundDrawable(-14602694, -13935795, -14395293, -14203560, true));
                 } else if (peerId > 0) {
                     TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(peerId));
                     ImageLocation forUser = ImageLocation.getForUser(user, 1);

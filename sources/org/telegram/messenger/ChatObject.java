@@ -152,10 +152,10 @@ public class ChatObject {
                     }
                     i++;
                 }
+                if (Call.this.currentSpeakingPeers.size() > 0) {
+                    AndroidUtilities.runOnUIThread(Call.this.updateCurrentSpeakingRunnable, 550);
+                }
                 if (z) {
-                    if (Call.this.currentSpeakingPeers.size() > 0) {
-                        AndroidUtilities.runOnUIThread(Call.this.updateCurrentSpeakingRunnable, 550);
-                    }
                     Call.this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.groupCallSpeakingUsersUpdated, Integer.valueOf(Call.this.chatId), Long.valueOf(Call.this.call.id), Boolean.FALSE);
                 }
             }
@@ -653,7 +653,6 @@ public class ChatObject {
             long uptimeMillis = SystemClock.uptimeMillis();
             int i = 1;
             this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.applyGroupCallVisibleParticipants, Long.valueOf(elapsedRealtime));
-            AndroidUtilities.cancelRunOnUIThread(this.updateCurrentSpeakingRunnable);
             ArrayList arrayList2 = null;
             int i2 = 0;
             boolean z2 = false;
@@ -724,6 +723,7 @@ public class ChatObject {
             }
             if (z4) {
                 if (this.currentSpeakingPeers.size() > 0) {
+                    AndroidUtilities.cancelRunOnUIThread(this.updateCurrentSpeakingRunnable);
                     AndroidUtilities.runOnUIThread(this.updateCurrentSpeakingRunnable, 550);
                 }
                 this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.groupCallSpeakingUsersUpdated, Integer.valueOf(this.chatId), Long.valueOf(this.call.id), Boolean.FALSE);
@@ -1019,7 +1019,7 @@ public class ChatObject {
                     if (i6 < 0) {
                         tLRPC$GroupCall.participants_count = z3 ? 1 : 0;
                     }
-                    i2 = peerId;
+                    i2 = selfId;
                     j = 0;
                 } else {
                     if (this.invitedUsersMap.contains(Integer.valueOf(peerId))) {
@@ -1032,6 +1032,12 @@ public class ChatObject {
                             FileLog.d("new participant, update old");
                         }
                         tLRPC$TL_groupCallParticipant2.muted = tLRPC$TL_groupCallParticipant.muted;
+                        if (tLRPC$TL_groupCallParticipant.muted) {
+                            if (this.currentSpeakingPeers.get(peerId, (Object) null) != null) {
+                                this.currentSpeakingPeers.remove(peerId);
+                                z7 = true;
+                            }
+                        }
                         if (!tLRPC$TL_groupCallParticipant.min) {
                             tLRPC$TL_groupCallParticipant2.volume = tLRPC$TL_groupCallParticipant.volume;
                             tLRPC$TL_groupCallParticipant2.muted_by_you = tLRPC$TL_groupCallParticipant.muted_by_you;
@@ -1047,6 +1053,7 @@ public class ChatObject {
                         tLRPC$TL_groupCallParticipant2.flags = tLRPC$TL_groupCallParticipant.flags;
                         tLRPC$TL_groupCallParticipant2.can_self_unmute = tLRPC$TL_groupCallParticipant.can_self_unmute;
                         tLRPC$TL_groupCallParticipant2.video_joined = tLRPC$TL_groupCallParticipant.video_joined;
+                        i2 = selfId;
                         if (tLRPC$TL_groupCallParticipant2.raise_hand_rating == 0 && tLRPC$TL_groupCallParticipant.raise_hand_rating != 0) {
                             tLRPC$TL_groupCallParticipant2.lastRaiseHandDate = SystemClock.elapsedRealtime();
                         }
@@ -1054,9 +1061,9 @@ public class ChatObject {
                         tLRPC$TL_groupCallParticipant2.date = tLRPC$TL_groupCallParticipant.date;
                         int max = Math.max(tLRPC$TL_groupCallParticipant2.active_date, tLRPC$TL_groupCallParticipant.active_date);
                         tLRPC$TL_groupCallParticipant2.lastTypingDate = max;
-                        i2 = peerId;
+                        int i8 = max;
                         if (elapsedRealtime != tLRPC$TL_groupCallParticipant2.lastVisibleDate) {
-                            tLRPC$TL_groupCallParticipant2.active_date = max;
+                            tLRPC$TL_groupCallParticipant2.active_date = i8;
                         }
                         if (tLRPC$TL_groupCallParticipant2.source != tLRPC$TL_groupCallParticipant.source || !isSameVideo(tLRPC$TL_groupCallParticipant2.video, tLRPC$TL_groupCallParticipant.video) || !isSameVideo(tLRPC$TL_groupCallParticipant2.presentation, tLRPC$TL_groupCallParticipant.presentation)) {
                             processAllSources(tLRPC$TL_groupCallParticipant2, false);
@@ -1075,9 +1082,9 @@ public class ChatObject {
                         }
                         j = 0;
                     } else {
-                        i2 = peerId;
+                        i2 = selfId;
                         if (tLRPC$TL_groupCallParticipant.just_joined) {
-                            long j3 = (long) i2;
+                            long j3 = (long) peerId;
                             TLRPC$GroupCall tLRPC$GroupCall2 = this.call;
                             tLRPC$GroupCall2.participants_count++;
                             if (tLRPC$TL_updateGroupCallParticipants2.version == tLRPC$GroupCall2.version) {
@@ -1097,30 +1104,31 @@ public class ChatObject {
                         if (tLRPC$TL_groupCallParticipant.raise_hand_rating != 0) {
                             tLRPC$TL_groupCallParticipant.lastRaiseHandDate = SystemClock.elapsedRealtime();
                         }
-                        if (i2 == selfId || this.sortedParticipants.size() < 20 || tLRPC$TL_groupCallParticipant.date <= i || tLRPC$TL_groupCallParticipant.active_date != 0 || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || !tLRPC$TL_groupCallParticipant.min || this.membersLoadEndReached) {
+                        if (peerId == i2 || this.sortedParticipants.size() < 20 || tLRPC$TL_groupCallParticipant.date <= i || tLRPC$TL_groupCallParticipant.active_date != 0 || tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted || !tLRPC$TL_groupCallParticipant.min || this.membersLoadEndReached) {
                             this.sortedParticipants.add(tLRPC$TL_groupCallParticipant);
                         }
-                        this.participants.put(i2, tLRPC$TL_groupCallParticipant);
+                        this.participants.put(peerId, tLRPC$TL_groupCallParticipant);
                         processAllSources(tLRPC$TL_groupCallParticipant, true);
                     }
-                    if (i2 == selfId && tLRPC$TL_groupCallParticipant.active_date == 0 && (tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted)) {
+                    if (peerId == i2 && tLRPC$TL_groupCallParticipant.active_date == 0 && (tLRPC$TL_groupCallParticipant.can_self_unmute || !tLRPC$TL_groupCallParticipant.muted)) {
                         tLRPC$TL_groupCallParticipant.active_date = this.currentAccount.getConnectionsManager().getCurrentTime();
                     }
                     z6 = true;
                 }
-                if (i2 == selfId) {
+                if (peerId == i2) {
                     z8 = true;
                 }
                 i4++;
+                selfId = i2;
                 long j4 = j;
                 obj = null;
                 z3 = false;
                 z5 = true;
             }
-            int i8 = tLRPC$TL_updateGroupCallParticipants2.version;
+            int i9 = tLRPC$TL_updateGroupCallParticipants2.version;
             TLRPC$GroupCall tLRPC$GroupCall3 = this.call;
-            if (i8 > tLRPC$GroupCall3.version) {
-                tLRPC$GroupCall3.version = i8;
+            if (i9 > tLRPC$GroupCall3.version) {
+                tLRPC$GroupCall3.version = i9;
                 if (!z) {
                     processUpdatesQueue();
                 }

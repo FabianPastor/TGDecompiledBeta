@@ -993,7 +993,6 @@
     <public type="drawable" name="round_check2" id="NUM" />
     <public type="drawable" name="s_pause" id="NUM" />
     <public type="drawable" name="s_play" id="NUM" />
-    <public type="drawable" name="screenbg_blur" id="NUM" />
     <public type="drawable" name="screencast_big" id="NUM" />
     <public type="drawable" name="scroll_tip" id="NUM" />
     <public type="drawable" name="scrollbar_vertical_thumb" id="NUM" />

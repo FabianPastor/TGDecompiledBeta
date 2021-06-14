@@ -974,7 +974,6 @@ public final class R {
         public static final int round_check2 = NUM;
         public static final int s_pause = NUM;
         public static final int s_play = NUM;
-        public static final int screenbg_blur = NUM;
         public static final int screencast_big = NUM;
         public static final int scroll_tip = NUM;
         public static final int scrollbar_vertical_thumb = NUM;
