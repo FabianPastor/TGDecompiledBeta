@@ -37,17 +37,19 @@ public class WallpaperCheckBoxView extends View {
     private Paint eraserPaint;
     private boolean isChecked;
     private int maxTextSize;
+    private View parentView;
     /* access modifiers changed from: private */
     public float progress;
     private RectF rect = new RectF();
     private TextPaint textPaint;
 
-    public WallpaperCheckBoxView(Context context, boolean z) {
+    public WallpaperCheckBoxView(Context context, boolean z, View view) {
         super(context);
         if (z) {
             this.drawBitmap = Bitmap.createBitmap(AndroidUtilities.dp(18.0f), AndroidUtilities.dp(18.0f), Bitmap.Config.ARGB_4444);
             this.drawCanvas = new Canvas(this.drawBitmap);
         }
+        this.parentView = view;
         TextPaint textPaint2 = new TextPaint(1);
         this.textPaint = textPaint2;
         textPaint2.setTextSize((float) AndroidUtilities.dp(14.0f));
@@ -94,7 +96,11 @@ public class WallpaperCheckBoxView extends View {
         float f;
         float f2;
         this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+        Theme.applyServiceShaderMatrixForView(this, this.parentView);
         canvas.drawRoundRect(this.rect, (float) (getMeasuredHeight() / 2), (float) (getMeasuredHeight() / 2), Theme.chat_actionBackgroundPaint);
+        if (Theme.hasGradientService()) {
+            canvas.drawRoundRect(this.rect, (float) (getMeasuredHeight() / 2), (float) (getMeasuredHeight() / 2), Theme.chat_actionBackgroundGradientDarkenPaint);
+        }
         this.textPaint.setColor(Theme.getColor("chat_serviceText"));
         int measuredWidth = ((getMeasuredWidth() - this.currentTextSize) - AndroidUtilities.dp(28.0f)) / 2;
         canvas.drawText(this.currentText, (float) (AndroidUtilities.dp(28.0f) + measuredWidth), (float) AndroidUtilities.dp(21.0f), this.textPaint);

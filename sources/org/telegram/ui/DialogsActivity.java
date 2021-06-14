@@ -2233,7 +2233,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         return r0;
     }
 
-    /* JADX WARNING: type inference failed for: r12v1, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r12v1, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r12v7 */
     /* JADX WARNING: type inference failed for: r12v8 */
     /* JADX WARNING: Removed duplicated region for block: B:171:0x07c1  */
@@ -2326,7 +2326,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
             org.telegram.ui.Components.RLottieDrawable r0 = new org.telegram.ui.Components.RLottieDrawable
-            r19 = 2131558462(0x7f0d003e, float:1.874224E38)
+            r19 = 2131558463(0x7f0d003f, float:1.8742243E38)
             r1 = 1105199104(0x41e00000, float:28.0)
             int r21 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r22 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -2337,7 +2337,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r18.<init>((int) r19, (java.lang.String) r20, (int) r21, (int) r22, (boolean) r23, (int[]) r24)
             r10.passcodeDrawable = r0
             org.telegram.ui.Components.RLottieDrawable r0 = new org.telegram.ui.Components.RLottieDrawable
-            r26 = 2131558461(0x7f0d003d, float:1.8742238E38)
+            r26 = 2131558462(0x7f0d003e, float:1.874224E38)
             int r28 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r29 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r30 = 1
@@ -2357,7 +2357,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r0 = 0
             r12 = 1
         L_0x00f7:
-            r1 = 2131165480(0x7var_, float:1.7945178E38)
+            r1 = 2131165471(0x7var_f, float:1.794516E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r6.addItem((int) r0, (int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r1.setIsSearchField(r12, r12)
             org.telegram.ui.DialogsActivity$3 r1 = new org.telegram.ui.DialogsActivity$3
@@ -2377,7 +2377,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r4 = 3
             if (r0 == 0) goto L_0x0173
             org.telegram.ui.ActionBar.ActionBar r0 = r10.actionBar
-            r1 = 2131165470(0x7var_e, float:1.7945158E38)
+            r1 = 2131165461(0x7var_, float:1.794514E38)
             r0.setBackButtonImage(r1)
             int r0 = r10.initialDialogsType
             if (r0 != r4) goto L_0x014a
@@ -2949,7 +2949,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r0, r3, r4)
             if (r6 >= r7) goto L_0x0649
             android.content.res.Resources r3 = r42.getResources()
-            r4 = 2131165420(0x7var_ec, float:1.7945057E38)
+            r4 = 2131165411(0x7var_e3, float:1.7945038E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
@@ -2978,7 +2978,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r1 = 10
             if (r0 != r1) goto L_0x067b
             org.telegram.ui.Components.RLottieImageView r0 = r10.floatingButton
-            r1 = 2131165417(0x7var_e9, float:1.794505E38)
+            r1 = 2131165408(0x7var_e0, float:1.7945032E38)
             r0.setImageResource(r1)
             android.widget.FrameLayout r0 = r10.floatingButtonContainer
             r1 = 2131625228(0x7f0e050c, float:1.8877658E38)
@@ -2987,7 +2987,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             goto L_0x0695
         L_0x067b:
             org.telegram.ui.Components.RLottieImageView r0 = r10.floatingButton
-            r1 = 2131558535(0x7f0d0087, float:1.8742389E38)
+            r1 = 2131558536(0x7f0d0088, float:1.874239E38)
             r3 = 52
             r4 = 52
             r0.setAnimation(r1, r3, r4)
@@ -4759,8 +4759,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r2 = r6.folderId
             if (r2 == 0) goto L_0x013c
             org.telegram.ui.Adapters.FiltersView$MediaFilterData r2 = new org.telegram.ui.Adapters.FiltersView$MediaFilterData
-            r13 = 2131165343(0x7var_f, float:1.79449E38)
-            r14 = 2131165343(0x7var_f, float:1.79449E38)
+            r13 = 2131165342(0x7var_e, float:1.7944898E38)
+            r14 = 2131165342(0x7var_e, float:1.7944898E38)
             r3 = 2131624309(0x7f0e0175, float:1.8875794E38)
             java.lang.String r4 = "ArchiveSearchFilter"
             java.lang.String r15 = org.telegram.messenger.LocaleController.getString(r4, r3)
@@ -6134,7 +6134,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         L_0x01a3:
             int[] r10 = new int[r7]
             if (r8 == 0) goto L_0x01ab
-            r11 = 2131165680(0x7var_f0, float:1.7945584E38)
+            r11 = 2131165671(0x7var_e7, float:1.7945566E38)
             goto L_0x01ac
         L_0x01ab:
             r11 = 0
@@ -6142,10 +6142,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r10[r1] = r11
             boolean r11 = org.telegram.messenger.SharedConfig.archiveHidden
             if (r11 == 0) goto L_0x01b6
-            r11 = 2131165352(0x7var_a8, float:1.7944919E38)
+            r11 = 2131165351(0x7var_a7, float:1.7944917E38)
             goto L_0x01b9
         L_0x01b6:
-            r11 = 2131165357(0x7var_ad, float:1.7944929E38)
+            r11 = 2131165356(0x7var_ac, float:1.7944927E38)
         L_0x01b9:
             r10[r0] = r11
             java.lang.CharSequence[] r7 = new java.lang.CharSequence[r7]
@@ -6507,7 +6507,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v17, resolved type: boolean} */
     /* JADX WARNING: type inference failed for: r15v0 */
-    /* JADX WARNING: type inference failed for: r15v1, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r15v1, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r15v11 */
     /* JADX WARNING: type inference failed for: r15v18 */
     /* access modifiers changed from: private */

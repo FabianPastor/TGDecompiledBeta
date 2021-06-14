@@ -145,7 +145,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r0.newTimer = r5
         L_0x0053:
             android.content.res.Resources r6 = r27.getResources()
-            r8 = 2131166031(0x7var_f, float:1.7946296E38)
+            r8 = 2131166022(0x7var_, float:1.7946278E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r8)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.shadowDrawable = r6
@@ -393,7 +393,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r3.addView(r2, r5)
             org.telegram.ui.Cells.ShadowSectionCell r2 = new org.telegram.ui.Cells.ShadowSectionCell
             r2.<init>(r1)
-            r3 = 2131165450(0x7var_a, float:1.7945117E38)
+            r3 = 2131165441(0x7var_, float:1.79451E38)
             android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r3, (java.lang.String) r15)
             org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
             android.graphics.drawable.ColorDrawable r8 = new android.graphics.drawable.ColorDrawable
@@ -433,7 +433,7 @@ public class ClearHistoryAlert extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
             r5.<init>(r1)
             r5.setAutoRepeat(r4)
-            r8 = 2131558508(0x7f0d006c, float:1.8742334E38)
+            r8 = 2131558509(0x7f0d006d, float:1.8742336E38)
             r10 = 120(0x78, float:1.68E-43)
             r5.setAnimation(r8, r10, r10)
             r8 = 1101004800(0x41a00000, float:20.0)
@@ -545,7 +545,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r3.addView(r2, r5)
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
-            r3 = 2131165451(0x7var_b, float:1.794512E38)
+            r3 = 2131165442(0x7var_, float:1.7945101E38)
             android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r3, (java.lang.String) r15)
             org.telegram.ui.Components.CombinedDrawable r5 = new org.telegram.ui.Components.CombinedDrawable
             android.graphics.drawable.ColorDrawable r6 = new android.graphics.drawable.ColorDrawable

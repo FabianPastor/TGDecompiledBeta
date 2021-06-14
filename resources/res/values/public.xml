@@ -279,7 +279,6 @@
     <public type="drawable" name="audiosend_pause" id="NUM" />
     <public type="drawable" name="audiosend_play" id="NUM" />
     <public type="drawable" name="authorize" id="NUM" />
-    <public type="drawable" name="background_hd" id="NUM" />
     <public type="drawable" name="background_selected" id="NUM" />
     <public type="drawable" name="bar_selector_lock" id="NUM" />
     <public type="drawable" name="bar_selector_style" id="NUM" />
@@ -390,14 +389,6 @@
     <public type="drawable" name="contacts_sort_name" id="NUM" />
     <public type="drawable" name="contacts_sort_time" id="NUM" />
     <public type="drawable" name="contacts_widget_preview" id="NUM" />
-    <public type="drawable" name="corner_in_bl" id="NUM" />
-    <public type="drawable" name="corner_in_br" id="NUM" />
-    <public type="drawable" name="corner_in_tl" id="NUM" />
-    <public type="drawable" name="corner_in_tr" id="NUM" />
-    <public type="drawable" name="corner_out_bl" id="NUM" />
-    <public type="drawable" name="corner_out_br" id="NUM" />
-    <public type="drawable" name="corner_out_tl" id="NUM" />
-    <public type="drawable" name="corner_out_tr" id="NUM" />
     <public type="drawable" name="delete" id="NUM" />
     <public type="drawable" name="devices" id="NUM" />
     <public type="drawable" name="dice" id="NUM" />
@@ -1090,7 +1081,6 @@
     <public type="drawable" name="switch_to_on2" id="NUM" />
     <public type="drawable" name="switch_track" id="NUM" />
     <public type="drawable" name="system" id="NUM" />
-    <public type="drawable" name="system_loader" id="NUM" />
     <public type="drawable" name="tabs_reorder" id="NUM" />
     <public type="drawable" name="theme_picker" id="NUM" />
     <public type="drawable" name="theme_preview_image" id="NUM" />
@@ -1466,6 +1456,7 @@
     <public type="raw" name="contacts_sync_on" id="NUM" />
     <public type="raw" name="copy" id="NUM" />
     <public type="raw" name="dartloop" id="NUM" />
+    <public type="raw" name="default_pattern" id="NUM" />
     <public type="raw" name="diceloop" id="NUM" />
     <public type="raw" name="download_arrow" id="NUM" />
     <public type="raw" name="error" id="NUM" />

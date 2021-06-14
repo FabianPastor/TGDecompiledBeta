@@ -225,7 +225,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r11.searching = r13
             r11.searchWas = r13
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
-            r1 = 2131165470(0x7var_e, float:1.7945158E38)
+            r1 = 2131165461(0x7var_, float:1.794514E38)
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
             r14 = 1
@@ -269,7 +269,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r0.setActionBarMenuOnItemClick(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r11.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
-            r1 = 2131165480(0x7var_, float:1.7945178E38)
+            r1 = 2131165471(0x7var_f, float:1.794516E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r13, (int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r1.setIsSearchField(r14)
             org.telegram.ui.ContactsActivity$2 r2 = new org.telegram.ui.ContactsActivity$2
@@ -287,10 +287,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             if (r1 != 0) goto L_0x00ba
             boolean r1 = r11.sortByName
             if (r1 == 0) goto L_0x00a5
-            r1 = 2131165385(0x7var_c9, float:1.7944986E38)
+            r1 = 2131165384(0x7var_c8, float:1.7944984E38)
             goto L_0x00a8
         L_0x00a5:
-            r1 = 2131165384(0x7var_c8, float:1.7944984E38)
+            r1 = 2131165383(0x7var_c7, float:1.7944982E38)
         L_0x00a8:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r14, (int) r1)
             r11.sortItem = r0
@@ -517,7 +517,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r1, r6, r7)
             if (r2 >= r5) goto L_0x029d
             android.content.res.Resources r6 = r24.getResources()
-            r7 = 2131165420(0x7var_ec, float:1.7945057E38)
+            r7 = 2131165411(0x7var_e3, float:1.7945038E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
@@ -546,10 +546,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.getBoolean(r1, r14)
             org.telegram.ui.Components.RLottieImageView r1 = r11.floatingButton
             if (r0 == 0) goto L_0x02c6
-            r0 = 2131558535(0x7f0d0087, float:1.8742389E38)
+            r0 = 2131558536(0x7f0d0088, float:1.874239E38)
             goto L_0x02c9
         L_0x02c6:
-            r0 = 2131558536(0x7f0d0088, float:1.874239E38)
+            r0 = 2131558537(0x7f0d0089, float:1.8742393E38)
         L_0x02c9:
             r6 = 52
             r1.setAnimation(r0, r6, r6)

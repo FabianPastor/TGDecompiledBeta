@@ -1569,8 +1569,8 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.Cells.TextInfoPrivacyCell r11 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r11
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
                 int r0 = r0.detailRow
-                r1 = 2131165450(0x7var_a, float:1.7945117E38)
-                r9 = 2131165451(0x7var_b, float:1.794512E38)
+                r1 = 2131165441(0x7var_, float:1.79451E38)
+                r9 = 2131165442(0x7var_, float:1.7945101E38)
                 if (r12 != r0) goto L_0x02e1
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
@@ -1647,7 +1647,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
             L_0x02dc:
-                r3 = 2131165450(0x7var_a, float:1.7945117E38)
+                r3 = 2131165441(0x7var_, float:1.79451E38)
                 goto L_0x0389
             L_0x02e1:
                 org.telegram.ui.PrivacyControlActivity r0 = org.telegram.ui.PrivacyControlActivity.this
@@ -1721,7 +1721,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 int r0 = r0.p2pDetailRow
                 if (r12 != r0) goto L_0x0389
             L_0x0386:
-                r3 = 2131165451(0x7var_b, float:1.794512E38)
+                r3 = 2131165442(0x7var_, float:1.7945101E38)
             L_0x0389:
                 if (r3 == 0) goto L_0x0494
                 android.content.Context r12 = r10.mContext

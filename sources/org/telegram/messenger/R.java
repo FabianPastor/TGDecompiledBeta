@@ -260,7 +260,6 @@ public final class R {
         public static final int audiosend_pause = NUM;
         public static final int audiosend_play = NUM;
         public static final int authorize = NUM;
-        public static final int background_hd = NUM;
         public static final int background_selected = NUM;
         public static final int bar_selector_lock = NUM;
         public static final int bar_selector_style = NUM;
@@ -371,14 +370,6 @@ public final class R {
         public static final int contacts_sort_name = NUM;
         public static final int contacts_sort_time = NUM;
         public static final int contacts_widget_preview = NUM;
-        public static final int corner_in_bl = NUM;
-        public static final int corner_in_br = NUM;
-        public static final int corner_in_tl = NUM;
-        public static final int corner_in_tr = NUM;
-        public static final int corner_out_bl = NUM;
-        public static final int corner_out_br = NUM;
-        public static final int corner_out_tl = NUM;
-        public static final int corner_out_tr = NUM;
         public static final int delete = NUM;
         public static final int devices = NUM;
         public static final int dice = NUM;
@@ -1071,7 +1062,6 @@ public final class R {
         public static final int switch_to_on2 = NUM;
         public static final int switch_track = NUM;
         public static final int system = NUM;
-        public static final int system_loader = NUM;
         public static final int tabs_reorder = NUM;
         public static final int theme_picker = NUM;
         public static final int theme_preview_image = NUM;
@@ -1599,6 +1589,7 @@ public final class R {
         public static final int contacts_sync_on = NUM;
         public static final int copy = NUM;
         public static final int dartloop = NUM;
+        public static final int default_pattern = NUM;
         public static final int diceloop = NUM;
         public static final int download_arrow = NUM;
         public static final int error = NUM;

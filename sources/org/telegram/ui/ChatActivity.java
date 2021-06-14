@@ -2639,39 +2639,39 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     /* JADX WARNING: Removed duplicated region for block: B:141:0x0473  */
     /* JADX WARNING: Removed duplicated region for block: B:151:0x04b1  */
-    /* JADX WARNING: Removed duplicated region for block: B:284:0x09d3  */
-    /* JADX WARNING: Removed duplicated region for block: B:292:0x0a38  */
-    /* JADX WARNING: Removed duplicated region for block: B:295:0x0b60  */
-    /* JADX WARNING: Removed duplicated region for block: B:311:0x0e26  */
-    /* JADX WARNING: Removed duplicated region for block: B:314:0x0e8b  */
-    /* JADX WARNING: Removed duplicated region for block: B:317:0x0f2f  */
+    /* JADX WARNING: Removed duplicated region for block: B:284:0x09d7  */
+    /* JADX WARNING: Removed duplicated region for block: B:292:0x0a3c  */
+    /* JADX WARNING: Removed duplicated region for block: B:295:0x0b64  */
+    /* JADX WARNING: Removed duplicated region for block: B:311:0x0e2a  */
+    /* JADX WARNING: Removed duplicated region for block: B:314:0x0e8f  */
+    /* JADX WARNING: Removed duplicated region for block: B:317:0x0var_  */
     /* JADX WARNING: Removed duplicated region for block: B:320:0x0var_  */
-    /* JADX WARNING: Removed duplicated region for block: B:328:0x11bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:329:0x11c1  */
-    /* JADX WARNING: Removed duplicated region for block: B:332:0x11d1  */
-    /* JADX WARNING: Removed duplicated region for block: B:333:0x11d4  */
-    /* JADX WARNING: Removed duplicated region for block: B:336:0x122b  */
-    /* JADX WARNING: Removed duplicated region for block: B:337:0x124a  */
-    /* JADX WARNING: Removed duplicated region for block: B:340:0x12f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:341:0x1316  */
-    /* JADX WARNING: Removed duplicated region for block: B:344:0x142c  */
-    /* JADX WARNING: Removed duplicated region for block: B:347:0x1544  */
-    /* JADX WARNING: Removed duplicated region for block: B:352:0x1575  */
-    /* JADX WARNING: Removed duplicated region for block: B:353:0x1577  */
-    /* JADX WARNING: Removed duplicated region for block: B:356:0x1580  */
-    /* JADX WARNING: Removed duplicated region for block: B:359:0x1633  */
-    /* JADX WARNING: Removed duplicated region for block: B:363:0x172f  */
-    /* JADX WARNING: Removed duplicated region for block: B:373:0x186d  */
-    /* JADX WARNING: Removed duplicated region for block: B:383:0x1b9b  */
-    /* JADX WARNING: Removed duplicated region for block: B:386:0x1d53  */
-    /* JADX WARNING: Removed duplicated region for block: B:391:0x1d93  */
-    /* JADX WARNING: Removed duplicated region for block: B:396:0x1da8  */
-    /* JADX WARNING: Removed duplicated region for block: B:412:0x1dff  */
-    /* JADX WARNING: Removed duplicated region for block: B:415:0x1e4c  */
-    /* JADX WARNING: Removed duplicated region for block: B:418:0x1e6b A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:424:0x1e8f  */
-    /* JADX WARNING: Removed duplicated region for block: B:427:0x1e98  */
-    /* JADX WARNING: Removed duplicated region for block: B:428:0x1ea7  */
+    /* JADX WARNING: Removed duplicated region for block: B:328:0x11c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:329:0x11c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:332:0x11d5  */
+    /* JADX WARNING: Removed duplicated region for block: B:333:0x11d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:336:0x122f  */
+    /* JADX WARNING: Removed duplicated region for block: B:337:0x124e  */
+    /* JADX WARNING: Removed duplicated region for block: B:340:0x12fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:341:0x131a  */
+    /* JADX WARNING: Removed duplicated region for block: B:344:0x1430  */
+    /* JADX WARNING: Removed duplicated region for block: B:347:0x1548  */
+    /* JADX WARNING: Removed duplicated region for block: B:352:0x1579  */
+    /* JADX WARNING: Removed duplicated region for block: B:353:0x157b  */
+    /* JADX WARNING: Removed duplicated region for block: B:356:0x1584  */
+    /* JADX WARNING: Removed duplicated region for block: B:359:0x1637  */
+    /* JADX WARNING: Removed duplicated region for block: B:363:0x1733  */
+    /* JADX WARNING: Removed duplicated region for block: B:373:0x1871  */
+    /* JADX WARNING: Removed duplicated region for block: B:383:0x1b9f  */
+    /* JADX WARNING: Removed duplicated region for block: B:386:0x1d57  */
+    /* JADX WARNING: Removed duplicated region for block: B:391:0x1d97  */
+    /* JADX WARNING: Removed duplicated region for block: B:396:0x1dac  */
+    /* JADX WARNING: Removed duplicated region for block: B:412:0x1e03  */
+    /* JADX WARNING: Removed duplicated region for block: B:415:0x1e50  */
+    /* JADX WARNING: Removed duplicated region for block: B:418:0x1e6f A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:424:0x1e93  */
+    /* JADX WARNING: Removed duplicated region for block: B:427:0x1e9c  */
+    /* JADX WARNING: Removed duplicated region for block: B:428:0x1eab  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r41) {
         /*
@@ -2905,10 +2905,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r2 = r7.reportType
             if (r2 >= 0) goto L_0x0202
             r2 = 40
-            r3 = 2131165480(0x7var_, float:1.7945178E38)
+            r3 = 2131165471(0x7var_f, float:1.794516E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r1.addItem((int) r2, (int) r3)
             r7.searchIconItem = r2
-            r2 = 2131165480(0x7var_, float:1.7945178E38)
+            r2 = 2131165471(0x7var_f, float:1.794516E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r1.addItem((int) r11, (int) r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r2.setIsSearchField(r0)
             org.telegram.ui.ChatActivity$8 r3 = new org.telegram.ui.ChatActivity$8
@@ -2947,7 +2947,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r2 != 0) goto L_0x0529
             int r2 = r7.reportType
             if (r2 >= 0) goto L_0x0529
-            r2 = 2131165477(0x7var_, float:1.7945172E38)
+            r2 = 2131165468(0x7var_c, float:1.7945154E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r1.addItem((int) r11, (int) r2)
             r7.headerItem = r2
             r13 = 2131623986(0x7f0e0032, float:1.8875139E38)
@@ -2959,7 +2959,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r2 == 0) goto L_0x0296
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r7.headerItem
             r14 = 32
-            r0 = 2131165724(0x7var_c, float:1.7945673E38)
+            r0 = 2131165715(0x7var_, float:1.7945655E38)
             r4 = 2131624615(0x7f0e02a7, float:1.8876415E38)
             java.lang.String r5 = "Call"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
@@ -2968,7 +2968,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 18
             if (r0 < r2) goto L_0x0261
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
-            r2 = 2131165846(0x7var_, float:1.794592E38)
+            r2 = 2131165837(0x7var_d, float:1.7945902E38)
             r4 = 2131627974(0x7f0e0fc6, float:1.8883228E38)
             java.lang.String r5 = "VideoCall"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
@@ -3000,7 +3000,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
             r0.hideSubItem(r13)
         L_0x0296:
-            r0 = 2131165477(0x7var_, float:1.7945172E38)
+            r0 = 2131165468(0x7var_c, float:1.7945154E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r1.addItem((int) r11, (int) r0)
             r7.editTextItem = r0
             r2 = 2131623986(0x7f0e0032, float:1.8875139E38)
@@ -3108,7 +3108,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r0 == 0) goto L_0x03bd
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
             r2 = 40
-            r4 = 2131165822(0x7var_e, float:1.7945872E38)
+            r4 = 2131165813(0x7var_, float:1.7945854E38)
             r5 = 2131627294(0x7f0e0d1e, float:1.8881848E38)
             java.lang.String r13 = "Search"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r13, r5)
@@ -3121,7 +3121,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             boolean r0 = org.telegram.messenger.ChatObject.hasAdminRights(r0)
             if (r0 != 0) goto L_0x03df
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
-            r2 = 2131165803(0x7var_b, float:1.7945833E38)
+            r2 = 2131165794(0x7var_, float:1.7945815E38)
             r4 = 2131627181(0x7f0e0cad, float:1.888162E38)
             java.lang.String r5 = "ReportChat"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
@@ -3134,7 +3134,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$User r0 = r7.currentUser
             if (r0 == 0) goto L_0x03f4
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
-            r2 = 2131165713(0x7var_, float:1.794565E38)
+            r2 = 2131165704(0x7var_, float:1.7945633E38)
             java.lang.String r4 = ""
             r13 = 17
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r0.addSubItem(r13, r2, r4)
@@ -3144,7 +3144,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r0 == 0) goto L_0x040e
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
             r2 = 13
-            r4 = 2131165837(0x7var_d, float:1.7945902E38)
+            r4 = 2131165828(0x7var_, float:1.7945884E38)
             r13 = 2131627436(0x7f0e0dac, float:1.8882136E38)
             java.lang.String r14 = "SetTimer"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
@@ -3168,7 +3168,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r0 == 0) goto L_0x0456
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
             r2 = 26
-            r4 = 2131165837(0x7var_d, float:1.7945902E38)
+            r4 = 2131165828(0x7var_, float:1.7945884E38)
             r13 = 2131624446(0x7f0e01fe, float:1.8876072E38)
             java.lang.String r14 = "AutoDeleteSetTimer"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
@@ -3177,7 +3177,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x0443:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
             r2 = 15
-            r4 = 2131165732(0x7var_, float:1.794569E38)
+            r4 = 2131165723(0x7var_b, float:1.7945671E38)
             r13 = 2131624911(0x7f0e03cf, float:1.8877015E38)
             java.lang.String r14 = "ClearHistory"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
@@ -3190,7 +3190,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x045e:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
             r2 = 18
-            r4 = 2131165782(0x7var_, float:1.794579E38)
+            r4 = 2131165773(0x7var_d, float:1.7945773E38)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r0 = r0.addSubItem(r2, r4, r12)
             r7.muteItem = r0
         L_0x046b:
@@ -3206,7 +3206,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             boolean r0 = r0.megagroup
             if (r0 == 0) goto L_0x0497
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
-            r2 = 2131165762(0x7var_, float:1.794575E38)
+            r2 = 2131165753(0x7var_, float:1.7945732E38)
             r4 = 2131625953(0x7f0e07e1, float:1.8879129E38)
             java.lang.String r13 = "LeaveMegaMenu"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r13, r4)
@@ -3214,7 +3214,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             goto L_0x04d8
         L_0x0497:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
-            r2 = 2131165762(0x7var_, float:1.794575E38)
+            r2 = 2131165753(0x7var_, float:1.7945732E38)
             r4 = 2131625951(0x7f0e07df, float:1.8879124E38)
             java.lang.String r13 = "LeaveChannelMenu"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r13, r4)
@@ -3227,7 +3227,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$Chat r0 = r7.currentChat
             if (r0 == 0) goto L_0x04c7
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
-            r2 = 2131165762(0x7var_, float:1.794575E38)
+            r2 = 2131165753(0x7var_, float:1.7945732E38)
             r4 = 2131625119(0x7f0e049f, float:1.8877437E38)
             java.lang.String r13 = "DeleteAndExit"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r13, r4)
@@ -3235,7 +3235,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             goto L_0x04d8
         L_0x04c7:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
-            r2 = 2131165737(0x7var_, float:1.79457E38)
+            r2 = 2131165728(0x7var_, float:1.7945681E38)
             r4 = 2131625134(0x7f0e04ae, float:1.8877467E38)
             java.lang.String r13 = "DeleteChatUser"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r13, r4)
@@ -3247,7 +3247,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r0 == 0) goto L_0x04f3
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
             r2 = 24
-            r4 = 2131165757(0x7var_d, float:1.794574E38)
+            r4 = 2131165748(0x7var_, float:1.7945722E38)
             r13 = 2131624215(0x7f0e0117, float:1.8875603E38)
             java.lang.String r14 = "AddShortcut"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
@@ -3261,14 +3261,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r0 == 0) goto L_0x052b
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
             r2 = 31
-            r4 = 2131165688(0x7var_f8, float:1.79456E38)
+            r4 = 2131165679(0x7var_ef, float:1.7945582E38)
             r13 = 2131624594(0x7f0e0292, float:1.8876372E38)
             java.lang.String r14 = "BotSettings"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.addSubItem(r2, r4, r13)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.headerItem
             r2 = 30
-            r4 = 2131165658(0x7var_da, float:1.794554E38)
+            r4 = 2131165649(0x7var_d1, float:1.7945521E38)
             r13 = 2131624585(0x7f0e0289, float:1.8876354E38)
             java.lang.String r14 = "BotHelp"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
@@ -3291,7 +3291,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r0 != 0) goto L_0x056e
             int r0 = r7.reportType
             if (r0 >= 0) goto L_0x056e
-            r0 = 2131165477(0x7var_, float:1.7945172E38)
+            r0 = 2131165468(0x7var_c, float:1.7945154E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r1.addItem((int) r13, (int) r0)
             r1 = 1
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setOverrideMenuClick(r1)
@@ -3349,7 +3349,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r1 != 0) goto L_0x0675
             java.util.ArrayList<android.view.View> r1 = r7.actionModeViews
             r4 = 25
-            r3 = 2131165741(0x7var_d, float:1.7945708E38)
+            r3 = 2131165732(0x7var_, float:1.794569E38)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r6 = 2131627281(0x7f0e0d11, float:1.8881822E38)
             java.lang.String r12 = "SaveToMusic"
@@ -3358,7 +3358,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.add(r3)
             java.util.ArrayList<android.view.View> r1 = r7.actionModeViews
             r3 = 23
-            r4 = 2131165746(0x7var_, float:1.7945718E38)
+            r4 = 2131165737(0x7var_, float:1.79457E38)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r6 = 2131625230(0x7f0e050e, float:1.8877662E38)
             java.lang.String r12 = "Edit"
@@ -3367,7 +3367,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.add(r3)
             java.util.ArrayList<android.view.View> r1 = r7.actionModeViews
             r3 = 22
-            r4 = 2131165748(0x7var_, float:1.7945722E38)
+            r4 = 2131165739(0x7var_b, float:1.7945704E38)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r6 = 2131624225(0x7f0e0121, float:1.8875624E38)
             java.lang.String r12 = "AddToFavorites"
@@ -3376,7 +3376,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.add(r3)
             java.util.ArrayList<android.view.View> r1 = r7.actionModeViews
             r3 = 10
-            r4 = 2131165735(0x7var_, float:1.7945696E38)
+            r4 = 2131165726(0x7var_e, float:1.7945677E38)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r6 = 2131625011(0x7f0e0433, float:1.8877218E38)
             java.lang.String r12 = "Copy"
@@ -3385,7 +3385,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.add(r3)
             java.util.ArrayList<android.view.View> r1 = r7.actionModeViews
             r3 = 11
-            r4 = 2131165749(0x7var_, float:1.7945724E38)
+            r4 = 2131165740(0x7var_c, float:1.7945706E38)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r6 = 2131625588(0x7f0e0674, float:1.8878388E38)
             java.lang.String r12 = "Forward"
@@ -3394,7 +3394,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.add(r3)
             java.util.ArrayList<android.view.View> r1 = r7.actionModeViews
             r3 = 12
-            r4 = 2131165737(0x7var_, float:1.79457E38)
+            r4 = 2131165728(0x7var_, float:1.7945681E38)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r5 = 2131625106(0x7f0e0492, float:1.887741E38)
             java.lang.String r6 = "Delete"
@@ -3405,7 +3405,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x0675:
             java.util.ArrayList<android.view.View> r1 = r7.actionModeViews
             r3 = 23
-            r4 = 2131165746(0x7var_, float:1.7945718E38)
+            r4 = 2131165737(0x7var_, float:1.79457E38)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r6 = 2131625230(0x7f0e050e, float:1.8877662E38)
             java.lang.String r12 = "Edit"
@@ -3414,7 +3414,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.add(r3)
             java.util.ArrayList<android.view.View> r1 = r7.actionModeViews
             r3 = 22
-            r4 = 2131165748(0x7var_, float:1.7945722E38)
+            r4 = 2131165739(0x7var_b, float:1.7945704E38)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r6 = 2131624225(0x7f0e0121, float:1.8875624E38)
             java.lang.String r12 = "AddToFavorites"
@@ -3423,7 +3423,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.add(r3)
             java.util.ArrayList<android.view.View> r1 = r7.actionModeViews
             r3 = 10
-            r4 = 2131165735(0x7var_, float:1.7945696E38)
+            r4 = 2131165726(0x7var_e, float:1.7945677E38)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r6 = 2131625011(0x7f0e0433, float:1.8877218E38)
             java.lang.String r12 = "Copy"
@@ -3432,7 +3432,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.add(r3)
             java.util.ArrayList<android.view.View> r1 = r7.actionModeViews
             r3 = 12
-            r4 = 2131165737(0x7var_, float:1.79457E38)
+            r4 = 2131165728(0x7var_, float:1.7945681E38)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r5 = 2131625106(0x7f0e0492, float:1.887741E38)
             java.lang.String r6 = "Delete"
@@ -3579,108 +3579,109 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r32, r33, r34, r35, r36, r37, r38)
             r1.addView(r2, r3)
             r13 = 1073741824(0x40000000, float:2.0)
-            goto L_0x09b7
+            goto L_0x09bb
         L_0x0801:
             r12 = 17
             r13 = 1073741824(0x40000000, float:2.0)
             r14 = -2
             r15 = 1096810496(0x41600000, float:14.0)
             org.telegram.tgnet.TLRPC$EncryptedChat r1 = r7.currentEncryptedChat
-            if (r1 != 0) goto L_0x0963
+            if (r1 != 0) goto L_0x0965
             boolean r1 = r40.isThreadChat()
-            if (r1 != 0) goto L_0x0856
+            if (r1 != 0) goto L_0x0858
             int r1 = r7.chatMode
-            if (r1 != 0) goto L_0x0856
+            if (r1 != 0) goto L_0x0858
             org.telegram.tgnet.TLRPC$User r1 = r7.currentUser
             if (r1 == 0) goto L_0x081e
             boolean r1 = r1.self
             if (r1 != 0) goto L_0x0826
         L_0x081e:
             org.telegram.tgnet.TLRPC$Chat r1 = r7.currentChat
-            if (r1 == 0) goto L_0x0856
+            if (r1 == 0) goto L_0x0858
             boolean r1 = r1.creator
-            if (r1 == 0) goto L_0x0856
+            if (r1 == 0) goto L_0x0858
         L_0x0826:
             org.telegram.ui.Components.ChatBigEmptyView r0 = new org.telegram.ui.Components.ChatBigEmptyView
-            org.telegram.tgnet.TLRPC$Chat r1 = r7.currentChat
-            if (r1 == 0) goto L_0x082e
-            r1 = 1
-            goto L_0x082f
-        L_0x082e:
-            r1 = 2
-        L_0x082f:
-            r0.<init>(r8, r1)
+            org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.contentView
+            org.telegram.tgnet.TLRPC$Chat r2 = r7.currentChat
+            if (r2 == 0) goto L_0x0830
+            r2 = 1
+            goto L_0x0831
+        L_0x0830:
+            r2 = 2
+        L_0x0831:
+            r0.<init>(r8, r1, r2)
             r7.bigEmptyView = r0
             android.widget.FrameLayout r1 = r7.emptyViewContainer
             android.widget.FrameLayout$LayoutParams r2 = new android.widget.FrameLayout$LayoutParams
             r2.<init>(r14, r14, r12)
             r1.addView(r0, r2)
             org.telegram.tgnet.TLRPC$Chat r0 = r7.currentChat
-            if (r0 == 0) goto L_0x09b7
+            if (r0 == 0) goto L_0x09bb
             org.telegram.ui.Components.ChatBigEmptyView r0 = r7.bigEmptyView
             r1 = 2131625726(0x7f0e06fe, float:1.8878668E38)
             java.lang.String r2 = "GroupEmptyTitle1"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             android.text.SpannableStringBuilder r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1)
             r0.setStatusText(r1)
-            goto L_0x09b7
-        L_0x0856:
+            goto L_0x09bb
+        L_0x0858:
             boolean r1 = r40.isThreadChat()
-            if (r1 == 0) goto L_0x0874
+            if (r1 == 0) goto L_0x0876
             boolean r1 = r7.isComments
-            if (r1 == 0) goto L_0x086a
+            if (r1 == 0) goto L_0x086c
             r1 = 2131626288(0x7f0e0930, float:1.8879808E38)
             java.lang.String r2 = "NoComments"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            goto L_0x08c4
-        L_0x086a:
+            goto L_0x08c6
+        L_0x086c:
             r1 = 2131626327(0x7f0e0957, float:1.8879887E38)
             java.lang.String r2 = "NoReplies"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            goto L_0x08c4
-        L_0x0874:
+            goto L_0x08c6
+        L_0x0876:
             int r1 = r7.chatMode
             r2 = 1
-            if (r1 != r2) goto L_0x0883
+            if (r1 != r2) goto L_0x0885
             r1 = 2131626329(0x7f0e0959, float:1.8879891E38)
             java.lang.String r2 = "NoScheduledMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            goto L_0x08c4
-        L_0x0883:
+            goto L_0x08c6
+        L_0x0885:
             org.telegram.tgnet.TLRPC$User r1 = r7.currentUser
-            if (r1 == 0) goto L_0x08a8
+            if (r1 == 0) goto L_0x08aa
             int r2 = r1.id
             r3 = 777000(0xbdb28, float:1.088809E-39)
-            if (r2 == r3) goto L_0x08a8
+            if (r2 == r3) goto L_0x08aa
             r3 = 429000(0x68bc8, float:6.01157E-40)
-            if (r2 == r3) goto L_0x08a8
+            if (r2 == r3) goto L_0x08aa
             r3 = 4244000(0x40CLASSNAME, float:5.94711E-39)
-            if (r2 == r3) goto L_0x08a8
+            if (r2 == r3) goto L_0x08aa
             boolean r1 = org.telegram.messenger.MessagesController.isSupportUser(r1)
-            if (r1 == 0) goto L_0x08a8
+            if (r1 == 0) goto L_0x08aa
             r1 = 2131625713(0x7f0e06f1, float:1.8878642E38)
             java.lang.String r2 = "GotAQuestion"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            goto L_0x08c4
-        L_0x08a8:
+            goto L_0x08c6
+        L_0x08aa:
             org.telegram.tgnet.TLRPC$User r1 = r7.currentUser
-            if (r1 == 0) goto L_0x08bb
+            if (r1 == 0) goto L_0x08bd
             boolean r2 = r1.self
-            if (r2 != 0) goto L_0x08bb
+            if (r2 != 0) goto L_0x08bd
             boolean r1 = r1.deleted
-            if (r1 != 0) goto L_0x08bb
+            if (r1 != 0) goto L_0x08bd
             boolean r1 = r7.userBlocked
-            if (r1 == 0) goto L_0x08b9
-            goto L_0x08bb
-        L_0x08b9:
-            r1 = 0
-            goto L_0x08c4
+            if (r1 == 0) goto L_0x08bb
+            goto L_0x08bd
         L_0x08bb:
+            r1 = 0
+            goto L_0x08c6
+        L_0x08bd:
             r1 = 2131626309(0x7f0e0945, float:1.887985E38)
             java.lang.String r2 = "NoMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-        L_0x08c4:
-            if (r1 != 0) goto L_0x08ff
+        L_0x08c6:
+            if (r1 != 0) goto L_0x0901
             org.telegram.ui.Components.ChatGreetingsView r6 = new org.telegram.ui.Components.ChatGreetingsView
             org.telegram.tgnet.TLRPC$User r3 = r7.currentUser
             int r5 = r7.currentAccount
@@ -3707,8 +3708,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r38 = 0
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r32, r33, r34, r35, r36, r37, r38)
             r0.addView(r1, r2)
-            goto L_0x09b7
-        L_0x08ff:
+            goto L_0x09bb
+        L_0x0901:
             android.widget.TextView r0 = new android.widget.TextView
             r0.<init>(r8)
             r7.emptyView = r0
@@ -3723,12 +3724,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setTextColor(r1)
             android.widget.TextView r0 = r7.emptyView
-            r1 = 2131166086(0x7var_, float:1.7946407E38)
-            r0.setBackgroundResource(r1)
-            android.widget.TextView r0 = r7.emptyView
-            android.graphics.drawable.Drawable r0 = r0.getBackground()
-            android.graphics.PorterDuffColorFilter r1 = org.telegram.ui.ActionBar.Theme.colorFilter
-            r0.setColorFilter(r1)
+            r1 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            android.widget.TextView r2 = r7.emptyView
+            org.telegram.ui.Components.SizeNotifierFrameLayout r3 = r7.contentView
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createServiceDrawable(r1, r2, r3)
+            r0.setBackground(r1)
             android.widget.TextView r0 = r7.emptyView
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r16)
             r0.setTypeface(r1)
@@ -3746,16 +3747,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.FrameLayout$LayoutParams r2 = new android.widget.FrameLayout$LayoutParams
             r2.<init>(r14, r14, r12)
             r0.addView(r1, r2)
-            goto L_0x09b7
-        L_0x0963:
+            goto L_0x09bb
+        L_0x0965:
             org.telegram.ui.Components.ChatBigEmptyView r0 = new org.telegram.ui.Components.ChatBigEmptyView
-            r0.<init>(r8, r11)
+            org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.contentView
+            r0.<init>(r8, r1, r11)
             r7.bigEmptyView = r0
             org.telegram.tgnet.TLRPC$EncryptedChat r0 = r7.currentEncryptedChat
             int r0 = r0.admin_id
             org.telegram.messenger.UserConfig r1 = r40.getUserConfig()
             int r1 = r1.getClientUserId()
-            if (r0 != r1) goto L_0x0992
+            if (r0 != r1) goto L_0x0996
             org.telegram.ui.Components.ChatBigEmptyView r0 = r7.bigEmptyView
             r1 = 2131625320(0x7f0e0568, float:1.8877845E38)
             r2 = 1
@@ -3766,8 +3768,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r4 = "EncryptedPlaceholderTitleOutgoing"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3)
             r0.setStatusText(r1)
-            goto L_0x09ab
-        L_0x0992:
+            goto L_0x09af
+        L_0x0996:
             r2 = 1
             org.telegram.ui.Components.ChatBigEmptyView r0 = r7.bigEmptyView
             r1 = 2131625319(0x7f0e0567, float:1.8877843E38)
@@ -3778,41 +3780,41 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r2 = "EncryptedPlaceholderTitleIncoming"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r2, r1, r3)
             r0.setStatusText(r1)
-        L_0x09ab:
+        L_0x09af:
             android.widget.FrameLayout r0 = r7.emptyViewContainer
             org.telegram.ui.Components.ChatBigEmptyView r1 = r7.bigEmptyView
             android.widget.FrameLayout$LayoutParams r2 = new android.widget.FrameLayout$LayoutParams
             r2.<init>(r14, r14, r12)
             r0.addView(r1, r2)
-        L_0x09b7:
+        L_0x09bb:
             org.telegram.ui.Components.ChatActivityEnterView r0 = r7.chatActivityEnterView
-            if (r0 == 0) goto L_0x09ce
+            if (r0 == 0) goto L_0x09d2
             r0.onDestroy()
             org.telegram.ui.Components.ChatActivityEnterView r0 = r7.chatActivityEnterView
             boolean r0 = r0.isEditingMessage()
-            if (r0 != 0) goto L_0x09ce
+            if (r0 != 0) goto L_0x09d2
             org.telegram.ui.Components.ChatActivityEnterView r0 = r7.chatActivityEnterView
             java.lang.CharSequence r0 = r0.getFieldText()
             r6 = r0
-            goto L_0x09cf
-        L_0x09ce:
+            goto L_0x09d3
+        L_0x09d2:
             r6 = 0
-        L_0x09cf:
+        L_0x09d3:
             org.telegram.ui.Adapters.MentionsAdapter r0 = r7.mentionsAdapter
-            if (r0 == 0) goto L_0x09d6
+            if (r0 == 0) goto L_0x09da
             r0.onDestroy()
-        L_0x09d6:
+        L_0x09da:
             org.telegram.ui.ChatActivity$11 r0 = new org.telegram.ui.ChatActivity$11
             r0.<init>(r8)
             r7.chatListView = r0
             org.telegram.tgnet.TLRPC$EncryptedChat r1 = r7.currentEncryptedChat
-            if (r1 == 0) goto L_0x09eb
+            if (r1 == 0) goto L_0x09ef
             int r1 = android.os.Build.VERSION.SDK_INT
             r2 = 19
-            if (r1 < r2) goto L_0x09eb
+            if (r1 < r2) goto L_0x09ef
             r1 = 4
             r0.setImportantForAccessibility(r1)
-        L_0x09eb:
+        L_0x09ef:
             org.telegram.ui.Components.RecyclerListView r0 = r7.chatListView
             r0.setNestedScrollingEnabled(r11)
             org.telegram.ui.Components.RecyclerListView r0 = r7.chatListView
@@ -3843,13 +3845,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.content.SharedPreferences r0 = org.telegram.messenger.MessagesController.getGlobalMainSettings()
             java.lang.String r2 = "view_animations"
             boolean r0 = r0.getBoolean(r2, r1)
-            if (r0 == 0) goto L_0x0a44
+            if (r0 == 0) goto L_0x0a48
             org.telegram.ui.ChatActivity$12 r0 = new org.telegram.ui.ChatActivity$12
             org.telegram.ui.Components.RecyclerListView r1 = r7.chatListView
             r0.<init>(r7, r1)
             r7.chatListItemAnimator = r0
             r0.setSupportsChangeAnimations(r11)
-        L_0x0a44:
+        L_0x0a48:
             org.telegram.ui.ChatActivity$13 r0 = new org.telegram.ui.ChatActivity$13
             r4 = 1000(0x3e8, float:1.401E-42)
             r5 = 1
@@ -3911,12 +3913,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.view.View r0 = new android.view.View
             r0.<init>(r8)
             r7.progressView2 = r0
-            r1 = 2131166087(0x7var_, float:1.794641E38)
-            r0.setBackgroundResource(r1)
-            android.view.View r0 = r7.progressView2
-            android.graphics.drawable.Drawable r0 = r0.getBackground()
-            android.graphics.PorterDuffColorFilter r1 = org.telegram.ui.ActionBar.Theme.colorFilter
-            r0.setColorFilter(r1)
+            r1 = 1099956224(0x41900000, float:18.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            android.view.View r2 = r7.progressView2
+            org.telegram.ui.Components.SizeNotifierFrameLayout r3 = r7.contentView
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createServiceDrawable(r1, r2, r3)
+            r0.setBackground(r1)
             android.widget.FrameLayout r0 = r7.progressView
             android.view.View r1 = r7.progressView2
             r2 = 36
@@ -3969,7 +3971,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.<init>()
             r0.setOnClickListener(r1)
             org.telegram.tgnet.TLRPC$EncryptedChat r0 = r7.currentEncryptedChat
-            if (r0 != 0) goto L_0x0e26
+            if (r0 != 0) goto L_0x0e2a
             org.telegram.ui.ChatActivity$18 r0 = new org.telegram.ui.ChatActivity$18
             r0.<init>(r8)
             r7.pinnedMessageView = r0
@@ -3985,7 +3987,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 8
             r0.setVisibility(r1)
             android.widget.FrameLayout r0 = r7.pinnedMessageView
-            r1 = 2131165283(0x7var_, float:1.7944779E38)
+            r1 = 2131165282(0x7var_, float:1.7944777E38)
             r0.setBackgroundResource(r1)
             android.widget.FrameLayout r0 = r7.pinnedMessageView
             android.graphics.drawable.Drawable r0 = r0.getBackground()
@@ -4053,9 +4055,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r32, r33, r34, r35, r36, r37, r38)
             r0.addView(r1, r2)
             r0 = 0
-        L_0x0c2c:
+        L_0x0CLASSNAME:
             r1 = 2
-            if (r0 >= r1) goto L_0x0cec
+            if (r0 >= r1) goto L_0x0cf0
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r7.pinnedNameTextView
             org.telegram.ui.ChatActivity$19 r2 = new org.telegram.ui.ChatActivity$19
             r2.<init>(r8)
@@ -4123,7 +4125,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r32, r33, r34, r35, r36, r37, r38)
             r1.addView(r2, r3)
             r1 = 1
-            if (r0 != r1) goto L_0x0ce8
+            if (r0 != r1) goto L_0x0cec
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r7.pinnedMessageTextView
             r1 = r1[r0]
             r2 = 4
@@ -4134,14 +4136,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.Components.BackupImageView[] r1 = r7.pinnedMessageImageView
             r1 = r1[r0]
             r1.setVisibility(r2)
-        L_0x0ce8:
-            int r0 = r0 + 1
-            goto L_0x0c2c
         L_0x0cec:
+            int r0 = r0 + 1
+            goto L_0x0CLASSNAME
+        L_0x0cf0:
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r8)
             r7.pinnedListButton = r0
-            r1 = 2131165677(0x7var_ed, float:1.7945578E38)
+            r1 = 2131165668(0x7var_e4, float:1.794556E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r7.pinnedListButton
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -4171,7 +4173,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.setScaleY(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
             r4 = 21
-            if (r0 < r4) goto L_0x0d52
+            if (r0 < r4) goto L_0x0d56
             android.widget.ImageView r1 = r7.pinnedListButton
             java.lang.String r2 = "inappPlayerClose"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
@@ -4179,7 +4181,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = r2 & r3
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2)
             r1.setBackgroundDrawable(r2)
-        L_0x0d52:
+        L_0x0d56:
             android.widget.FrameLayout r1 = r7.pinnedMessageView
             android.widget.ImageView r2 = r7.pinnedListButton
             r32 = 36
@@ -4198,7 +4200,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.ImageView r1 = new android.widget.ImageView
             r1.<init>(r8)
             r7.closePinned = r1
-            r2 = 2131165705(0x7var_, float:1.7945635E38)
+            r2 = 2131165696(0x7var_, float:1.7945616E38)
             r1.setImageResource(r2)
             android.widget.ImageView r1 = r7.closePinned
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -4236,12 +4238,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r32, r33, r34, r35, r36, r37, r38)
             r1.addView(r2, r3)
             int r1 = r7.threadMessageId
-            if (r1 == 0) goto L_0x0de8
+            if (r1 == 0) goto L_0x0dec
             android.widget.ImageView r1 = r7.closePinned
             r2 = 8
             r1.setVisibility(r2)
-        L_0x0de8:
-            if (r0 < r4) goto L_0x0e02
+        L_0x0dec:
+            if (r0 < r4) goto L_0x0e06
             android.widget.ImageView r0 = r7.closePinned
             java.lang.String r1 = "inappPlayerClose"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
@@ -4251,7 +4253,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3 = 1
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1, r3, r2)
             r0.setBackgroundDrawable(r1)
-        L_0x0e02:
+        L_0x0e06:
             android.widget.FrameLayout r0 = r7.pinnedMessageView
             android.widget.ImageView r1 = r7.closePinned
             r32 = 36
@@ -4267,10 +4269,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.-$$Lambda$ChatActivity$WhdmnIsE4ngL7u7CLASSNAMErxLp1EzwE r1 = new org.telegram.ui.-$$Lambda$ChatActivity$WhdmnIsE4ngL7u7CLASSNAMErxLp1EzwE
             r1.<init>()
             r0.setOnClickListener(r1)
-            goto L_0x0e28
-        L_0x0e26:
+            goto L_0x0e2c
+        L_0x0e2a:
             r4 = 21
-        L_0x0e28:
+        L_0x0e2c:
             org.telegram.ui.ChatActivity$21 r0 = new org.telegram.ui.ChatActivity$21
             r0.<init>(r8)
             r7.topChatPanelView = r0
@@ -4287,7 +4289,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 8
             r0.setVisibility(r1)
             android.widget.FrameLayout r0 = r7.topChatPanelView
-            r1 = 2131165283(0x7var_, float:1.7944779E38)
+            r1 = 2131165282(0x7var_, float:1.7944777E38)
             r0.setBackgroundResource(r1)
             android.widget.FrameLayout r0 = r7.topChatPanelView
             android.graphics.drawable.Drawable r0 = r0.getBackground()
@@ -4310,7 +4312,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setTextColor(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r4) goto L_0x0e9f
+            if (r0 < r4) goto L_0x0ea3
             android.widget.TextView r1 = r7.reportSpamButton
             java.lang.String r2 = "chat_reportSpam"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
@@ -4319,7 +4321,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3 = 2
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r3)
             r1.setBackground(r2)
-        L_0x0e9f:
+        L_0x0ea3:
             android.widget.TextView r1 = r7.reportSpamButton
             java.lang.String r2 = "chat_reportSpam"
             r1.setTag(r2)
@@ -4405,14 +4407,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.ImageView r1 = new android.widget.ImageView
             r1.<init>(r8)
             r7.closeReportSpam = r1
-            r2 = 2131165705(0x7var_, float:1.7945635E38)
+            r2 = 2131165696(0x7var_, float:1.7945616E38)
             r1.setImageResource(r2)
             android.widget.ImageView r1 = r7.closeReportSpam
             r2 = 2131624928(0x7f0e03e0, float:1.887705E38)
             java.lang.String r3 = "Close"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
-            if (r0 < r4) goto L_0x0var_
+            if (r0 < r4) goto L_0x0f9a
             android.widget.ImageView r1 = r7.closeReportSpam
             java.lang.String r2 = "chat_topPanelClose"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
@@ -4420,7 +4422,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = r2 & r3
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2)
             r1.setBackground(r2)
-        L_0x0var_:
+        L_0x0f9a:
             android.widget.ImageView r1 = r7.closeReportSpam
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
             java.lang.String r3 = "chat_topPanelClose"
@@ -4456,7 +4458,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 8
             r1.setVisibility(r2)
             android.widget.FrameLayout r1 = r7.alertView
-            r2 = 2131165283(0x7var_, float:1.7944779E38)
+            r2 = 2131165282(0x7var_, float:1.7944777E38)
             r1.setBackgroundResource(r2)
             android.widget.FrameLayout r1 = r7.alertView
             android.graphics.drawable.Drawable r1 = r1.getBackground()
@@ -4639,15 +4641,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r15.setAdapter(r14)
             org.telegram.tgnet.TLRPC$Chat r1 = r7.currentChat
             boolean r1 = org.telegram.messenger.ChatObject.isChannel(r1)
-            if (r1 == 0) goto L_0x11a6
+            if (r1 == 0) goto L_0x11aa
             org.telegram.tgnet.TLRPC$Chat r1 = r7.currentChat
             boolean r1 = r1.megagroup
-            if (r1 == 0) goto L_0x11ad
-        L_0x11a6:
+            if (r1 == 0) goto L_0x11b1
+        L_0x11aa:
             org.telegram.ui.Adapters.MentionsAdapter r1 = r7.mentionsAdapter
             android.util.SparseArray<org.telegram.tgnet.TLRPC$BotInfo> r2 = r7.botInfo
             r1.setBotInfo(r2)
-        L_0x11ad:
+        L_0x11b1:
             org.telegram.ui.Adapters.MentionsAdapter r1 = r7.mentionsAdapter
             r1.setParentFragment(r7)
             org.telegram.ui.Adapters.MentionsAdapter r1 = r7.mentionsAdapter
@@ -4655,24 +4657,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.setChatInfo(r2)
             org.telegram.ui.Adapters.MentionsAdapter r1 = r7.mentionsAdapter
             org.telegram.tgnet.TLRPC$Chat r2 = r7.currentChat
-            if (r2 == 0) goto L_0x11c1
+            if (r2 == 0) goto L_0x11c5
             r2 = 1
-            goto L_0x11c2
-        L_0x11c1:
+            goto L_0x11c6
+        L_0x11c5:
             r2 = 0
-        L_0x11c2:
+        L_0x11c6:
             r1.setNeedUsernames(r2)
             org.telegram.ui.Adapters.MentionsAdapter r1 = r7.mentionsAdapter
             r2 = 1
             r1.setNeedBotContext(r2)
             org.telegram.ui.Adapters.MentionsAdapter r1 = r7.mentionsAdapter
             org.telegram.tgnet.TLRPC$Chat r2 = r7.currentChat
-            if (r2 == 0) goto L_0x11d4
+            if (r2 == 0) goto L_0x11d8
             int r2 = r7.botsCount
-            goto L_0x11d5
-        L_0x11d4:
+            goto L_0x11d9
+        L_0x11d8:
             r2 = 1
-        L_0x11d5:
+        L_0x11d9:
             r1.setBotsCount(r2)
             org.telegram.ui.Components.RecyclerListView r1 = r7.mentionListView
             org.telegram.ui.-$$Lambda$ChatActivity$poMOmNjDg5Z8HMGgozP0HJahF8Y r2 = new org.telegram.ui.-$$Lambda$ChatActivity$poMOmNjDg5Z8HMGgozP0HJahF8Y
@@ -4690,7 +4692,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.ImageView r1 = new android.widget.ImageView
             r1.<init>(r8)
             r7.pagedownButtonImage = r1
-            r2 = 2131165896(0x7var_c8, float:1.7946022E38)
+            r2 = 2131165887(0x7var_bf, float:1.7946004E38)
             r1.setImageResource(r2)
             android.widget.ImageView r1 = r7.pagedownButtonImage
             android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
@@ -4706,7 +4708,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r13)
             r1.setPadding(r11, r2, r11, r11)
             r1 = 1109917696(0x42280000, float:42.0)
-            if (r0 < r12) goto L_0x124a
+            if (r0 < r12) goto L_0x124e
             android.widget.ImageView r2 = r7.pagedownButtonImage
             org.telegram.ui.ChatActivity$31 r3 = new org.telegram.ui.ChatActivity$31
             r3.<init>()
@@ -4717,15 +4719,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r4 = "listSelectorSDK21"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r2, r3, r4)
-            goto L_0x1258
-        L_0x124a:
+            goto L_0x125c
+        L_0x124e:
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
             java.lang.String r3 = "chat_goDownButton"
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             android.graphics.drawable.ShapeDrawable r2 = org.telegram.ui.ActionBar.Theme.createCircleDrawable(r2, r3)
-        L_0x1258:
+        L_0x125c:
             android.content.res.Resources r3 = r41.getResources()
-            r4 = 2131165897(0x7var_c9, float:1.7946024E38)
+            r4 = 2131165888(0x7var_c0, float:1.7946006E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
@@ -4768,7 +4770,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r8)
             r7.mentiondownButtonImage = r2
-            r3 = 2131165623(0x7var_b7, float:1.7945468E38)
+            r3 = 2131165614(0x7var_ae, float:1.794545E38)
             r2.setImageResource(r3)
             android.widget.ImageView r2 = r7.mentiondownButtonImage
             android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
@@ -4783,7 +4785,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.ImageView r2 = r7.mentiondownButtonImage
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r13)
             r2.setPadding(r11, r3, r11, r11)
-            if (r0 < r12) goto L_0x1316
+            if (r0 < r12) goto L_0x131a
             android.widget.ImageView r2 = r7.pagedownButtonImage
             org.telegram.ui.ChatActivity$32 r3 = new org.telegram.ui.ChatActivity$32
             r3.<init>()
@@ -4794,15 +4796,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r4 = "listSelectorSDK21"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r2, r3, r4)
-            goto L_0x1324
-        L_0x1316:
+            goto L_0x1328
+        L_0x131a:
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
             java.lang.String r3 = "chat_goDownButton"
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             android.graphics.drawable.ShapeDrawable r2 = org.telegram.ui.ActionBar.Theme.createCircleDrawable(r2, r3)
-        L_0x1324:
+        L_0x1328:
             android.content.res.Resources r3 = r41.getResources()
-            r4 = 2131165897(0x7var_c9, float:1.7946024E38)
+            r4 = 2131165888(0x7var_c0, float:1.7946006E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
@@ -4901,10 +4903,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.Components.FragmentContextView r2 = r7.fragmentContextView
             r1.setAdditionalContextView(r2)
             int r1 = r7.chatMode
-            if (r1 == 0) goto L_0x1431
+            if (r1 == 0) goto L_0x1435
             org.telegram.ui.Components.FragmentContextView r1 = r7.fragmentContextView
             r1.setSupportsCalls(r11)
-        L_0x1431:
+        L_0x1435:
             org.telegram.ui.Components.RecyclerListView r1 = new org.telegram.ui.Components.RecyclerListView
             r1.<init>(r8)
             r7.messagesSearchListView = r1
@@ -5020,10 +5022,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r4 = r7.currentAccount
             r1.setDialogId(r2, r4)
             org.telegram.tgnet.TLRPC$ChatFull r1 = r7.chatInfo
-            if (r1 == 0) goto L_0x1549
+            if (r1 == 0) goto L_0x154d
             org.telegram.ui.Components.ChatActivityEnterView r2 = r7.chatActivityEnterView
             r2.setChatInfo(r1)
-        L_0x1549:
+        L_0x154d:
             org.telegram.ui.Components.ChatActivityEnterView r1 = r7.chatActivityEnterView
             r2 = 1000(0x3e8, float:1.401E-42)
             r1.setId(r2)
@@ -5037,26 +5039,26 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.setMinimumHeight(r2)
             org.telegram.ui.Components.ChatActivityEnterView r1 = r7.chatActivityEnterView
             org.telegram.tgnet.TLRPC$EncryptedChat r2 = r7.currentEncryptedChat
-            if (r2 == 0) goto L_0x1577
+            if (r2 == 0) goto L_0x157b
             int r2 = r2.layer
             int r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2)
             r3 = 46
-            if (r2 < r3) goto L_0x1575
-            goto L_0x1577
-        L_0x1575:
+            if (r2 < r3) goto L_0x1579
+            goto L_0x157b
+        L_0x1579:
             r2 = 0
-            goto L_0x1578
-        L_0x1577:
+            goto L_0x157c
+        L_0x157b:
             r2 = 1
-        L_0x1578:
+        L_0x157c:
             r3 = 1
             r1.setAllowStickersAndGifs(r3, r2)
             boolean r1 = r7.inPreviewMode
-            if (r1 == 0) goto L_0x1586
+            if (r1 == 0) goto L_0x158a
             org.telegram.ui.Components.ChatActivityEnterView r1 = r7.chatActivityEnterView
             r2 = 4
             r1.setVisibility(r2)
-        L_0x1586:
+        L_0x158a:
             org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.contentView
             org.telegram.ui.Components.ChatActivityEnterView r2 = r7.chatActivityEnterView
             int r4 = r1.getChildCount()
@@ -5122,12 +5124,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3.<init>(r4, r5)
             r2.setColorFilter(r3)
             android.widget.ImageView r2 = r7.replyCloseImageView
-            r3 = 2131165538(0x7var_, float:1.7945296E38)
+            r3 = 2131165529(0x7var_, float:1.7945278E38)
             r2.setImageResource(r3)
             android.widget.ImageView r2 = r7.replyCloseImageView
             android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r3)
-            if (r0 < r12) goto L_0x164d
+            if (r0 < r12) goto L_0x1651
             android.widget.ImageView r0 = r7.replyCloseImageView
             java.lang.String r2 = "inappPlayerClose"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
@@ -5138,7 +5140,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r4 = 1
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r4, r3)
             r0.setBackgroundDrawable(r2)
-        L_0x164d:
+        L_0x1651:
             org.telegram.ui.ChatActivityEnterTopView r0 = r7.chatActivityEnterTopView
             android.widget.ImageView r2 = r7.replyCloseImageView
             r32 = 52
@@ -5229,15 +5231,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r32, r33, r34, r35, r36, r37, r38)
             r2.addEditView(r0, r3)
             r2 = 0
-        L_0x172c:
+        L_0x1730:
             r3 = 2
-            if (r2 >= r3) goto L_0x17b5
-            if (r2 != 0) goto L_0x1733
+            if (r2 >= r3) goto L_0x17b9
+            if (r2 != 0) goto L_0x1737
             r3 = 1
-            goto L_0x1734
-        L_0x1733:
+            goto L_0x1738
+        L_0x1737:
             r3 = 0
-        L_0x1734:
+        L_0x1738:
             org.telegram.ui.ChatActivity$40 r4 = new org.telegram.ui.ChatActivity$40
             r4.<init>(r8, r3)
             r4.setOrientation(r11)
@@ -5253,12 +5255,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r5.<init>(r8)
             android.widget.ImageView$ScaleType r6 = android.widget.ImageView.ScaleType.CENTER
             r5.setScaleType(r6)
-            if (r3 == 0) goto L_0x175d
+            if (r3 == 0) goto L_0x1761
+            r3 = 2131165782(0x7var_, float:1.794579E38)
+            goto L_0x1764
+        L_0x1761:
             r3 = 2131165791(0x7var_f, float:1.794581E38)
-            goto L_0x1760
-        L_0x175d:
-            r3 = 2131165800(0x7var_, float:1.7945827E38)
-        L_0x1760:
+        L_0x1764:
             r5.setImageResource(r3)
             r3 = 24
             r6 = -1
@@ -5291,8 +5293,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3.<init>(r4, r1)
             r4.setOnClickListener(r3)
             int r2 = r2 + 1
-            goto L_0x172c
-        L_0x17b5:
+            goto L_0x1730
+        L_0x17b9:
             org.telegram.ui.ChatActivity$41 r0 = new org.telegram.ui.ChatActivity$41
             r0.<init>()
             org.telegram.ui.ChatActivity$42 r1 = new org.telegram.ui.ChatActivity$42
@@ -5328,7 +5330,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r8)
             r7.stickersPanelArrow = r0
-            r1 = 2131166069(0x7var_, float:1.7946373E38)
+            r1 = 2131166060(0x7var_c, float:1.7946355E38)
             r0.setImageResource(r1)
             android.widget.ImageView r0 = r7.stickersPanelArrow
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -5368,12 +5370,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.<init>()
             r0.setOnTouchListener(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r12) goto L_0x187a
+            if (r0 < r12) goto L_0x187e
             android.view.View r1 = r7.searchAsListTogglerView
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable((int) r2, (boolean) r11)
             r1.setBackground(r2)
-        L_0x187a:
+        L_0x187e:
             android.view.View r1 = r7.searchAsListTogglerView
             org.telegram.ui.-$$Lambda$ChatActivity$Kyc4HEuQu5kJPKr3ZFndKeKqrrw r2 = new org.telegram.ui.-$$Lambda$ChatActivity$Kyc4HEuQu5kJPKr3ZFndKeKqrrw
             r2.<init>()
@@ -5401,7 +5403,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
             r1.setScaleType(r2)
             android.widget.ImageView r1 = r7.searchUpButton
-            r2 = 2131165753(0x7var_, float:1.7945732E38)
+            r2 = 2131165744(0x7var_, float:1.7945714E38)
             r1.setImageResource(r2)
             android.widget.ImageView r1 = r7.searchUpButton
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -5439,7 +5441,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
             r1.setScaleType(r2)
             android.widget.ImageView r1 = r7.searchDownButton
-            r2 = 2131165752(0x7var_, float:1.794573E38)
+            r2 = 2131165743(0x7var_f, float:1.7945712E38)
             r1.setImageResource(r2)
             android.widget.ImageView r1 = r7.searchDownButton
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -5468,20 +5470,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
             org.telegram.tgnet.TLRPC$Chat r1 = r7.currentChat
-            if (r1 == 0) goto L_0x19d8
+            if (r1 == 0) goto L_0x19dc
             boolean r1 = org.telegram.messenger.ChatObject.isChannel(r1)
-            if (r1 == 0) goto L_0x1973
+            if (r1 == 0) goto L_0x1977
             org.telegram.tgnet.TLRPC$Chat r1 = r7.currentChat
             boolean r1 = r1.megagroup
-            if (r1 == 0) goto L_0x19d8
-        L_0x1973:
+            if (r1 == 0) goto L_0x19dc
+        L_0x1977:
             android.widget.ImageView r1 = new android.widget.ImageView
             r1.<init>(r8)
             r7.searchUserButton = r1
             android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
             r1.setScaleType(r2)
             android.widget.ImageView r1 = r7.searchUserButton
-            r2 = 2131165844(0x7var_, float:1.7945917E38)
+            r2 = 2131165835(0x7var_b, float:1.7945898E38)
             r1.setImageResource(r2)
             android.widget.ImageView r1 = r7.searchUserButton
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -5515,14 +5517,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r3 = "AccDescrSearchByUser"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
-        L_0x19d8:
+        L_0x19dc:
             android.widget.ImageView r1 = new android.widget.ImageView
             r1.<init>(r8)
             r7.searchCalendarButton = r1
             android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
             r1.setScaleType(r2)
             android.widget.ImageView r1 = r7.searchCalendarButton
-            r2 = 2131165723(0x7var_b, float:1.7945671E38)
+            r2 = 2131165714(0x7var_, float:1.7945653E38)
             r1.setImageResource(r2)
             android.widget.ImageView r1 = r7.searchCalendarButton
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -5690,7 +5692,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r1 = "chat_fieldOverlayText"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             android.widget.ImageView r2 = r7.bottomOverlayImage
-            r3 = 2131165604(0x7var_a4, float:1.794543E38)
+            r3 = 2131165595(0x7var_b, float:1.7945412E38)
             r2.setImageResource(r3)
             android.widget.ImageView r2 = r7.bottomOverlayImage
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
@@ -5700,7 +5702,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.ImageView r2 = r7.bottomOverlayImage
             android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r3)
-            if (r0 < r12) goto L_0x1bb7
+            if (r0 < r12) goto L_0x1bbb
             android.widget.ImageView r2 = r7.bottomOverlayImage
             r3 = 24
             int r4 = android.graphics.Color.red(r1)
@@ -5710,7 +5712,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3 = 1
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1, r3)
             r2.setBackgroundDrawable(r1)
-        L_0x1bb7:
+        L_0x1bbb:
             android.widget.FrameLayout r1 = r7.bottomOverlayChat
             android.widget.ImageView r2 = r7.bottomOverlayImage
             r32 = 48
@@ -5767,7 +5769,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.graphics.Typeface r3 = org.telegram.messenger.AndroidUtilities.getTypeface(r16)
             r1.setTypeface(r3)
             android.content.res.Resources r1 = r41.getResources()
-            r3 = 2131165547(0x7var_b, float:1.7945314E38)
+            r3 = 2131165538(0x7var_, float:1.7945296E38)
             android.graphics.drawable.Drawable r1 = r1.getDrawable(r3)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
@@ -5823,7 +5825,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r16)
             r1.setTypeface(r2)
             android.content.res.Resources r1 = r41.getResources()
-            r2 = 2131165540(0x7var_, float:1.79453E38)
+            r2 = 2131165531(0x7var_b, float:1.7945282E38)
             android.graphics.drawable.Drawable r1 = r1.getDrawable(r2)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -5869,7 +5871,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
             r1.addView(r2, r3)
             org.telegram.tgnet.TLRPC$Chat r1 = r7.currentChat
-            if (r1 == 0) goto L_0x1d82
+            if (r1 == 0) goto L_0x1d86
             org.telegram.ui.Components.HintView r1 = new org.telegram.ui.Components.HintView
             android.app.Activity r2 = r40.getParentActivity()
             r3 = 2
@@ -5891,33 +5893,33 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r31 = 0
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
             r1.addView(r2, r3)
-        L_0x1d82:
+        L_0x1d86:
             org.telegram.ui.ChatActivity$ChatActivityAdapter r1 = r7.chatAdapter
             r1.updateRowsSafe()
             boolean r1 = r7.loading
-            if (r1 == 0) goto L_0x1da8
+            if (r1 == 0) goto L_0x1dac
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r7.messages
             boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x1da8
+            if (r1 == 0) goto L_0x1dac
             org.telegram.ui.ChatActivity$ChatActivityAdapter r1 = r7.chatAdapter
             int r1 = r1.botInfoRow
-            if (r1 >= 0) goto L_0x1d9d
+            if (r1 >= 0) goto L_0x1da1
             r1 = 1
-            goto L_0x1d9e
-        L_0x1d9d:
+            goto L_0x1da2
+        L_0x1da1:
             r1 = 0
-        L_0x1d9e:
+        L_0x1da2:
             r7.showProgressView(r1)
             org.telegram.ui.Components.RecyclerListView r1 = r7.chatListView
             r2 = 0
             r1.setEmptyView(r2)
-            goto L_0x1db2
-        L_0x1da8:
+            goto L_0x1db6
+        L_0x1dac:
             r7.showProgressView(r11)
             org.telegram.ui.Components.RecyclerListView r1 = r7.chatListView
             android.widget.FrameLayout r2 = r7.emptyViewContainer
             r1.setEmptyView(r2)
-        L_0x1db2:
+        L_0x1db6:
             r40.checkBotKeyboard()
             r40.updateBottomOverlay()
             r40.updateSecretStatus()
@@ -5935,28 +5937,28 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.Components.RecyclerAnimationScrollHelper r1 = r7.chatScrollHelper
             org.telegram.ui.ChatActivity$ChatScrollCallback r2 = r7.chatScrollHelperCallback
             r1.setAnimationCallback(r2)
-            org.telegram.tgnet.TLRPC$EncryptedChat r1 = r7.currentEncryptedChat     // Catch:{ all -> 0x1df7 }
-            if (r1 == 0) goto L_0x1dfb
+            org.telegram.tgnet.TLRPC$EncryptedChat r1 = r7.currentEncryptedChat     // Catch:{ all -> 0x1dfb }
+            if (r1 == 0) goto L_0x1dff
             r1 = 23
-            if (r0 < r1) goto L_0x1dfb
-            java.lang.String r0 = org.telegram.messenger.SharedConfig.passcodeHash     // Catch:{ all -> 0x1df7 }
-            int r0 = r0.length()     // Catch:{ all -> 0x1df7 }
-            if (r0 == 0) goto L_0x1df2
-            boolean r0 = org.telegram.messenger.SharedConfig.allowScreenCapture     // Catch:{ all -> 0x1df7 }
-            if (r0 == 0) goto L_0x1dfb
-        L_0x1df2:
+            if (r0 < r1) goto L_0x1dff
+            java.lang.String r0 = org.telegram.messenger.SharedConfig.passcodeHash     // Catch:{ all -> 0x1dfb }
+            int r0 = r0.length()     // Catch:{ all -> 0x1dfb }
+            if (r0 == 0) goto L_0x1df6
+            boolean r0 = org.telegram.messenger.SharedConfig.allowScreenCapture     // Catch:{ all -> 0x1dfb }
+            if (r0 == 0) goto L_0x1dff
+        L_0x1df6:
             r0 = 1
-            org.telegram.messenger.AndroidUtilities.setFlagSecure(r7, r0)     // Catch:{ all -> 0x1df7 }
-            goto L_0x1dfb
-        L_0x1df7:
+            org.telegram.messenger.AndroidUtilities.setFlagSecure(r7, r0)     // Catch:{ all -> 0x1dfb }
+            goto L_0x1dff
+        L_0x1dfb:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x1dfb:
+        L_0x1dff:
             r1 = r39
-            if (r1 == 0) goto L_0x1e04
+            if (r1 == 0) goto L_0x1e08
             org.telegram.ui.Components.ChatActivityEnterView r0 = r7.chatActivityEnterView
             r0.setFieldText(r1)
-        L_0x1e04:
+        L_0x1e08:
             r40.fixLayoutInternal()
             org.telegram.ui.Cells.TextSelectionHelper$ChatListTextSelectionHelper r0 = r7.textSelectionHelper
             org.telegram.ui.ChatActivity$47 r1 = new org.telegram.ui.ChatActivity$47
@@ -5983,48 +5985,48 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.os.Bundle r1 = r40.getArguments()
             java.lang.String r2 = "search_from_chat_id"
             int r1 = r1.getInt(r2, r11)
-            if (r0 == 0) goto L_0x1e6b
+            if (r0 == 0) goto L_0x1e6f
             int r1 = r7.currentAccount
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             org.telegram.tgnet.TLRPC$User r0 = r1.getUser(r0)
-            if (r0 == 0) goto L_0x1e8b
+            if (r0 == 0) goto L_0x1e8f
             java.lang.String r1 = ""
             r7.openSearchWithText(r1)
             android.widget.ImageView r1 = r7.searchUserButton
             r1.callOnClick()
             r1 = 0
             r7.searchUserMessages(r0, r1)
-            goto L_0x1e8b
-        L_0x1e6b:
-            if (r1 == 0) goto L_0x1e8b
+            goto L_0x1e8f
+        L_0x1e6f:
+            if (r1 == 0) goto L_0x1e8f
             int r0 = r7.currentAccount
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r1)
-            if (r0 == 0) goto L_0x1e8b
+            if (r0 == 0) goto L_0x1e8f
             java.lang.String r1 = ""
             r7.openSearchWithText(r1)
             android.widget.ImageView r1 = r7.searchUserButton
             r1.callOnClick()
             r1 = 0
             r7.searchUserMessages(r1, r0)
-        L_0x1e8b:
+        L_0x1e8f:
             org.telegram.messenger.MessageObject r0 = r7.replyingMessageObject
-            if (r0 == 0) goto L_0x1e94
+            if (r0 == 0) goto L_0x1e98
             org.telegram.ui.Components.ChatActivityEnterView r1 = r7.chatActivityEnterView
             r1.setReplyingMessageObject(r0)
-        L_0x1e94:
+        L_0x1e98:
             int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r12) goto L_0x1ea7
+            if (r0 < r12) goto L_0x1eab
             android.app.Activity r0 = r40.getParentActivity()
             android.view.Window r0 = r0.getWindow()
             android.view.View r0 = r0.getDecorView()
             android.view.ViewGroup r0 = (android.view.ViewGroup) r0
-            goto L_0x1ea9
-        L_0x1ea7:
+            goto L_0x1ead
+        L_0x1eab:
             org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r7.contentView
-        L_0x1ea9:
+        L_0x1ead:
             org.telegram.ui.ChatActivity$48 r1 = new org.telegram.ui.ChatActivity$48
             r1.<init>(r0)
             r7.pinchToZoomHelper = r1
@@ -6032,7 +6034,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.<init>()
             r1.setCallback(r0)
             org.telegram.ui.PinchToZoomHelper r0 = r7.pinchToZoomHelper
-            org.telegram.ui.ChatActivity$50 r1 = new org.telegram.ui.ChatActivity$50
+            org.telegram.ui.-$$Lambda$ChatActivity$blK-gcmNOTSSyxMNNcoi0eCb1e4 r1 = new org.telegram.ui.-$$Lambda$ChatActivity$blK-gcmNOTSSyxMNNcoi0eCb1e4
             r1.<init>()
             r0.setClipBoundsListener(r1)
             android.view.View r0 = r7.fragmentView
@@ -6884,6 +6886,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$54 */
+    public /* synthetic */ void lambda$createView$54$ChatActivity(float[] fArr) {
+        fArr[1] = (float) this.chatListView.getBottom();
+        fArr[0] = (((float) this.chatListView.getTop()) + this.chatListViewPaddingTop) - ((float) AndroidUtilities.dp(4.0f));
+    }
+
+    /* access modifiers changed from: private */
     public void updateBulletinLayout() {
         Bulletin visibleBulletin = Bulletin.getVisibleBulletin();
         if (visibleBulletin != null && this.bulletinDelegate != null) {
@@ -6926,7 +6935,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private void updateInfoTopView(boolean z) {
         View.OnClickListener onClickListener;
-        $$Lambda$ChatActivity$LOh7VQsBel2T9YrMSEn2qa6Px08 r1;
+        $$Lambda$ChatActivity$0Voi8C5V9glUR663W1Lt8rA0poU r1;
         String str;
         int i;
         TLRPC$User tLRPC$User;
@@ -6958,7 +6967,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             CharSequence replaceWithLink = MessageObject.replaceWithLink(LocaleController.getString(str, i), "un1", user);
                             r1 = new View.OnClickListener() {
                                 public final void onClick(View view) {
-                                    ChatActivity.this.lambda$updateInfoTopView$55$ChatActivity(view);
+                                    ChatActivity.this.lambda$updateInfoTopView$56$ChatActivity(view);
                                 }
                             };
                             charSequence = replaceWithLink;
@@ -6973,7 +6982,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 charSequence = LocaleController.formatString("ChatDistanceToPeer", NUM, tLRPC$User.first_name, LocaleController.formatDistance((float) i2, 0));
                 onClickListener = new View.OnClickListener() {
                     public final void onClick(View view) {
-                        ChatActivity.this.lambda$updateInfoTopView$54$ChatActivity(view);
+                        ChatActivity.this.lambda$updateInfoTopView$55$ChatActivity(view);
                     }
                 };
             }
@@ -7005,7 +7014,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
 
                         public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            ChatActivity.this.lambda$updateInfoTopView$56$ChatActivity(this.f$1, valueAnimator);
+                            ChatActivity.this.lambda$updateInfoTopView$57$ChatActivity(this.f$1, valueAnimator);
                         }
                     });
                     ofFloat.addListener(new AnimatorListenerAdapter() {
@@ -7023,22 +7032,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateInfoTopView$54 */
-    public /* synthetic */ void lambda$updateInfoTopView$54$ChatActivity(View view) {
+    /* renamed from: lambda$updateInfoTopView$55 */
+    public /* synthetic */ void lambda$updateInfoTopView$55$ChatActivity(View view) {
         presentFragment(new PeopleNearbyActivity());
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateInfoTopView$55 */
-    public /* synthetic */ void lambda$updateInfoTopView$55$ChatActivity(View view) {
+    /* renamed from: lambda$updateInfoTopView$56 */
+    public /* synthetic */ void lambda$updateInfoTopView$56$ChatActivity(View view) {
         Bundle bundle = new Bundle();
         bundle.putInt("user_id", this.chatInviterId);
         presentFragment(new ProfileActivity(bundle));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateInfoTopView$56 */
-    public /* synthetic */ void lambda$updateInfoTopView$56$ChatActivity(View view, ValueAnimator valueAnimator) {
+    /* renamed from: lambda$updateInfoTopView$57 */
+    public /* synthetic */ void lambda$updateInfoTopView$57$ChatActivity(View view, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.topViewOffset = ((float) AndroidUtilities.dp(30.0f)) * floatValue;
         invalidateChatListViewTopPadding();
@@ -7127,7 +7136,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
 
                             public final void run() {
-                                ChatActivity.AnonymousClass52.this.lambda$onUnpin$0$ChatActivity$52(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                                ChatActivity.AnonymousClass51.this.lambda$onUnpin$0$ChatActivity$51(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                             }
                         }, new Runnable(z2, access$28704) {
                             public final /* synthetic */ boolean f$1;
@@ -7139,7 +7148,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
 
                             public final void run() {
-                                ChatActivity.AnonymousClass52.this.lambda$onUnpin$1$ChatActivity$52(this.f$1, this.f$2);
+                                ChatActivity.AnonymousClass51.this.lambda$onUnpin$1$ChatActivity$51(this.f$1, this.f$2);
                             }
                         });
                         return;
@@ -7153,7 +7162,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 /* access modifiers changed from: private */
                 /* renamed from: lambda$onUnpin$0 */
-                public /* synthetic */ void lambda$onUnpin$0$ChatActivity$52(boolean z, ArrayList arrayList, ArrayList arrayList2, int i, int i2) {
+                public /* synthetic */ void lambda$onUnpin$0$ChatActivity$51(boolean z, ArrayList arrayList, ArrayList arrayList2, int i, int i2) {
                     if (z) {
                         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(ChatActivity.this.currentAccount).edit();
                         edit.remove("pin_" + ChatActivity.this.dialog_id).commit();
@@ -7168,7 +7177,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 /* access modifiers changed from: private */
                 /* renamed from: lambda$onUnpin$1 */
-                public /* synthetic */ void lambda$onUnpin$1$ChatActivity$52(boolean z, int i) {
+                public /* synthetic */ void lambda$onUnpin$1$ChatActivity$51(boolean z, int i) {
                     if (!z) {
                         MessagesController messagesController = ChatActivity.this.getMessagesController();
                         ChatActivity chatActivity = ChatActivity.this;
@@ -7272,7 +7281,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    ChatActivity.this.lambda$hideInfoView$57$ChatActivity(this.f$1, valueAnimator);
+                    ChatActivity.this.lambda$hideInfoView$58$ChatActivity(this.f$1, valueAnimator);
                 }
             });
             ofFloat.addListener(new AnimatorListenerAdapter() {
@@ -7295,8 +7304,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$hideInfoView$57 */
-    public /* synthetic */ void lambda$hideInfoView$57$ChatActivity(View view, ValueAnimator valueAnimator) {
+    /* renamed from: lambda$hideInfoView$58 */
+    public /* synthetic */ void lambda$hideInfoView$58$ChatActivity(View view, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.topViewOffset = ((float) AndroidUtilities.dp(30.0f)) * floatValue;
         invalidateChatListViewTopPadding();
@@ -7475,7 +7484,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
         if (this.videoPlayerContainer == null) {
             if (Build.VERSION.SDK_INT >= 21) {
-                AnonymousClass55 r0 = new FrameLayout(getParentActivity()) {
+                AnonymousClass54 r0 = new FrameLayout(getParentActivity()) {
                     public void setTranslationY(float f) {
                         super.setTranslationY(f);
                         ChatActivity.this.contentView.invalidate();
@@ -7932,7 +7941,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     private void createChatAttachView() {
         if (getParentActivity() != null && this.chatAttachAlert == null) {
-            AnonymousClass59 r1 = new ChatAttachAlert(getParentActivity(), this, false, false) {
+            AnonymousClass58 r1 = new ChatAttachAlert(getParentActivity(), this, false, false) {
                 public void dismissInternal() {
                     if (ChatActivity.this.chatAttachAlert.isShowing()) {
                         AndroidUtilities.requestAdjustResize(ChatActivity.this.getParentActivity(), ChatActivity.this.classGuid);
@@ -8026,7 +8035,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public void doOnIdle(Runnable runnable) {
-                    ChatActivity.this.lambda$openDiscussionMessageChat$142(runnable);
+                    ChatActivity.this.lambda$openDiscussionMessageChat$143(runnable);
                 }
             });
         }
@@ -8047,7 +8056,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (this.openKeyboardOnAttachMenuClose) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
-                    ChatActivity.this.lambda$onEditTextDialogClose$58$ChatActivity();
+                    ChatActivity.this.lambda$onEditTextDialogClose$59$ChatActivity();
                 }
             }, 50);
             this.openKeyboardOnAttachMenuClose = false;
@@ -8058,13 +8067,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onEditTextDialogClose$58 */
-    public /* synthetic */ void lambda$onEditTextDialogClose$58$ChatActivity() {
+    /* renamed from: lambda$onEditTextDialogClose$59 */
+    public /* synthetic */ void lambda$onEditTextDialogClose$59$ChatActivity() {
         this.chatActivityEnterView.openKeyboard();
     }
 
     /* renamed from: doOnIdle */
-    public void lambda$openDiscussionMessageChat$142(Runnable runnable) {
+    public void lambda$openDiscussionMessageChat$143(Runnable runnable) {
         NotificationCenter.getInstance(this.currentAccount).doOnIdle(runnable);
     }
 
@@ -8078,19 +8087,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$performHistoryClear$59$ChatActivity(this.f$1);
+                ChatActivity.this.lambda$performHistoryClear$60$ChatActivity(this.f$1);
             }
         }, new Runnable() {
             public final void run() {
-                ChatActivity.this.lambda$performHistoryClear$60$ChatActivity();
+                ChatActivity.this.lambda$performHistoryClear$61$ChatActivity();
             }
         });
         this.chatAdapter.notifyDataSetChanged();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$performHistoryClear$59 */
-    public /* synthetic */ void lambda$performHistoryClear$59$ChatActivity(boolean z) {
+    /* renamed from: lambda$performHistoryClear$60 */
+    public /* synthetic */ void lambda$performHistoryClear$60$ChatActivity(boolean z) {
         if (!this.pinnedMessageIds.isEmpty()) {
             SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(this.currentAccount).edit();
             edit.putInt("pin_" + this.dialog_id, this.pinnedMessageIds.get(0).intValue()).commit();
@@ -8108,8 +8117,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$performHistoryClear$60 */
-    public /* synthetic */ void lambda$performHistoryClear$60$ChatActivity() {
+    /* renamed from: lambda$performHistoryClear$61 */
+    public /* synthetic */ void lambda$performHistoryClear$61$ChatActivity() {
         this.clearingHistory = false;
         this.chatAdapter.notifyDataSetChanged();
     }
@@ -8278,15 +8287,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             RecyclerListView recyclerListView = this.stickersListView;
             StickersAdapter stickersAdapter2 = new StickersAdapter(getParentActivity(), new StickersAdapter.StickersAdapterDelegate() {
                 public final void needChangePanelVisibility(boolean z) {
-                    ChatActivity.this.lambda$initStickers$61$ChatActivity(z);
+                    ChatActivity.this.lambda$initStickers$62$ChatActivity(z);
                 }
             });
             this.stickersAdapter = stickersAdapter2;
             recyclerListView.setAdapter(stickersAdapter2);
             RecyclerListView recyclerListView2 = this.stickersListView;
-            $$Lambda$ChatActivity$hlaLzdXlV2S8NeDVChuXJG7Tq5o r1 = new RecyclerListView.OnItemClickListener() {
+            $$Lambda$ChatActivity$Iu2knJr5j2pYeszGwt2RgyMbY8 r1 = new RecyclerListView.OnItemClickListener() {
                 public final void onItemClick(View view, int i) {
-                    ChatActivity.this.lambda$initStickers$63$ChatActivity(view, i);
+                    ChatActivity.this.lambda$initStickers$64$ChatActivity(view, i);
                 }
             };
             this.stickersOnItemClickListener = r1;
@@ -8295,8 +8304,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initStickers$61 */
-    public /* synthetic */ void lambda$initStickers$61$ChatActivity(final boolean z) {
+    /* renamed from: lambda$initStickers$62 */
+    public /* synthetic */ void lambda$initStickers$62$ChatActivity(final boolean z) {
         if (z) {
             int dp = this.stickersAdapter.isShowingKeywords() ? AndroidUtilities.dp(24.0f) : 0;
             if (dp != this.stickersListView.getPaddingTop() || this.stickersPanel.getTag() == null) {
@@ -8366,8 +8375,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initStickers$63 */
-    public /* synthetic */ void lambda$initStickers$63$ChatActivity(View view, int i) {
+    /* renamed from: lambda$initStickers$64 */
+    public /* synthetic */ void lambda$initStickers$64$ChatActivity(View view, int i) {
         Object item = this.stickersAdapter.getItem(i);
         Object itemParent = this.stickersAdapter.getItemParent(i);
         if (item instanceof TLRPC$TL_document) {
@@ -8387,7 +8396,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
 
                         public final void didSelectDate(boolean z, int i) {
-                            ChatActivity.this.lambda$initStickers$62$ChatActivity(this.f$1, this.f$2, this.f$3, z, i);
+                            ChatActivity.this.lambda$initStickers$63$ChatActivity(this.f$1, this.f$2, this.f$3, z, i);
                         }
                     });
                 } else {
@@ -8405,8 +8414,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$initStickers$62 */
-    public /* synthetic */ void lambda$initStickers$62$ChatActivity(TLRPC$TL_document tLRPC$TL_document, String str, Object obj, boolean z, int i) {
+    /* renamed from: lambda$initStickers$63 */
+    public /* synthetic */ void lambda$initStickers$63$ChatActivity(TLRPC$TL_document tLRPC$TL_document, String str, Object obj, boolean z, int i) {
         SendMessagesHelper.getInstance(this.currentAccount).sendSticker(tLRPC$TL_document, str, this.dialog_id, this.replyingMessageObject, getThreadMessage(), obj, (MessageObject.SendAnimationData) null, z, i);
     }
 
@@ -8433,7 +8442,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                ChatActivity.this.lambda$shareMyContact$65$ChatActivity(this.f$1, this.f$2, dialogInterface, i);
+                ChatActivity.this.lambda$shareMyContact$66$ChatActivity(this.f$1, this.f$2, dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -8441,14 +8450,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$shareMyContact$65 */
-    public /* synthetic */ void lambda$shareMyContact$65$ChatActivity(int i, MessageObject messageObject, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$shareMyContact$66 */
+    public /* synthetic */ void lambda$shareMyContact$66$ChatActivity(int i, MessageObject messageObject, DialogInterface dialogInterface, int i2) {
         if (i == 1) {
             TLRPC$TL_contacts_acceptContact tLRPC$TL_contacts_acceptContact = new TLRPC$TL_contacts_acceptContact();
             tLRPC$TL_contacts_acceptContact.id = getMessagesController().getInputUser(this.currentUser);
             getConnectionsManager().sendRequest(tLRPC$TL_contacts_acceptContact, new RequestDelegate() {
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ChatActivity.this.lambda$shareMyContact$64$ChatActivity(tLObject, tLRPC$TL_error);
+                    ChatActivity.this.lambda$shareMyContact$65$ChatActivity(tLObject, tLRPC$TL_error);
                 }
             });
             return;
@@ -8461,8 +8470,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$shareMyContact$64 */
-    public /* synthetic */ void lambda$shareMyContact$64$ChatActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$shareMyContact$65 */
+    public /* synthetic */ void lambda$shareMyContact$65$ChatActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             getMessagesController().processUpdates((TLRPC$Updates) tLObject, false);
         }
@@ -9032,7 +9041,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.messenger.SharedConfig.increaseTextSelectionHintShowed()
             org.telegram.ui.TextSelectionHint r9 = r8.textSelectionHint
             if (r9 != 0) goto L_0x0079
-            org.telegram.ui.ChatActivity$64 r9 = new org.telegram.ui.ChatActivity$64
+            org.telegram.ui.ChatActivity$63 r9 = new org.telegram.ui.ChatActivity$63
             android.app.Activity r0 = r8.getParentActivity()
             r9.<init>(r0)
             r8.textSelectionHint = r9
@@ -9095,14 +9104,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             public void onAnimationEnd(Animator animator) {
                                 AndroidUtilities.runOnUIThread(new Runnable() {
                                     public final void run() {
-                                        ChatActivity.AnonymousClass65.this.lambda$onAnimationEnd$0$ChatActivity$65();
+                                        ChatActivity.AnonymousClass64.this.lambda$onAnimationEnd$0$ChatActivity$64();
                                     }
                                 }, 2000);
                             }
 
                             /* access modifiers changed from: private */
                             /* renamed from: lambda$onAnimationEnd$0 */
-                            public /* synthetic */ void lambda$onAnimationEnd$0$ChatActivity$65() {
+                            public /* synthetic */ void lambda$onAnimationEnd$0$ChatActivity$64() {
                                 if (ChatActivity.this.gifHintTextView != null) {
                                     AnimatorSet animatorSet = new AnimatorSet();
                                     animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ChatActivity.this.gifHintTextView, View.ALPHA, new float[]{0.0f})});
@@ -9599,7 +9608,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x00bf:
             r0.setMaxSelectedPhotos(r1, r6)
         L_0x00c2:
-            org.telegram.ui.ChatActivity$70 r9 = new org.telegram.ui.ChatActivity$70
+            org.telegram.ui.ChatActivity$69 r9 = new org.telegram.ui.ChatActivity$69
             r9.<init>()
             r0.setDelegate(r9)
             r8.presentFragment(r0)
@@ -9682,15 +9691,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         PollCreateActivity pollCreateActivity = new PollCreateActivity(this, bool);
         pollCreateActivity.setDelegate(new PollCreateActivity.PollCreateActivityDelegate() {
             public final void sendPoll(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
-                ChatActivity.this.lambda$openPollCreate$66$ChatActivity(tLRPC$TL_messageMediaPoll, hashMap, z, i);
+                ChatActivity.this.lambda$openPollCreate$67$ChatActivity(tLRPC$TL_messageMediaPoll, hashMap, z, i);
             }
         });
         presentFragment(pollCreateActivity);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openPollCreate$66 */
-    public /* synthetic */ void lambda$openPollCreate$66$ChatActivity(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
+    /* renamed from: lambda$openPollCreate$67 */
+    public /* synthetic */ void lambda$openPollCreate$67$ChatActivity(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
         getSendMessagesHelper().sendMessage(tLRPC$TL_messageMediaPoll, this.dialog_id, this.replyingMessageObject, getThreadMessage(), (TLRPC$ReplyMarkup) null, (HashMap<String, String>) hashMap, z, i);
         afterMessageSend();
     }
@@ -9842,7 +9851,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
 
                     public final void run() {
-                        ChatActivity.this.lambda$searchLinks$73$ChatActivity(this.f$1, this.f$2, this.f$3);
+                        ChatActivity.this.lambda$searchLinks$74$ChatActivity(this.f$1, this.f$2, this.f$3);
                     }
                 });
             }
@@ -9850,8 +9859,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchLinks$73 */
-    public /* synthetic */ void lambda$searchLinks$73$ChatActivity(CharSequence charSequence, MessagesController messagesController, boolean z) {
+    /* renamed from: lambda$searchLinks$74 */
+    public /* synthetic */ void lambda$searchLinks$74$ChatActivity(CharSequence charSequence, MessagesController messagesController, boolean z) {
         CharSequence charSequence2;
         URLSpanReplacement[] uRLSpanReplacementArr;
         boolean z2 = true;
@@ -9892,7 +9901,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (arrayList == null) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public final void run() {
-                        ChatActivity.this.lambda$searchLinks$67$ChatActivity();
+                        ChatActivity.this.lambda$searchLinks$68$ChatActivity();
                     }
                 });
                 return;
@@ -9913,7 +9922,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        ChatActivity.this.lambda$searchLinks$72$ChatActivity(this.f$1, tLObject, tLRPC$TL_error);
+                        ChatActivity.this.lambda$searchLinks$73$ChatActivity(this.f$1, tLObject, tLRPC$TL_error);
                     }
                 });
                 getConnectionsManager().bindRequestToGuid(this.linkSearchRequestId, this.classGuid);
@@ -9931,7 +9940,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void run() {
-                    ChatActivity.this.lambda$searchLinks$70$ChatActivity(this.f$1, this.f$2, this.f$3);
+                    ChatActivity.this.lambda$searchLinks$71$ChatActivity(this.f$1, this.f$2, this.f$3);
                 }
             });
         } catch (Exception e) {
@@ -9940,22 +9949,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (charSequence.length() < 13 || (!lowerCase.contains("http://") && !lowerCase.contains("https://"))) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public final void run() {
-                        ChatActivity.this.lambda$searchLinks$68$ChatActivity();
+                        ChatActivity.this.lambda$searchLinks$69$ChatActivity();
                     }
                 });
                 return;
             }
             charSequence2 = charSequence;
-        }
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$searchLinks$67 */
-    public /* synthetic */ void lambda$searchLinks$67$ChatActivity() {
-        TLRPC$WebPage tLRPC$WebPage = this.foundWebPage;
-        if (tLRPC$WebPage != null) {
-            showFieldPanelForWebPage(false, tLRPC$WebPage, false);
-            this.foundWebPage = null;
         }
     }
 
@@ -9970,8 +9969,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchLinks$70 */
-    public /* synthetic */ void lambda$searchLinks$70$ChatActivity(MessagesController messagesController, CharSequence charSequence, boolean z) {
+    /* renamed from: lambda$searchLinks$69 */
+    public /* synthetic */ void lambda$searchLinks$69$ChatActivity() {
+        TLRPC$WebPage tLRPC$WebPage = this.foundWebPage;
+        if (tLRPC$WebPage != null) {
+            showFieldPanelForWebPage(false, tLRPC$WebPage, false);
+            this.foundWebPage = null;
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$searchLinks$71 */
+    public /* synthetic */ void lambda$searchLinks$71$ChatActivity(MessagesController messagesController, CharSequence charSequence, boolean z) {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("AppName", NUM));
         builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(messagesController, charSequence, z) {
@@ -9986,7 +9995,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                ChatActivity.this.lambda$searchLinks$69$ChatActivity(this.f$1, this.f$2, this.f$3, dialogInterface, i);
+                ChatActivity.this.lambda$searchLinks$70$ChatActivity(this.f$1, this.f$2, this.f$3, dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -9997,8 +10006,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchLinks$69 */
-    public /* synthetic */ void lambda$searchLinks$69$ChatActivity(MessagesController messagesController, CharSequence charSequence, boolean z, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$searchLinks$70 */
+    public /* synthetic */ void lambda$searchLinks$70$ChatActivity(MessagesController messagesController, CharSequence charSequence, boolean z, DialogInterface dialogInterface, int i) {
         messagesController.secretWebpagePreview = 1;
         MessagesController.getGlobalMainSettings().edit().putInt("secretWebpage2", getMessagesController().secretWebpagePreview).commit();
         this.foundUrls = null;
@@ -10006,8 +10015,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchLinks$72 */
-    public /* synthetic */ void lambda$searchLinks$72$ChatActivity(TLRPC$TL_messages_getWebPagePreview tLRPC$TL_messages_getWebPagePreview, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$searchLinks$73 */
+    public /* synthetic */ void lambda$searchLinks$73$ChatActivity(TLRPC$TL_messages_getWebPagePreview tLRPC$TL_messages_getWebPagePreview, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, tLRPC$TL_messages_getWebPagePreview) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -10020,14 +10029,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$searchLinks$71$ChatActivity(this.f$1, this.f$2, this.f$3);
+                ChatActivity.this.lambda$searchLinks$72$ChatActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$searchLinks$71 */
-    public /* synthetic */ void lambda$searchLinks$71$ChatActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_getWebPagePreview tLRPC$TL_messages_getWebPagePreview) {
+    /* renamed from: lambda$searchLinks$72 */
+    public /* synthetic */ void lambda$searchLinks$72$ChatActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_getWebPagePreview tLRPC$TL_messages_getWebPagePreview) {
         this.linkSearchRequestId = 0;
         if (tLRPC$TL_error != null) {
             return;
@@ -10209,7 +10218,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     this.chatActivityEnterView.setFieldFocused();
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public final void run() {
-                            ChatActivity.this.lambda$showFieldPanel$74$ChatActivity();
+                            ChatActivity.this.lambda$showFieldPanel$75$ChatActivity();
                         }
                     }, 100);
                 }
@@ -10609,8 +10618,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showFieldPanel$74 */
-    public /* synthetic */ void lambda$showFieldPanel$74$ChatActivity() {
+    /* renamed from: lambda$showFieldPanel$75 */
+    public /* synthetic */ void lambda$showFieldPanel$75$ChatActivity() {
         ChatActivityEnterView chatActivityEnterView2 = this.chatActivityEnterView;
         if (chatActivityEnterView2 != null) {
             chatActivityEnterView2.openKeyboard();
@@ -10645,7 +10654,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void run() {
-                    ChatActivity.this.lambda$sendSecretMessageRead$75$ChatActivity(this.f$1);
+                    ChatActivity.this.lambda$sendSecretMessageRead$76$ChatActivity(this.f$1);
                 }
             };
         }
@@ -10661,8 +10670,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$sendSecretMessageRead$75 */
-    public /* synthetic */ void lambda$sendSecretMessageRead$75$ChatActivity(MessageObject messageObject) {
+    /* renamed from: lambda$sendSecretMessageRead$76 */
+    public /* synthetic */ void lambda$sendSecretMessageRead$76$ChatActivity(MessageObject messageObject) {
         if (this.currentEncryptedChat != null) {
             MessagesController messagesController = getMessagesController();
             long j = this.dialog_id;
@@ -10904,14 +10913,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         Object obj2;
         MessageObject messageObject;
         int indexOf;
+        float f;
         int i2;
         int i3;
-        boolean z3;
-        float f;
         int i4;
         int i5;
-        MessageObject messageObject2;
         int i6;
+        boolean z3;
+        MessageObject messageObject2;
+        int i7;
         MessageObject messageObject3;
         TLRPC$Chat tLRPC$Chat;
         RecyclerListView recyclerListView = this.chatListView;
@@ -10919,7 +10929,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int childCount = recyclerListView.getChildCount();
             int measuredHeight = this.chatListView.getMeasuredHeight();
             boolean z4 = this.threadMessageVisible;
-            int i7 = this.currentPinnedMessageId;
+            int i8 = this.currentPinnedMessageId;
             this.threadMessageVisible = this.firstLoading;
             long j = (long) this.threadMessageId;
             if (j == 0 || (tLRPC$Chat = this.currentChat) == null) {
@@ -10935,55 +10945,62 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             this.pollsToCheck.clear();
             float f2 = this.chatListViewPaddingTop;
             long j2 = j;
-            int i8 = Integer.MIN_VALUE;
-            int i9 = Integer.MAX_VALUE;
+            int i9 = Integer.MIN_VALUE;
             int i10 = Integer.MAX_VALUE;
             int i11 = Integer.MAX_VALUE;
-            int i12 = 0;
-            int i13 = Integer.MIN_VALUE;
+            int i12 = Integer.MAX_VALUE;
+            int i13 = 0;
             int i14 = Integer.MIN_VALUE;
+            int i15 = Integer.MIN_VALUE;
             boolean z5 = false;
             MessageObject messageObject4 = null;
             View view = null;
             View view2 = null;
             ChatActionCell chatActionCell = null;
-            while (i12 < childCount) {
-                View childAt = this.chatListView.getChildAt(i12);
-                int i15 = childCount;
+            while (i13 < childCount) {
+                View childAt = this.chatListView.getChildAt(i13);
+                int i16 = childCount;
                 int y = (int) childAt.getY();
-                int i16 = i7;
+                int i17 = i8;
                 float measuredHeight2 = (float) (y + childAt.getMeasuredHeight());
                 boolean z6 = z4;
                 if (measuredHeight2 <= f2 - ((float) this.chatListViewPaddingVisibleOffset) || y > this.chatListView.getMeasuredHeight()) {
                     i2 = measuredHeight;
-                    i3 = i12;
+                    f = f2;
+                    i3 = i13;
+                    i11 = i11;
                     i10 = i10;
-                    i9 = i9;
                 } else {
+                    if (y >= 0) {
+                        i3 = i13;
+                        i4 = 0;
+                    } else {
+                        i4 = -y;
+                        i3 = i13;
+                    }
+                    int measuredHeight3 = childAt.getMeasuredHeight();
+                    if (measuredHeight3 > measuredHeight) {
+                        measuredHeight3 = i4 + measuredHeight;
+                    }
+                    i2 = measuredHeight;
+                    int keyboardHeight = this.contentView.getKeyboardHeight();
+                    int i18 = i11;
+                    if ((keyboardHeight < AndroidUtilities.dp(20.0f) && this.chatActivityEnterView.isPopupShowing()) || this.chatActivityEnterView.pannelAniamationInProgress()) {
+                        keyboardHeight = this.chatActivityEnterView.getEmojiPadding();
+                    }
                     boolean z7 = childAt instanceof ChatMessageCell;
                     if (z7) {
-                        i3 = i12;
-                        ChatMessageCell chatMessageCell = (ChatMessageCell) childAt;
-                        i4 = i10;
-                        MessageObject messageObject5 = chatMessageCell.getMessageObject();
                         z3 = z7;
-                        f = measuredHeight2;
-                        if (messageObject5.getDialogId() == this.dialog_id && messageObject5.getId() > i14) {
-                            i14 = messageObject5.getId();
+                        ChatMessageCell chatMessageCell = (ChatMessageCell) childAt;
+                        i6 = i10;
+                        MessageObject messageObject5 = chatMessageCell.getMessageObject();
+                        f = f2;
+                        i5 = i12;
+                        if (messageObject5.getDialogId() == this.dialog_id && messageObject5.getId() > i15) {
+                            i15 = messageObject5.getId();
                             messageObject4 = messageObject5;
                         }
-                        int i17 = y >= 0 ? 0 : -y;
-                        int measuredHeight3 = chatMessageCell.getMeasuredHeight();
-                        if (measuredHeight3 > measuredHeight) {
-                            measuredHeight3 = i17 + measuredHeight;
-                        }
-                        i2 = measuredHeight;
-                        int keyboardHeight = this.contentView.getKeyboardHeight();
-                        int i18 = i14;
-                        if ((keyboardHeight < AndroidUtilities.dp(20.0f) && this.chatActivityEnterView.isPopupShowing()) || this.chatActivityEnterView.pannelAniamationInProgress()) {
-                            keyboardHeight = this.chatActivityEnterView.getEmojiPadding();
-                        }
-                        chatMessageCell.setVisiblePart(i17, measuredHeight3 - i17, heightWithKeyboard, (float) keyboardHeight);
+                        chatMessageCell.setVisiblePart(i4, measuredHeight3 - i4, heightWithKeyboard, (float) keyboardHeight);
                         if (!this.threadMessageVisible && (messageObject3 = this.threadMessageObject) != null && messageObject5 == messageObject3 && ((float) chatMessageCell.getBottom()) > this.chatListViewPaddingTop) {
                             this.threadMessageVisible = true;
                         }
@@ -10999,133 +11016,131 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                 z5 = true;
                             }
                         }
-                        i5 = i9;
                         messageObject2 = messageObject5;
-                        i14 = i18;
                     } else {
-                        i2 = measuredHeight;
+                        i6 = i10;
                         z3 = z7;
-                        f = measuredHeight2;
-                        i4 = i10;
-                        i3 = i12;
+                        f = f2;
+                        i5 = i12;
                         if (childAt instanceof ChatActionCell) {
-                            messageObject2 = ((ChatActionCell) childAt).getMessageObject();
-                            if (messageObject2 != null) {
-                                i5 = i9;
-                                if (messageObject2.getDialogId() == this.dialog_id && messageObject2.getId() > i14) {
-                                    i14 = Math.max(i14, messageObject2.getId());
-                                }
-                            } else {
-                                i5 = i9;
+                            ChatActionCell chatActionCell2 = (ChatActionCell) childAt;
+                            messageObject2 = chatActionCell2.getMessageObject();
+                            if (messageObject2 != null && messageObject2.getDialogId() == this.dialog_id && messageObject2.getId() > i15) {
+                                i15 = Math.max(i15, messageObject2.getId());
                             }
+                            chatActionCell2.setVisiblePart(childAt.getY() + ((float) (isKeyboardVisible() ? this.chatListView.getTop() : this.actionBar.getMeasuredHeight())), this.fragmentView.getMeasuredHeight(), this.contentView.getBackgroundTranslationY());
                         } else {
-                            i5 = i9;
                             if (childAt instanceof BotHelpCell) {
                                 childAt.invalidate();
                             }
                             messageObject2 = null;
                         }
                     }
-                    if (!(this.chatMode == 1 || messageObject2 == null)) {
+                    if (this.chatMode == 1 || messageObject2 == null) {
+                        i12 = i5;
+                    } else {
                         int id = messageObject2.getId();
-                        if ((!isThreadChat() && ((!messageObject2.isOut() && messageObject2.isUnread()) || (messageObject2.messageOwner.from_scheduled && id > num.intValue()))) || (id > 0 && isThreadChat() && id > num.intValue() && id > this.replyMaxReadId)) {
+                        if ((isThreadChat() || ((messageObject2.isOut() || !messageObject2.isUnread()) && (!messageObject2.messageOwner.from_scheduled || id <= num.intValue()))) && (id <= 0 || !isThreadChat() || id <= num.intValue() || id <= this.replyMaxReadId)) {
+                            i12 = i5;
+                        } else {
                             if (id > 0) {
-                                i8 = Math.max(i8, messageObject2.getId());
+                                i9 = Math.max(i9, messageObject2.getId());
                             }
-                            if (id < 0 && !isThreadChat()) {
-                                i11 = Math.min(i11, messageObject2.getId());
-                            }
-                            i13 = Math.max(i13, messageObject2.messageOwner.date);
+                            i12 = (id >= 0 || isThreadChat()) ? i5 : Math.min(i5, messageObject2.getId());
+                            i14 = Math.max(i14, messageObject2.messageOwner.date);
                         }
                         if (messageObject2.type == 17 && messageObject2.getId() > 0) {
                             this.pollsToCheck.add(messageObject2);
                         }
                     }
-                    if (f <= f2) {
+                    if (measuredHeight2 <= f) {
                         if ((childAt instanceof ChatActionCell) && messageObject2.isDateObject) {
                             childAt.setAlpha(0.0f);
                         }
-                        i9 = i5;
-                        i10 = i4;
+                        i11 = i18;
+                        i10 = i6;
                     } else {
                         int bottom = childAt.getBottom();
-                        if (bottom < i5) {
+                        int i19 = i6;
+                        if (bottom < i19) {
                             if (z3 || (childAt instanceof ChatActionCell)) {
                                 chatActionCell = childAt;
                             }
-                            i9 = bottom;
+                            i10 = bottom;
                             view2 = childAt;
                         } else {
-                            i9 = i5;
+                            i10 = i19;
                         }
                         ChatListItemAnimator chatListItemAnimator2 = this.chatListItemAnimator;
                         if ((chatListItemAnimator2 == null || (!chatListItemAnimator2.willRemoved(childAt) && !this.chatListItemAnimator.willAddedFromAlpha(childAt))) && (childAt instanceof ChatActionCell) && messageObject2.isDateObject) {
                             if (childAt.getAlpha() != 1.0f) {
                                 childAt.setAlpha(1.0f);
                             }
-                            i6 = i4;
-                            if (bottom < i6) {
-                                i10 = bottom;
+                            i7 = i18;
+                            if (bottom < i7) {
+                                i11 = bottom;
                                 view = childAt;
                             }
                         } else {
-                            i6 = i4;
+                            i7 = i18;
                         }
-                        i10 = i6;
+                        i11 = i7;
                     }
                 }
-                i12 = i3 + 1;
-                childCount = i15;
+                i13 = i3 + 1;
+                childCount = i16;
                 z4 = z6;
-                i7 = i16;
+                i8 = i17;
                 measuredHeight = i2;
+                f2 = f;
             }
             boolean z8 = z4;
-            int i19 = i7;
+            int i20 = i8;
+            float f3 = f2;
             this.currentPinnedMessageId = 0;
             if (!this.pinnedMessageIds.isEmpty()) {
-                if (i14 == Integer.MIN_VALUE) {
-                    int i20 = this.startLoadFromMessageId;
-                    if (i20 != 0) {
-                        i14 = i20;
+                if (i15 == Integer.MIN_VALUE) {
+                    int i21 = this.startLoadFromMessageId;
+                    if (i21 != 0) {
+                        i15 = i21;
                     } else if (!this.pinnedMessageIds.isEmpty()) {
-                        i14 = this.pinnedMessageIds.get(0).intValue() + 1;
+                        i15 = this.pinnedMessageIds.get(0).intValue() + 1;
                     }
-                } else if (i14 < 0 && (indexOf = this.messages.indexOf(messageObject4)) >= 0) {
-                    int i21 = indexOf - 1;
+                } else if (i15 < 0 && (indexOf = this.messages.indexOf(messageObject4)) >= 0) {
+                    int i22 = indexOf - 1;
                     while (true) {
-                        if (i21 < 0) {
+                        if (i22 < 0) {
                             break;
                         }
-                        MessageObject messageObject6 = this.messages.get(i21);
+                        MessageObject messageObject6 = this.messages.get(i22);
                         if (messageObject6.getId() > 0) {
-                            i14 = messageObject6.getId();
+                            i15 = messageObject6.getId();
                             break;
                         }
-                        i21--;
+                        i22--;
                     }
-                    if (i14 < 0) {
-                        int i22 = indexOf + 1;
+                    if (i15 < 0) {
+                        int i23 = indexOf + 1;
                         int size = this.messages.size();
                         while (true) {
-                            if (i22 >= size) {
+                            if (i23 >= size) {
                                 break;
                             }
-                            MessageObject messageObject7 = this.messages.get(i22);
+                            MessageObject messageObject7 = this.messages.get(i23);
                             if (messageObject7.getId() > 0) {
-                                i14 = messageObject7.getId();
+                                i15 = messageObject7.getId();
                                 break;
                             }
-                            i22++;
+                            i23++;
                         }
                     }
                 }
                 ArrayList<Integer> arrayList = this.pinnedMessageIds;
-                int i23 = this.forceNextPinnedMessageId;
-                if (i23 != 0) {
-                    i14 = i23;
+                int i24 = this.forceNextPinnedMessageId;
+                if (i24 != 0) {
+                    i15 = i24;
                 }
-                this.currentPinnedMessageId = findClosest(arrayList, i14, this.currentPinnedMessageIndex).intValue();
+                this.currentPinnedMessageId = findClosest(arrayList, i15, this.currentPinnedMessageIndex).intValue();
                 if (!this.loadingPinnedMessagesList && !this.pinnedEndReached && !this.pinnedMessageIds.isEmpty() && this.currentPinnedMessageIndex[0] > this.pinnedMessageIds.size() - 2) {
                     MediaDataController mediaDataController = getMediaDataController();
                     long j3 = this.dialog_id;
@@ -11167,7 +11182,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             this.currentFloatingTopIsNotMessage = !(view3 instanceof ChatMessageCell) && !(view3 instanceof ChatActionCell);
             View view4 = view;
             if (view4 != null) {
-                if (view4.getY() > f2 || this.currentFloatingTopIsNotMessage) {
+                if (view4.getY() > f3 || this.currentFloatingTopIsNotMessage) {
                     if (view4.getAlpha() != 1.0f) {
                         view4.setAlpha(1.0f);
                     }
@@ -11196,7 +11211,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                     z2 = true;
                 }
-                float y2 = (view4.getY() + ((float) view4.getMeasuredHeight())) - f2;
+                float y2 = (view4.getY() + ((float) view4.getMeasuredHeight())) - f3;
                 if (y2 <= ((float) this.floatingDateView.getMeasuredHeight()) || y2 >= ((float) (this.floatingDateView.getMeasuredHeight() * 2))) {
                     this.floatingDateViewOffset = 0.0f;
                 } else if (this.chatListView.getChildAdapterPosition(view4) == (this.chatAdapter.messagesStartRow + this.messages.size()) - 1) {
@@ -11236,9 +11251,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 this.floatingDateViewOffset = 0.0f;
             }
             if (!isThreadChat()) {
-                int i24 = this.currentPinnedMessageId;
-                if (i24 != 0) {
-                    MessageObject messageObject8 = this.pinnedMessageObjects.get(Integer.valueOf(i24));
+                int i25 = this.currentPinnedMessageId;
+                if (i25 != 0) {
+                    MessageObject messageObject8 = this.pinnedMessageObjects.get(Integer.valueOf(i25));
                     if (messageObject8 == null) {
                         messageObject8 = this.messagesDict[0].get(this.currentPinnedMessageId);
                     }
@@ -11249,57 +11264,57 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             arrayList3.add(Integer.valueOf(this.currentPinnedMessageId));
                             getMediaDataController().loadPinnedMessages(this.dialog_id, ChatObject.isChannel(this.currentChat) ? this.currentChat.id : 0, arrayList3, true);
                         }
-                        i = i19;
+                        i = i20;
                         this.currentPinnedMessageId = i;
                     } else {
-                        i = i19;
+                        i = i20;
                     }
                 } else {
-                    i = i19;
+                    i = i20;
                     if (i != 0 && !this.pinnedMessageIds.isEmpty()) {
                         this.currentPinnedMessageId = i;
                     }
                 }
-                int i25 = this.currentPinnedMessageId;
-                if (i != i25) {
-                    updatePinnedMessageView(this.openAnimationStartTime != 0 && SystemClock.elapsedRealtime() >= this.openAnimationStartTime + 150, i == 0 ? 0 : i > i25 ? 1 : 2);
+                int i26 = this.currentPinnedMessageId;
+                if (i != i26) {
+                    updatePinnedMessageView(this.openAnimationStartTime != 0 && SystemClock.elapsedRealtime() >= this.openAnimationStartTime + 150, i == 0 ? 0 : i > i26 ? 1 : 2);
                 } else {
                     updatePinnedListButton(this.openAnimationStartTime != 0 && SystemClock.elapsedRealtime() >= this.openAnimationStartTime + 150);
                 }
             } else if (z8 != this.threadMessageVisible) {
                 updatePinnedMessageView(this.openAnimationStartTime != 0 && SystemClock.elapsedRealtime() >= this.openAnimationStartTime + 150);
             }
-            ChatActionCell chatActionCell2 = this.floatingDateView;
-            if (chatActionCell2 != null) {
-                chatActionCell2.setTranslationY(((this.chatListView.getTranslationY() + this.chatListViewPaddingTop) + this.floatingDateViewOffset) - ((float) AndroidUtilities.dp(4.0f)));
+            ChatActionCell chatActionCell3 = this.floatingDateView;
+            if (chatActionCell3 != null) {
+                chatActionCell3.setTranslationY(((this.chatListView.getTranslationY() + this.chatListViewPaddingTop) + this.floatingDateViewOffset) - ((float) AndroidUtilities.dp(4.0f)));
             }
             invalidateChatListViewTopPadding();
             if (!this.firstLoading && !this.paused && !this.inPreviewMode && this.chatMode == 0 && !getMessagesController().ignoreSetOnline) {
-                int i26 = 0;
-                if (i8 != Integer.MIN_VALUE || i11 != Integer.MAX_VALUE) {
+                int i27 = 0;
+                if (i9 != Integer.MIN_VALUE || i12 != Integer.MAX_VALUE) {
                     c = 0;
-                    int i27 = 0;
-                    for (int i28 = 0; i28 < this.messages.size(); i28++) {
-                        MessageObject messageObject9 = this.messages.get(i28);
+                    int i28 = 0;
+                    for (int i29 = 0; i29 < this.messages.size(); i29++) {
+                        MessageObject messageObject9 = this.messages.get(i29);
                         int id2 = messageObject9.getId();
-                        if (i8 != Integer.MIN_VALUE && id2 > 0 && id2 <= i8 && ((messageObject9.messageOwner.from_scheduled && id2 > num.intValue()) || (messageObject9.isUnread() && !messageObject9.isOut()))) {
+                        if (i9 != Integer.MIN_VALUE && id2 > 0 && id2 <= i9 && ((messageObject9.messageOwner.from_scheduled && id2 > num.intValue()) || (messageObject9.isUnread() && !messageObject9.isOut()))) {
                             if (messageObject9.messageOwner.from_scheduled) {
-                                i26++;
+                                i27++;
                             } else {
                                 messageObject9.setIsRead();
                             }
-                            i27++;
+                            i28++;
                         }
-                        if (i11 != Integer.MAX_VALUE && id2 < 0 && id2 >= i11 && messageObject9.isUnread()) {
+                        if (i12 != Integer.MAX_VALUE && id2 < 0 && id2 >= i12 && messageObject9.isUnread()) {
                             messageObject9.setIsRead();
-                            i27++;
+                            i28++;
                         }
                     }
                     if (!isThreadChat()) {
-                        if ((!this.forwardEndReached[0] || i8 != this.minMessageId[0]) && i11 != this.minMessageId[0]) {
-                            int i29 = this.newUnreadMessageCount - i27;
-                            this.newUnreadMessageCount = i29;
-                            if (i29 < 0) {
+                        if ((!this.forwardEndReached[0] || i9 != this.minMessageId[0]) && i12 != this.minMessageId[0]) {
+                            int i30 = this.newUnreadMessageCount - i28;
+                            this.newUnreadMessageCount = i30;
+                            if (i30 < 0) {
                                 this.newUnreadMessageCount = 0;
                             }
                         } else {
@@ -11318,7 +11333,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     MessagesController messagesController = getMessagesController();
                     long j4 = this.dialog_id;
                     int[] iArr = this.minMessageId;
-                    messagesController.markDialogAsRead(j4, i8, i11, i13, false, j2, i27, i8 == iArr[0] || i11 == iArr[0], i26);
+                    messagesController.markDialogAsRead(j4, i9, i12, i14, false, j2, i28, i9 == iArr[0] || i12 == iArr[0], i27);
                     this.firstUnreadSent = true;
                 } else if (!this.firstUnreadSent && this.currentEncryptedChat == null && this.chatLayoutManager.findFirstVisibleItemPosition() == 0) {
                     c = 0;
@@ -11340,16 +11355,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 } else {
                     c = 0;
                 }
-                if (j2 != 0 && i8 > 0 && this.replyMaxReadId != i8) {
-                    this.replyMaxReadId = i8;
+                if (j2 != 0 && i9 > 0 && this.replyMaxReadId != i9) {
+                    this.replyMaxReadId = i9;
                     getMessagesStorage().updateRepliesMaxReadId(this.replyOriginalChat.id, this.replyOriginalMessageId, this.replyMaxReadId, true);
                     NotificationCenter notificationCenter = getNotificationCenter();
-                    int i30 = NotificationCenter.commentsRead;
+                    int i31 = NotificationCenter.commentsRead;
                     Object[] objArr = new Object[3];
                     objArr[c] = Integer.valueOf(this.replyOriginalChat.id);
                     objArr[1] = Integer.valueOf(this.replyOriginalMessageId);
                     objArr[2] = Integer.valueOf(this.replyMaxReadId);
-                    notificationCenter.postNotificationName(i30, objArr);
+                    notificationCenter.postNotificationName(i31, objArr);
                 }
             }
         }
@@ -11436,9 +11451,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (runnable != null) {
             AndroidUtilities.cancelRunOnUIThread(runnable);
         }
-        $$Lambda$ChatActivity$0zgnuNS6JAi95coTYdNItIROiD4 r0 = new Runnable() {
+        $$Lambda$ChatActivity$NCs_o_zeupkv9KVFAF1XibYhUPE r0 = new Runnable() {
             public final void run() {
-                ChatActivity.this.lambda$startMessageUnselect$76$ChatActivity();
+                ChatActivity.this.lambda$startMessageUnselect$77$ChatActivity();
             }
         };
         this.unselectRunnable = r0;
@@ -11446,8 +11461,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startMessageUnselect$76 */
-    public /* synthetic */ void lambda$startMessageUnselect$76$ChatActivity() {
+    /* renamed from: lambda$startMessageUnselect$77 */
+    public /* synthetic */ void lambda$startMessageUnselect$77$ChatActivity() {
         this.highlightMessageId = Integer.MAX_VALUE;
         updateVisibleRows();
         this.unselectRunnable = null;
@@ -11738,7 +11753,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r8 = 3
             r6.<init>(r7, r8)
             r0.progressDialog = r6
-            org.telegram.ui.-$$Lambda$ChatActivity$Z7-YWxfNnHk4QqC-tAqe-vfrbWc r7 = new org.telegram.ui.-$$Lambda$ChatActivity$Z7-YWxfNnHk4QqC-tAqe-vfrbWc
+            org.telegram.ui.-$$Lambda$ChatActivity$ne1DZhBjw1gsxjNWk5a0JN5q25U r7 = new org.telegram.ui.-$$Lambda$ChatActivity$ne1DZhBjw1gsxjNWk5a0JN5q25U
             r7.<init>()
             r6.setOnShowListener(r7)
             org.telegram.ui.ActionBar.AlertDialog r6 = r0.progressDialog
@@ -11842,7 +11857,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.nextScrollForcePinnedMessageId = r6
             int r1 = r0.currentAccount
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            org.telegram.ui.-$$Lambda$ChatActivity$1Txu5w6RE2lTlie2r-YXFSS57Ag r2 = new org.telegram.ui.-$$Lambda$ChatActivity$1Txu5w6RE2lTlie2r-YXFSS57Ag
+            org.telegram.ui.-$$Lambda$ChatActivity$ABRZKCveftP_-Jd4IqypWkQE11Y r2 = new org.telegram.ui.-$$Lambda$ChatActivity$ABRZKCveftP_-Jd4IqypWkQE11Y
             r2.<init>()
             r1.doOnIdle(r2)
         L_0x02cb:
@@ -11852,8 +11867,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$scrollToMessageId$77 */
-    public /* synthetic */ void lambda$scrollToMessageId$77$ChatActivity() {
+    /* renamed from: lambda$scrollToMessageId$78 */
+    public /* synthetic */ void lambda$scrollToMessageId$78$ChatActivity() {
         int i = this.nextScrollToMessageId;
         if (i != 0) {
             scrollToMessageId(i, this.nextScrollFromMessageId, this.nextScrollSelect, this.nextScrollLoadIndex, this.nextScrollForce, this.nextScrollForcePinnedMessageId);
@@ -11862,8 +11877,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$scrollToMessageId$78 */
-    public /* synthetic */ void lambda$scrollToMessageId$78$ChatActivity(DialogInterface dialogInterface) {
+    /* renamed from: lambda$scrollToMessageId$79 */
+    public /* synthetic */ void lambda$scrollToMessageId$79$ChatActivity(DialogInterface dialogInterface) {
         showPinnedProgress(false);
     }
 
@@ -11877,9 +11892,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             this.pinnedPorgressIsShowing = false;
             updatePinnedListButton(true);
         } else if (this.updatePinnedProgressRunnable == null) {
-            $$Lambda$ChatActivity$YWRIn_6HLjgQwQte7uUMw67gKF8 r3 = new Runnable() {
+            $$Lambda$ChatActivity$7HQyIEcHd9g9UffDrVpALJ5R0c0 r3 = new Runnable() {
                 public final void run() {
-                    ChatActivity.this.lambda$showPinnedProgress$79$ChatActivity();
+                    ChatActivity.this.lambda$showPinnedProgress$80$ChatActivity();
                 }
             };
             this.updatePinnedProgressRunnable = r3;
@@ -11888,8 +11903,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showPinnedProgress$79 */
-    public /* synthetic */ void lambda$showPinnedProgress$79$ChatActivity() {
+    /* renamed from: lambda$showPinnedProgress$80 */
+    public /* synthetic */ void lambda$showPinnedProgress$80$ChatActivity() {
         this.pinnedPorgressIsShowing = true;
         updatePinnedListButton(true);
     }
@@ -12235,7 +12250,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     builder.setMessage(LocaleController.getString("PermissionNoAudioVideo", NUM));
                     builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            ChatActivity.this.lambda$onRequestPermissionsResultFragment$80$ChatActivity(dialogInterface, i);
+                            ChatActivity.this.lambda$onRequestPermissionsResultFragment$81$ChatActivity(dialogInterface, i);
                         }
                     });
                     builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
@@ -12273,8 +12288,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onRequestPermissionsResultFragment$80 */
-    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$80$ChatActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$onRequestPermissionsResultFragment$81 */
+    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$81$ChatActivity(DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));
@@ -13339,7 +13354,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
 
                     public final void didSelectDate(boolean z, int i) {
-                        ChatActivity.this.lambda$onActivityResultFragment$81$ChatActivity(this.f$1, z, i);
+                        ChatActivity.this.lambda$onActivityResultFragment$82$ChatActivity(this.f$1, z, i);
                     }
                 });
             } else {
@@ -13368,8 +13383,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onActivityResultFragment$81 */
-    public /* synthetic */ void lambda$onActivityResultFragment$81$ChatActivity(Uri uri, boolean z, int i) {
+    /* renamed from: lambda$onActivityResultFragment$82 */
+    public /* synthetic */ void lambda$onActivityResultFragment$82$ChatActivity(Uri uri, boolean z, int i) {
         fillEditingMediaWithCaption((CharSequence) null, (ArrayList<TLRPC$MessageEntity>) null);
         SendMessagesHelper.prepareSendingPhoto(getAccountInstance(), (String) null, uri, this.dialog_id, this.replyingMessageObject, getThreadMessage(), (CharSequence) null, (ArrayList<TLRPC$MessageEntity>) null, (ArrayList<TLRPC$InputDocument>) null, (InputContentInfoCompat) null, 0, this.editingMessageObject, z, i);
     }
@@ -13516,7 +13531,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.Integer r1 = (java.lang.Integer) r1
             int r1 = r1.intValue()
             int r0 = r8.classGuid
-            if (r1 != r0) goto L_0x3087
+            if (r1 != r0) goto L_0x3075
             r0 = 11
             r0 = r9[r0]
             java.lang.Integer r0 = (java.lang.Integer) r0
@@ -13560,7 +13575,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r10 = r8.transitionAnimationIndex
             int r6 = r12.setAnimationInProgress(r10, r6)
             r8.transitionAnimationIndex = r6
-            org.telegram.ui.-$$Lambda$ChatActivity$Pj9h3qkxs9NzSPthtLjHNBqJ7PY r6 = new org.telegram.ui.-$$Lambda$ChatActivity$Pj9h3qkxs9NzSPthtLjHNBqJ7PY
+            org.telegram.ui.-$$Lambda$ChatActivity$wwqWhZTn8GwXN1-Y5H7y3T6W4S0 r6 = new org.telegram.ui.-$$Lambda$ChatActivity$wwqWhZTn8GwXN1-Y5H7y3T6W4S0
             r6.<init>()
             r2 = 800(0x320, double:3.953E-321)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r6, r2)
@@ -14160,7 +14175,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x04c4:
             r15 = 0
             r8.firstLoading = r15
-            org.telegram.ui.-$$Lambda$ChatActivity$wwqWhZTn8GwXN1-Y5H7y3T6W4S0 r13 = new org.telegram.ui.-$$Lambda$ChatActivity$wwqWhZTn8GwXN1-Y5H7y3T6W4S0
+            org.telegram.ui.-$$Lambda$ChatActivity$fitsk6ThcGf9_hJ5KFSRF7ZvH4M r13 = new org.telegram.ui.-$$Lambda$ChatActivity$fitsk6ThcGf9_hJ5KFSRF7ZvH4M
             r13.<init>()
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)
         L_0x04cf:
@@ -15849,7 +15864,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r8.showFloatingDateView(r2)
         L_0x10d1:
             r8.checkScrollForLoad(r2)
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             org.telegram.ui.ChatActivity$ChatActivityAdapter r0 = r8.chatAdapter
             r0.notifyDataSetChanged()
             org.telegram.ui.ActionBar.AlertDialog r0 = r8.progressDialog
@@ -15873,7 +15888,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int unused = r0.lastPadding = r3
             org.telegram.ui.Components.RecyclerAnimationScrollHelper r0 = r8.chatScrollHelper
             r0.scrollToPosition(r2, r2, r1, r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x1109:
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r2 = r8.messagesDict
             r1 = r2[r1]
@@ -15893,10 +15908,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r1 == 0) goto L_0x1134
             r0 = r1
         L_0x1134:
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r8.messages
             int r1 = r1.indexOf(r0)
-            if (r1 < 0) goto L_0x3087
+            if (r1 < 0) goto L_0x3075
             androidx.recyclerview.widget.GridLayoutManagerFixed r2 = r8.chatLayoutManager
             int r2 = r2.findFirstVisibleItemPosition()
             int r3 = r0.getId()
@@ -15943,7 +15958,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r4 = r4 + r1
             r1 = 1
             r0.scrollToPosition(r4, r2, r3, r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x1195:
             r11 = r4
             int r1 = org.telegram.messenger.NotificationCenter.emojiDidLoad
@@ -15991,23 +16006,23 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.invalidate()
         L_0x11de:
             org.telegram.ui.Components.ChatActivityEnterView r0 = r8.chatActivityEnterView
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             org.telegram.ui.Components.EditTextCaption r0 = r0.getEditField()
             int r1 = r0.getCurrentTextColor()
             r2 = -1
             r0.setTextColor(r2)
             r0.setTextColor(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x11f3:
             int r1 = org.telegram.messenger.NotificationCenter.didUpdateConnectionState
             if (r0 != r1) goto L_0x1208
             org.telegram.tgnet.ConnectionsManager r0 = org.telegram.tgnet.ConnectionsManager.getInstance(r55)
             int r0 = r0.getConnectionState()
             r1 = 3
-            if (r0 != r1) goto L_0x3087
+            if (r0 != r1) goto L_0x3075
             r1 = 0
             r8.checkAutoDownloadMessages(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x1208:
             r1 = 0
             int r2 = org.telegram.messenger.NotificationCenter.chatOnlineCountDidLoad
@@ -16030,11 +16045,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r1 = r1.intValue()
             r0.online_count = r1
             org.telegram.ui.Components.ChatAvatarContainer r0 = r8.avatarContainer
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r0.updateOnlineCount()
             org.telegram.ui.Components.ChatAvatarContainer r0 = r8.avatarContainer
             r0.updateSubtitle()
-            goto L_0x3087
+            goto L_0x3075
         L_0x123d:
             return
         L_0x123e:
@@ -16136,9 +16151,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r12 = 1
         L_0x12f6:
             r0 = r0 & 128(0x80, float:1.794E-43)
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r8.updateTopPanel(r12)
-            goto L_0x3087
+            goto L_0x3075
         L_0x12ff:
             r12 = 1
             int r1 = org.telegram.messenger.NotificationCenter.didReceiveNewMessages
@@ -16181,21 +16196,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return
         L_0x134a:
             r8.processNewMessages(r2)
-            goto L_0x3087
+            goto L_0x3075
         L_0x134f:
             org.telegram.tgnet.TLRPC$Chat r3 = r8.currentChat
             boolean r3 = org.telegram.messenger.ChatObject.isChannel(r3)
-            if (r3 == 0) goto L_0x3087
+            if (r3 == 0) goto L_0x3075
             org.telegram.tgnet.TLRPC$Chat r3 = r8.currentChat
             boolean r3 = r3.megagroup
-            if (r3 != 0) goto L_0x3087
+            if (r3 != 0) goto L_0x3075
             org.telegram.tgnet.TLRPC$ChatFull r3 = r8.chatInfo
-            if (r3 == 0) goto L_0x3087
+            if (r3 == 0) goto L_0x3075
             int r3 = r3.linked_chat_id
             int r3 = -r3
             long r3 = (long) r3
             int r5 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r5 != 0) goto L_0x3087
+            if (r5 != 0) goto L_0x3075
             int r0 = r2.size()
             r15 = 0
         L_0x136e:
@@ -16212,7 +16227,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             goto L_0x136e
         L_0x1388:
             r53.checkWaitingForReplies()
-            goto L_0x3087
+            goto L_0x3075
         L_0x138d:
             int r1 = org.telegram.messenger.NotificationCenter.closeChats
             if (r0 != r1) goto L_0x13c7
@@ -16225,9 +16240,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             long r0 = r0.longValue()
             long r2 = r8.dialog_id
             int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 != 0) goto L_0x3087
+            if (r4 != 0) goto L_0x3075
             r53.finishFragment()
-            goto L_0x3087
+            goto L_0x3075
         L_0x13aa:
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
             if (r0 == 0) goto L_0x13c2
@@ -16238,10 +16253,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 1
             if (r0 <= r1) goto L_0x13c2
             r53.finishFragment()
-            goto L_0x3087
+            goto L_0x3075
         L_0x13c2:
             r53.removeSelfFromStack()
-            goto L_0x3087
+            goto L_0x3075
         L_0x13c7:
             int r1 = org.telegram.messenger.NotificationCenter.commentsRead
             if (r0 != r1) goto L_0x1424
@@ -16250,9 +16265,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             org.telegram.tgnet.TLRPC$Chat r2 = r8.currentChat
-            if (r2 == 0) goto L_0x3087
+            if (r2 == 0) goto L_0x3075
             int r2 = r2.id
-            if (r2 != r0) goto L_0x3087
+            if (r2 != r0) goto L_0x3075
             r2 = 1
             r0 = r9[r2]
             java.lang.Integer r0 = (java.lang.Integer) r0
@@ -16261,9 +16276,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = r2[r1]
             java.lang.Object r0 = r1.get(r0)
             org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             boolean r1 = r0.hasReplies()
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             r1 = 2
             r1 = r9[r1]
             java.lang.Integer r1 = (java.lang.Integer) r1
@@ -16279,14 +16294,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             org.telegram.tgnet.TLRPC$TL_messageReplies r0 = r0.replies
             r0.read_max_id = r1
-            goto L_0x3087
+            goto L_0x3075
         L_0x1416:
-            org.telegram.ui.-$$Lambda$ChatActivity$y3gu1Bs8Zs6yHckUowm75hs3oCI r2 = new org.telegram.ui.-$$Lambda$ChatActivity$y3gu1Bs8Zs6yHckUowm75hs3oCI
+            org.telegram.ui.-$$Lambda$ChatActivity$V53xFY7qEq2P332oYPBaTajGEWo r2 = new org.telegram.ui.-$$Lambda$ChatActivity$V53xFY7qEq2P332oYPBaTajGEWo
             r2.<init>(r0, r1)
             r8.delayedReadRunnable = r2
             r0 = 500(0x1f4, double:2.47E-321)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2, r0)
-            goto L_0x3087
+            goto L_0x3075
         L_0x1424:
             int r1 = org.telegram.messenger.NotificationCenter.changeRepliesCounter
             if (r0 != r1) goto L_0x14d3
@@ -16295,9 +16310,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             org.telegram.tgnet.TLRPC$Chat r2 = r8.currentChat
-            if (r2 == 0) goto L_0x3087
+            if (r2 == 0) goto L_0x3075
             int r2 = r2.id
-            if (r2 != r0) goto L_0x3087
+            if (r2 != r0) goto L_0x3075
             r2 = 1
             r0 = r9[r2]
             java.lang.Integer r0 = (java.lang.Integer) r0
@@ -16306,10 +16321,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = r2[r1]
             java.lang.Object r0 = r2.get(r0)
             org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             org.telegram.tgnet.TLRPC$Message r1 = r0.messageOwner
             org.telegram.tgnet.TLRPC$TL_messageReplies r1 = r1.replies
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             r2 = 2
             r2 = r9[r2]
             java.lang.Integer r2 = (java.lang.Integer) r2
@@ -16371,9 +16386,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             org.telegram.tgnet.TLRPC$TL_messageReplies r0 = r0.replies
             int r1 = r0.replies
-            if (r1 >= 0) goto L_0x3087
+            if (r1 >= 0) goto L_0x3075
             r0.replies = r3
-            goto L_0x3087
+            goto L_0x3075
         L_0x14d3:
             r3 = 0
             int r1 = org.telegram.messenger.NotificationCenter.threadMessagesRead
@@ -16432,13 +16447,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             goto L_0x1514
         L_0x1542:
             int r0 = r8.threadMaxOutboxReadId
-            if (r1 <= r0) goto L_0x3087
+            if (r1 <= r0) goto L_0x3075
             r8.threadMaxOutboxReadId = r1
             java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r8.messages
             int r0 = r0.size()
             r1 = 0
         L_0x154f:
-            if (r1 >= r0) goto L_0x3087
+            if (r1 >= r0) goto L_0x3075
             java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r8.messages
             java.lang.Object r2 = r2.get(r1)
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
@@ -16450,7 +16465,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r3 > r4) goto L_0x157c
             boolean r3 = r2.isUnread()
             if (r3 != 0) goto L_0x1571
-            goto L_0x3087
+            goto L_0x3075
         L_0x1571:
             r2.setIsRead()
             org.telegram.ui.ChatActivity$ChatActivityAdapter r3 = r8.chatAdapter
@@ -16543,11 +16558,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 1
             r0.setCount(r3, r1)
         L_0x160f:
-            if (r2 == 0) goto L_0x3087
+            if (r2 == 0) goto L_0x3075
             int r0 = r2.size()
             r1 = 0
         L_0x1616:
-            if (r1 >= r0) goto L_0x3087
+            if (r1 >= r0) goto L_0x3075
             int r3 = r2.keyAt(r1)
             long r4 = r2.get(r3)
             int r5 = (int) r4
@@ -16562,7 +16577,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r0 = r0.size()
             r15 = 0
         L_0x1632:
-            if (r15 >= r0) goto L_0x3087
+            if (r15 >= r0) goto L_0x3075
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r8.messages
             java.lang.Object r1 = r1.get(r15)
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
@@ -16765,11 +16780,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r8.updatePagedownButtonVisibility(r3)
             r8.showMentionDownButton(r1, r3)
             r8.removeUnreadPlane(r3)
-            if (r2 == 0) goto L_0x3087
+            if (r2 == 0) goto L_0x3075
             org.telegram.ui.ChatActivity$ChatActivityAdapter r0 = r8.chatAdapter
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r0.notifyDataSetChanged(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x17d1:
             int r1 = org.telegram.messenger.NotificationCenter.messagesDeleted
             if (r0 != r1) goto L_0x17fb
@@ -16795,7 +16810,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.Integer r1 = (java.lang.Integer) r1
             int r1 = r1.intValue()
             r8.processDeletedMessages(r0, r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x17fb:
             r12 = 1
             int r1 = org.telegram.messenger.NotificationCenter.messageReceivedByServer
@@ -16841,7 +16856,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r4 = r4.intValue()
             r3.put(r4, r0)
         L_0x1852:
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             r53.checkChecksHint()
             boolean r0 = r1.shouldRemoveVideoEditedInfo
             if (r0 == 0) goto L_0x1862
@@ -17078,7 +17093,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x1a14:
             org.telegram.messenger.NotificationsController r0 = r53.getNotificationsController()
             r0.playOutChatSound()
-            goto L_0x3087
+            goto L_0x3075
         L_0x1a1d:
             int r1 = org.telegram.messenger.NotificationCenter.messageReceivedByAck
             if (r0 != r1) goto L_0x1a43
@@ -17090,13 +17105,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r0 = r0.intValue()
             java.lang.Object r0 = r2.get(r0)
             org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             org.telegram.tgnet.TLRPC$Message r2 = r0.messageOwner
             r2.send_state = r1
             org.telegram.ui.ChatActivity$ChatActivityAdapter r2 = r8.chatAdapter
-            if (r2 == 0) goto L_0x3087
+            if (r2 == 0) goto L_0x3075
             r2.updateRowWithMessageObject(r0, r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x1a43:
             r1 = 0
             int r2 = org.telegram.messenger.NotificationCenter.messageSendError
@@ -17108,12 +17123,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r0 = r0.intValue()
             java.lang.Object r0 = r1.get(r0)
             org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             r1 = 2
             r0.send_state = r1
             r53.updateVisibleRows()
-            goto L_0x3087
+            goto L_0x3075
         L_0x1a66:
             int r1 = org.telegram.messenger.NotificationCenter.groupCallUpdated
             r2 = 150(0x96, double:7.4E-322)
@@ -17126,7 +17141,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r0 = -r0
             long r6 = (long) r0
             int r0 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r0 != 0) goto L_0x3087
+            if (r0 != 0) goto L_0x3075
             org.telegram.messenger.MessagesController r0 = r53.getMessagesController()
             org.telegram.tgnet.TLRPC$Chat r4 = r8.currentChat
             int r4 = r4.id
@@ -17154,7 +17169,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x1aa9:
             r1 = 0
             r8.checkGroupCallJoin(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x1aaf:
             r1 = 0
             int r4 = org.telegram.messenger.NotificationCenter.didLoadChatInviter
@@ -17166,9 +17181,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r0 = -r0
             long r0 = (long) r0
             int r6 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1))
-            if (r6 != 0) goto L_0x3087
+            if (r6 != 0) goto L_0x3075
             int r0 = r8.chatInviterId
-            if (r0 != 0) goto L_0x3087
+            if (r0 != 0) goto L_0x3075
             r1 = 1
             r0 = r9[r1]
             java.lang.Integer r0 = (java.lang.Integer) r0
@@ -17193,7 +17208,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3 = 0
         L_0x1aef:
             r8.updateInfoTopView(r3)
-            goto L_0x3087
+            goto L_0x3075
         L_0x1af4:
             int r1 = org.telegram.messenger.NotificationCenter.chatInfoDidLoad
             if (r0 != r1) goto L_0x1dc8
@@ -17201,10 +17216,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0 = r9[r1]
             org.telegram.tgnet.TLRPC$ChatFull r0 = (org.telegram.tgnet.TLRPC$ChatFull) r0
             org.telegram.tgnet.TLRPC$Chat r1 = r8.currentChat
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             int r4 = r0.id
             int r5 = r1.id
-            if (r4 != r5) goto L_0x3087
+            if (r4 != r5) goto L_0x3075
             boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_channelFull
             if (r4 == 0) goto L_0x1b63
             boolean r1 = r1.megagroup
@@ -17562,7 +17577,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.Boolean r0 = (java.lang.Boolean) r0
             boolean r0 = r0.booleanValue()
             r8.checkGroupCallJoin(r0)
-            goto L_0x3087
+            goto L_0x3075
         L_0x1dc8:
             int r1 = org.telegram.messenger.NotificationCenter.chatInfoCantLoad
             if (r0 != r1) goto L_0x1e84
@@ -17571,9 +17586,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             org.telegram.tgnet.TLRPC$Chat r1 = r8.currentChat
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             int r1 = r1.id
-            if (r1 != r0) goto L_0x3087
+            if (r1 != r0) goto L_0x3075
             r1 = 1
             r0 = r9[r1]
             java.lang.Integer r0 = (java.lang.Integer) r0
@@ -17646,9 +17661,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r8.loading = r1
             r8.showProgressView(r1)
             org.telegram.ui.ChatActivity$ChatActivityAdapter r0 = r8.chatAdapter
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r0.notifyDataSetChanged(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x1e83:
             return
         L_0x1e84:
@@ -17657,11 +17672,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 1
             r8.updateTopPanel(r1)
             boolean r0 = r53.isThreadChat()
-            if (r0 != 0) goto L_0x3087
+            if (r0 != 0) goto L_0x3075
             org.telegram.ui.Components.ChatAvatarContainer r0 = r8.avatarContainer
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r0.updateSubtitle()
-            goto L_0x3087
+            goto L_0x3075
         L_0x1e9b:
             int r1 = org.telegram.messenger.NotificationCenter.encryptedChatUpdated
             if (r0 != r1) goto L_0x1ed6
@@ -17669,10 +17684,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0 = r9[r1]
             org.telegram.tgnet.TLRPC$EncryptedChat r0 = (org.telegram.tgnet.TLRPC$EncryptedChat) r0
             org.telegram.tgnet.TLRPC$EncryptedChat r1 = r8.currentEncryptedChat
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             int r2 = r0.id
             int r1 = r1.id
-            if (r2 != r1) goto L_0x3087
+            if (r2 != r1) goto L_0x3075
             r8.currentEncryptedChat = r0
             r1 = 1
             r8.updateTopPanel(r1)
@@ -17685,12 +17700,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.checkRoundVideo()
         L_0x1ec6:
             org.telegram.ui.Adapters.MentionsAdapter r0 = r8.mentionsAdapter
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             org.telegram.ui.Components.ChatActivityEnterView r2 = r8.chatActivityEnterView
             boolean r2 = r2.isEditingMessage()
             r1 = r1 ^ r2
             r0.setNeedBotContext(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x1ed6:
             int r1 = org.telegram.messenger.NotificationCenter.messagesReadEncrypted
             if (r0 != r1) goto L_0x1f2e
@@ -17699,9 +17714,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             org.telegram.tgnet.TLRPC$EncryptedChat r1 = r8.currentEncryptedChat
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             int r1 = r1.id
-            if (r1 != r0) goto L_0x3087
+            if (r1 != r0) goto L_0x3075
             r1 = 1
             r0 = r9[r1]
             java.lang.Integer r0 = (java.lang.Integer) r0
@@ -17710,7 +17725,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.util.Iterator r1 = r1.iterator()
         L_0x1efa:
             boolean r2 = r1.hasNext()
-            if (r2 == 0) goto L_0x3087
+            if (r2 == 0) goto L_0x3075
             java.lang.Object r2 = r1.next()
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
             boolean r3 = r2.isOut()
@@ -17721,7 +17736,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r3 == 0) goto L_0x1f1b
             boolean r3 = r2.isUnread()
             if (r3 != 0) goto L_0x1f1b
-            goto L_0x3087
+            goto L_0x3075
         L_0x1f1b:
             org.telegram.tgnet.TLRPC$Message r3 = r2.messageOwner
             int r3 = r3.date
@@ -17742,7 +17757,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             long r2 = r0.longValue()
             long r4 = r8.dialog_id
             int r0 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
-            if (r0 != 0) goto L_0x3087
+            if (r0 != 0) goto L_0x3075
             int r0 = r8.threadMessageId
             if (r0 == 0) goto L_0x1f5f
             boolean[] r0 = r8.forwardEndReached
@@ -17756,7 +17771,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             org.telegram.messenger.MessageObject r1 = r8.threadMessageObject
             r0.addToViewsQueue(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x1f5f:
             r1 = 1
             r0 = r9[r1]
@@ -17766,19 +17781,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = r9[r1]
             org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong r1 = (org.telegram.tgnet.TLRPC$TL_updates_channelDifferenceTooLong) r1
             r8.clearHistory(r0, r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x1var_:
             int r1 = org.telegram.messenger.NotificationCenter.screenshotTook
             if (r0 != r1) goto L_0x1f7b
             r53.updateInformationForScreenshotDetector()
-            goto L_0x3087
+            goto L_0x3075
         L_0x1f7b:
             int r1 = org.telegram.messenger.NotificationCenter.blockedUsersDidLoad
             if (r0 != r1) goto L_0x1fa7
             org.telegram.tgnet.TLRPC$User r0 = r8.currentUser
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             boolean r0 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
-            if (r0 != 0) goto L_0x3087
+            if (r0 != 0) goto L_0x3075
             boolean r0 = r8.userBlocked
             org.telegram.messenger.MessagesController r1 = r53.getMessagesController()
             android.util.SparseIntArray r1 = r1.blockePeers
@@ -17792,9 +17807,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3 = 0
         L_0x1f9e:
             r8.userBlocked = r3
-            if (r0 == r3) goto L_0x3087
+            if (r0 == r3) goto L_0x3075
             r53.updateBottomOverlay()
-            goto L_0x3087
+            goto L_0x3075
         L_0x1fa7:
             int r1 = org.telegram.messenger.NotificationCenter.fileNewChunkAvailable
             if (r0 != r1) goto L_0x1fea
@@ -17807,26 +17822,26 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             long r1 = r1.longValue()
             r3 = 0
             int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r5 == 0) goto L_0x3087
+            if (r5 == 0) goto L_0x3075
             long r3 = r8.dialog_id
             long r5 = r0.getDialogId()
             int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r7 != 0) goto L_0x3087
+            if (r7 != 0) goto L_0x3075
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r3 = r8.messagesDict
             r4 = 0
             r3 = r3[r4]
             int r0 = r0.getId()
             java.lang.Object r0 = r3.get(r0)
             org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             org.telegram.tgnet.TLRPC$Document r0 = r0.document
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             int r2 = (int) r1
             r0.size = r2
             r53.updateVisibleRows()
-            goto L_0x3087
+            goto L_0x3075
         L_0x1fea:
             int r1 = org.telegram.messenger.NotificationCenter.didCreatedNewDeleteTask
             r2 = 32
@@ -17884,9 +17899,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r1 = r1 + 1
             goto L_0x1ff7
         L_0x204a:
-            if (r3 == 0) goto L_0x3087
+            if (r3 == 0) goto L_0x3075
             r53.updateVisibleRows()
-            goto L_0x3087
+            goto L_0x3075
         L_0x2051:
             int r1 = org.telegram.messenger.NotificationCenter.messagePlayingDidStart
             if (r0 != r1) goto L_0x213f
@@ -17919,7 +17934,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r8.updateTextureViewPosition(r2)
         L_0x2090:
             org.telegram.ui.Components.RecyclerListView r1 = r8.chatListView
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             int r1 = r1.getChildCount()
             r2 = 0
         L_0x2099:
@@ -17983,7 +17998,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r0 = r0.getChildCount()
             r1 = 0
         L_0x2117:
-            if (r1 >= r0) goto L_0x3087
+            if (r1 >= r0) goto L_0x3075
             org.telegram.ui.Components.RecyclerListView r2 = r8.mentionListView
             android.view.View r2 = r2.getChildAt(r1)
             boolean r3 = r2 instanceof org.telegram.ui.Cells.ContextLinkCell
@@ -18017,14 +18032,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r8.videoPlayerContainer = r1
             r8.videoTextureView = r1
             r8.aspectRatioFrameLayout = r1
-            goto L_0x3087
+            goto L_0x3075
         L_0x215e:
             org.telegram.ui.Components.RecyclerListView r0 = r8.chatListView
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             android.widget.FrameLayout r0 = r8.videoPlayerContainer
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             java.lang.Object r0 = r0.getTag()
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r1 = 0
             r0 = r9[r1]
             r1 = r0
@@ -18033,7 +18048,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r0 = r0.getChildCount()
             r15 = 0
         L_0x2179:
-            if (r15 >= r0) goto L_0x3087
+            if (r15 >= r0) goto L_0x3075
             org.telegram.ui.Components.RecyclerListView r2 = r8.chatListView
             android.view.View r2 = r2.getChildAt(r15)
             boolean r3 = r2 instanceof org.telegram.ui.Cells.ChatMessageCell
@@ -18043,7 +18058,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r1 != r3) goto L_0x21d4
             org.telegram.messenger.ImageReceiver r0 = r2.getPhotoImage()
             org.telegram.ui.Components.AnimatedFileDrawable r2 = r0.getAnimation()
-            if (r2 == 0) goto L_0x3087
+            if (r2 == 0) goto L_0x3075
             android.graphics.Bitmap r0 = r2.getAnimatedBitmap()
             if (r0 == 0) goto L_0x21be
             android.view.TextureView r3 = r8.videoTextureView     // Catch:{ all -> 0x21ba }
@@ -18070,16 +18085,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             boolean r0 = r0.isLoadingVideo(r1, r5)
             r0 = r0 ^ r5
             r2.seekTo(r3, r0)
-            goto L_0x3087
+            goto L_0x3075
         L_0x21d4:
             int r15 = r15 + 1
             goto L_0x2179
         L_0x21d7:
             int r1 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset
-            if (r0 == r1) goto L_0x2fdc
+            if (r0 == r1) goto L_0x2fca
             int r3 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged
             if (r0 != r3) goto L_0x21e1
-            goto L_0x2fdc
+            goto L_0x2fca
         L_0x21e1:
             int r1 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged
             if (r0 != r1) goto L_0x2242
@@ -18087,11 +18102,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0 = r9[r1]
             java.lang.Integer r0 = (java.lang.Integer) r0
             org.telegram.ui.Components.RecyclerListView r1 = r8.chatListView
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             int r1 = r1.getChildCount()
             r15 = 0
         L_0x21f3:
-            if (r15 >= r1) goto L_0x3087
+            if (r15 >= r1) goto L_0x3075
             org.telegram.ui.Components.RecyclerListView r2 = r8.chatListView
             android.view.View r2 = r2.getChildAt(r15)
             boolean r3 = r2 instanceof org.telegram.ui.Cells.ChatMessageCell
@@ -18104,10 +18119,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r4 != r5) goto L_0x223f
             org.telegram.messenger.MediaController r0 = org.telegram.messenger.MediaController.getInstance()
             org.telegram.messenger.MessageObject r0 = r0.getPlayingMessageObject()
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             org.telegram.ui.Components.SeekBar r1 = r2.getSeekBar()
             boolean r1 = r1.isDragging()
-            if (r1 != 0) goto L_0x3087
+            if (r1 != 0) goto L_0x3075
             float r1 = r0.audioProgress
             r3.audioProgress = r1
             int r1 = r0.audioProgressSec
@@ -18116,10 +18131,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3.audioPlayerDuration = r0
             r2.updatePlayingMessageProgress()
             org.telegram.ui.Cells.ChatMessageCell r0 = r8.drawLaterRoundProgressCell
-            if (r0 != r2) goto L_0x3087
+            if (r0 != r2) goto L_0x3075
             android.view.View r0 = r8.fragmentView
             r0.invalidate()
-            goto L_0x3087
+            goto L_0x3075
         L_0x223f:
             int r15 = r15 + 1
             goto L_0x21f3
@@ -18133,7 +18148,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.util.LongSparseArray<java.util.ArrayList<org.telegram.messenger.MessageObject>> r2 = r8.polls
             java.lang.Object r0 = r2.get(r0)
             java.util.ArrayList r0 = (java.util.ArrayList) r0
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r1 = 1
             r2 = r9[r1]
             org.telegram.tgnet.TLRPC$TL_poll r2 = (org.telegram.tgnet.TLRPC$TL_poll) r2
@@ -18176,21 +18191,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r5 = r5 + 1
             goto L_0x226b
         L_0x22a1:
-            if (r4 == 0) goto L_0x3087
-            if (r6 == 0) goto L_0x3087
+            if (r4 == 0) goto L_0x3075
+            if (r6 == 0) goto L_0x3075
             org.telegram.ui.Components.UndoView r0 = r8.undoView
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             boolean r0 = r15 instanceof org.telegram.ui.Cells.ChatMessageCell
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r0 = r15
             org.telegram.ui.Cells.ChatMessageCell r0 = (org.telegram.ui.Cells.ChatMessageCell) r0
             boolean r1 = r0.isAnimatingPollAnswer()
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_pollAnswerVoters> r1 = r3.results
             int r1 = r1.size()
             r2 = 0
         L_0x22bd:
-            if (r2 >= r1) goto L_0x3087
+            if (r2 >= r1) goto L_0x3075
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_pollAnswerVoters> r4 = r3.results
             java.lang.Object r4 = r4.get(r2)
             org.telegram.tgnet.TLRPC$TL_pollAnswerVoters r4 = (org.telegram.tgnet.TLRPC$TL_pollAnswerVoters) r4
@@ -18203,7 +18218,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 3
             r2 = 2
             r15.performHapticFeedback(r1, r2)
-            goto L_0x3087
+            goto L_0x3075
         L_0x22db:
             r1 = 3
             r2 = 2
@@ -18214,7 +18229,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 1
             r2 = 0
             r0.showHintButton(r2, r1, r2)
-            goto L_0x3087
+            goto L_0x3075
         L_0x22f1:
             int r2 = r2 + 1
             goto L_0x22bd
@@ -18230,7 +18245,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r4 == 0) goto L_0x230d
             long r2 = r8.mergeDialogId
             int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 != 0) goto L_0x3087
+            if (r4 != 0) goto L_0x3075
         L_0x230d:
             r2 = 1
             r3 = r9[r2]
@@ -18248,7 +18263,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0 = r3[r15]
             java.lang.Object r0 = r0.get(r2)
             org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             org.telegram.tgnet.TLRPC$Message r1 = r0.messageOwner
             r2 = 2
             r2 = r9[r2]
@@ -18258,7 +18273,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.ChatActivity$ChatActivityAdapter r1 = r8.chatAdapter
             r2 = 1
             r1.updateRowWithMessageObject(r0, r2)
-            goto L_0x3087
+            goto L_0x3075
         L_0x2340:
             int r1 = org.telegram.messenger.NotificationCenter.didVerifyMessagesStickers
             if (r0 != r1) goto L_0x2377
@@ -18268,7 +18283,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r2 = r0.size()
             r3 = 0
         L_0x234e:
-            if (r3 >= r2) goto L_0x3087
+            if (r3 >= r2) goto L_0x3075
             java.lang.Object r4 = r0.get(r3)
             org.telegram.tgnet.TLRPC$Message r4 = (org.telegram.tgnet.TLRPC$Message) r4
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r5 = r8.messagesDict
@@ -18298,7 +18313,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r3 = r0.id
             java.lang.Object r2 = r2.get(r3)
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
-            if (r2 == 0) goto L_0x3087
+            if (r2 == 0) goto L_0x3075
             org.telegram.tgnet.TLRPC$Message r3 = r2.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r4 = r0.media
             r3.media = r4
@@ -18412,13 +18427,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x247c:
             r2.setType()
             org.telegram.ui.ChatActivity$ChatActivityAdapter r0 = r8.chatAdapter
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r1 = 0
             r0.updateRowWithMessageObject(r2, r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x2489:
             r53.updateVisibleRows()
-            goto L_0x3087
+            goto L_0x3075
         L_0x248e:
             int r3 = org.telegram.messenger.NotificationCenter.replaceMessagesObjects
             if (r0 != r3) goto L_0x24b9
@@ -18445,7 +18460,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.util.ArrayList r0 = (java.util.ArrayList) r0
             r1 = 0
             r8.replaceMessageObjects(r0, r12, r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x24b9:
             int r1 = org.telegram.messenger.NotificationCenter.notificationsSettingsUpdated
             if (r0 != r1) goto L_0x24d5
@@ -18455,10 +18470,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (r0 != 0) goto L_0x24d0
             org.telegram.tgnet.TLRPC$User r0 = r8.currentUser
             boolean r0 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
         L_0x24d0:
             r53.updateBottomOverlay()
-            goto L_0x3087
+            goto L_0x3075
         L_0x24d5:
             int r1 = org.telegram.messenger.NotificationCenter.replyMessagesDidLoad
             if (r0 != r1) goto L_0x2535
@@ -18507,7 +18522,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x252f:
             r1 = 1
             r8.updateReplyMessageHeader(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x2535:
             r1 = 1
             int r3 = org.telegram.messenger.NotificationCenter.didLoadPinnedMessages
@@ -18518,7 +18533,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             long r2 = r0.longValue()
             long r4 = r8.dialog_id
             int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r0 != 0) goto L_0x3087
+            if (r0 != 0) goto L_0x3075
             r0 = r9[r1]
             java.util.ArrayList r0 = (java.util.ArrayList) r0
             r1 = 2
@@ -18701,7 +18716,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3.setTitle(r4)
         L_0x26b9:
             java.util.ArrayList<java.lang.Integer> r3 = r8.pinnedMessageIds
-            org.telegram.ui.-$$Lambda$ChatActivity$qiqbXvEk6CA4jYzI-q4p-EQ6UJk r4 = org.telegram.ui.$$Lambda$ChatActivity$qiqbXvEk6CA4jYzIq4pEQ6UJk.INSTANCE
+            org.telegram.ui.-$$Lambda$ChatActivity$FJFZURo6IXFv2czjQT1QYHYY3qo r4 = org.telegram.ui.$$Lambda$ChatActivity$FJFZURo6IXFv2czjQT1QYHYY3qo.INSTANCE
             java.util.Collections.sort(r3, r4)
             java.util.ArrayList<java.lang.Integer> r3 = r8.pinnedMessageIds
             boolean r3 = r3.isEmpty()
@@ -18715,11 +18730,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x26d1:
             int r3 = r8.chatMode
             r4 = 2
-            if (r3 != r4) goto L_0x3087
+            if (r3 != r4) goto L_0x3075
             if (r1 == 0) goto L_0x26df
-            if (r2 == 0) goto L_0x3087
+            if (r2 == 0) goto L_0x3075
             r8.processNewMessages(r2)
-            goto L_0x3087
+            goto L_0x3075
         L_0x26df:
             org.telegram.tgnet.TLRPC$Chat r1 = r8.currentChat
             boolean r1 = org.telegram.messenger.ChatObject.isChannel(r1)
@@ -18731,7 +18746,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r15 = 0
         L_0x26ed:
             r8.processDeletedMessages(r0, r15)
-            goto L_0x3087
+            goto L_0x3075
         L_0x26f2:
             if (r1 == 0) goto L_0x2741
             int r0 = r2.size()
@@ -18765,7 +18780,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r26.loadReplyMessagesForMessages(r27, r28, r30, r31)
             r1 = 0
             r8.updateMessagesVisiblePart(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x2741:
             r1 = 0
             java.util.ArrayList<java.lang.Integer> r0 = r8.pinnedMessageIds
@@ -18777,7 +18792,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r8.totalPinnedMessagesCount = r1
             r1 = 1
             r8.hidePinnedMessageView(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x2758:
             r1 = 0
             r4 = 2
@@ -18830,21 +18845,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r2 = r2 + 1
             goto L_0x2764
         L_0x27b1:
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             r53.updateVisibleRows()
-            goto L_0x3087
+            goto L_0x3075
         L_0x27b8:
             int r1 = org.telegram.messenger.NotificationCenter.didReceivedWebpagesInUpdates
             if (r0 != r1) goto L_0x27ea
             org.telegram.tgnet.TLRPC$WebPage r0 = r8.foundWebPage
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r1 = 0
             r0 = r9[r1]
             android.util.LongSparseArray r0 = (android.util.LongSparseArray) r0
             r1 = 0
         L_0x27c6:
             int r2 = r0.size()
-            if (r1 >= r2) goto L_0x3087
+            if (r1 >= r2) goto L_0x3075
             java.lang.Object r2 = r0.valueAt(r1)
             org.telegram.tgnet.TLRPC$WebPage r2 = (org.telegram.tgnet.TLRPC$WebPage) r2
             long r3 = r2.id
@@ -18857,7 +18872,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0 = r0 ^ r1
             r3 = 0
             r8.showFieldPanelForWebPage(r0, r2, r3)
-            goto L_0x3087
+            goto L_0x3075
         L_0x27e6:
             r3 = 0
             int r1 = r1 + 1
@@ -18880,7 +18895,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3 = 0
         L_0x2802:
             int r4 = r0.size()
-            if (r3 >= r4) goto L_0x3087
+            if (r3 >= r4) goto L_0x3075
             java.lang.Object r4 = r0.get(r3)
             java.lang.Long r4 = (java.lang.Long) r4
             long r4 = r4.longValue()
@@ -18938,7 +18953,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             int r1 = r8.classGuid
-            if (r1 != r0) goto L_0x3087
+            if (r1 != r0) goto L_0x3075
             r1 = 0
             r0 = r9[r1]
             org.telegram.tgnet.TLRPC$BotInfo r0 = (org.telegram.tgnet.TLRPC$BotInfo) r0
@@ -19009,7 +19024,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.setBotsCount(r1, r2)
         L_0x2907:
             r53.updateBotButtons()
-            goto L_0x3087
+            goto L_0x3075
         L_0x290c:
             int r1 = org.telegram.messenger.NotificationCenter.botKeyboardDidLoad
             if (r0 != r1) goto L_0x2956
@@ -19019,7 +19034,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.Long r3 = (java.lang.Long) r3
             long r2 = r3.longValue()
             int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 != 0) goto L_0x3087
+            if (r4 != 0) goto L_0x3075
             r1 = 0
             r0 = r9[r1]
             org.telegram.tgnet.TLRPC$Message r0 = (org.telegram.tgnet.TLRPC$Message) r0
@@ -19031,12 +19046,12 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2.<init>(r3, r0, r1, r1)
             r8.botButtons = r2
             r53.checkBotKeyboard()
-            goto L_0x3087
+            goto L_0x3075
         L_0x2938:
             r3 = 0
             r8.botButtons = r3
             org.telegram.ui.Components.ChatActivityEnterView r0 = r8.chatActivityEnterView
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             org.telegram.messenger.MessageObject r0 = r8.replyingMessageObject
             if (r0 == 0) goto L_0x294d
             org.telegram.messenger.MessageObject r1 = r8.botReplyButtons
@@ -19048,7 +19063,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.Components.ChatActivityEnterView r0 = r8.chatActivityEnterView
             org.telegram.messenger.MessageObject r1 = r8.botButtons
             r0.setButtons(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x2956:
             r3 = 0
             int r1 = org.telegram.messenger.NotificationCenter.chatSearchResultsAvailable
@@ -19058,7 +19073,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = r9[r1]
             java.lang.Integer r2 = (java.lang.Integer) r2
             int r1 = r2.intValue()
-            if (r0 != r1) goto L_0x3087
+            if (r0 != r1) goto L_0x3075
             r1 = 6
             r0 = r9[r1]
             java.lang.Boolean r0 = (java.lang.Boolean) r0
@@ -19113,9 +19128,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.setShowSearchProgress(r1)
         L_0x29c6:
             org.telegram.ui.Adapters.MessagesSearchAdapter r0 = r8.messagesSearchAdapter
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r0.notifyDataSetChanged()
-            goto L_0x3087
+            goto L_0x3075
         L_0x29cf:
             r10 = 2
             int r1 = org.telegram.messenger.NotificationCenter.chatSearchResultsLoading
@@ -19125,16 +19140,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = r9[r1]
             java.lang.Integer r1 = (java.lang.Integer) r1
             int r1 = r1.intValue()
-            if (r0 != r1) goto L_0x3087
+            if (r0 != r1) goto L_0x3075
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r8.searchItem
             if (r0 == 0) goto L_0x29e9
             r1 = 1
             r0.setShowSearchProgress(r1)
         L_0x29e9:
             org.telegram.ui.Adapters.MessagesSearchAdapter r0 = r8.messagesSearchAdapter
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r0.notifyDataSetChanged()
-            goto L_0x3087
+            goto L_0x3075
         L_0x29f2:
             int r1 = org.telegram.messenger.NotificationCenter.didUpdateMessagesViews
             if (r0 != r1) goto L_0x2CLASSNAME
@@ -19407,7 +19422,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r15 = r3
             r2 = 0
         L_0x2be0:
-            if (r2 == 0) goto L_0x3087
+            if (r2 == 0) goto L_0x3075
             org.telegram.ui.ChatActivity$ChatActivityAdapter r0 = r8.chatAdapter
             if (r0 == 0) goto L_0x2CLASSNAME
             if (r5 == 0) goto L_0x2c1e
@@ -19452,7 +19467,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r53.updateVisibleRows()
             r1 = 1
             r8.updateReplyMessageHeader(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x2CLASSNAME:
             int r1 = org.telegram.messenger.NotificationCenter.peerSettingsDidLoad
             if (r0 != r1) goto L_0x2c6c
@@ -19464,18 +19479,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
             if (r4 == 0) goto L_0x2CLASSNAME
             org.telegram.tgnet.TLRPC$User r2 = r8.currentUser
-            if (r2 == 0) goto L_0x3087
+            if (r2 == 0) goto L_0x3075
             int r2 = r2.id
             long r2 = (long) r2
             int r4 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-            if (r4 != 0) goto L_0x3087
+            if (r4 != 0) goto L_0x3075
         L_0x2CLASSNAME:
             boolean r0 = r8.paused
             r1 = 1
             r0 = r0 ^ r1
             r8.updateTopPanel(r0)
             r8.updateInfoTopView(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x2c6c:
             r1 = 1
             int r3 = org.telegram.messenger.NotificationCenter.newDraftReceived
@@ -19486,9 +19501,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             long r2 = r0.longValue()
             long r4 = r8.dialog_id
             int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r0 != 0) goto L_0x3087
+            if (r0 != 0) goto L_0x3075
             r8.applyDraftMaybe(r1)
-            goto L_0x3087
+            goto L_0x3075
         L_0x2CLASSNAME:
             int r1 = org.telegram.messenger.NotificationCenter.pinnedInfoDidLoad
             if (r0 != r1) goto L_0x2d24
@@ -19498,7 +19513,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             long r0 = r0.longValue()
             long r2 = r8.dialog_id
             int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 != 0) goto L_0x3087
+            if (r4 != 0) goto L_0x3075
             r1 = 1
             r0 = r9[r1]
             java.util.ArrayList r0 = (java.util.ArrayList) r0
@@ -19542,11 +19557,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r6 = 0
             r1.loadReplyMessagesForMessages(r2, r3, r5, r6)
             boolean r0 = r8.loadingPinnedMessagesList
-            if (r0 != 0) goto L_0x3087
+            if (r0 != 0) goto L_0x3075
             int r0 = r8.totalPinnedMessagesCount
-            if (r0 != 0) goto L_0x3087
+            if (r0 != 0) goto L_0x3075
             boolean r0 = r8.pinnedEndReached
-            if (r0 != 0) goto L_0x3087
+            if (r0 != 0) goto L_0x3075
             org.telegram.messenger.MediaDataController r0 = r53.getMediaDataController()
             long r1 = r8.dialog_id
             java.util.ArrayList<java.lang.Integer> r3 = r8.pinnedMessageIds
@@ -19566,7 +19581,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.loadPinnedMessages(r1, r4, r3)
             r1 = 1
             r8.loadingPinnedMessagesList = r1
-            goto L_0x3087
+            goto L_0x3075
         L_0x2d24:
             r4 = 0
             int r1 = org.telegram.messenger.NotificationCenter.userInfoDidLoad
@@ -19574,10 +19589,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0 = r9[r4]
             java.lang.Integer r0 = (java.lang.Integer) r0
             org.telegram.tgnet.TLRPC$User r1 = r8.currentUser
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             int r1 = r1.id
             int r0 = r0.intValue()
-            if (r1 != r0) goto L_0x3087
+            if (r1 != r0) goto L_0x3075
             r1 = 1
             r0 = r9[r1]
             org.telegram.tgnet.TLRPC$UserFull r0 = (org.telegram.tgnet.TLRPC$UserFull) r0
@@ -19611,17 +19626,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 0
             r8.checkActionBarMenu(r1)
             boolean r0 = r8.loadingPinnedMessagesList
-            if (r0 != 0) goto L_0x3087
+            if (r0 != 0) goto L_0x3075
             java.util.ArrayList<java.lang.Integer> r0 = r8.pinnedMessageIds
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x3087
+            if (r0 != 0) goto L_0x3075
             org.telegram.tgnet.TLRPC$UserFull r0 = r8.userInfo
             int r0 = r0.pinned_msg_id
             java.util.ArrayList<java.lang.Integer> r2 = r8.pinnedMessageIds
             java.lang.Object r2 = r2.get(r1)
             java.lang.Integer r2 = (java.lang.Integer) r2
             int r2 = r2.intValue()
-            if (r0 <= r2) goto L_0x3087
+            if (r0 <= r2) goto L_0x3075
             org.telegram.messenger.MediaDataController r0 = r53.getMediaDataController()
             long r2 = r8.dialog_id
             org.telegram.tgnet.TLRPC$UserFull r4 = r8.userInfo
@@ -19629,44 +19644,38 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.loadPinnedMessages(r2, r1, r4)
             r1 = 1
             r8.loadingPinnedMessagesList = r1
-            goto L_0x3087
+            goto L_0x3075
         L_0x2da5:
             int r1 = org.telegram.messenger.NotificationCenter.didSetNewWallpapper
-            if (r0 != r1) goto L_0x2de6
+            if (r0 != r1) goto L_0x2dd4
             android.view.View r0 = r8.fragmentView
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r8.contentView
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper()
             boolean r2 = org.telegram.ui.ActionBar.Theme.isWallpaperMotion()
             r0.setBackgroundImage(r1, r2)
             android.view.View r0 = r8.progressView2
-            android.graphics.drawable.Drawable r0 = r0.getBackground()
-            android.graphics.PorterDuffColorFilter r1 = org.telegram.ui.ActionBar.Theme.colorFilter
-            r0.setColorFilter(r1)
+            r0.invalidate()
             android.widget.TextView r0 = r8.emptyView
-            if (r0 == 0) goto L_0x2dd2
-            android.graphics.drawable.Drawable r0 = r0.getBackground()
-            android.graphics.PorterDuffColorFilter r1 = org.telegram.ui.ActionBar.Theme.colorFilter
-            r0.setColorFilter(r1)
-        L_0x2dd2:
+            if (r0 == 0) goto L_0x2dc6
+            r0.invalidate()
+        L_0x2dc6:
             org.telegram.ui.Components.ChatBigEmptyView r0 = r8.bigEmptyView
-            if (r0 == 0) goto L_0x2ddf
-            android.graphics.drawable.Drawable r0 = r0.getBackground()
-            android.graphics.PorterDuffColorFilter r1 = org.telegram.ui.ActionBar.Theme.colorFilter
-            r0.setColorFilter(r1)
-        L_0x2ddf:
+            if (r0 == 0) goto L_0x2dcd
+            r0.invalidate()
+        L_0x2dcd:
             org.telegram.ui.Components.RecyclerListView r0 = r8.chatListView
             r0.invalidateViews()
-            goto L_0x3087
-        L_0x2de6:
+            goto L_0x3075
+        L_0x2dd4:
             int r1 = org.telegram.messenger.NotificationCenter.didApplyNewTheme
-            if (r0 != r1) goto L_0x2e40
+            if (r0 != r1) goto L_0x2e2e
             org.telegram.ui.Components.UndoView r0 = r8.undoView
-            if (r0 == 0) goto L_0x2e3f
+            if (r0 == 0) goto L_0x2e2d
             boolean r0 = r8.paused
-            if (r0 == 0) goto L_0x2df3
-            goto L_0x2e3f
-        L_0x2df3:
+            if (r0 == 0) goto L_0x2de1
+            goto L_0x2e2d
+        L_0x2de1:
             r1 = 0
             r0 = r9[r1]
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = (org.telegram.ui.ActionBar.Theme.ThemeInfo) r0
@@ -19674,20 +19683,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = r9[r1]
             org.telegram.ui.ActionBar.Theme$ThemeAccent r2 = (org.telegram.ui.ActionBar.Theme.ThemeAccent) r2
             boolean r1 = r0.firstAccentIsDefault
-            if (r1 == 0) goto L_0x2e3f
-            if (r2 == 0) goto L_0x2e3f
+            if (r1 == 0) goto L_0x2e2d
+            if (r2 == 0) goto L_0x2e2d
             int r1 = r2.id
             int r3 = org.telegram.ui.ActionBar.Theme.DEFALT_THEME_ACCENT_ID
-            if (r1 == r3) goto L_0x2e0a
-            goto L_0x2e3f
-        L_0x2e0a:
+            if (r1 == r3) goto L_0x2df8
+            goto L_0x2e2d
+        L_0x2df8:
             android.content.SharedPreferences r1 = org.telegram.messenger.MessagesController.getGlobalMainSettings()
             java.lang.String r3 = "themehint"
             r4 = 0
             boolean r3 = r1.getBoolean(r3, r4)
-            if (r3 == 0) goto L_0x2e18
+            if (r3 == 0) goto L_0x2e06
             return
-        L_0x2e18:
+        L_0x2e06:
             android.content.SharedPreferences$Editor r1 = r1.edit()
             java.lang.String r3 = "themehint"
             r4 = 1
@@ -19700,24 +19709,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r10 = 0
             r12 = 12
             r13 = 0
-            org.telegram.ui.-$$Lambda$ChatActivity$RxjBLO-i2N-JucIXbwSp8OIu93Q r14 = new org.telegram.ui.-$$Lambda$ChatActivity$RxjBLO-i2N-JucIXbwSp8OIu93Q
+            org.telegram.ui.-$$Lambda$ChatActivity$RCUtLsvap0-8YGgwh0VU_lVtpwI r14 = new org.telegram.ui.-$$Lambda$ChatActivity$RCUtLsvap0-8YGgwh0VU_lVtpwI
             r14.<init>(r0, r1)
             r9.showWithAction(r10, r12, r13, r14)
-            goto L_0x3087
-        L_0x2e3f:
+            goto L_0x3075
+        L_0x2e2d:
             return
-        L_0x2e40:
+        L_0x2e2e:
             int r1 = org.telegram.messenger.NotificationCenter.goingToPreviewTheme
-            if (r0 != r1) goto L_0x2e77
+            if (r0 != r1) goto L_0x2e65
             androidx.recyclerview.widget.GridLayoutManagerFixed r0 = r8.chatLayoutManager
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             int r0 = r0.findFirstVisibleItemPosition()
             r8.scrollToPositionOnRecreate = r0
             org.telegram.ui.Components.RecyclerListView r0 = r8.chatListView
             int r1 = r8.scrollToPositionOnRecreate
             androidx.recyclerview.widget.RecyclerView$ViewHolder r0 = r0.findViewHolderForAdapterPosition(r1)
             org.telegram.ui.Components.RecyclerListView$Holder r0 = (org.telegram.ui.Components.RecyclerListView.Holder) r0
-            if (r0 == 0) goto L_0x2e72
+            if (r0 == 0) goto L_0x2e60
             org.telegram.ui.Components.RecyclerListView r1 = r8.chatListView
             int r1 = r1.getMeasuredHeight()
             android.view.View r0 = r0.itemView
@@ -19727,25 +19736,25 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r0 = r0.getPaddingBottom()
             int r1 = r1 - r0
             r8.scrollToOffsetOnRecreate = r1
-            goto L_0x3087
-        L_0x2e72:
+            goto L_0x3075
+        L_0x2e60:
             r0 = -1
             r8.scrollToPositionOnRecreate = r0
-            goto L_0x3087
-        L_0x2e77:
+            goto L_0x3075
+        L_0x2e65:
             int r1 = org.telegram.messenger.NotificationCenter.channelRightsUpdated
-            if (r0 != r1) goto L_0x2ea8
+            if (r0 != r1) goto L_0x2e96
             r1 = 0
             r0 = r9[r1]
             org.telegram.tgnet.TLRPC$Chat r0 = (org.telegram.tgnet.TLRPC$Chat) r0
             org.telegram.tgnet.TLRPC$Chat r1 = r8.currentChat
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             int r1 = r0.id
             org.telegram.tgnet.TLRPC$Chat r2 = r8.currentChat
             int r2 = r2.id
-            if (r1 != r2) goto L_0x3087
+            if (r1 != r2) goto L_0x3075
             org.telegram.ui.Components.ChatActivityEnterView r1 = r8.chatActivityEnterView
-            if (r1 == 0) goto L_0x3087
+            if (r1 == 0) goto L_0x3075
             r8.currentChat = r0
             org.telegram.ui.Components.ChatActivityEnterView r0 = r8.chatActivityEnterView
             r0.checkChannelRights()
@@ -19753,33 +19762,33 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r53.updateSecretStatus()
             org.telegram.tgnet.TLRPC$Chat r0 = r8.currentChat
             boolean r0 = r0.gigagroup
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r53.updateBottomOverlay()
-            goto L_0x3087
-        L_0x2ea8:
+            goto L_0x3075
+        L_0x2e96:
             int r1 = org.telegram.messenger.NotificationCenter.updateMentionsCount
-            if (r0 != r1) goto L_0x2eee
+            if (r0 != r1) goto L_0x2edc
             long r0 = r8.dialog_id
             r2 = 0
             r3 = r9[r2]
             java.lang.Long r3 = (java.lang.Long) r3
             long r2 = r3.longValue()
             int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 != 0) goto L_0x3087
+            if (r4 != 0) goto L_0x3075
             r1 = 1
             r0 = r9[r1]
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             int r2 = r8.newMentionsCount
-            if (r2 <= r0) goto L_0x3087
+            if (r2 <= r0) goto L_0x3075
             r8.newMentionsCount = r0
-            if (r0 > 0) goto L_0x2ed6
+            if (r0 > 0) goto L_0x2ec4
             r2 = 0
             r8.newMentionsCount = r2
             r8.hasAllMentionsLocal = r1
             r8.showMentionDownButton(r2, r1)
-            goto L_0x3087
-        L_0x2ed6:
+            goto L_0x3075
+        L_0x2ec4:
             r2 = 0
             org.telegram.ui.ActionBar.SimpleTextView r0 = r8.mentiondownButtonCounter
             java.lang.Object[] r1 = new java.lang.Object[r1]
@@ -19789,50 +19798,50 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r2 = "%d"
             java.lang.String r1 = java.lang.String.format(r2, r1)
             r0.setText(r1)
-            goto L_0x3087
-        L_0x2eee:
+            goto L_0x3075
+        L_0x2edc:
             r2 = 0
             int r1 = org.telegram.messenger.NotificationCenter.audioRecordTooShort
-            if (r0 != r1) goto L_0x2f1b
+            if (r0 != r1) goto L_0x2var_
             r0 = r9[r2]
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             int r1 = r8.classGuid
-            if (r0 == r1) goto L_0x2var_
+            if (r0 == r1) goto L_0x2eee
             return
-        L_0x2var_:
+        L_0x2eee:
             r0 = r9[r10]
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             r1 = 100
-            if (r0 >= r1) goto L_0x3087
+            if (r0 >= r1) goto L_0x3075
             r1 = 1
             r0 = r9[r1]
             java.lang.Boolean r0 = (java.lang.Boolean) r0
             boolean r0 = r0.booleanValue()
             r1 = 0
             r8.showVoiceHint(r1, r0)
-            goto L_0x3087
-        L_0x2f1b:
+            goto L_0x3075
+        L_0x2var_:
             r1 = 0
             int r2 = org.telegram.messenger.NotificationCenter.videoLoadingStateChanged
             if (r0 != r2) goto L_0x2var_
             org.telegram.ui.Components.RecyclerListView r0 = r8.chatListView
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             r2 = r9[r1]
             java.lang.String r2 = (java.lang.String) r2
             int r0 = r0.getChildCount()
             r1 = 0
-        L_0x2f2d:
-            if (r1 >= r0) goto L_0x3087
+        L_0x2f1b:
+            if (r1 >= r0) goto L_0x3075
             org.telegram.ui.Components.RecyclerListView r3 = r8.chatListView
             android.view.View r3 = r3.getChildAt(r1)
             boolean r4 = r3 instanceof org.telegram.ui.Cells.ChatMessageCell
-            if (r4 != 0) goto L_0x2f3b
+            if (r4 != 0) goto L_0x2var_
         L_0x2var_:
             r5 = 0
             goto L_0x2var_
-        L_0x2f3b:
+        L_0x2var_:
             org.telegram.ui.Cells.ChatMessageCell r3 = (org.telegram.ui.Cells.ChatMessageCell) r3
             org.telegram.tgnet.TLRPC$Document r4 = r3.getStreamingMedia()
             if (r4 != 0) goto L_0x2var_
@@ -19846,17 +19855,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3.updateButtonState(r5, r4, r5)
         L_0x2var_:
             int r1 = r1 + 1
-            goto L_0x2f2d
+            goto L_0x2f1b
         L_0x2var_:
             r5 = 0
             int r1 = org.telegram.messenger.NotificationCenter.scheduledMessagesUpdated
-            if (r0 != r1) goto L_0x2f7b
+            if (r0 != r1) goto L_0x2var_
             r0 = r9[r5]
             java.lang.Long r0 = (java.lang.Long) r0
             long r0 = r0.longValue()
             long r2 = r8.dialog_id
             int r4 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-            if (r4 != 0) goto L_0x3087
+            if (r4 != 0) goto L_0x3075
             r1 = 1
             r0 = r9[r1]
             java.lang.Integer r0 = (java.lang.Integer) r0
@@ -19864,10 +19873,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r8.scheduledMessagesCount = r0
             boolean r0 = r8.openAnimationEnded
             r8.updateScheduledInterface(r0)
-            goto L_0x3087
-        L_0x2f7b:
+            goto L_0x3075
+        L_0x2var_:
             int r1 = org.telegram.messenger.NotificationCenter.diceStickersDidLoad
-            if (r0 != r1) goto L_0x2fa9
+            if (r0 != r1) goto L_0x2var_
             org.telegram.ui.Components.RecyclerListView r0 = r8.chatListView
             if (r0 != 0) goto L_0x2var_
             return
@@ -19875,34 +19884,34 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r0 = r0.getChildCount()
             r15 = 0
         L_0x2var_:
-            if (r15 >= r0) goto L_0x3087
+            if (r15 >= r0) goto L_0x3075
             org.telegram.ui.Components.RecyclerListView r1 = r8.chatListView
             android.view.View r1 = r1.getChildAt(r15)
             boolean r2 = r1 instanceof org.telegram.ui.Cells.ChatMessageCell
             if (r2 != 0) goto L_0x2var_
-            goto L_0x2fa6
+            goto L_0x2var_
         L_0x2var_:
             org.telegram.ui.Cells.ChatMessageCell r1 = (org.telegram.ui.Cells.ChatMessageCell) r1
             org.telegram.messenger.MessageObject r2 = r1.getMessageObject()
             boolean r2 = r2.isDice()
-            if (r2 == 0) goto L_0x2fa6
+            if (r2 == 0) goto L_0x2var_
             r2 = 1
             r1.setCurrentDiceValue(r2)
-        L_0x2fa6:
+        L_0x2var_:
             int r15 = r15 + 1
             goto L_0x2var_
-        L_0x2fa9:
+        L_0x2var_:
             int r1 = org.telegram.messenger.NotificationCenter.dialogDeleted
-            if (r0 != r1) goto L_0x3087
+            if (r0 != r1) goto L_0x3075
             r1 = 0
             r0 = r9[r1]
             java.lang.Long r0 = (java.lang.Long) r0
             long r0 = r0.longValue()
             long r2 = r8.dialog_id
             int r4 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r4 != 0) goto L_0x3087
+            if (r4 != 0) goto L_0x3075
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.parentLayout
-            if (r0 == 0) goto L_0x2fd7
+            if (r0 == 0) goto L_0x2fc5
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             org.telegram.ui.ActionBar.ActionBarLayout r1 = r8.parentLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r1.fragmentsStack
@@ -19910,122 +19919,122 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 1
             int r1 = r1 - r2
             java.lang.Object r0 = r0.get(r1)
-            if (r0 != r8) goto L_0x2fd7
+            if (r0 != r8) goto L_0x2fc5
             r53.finishFragment()
-            goto L_0x3087
-        L_0x2fd7:
+            goto L_0x3075
+        L_0x2fc5:
             r53.removeSelfFromStack()
-            goto L_0x3087
-        L_0x2fdc:
-            if (r0 != r1) goto L_0x2fe1
+            goto L_0x3075
+        L_0x2fca:
+            if (r0 != r1) goto L_0x2fcf
             r53.destroyTextureView()
-        L_0x2fe1:
+        L_0x2fcf:
             org.telegram.ui.Components.RecyclerListView r0 = r8.chatListView
-            if (r0 == 0) goto L_0x3087
+            if (r0 == 0) goto L_0x3075
             int r0 = r0.getChildCount()
             r14 = 0
-        L_0x2fea:
-            if (r14 >= r0) goto L_0x3055
+        L_0x2fd8:
+            if (r14 >= r0) goto L_0x3043
             org.telegram.ui.Components.RecyclerListView r1 = r8.chatListView
             android.view.View r1 = r1.getChildAt(r14)
             boolean r2 = r1 instanceof org.telegram.ui.Cells.ChatMessageCell
-            if (r2 == 0) goto L_0x3052
+            if (r2 == 0) goto L_0x3040
             org.telegram.ui.Cells.ChatMessageCell r1 = (org.telegram.ui.Cells.ChatMessageCell) r1
             org.telegram.messenger.MessageObject r2 = r1.getMessageObject()
-            if (r2 == 0) goto L_0x3052
+            if (r2 == 0) goto L_0x3040
             boolean r3 = r2.isVoice()
-            if (r3 != 0) goto L_0x304d
+            if (r3 != 0) goto L_0x303b
             boolean r3 = r2.isMusic()
-            if (r3 == 0) goto L_0x300b
-            goto L_0x304d
-        L_0x300b:
+            if (r3 == 0) goto L_0x2ff9
+            goto L_0x303b
+        L_0x2ff9:
             boolean r3 = r2.isVideo()
-            if (r3 == 0) goto L_0x3038
+            if (r3 == 0) goto L_0x3026
             r3 = 1
             r4 = 0
             r1.updateButtonState(r4, r3, r4)
             org.telegram.messenger.MediaController r3 = org.telegram.messenger.MediaController.getInstance()
             boolean r3 = r3.isPlayingMessage(r2)
-            if (r3 != 0) goto L_0x3052
+            if (r3 != 0) goto L_0x3040
             org.telegram.messenger.MediaController r3 = org.telegram.messenger.MediaController.getInstance()
             boolean r2 = r3.isGoingToShowMessageObject(r2)
-            if (r2 != 0) goto L_0x3052
+            if (r2 != 0) goto L_0x3040
             org.telegram.messenger.ImageReceiver r1 = r1.getPhotoImage()
             org.telegram.ui.Components.AnimatedFileDrawable r1 = r1.getAnimation()
-            if (r1 == 0) goto L_0x3052
+            if (r1 == 0) goto L_0x3040
             r1.start()
-            goto L_0x3052
-        L_0x3038:
+            goto L_0x3040
+        L_0x3026:
             boolean r3 = r2.isRoundVideo()
-            if (r3 == 0) goto L_0x3052
+            if (r3 == 0) goto L_0x3040
             org.telegram.messenger.MediaController r3 = org.telegram.messenger.MediaController.getInstance()
             boolean r2 = r3.isPlayingMessage(r2)
-            if (r2 != 0) goto L_0x3052
+            if (r2 != 0) goto L_0x3040
             r2 = 1
             r1.checkVideoPlayback(r2)
-            goto L_0x3052
-        L_0x304d:
+            goto L_0x3040
+        L_0x303b:
             r2 = 1
             r3 = 0
             r1.updateButtonState(r3, r2, r3)
-        L_0x3052:
+        L_0x3040:
             int r14 = r14 + 1
-            goto L_0x2fea
-        L_0x3055:
+            goto L_0x2fd8
+        L_0x3043:
             org.telegram.ui.Components.RecyclerListView r0 = r8.mentionListView
             int r0 = r0.getChildCount()
             r14 = 0
-        L_0x305c:
-            if (r14 >= r0) goto L_0x3087
+        L_0x304a:
+            if (r14 >= r0) goto L_0x3075
             org.telegram.ui.Components.RecyclerListView r1 = r8.mentionListView
             android.view.View r1 = r1.getChildAt(r14)
             boolean r2 = r1 instanceof org.telegram.ui.Cells.ContextLinkCell
-            if (r2 == 0) goto L_0x3082
+            if (r2 == 0) goto L_0x3070
             org.telegram.ui.Cells.ContextLinkCell r1 = (org.telegram.ui.Cells.ContextLinkCell) r1
             org.telegram.messenger.MessageObject r2 = r1.getMessageObject()
-            if (r2 == 0) goto L_0x3082
+            if (r2 == 0) goto L_0x3070
             boolean r3 = r2.isVoice()
-            if (r3 != 0) goto L_0x307c
+            if (r3 != 0) goto L_0x306a
             boolean r2 = r2.isMusic()
-            if (r2 == 0) goto L_0x3082
-        L_0x307c:
+            if (r2 == 0) goto L_0x3070
+        L_0x306a:
             r2 = 1
             r3 = 0
             r1.updateButtonState(r3, r2)
-            goto L_0x3084
-        L_0x3082:
+            goto L_0x3072
+        L_0x3070:
             r2 = 1
             r3 = 0
-        L_0x3084:
+        L_0x3072:
             int r14 = r14 + 1
-            goto L_0x305c
-        L_0x3087:
+            goto L_0x304a
+        L_0x3075:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$82 */
-    public /* synthetic */ void lambda$didReceivedNotification$82$ChatActivity() {
+    /* renamed from: lambda$didReceivedNotification$83 */
+    public /* synthetic */ void lambda$didReceivedNotification$83$ChatActivity() {
         getNotificationCenter().onAnimationFinish(this.transitionAnimationIndex);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$83 */
-    public /* synthetic */ void lambda$didReceivedNotification$83$ChatActivity() {
+    /* renamed from: lambda$didReceivedNotification$84 */
+    public /* synthetic */ void lambda$didReceivedNotification$84$ChatActivity() {
         getNotificationCenter().runDelayedNotifications();
         resumeDelayedFragmentAnimation();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$84 */
-    public /* synthetic */ void lambda$didReceivedNotification$84$ChatActivity(MessageObject messageObject, int i) {
+    /* renamed from: lambda$didReceivedNotification$85 */
+    public /* synthetic */ void lambda$didReceivedNotification$85$ChatActivity(MessageObject messageObject, int i) {
         this.delayedReadRunnable = null;
         messageObject.messageOwner.replies.read_max_id = i;
     }
 
-    static /* synthetic */ void lambda$didReceivedNotification$86(Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, boolean z) {
+    static /* synthetic */ void lambda$didReceivedNotification$87(Theme.ThemeAccent themeAccent, Theme.ThemeInfo themeInfo, boolean z) {
         if (themeAccent != null) {
             Theme.ThemeAccent accent = themeInfo.getAccent(false);
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, Boolean.FALSE, null, Integer.valueOf(themeAccent.id));
@@ -20043,15 +20052,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             this.locationAlertShown = true;
             AlertsCreator.showSecretLocationAlert(getParentActivity(), this.currentAccount, new Runnable() {
                 public final void run() {
-                    ChatActivity.this.lambda$checkSecretMessageForLocation$87$ChatActivity();
+                    ChatActivity.this.lambda$checkSecretMessageForLocation$88$ChatActivity();
                 }
             }, true);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkSecretMessageForLocation$87 */
-    public /* synthetic */ void lambda$checkSecretMessageForLocation$87$ChatActivity() {
+    /* renamed from: lambda$checkSecretMessageForLocation$88 */
+    public /* synthetic */ void lambda$checkSecretMessageForLocation$88$ChatActivity() {
         int childCount = this.chatListView.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View childAt = this.chatListView.getChildAt(i);
@@ -20304,7 +20313,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (tLRPC$Chat.creator && tLRPC$Chat.megagroup && !tLRPC$Chat.gigagroup && tLRPC$ChatFull.pending_suggestions.contains("CONVERT_GIGAGROUP") && this.visibleDialog == null) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public final void run() {
-                        ChatActivity.this.lambda$showGigagroupConvertAlert$90$ChatActivity();
+                        ChatActivity.this.lambda$showGigagroupConvertAlert$91$ChatActivity();
                     }
                 }, 1000);
             }
@@ -20312,8 +20321,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showGigagroupConvertAlert$90 */
-    public /* synthetic */ void lambda$showGigagroupConvertAlert$90$ChatActivity() {
+    /* renamed from: lambda$showGigagroupConvertAlert$91 */
+    public /* synthetic */ void lambda$showGigagroupConvertAlert$91$ChatActivity() {
         TLRPC$ChatFull tLRPC$ChatFull = this.chatInfo;
         if (tLRPC$ChatFull != null && !this.paused) {
             TLRPC$Chat tLRPC$Chat = this.currentChat;
@@ -20326,11 +20335,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     notificationsSettings.edit().putInt("group_convert_time", currentTime).commit();
                     showDialog(AlertsCreator.createGigagroupConvertAlert(getParentActivity(), new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            ChatActivity.this.lambda$showGigagroupConvertAlert$88$ChatActivity(dialogInterface, i);
+                            ChatActivity.this.lambda$showGigagroupConvertAlert$89$ChatActivity(dialogInterface, i);
                         }
                     }, new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            ChatActivity.this.lambda$showGigagroupConvertAlert$89$ChatActivity(dialogInterface, i);
+                            ChatActivity.this.lambda$showGigagroupConvertAlert$90$ChatActivity(dialogInterface, i);
                         }
                     }).create());
                 }
@@ -20339,8 +20348,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showGigagroupConvertAlert$88 */
-    public /* synthetic */ void lambda$showGigagroupConvertAlert$88$ChatActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$showGigagroupConvertAlert$89 */
+    public /* synthetic */ void lambda$showGigagroupConvertAlert$89$ChatActivity(DialogInterface dialogInterface, int i) {
         showDialog(new GigagroupConvertAlert(getParentActivity(), this) {
             /* access modifiers changed from: protected */
             public void onCovert() {
@@ -20349,14 +20358,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 ChatActivity chatActivity = ChatActivity.this;
                 messagesController.convertToGigaGroup(parentActivity, chatActivity.currentChat, chatActivity, new MessagesStorage.BooleanCallback() {
                     public final void run(boolean z) {
-                        ChatActivity.AnonymousClass78.this.lambda$onCovert$0$ChatActivity$78(z);
+                        ChatActivity.AnonymousClass77.this.lambda$onCovert$0$ChatActivity$77(z);
                     }
                 });
             }
 
             /* access modifiers changed from: private */
             /* renamed from: lambda$onCovert$0 */
-            public /* synthetic */ void lambda$onCovert$0$ChatActivity$78(boolean z) {
+            public /* synthetic */ void lambda$onCovert$0$ChatActivity$77(boolean z) {
                 if (z) {
                     ChatActivity.this.undoView.showWithAction(0, 76, (Runnable) null);
                 }
@@ -20371,33 +20380,33 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showGigagroupConvertAlert$89 */
-    public /* synthetic */ void lambda$showGigagroupConvertAlert$89$ChatActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$showGigagroupConvertAlert$90 */
+    public /* synthetic */ void lambda$showGigagroupConvertAlert$90$ChatActivity(DialogInterface dialogInterface, int i) {
         this.undoView.showWithAction(0, 75, (Runnable) null);
     }
 
     /* JADX WARNING: type inference failed for: r4v15 */
     /* JADX WARNING: type inference failed for: r4v92 */
-    /* JADX WARNING: Code restructure failed: missing block: B:401:0x0663, code lost:
-        if (r1.messages.size() == 0) goto L_0x0667;
+    /* JADX WARNING: Code restructure failed: missing block: B:401:0x065f, code lost:
+        if (r1.messages.size() == 0) goto L_0x0663;
      */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v14, types: [int, boolean] */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x04bf  */
-    /* JADX WARNING: Removed duplicated region for block: B:311:0x04f4  */
-    /* JADX WARNING: Removed duplicated region for block: B:336:0x0545  */
-    /* JADX WARNING: Removed duplicated region for block: B:374:0x05ee  */
-    /* JADX WARNING: Removed duplicated region for block: B:405:0x066a  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x066c  */
-    /* JADX WARNING: Removed duplicated region for block: B:417:0x06b4  */
-    /* JADX WARNING: Removed duplicated region for block: B:421:0x06c3  */
-    /* JADX WARNING: Removed duplicated region for block: B:439:0x071c  */
-    /* JADX WARNING: Removed duplicated region for block: B:515:0x0917  */
-    /* JADX WARNING: Removed duplicated region for block: B:516:0x0919  */
-    /* JADX WARNING: Removed duplicated region for block: B:519:0x091f  */
-    /* JADX WARNING: Removed duplicated region for block: B:526:0x093e  */
-    /* JADX WARNING: Removed duplicated region for block: B:529:0x0945  */
-    /* JADX WARNING: Removed duplicated region for block: B:543:0x0976  */
-    /* JADX WARNING: Removed duplicated region for block: B:666:0x0703 A[SYNTHETIC] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v14, types: [boolean, int] */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x04bd  */
+    /* JADX WARNING: Removed duplicated region for block: B:311:0x04f2  */
+    /* JADX WARNING: Removed duplicated region for block: B:336:0x0541  */
+    /* JADX WARNING: Removed duplicated region for block: B:374:0x05ea  */
+    /* JADX WARNING: Removed duplicated region for block: B:405:0x0666  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x0668  */
+    /* JADX WARNING: Removed duplicated region for block: B:417:0x06b0  */
+    /* JADX WARNING: Removed duplicated region for block: B:421:0x06bf  */
+    /* JADX WARNING: Removed duplicated region for block: B:439:0x0718  */
+    /* JADX WARNING: Removed duplicated region for block: B:515:0x0913  */
+    /* JADX WARNING: Removed duplicated region for block: B:516:0x0915  */
+    /* JADX WARNING: Removed duplicated region for block: B:519:0x091b  */
+    /* JADX WARNING: Removed duplicated region for block: B:526:0x093a  */
+    /* JADX WARNING: Removed duplicated region for block: B:529:0x0941  */
+    /* JADX WARNING: Removed duplicated region for block: B:543:0x0972  */
+    /* JADX WARNING: Removed duplicated region for block: B:666:0x06ff A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void processNewMessages(java.util.ArrayList<org.telegram.messenger.MessageObject> r28) {
         /*
@@ -20657,14 +20666,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             boolean[] r3 = r0.forwardEndReached
             boolean r3 = r3[r6]
             java.lang.String r5 = "%d"
-            if (r3 != 0) goto L_0x03d1
+            if (r3 != 0) goto L_0x03cf
             r3 = -2147483648(0xfffffffvar_, float:-0.0)
             r10 = 0
             r11 = 0
             r12 = 0
         L_0x0228:
             int r13 = r28.size()
-            if (r10 >= r13) goto L_0x0392
+            if (r10 >= r13) goto L_0x0390
             java.lang.Object r13 = r1.get(r10)
             org.telegram.messenger.MessageObject r13 = (org.telegram.messenger.MessageObject) r13
             int r14 = r0.threadMessageId
@@ -20674,7 +20683,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r14 = r0.threadMessageId
             int r15 = r13.getReplyMsgId()
             if (r14 == r15) goto L_0x0248
-            goto L_0x038e
+            goto L_0x038c
         L_0x0248:
             int r14 = r13.getId()
             boolean r15 = r13.isOut()
@@ -20706,166 +20715,165 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$Message r15 = r13.messageOwner
             org.telegram.tgnet.TLRPC$MessageAction r15 = r15.action
             org.telegram.ui.Components.ChatAvatarContainer r7 = r0.avatarContainer
-            if (r7 == 0) goto L_0x029c
+            if (r7 == 0) goto L_0x029a
             org.telegram.tgnet.TLRPC$EncryptedChat r8 = r0.currentEncryptedChat
-            if (r8 == 0) goto L_0x029c
+            if (r8 == 0) goto L_0x029a
             boolean r8 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageEncryptedAction
-            if (r8 == 0) goto L_0x029c
+            if (r8 == 0) goto L_0x029a
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r8 = r15.encryptedAction
             boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL
-            if (r9 == 0) goto L_0x029c
-            org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL r8 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL) r8
+            if (r9 == 0) goto L_0x029a
             int r8 = r8.ttl_seconds
             r7.setTime(r8)
-        L_0x029c:
+        L_0x029a:
             boolean r7 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatMigrateTo
-            if (r7 == 0) goto L_0x02a4
+            if (r7 == 0) goto L_0x02a2
             r0.migrateToNewChat(r13)
             return
-        L_0x02a4:
+        L_0x02a2:
             org.telegram.tgnet.TLRPC$Chat r7 = r0.currentChat
-            if (r7 == 0) goto L_0x02b5
+            if (r7 == 0) goto L_0x02b3
             boolean r7 = r7.megagroup
-            if (r7 == 0) goto L_0x02b5
+            if (r7 == 0) goto L_0x02b3
             boolean r7 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatAddUser
-            if (r7 != 0) goto L_0x02b4
+            if (r7 != 0) goto L_0x02b2
             boolean r7 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatDeleteUser
-            if (r7 == 0) goto L_0x02b5
-        L_0x02b4:
+            if (r7 == 0) goto L_0x02b3
+        L_0x02b2:
             r12 = 1
-        L_0x02b5:
-            if (r10 != 0) goto L_0x02c3
+        L_0x02b3:
+            if (r10 != 0) goto L_0x02c1
             boolean r7 = r13.shouldAnimateSending()
-            if (r7 == 0) goto L_0x02c3
+            if (r7 == 0) goto L_0x02c1
             int r7 = r0.chatMode
-            if (r7 == r4) goto L_0x02c3
+            if (r7 == r4) goto L_0x02c1
             r0.needAnimateToMessage = r13
-        L_0x02c3:
+        L_0x02c1:
             boolean r7 = r13.isOut()
-            if (r7 == 0) goto L_0x02d1
+            if (r7 == 0) goto L_0x02cf
             boolean r7 = r13.wasJustSent
-            if (r7 == 0) goto L_0x02d1
+            if (r7 == 0) goto L_0x02cf
             r27.scrollToLastMessage()
             return
-        L_0x02d1:
+        L_0x02cf:
             int r7 = r13.type
-            if (r7 < 0) goto L_0x038e
+            if (r7 < 0) goto L_0x038c
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r7 = r0.messagesDict
             r7 = r7[r6]
             int r7 = r7.indexOfKey(r14)
-            if (r7 < 0) goto L_0x02e1
-            goto L_0x038e
-        L_0x02e1:
+            if (r7 < 0) goto L_0x02df
+            goto L_0x038c
+        L_0x02df:
             org.telegram.tgnet.TLRPC$Chat r7 = r0.currentChat
-            if (r7 == 0) goto L_0x0308
+            if (r7 == 0) goto L_0x0306
             boolean r8 = r7.creator
-            if (r8 == 0) goto L_0x0308
+            if (r8 == 0) goto L_0x0306
             boolean r7 = org.telegram.messenger.ChatObject.isChannel(r7)
-            if (r7 == 0) goto L_0x02f5
+            if (r7 == 0) goto L_0x02f3
             org.telegram.tgnet.TLRPC$Chat r7 = r0.currentChat
             boolean r7 = r7.megagroup
-            if (r7 == 0) goto L_0x0308
-        L_0x02f5:
+            if (r7 == 0) goto L_0x0306
+        L_0x02f3:
             boolean r7 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatCreate
-            if (r7 != 0) goto L_0x038e
+            if (r7 != 0) goto L_0x038c
             boolean r7 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatEditPhoto
-            if (r7 == 0) goto L_0x0308
+            if (r7 == 0) goto L_0x0306
             java.util.ArrayList<org.telegram.messenger.MessageObject> r7 = r0.messages
             int r7 = r7.size()
             r8 = 2
-            if (r7 >= r8) goto L_0x0308
-            goto L_0x038e
-        L_0x0308:
+            if (r7 >= r8) goto L_0x0306
+            goto L_0x038c
+        L_0x0306:
             boolean r7 = r15 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChannelMigrateFrom
-            if (r7 == 0) goto L_0x030e
-            goto L_0x038e
-        L_0x030e:
+            if (r7 == 0) goto L_0x030c
+            goto L_0x038c
+        L_0x030c:
             int r7 = r0.threadMessageId
-            if (r7 == 0) goto L_0x031a
+            if (r7 == 0) goto L_0x0318
             org.telegram.tgnet.TLRPC$Message r7 = r13.messageOwner
             boolean r7 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
-            if (r7 == 0) goto L_0x031a
-            goto L_0x038e
-        L_0x031a:
+            if (r7 == 0) goto L_0x0318
+            goto L_0x038c
+        L_0x0318:
             org.telegram.messenger.MessageObject r7 = r0.threadMessageObject
-            if (r7 == 0) goto L_0x0343
+            if (r7 == 0) goto L_0x0341
             boolean r7 = r13.isReply()
-            if (r7 == 0) goto L_0x0343
+            if (r7 == 0) goto L_0x0341
             org.telegram.tgnet.TLRPC$Message r7 = r13.messageOwner
             org.telegram.tgnet.TLRPC$MessageAction r7 = r7.action
             boolean r7 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPinMessage
-            if (r7 != 0) goto L_0x0343
+            if (r7 != 0) goto L_0x0341
             int r7 = r13.getReplyAnyMsgId()
             org.telegram.messenger.MessageObject r8 = r0.threadMessageObject
             int r8 = r8.getId()
-            if (r8 != r7) goto L_0x0343
+            if (r8 != r7) goto L_0x0341
             org.telegram.messenger.MessageObject r7 = r0.threadMessageObject
             org.telegram.tgnet.TLRPC$Message r7 = r7.messageOwner
             org.telegram.tgnet.TLRPC$TL_messageReplies r7 = r7.replies
             int r8 = r7.replies
             int r8 = r8 + r4
             r7.replies = r8
-        L_0x0343:
+        L_0x0341:
             r7 = 0
             r0.addToPolls(r13, r7)
             r13.checkLayout()
             org.telegram.tgnet.TLRPC$Message r7 = r13.messageOwner
             int r7 = r7.date
             int r3 = java.lang.Math.max(r3, r7)
-            if (r14 <= 0) goto L_0x035d
+            if (r14 <= 0) goto L_0x035b
             int r7 = r0.last_message_id
             int r7 = java.lang.Math.max(r7, r14)
             r0.last_message_id = r7
-            goto L_0x0369
-        L_0x035d:
+            goto L_0x0367
+        L_0x035b:
             org.telegram.tgnet.TLRPC$EncryptedChat r7 = r0.currentEncryptedChat
-            if (r7 == 0) goto L_0x0369
+            if (r7 == 0) goto L_0x0367
             int r7 = r0.last_message_id
             int r7 = java.lang.Math.min(r7, r14)
             r0.last_message_id = r7
-        L_0x0369:
+        L_0x0367:
             int r7 = r0.threadMessageId
-            if (r7 != 0) goto L_0x0383
+            if (r7 != 0) goto L_0x0381
             org.telegram.tgnet.TLRPC$Message r7 = r13.messageOwner
             boolean r7 = r7.mentioned
-            if (r7 == 0) goto L_0x037e
+            if (r7 == 0) goto L_0x037c
             boolean r7 = r13.isContentUnread()
-            if (r7 == 0) goto L_0x037e
+            if (r7 == 0) goto L_0x037c
             int r7 = r0.newMentionsCount
             int r7 = r7 + r4
             r0.newMentionsCount = r7
-        L_0x037e:
+        L_0x037c:
             int r7 = r0.newUnreadMessageCount
             int r7 = r7 + r4
             r0.newUnreadMessageCount = r7
-        L_0x0383:
+        L_0x0381:
             int r7 = r13.type
             r8 = 10
-            if (r7 == r8) goto L_0x038d
+            if (r7 == r8) goto L_0x038b
             r8 = 11
-            if (r7 != r8) goto L_0x038e
-        L_0x038d:
+            if (r7 != r8) goto L_0x038c
+        L_0x038b:
             r11 = 1
-        L_0x038e:
+        L_0x038c:
             int r10 = r10 + 1
             goto L_0x0228
-        L_0x0392:
+        L_0x0390:
             int r2 = r0.newUnreadMessageCount
-            if (r2 == 0) goto L_0x03aa
+            if (r2 == 0) goto L_0x03a8
             org.telegram.ui.Components.CounterView r2 = r0.pagedownButtonCounter
-            if (r2 == 0) goto L_0x03aa
+            if (r2 == 0) goto L_0x03a8
             r2.setVisibility(r6)
             int r2 = r0.prevSetUnreadCount
             int r3 = r0.newUnreadMessageCount
-            if (r2 == r3) goto L_0x03aa
+            if (r2 == r3) goto L_0x03a8
             r0.prevSetUnreadCount = r3
             org.telegram.ui.Components.CounterView r2 = r0.pagedownButtonCounter
             r2.setCount(r3, r4)
-        L_0x03aa:
+        L_0x03a8:
             int r2 = r0.newMentionsCount
-            if (r2 == 0) goto L_0x03cb
+            if (r2 == 0) goto L_0x03c9
             org.telegram.ui.ActionBar.SimpleTextView r2 = r0.mentiondownButtonCounter
-            if (r2 == 0) goto L_0x03cb
+            if (r2 == 0) goto L_0x03c9
             r2.setVisibility(r6)
             org.telegram.ui.ActionBar.SimpleTextView r2 = r0.mentiondownButtonCounter
             java.lang.Object[] r3 = new java.lang.Object[r4]
@@ -20875,13 +20883,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r3 = java.lang.String.format(r5, r3)
             r2.setText(r3)
             r0.showMentionDownButton(r4, r4)
-        L_0x03cb:
+        L_0x03c9:
             r27.updateVisibleRows()
             r9 = 0
-            goto L_0x0a96
-        L_0x03d1:
+            goto L_0x0a92
+        L_0x03cf:
             boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r3 == 0) goto L_0x03f7
+            if (r3 == 0) goto L_0x03f5
             java.lang.StringBuilder r3 = new java.lang.StringBuilder
             r3.<init>()
             java.lang.String r7 = "received new messages "
@@ -20894,7 +20902,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3.append(r7)
             java.lang.String r3 = r3.toString()
             org.telegram.messenger.FileLog.d(r3)
-        L_0x03f7:
+        L_0x03f5:
             r3 = 0
             r7 = 0
             r8 = 0
@@ -20902,36 +20910,36 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r10 = 0
             r11 = 0
             r12 = 0
-        L_0x03fe:
+        L_0x03fc:
             int r13 = r28.size()
-            if (r7 >= r13) goto L_0x099f
+            if (r7 >= r13) goto L_0x099b
             java.lang.Object r13 = r1.get(r7)
             org.telegram.messenger.MessageObject r13 = (org.telegram.messenger.MessageObject) r13
             boolean r15 = r13.scheduled
             int r14 = r0.chatMode
-            if (r14 != r4) goto L_0x0412
+            if (r14 != r4) goto L_0x0410
             r14 = 1
-            goto L_0x0413
-        L_0x0412:
+            goto L_0x0411
+        L_0x0410:
             r14 = 0
-        L_0x0413:
-            if (r15 != r14) goto L_0x097e
+        L_0x0411:
+            if (r15 != r14) goto L_0x097a
             int r14 = r0.threadMessageId
-            if (r14 == 0) goto L_0x0429
+            if (r14 == 0) goto L_0x0427
             int r15 = r13.getReplyTopMsgId()
-            if (r14 == r15) goto L_0x0429
+            if (r14 == r15) goto L_0x0427
             int r14 = r0.threadMessageId
             int r15 = r13.getReplyMsgId()
-            if (r14 == r15) goto L_0x0429
-            goto L_0x097e
-        L_0x0429:
+            if (r14 == r15) goto L_0x0427
+            goto L_0x097a
+        L_0x0427:
             int r14 = r13.getId()
             int r15 = r0.chatMode
-            if (r15 != r4) goto L_0x04b5
+            if (r15 != r4) goto L_0x04b3
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r15 = r0.messagesDict
             r15 = r15[r6]
             int r15 = r15.indexOfKey(r14)
-            if (r15 < 0) goto L_0x04b5
+            if (r15 < 0) goto L_0x04b3
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r15 = r0.messagesDict
             r15 = r15[r6]
             java.lang.Object r15 = r15.get(r14)
@@ -20939,7 +20947,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r4 = r0.messagesDict
             r4 = r4[r6]
             r4.remove(r14)
-            if (r15 == 0) goto L_0x04b5
+            if (r15 == 0) goto L_0x04b3
             java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r0.messages
             int r4 = r4.indexOf(r15)
             java.util.ArrayList<org.telegram.messenger.MessageObject> r6 = r0.messages
@@ -20951,19 +20959,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.util.ArrayList r6 = (java.util.ArrayList) r6
             r6.remove(r15)
             boolean r6 = r6.isEmpty()
-            if (r6 == 0) goto L_0x0484
+            if (r6 == 0) goto L_0x0482
             java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.messenger.MessageObject>> r6 = r0.messagesByDays
             java.lang.String r9 = r15.dateKey
             r6.remove(r9)
-            if (r4 < 0) goto L_0x0484
+            if (r4 < 0) goto L_0x0482
             java.util.ArrayList<org.telegram.messenger.MessageObject> r6 = r0.messages
             int r6 = r6.size()
-            if (r4 >= r6) goto L_0x0484
+            if (r4 >= r6) goto L_0x0482
             java.util.ArrayList<org.telegram.messenger.MessageObject> r6 = r0.messages
             r6.remove(r4)
-        L_0x0484:
+        L_0x0482:
             boolean r4 = r15.hasValidGroupId()
-            if (r4 == 0) goto L_0x04aa
+            if (r4 == 0) goto L_0x04a8
             android.util.LongSparseArray<org.telegram.messenger.MessageObject$GroupedMessages> r4 = r0.groupedMessagesMap
             r6 = r11
             r9 = r12
@@ -20972,117 +20980,116 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.messenger.MessageObject$GroupedMessages r4 = (org.telegram.messenger.MessageObject.GroupedMessages) r4
             java.util.ArrayList<org.telegram.messenger.MessageObject> r11 = r4.messages
             r11.remove(r15)
-            if (r3 != 0) goto L_0x04a4
+            if (r3 != 0) goto L_0x04a2
             android.util.LongSparseArray r3 = new android.util.LongSparseArray
             r3.<init>()
-        L_0x04a4:
+        L_0x04a2:
             long r11 = r4.groupId
             r3.put(r11, r4)
-            goto L_0x04ac
-        L_0x04aa:
+            goto L_0x04aa
+        L_0x04a8:
             r6 = r11
             r9 = r12
-        L_0x04ac:
+        L_0x04aa:
             org.telegram.ui.ChatActivity$ChatActivityAdapter r4 = r0.chatAdapter
-            if (r4 == 0) goto L_0x04b9
+            if (r4 == 0) goto L_0x04b7
             r11 = 0
             r4.notifyDataSetChanged(r11)
-            goto L_0x04b9
-        L_0x04b5:
+            goto L_0x04b7
+        L_0x04b3:
             r21 = r9
             r6 = r11
             r9 = r12
-        L_0x04b9:
+        L_0x04b7:
             boolean r4 = r27.isSecretChat()
-            if (r4 == 0) goto L_0x04c2
+            if (r4 == 0) goto L_0x04c0
             r0.checkSecretMessageForLocation(r13)
-        L_0x04c2:
+        L_0x04c0:
             int r4 = r0.chatMode
             r11 = 1
-            if (r4 == r11) goto L_0x04de
+            if (r4 == r11) goto L_0x04dc
             org.telegram.tgnet.TLRPC$User r4 = r0.currentUser
-            if (r4 == 0) goto L_0x04de
+            if (r4 == 0) goto L_0x04dc
             boolean r4 = r4.bot
-            if (r4 == 0) goto L_0x04d5
+            if (r4 == 0) goto L_0x04d3
             boolean r4 = r13.isOut()
-            if (r4 != 0) goto L_0x04db
-        L_0x04d5:
+            if (r4 != 0) goto L_0x04d9
+        L_0x04d3:
             org.telegram.tgnet.TLRPC$User r4 = r0.currentUser
             int r4 = r4.id
-            if (r4 != r2) goto L_0x04de
-        L_0x04db:
+            if (r4 != r2) goto L_0x04dc
+        L_0x04d9:
             r13.setIsRead()
-        L_0x04de:
+        L_0x04dc:
             org.telegram.tgnet.TLRPC$Message r4 = r13.messageOwner
             org.telegram.tgnet.TLRPC$MessageAction r4 = r4.action
             org.telegram.ui.Components.ChatAvatarContainer r11 = r0.avatarContainer
-            if (r11 == 0) goto L_0x04fb
+            if (r11 == 0) goto L_0x04f7
             org.telegram.tgnet.TLRPC$EncryptedChat r12 = r0.currentEncryptedChat
-            if (r12 == 0) goto L_0x04fb
+            if (r12 == 0) goto L_0x04f7
             boolean r12 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageEncryptedAction
-            if (r12 == 0) goto L_0x04fb
+            if (r12 == 0) goto L_0x04f7
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r12 = r4.encryptedAction
             boolean r15 = r12 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL
-            if (r15 == 0) goto L_0x04fb
-            org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL r12 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL) r12
+            if (r15 == 0) goto L_0x04f7
             int r12 = r12.ttl_seconds
             r11.setTime(r12)
-        L_0x04fb:
+        L_0x04f7:
             int r11 = r13.type
-            if (r11 < 0) goto L_0x0976
+            if (r11 < 0) goto L_0x0972
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r11 = r0.messagesDict
             r12 = 0
             r11 = r11[r12]
             int r11 = r11.indexOfKey(r14)
-            if (r11 < 0) goto L_0x050c
-            goto L_0x0976
-        L_0x050c:
+            if (r11 < 0) goto L_0x0508
+            goto L_0x0972
+        L_0x0508:
             org.telegram.tgnet.TLRPC$Chat r11 = r0.currentChat
-            if (r11 == 0) goto L_0x0533
+            if (r11 == 0) goto L_0x052f
             boolean r12 = r11.creator
-            if (r12 == 0) goto L_0x0533
+            if (r12 == 0) goto L_0x052f
             boolean r11 = org.telegram.messenger.ChatObject.isChannel(r11)
-            if (r11 == 0) goto L_0x0520
+            if (r11 == 0) goto L_0x051c
             org.telegram.tgnet.TLRPC$Chat r11 = r0.currentChat
             boolean r11 = r11.megagroup
-            if (r11 == 0) goto L_0x0533
-        L_0x0520:
+            if (r11 == 0) goto L_0x052f
+        L_0x051c:
             boolean r11 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatCreate
-            if (r11 != 0) goto L_0x0976
+            if (r11 != 0) goto L_0x0972
             boolean r11 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatEditPhoto
-            if (r11 == 0) goto L_0x0533
+            if (r11 == 0) goto L_0x052f
             java.util.ArrayList<org.telegram.messenger.MessageObject> r11 = r0.messages
             int r11 = r11.size()
             r12 = 2
-            if (r11 >= r12) goto L_0x0533
-            goto L_0x0976
-        L_0x0533:
+            if (r11 >= r12) goto L_0x052f
+            goto L_0x0972
+        L_0x052f:
             boolean r11 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChannelMigrateFrom
-            if (r11 == 0) goto L_0x0539
-            goto L_0x0976
-        L_0x0539:
+            if (r11 == 0) goto L_0x0535
+            goto L_0x0972
+        L_0x0535:
             int r11 = r0.threadMessageId
-            if (r11 == 0) goto L_0x0545
+            if (r11 == 0) goto L_0x0541
             org.telegram.tgnet.TLRPC$Message r11 = r13.messageOwner
             boolean r11 = r11 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
-            if (r11 == 0) goto L_0x0545
-            goto L_0x0976
-        L_0x0545:
+            if (r11 == 0) goto L_0x0541
+            goto L_0x0972
+        L_0x0541:
             org.telegram.messenger.MessageObject r11 = r0.threadMessageObject
-            if (r11 == 0) goto L_0x0575
+            if (r11 == 0) goto L_0x0571
             org.telegram.tgnet.TLRPC$Message r11 = r11.messageOwner
             org.telegram.tgnet.TLRPC$TL_messageReplies r11 = r11.replies
-            if (r11 == 0) goto L_0x0575
+            if (r11 == 0) goto L_0x0571
             boolean r11 = r13.isReply()
-            if (r11 == 0) goto L_0x0575
+            if (r11 == 0) goto L_0x0571
             org.telegram.tgnet.TLRPC$Message r11 = r13.messageOwner
             org.telegram.tgnet.TLRPC$MessageAction r11 = r11.action
             boolean r11 = r11 instanceof org.telegram.tgnet.TLRPC$TL_messageActionPinMessage
-            if (r11 != 0) goto L_0x0575
+            if (r11 != 0) goto L_0x0571
             int r11 = r13.getReplyAnyMsgId()
             org.telegram.messenger.MessageObject r12 = r0.threadMessageObject
             int r12 = r12.getId()
-            if (r12 != r11) goto L_0x0575
+            if (r12 != r11) goto L_0x0571
             org.telegram.messenger.MessageObject r11 = r0.threadMessageObject
             org.telegram.tgnet.TLRPC$Message r11 = r11.messageOwner
             org.telegram.tgnet.TLRPC$TL_messageReplies r11 = r11.replies
@@ -21090,26 +21097,26 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r15 = 1
             int r12 = r12 + r15
             r11.replies = r12
-        L_0x0575:
+        L_0x0571:
             r11 = 0
             r0.addToPolls(r13, r11)
-            if (r7 != 0) goto L_0x058b
+            if (r7 != 0) goto L_0x0587
             boolean r11 = r13.shouldAnimateSending()
-            if (r11 == 0) goto L_0x058b
+            if (r11 == 0) goto L_0x0587
             int r11 = r0.chatMode
             r12 = 1
-            if (r11 == r12) goto L_0x058b
+            if (r11 == r12) goto L_0x0587
             java.util.ArrayList<org.telegram.messenger.MessageObject> r11 = r0.animatingMessageObjects
             r11.add(r13)
-        L_0x058b:
+        L_0x0587:
             boolean r11 = r13.hasValidGroupId()
-            if (r11 == 0) goto L_0x05c5
+            if (r11 == 0) goto L_0x05c1
             android.util.LongSparseArray<org.telegram.messenger.MessageObject$GroupedMessages> r11 = r0.groupedMessagesMap
             r12 = r2
             long r1 = r13.getGroupId()
             java.lang.Object r1 = r11.get(r1)
             org.telegram.messenger.MessageObject$GroupedMessages r1 = (org.telegram.messenger.MessageObject.GroupedMessages) r1
-            if (r1 != 0) goto L_0x05b2
+            if (r1 != 0) goto L_0x05ae
             org.telegram.messenger.MessageObject$GroupedMessages r1 = new org.telegram.messenger.MessageObject$GroupedMessages
             r1.<init>()
             r2 = r12
@@ -21117,117 +21124,117 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.groupId = r11
             android.util.LongSparseArray<org.telegram.messenger.MessageObject$GroupedMessages> r15 = r0.groupedMessagesMap
             r15.put(r11, r1)
-            goto L_0x05b3
-        L_0x05b2:
+            goto L_0x05af
+        L_0x05ae:
             r2 = r12
-        L_0x05b3:
-            if (r3 != 0) goto L_0x05ba
+        L_0x05af:
+            if (r3 != 0) goto L_0x05b6
             android.util.LongSparseArray r3 = new android.util.LongSparseArray
             r3.<init>()
-        L_0x05ba:
+        L_0x05b6:
             long r11 = r1.groupId
             r3.put(r11, r1)
             java.util.ArrayList<org.telegram.messenger.MessageObject> r11 = r1.messages
             r11.add(r13)
-            goto L_0x05c6
-        L_0x05c5:
+            goto L_0x05c2
+        L_0x05c1:
             r1 = 0
-        L_0x05c6:
-            if (r1 == 0) goto L_0x05ea
+        L_0x05c2:
+            if (r1 == 0) goto L_0x05e6
             java.util.ArrayList<org.telegram.messenger.MessageObject> r11 = r1.messages
             int r11 = r11.size()
             r12 = 1
-            if (r11 <= r12) goto L_0x05e0
+            if (r11 <= r12) goto L_0x05dc
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r1.messages
             int r11 = r1.size()
             r12 = 2
             int r11 = r11 - r12
             java.lang.Object r1 = r1.get(r11)
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
-            goto L_0x05e1
-        L_0x05e0:
+            goto L_0x05dd
+        L_0x05dc:
             r1 = 0
-        L_0x05e1:
-            if (r1 == 0) goto L_0x05ea
+        L_0x05dd:
+            if (r1 == 0) goto L_0x05e6
             java.util.ArrayList<org.telegram.messenger.MessageObject> r11 = r0.messages
             int r1 = r11.indexOf(r1)
-            goto L_0x05eb
-        L_0x05ea:
+            goto L_0x05e7
+        L_0x05e6:
             r1 = -1
-        L_0x05eb:
+        L_0x05e7:
             r11 = -1
-            if (r1 != r11) goto L_0x06b4
+            if (r1 != r11) goto L_0x06b0
             boolean r11 = r13.scheduled
-            if (r11 != 0) goto L_0x05f8
+            if (r11 != 0) goto L_0x05f4
             org.telegram.tgnet.TLRPC$Message r11 = r13.messageOwner
             int r11 = r11.id
-            if (r11 < 0) goto L_0x0600
-        L_0x05f8:
+            if (r11 < 0) goto L_0x05fc
+        L_0x05f4:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r11 = r0.messages
             boolean r11 = r11.isEmpty()
-            if (r11 == 0) goto L_0x060a
-        L_0x0600:
+            if (r11 == 0) goto L_0x0606
+        L_0x05fc:
             r23 = r2
             r2 = r5
             r24 = r6
             r25 = r9
             r1 = 0
-            goto L_0x06bd
-        L_0x060a:
+            goto L_0x06b9
+        L_0x0606:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r11 = r0.messages
             int r11 = r11.size()
             r12 = 0
-        L_0x0611:
-            if (r12 >= r11) goto L_0x0697
+        L_0x060d:
+            if (r12 >= r11) goto L_0x0693
             java.util.ArrayList<org.telegram.messenger.MessageObject> r15 = r0.messages
             java.lang.Object r15 = r15.get(r12)
             org.telegram.messenger.MessageObject r15 = (org.telegram.messenger.MessageObject) r15
             r22 = r1
             int r1 = r15.type
-            if (r1 < 0) goto L_0x0681
+            if (r1 < 0) goto L_0x067d
             org.telegram.tgnet.TLRPC$Message r1 = r15.messageOwner
             r23 = r2
             int r2 = r1.date
-            if (r2 <= 0) goto L_0x0683
+            if (r2 <= 0) goto L_0x067f
             r24 = r6
             int r6 = r0.chatMode
             r25 = r9
             r9 = 1
-            if (r6 == r9) goto L_0x063e
+            if (r6 == r9) goto L_0x063a
             int r1 = r1.id
-            if (r1 <= 0) goto L_0x063e
+            if (r1 <= 0) goto L_0x063a
             org.telegram.tgnet.TLRPC$Message r6 = r13.messageOwner
             int r6 = r6.id
-            if (r6 <= 0) goto L_0x063e
-            if (r1 < r6) goto L_0x0644
-        L_0x063e:
+            if (r6 <= 0) goto L_0x063a
+            if (r1 < r6) goto L_0x0640
+        L_0x063a:
             org.telegram.tgnet.TLRPC$Message r1 = r13.messageOwner
             int r1 = r1.date
-            if (r2 > r1) goto L_0x067f
-        L_0x0644:
+            if (r2 > r1) goto L_0x067b
+        L_0x0640:
             long r1 = r15.getGroupId()
             r17 = 0
             int r6 = (r1 > r17 ? 1 : (r1 == r17 ? 0 : -1))
-            if (r6 == 0) goto L_0x0666
+            if (r6 == 0) goto L_0x0662
             android.util.LongSparseArray<org.telegram.messenger.MessageObject$GroupedMessages> r1 = r0.groupedMessagesMap
             r2 = r5
             long r5 = r15.getGroupId()
             java.lang.Object r1 = r1.get(r5)
             org.telegram.messenger.MessageObject$GroupedMessages r1 = (org.telegram.messenger.MessageObject.GroupedMessages) r1
-            if (r1 == 0) goto L_0x0668
+            if (r1 == 0) goto L_0x0664
             java.util.ArrayList<org.telegram.messenger.MessageObject> r5 = r1.messages
             int r5 = r5.size()
-            if (r5 != 0) goto L_0x0668
-            goto L_0x0667
-        L_0x0666:
+            if (r5 != 0) goto L_0x0664
+            goto L_0x0663
+        L_0x0662:
             r2 = r5
-        L_0x0667:
+        L_0x0663:
             r1 = 0
-        L_0x0668:
-            if (r1 != 0) goto L_0x066c
+        L_0x0664:
+            if (r1 != 0) goto L_0x0668
             r1 = r12
-            goto L_0x06a2
-        L_0x066c:
+            goto L_0x069e
+        L_0x0668:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r5 = r0.messages
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r1.messages
             int r6 = r1.size()
@@ -21235,17 +21242,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r6 = r6 - r9
             java.lang.Object r1 = r1.get(r6)
             int r1 = r5.indexOf(r1)
-            goto L_0x06a2
-        L_0x067f:
+            goto L_0x069e
+        L_0x067b:
             r2 = r5
-            goto L_0x0688
-        L_0x0681:
+            goto L_0x0684
+        L_0x067d:
             r23 = r2
-        L_0x0683:
+        L_0x067f:
             r2 = r5
             r24 = r6
             r25 = r9
-        L_0x0688:
+        L_0x0684:
             r17 = 0
             int r12 = r12 + 1
             r5 = r2
@@ -21253,54 +21260,54 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = r23
             r6 = r24
             r9 = r25
-            goto L_0x0611
-        L_0x0697:
+            goto L_0x060d
+        L_0x0693:
             r22 = r1
             r23 = r2
             r2 = r5
             r24 = r6
             r25 = r9
             r17 = 0
-        L_0x06a2:
+        L_0x069e:
             r5 = -1
-            if (r1 == r5) goto L_0x06ad
+            if (r1 == r5) goto L_0x06a9
             java.util.ArrayList<org.telegram.messenger.MessageObject> r5 = r0.messages
             int r5 = r5.size()
-            if (r1 <= r5) goto L_0x06bf
-        L_0x06ad:
+            if (r1 <= r5) goto L_0x06bb
+        L_0x06a9:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.messages
             int r1 = r1.size()
-            goto L_0x06bf
-        L_0x06b4:
+            goto L_0x06bb
+        L_0x06b0:
             r22 = r1
             r23 = r2
             r2 = r5
             r24 = r6
             r25 = r9
-        L_0x06bd:
+        L_0x06b9:
             r17 = 0
-        L_0x06bf:
+        L_0x06bb:
             org.telegram.tgnet.TLRPC$EncryptedChat r5 = r0.currentEncryptedChat
-            if (r5 == 0) goto L_0x06fc
+            if (r5 == 0) goto L_0x06f8
             org.telegram.tgnet.TLRPC$Message r5 = r13.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r5 = r5.media
             boolean r6 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
-            if (r6 == 0) goto L_0x06fc
+            if (r6 == 0) goto L_0x06f8
             org.telegram.tgnet.TLRPC$WebPage r5 = r5.webpage
             boolean r5 = r5 instanceof org.telegram.tgnet.TLRPC$TL_webPageUrlPending
-            if (r5 == 0) goto L_0x06fc
-            if (r10 != 0) goto L_0x06d9
+            if (r5 == 0) goto L_0x06f8
+            if (r10 != 0) goto L_0x06d5
             java.util.HashMap r5 = new java.util.HashMap
             r5.<init>()
             r10 = r5
-        L_0x06d9:
+        L_0x06d5:
             org.telegram.tgnet.TLRPC$Message r5 = r13.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r5 = r5.media
             org.telegram.tgnet.TLRPC$WebPage r5 = r5.webpage
             java.lang.String r5 = r5.url
             java.lang.Object r5 = r10.get(r5)
             java.util.ArrayList r5 = (java.util.ArrayList) r5
-            if (r5 != 0) goto L_0x06f9
+            if (r5 != 0) goto L_0x06f5
             java.util.ArrayList r5 = new java.util.ArrayList
             r5.<init>()
             org.telegram.tgnet.TLRPC$Message r6 = r13.messageOwner
@@ -21308,64 +21315,64 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$WebPage r6 = r6.webpage
             java.lang.String r6 = r6.url
             r10.put(r6, r5)
-        L_0x06f9:
+        L_0x06f5:
             r5.add(r13)
-        L_0x06fc:
+        L_0x06f8:
             r13.checkLayout()
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatMigrateTo
-            if (r5 == 0) goto L_0x071c
+            if (r5 == 0) goto L_0x0718
             r0.migrateToNewChat(r13)
-            if (r3 == 0) goto L_0x071b
+            if (r3 == 0) goto L_0x0717
             r6 = 0
-        L_0x0709:
+        L_0x0705:
             int r1 = r3.size()
-            if (r6 >= r1) goto L_0x071b
+            if (r6 >= r1) goto L_0x0717
             java.lang.Object r1 = r3.valueAt(r6)
             org.telegram.messenger.MessageObject$GroupedMessages r1 = (org.telegram.messenger.MessageObject.GroupedMessages) r1
             r1.calculate()
             int r6 = r6 + 1
-            goto L_0x0709
-        L_0x071b:
+            goto L_0x0705
+        L_0x0717:
             return
-        L_0x071c:
+        L_0x0718:
             org.telegram.tgnet.TLRPC$Chat r5 = r0.currentChat
-            if (r5 == 0) goto L_0x072e
+            if (r5 == 0) goto L_0x072a
             boolean r5 = r5.megagroup
-            if (r5 == 0) goto L_0x072e
+            if (r5 == 0) goto L_0x072a
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatAddUser
-            if (r5 != 0) goto L_0x072c
+            if (r5 != 0) goto L_0x0728
             boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageActionChatDeleteUser
-            if (r4 == 0) goto L_0x072e
-        L_0x072c:
+            if (r4 == 0) goto L_0x072a
+        L_0x0728:
             r12 = 1
-            goto L_0x0730
-        L_0x072e:
+            goto L_0x072c
+        L_0x072a:
             r12 = r25
-        L_0x0730:
+        L_0x072c:
             int[] r4 = r0.minDate
             r5 = 0
             r6 = r4[r5]
-            if (r6 == 0) goto L_0x073f
+            if (r6 == 0) goto L_0x073b
             org.telegram.tgnet.TLRPC$Message r6 = r13.messageOwner
             int r6 = r6.date
             r9 = r4[r5]
-            if (r6 >= r9) goto L_0x0745
-        L_0x073f:
+            if (r6 >= r9) goto L_0x0741
+        L_0x073b:
             org.telegram.tgnet.TLRPC$Message r6 = r13.messageOwner
             int r6 = r6.date
             r4[r5] = r6
-        L_0x0745:
+        L_0x0741:
             boolean r4 = r13.isOut()
-            if (r4 == 0) goto L_0x0759
+            if (r4 == 0) goto L_0x0755
             org.telegram.tgnet.TLRPC$Message r4 = r13.messageOwner
             boolean r4 = r4.from_scheduled
-            if (r4 != 0) goto L_0x0759
+            if (r4 != 0) goto L_0x0755
             r4 = 1
             r0.removeUnreadPlane(r4)
             r27.hideInfoView()
             r8 = 1
-        L_0x0759:
-            if (r14 <= 0) goto L_0x0771
+        L_0x0755:
+            if (r14 <= 0) goto L_0x076d
             int[] r4 = r0.maxMessageId
             r5 = 0
             r6 = r4[r5]
@@ -21375,11 +21382,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r6 = r4[r5]
             int r6 = java.lang.Math.max(r14, r6)
             r4[r5] = r6
-            goto L_0x078a
-        L_0x0771:
+            goto L_0x0786
+        L_0x076d:
             r5 = 0
             org.telegram.tgnet.TLRPC$EncryptedChat r4 = r0.currentEncryptedChat
-            if (r4 == 0) goto L_0x078a
+            if (r4 == 0) goto L_0x0786
             int[] r4 = r0.maxMessageId
             r6 = r4[r5]
             int r6 = java.lang.Math.max(r14, r6)
@@ -21388,7 +21395,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r6 = r4[r5]
             int r6 = java.lang.Math.min(r14, r6)
             r4[r5] = r6
-        L_0x078a:
+        L_0x0786:
             int[] r4 = r0.maxDate
             r6 = r4[r5]
             org.telegram.tgnet.TLRPC$Message r9 = r13.messageOwner
@@ -21404,11 +21411,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.util.ArrayList r4 = (java.util.ArrayList) r4
             java.util.ArrayList<org.telegram.messenger.MessageObject> r5 = r0.messages
             int r5 = r5.size()
-            if (r1 <= r5) goto L_0x07b7
+            if (r1 <= r5) goto L_0x07b3
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.messages
             int r1 = r1.size()
-        L_0x07b7:
-            if (r4 != 0) goto L_0x0854
+        L_0x07b3:
+            if (r4 != 0) goto L_0x0850
             java.util.ArrayList r4 = new java.util.ArrayList
             r4.<init>()
             java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.messenger.MessageObject>> r5 = r0.messagesByDays
@@ -21418,19 +21425,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r5.<init>()
             int r6 = r0.chatMode
             r9 = 1
-            if (r6 != r9) goto L_0x07fd
+            if (r6 != r9) goto L_0x07f9
             org.telegram.tgnet.TLRPC$Message r6 = r13.messageOwner
             int r6 = r6.date
             r11 = 2147483646(0x7ffffffe, float:NaN)
-            if (r6 != r11) goto L_0x07e6
+            if (r6 != r11) goto L_0x07e2
             r6 = 2131626158(0x7f0e08ae, float:1.8879544E38)
             java.lang.String r11 = "MessageScheduledUntilOnline"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r11, r6)
             r5.message = r6
             r15 = r12
             r9 = 0
-            goto L_0x080a
-        L_0x07e6:
+            goto L_0x0806
+        L_0x07e2:
             java.lang.Object[] r14 = new java.lang.Object[r9]
             r15 = r12
             long r11 = (long) r6
@@ -21441,8 +21448,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r11 = 2131626156(0x7f0e08ac, float:1.887954E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.formatString(r6, r11, r14)
             r5.message = r6
-            goto L_0x080a
-        L_0x07fd:
+            goto L_0x0806
+        L_0x07f9:
             r15 = r12
             r9 = 0
             org.telegram.tgnet.TLRPC$Message r6 = r13.messageOwner
@@ -21450,7 +21457,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             long r11 = (long) r6
             java.lang.String r6 = org.telegram.messenger.LocaleController.formatDateChat(r11)
             r5.message = r6
-        L_0x080a:
+        L_0x0806:
             r5.id = r9
             java.util.Calendar r6 = java.util.Calendar.getInstance()
             org.telegram.tgnet.TLRPC$Message r11 = r13.messageOwner
@@ -21482,35 +21489,35 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.util.ArrayList<org.telegram.messenger.MessageObject> r5 = r0.messages
             r5.add(r1, r6)
             org.telegram.ui.ChatActivity$ChatActivityAdapter r5 = r0.chatAdapter
-            if (r5 == 0) goto L_0x0855
+            if (r5 == 0) goto L_0x0851
             r5.notifyItemInserted(r1)
-            goto L_0x0855
-        L_0x0854:
+            goto L_0x0851
+        L_0x0850:
             r15 = r12
-        L_0x0855:
+        L_0x0851:
             org.telegram.tgnet.TLRPC$Message r5 = r13.messageOwner
             org.telegram.tgnet.TLRPC$MessageAction r5 = r5.action
             boolean r5 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageActionGeoProximityReached
-            if (r5 != 0) goto L_0x08ba
+            if (r5 != 0) goto L_0x08b6
             boolean r5 = r13.isOut()
-            if (r5 == 0) goto L_0x0869
+            if (r5 == 0) goto L_0x0865
             org.telegram.tgnet.TLRPC$Message r5 = r13.messageOwner
             boolean r5 = r5.from_scheduled
-            if (r5 == 0) goto L_0x08ba
-        L_0x0869:
+            if (r5 == 0) goto L_0x08b6
+        L_0x0865:
             boolean r5 = r0.paused
-            if (r5 == 0) goto L_0x08ba
-            if (r1 != 0) goto L_0x08ba
+            if (r5 == 0) goto L_0x08b6
+            if (r1 != 0) goto L_0x08b6
             boolean r5 = r0.scrollToTopUnReadOnResume
-            if (r5 != 0) goto L_0x087d
+            if (r5 != 0) goto L_0x0879
             org.telegram.messenger.MessageObject r5 = r0.unreadMessageObject
-            if (r5 == 0) goto L_0x087d
+            if (r5 == 0) goto L_0x0879
             r0.removeMessageObject(r5)
             r5 = 0
             r0.unreadMessageObject = r5
-        L_0x087d:
+        L_0x0879:
             org.telegram.messenger.MessageObject r5 = r0.unreadMessageObject
-            if (r5 != 0) goto L_0x08ba
+            if (r5 != 0) goto L_0x08b6
             org.telegram.tgnet.TLRPC$TL_message r5 = new org.telegram.tgnet.TLRPC$TL_message
             r5.<init>()
             java.lang.String r6 = ""
@@ -21531,129 +21538,129 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.util.ArrayList<org.telegram.messenger.MessageObject> r11 = r0.messages
             r11.add(r6, r9)
             org.telegram.ui.ChatActivity$ChatActivityAdapter r11 = r0.chatAdapter
-            if (r11 == 0) goto L_0x08ae
+            if (r11 == 0) goto L_0x08aa
             r11.notifyItemInserted(r6)
-        L_0x08ae:
+        L_0x08aa:
             r0.unreadMessageObject = r9
             r0.scrollToMessage = r9
             r6 = -10000(0xffffffffffffd8f0, float:NaN)
             r0.scrollToMessagePosition = r6
             r6 = 1
             r0.scrollToTopUnReadOnResume = r6
-            goto L_0x08bb
-        L_0x08ba:
+            goto L_0x08b7
+        L_0x08b6:
             r5 = 2
-        L_0x08bb:
+        L_0x08b7:
             r6 = 0
             r4.add(r6, r13)
             org.telegram.ui.ChatActivity$ChatActivityAdapter r4 = r0.chatAdapter
-            if (r4 == 0) goto L_0x0908
+            if (r4 == 0) goto L_0x0904
             java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r0.messages
             int r4 = r4.size()
-            if (r1 >= r4) goto L_0x0908
+            if (r1 >= r4) goto L_0x0904
             java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r0.messages
             java.lang.Object r4 = r4.get(r1)
             org.telegram.messenger.MessageObject r4 = (org.telegram.messenger.MessageObject) r4
             boolean r6 = r4.hasValidGroupId()
-            if (r6 == 0) goto L_0x0908
+            if (r6 == 0) goto L_0x0904
             long r11 = r4.getGroupId()
             long r19 = r13.getGroupId()
             int r6 = (r11 > r19 ? 1 : (r11 == r19 ? 0 : -1))
-            if (r6 == 0) goto L_0x0908
+            if (r6 == 0) goto L_0x0904
             android.util.LongSparseArray<org.telegram.messenger.MessageObject$GroupedMessages> r6 = r0.groupedMessagesMap
             long r11 = r4.getGroupId()
             java.lang.Object r4 = r6.get(r11)
             org.telegram.messenger.MessageObject$GroupedMessages r4 = (org.telegram.messenger.MessageObject.GroupedMessages) r4
-            if (r4 == 0) goto L_0x0908
+            if (r4 == 0) goto L_0x0904
             java.util.ArrayList<org.telegram.messenger.MessageObject> r6 = r4.messages
             int r6 = r6.size()
             r9 = 1
-            if (r6 <= r9) goto L_0x0908
+            if (r6 <= r9) goto L_0x0904
             java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r4.messages
             int r4 = r4.size()
             org.telegram.ui.ChatActivity$ChatActivityAdapter r6 = r0.chatAdapter
             int r4 = r4 - r9
             r6.notifyItemRangeChanged(r9, r4)
-        L_0x0908:
+        L_0x0904:
             int r4 = r0.lastStableId
             int r6 = r4 + 1
             r0.lastStableId = r6
             r13.stableId = r4
             java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r0.messages
             r4.add(r1, r13)
-            if (r1 != 0) goto L_0x0919
+            if (r1 != 0) goto L_0x0915
             r9 = 1
-            goto L_0x091b
-        L_0x0919:
+            goto L_0x0917
+        L_0x0915:
             r9 = r21
-        L_0x091b:
+        L_0x0917:
             org.telegram.ui.ChatActivity$ChatActivityAdapter r4 = r0.chatAdapter
-            if (r4 == 0) goto L_0x0927
+            if (r4 == 0) goto L_0x0923
             r4.notifyItemChanged(r1)
             org.telegram.ui.ChatActivity$ChatActivityAdapter r4 = r0.chatAdapter
             r4.notifyItemInserted(r1)
-        L_0x0927:
+        L_0x0923:
             boolean r1 = r13.isOut()
-            if (r1 == 0) goto L_0x0941
+            if (r1 == 0) goto L_0x093d
             boolean r1 = r0.waitingForSendingMessageLoad
-            if (r1 == 0) goto L_0x0941
+            if (r1 == 0) goto L_0x093d
             r1 = 0
             r0.waitingForSendingMessageLoad = r1
             org.telegram.ui.Components.ChatActivityEnterView r1 = r0.chatActivityEnterView
             r4 = 1
             r1.hideTopView(r4)
             android.animation.ValueAnimator r1 = r0.changeBoundAnimator
-            if (r1 == 0) goto L_0x0941
+            if (r1 == 0) goto L_0x093d
             r1.start()
-        L_0x0941:
+        L_0x093d:
             int r1 = r0.threadMessageId
-            if (r1 != 0) goto L_0x0964
+            if (r1 != 0) goto L_0x0960
             boolean r1 = r13.isOut()
-            if (r1 != 0) goto L_0x095e
+            if (r1 != 0) goto L_0x095a
             org.telegram.tgnet.TLRPC$Message r1 = r13.messageOwner
             boolean r1 = r1.mentioned
-            if (r1 == 0) goto L_0x095e
+            if (r1 == 0) goto L_0x095a
             boolean r1 = r13.isContentUnread()
-            if (r1 == 0) goto L_0x095e
+            if (r1 == 0) goto L_0x095a
             int r1 = r0.newMentionsCount
             r4 = 1
             int r1 = r1 + r4
             r0.newMentionsCount = r1
-            goto L_0x095f
-        L_0x095e:
+            goto L_0x095b
+        L_0x095a:
             r4 = 1
-        L_0x095f:
+        L_0x095b:
             int r1 = r0.newUnreadMessageCount
             int r1 = r1 + r4
             r0.newUnreadMessageCount = r1
-        L_0x0964:
+        L_0x0960:
             int r1 = r13.type
             r4 = 10
             r6 = 11
-            if (r1 == r4) goto L_0x0973
-            if (r1 != r6) goto L_0x096f
-            goto L_0x0973
-        L_0x096f:
+            if (r1 == r4) goto L_0x096f
+            if (r1 != r6) goto L_0x096b
+            goto L_0x096f
+        L_0x096b:
             r12 = r15
             r11 = r24
-            goto L_0x0994
-        L_0x0973:
+            goto L_0x0990
+        L_0x096f:
             r12 = r15
             r11 = 1
-            goto L_0x0994
-        L_0x0976:
+            goto L_0x0990
+        L_0x0972:
             r23 = r2
             r2 = r5
             r24 = r6
             r25 = r9
-            goto L_0x0987
-        L_0x097e:
+            goto L_0x0983
+        L_0x097a:
             r23 = r2
             r2 = r5
             r21 = r9
             r24 = r11
             r25 = r12
-        L_0x0987:
+        L_0x0983:
             r4 = 10
             r5 = 2
             r6 = 11
@@ -21661,37 +21668,37 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r9 = r21
             r11 = r24
             r12 = r25
-        L_0x0994:
+        L_0x0990:
             int r7 = r7 + 1
             r1 = r28
             r5 = r2
             r2 = r23
             r4 = 1
             r6 = 0
-            goto L_0x03fe
-        L_0x099f:
+            goto L_0x03fc
+        L_0x099b:
             r2 = r5
             r21 = r9
             r24 = r11
             r25 = r12
-            if (r10 == 0) goto L_0x09b9
+            if (r10 == 0) goto L_0x09b5
             org.telegram.messenger.MessagesController r1 = r27.getMessagesController()
             long r4 = r0.dialog_id
             int r6 = r0.chatMode
             r7 = 1
-            if (r6 != r7) goto L_0x09b5
+            if (r6 != r7) goto L_0x09b1
             r6 = 1
-            goto L_0x09b6
-        L_0x09b5:
+            goto L_0x09b2
+        L_0x09b1:
             r6 = 0
-        L_0x09b6:
+        L_0x09b2:
             r1.reloadWebPages(r4, r10, r6)
-        L_0x09b9:
-            if (r3 == 0) goto L_0x09fb
+        L_0x09b5:
+            if (r3 == 0) goto L_0x09f7
             r1 = 0
-        L_0x09bc:
+        L_0x09b8:
             int r4 = r3.size()
-            if (r1 >= r4) goto L_0x09fb
+            if (r1 >= r4) goto L_0x09f7
             java.lang.Object r4 = r3.valueAt(r1)
             org.telegram.messenger.MessageObject$GroupedMessages r4 = (org.telegram.messenger.MessageObject.GroupedMessages) r4
             java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r5 = r4.posArray
@@ -21700,9 +21707,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.util.ArrayList<org.telegram.messenger.MessageObject$GroupedMessagePosition> r6 = r4.posArray
             int r6 = r6.size()
             int r5 = r6 - r5
-            if (r5 <= 0) goto L_0x09f8
+            if (r5 <= 0) goto L_0x09f4
             org.telegram.ui.ChatActivity$ChatActivityAdapter r5 = r0.chatAdapter
-            if (r5 == 0) goto L_0x09f8
+            if (r5 == 0) goto L_0x09f4
             java.util.ArrayList<org.telegram.messenger.MessageObject> r5 = r0.messages
             java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r4.messages
             int r7 = r4.size()
@@ -21710,85 +21717,85 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r7 = r7 - r9
             java.lang.Object r4 = r4.get(r7)
             int r4 = r5.indexOf(r4)
-            if (r4 < 0) goto L_0x09f8
+            if (r4 < 0) goto L_0x09f4
             org.telegram.ui.ChatActivity$ChatActivityAdapter r5 = r0.chatAdapter
             r5.notifyItemRangeChanged(r4, r6)
-        L_0x09f8:
+        L_0x09f4:
             int r1 = r1 + 1
-            goto L_0x09bc
-        L_0x09fb:
+            goto L_0x09b8
+        L_0x09f7:
             r1 = 0
             r0.showProgressView(r1)
             org.telegram.ui.ChatActivity$ChatActivityAdapter r1 = r0.chatAdapter
-            if (r1 != 0) goto L_0x0a06
+            if (r1 != 0) goto L_0x0a02
             r3 = 1
             r0.scrollToTopOnResume = r3
-        L_0x0a06:
+        L_0x0a02:
             org.telegram.ui.Components.RecyclerListView r3 = r0.chatListView
-            if (r3 == 0) goto L_0x0a8d
-            if (r1 == 0) goto L_0x0a8d
+            if (r3 == 0) goto L_0x0a89
+            if (r1 == 0) goto L_0x0a89
             androidx.recyclerview.widget.GridLayoutManagerFixed r1 = r0.chatLayoutManager
             int r1 = r1.findFirstVisibleItemPosition()
             r3 = -1
-            if (r1 != r3) goto L_0x0a16
+            if (r1 != r3) goto L_0x0a12
             r1 = 0
-        L_0x0a16:
+        L_0x0a12:
             androidx.recyclerview.widget.GridLayoutManagerFixed r3 = r0.chatLayoutManager
             android.view.View r3 = r3.findViewByPosition(r1)
-            if (r3 == 0) goto L_0x0a2a
+            if (r3 == 0) goto L_0x0a26
             int r3 = r3.getBottom()
             org.telegram.ui.Components.RecyclerListView r4 = r0.chatListView
             int r4 = r4.getMeasuredHeight()
             int r3 = r3 - r4
-            goto L_0x0a2b
-        L_0x0a2a:
+            goto L_0x0a27
+        L_0x0a26:
             r3 = 0
-        L_0x0a2b:
-            if (r1 != 0) goto L_0x0a35
+        L_0x0a27:
+            if (r1 != 0) goto L_0x0a31
             r1 = 1084227584(0x40a00000, float:5.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            if (r3 <= r1) goto L_0x0a37
-        L_0x0a35:
-            if (r8 == 0) goto L_0x0a51
-        L_0x0a37:
+            if (r3 <= r1) goto L_0x0a33
+        L_0x0a31:
+            if (r8 == 0) goto L_0x0a4d
+        L_0x0a33:
             r1 = 0
             r0.newUnreadMessageCount = r1
             boolean r1 = r0.firstLoading
-            if (r1 != 0) goto L_0x0a4f
+            if (r1 != 0) goto L_0x0a4b
             int r1 = r0.chatMode
             r3 = 1
-            if (r1 == r3) goto L_0x0a4f
+            if (r1 == r3) goto L_0x0a4b
             boolean r1 = r0.paused
-            if (r1 == 0) goto L_0x0a4a
+            if (r1 == 0) goto L_0x0a46
             r0.scrollToTopOnResume = r3
-            goto L_0x0a4f
-        L_0x0a4a:
+            goto L_0x0a4b
+        L_0x0a46:
             r0.forceScrollToTop = r3
             r27.moveScrollToLastMessage()
-        L_0x0a4f:
+        L_0x0a4b:
             r4 = 1
-            goto L_0x0a6a
-        L_0x0a51:
+            goto L_0x0a66
+        L_0x0a4d:
             int r1 = r0.newUnreadMessageCount
-            if (r1 == 0) goto L_0x0a64
+            if (r1 == 0) goto L_0x0a60
             org.telegram.ui.Components.CounterView r3 = r0.pagedownButtonCounter
-            if (r3 == 0) goto L_0x0a64
+            if (r3 == 0) goto L_0x0a60
             int r4 = r0.prevSetUnreadCount
-            if (r4 == r1) goto L_0x0a64
+            if (r4 == r1) goto L_0x0a60
             r0.prevSetUnreadCount = r1
             r4 = 1
             r3.setCount(r1, r4)
-            goto L_0x0a65
-        L_0x0a64:
+            goto L_0x0a61
+        L_0x0a60:
             r4 = 1
-        L_0x0a65:
+        L_0x0a61:
             r0.canShowPagedownButton = r4
             r0.updatePagedownButtonVisibility(r4)
-        L_0x0a6a:
+        L_0x0a66:
             int r1 = r0.newMentionsCount
-            if (r1 == 0) goto L_0x0a90
+            if (r1 == 0) goto L_0x0a8c
             org.telegram.ui.ActionBar.SimpleTextView r1 = r0.mentiondownButtonCounter
-            if (r1 == 0) goto L_0x0a90
+            if (r1 == 0) goto L_0x0a8c
             r3 = 0
             r1.setVisibility(r3)
             org.telegram.ui.ActionBar.SimpleTextView r1 = r0.mentiondownButtonCounter
@@ -21799,43 +21806,43 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r2 = java.lang.String.format(r2, r5)
             r1.setText(r2)
             r0.showMentionDownButton(r4, r4)
-            goto L_0x0a90
-        L_0x0a8d:
+            goto L_0x0a8c
+        L_0x0a89:
             r4 = 1
             r0.scrollToTopOnResume = r4
-        L_0x0a90:
+        L_0x0a8c:
             r9 = r21
             r11 = r24
             r12 = r25
-        L_0x0a96:
+        L_0x0a92:
             int r1 = r0.chatMode
-            if (r1 != r4) goto L_0x0b06
+            if (r1 != r4) goto L_0x0b02
             boolean r1 = r28.isEmpty()
-            if (r1 != 0) goto L_0x0b06
+            if (r1 != 0) goto L_0x0b02
             r1 = r28
             r2 = 0
             java.lang.Object r1 = r1.get(r2)
             org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
             int r2 = r1.getId()
-            if (r2 >= 0) goto L_0x0b06
+            if (r2 >= 0) goto L_0x0b02
             androidx.recyclerview.widget.ChatListItemAnimator r3 = r0.chatListItemAnimator
-            if (r3 == 0) goto L_0x0ab6
+            if (r3 == 0) goto L_0x0ab2
             r3.setShouldAnimateEnterFromBottom(r9)
-        L_0x0ab6:
-            if (r9 == 0) goto L_0x0abc
+        L_0x0ab2:
+            if (r9 == 0) goto L_0x0ab8
             r27.moveScrollToLastMessage()
-            goto L_0x0b06
-        L_0x0abc:
+            goto L_0x0b02
+        L_0x0ab8:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r3 = r0.messages
             int r3 = r3.indexOf(r1)
             androidx.recyclerview.widget.GridLayoutManagerFixed r4 = r0.chatLayoutManager
-            if (r4 == 0) goto L_0x0afe
-            if (r3 <= 0) goto L_0x0afe
+            if (r4 == 0) goto L_0x0afa
+            if (r3 <= 0) goto L_0x0afa
             org.telegram.ui.ChatActivity$ChatActivityAdapter r5 = r0.chatAdapter
             int r5 = r5.messagesStartRow
             int r5 = r5 + r3
             android.view.View r4 = r4.findViewByPosition(r5)
-            if (r4 != 0) goto L_0x0ae6
+            if (r4 != 0) goto L_0x0ae2
             androidx.recyclerview.widget.GridLayoutManagerFixed r4 = r0.chatLayoutManager
             org.telegram.ui.ChatActivity$ChatActivityAdapter r5 = r0.chatAdapter
             int r5 = r5.messagesStartRow
@@ -21843,8 +21850,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3 = 1
             int r5 = r5 - r3
             android.view.View r3 = r4.findViewByPosition(r5)
-            if (r3 == 0) goto L_0x0afe
-        L_0x0ae6:
+            if (r3 == 0) goto L_0x0afa
+        L_0x0ae2:
             androidx.recyclerview.widget.GridLayoutManagerFixed r2 = r0.chatLayoutManager
             org.telegram.ui.ChatActivity$ChatActivityAdapter r3 = r0.chatAdapter
             int r3 = r3.messagesStartRow
@@ -21854,38 +21861,38 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r1 = r0.getScrollOffsetForMessage(r1)
             r4 = 0
             r2.scrollToPositionWithOffset(r3, r1, r4)
-            goto L_0x0b06
-        L_0x0afe:
-            org.telegram.ui.-$$Lambda$ChatActivity$tuDx4ieWEjDd0KKzQNyxFg7cXiY r1 = new org.telegram.ui.-$$Lambda$ChatActivity$tuDx4ieWEjDd0KKzQNyxFg7cXiY
+            goto L_0x0b02
+        L_0x0afa:
+            org.telegram.ui.-$$Lambda$ChatActivity$UVI06Uts7bEj13BY41gIshYQvB4 r1 = new org.telegram.ui.-$$Lambda$ChatActivity$UVI06Uts7bEj13BY41gIshYQvB4
             r1.<init>(r2)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
-        L_0x0b06:
+        L_0x0b02:
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r0.messages
             boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x0b1e
+            if (r1 != 0) goto L_0x0b1a
             java.lang.String r1 = r0.botUser
-            if (r1 == 0) goto L_0x0b1e
+            if (r1 == 0) goto L_0x0b1a
             int r1 = r1.length()
-            if (r1 != 0) goto L_0x0b1e
+            if (r1 != 0) goto L_0x0b1a
             r1 = 0
             r0.botUser = r1
             r27.updateBottomOverlay()
-        L_0x0b1e:
-            if (r11 == 0) goto L_0x0b26
+        L_0x0b1a:
+            if (r11 == 0) goto L_0x0b22
             r27.updateTitle()
             r27.checkAndUpdateAvatar()
-        L_0x0b26:
-            if (r12 == 0) goto L_0x0b36
+        L_0x0b22:
+            if (r12 == 0) goto L_0x0b32
             org.telegram.messenger.MessagesController r1 = r27.getMessagesController()
             org.telegram.tgnet.TLRPC$Chat r2 = r0.currentChat
             int r2 = r2.id
             r3 = 0
             r4 = 1
             r1.loadFullChat(r2, r3, r4)
-            goto L_0x0b37
-        L_0x0b36:
+            goto L_0x0b33
+        L_0x0b32:
             r4 = 1
-        L_0x0b37:
+        L_0x0b33:
             r27.checkWaitingForReplies()
             r0.updateReplyMessageHeader(r4)
             return
@@ -21894,8 +21901,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processNewMessages$91 */
-    public /* synthetic */ void lambda$processNewMessages$91$ChatActivity(int i) {
+    /* renamed from: lambda$processNewMessages$92 */
+    public /* synthetic */ void lambda$processNewMessages$92$ChatActivity(int i) {
         scrollToMessageId(i, 0, false, 0, true, 0);
     }
 
@@ -22743,7 +22750,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
 
                     public final void run() {
-                        ChatActivity.this.lambda$migrateToNewChat$92$ChatActivity(this.f$1, this.f$2, this.f$3);
+                        ChatActivity.this.lambda$migrateToNewChat$93$ChatActivity(this.f$1, this.f$2, this.f$3);
                     }
                 });
             } else {
@@ -22784,15 +22791,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void run() {
-                    ChatActivity.this.lambda$migrateToNewChat$93$ChatActivity(this.f$1);
+                    ChatActivity.this.lambda$migrateToNewChat$94$ChatActivity(this.f$1);
                 }
             }, 1000);
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$migrateToNewChat$92 */
-    public /* synthetic */ void lambda$migrateToNewChat$92$ChatActivity(BaseFragment baseFragment, MessageObject messageObject, ActionBarLayout actionBarLayout) {
+    /* renamed from: lambda$migrateToNewChat$93 */
+    public /* synthetic */ void lambda$migrateToNewChat$93$ChatActivity(BaseFragment baseFragment, MessageObject messageObject, ActionBarLayout actionBarLayout) {
         if (baseFragment instanceof NotificationCenter.NotificationCenterDelegate) {
             getNotificationCenter().removeObserver((NotificationCenter.NotificationCenterDelegate) baseFragment, NotificationCenter.closeChats);
         }
@@ -22804,8 +22811,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$migrateToNewChat$93 */
-    public /* synthetic */ void lambda$migrateToNewChat$93$ChatActivity(int i) {
+    /* renamed from: lambda$migrateToNewChat$94 */
+    public /* synthetic */ void lambda$migrateToNewChat$94$ChatActivity(int i) {
         getMessagesController().loadFullChat(i, 0, true);
     }
 
@@ -22828,7 +22835,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     public void showInfoHint(MessageObject messageObject, CharSequence charSequence, int i) {
         UndoView undoView2 = this.topUndoView;
         if (undoView2 != null) {
-            $$Lambda$ChatActivity$MuR_bXfdjXpBO_6wm6V85lYmWj8 r6 = new Runnable(i) {
+            $$Lambda$ChatActivity$50urQSI_DrLM6zP6ECLASSNAMEhyn9jPM r6 = new Runnable(i) {
                 public final /* synthetic */ int f$1;
 
                 {
@@ -22836,7 +22843,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void run() {
-                    ChatActivity.this.lambda$showInfoHint$94$ChatActivity(this.f$1);
+                    ChatActivity.this.lambda$showInfoHint$95$ChatActivity(this.f$1);
                 }
             };
             undoView2.showWithAction(0, 18, charSequence, r6, r6);
@@ -22849,9 +22856,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     /* JADX WARNING: Code restructure failed: missing block: B:6:0x0016, code lost:
         r2 = (org.telegram.ui.Cells.ChatMessageCell) r2;
      */
-    /* renamed from: lambda$showInfoHint$94 */
+    /* renamed from: lambda$showInfoHint$95 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$showInfoHint$94$ChatActivity(int r6) {
+    public /* synthetic */ void lambda$showInfoHint$95$ChatActivity(int r6) {
         /*
             r5 = this;
             org.telegram.ui.Components.RecyclerListView r0 = r5.chatListView
@@ -22882,7 +22889,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r5.hintMessageObject = r6
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.lambda$showInfoHint$94$ChatActivity(int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.lambda$showInfoHint$95$ChatActivity(int):void");
     }
 
     /* access modifiers changed from: private */
@@ -22960,9 +22967,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     public void removeKeyboardPositionBeforeTransition() {
         if (this.fixedKeyboardHeight > 0) {
-            $$Lambda$ChatActivity$K8B725PECwnvP9_OaOi0u24uvM r0 = new Runnable() {
+            $$Lambda$ChatActivity$KKBybScUfGSRYfRmPwHDGe96ECg r0 = new Runnable() {
                 public final void run() {
-                    ChatActivity.this.lambda$removeKeyboardPositionBeforeTransition$95$ChatActivity();
+                    ChatActivity.this.lambda$removeKeyboardPositionBeforeTransition$96$ChatActivity();
                 }
             };
             this.cancelFixedPositionRunnable = r0;
@@ -22971,8 +22978,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$removeKeyboardPositionBeforeTransition$95 */
-    public /* synthetic */ void lambda$removeKeyboardPositionBeforeTransition$95$ChatActivity() {
+    /* renamed from: lambda$removeKeyboardPositionBeforeTransition$96 */
+    public /* synthetic */ void lambda$removeKeyboardPositionBeforeTransition$96$ChatActivity() {
         this.cancelFixedPositionRunnable = null;
         this.fixedKeyboardHeight = -1;
         this.fragmentView.requestLayout();
@@ -23328,7 +23335,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         this.chatActivityEnterView.setFieldFocused();
                         AndroidUtilities.runOnUIThread(new Runnable() {
                             public final void run() {
-                                ChatActivity.this.lambda$updateBottomOverlay$96$ChatActivity();
+                                ChatActivity.this.lambda$updateBottomOverlay$97$ChatActivity();
                             }
                         }, 100);
                     } else {
@@ -23390,8 +23397,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateBottomOverlay$96 */
-    public /* synthetic */ void lambda$updateBottomOverlay$96$ChatActivity() {
+    /* renamed from: lambda$updateBottomOverlay$97 */
+    public /* synthetic */ void lambda$updateBottomOverlay$97$ChatActivity() {
         this.chatActivityEnterView.openKeyboard();
     }
 
@@ -23443,7 +23450,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.alertViewEnterProgress, 1.0f});
                 ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        ChatActivity.this.lambda$showAlert$97$ChatActivity(valueAnimator);
+                        ChatActivity.this.lambda$showAlert$98$ChatActivity(valueAnimator);
                     }
                 });
                 this.alertViewAnimator.playTogether(new Animator[]{ofFloat});
@@ -23471,7 +23478,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (runnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(runnable);
             }
-            AnonymousClass82 r5 = new Runnable() {
+            AnonymousClass81 r5 = new Runnable() {
                 public void run() {
                     if (ChatActivity.this.hideAlertViewRunnable == this && ChatActivity.this.alertView.getTag() == null) {
                         ChatActivity.this.alertView.setTag(1);
@@ -23483,7 +23490,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{ChatActivity.this.alertViewEnterProgress, 0.0f});
                         ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                ChatActivity.AnonymousClass82.this.lambda$run$0$ChatActivity$82(valueAnimator);
+                                ChatActivity.AnonymousClass81.this.lambda$run$0$ChatActivity$81(valueAnimator);
                             }
                         });
                         ChatActivity.this.alertViewAnimator.playTogether(new Animator[]{ofFloat});
@@ -23510,7 +23517,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
                 /* access modifiers changed from: private */
                 /* renamed from: lambda$run$0 */
-                public /* synthetic */ void lambda$run$0$ChatActivity$82(ValueAnimator valueAnimator) {
+                public /* synthetic */ void lambda$run$0$ChatActivity$81(ValueAnimator valueAnimator) {
                     float unused = ChatActivity.this.alertViewEnterProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
                     ChatActivity.this.invalidateChatListViewTopPadding();
                 }
@@ -23521,8 +23528,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showAlert$97 */
-    public /* synthetic */ void lambda$showAlert$97$ChatActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$showAlert$98 */
+    public /* synthetic */ void lambda$showAlert$98$ChatActivity(ValueAnimator valueAnimator) {
         this.alertViewEnterProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidateChatListViewTopPadding();
     }
@@ -23556,7 +23563,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.pinnedMessageEnterOffset, (float) (-AndroidUtilities.dp(50.0f))});
             ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    ChatActivity.this.lambda$hidePinnedMessageView$98$ChatActivity(valueAnimator);
+                    ChatActivity.this.lambda$hidePinnedMessageView$99$ChatActivity(valueAnimator);
                 }
             });
             this.pinnedMessageViewAnimator.playTogether(new Animator[]{ofFloat});
@@ -23585,8 +23592,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$hidePinnedMessageView$98 */
-    public /* synthetic */ void lambda$hidePinnedMessageView$98$ChatActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$hidePinnedMessageView$99 */
+    public /* synthetic */ void lambda$hidePinnedMessageView$99$ChatActivity(ValueAnimator valueAnimator) {
         this.pinnedMessageEnterOffset = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidateChatListViewTopPadding();
         invalidateMessagesVisiblePart();
@@ -23849,7 +23856,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3[r8] = r9
             r3[r13] = r15
             android.animation.ValueAnimator r3 = android.animation.ValueAnimator.ofFloat(r3)
-            org.telegram.ui.ChatActivity$85 r9 = new org.telegram.ui.ChatActivity$85
+            org.telegram.ui.ChatActivity$84 r9 = new org.telegram.ui.ChatActivity$84
             r9.<init>()
             r3.addUpdateListener(r9)
             android.widget.FrameLayout r9 = r6.pinnedMessageView
@@ -23864,7 +23871,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r9 = 200(0xc8, double:9.9E-322)
             r3.setDuration(r9)
             android.animation.AnimatorSet r3 = r6.pinnedMessageViewAnimator
-            org.telegram.ui.ChatActivity$86 r9 = new org.telegram.ui.ChatActivity$86
+            org.telegram.ui.ChatActivity$85 r9 = new org.telegram.ui.ChatActivity$85
             r9.<init>()
             r3.addListener(r9)
             android.animation.AnimatorSet r3 = r6.pinnedMessageViewAnimator
@@ -24883,7 +24890,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x08f5:
             android.animation.AnimatorSet[] r3 = r6.pinnedNextAnimation
             r3 = r3[r9]
-            org.telegram.ui.ChatActivity$87 r8 = new org.telegram.ui.ChatActivity$87
+            org.telegram.ui.ChatActivity$86 r8 = new org.telegram.ui.ChatActivity$86
             r8.<init>(r4, r0, r5)
             r3.addListener(r8)
             android.animation.AnimatorSet[] r0 = r6.pinnedNextAnimation
@@ -24909,7 +24916,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.playTogether(r1)
             android.animation.AnimatorSet[] r0 = r6.pinnedNextAnimation
             r14 = r0[r8]
-            org.telegram.ui.ChatActivity$88 r15 = new org.telegram.ui.ChatActivity$88
+            org.telegram.ui.ChatActivity$87 r15 = new org.telegram.ui.ChatActivity$87
             r0 = r15
             r1 = r33
             r2 = r4
@@ -25298,7 +25305,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.topChatPanelViewOffset, 0.0f});
                         ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                                ChatActivity.this.lambda$updateTopPanel$99$ChatActivity(valueAnimator);
+                                ChatActivity.this.lambda$updateTopPanel$100$ChatActivity(valueAnimator);
                             }
                         });
                         this.reportSpamViewAnimator.playTogether(new Animator[]{ofFloat});
@@ -25338,7 +25345,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{this.topChatPanelViewOffset, (float) (-AndroidUtilities.dp(50.0f))});
                     ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            ChatActivity.this.lambda$updateTopPanel$100$ChatActivity(valueAnimator);
+                            ChatActivity.this.lambda$updateTopPanel$101$ChatActivity(valueAnimator);
                         }
                     });
                     this.reportSpamViewAnimator.playTogether(new Animator[]{ofFloat2});
@@ -25369,16 +25376,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateTopPanel$99 */
-    public /* synthetic */ void lambda$updateTopPanel$99$ChatActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$updateTopPanel$100 */
+    public /* synthetic */ void lambda$updateTopPanel$100$ChatActivity(ValueAnimator valueAnimator) {
         this.topChatPanelViewOffset = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidateChatListViewTopPadding();
         invalidateMessagesVisiblePart();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateTopPanel$100 */
-    public /* synthetic */ void lambda$updateTopPanel$100$ChatActivity(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$updateTopPanel$101 */
+    public /* synthetic */ void lambda$updateTopPanel$101$ChatActivity(ValueAnimator valueAnimator) {
         this.topChatPanelViewOffset = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidateChatListViewTopPadding();
         invalidateMessagesVisiblePart();
@@ -25388,9 +25395,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         MessageObject messageObject;
         if (this.wasManualScroll || (messageObject = this.unreadMessageObject) == null) {
             if (this.checkPaddingsRunnable == null) {
-                $$Lambda$ChatActivity$cCrl6rWPTBv7kdqXikDreqI3e0 r0 = new Runnable() {
+                $$Lambda$ChatActivity$6gNI5M8s_q9uLFM4t9uYpMjR9oo r0 = new Runnable() {
                     public final void run() {
-                        ChatActivity.this.lambda$checkListViewPaddings$101$ChatActivity();
+                        ChatActivity.this.lambda$checkListViewPaddings$102$ChatActivity();
                     }
                 };
                 this.checkPaddingsRunnable = r0;
@@ -25406,8 +25413,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkListViewPaddings$101 */
-    public /* synthetic */ void lambda$checkListViewPaddings$101$ChatActivity() {
+    /* renamed from: lambda$checkListViewPaddings$102 */
+    public /* synthetic */ void lambda$checkListViewPaddings$102$ChatActivity() {
         this.checkPaddingsRunnable = null;
         invalidateChatListViewTopPadding();
         invalidateMessagesVisiblePart();
@@ -25536,7 +25543,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             ImportingAlert importingAlert = new ImportingAlert(getParentActivity(), this);
             importingAlert.setOnHideListener(new DialogInterface.OnDismissListener() {
                 public final void onDismiss(DialogInterface dialogInterface) {
-                    ChatActivity.this.lambda$onResume$102$ChatActivity(dialogInterface);
+                    ChatActivity.this.lambda$onResume$103$ChatActivity(dialogInterface);
                 }
             });
             showDialog(importingAlert);
@@ -25554,7 +25561,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             sizeNotifierFrameLayout.onResume();
         }
         checkChecksHint();
-        AnonymousClass91 r0 = new Bulletin.Delegate() {
+        AnonymousClass90 r0 = new Bulletin.Delegate() {
             public /* synthetic */ void onHide(Bulletin bulletin) {
                 Bulletin.Delegate.CC.$default$onHide(this, bulletin);
             }
@@ -25644,7 +25651,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (this.startVideoEdit != null) {
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
-                    ChatActivity.this.lambda$onResume$103$ChatActivity();
+                    ChatActivity.this.lambda$onResume$104$ChatActivity();
                 }
             });
         }
@@ -25659,8 +25666,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onResume$102 */
-    public /* synthetic */ void lambda$onResume$102$ChatActivity(DialogInterface dialogInterface) {
+    /* renamed from: lambda$onResume$103 */
+    public /* synthetic */ void lambda$onResume$103$ChatActivity(DialogInterface dialogInterface) {
         FragmentContextView fragmentContextView2 = this.fragmentContextView;
         if (fragmentContextView2 != null) {
             fragmentContextView2.checkImport(false);
@@ -25668,8 +25675,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onResume$103 */
-    public /* synthetic */ void lambda$onResume$103$ChatActivity() {
+    /* renamed from: lambda$onResume$104 */
+    public /* synthetic */ void lambda$onResume$104$ChatActivity() {
         openVideoEditor(this.startVideoEdit, (String) null);
         this.startVideoEdit = null;
     }
@@ -26227,7 +26234,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r0 = r0.indexOf(r1)
             int r0 = r0 + r4
             r12.setSelection(r0)
-            org.telegram.ui.-$$Lambda$ChatActivity$J7PSFYpXPjMls_tMf-quCZK6j9A r12 = new org.telegram.ui.-$$Lambda$ChatActivity$J7PSFYpXPjMls_tMf-quCZK6j9A
+            org.telegram.ui.-$$Lambda$ChatActivity$w-BbMT5_jn9syGebTIPuScbG78s r12 = new org.telegram.ui.-$$Lambda$ChatActivity$w-BbMT5_jn9syGebTIPuScbG78s
             r12.<init>()
             r0 = 700(0x2bc, double:3.46E-321)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r12, r0)
@@ -26259,8 +26266,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$applyDraftMaybe$104 */
-    public /* synthetic */ void lambda$applyDraftMaybe$104$ChatActivity() {
+    /* renamed from: lambda$applyDraftMaybe$105 */
+    public /* synthetic */ void lambda$applyDraftMaybe$105$ChatActivity() {
         ChatActivityEnterView chatActivityEnterView2 = this.chatActivityEnterView;
         if (chatActivityEnterView2 != null) {
             chatActivityEnterView2.setFieldFocused(true);
@@ -26497,15 +26504,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (messageObject != null || this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size() != 0) {
             AlertsCreator.createDeleteMessagesAlert(this, this.currentUser, this.currentChat, this.currentEncryptedChat, this.chatInfo, this.mergeDialogId, messageObject, this.selectedMessagesIds, groupedMessages, this.chatMode == 1, i, new Runnable() {
                 public final void run() {
-                    ChatActivity.this.lambda$createDeleteMessagesAlert$105$ChatActivity();
+                    ChatActivity.this.lambda$createDeleteMessagesAlert$106$ChatActivity();
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createDeleteMessagesAlert$105 */
-    public /* synthetic */ void lambda$createDeleteMessagesAlert$105$ChatActivity() {
+    /* renamed from: lambda$createDeleteMessagesAlert$106 */
+    public /* synthetic */ void lambda$createDeleteMessagesAlert$106$ChatActivity() {
         hideActionMode();
         updatePinnedMessageView(true);
     }
@@ -26582,8 +26589,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v3, resolved type: android.widget.ScrollView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v25, resolved type: org.telegram.ui.ChatActivity$94} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v264, resolved type: org.telegram.ui.ChatActivity$94} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v25, resolved type: org.telegram.ui.ChatActivity$93} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v264, resolved type: org.telegram.ui.ChatActivity$93} */
     /* JADX WARNING: type inference failed for: r11v2, types: [android.widget.ScrollView, android.view.View] */
     /* access modifiers changed from: private */
     /* JADX WARNING: Code restructure failed: missing block: B:161:0x02ff, code lost:
@@ -26701,7 +26708,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$InputPeer r0 = r2.getInputPeer((org.telegram.tgnet.TLRPC$Peer) r0)
             r1.peer = r0
             org.telegram.tgnet.ConnectionsManager r0 = r28.getConnectionsManager()
-            org.telegram.ui.-$$Lambda$ChatActivity$x0opOmbBTExSdALGVreShLAsHsY r2 = new org.telegram.ui.-$$Lambda$ChatActivity$x0opOmbBTExSdALGVreShLAsHsY
+            org.telegram.ui.-$$Lambda$ChatActivity$hmZM28SYqmLRUsmRbj7IOPOFM9I r2 = new org.telegram.ui.-$$Lambda$ChatActivity$hmZM28SYqmLRUsmRbj7IOPOFM9I
             r2.<init>()
             r0.sendRequest(r1, r2, r9)
             return
@@ -27246,8 +27253,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r7.selectedObject = r0
             r7.selectedObjectGroup = r4
             r3 = -1
-            r4 = 2131165737(0x7var_, float:1.79457E38)
-            r17 = 2131165735(0x7var_, float:1.7945696E38)
+            r4 = 2131165728(0x7var_, float:1.7945681E38)
+            r17 = 2131165726(0x7var_e, float:1.7945677E38)
             r15 = 2131625011(0x7f0e0433, float:1.8877218E38)
             java.lang.String r9 = "Copy"
             if (r2 != r3) goto L_0x0546
@@ -27287,7 +27294,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r13.add(r0)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r10)
             r14.add(r0)
-            r0 = 2131165811(0x7var_, float:1.794585E38)
+            r0 = 2131165802(0x7var_a, float:1.7945831E38)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r12.add(r0)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r3)
@@ -27299,10 +27306,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             int r0 = r0.ttl_period
             if (r0 == 0) goto L_0x0585
-            r4 = 2131165738(0x7var_a, float:1.7945702E38)
+            r4 = 2131165729(0x7var_, float:1.7945683E38)
             goto L_0x0588
         L_0x0585:
-            r4 = 2131165737(0x7var_, float:1.79457E38)
+            r4 = 2131165728(0x7var_, float:1.7945681E38)
         L_0x0588:
             java.lang.Integer r0 = java.lang.Integer.valueOf(r4)
             r12.add(r0)
@@ -27320,7 +27327,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r13.add(r1)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r11)
             r14.add(r1)
-            r1 = 2131165801(0x7var_, float:1.794583E38)
+            r1 = 2131165792(0x7var_, float:1.7945811E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
         L_0x05b9:
@@ -27343,7 +27350,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 27
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r14.add(r1)
-            r1 = 2131165847(0x7var_, float:1.7945923E38)
+            r1 = 2131165838(0x7var_e, float:1.7945904E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
         L_0x05f6:
@@ -27355,7 +27362,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 14
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r14.add(r1)
-            r1 = 2131165842(0x7var_, float:1.7945913E38)
+            r1 = 2131165833(0x7var_, float:1.7945894E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
             goto L_0x0639
@@ -27368,7 +27375,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 13
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r14.add(r1)
-            r1 = 2131165792(0x7var_, float:1.7945811E38)
+            r1 = 2131165783(0x7var_, float:1.7945793E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
         L_0x0639:
@@ -27382,7 +27389,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 12
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r14.add(r1)
-            r1 = 2131165746(0x7var_, float:1.7945718E38)
+            r1 = 2131165737(0x7var_, float:1.79457E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
         L_0x0660:
@@ -27411,7 +27418,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 23
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r14.add(r1)
-            r1 = 2131165803(0x7var_b, float:1.7945833E38)
+            r1 = 2131165794(0x7var_, float:1.7945815E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
             goto L_0x06cd
@@ -27425,7 +27432,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r13.add(r1)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r11)
             r14.add(r1)
-            r1 = 2131165801(0x7var_, float:1.794583E38)
+            r1 = 2131165792(0x7var_, float:1.7945811E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
         L_0x06cd:
@@ -27454,10 +27461,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             int r0 = r0.ttl_period
             if (r0 == 0) goto L_0x0702
-            r4 = 2131165738(0x7var_a, float:1.7945702E38)
+            r4 = 2131165729(0x7var_, float:1.7945683E38)
             goto L_0x0705
         L_0x0702:
-            r4 = 2131165737(0x7var_, float:1.79457E38)
+            r4 = 2131165728(0x7var_, float:1.7945681E38)
         L_0x0705:
             java.lang.Integer r0 = java.lang.Integer.valueOf(r4)
             r12.add(r0)
@@ -27471,7 +27478,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r13.add(r0)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r10)
             r14.add(r0)
-            r0 = 2131165811(0x7var_, float:1.794585E38)
+            r0 = 2131165802(0x7var_a, float:1.7945831E38)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r12.add(r0)
             r0 = 2131625011(0x7f0e0433, float:1.8877218E38)
@@ -27491,10 +27498,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             int r0 = r0.ttl_period
             if (r0 == 0) goto L_0x0763
-            r4 = 2131165738(0x7var_a, float:1.7945702E38)
+            r4 = 2131165729(0x7var_, float:1.7945683E38)
             goto L_0x0766
         L_0x0763:
-            r4 = 2131165737(0x7var_, float:1.79457E38)
+            r4 = 2131165728(0x7var_, float:1.7945681E38)
         L_0x0766:
             java.lang.Integer r0 = java.lang.Integer.valueOf(r4)
             r12.add(r0)
@@ -27502,8 +27509,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x076f:
             org.telegram.tgnet.TLRPC$EncryptedChat r15 = r7.currentEncryptedChat
             java.lang.String r3 = "SaveToDownloads"
-            r24 = 2131165741(0x7var_d, float:1.7945708E38)
-            r25 = 2131165826(0x7var_, float:1.794588E38)
+            r24 = 2131165732(0x7var_, float:1.794569E38)
+            r25 = 2131165817(0x7var_, float:1.7945862E38)
             java.lang.String r10 = "ShareFile"
             if (r15 != 0) goto L_0x0var_
             int r15 = r7.chatMode
@@ -27516,7 +27523,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r11 = 100
             java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
             r14.add(r11)
-            r11 = 2131165894(0x7var_c6, float:1.7946018E38)
+            r11 = 2131165885(0x7var_bd, float:1.7946E38)
             java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
             r12.add(r11)
         L_0x07a1:
@@ -27548,7 +27555,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r8 = 18
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r14.add(r8)
-            r8 = 2131165724(0x7var_c, float:1.7945673E38)
+            r8 = 2131165715(0x7var_, float:1.7945655E38)
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r12.add(r8)
             boolean r8 = org.telegram.ui.Components.voip.VoIPHelper.canRateCall(r11)
@@ -27560,7 +27567,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r8 = 19
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r14.add(r8)
-            r8 = 2131165748(0x7var_, float:1.7945722E38)
+            r8 = 2131165739(0x7var_b, float:1.7945704E38)
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r12.add(r8)
         L_0x080b:
@@ -27572,7 +27579,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 8
             java.lang.Integer r8 = java.lang.Integer.valueOf(r1)
             r14.add(r8)
-            r1 = 2131165801(0x7var_, float:1.794583E38)
+            r1 = 2131165792(0x7var_, float:1.7945811E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
         L_0x082c:
@@ -27631,7 +27638,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r8 = 27
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r14.add(r8)
-            r8 = 2131165847(0x7var_, float:1.7945923E38)
+            r8 = 2131165838(0x7var_e, float:1.7945904E38)
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             r12.add(r8)
         L_0x08bb:
@@ -27654,7 +27661,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 22
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r14.add(r1)
-            r1 = 2131165763(0x7var_, float:1.7945752E38)
+            r1 = 2131165754(0x7var_a, float:1.7945734E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
             goto L_0x08f6
@@ -27681,7 +27688,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 25
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165843(0x7var_, float:1.7945915E38)
+            r2 = 2131165834(0x7var_a, float:1.7945896E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
         L_0x0931:
@@ -27725,7 +27732,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 26
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165795(0x7var_, float:1.7945817E38)
+            r2 = 2131165786(0x7var_a, float:1.7945799E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             goto L_0x0ddc
@@ -27775,7 +27782,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 11
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165751(0x7var_, float:1.7945728E38)
+            r2 = 2131165742(0x7var_e, float:1.794571E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             goto L_0x0ddc
@@ -27794,7 +27801,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r13.add(r3)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165750(0x7var_, float:1.7945726E38)
+            r2 = 2131165741(0x7var_d, float:1.7945708E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             r2 = 2131627457(0x7f0e0dc1, float:1.8882179E38)
@@ -27843,7 +27850,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 11
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165751(0x7var_, float:1.7945728E38)
+            r2 = 2131165742(0x7var_e, float:1.794571E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
         L_0x0ad8:
@@ -27875,7 +27882,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 4
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165750(0x7var_, float:1.7945726E38)
+            r2 = 2131165741(0x7var_d, float:1.7945708E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             goto L_0x0ddc
@@ -27888,7 +27895,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r13.add(r8)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165761(0x7var_, float:1.7945748E38)
+            r2 = 2131165752(0x7var_, float:1.794573E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             r2 = 2131627277(0x7f0e0d0d, float:1.8881814E38)
@@ -27918,7 +27925,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 5
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165836(0x7var_c, float:1.79459E38)
+            r2 = 2131165827(0x7var_, float:1.7945882E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             r2 = 2131627277(0x7f0e0d0d, float:1.8881814E38)
@@ -27948,7 +27955,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 7
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165750(0x7var_, float:1.7945726E38)
+            r2 = 2131165741(0x7var_d, float:1.7945708E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             r2 = 2131627277(0x7f0e0d0d, float:1.8881814E38)
@@ -27981,7 +27988,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 9
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165829(0x7var_, float:1.7945886E38)
+            r2 = 2131165820(0x7var_c, float:1.7945868E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             goto L_0x0ddc
@@ -27993,7 +28000,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 9
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165829(0x7var_, float:1.7945886E38)
+            r2 = 2131165820(0x7var_c, float:1.7945868E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             org.telegram.messenger.MessageObject r2 = r7.selectedObject
@@ -28013,7 +28020,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 20
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165748(0x7var_, float:1.7945722E38)
+            r2 = 2131165739(0x7var_b, float:1.7945704E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             goto L_0x0ddc
@@ -28025,7 +28032,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 21
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165840(0x7var_, float:1.7945908E38)
+            r2 = 2131165831(0x7var_, float:1.794589E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             goto L_0x0ddc
@@ -28057,7 +28064,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 15
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165713(0x7var_, float:1.794565E38)
+            r2 = 2131165704(0x7var_, float:1.7945633E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
         L_0x0d3b:
@@ -28082,7 +28089,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 17
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165724(0x7var_c, float:1.7945673E38)
+            r2 = 2131165715(0x7var_, float:1.7945655E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             goto L_0x0ddc
@@ -28103,7 +28110,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 20
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165748(0x7var_, float:1.7945722E38)
+            r2 = 2131165739(0x7var_b, float:1.7945704E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
             goto L_0x0ddc
@@ -28115,7 +28122,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 21
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r14.add(r2)
-            r2 = 2131165840(0x7var_, float:1.7945908E38)
+            r2 = 2131165831(0x7var_, float:1.794589E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r12.add(r2)
         L_0x0ddc:
@@ -28139,7 +28146,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 2
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
             r14.add(r2)
-            r1 = 2131165749(0x7var_, float:1.7945724E38)
+            r1 = 2131165740(0x7var_c, float:1.7945706E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
         L_0x0e17:
@@ -28151,7 +28158,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 14
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r14.add(r1)
-            r1 = 2131165842(0x7var_, float:1.7945913E38)
+            r1 = 2131165833(0x7var_, float:1.7945894E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
             goto L_0x0e5a
@@ -28164,7 +28171,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 13
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r14.add(r1)
-            r1 = 2131165792(0x7var_, float:1.7945811E38)
+            r1 = 2131165783(0x7var_, float:1.7945793E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
         L_0x0e5a:
@@ -28176,7 +28183,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 12
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r14.add(r1)
-            r1 = 2131165746(0x7var_, float:1.7945718E38)
+            r1 = 2131165737(0x7var_, float:1.79457E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
         L_0x0e7b:
@@ -28194,7 +28201,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 102(0x66, float:1.43E-43)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r14.add(r1)
-            r1 = 2131165819(0x7var_b, float:1.7945866E38)
+            r1 = 2131165810(0x7var_, float:1.7945848E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
         L_0x0ea9:
@@ -28226,7 +28233,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 23
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r14.add(r1)
-            r1 = 2131165722(0x7var_a, float:1.794567E38)
+            r1 = 2131165713(0x7var_, float:1.794565E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
             goto L_0x0var_
@@ -28238,7 +28245,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 23
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r14.add(r1)
-            r1 = 2131165803(0x7var_b, float:1.7945833E38)
+            r1 = 2131165794(0x7var_, float:1.7945815E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
         L_0x0var_:
@@ -28268,10 +28275,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             int r0 = r0.ttl_period
             if (r0 == 0) goto L_0x0f4d
-            r4 = 2131165738(0x7var_a, float:1.7945702E38)
+            r4 = 2131165729(0x7var_, float:1.7945683E38)
             goto L_0x0var_
         L_0x0f4d:
-            r4 = 2131165737(0x7var_, float:1.79457E38)
+            r4 = 2131165728(0x7var_, float:1.7945681E38)
         L_0x0var_:
             java.lang.Integer r0 = java.lang.Integer.valueOf(r4)
             r12.add(r0)
@@ -28286,7 +28293,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = 8
             java.lang.Integer r5 = java.lang.Integer.valueOf(r1)
             r14.add(r5)
-            r1 = 2131165801(0x7var_, float:1.794583E38)
+            r1 = 2131165792(0x7var_, float:1.7945811E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r12.add(r1)
         L_0x0f7b:
@@ -28342,7 +28349,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0 = 27
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r14.add(r0)
-            r0 = 2131165847(0x7var_, float:1.7945923E38)
+            r0 = 2131165838(0x7var_e, float:1.7945904E38)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r12.add(r0)
         L_0x1002:
@@ -28357,7 +28364,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r13.add(r2)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r14.add(r0)
-            r0 = 2131165750(0x7var_, float:1.7945726E38)
+            r0 = 2131165741(0x7var_d, float:1.7945708E38)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r12.add(r0)
             r0 = 2131627457(0x7f0e0dc1, float:1.8882179E38)
@@ -28423,7 +28430,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0 = 4
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r14.add(r0)
-            r0 = 2131165750(0x7var_, float:1.7945726E38)
+            r0 = 2131165741(0x7var_d, float:1.7945708E38)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r12.add(r0)
             goto L_0x1107
@@ -28436,7 +28443,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r13.add(r2)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r14.add(r0)
-            r0 = 2131165761(0x7var_, float:1.7945748E38)
+            r0 = 2131165752(0x7var_, float:1.794573E38)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r12.add(r0)
         L_0x1107:
@@ -28451,7 +28458,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r13.add(r2)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r14.add(r0)
-            r0 = 2131165836(0x7var_c, float:1.79459E38)
+            r0 = 2131165827(0x7var_, float:1.7945882E38)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r12.add(r0)
             goto L_0x1107
@@ -28465,7 +28472,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0 = 9
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r14.add(r0)
-            r0 = 2131165829(0x7var_, float:1.7945886E38)
+            r0 = 2131165820(0x7var_c, float:1.7945868E38)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r12.add(r0)
             goto L_0x1107
@@ -28497,7 +28504,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0 = 15
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r14.add(r0)
-            r0 = 2131165713(0x7var_, float:1.794565E38)
+            r0 = 2131165704(0x7var_, float:1.7945633E38)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r12.add(r0)
         L_0x11a8:
@@ -28522,7 +28529,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0 = 17
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r14.add(r0)
-            r0 = 2131165724(0x7var_c, float:1.7945673E38)
+            r0 = 2131165715(0x7var_, float:1.7945655E38)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             r12.add(r0)
             goto L_0x1107
@@ -28536,10 +28543,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             int r0 = r0.ttl_period
             if (r0 == 0) goto L_0x120c
-            r4 = 2131165738(0x7var_a, float:1.7945702E38)
+            r4 = 2131165729(0x7var_, float:1.7945683E38)
             goto L_0x120f
         L_0x120c:
-            r4 = 2131165737(0x7var_, float:1.79457E38)
+            r4 = 2131165728(0x7var_, float:1.7945681E38)
         L_0x120f:
             java.lang.Integer r0 = java.lang.Integer.valueOf(r4)
             r12.add(r0)
@@ -28562,17 +28569,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout r8 = new org.telegram.ui.ActionBar.ActionBarPopupWindow$ActionBarPopupWindowLayout
             android.app.Activity r1 = r28.getParentActivity()
             r8.<init>(r1)
-            org.telegram.ui.ChatActivity$93 r1 = new org.telegram.ui.ChatActivity$93
+            org.telegram.ui.ChatActivity$92 r1 = new org.telegram.ui.ChatActivity$92
             r1.<init>(r0)
             r8.setOnTouchListener(r1)
-            org.telegram.ui.-$$Lambda$ChatActivity$Ut_kToVyew6FD-fIZ3o_z1iGGuM r0 = new org.telegram.ui.-$$Lambda$ChatActivity$Ut_kToVyew6FD-fIZ3o_z1iGGuM
+            org.telegram.ui.-$$Lambda$ChatActivity$FyAuXJQzBVyHT31QgQyncHnJIgQ r0 = new org.telegram.ui.-$$Lambda$ChatActivity$FyAuXJQzBVyHT31QgQyncHnJIgQ
             r0.<init>()
             r8.setDispatchKeyEventListener(r0)
             android.graphics.Rect r9 = new android.graphics.Rect
             r9.<init>()
             android.app.Activity r0 = r28.getParentActivity()
             android.content.res.Resources r0 = r0.getResources()
-            r1 = 2131165965(0x7var_d, float:1.7946162E38)
+            r1 = 2131165956(0x7var_, float:1.7946144E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             android.graphics.drawable.Drawable r0 = r0.mutate()
             r0.getPadding(r9)
@@ -28586,7 +28593,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r0 = android.os.Build.VERSION.SDK_INT
             r1 = 21
             if (r0 < r1) goto L_0x1293
-            org.telegram.ui.ChatActivity$94 r11 = new org.telegram.ui.ChatActivity$94
+            org.telegram.ui.ChatActivity$93 r11 = new org.telegram.ui.ChatActivity$93
             android.app.Activity r2 = r28.getParentActivity()
             r3 = 0
             r4 = 0
@@ -28660,7 +28667,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.ActionBar.ActionBarMenuSubItem[] r3 = r7.scrimPopupWindowItems
             r3[r1] = r2
             r10.addView(r2)
-            org.telegram.ui.-$$Lambda$ChatActivity$uzy8h3LV12BeIdfi17SXlzLglGc r3 = new org.telegram.ui.-$$Lambda$ChatActivity$uzy8h3LV12BeIdfi17SXlzLglGc
+            org.telegram.ui.-$$Lambda$ChatActivity$8SLDCWRmMdxlv-Q0REANXgKJqNw r3 = new org.telegram.ui.-$$Lambda$ChatActivity$8SLDCWRmMdxlv-Q0REANXgKJqNw
             r3.<init>(r1, r14)
             r2.setOnClickListener(r3)
             int r1 = r1 + 1
@@ -28671,7 +28678,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 51
             android.widget.FrameLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createScroll(r0, r1, r2)
             r11.addView(r10, r0)
-            org.telegram.ui.ChatActivity$95 r0 = new org.telegram.ui.ChatActivity$95
+            org.telegram.ui.ChatActivity$94 r0 = new org.telegram.ui.ChatActivity$94
             r2 = -2
             r0.<init>(r8, r1, r2)
             r7.scrimPopupWindow = r0
@@ -28913,8 +28920,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createMenu$107 */
-    public /* synthetic */ void lambda$createMenu$107$ChatActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$createMenu$108 */
+    public /* synthetic */ void lambda$createMenu$108$ChatActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
             public final /* synthetic */ TLObject f$1;
 
@@ -28923,22 +28930,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$createMenu$106$ChatActivity(this.f$1);
+                ChatActivity.this.lambda$createMenu$107$ChatActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createMenu$106 */
-    public /* synthetic */ void lambda$createMenu$106$ChatActivity(TLObject tLObject) {
+    /* renamed from: lambda$createMenu$107 */
+    public /* synthetic */ void lambda$createMenu$107$ChatActivity(TLObject tLObject) {
         if (tLObject instanceof TLRPC$TL_payments_paymentReceipt) {
             presentFragment(new PaymentFormActivity((TLRPC$TL_payments_paymentReceipt) tLObject));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createMenu$108 */
-    public /* synthetic */ void lambda$createMenu$108$ChatActivity(KeyEvent keyEvent) {
+    /* renamed from: lambda$createMenu$109 */
+    public /* synthetic */ void lambda$createMenu$109$ChatActivity(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.scrimPopupWindow) != null && actionBarPopupWindow.isShowing()) {
             this.scrimPopupWindow.dismiss();
@@ -28946,8 +28953,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createMenu$109 */
-    public /* synthetic */ void lambda$createMenu$109$ChatActivity(int i, ArrayList arrayList, View view) {
+    /* renamed from: lambda$createMenu$110 */
+    public /* synthetic */ void lambda$createMenu$110$ChatActivity(int i, ArrayList arrayList, View view) {
         if (this.selectedObject != null && i < arrayList.size()) {
             processSelectedOption(((Integer) arrayList.get(i)).intValue());
             this.scrimView = null;
@@ -28981,7 +28988,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 tLRPC$TL_messages_getMessageEditData.id = messageObject.getId();
                 this.editingMessageObjectReqId = getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessageEditData, new RequestDelegate() {
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        ChatActivity.this.lambda$startEditingMessageObject$111$ChatActivity(tLObject, tLRPC$TL_error);
+                        ChatActivity.this.lambda$startEditingMessageObject$112$ChatActivity(tLObject, tLRPC$TL_error);
                     }
                 });
                 return;
@@ -28991,8 +28998,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startEditingMessageObject$111 */
-    public /* synthetic */ void lambda$startEditingMessageObject$111$ChatActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$startEditingMessageObject$112 */
+    public /* synthetic */ void lambda$startEditingMessageObject$112$ChatActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
             public final /* synthetic */ TLObject f$1;
 
@@ -29001,14 +29008,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$startEditingMessageObject$110$ChatActivity(this.f$1);
+                ChatActivity.this.lambda$startEditingMessageObject$111$ChatActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startEditingMessageObject$110 */
-    public /* synthetic */ void lambda$startEditingMessageObject$110$ChatActivity(TLObject tLObject) {
+    /* renamed from: lambda$startEditingMessageObject$111 */
+    public /* synthetic */ void lambda$startEditingMessageObject$111$ChatActivity(TLObject tLObject) {
         this.editingMessageObjectReqId = 0;
         if (tLObject == null && getParentActivity() != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
@@ -29124,7 +29131,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void run() {
-                    ChatActivity.this.lambda$unpinMessage$112$ChatActivity(this.f$1, this.f$2, this.f$3);
+                    ChatActivity.this.lambda$unpinMessage$113$ChatActivity(this.f$1, this.f$2, this.f$3);
                 }
             }, new Runnable(messageObject) {
                 public final /* synthetic */ MessageObject f$1;
@@ -29134,22 +29141,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void run() {
-                    ChatActivity.this.lambda$unpinMessage$113$ChatActivity(this.f$1);
+                    ChatActivity.this.lambda$unpinMessage$114$ChatActivity(this.f$1);
                 }
             }).show();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$unpinMessage$112 */
-    public /* synthetic */ void lambda$unpinMessage$112$ChatActivity(ArrayList arrayList, ArrayList arrayList2, int i) {
+    /* renamed from: lambda$unpinMessage$113 */
+    public /* synthetic */ void lambda$unpinMessage$113$ChatActivity(ArrayList arrayList, ArrayList arrayList2, int i) {
         getNotificationCenter().postNotificationName(NotificationCenter.didLoadPinnedMessages, Long.valueOf(this.dialog_id), arrayList, Boolean.TRUE, arrayList2, null, 0, Integer.valueOf(i), Boolean.valueOf(this.pinnedEndReached));
         this.pinBulletin = null;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$unpinMessage$113 */
-    public /* synthetic */ void lambda$unpinMessage$113$ChatActivity(MessageObject messageObject) {
+    /* renamed from: lambda$unpinMessage$114 */
+    public /* synthetic */ void lambda$unpinMessage$114$ChatActivity(MessageObject messageObject) {
         getMessagesController().pinMessage(this.currentChat, this.currentUser, messageObject.getId(), true, false, false);
         this.pinBulletin = null;
     }
@@ -29309,7 +29316,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 2131627609(0x7f0e0e59, float:1.8882487E38)
             java.lang.String r3 = "Stop"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            org.telegram.ui.-$$Lambda$ChatActivity$kbtCABEuo2fhex1fhF_zalixnOE r3 = new org.telegram.ui.-$$Lambda$ChatActivity$kbtCABEuo2fhex1fhF_zalixnOE
+            org.telegram.ui.-$$Lambda$ChatActivity$2mi-NTM8DI9PGg6Qp-QhLQOzI70 r3 = new org.telegram.ui.-$$Lambda$ChatActivity$2mi-NTM8DI9PGg6Qp-QhLQOzI70
             r3.<init>(r0)
             r1.setPositiveButton(r2, r3)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r4)
@@ -29325,11 +29332,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0[r3] = r1
             org.telegram.messenger.SendMessagesHelper r1 = r19.getSendMessagesHelper()
             org.telegram.messenger.MessageObject r2 = r9.selectedObject
-            org.telegram.ui.-$$Lambda$ChatActivity$aKy6ZW-zKNbKVDP7hMWM82XyjUE r3 = new org.telegram.ui.-$$Lambda$ChatActivity$aKy6ZW-zKNbKVDP7hMWM82XyjUE
+            org.telegram.ui.-$$Lambda$ChatActivity$pqujEnkYYSpYqaUMNxNiKYwdBWA r3 = new org.telegram.ui.-$$Lambda$ChatActivity$pqujEnkYYSpYqaUMNxNiKYwdBWA
             r3.<init>(r0)
             int r1 = r1.sendVote(r2, r10, r3)
             if (r1 == 0) goto L_0x099c
-            org.telegram.ui.-$$Lambda$ChatActivity$tVTQsdLOAJGfWMEjT3dM4CixXy4 r2 = new org.telegram.ui.-$$Lambda$ChatActivity$tVTQsdLOAJGfWMEjT3dM4CixXy4
+            org.telegram.ui.-$$Lambda$ChatActivity$AhyLWNhHfsgrT25OQ05LtmFOFPQ r2 = new org.telegram.ui.-$$Lambda$ChatActivity$AhyLWNhHfsgrT25OQ05LtmFOFPQ
             r2.<init>(r0, r1)
             r0 = 500(0x1f4, double:2.47E-321)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2, r0)
@@ -29411,7 +29418,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.thread = r1
         L_0x0187:
             org.telegram.tgnet.ConnectionsManager r1 = r19.getConnectionsManager()
-            org.telegram.ui.-$$Lambda$ChatActivity$FvpfAI0UavJakiDVCGfZi7qUhd8 r2 = new org.telegram.ui.-$$Lambda$ChatActivity$FvpfAI0UavJakiDVCGfZi7qUhd8
+            org.telegram.ui.-$$Lambda$ChatActivity$SEtLPUtpN1YFrHb4GZJk6mylqnU r2 = new org.telegram.ui.-$$Lambda$ChatActivity$SEtLPUtpN1YFrHb4GZJk6mylqnU
             r2.<init>()
             r1.sendRequest(r0, r2)
             goto L_0x099c
@@ -29642,7 +29649,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r18 = 0
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
             r7.addView(r8, r2)
-            org.telegram.ui.-$$Lambda$ChatActivity$uFb1MMJxCTDQDn6VM_vBJNrTSIg r2 = new org.telegram.ui.-$$Lambda$ChatActivity$uFb1MMJxCTDQDn6VM_vBJNrTSIg
+            org.telegram.ui.-$$Lambda$ChatActivity$Mpzcwy7PIVjJQdojPp-ajz9OkXk r2 = new org.telegram.ui.-$$Lambda$ChatActivity$Mpzcwy7PIVjJQdojPp-ajz9OkXk
             r2.<init>(r6)
             r8.setOnClickListener(r2)
             r1.setView(r7)
@@ -29716,7 +29723,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r18 = 0
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
             r7.addView(r8, r2)
-            org.telegram.ui.-$$Lambda$ChatActivity$Mpzcwy7PIVjJQdojPp-ajz9OkXk r2 = new org.telegram.ui.-$$Lambda$ChatActivity$Mpzcwy7PIVjJQdojPp-ajz9OkXk
+            org.telegram.ui.-$$Lambda$ChatActivity$d8SzdnrY8jCIMReqeB9tfL8pKv4 r2 = new org.telegram.ui.-$$Lambda$ChatActivity$d8SzdnrY8jCIMReqeB9tfL8pKv4
             r2.<init>(r6)
             r8.setOnClickListener(r2)
             r1.setView(r7)
@@ -29740,7 +29747,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 2131626955(0x7f0e0bcb, float:1.888116E38)
             java.lang.String r3 = "PinMessage"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            org.telegram.ui.-$$Lambda$ChatActivity$2oUrOJgJCkp2f7L1XPOTM-Evnhs r3 = new org.telegram.ui.-$$Lambda$ChatActivity$2oUrOJgJCkp2f7L1XPOTM-Evnhs
+            org.telegram.ui.-$$Lambda$ChatActivity$JdEMtRY2-f9-FvncuuN13pPHPgo r3 = new org.telegram.ui.-$$Lambda$ChatActivity$JdEMtRY2-f9-FvncuuN13pPHPgo
             r3.<init>(r0, r6)
             r1.setPositiveButton(r2, r3)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r5, r4)
@@ -29846,7 +29853,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r11 = r3.mime_type
         L_0x054e:
             r16 = r11
-            org.telegram.ui.-$$Lambda$ChatActivity$UEpcmGYAzObPJJDCIE4Gbf1dG_8 r3 = new org.telegram.ui.-$$Lambda$ChatActivity$UEpcmGYAzObPJJDCIE4Gbf1dG_8
+            org.telegram.ui.-$$Lambda$ChatActivity$fNOdeq1Qbx0v1jQJSL9b5Oy13pE r3 = new org.telegram.ui.-$$Lambda$ChatActivity$fNOdeq1Qbx0v1jQJSL9b5Oy13pE
             r3.<init>(r1, r0, r2)
             r17 = r3
             org.telegram.messenger.MediaController.saveFile(r12, r13, r14, r15, r16, r17)
@@ -29867,7 +29874,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x0574:
             android.app.Activity r2 = r19.getParentActivity()
             org.telegram.messenger.AccountInstance r3 = r19.getAccountInstance()
-            org.telegram.ui.-$$Lambda$ChatActivity$6R8639xN5L8L5f4pD9EUx6cobyE r4 = new org.telegram.ui.-$$Lambda$ChatActivity$6R8639xN5L8L5f4pD9EUx6cobyE
+            org.telegram.ui.-$$Lambda$ChatActivity$TN0e69onDWKjLVVVazZOkUJGqTU r4 = new org.telegram.ui.-$$Lambda$ChatActivity$TN0e69onDWKjLVVVazZOkUJGqTU
             r4.<init>(r0)
             org.telegram.messenger.MediaController.saveFilesFromMessages(r2, r3, r1, r4)
             goto L_0x099c
@@ -30329,7 +30336,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         L_0x0975:
             int r1 = r9.currentAccount
             org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
-            org.telegram.ui.-$$Lambda$ChatActivity$EG06tYbmWZG7IOF3XDMHu1sIi48 r2 = new org.telegram.ui.-$$Lambda$ChatActivity$EG06tYbmWZG7IOF3XDMHu1sIi48
+            org.telegram.ui.-$$Lambda$ChatActivity$VuZ-oJbRQazHbxZPgt2ZrymsxnE r2 = new org.telegram.ui.-$$Lambda$ChatActivity$VuZ-oJbRQazHbxZPgt2ZrymsxnE
             r2.<init>(r0)
             r1.sendRequest(r0, r2)
             goto L_0x099c
@@ -30341,7 +30348,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$Message r5 = r0.messageOwner
             int r5 = r5.date
             long r5 = (long) r5
-            org.telegram.ui.-$$Lambda$ChatActivity$R232nuWZbFcLJBcnaPw0X4bI8AQ r7 = new org.telegram.ui.-$$Lambda$ChatActivity$R232nuWZbFcLJBcnaPw0X4bI8AQ
+            org.telegram.ui.-$$Lambda$ChatActivity$rBCJWs8kf4oKqcdu8baTdwNFNmc r7 = new org.telegram.ui.-$$Lambda$ChatActivity$rBCJWs8kf4oKqcdu8baTdwNFNmc
             r7.<init>(r1, r0)
             r8 = 0
             org.telegram.ui.Components.AlertsCreator.createScheduleDatePickerDialog(r2, r3, r5, r7, r8)
@@ -30356,16 +30363,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$114 */
-    public /* synthetic */ void lambda$processSelectedOption$114$ChatActivity(boolean z, int i) {
+    /* renamed from: lambda$processSelectedOption$115 */
+    public /* synthetic */ void lambda$processSelectedOption$115$ChatActivity(boolean z, int i) {
         if (getParentActivity() != null && this.fragmentView != null && i > 0) {
             BulletinFactory.of((BaseFragment) this).createDownloadBulletin(z ? BulletinFactory.FileType.AUDIOS : BulletinFactory.FileType.UNKNOWNS, i).show();
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$115 */
-    public /* synthetic */ void lambda$processSelectedOption$115$ChatActivity(boolean z, boolean z2, boolean z3) {
+    /* renamed from: lambda$processSelectedOption$116 */
+    public /* synthetic */ void lambda$processSelectedOption$116$ChatActivity(boolean z, boolean z2, boolean z3) {
         BulletinFactory.FileType fileType;
         if (getParentActivity() != null) {
             if (z) {
@@ -30381,26 +30388,26 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
     }
 
-    static /* synthetic */ void lambda$processSelectedOption$116(boolean[] zArr, View view) {
+    static /* synthetic */ void lambda$processSelectedOption$117(boolean[] zArr, View view) {
         zArr[1] = !zArr[1];
         ((CheckBoxCell) view).setChecked(zArr[1], true);
     }
 
-    static /* synthetic */ void lambda$processSelectedOption$117(boolean[] zArr, View view) {
+    static /* synthetic */ void lambda$processSelectedOption$118(boolean[] zArr, View view) {
         zArr[0] = !zArr[0];
         ((CheckBoxCell) view).setChecked(zArr[0], true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$118 */
-    public /* synthetic */ void lambda$processSelectedOption$118$ChatActivity(int i, boolean[] zArr, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$processSelectedOption$119 */
+    public /* synthetic */ void lambda$processSelectedOption$119$ChatActivity(int i, boolean[] zArr, DialogInterface dialogInterface, int i2) {
         getMessagesController().pinMessage(this.currentChat, this.currentUser, i, false, !zArr[1], zArr[0]);
         BulletinFactory.createPinMessageBulletin(this).show();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$120 */
-    public /* synthetic */ void lambda$processSelectedOption$120$ChatActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$processSelectedOption$121 */
+    public /* synthetic */ void lambda$processSelectedOption$121$ChatActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
             public final /* synthetic */ TLObject f$1;
 
@@ -30409,14 +30416,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$processSelectedOption$119$ChatActivity(this.f$1);
+                ChatActivity.this.lambda$processSelectedOption$120$ChatActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$119 */
-    public /* synthetic */ void lambda$processSelectedOption$119$ChatActivity(TLObject tLObject) {
+    /* renamed from: lambda$processSelectedOption$120 */
+    public /* synthetic */ void lambda$processSelectedOption$120$ChatActivity(TLObject tLObject) {
         if (tLObject != null) {
             TLRPC$TL_exportedMessageLink tLRPC$TL_exportedMessageLink = (TLRPC$TL_exportedMessageLink) tLObject;
             try {
@@ -30430,7 +30437,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
     }
 
-    static /* synthetic */ void lambda$processSelectedOption$121(AlertDialog[] alertDialogArr) {
+    static /* synthetic */ void lambda$processSelectedOption$122(AlertDialog[] alertDialogArr) {
         try {
             alertDialogArr[0].dismiss();
         } catch (Throwable unused) {
@@ -30439,8 +30446,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$123 */
-    public /* synthetic */ void lambda$processSelectedOption$123$ChatActivity(AlertDialog[] alertDialogArr, int i) {
+    /* renamed from: lambda$processSelectedOption$124 */
+    public /* synthetic */ void lambda$processSelectedOption$124$ChatActivity(AlertDialog[] alertDialogArr, int i) {
         if (alertDialogArr[0] != null) {
             alertDialogArr[0].setOnCancelListener(new DialogInterface.OnCancelListener(i) {
                 public final /* synthetic */ int f$1;
@@ -30450,7 +30457,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void onCancel(DialogInterface dialogInterface) {
-                    ChatActivity.this.lambda$processSelectedOption$122$ChatActivity(this.f$1, dialogInterface);
+                    ChatActivity.this.lambda$processSelectedOption$123$ChatActivity(this.f$1, dialogInterface);
                 }
             });
             showDialog(alertDialogArr[0]);
@@ -30458,14 +30465,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$122 */
-    public /* synthetic */ void lambda$processSelectedOption$122$ChatActivity(int i, DialogInterface dialogInterface) {
+    /* renamed from: lambda$processSelectedOption$123 */
+    public /* synthetic */ void lambda$processSelectedOption$123$ChatActivity(int i, DialogInterface dialogInterface) {
         getConnectionsManager().cancelRequest(i, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$129 */
-    public /* synthetic */ void lambda$processSelectedOption$129$ChatActivity(MessageObject messageObject, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$processSelectedOption$130 */
+    public /* synthetic */ void lambda$processSelectedOption$130$ChatActivity(MessageObject messageObject, DialogInterface dialogInterface, int i) {
         AlertDialog[] alertDialogArr = {new AlertDialog(getParentActivity(), 3)};
         TLRPC$TL_messages_editMessage tLRPC$TL_messages_editMessage = new TLRPC$TL_messages_editMessage();
         TLRPC$TL_inputMediaPoll tLRPC$TL_inputMediaPoll = new TLRPC$TL_inputMediaPoll();
@@ -30490,7 +30497,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ChatActivity.this.lambda$processSelectedOption$126$ChatActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                ChatActivity.this.lambda$processSelectedOption$127$ChatActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
             }
         })) {
             public final /* synthetic */ AlertDialog[] f$1;
@@ -30502,14 +30509,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$processSelectedOption$128$ChatActivity(this.f$1, this.f$2);
+                ChatActivity.this.lambda$processSelectedOption$129$ChatActivity(this.f$1, this.f$2);
             }
         }, 500);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$126 */
-    public /* synthetic */ void lambda$processSelectedOption$126$ChatActivity(AlertDialog[] alertDialogArr, TLRPC$TL_messages_editMessage tLRPC$TL_messages_editMessage, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$processSelectedOption$127 */
+    public /* synthetic */ void lambda$processSelectedOption$127$ChatActivity(AlertDialog[] alertDialogArr, TLRPC$TL_messages_editMessage tLRPC$TL_messages_editMessage, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr) {
             public final /* synthetic */ AlertDialog[] f$0;
 
@@ -30518,7 +30525,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.lambda$processSelectedOption$124(this.f$0);
+                ChatActivity.lambda$processSelectedOption$125(this.f$0);
             }
         });
         if (tLRPC$TL_error == null) {
@@ -30534,13 +30541,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void run() {
-                    ChatActivity.this.lambda$processSelectedOption$125$ChatActivity(this.f$1, this.f$2);
+                    ChatActivity.this.lambda$processSelectedOption$126$ChatActivity(this.f$1, this.f$2);
                 }
             });
         }
     }
 
-    static /* synthetic */ void lambda$processSelectedOption$124(AlertDialog[] alertDialogArr) {
+    static /* synthetic */ void lambda$processSelectedOption$125(AlertDialog[] alertDialogArr) {
         try {
             alertDialogArr[0].dismiss();
         } catch (Throwable unused) {
@@ -30549,14 +30556,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$125 */
-    public /* synthetic */ void lambda$processSelectedOption$125$ChatActivity(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_messages_editMessage tLRPC$TL_messages_editMessage) {
+    /* renamed from: lambda$processSelectedOption$126 */
+    public /* synthetic */ void lambda$processSelectedOption$126$ChatActivity(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_messages_editMessage tLRPC$TL_messages_editMessage) {
         AlertsCreator.processError(this.currentAccount, tLRPC$TL_error, this, tLRPC$TL_messages_editMessage, new Object[0]);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$128 */
-    public /* synthetic */ void lambda$processSelectedOption$128$ChatActivity(AlertDialog[] alertDialogArr, int i) {
+    /* renamed from: lambda$processSelectedOption$129 */
+    public /* synthetic */ void lambda$processSelectedOption$129$ChatActivity(AlertDialog[] alertDialogArr, int i) {
         if (alertDialogArr[0] != null) {
             alertDialogArr[0].setOnCancelListener(new DialogInterface.OnCancelListener(i) {
                 public final /* synthetic */ int f$1;
@@ -30566,7 +30573,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void onCancel(DialogInterface dialogInterface) {
-                    ChatActivity.this.lambda$processSelectedOption$127$ChatActivity(this.f$1, dialogInterface);
+                    ChatActivity.this.lambda$processSelectedOption$128$ChatActivity(this.f$1, dialogInterface);
                 }
             });
             showDialog(alertDialogArr[0]);
@@ -30574,14 +30581,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$127 */
-    public /* synthetic */ void lambda$processSelectedOption$127$ChatActivity(int i, DialogInterface dialogInterface) {
+    /* renamed from: lambda$processSelectedOption$128 */
+    public /* synthetic */ void lambda$processSelectedOption$128$ChatActivity(int i, DialogInterface dialogInterface) {
         getConnectionsManager().cancelRequest(i, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$132 */
-    public /* synthetic */ void lambda$processSelectedOption$132$ChatActivity(TLRPC$TL_messages_sendScheduledMessages tLRPC$TL_messages_sendScheduledMessages, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$processSelectedOption$133 */
+    public /* synthetic */ void lambda$processSelectedOption$133$ChatActivity(TLRPC$TL_messages_sendScheduledMessages tLRPC$TL_messages_sendScheduledMessages, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC$Updates) tLObject, false);
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_messages_sendScheduledMessages) {
@@ -30592,7 +30599,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void run() {
-                    ChatActivity.this.lambda$processSelectedOption$130$ChatActivity(this.f$1);
+                    ChatActivity.this.lambda$processSelectedOption$131$ChatActivity(this.f$1);
                 }
             });
         } else if (tLRPC$TL_error.text != null) {
@@ -30604,21 +30611,21 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void run() {
-                    ChatActivity.this.lambda$processSelectedOption$131$ChatActivity(this.f$1);
+                    ChatActivity.this.lambda$processSelectedOption$132$ChatActivity(this.f$1);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$130 */
-    public /* synthetic */ void lambda$processSelectedOption$130$ChatActivity(TLRPC$TL_messages_sendScheduledMessages tLRPC$TL_messages_sendScheduledMessages) {
+    /* renamed from: lambda$processSelectedOption$131 */
+    public /* synthetic */ void lambda$processSelectedOption$131$ChatActivity(TLRPC$TL_messages_sendScheduledMessages tLRPC$TL_messages_sendScheduledMessages) {
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.messagesDeleted, tLRPC$TL_messages_sendScheduledMessages.id, Integer.valueOf((int) (-this.dialog_id)), Boolean.TRUE, Long.valueOf(this.dialog_id));
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$131 */
-    public /* synthetic */ void lambda$processSelectedOption$131$ChatActivity(TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$processSelectedOption$132 */
+    public /* synthetic */ void lambda$processSelectedOption$132$ChatActivity(TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error.text.startsWith("SLOWMODE_WAIT_")) {
             AlertsCreator.showSimpleToast(this, LocaleController.getString("SlowmodeSendError", NUM));
         } else if (tLRPC$TL_error.text.equals("CHAT_SEND_MEDIA_FORBIDDEN")) {
@@ -30629,8 +30636,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processSelectedOption$133 */
-    public /* synthetic */ void lambda$processSelectedOption$133$ChatActivity(MessageObject.GroupedMessages groupedMessages, MessageObject messageObject, boolean z, int i) {
+    /* renamed from: lambda$processSelectedOption$134 */
+    public /* synthetic */ void lambda$processSelectedOption$134$ChatActivity(MessageObject.GroupedMessages groupedMessages, MessageObject messageObject, boolean z, int i) {
         if (groupedMessages == null || groupedMessages.messages.isEmpty()) {
             SendMessagesHelper.getInstance(this.currentAccount).editMessage(messageObject, (String) null, false, this, (ArrayList<TLRPC$MessageEntity>) null, i);
         } else {
@@ -30753,7 +30760,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void onClick(DialogInterface dialogInterface, int i) {
-                ChatActivity.this.lambda$checkRecordLocked$134$ChatActivity(this.f$1, dialogInterface, i);
+                ChatActivity.this.lambda$checkRecordLocked$135$ChatActivity(this.f$1, dialogInterface, i);
             }
         });
         builder.setNegativeButton(LocaleController.getString("Continue", NUM), (DialogInterface.OnClickListener) null);
@@ -30762,8 +30769,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkRecordLocked$134 */
-    public /* synthetic */ void lambda$checkRecordLocked$134$ChatActivity(boolean z, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$checkRecordLocked$135 */
+    public /* synthetic */ void lambda$checkRecordLocked$135$ChatActivity(boolean z, DialogInterface dialogInterface, int i) {
         ChatActivityEnterView chatActivityEnterView2 = this.chatActivityEnterView;
         if (chatActivityEnterView2 == null) {
             return;
@@ -31355,7 +31362,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    ChatActivity.this.lambda$showOpenGameAlert$135$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
+                    ChatActivity.this.lambda$showOpenGameAlert$136$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -31379,8 +31386,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showOpenGameAlert$135 */
-    public /* synthetic */ void lambda$showOpenGameAlert$135$ChatActivity(TLRPC$TL_game tLRPC$TL_game, MessageObject messageObject, String str, int i, DialogInterface dialogInterface, int i2) {
+    /* renamed from: lambda$showOpenGameAlert$136 */
+    public /* synthetic */ void lambda$showOpenGameAlert$136$ChatActivity(TLRPC$TL_game tLRPC$TL_game, MessageObject messageObject, String str, int i, DialogInterface dialogInterface, int i2) {
         showOpenGameAlert(tLRPC$TL_game, messageObject, str, false, i);
         SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(this.currentAccount).edit();
         edit.putBoolean("askgame_" + i, false).commit();
@@ -31559,7 +31566,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r13 = 0
         L_0x0129:
             org.telegram.messenger.DispatchQueue r14 = org.telegram.messenger.Utilities.stageQueue
-            org.telegram.ui.-$$Lambda$ChatActivity$6Zff1CiyrrIW6EiL5sZAQSuNTrE r15 = new org.telegram.ui.-$$Lambda$ChatActivity$6Zff1CiyrrIW6EiL5sZAQSuNTrE
+            org.telegram.ui.-$$Lambda$ChatActivity$c7xTw7g-NuEmZhK_BvyYPKXqMwg r15 = new org.telegram.ui.-$$Lambda$ChatActivity$c7xTw7g-NuEmZhK_BvyYPKXqMwg
             r0 = r15
             r1 = r19
             r2 = r4
@@ -31604,8 +31611,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$processLoadedDiscussionMessage$136 */
-    public /* synthetic */ void lambda$processLoadedDiscussionMessage$136$ChatActivity(TLRPC$messages_Messages tLRPC$messages_Messages, long j, int i, ChatActivity chatActivity, int i2, ArrayList arrayList) {
+    /* renamed from: lambda$processLoadedDiscussionMessage$137 */
+    public /* synthetic */ void lambda$processLoadedDiscussionMessage$137$ChatActivity(TLRPC$messages_Messages tLRPC$messages_Messages, long j, int i, ChatActivity chatActivity, int i2, ArrayList arrayList) {
         getMessagesController().processLoadedMessages(tLRPC$messages_Messages, tLRPC$messages_Messages.messages.size(), j, 0, 30, i, 0, false, chatActivity.getClassGuid(), i2, 0, 0, 0, 2, true, false, 0, ((MessageObject) arrayList.get(arrayList.size() - 1)).getId(), 1, false, 0, true);
     }
 
@@ -31635,7 +31642,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         if (this.commentRequestId != -1) {
             getConnectionsManager().cancelRequest(this.commentRequestId, false);
         }
-        $$Lambda$ChatActivity$6SRDtFJwkBItIord_gMrHPMEEU r15 = new Runnable(messageObject2, i6) {
+        $$Lambda$ChatActivity$PT6KcQAZPrLGInAp4V8rWiZPpyk r15 = new Runnable(messageObject2, i6) {
             public final /* synthetic */ MessageObject f$1;
             public final /* synthetic */ int f$2;
 
@@ -31645,7 +31652,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$openDiscussionMessageChat$137$ChatActivity(this.f$1, this.f$2);
+                ChatActivity.this.lambda$openDiscussionMessageChat$138$ChatActivity(this.f$1, this.f$2);
             }
         };
         if (i7 < 0 || i3 == 0) {
@@ -31665,9 +31672,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 tLRPC$TL_messages_getReplies.offset_id = i7;
                 int i8 = this.commentMessagesLoadingGuid + 1;
                 this.commentMessagesLoadingGuid = i8;
-                $$Lambda$ChatActivity$n_j6nK2_AxKB5iLQGEaJwyurY3Q r16 = r0;
+                $$Lambda$ChatActivity$hYL1QDzcwACuokBEq6UZ4QVhlo r16 = r0;
                 ConnectionsManager connectionsManager = getConnectionsManager();
-                $$Lambda$ChatActivity$n_j6nK2_AxKB5iLQGEaJwyurY3Q r0 = new RequestDelegate(i8, 30, r15, i4, messageObject2, tLRPC$TL_messages_getDiscussionMessage, chat, i5, messageObject) {
+                $$Lambda$ChatActivity$hYL1QDzcwACuokBEq6UZ4QVhlo r0 = new RequestDelegate(i8, 30, r15, i4, messageObject2, tLRPC$TL_messages_getDiscussionMessage, chat, i5, messageObject) {
                     public final /* synthetic */ int f$1;
                     public final /* synthetic */ int f$2;
                     public final /* synthetic */ Runnable f$3;
@@ -31691,7 +31698,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        ChatActivity.this.lambda$openDiscussionMessageChat$140$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, tLObject, tLRPC$TL_error);
+                        ChatActivity.this.lambda$openDiscussionMessageChat$141$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, tLObject, tLRPC$TL_error);
                     }
                 };
                 this.commentMessagesRequestId = connectionsManager.sendRequest(tLRPC$TL_messages_getReplies, r16);
@@ -31703,8 +31710,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         int i9 = this.commentLoadingGuid + 1;
         this.commentLoadingGuid = i9;
         ConnectionsManager connectionsManager2 = getConnectionsManager();
-        $$Lambda$ChatActivity$U8iTOPQt5M0e2a9VYJNbn7OV80 r12 = r0;
-        $$Lambda$ChatActivity$U8iTOPQt5M0e2a9VYJNbn7OV80 r02 = new RequestDelegate(i9, i4, messageObject2, r15, tLRPC$TL_messages_getDiscussionMessage, chat, i5, messageObject) {
+        $$Lambda$ChatActivity$9Mn8Fj0JR4PywC8FoDTiLYYb_U r12 = r0;
+        $$Lambda$ChatActivity$9Mn8Fj0JR4PywC8FoDTiLYYb_U r02 = new RequestDelegate(i9, i4, messageObject2, r15, tLRPC$TL_messages_getDiscussionMessage, chat, i5, messageObject) {
             public final /* synthetic */ int f$1;
             public final /* synthetic */ int f$2;
             public final /* synthetic */ MessageObject f$3;
@@ -31726,7 +31733,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ChatActivity.this.lambda$openDiscussionMessageChat$143$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, tLObject, tLRPC$TL_error);
+                ChatActivity.this.lambda$openDiscussionMessageChat$144$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, tLObject, tLRPC$TL_error);
             }
         };
         this.commentRequestId = connectionsManager2.sendRequest(tLRPC$TL_messages_getDiscussionMessage, r12);
@@ -31735,8 +31742,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openDiscussionMessageChat$137 */
-    public /* synthetic */ void lambda$openDiscussionMessageChat$137$ChatActivity(MessageObject messageObject, int i) {
+    /* renamed from: lambda$openDiscussionMessageChat$138 */
+    public /* synthetic */ void lambda$openDiscussionMessageChat$138$ChatActivity(MessageObject messageObject, int i) {
         if (messageObject != null) {
             i = messageObject.getId();
         }
@@ -31748,8 +31755,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openDiscussionMessageChat$140 */
-    public /* synthetic */ void lambda$openDiscussionMessageChat$140$ChatActivity(int i, int i2, Runnable runnable, int i3, MessageObject messageObject, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i4, MessageObject messageObject2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$openDiscussionMessageChat$141 */
+    public /* synthetic */ void lambda$openDiscussionMessageChat$141$ChatActivity(int i, int i2, Runnable runnable, int i3, MessageObject messageObject, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i4, MessageObject messageObject2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(new Runnable(i, tLObject, i2, tLRPC$TL_error, runnable, i3, messageObject, tLRPC$TL_messages_getDiscussionMessage, tLRPC$Chat, i4, messageObject2) {
             public final /* synthetic */ int f$1;
             public final /* synthetic */ int f$10;
@@ -31778,7 +31785,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$openDiscussionMessageChat$138$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11);
+                ChatActivity.this.lambda$openDiscussionMessageChat$139$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11);
             }
         }) {
             public final /* synthetic */ Runnable f$1;
@@ -31788,14 +31795,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$openDiscussionMessageChat$139$ChatActivity(this.f$1);
+                ChatActivity.this.lambda$openDiscussionMessageChat$140$ChatActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openDiscussionMessageChat$138 */
-    public /* synthetic */ void lambda$openDiscussionMessageChat$138$ChatActivity(int i, TLObject tLObject, int i2, TLRPC$TL_error tLRPC$TL_error, Runnable runnable, int i3, MessageObject messageObject, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i4, MessageObject messageObject2) {
+    /* renamed from: lambda$openDiscussionMessageChat$139 */
+    public /* synthetic */ void lambda$openDiscussionMessageChat$139$ChatActivity(int i, TLObject tLObject, int i2, TLRPC$TL_error tLRPC$TL_error, Runnable runnable, int i3, MessageObject messageObject, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i4, MessageObject messageObject2) {
         if (i == this.commentMessagesLoadingGuid) {
             this.commentMessagesRequestId = -1;
             if (tLObject != null) {
@@ -31825,8 +31832,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openDiscussionMessageChat$143 */
-    public /* synthetic */ void lambda$openDiscussionMessageChat$143$ChatActivity(int i, int i2, MessageObject messageObject, Runnable runnable, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i3, MessageObject messageObject2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$openDiscussionMessageChat$144 */
+    public /* synthetic */ void lambda$openDiscussionMessageChat$144$ChatActivity(int i, int i2, MessageObject messageObject, Runnable runnable, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i3, MessageObject messageObject2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(new Runnable(i, tLObject, i2, messageObject, runnable, tLRPC$TL_messages_getDiscussionMessage, tLRPC$Chat, i3, messageObject2) {
             public final /* synthetic */ int f$1;
             public final /* synthetic */ TLObject f$2;
@@ -31851,7 +31858,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$openDiscussionMessageChat$141$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
+                ChatActivity.this.lambda$openDiscussionMessageChat$142$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
             }
         }) {
             public final /* synthetic */ Runnable f$1;
@@ -31861,14 +31868,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$openDiscussionMessageChat$142$ChatActivity(this.f$1);
+                ChatActivity.this.lambda$openDiscussionMessageChat$143$ChatActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openDiscussionMessageChat$141 */
-    public /* synthetic */ void lambda$openDiscussionMessageChat$141$ChatActivity(int i, TLObject tLObject, int i2, MessageObject messageObject, Runnable runnable, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i3, MessageObject messageObject2) {
+    /* renamed from: lambda$openDiscussionMessageChat$142 */
+    public /* synthetic */ void lambda$openDiscussionMessageChat$142$ChatActivity(int i, TLObject tLObject, int i2, MessageObject messageObject, Runnable runnable, TLRPC$TL_messages_getDiscussionMessage tLRPC$TL_messages_getDiscussionMessage, TLRPC$Chat tLRPC$Chat, int i3, MessageObject messageObject2) {
         TLObject tLObject2 = tLObject;
         if (i == this.commentLoadingGuid) {
             this.commentRequestId = -1;
@@ -31960,7 +31967,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
 
                         public final void onClick(View view) {
-                            ChatActivity.lambda$showRequestUrlAlert$144(this.f$0, view);
+                            ChatActivity.lambda$showRequestUrlAlert$145(this.f$0, view);
                         }
                     });
                     i++;
@@ -31983,7 +31990,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
 
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            ChatActivity.this.lambda$showRequestUrlAlert$149$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, dialogInterface, i);
+                            ChatActivity.this.lambda$showRequestUrlAlert$150$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, dialogInterface, i);
                         }
                     });
                     showDialog(builder.create());
@@ -31993,7 +32000,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
     }
 
-    static /* synthetic */ void lambda$showRequestUrlAlert$144(CheckBoxCell[] checkBoxCellArr, View view) {
+    static /* synthetic */ void lambda$showRequestUrlAlert$145(CheckBoxCell[] checkBoxCellArr, View view) {
         if (view.isEnabled()) {
             Integer num = (Integer) view.getTag();
             checkBoxCellArr[num.intValue()].setChecked(!checkBoxCellArr[num.intValue()].isChecked(), true);
@@ -32009,8 +32016,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showRequestUrlAlert$149 */
-    public /* synthetic */ void lambda$showRequestUrlAlert$149$ChatActivity(CheckBoxCell[] checkBoxCellArr, String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, TLRPC$TL_urlAuthResultRequest tLRPC$TL_urlAuthResultRequest, boolean z, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$showRequestUrlAlert$150 */
+    public /* synthetic */ void lambda$showRequestUrlAlert$150$ChatActivity(CheckBoxCell[] checkBoxCellArr, String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, TLRPC$TL_urlAuthResultRequest tLRPC$TL_urlAuthResultRequest, boolean z, DialogInterface dialogInterface, int i) {
         if (!checkBoxCellArr[0].isChecked()) {
             Browser.openUrl((Context) getParentActivity(), str, false);
             return;
@@ -32047,7 +32054,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ChatActivity.this.lambda$showRequestUrlAlert$146$ChatActivity(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+                ChatActivity.this.lambda$showRequestUrlAlert$147$ChatActivity(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
             }
         })) {
             public final /* synthetic */ AlertDialog[] f$1;
@@ -32059,14 +32066,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$showRequestUrlAlert$148$ChatActivity(this.f$1, this.f$2);
+                ChatActivity.this.lambda$showRequestUrlAlert$149$ChatActivity(this.f$1, this.f$2);
             }
         }, 500);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showRequestUrlAlert$146 */
-    public /* synthetic */ void lambda$showRequestUrlAlert$146$ChatActivity(String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$showRequestUrlAlert$147 */
+    public /* synthetic */ void lambda$showRequestUrlAlert$147$ChatActivity(String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, str, tLRPC$TL_messages_requestUrlAuth, z) {
             public final /* synthetic */ TLObject f$1;
             public final /* synthetic */ String f$2;
@@ -32081,14 +32088,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$showRequestUrlAlert$145$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4);
+                ChatActivity.this.lambda$showRequestUrlAlert$146$ChatActivity(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showRequestUrlAlert$145 */
-    public /* synthetic */ void lambda$showRequestUrlAlert$145$ChatActivity(TLObject tLObject, String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, boolean z) {
+    /* renamed from: lambda$showRequestUrlAlert$146 */
+    public /* synthetic */ void lambda$showRequestUrlAlert$146$ChatActivity(TLObject tLObject, String str, TLRPC$TL_messages_requestUrlAuth tLRPC$TL_messages_requestUrlAuth, boolean z) {
         if (tLObject instanceof TLRPC$TL_urlAuthResultAccepted) {
             Browser.openUrl((Context) getParentActivity(), ((TLRPC$TL_urlAuthResultAccepted) tLObject).url, false);
         } else if (tLObject instanceof TLRPC$TL_urlAuthResultDefault) {
@@ -32102,8 +32109,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showRequestUrlAlert$148 */
-    public /* synthetic */ void lambda$showRequestUrlAlert$148$ChatActivity(AlertDialog[] alertDialogArr, int i) {
+    /* renamed from: lambda$showRequestUrlAlert$149 */
+    public /* synthetic */ void lambda$showRequestUrlAlert$149$ChatActivity(AlertDialog[] alertDialogArr, int i) {
         if (alertDialogArr[0] != null) {
             alertDialogArr[0].setOnCancelListener(new DialogInterface.OnCancelListener(i) {
                 public final /* synthetic */ int f$1;
@@ -32113,7 +32120,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void onCancel(DialogInterface dialogInterface) {
-                    ChatActivity.this.lambda$showRequestUrlAlert$147$ChatActivity(this.f$1, dialogInterface);
+                    ChatActivity.this.lambda$showRequestUrlAlert$148$ChatActivity(this.f$1, dialogInterface);
                 }
             });
             showDialog(alertDialogArr[0]);
@@ -32121,8 +32128,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showRequestUrlAlert$147 */
-    public /* synthetic */ void lambda$showRequestUrlAlert$147$ChatActivity(int i, DialogInterface dialogInterface) {
+    /* renamed from: lambda$showRequestUrlAlert$148 */
+    public /* synthetic */ void lambda$showRequestUrlAlert$148$ChatActivity(int i, DialogInterface dialogInterface) {
         getConnectionsManager().cancelRequest(i, true);
     }
 
@@ -32369,7 +32376,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
 
                             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                                ChatActivity.this.lambda$didPressMessageUrl$152$ChatActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                                ChatActivity.this.lambda$didPressMessageUrl$153$ChatActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                             }
                         }, (QuickAckDelegate) null, (WriteToSocketDelegate) null, 0, getMessagesController().webFileDatacenterId, 1, true)) {
                             public final /* synthetic */ AlertDialog[] f$1;
@@ -32381,7 +32388,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
 
                             public final void run() {
-                                ChatActivity.this.lambda$didPressMessageUrl$154$ChatActivity(this.f$1, this.f$2);
+                                ChatActivity.this.lambda$didPressMessageUrl$155$ChatActivity(this.f$1, this.f$2);
                             }
                         }, 500);
                     } else if (z2) {
@@ -32395,7 +32402,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                             }
 
                             public final void onClick(DialogInterface dialogInterface, int i) {
-                                ChatActivity.this.lambda$didPressMessageUrl$155$ChatActivity(this.f$1, dialogInterface, i);
+                                ChatActivity.this.lambda$didPressMessageUrl$156$ChatActivity(this.f$1, dialogInterface, i);
                             }
                         });
                         showDialog(builder.create());
@@ -32426,7 +32433,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                         }
 
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            ChatActivity.this.lambda$didPressMessageUrl$156$ChatActivity(this.f$1, dialogInterface, i);
+                            ChatActivity.this.lambda$didPressMessageUrl$157$ChatActivity(this.f$1, dialogInterface, i);
                         }
                     });
                     showDialog(builder2.create());
@@ -32468,8 +32475,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didPressMessageUrl$152 */
-    public /* synthetic */ void lambda$didPressMessageUrl$152$ChatActivity(AlertDialog[] alertDialogArr, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$didPressMessageUrl$153 */
+    public /* synthetic */ void lambda$didPressMessageUrl$153$ChatActivity(AlertDialog[] alertDialogArr, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr, tLObject, str) {
             public final /* synthetic */ AlertDialog[] f$1;
             public final /* synthetic */ TLObject f$2;
@@ -32482,14 +32489,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             }
 
             public final void run() {
-                ChatActivity.this.lambda$didPressMessageUrl$151$ChatActivity(this.f$1, this.f$2, this.f$3);
+                ChatActivity.this.lambda$didPressMessageUrl$152$ChatActivity(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didPressMessageUrl$151 */
-    public /* synthetic */ void lambda$didPressMessageUrl$151$ChatActivity(AlertDialog[] alertDialogArr, TLObject tLObject, String str) {
+    /* renamed from: lambda$didPressMessageUrl$152 */
+    public /* synthetic */ void lambda$didPressMessageUrl$152$ChatActivity(AlertDialog[] alertDialogArr, TLObject tLObject, String str) {
         try {
             alertDialogArr[0].dismiss();
         } catch (Throwable unused) {
@@ -32515,7 +32522,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    ChatActivity.this.lambda$didPressMessageUrl$150$ChatActivity(this.f$1, this.f$2, dialogInterface, i);
+                    ChatActivity.this.lambda$didPressMessageUrl$151$ChatActivity(this.f$1, this.f$2, dialogInterface, i);
                 }
             });
             showDialog(builder.create());
@@ -32523,8 +32530,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didPressMessageUrl$150 */
-    public /* synthetic */ void lambda$didPressMessageUrl$150$ChatActivity(TLRPC$TL_payments_bankCardData tLRPC$TL_payments_bankCardData, String str, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$didPressMessageUrl$151 */
+    public /* synthetic */ void lambda$didPressMessageUrl$151$ChatActivity(TLRPC$TL_payments_bankCardData tLRPC$TL_payments_bankCardData, String str, DialogInterface dialogInterface, int i) {
         if (i < tLRPC$TL_payments_bankCardData.open_urls.size()) {
             Browser.openUrl((Context) getParentActivity(), tLRPC$TL_payments_bankCardData.open_urls.get(i).url, this.inlineReturn == 0, false);
             return;
@@ -32534,8 +32541,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didPressMessageUrl$154 */
-    public /* synthetic */ void lambda$didPressMessageUrl$154$ChatActivity(AlertDialog[] alertDialogArr, int i) {
+    /* renamed from: lambda$didPressMessageUrl$155 */
+    public /* synthetic */ void lambda$didPressMessageUrl$155$ChatActivity(AlertDialog[] alertDialogArr, int i) {
         if (alertDialogArr[0] != null) {
             alertDialogArr[0].setOnCancelListener(new DialogInterface.OnCancelListener(i) {
                 public final /* synthetic */ int f$1;
@@ -32545,7 +32552,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
 
                 public final void onCancel(DialogInterface dialogInterface) {
-                    ChatActivity.this.lambda$didPressMessageUrl$153$ChatActivity(this.f$1, dialogInterface);
+                    ChatActivity.this.lambda$didPressMessageUrl$154$ChatActivity(this.f$1, dialogInterface);
                 }
             });
             showDialog(alertDialogArr[0]);
@@ -32553,14 +32560,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didPressMessageUrl$153 */
-    public /* synthetic */ void lambda$didPressMessageUrl$153$ChatActivity(int i, DialogInterface dialogInterface) {
+    /* renamed from: lambda$didPressMessageUrl$154 */
+    public /* synthetic */ void lambda$didPressMessageUrl$154$ChatActivity(int i, DialogInterface dialogInterface) {
         getConnectionsManager().cancelRequest(i, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didPressMessageUrl$155 */
-    public /* synthetic */ void lambda$didPressMessageUrl$155$ChatActivity(String str, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$didPressMessageUrl$156 */
+    public /* synthetic */ void lambda$didPressMessageUrl$156$ChatActivity(String str, DialogInterface dialogInterface, int i) {
         if (i == 0) {
             openClickableLink(str);
         } else if (i == 1) {
@@ -32576,8 +32583,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didPressMessageUrl$156 */
-    public /* synthetic */ void lambda$didPressMessageUrl$156$ChatActivity(String str, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$didPressMessageUrl$157 */
+    public /* synthetic */ void lambda$didPressMessageUrl$157$ChatActivity(String str, DialogInterface dialogInterface, int i) {
         boolean z = false;
         if (i == 0) {
             processExternalUrl(1, str, false);
@@ -32862,9 +32869,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 r0.setDelegate(r1)
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 org.telegram.tgnet.TLRPC$EncryptedChat r1 = r1.currentEncryptedChat
-                if (r1 != 0) goto L_0x007e
+                if (r1 != 0) goto L_0x0084
                 r0.setAllowAssistant(r3)
-                goto L_0x007e
+                goto L_0x0084
             L_0x0042:
                 if (r4 != r3) goto L_0x0054
                 org.telegram.ui.ChatActivity$ChatActivityAdapter$2 r4 = new org.telegram.ui.ChatActivity$ChatActivityAdapter$2
@@ -32873,14 +32880,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 org.telegram.ui.ChatActivity$ChatActivityAdapter$3 r3 = new org.telegram.ui.ChatActivity$ChatActivityAdapter$3
                 r3.<init>()
                 r4.setDelegate(r3)
-                goto L_0x007e
+                goto L_0x0084
             L_0x0054:
                 r3 = 2
                 if (r4 != r3) goto L_0x005f
                 org.telegram.ui.Cells.ChatUnreadCell r4 = new org.telegram.ui.Cells.ChatUnreadCell
                 android.content.Context r3 = r2.mContext
                 r4.<init>(r3)
-                goto L_0x007e
+                goto L_0x0084
             L_0x005f:
                 r3 = 3
                 if (r4 != r3) goto L_0x0072
@@ -32890,17 +32897,19 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 org.telegram.ui.-$$Lambda$ChatActivity$ChatActivityAdapter$N39hl90o7gVBYNU5s2z9r-eoDYY r3 = new org.telegram.ui.-$$Lambda$ChatActivity$ChatActivityAdapter$N39hl90o7gVBYNU5s2z9r-eoDYY
                 r3.<init>()
                 r4.setDelegate(r3)
-                goto L_0x007e
+                goto L_0x0084
             L_0x0072:
                 r3 = 4
-                if (r4 != r3) goto L_0x007d
+                if (r4 != r3) goto L_0x0083
                 org.telegram.ui.Cells.ChatLoadingCell r4 = new org.telegram.ui.Cells.ChatLoadingCell
                 android.content.Context r3 = r2.mContext
-                r4.<init>(r3)
-                goto L_0x007e
-            L_0x007d:
+                org.telegram.ui.ChatActivity r0 = org.telegram.ui.ChatActivity.this
+                org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r0.contentView
+                r4.<init>(r3, r0)
+                goto L_0x0084
+            L_0x0083:
                 r4 = 0
-            L_0x007e:
+            L_0x0084:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r3 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2
@@ -33612,37 +33621,48 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             return ChatActivity.this.messages.get(i - i2).contentType;
         }
 
-        /* JADX WARNING: Removed duplicated region for block: B:61:0x0164  */
-        /* JADX WARNING: Removed duplicated region for block: B:62:0x0166  */
-        /* JADX WARNING: Removed duplicated region for block: B:65:0x0172  */
+        /* JADX WARNING: Removed duplicated region for block: B:66:0x016e  */
+        /* JADX WARNING: Removed duplicated region for block: B:67:0x0170  */
+        /* JADX WARNING: Removed duplicated region for block: B:70:0x017c  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void onViewAttachedToWindow(androidx.recyclerview.widget.RecyclerView.ViewHolder r11) {
+        public void onViewAttachedToWindow(final androidx.recyclerview.widget.RecyclerView.ViewHolder r11) {
             /*
                 r10 = this;
                 android.view.View r0 = r11.itemView
                 boolean r1 = r0 instanceof org.telegram.ui.Cells.ChatMessageCell
+                if (r1 != 0) goto L_0x000a
+                boolean r1 = r0 instanceof org.telegram.ui.Cells.ChatActionCell
+                if (r1 == 0) goto L_0x0016
+            L_0x000a:
+                android.view.ViewTreeObserver r1 = r0.getViewTreeObserver()
+                org.telegram.ui.ChatActivity$ChatActivityAdapter$7 r2 = new org.telegram.ui.ChatActivity$ChatActivityAdapter$7
+                r2.<init>(r0, r11)
+                r1.addOnPreDrawListener(r2)
+            L_0x0016:
+                android.view.View r0 = r11.itemView
+                boolean r1 = r0 instanceof org.telegram.ui.Cells.ChatMessageCell
                 r2 = 1
                 r3 = 0
-                if (r1 == 0) goto L_0x0177
+                if (r1 == 0) goto L_0x0181
                 org.telegram.ui.Cells.ChatMessageCell r0 = (org.telegram.ui.Cells.ChatMessageCell) r0
                 org.telegram.messenger.MessageObject r1 = r0.getMessageObject()
                 r4 = -1
                 r0.showHintButton(r2, r3, r4)
                 org.telegram.ui.ChatActivity r4 = org.telegram.ui.ChatActivity.this
                 org.telegram.messenger.MessageObject r4 = r4.hintMessageObject
-                if (r4 == 0) goto L_0x002f
+                if (r4 == 0) goto L_0x0045
                 org.telegram.ui.ChatActivity r4 = org.telegram.ui.ChatActivity.this
                 org.telegram.messenger.MessageObject r4 = r4.hintMessageObject
                 boolean r4 = r4.equals(r1)
-                if (r4 == 0) goto L_0x002f
+                if (r4 == 0) goto L_0x0045
                 org.telegram.ui.ChatActivity r4 = org.telegram.ui.ChatActivity.this
                 int r4 = r4.hintMessageType
                 r0.showHintButton(r3, r3, r4)
-            L_0x002f:
+            L_0x0045:
                 boolean r4 = r1.isAnimatedEmoji()
-                if (r4 == 0) goto L_0x0062
+                if (r4 == 0) goto L_0x0078
                 java.lang.String r4 = r1.getStickerEmoji()
-                if (r4 == 0) goto L_0x0062
+                if (r4 == 0) goto L_0x0078
                 org.telegram.ui.ChatActivity r5 = org.telegram.ui.ChatActivity.this
                 org.telegram.messenger.MessagesController r5 = r5.getMessagesController()
                 java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$EmojiSound> r5 = r5.emojiSounds
@@ -33651,87 +33671,87 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 java.lang.String r6 = r4.replace(r6, r7)
                 java.lang.Object r5 = r5.get(r6)
                 org.telegram.messenger.MessagesController$EmojiSound r5 = (org.telegram.messenger.MessagesController.EmojiSound) r5
-                if (r5 == 0) goto L_0x0062
+                if (r5 == 0) goto L_0x0078
                 org.telegram.ui.ChatActivity r6 = org.telegram.ui.ChatActivity.this
                 org.telegram.messenger.MediaController r6 = r6.getMediaController()
                 org.telegram.ui.ChatActivity r7 = org.telegram.ui.ChatActivity.this
                 org.telegram.messenger.AccountInstance r7 = r7.getAccountInstance()
                 r6.playEmojiSound(r7, r4, r5, r2)
-            L_0x0062:
+            L_0x0078:
                 org.telegram.ui.ChatActivity r4 = org.telegram.ui.ChatActivity.this
                 org.telegram.ui.ActionBar.ActionBar r4 = r4.actionBar
                 boolean r4 = r4.isActionModeShowed()
-                if (r4 != 0) goto L_0x0083
+                if (r4 != 0) goto L_0x0099
                 org.telegram.ui.ChatActivity r4 = org.telegram.ui.ChatActivity.this
                 int r4 = r4.reportType
-                if (r4 < 0) goto L_0x0077
-                goto L_0x0083
-            L_0x0077:
+                if (r4 < 0) goto L_0x008d
+                goto L_0x0099
+            L_0x008d:
                 r0.setDrawSelectionBackground(r3)
                 r0.setChecked(r3, r3, r3)
                 r0.setCheckBoxVisible(r3, r3)
                 r4 = 0
                 r5 = 0
-                goto L_0x00d0
-            L_0x0083:
+                goto L_0x00e6
+            L_0x0099:
                 org.telegram.ui.ChatActivity r4 = org.telegram.ui.ChatActivity.this
                 java.util.ArrayList r4 = r4.threadMessageObjects
-                if (r4 == 0) goto L_0x009a
+                if (r4 == 0) goto L_0x00b0
                 org.telegram.ui.ChatActivity r4 = org.telegram.ui.ChatActivity.this
                 java.util.ArrayList r4 = r4.threadMessageObjects
                 boolean r4 = r4.contains(r1)
-                if (r4 != 0) goto L_0x0098
-                goto L_0x009a
-            L_0x0098:
+                if (r4 != 0) goto L_0x00ae
+                goto L_0x00b0
+            L_0x00ae:
                 r4 = 0
-                goto L_0x009b
-            L_0x009a:
+                goto L_0x00b1
+            L_0x00b0:
                 r4 = 1
-            L_0x009b:
+            L_0x00b1:
                 r0.setCheckBoxVisible(r4, r3)
                 long r4 = r1.getDialogId()
                 org.telegram.ui.ChatActivity r6 = org.telegram.ui.ChatActivity.this
                 long r6 = r6.dialog_id
                 int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-                if (r8 != 0) goto L_0x00ae
+                if (r8 != 0) goto L_0x00c4
                 r4 = 0
-                goto L_0x00af
-            L_0x00ae:
+                goto L_0x00c5
+            L_0x00c4:
                 r4 = 1
-            L_0x00af:
+            L_0x00c5:
                 org.telegram.ui.ChatActivity r5 = org.telegram.ui.ChatActivity.this
                 android.util.SparseArray[] r5 = r5.selectedMessagesIds
                 r5 = r5[r4]
                 int r6 = r1.getId()
                 int r5 = r5.indexOfKey(r6)
-                if (r5 < 0) goto L_0x00c8
+                if (r5 < 0) goto L_0x00de
                 org.telegram.ui.ChatActivity r5 = org.telegram.ui.ChatActivity.this
                 r5.setCellSelectionBackground(r1, r0, r4, r3)
                 r4 = 1
-                goto L_0x00cf
-            L_0x00c8:
+                goto L_0x00e5
+            L_0x00de:
                 r0.setDrawSelectionBackground(r3)
                 r0.setChecked(r3, r3, r3)
                 r4 = 0
-            L_0x00cf:
+            L_0x00e5:
                 r5 = 1
-            L_0x00d0:
+            L_0x00e6:
                 r6 = r5 ^ 1
-                if (r5 == 0) goto L_0x00d8
-                if (r4 == 0) goto L_0x00d8
+                if (r5 == 0) goto L_0x00ee
+                if (r4 == 0) goto L_0x00ee
                 r4 = 1
-                goto L_0x00d9
-            L_0x00d8:
+                goto L_0x00ef
+            L_0x00ee:
                 r4 = 0
-            L_0x00d9:
+            L_0x00ef:
                 r0.setCheckPressed(r6, r4)
                 org.telegram.ui.ChatActivity r4 = org.telegram.ui.ChatActivity.this
                 android.widget.FrameLayout r4 = r4.searchContainer
-                if (r4 == 0) goto L_0x012b
+                if (r4 == 0) goto L_0x0141
                 org.telegram.ui.ChatActivity r4 = org.telegram.ui.ChatActivity.this
                 android.widget.FrameLayout r4 = r4.searchContainer
                 int r4 = r4.getVisibility()
-                if (r4 != 0) goto L_0x012b
+                if (r4 != 0) goto L_0x0141
                 org.telegram.ui.ChatActivity r4 = org.telegram.ui.ChatActivity.this
                 org.telegram.messenger.MediaDataController r4 = r4.getMediaDataController()
                 int r5 = r1.getId()
@@ -33739,99 +33759,95 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 long r8 = r1.mergeDialogId
                 int r1 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-                if (r1 != 0) goto L_0x010a
+                if (r1 != 0) goto L_0x0120
                 r1 = 1
-                goto L_0x010b
-            L_0x010a:
+                goto L_0x0121
+            L_0x0120:
                 r1 = 0
-            L_0x010b:
+            L_0x0121:
                 boolean r1 = r4.isMessageFound(r5, r1)
-                if (r1 == 0) goto L_0x012b
+                if (r1 == 0) goto L_0x0141
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 org.telegram.messenger.MediaDataController r1 = r1.getMediaDataController()
                 java.lang.String r1 = r1.getLastSearchQuery()
-                if (r1 == 0) goto L_0x012b
+                if (r1 == 0) goto L_0x0141
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 org.telegram.messenger.MediaDataController r1 = r1.getMediaDataController()
                 java.lang.String r1 = r1.getLastSearchQuery()
                 r0.setHighlightedText(r1)
-                goto L_0x012f
-            L_0x012b:
+                goto L_0x0145
+            L_0x0141:
                 r1 = 0
                 r0.setHighlightedText(r1)
-            L_0x012f:
-                android.view.ViewTreeObserver r1 = r0.getViewTreeObserver()
-                org.telegram.ui.ChatActivity$ChatActivityAdapter$7 r4 = new org.telegram.ui.ChatActivity$ChatActivityAdapter$7
-                r4.<init>(r0)
-                r1.addOnPreDrawListener(r4)
+            L_0x0145:
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 boolean r1 = r1.inPreviewMode
-                if (r1 == 0) goto L_0x0149
+                if (r1 == 0) goto L_0x0153
                 boolean r1 = r0.isHighlighted()
-                if (r1 != 0) goto L_0x0177
-            L_0x0149:
+                if (r1 != 0) goto L_0x0181
+            L_0x0153:
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 int r1 = r1.highlightMessageId
                 r4 = 2147483647(0x7fffffff, float:NaN)
-                if (r1 == r4) goto L_0x0166
+                if (r1 == r4) goto L_0x0170
                 org.telegram.messenger.MessageObject r1 = r0.getMessageObject()
                 int r1 = r1.getId()
                 org.telegram.ui.ChatActivity r5 = org.telegram.ui.ChatActivity.this
                 int r5 = r5.highlightMessageId
-                if (r1 != r5) goto L_0x0166
+                if (r1 != r5) goto L_0x0170
                 r1 = 1
-                goto L_0x0167
-            L_0x0166:
+                goto L_0x0171
+            L_0x0170:
                 r1 = 0
-            L_0x0167:
+            L_0x0171:
                 r0.setHighlighted(r1)
                 org.telegram.ui.ChatActivity r0 = org.telegram.ui.ChatActivity.this
                 int r0 = r0.highlightMessageId
-                if (r0 == r4) goto L_0x0177
+                if (r0 == r4) goto L_0x0181
                 org.telegram.ui.ChatActivity r0 = org.telegram.ui.ChatActivity.this
                 r0.startMessageUnselect()
-            L_0x0177:
+            L_0x0181:
                 int r0 = r11.getAdapterPosition()
                 int r1 = r10.messagesStartRow
-                if (r0 < r1) goto L_0x022f
+                if (r0 < r1) goto L_0x0239
                 int r4 = r10.messagesEndRow
-                if (r0 >= r4) goto L_0x022f
+                if (r0 >= r4) goto L_0x0239
                 org.telegram.ui.ChatActivity r4 = org.telegram.ui.ChatActivity.this
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r4.messages
                 int r0 = r0 - r1
                 java.lang.Object r0 = r4.get(r0)
                 org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
                 android.view.View r11 = r11.itemView
-                if (r0 == 0) goto L_0x022f
+                if (r0 == 0) goto L_0x0239
                 org.telegram.tgnet.TLRPC$Message r1 = r0.messageOwner
-                if (r1 == 0) goto L_0x022f
+                if (r1 == 0) goto L_0x0239
                 boolean r4 = r1.media_unread
-                if (r4 == 0) goto L_0x022f
+                if (r4 == 0) goto L_0x0239
                 boolean r1 = r1.mentioned
-                if (r1 == 0) goto L_0x022f
+                if (r1 == 0) goto L_0x0239
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 boolean r1 = r1.inPreviewMode
-                if (r1 != 0) goto L_0x021a
+                if (r1 != 0) goto L_0x0224
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 int r1 = r1.chatMode
-                if (r1 != 0) goto L_0x021a
+                if (r1 != 0) goto L_0x0224
                 boolean r1 = r0.isVoice()
-                if (r1 != 0) goto L_0x021a
+                if (r1 != 0) goto L_0x0224
                 boolean r1 = r0.isRoundVideo()
-                if (r1 != 0) goto L_0x021a
+                if (r1 != 0) goto L_0x0224
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 org.telegram.ui.ChatActivity.access$21210(r1)
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 int r1 = r1.newMentionsCount
-                if (r1 > 0) goto L_0x01d7
+                if (r1 > 0) goto L_0x01e1
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 int unused = r1.newMentionsCount = r3
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 boolean unused = r1.hasAllMentionsLocal = r2
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 r1.showMentionDownButton(r3, r2)
-                goto L_0x01f4
-            L_0x01d7:
+                goto L_0x01fe
+            L_0x01e1:
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 org.telegram.ui.ActionBar.SimpleTextView r1 = r1.mentiondownButtonCounter
                 java.lang.Object[] r4 = new java.lang.Object[r2]
@@ -33842,34 +33858,34 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 java.lang.String r5 = "%d"
                 java.lang.String r4 = java.lang.String.format(r5, r4)
                 r1.setText(r4)
-            L_0x01f4:
+            L_0x01fe:
                 org.telegram.ui.ChatActivity r1 = org.telegram.ui.ChatActivity.this
                 org.telegram.messenger.MessagesController r1 = r1.getMessagesController()
                 int r4 = r0.getId()
                 org.telegram.ui.ChatActivity r5 = org.telegram.ui.ChatActivity.this
                 org.telegram.tgnet.TLRPC$Chat r5 = r5.currentChat
                 boolean r5 = org.telegram.messenger.ChatObject.isChannel(r5)
-                if (r5 == 0) goto L_0x020e
+                if (r5 == 0) goto L_0x0218
                 org.telegram.ui.ChatActivity r3 = org.telegram.ui.ChatActivity.this
                 org.telegram.tgnet.TLRPC$Chat r3 = r3.currentChat
                 int r3 = r3.id
-            L_0x020e:
+            L_0x0218:
                 org.telegram.ui.ChatActivity r5 = org.telegram.ui.ChatActivity.this
                 long r5 = r5.dialog_id
                 r1.markMentionMessageAsRead(r4, r3, r5)
                 r0.setContentIsRead()
-            L_0x021a:
+            L_0x0224:
                 boolean r0 = r11 instanceof org.telegram.ui.Cells.ChatMessageCell
-                if (r0 == 0) goto L_0x022f
+                if (r0 == 0) goto L_0x0239
                 org.telegram.ui.Cells.ChatMessageCell r11 = (org.telegram.ui.Cells.ChatMessageCell) r11
                 org.telegram.ui.ChatActivity r0 = org.telegram.ui.ChatActivity.this
                 boolean r0 = r0.inPreviewMode
-                if (r0 == 0) goto L_0x022c
+                if (r0 == 0) goto L_0x0236
                 r11.setHighlighted(r2)
-                goto L_0x022f
-            L_0x022c:
+                goto L_0x0239
+            L_0x0236:
                 r11.setHighlightedAnimated()
-            L_0x022f:
+            L_0x0239:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.ChatActivityAdapter.onViewAttachedToWindow(androidx.recyclerview.widget.RecyclerView$ViewHolder):void");
@@ -34094,8 +34110,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         }
     }
 
-    /* renamed from: org.telegram.ui.ChatActivity$97  reason: invalid class name */
-    static /* synthetic */ class AnonymousClass97 {
+    /* renamed from: org.telegram.ui.ChatActivity$96  reason: invalid class name */
+    static /* synthetic */ class AnonymousClass96 {
         static final /* synthetic */ int[] $SwitchMap$org$telegram$ui$AvatarPreviewer$MenuItem;
 
         /* JADX WARNING: Can't wrap try/catch for region: R(12:0|1|2|3|4|5|6|7|8|9|10|12) */
@@ -34144,7 +34160,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             L_0x003e:
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.AnonymousClass97.<clinit>():void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatActivity.AnonymousClass96.<clinit>():void");
         }
     }
 
@@ -34333,9 +34349,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         TrendingStickersAlert trendingStickersAlert;
-        $$Lambda$ChatActivity$863zurfR5_Z5_h_r36mEI0_c r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$ChatActivity$rQlHGLHjOdUpWO0Z3tPWRmxXsA r10 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
-                ChatActivity.this.lambda$getThemeDescriptions$157$ChatActivity();
+                ChatActivity.this.lambda$getThemeDescriptions$158$ChatActivity();
             }
         };
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
@@ -34355,7 +34371,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultIcon"));
             arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBTITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultIcon"));
         }
-        $$Lambda$ChatActivity$863zurfR5_Z5_h_r36mEI0_c r7 = r10;
+        $$Lambda$ChatActivity$rQlHGLHjOdUpWO0Z3tPWRmxXsA r7 = r10;
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "actionBarDefaultSubmenuBackground"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "actionBarDefaultSubmenuItem"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_AB_SUBMENUITEM, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "actionBarDefaultSubmenuItemIcon"));
@@ -34449,7 +34465,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgCallDownGreenDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inDownCall"));
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_msgErrorPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_sentError"));
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgErrorDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_sentErrorIcon"));
-        $$Lambda$ChatActivity$863zurfR5_Z5_h_r36mEI0_c r72 = r10;
+        $$Lambda$ChatActivity$rQlHGLHjOdUpWO0Z3tPWRmxXsA r72 = r10;
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, (Drawable[]) null, r72, "chat_selectedBackground"));
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_durationPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_previewDurationText"));
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, Theme.chat_gamePaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_previewGameText"));
@@ -34603,8 +34619,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_pollHintDrawable[1]}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outPreviewInstantText"));
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_psaHelpDrawable[0]}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inViews"));
         arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_psaHelpDrawable[1]}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outViews"));
-        arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_shareBackground"));
-        arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_shareBackgroundSelected"));
         arrayList.add(new ThemeDescription(this.messagesSearchListView, 0, new Class[]{DialogCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
         arrayList.add(new ThemeDescription(this.messagesSearchListView, 0, new Class[]{DialogCell.class}, Theme.dialogs_countPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_unreadCounter"));
         TextPaint[] textPaintArr = Theme.dialogs_namePaint;
@@ -34739,7 +34753,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{FragmentContextView.class}, new String[]{"closeButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "inappPlayerClose"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND | ThemeDescription.FLAG_CHECKTAG, new Class[]{FragmentContextView.class}, new String[]{"frameLayout"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "returnToCallBackground"));
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{FragmentContextView.class}, new String[]{"titleTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "returnToCallText"));
-        $$Lambda$ChatActivity$863zurfR5_Z5_h_r36mEI0_c r73 = r10;
+        $$Lambda$ChatActivity$rQlHGLHjOdUpWO0Z3tPWRmxXsA r73 = r10;
         arrayList.add(new ThemeDescription(this.pinnedLineView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r73, "chat_topPanelLine"));
         arrayList.add(new ThemeDescription(this.pinnedLineView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r73, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription(this.pinnedCounterTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_topPanelTitle"));
@@ -34763,7 +34777,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         arrayList.add(new ThemeDescription(this.replyObjectTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_replyPanelMessage"));
         arrayList.add(new ThemeDescription(this.replyIconImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_replyPanelIcons"));
         arrayList.add(new ThemeDescription(this.replyCloseImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_replyPanelClose"));
-        $$Lambda$ChatActivity$863zurfR5_Z5_h_r36mEI0_c r74 = r10;
+        $$Lambda$ChatActivity$rQlHGLHjOdUpWO0Z3tPWRmxXsA r74 = r10;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r74, "chat_replyPanelName"));
         arrayList.add(new ThemeDescription(this.searchUpButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_searchPanelIcons"));
         arrayList.add(new ThemeDescription(this.searchUpButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultSelector"));
@@ -34831,7 +34845,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         arrayList.add(new ThemeDescription(chatAvatarContainer7 != null ? chatAvatarContainer7.getTimeItem() : null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_secretTimerBackground"));
         ChatAvatarContainer chatAvatarContainer8 = this.avatarContainer;
         arrayList.add(new ThemeDescription(chatAvatarContainer8 != null ? chatAvatarContainer8.getTimeItem() : null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_secretTimerText"));
-        $$Lambda$ChatActivity$863zurfR5_Z5_h_r36mEI0_c r75 = r10;
+        $$Lambda$ChatActivity$rQlHGLHjOdUpWO0Z3tPWRmxXsA r75 = r10;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r75, "chat_attachGalleryIcon"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r75, "chat_attachGalleryBackground"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r75, "chat_attachGalleryText"));
@@ -34886,8 +34900,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$157 */
-    public /* synthetic */ void lambda$getThemeDescriptions$157$ChatActivity() {
+    /* renamed from: lambda$getThemeDescriptions$158 */
+    public /* synthetic */ void lambda$getThemeDescriptions$158$ChatActivity() {
         updateVisibleRows();
         ChatActivityEnterView chatActivityEnterView2 = this.chatActivityEnterView;
         if (chatActivityEnterView2 != null) {

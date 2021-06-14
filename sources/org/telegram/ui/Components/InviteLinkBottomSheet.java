@@ -567,7 +567,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             L_0x004c:
                 org.telegram.ui.Cells.ShadowSectionCell r11 = new org.telegram.ui.Cells.ShadowSectionCell
                 r11.<init>(r1, r2)
-                r2 = 2131165451(0x7var_b, float:1.794512E38)
+                r2 = 2131165442(0x7var_, float:1.7945101E38)
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r2, (java.lang.String) r10)
                 android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
@@ -597,7 +597,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 android.graphics.drawable.ColorDrawable r4 = new android.graphics.drawable.ColorDrawable
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r4.<init>(r0)
-                r0 = 2131165450(0x7var_a, float:1.7945117E38)
+                r0 = 2131165441(0x7var_, float:1.79451E38)
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r0, (java.lang.String) r10)
                 r2.<init>(r4, r10)
                 r2.setFullsize(r3)

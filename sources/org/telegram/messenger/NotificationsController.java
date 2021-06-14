@@ -8292,17 +8292,17 @@ public class NotificationsController extends BaseController {
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0115 }
             boolean r12 = r12.bot     // Catch:{ Exception -> 0x0115 }
             if (r12 == 0) goto L_0x00f6
-            r12 = 2131165289(0x7var_, float:1.794479E38)
+            r12 = 2131165288(0x7var_, float:1.7944789E38)
             goto L_0x00f9
         L_0x00f6:
-            r12 = 2131165293(0x7var_d, float:1.79448E38)
+            r12 = 2131165292(0x7var_c, float:1.7944797E38)
         L_0x00f9:
             androidx.core.graphics.drawable.IconCompat r10 = androidx.core.graphics.drawable.IconCompat.createWithResource(r10, r12)     // Catch:{ Exception -> 0x0115 }
             r11.setIcon(r10)     // Catch:{ Exception -> 0x0115 }
             goto L_0x010d
         L_0x0101:
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0115 }
-            r12 = 2131165291(0x7var_b, float:1.7944795E38)
+            r12 = 2131165290(0x7var_a, float:1.7944793E38)
             androidx.core.graphics.drawable.IconCompat r10 = androidx.core.graphics.drawable.IconCompat.createWithResource(r10, r12)     // Catch:{ Exception -> 0x0115 }
             r11.setIcon(r10)     // Catch:{ Exception -> 0x0115 }
         L_0x010d:
@@ -10182,7 +10182,7 @@ public class NotificationsController extends BaseController {
             r10 = 0
             android.app.PendingIntent r0 = android.app.PendingIntent.getActivity(r7, r10, r0, r9)     // Catch:{ Exception -> 0x0a07 }
             androidx.core.app.NotificationCompat$Builder r3 = r4.setContentTitle(r3)     // Catch:{ Exception -> 0x0a07 }
-            r7 = 2131165873(0x7var_b1, float:1.7945975E38)
+            r7 = 2131165864(0x7var_a8, float:1.7945957E38)
             androidx.core.app.NotificationCompat$Builder r3 = r3.setSmallIcon(r7)     // Catch:{ Exception -> 0x0a07 }
             r7 = 1
             androidx.core.app.NotificationCompat$Builder r3 = r3.setAutoCancel(r7)     // Catch:{ Exception -> 0x0a07 }
@@ -10606,7 +10606,7 @@ public class NotificationsController extends BaseController {
             r2.putExtra(r8, r3)     // Catch:{ Exception -> 0x0a07 }
             r3 = 19
             if (r1 > r3) goto L_0x09d4
-            r1 = 2131165479(0x7var_, float:1.7945176E38)
+            r1 = 2131165470(0x7var_e, float:1.7945158E38)
             java.lang.String r3 = "Reply"
             r5 = 2131627178(0x7f0e0caa, float:1.8881613E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r5)     // Catch:{ Exception -> 0x0a07 }
@@ -10617,7 +10617,7 @@ public class NotificationsController extends BaseController {
             r4.addAction(r1, r3, r2)     // Catch:{ Exception -> 0x0a07 }
             goto L_0x09ec
         L_0x09d4:
-            r1 = 2131165478(0x7var_, float:1.7945174E38)
+            r1 = 2131165469(0x7var_d, float:1.7945156E38)
             java.lang.String r3 = "Reply"
             r5 = 2131627178(0x7f0e0caa, float:1.8881613E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r5)     // Catch:{ Exception -> 0x0a07 }
@@ -11340,7 +11340,7 @@ public class NotificationsController extends BaseController {
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r12, r2, r13)
         L_0x0447:
             androidx.core.app.NotificationCompat$Action$Builder r12 = new androidx.core.app.NotificationCompat$Action$Builder
-            r13 = 2131165523(0x7var_, float:1.7945266E38)
+            r13 = 2131165514(0x7var_a, float:1.7945247E38)
             r12.<init>(r13, r2, r0)
             r2 = 1
             androidx.core.app.NotificationCompat$Action$Builder r0 = r12.setAllowGeneratedReplies(r2)
@@ -12048,7 +12048,7 @@ public class NotificationsController extends BaseController {
             r11 = 134217728(0x8000000, float:3.85186E-34)
             android.app.PendingIntent r6 = android.app.PendingIntent.getBroadcast(r12, r13, r6, r11)
             androidx.core.app.NotificationCompat$Action$Builder r11 = new androidx.core.app.NotificationCompat$Action$Builder
-            r12 = 2131165680(0x7var_f0, float:1.7945584E38)
+            r12 = 2131165671(0x7var_e7, float:1.7945566E38)
             r13 = 2131626063(0x7f0e084f, float:1.8879352E38)
             r30 = r14
             java.lang.String r14 = "MarkAsRead"
@@ -12139,7 +12139,7 @@ public class NotificationsController extends BaseController {
             r13 = r64
             androidx.core.app.NotificationCompat$Builder r12 = r12.setContentTitle(r13)
             r33 = r14
-            r14 = 2131165873(0x7var_b1, float:1.7945975E38)
+            r14 = 2131165864(0x7var_a8, float:1.7945957E38)
             androidx.core.app.NotificationCompat$Builder r12 = r12.setSmallIcon(r14)
             java.lang.String r14 = r54.toString()
             androidx.core.app.NotificationCompat$Builder r12 = r12.setContentText(r14)

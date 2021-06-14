@@ -460,7 +460,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r14 = 5
             r0 = -1
             java.lang.String r1 = "windowBackgroundGrayShadow"
-            r2 = 2131165450(0x7var_a, float:1.7945117E38)
+            r2 = 2131165441(0x7var_, float:1.79451E38)
             java.lang.String r3 = "windowBackgroundGray"
             r4 = 1
             switch(r15) {

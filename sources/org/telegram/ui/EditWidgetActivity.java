@@ -233,7 +233,7 @@ public class EditWidgetActivity extends BaseFragment {
                 android.widget.LinearLayout r9 = new android.widget.LinearLayout
                 r9.<init>(r2)
                 r9.setOrientation(r4)
-                r10 = 2131166150(0x7var_c6, float:1.7946537E38)
+                r10 = 2131166140(0x7var_bc, float:1.7946517E38)
                 r9.setBackgroundResource(r10)
                 r14 = 10
                 r16 = 10
@@ -269,7 +269,7 @@ public class EditWidgetActivity extends BaseFragment {
                 android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r4, (int) r11, (int) r8)
                 r9.addView(r3, r4)
                 android.widget.ImageView r1 = r19.previewImageView
-                r3 = 2131165358(0x7var_ae, float:1.794493E38)
+                r3 = 2131165357(0x7var_ad, float:1.7944929E38)
                 r1.setImageResource(r3)
                 goto L_0x010e
             L_0x00ce:
@@ -295,11 +295,11 @@ public class EditWidgetActivity extends BaseFragment {
                 android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r11, (int) r11, (int) r8)
                 r9.addView(r3, r4)
                 android.widget.ImageView r1 = r19.previewImageView
-                r3 = 2131165386(0x7var_ca, float:1.7944988E38)
+                r3 = 2131165385(0x7var_c9, float:1.7944986E38)
                 r1.setImageResource(r3)
             L_0x010e:
                 r18.updateDialogs()
-                r1 = 2131165451(0x7var_b, float:1.794512E38)
+                r1 = 2131165442(0x7var_, float:1.7945101E38)
                 java.lang.String r3 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r1, (java.lang.String) r3)
                 r0.shadowDrawable = r1
@@ -1057,14 +1057,14 @@ public class EditWidgetActivity extends BaseFragment {
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
                 android.view.View r0 = r0.findViewById(r2)
-                r2 = 2131166154(0x7var_ca, float:1.7946545E38)
+                r2 = 2131166144(0x7var_c0, float:1.7946525E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x05fd
             L_0x05e1:
                 android.view.ViewGroup[] r0 = r1.cells
                 r0 = r0[r13]
                 android.view.View r0 = r0.findViewById(r2)
-                r2 = 2131166153(0x7var_c9, float:1.7946543E38)
+                r2 = 2131166143(0x7var_bf, float:1.7946523E38)
                 r0.setBackgroundResource(r2)
                 goto L_0x05fd
             L_0x05f0:

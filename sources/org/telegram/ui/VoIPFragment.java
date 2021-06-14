@@ -1964,7 +1964,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
         L_0x04cb:
             boolean r8 = r0.currentUserIsVideo
             java.lang.String r10 = "VoipUserMicrophoneIsOff"
-            r12 = 2131165328(0x7var_, float:1.794487E38)
+            r12 = 2131165327(0x7var_f, float:1.7944868E38)
             java.lang.String r13 = "video"
             java.lang.String r14 = "muted"
             if (r8 != 0) goto L_0x04dc
@@ -2000,7 +2000,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             int r4 = r3.getRemoteVideoState()
             if (r4 != 0) goto L_0x0534
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r4 = r0.notificationsLayout
-            r5 = 2131165319(0x7var_, float:1.7944852E38)
+            r5 = 2131165318(0x7var_, float:1.794485E38)
             r8 = 2131628231(0x7f0e10c7, float:1.8883749E38)
             r10 = 1
             java.lang.Object[] r12 = new java.lang.Object[r10]

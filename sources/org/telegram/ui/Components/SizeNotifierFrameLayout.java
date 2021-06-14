@@ -21,11 +21,14 @@ import org.telegram.ui.Components.WallpaperParallaxEffect;
 
 public class SizeNotifierFrameLayout extends FrameLayout {
     protected AdjustPanLayoutHelper adjustPanLayoutHelper;
+    private boolean animationInProgress;
     private Drawable backgroundDrawable;
     private int backgroundTranslationY;
     private float bgAngle;
     private int bottomClip;
     private SizeNotifierFrameLayoutDelegate delegate;
+    private int emojiHeight;
+    private float emojiOffset;
     protected int keyboardHeight;
     private boolean occupyStatusBar;
     private Drawable oldBackgroundDrawable;
@@ -200,8 +203,35 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         this.backgroundTranslationY = i;
     }
 
+    public int getBackgroundTranslationY() {
+        Drawable drawable = this.backgroundDrawable;
+        if (!(drawable instanceof MotionBackgroundDrawable)) {
+            return 0;
+        }
+        if (((MotionBackgroundDrawable) drawable).hasPattern()) {
+            return this.backgroundTranslationY;
+        }
+        if (this.animationInProgress) {
+            return (int) this.emojiOffset;
+        }
+        int i = this.emojiHeight;
+        if (i != 0) {
+            return i;
+        }
+        return this.backgroundTranslationY;
+    }
+
     public int getHeightWithKeyboard() {
         return this.keyboardHeight + getMeasuredHeight();
+    }
+
+    public void setEmojiKeyboardHeight(int i) {
+        this.emojiHeight = i;
+    }
+
+    public void setEmojiOffset(boolean z, float f) {
+        this.emojiOffset = f;
+        this.animationInProgress = z;
     }
 
     /* access modifiers changed from: protected */
@@ -251,8 +281,17 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                             canvas.save();
                             canvas.clipRect(0, 0, getMeasuredWidth(), getRootView().getMeasuredHeight() - this.bottomClip);
                         }
-                        motionBackgroundDrawable.setTranslationYAndRotation(this.backgroundTranslationY);
-                        drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight() - this.backgroundTranslationY);
+                        motionBackgroundDrawable.setTranslationY(this.backgroundTranslationY);
+                        int measuredHeight2 = getMeasuredHeight() - this.backgroundTranslationY;
+                        if (this.animationInProgress) {
+                            measuredHeight2 = (int) (((float) measuredHeight2) - this.emojiOffset);
+                        } else {
+                            int i3 = this.emojiHeight;
+                            if (i3 != 0) {
+                                measuredHeight2 -= i3;
+                            }
+                        }
+                        drawable.setBounds(0, 0, getMeasuredWidth(), measuredHeight2);
                         drawable.draw(canvas);
                         if (this.bottomClip != 0) {
                             canvas.restore();
@@ -288,15 +327,15 @@ public class SizeNotifierFrameLayout extends FrameLayout {
                         canvas.restore();
                     } else {
                         int currentActionBarHeight2 = (isActionBarVisible() ? ActionBar.getCurrentActionBarHeight() : 0) + ((Build.VERSION.SDK_INT < 21 || !this.occupyStatusBar) ? 0 : AndroidUtilities.statusBarHeight);
-                        int measuredHeight2 = getRootView().getMeasuredHeight() - currentActionBarHeight2;
-                        float max2 = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) measuredHeight2) / ((float) drawable.getIntrinsicHeight()));
+                        int measuredHeight3 = getRootView().getMeasuredHeight() - currentActionBarHeight2;
+                        float max2 = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) measuredHeight3) / ((float) drawable.getIntrinsicHeight()));
                         int ceil3 = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * max2 * this.parallaxScale));
                         int ceil4 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * max2 * this.parallaxScale));
                         int measuredWidth2 = ((getMeasuredWidth() - ceil3) / 2) + ((int) this.translationX);
-                        int i3 = this.backgroundTranslationY + ((measuredHeight2 - ceil4) / 2) + currentActionBarHeight2 + ((int) this.translationY);
+                        int i4 = this.backgroundTranslationY + ((measuredHeight3 - ceil4) / 2) + currentActionBarHeight2 + ((int) this.translationY);
                         canvas.save();
                         canvas.clipRect(0, currentActionBarHeight2, ceil3, getMeasuredHeight() - this.bottomClip);
-                        drawable.setBounds(measuredWidth2, i3, ceil3 + measuredWidth2, ceil4 + i3);
+                        drawable.setBounds(measuredWidth2, i4, ceil3 + measuredWidth2, ceil4 + i4);
                         drawable.draw(canvas);
                         canvas.restore();
                     }

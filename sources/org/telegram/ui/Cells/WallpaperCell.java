@@ -24,6 +24,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_wallPaper;
@@ -122,6 +123,7 @@ public class WallpaperCell extends FrameLayout {
         }
 
         public void setWallpaper(Object obj, Object obj2, Drawable drawable, boolean z) {
+            int i;
             Object obj3 = obj;
             this.currentWallpaper = obj3;
             this.imageView.setVisibility(0);
@@ -140,20 +142,20 @@ public class WallpaperCell extends FrameLayout {
                 if (closestPhotoSizeWithSize2 != closestPhotoSizeWithSize) {
                     tLRPC$PhotoSize = closestPhotoSizeWithSize2;
                 }
-                int i = tLRPC$PhotoSize != null ? tLRPC$PhotoSize.size : tLRPC$TL_wallPaper.document.size;
+                int i2 = tLRPC$PhotoSize != null ? tLRPC$PhotoSize.size : tLRPC$TL_wallPaper.document.size;
                 if (tLRPC$TL_wallPaper.pattern) {
                     this.imageView.setBackgroundColor(tLRPC$TL_wallPaper.settings.background_color | -16777216);
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), (String) null, "jpg", i, 1, tLRPC$TL_wallPaper);
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), (String) null, "jpg", i2, 1, tLRPC$TL_wallPaper);
                     this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(AndroidUtilities.getPatternColor(tLRPC$TL_wallPaper.settings.background_color), PorterDuff.Mode.SRC_IN));
                     this.imageView.getImageReceiver().setAlpha(((float) Math.abs(tLRPC$TL_wallPaper.settings.intensity)) / 100.0f);
                 } else if (tLRPC$PhotoSize != null) {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100_b", "jpg", i, 1, tLRPC$TL_wallPaper);
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100_b", "jpg", i2, 1, tLRPC$TL_wallPaper);
                 } else {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100_b", "jpg", i, 1, tLRPC$TL_wallPaper);
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100_b", "jpg", i2, 1, tLRPC$TL_wallPaper);
                 }
             } else if (obj3 instanceof WallpapersListActivity.ColorWallpaper) {
                 WallpapersListActivity.ColorWallpaper colorWallpaper = (WallpapersListActivity.ColorWallpaper) obj3;
-                if (colorWallpaper.path == null && colorWallpaper.pattern == null) {
+                if (colorWallpaper.path == null && colorWallpaper.pattern == null && !"d".equals(colorWallpaper.slug)) {
                     this.imageView.setImageBitmap((Bitmap) null);
                     if (colorWallpaper.isGradient) {
                         this.imageView.setBackground(new MotionBackgroundDrawable(colorWallpaper.color, colorWallpaper.gradientColor1, colorWallpaper.gradientColor2, colorWallpaper.gradientColor3, true));
@@ -173,6 +175,17 @@ public class WallpaperCell extends FrameLayout {
                         } else {
                             this.imageView.getImageReceiver().setGradientBitmap(motionBackgroundDrawable.getBitmap());
                         }
+                        i = MotionBackgroundDrawable.getPatternColor(colorWallpaper.color, colorWallpaper.gradientColor1, colorWallpaper.gradientColor2, colorWallpaper.gradientColor3);
+                    } else {
+                        i = AndroidUtilities.getPatternColor(colorWallpaper.color);
+                    }
+                    if ("d".equals(colorWallpaper.slug)) {
+                        if (colorWallpaper.defaultCache == null) {
+                            colorWallpaper.defaultCache = SvgHelper.getBitmap(NUM, 100, 180, i);
+                        }
+                        this.imageView.setImageBitmap(colorWallpaper.defaultCache);
+                        this.imageView.getImageReceiver().setAlpha(Math.abs(colorWallpaper.intensity));
+                        return;
                     }
                     File file = colorWallpaper.path;
                     if (file != null) {
@@ -182,6 +195,9 @@ public class WallpaperCell extends FrameLayout {
                     TLRPC$PhotoSize closestPhotoSizeWithSize3 = FileLoader.getClosestPhotoSizeWithSize(colorWallpaper.pattern.document.thumbs, 100);
                     this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize3, colorWallpaper.pattern.document), "100_100", (ImageLocation) null, (String) null, "jpg", closestPhotoSizeWithSize3 != null ? closestPhotoSizeWithSize3.size : colorWallpaper.pattern.document.size, 1, colorWallpaper.pattern);
                     this.imageView.getImageReceiver().setAlpha(Math.abs(colorWallpaper.intensity));
+                    if (Build.VERSION.SDK_INT < 29) {
+                        this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(AndroidUtilities.getPatternColor(i), PorterDuff.Mode.SRC_IN));
+                    }
                 }
             } else if (obj3 instanceof WallpapersListActivity.FileWallpaper) {
                 WallpapersListActivity.FileWallpaper fileWallpaper = (WallpapersListActivity.FileWallpaper) obj3;

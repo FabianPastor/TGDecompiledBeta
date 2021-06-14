@@ -5019,7 +5019,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 android.content.Context r13 = r12.mContext
                 r14.<init>(r13)
                 android.content.Context r13 = r12.mContext
-                r0 = 2131165451(0x7var_b, float:1.794512E38)
+                r0 = 2131165442(0x7var_, float:1.7945101E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r13, (int) r0, (java.lang.String) r2)
                 r14.setBackgroundDrawable(r13)
@@ -5039,7 +5039,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 android.widget.ImageView r0 = new android.widget.ImageView
                 android.content.Context r2 = r12.mContext
                 r0.<init>(r2)
-                r2 = 2131165456(0x7var_, float:1.794513E38)
+                r2 = 2131165447(0x7var_, float:1.7945111E38)
                 r0.setImageResource(r2)
                 android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
                 r0.setScaleType(r2)
@@ -5202,9 +5202,9 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r7 = 0
                 r8 = 1
                 if (r3 == 0) goto L_0x062d
-                r9 = 2131165450(0x7var_a, float:1.7945117E38)
+                r9 = 2131165441(0x7var_, float:1.79451E38)
                 java.lang.String r10 = ""
-                r11 = 2131165451(0x7var_b, float:1.794512E38)
+                r11 = 2131165442(0x7var_, float:1.7945101E38)
                 r12 = -1
                 java.lang.String r13 = "windowBackgroundGrayShadow"
                 if (r3 == r8) goto L_0x050d
@@ -5509,7 +5509,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 int r3 = r3.changeInfoRow
                 if (r2 != r3) goto L_0x02d0
             L_0x02c8:
-                r2 = 2131165911(0x7var_d7, float:1.7946052E38)
+                r2 = 2131165902(0x7var_ce, float:1.7946034E38)
                 r1.setIcon(r2)
                 goto L_0x07c1
             L_0x02d0:
@@ -5733,7 +5733,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r2 = 2131625345(0x7f0e0581, float:1.8877895E38)
                 java.lang.String r3 = "EventLog"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165461(0x7var_, float:1.794514E38)
+                r3 = 2131165452(0x7var_c, float:1.7945122E38)
                 r1.setText(r2, r6, r3, r7)
                 goto L_0x07c1
             L_0x04d8:
@@ -5743,7 +5743,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r2 = 2131624727(0x7f0e0317, float:1.8876642E38)
                 java.lang.String r3 = "ChannelInviteViaLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165981(0x7var_d, float:1.7946194E38)
+                r3 = 2131165972(0x7var_, float:1.7946176E38)
                 r1.setText(r2, r6, r3, r8)
                 goto L_0x07c1
             L_0x04f1:
@@ -5754,7 +5754,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r2 = 2131624602(0x7f0e029a, float:1.8876388E38)
                 java.lang.String r3 = "BroadcastGroupConvert"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165729(0x7var_, float:1.7945683E38)
+                r3 = 2131165720(0x7var_, float:1.7945665E38)
                 r1.setText(r2, r6, r3, r7)
                 goto L_0x07c1
             L_0x050d:

@@ -204,7 +204,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
                 float f2;
                 float f3;
                 Canvas canvas2 = canvas;
-                if (!this.renderer.isFirstFrameRendered() || this.renderer.getAlpha() != 1.0f || this.this$0.videoIsPaused) {
+                if (!this.renderer.isFirstFrameRendered() || (!(this.renderer.getAlpha() == 1.0f || this.blurRenderer.getAlpha() == 1.0f) || this.this$0.videoIsPaused)) {
                     if (this.this$0.progressToBackground != 1.0f) {
                         GroupCallMiniTextureView.access$116(this.this$0, 0.10666667f);
                         if (this.this$0.progressToBackground > 1.0f) {
@@ -1309,7 +1309,7 @@ public class GroupCallMiniTextureView extends FrameLayout implements GroupCallSt
             org.telegram.messenger.ImageReceiver r1 = r0.imageReceiver
             android.content.Context r3 = r21.getContext()
             android.content.res.Resources r3 = r3.getResources()
-            r11 = 2131165999(0x7var_f, float:1.794623E38)
+            r11 = 2131165990(0x7var_, float:1.7946213E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r11)
             r1.setImageBitmap((android.graphics.drawable.Drawable) r3)
             goto L_0x034e

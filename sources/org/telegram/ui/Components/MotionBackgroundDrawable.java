@@ -237,9 +237,8 @@ public class MotionBackgroundDrawable extends Drawable {
         return super.getIntrinsicHeight();
     }
 
-    public void setTranslationYAndRotation(int i) {
+    public void setTranslationY(int i) {
         this.translationY = i;
-        invalidateParent();
     }
 
     public void setPatternBitmap(int i, Bitmap bitmap) {

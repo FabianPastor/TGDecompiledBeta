@@ -598,6 +598,9 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
 
     public void setRotateTextureWitchScreen(boolean z) {
         if (this.rotateTextureWitchScreen != z) {
+            if (!z) {
+                setScreenRotation(0);
+            }
             this.rotateTextureWitchScreen = z;
             requestLayout();
         }

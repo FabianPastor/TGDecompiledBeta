@@ -293,7 +293,7 @@ public class LoginActivity extends BaseFragment {
             r5.setAllowOverlayTitle(r4)
             r5 = 1113587712(0x42600000, float:56.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r7 = 2131165500(0x7var_c, float:1.7945219E38)
+            r7 = 2131165491(0x7var_, float:1.79452E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r3.addItemWithWidth(r4, r7, r6)
             r0.doneItem = r3
             org.telegram.ui.Components.ContextProgressView r3 = new org.telegram.ui.Components.ContextProgressView
@@ -508,7 +508,7 @@ public class LoginActivity extends BaseFragment {
             r11 = 21
             if (r10 >= r11) goto L_0x021f
             android.content.res.Resources r14 = r32.getResources()
-            r15 = 2131165420(0x7var_ec, float:1.7945057E38)
+            r15 = 2131165411(0x7var_e3, float:1.7945038E38)
             android.graphics.drawable.Drawable r14 = r14.getDrawable(r15)
             android.graphics.drawable.Drawable r14 = r14.mutate()
             android.graphics.PorterDuffColorFilter r15 = new android.graphics.PorterDuffColorFilter
@@ -693,7 +693,7 @@ public class LoginActivity extends BaseFragment {
             r4 = 0
             goto L_0x0387
         L_0x0384:
-            r4 = 2131165470(0x7var_e, float:1.7945158E38)
+            r4 = 2131165461(0x7var_, float:1.794514E38)
         L_0x0387:
             r1.setBackButtonImage(r4)
             org.telegram.ui.Components.SlideView[] r1 = r0.views
@@ -1453,6 +1453,7 @@ public class LoginActivity extends BaseFragment {
         /* access modifiers changed from: private */
         public boolean ignoreSelection = false;
         private boolean nextPressed = false;
+        private boolean numberFilled;
         /* access modifiers changed from: private */
         public HintEditText phoneField;
         /* access modifiers changed from: private */
@@ -2222,76 +2223,79 @@ public class LoginActivity extends BaseFragment {
         public void fillNumber() {
             boolean z;
             boolean z2;
-            try {
-                TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
-                if (telephonyManager.getSimState() != 1 && telephonyManager.getPhoneType() != 0) {
-                    String str = null;
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        z = this.this$0.getParentActivity().checkSelfPermission("android.permission.READ_PHONE_STATE") == 0;
-                        if (this.this$0.checkShowPermissions && !z) {
-                            this.this$0.permissionsShowItems.clear();
-                            if (!z) {
-                                this.this$0.permissionsShowItems.add("android.permission.READ_PHONE_STATE");
-                            }
-                            if (!this.this$0.permissionsShowItems.isEmpty()) {
-                                SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
-                                if (!globalMainSettings.getBoolean("firstloginshow", true)) {
-                                    if (!this.this$0.getParentActivity().shouldShowRequestPermissionRationale("android.permission.READ_PHONE_STATE")) {
-                                        this.this$0.getParentActivity().requestPermissions((String[]) this.this$0.permissionsShowItems.toArray(new String[0]), 7);
-                                        return;
-                                    }
+            if (!this.numberFilled) {
+                try {
+                    TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
+                    if (telephonyManager.getSimState() != 1 && telephonyManager.getPhoneType() != 0) {
+                        String str = null;
+                        if (Build.VERSION.SDK_INT >= 23) {
+                            z = this.this$0.getParentActivity().checkSelfPermission("android.permission.READ_PHONE_STATE") == 0;
+                            if (this.this$0.checkShowPermissions && !z) {
+                                this.this$0.permissionsShowItems.clear();
+                                if (!z) {
+                                    this.this$0.permissionsShowItems.add("android.permission.READ_PHONE_STATE");
                                 }
-                                globalMainSettings.edit().putBoolean("firstloginshow", false).commit();
-                                AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.this$0.getParentActivity());
-                                builder.setTitle(LocaleController.getString("AppName", NUM));
-                                builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-                                builder.setMessage(LocaleController.getString("AllowFillNumber", NUM));
-                                LoginActivity loginActivity = this.this$0;
-                                Dialog unused = loginActivity.permissionsShowDialog = loginActivity.showDialog(builder.create());
-                                boolean unused2 = this.this$0.needRequestPermissions = true;
+                                if (!this.this$0.permissionsShowItems.isEmpty()) {
+                                    SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+                                    if (!globalMainSettings.getBoolean("firstloginshow", true)) {
+                                        if (!this.this$0.getParentActivity().shouldShowRequestPermissionRationale("android.permission.READ_PHONE_STATE")) {
+                                            this.this$0.getParentActivity().requestPermissions((String[]) this.this$0.permissionsShowItems.toArray(new String[0]), 7);
+                                            return;
+                                        }
+                                    }
+                                    globalMainSettings.edit().putBoolean("firstloginshow", false).commit();
+                                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.this$0.getParentActivity());
+                                    builder.setTitle(LocaleController.getString("AppName", NUM));
+                                    builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
+                                    builder.setMessage(LocaleController.getString("AllowFillNumber", NUM));
+                                    LoginActivity loginActivity = this.this$0;
+                                    Dialog unused = loginActivity.permissionsShowDialog = loginActivity.showDialog(builder.create());
+                                    boolean unused2 = this.this$0.needRequestPermissions = true;
+                                    return;
+                                }
                                 return;
                             }
-                            return;
+                        } else {
+                            z = true;
                         }
-                    } else {
-                        z = true;
-                    }
-                    if (!this.this$0.newAccount && z) {
-                        String stripExceptNumbers = PhoneFormat.stripExceptNumbers(telephonyManager.getLine1Number());
-                        if (!TextUtils.isEmpty(stripExceptNumbers)) {
-                            int i = 4;
-                            if (stripExceptNumbers.length() > 4) {
-                                while (true) {
-                                    if (i < 1) {
-                                        z2 = false;
-                                        break;
+                        this.numberFilled = true;
+                        if (!this.this$0.newAccount && z) {
+                            String stripExceptNumbers = PhoneFormat.stripExceptNumbers(telephonyManager.getLine1Number());
+                            if (!TextUtils.isEmpty(stripExceptNumbers)) {
+                                int i = 4;
+                                if (stripExceptNumbers.length() > 4) {
+                                    while (true) {
+                                        if (i < 1) {
+                                            z2 = false;
+                                            break;
+                                        }
+                                        String substring = stripExceptNumbers.substring(0, i);
+                                        if (this.codesMap.get(substring) != null) {
+                                            String substring2 = stripExceptNumbers.substring(i);
+                                            this.codeField.setText(substring);
+                                            str = substring2;
+                                            z2 = true;
+                                            break;
+                                        }
+                                        i--;
                                     }
-                                    String substring = stripExceptNumbers.substring(0, i);
-                                    if (this.codesMap.get(substring) != null) {
-                                        String substring2 = stripExceptNumbers.substring(i);
-                                        this.codeField.setText(substring);
-                                        str = substring2;
-                                        z2 = true;
-                                        break;
+                                    if (!z2) {
+                                        str = stripExceptNumbers.substring(1);
+                                        this.codeField.setText(stripExceptNumbers.substring(0, 1));
                                     }
-                                    i--;
                                 }
-                                if (!z2) {
-                                    str = stripExceptNumbers.substring(1);
-                                    this.codeField.setText(stripExceptNumbers.substring(0, 1));
+                                if (str != null) {
+                                    this.phoneField.requestFocus();
+                                    this.phoneField.setText(str);
+                                    HintEditText hintEditText = this.phoneField;
+                                    hintEditText.setSelection(hintEditText.length());
                                 }
                             }
-                            if (str != null) {
-                                this.phoneField.requestFocus();
-                                this.phoneField.setText(str);
-                                HintEditText hintEditText = this.phoneField;
-                                hintEditText.setSelection(hintEditText.length());
-                            }
                         }
                     }
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
                 }
-            } catch (Exception e) {
-                FileLog.e((Throwable) e);
             }
         }
 
@@ -2532,7 +2536,7 @@ public class LoginActivity extends BaseFragment {
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165917(0x7var_dd, float:1.7946065E38)
+                r14 = 2131165908(0x7var_d4, float:1.7946046E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
                 if (r14 == 0) goto L_0x00f9
@@ -2600,7 +2604,7 @@ public class LoginActivity extends BaseFragment {
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131166064(0x7var_, float:1.7946363E38)
+                r11 = 2131166055(0x7var_, float:1.7946345E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -2621,7 +2625,7 @@ public class LoginActivity extends BaseFragment {
                 org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166062(0x7var_e, float:1.7946359E38)
+                r10 = 2131166053(0x7var_, float:1.794634E38)
                 r8.setImageResource(r10)
                 org.telegram.ui.Components.RLottieImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -2643,7 +2647,7 @@ public class LoginActivity extends BaseFragment {
                 r8.<init>(r2)
                 r0.blueImageView = r8
                 org.telegram.ui.Components.RLottieDrawable r8 = new org.telegram.ui.Components.RLottieDrawable
-                r18 = 2131558479(0x7f0d004f, float:1.8742275E38)
+                r18 = 2131558480(0x7f0d0050, float:1.8742277E38)
                 r10 = 1115684864(0x42800000, float:64.0)
                 int r20 = org.telegram.messenger.AndroidUtilities.dp(r10)
                 int r21 = org.telegram.messenger.AndroidUtilities.dp(r10)

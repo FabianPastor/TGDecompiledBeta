@@ -534,7 +534,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
     /* JADX WARNING: Code restructure failed: missing block: B:43:0x00a6, code lost:
         r8 = (org.telegram.ui.Cells.ChatMessageCell) r8;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:65:0x011e, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:65:0x0112, code lost:
         r8 = (org.telegram.ui.Cells.ChatMessageCell) r8;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -544,9 +544,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             int r7 = org.telegram.messenger.NotificationCenter.emojiDidLoad
             if (r6 != r7) goto L_0x000d
             org.telegram.ui.Components.RecyclerListView r6 = r5.chatListView
-            if (r6 == 0) goto L_0x014d
+            if (r6 == 0) goto L_0x0141
             r6.invalidateViews()
-            goto L_0x014d
+            goto L_0x0141
         L_0x000d:
             int r7 = org.telegram.messenger.NotificationCenter.messagePlayingDidStart
             r0 = 1
@@ -564,11 +564,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r5.updateTextureViewPosition()
         L_0x002f:
             org.telegram.ui.Components.RecyclerListView r6 = r5.chatListView
-            if (r6 == 0) goto L_0x014d
+            if (r6 == 0) goto L_0x0141
             int r6 = r6.getChildCount()
             r7 = 0
         L_0x0038:
-            if (r7 >= r6) goto L_0x014d
+            if (r7 >= r6) goto L_0x0141
             org.telegram.ui.Components.RecyclerListView r8 = r5.chatListView
             android.view.View r8 = r8.getChildAt(r7)
             boolean r2 = r8 instanceof org.telegram.ui.Cells.ChatMessageCell
@@ -602,20 +602,20 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             goto L_0x0038
         L_0x0080:
             int r7 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset
-            if (r6 == r7) goto L_0x0109
+            if (r6 == r7) goto L_0x00fd
             int r7 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged
             if (r6 != r7) goto L_0x008a
-            goto L_0x0109
+            goto L_0x00fd
         L_0x008a:
             int r7 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged
             if (r6 != r7) goto L_0x00d6
             r6 = r8[r1]
             java.lang.Integer r6 = (java.lang.Integer) r6
             org.telegram.ui.Components.RecyclerListView r7 = r5.chatListView
-            if (r7 == 0) goto L_0x014d
+            if (r7 == 0) goto L_0x0141
             int r7 = r7.getChildCount()
         L_0x009a:
-            if (r1 >= r7) goto L_0x014d
+            if (r1 >= r7) goto L_0x0141
             org.telegram.ui.Components.RecyclerListView r8 = r5.chatListView
             android.view.View r8 = r8.getChildAt(r1)
             boolean r0 = r8 instanceof org.telegram.ui.Cells.ChatMessageCell
@@ -628,7 +628,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             if (r2 != r3) goto L_0x00d3
             org.telegram.messenger.MediaController r6 = org.telegram.messenger.MediaController.getInstance()
             org.telegram.messenger.MessageObject r6 = r6.getPlayingMessageObject()
-            if (r6 == 0) goto L_0x014d
+            if (r6 == 0) goto L_0x0141
             float r7 = r6.audioProgress
             r0.audioProgress = r7
             int r7 = r6.audioProgressSec
@@ -636,65 +636,61 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             int r6 = r6.audioPlayerDuration
             r0.audioPlayerDuration = r6
             r8.updatePlayingMessageProgress()
-            goto L_0x014d
+            goto L_0x0141
         L_0x00d3:
             int r1 = r1 + 1
             goto L_0x009a
         L_0x00d6:
             int r7 = org.telegram.messenger.NotificationCenter.didSetNewWallpapper
-            if (r6 != r7) goto L_0x014d
+            if (r6 != r7) goto L_0x0141
             android.view.View r6 = r5.fragmentView
-            if (r6 == 0) goto L_0x014d
+            if (r6 == 0) goto L_0x0141
             org.telegram.ui.Components.SizeNotifierFrameLayout r6 = r5.contentView
             android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getCachedWallpaper()
             boolean r8 = org.telegram.ui.ActionBar.Theme.isWallpaperMotion()
             r6.setBackgroundImage(r7, r8)
             android.view.View r6 = r5.progressView2
-            android.graphics.drawable.Drawable r6 = r6.getBackground()
-            android.graphics.PorterDuffColorFilter r7 = org.telegram.ui.ActionBar.Theme.colorFilter
-            r6.setColorFilter(r7)
+            r6.invalidate()
             android.widget.TextView r6 = r5.emptyView
-            if (r6 == 0) goto L_0x0103
-            android.graphics.drawable.Drawable r6 = r6.getBackground()
-            android.graphics.PorterDuffColorFilter r7 = org.telegram.ui.ActionBar.Theme.colorFilter
-            r6.setColorFilter(r7)
-        L_0x0103:
+            if (r6 == 0) goto L_0x00f7
+            r6.invalidate()
+        L_0x00f7:
             org.telegram.ui.Components.RecyclerListView r6 = r5.chatListView
             r6.invalidateViews()
-            goto L_0x014d
-        L_0x0109:
+            goto L_0x0141
+        L_0x00fd:
             org.telegram.ui.Components.RecyclerListView r6 = r5.chatListView
-            if (r6 == 0) goto L_0x014d
+            if (r6 == 0) goto L_0x0141
             int r6 = r6.getChildCount()
             r7 = 0
-        L_0x0112:
-            if (r7 >= r6) goto L_0x014d
+        L_0x0106:
+            if (r7 >= r6) goto L_0x0141
             org.telegram.ui.Components.RecyclerListView r8 = r5.chatListView
             android.view.View r8 = r8.getChildAt(r7)
             boolean r2 = r8 instanceof org.telegram.ui.Cells.ChatMessageCell
-            if (r2 == 0) goto L_0x014a
+            if (r2 == 0) goto L_0x013e
             org.telegram.ui.Cells.ChatMessageCell r8 = (org.telegram.ui.Cells.ChatMessageCell) r8
             org.telegram.messenger.MessageObject r2 = r8.getMessageObject()
-            if (r2 == 0) goto L_0x014a
+            if (r2 == 0) goto L_0x013e
             boolean r3 = r2.isVoice()
-            if (r3 != 0) goto L_0x0147
+            if (r3 != 0) goto L_0x013b
             boolean r3 = r2.isMusic()
-            if (r3 == 0) goto L_0x0133
-            goto L_0x0147
-        L_0x0133:
+            if (r3 == 0) goto L_0x0127
+            goto L_0x013b
+        L_0x0127:
             boolean r3 = r2.isRoundVideo()
-            if (r3 == 0) goto L_0x014a
+            if (r3 == 0) goto L_0x013e
             org.telegram.messenger.MediaController r3 = org.telegram.messenger.MediaController.getInstance()
             boolean r2 = r3.isPlayingMessage(r2)
-            if (r2 != 0) goto L_0x014a
+            if (r2 != 0) goto L_0x013e
             r8.checkVideoPlayback(r0)
-            goto L_0x014a
-        L_0x0147:
+            goto L_0x013e
+        L_0x013b:
             r8.updateButtonState(r1, r0, r1)
-        L_0x014a:
+        L_0x013e:
             int r7 = r7 + 1
-            goto L_0x0112
-        L_0x014d:
+            goto L_0x0106
+        L_0x0141:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChannelAdminLogActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -958,7 +954,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         textView.setTextSize(1, 14.0f);
         this.emptyView.setGravity(17);
         this.emptyView.setTextColor(Theme.getColor("chat_serviceText"));
-        this.emptyView.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(10.0f), Theme.getServiceMessageColor()));
+        this.emptyView.setBackground(Theme.createServiceDrawable(AndroidUtilities.dp(6.0f), this.emptyView, this.contentView));
         this.emptyView.setPadding(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
         this.emptyViewContainer.addView(this.emptyView, LayoutHelper.createFrame(-2, -2.0f, 17, 16.0f, 0.0f, 16.0f, 0.0f));
         AnonymousClass5 r42 = new RecyclerListView(context2) {
@@ -1248,8 +1244,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         this.contentView.addView(this.progressView, LayoutHelper.createFrame(-1, -1, 51));
         View view = new View(context2);
         this.progressView2 = view;
-        view.setBackgroundResource(NUM);
-        this.progressView2.getBackground().setColorFilter(Theme.colorFilter);
+        view.setBackground(Theme.createServiceDrawable(AndroidUtilities.dp(18.0f), this.progressView2, this.contentView));
         this.progressView.addView(this.progressView2, LayoutHelper.createFrame(36, 36, 17));
         RadialProgressView radialProgressView = new RadialProgressView(context2);
         this.progressBar = radialProgressView;
@@ -3876,7 +3871,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                                         org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r6 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                                         org.telegram.ui.ChannelAdminLogActivity r6 = org.telegram.ui.ChannelAdminLogActivity.this
                                                         org.telegram.ui.Components.BulletinFactory r6 = org.telegram.ui.Components.BulletinFactory.of((org.telegram.ui.ActionBar.BaseFragment) r6)
-                                                        r0 = 2131558459(0x7f0d003b, float:1.8742234E38)
+                                                        r0 = 2131558460(0x7f0d003c, float:1.8742236E38)
                                                         r1 = 2131625969(0x7f0e07f1, float:1.887916E38)
                                                         java.lang.String r2 = "LinkHashExpired"
                                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
@@ -4095,7 +4090,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         } else if (i == 2) {
                                             chatMessageCell = new ChatUnreadCell(this.mContext);
                                         } else {
-                                            chatMessageCell = new ChatLoadingCell(this.mContext);
+                                            chatMessageCell = new ChatLoadingCell(this.mContext, ChannelAdminLogActivity.this.contentView);
                                         }
                                         chatMessageCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
                                         return new RecyclerListView.Holder(chatMessageCell);

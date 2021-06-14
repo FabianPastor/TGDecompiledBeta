@@ -531,7 +531,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1.<init>()
             r0.setActionBarMenuOnItemClick(r1)
             android.content.res.Resources r0 = r27.getResources()
-            r1 = 2131165935(0x7var_ef, float:1.7946101E38)
+            r1 = 2131165926(0x7var_e6, float:1.7946083E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             r6.pinnedHeaderShadowDrawable = r0
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -578,7 +578,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r0.clear()
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
-            r1 = 2131165480(0x7var_, float:1.7945178E38)
+            r1 = 2131165471(0x7var_f, float:1.794516E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r8, (int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.setIsSearchField(r9)
             org.telegram.ui.MediaActivity$6 r1 = new org.telegram.ui.MediaActivity$6
@@ -654,7 +654,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             if (r1 == 0) goto L_0x026e
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
             r5 = 7
-            r12 = 2131165777(0x7var_, float:1.794578E38)
+            r12 = 2131165768(0x7var_, float:1.7945762E38)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r14 = 2131623977(0x7f0e0029, float:1.887512E38)
             java.lang.String r15 = "AccDescrGoToMessage"
@@ -663,7 +663,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r6.gotoItem = r5
             r1.add(r5)
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
-            r5 = 2131165749(0x7var_, float:1.7945724E38)
+            r5 = 2131165740(0x7var_c, float:1.7945706E38)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r13 = 2131625588(0x7f0e0674, float:1.8878388E38)
             java.lang.String r14 = "Forward"
@@ -672,7 +672,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1.add(r5)
         L_0x026e:
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
-            r5 = 2131165737(0x7var_, float:1.79457E38)
+            r5 = 2131165728(0x7var_, float:1.7945681E38)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r12 = 2131625106(0x7f0e0492, float:1.887741E38)
             java.lang.String r13 = "Delete"

@@ -266,40 +266,89 @@ public class SvgHelper {
         }
     }
 
-    /* JADX WARNING: Missing exception handler attribute for start block: B:10:0x0033 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:12:0x003f */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static android.graphics.Bitmap getBitmap(java.io.File r8, int r9, int r10, boolean r11) {
+    public static android.graphics.Bitmap getBitmap(int r8, int r9, int r10, int r11) {
         /*
-            java.io.FileInputStream r0 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0034 }
-            r0.<init>(r8)     // Catch:{ Exception -> 0x0034 }
-            javax.xml.parsers.SAXParserFactory r8 = javax.xml.parsers.SAXParserFactory.newInstance()     // Catch:{ all -> 0x002f }
-            javax.xml.parsers.SAXParser r8 = r8.newSAXParser()     // Catch:{ all -> 0x002f }
-            org.xml.sax.XMLReader r8 = r8.getXMLReader()     // Catch:{ all -> 0x002f }
-            org.telegram.messenger.SvgHelper$SVGHandler r7 = new org.telegram.messenger.SvgHelper$SVGHandler     // Catch:{ all -> 0x002f }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0040 }
+            android.content.res.Resources r0 = r0.getResources()     // Catch:{ Exception -> 0x0040 }
+            java.io.InputStream r8 = r0.openRawResource(r8)     // Catch:{ Exception -> 0x0040 }
+            javax.xml.parsers.SAXParserFactory r0 = javax.xml.parsers.SAXParserFactory.newInstance()     // Catch:{ all -> 0x0039 }
+            javax.xml.parsers.SAXParser r0 = r0.newSAXParser()     // Catch:{ all -> 0x0039 }
+            org.xml.sax.XMLReader r0 = r0.getXMLReader()     // Catch:{ all -> 0x0039 }
+            org.telegram.messenger.SvgHelper$SVGHandler r7 = new org.telegram.messenger.SvgHelper$SVGHandler     // Catch:{ all -> 0x0039 }
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r11)     // Catch:{ all -> 0x0039 }
             r5 = 0
             r6 = 0
             r1 = r7
             r2 = r9
             r3 = r10
-            r4 = r11
-            r1.<init>(r2, r3, r4, r5)     // Catch:{ all -> 0x002f }
-            r8.setContentHandler(r7)     // Catch:{ all -> 0x002f }
-            org.xml.sax.InputSource r9 = new org.xml.sax.InputSource     // Catch:{ all -> 0x002f }
-            r9.<init>(r0)     // Catch:{ all -> 0x002f }
-            r8.parse(r9)     // Catch:{ all -> 0x002f }
-            android.graphics.Bitmap r8 = r7.getBitmap()     // Catch:{ all -> 0x002f }
-            r0.close()     // Catch:{ Exception -> 0x0034 }
-            return r8
-        L_0x002f:
-            r8 = move-exception
-            r0.close()     // Catch:{ all -> 0x0033 }
-        L_0x0033:
-            throw r8     // Catch:{ Exception -> 0x0034 }
-        L_0x0034:
+            r1.<init>(r2, r3, r4, r5)     // Catch:{ all -> 0x0039 }
+            r0.setContentHandler(r7)     // Catch:{ all -> 0x0039 }
+            org.xml.sax.InputSource r9 = new org.xml.sax.InputSource     // Catch:{ all -> 0x0039 }
+            r9.<init>(r8)     // Catch:{ all -> 0x0039 }
+            r0.parse(r9)     // Catch:{ all -> 0x0039 }
+            android.graphics.Bitmap r9 = r7.getBitmap()     // Catch:{ all -> 0x0039 }
+            if (r8 == 0) goto L_0x0038
+            r8.close()     // Catch:{ Exception -> 0x0040 }
+        L_0x0038:
+            return r9
+        L_0x0039:
+            r9 = move-exception
+            if (r8 == 0) goto L_0x003f
+            r8.close()     // Catch:{ all -> 0x003f }
+        L_0x003f:
+            throw r9     // Catch:{ Exception -> 0x0040 }
+        L_0x0040:
             r8 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
             r8 = 0
             return r8
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.getBitmap(int, int, int, int):android.graphics.Bitmap");
+    }
+
+    /* JADX WARNING: Missing exception handler attribute for start block: B:15:0x003d */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static android.graphics.Bitmap getBitmap(java.io.File r9, int r10, int r11, boolean r12) {
+        /*
+            r0 = 0
+            java.io.FileInputStream r1 = new java.io.FileInputStream     // Catch:{ Exception -> 0x003e }
+            r1.<init>(r9)     // Catch:{ Exception -> 0x003e }
+            javax.xml.parsers.SAXParserFactory r9 = javax.xml.parsers.SAXParserFactory.newInstance()     // Catch:{ all -> 0x0039 }
+            javax.xml.parsers.SAXParser r9 = r9.newSAXParser()     // Catch:{ all -> 0x0039 }
+            org.xml.sax.XMLReader r9 = r9.getXMLReader()     // Catch:{ all -> 0x0039 }
+            org.telegram.messenger.SvgHelper$SVGHandler r8 = new org.telegram.messenger.SvgHelper$SVGHandler     // Catch:{ all -> 0x0039 }
+            if (r12 == 0) goto L_0x001d
+            r12 = -1
+            java.lang.Integer r12 = java.lang.Integer.valueOf(r12)     // Catch:{ all -> 0x0039 }
+            r5 = r12
+            goto L_0x001e
+        L_0x001d:
+            r5 = r0
+        L_0x001e:
+            r6 = 0
+            r7 = 0
+            r2 = r8
+            r3 = r10
+            r4 = r11
+            r2.<init>(r3, r4, r5, r6)     // Catch:{ all -> 0x0039 }
+            r9.setContentHandler(r8)     // Catch:{ all -> 0x0039 }
+            org.xml.sax.InputSource r10 = new org.xml.sax.InputSource     // Catch:{ all -> 0x0039 }
+            r10.<init>(r1)     // Catch:{ all -> 0x0039 }
+            r9.parse(r10)     // Catch:{ all -> 0x0039 }
+            android.graphics.Bitmap r9 = r8.getBitmap()     // Catch:{ all -> 0x0039 }
+            r1.close()     // Catch:{ Exception -> 0x003e }
+            return r9
+        L_0x0039:
+            r9 = move-exception
+            r1.close()     // Catch:{ all -> 0x003d }
+        L_0x003d:
+            throw r9     // Catch:{ Exception -> 0x003e }
+        L_0x003e:
+            r9 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r9)
+            return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SvgHelper.getBitmap(java.io.File, int, int, boolean):android.graphics.Bitmap");
     }
@@ -307,7 +356,7 @@ public class SvgHelper {
     public static Bitmap getBitmap(String str, int i, int i2, boolean z) {
         try {
             XMLReader xMLReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-            SVGHandler sVGHandler = new SVGHandler(i, i2, z, false);
+            SVGHandler sVGHandler = new SVGHandler(i, i2, z ? -1 : null, false);
             xMLReader.setContentHandler(sVGHandler);
             xMLReader.parse(new InputSource(new StringReader(str)));
             return sVGHandler.getBitmap();
@@ -320,9 +369,22 @@ public class SvgHelper {
     public static SvgDrawable getDrawable(String str) {
         try {
             XMLReader xMLReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
-            SVGHandler sVGHandler = new SVGHandler(0, 0, false, true);
+            SVGHandler sVGHandler = new SVGHandler(0, 0, (Integer) null, true);
             xMLReader.setContentHandler(sVGHandler);
             xMLReader.parse(new InputSource(new StringReader(str)));
+            return sVGHandler.getDrawable();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+            return null;
+        }
+    }
+
+    public static SvgDrawable getDrawable(int i, int i2) {
+        try {
+            XMLReader xMLReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+            SVGHandler sVGHandler = new SVGHandler(0, 0, Integer.valueOf(i2), true);
+            xMLReader.setContentHandler(sVGHandler);
+            xMLReader.parse(new InputSource(ApplicationLoader.applicationContext.getResources().openRawResource(i)));
             return sVGHandler.getDrawable();
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -1154,12 +1216,12 @@ public class SvgHelper {
         private SvgDrawable drawable;
         private HashMap<String, StyleSet> globalStyles;
         private Paint paint;
+        private Integer paintColor;
         boolean pushed;
         private RectF rect;
         private RectF rectTmp;
         private float scale;
         private StringBuilder styles;
-        private boolean whiteOnly;
 
         public void endDocument() {
         }
@@ -1167,7 +1229,7 @@ public class SvgHelper {
         public void startDocument() {
         }
 
-        private SVGHandler(int i, int i2, boolean z, boolean z2) {
+        private SVGHandler(int i, int i2, Integer num, boolean z) {
             this.scale = 1.0f;
             this.paint = new Paint(1);
             this.rect = new RectF();
@@ -1176,8 +1238,8 @@ public class SvgHelper {
             this.globalStyles = new HashMap<>();
             this.desiredWidth = i;
             this.desiredHeight = i2;
-            this.whiteOnly = z;
-            if (z2) {
+            this.paintColor = num;
+            if (z) {
                 this.drawable = new SvgDrawable();
             }
         }
@@ -1197,8 +1259,9 @@ public class SvgHelper {
                     return false;
                 } else {
                     this.paint.setStyle(Paint.Style.FILL);
-                    if (this.whiteOnly) {
-                        this.paint.setColor(-1);
+                    Integer num = this.paintColor;
+                    if (num != null) {
+                        this.paint.setColor(num.intValue());
                     } else {
                         this.paint.setColor(-16777216);
                     }
@@ -1241,8 +1304,9 @@ public class SvgHelper {
         }
 
         private void doColor(Properties properties, Integer num, boolean z) {
-            if (this.whiteOnly) {
-                this.paint.setColor(-1);
+            Integer num2 = this.paintColor;
+            if (num2 != null) {
+                this.paint.setColor(num2.intValue());
             } else {
                 this.paint.setColor((num.intValue() & 16777215) | -16777216);
             }

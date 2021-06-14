@@ -3,6 +3,7 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -17,12 +18,11 @@ public class ChatBigEmptyView extends LinearLayout {
     private ArrayList<TextView> textViews = new ArrayList<>();
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public ChatBigEmptyView(Context context, int i) {
+    public ChatBigEmptyView(Context context, View view, int i) {
         super(context);
         Context context2 = context;
         int i2 = i;
-        setBackgroundResource(NUM);
-        getBackground().setColorFilter(Theme.colorFilter);
+        setBackground(Theme.createServiceDrawable(AndroidUtilities.dp(18.0f), this, view));
         setPadding(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(12.0f));
         setOrientation(1);
         if (i2 == 0) {

@@ -2,10 +2,6 @@ package org.telegram.tgnet;
 
 public class TLRPC$TL_photoCachedSize extends TLRPC$PhotoSize {
     public static int constructor = 35527382;
-    public byte[] bytes;
-    public int h;
-    public String type;
-    public int w;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.type = abstractSerializedData.readString(z);

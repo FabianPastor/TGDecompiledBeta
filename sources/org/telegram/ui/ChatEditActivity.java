@@ -394,7 +394,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r2.onDestroy()
         L_0x000b:
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r3 = 2131165470(0x7var_e, float:1.7945158E38)
+            r3 = 2131165461(0x7var_, float:1.794514E38)
             r2.setBackButtonImage(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
             r3 = 1
@@ -941,7 +941,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.ui.Cells.TextDetailCell r11 = r0.historyCell
             if (r11 == 0) goto L_0x04df
         L_0x04c4:
-            r11 = 2131165500(0x7var_c, float:1.7945219E38)
+            r11 = 2131165491(0x7var_, float:1.79452E38)
             r12 = 1113587712(0x42600000, float:56.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r4.addItemWithWidth(r3, r11, r12)
@@ -1048,7 +1048,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r11 = 2131625345(0x7f0e0581, float:1.8877895E38)
             java.lang.String r13 = "EventLog"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
-            r13 = 2131165461(0x7var_, float:1.794514E38)
+            r13 = 2131165452(0x7var_c, float:1.7945122E38)
             r4.setTextAndIcon((java.lang.String) r11, (int) r13, (boolean) r14)
             org.telegram.ui.Cells.TextCell r4 = r0.logCell
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r14)
@@ -1163,7 +1163,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         L_0x06d2:
             org.telegram.tgnet.TLRPC$Chat r4 = r0.currentChat
             boolean r4 = r4.creator
-            r9 = 2131165451(0x7var_b, float:1.794512E38)
+            r9 = 2131165442(0x7var_, float:1.7945101E38)
             java.lang.String r11 = "windowBackgroundGrayShadow"
             if (r4 == 0) goto L_0x075b
             android.widget.FrameLayout r4 = new android.widget.FrameLayout
@@ -1232,7 +1232,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r4.setBackgroundDrawable(r5)
             goto L_0x0786
         L_0x077c:
-            r5 = 2131165450(0x7var_a, float:1.7945117E38)
+            r5 = 2131165441(0x7var_, float:1.79451E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r5, (java.lang.String) r11)
             r4.setBackgroundDrawable(r5)
         L_0x0786:

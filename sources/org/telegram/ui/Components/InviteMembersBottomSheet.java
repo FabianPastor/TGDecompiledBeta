@@ -255,7 +255,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             r4 = 21
             if (r3 >= r4) goto L_0x012b
             android.content.res.Resources r5 = r17.getResources()
-            r11 = 2131165420(0x7var_ec, float:1.7945057E38)
+            r11 = 2131165411(0x7var_e3, float:1.7945038E38)
             android.graphics.drawable.Drawable r5 = r5.getDrawable(r11)
             android.graphics.drawable.Drawable r5 = r5.mutate()
             android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
@@ -277,7 +277,7 @@ public class InviteMembersBottomSheet extends UsersAlertBase implements Notifica
             android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
             r1.<init>(r2, r5)
             r0.setColorFilter(r1)
-            r1 = 2131165417(0x7var_e9, float:1.794505E38)
+            r1 = 2131165408(0x7var_e0, float:1.7945032E38)
             r0.setImageResource(r1)
             r1 = 1082130432(0x40800000, float:4.0)
             if (r3 < r4) goto L_0x01a0

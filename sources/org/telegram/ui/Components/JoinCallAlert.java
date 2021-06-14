@@ -396,7 +396,7 @@ public class JoinCallAlert extends BottomSheet {
             r0.delegate = r3
             r0.currentType = r2
             android.content.res.Resources r6 = r19.getResources()
-            r7 = 2131166031(0x7var_f, float:1.7946296E38)
+            r7 = 2131166022(0x7var_, float:1.7946278E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.shadowDrawable = r6
@@ -547,7 +547,7 @@ public class JoinCallAlert extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r8 = new org.telegram.ui.Components.RLottieImageView
             r8.<init>(r1)
             r8.setAutoRepeat(r7)
-            r9 = 2131558509(0x7f0d006d, float:1.8742336E38)
+            r9 = 2131558510(0x7f0d006e, float:1.8742338E38)
             r10 = 120(0x78, float:1.68E-43)
             r8.setAnimation(r9, r10, r10)
             r8.playAnimation()

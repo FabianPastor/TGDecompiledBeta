@@ -748,7 +748,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r16)
             r0.setBackgroundColor(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131165470(0x7var_e, float:1.7945158E38)
+            r1 = 2131165461(0x7var_, float:1.794514E38)
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r17 = "dialogTextBlack"
@@ -777,7 +777,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.selectedMenuItem = r0
             r0.setLongClickEnabled(r10)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
-            r1 = 2131165477(0x7var_, float:1.7945172E38)
+            r1 = 2131165468(0x7var_c, float:1.7945154E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.selectedMenuItem
             r1 = 2131623986(0x7f0e0032, float:1.8875139E38)
@@ -862,7 +862,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.searchItem = r0
             r0.setLongClickEnabled(r10)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
-            r1 = 2131165480(0x7var_, float:1.7945178E38)
+            r1 = 2131165471(0x7var_f, float:1.794516E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
             r1 = 2131627294(0x7f0e0d1e, float:1.8881848E38)
@@ -1153,7 +1153,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.writeButtonDrawable = r2
             if (r4 >= r5) goto L_0x04e7
             android.content.res.Resources r2 = r32.getResources()
-            r3 = 2131165421(0x7var_ed, float:1.7945059E38)
+            r3 = 2131165412(0x7var_e4, float:1.794504E38)
             android.graphics.drawable.Drawable r2 = r2.getDrawable(r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter

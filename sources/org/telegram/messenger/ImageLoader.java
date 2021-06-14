@@ -51,7 +51,7 @@ import org.telegram.tgnet.TLRPC$TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC$TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC$TL_photoCachedSize;
-import org.telegram.tgnet.TLRPC$TL_photoSize;
+import org.telegram.tgnet.TLRPC$TL_photoSize_layer127;
 import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.AnimatedFileDrawable;
@@ -6927,18 +6927,18 @@ public class ImageLoader {
                 randomAccessFile2.write(findPhotoCachedSize.bytes);
                 randomAccessFile2.close();
             }
-            TLRPC$TL_photoSize tLRPC$TL_photoSize = new TLRPC$TL_photoSize();
-            tLRPC$TL_photoSize.w = findPhotoCachedSize.w;
-            tLRPC$TL_photoSize.h = findPhotoCachedSize.h;
-            tLRPC$TL_photoSize.location = findPhotoCachedSize.location;
-            tLRPC$TL_photoSize.size = findPhotoCachedSize.size;
-            tLRPC$TL_photoSize.type = findPhotoCachedSize.type;
+            TLRPC$TL_photoSize_layer127 tLRPC$TL_photoSize_layer127 = new TLRPC$TL_photoSize_layer127();
+            tLRPC$TL_photoSize_layer127.w = findPhotoCachedSize.w;
+            tLRPC$TL_photoSize_layer127.h = findPhotoCachedSize.h;
+            tLRPC$TL_photoSize_layer127.location = findPhotoCachedSize.location;
+            tLRPC$TL_photoSize_layer127.size = findPhotoCachedSize.size;
+            tLRPC$TL_photoSize_layer127.type = findPhotoCachedSize.type;
             TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
             if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaPhoto) {
                 int size = tLRPC$MessageMedia.photo.sizes.size();
                 while (i < size) {
                     if (tLRPC$Message.media.photo.sizes.get(i) instanceof TLRPC$TL_photoCachedSize) {
-                        tLRPC$Message.media.photo.sizes.set(i, tLRPC$TL_photoSize);
+                        tLRPC$Message.media.photo.sizes.set(i, tLRPC$TL_photoSize_layer127);
                         return;
                     }
                     i++;
@@ -6947,7 +6947,7 @@ public class ImageLoader {
                 int size2 = tLRPC$MessageMedia.document.thumbs.size();
                 while (i < size2) {
                     if (tLRPC$Message.media.document.thumbs.get(i) instanceof TLRPC$TL_photoCachedSize) {
-                        tLRPC$Message.media.document.thumbs.set(i, tLRPC$TL_photoSize);
+                        tLRPC$Message.media.document.thumbs.set(i, tLRPC$TL_photoSize_layer127);
                         return;
                     }
                     i++;
@@ -6956,7 +6956,7 @@ public class ImageLoader {
                 int size3 = tLRPC$MessageMedia.webpage.photo.sizes.size();
                 while (i < size3) {
                     if (tLRPC$Message.media.webpage.photo.sizes.get(i) instanceof TLRPC$TL_photoCachedSize) {
-                        tLRPC$Message.media.webpage.photo.sizes.set(i, tLRPC$TL_photoSize);
+                        tLRPC$Message.media.webpage.photo.sizes.set(i, tLRPC$TL_photoSize_layer127);
                         return;
                     }
                     i++;
@@ -7064,12 +7064,12 @@ public class ImageLoader {
             }
         } else {
             File pathToAttach = FileLoader.getPathToAttach(findPhotoCachedSize, true);
-            TLRPC$TL_photoSize tLRPC$TL_photoSize = new TLRPC$TL_photoSize();
-            tLRPC$TL_photoSize.w = findPhotoCachedSize.w;
-            tLRPC$TL_photoSize.h = findPhotoCachedSize.h;
-            tLRPC$TL_photoSize.location = findPhotoCachedSize.location;
-            tLRPC$TL_photoSize.size = findPhotoCachedSize.size;
-            tLRPC$TL_photoSize.type = findPhotoCachedSize.type;
+            TLRPC$TL_photoSize_layer127 tLRPC$TL_photoSize_layer127 = new TLRPC$TL_photoSize_layer127();
+            tLRPC$TL_photoSize_layer127.w = findPhotoCachedSize.w;
+            tLRPC$TL_photoSize_layer127.h = findPhotoCachedSize.h;
+            tLRPC$TL_photoSize_layer127.location = findPhotoCachedSize.location;
+            tLRPC$TL_photoSize_layer127.size = findPhotoCachedSize.size;
+            tLRPC$TL_photoSize_layer127.type = findPhotoCachedSize.type;
             if (pathToAttach.exists() && tLRPC$Message2.grouped_id == 0) {
                 org.telegram.ui.Components.Point messageSize2 = ChatMessageCell.getMessageSize(findPhotoCachedSize.w, findPhotoCachedSize.h);
                 String format2 = String.format(Locale.US, "%d_%d@%d_%d_b", new Object[]{Long.valueOf(findPhotoCachedSize.location.volume_id), Integer.valueOf(findPhotoCachedSize.location.local_id), Integer.valueOf((int) (messageSize2.x / AndroidUtilities.density)), Integer.valueOf((int) (messageSize2.y / AndroidUtilities.density))});

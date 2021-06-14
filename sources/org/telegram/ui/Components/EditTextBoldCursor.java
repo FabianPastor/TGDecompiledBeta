@@ -261,7 +261,7 @@ public class EditTextBoldCursor extends EditText {
         L_0x00ab:
             java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00b9 }
             if (r0 == 0) goto L_0x00b9
-            r1 = 2131165403(0x7var_db, float:1.7945022E38)
+            r1 = 2131165394(0x7var_d2, float:1.7945004E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00b9 }
             r0.set(r7, r1)     // Catch:{ all -> 0x00b9 }
         L_0x00b9:

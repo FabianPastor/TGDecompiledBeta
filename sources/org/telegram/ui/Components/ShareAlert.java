@@ -528,7 +528,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r7 = r26
             r0.parentFragment = r7
             android.content.res.Resources r7 = r25.getResources()
-            r8 = 2131166031(0x7var_f, float:1.7946296E38)
+            r8 = 2131166022(0x7var_, float:1.7946278E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r8)
             android.graphics.drawable.Drawable r7 = r7.mutate()
             r0.shadowDrawable = r7
@@ -980,7 +980,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r7.setOnClickListener(r11)
             android.widget.ImageView r7 = new android.widget.ImageView
             r7.<init>(r1)
-            r11 = 2131166029(0x7var_d, float:1.7946292E38)
+            r11 = 2131166020(0x7var_, float:1.7946274E38)
             r7.setImageResource(r11)
             android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
             boolean r12 = r0.darkTheme
@@ -1146,7 +1146,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r5, r9, r7)
             if (r10 >= r11) goto L_0x05cb
             android.content.res.Resources r7 = r25.getResources()
-            r9 = 2131165421(0x7var_ed, float:1.7945059E38)
+            r9 = 2131165412(0x7var_e4, float:1.794504E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r9)
             android.graphics.drawable.Drawable r7 = r7.mutate()
             android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter

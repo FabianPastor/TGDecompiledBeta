@@ -1677,7 +1677,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             r6.<init>(r3)     // Catch:{ all -> 0x00fc }
             android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x00fc }
             android.content.res.Resources r7 = r7.getResources()     // Catch:{ all -> 0x00fc }
-            r8 = 2131165612(0x7var_ac, float:1.7945446E38)
+            r8 = 2131165603(0x7var_a3, float:1.7945428E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r8)     // Catch:{ all -> 0x00fc }
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ all -> 0x00fc }
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x00fc }

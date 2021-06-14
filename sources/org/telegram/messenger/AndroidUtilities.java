@@ -4191,7 +4191,7 @@ public class AndroidUtilities {
     public static int getPatternColor(int i, boolean z) {
         float[] RGBtoHSB = RGBtoHSB(Color.red(i), Color.green(i), Color.blue(i));
         if (RGBtoHSB[1] > 0.0f || (RGBtoHSB[2] < 1.0f && RGBtoHSB[2] > 0.0f)) {
-            RGBtoHSB[1] = Math.min(1.0f, RGBtoHSB[1] + 0.05f + ((1.0f - RGBtoHSB[1]) * 0.1f));
+            RGBtoHSB[1] = Math.min(1.0f, RGBtoHSB[1] + (z ? 0.15f : 0.05f) + ((1.0f - RGBtoHSB[1]) * 0.1f));
         }
         if (z || RGBtoHSB[2] > 0.5f) {
             RGBtoHSB[2] = Math.max(0.0f, RGBtoHSB[2] * 0.65f);

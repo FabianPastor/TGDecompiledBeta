@@ -3446,7 +3446,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 java.lang.String r10 = "StatisticOpenProfile"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165679(0x7var_ef, float:1.7945582E38)
+                r9 = 2131165670(0x7var_e6, float:1.7945564E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 2
@@ -3456,7 +3456,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 java.lang.String r10 = "StatisticSearchUserHistory"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165641(0x7var_c9, float:1.7945505E38)
+                r9 = 2131165632(0x7var_c0, float:1.7945487E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 1

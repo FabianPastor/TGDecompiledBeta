@@ -215,7 +215,6 @@ public class ThemeDescription {
     public void setColor(int i, boolean z, boolean z2) {
         Class[] clsArr;
         Drawable[] compoundDrawables;
-        Drawable background;
         if (z2) {
             Theme.setColor(this.currentKey, i, z);
         }
@@ -273,9 +272,9 @@ public class ThemeDescription {
         View view = this.viewToInvalidate;
         if (view != null && this.listClasses == null && this.listClassesFieldName == null && ((this.changeFlags & FLAG_CHECKTAG) == 0 || checkTag(this.currentKey, view))) {
             if ((this.changeFlags & FLAG_BACKGROUND) != 0) {
-                Drawable background2 = this.viewToInvalidate.getBackground();
-                if (background2 instanceof MessageBackgroundDrawable) {
-                    ((MessageBackgroundDrawable) background2).setColor(i);
+                Drawable background = this.viewToInvalidate.getBackground();
+                if (background instanceof MessageBackgroundDrawable) {
+                    ((MessageBackgroundDrawable) background).setColor(i);
                 } else {
                     this.viewToInvalidate.setBackgroundColor(i);
                 }
@@ -288,21 +287,21 @@ public class ThemeDescription {
                         ((EditTextBoldCursor) view2).setErrorLineColor(i);
                     }
                 } else {
-                    Drawable background3 = this.viewToInvalidate.getBackground();
-                    if (background3 instanceof CombinedDrawable) {
+                    Drawable background2 = this.viewToInvalidate.getBackground();
+                    if (background2 instanceof CombinedDrawable) {
                         if ((this.changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0) {
-                            background3 = ((CombinedDrawable) background3).getBackground();
+                            background2 = ((CombinedDrawable) background2).getBackground();
                         } else {
-                            background3 = ((CombinedDrawable) background3).getIcon();
+                            background2 = ((CombinedDrawable) background2).getIcon();
                         }
                     }
-                    if (background3 != null) {
-                        if ((background3 instanceof StateListDrawable) || (Build.VERSION.SDK_INT >= 21 && (background3 instanceof RippleDrawable))) {
-                            Theme.setSelectorDrawableColor(background3, i, (this.changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
-                        } else if (background3 instanceof ShapeDrawable) {
-                            ((ShapeDrawable) background3).getPaint().setColor(i);
+                    if (background2 != null) {
+                        if ((background2 instanceof StateListDrawable) || (Build.VERSION.SDK_INT >= 21 && (background2 instanceof RippleDrawable))) {
+                            Theme.setSelectorDrawableColor(background2, i, (this.changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
+                        } else if (background2 instanceof ShapeDrawable) {
+                            ((ShapeDrawable) background2).getPaint().setColor(i);
                         } else {
-                            background3.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+                            background2.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
                         }
                     }
                 }
@@ -408,11 +407,8 @@ public class ThemeDescription {
             }
         }
         View view10 = this.viewToInvalidate;
-        if (!(view10 == null || (this.changeFlags & FLAG_SERVICEBACKGROUND) == 0 || (background = view10.getBackground()) == null)) {
-            background.setColorFilter(Theme.colorFilter);
-        }
         int i10 = this.changeFlags;
-        if ((FLAG_IMAGECOLOR & i10) != 0 && ((i10 & FLAG_CHECKTAG) == 0 || checkTag(this.currentKey, this.viewToInvalidate))) {
+        if ((FLAG_IMAGECOLOR & i10) != 0 && ((i10 & FLAG_CHECKTAG) == 0 || checkTag(this.currentKey, view10))) {
             View view11 = this.viewToInvalidate;
             if (view11 instanceof ImageView) {
                 if ((this.changeFlags & FLAG_USEBACKGROUNDDRAWABLE) != 0) {
@@ -551,31 +547,28 @@ public class ThemeDescription {
                                         i4++;
                                     }
                                 }
-                            } else if ((FLAG_SERVICEBACKGROUND & i3) != 0) {
-                                Drawable background = view.getBackground();
-                                if (background != null) {
-                                    background.setColorFilter(Theme.colorFilter);
+                            } else if ((FLAG_SERVICEBACKGROUND & i3) == 0) {
+                                if ((FLAG_SELECTOR & i3) != 0) {
+                                    view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                                } else if ((i3 & FLAG_SELECTORWHITE) != 0) {
+                                    view.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                                 }
-                            } else if ((FLAG_SELECTOR & i3) != 0) {
-                                view.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-                            } else if ((i3 & FLAG_SELECTORWHITE) != 0) {
-                                view.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                             }
                         } else {
-                            Drawable background2 = view.getBackground();
-                            if (background2 != null) {
+                            Drawable background = view.getBackground();
+                            if (background != null) {
                                 int i5 = this.changeFlags;
                                 if ((FLAG_CELLBACKGROUNDCOLOR & i5) == 0) {
-                                    if (background2 instanceof CombinedDrawable) {
-                                        background2 = ((CombinedDrawable) background2).getIcon();
-                                    } else if ((background2 instanceof StateListDrawable) || (Build.VERSION.SDK_INT >= 21 && (background2 instanceof RippleDrawable))) {
-                                        Theme.setSelectorDrawableColor(background2, i, (i5 & FLAG_DRAWABLESELECTEDSTATE) != 0);
+                                    if (background instanceof CombinedDrawable) {
+                                        background = ((CombinedDrawable) background).getIcon();
+                                    } else if ((background instanceof StateListDrawable) || (Build.VERSION.SDK_INT >= 21 && (background instanceof RippleDrawable))) {
+                                        Theme.setSelectorDrawableColor(background, i, (i5 & FLAG_DRAWABLESELECTEDSTATE) != 0);
                                     }
-                                    background2.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
-                                } else if (background2 instanceof CombinedDrawable) {
-                                    Drawable background3 = ((CombinedDrawable) background2).getBackground();
-                                    if (background3 instanceof ColorDrawable) {
-                                        ((ColorDrawable) background3).setColor(i);
+                                    background.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+                                } else if (background instanceof CombinedDrawable) {
+                                    Drawable background2 = ((CombinedDrawable) background).getBackground();
+                                    if (background2 instanceof ColorDrawable) {
+                                        ((ColorDrawable) background2).setColor(i);
                                     }
                                 }
                             }
@@ -613,9 +606,9 @@ public class ThemeDescription {
                                         int i6 = this.changeFlags;
                                         if ((FLAG_BACKGROUND & i6) != 0 && (drawable instanceof View)) {
                                             View view2 = (View) drawable;
-                                            Drawable background4 = view2.getBackground();
-                                            if (background4 instanceof MessageBackgroundDrawable) {
-                                                ((MessageBackgroundDrawable) background4).setColor(i);
+                                            Drawable background3 = view2.getBackground();
+                                            if (background3 instanceof MessageBackgroundDrawable) {
+                                                ((MessageBackgroundDrawable) background3).setColor(i);
                                             } else {
                                                 view2.setBackgroundColor(i);
                                             }
