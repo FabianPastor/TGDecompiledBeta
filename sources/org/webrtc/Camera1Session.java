@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import org.webrtc.Camera1Session;
 import org.webrtc.CameraEnumerationAndroid;
 import org.webrtc.CameraSession;
+import org.webrtc.VideoSink;
 
 class Camera1Session implements CameraSession {
     private static final int NUMBER_OF_CAPTURE_BUFFERS = 3;
@@ -208,6 +209,10 @@ class Camera1Session implements CameraSession {
         this.surfaceTextureHelper.startListening(new VideoSink() {
             public final void onFrame(VideoFrame videoFrame) {
                 Camera1Session.this.lambda$listenForTextureFrames$0$Camera1Session(videoFrame);
+            }
+
+            public /* synthetic */ void setParentSink(VideoSink videoSink) {
+                VideoSink.CC.$default$setParentSink(this, videoSink);
             }
         });
     }

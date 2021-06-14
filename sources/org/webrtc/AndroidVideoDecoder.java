@@ -16,6 +16,7 @@ import org.webrtc.EncodedImage;
 import org.webrtc.ThreadUtils;
 import org.webrtc.VideoDecoder;
 import org.webrtc.VideoFrame;
+import org.webrtc.VideoSink;
 
 class AndroidVideoDecoder implements VideoDecoder, VideoSink {
     private static final int DEQUEUE_INPUT_TIMEOUT_US = 500000;
@@ -61,6 +62,10 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
 
     public boolean getPrefersLateDecoding() {
         return true;
+    }
+
+    public /* synthetic */ void setParentSink(VideoSink videoSink) {
+        VideoSink.CC.$default$setParentSink(this, videoSink);
     }
 
     private static class FrameInfo {

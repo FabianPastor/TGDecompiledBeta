@@ -83,8 +83,8 @@ public class Camera2Enumerator implements CameraEnumerator {
                 }
             }
             return true;
-        } catch (AndroidException e) {
-            Logging.e("Camera2Enumerator", "Camera access exception: " + e);
+        } catch (Throwable th) {
+            Logging.e("Camera2Enumerator", "Camera access exception: " + th);
             return false;
         }
     }

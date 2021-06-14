@@ -2,14 +2,20 @@ package org.telegram.ui.Cells;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BlendMode;
 import android.graphics.Canvas;
 import android.graphics.LinearGradient;
+import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.TextUtils;
+import android.view.View;
+import android.view.ViewOutlineProvider;
 import java.io.File;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DownloadController;
@@ -57,6 +63,8 @@ public class PatternCell extends BackupImageView implements DownloadController.F
 
         int getCheckColor();
 
+        float getIntensity();
+
         TLRPC$TL_wallPaper getSelectedPattern();
     }
 
@@ -73,6 +81,14 @@ public class PatternCell extends BackupImageView implements DownloadController.F
         radialProgress2.setProgressRect(AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f), AndroidUtilities.dp(70.0f), AndroidUtilities.dp(70.0f));
         this.backgroundPaint = new Paint(1);
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
+        if (Build.VERSION.SDK_INT >= 21) {
+            setOutlineProvider(new ViewOutlineProvider() {
+                public void getOutline(View view, Outline outline) {
+                    outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.dp(6.0f));
+                }
+            });
+            setClipToOutline(true);
+        }
     }
 
     public void setPattern(TLRPC$TL_wallPaper tLRPC$TL_wallPaper) {
@@ -155,7 +171,9 @@ public class PatternCell extends BackupImageView implements DownloadController.F
     @SuppressLint({"DrawAllocation"})
     public void onDraw(Canvas canvas) {
         Canvas canvas2 = canvas;
-        getImageReceiver().setAlpha(0.8f);
+        float intensity = this.delegate.getIntensity();
+        this.imageReceiver.setAlpha(Math.abs(intensity));
+        this.imageReceiver.setBlendMode((Object) null);
         int backgroundColor = this.delegate.getBackgroundColor();
         int backgroundGradientColor1 = this.delegate.getBackgroundGradientColor1();
         int backgroundGradientColor2 = this.delegate.getBackgroundGradientColor2();
@@ -165,6 +183,7 @@ public class PatternCell extends BackupImageView implements DownloadController.F
         if (backgroundGradientColor1 == 0) {
             this.gradientShader = null;
             this.backgroundDrawable = null;
+            this.imageReceiver.setGradientBitmap((Bitmap) null);
         } else if (!(this.gradientShader != null && backgroundColor == this.currentBackgroundColor && backgroundGradientColor1 == this.currentGradientColor1 && backgroundGradientColor2 == this.currentGradientColor2 && backgroundGradientColor3 == this.currentGradientColor3 && backgroundGradientAngle == this.currentGradientAngle)) {
             this.currentBackgroundColor = backgroundColor;
             this.currentGradientColor1 = backgroundGradientColor1;
@@ -173,19 +192,35 @@ public class PatternCell extends BackupImageView implements DownloadController.F
             this.currentGradientAngle = backgroundGradientAngle;
             if (backgroundGradientColor2 != 0) {
                 this.gradientShader = null;
-                MotionBackgroundDrawable motionBackgroundDrawable = new MotionBackgroundDrawable(backgroundColor, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientColor3, true);
-                this.backgroundDrawable = motionBackgroundDrawable;
-                motionBackgroundDrawable.setRoundRadius(AndroidUtilities.dp(6.0f));
-                this.backgroundDrawable.setParentView(this);
+                MotionBackgroundDrawable motionBackgroundDrawable = this.backgroundDrawable;
+                if (motionBackgroundDrawable != null) {
+                    motionBackgroundDrawable.setColors(backgroundColor, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientColor3, false);
+                } else {
+                    MotionBackgroundDrawable motionBackgroundDrawable2 = new MotionBackgroundDrawable(backgroundColor, backgroundGradientColor1, backgroundGradientColor2, backgroundGradientColor3, true);
+                    this.backgroundDrawable = motionBackgroundDrawable2;
+                    motionBackgroundDrawable2.setRoundRadius(AndroidUtilities.dp(6.0f));
+                    this.backgroundDrawable.setParentView(this);
+                }
+                if (intensity < 0.0f) {
+                    this.imageReceiver.setGradientBitmap(this.backgroundDrawable.getBitmap());
+                } else {
+                    this.imageReceiver.setGradientBitmap((Bitmap) null);
+                    if (Build.VERSION.SDK_INT >= 29) {
+                        this.imageReceiver.setBlendMode(BlendMode.SOFT_LIGHT);
+                    } else {
+                        this.imageReceiver.setAlpha(Math.abs(intensity / 2.0f));
+                    }
+                }
             } else {
                 Rect gradientPoints = BackgroundGradientDrawable.getGradientPoints(backgroundGradientAngle, getMeasuredWidth(), getMeasuredHeight());
                 this.gradientShader = new LinearGradient((float) gradientPoints.left, (float) gradientPoints.top, (float) gradientPoints.right, (float) gradientPoints.bottom, new int[]{backgroundColor, backgroundGradientColor1}, (float[]) null, Shader.TileMode.CLAMP);
                 this.backgroundDrawable = null;
+                this.imageReceiver.setGradientBitmap((Bitmap) null);
             }
         }
-        MotionBackgroundDrawable motionBackgroundDrawable2 = this.backgroundDrawable;
-        if (motionBackgroundDrawable2 != null) {
-            motionBackgroundDrawable2.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+        MotionBackgroundDrawable motionBackgroundDrawable3 = this.backgroundDrawable;
+        if (motionBackgroundDrawable3 != null) {
+            motionBackgroundDrawable3.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
             this.backgroundDrawable.draw(canvas2);
         } else {
             this.backgroundPaint.setShader(this.gradientShader);

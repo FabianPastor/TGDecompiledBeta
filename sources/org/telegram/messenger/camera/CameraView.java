@@ -773,7 +773,11 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                     }
                 }
                 if (z) {
-                    this.cameraSurface.updateTexImage();
+                    try {
+                        this.cameraSurface.updateTexImage();
+                    } catch (Throwable th) {
+                        FileLog.e(th);
+                    }
                 }
                 CameraSession cameraSession = this.currentSession;
                 if (cameraSession != null && cameraSession.cameraInfo.cameraId == num.intValue()) {

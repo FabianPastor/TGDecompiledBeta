@@ -6678,7 +6678,7 @@ public class ImageLoader {
             r8.local_id = r0
             byte[] r0 = new byte[r5]
             r8.file_reference = r0
-            org.telegram.tgnet.TLRPC$TL_photoSize r0 = new org.telegram.tgnet.TLRPC$TL_photoSize
+            org.telegram.tgnet.TLRPC$TL_photoSize_layer127 r0 = new org.telegram.tgnet.TLRPC$TL_photoSize_layer127
             r0.<init>()
             r0.location = r8
             int r9 = r4.getWidth()

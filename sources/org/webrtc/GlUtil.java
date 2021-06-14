@@ -6,25 +6,15 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 public class GlUtil {
+    public static void checkNoGLES2Error(String str) {
+    }
+
     private GlUtil() {
     }
 
     public static class GlOutOfMemoryException extends RuntimeException {
         public GlOutOfMemoryException(String str) {
             super(str);
-        }
-    }
-
-    public static void checkNoGLES2Error(String str) {
-        RuntimeException runtimeException;
-        int glGetError = GLES20.glGetError();
-        if (glGetError != 0) {
-            if (glGetError == 1285) {
-                runtimeException = new GlOutOfMemoryException(str);
-            } else {
-                runtimeException = new RuntimeException(str + ": GLES20 error: " + glGetError);
-            }
-            throw runtimeException;
         }
     }
 

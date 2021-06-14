@@ -1,5 +1,7 @@
 package org.webrtc;
 
+import org.webrtc.VideoSink;
+
 public class VideoSource extends MediaSource {
     private final CapturerObserver capturerObserver = new CapturerObserver() {
         public void onCapturerStarted(boolean z) {
@@ -131,6 +133,10 @@ public class VideoSource extends MediaSource {
                 videoProcessor2.setSink(new VideoSink() {
                     public final void onFrame(VideoFrame videoFrame) {
                         VideoSource.this.lambda$setVideoProcessor$1$VideoSource(videoFrame);
+                    }
+
+                    public /* synthetic */ void setParentSink(VideoSink videoSink) {
+                        VideoSink.CC.$default$setParentSink(this, videoSink);
                     }
                 });
                 if (this.isCapturerRunning) {

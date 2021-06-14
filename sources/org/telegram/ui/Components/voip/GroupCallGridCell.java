@@ -7,27 +7,38 @@ import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
 import org.telegram.ui.GroupCallActivity;
+import org.telegram.ui.GroupCallTabletGridAdapter;
 
 public class GroupCallGridCell extends FrameLayout {
     public boolean attached;
+    public GroupCallTabletGridAdapter gridAdapter;
+    private final boolean isTabletGrid;
     ChatObject.VideoParticipant participant;
+    public int position;
     GroupCallMiniTextureView renderer;
     public int spanCount;
 
-    public GroupCallGridCell(Context context) {
+    public GroupCallGridCell(Context context, boolean z) {
         super(context);
+        this.isTabletGrid = z;
     }
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         int i3;
+        if (this.isTabletGrid) {
+            ((View) getParent()).getMeasuredWidth();
+            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(this.gridAdapter.getItemHeight(this.position), NUM));
+            return;
+        }
         float f = GroupCallActivity.isLandscapeMode ? 3.0f : 2.0f;
         if (getParent() != null) {
             i3 = ((View) getParent()).getMeasuredWidth();
         } else {
             i3 = View.MeasureSpec.getSize(i);
         }
-        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec((int) ((((float) i3) / f) + ((float) AndroidUtilities.dp(4.0f))), NUM));
+        float f2 = (float) i3;
+        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec((int) ((GroupCallActivity.isTabletMode ? f2 / 2.0f : f2 / f) + ((float) AndroidUtilities.dp(4.0f))), NUM));
     }
 
     public void setData(AccountInstance accountInstance, ChatObject.VideoParticipant videoParticipant, ChatObject.Call call, int i) {
@@ -56,5 +67,16 @@ public class GroupCallGridCell extends FrameLayout {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.attached = false;
+    }
+
+    public float getItemHeight() {
+        int measuredHeight;
+        GroupCallTabletGridAdapter groupCallTabletGridAdapter = this.gridAdapter;
+        if (groupCallTabletGridAdapter != null) {
+            measuredHeight = groupCallTabletGridAdapter.getItemHeight(this.position);
+        } else {
+            measuredHeight = getMeasuredHeight();
+        }
+        return (float) measuredHeight;
     }
 }

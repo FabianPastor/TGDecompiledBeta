@@ -660,6 +660,10 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
                 }
                 this.waitingFrameParticipant.put(str, tLRPC$TL_groupCallParticipant);
                 addRemoteSink(tLRPC$TL_groupCallParticipant, z, new VideoSink() {
+                    public /* synthetic */ void setParentSink(VideoSink videoSink) {
+                        VideoSink.CC.$default$setParentSink(this, videoSink);
+                    }
+
                     public void onFrame(VideoFrame videoFrame) {
                         if (videoFrame != null && videoFrame.getBuffer().getHeight() != 0 && videoFrame.getBuffer().getWidth() != 0) {
                             AndroidUtilities.runOnUIThread(new Runnable(str, this, z) {
@@ -721,14 +725,15 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         }
     }
 
-    private static class ProxyVideoSink implements VideoSink {
+    public static class ProxyVideoSink implements VideoSink {
         private VideoSink background;
         /* access modifiers changed from: private */
         public long nativeInstance;
         /* access modifiers changed from: private */
         public VideoSink target;
 
-        private ProxyVideoSink() {
+        public /* synthetic */ void setParentSink(VideoSink videoSink) {
+            VideoSink.CC.$default$setParentSink(this, videoSink);
         }
 
         public synchronized void onFrame(VideoFrame videoFrame) {
@@ -743,11 +748,37 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         }
 
         public synchronized void setTarget(VideoSink videoSink) {
+            VideoSink videoSink2 = this.target;
+            if (videoSink2 != null) {
+                videoSink2.setParentSink((VideoSink) null);
+            }
             this.target = videoSink;
+            if (videoSink != null) {
+                videoSink.setParentSink(this);
+            }
         }
 
         public synchronized void setBackground(VideoSink videoSink) {
+            VideoSink videoSink2 = this.background;
+            if (videoSink2 != null) {
+                videoSink2.setParentSink((VideoSink) null);
+            }
             this.background = videoSink;
+            if (videoSink != null) {
+                videoSink.setParentSink(this);
+            }
+        }
+
+        public synchronized void removeTarget(VideoSink videoSink) {
+            if (this.target == videoSink) {
+                this.target = null;
+            }
+        }
+
+        public synchronized void removeBackground(VideoSink videoSink) {
+            if (this.background == videoSink) {
+                this.background = null;
+            }
         }
 
         public synchronized void swap() {
@@ -2610,6 +2641,38 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
     public /* synthetic */ void lambda$startScreenCapture$30$VoIPService(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             TLRPC$Updates tLRPC$Updates = (TLRPC$Updates) tLObject;
+            AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Updates) {
+                public final /* synthetic */ TLRPC$Updates f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run() {
+                    VoIPService.this.lambda$startScreenCapture$28$VoIPService(this.f$1);
+                }
+            });
+            MessagesController.getInstance(this.currentAccount).processUpdates(tLRPC$Updates, false);
+            startGroupCheckShortpoll();
+            return;
+        }
+        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
+            public final /* synthetic */ TLRPC$TL_error f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void run() {
+                VoIPService.this.lambda$startScreenCapture$29$VoIPService(this.f$1);
+            }
+        });
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$startScreenCapture$28 */
+    public /* synthetic */ void lambda$startScreenCapture$28$VoIPService(TLRPC$Updates tLRPC$Updates) {
+        if (this.tgVoip[1] != null) {
             int selfId = getSelfId();
             int size = tLRPC$Updates.updates.size();
             for (int i = 0; i < size; i++) {
@@ -2635,17 +2698,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
                                 for (int i3 = 0; i3 < size3; i3++) {
                                     TLRPC$TL_groupCallParticipantVideoSourceGroup tLRPC$TL_groupCallParticipantVideoSourceGroup = tLRPC$TL_groupCallParticipant.presentation.source_groups.get(i3);
                                     if (tLRPC$TL_groupCallParticipantVideoSourceGroup.sources.size() > 0) {
-                                        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_groupCallParticipantVideoSourceGroup.sources.get(0).intValue()) {
-                                            public final /* synthetic */ int f$1;
-
-                                            {
-                                                this.f$1 = r2;
-                                            }
-
-                                            public final void run() {
-                                                VoIPService.this.lambda$startScreenCapture$28$VoIPService(this.f$1);
-                                            }
-                                        });
+                                        this.mySource[1] = tLRPC$TL_groupCallParticipantVideoSourceGroup.sources.get(0).intValue();
                                     }
                                 }
                             }
@@ -2655,27 +2708,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
                     }
                 }
             }
-            MessagesController.getInstance(this.currentAccount).processUpdates(tLRPC$Updates, false);
-            startGroupCheckShortpoll();
-            return;
         }
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
-            public final /* synthetic */ TLRPC$TL_error f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                VoIPService.this.lambda$startScreenCapture$29$VoIPService(this.f$1);
-            }
-        });
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$startScreenCapture$28 */
-    public /* synthetic */ void lambda$startScreenCapture$28$VoIPService(int i) {
-        this.mySource[1] = i;
     }
 
     /* access modifiers changed from: private */

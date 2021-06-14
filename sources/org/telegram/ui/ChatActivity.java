@@ -12252,7 +12252,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         TLRPC$UserFull tLRPC$UserFull;
         TLRPC$ChatFull tLRPC$ChatFull;
         TLRPC$EncryptedChat tLRPC$EncryptedChat = this.currentEncryptedChat;
-        if ((tLRPC$EncryptedChat == null || (tLRPC$EncryptedChat instanceof TLRPC$TL_encryptedChat)) && ((this.currentChat == null || !(this.chatMode == 0 || this.threadMessageId == 0 || (tLRPC$ChatFull = this.chatInfo) == null || tLRPC$ChatFull.ttl_period == 0)) && ((tLRPC$User = this.currentUser) == null || (!UserObject.isDeleted(tLRPC$User) && !(this.currentEncryptedChat == null && ((tLRPC$UserFull = this.userInfo) == null || tLRPC$UserFull.ttl_period == 0)))))) {
+        if ((tLRPC$EncryptedChat == null || (tLRPC$EncryptedChat instanceof TLRPC$TL_encryptedChat)) && ((this.currentChat == null || (this.chatMode == 0 && this.threadMessageId == 0 && (tLRPC$ChatFull = this.chatInfo) != null && tLRPC$ChatFull.ttl_period != 0)) && ((tLRPC$User = this.currentUser) == null || (!UserObject.isDeleted(tLRPC$User) && !(this.currentEncryptedChat == null && ((tLRPC$UserFull = this.userInfo) == null || tLRPC$UserFull.ttl_period == 0)))))) {
             View view = this.timeItem2;
             if (view != null) {
                 view.setVisibility(0);
@@ -20185,48 +20185,32 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int i = tLRPC$TL_updates_channelDifferenceTooLong.dialog.top_message;
             if (i > this.minMessageId[0]) {
                 this.last_message_id = Math.max(this.last_message_id, i);
-                int[] iArr = this.minMessageId;
-                iArr[0] = Math.max(tLRPC$TL_updates_channelDifferenceTooLong.dialog.top_message, iArr[0]);
-                this.createUnreadMessageAfterId = tLRPC$TL_updates_channelDifferenceTooLong.dialog.read_inbox_max_id;
-            }
-            int size = tLRPC$TL_updates_channelDifferenceTooLong.messages.size();
-            int i2 = 0;
-            while (true) {
-                if (i2 >= size) {
-                    break;
-                }
-                int i3 = tLRPC$TL_updates_channelDifferenceTooLong.messages.get(i2).id;
-                int i4 = tLRPC$TL_updates_channelDifferenceTooLong.dialog.top_message;
-                if (i3 == i4) {
-                    int[] iArr2 = this.maxDate;
-                    iArr2[0] = Math.max(i4, iArr2[0]);
-                    break;
-                }
-                i2++;
+                this.createUnreadMessageAfterId = Math.max(this.minMessageId[0] + 1, tLRPC$TL_updates_channelDifferenceTooLong.dialog.read_inbox_max_id);
             }
             this.forwardEndReached[0] = false;
-            if (this.chatAdapter.loadingDownRow < 0) {
+            ChatActivityAdapter chatActivityAdapter = this.chatAdapter;
+            if (chatActivityAdapter != null && chatActivityAdapter.loadingDownRow < 0) {
                 this.chatAdapter.notifyItemInserted(0);
             }
             TLRPC$Dialog tLRPC$Dialog = tLRPC$TL_updates_channelDifferenceTooLong.dialog;
-            int i5 = tLRPC$Dialog.unread_count;
-            this.newUnreadMessageCount = i5;
+            int i2 = tLRPC$Dialog.unread_count;
+            this.newUnreadMessageCount = i2;
             this.newMentionsCount = tLRPC$Dialog.unread_mentions_count;
-            if (this.prevSetUnreadCount != i5) {
-                this.pagedownButtonCounter.setCount(i5, this.openAnimationEnded);
+            if (this.prevSetUnreadCount != i2) {
+                this.pagedownButtonCounter.setCount(i2, this.openAnimationEnded);
                 this.prevSetUnreadCount = this.newUnreadMessageCount;
                 updatePagedownButtonVisibility(true);
             }
-            int i6 = this.newMentionsCount;
-            int i7 = tLRPC$TL_updates_channelDifferenceTooLong.dialog.unread_mentions_count;
-            if (i6 != i7) {
-                this.newMentionsCount = i7;
-                if (i7 <= 0) {
+            int i3 = this.newMentionsCount;
+            int i4 = tLRPC$TL_updates_channelDifferenceTooLong.dialog.unread_mentions_count;
+            if (i3 != i4) {
+                this.newMentionsCount = i4;
+                if (i4 <= 0) {
                     this.newMentionsCount = 0;
                     this.hasAllMentionsLocal = true;
                     showMentionDownButton(false, true);
                 } else {
-                    this.mentiondownButtonCounter.setText(String.format("%d", new Object[]{Integer.valueOf(i7)}));
+                    this.mentiondownButtonCounter.setText(String.format("%d", new Object[]{Integer.valueOf(i4)}));
                     showMentionDownButton(true, true);
                 }
             }
@@ -20238,20 +20222,20 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         this.messagesByDays.clear();
         this.groupedMessagesMap.clear();
         this.threadMessageAdded = false;
-        for (int i8 = 1; i8 >= 0; i8--) {
-            this.messagesDict[i8].clear();
+        for (int i5 = 1; i5 >= 0; i5--) {
+            this.messagesDict[i5].clear();
             if (this.currentEncryptedChat == null) {
-                this.maxMessageId[i8] = Integer.MAX_VALUE;
-                this.minMessageId[i8] = Integer.MIN_VALUE;
+                this.maxMessageId[i5] = Integer.MAX_VALUE;
+                this.minMessageId[i5] = Integer.MIN_VALUE;
             } else {
-                this.maxMessageId[i8] = Integer.MIN_VALUE;
-                this.minMessageId[i8] = Integer.MAX_VALUE;
+                this.maxMessageId[i5] = Integer.MIN_VALUE;
+                this.minMessageId[i5] = Integer.MAX_VALUE;
             }
-            this.maxDate[i8] = Integer.MIN_VALUE;
-            this.minDate[i8] = 0;
-            this.selectedMessagesIds[i8].clear();
-            this.selectedMessagesCanCopyIds[i8].clear();
-            this.selectedMessagesCanStarIds[i8].clear();
+            this.maxDate[i5] = Integer.MIN_VALUE;
+            this.minDate[i5] = 0;
+            this.selectedMessagesIds[i5].clear();
+            this.selectedMessagesCanCopyIds[i5].clear();
+            this.selectedMessagesCanStarIds[i5].clear();
         }
         hideActionMode();
         updatePinnedMessageView(true);
@@ -20266,9 +20250,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             showProgressView(false);
             this.chatListView.setEmptyView(this.emptyViewContainer);
         }
-        ChatActivityAdapter chatActivityAdapter = this.chatAdapter;
-        if (chatActivityAdapter != null) {
-            chatActivityAdapter.notifyDataSetChanged(false);
+        ChatActivityAdapter chatActivityAdapter2 = this.chatAdapter;
+        if (chatActivityAdapter2 != null) {
+            chatActivityAdapter2.notifyDataSetChanged(false);
         }
         if (this.currentEncryptedChat == null && (tLRPC$User = this.currentUser) != null && tLRPC$User.bot && this.botUser == null) {
             this.botUser = "";

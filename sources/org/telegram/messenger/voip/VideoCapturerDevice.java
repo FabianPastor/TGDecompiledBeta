@@ -115,19 +115,26 @@ public class VideoCapturerDevice {
                 videoCapturerDeviceArr[1].currentWidth = i;
                 videoCapturerDeviceArr[1].currentHeight = i2;
                 videoCapturerDeviceArr[1].handler.post(new Runnable(i, i2) {
-                    public final /* synthetic */ int f$0;
                     public final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$2;
 
                     {
-                        this.f$0 = r1;
                         this.f$1 = r2;
+                        this.f$2 = r3;
                     }
 
                     public final void run() {
-                        VideoCapturerDevice.instance[1].videoCapturer.changeCaptureFormat(this.f$0, this.f$1, 30);
+                        VideoCapturerDevice.lambda$checkScreenCapturerSize$1(VideoCapturerDevice.this, this.f$1, this.f$2);
                     }
                 });
             }
+        }
+    }
+
+    static /* synthetic */ void lambda$checkScreenCapturerSize$1(VideoCapturerDevice videoCapturerDevice, int i, int i2) {
+        VideoCapturer videoCapturer2 = videoCapturerDevice.videoCapturer;
+        if (videoCapturer2 != null) {
+            videoCapturer2.changeCaptureFormat(i, i2, 30);
         }
     }
 
@@ -226,17 +233,21 @@ public class VideoCapturerDevice {
     /* access modifiers changed from: private */
     /* renamed from: lambda$init$2 */
     public /* synthetic */ void lambda$init$2$VideoCapturerDevice(int i, int i2) {
-        this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(this.nativePtr);
-        this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
-        this.videoCapturer.startCapture(i, i2, 30);
+        if (this.videoCapturerSurfaceTextureHelper != null) {
+            this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(this.nativePtr);
+            this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
+            this.videoCapturer.startCapture(i, i2, 30);
+        }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$init$3 */
     public /* synthetic */ void lambda$init$3$VideoCapturerDevice() {
-        this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(this.nativePtr);
-        this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
-        this.videoCapturer.startCapture(CAPTURE_WIDTH, CAPTURE_HEIGHT, 30);
+        if (this.videoCapturerSurfaceTextureHelper != null) {
+            this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(this.nativePtr);
+            this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
+            this.videoCapturer.startCapture(CAPTURE_WIDTH, CAPTURE_HEIGHT, 30);
+        }
     }
 
     /* access modifiers changed from: private */

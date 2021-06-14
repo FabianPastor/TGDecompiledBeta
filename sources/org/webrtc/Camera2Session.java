@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import org.webrtc.Camera2Session;
 import org.webrtc.CameraEnumerationAndroid;
 import org.webrtc.CameraSession;
+import org.webrtc.VideoSink;
 
 @TargetApi(21)
 class Camera2Session implements CameraSession {
@@ -156,6 +157,10 @@ class Camera2Session implements CameraSession {
                 Camera2Session.this.surfaceTextureHelper.startListening(new VideoSink() {
                     public final void onFrame(VideoFrame videoFrame) {
                         Camera2Session.CaptureSessionCallback.this.lambda$onConfigured$0$Camera2Session$CaptureSessionCallback(videoFrame);
+                    }
+
+                    public /* synthetic */ void setParentSink(VideoSink videoSink) {
+                        VideoSink.CC.$default$setParentSink(this, videoSink);
                     }
                 });
                 Logging.d("Camera2Session", "Camera device successfully started.");

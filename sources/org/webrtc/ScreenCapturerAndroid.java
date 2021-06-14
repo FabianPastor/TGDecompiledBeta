@@ -8,6 +8,8 @@ import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Handler;
 import android.view.Surface;
+import org.telegram.messenger.FileLog;
+import org.webrtc.VideoSink;
 
 @TargetApi(21)
 public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
@@ -32,6 +34,10 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
 
     public boolean isScreencast() {
         return true;
+    }
+
+    public /* synthetic */ void setParentSink(VideoSink videoSink) {
+        VideoSink.CC.$default$setParentSink(this, videoSink);
     }
 
     public ScreenCapturerAndroid(Intent intent, MediaProjection.Callback callback) {
@@ -118,7 +124,11 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
     /* access modifiers changed from: private */
     public void createVirtualDisplay() {
         this.surfaceTextureHelper.setTextureSize(this.width, this.height);
-        this.virtualDisplay = this.mediaProjection.createVirtualDisplay("WebRTC_ScreenCapture", this.width, this.height, 400, 3, new Surface(this.surfaceTextureHelper.getSurfaceTexture()), (VirtualDisplay.Callback) null, (Handler) null);
+        try {
+            this.virtualDisplay = this.mediaProjection.createVirtualDisplay("WebRTC_ScreenCapture", this.width, this.height, 400, 3, new Surface(this.surfaceTextureHelper.getSurfaceTexture()), (VirtualDisplay.Callback) null, (Handler) null);
+        } catch (Throwable th) {
+            FileLog.e(th);
+        }
     }
 
     public void onFrame(VideoFrame videoFrame) {

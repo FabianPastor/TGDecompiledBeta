@@ -4293,6 +4293,7 @@
     <string name="VoipUseLessData">Use less data for calls</string>
     <string name="VoipUserCameraIsOff">%s\'s camera is off</string>
     <string name="VoipUserMicrophoneIsOff">%s\'s microphone is off</string>
+    <string name="VoipVideoOnPause">Video on Pause</string>
     <string name="VoipVideoUnavailable">Video</string>
     <string name="VoipVoiceChat">Ongoing Voice Chat</string>
     <string name="VoipWaiting">Waiting</string>

@@ -551,7 +551,9 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
         RendererCommon.ScalingType scalingType = RendererCommon.ScalingType.SCALE_ASPECT_FIT;
         textureViewRenderer.setScalingType(scalingType);
         this.callingUserTextureView.renderer.setEnableHardwareScaler(true);
-        this.callingUserTextureView.scaleType = VoIPTextureView.SCALE_TYPE_NONE;
+        VoIPTextureView voIPTextureView2 = this.callingUserTextureView;
+        voIPTextureView2.scaleType = VoIPTextureView.SCALE_TYPE_NONE;
+        voIPTextureView2.attachBackgroundRenderer();
         r8.addView(this.callingUserPhotoView);
         r8.addView(this.callingUserTextureView);
         BackgroundGradientDrawable backgroundGradientDrawable = new BackgroundGradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{-14994098, -14328963});
@@ -1459,7 +1461,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             goto L_0x028a
         L_0x00f3:
             org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131628233(0x7f0e10c9, float:1.8883753E38)
+            r10 = 2131628234(0x7f0e10ca, float:1.8883755E38)
             java.lang.String r11 = "VoipWaiting"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.setText(r10, r4, r2)

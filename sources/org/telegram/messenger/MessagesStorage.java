@@ -17378,7 +17378,6 @@ public class MessagesStorage extends BaseController {
     }
 
     private int getMessageMediaType(TLRPC$Message tLRPC$Message) {
-        int i;
         if (!(tLRPC$Message instanceof TLRPC$TL_message_secret)) {
             if (tLRPC$Message instanceof TLRPC$TL_message) {
                 TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
@@ -17390,13 +17389,11 @@ public class MessagesStorage extends BaseController {
                 return 0;
             }
             return -1;
-        } else if ((((tLRPC$Message.media instanceof TLRPC$TL_messageMediaPhoto) || MessageObject.isGifMessage(tLRPC$Message)) && (i = tLRPC$Message.ttl) > 0 && i <= 60) || MessageObject.isVoiceMessage(tLRPC$Message) || MessageObject.isVideoMessage(tLRPC$Message) || MessageObject.isRoundVideoMessage(tLRPC$Message)) {
-            return 1;
-        } else {
-            if ((tLRPC$Message.media instanceof TLRPC$TL_messageMediaPhoto) || MessageObject.isVideoMessage(tLRPC$Message)) {
-                return 0;
-            }
+        } else if (!(tLRPC$Message.media instanceof TLRPC$TL_messageMediaPhoto) && !MessageObject.isGifMessage(tLRPC$Message) && !MessageObject.isVoiceMessage(tLRPC$Message) && !MessageObject.isVideoMessage(tLRPC$Message) && !MessageObject.isRoundVideoMessage(tLRPC$Message)) {
             return -1;
+        } else {
+            int i = tLRPC$Message.ttl;
+            return (i <= 0 || i > 60) ? 0 : 1;
         }
     }
 

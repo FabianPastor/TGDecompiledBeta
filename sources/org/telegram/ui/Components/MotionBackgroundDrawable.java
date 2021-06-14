@@ -166,13 +166,19 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     public void setColors(int i, int i2, int i3, int i4) {
+        setColors(i, i2, i3, i4, true);
+    }
+
+    public void setColors(int i, int i2, int i3, int i4, boolean z) {
         int[] iArr = this.colors;
         iArr[0] = i;
         iArr[1] = i2;
         iArr[2] = i3;
         iArr[3] = i4;
         Utilities.generateGradient(this.currentBitmap, true, this.phase, this.interpolator.getInterpolation(this.posAnimationProgress), this.currentBitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
-        invalidateParent();
+        if (z) {
+            invalidateParent();
+        }
     }
 
     private void invalidateParent() {

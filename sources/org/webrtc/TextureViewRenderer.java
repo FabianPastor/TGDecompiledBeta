@@ -9,6 +9,7 @@ import android.view.TextureView;
 import android.view.View;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.voip.VoIPService;
 import org.webrtc.EglBase;
 import org.webrtc.EglRenderer;
 import org.webrtc.GlGenericDrawer;
@@ -27,6 +28,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
     private int maxTextureSize;
     private boolean mirror;
     private OrientationHelper orientationHelper;
+    private VideoSink parentSink;
     private RendererCommon.RendererEvents rendererEvents;
     private final String resourceName;
     private boolean rotateTextureWitchScreen;
@@ -444,6 +446,12 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
     }
 
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+        VideoSink videoSink = this.parentSink;
+        if (videoSink instanceof VoIPService.ProxyVideoSink) {
+            VoIPService.ProxyVideoSink proxyVideoSink = (VoIPService.ProxyVideoSink) videoSink;
+            proxyVideoSink.removeTarget(this);
+            proxyVideoSink.removeBackground(this);
+        }
         this.eglRenderer.onSurfaceTextureDestroyed(surfaceTexture);
         return true;
     }
@@ -463,6 +471,10 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
     public void clearImage() {
         this.eglRenderer.clearImage();
         boolean unused = this.eglRenderer.isFirstFrameRendered = false;
+    }
+
+    public void setParentSink(VideoSink videoSink) {
+        this.parentSink = videoSink;
     }
 
     public void onFirstFrameRendered() {

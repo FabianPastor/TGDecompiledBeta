@@ -2220,7 +2220,7 @@ public class AndroidUtilities {
 
     public static boolean isSmallTablet() {
         Point point = displaySize;
-        return ((float) Math.min(point.x, point.y)) / density <= 700.0f;
+        return ((float) Math.min(point.x, point.y)) / density <= 690.0f;
     }
 
     public static int getMinTabletSide() {

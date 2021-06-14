@@ -5866,6 +5866,7 @@
     <public type="string" name="VoipUseLessData" id="NUM" />
     <public type="string" name="VoipUserCameraIsOff" id="NUM" />
     <public type="string" name="VoipUserMicrophoneIsOff" id="NUM" />
+    <public type="string" name="VoipVideoOnPause" id="NUM" />
     <public type="string" name="VoipVideoUnavailable" id="NUM" />
     <public type="string" name="VoipVoiceChat" id="NUM" />
     <public type="string" name="VoipWaiting" id="NUM" />

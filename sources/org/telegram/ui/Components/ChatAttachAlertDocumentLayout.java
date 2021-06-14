@@ -738,7 +738,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 z = true;
             }
             this.scrolling = false;
-            z2 = z;
+        } else if (!(obj instanceof MessageObject)) {
+            return false;
         } else {
             MessageObject messageObject = (MessageObject) obj;
             FilteredSearchView.MessageHashId messageHashId = new FilteredSearchView.MessageHashId(messageObject.getId(), messageObject.getDialogId());
@@ -750,11 +751,12 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 this.selectedMessages.put(messageHashId, messageObject);
                 z2 = true;
             }
+            z = z2;
         }
         if (view instanceof SharedDocumentCell) {
-            ((SharedDocumentCell) view).setChecked(z2, true);
+            ((SharedDocumentCell) view).setChecked(z, true);
         }
-        this.parentAlert.updateCountButton(z2 ? 1 : 2);
+        this.parentAlert.updateCountButton(z ? 1 : 2);
         return true;
     }
 
@@ -1694,8 +1696,9 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         }
 
         public void loadMore() {
-            if (!ChatAttachAlertDocumentLayout.this.searchAdapter.isLoading && !ChatAttachAlertDocumentLayout.this.searchAdapter.endReached) {
-                searchGlobal(this.currentSearchDialogId, this.currentSearchMinDate, this.currentSearchMaxDate, this.currentSearchFilter, this.lastMessagesSearchString, false);
+            FiltersView.MediaFilterData mediaFilterData;
+            if (!ChatAttachAlertDocumentLayout.this.searchAdapter.isLoading && !ChatAttachAlertDocumentLayout.this.searchAdapter.endReached && (mediaFilterData = this.currentSearchFilter) != null) {
+                searchGlobal(this.currentSearchDialogId, this.currentSearchMinDate, this.currentSearchMaxDate, mediaFilterData, this.lastMessagesSearchString, false);
             }
         }
 
@@ -1996,22 +1999,14 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         }
 
         private void searchGlobal(long j, long j2, long j3, FiltersView.MediaFilterData mediaFilterData, String str, boolean z) {
-            String str2;
-            boolean z2;
             long j4 = j;
             long j5 = j2;
             long j6 = j3;
             FiltersView.MediaFilterData mediaFilterData2 = mediaFilterData;
             String format = String.format(Locale.ENGLISH, "%d%d%d%d%s", new Object[]{Long.valueOf(j), Long.valueOf(j2), Long.valueOf(j3), Integer.valueOf(mediaFilterData2.filterType), str});
-            String str3 = this.lastSearchFilterQueryString;
-            boolean z3 = str3 != null && str3.equals(format);
-            if (z3 || !z) {
-                str2 = format;
-                z2 = false;
-            } else {
-                str2 = format;
-                z2 = true;
-            }
+            String str2 = this.lastSearchFilterQueryString;
+            boolean z2 = str2 != null && str2.equals(format);
+            boolean z3 = !z2 && z;
             if (j4 == this.currentSearchDialogId && this.currentSearchMinDate == j5) {
                 int i = (this.currentSearchMaxDate > j6 ? 1 : (this.currentSearchMaxDate == j6 ? 0 : -1));
             }
@@ -2024,8 +2019,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 AndroidUtilities.cancelRunOnUIThread(runnable);
             }
             AndroidUtilities.cancelRunOnUIThread(this.clearCurrentResultsRunnable);
-            if (!z3 || !z) {
-                if (z2) {
+            if (!z2 || !z) {
+                if (z3) {
                     this.messages.clear();
                     this.sections.clear();
                     this.sectionArrays.clear();
@@ -2042,7 +2037,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 }
                 this.isLoading = true;
                 notifyDataSetChanged();
-                if (!z3) {
+                if (!z2) {
                     this.clearCurrentResultsRunnable.run();
                     ChatAttachAlertDocumentLayout.this.emptyView.showProgress(true, !z);
                 }
@@ -2051,89 +2046,87 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                     this.localTipChats.clear();
                     updateFiltersView(false, (ArrayList<Object>) null, (ArrayList<FiltersView.DateData>) null, true);
                 }
-                int i2 = this.requestIndex + 1;
+                int i2 = 1 + this.requestIndex;
                 this.requestIndex = i2;
-                $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$cZXo8Z1zdIhBeBIhlmvMGF7iHgw r15 = r0;
-                $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$cZXo8Z1zdIhBeBIhlmvMGF7iHgw r0 = new Runnable(j, str, mediaFilterData, AccountInstance.getInstance(UserConfig.selectedAccount), j2, j3, z3, str2, i2) {
+                $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$cioU8O3cdcU5q4AV2ge90ZpGrlA r14 = r0;
+                $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$cioU8O3cdcU5q4AV2ge90ZpGrlA r0 = new Runnable(j, str, AccountInstance.getInstance(UserConfig.selectedAccount), j2, j3, z2, format, i2) {
                     public final /* synthetic */ long f$1;
                     public final /* synthetic */ String f$2;
-                    public final /* synthetic */ FiltersView.MediaFilterData f$3;
-                    public final /* synthetic */ AccountInstance f$4;
+                    public final /* synthetic */ AccountInstance f$3;
+                    public final /* synthetic */ long f$4;
                     public final /* synthetic */ long f$5;
-                    public final /* synthetic */ long f$6;
-                    public final /* synthetic */ boolean f$7;
-                    public final /* synthetic */ String f$8;
-                    public final /* synthetic */ int f$9;
+                    public final /* synthetic */ boolean f$6;
+                    public final /* synthetic */ String f$7;
+                    public final /* synthetic */ int f$8;
 
                     {
                         this.f$1 = r2;
                         this.f$2 = r4;
                         this.f$3 = r5;
                         this.f$4 = r6;
-                        this.f$5 = r7;
-                        this.f$6 = r9;
+                        this.f$5 = r8;
+                        this.f$6 = r10;
                         this.f$7 = r11;
                         this.f$8 = r12;
-                        this.f$9 = r13;
                     }
 
                     public final void run() {
-                        ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$searchGlobal$4$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
+                        ChatAttachAlertDocumentLayout.SearchAdapter.this.lambda$searchGlobal$4$ChatAttachAlertDocumentLayout$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
                     }
                 };
-                this.searchRunnable = r15;
-                AndroidUtilities.runOnUIThread(r15, (!z3 || this.messages.isEmpty()) ? 350 : 0);
+                this.searchRunnable = r14;
+                AndroidUtilities.runOnUIThread(r14, (!z2 || this.messages.isEmpty()) ? 350 : 0);
                 ChatAttachAlertDocumentLayout.this.loadingView.setViewType(3);
             }
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v3, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v5, resolved type: org.telegram.tgnet.TLRPC$TL_messages_search} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v6, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v7, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v8, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v9, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v3, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v5, resolved type: org.telegram.tgnet.TLRPC$TL_messages_search} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v6, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v7, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v8, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v9, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
         /* access modifiers changed from: private */
         /* JADX WARNING: Multi-variable type inference failed */
         /* renamed from: lambda$searchGlobal$4 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public /* synthetic */ void lambda$searchGlobal$4$ChatAttachAlertDocumentLayout$SearchAdapter(long r21, java.lang.String r23, org.telegram.ui.Adapters.FiltersView.MediaFilterData r24, org.telegram.messenger.AccountInstance r25, long r26, long r28, boolean r30, java.lang.String r31, int r32) {
+        public /* synthetic */ void lambda$searchGlobal$4$ChatAttachAlertDocumentLayout$SearchAdapter(long r21, java.lang.String r23, org.telegram.messenger.AccountInstance r24, long r25, long r27, boolean r29, java.lang.String r30, int r31) {
             /*
                 r20 = this;
                 r12 = r20
                 r6 = r21
                 r3 = r23
-                r0 = r24
-                r1 = 20
-                r2 = 0
+                r0 = 20
+                r1 = 0
                 r4 = 1000(0x3e8, double:4.94E-321)
                 r8 = 0
-                r10 = 0
-                int r11 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-                if (r11 == 0) goto L_0x006a
-                org.telegram.tgnet.TLRPC$TL_messages_search r11 = new org.telegram.tgnet.TLRPC$TL_messages_search
-                r11.<init>()
-                r11.q = r3
-                r11.limit = r1
+                r2 = 0
+                int r10 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
+                if (r10 == 0) goto L_0x006b
+                org.telegram.tgnet.TLRPC$TL_messages_search r10 = new org.telegram.tgnet.TLRPC$TL_messages_search
+                r10.<init>()
+                r10.q = r3
+                r10.limit = r0
+                org.telegram.ui.Adapters.FiltersView$MediaFilterData r0 = r12.currentSearchFilter
                 org.telegram.tgnet.TLRPC$MessagesFilter r0 = r0.filter
-                r11.filter = r0
-                org.telegram.messenger.MessagesController r0 = r25.getMessagesController()
-                int r1 = (int) r6
-                org.telegram.tgnet.TLRPC$InputPeer r0 = r0.getInputPeer((int) r1)
-                r11.peer = r0
-                int r0 = (r26 > r8 ? 1 : (r26 == r8 ? 0 : -1))
+                r10.filter = r0
+                org.telegram.messenger.MessagesController r0 = r24.getMessagesController()
+                int r11 = (int) r6
+                org.telegram.tgnet.TLRPC$InputPeer r0 = r0.getInputPeer((int) r11)
+                r10.peer = r0
+                int r0 = (r25 > r8 ? 1 : (r25 == r8 ? 0 : -1))
                 if (r0 <= 0) goto L_0x0035
-                long r0 = r26 / r4
-                int r1 = (int) r0
-                r11.min_date = r1
+                long r13 = r25 / r4
+                int r0 = (int) r13
+                r10.min_date = r0
             L_0x0035:
-                int r0 = (r28 > r8 ? 1 : (r28 == r8 ? 0 : -1))
+                int r0 = (r27 > r8 ? 1 : (r27 == r8 ? 0 : -1))
                 if (r0 <= 0) goto L_0x003e
-                long r0 = r28 / r4
-                int r1 = (int) r0
-                r11.max_date = r1
+                long r4 = r27 / r4
+                int r0 = (int) r4
+                r10.max_date = r0
             L_0x003e:
-                if (r30 == 0) goto L_0x0065
+                if (r29 == 0) goto L_0x0065
                 java.lang.String r0 = r12.lastMessagesSearchString
                 boolean r0 = r3.equals(r0)
                 if (r0 == 0) goto L_0x0065
@@ -2146,111 +2139,113 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 java.lang.Object r0 = r0.get(r1)
                 org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
                 int r0 = r0.getId()
-                r11.offset_id = r0
+                r10.offset_id = r0
                 goto L_0x0067
             L_0x0065:
-                r11.offset_id = r2
+                r10.offset_id = r1
             L_0x0067:
-                r13 = r11
-                goto L_0x0100
-            L_0x006a:
-                boolean r11 = android.text.TextUtils.isEmpty(r23)
-                if (r11 != 0) goto L_0x008d
-                java.util.ArrayList r10 = new java.util.ArrayList
-                r10.<init>()
+                r13 = r10
+                r10 = r2
+                goto L_0x0103
+            L_0x006b:
+                boolean r10 = android.text.TextUtils.isEmpty(r23)
+                if (r10 != 0) goto L_0x008e
+                java.util.ArrayList r2 = new java.util.ArrayList
+                r2.<init>()
                 java.util.ArrayList r17 = new java.util.ArrayList
                 r17.<init>()
                 java.util.ArrayList r18 = new java.util.ArrayList
                 r18.<init>()
-                org.telegram.messenger.MessagesStorage r13 = r25.getMessagesStorage()
+                org.telegram.messenger.MessagesStorage r13 = r24.getMessagesStorage()
                 r14 = 0
                 r19 = -1
                 r15 = r23
-                r16 = r10
+                r16 = r2
                 r13.localSearch(r14, r15, r16, r17, r18, r19)
-            L_0x008d:
-                org.telegram.tgnet.TLRPC$TL_messages_searchGlobal r11 = new org.telegram.tgnet.TLRPC$TL_messages_searchGlobal
-                r11.<init>()
-                r11.limit = r1
-                r11.q = r3
+            L_0x008e:
+                org.telegram.tgnet.TLRPC$TL_messages_searchGlobal r10 = new org.telegram.tgnet.TLRPC$TL_messages_searchGlobal
+                r10.<init>()
+                r10.limit = r0
+                r10.q = r3
+                org.telegram.ui.Adapters.FiltersView$MediaFilterData r0 = r12.currentSearchFilter
                 org.telegram.tgnet.TLRPC$MessagesFilter r0 = r0.filter
-                r11.filter = r0
-                int r0 = (r26 > r8 ? 1 : (r26 == r8 ? 0 : -1))
-                if (r0 <= 0) goto L_0x00a3
-                long r0 = r26 / r4
-                int r1 = (int) r0
-                r11.min_date = r1
-            L_0x00a3:
-                int r0 = (r28 > r8 ? 1 : (r28 == r8 ? 0 : -1))
-                if (r0 <= 0) goto L_0x00ac
-                long r0 = r28 / r4
-                int r1 = (int) r0
-                r11.max_date = r1
-            L_0x00ac:
-                if (r30 == 0) goto L_0x00f3
+                r10.filter = r0
+                int r0 = (r25 > r8 ? 1 : (r25 == r8 ? 0 : -1))
+                if (r0 <= 0) goto L_0x00a6
+                long r13 = r25 / r4
+                int r0 = (int) r13
+                r10.min_date = r0
+            L_0x00a6:
+                int r0 = (r27 > r8 ? 1 : (r27 == r8 ? 0 : -1))
+                if (r0 <= 0) goto L_0x00af
+                long r4 = r27 / r4
+                int r0 = (int) r4
+                r10.max_date = r0
+            L_0x00af:
+                if (r29 == 0) goto L_0x00f6
                 java.lang.String r0 = r12.lastMessagesSearchString
                 boolean r0 = r3.equals(r0)
-                if (r0 == 0) goto L_0x00f3
+                if (r0 == 0) goto L_0x00f6
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r12.messages
                 boolean r0 = r0.isEmpty()
-                if (r0 != 0) goto L_0x00f3
+                if (r0 != 0) goto L_0x00f6
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r12.messages
                 int r1 = r0.size()
                 int r1 = r1 + -1
                 java.lang.Object r0 = r0.get(r1)
                 org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
                 int r1 = r0.getId()
-                r11.offset_id = r1
+                r10.offset_id = r1
                 int r1 = r12.nextSearchRate
-                r11.offset_rate = r1
+                r10.offset_rate = r1
                 org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
                 org.telegram.tgnet.TLRPC$Peer r0 = r0.peer_id
                 int r1 = r0.channel_id
-                if (r1 == 0) goto L_0x00e0
-            L_0x00de:
+                if (r1 == 0) goto L_0x00e3
+            L_0x00e1:
                 int r0 = -r1
-                goto L_0x00e7
-            L_0x00e0:
+                goto L_0x00ea
+            L_0x00e3:
                 int r1 = r0.chat_id
-                if (r1 == 0) goto L_0x00e5
-                goto L_0x00de
-            L_0x00e5:
+                if (r1 == 0) goto L_0x00e8
+                goto L_0x00e1
+            L_0x00e8:
                 int r0 = r0.user_id
-            L_0x00e7:
-                org.telegram.messenger.MessagesController r1 = r25.getMessagesController()
+            L_0x00ea:
+                org.telegram.messenger.MessagesController r1 = r24.getMessagesController()
                 org.telegram.tgnet.TLRPC$InputPeer r0 = r1.getInputPeer((int) r0)
-                r11.offset_peer = r0
+                r10.offset_peer = r0
                 goto L_0x0067
-            L_0x00f3:
-                r11.offset_rate = r2
-                r11.offset_id = r2
+            L_0x00f6:
+                r10.offset_rate = r1
+                r10.offset_id = r1
                 org.telegram.tgnet.TLRPC$TL_inputPeerEmpty r0 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty
                 r0.<init>()
-                r11.offset_peer = r0
+                r10.offset_peer = r0
                 goto L_0x0067
-            L_0x0100:
+            L_0x0103:
                 r12.lastMessagesSearchString = r3
-                r0 = r31
+                r0 = r30
                 r12.lastSearchFilterQueryString = r0
                 java.util.ArrayList r11 = new java.util.ArrayList
                 r11.<init>()
                 java.lang.String r0 = r12.lastMessagesSearchString
                 org.telegram.ui.Adapters.FiltersView.fillTipDates(r0, r11)
-                org.telegram.tgnet.ConnectionsManager r14 = r25.getConnectionsManager()
+                org.telegram.tgnet.ConnectionsManager r14 = r24.getConnectionsManager()
                 org.telegram.ui.Components.-$$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$obxFiEGr-eW7zt4KfvEib5HcL-A r15 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$obxFiEGr-eW7zt4KfvEib5HcL-A
                 r0 = r15
                 r1 = r20
-                r2 = r25
+                r2 = r24
                 r3 = r23
-                r4 = r32
-                r5 = r30
+                r4 = r31
+                r5 = r29
                 r6 = r21
-                r8 = r26
+                r8 = r25
                 r0.<init>(r2, r3, r4, r5, r6, r8, r10, r11)
                 r14.sendRequest(r13, r15)
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.SearchAdapter.lambda$searchGlobal$4$ChatAttachAlertDocumentLayout$SearchAdapter(long, java.lang.String, org.telegram.ui.Adapters.FiltersView$MediaFilterData, org.telegram.messenger.AccountInstance, long, long, boolean, java.lang.String, int):void");
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.SearchAdapter.lambda$searchGlobal$4$ChatAttachAlertDocumentLayout$SearchAdapter(long, java.lang.String, org.telegram.messenger.AccountInstance, long, long, boolean, java.lang.String, int):void");
         }
 
         /* access modifiers changed from: private */

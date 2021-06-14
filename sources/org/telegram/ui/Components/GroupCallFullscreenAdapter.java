@@ -435,15 +435,15 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
 
         public void attachRenderer(boolean z) {
             if (!GroupCallFullscreenAdapter.this.activity.isDismissed()) {
-                if (z) {
-                    this.renderer = GroupCallMiniTextureView.getOrCreate(GroupCallFullscreenAdapter.this.attachedRenderers, GroupCallFullscreenAdapter.this.renderersContainer, (GroupCallGridCell) null, this, this.videoParticipant, GroupCallFullscreenAdapter.this.groupCall, GroupCallFullscreenAdapter.this.activity);
-                    return;
+                if (z && this.renderer == null) {
+                    this.renderer = GroupCallMiniTextureView.getOrCreate(GroupCallFullscreenAdapter.this.attachedRenderers, GroupCallFullscreenAdapter.this.renderersContainer, (GroupCallGridCell) null, this, (GroupCallGridCell) null, this.videoParticipant, GroupCallFullscreenAdapter.this.groupCall, GroupCallFullscreenAdapter.this.activity);
+                } else if (!z) {
+                    GroupCallMiniTextureView groupCallMiniTextureView = this.renderer;
+                    if (groupCallMiniTextureView != null) {
+                        groupCallMiniTextureView.setSecondaryView((GroupCallUserCell) null);
+                    }
+                    this.renderer = null;
                 }
-                GroupCallMiniTextureView groupCallMiniTextureView = this.renderer;
-                if (groupCallMiniTextureView != null) {
-                    groupCallMiniTextureView.setSecondaryView((GroupCallUserCell) null);
-                }
-                this.renderer = null;
             }
         }
 
@@ -486,7 +486,10 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
         }
 
         public void setAmplitude(double d) {
-            this.statusIcon.setAmplitude(d);
+            GroupCallStatusIcon groupCallStatusIcon = this.statusIcon;
+            if (groupCallStatusIcon != null) {
+                groupCallStatusIcon.setAmplitude(d);
+            }
             this.avatarWavesDrawable.setAmplitude(d);
         }
 
@@ -610,10 +613,8 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
 
     public void update(boolean z, RecyclerListView recyclerListView) {
         if (z) {
-            final ArrayList arrayList = new ArrayList();
-            final ArrayList arrayList2 = new ArrayList();
-            arrayList2.addAll(this.participants);
-            arrayList.addAll(this.videoParticipants);
+            final ArrayList arrayList = new ArrayList(this.participants);
+            final ArrayList arrayList2 = new ArrayList(this.videoParticipants);
             this.participants.clear();
             this.participants.addAll(this.groupCall.visibleParticipants);
             this.videoParticipants.clear();
@@ -624,7 +625,7 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
                 }
 
                 public int getOldListSize() {
-                    return arrayList.size() + arrayList2.size();
+                    return arrayList2.size() + arrayList.size();
                 }
 
                 public int getNewListSize() {
@@ -634,16 +635,16 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
                 public boolean areItemsTheSame(int i, int i2) {
                     TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant;
                     TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2;
-                    if (i < arrayList.size() && i2 < GroupCallFullscreenAdapter.this.videoParticipants.size()) {
-                        return ((ChatObject.VideoParticipant) arrayList.get(i)).equals(GroupCallFullscreenAdapter.this.videoParticipants.get(i2));
+                    if (i < arrayList2.size() && i2 < GroupCallFullscreenAdapter.this.videoParticipants.size()) {
+                        return ((ChatObject.VideoParticipant) arrayList2.get(i)).equals(GroupCallFullscreenAdapter.this.videoParticipants.get(i2));
                     }
-                    int size = i - arrayList.size();
+                    int size = i - arrayList2.size();
                     int size2 = i2 - GroupCallFullscreenAdapter.this.videoParticipants.size();
-                    if (size2 < 0 || size2 >= GroupCallFullscreenAdapter.this.participants.size() || size < 0 || size >= arrayList2.size()) {
-                        if (i < arrayList.size()) {
-                            tLRPC$TL_groupCallParticipant = ((ChatObject.VideoParticipant) arrayList.get(i)).participant;
+                    if (size2 < 0 || size2 >= GroupCallFullscreenAdapter.this.participants.size() || size < 0 || size >= arrayList.size()) {
+                        if (i < arrayList2.size()) {
+                            tLRPC$TL_groupCallParticipant = ((ChatObject.VideoParticipant) arrayList2.get(i)).participant;
                         } else {
-                            tLRPC$TL_groupCallParticipant = (TLRPC$TL_groupCallParticipant) arrayList2.get(size);
+                            tLRPC$TL_groupCallParticipant = (TLRPC$TL_groupCallParticipant) arrayList.get(size);
                         }
                         if (i2 < GroupCallFullscreenAdapter.this.videoParticipants.size()) {
                             tLRPC$TL_groupCallParticipant2 = ((ChatObject.VideoParticipant) GroupCallFullscreenAdapter.this.videoParticipants.get(i2)).participant;
@@ -651,7 +652,7 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
                             tLRPC$TL_groupCallParticipant2 = (TLRPC$TL_groupCallParticipant) GroupCallFullscreenAdapter.this.participants.get(size2);
                         }
                         return MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer) == MessageObject.getPeerId(tLRPC$TL_groupCallParticipant2.peer);
-                    } else if (MessageObject.getPeerId(((TLRPC$TL_groupCallParticipant) arrayList2.get(size)).peer) == MessageObject.getPeerId(((TLRPC$TL_groupCallParticipant) GroupCallFullscreenAdapter.this.participants.get(size2)).peer)) {
+                    } else if (MessageObject.getPeerId(((TLRPC$TL_groupCallParticipant) arrayList.get(size)).peer) == MessageObject.getPeerId(((TLRPC$TL_groupCallParticipant) GroupCallFullscreenAdapter.this.participants.get(size2)).peer)) {
                         return true;
                     } else {
                         return false;

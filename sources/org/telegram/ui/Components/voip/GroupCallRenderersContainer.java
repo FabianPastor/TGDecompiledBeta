@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.util.SparseIntArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -51,11 +53,13 @@ import org.webrtc.TextureViewRenderer;
 public class GroupCallRenderersContainer extends FrameLayout {
     private boolean animateSpeakingOnNextDraw = true;
     int animationIndex;
+    private SparseIntArray attachedPeerIds = new SparseIntArray();
     private final ArrayList<GroupCallMiniTextureView> attachedRenderers;
     /* access modifiers changed from: private */
     public final ImageView backButton;
     ChatObject.Call call;
     private boolean canZoomGesture;
+    private boolean drawRenderesOnly;
     ValueAnimator fullscreenAnimator;
     private final RecyclerView fullscreenListView;
     public ChatObject.VideoParticipant fullscreenParticipant;
@@ -76,12 +80,15 @@ public class GroupCallRenderersContainer extends FrameLayout {
     };
     boolean hideUiRunnableIsScheduled;
     public boolean inFullscreenMode;
+    public boolean inLayout;
     private boolean isInPinchToZoomTouchMode;
+    private boolean isTablet;
     public long lastUpdateTime;
     long lastUpdateTooltipTime;
     private final RecyclerView listView;
     public int listWidth;
     boolean maybeSwipeToBackGesture;
+    private boolean notDrawRenderes;
     /* access modifiers changed from: private */
     public GroupCallMiniTextureView outFullscreenTextureView;
     /* access modifiers changed from: private */
@@ -296,12 +303,10 @@ public class GroupCallRenderersContainer extends FrameLayout {
             };
             this.undoView[i].setHideAnimationType(2);
             this.undoView[i].setAdditionalTranslationY((float) AndroidUtilities.dp(10.0f));
-            if (Build.VERSION.SDK_INT >= 21) {
-                this.undoView[i].setTranslationZ((float) AndroidUtilities.dp(5.0f));
-            }
-            addView(this.undoView[i], LayoutHelper.createFrame(-1, -2.0f, 83, 8.0f, 0.0f, 8.0f, 8.0f));
+            addView(this.undoView[i], LayoutHelper.createFrame(-1, -2.0f, 80, 16.0f, 0.0f, 0.0f, 8.0f));
         }
         this.pinContainer.setVisibility(8);
+        setIsTablet(GroupCallActivity.isTabletMode);
     }
 
     /* access modifiers changed from: private */
@@ -321,61 +326,96 @@ public class GroupCallRenderersContainer extends FrameLayout {
         }
     }
 
+    public void setIsTablet(boolean z) {
+        if (this.isTablet != z) {
+            this.isTablet = z;
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.backButton.getLayoutParams();
+            layoutParams.gravity = z ? 85 : 51;
+            layoutParams.rightMargin = z ? AndroidUtilities.dp(328.0f) : 0;
+            layoutParams.bottomMargin = z ? -AndroidUtilities.dp(8.0f) : 0;
+            if (this.isTablet) {
+                this.backButton.setImageDrawable(ContextCompat.getDrawable(getContext(), NUM));
+                return;
+            }
+            BackDrawable backDrawable = new BackDrawable(false);
+            backDrawable.setColor(-1);
+            this.backButton.setImageDrawable(backDrawable);
+        }
+    }
+
     /* access modifiers changed from: protected */
     public boolean drawChild(Canvas canvas, View view, long j) {
         UndoView[] undoViewArr = this.undoView;
         if (view == undoViewArr[0] || view == undoViewArr[1]) {
             return true;
         }
-        if (!(view instanceof GroupCallMiniTextureView)) {
-            return super.drawChild(canvas, view, j);
+        if (view instanceof GroupCallMiniTextureView) {
+            GroupCallMiniTextureView groupCallMiniTextureView = (GroupCallMiniTextureView) view;
+            if (groupCallMiniTextureView == this.fullscreenTextureView || groupCallMiniTextureView == this.outFullscreenTextureView || this.notDrawRenderes) {
+                return true;
+            }
+            if (groupCallMiniTextureView.primaryView != null) {
+                float y = this.listView.getY() - ((float) getTop());
+                float measuredHeight = (((float) this.listView.getMeasuredHeight()) + y) - this.listView.getTranslationY();
+                float f = this.progressToFullscreenMode;
+                if (groupCallMiniTextureView.secondaryView == null) {
+                    f = 0.0f;
+                }
+                canvas.save();
+                float f2 = 1.0f - f;
+                canvas.clipRect(0.0f, y * f2, (float) getMeasuredWidth(), (measuredHeight * f2) + (((float) getMeasuredHeight()) * f));
+                boolean drawChild = super.drawChild(canvas, view, j);
+                canvas.restore();
+                return drawChild;
+            } else if (!GroupCallActivity.isTabletMode) {
+                return super.drawChild(canvas, view, j);
+            } else {
+                canvas.save();
+                canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                super.drawChild(canvas, view, j);
+                canvas.restore();
+            }
         }
-        GroupCallMiniTextureView groupCallMiniTextureView = (GroupCallMiniTextureView) view;
-        if (groupCallMiniTextureView == this.fullscreenTextureView || groupCallMiniTextureView == this.outFullscreenTextureView) {
+        if (this.drawRenderesOnly) {
             return true;
         }
-        if (groupCallMiniTextureView.primaryView == null) {
-            return super.drawChild(canvas, view, j);
-        }
-        float y = this.listView.getY() - ((float) getTop());
-        float measuredHeight = (((float) this.listView.getMeasuredHeight()) + y) - this.listView.getTranslationY();
-        float f = this.progressToFullscreenMode;
-        if (groupCallMiniTextureView.secondaryView == null) {
-            f = 0.0f;
-        }
-        canvas.save();
-        float f2 = 1.0f - f;
-        canvas.clipRect(0.0f, y * f2, (float) getMeasuredWidth(), (measuredHeight * f2) + (((float) getMeasuredHeight()) * f));
-        boolean drawChild = super.drawChild(canvas, view, j);
-        canvas.restore();
-        return drawChild;
+        return super.drawChild(canvas, view, j);
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x0373  */
-    /* JADX WARNING: Removed duplicated region for block: B:114:0x0380  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x03cd A[LOOP:1: B:117:0x03cd->B:124:0x0424, LOOP_START, PHI: r12 
-      PHI: (r12v1 int) = (r12v0 int), (r12v2 int) binds: [B:116:0x03cb, B:124:0x0424] A[DONT_GENERATE, DONT_INLINE]] */
-    /* JADX WARNING: Removed duplicated region for block: B:132:? A[ORIG_RETURN, RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x03ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x03ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:130:0x03fe  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0406  */
+    /* JADX WARNING: Removed duplicated region for block: B:134:0x0411 A[LOOP:1: B:134:0x0411->B:141:0x046a, LOOP_START, PHI: r10 
+      PHI: (r10v1 int) = (r10v0 int), (r10v2 int) binds: [B:133:0x040f, B:141:0x046a] A[DONT_GENERATE, DONT_INLINE]] */
+    /* JADX WARNING: Removed duplicated region for block: B:149:? A[ORIG_RETURN, RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void dispatchDraw(android.graphics.Canvas r22) {
+    public void dispatchDraw(android.graphics.Canvas r23) {
         /*
-            r21 = this;
-            r0 = r21
-            r8 = r22
+            r22 = this;
+            r0 = r22
+            r8 = r23
+            boolean r1 = org.telegram.ui.GroupCallActivity.isTabletMode
+            r9 = 1
+            r10 = 0
+            if (r1 == 0) goto L_0x0011
+            r0.drawRenderesOnly = r9
+            super.dispatchDraw(r23)
+            r0.drawRenderesOnly = r10
+        L_0x0011:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.outFullscreenTextureView
-            r9 = 1119092736(0x42b40000, float:90.0)
-            r10 = 1132396544(0x437var_, float:255.0)
-            r11 = 0
-            r12 = 0
-            r13 = 1065353216(0x3var_, float:1.0)
-            if (r1 != 0) goto L_0x0014
+            r11 = 1119092736(0x42b40000, float:90.0)
+            r12 = 1132396544(0x437var_, float:255.0)
+            r13 = 0
+            r14 = 1065353216(0x3var_, float:1.0)
+            if (r1 != 0) goto L_0x0020
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
-            if (r1 == 0) goto L_0x0134
-        L_0x0014:
+            if (r1 == 0) goto L_0x0157
+        L_0x0020:
             androidx.recyclerview.widget.RecyclerView r1 = r0.listView
             float r1 = r1.getY()
-            int r2 = r21.getTop()
+            int r2 = r22.getTop()
             float r2 = (float) r2
             float r1 = r1 - r2
             androidx.recyclerview.widget.RecyclerView r2 = r0.listView
@@ -386,27 +426,37 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r3 = r3.getTranslationY()
             float r2 = r2 - r3
             float r3 = r0.progressToFullscreenMode
-            r22.save()
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r4 = r0.fullscreenTextureView
-            if (r4 == 0) goto L_0x0052
-            boolean r4 = r4.forceDetached
-            if (r4 != 0) goto L_0x0052
-            float r4 = r13 - r3
+            r23.save()
+            boolean r4 = org.telegram.ui.GroupCallActivity.isTabletMode
+            if (r4 != 0) goto L_0x0067
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r5 = r0.fullscreenTextureView
+            if (r5 == 0) goto L_0x0067
+            boolean r6 = r5.forceDetached
+            if (r6 != 0) goto L_0x0067
+            org.telegram.ui.Components.voip.GroupCallGridCell r5 = r5.primaryView
+            if (r5 == 0) goto L_0x0067
+            float r4 = r14 - r3
             float r1 = r1 * r4
-            int r5 = r21.getMeasuredWidth()
+            int r5 = r22.getMeasuredWidth()
             float r5 = (float) r5
             float r2 = r2 * r4
-            int r4 = r21.getMeasuredHeight()
+            int r4 = r22.getMeasuredHeight()
             float r4 = (float) r4
             float r4 = r4 * r3
             float r2 = r2 + r4
-            r8.clipRect(r11, r1, r5, r2)
-        L_0x0052:
+            r8.clipRect(r13, r1, r5, r2)
+            goto L_0x0074
+        L_0x0067:
+            if (r4 == 0) goto L_0x0074
+            int r1 = r22.getMeasuredWidth()
+            int r2 = r22.getMeasuredHeight()
+            r8.clipRect(r10, r10, r1, r2)
+        L_0x0074:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.outFullscreenTextureView
-            if (r1 == 0) goto L_0x0076
+            if (r1 == 0) goto L_0x0098
             android.view.ViewParent r1 = r1.getParent()
-            if (r1 == 0) goto L_0x0076
-            r22.save()
+            if (r1 == 0) goto L_0x0098
+            r23.save()
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.outFullscreenTextureView
             float r1 = r1.getX()
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r2 = r0.outFullscreenTextureView
@@ -414,16 +464,16 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r8.translate(r1, r2)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.outFullscreenTextureView
             r1.draw(r8)
-            r22.restore()
-        L_0x0076:
+            r23.restore()
+        L_0x0098:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
-            if (r1 == 0) goto L_0x0131
+            if (r1 == 0) goto L_0x0154
             android.view.ViewParent r1 = r1.getParent()
-            if (r1 == 0) goto L_0x0131
+            if (r1 == 0) goto L_0x0154
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
             float r1 = r1.getAlpha()
-            int r1 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1))
-            if (r1 == 0) goto L_0x00c6
+            int r1 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
+            if (r1 == 0) goto L_0x00e8
             android.graphics.RectF r1 = org.telegram.messenger.AndroidUtilities.rectTmp
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r2 = r0.fullscreenTextureView
             float r2 = r2.getX()
@@ -444,399 +494,408 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r1.set(r2, r3, r4, r5)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r2 = r0.fullscreenTextureView
             float r2 = r2.getAlpha()
-            float r2 = r2 * r10
+            float r2 = r2 * r12
             int r2 = (int) r2
             r3 = 31
             r8.saveLayerAlpha(r1, r2, r3)
-            goto L_0x00c9
-        L_0x00c6:
-            r22.save()
-        L_0x00c9:
+            goto L_0x00eb
+        L_0x00e8:
+            r23.save()
+        L_0x00eb:
             boolean r1 = r0.swipeToBackGesture
-            r2 = 1
-            if (r1 != 0) goto L_0x00d5
+            if (r1 != 0) goto L_0x00f6
             android.animation.ValueAnimator r1 = r0.swipeToBackAnimator
-            if (r1 == 0) goto L_0x00d3
-            goto L_0x00d5
-        L_0x00d3:
+            if (r1 == 0) goto L_0x00f4
+            goto L_0x00f6
+        L_0x00f4:
             r1 = 0
-            goto L_0x00d6
-        L_0x00d5:
+            goto L_0x00f7
+        L_0x00f6:
             r1 = 1
-        L_0x00d6:
-            if (r1 == 0) goto L_0x00ee
-            int r3 = r21.getMeasuredWidth()
-            int r4 = r21.getMeasuredHeight()
-            boolean r5 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r5 == 0) goto L_0x00e6
-            r5 = 0
-            goto L_0x00ea
-        L_0x00e6:
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r9)
-        L_0x00ea:
-            int r4 = r4 - r5
-            r8.clipRect(r12, r12, r3, r4)
-        L_0x00ee:
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r3 = r0.fullscreenTextureView
-            float r3 = r3.getX()
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r4 = r0.fullscreenTextureView
-            float r4 = r4.getY()
-            r8.translate(r3, r4)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r3 = r0.fullscreenTextureView
-            float r4 = r0.swipeToBackDy
-            r3.setSwipeToBack(r1, r4)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r14 = r0.fullscreenTextureView
-            boolean r1 = r0.zoomStarted
-            if (r1 != 0) goto L_0x0111
-            android.animation.ValueAnimator r1 = r0.zoomBackAnimator
+        L_0x00f7:
             if (r1 == 0) goto L_0x010f
-            goto L_0x0111
+            int r2 = r22.getMeasuredWidth()
+            int r3 = r22.getMeasuredHeight()
+            boolean r4 = org.telegram.ui.GroupCallActivity.isLandscapeMode
+            if (r4 == 0) goto L_0x0107
+            r4 = 0
+            goto L_0x010b
+        L_0x0107:
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
+        L_0x010b:
+            int r3 = r3 - r4
+            r8.clipRect(r10, r10, r2, r3)
         L_0x010f:
-            r15 = 0
-            goto L_0x0112
-        L_0x0111:
-            r15 = 1
-        L_0x0112:
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r2 = r0.fullscreenTextureView
+            float r2 = r2.getX()
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r3 = r0.fullscreenTextureView
+            float r3 = r3.getY()
+            r8.translate(r2, r3)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r2 = r0.fullscreenTextureView
+            float r3 = r0.swipeToBackDy
+            r2.setSwipeToBack(r1, r3)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r15 = r0.fullscreenTextureView
+            boolean r1 = r0.zoomStarted
+            if (r1 != 0) goto L_0x0133
+            android.animation.ValueAnimator r1 = r0.zoomBackAnimator
+            if (r1 == 0) goto L_0x0130
+            goto L_0x0133
+        L_0x0130:
+            r16 = 0
+            goto L_0x0135
+        L_0x0133:
+            r16 = 1
+        L_0x0135:
             float r1 = r0.pinchScale
             float r2 = r0.pinchCenterX
             float r3 = r0.pinchCenterY
             float r4 = r0.pinchTranslationX
             float r5 = r0.pinchTranslationY
-            r16 = r1
-            r17 = r2
-            r18 = r3
-            r19 = r4
-            r20 = r5
-            r14.setZoom(r15, r16, r17, r18, r19, r20)
+            r17 = r1
+            r18 = r2
+            r19 = r3
+            r20 = r4
+            r21 = r5
+            r15.setZoom(r16, r17, r18, r19, r20, r21)
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
             r1.draw(r8)
-            r22.restore()
-        L_0x0131:
-            r22.restore()
-        L_0x0134:
-            r14 = 0
-        L_0x0135:
+            r23.restore()
+        L_0x0154:
+            r23.restore()
+        L_0x0157:
+            r15 = 0
+        L_0x0158:
             r1 = 2
-            r15 = 1073741824(0x40000000, float:2.0)
-            if (r14 >= r1) goto L_0x0210
+            r2 = 1090519040(0x41000000, float:8.0)
+            r16 = 1073741824(0x40000000, float:2.0)
+            if (r15 >= r1) goto L_0x023d
             org.telegram.ui.Components.UndoView[] r1 = r0.undoView
-            r1 = r1[r14]
+            r1 = r1[r15]
             int r1 = r1.getVisibility()
-            if (r1 != 0) goto L_0x020c
-            r22.save()
+            if (r1 != 0) goto L_0x0239
+            r23.save()
             boolean r1 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r1 == 0) goto L_0x014d
+            if (r1 == 0) goto L_0x0172
             r1 = 0
-            goto L_0x0159
-        L_0x014d:
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            goto L_0x017e
+        L_0x0172:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r11)
             int r1 = -r1
             float r1 = (float) r1
-            float r2 = r0.progressToHideUi
-            float r2 = r13 - r2
-            float r1 = r1 * r2
-        L_0x0159:
-            int r2 = r21.getMeasuredWidth()
-            float r2 = (float) r2
-            int r3 = r21.getMeasuredHeight()
-            boolean r4 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r4 == 0) goto L_0x0168
-            r4 = 0
-            goto L_0x016c
-        L_0x0168:
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r9)
-        L_0x016c:
-            int r3 = r3 - r4
+            float r3 = r0.progressToHideUi
+            float r3 = r14 - r3
+            float r1 = r1 * r3
+        L_0x017e:
+            int r3 = r22.getMeasuredWidth()
             float r3 = (float) r3
-            float r3 = r3 + r1
-            r4 = 1099956224(0x41900000, float:18.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r4 = (float) r4
-            float r3 = r3 - r4
-            r8.clipRect(r11, r11, r2, r3)
-            org.telegram.ui.Components.UndoView[] r2 = r0.undoView
-            r2 = r2[r14]
-            float r2 = r2.getX()
-            org.telegram.ui.Components.UndoView[] r3 = r0.undoView
-            r3 = r3[r14]
-            float r3 = r3.getY()
-            boolean r4 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r4 == 0) goto L_0x0190
-            r4 = 0
-            goto L_0x0194
-        L_0x0190:
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r9)
-        L_0x0194:
-            float r4 = (float) r4
-            float r3 = r3 - r4
-            float r3 = r3 + r1
-            r1 = 1104150528(0x41d00000, float:26.0)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r1 = (float) r1
-            float r3 = r3 - r1
-            r8.translate(r2, r3)
-            org.telegram.ui.Components.UndoView[] r1 = r0.undoView
-            r1 = r1[r14]
-            float r1 = r1.getAlpha()
-            int r1 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1))
-            if (r1 == 0) goto L_0x01d5
-            r2 = 0
-            r3 = 0
-            org.telegram.ui.Components.UndoView[] r1 = r0.undoView
-            r1 = r1[r14]
-            int r1 = r1.getMeasuredWidth()
-            float r4 = (float) r1
-            org.telegram.ui.Components.UndoView[] r1 = r0.undoView
-            r1 = r1[r14]
-            int r1 = r1.getMeasuredHeight()
-            float r5 = (float) r1
-            org.telegram.ui.Components.UndoView[] r1 = r0.undoView
-            r1 = r1[r14]
-            float r1 = r1.getAlpha()
-            float r1 = r1 * r10
-            int r6 = (int) r1
-            r7 = 31
-            r1 = r22
-            r1.saveLayerAlpha(r2, r3, r4, r5, r6, r7)
-            goto L_0x01d8
-        L_0x01d5:
-            r22.save()
-        L_0x01d8:
-            org.telegram.ui.Components.UndoView[] r1 = r0.undoView
-            r1 = r1[r14]
-            float r1 = r1.getScaleX()
-            org.telegram.ui.Components.UndoView[] r2 = r0.undoView
-            r2 = r2[r14]
-            float r2 = r2.getScaleY()
-            org.telegram.ui.Components.UndoView[] r3 = r0.undoView
-            r3 = r3[r14]
-            int r3 = r3.getMeasuredWidth()
-            float r3 = (float) r3
-            float r3 = r3 / r15
-            org.telegram.ui.Components.UndoView[] r4 = r0.undoView
-            r4 = r4[r14]
-            int r4 = r4.getMeasuredHeight()
-            float r4 = (float) r4
-            float r4 = r4 / r15
-            r8.scale(r1, r2, r3, r4)
-            org.telegram.ui.Components.UndoView[] r1 = r0.undoView
-            r1 = r1[r14]
-            r1.draw(r8)
-            r22.restore()
-            r22.restore()
-        L_0x020c:
-            int r14 = r14 + 1
-            goto L_0x0135
-        L_0x0210:
-            float r1 = r0.progressToFullscreenMode
-            float r2 = r0.progressToHideUi
-            float r2 = r13 - r2
-            float r1 = r1 * r2
-            android.animation.ValueAnimator r2 = r0.replaceFullscreenViewAnimator
-            if (r2 == 0) goto L_0x0248
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r2 = r0.outFullscreenTextureView
-            if (r2 == 0) goto L_0x0248
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r3 = r0.fullscreenTextureView
-            if (r3 == 0) goto L_0x0248
-            boolean r2 = r2.hasVideo
-            boolean r4 = r3.hasVideo
-            if (r2 == r4) goto L_0x023a
-            if (r4 != 0) goto L_0x0233
-            float r2 = r3.getAlpha()
-            float r2 = r13 - r2
-            goto L_0x0237
-        L_0x0233:
-            float r2 = r3.getAlpha()
-        L_0x0237:
-            float r2 = r2 * r1
-            goto L_0x023f
-        L_0x023a:
-            if (r4 != 0) goto L_0x023e
-            r2 = 0
-            goto L_0x023f
-        L_0x023e:
-            r2 = r1
-        L_0x023f:
-            android.graphics.drawable.Drawable r3 = r0.topShadowDrawable
-            float r2 = r2 * r10
-            int r2 = (int) r2
-            r3.setAlpha(r2)
-            goto L_0x0263
-        L_0x0248:
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r2 = r0.fullscreenTextureView
-            if (r2 == 0) goto L_0x025b
-            android.graphics.drawable.Drawable r3 = r0.topShadowDrawable
-            float r10 = r10 * r1
-            float r2 = r2.progressToNoVideoStub
-            float r2 = r13 - r2
-            float r10 = r10 * r2
-            int r2 = (int) r10
-            r3.setAlpha(r2)
-            goto L_0x0263
-        L_0x025b:
-            android.graphics.drawable.Drawable r2 = r0.topShadowDrawable
-            float r10 = r10 * r1
-            int r3 = (int) r10
-            r2.setAlpha(r3)
-        L_0x0263:
-            android.widget.ImageView r2 = r0.backButton
-            r2.setAlpha(r1)
-            android.widget.ImageView r2 = r0.pinButton
-            r2.setAlpha(r1)
-            int r2 = r21.getMeasuredWidth()
-            android.widget.TextView r3 = r0.pinTextView
-            int r3 = r3.getMeasuredWidth()
-            int r2 = r2 - r3
-            float r2 = (float) r2
-            int r3 = r21.getMeasuredWidth()
-            android.widget.TextView r4 = r0.unpinTextView
-            int r4 = r4.getMeasuredWidth()
-            int r3 = r3 - r4
-            float r3 = (float) r3
-            int r4 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
-            android.widget.TextView r5 = r0.pinTextView
-            int r5 = r5.getMeasuredHeight()
+            int r4 = r22.getMeasuredHeight()
+            boolean r5 = org.telegram.ui.GroupCallActivity.isLandscapeMode
+            if (r5 == 0) goto L_0x018d
+            r5 = 0
+            goto L_0x0191
+        L_0x018d:
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r11)
+        L_0x0191:
             int r4 = r4 - r5
             float r4 = (float) r4
-            float r4 = r4 / r15
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            float r4 = r4 + r1
+            r5 = 1099956224(0x41900000, float:18.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             float r5 = (float) r5
             float r4 = r4 - r5
-            org.telegram.ui.Components.CrossOutDrawable r5 = r0.pinDrawable
-            float r5 = r5.getProgress()
-            float r3 = r3 * r5
-            org.telegram.ui.Components.CrossOutDrawable r5 = r0.pinDrawable
-            float r5 = r5.getProgress()
-            float r5 = r13 - r5
-            float r2 = r2 * r5
-            float r3 = r3 + r2
-            r2 = 1101529088(0x41a80000, float:21.0)
+            r8.clipRect(r13, r13, r3, r4)
+            org.telegram.ui.Components.UndoView[] r3 = r0.undoView
+            r3 = r3[r15]
+            float r3 = r3.getX()
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             float r2 = (float) r2
             float r3 = r3 - r2
-            boolean r2 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r2 == 0) goto L_0x02bf
-            r2 = 1127481344(0x43340000, float:180.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            int r2 = -r2
-            goto L_0x02c0
-        L_0x02bf:
-            r2 = 0
-        L_0x02c0:
-            float r2 = (float) r2
-            float r3 = r3 + r2
-            android.widget.TextView r2 = r0.pinTextView
-            r2.setTranslationX(r3)
-            android.widget.TextView r2 = r0.unpinTextView
-            r2.setTranslationX(r3)
-            android.widget.TextView r2 = r0.pinTextView
-            r2.setTranslationY(r4)
-            android.widget.TextView r2 = r0.unpinTextView
-            r2.setTranslationY(r4)
-            android.view.View r2 = r0.pinContainer
-            r4 = 1108344832(0x42100000, float:36.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            org.telegram.ui.Components.UndoView[] r2 = r0.undoView
+            r2 = r2[r15]
+            float r2 = r2.getY()
+            boolean r4 = org.telegram.ui.GroupCallActivity.isLandscapeMode
+            if (r4 == 0) goto L_0x01bb
+            r4 = 0
+            goto L_0x01bf
+        L_0x01bb:
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
+        L_0x01bf:
             float r4 = (float) r4
-            float r4 = r3 - r4
-            r2.setTranslationX(r4)
-            android.view.View r2 = r0.pinContainer
-            int r4 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
-            android.view.View r5 = r0.pinContainer
-            int r5 = r5.getMeasuredHeight()
+            float r2 = r2 - r4
+            float r2 = r2 + r1
+            r1 = 1104150528(0x41d00000, float:26.0)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            float r1 = (float) r1
+            float r2 = r2 - r1
+            r8.translate(r3, r2)
+            org.telegram.ui.Components.UndoView[] r1 = r0.undoView
+            r1 = r1[r15]
+            float r1 = r1.getAlpha()
+            int r1 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
+            if (r1 == 0) goto L_0x0200
+            r2 = 0
+            r3 = 0
+            org.telegram.ui.Components.UndoView[] r1 = r0.undoView
+            r1 = r1[r15]
+            int r1 = r1.getMeasuredWidth()
+            float r4 = (float) r1
+            org.telegram.ui.Components.UndoView[] r1 = r0.undoView
+            r1 = r1[r15]
+            int r1 = r1.getMeasuredHeight()
+            float r5 = (float) r1
+            org.telegram.ui.Components.UndoView[] r1 = r0.undoView
+            r1 = r1[r15]
+            float r1 = r1.getAlpha()
+            float r1 = r1 * r12
+            int r6 = (int) r1
+            r7 = 31
+            r1 = r23
+            r1.saveLayerAlpha(r2, r3, r4, r5, r6, r7)
+            goto L_0x0203
+        L_0x0200:
+            r23.save()
+        L_0x0203:
+            org.telegram.ui.Components.UndoView[] r1 = r0.undoView
+            r1 = r1[r15]
+            float r1 = r1.getScaleX()
+            org.telegram.ui.Components.UndoView[] r2 = r0.undoView
+            r2 = r2[r15]
+            float r2 = r2.getScaleY()
+            org.telegram.ui.Components.UndoView[] r3 = r0.undoView
+            r3 = r3[r15]
+            int r3 = r3.getMeasuredWidth()
+            float r3 = (float) r3
+            float r3 = r3 / r16
+            org.telegram.ui.Components.UndoView[] r4 = r0.undoView
+            r4 = r4[r15]
+            int r4 = r4.getMeasuredHeight()
+            float r4 = (float) r4
+            float r4 = r4 / r16
+            r8.scale(r1, r2, r3, r4)
+            org.telegram.ui.Components.UndoView[] r1 = r0.undoView
+            r1 = r1[r15]
+            r1.draw(r8)
+            r23.restore()
+            r23.restore()
+        L_0x0239:
+            int r15 = r15 + 1
+            goto L_0x0158
+        L_0x023d:
+            float r1 = r0.progressToFullscreenMode
+            float r3 = r0.progressToHideUi
+            float r3 = r14 - r3
+            float r1 = r1 * r3
+            android.animation.ValueAnimator r3 = r0.replaceFullscreenViewAnimator
+            if (r3 == 0) goto L_0x0275
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r3 = r0.outFullscreenTextureView
+            if (r3 == 0) goto L_0x0275
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r4 = r0.fullscreenTextureView
+            if (r4 == 0) goto L_0x0275
+            boolean r3 = r3.hasVideo
+            boolean r5 = r4.hasVideo
+            if (r3 == r5) goto L_0x0267
+            if (r5 != 0) goto L_0x0260
+            float r3 = r4.getAlpha()
+            float r3 = r14 - r3
+            goto L_0x0264
+        L_0x0260:
+            float r3 = r4.getAlpha()
+        L_0x0264:
+            float r3 = r3 * r1
+            goto L_0x026c
+        L_0x0267:
+            if (r5 != 0) goto L_0x026b
+            r3 = 0
+            goto L_0x026c
+        L_0x026b:
+            r3 = r1
+        L_0x026c:
+            android.graphics.drawable.Drawable r4 = r0.topShadowDrawable
+            float r3 = r3 * r12
+            int r3 = (int) r3
+            r4.setAlpha(r3)
+            goto L_0x0290
+        L_0x0275:
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r3 = r0.fullscreenTextureView
+            if (r3 == 0) goto L_0x0288
+            android.graphics.drawable.Drawable r4 = r0.topShadowDrawable
+            float r12 = r12 * r1
+            float r3 = r3.progressToNoVideoStub
+            float r3 = r14 - r3
+            float r12 = r12 * r3
+            int r3 = (int) r12
+            r4.setAlpha(r3)
+            goto L_0x0290
+        L_0x0288:
+            android.graphics.drawable.Drawable r3 = r0.topShadowDrawable
+            float r12 = r12 * r1
+            int r4 = (int) r12
+            r3.setAlpha(r4)
+        L_0x0290:
+            android.widget.ImageView r3 = r0.backButton
+            r3.setAlpha(r1)
+            android.widget.ImageView r3 = r0.pinButton
+            r3.setAlpha(r1)
+            int r3 = r22.getMeasuredWidth()
+            android.widget.TextView r4 = r0.pinTextView
+            int r4 = r4.getMeasuredWidth()
+            int r3 = r3 - r4
+            float r3 = (float) r3
+            int r4 = r22.getMeasuredWidth()
+            android.widget.TextView r5 = r0.unpinTextView
+            int r5 = r5.getMeasuredWidth()
             int r4 = r4 - r5
             float r4 = (float) r4
-            float r4 = r4 / r15
-            r2.setTranslationY(r4)
-            android.widget.ImageView r2 = r0.pinButton
-            r4 = 1110441984(0x42300000, float:44.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            float r4 = (float) r4
-            float r3 = r3 - r4
-            r2.setTranslationX(r3)
-            android.widget.TextView r2 = r0.pinTextView
-            org.telegram.ui.Components.CrossOutDrawable r3 = r0.pinDrawable
-            float r3 = r3.getProgress()
-            float r3 = r13 - r3
-            float r3 = r3 * r1
-            r2.setAlpha(r3)
-            android.widget.TextView r2 = r0.unpinTextView
-            org.telegram.ui.Components.CrossOutDrawable r3 = r0.pinDrawable
-            float r3 = r3.getProgress()
-            float r3 = r3 * r1
-            r2.setAlpha(r3)
-            android.view.View r2 = r0.pinContainer
-            r2.setAlpha(r1)
+            int r5 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
+            android.widget.TextView r6 = r0.pinTextView
+            int r6 = r6.getMeasuredHeight()
+            int r5 = r5 - r6
+            float r5 = (float) r5
+            float r5 = r5 / r16
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            float r6 = (float) r6
+            float r5 = r5 - r6
+            org.telegram.ui.Components.CrossOutDrawable r6 = r0.pinDrawable
+            float r6 = r6.getProgress()
+            float r4 = r4 * r6
+            org.telegram.ui.Components.CrossOutDrawable r6 = r0.pinDrawable
+            float r6 = r6.getProgress()
+            float r6 = r14 - r6
+            float r3 = r3 * r6
+            float r4 = r4 + r3
+            r3 = 1101529088(0x41a80000, float:21.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            float r3 = (float) r3
+            float r4 = r4 - r3
+            boolean r3 = org.telegram.ui.GroupCallActivity.isTabletMode
+            if (r3 == 0) goto L_0x02ee
+            r3 = 1134821376(0x43a40000, float:328.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+        L_0x02eb:
+            float r3 = (float) r3
+            float r4 = r4 - r3
+            goto L_0x02fb
+        L_0x02ee:
+            boolean r3 = org.telegram.ui.GroupCallActivity.isLandscapeMode
+            if (r3 == 0) goto L_0x02f9
+            r3 = 1127481344(0x43340000, float:180.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            goto L_0x02eb
+        L_0x02f9:
+            r3 = 0
+            goto L_0x02eb
+        L_0x02fb:
+            android.widget.TextView r3 = r0.pinTextView
+            r3.setTranslationX(r4)
+            android.widget.TextView r3 = r0.unpinTextView
+            r3.setTranslationX(r4)
+            android.widget.TextView r3 = r0.pinTextView
+            r3.setTranslationY(r5)
+            android.widget.TextView r3 = r0.unpinTextView
+            r3.setTranslationY(r5)
+            android.view.View r3 = r0.pinContainer
+            r5 = 1108344832(0x42100000, float:36.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r5 = (float) r5
+            float r5 = r4 - r5
+            r3.setTranslationX(r5)
+            android.view.View r3 = r0.pinContainer
+            int r5 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
+            android.view.View r6 = r0.pinContainer
+            int r6 = r6.getMeasuredHeight()
+            int r5 = r5 - r6
+            float r5 = (float) r5
+            float r5 = r5 / r16
+            r3.setTranslationY(r5)
+            android.widget.ImageView r3 = r0.pinButton
+            r5 = 1110441984(0x42300000, float:44.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            float r5 = (float) r5
+            float r4 = r4 - r5
+            r3.setTranslationX(r4)
+            android.widget.TextView r3 = r0.pinTextView
+            org.telegram.ui.Components.CrossOutDrawable r4 = r0.pinDrawable
+            float r4 = r4.getProgress()
+            float r4 = r14 - r4
+            float r4 = r4 * r1
+            r3.setAlpha(r4)
+            android.widget.TextView r3 = r0.unpinTextView
+            org.telegram.ui.Components.CrossOutDrawable r4 = r0.pinDrawable
+            float r4 = r4.getProgress()
+            float r4 = r4 * r1
+            r3.setAlpha(r4)
+            android.view.View r3 = r0.pinContainer
+            r3.setAlpha(r1)
             float r1 = r0.speakingMembersToastChangeProgress
-            int r2 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1))
-            if (r2 == 0) goto L_0x033f
-            r2 = 1033171465(0x3d94var_, float:0.07272727)
-            float r1 = r1 + r2
+            int r3 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
+            if (r3 == 0) goto L_0x0379
+            r3 = 1033171465(0x3d94var_, float:0.07272727)
+            float r1 = r1 + r3
             r0.speakingMembersToastChangeProgress = r1
-            int r1 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0337
-            r0.speakingMembersToastChangeProgress = r13
-            goto L_0x033a
-        L_0x0337:
-            r21.invalidate()
-        L_0x033a:
+            int r1 = (r1 > r14 ? 1 : (r1 == r14 ? 0 : -1))
+            if (r1 <= 0) goto L_0x0371
+            r0.speakingMembersToastChangeProgress = r14
+            goto L_0x0374
+        L_0x0371:
+            r22.invalidate()
+        L_0x0374:
             android.widget.FrameLayout r1 = r0.speakingMembersToast
             r1.invalidate()
-        L_0x033f:
+        L_0x0379:
             boolean r1 = r0.showSpeakingMembersToast
-            r2 = 1037726734(0x3dda740e, float:0.10666667)
-            if (r1 == 0) goto L_0x035a
-            float r3 = r0.showSpeakingMembersToastProgress
-            int r4 = (r3 > r13 ? 1 : (r3 == r13 ? 0 : -1))
-            if (r4 == 0) goto L_0x035a
-            float r3 = r3 + r2
-            r0.showSpeakingMembersToastProgress = r3
-            int r1 = (r3 > r13 ? 1 : (r3 == r13 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0356
-            r0.showSpeakingMembersToastProgress = r13
-            goto L_0x036f
-        L_0x0356:
-            r21.invalidate()
-            goto L_0x036f
-        L_0x035a:
-            if (r1 != 0) goto L_0x036f
+            r3 = 1037726734(0x3dda740e, float:0.10666667)
+            if (r1 == 0) goto L_0x0394
+            float r4 = r0.showSpeakingMembersToastProgress
+            int r5 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
+            if (r5 == 0) goto L_0x0394
+            float r4 = r4 + r3
+            r0.showSpeakingMembersToastProgress = r4
+            int r1 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
+            if (r1 <= 0) goto L_0x0390
+            r0.showSpeakingMembersToastProgress = r14
+            goto L_0x03a9
+        L_0x0390:
+            r22.invalidate()
+            goto L_0x03a9
+        L_0x0394:
+            if (r1 != 0) goto L_0x03a9
             float r1 = r0.showSpeakingMembersToastProgress
-            int r3 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
-            if (r3 == 0) goto L_0x036f
-            float r1 = r1 - r2
+            int r4 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1))
+            if (r4 == 0) goto L_0x03a9
+            float r1 = r1 - r3
             r0.showSpeakingMembersToastProgress = r1
-            int r1 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
-            if (r1 >= 0) goto L_0x036c
-            r0.showSpeakingMembersToastProgress = r11
-            goto L_0x036f
-        L_0x036c:
-            r21.invalidate()
-        L_0x036f:
+            int r1 = (r1 > r13 ? 1 : (r1 == r13 ? 0 : -1))
+            if (r1 >= 0) goto L_0x03a6
+            r0.showSpeakingMembersToastProgress = r13
+            goto L_0x03a9
+        L_0x03a6:
+            r22.invalidate()
+        L_0x03a9:
             boolean r1 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r1 == 0) goto L_0x0380
+            if (r1 == 0) goto L_0x03ba
             android.widget.FrameLayout r1 = r0.speakingMembersToast
             r2 = 1098907648(0x41800000, float:16.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             float r2 = (float) r2
             r1.setTranslationY(r2)
-            goto L_0x03a1
-        L_0x0380:
+            goto L_0x03d9
+        L_0x03ba:
             android.widget.FrameLayout r1 = r0.speakingMembersToast
-            int r2 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
-            float r2 = (float) r2
-            float r3 = r0.progressToHideUi
-            float r13 = r13 - r3
-            float r2 = r2 * r13
-            r3 = 1090519040(0x41000000, float:8.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r4 = (float) r4
-            float r2 = r2 + r4
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            int r3 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
             float r3 = (float) r3
             float r4 = r0.progressToHideUi
-            float r3 = r3 * r4
-            float r2 = r2 + r3
-            r1.setTranslationY(r2)
-        L_0x03a1:
+            float r14 = r14 - r4
+            float r3 = r3 * r14
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r4 = (float) r4
+            float r3 = r3 + r4
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            float r2 = (float) r2
+            float r4 = r0.progressToHideUi
+            float r2 = r2 * r4
+            float r3 = r3 + r2
+            r1.setTranslationY(r3)
+        L_0x03d9:
             android.widget.FrameLayout r1 = r0.speakingMembersToast
             float r2 = r0.showSpeakingMembersToastProgress
             float r3 = r0.progressToFullscreenMode
@@ -853,23 +912,31 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r2 = r2 * r3
             float r2 = r2 + r3
             r1.setScaleY(r2)
-            super.dispatchDraw(r22)
+            boolean r1 = org.telegram.ui.GroupCallActivity.isTabletMode
+            if (r1 == 0) goto L_0x0406
+            r0.notDrawRenderes = r9
+            super.dispatchDraw(r23)
+            r0.notDrawRenderes = r10
+            goto L_0x0409
+        L_0x0406:
+            super.dispatchDraw(r23)
+        L_0x0409:
             androidx.recyclerview.widget.RecyclerView r1 = r0.fullscreenListView
             int r1 = r1.getVisibility()
-            if (r1 != 0) goto L_0x0427
-        L_0x03cd:
+            if (r1 != 0) goto L_0x046d
+        L_0x0411:
             androidx.recyclerview.widget.RecyclerView r1 = r0.fullscreenListView
             int r1 = r1.getChildCount()
-            if (r12 >= r1) goto L_0x0427
+            if (r10 >= r1) goto L_0x046d
             androidx.recyclerview.widget.RecyclerView r1 = r0.fullscreenListView
-            android.view.View r1 = r1.getChildAt(r12)
+            android.view.View r1 = r1.getChildAt(r10)
             org.telegram.ui.Components.GroupCallFullscreenAdapter$GroupCallUserCell r1 = (org.telegram.ui.Components.GroupCallFullscreenAdapter.GroupCallUserCell) r1
             int r2 = r1.getVisibility()
-            if (r2 != 0) goto L_0x0424
+            if (r2 != 0) goto L_0x046a
             float r2 = r1.getAlpha()
-            int r2 = (r2 > r11 ? 1 : (r2 == r11 ? 0 : -1))
-            if (r2 == 0) goto L_0x0424
-            r22.save()
+            int r2 = (r2 > r13 ? 1 : (r2 == r13 ? 0 : -1))
+            if (r2 == 0) goto L_0x046a
+            r23.save()
             float r2 = r1.getX()
             androidx.recyclerview.widget.RecyclerView r3 = r0.fullscreenListView
             float r3 = r3.getX()
@@ -883,17 +950,17 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r3 = r1.getScaleY()
             int r4 = r1.getMeasuredWidth()
             float r4 = (float) r4
-            float r4 = r4 / r15
+            float r4 = r4 / r16
             int r5 = r1.getMeasuredHeight()
             float r5 = (float) r5
-            float r5 = r5 / r15
+            float r5 = r5 / r16
             r8.scale(r2, r3, r4, r5)
             r1.drawOverlays(r8)
-            r22.restore()
-        L_0x0424:
-            int r12 = r12 + 1
-            goto L_0x03cd
-        L_0x0427:
+            r23.restore()
+        L_0x046a:
+            int r10 = r10 + 1
+            goto L_0x0411
+        L_0x046d:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.GroupCallRenderersContainer.dispatchDraw(android.graphics.Canvas):void");
@@ -933,7 +1000,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
                         }
                         this.inFullscreenMode = false;
                         GroupCallMiniTextureView groupCallMiniTextureView4 = this.fullscreenTextureView;
-                        if (!(groupCallMiniTextureView4.primaryView == null && groupCallMiniTextureView4.secondaryView == null)) {
+                        if (!(groupCallMiniTextureView4.primaryView == null && groupCallMiniTextureView4.secondaryView == null && groupCallMiniTextureView4.tabletGridView == null)) {
                             ChatObject.VideoParticipant videoParticipant3 = groupCallMiniTextureView4.participant;
                             if (GroupCallActivity.videoIsActive(videoParticipant3.participant, videoParticipant3.presentation, this.call)) {
                                 this.fullscreenTextureView.setShowingInFullscreen(false, true);
@@ -947,6 +1014,10 @@ public class GroupCallRenderersContainer extends FrameLayout {
                         GroupCallFullscreenAdapter.GroupCallUserCell groupCallUserCell = this.fullscreenTextureView.secondaryView;
                         if (groupCallUserCell != null) {
                             groupCallUserCell.setRenderer((GroupCallMiniTextureView) null);
+                        }
+                        GroupCallGridCell groupCallGridCell2 = this.fullscreenTextureView.tabletGridView;
+                        if (groupCallGridCell2 != null) {
+                            groupCallGridCell2.setRenderer((GroupCallMiniTextureView) null);
                         }
                         final GroupCallMiniTextureView groupCallMiniTextureView5 = this.fullscreenTextureView;
                         groupCallMiniTextureView5.animate().alpha(0.0f).setListener(new AnimatorListenerAdapter() {
@@ -990,38 +1061,46 @@ public class GroupCallRenderersContainer extends FrameLayout {
                             this.fullscreenTextureView.forceDetach(false);
                             groupCallMiniTextureView.forceDetach(false);
                             GroupCallMiniTextureView groupCallMiniTextureView6 = this.fullscreenTextureView;
-                            if (groupCallMiniTextureView6.primaryView == null && groupCallMiniTextureView6.secondaryView == null) {
+                            if (groupCallMiniTextureView6.primaryView == null && groupCallMiniTextureView6.secondaryView == null && groupCallMiniTextureView6.tabletGridView == null) {
                                 groupCallMiniTextureView2 = null;
                             } else {
                                 groupCallMiniTextureView2 = new GroupCallMiniTextureView(this, this.attachedRenderers, this.call, this.groupCallActivity);
                                 GroupCallMiniTextureView groupCallMiniTextureView7 = this.fullscreenTextureView;
-                                groupCallMiniTextureView2.setViews(groupCallMiniTextureView7.primaryView, groupCallMiniTextureView7.secondaryView);
+                                groupCallMiniTextureView2.setViews(groupCallMiniTextureView7.primaryView, groupCallMiniTextureView7.secondaryView, groupCallMiniTextureView7.tabletGridView);
                                 groupCallMiniTextureView2.setFullscreenMode(this.inFullscreenMode, false);
                                 groupCallMiniTextureView2.updateAttachState(false);
-                                GroupCallGridCell groupCallGridCell2 = this.fullscreenTextureView.primaryView;
-                                if (groupCallGridCell2 != null) {
-                                    groupCallGridCell2.setRenderer(groupCallMiniTextureView2);
+                                GroupCallGridCell groupCallGridCell3 = this.fullscreenTextureView.primaryView;
+                                if (groupCallGridCell3 != null) {
+                                    groupCallGridCell3.setRenderer(groupCallMiniTextureView2);
                                 }
                                 GroupCallFullscreenAdapter.GroupCallUserCell groupCallUserCell2 = this.fullscreenTextureView.secondaryView;
                                 if (groupCallUserCell2 != null) {
                                     groupCallUserCell2.setRenderer(groupCallMiniTextureView2);
                                 }
+                                GroupCallGridCell groupCallGridCell4 = this.fullscreenTextureView.tabletGridView;
+                                if (groupCallGridCell4 != null) {
+                                    groupCallGridCell4.setRenderer(groupCallMiniTextureView2);
+                                }
                             }
                             final GroupCallMiniTextureView groupCallMiniTextureView8 = new GroupCallMiniTextureView(this, this.attachedRenderers, this.call, this.groupCallActivity);
                             groupCallMiniTextureView8.participant = groupCallMiniTextureView.participant;
-                            groupCallMiniTextureView8.setViews(groupCallMiniTextureView.primaryView, groupCallMiniTextureView.secondaryView);
+                            groupCallMiniTextureView8.setViews(groupCallMiniTextureView.primaryView, groupCallMiniTextureView.secondaryView, groupCallMiniTextureView.tabletGridView);
                             groupCallMiniTextureView8.setFullscreenMode(this.inFullscreenMode, false);
                             groupCallMiniTextureView8.updateAttachState(false);
                             groupCallMiniTextureView8.showBackground = true;
                             groupCallMiniTextureView8.textureView.renderer.setAlpha(1.0f);
                             groupCallMiniTextureView8.textureView.blurRenderer.setAlpha(1.0f);
-                            GroupCallGridCell groupCallGridCell3 = groupCallMiniTextureView.primaryView;
-                            if (groupCallGridCell3 != null) {
-                                groupCallGridCell3.setRenderer(groupCallMiniTextureView8);
+                            GroupCallGridCell groupCallGridCell5 = groupCallMiniTextureView.primaryView;
+                            if (groupCallGridCell5 != null) {
+                                groupCallGridCell5.setRenderer(groupCallMiniTextureView8);
                             }
                             GroupCallFullscreenAdapter.GroupCallUserCell groupCallUserCell3 = groupCallMiniTextureView.secondaryView;
                             if (groupCallUserCell3 != null) {
                                 groupCallUserCell3.setRenderer(groupCallMiniTextureView8);
+                            }
+                            GroupCallGridCell groupCallGridCell6 = groupCallMiniTextureView.tabletGridView;
+                            if (groupCallGridCell6 != null) {
+                                groupCallGridCell6.setRenderer(groupCallMiniTextureView8);
                             }
                             groupCallMiniTextureView8.animateEnter = true;
                             groupCallMiniTextureView8.setAlpha(0.0f);
@@ -1068,49 +1147,94 @@ public class GroupCallRenderersContainer extends FrameLayout {
                         }
                     } else if (this.inFullscreenMode) {
                         GroupCallMiniTextureView groupCallMiniTextureView9 = this.fullscreenTextureView;
-                        if (groupCallMiniTextureView9.primaryView == null && groupCallMiniTextureView9.secondaryView == null) {
-                            groupCallMiniTextureView9.forceDetach(true);
-                        } else {
-                            groupCallMiniTextureView9.forceDetach(false);
-                            GroupCallMiniTextureView groupCallMiniTextureView10 = new GroupCallMiniTextureView(this, this.attachedRenderers, this.call, this.groupCallActivity);
-                            GroupCallMiniTextureView groupCallMiniTextureView11 = this.fullscreenTextureView;
-                            groupCallMiniTextureView10.setViews(groupCallMiniTextureView11.primaryView, groupCallMiniTextureView11.secondaryView);
-                            groupCallMiniTextureView10.setFullscreenMode(this.inFullscreenMode, false);
-                            groupCallMiniTextureView10.updateAttachState(false);
-                            GroupCallGridCell groupCallGridCell4 = this.fullscreenTextureView.primaryView;
-                            if (groupCallGridCell4 != null) {
-                                groupCallGridCell4.setRenderer(groupCallMiniTextureView10);
-                            }
-                            GroupCallFullscreenAdapter.GroupCallUserCell groupCallUserCell4 = this.fullscreenTextureView.secondaryView;
-                            if (groupCallUserCell4 != null) {
-                                groupCallUserCell4.setRenderer(groupCallMiniTextureView10);
-                            }
-                            groupCallMiniTextureView10.setAlpha(0.0f);
-                            groupCallMiniTextureView10.setScaleX(0.5f);
-                            groupCallMiniTextureView10.setScaleY(0.5f);
-                            groupCallMiniTextureView10.animateEnter = true;
-                            groupCallMiniTextureView10.runOnFrameRendered(new Runnable(groupCallMiniTextureView10) {
-                                public final /* synthetic */ GroupCallMiniTextureView f$1;
+                        if (groupCallMiniTextureView9.primaryView == null) {
+                            if (!(groupCallMiniTextureView9.secondaryView != null) && !(groupCallMiniTextureView9.tabletGridView != null)) {
+                                groupCallMiniTextureView9.forceDetach(true);
+                                final GroupCallMiniTextureView groupCallMiniTextureView10 = new GroupCallMiniTextureView(this, this.attachedRenderers, this.call, this.groupCallActivity);
+                                groupCallMiniTextureView10.participant = videoParticipant2;
+                                groupCallMiniTextureView10.setFullscreenMode(this.inFullscreenMode, false);
+                                groupCallMiniTextureView10.setShowingInFullscreen(true, false);
+                                groupCallMiniTextureView10.animateEnter = true;
+                                groupCallMiniTextureView10.setAlpha(0.0f);
+                                this.outFullscreenTextureView = this.fullscreenTextureView;
+                                ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                                this.replaceFullscreenViewAnimator = ofFloat2;
+                                ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(groupCallMiniTextureView10) {
+                                    public final /* synthetic */ GroupCallMiniTextureView f$1;
 
-                                {
-                                    this.f$1 = r2;
-                                }
+                                    {
+                                        this.f$1 = r2;
+                                    }
 
-                                public final void run() {
-                                    GroupCallRenderersContainer.this.lambda$requestFullscreen$3$GroupCallRenderersContainer(this.f$1);
-                                }
-                            });
+                                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                        GroupCallRenderersContainer.this.lambda$requestFullscreen$4$GroupCallRenderersContainer(this.f$1, valueAnimator);
+                                    }
+                                });
+                                this.replaceFullscreenViewAnimator.addListener(new AnimatorListenerAdapter() {
+                                    public void onAnimationEnd(Animator animator) {
+                                        GroupCallRenderersContainer groupCallRenderersContainer = GroupCallRenderersContainer.this;
+                                        groupCallRenderersContainer.replaceFullscreenViewAnimator = null;
+                                        groupCallMiniTextureView10.animateEnter = false;
+                                        if (groupCallRenderersContainer.outFullscreenTextureView != null) {
+                                            if (GroupCallRenderersContainer.this.outFullscreenTextureView.getParent() != null) {
+                                                GroupCallRenderersContainer groupCallRenderersContainer2 = GroupCallRenderersContainer.this;
+                                                groupCallRenderersContainer2.removeView(groupCallRenderersContainer2.outFullscreenTextureView);
+                                                GroupCallRenderersContainer.this.outFullscreenTextureView.release();
+                                            }
+                                            GroupCallMiniTextureView unused = GroupCallRenderersContainer.this.outFullscreenTextureView = null;
+                                        }
+                                    }
+                                });
+                                this.replaceFullscreenViewAnimator.start();
+                                this.fullscreenTextureView = groupCallMiniTextureView10;
+                                groupCallMiniTextureView10.setShowingInFullscreen(true, false);
+                                this.fullscreenTextureView.updateAttachState(false);
+                                update();
+                            }
                         }
-                        final GroupCallMiniTextureView groupCallMiniTextureView12 = new GroupCallMiniTextureView(this, this.attachedRenderers, this.call, this.groupCallActivity);
-                        groupCallMiniTextureView12.participant = videoParticipant2;
-                        groupCallMiniTextureView12.setFullscreenMode(this.inFullscreenMode, false);
-                        groupCallMiniTextureView12.setShowingInFullscreen(true, false);
-                        groupCallMiniTextureView12.animateEnter = true;
-                        groupCallMiniTextureView12.setAlpha(0.0f);
+                        groupCallMiniTextureView9.forceDetach(false);
+                        GroupCallMiniTextureView groupCallMiniTextureView11 = new GroupCallMiniTextureView(this, this.attachedRenderers, this.call, this.groupCallActivity);
+                        GroupCallMiniTextureView groupCallMiniTextureView12 = this.fullscreenTextureView;
+                        groupCallMiniTextureView11.setViews(groupCallMiniTextureView12.primaryView, groupCallMiniTextureView12.secondaryView, groupCallMiniTextureView12.tabletGridView);
+                        groupCallMiniTextureView11.setFullscreenMode(this.inFullscreenMode, false);
+                        groupCallMiniTextureView11.updateAttachState(false);
+                        GroupCallGridCell groupCallGridCell7 = this.fullscreenTextureView.primaryView;
+                        if (groupCallGridCell7 != null) {
+                            groupCallGridCell7.setRenderer(groupCallMiniTextureView11);
+                        }
+                        GroupCallFullscreenAdapter.GroupCallUserCell groupCallUserCell4 = this.fullscreenTextureView.secondaryView;
+                        if (groupCallUserCell4 != null) {
+                            groupCallUserCell4.setRenderer(groupCallMiniTextureView11);
+                        }
+                        GroupCallGridCell groupCallGridCell8 = this.fullscreenTextureView.tabletGridView;
+                        if (groupCallGridCell8 != null) {
+                            groupCallGridCell8.setRenderer(groupCallMiniTextureView11);
+                        }
+                        groupCallMiniTextureView11.setAlpha(0.0f);
+                        groupCallMiniTextureView11.setScaleX(0.5f);
+                        groupCallMiniTextureView11.setScaleY(0.5f);
+                        groupCallMiniTextureView11.animateEnter = true;
+                        groupCallMiniTextureView11.runOnFrameRendered(new Runnable(groupCallMiniTextureView11) {
+                            public final /* synthetic */ GroupCallMiniTextureView f$1;
+
+                            {
+                                this.f$1 = r2;
+                            }
+
+                            public final void run() {
+                                GroupCallRenderersContainer.this.lambda$requestFullscreen$3$GroupCallRenderersContainer(this.f$1);
+                            }
+                        });
+                        final GroupCallMiniTextureView groupCallMiniTextureView102 = new GroupCallMiniTextureView(this, this.attachedRenderers, this.call, this.groupCallActivity);
+                        groupCallMiniTextureView102.participant = videoParticipant2;
+                        groupCallMiniTextureView102.setFullscreenMode(this.inFullscreenMode, false);
+                        groupCallMiniTextureView102.setShowingInFullscreen(true, false);
+                        groupCallMiniTextureView102.animateEnter = true;
+                        groupCallMiniTextureView102.setAlpha(0.0f);
                         this.outFullscreenTextureView = this.fullscreenTextureView;
-                        ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                        this.replaceFullscreenViewAnimator = ofFloat2;
-                        ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(groupCallMiniTextureView12) {
+                        ValueAnimator ofFloat22 = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                        this.replaceFullscreenViewAnimator = ofFloat22;
+                        ofFloat22.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(groupCallMiniTextureView102) {
                             public final /* synthetic */ GroupCallMiniTextureView f$1;
 
                             {
@@ -1125,7 +1249,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
                             public void onAnimationEnd(Animator animator) {
                                 GroupCallRenderersContainer groupCallRenderersContainer = GroupCallRenderersContainer.this;
                                 groupCallRenderersContainer.replaceFullscreenViewAnimator = null;
-                                groupCallMiniTextureView12.animateEnter = false;
+                                groupCallMiniTextureView102.animateEnter = false;
                                 if (groupCallRenderersContainer.outFullscreenTextureView != null) {
                                     if (GroupCallRenderersContainer.this.outFullscreenTextureView.getParent() != null) {
                                         GroupCallRenderersContainer groupCallRenderersContainer2 = GroupCallRenderersContainer.this;
@@ -1137,8 +1261,8 @@ public class GroupCallRenderersContainer extends FrameLayout {
                             }
                         });
                         this.replaceFullscreenViewAnimator.start();
-                        this.fullscreenTextureView = groupCallMiniTextureView12;
-                        groupCallMiniTextureView12.setShowingInFullscreen(true, false);
+                        this.fullscreenTextureView = groupCallMiniTextureView102;
+                        groupCallMiniTextureView102.setShowingInFullscreen(true, false);
                         this.fullscreenTextureView.updateAttachState(false);
                         update();
                     } else {
@@ -1619,7 +1743,13 @@ public class GroupCallRenderersContainer extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        ((ViewGroup.MarginLayoutParams) this.topShadowView.getLayoutParams()).rightMargin = GroupCallActivity.isLandscapeMode ? AndroidUtilities.dp(90.0f) : 0;
+        if (GroupCallActivity.isTabletMode) {
+            ((ViewGroup.MarginLayoutParams) this.topShadowView.getLayoutParams()).rightMargin = AndroidUtilities.dp(328.0f);
+        } else if (GroupCallActivity.isLandscapeMode) {
+            ((ViewGroup.MarginLayoutParams) this.topShadowView.getLayoutParams()).rightMargin = AndroidUtilities.dp(90.0f);
+        } else {
+            ((ViewGroup.MarginLayoutParams) this.topShadowView.getLayoutParams()).rightMargin = 0;
+        }
         this.pinContainer.getLayoutParams().height = AndroidUtilities.dp(40.0f);
         this.pinTextView.measure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), 0), i2);
         this.unpinTextView.measure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), 0), i2);
@@ -1638,32 +1768,29 @@ public class GroupCallRenderersContainer extends FrameLayout {
     public void setVisibleParticipant(boolean z) {
         boolean z2;
         int i;
-        int i2;
-        if (this.inFullscreenMode && this.fullscreenParticipant != null && this.fullscreenAnimator == null) {
+        if (this.inFullscreenMode && !this.isTablet && this.fullscreenParticipant != null && this.fullscreenAnimator == null) {
             int currentAccount = this.groupCallActivity.getCurrentAccount();
             if (System.currentTimeMillis() - this.lastUpdateTooltipTime >= 500) {
                 this.lastUpdateTooltipTime = System.currentTimeMillis();
-                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
                 ArrayList<TLRPC$TL_groupCallParticipant> arrayList = this.call.sortedParticipants;
-                int i3 = 0;
-                int i4 = 0;
-                while (true) {
-                    if (i3 >= arrayList.size()) {
-                        break;
-                    }
+                SpannableStringBuilder spannableStringBuilder = null;
+                int i2 = 0;
+                for (int i3 = 0; i3 < arrayList.size(); i3++) {
                     TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = arrayList.get(i3);
-                    if (tLRPC$TL_groupCallParticipant.self || MessageObject.getPeerId(this.fullscreenParticipant.participant.peer) == MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer)) {
-                        i2 = i3;
-                    } else {
+                    if (!tLRPC$TL_groupCallParticipant.self && !tLRPC$TL_groupCallParticipant.muted_by_you && MessageObject.getPeerId(this.fullscreenParticipant.participant.peer) != MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer)) {
                         int peerId = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
-                        i2 = i3;
-                        if (SystemClock.uptimeMillis() - tLRPC$TL_groupCallParticipant.lastSpeakTime < 500) {
-                            if (i4 < 3) {
+                        if (!(SystemClock.uptimeMillis() - tLRPC$TL_groupCallParticipant.lastSpeakTime < 500)) {
+                            continue;
+                        } else {
+                            if (spannableStringBuilder == null) {
+                                spannableStringBuilder = new SpannableStringBuilder();
+                            }
+                            if (i2 < 3) {
                                 TLRPC$User user = peerId > 0 ? MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(peerId)) : null;
                                 TLRPC$Chat chat = peerId <= 0 ? MessagesController.getInstance(currentAccount).getChat(Integer.valueOf(peerId)) : null;
-                                if (!(user == null && chat == null)) {
-                                    this.speakingMembersAvatars.setObject(i4, currentAccount, tLRPC$TL_groupCallParticipant);
-                                    if (i4 != 0) {
+                                if (user != null || chat != null) {
+                                    this.speakingMembersAvatars.setObject(i2, currentAccount, tLRPC$TL_groupCallParticipant);
+                                    if (i2 != 0) {
                                         spannableStringBuilder.append(", ");
                                     }
                                     if (user != null) {
@@ -1679,16 +1806,14 @@ public class GroupCallRenderersContainer extends FrameLayout {
                                     }
                                 }
                             }
-                            i4++;
-                            if (i4 == 3) {
+                            i2++;
+                            if (i2 == 3) {
                                 break;
                             }
-                            i3 = i2 + 1;
                         }
                     }
-                    i3 = i2 + 1;
                 }
-                boolean z3 = i4 != 0;
+                boolean z3 = i2 != 0;
                 boolean z4 = this.showSpeakingMembersToast;
                 if (!z4 && z3) {
                     z2 = false;
@@ -1705,16 +1830,21 @@ public class GroupCallRenderersContainer extends FrameLayout {
                     invalidate();
                     return;
                 }
-                String pluralString = LocaleController.getPluralString("MembersAreSpeakingToast", i4);
+                if (!z3) {
+                    this.showSpeakingMembersToast = z3;
+                    invalidate();
+                    return;
+                }
+                String pluralString = LocaleController.getPluralString("MembersAreSpeakingToast", i2);
                 int indexOf = pluralString.indexOf("un1");
                 SpannableStringBuilder spannableStringBuilder2 = new SpannableStringBuilder(pluralString);
                 spannableStringBuilder2.replace(indexOf, indexOf + 3, spannableStringBuilder);
                 this.speakingMembersText.setText(spannableStringBuilder2);
-                if (i4 == 0) {
+                if (i2 == 0) {
                     i = 0;
-                } else if (i4 == 1) {
+                } else if (i2 == 1) {
                     i = AndroidUtilities.dp(40.0f);
-                } else if (i4 == 2) {
+                } else if (i2 == 2) {
                     i = AndroidUtilities.dp(64.0f);
                 } else {
                     i = AndroidUtilities.dp(88.0f);
@@ -1723,9 +1853,9 @@ public class GroupCallRenderersContainer extends FrameLayout {
                 ((FrameLayout.LayoutParams) this.speakingMembersText.getLayoutParams()).rightMargin = AndroidUtilities.dp(16.0f);
                 this.showSpeakingMembersToast = z3;
                 invalidate();
-                while (i4 < 3) {
-                    this.speakingMembersAvatars.setObject(i4, currentAccount, (TLObject) null);
-                    i4++;
+                while (i2 < 3) {
+                    this.speakingMembersAvatars.setObject(i2, currentAccount, (TLObject) null);
+                    i2++;
                 }
                 this.speakingMembersAvatars.commitTransition(z2);
             } else if (this.updateTooltipRunnbale == null) {
@@ -1737,6 +1867,9 @@ public class GroupCallRenderersContainer extends FrameLayout {
                 this.updateTooltipRunnbale = r1;
                 AndroidUtilities.runOnUIThread(r1, (System.currentTimeMillis() - this.lastUpdateTooltipTime) + 50);
             }
+        } else if (this.showSpeakingMembersToast) {
+            this.showSpeakingMembersToast = false;
+            this.showSpeakingMembersToastProgress = 0.0f;
         }
     }
 
@@ -1758,5 +1891,23 @@ public class GroupCallRenderersContainer extends FrameLayout {
             addView(this.undoView[0]);
         }
         return this.undoView[0];
+    }
+
+    public boolean isVisible(TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant) {
+        return this.attachedPeerIds.get(MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer)) > 0;
+    }
+
+    public void attach(GroupCallMiniTextureView groupCallMiniTextureView) {
+        this.attachedRenderers.add(groupCallMiniTextureView);
+        int peerId = MessageObject.getPeerId(groupCallMiniTextureView.participant.participant.peer);
+        SparseIntArray sparseIntArray = this.attachedPeerIds;
+        sparseIntArray.put(peerId, sparseIntArray.get(peerId, 0) + 1);
+    }
+
+    public void detach(GroupCallMiniTextureView groupCallMiniTextureView) {
+        this.attachedRenderers.remove(groupCallMiniTextureView);
+        int peerId = MessageObject.getPeerId(groupCallMiniTextureView.participant.participant.peer);
+        SparseIntArray sparseIntArray = this.attachedPeerIds;
+        sparseIntArray.put(peerId, sparseIntArray.get(peerId, 0) - 1);
     }
 }

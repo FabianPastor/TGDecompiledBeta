@@ -8,7 +8,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.messenger.BuildVars;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.CheckBoxCell;
@@ -636,7 +635,7 @@ public class ClearHistoryAlert extends BottomSheet {
                 this.dismissedDelayed = true;
                 int i3 = 70;
                 if (i2 == 2) {
-                    i = BuildVars.DEBUG_PRIVATE_VERSION ? 5 : 604800;
+                    i = 604800;
                 } else if (i2 == 1) {
                     i = 86400;
                 } else {

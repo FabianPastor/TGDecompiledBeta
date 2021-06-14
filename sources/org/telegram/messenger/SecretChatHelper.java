@@ -1489,7 +1489,7 @@ public class SecretChatHelper extends BaseController {
             r1 = r1 | 4
             r3.flags = r1
         L_0x0233:
-            org.telegram.tgnet.TLRPC$TL_photoSize r1 = new org.telegram.tgnet.TLRPC$TL_photoSize
+            org.telegram.tgnet.TLRPC$TL_photoSize_layer127 r1 = new org.telegram.tgnet.TLRPC$TL_photoSize_layer127
             r1.<init>()
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r3 = r4.media
             int r5 = r3.w

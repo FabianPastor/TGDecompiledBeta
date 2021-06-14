@@ -10,6 +10,7 @@ import android.view.SurfaceView;
 import org.webrtc.EglBase;
 import org.webrtc.EglRenderer;
 import org.webrtc.RendererCommon;
+import org.webrtc.VideoSink;
 
 public class SurfaceViewRenderer extends SurfaceView implements SurfaceHolder.Callback, VideoSink, RendererCommon.RendererEvents {
     private static final String TAG = "SurfaceViewRenderer";
@@ -22,6 +23,10 @@ public class SurfaceViewRenderer extends SurfaceView implements SurfaceHolder.Ca
     private int surfaceHeight;
     private int surfaceWidth;
     private final RendererCommon.VideoLayoutMeasure videoLayoutMeasure = new RendererCommon.VideoLayoutMeasure();
+
+    public /* synthetic */ void setParentSink(VideoSink videoSink) {
+        VideoSink.CC.$default$setParentSink(this, videoSink);
+    }
 
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
     }

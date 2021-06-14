@@ -779,7 +779,10 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         this.selectedIds.clear();
         int childCount = this.listView.getChildCount();
         for (int i = 0; i < childCount; i++) {
-            ((CallCell) this.listView.getChildAt(i)).setChecked(false, z);
+            View childAt = this.listView.getChildAt(i);
+            if (childAt instanceof CallCell) {
+                ((CallCell) childAt).setChecked(false, z);
+            }
         }
     }
 

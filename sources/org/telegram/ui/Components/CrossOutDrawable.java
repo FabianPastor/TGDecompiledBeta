@@ -239,6 +239,11 @@ public class CrossOutDrawable extends Drawable {
         invalidateSelf();
     }
 
+    public void setStrokeWidth(float f) {
+        this.paint.setStrokeWidth(f);
+        this.xRefPaint.setStrokeWidth(f * 1.47f);
+    }
+
     public float getProgress() {
         return this.progress;
     }

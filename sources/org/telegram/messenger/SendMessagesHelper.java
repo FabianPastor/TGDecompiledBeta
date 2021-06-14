@@ -162,6 +162,7 @@ import org.telegram.tgnet.TLRPC$TL_photoPathSize;
 import org.telegram.tgnet.TLRPC$TL_photoSize;
 import org.telegram.tgnet.TLRPC$TL_photoSizeEmpty;
 import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
+import org.telegram.tgnet.TLRPC$TL_photoSize_layer127;
 import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$TL_pollAnswer;
 import org.telegram.tgnet.TLRPC$TL_restrictionReason;
@@ -10536,24 +10537,24 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 if (tLRPC$PhotoSize == null || (tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoSizeEmpty) || tLRPC$PhotoSize.location == null) {
                     i++;
                 } else {
-                    TLRPC$TL_photoSize tLRPC$TL_photoSize = new TLRPC$TL_photoSize();
-                    tLRPC$TL_photoSize.type = tLRPC$PhotoSize.type;
-                    tLRPC$TL_photoSize.w = tLRPC$PhotoSize.w;
-                    tLRPC$TL_photoSize.h = tLRPC$PhotoSize.h;
-                    tLRPC$TL_photoSize.size = tLRPC$PhotoSize.size;
+                    TLRPC$TL_photoSize_layer127 tLRPC$TL_photoSize_layer127 = new TLRPC$TL_photoSize_layer127();
+                    tLRPC$TL_photoSize_layer127.type = tLRPC$PhotoSize.type;
+                    tLRPC$TL_photoSize_layer127.w = tLRPC$PhotoSize.w;
+                    tLRPC$TL_photoSize_layer127.h = tLRPC$PhotoSize.h;
+                    tLRPC$TL_photoSize_layer127.size = tLRPC$PhotoSize.size;
                     byte[] bArr = tLRPC$PhotoSize.bytes;
-                    tLRPC$TL_photoSize.bytes = bArr;
+                    tLRPC$TL_photoSize_layer127.bytes = bArr;
                     if (bArr == null) {
-                        tLRPC$TL_photoSize.bytes = new byte[0];
+                        tLRPC$TL_photoSize_layer127.bytes = new byte[0];
                     }
                     TLRPC$TL_fileLocation_layer82 tLRPC$TL_fileLocation_layer82 = new TLRPC$TL_fileLocation_layer82();
-                    tLRPC$TL_photoSize.location = tLRPC$TL_fileLocation_layer82;
+                    tLRPC$TL_photoSize_layer127.location = tLRPC$TL_fileLocation_layer82;
                     TLRPC$FileLocation tLRPC$FileLocation = tLRPC$PhotoSize.location;
                     tLRPC$TL_fileLocation_layer82.dc_id = tLRPC$FileLocation.dc_id;
                     tLRPC$TL_fileLocation_layer82.volume_id = tLRPC$FileLocation.volume_id;
                     tLRPC$TL_fileLocation_layer82.local_id = tLRPC$FileLocation.local_id;
                     tLRPC$TL_fileLocation_layer82.secret = tLRPC$FileLocation.secret;
-                    return tLRPC$TL_photoSize;
+                    return tLRPC$TL_photoSize_layer127;
                 }
             }
         }

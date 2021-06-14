@@ -6083,7 +6083,7 @@ public class MessageObject {
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
             if (r2 == 0) goto L_0x06e3
-            r2 = 2131628356(0x7f0e1144, float:1.8884002E38)
+            r2 = 2131628357(0x7f0e1145, float:1.8884004E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -6249,7 +6249,7 @@ public class MessageObject {
         L_0x0821:
             boolean r7 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
             if (r7 == 0) goto L_0x0835
-            r0 = 2131628284(0x7f0e10fc, float:1.8883856E38)
+            r0 = 2131628285(0x7f0e10fd, float:1.8883858E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"

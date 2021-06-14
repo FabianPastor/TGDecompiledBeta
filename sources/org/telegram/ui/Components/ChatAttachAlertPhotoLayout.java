@@ -1823,7 +1823,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         if (ChatAttachAlertPhotoLayout.this.cameraOpened) {
                             ChatAttachAlertPhotoLayout.this.parentAlert.delegate.onCameraOpened();
                         }
-                        if (i >= 21) {
+                        if (i >= 21 && ChatAttachAlertPhotoLayout.this.cameraView != null) {
                             ChatAttachAlertPhotoLayout.this.cameraView.setSystemUiVisibility(1028);
                         }
                     }
@@ -2595,12 +2595,18 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                         float f = y < currentActionBarHeight ? currentActionBarHeight - y : 0.0f;
                         if (f != this.cameraViewOffsetY) {
                             this.cameraViewOffsetY = f;
-                            if (i3 >= 21) {
-                                this.cameraView.invalidateOutline();
-                            } else {
-                                this.cameraView.invalidate();
+                            CameraView cameraView4 = this.cameraView;
+                            if (cameraView4 != null) {
+                                if (i3 >= 21) {
+                                    cameraView4.invalidateOutline();
+                                } else {
+                                    cameraView4.invalidate();
+                                }
                             }
-                            this.cameraIcon.invalidate();
+                            FrameLayout frameLayout = this.cameraIcon;
+                            if (frameLayout != null) {
+                                frameLayout.invalidate();
+                            }
                         }
                         float measuredHeight = (float) ((int) (((float) (this.parentAlert.getSheetContainer().getMeasuredHeight() - this.parentAlert.buttonsRecyclerView.getMeasuredHeight())) + this.parentAlert.buttonsRecyclerView.getTranslationY()));
                         if (((float) childAt.getMeasuredHeight()) + y > measuredHeight) {
@@ -2621,12 +2627,18 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             if (!(this.cameraViewOffsetY == 0.0f && this.cameraViewOffsetX == 0.0f)) {
                 this.cameraViewOffsetX = 0.0f;
                 this.cameraViewOffsetY = 0.0f;
-                if (Build.VERSION.SDK_INT >= 21) {
-                    this.cameraView.invalidateOutline();
-                } else {
-                    this.cameraView.invalidate();
+                CameraView cameraView5 = this.cameraView;
+                if (cameraView5 != null) {
+                    if (Build.VERSION.SDK_INT >= 21) {
+                        cameraView5.invalidateOutline();
+                    } else {
+                        cameraView5.invalidate();
+                    }
                 }
-                this.cameraIcon.invalidate();
+                FrameLayout frameLayout2 = this.cameraIcon;
+                if (frameLayout2 != null) {
+                    frameLayout2.invalidate();
+                }
             }
             this.cameraViewLocation[0] = (float) AndroidUtilities.dp(-400.0f);
             this.cameraViewLocation[1] = 0.0f;

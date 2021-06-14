@@ -6694,7 +6694,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r2 = 2
             r4 = 1
             if (r1 != r2) goto L_0x0022
-            r1 = 2131628241(0x7f0e10d1, float:1.888377E38)
+            r1 = 2131628242(0x7f0e10d2, float:1.8883771E38)
             java.lang.String r5 = "WaitingForNetwork"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
@@ -7138,7 +7138,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x039a:
             boolean r2 = org.telegram.messenger.ChatObject.isKickedFromChat(r5)
             if (r2 == 0) goto L_0x03ab
-            r2 = 2131628287(0x7f0e10ff, float:1.8883862E38)
+            r2 = 2131628288(0x7f0e1100, float:1.8883864E38)
             java.lang.String r3 = "YouWereKicked"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x03a9:
@@ -7147,7 +7147,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x03ab:
             boolean r2 = org.telegram.messenger.ChatObject.isLeftFromChat(r5)
             if (r2 == 0) goto L_0x03bb
-            r2 = 2131628286(0x7f0e10fe, float:1.888386E38)
+            r2 = 2131628287(0x7f0e10ff, float:1.8883862E38)
             java.lang.String r3 = "YouLeft"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x03a9
@@ -9275,7 +9275,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x02c9
             L_0x0239:
                 r3 = 3600(0xe10, float:5.045E-42)
-                r4 = 2131628268(0x7f0e10ec, float:1.8883824E38)
+                r4 = 2131628269(0x7f0e10ed, float:1.8883826E38)
                 java.lang.String r5 = "WillUnmuteIn"
                 if (r2 >= r3) goto L_0x0255
                 java.lang.Object[] r3 = new java.lang.Object[r7]

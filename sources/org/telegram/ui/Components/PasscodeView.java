@@ -88,7 +88,7 @@ public class PasscodeView extends FrameLayout {
         return true;
     }
 
-    private class AnimatingTextView extends FrameLayout {
+    private static class AnimatingTextView extends FrameLayout {
         /* access modifiers changed from: private */
         public ArrayList<TextView> characterTextViews = new ArrayList<>(4);
         /* access modifiers changed from: private */
@@ -1369,7 +1369,7 @@ public class PasscodeView extends FrameLayout {
             Drawable drawable = this.backgroundDrawable;
             if (drawable == null) {
                 super.onDraw(canvas);
-            } else if ((drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable)) {
+            } else if ((drawable instanceof MotionBackgroundDrawable) || (drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable)) {
                 drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 this.backgroundDrawable.draw(canvas);
             } else {

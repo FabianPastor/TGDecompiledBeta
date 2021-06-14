@@ -7,6 +7,7 @@ import java.lang.reflect.Array;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import org.telegram.messenger.FileLog;
 import org.webrtc.RendererCommon;
 
 public class GlGenericDrawer implements RendererCommon.GlDrawer {
@@ -79,7 +80,7 @@ public class GlGenericDrawer implements RendererCommon.GlDrawer {
                 sb.append("uniform float texelWidthOffset;\n");
                 sb.append("uniform float texelHeightOffset;\n");
                 sb.append("void main(){\n");
-                sb.append("int rad = 15;\n");
+                sb.append("int rad = 2;\n");
                 sb.append("int diameter = 2 * rad + 1;\n");
                 sb.append("vec4 sampleTex = vec4(0, 0, 0, 0);\n");
                 sb.append("vec3 col = vec3(0, 0, 0);\n");
@@ -157,7 +158,7 @@ public class GlGenericDrawer implements RendererCommon.GlDrawer {
             Matrix.setIdentityM(fArr, 0);
         }
         if (this.renderTextureWidth[i3] != i) {
-            this.renderTextureDownscale = Math.max(1.0f, ((float) Math.max(i, i2)) / 100.0f);
+            this.renderTextureDownscale = Math.max(1.0f, ((float) Math.max(i, i2)) / 50.0f);
             GLES20.glBindTexture(3553, this.renderTexture[i3]);
             float f = this.renderTextureDownscale;
             GLES20.glTexImage2D(3553, 0, 6408, (int) (((float) i) / f), (int) (((float) i2) / f), 0, 6408, 5121, (Buffer) null);
@@ -330,25 +331,30 @@ public class GlGenericDrawer implements RendererCommon.GlDrawer {
         if (glShaderArr[i9][i10] != null) {
             createShader = glShaderArr[i9][i10];
         } else {
-            createShader = createShader(i9, z);
-            this.currentShader[i9][i10] = createShader;
-            createShader.useProgram();
-            if (i9 == 2) {
-                GLES20.glUniform1i(createShader.getUniformLocation("y_tex"), 0);
-                GLES20.glUniform1i(createShader.getUniformLocation("u_tex"), 1);
-                GLES20.glUniform1i(createShader.getUniformLocation("v_tex"), 2);
-            } else {
-                GLES20.glUniform1i(createShader.getUniformLocation("tex"), 0);
+            try {
+                createShader = createShader(i9, z);
+                this.currentShader[i9][i10] = createShader;
+                createShader.useProgram();
+                if (i9 == 2) {
+                    GLES20.glUniform1i(createShader.getUniformLocation("y_tex"), 0);
+                    GLES20.glUniform1i(createShader.getUniformLocation("u_tex"), 1);
+                    GLES20.glUniform1i(createShader.getUniformLocation("v_tex"), 2);
+                } else {
+                    GLES20.glUniform1i(createShader.getUniformLocation("tex"), 0);
+                }
+                GlUtil.checkNoGLES2Error("Create shader");
+                this.shaderCallbacks.onNewShader(createShader);
+                if (z) {
+                    this.texelLocation[i9][0] = createShader.getUniformLocation("texelWidthOffset");
+                    this.texelLocation[i9][1] = createShader.getUniformLocation("texelHeightOffset");
+                }
+                this.texMatrixLocation[i9][i10] = createShader.getUniformLocation("tex_mat");
+                this.inPosLocation[i9][i10] = createShader.getAttribLocation("in_pos");
+                this.inTcLocation[i9][i10] = createShader.getAttribLocation("in_tc");
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+                return;
             }
-            GlUtil.checkNoGLES2Error("Create shader");
-            this.shaderCallbacks.onNewShader(createShader);
-            if (z) {
-                this.texelLocation[i9][0] = createShader.getUniformLocation("texelWidthOffset");
-                this.texelLocation[i9][1] = createShader.getUniformLocation("texelHeightOffset");
-            }
-            this.texMatrixLocation[i9][i10] = createShader.getUniformLocation("tex_mat");
-            this.inPosLocation[i9][i10] = createShader.getAttribLocation("in_pos");
-            this.inTcLocation[i9][i10] = createShader.getAttribLocation("in_tc");
         }
         GlShader glShader = createShader;
         glShader.useProgram();
