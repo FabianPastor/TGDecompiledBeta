@@ -2302,7 +2302,6 @@
     <string name="NoBlockedChannel2">لن يتمكن المستخدمون الذين أزالهم المشرفون من القناة من الانضمام إليها حتى عبر روابط الدعوة الخاصة.</string>
     <string name="NoBlockedGroup2">لن يتمكن المستخدمون الذين أزالهم المشرفون من المجموعة إعادة الإنضمام عبر روابط الدعوة.</string>
     <string name="NoBlockedUsers">ما من مستخدمين تمت إزالتهم</string>
-    <string name="NoCallLog">ما من مكالمات هنا بعد...</string>
     <string name="NoChats">أهلًا في تيليجرام</string>
     <string name="NoChatsContactsHelp">ابدأ المراسلة بالضغط على جهة من جهات اتصالك في الأسفل.</string>
     <string name="NoChatsHelp">ابدأ المراسلة عبر الضغط على زر القلم في الزاوية السفلية للشاشة.</string>

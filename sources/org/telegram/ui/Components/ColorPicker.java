@@ -732,18 +732,22 @@ public class ColorPicker extends FrameLayout {
                         }
                     } else {
                         this.radioButton[i4].setVisibility(0);
-                        this.radioButton[i4].setAlpha(1.0f);
-                        this.radioButton[i4].setScaleX(1.0f);
-                        this.radioButton[i4].setScaleY(1.0f);
+                        if (this.colorsAnimator == null) {
+                            this.radioButton[i4].setAlpha(1.0f);
+                            this.radioButton[i4].setScaleX(1.0f);
+                            this.radioButton[i4].setScaleY(1.0f);
+                        }
                         this.radioButton[i4].setTranslationX((float) i5);
                     }
                     this.radioButton[i4].setTag(NUM, 1);
                 } else {
                     if (arrayList == null) {
                         this.radioButton[i4].setVisibility(4);
-                        this.radioButton[i4].setAlpha(0.0f);
-                        this.radioButton[i4].setScaleX(0.0f);
-                        this.radioButton[i4].setScaleY(0.0f);
+                        if (this.colorsAnimator == null) {
+                            this.radioButton[i4].setAlpha(0.0f);
+                            this.radioButton[i4].setScaleX(0.0f);
+                            this.radioButton[i4].setScaleY(0.0f);
+                        }
                     } else if (z2) {
                         arrayList.add(ObjectAnimator.ofFloat(this.radioButton[i4], View.ALPHA, new float[]{0.0f}));
                         arrayList.add(ObjectAnimator.ofFloat(this.radioButton[i4], View.SCALE_X, new float[]{0.0f}));

@@ -457,9 +457,10 @@ public class EglRenderer implements VideoSink {
     }
 
     public void setLayoutAspectRatio(float f) {
-        logD("setLayoutAspectRatio: " + f);
-        synchronized (this.layoutLock) {
-            this.layoutAspectRatio = f;
+        if (this.layoutAspectRatio != f) {
+            synchronized (this.layoutLock) {
+                this.layoutAspectRatio = f;
+            }
         }
     }
 

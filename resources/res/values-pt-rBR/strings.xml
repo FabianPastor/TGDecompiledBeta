@@ -2302,7 +2302,6 @@
     <string name="NoBlockedChannel2">Os usuários removidos do canal pelos admins não podem entrar novamente usando links de convite.</string>
     <string name="NoBlockedGroup2">Os usuários removidos por admins do grupo não podem entrar novamente usando links de convite.</string>
     <string name="NoBlockedUsers">Nenhum usuário removido</string>
-    <string name="NoCallLog">Ainda sem chamadas aqui...</string>
     <string name="NoChats">Boas-vindas ao Telegram</string>
     <string name="NoChatsContactsHelp">Comece a conversar ao tocar em um dos seus contatos abaixo.</string>
     <string name="NoChatsHelp">Comece a conversar ao tocar no botão de lápis no canto inferior direito.</string>

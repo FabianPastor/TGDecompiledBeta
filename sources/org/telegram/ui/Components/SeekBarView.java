@@ -189,10 +189,10 @@ public class SeekBarView extends FrameLayout {
                     if (this.twoSided) {
                         float measuredWidth = (float) ((getMeasuredWidth() - this.selectorWidth) / 2);
                         int i = this.thumbX;
-                        if (((float) i) >= measuredWidth / 2.0f) {
+                        if (((float) i) >= measuredWidth) {
                             this.delegate.onSeekBarDrag(false, (((float) i) - measuredWidth) / measuredWidth);
                         } else {
-                            this.delegate.onSeekBarDrag(false, (-(measuredWidth - ((float) i))) / measuredWidth);
+                            this.delegate.onSeekBarDrag(false, -Math.max(0.01f, 1.0f - ((measuredWidth - ((float) i)) / measuredWidth)));
                         }
                     } else {
                         this.delegate.onSeekBarDrag(true, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.selectorWidth)));
@@ -246,10 +246,10 @@ public class SeekBarView extends FrameLayout {
                     if (this.twoSided) {
                         float measuredWidth2 = (float) ((getMeasuredWidth() - this.selectorWidth) / 2);
                         int i2 = this.thumbX;
-                        if (((float) i2) >= measuredWidth2 / 2.0f) {
+                        if (((float) i2) >= measuredWidth2) {
                             this.delegate.onSeekBarDrag(false, (((float) i2) - measuredWidth2) / measuredWidth2);
                         } else {
-                            this.delegate.onSeekBarDrag(false, (-(measuredWidth2 - ((float) i2))) / measuredWidth2);
+                            this.delegate.onSeekBarDrag(false, -Math.max(0.01f, 1.0f - ((measuredWidth2 - ((float) i2)) / measuredWidth2)));
                         }
                     } else {
                         this.delegate.onSeekBarDrag(false, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.selectorWidth)));
@@ -285,7 +285,11 @@ public class SeekBarView extends FrameLayout {
         this.progressToSet = -100.0f;
         if (this.twoSided) {
             float measuredWidth = (float) ((getMeasuredWidth() - this.selectorWidth) / 2);
-            d = Math.ceil((double) (measuredWidth + (f * measuredWidth)));
+            if (f < 0.0f) {
+                d = Math.ceil((double) (measuredWidth + ((-(f + 1.0f)) * measuredWidth)));
+            } else {
+                d = Math.ceil((double) (measuredWidth + (f * measuredWidth)));
+            }
         } else {
             d = Math.ceil((double) (((float) (getMeasuredWidth() - this.selectorWidth)) * f));
         }

@@ -2035,9 +2035,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 this.cameraZoom = 0.0f;
             }
             this.cameraView.setTranslationX(this.cameraViewLocation[0]);
-            this.cameraView.setTranslationY(this.cameraViewLocation[1]);
+            this.cameraView.setTranslationY(this.cameraViewLocation[1] + this.currentPanTranslationY);
             this.cameraIcon.setTranslationX(this.cameraViewLocation[0]);
-            this.cameraIcon.setTranslationY(this.cameraViewLocation[1] + this.cameraViewOffsetY);
+            this.cameraIcon.setTranslationY(this.cameraViewLocation[1] + this.cameraViewOffsetY + this.currentPanTranslationY);
         }
     }
 
@@ -2651,7 +2651,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if (cameraView2 != null) {
             if (!this.cameraOpened) {
                 cameraView2.setTranslationX(this.cameraViewLocation[0]);
-                this.cameraView.setTranslationY(this.cameraViewLocation[1]);
+                this.cameraView.setTranslationY(this.cameraViewLocation[1] + this.currentPanTranslationY);
             }
             this.cameraIcon.setTranslationX(this.cameraViewLocation[0]);
             this.cameraIcon.setTranslationY(this.cameraViewLocation[1] + this.cameraViewOffsetY + this.currentPanTranslationY);

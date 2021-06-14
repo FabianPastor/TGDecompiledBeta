@@ -509,13 +509,13 @@ public class GroupCallUserCell extends FrameLayout {
         return this.avatarImageView.getImageReceiver().hasNotThumb();
     }
 
-    public void setData(AccountInstance accountInstance2, TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, ChatObject.Call call, int i, TLRPC$FileLocation tLRPC$FileLocation) {
+    public void setData(AccountInstance accountInstance2, TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, ChatObject.Call call, int i, TLRPC$FileLocation tLRPC$FileLocation, boolean z) {
         this.currentCall = call;
         this.accountInstance = accountInstance2;
         this.selfId = i;
         this.participant = tLRPC$TL_groupCallParticipant;
         int peerId = MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer);
-        boolean z = true;
+        boolean z2 = false;
         if (peerId > 0) {
             TLRPC$User user = this.accountInstance.getMessagesController().getUser(Integer.valueOf(peerId));
             this.currentUser = user;
@@ -531,10 +531,10 @@ public class GroupCallUserCell extends FrameLayout {
                 this.avatarImageView.setImage(ImageLocation.getForLocal(tLRPC$FileLocation), "50_50", (Drawable) this.avatarDrawable, (Object) null);
             } else {
                 ImageLocation forUser = ImageLocation.getForUser(this.currentUser, 1);
-                if (forUser == null) {
-                    z = false;
+                if (forUser != null) {
+                    z2 = true;
                 }
-                this.hasAvatar = z;
+                this.hasAvatar = z2;
                 this.avatarImageView.setImage(forUser, "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
             }
         } else {
@@ -552,15 +552,15 @@ public class GroupCallUserCell extends FrameLayout {
                     this.avatarImageView.setImage(ImageLocation.getForLocal(tLRPC$FileLocation), "50_50", (Drawable) this.avatarDrawable, (Object) null);
                 } else {
                     ImageLocation forChat = ImageLocation.getForChat(this.currentChat, 1);
-                    if (forChat == null) {
-                        z = false;
+                    if (forChat != null) {
+                        z2 = true;
                     }
-                    this.hasAvatar = z;
+                    this.hasAvatar = z2;
                     this.avatarImageView.setImage(forChat, "50_50", (Drawable) this.avatarDrawable, (Object) this.currentChat);
                 }
             }
         }
-        applyParticipantChanges(false);
+        applyParticipantChanges(z);
     }
 
     public void setDrawDivider(boolean z) {
@@ -922,7 +922,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 == 0) goto L_0x01b4
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627673(0x7f0e0e99, float:1.8882617E38)
+            r10 = 2131627675(0x7f0e0e9b, float:1.8882621E38)
             java.lang.String r11 = "TapToAddPhotoOrBio"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -930,7 +930,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x01b4:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627674(0x7f0e0e9a, float:1.888262E38)
+            r10 = 2131627676(0x7f0e0e9c, float:1.8882623E38)
             java.lang.String r11 = "TapToAddPhotoOrDescription"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -947,7 +947,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 == 0) goto L_0x01e9
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627670(0x7f0e0e96, float:1.888261E38)
+            r10 = 2131627672(0x7f0e0e98, float:1.8882615E38)
             java.lang.String r11 = "TapToAddBio"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -955,7 +955,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x01e9:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627671(0x7f0e0e97, float:1.8882613E38)
+            r10 = 2131627673(0x7f0e0e99, float:1.8882617E38)
             java.lang.String r11 = "TapToAddDescription"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -971,7 +971,7 @@ public class GroupCallUserCell extends FrameLayout {
             if (r5 != 0) goto L_0x0229
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627672(0x7f0e0e98, float:1.8882615E38)
+            r10 = 2131627674(0x7f0e0e9a, float:1.888262E38)
             java.lang.String r11 = "TapToAddPhoto"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -984,7 +984,7 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x0229:
             org.telegram.ui.ActionBar.SimpleTextView[] r5 = r0.statusTextView
             r5 = r5[r15]
-            r10 = 2131627771(0x7f0e0efb, float:1.8882816E38)
+            r10 = 2131627773(0x7f0e0efd, float:1.888282E38)
             java.lang.String r11 = "ThisIsYou"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r5.setText(r10)
@@ -1100,7 +1100,7 @@ public class GroupCallUserCell extends FrameLayout {
             r13.setLeftDrawable((android.graphics.drawable.Drawable) r14)
             org.telegram.ui.ActionBar.SimpleTextView[] r13 = r0.statusTextView
             r13 = r13[r7]
-            r14 = 2131627558(0x7f0e0e26, float:1.8882384E38)
+            r14 = 2131627560(0x7f0e0e28, float:1.8882388E38)
             java.lang.Object[] r15 = new java.lang.Object[r7]
             if (r2 >= r12) goto L_0x0321
             r11 = 1
@@ -1117,7 +1117,7 @@ public class GroupCallUserCell extends FrameLayout {
             r2.setLeftDrawable((android.graphics.drawable.Drawable) r10)
             org.telegram.ui.ActionBar.SimpleTextView[] r2 = r0.statusTextView
             r2 = r2[r7]
-            r11 = 2131627557(0x7f0e0e25, float:1.8882382E38)
+            r11 = 2131627559(0x7f0e0e27, float:1.8882386E38)
             java.lang.String r12 = "Speaking"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
             r2.setText(r11)

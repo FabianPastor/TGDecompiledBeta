@@ -5282,7 +5282,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             boolean z = true;
             if (i != 0 || i2 == 0) {
                 this.hasRecordVideo = true;
-            } else if (AndroidUtilities.getPeerLayerVersion(this.accountInstance.getMessagesController().getEncryptedChat(Integer.valueOf(i2)).layer) >= 66) {
+            } else {
+                this.accountInstance.getMessagesController().getEncryptedChat(Integer.valueOf(i2));
                 this.hasRecordVideo = true;
             }
             if (((int) this.dialog_id) < 0) {

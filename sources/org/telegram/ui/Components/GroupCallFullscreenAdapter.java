@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
@@ -118,6 +119,15 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
                 if (groupCallUserCell.getVideoParticipant() != null) {
                     groupCallUserCell.attachRenderer(z);
                 }
+            }
+        }
+    }
+
+    public void scrollTo(ChatObject.VideoParticipant videoParticipant, RecyclerListView recyclerListView) {
+        for (int i = 0; i < this.participants.size(); i++) {
+            if (this.videoParticipants.get(i).equals(videoParticipant)) {
+                ((LinearLayoutManager) recyclerListView.getLayoutManager()).scrollToPositionWithOffset(i, AndroidUtilities.dp(13.0f));
+                return;
             }
         }
     }
@@ -596,6 +606,8 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
                 GroupCallMiniTextureView groupCallMiniTextureView = this.renderer;
                 if (groupCallMiniTextureView != null) {
                     groupCallMiniTextureView.invalidate();
+                } else {
+                    GroupCallFullscreenAdapter.this.renderersContainer.invalidate();
                 }
                 this.skipInvalidate = false;
             }

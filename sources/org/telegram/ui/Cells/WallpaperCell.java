@@ -180,7 +180,7 @@ public class WallpaperCell extends FrameLayout {
                         return;
                     }
                     TLRPC$PhotoSize closestPhotoSizeWithSize3 = FileLoader.getClosestPhotoSizeWithSize(colorWallpaper.pattern.document.thumbs, 100);
-                    this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize3, colorWallpaper.pattern.document), "100_100", (ImageLocation) null, (String) null, "jpg", closestPhotoSizeWithSize3 != null ? closestPhotoSizeWithSize3.size : colorWallpaper.pattern.document.size, 1, colorWallpaper);
+                    this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize3, colorWallpaper.pattern.document), "100_100", (ImageLocation) null, (String) null, "jpg", closestPhotoSizeWithSize3 != null ? closestPhotoSizeWithSize3.size : colorWallpaper.pattern.document.size, 1, colorWallpaper.pattern);
                     this.imageView.getImageReceiver().setAlpha(Math.abs(colorWallpaper.intensity));
                 }
             } else if (obj3 instanceof WallpapersListActivity.FileWallpaper) {

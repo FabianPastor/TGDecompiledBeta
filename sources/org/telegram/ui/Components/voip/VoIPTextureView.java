@@ -97,15 +97,15 @@ public class VoIPTextureView extends FrameLayout {
         r1.setEnableHardwareScaler(true);
         r1.setIsCamera(!z2);
         if (!z && z2) {
+            View view = new View(context);
+            this.backgroundView = view;
+            view.setBackgroundColor(-14999773);
+            addView(this.backgroundView, LayoutHelper.createFrame(-1, -1.0f));
             if (z4) {
                 TextureView textureView = new TextureView(context);
                 this.blurRenderer = textureView;
                 addView(textureView, LayoutHelper.createFrame(-1, -2, 17));
             }
-            View view = new View(context);
-            this.backgroundView = view;
-            view.setBackgroundColor(-14999773);
-            addView(this.backgroundView, LayoutHelper.createFrame(-1, -1.0f));
             r1.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
             addView(r1, LayoutHelper.createFrame(-1, -2, 17));
         } else if (!z) {
@@ -157,6 +157,9 @@ public class VoIPTextureView extends FrameLayout {
                 imageView2.setScaleType(ImageView.ScaleType.FIT_XY);
             } catch (Throwable unused) {
             }
+        }
+        if (!z2) {
+            this.renderer.setScreenRotation(((WindowManager) getContext().getSystemService("window")).getDefaultDisplay().getRotation());
         }
     }
 
@@ -260,7 +263,7 @@ public class VoIPTextureView extends FrameLayout {
             this.renderer.setScreenRotation(((WindowManager) getContext().getSystemService("window")).getDefaultDisplay().getRotation());
             this.ignoreLayout = false;
         }
-        this.renderer.measure(i, i2);
+        super.onMeasure(i, i2);
         TextureView textureView = this.blurRenderer;
         if (textureView != null) {
             textureView.getLayoutParams().width = this.renderer.getMeasuredWidth();
@@ -500,5 +503,11 @@ public class VoIPTextureView extends FrameLayout {
 
     public boolean isInAnimation() {
         return this.currentAnimation != null;
+    }
+
+    public void updateRotation() {
+        if (!this.applyRotation) {
+            this.renderer.setScreenRotation(((WindowManager) getContext().getSystemService("window")).getDefaultDisplay().getRotation());
+        }
     }
 }

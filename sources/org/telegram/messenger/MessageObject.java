@@ -52,6 +52,7 @@ import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$PollResults;
 import org.telegram.tgnet.TLRPC$TL_channelAdminLogEvent;
 import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
+import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
 import org.telegram.tgnet.TLRPC$TL_chatInviteExported;
 import org.telegram.tgnet.TLRPC$TL_decryptedMessageActionScreenshotMessages;
 import org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL;
@@ -2515,7 +2516,7 @@ public class MessageObject {
         L_0x04d7:
             r21 = r12
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
-            r5 = 2131627931(0x7f0e0f9b, float:1.888314E38)
+            r5 = 2131627933(0x7f0e0f9d, float:1.8883144E38)
             java.lang.String r8 = "UserRestrictionsUntilForever"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r8, r5)
             r11.<init>(r5)
@@ -6083,7 +6084,7 @@ public class MessageObject {
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
             if (r2 == 0) goto L_0x06e3
-            r2 = 2131628357(0x7f0e1145, float:1.8884004E38)
+            r2 = 2131628362(0x7f0e114a, float:1.8884015E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -6122,7 +6123,7 @@ public class MessageObject {
         L_0x0713:
             r1 = r10
         L_0x0714:
-            r2 = 2131626474(0x7f0e09ea, float:1.8880185E38)
+            r2 = 2131626476(0x7f0e09ec, float:1.888019E38)
             r3 = 4
             java.lang.Object[] r3 = new java.lang.Object[r3]
             r4 = 0
@@ -6149,7 +6150,7 @@ public class MessageObject {
         L_0x0741:
             boolean r7 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionUserUpdatedPhoto
             if (r7 == 0) goto L_0x075b
-            r0 = 2131626405(0x7f0e09a5, float:1.8880045E38)
+            r0 = 2131626407(0x7f0e09a7, float:1.888005E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r2)
             r3 = 0
@@ -6249,7 +6250,7 @@ public class MessageObject {
         L_0x0821:
             boolean r7 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
             if (r7 == 0) goto L_0x0835
-            r0 = 2131628285(0x7f0e10fd, float:1.8883858E38)
+            r0 = 2131628290(0x7f0e1102, float:1.8883869E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"
@@ -6644,7 +6645,7 @@ public class MessageObject {
             r6.messageText = r0
             goto L_0x0d6c
         L_0x0b6b:
-            r0 = 2131626404(0x7f0e09a4, float:1.8880043E38)
+            r0 = 2131626406(0x7f0e09a6, float:1.8880047E38)
             java.lang.Object[] r1 = new java.lang.Object[r12]
             java.lang.String r2 = org.telegram.messenger.UserObject.getUserName(r2)
             r4 = 0
@@ -6680,13 +6681,13 @@ public class MessageObject {
             org.telegram.tgnet.TLRPC$Poll r0 = r1.poll
             boolean r0 = r0.quiz
             if (r0 == 0) goto L_0x0bc5
-            r0 = 2131627112(0x7f0e0CLASSNAME, float:1.888148E38)
+            r0 = 2131627114(0x7f0e0c6a, float:1.8881483E38)
             java.lang.String r1 = "QuizPoll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
             goto L_0x0d6c
         L_0x0bc5:
-            r0 = 2131626997(0x7f0e0bf5, float:1.8881246E38)
+            r0 = 2131626999(0x7f0e0bf7, float:1.888125E38)
             java.lang.String r1 = "Poll"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -6789,7 +6790,7 @@ public class MessageObject {
         L_0x0c9a:
             boolean r0 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaUnsupported
             if (r0 == 0) goto L_0x0cab
-            r0 = 2131627854(0x7f0e0f4e, float:1.8882984E38)
+            r0 = 2131627856(0x7f0e0var_, float:1.8882988E38)
             java.lang.String r1 = "UnsupportedMedia"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r6.messageText = r0
@@ -11400,6 +11401,7 @@ public class MessageObject {
         TLRPC$MessageAction tLRPC$MessageAction;
         TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights;
         TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights2;
+        TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights;
         TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights3;
         int i2;
         if (z && tLRPC$Message.date < ConnectionsManager.getInstance(i).getCurrentTime() - 60) {
@@ -11420,7 +11422,7 @@ public class MessageObject {
             if (ChatObject.isChannel(tLRPC$Chat) && !tLRPC$Chat.megagroup && (tLRPC$Chat.creator || ((tLRPC$TL_chatAdminRights3 = tLRPC$Chat.admin_rights) != null && tLRPC$TL_chatAdminRights3.edit_messages))) {
                 return true;
             }
-            if (tLRPC$Message.out && tLRPC$Chat != null && tLRPC$Chat.megagroup && (tLRPC$Chat.creator || ((tLRPC$TL_chatAdminRights2 = tLRPC$Chat.admin_rights) != null && tLRPC$TL_chatAdminRights2.pin_messages))) {
+            if (tLRPC$Message.out && tLRPC$Chat != null && tLRPC$Chat.megagroup && (tLRPC$Chat.creator || (((tLRPC$TL_chatAdminRights2 = tLRPC$Chat.admin_rights) != null && tLRPC$TL_chatAdminRights2.pin_messages) || ((tLRPC$TL_chatBannedRights = tLRPC$Chat.default_banned_rights) != null && !tLRPC$TL_chatBannedRights.pin_messages)))) {
                 return true;
             }
             if (!z && Math.abs(tLRPC$Message.date - ConnectionsManager.getInstance(i).getCurrentTime()) > MessagesController.getInstance(i).maxEditTime) {

@@ -118,7 +118,36 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     public static int getPatternColor(int i, int i2, int i3, int i4) {
-        return isDark(i, i2, i3, i4) ? Build.VERSION.SDK_INT < 29 ? Integer.MAX_VALUE : -1 : Build.VERSION.SDK_INT < 29 ? NUM : -16777216;
+        if (isDark(i, i2, i3, i4)) {
+            return Build.VERSION.SDK_INT < 29 ? Integer.MAX_VALUE : -1;
+        }
+        if (Build.VERSION.SDK_INT >= 29) {
+            return -16777216;
+        }
+        double[] rgbToHsv = AndroidUtilities.rgbToHsv(i);
+        double[] rgbToHsv2 = AndroidUtilities.rgbToHsv(i2);
+        double[] rgbToHsv3 = AndroidUtilities.rgbToHsv(i3);
+        double[] rgbToHsv4 = i4 != 0 ? AndroidUtilities.rgbToHsv(i4) : null;
+        double d = rgbToHsv[0] + rgbToHsv2[0] + rgbToHsv3[0];
+        int i5 = 3;
+        if (rgbToHsv4 != null) {
+            d += rgbToHsv4[0];
+            i5 = 4;
+        }
+        double d2 = (double) i5;
+        Double.isNaN(d2);
+        double d3 = d / d2;
+        if (Math.abs(rgbToHsv[0] - d3) >= 0.19444444444444445d || Math.abs(rgbToHsv2[0] - d3) >= 0.19444444444444445d || Math.abs(rgbToHsv3[0] - d3) >= 0.19444444444444445d) {
+            return NUM;
+        }
+        if (rgbToHsv4 != null && Math.abs(rgbToHsv4[0] - d3) >= 0.19444444444444445d) {
+            return NUM;
+        }
+        int averageColor = AndroidUtilities.getAverageColor(i3, AndroidUtilities.getAverageColor(i, i2));
+        if (i4 != 0) {
+            averageColor = AndroidUtilities.getAverageColor(i4, averageColor);
+        }
+        return AndroidUtilities.getPatternColor(averageColor, true);
     }
 
     public int getPatternColor() {

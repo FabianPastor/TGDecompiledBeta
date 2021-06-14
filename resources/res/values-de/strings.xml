@@ -2302,7 +2302,6 @@
     <string name="NoBlockedChannel2">Nutzer, die von Admins aus dem Kanal entfernt wurden, können ihn nicht mehr über Einladungslinks betreten.</string>
     <string name="NoBlockedGroup2">Nutzer, die von Admins aus der Gruppe entfernt wurden, können sie nicht mehr über Einladungslinks betreten.</string>
     <string name="NoBlockedUsers">Keine entfernten Nutzer</string>
-    <string name="NoCallLog">Du hast noch keine Anrufe geführt.</string>
     <string name="NoChats">Willkommen bei Telegram</string>
     <string name="NoChatsContactsHelp">Beginne eine Nachricht, \10indem du unten auf einen \10deiner Kontakte tippst.</string>
     <string name="NoChatsHelp">Tippe unten auf den Stift für deine erste Chatnachricht.</string>

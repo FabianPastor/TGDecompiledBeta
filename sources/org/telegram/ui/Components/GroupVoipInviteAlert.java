@@ -229,19 +229,19 @@ public class GroupVoipInviteAlert extends UsersAlertBase {
     }
 
     private void fillContacts() {
+        int i;
         if (this.showContacts) {
             this.contacts.addAll(ContactsController.getInstance(this.currentAccount).contacts);
-            int i = UserConfig.getInstance(this.currentAccount).clientUserId;
-            int i2 = 0;
+            int i2 = UserConfig.getInstance(this.currentAccount).clientUserId;
+            int i3 = 0;
             int size = this.contacts.size();
-            while (i2 < size) {
-                int i3 = ((TLRPC$TL_contact) this.contacts.get(i2)).user_id;
-                if (i3 == i || this.ignoredUsers.indexOfKey(i3) >= 0 || this.invitedUsers.contains(Integer.valueOf(i3))) {
-                    this.contacts.remove(i2);
-                    i2--;
+            while (i3 < size) {
+                if ((this.contacts.get(i3) instanceof TLRPC$TL_contact) && ((i = ((TLRPC$TL_contact) this.contacts.get(i3)).user_id) == i2 || this.ignoredUsers.indexOfKey(i) >= 0 || this.invitedUsers.contains(Integer.valueOf(i)))) {
+                    this.contacts.remove(i3);
+                    i3--;
                     size--;
                 }
-                i2++;
+                i3++;
             }
             Collections.sort(this.contacts, new Object(ConnectionsManager.getInstance(this.currentAccount).getCurrentTime()) {
                 public final /* synthetic */ int f$1;

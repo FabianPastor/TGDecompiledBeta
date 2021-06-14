@@ -2302,7 +2302,6 @@
     <string name="NoBlockedChannel2">Los usuarios que fueron eliminados del canal por los administradores no pueden volver a unirse con enlaces de invitación.</string>
     <string name="NoBlockedGroup2">Los usuarios que fueron eliminados del grupo por los administradores no pueden volver a unirse con enlaces de invitación.</string>
     <string name="NoBlockedUsers">Sin usuarios eliminados</string>
-    <string name="NoCallLog">Aún no hay llamadas...</string>
     <string name="NoChats">Bienvenido a Telegram</string>
     <string name="NoChatsContactsHelp">Toca uno de tus contactos e inicia una conversación.</string>
     <string name="NoChatsHelp">Envía mensajes tocando el botón del lápiz en la esquina inferior derecha.</string>

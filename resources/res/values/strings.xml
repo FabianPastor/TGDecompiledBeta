@@ -2348,7 +2348,6 @@
     <string name="NoBlockedChannel2">Users removed from the channel by the admins can\'t rejoin via invite links.</string>
     <string name="NoBlockedGroup2">Users removed from the group by the admins can\'t rejoin via invite links.</string>
     <string name="NoBlockedUsers">No removed users</string>
-    <string name="NoCallLog">You haven\'t made any calls yet.</string>
     <string name="NoChats">Welcome to Telegram</string>
     <string name="NoChatsContactsHelp">Start messaging by tapping the pencil button in the bottom right corner.</string>
     <string name="NoChatsHelp">Start messaging by tapping the pencil button in the bottom right corner.</string>
@@ -2387,6 +2386,8 @@
     <string name="NoPlayerInstalled">You don\'t have a video player, please install one to continue</string>
     <string name="NoPopup">No popup</string>
     <string name="NoRecent">No recent</string>
+    <string name="NoRecentCalls">No recent calls</string>
+    <string name="NoRecentCallsInfo">Your recent voice and video calls\10will appear here.</string>
     <string name="NoRecentGIFs">No recent GIFs</string>
     <string name="NoRecentSearches">No recent searches</string>
     <string name="NoReplies">No replies here yet...</string>
@@ -4294,6 +4295,9 @@
     <string name="VoipUserCameraIsOff">%s\'s camera is off</string>
     <string name="VoipUserMicrophoneIsOff">%s\'s microphone is off</string>
     <string name="VoipVideoOnPause">Video on Pause</string>
+    <string name="VoipVideoScreenSharing">You are sharing your screen</string>
+    <string name="VoipVideoScreenSharingTwoLines">You are sharing\10your screen</string>
+    <string name="VoipVideoScreenStopSharing">STOP SHARING</string>
     <string name="VoipVideoUnavailable">Video</string>
     <string name="VoipVoiceChat">Ongoing Voice Chat</string>
     <string name="VoipWaiting">Waiting</string>

@@ -2302,7 +2302,6 @@
     <string name="NoBlockedChannel2">Gli utenti rimossi dal canale dagli amministratori non possono rientrare tramite link d\'invito.</string>
     <string name="NoBlockedGroup2">Gli utenti rimossi dal gruppo dagli amministratori non possono rientrare tramite link d\'invito.</string>
     <string name="NoBlockedUsers">Nessun utente rimosso</string>
-    <string name="NoCallLog">Ancora nessuna chiamata...</string>
     <string name="NoChats">Benvenuto su Telegram</string>
     <string name="NoChatsContactsHelp">Inizia a messaggiare toccando uno dei contatti qui sotto.</string>
     <string name="NoChatsHelp">Inizia a messaggiare toccando il pulsante con la matita in basso a destra.</string>

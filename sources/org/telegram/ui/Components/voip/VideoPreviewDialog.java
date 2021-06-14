@@ -208,9 +208,8 @@ public abstract class VideoPreviewDialog extends FrameLayout {
         RLottieDrawable rLottieDrawable2 = new RLottieDrawable(NUM, "NUM", AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f), true, (int[]) null);
         rLottieImageView2.setAnimation(rLottieDrawable2);
         rLottieImageView2.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        boolean isMicMute = true ^ VoIPService.getSharedInstance().isMicMute();
-        this.micEnabled = isMicMute;
-        rLottieDrawable2.setCurrentFrame(isMicMute ? 69 : 36);
+        this.micEnabled = true;
+        rLottieDrawable2.setCurrentFrame(69);
         rLottieImageView2.setOnClickListener(new View.OnClickListener(rLottieDrawable2) {
             public final /* synthetic */ RLottieDrawable f$1;
 

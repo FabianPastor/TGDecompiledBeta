@@ -145,7 +145,7 @@ public class ClearHistoryAlert extends BottomSheet {
             r0.newTimer = r5
         L_0x0053:
             android.content.res.Resources r6 = r27.getResources()
-            r8 = 2131166029(0x7var_d, float:1.7946292E38)
+            r8 = 2131166031(0x7var_f, float:1.7946296E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r8)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.shadowDrawable = r6
@@ -433,7 +433,7 @@ public class ClearHistoryAlert extends BottomSheet {
             org.telegram.ui.Components.RLottieImageView r5 = new org.telegram.ui.Components.RLottieImageView
             r5.<init>(r1)
             r5.setAutoRepeat(r4)
-            r8 = 2131558507(0x7f0d006b, float:1.8742332E38)
+            r8 = 2131558508(0x7f0d006c, float:1.8742334E38)
             r10 = 120(0x78, float:1.68E-43)
             r5.setAnimation(r8, r10, r10)
             r8 = 1101004800(0x41a00000, float:20.0)

@@ -189,10 +189,6 @@ public class AndroidUtilities {
         return i & 65535;
     }
 
-    public static int getPeerLayerVersion(int i) {
-        return (i >> 16) & 65535;
-    }
-
     public static int getWallpaperRotation(int i, boolean z) {
         int i2 = z ? i + 180 : i - 180;
         while (i2 >= 360) {
@@ -1180,27 +1176,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131626926(0x7f0e0bae, float:1.8881102E38)
+                r0 = 2131626928(0x7f0e0bb0, float:1.8881106E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131626927(0x7f0e0baf, float:1.8881104E38)
+                r0 = 2131626929(0x7f0e0bb1, float:1.8881108E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131626918(0x7f0e0ba6, float:1.8881086E38)
+                r0 = 2131626920(0x7f0e0ba8, float:1.888109E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131626917(0x7f0e0ba5, float:1.8881084E38)
+                r0 = 2131626919(0x7f0e0ba7, float:1.8881088E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131626919(0x7f0e0ba7, float:1.8881088E38)
+                r0 = 2131626921(0x7f0e0ba9, float:1.8881092E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -2193,6 +2189,10 @@ public class AndroidUtilities {
 
     public static float getPixelsInCM(float f, boolean z) {
         return (f / 2.54f) * (z ? displayMetrics.xdpi : displayMetrics.ydpi);
+    }
+
+    public static int getPeerLayerVersion(int i) {
+        return Math.max(73, (i >> 16) & 65535);
     }
 
     public static void runOnUIThread(Runnable runnable) {
@@ -3269,7 +3269,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0157
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0157
-            r7 = 2131626529(0x7f0e0a21, float:1.8880297E38)
+            r7 = 2131626531(0x7f0e0a23, float:1.88803E38)
             java.lang.String r8 = "OK"
             r9 = 2131624282(0x7f0e015a, float:1.887574E38)
             java.lang.String r10 = "AppName"
@@ -3458,7 +3458,7 @@ public class AndroidUtilities {
             java.lang.String r8 = "ApkRestricted"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6.setMessage(r7)
-            r7 = 2131626911(0x7f0e0b9f, float:1.8881072E38)
+            r7 = 2131626913(0x7f0e0ba1, float:1.8881076E38)
             java.lang.String r8 = "PermissionOpenSettings"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY r8 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY
@@ -4185,16 +4185,20 @@ public class AndroidUtilities {
     }
 
     public static int getPatternColor(int i) {
+        return getPatternColor(i, false);
+    }
+
+    public static int getPatternColor(int i, boolean z) {
         float[] RGBtoHSB = RGBtoHSB(Color.red(i), Color.green(i), Color.blue(i));
         if (RGBtoHSB[1] > 0.0f || (RGBtoHSB[2] < 1.0f && RGBtoHSB[2] > 0.0f)) {
             RGBtoHSB[1] = Math.min(1.0f, RGBtoHSB[1] + 0.05f + ((1.0f - RGBtoHSB[1]) * 0.1f));
         }
-        if (RGBtoHSB[2] > 0.5f) {
+        if (z || RGBtoHSB[2] > 0.5f) {
             RGBtoHSB[2] = Math.max(0.0f, RGBtoHSB[2] * 0.65f);
         } else {
             RGBtoHSB[2] = Math.max(0.0f, Math.min(1.0f, 1.0f - (RGBtoHSB[2] * 0.65f)));
         }
-        return HSBtoRGB(RGBtoHSB[0], RGBtoHSB[1], RGBtoHSB[2]) & NUM;
+        return HSBtoRGB(RGBtoHSB[0], RGBtoHSB[1], RGBtoHSB[2]) & (z ? -NUM : NUM);
     }
 
     public static int getPatternSideColor(int i) {

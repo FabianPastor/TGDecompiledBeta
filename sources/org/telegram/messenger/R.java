@@ -983,6 +983,8 @@ public final class R {
         public static final int round_check2 = NUM;
         public static final int s_pause = NUM;
         public static final int s_play = NUM;
+        public static final int screenbg_blur = NUM;
+        public static final int screencast_big = NUM;
         public static final int scroll_tip = NUM;
         public static final int scrollbar_vertical_thumb = NUM;
         public static final int scrollbar_vertical_thumb_inset = NUM;
@@ -1676,6 +1678,7 @@ public final class R {
         public static final int tsv_setup_monkey_idle2 = NUM;
         public static final int tsv_setup_monkey_peek = NUM;
         public static final int tsv_setup_monkey_tracking = NUM;
+        public static final int utyan_call = NUM;
         public static final int utyan_gigagroup = NUM;
         public static final int utyan_private = NUM;
         public static final int utyan_schedule = NUM;
@@ -4060,7 +4063,6 @@ public final class R {
         public static final int NoBlockedChannel2 = NUM;
         public static final int NoBlockedGroup2 = NUM;
         public static final int NoBlockedUsers = NUM;
-        public static final int NoCallLog = NUM;
         public static final int NoChats = NUM;
         public static final int NoChatsContactsHelp = NUM;
         public static final int NoChatsHelp = NUM;
@@ -4099,6 +4101,8 @@ public final class R {
         public static final int NoPlayerInstalled = NUM;
         public static final int NoPopup = NUM;
         public static final int NoRecent = NUM;
+        public static final int NoRecentCalls = NUM;
+        public static final int NoRecentCallsInfo = NUM;
         public static final int NoRecentGIFs = NUM;
         public static final int NoRecentSearches = NUM;
         public static final int NoReplies = NUM;
@@ -6006,6 +6010,9 @@ public final class R {
         public static final int VoipUserCameraIsOff = NUM;
         public static final int VoipUserMicrophoneIsOff = NUM;
         public static final int VoipVideoOnPause = NUM;
+        public static final int VoipVideoScreenSharing = NUM;
+        public static final int VoipVideoScreenSharingTwoLines = NUM;
+        public static final int VoipVideoScreenStopSharing = NUM;
         public static final int VoipVideoUnavailable = NUM;
         public static final int VoipVoiceChat = NUM;
         public static final int VoipWaiting = NUM;

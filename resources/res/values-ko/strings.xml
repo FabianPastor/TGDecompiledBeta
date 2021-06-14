@@ -2302,7 +2302,6 @@
     <string name="NoBlockedChannel2">관리자가 채널에서 추방시킨 사용자는 초대 링크를 통해 다시 들어올 수 없습니다.</string>
     <string name="NoBlockedGroup2">관리자가 그룹에서 추방시킨 사용자는 초대 링크를 통해 다시 들어올 수 없습니다.</string>
     <string name="NoBlockedUsers">추방된 사용자가 없습니다</string>
-    <string name="NoCallLog">아직 전화 내역이 없습니다...</string>
     <string name="NoChats">텔레그램에 오신 것을 환영합니다</string>
     <string name="NoChatsContactsHelp">아래에 있는 연락처 하나를 탭하여 대화를 시작해보세요.</string>
     <string name="NoChatsHelp">오른쪽 밑에 있는 연필 버튼을\10가볍게 눌러 대화를 시작하세요.</string>

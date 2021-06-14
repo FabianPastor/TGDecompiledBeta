@@ -965,6 +965,9 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("create camera session");
             }
+            if (this.previewSize == null) {
+                updateCameraInfoSize();
+            }
             surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
             CameraSession cameraSession2 = new CameraSession(this.info, this.previewSize, this.pictureSize, 256);
             this.cameraSession = cameraSession2;

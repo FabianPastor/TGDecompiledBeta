@@ -1039,7 +1039,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             this.titleTextView.setTextSize(1, 24.0f);
             this.titleTextView.setGravity(17);
             this.titleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("PeopleNearby", NUM, new Object[0])));
-            addView(this.titleTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, (float) (currentActionBarHeight + 120), 52.0f, 27.0f));
+            addView(this.titleTextView, LayoutHelper.createFrame(-1, -2.0f, 51, 17.0f, (float) (currentActionBarHeight + 120), 17.0f, 27.0f));
             TextView textView2 = new TextView(context);
             this.messageTextView = textView2;
             textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));

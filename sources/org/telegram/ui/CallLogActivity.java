@@ -80,11 +80,11 @@ import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.CombinedDrawable;
-import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.NumberTextView;
 import org.telegram.ui.Components.ProgressButton;
+import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.ContactsActivity;
@@ -146,6 +146,85 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 
     public boolean needDelayOpenAnimation() {
         return true;
+    }
+
+    private static class EmptyTextProgressView extends FrameLayout {
+        private TextView emptyTextView1;
+        private TextView emptyTextView2;
+        private RLottieImageView imageView;
+        private View progressView;
+
+        static /* synthetic */ boolean lambda$new$1(View view, MotionEvent motionEvent) {
+            return true;
+        }
+
+        public boolean hasOverlappingRendering() {
+            return false;
+        }
+
+        public EmptyTextProgressView(Context context, View view) {
+            super(context);
+            addView(view, LayoutHelper.createFrame(-1, -1.0f));
+            this.progressView = view;
+            RLottieImageView rLottieImageView = new RLottieImageView(context);
+            this.imageView = rLottieImageView;
+            rLottieImageView.setAnimation(NUM, 120, 120);
+            this.imageView.setAutoRepeat(false);
+            addView(this.imageView, LayoutHelper.createFrame(140, 140.0f, 17, 52.0f, 4.0f, 52.0f, 60.0f));
+            this.imageView.setOnClickListener(new View.OnClickListener() {
+                public final void onClick(View view) {
+                    CallLogActivity.EmptyTextProgressView.this.lambda$new$0$CallLogActivity$EmptyTextProgressView(view);
+                }
+            });
+            TextView textView = new TextView(context);
+            this.emptyTextView1 = textView;
+            textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            this.emptyTextView1.setText(LocaleController.getString("NoRecentCalls", NUM));
+            this.emptyTextView1.setTextSize(1, 20.0f);
+            this.emptyTextView1.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            this.emptyTextView1.setGravity(17);
+            addView(this.emptyTextView1, LayoutHelper.createFrame(-1, -2.0f, 17, 17.0f, 40.0f, 17.0f, 0.0f));
+            this.emptyTextView2 = new TextView(context);
+            String string = LocaleController.getString("NoRecentCallsInfo", NUM);
+            if (AndroidUtilities.isTablet() && !AndroidUtilities.isSmallTablet()) {
+                string = string.replace(10, ' ');
+            }
+            this.emptyTextView2.setText(string);
+            this.emptyTextView2.setTextColor(Theme.getColor("emptyListPlaceholder"));
+            this.emptyTextView2.setTextSize(1, 14.0f);
+            this.emptyTextView2.setGravity(17);
+            this.emptyTextView2.setLineSpacing((float) AndroidUtilities.dp(2.0f), 1.0f);
+            addView(this.emptyTextView2, LayoutHelper.createFrame(-1, -2.0f, 17, 17.0f, 80.0f, 17.0f, 0.0f));
+            view.setAlpha(0.0f);
+            this.imageView.setAlpha(0.0f);
+            this.emptyTextView1.setAlpha(0.0f);
+            this.emptyTextView2.setAlpha(0.0f);
+            setOnTouchListener($$Lambda$CallLogActivity$EmptyTextProgressView$0DfzUYohm5_C8g7TQPSfQTZEqo.INSTANCE);
+        }
+
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$new$0 */
+        public /* synthetic */ void lambda$new$0$CallLogActivity$EmptyTextProgressView(View view) {
+            if (!this.imageView.isPlaying()) {
+                this.imageView.setProgress(0.0f);
+                this.imageView.playAnimation();
+            }
+        }
+
+        public void showProgress() {
+            this.imageView.animate().alpha(0.0f).setDuration(150).start();
+            this.emptyTextView1.animate().alpha(0.0f).setDuration(150).start();
+            this.emptyTextView2.animate().alpha(0.0f).setDuration(150).start();
+            this.progressView.animate().alpha(1.0f).setDuration(150).start();
+        }
+
+        public void showTextView() {
+            this.imageView.animate().alpha(1.0f).setDuration(150).start();
+            this.emptyTextView1.animate().alpha(1.0f).setDuration(150).start();
+            this.emptyTextView2.animate().alpha(1.0f).setDuration(150).start();
+            this.progressView.animate().alpha(0.0f).setDuration(150).start();
+            this.imageView.playAnimation();
+        }
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
@@ -418,8 +497,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         this.flickerLoadingView.showDate(false);
         EmptyTextProgressView emptyTextProgressView = new EmptyTextProgressView(context2, this.flickerLoadingView);
         this.emptyView = emptyTextProgressView;
-        emptyTextProgressView.setText(LocaleController.getString("NoCallLog", NUM));
-        frameLayout2.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
+        frameLayout2.addView(emptyTextProgressView, LayoutHelper.createFrame(-1, -1.0f));
         RecyclerListView recyclerListView = new RecyclerListView(context2);
         this.listView = recyclerListView;
         recyclerListView.setEmptyView(this.emptyView);
@@ -1059,34 +1137,24 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             this.loadingCallsRow = -1;
             this.sectionRow = -1;
             this.rowsCount = 0;
-            if (!CallLogActivity.this.activeGroupCalls.isEmpty()) {
-                int i = this.rowsCount;
-                int i2 = i + 1;
-                this.rowsCount = i2;
-                this.activeHeaderRow = i;
-                this.activeStartRow = i2;
-                int size = i2 + CallLogActivity.this.activeGroupCalls.size();
-                this.rowsCount = size;
-                this.activeEndRow = size;
-            }
             if (!CallLogActivity.this.calls.isEmpty()) {
                 if (this.activeHeaderRow != -1) {
-                    int i3 = this.rowsCount;
-                    int i4 = i3 + 1;
-                    this.rowsCount = i4;
-                    this.sectionRow = i3;
-                    this.rowsCount = i4 + 1;
-                    this.callsHeaderRow = i4;
+                    int i = this.rowsCount;
+                    int i2 = i + 1;
+                    this.rowsCount = i2;
+                    this.sectionRow = i;
+                    this.rowsCount = i2 + 1;
+                    this.callsHeaderRow = i2;
                 }
-                int i5 = this.rowsCount;
-                this.callsStartRow = i5;
-                int size2 = i5 + CallLogActivity.this.calls.size();
-                this.rowsCount = size2;
-                this.callsEndRow = size2;
+                int i3 = this.rowsCount;
+                this.callsStartRow = i3;
+                int size = i3 + CallLogActivity.this.calls.size();
+                this.rowsCount = size;
+                this.callsEndRow = size;
                 if (!CallLogActivity.this.endReached) {
-                    int i6 = this.rowsCount;
-                    this.rowsCount = i6 + 1;
-                    this.loadingCallsRow = i6;
+                    int i4 = this.rowsCount;
+                    this.rowsCount = i4 + 1;
+                    this.loadingCallsRow = i4;
                 }
             }
         }
@@ -1215,11 +1283,11 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                     spannableString2.setSpan(CallLogActivity.this.iconMissed, str2.length(), str2.length() + 1, 0);
                 }
                 callCell.profileSearchCell.setData(callLogRow.user, (TLRPC$EncryptedChat) null, (CharSequence) null, spannableString2, false, false);
-                ProfileSearchCell access$2700 = callCell.profileSearchCell;
+                ProfileSearchCell access$2600 = callCell.profileSearchCell;
                 if (i3 != CallLogActivity.this.calls.size() - 1 || !CallLogActivity.this.endReached) {
                     z = true;
                 }
-                access$2700.useSeparator = z;
+                access$2600.useSeparator = z;
                 callCell.imageView.setTag(callLogRow);
             } else if (itemViewType == 3) {
                 HeaderCell headerCell = (HeaderCell) viewHolder2.itemView;
@@ -1247,11 +1315,11 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                     str = LocaleController.getString("ChannelPublic", NUM).toLowerCase();
                 }
                 groupCallCell.profileSearchCell.setData(chat, (TLRPC$EncryptedChat) null, (CharSequence) null, str, false, false);
-                ProfileSearchCell access$2100 = groupCallCell.profileSearchCell;
+                ProfileSearchCell access$2000 = groupCallCell.profileSearchCell;
                 if (i5 != CallLogActivity.this.activeGroupCalls.size() - 1 || !CallLogActivity.this.endReached) {
                     z = true;
                 }
-                access$2100.useSeparator = z;
+                access$2000.useSeparator = z;
             }
         }
 
@@ -1359,8 +1427,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
-        arrayList.add(new ThemeDescription(this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder"));
-        arrayList.add(new ThemeDescription(this.emptyView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
+        arrayList.add(new ThemeDescription((View) this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{EmptyTextProgressView.class}, new String[]{"emptyTextView1"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        arrayList.add(new ThemeDescription((View) this.emptyView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{EmptyTextProgressView.class}, new String[]{"emptyTextView2"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{LoadingCell.class}, new String[]{"progressBar"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER, new Class[]{TextInfoPrivacyCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundGrayShadow"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextInfoPrivacyCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));

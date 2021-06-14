@@ -202,6 +202,13 @@ public class VideoCapturerDevice {
             } else if (Build.VERSION.SDK_INT >= 21 && this.videoCapturer == null) {
                 this.videoCapturer = new ScreenCapturerAndroid(mediaProjectionPermissionResultData, new MediaProjection.Callback() {
                     public void onStop() {
+                        AndroidUtilities.runOnUIThread($$Lambda$VideoCapturerDevice$1$aL545guBvVZ5g5tMcj3HggeIM8U.INSTANCE);
+                    }
+
+                    static /* synthetic */ void lambda$onStop$0() {
+                        if (VoIPService.getSharedInstance() != null) {
+                            VoIPService.getSharedInstance().stopScreenCapture();
+                        }
                     }
                 });
                 Display defaultDisplay = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay();

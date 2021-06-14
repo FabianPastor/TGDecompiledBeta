@@ -42,6 +42,10 @@ public class GroupCallTabletGridAdapter extends RecyclerListView.SelectionAdapte
         this.renderersContainer = groupCallRenderersContainer;
     }
 
+    public void setGroupCall(ChatObject.Call call) {
+        this.groupCall = call;
+    }
+
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         return new RecyclerListView.Holder(new GroupCallGridCell(viewGroup.getContext(), true) {
             /* access modifiers changed from: protected */
@@ -76,8 +80,11 @@ public class GroupCallTabletGridAdapter extends RecyclerListView.SelectionAdapte
         ChatObject.VideoParticipant videoParticipant = this.videoParticipants.get(i);
         TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.videoParticipants.get(i).participant;
         groupCallGridCell.spanCount = getSpanCount(i);
-        groupCallGridCell.gridAdapter = this;
         groupCallGridCell.position = i;
+        groupCallGridCell.gridAdapter = this;
+        if (groupCallGridCell.getMeasuredHeight() != getItemHeight(i)) {
+            groupCallGridCell.requestLayout();
+        }
         AccountInstance instance = AccountInstance.getInstance(this.currentAccount);
         ChatObject.Call call = this.groupCall;
         groupCallGridCell.setData(instance, videoParticipant, call, MessageObject.getPeerId(call.selfPeer));
