@@ -1137,24 +1137,34 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             this.loadingCallsRow = -1;
             this.sectionRow = -1;
             this.rowsCount = 0;
+            if (!CallLogActivity.this.activeGroupCalls.isEmpty()) {
+                int i = this.rowsCount;
+                int i2 = i + 1;
+                this.rowsCount = i2;
+                this.activeHeaderRow = i;
+                this.activeStartRow = i2;
+                int size = i2 + CallLogActivity.this.activeGroupCalls.size();
+                this.rowsCount = size;
+                this.activeEndRow = size;
+            }
             if (!CallLogActivity.this.calls.isEmpty()) {
                 if (this.activeHeaderRow != -1) {
-                    int i = this.rowsCount;
-                    int i2 = i + 1;
-                    this.rowsCount = i2;
-                    this.sectionRow = i;
-                    this.rowsCount = i2 + 1;
-                    this.callsHeaderRow = i2;
-                }
-                int i3 = this.rowsCount;
-                this.callsStartRow = i3;
-                int size = i3 + CallLogActivity.this.calls.size();
-                this.rowsCount = size;
-                this.callsEndRow = size;
-                if (!CallLogActivity.this.endReached) {
-                    int i4 = this.rowsCount;
+                    int i3 = this.rowsCount;
+                    int i4 = i3 + 1;
+                    this.rowsCount = i4;
+                    this.sectionRow = i3;
                     this.rowsCount = i4 + 1;
-                    this.loadingCallsRow = i4;
+                    this.callsHeaderRow = i4;
+                }
+                int i5 = this.rowsCount;
+                this.callsStartRow = i5;
+                int size2 = i5 + CallLogActivity.this.calls.size();
+                this.rowsCount = size2;
+                this.callsEndRow = size2;
+                if (!CallLogActivity.this.endReached) {
+                    int i6 = this.rowsCount;
+                    this.rowsCount = i6 + 1;
+                    this.loadingCallsRow = i6;
                 }
             }
         }
@@ -1283,11 +1293,11 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                     spannableString2.setSpan(CallLogActivity.this.iconMissed, str2.length(), str2.length() + 1, 0);
                 }
                 callCell.profileSearchCell.setData(callLogRow.user, (TLRPC$EncryptedChat) null, (CharSequence) null, spannableString2, false, false);
-                ProfileSearchCell access$2600 = callCell.profileSearchCell;
+                ProfileSearchCell access$2700 = callCell.profileSearchCell;
                 if (i3 != CallLogActivity.this.calls.size() - 1 || !CallLogActivity.this.endReached) {
                     z = true;
                 }
-                access$2600.useSeparator = z;
+                access$2700.useSeparator = z;
                 callCell.imageView.setTag(callLogRow);
             } else if (itemViewType == 3) {
                 HeaderCell headerCell = (HeaderCell) viewHolder2.itemView;
@@ -1315,11 +1325,11 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                     str = LocaleController.getString("ChannelPublic", NUM).toLowerCase();
                 }
                 groupCallCell.profileSearchCell.setData(chat, (TLRPC$EncryptedChat) null, (CharSequence) null, str, false, false);
-                ProfileSearchCell access$2000 = groupCallCell.profileSearchCell;
+                ProfileSearchCell access$2100 = groupCallCell.profileSearchCell;
                 if (i5 != CallLogActivity.this.activeGroupCalls.size() - 1 || !CallLogActivity.this.endReached) {
                     z = true;
                 }
-                access$2000.useSeparator = z;
+                access$2100.useSeparator = z;
             }
         }
 

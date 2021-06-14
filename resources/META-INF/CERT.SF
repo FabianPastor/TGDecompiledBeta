@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 4.2.1
-SHA1-Digest-Manifest: hwSsrTeeMJqHxK4+gva91hSHquI=
+SHA1-Digest-Manifest: SMZ4m4r8C1SYZjL+JgHLz32rHaI=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: xQA3wTt20XvXGouzdBgy5JAfiwc=
+SHA1-Digest: PRUe/BVTT/9VaD+NzOGLQpyQ5xY=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9883,13 +9883,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: 1OdKdtXJinODJ9K2Lt0NykdOHRY=
+SHA1-Digest: 2md476mBfYymz9Tg3Hiupcjcp8k=
 
 Name: classes2.dex
 SHA1-Digest: uK1WsaAPCmjiEyESWCdfPgzjznA=
 
 Name: classes3.dex
-SHA1-Digest: S6ZpqNZF+cZzzuvUIXIEcX8tPTk=
+SHA1-Digest: DFgXZ6ERsUxjkXgmfZ+TAXKQG7I=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -16363,7 +16363,7 @@ Name: res/Xj.png
 SHA1-Digest: pIrBYkL5vl8IrKQCz0UfYXRi+50=
 
 Name: res/Xj1.png
-SHA1-Digest: 5gs3mvyajevSxkKimMy37IWzeOw=
+SHA1-Digest: z590tDc2/McluPyXJYANwVKkAQ4=
 
 Name: res/Xl.png
 SHA1-Digest: XSry9Y4aMyday4awudgWGj5RwmQ=
