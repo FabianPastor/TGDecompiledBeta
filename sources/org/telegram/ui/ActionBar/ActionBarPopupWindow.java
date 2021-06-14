@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Property;
@@ -77,7 +78,8 @@ public class ActionBarPopupWindow extends PopupWindow {
         private float backScaleX = 1.0f;
         private float backScaleY = 1.0f;
         private int backgroundColor = -1;
-        protected Drawable backgroundDrawable = getResources().getDrawable(NUM).mutate();
+        protected Drawable backgroundDrawable;
+        private Rect bgPaddings = new Rect();
         /* access modifiers changed from: private */
         public boolean fitItems;
         /* access modifiers changed from: private */
@@ -98,6 +100,11 @@ public class ActionBarPopupWindow extends PopupWindow {
 
         public ActionBarPopupWindowLayout(Context context) {
             super(context);
+            Drawable mutate = getResources().getDrawable(NUM).mutate();
+            this.backgroundDrawable = mutate;
+            if (mutate != null) {
+                mutate.getPadding(this.bgPaddings);
+            }
             setBackgroundColor(Theme.getColor("actionBarDefaultSubmenuBackground"));
             setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             setWillNotDraw(false);
@@ -113,8 +120,8 @@ public class ActionBarPopupWindow extends PopupWindow {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
                     if (ActionBarPopupWindowLayout.this.fitItems) {
-                        int unused = ActionBarPopupWindowLayout.this.gapStartY = -1;
-                        int unused2 = ActionBarPopupWindowLayout.this.gapEndY = -1;
+                        int unused = ActionBarPopupWindowLayout.this.gapStartY = Integer.MIN_VALUE;
+                        int unused2 = ActionBarPopupWindowLayout.this.gapEndY = Integer.MIN_VALUE;
                         int childCount = getChildCount();
                         ArrayList arrayList = null;
                         int i3 = 0;
@@ -246,6 +253,9 @@ public class ActionBarPopupWindow extends PopupWindow {
         public void setBackgroundDrawable(Drawable drawable) {
             this.backgroundColor = -1;
             this.backgroundDrawable = drawable;
+            if (drawable != null) {
+                drawable.getPadding(this.bgPaddings);
+            }
         }
 
         private void startChildAnimation(View view) {
@@ -309,29 +319,38 @@ public class ActionBarPopupWindow extends PopupWindow {
         /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
             if (this.backgroundDrawable != null) {
+                int scrollY = this.gapStartY - this.scrollView.getScrollY();
+                int scrollY2 = this.gapEndY - this.scrollView.getScrollY();
                 int i = 0;
                 while (i < 2) {
-                    if (i != 1 || this.gapStartY >= 0) {
+                    if (i != 1 || scrollY >= (-AndroidUtilities.dp(16.0f))) {
+                        if (this.gapStartY != Integer.MIN_VALUE) {
+                            canvas.save();
+                            canvas.clipRect(0, this.bgPaddings.top, getMeasuredWidth(), getMeasuredHeight());
+                        }
                         this.backgroundDrawable.setAlpha(this.backAlpha);
                         if (this.shownFromBotton) {
                             int measuredHeight = getMeasuredHeight();
                             this.backgroundDrawable.setBounds(0, (int) (((float) measuredHeight) * (1.0f - this.backScaleY)), (int) (((float) getMeasuredWidth()) * this.backScaleX), measuredHeight);
-                        } else if (this.gapStartY > 0) {
+                        } else if (scrollY > (-AndroidUtilities.dp(16.0f))) {
                             int measuredHeight2 = (int) (((float) getMeasuredHeight()) * this.backScaleY);
                             if (i == 0) {
-                                this.backgroundDrawable.setBounds(0, 0, (int) (((float) getMeasuredWidth()) * this.backScaleX), Math.min(measuredHeight2, this.gapStartY + AndroidUtilities.dp(16.0f)));
-                            } else {
-                                int i2 = this.gapEndY;
-                                if (measuredHeight2 < i2) {
-                                    i++;
-                                } else {
-                                    this.backgroundDrawable.setBounds(0, i2, (int) (((float) getMeasuredWidth()) * this.backScaleX), measuredHeight2);
+                                this.backgroundDrawable.setBounds(0, -this.scrollView.getScrollY(), (int) (((float) getMeasuredWidth()) * this.backScaleX), Math.min(measuredHeight2, AndroidUtilities.dp(16.0f) + scrollY));
+                            } else if (measuredHeight2 < scrollY2) {
+                                if (this.gapStartY != Integer.MIN_VALUE) {
+                                    canvas.restore();
                                 }
+                                i++;
+                            } else {
+                                this.backgroundDrawable.setBounds(0, scrollY2, (int) (((float) getMeasuredWidth()) * this.backScaleX), measuredHeight2);
                             }
                         } else {
-                            this.backgroundDrawable.setBounds(0, 0, (int) (((float) getMeasuredWidth()) * this.backScaleX), (int) (((float) getMeasuredHeight()) * this.backScaleY));
+                            this.backgroundDrawable.setBounds(0, this.gapStartY < 0 ? 0 : -AndroidUtilities.dp(16.0f), (int) (((float) getMeasuredWidth()) * this.backScaleX), (int) (((float) getMeasuredHeight()) * this.backScaleY));
                         }
                         this.backgroundDrawable.draw(canvas);
+                        if (this.gapStartY != Integer.MIN_VALUE) {
+                            canvas.restore();
+                        }
                         i++;
                     } else {
                         return;

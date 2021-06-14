@@ -124,10 +124,13 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
     }
 
     public void scrollTo(ChatObject.VideoParticipant videoParticipant, RecyclerListView recyclerListView) {
-        for (int i = 0; i < this.participants.size(); i++) {
-            if (this.videoParticipants.get(i).equals(videoParticipant)) {
-                ((LinearLayoutManager) recyclerListView.getLayoutManager()).scrollToPositionWithOffset(i, AndroidUtilities.dp(13.0f));
-                return;
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerListView.getLayoutManager();
+        if (linearLayoutManager != null) {
+            for (int i = 0; i < this.videoParticipants.size(); i++) {
+                if (this.videoParticipants.get(i).equals(videoParticipant)) {
+                    linearLayoutManager.scrollToPositionWithOffset(i, AndroidUtilities.dp(13.0f));
+                    return;
+                }
             }
         }
     }
@@ -624,60 +627,62 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
     }
 
     public void update(boolean z, RecyclerListView recyclerListView) {
-        if (z) {
-            final ArrayList arrayList = new ArrayList(this.participants);
-            final ArrayList arrayList2 = new ArrayList(this.videoParticipants);
+        if (this.groupCall != null) {
+            if (z) {
+                final ArrayList arrayList = new ArrayList(this.participants);
+                final ArrayList arrayList2 = new ArrayList(this.videoParticipants);
+                this.participants.clear();
+                this.participants.addAll(this.groupCall.visibleParticipants);
+                this.videoParticipants.clear();
+                this.videoParticipants.addAll(this.groupCall.visibleVideoParticipants);
+                DiffUtil.calculateDiff(new DiffUtil.Callback() {
+                    public boolean areContentsTheSame(int i, int i2) {
+                        return true;
+                    }
+
+                    public int getOldListSize() {
+                        return arrayList2.size() + arrayList.size();
+                    }
+
+                    public int getNewListSize() {
+                        return GroupCallFullscreenAdapter.this.videoParticipants.size() + GroupCallFullscreenAdapter.this.participants.size();
+                    }
+
+                    public boolean areItemsTheSame(int i, int i2) {
+                        TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant;
+                        TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2;
+                        if (i < arrayList2.size() && i2 < GroupCallFullscreenAdapter.this.videoParticipants.size()) {
+                            return ((ChatObject.VideoParticipant) arrayList2.get(i)).equals(GroupCallFullscreenAdapter.this.videoParticipants.get(i2));
+                        }
+                        int size = i - arrayList2.size();
+                        int size2 = i2 - GroupCallFullscreenAdapter.this.videoParticipants.size();
+                        if (size2 < 0 || size2 >= GroupCallFullscreenAdapter.this.participants.size() || size < 0 || size >= arrayList.size()) {
+                            if (i < arrayList2.size()) {
+                                tLRPC$TL_groupCallParticipant = ((ChatObject.VideoParticipant) arrayList2.get(i)).participant;
+                            } else {
+                                tLRPC$TL_groupCallParticipant = (TLRPC$TL_groupCallParticipant) arrayList.get(size);
+                            }
+                            if (i2 < GroupCallFullscreenAdapter.this.videoParticipants.size()) {
+                                tLRPC$TL_groupCallParticipant2 = ((ChatObject.VideoParticipant) GroupCallFullscreenAdapter.this.videoParticipants.get(i2)).participant;
+                            } else {
+                                tLRPC$TL_groupCallParticipant2 = (TLRPC$TL_groupCallParticipant) GroupCallFullscreenAdapter.this.participants.get(size2);
+                            }
+                            return MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer) == MessageObject.getPeerId(tLRPC$TL_groupCallParticipant2.peer);
+                        } else if (MessageObject.getPeerId(((TLRPC$TL_groupCallParticipant) arrayList.get(size)).peer) == MessageObject.getPeerId(((TLRPC$TL_groupCallParticipant) GroupCallFullscreenAdapter.this.participants.get(size2)).peer)) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                }).dispatchUpdatesTo((RecyclerView.Adapter) this);
+                AndroidUtilities.updateVisibleRows(recyclerListView);
+                return;
+            }
             this.participants.clear();
             this.participants.addAll(this.groupCall.visibleParticipants);
             this.videoParticipants.clear();
             this.videoParticipants.addAll(this.groupCall.visibleVideoParticipants);
-            DiffUtil.calculateDiff(new DiffUtil.Callback() {
-                public boolean areContentsTheSame(int i, int i2) {
-                    return true;
-                }
-
-                public int getOldListSize() {
-                    return arrayList2.size() + arrayList.size();
-                }
-
-                public int getNewListSize() {
-                    return GroupCallFullscreenAdapter.this.videoParticipants.size() + GroupCallFullscreenAdapter.this.participants.size();
-                }
-
-                public boolean areItemsTheSame(int i, int i2) {
-                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant;
-                    TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2;
-                    if (i < arrayList2.size() && i2 < GroupCallFullscreenAdapter.this.videoParticipants.size()) {
-                        return ((ChatObject.VideoParticipant) arrayList2.get(i)).equals(GroupCallFullscreenAdapter.this.videoParticipants.get(i2));
-                    }
-                    int size = i - arrayList2.size();
-                    int size2 = i2 - GroupCallFullscreenAdapter.this.videoParticipants.size();
-                    if (size2 < 0 || size2 >= GroupCallFullscreenAdapter.this.participants.size() || size < 0 || size >= arrayList.size()) {
-                        if (i < arrayList2.size()) {
-                            tLRPC$TL_groupCallParticipant = ((ChatObject.VideoParticipant) arrayList2.get(i)).participant;
-                        } else {
-                            tLRPC$TL_groupCallParticipant = (TLRPC$TL_groupCallParticipant) arrayList.get(size);
-                        }
-                        if (i2 < GroupCallFullscreenAdapter.this.videoParticipants.size()) {
-                            tLRPC$TL_groupCallParticipant2 = ((ChatObject.VideoParticipant) GroupCallFullscreenAdapter.this.videoParticipants.get(i2)).participant;
-                        } else {
-                            tLRPC$TL_groupCallParticipant2 = (TLRPC$TL_groupCallParticipant) GroupCallFullscreenAdapter.this.participants.get(size2);
-                        }
-                        return MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer) == MessageObject.getPeerId(tLRPC$TL_groupCallParticipant2.peer);
-                    } else if (MessageObject.getPeerId(((TLRPC$TL_groupCallParticipant) arrayList.get(size)).peer) == MessageObject.getPeerId(((TLRPC$TL_groupCallParticipant) GroupCallFullscreenAdapter.this.participants.get(size2)).peer)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            }).dispatchUpdatesTo((RecyclerView.Adapter) this);
-            AndroidUtilities.updateVisibleRows(recyclerListView);
-            return;
+            notifyDataSetChanged();
         }
-        this.participants.clear();
-        this.participants.addAll(this.groupCall.visibleParticipants);
-        this.videoParticipants.clear();
-        this.videoParticipants.addAll(this.groupCall.visibleVideoParticipants);
-        notifyDataSetChanged();
     }
 }

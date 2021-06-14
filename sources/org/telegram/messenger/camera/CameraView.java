@@ -968,20 +968,23 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             if (this.previewSize == null) {
                 updateCameraInfoSize();
             }
-            surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
-            CameraSession cameraSession2 = new CameraSession(this.info, this.previewSize, this.pictureSize, 256);
-            this.cameraSession = cameraSession2;
-            this.cameraThread.setCurrentSession(cameraSession2);
-            requestLayout();
-            CameraController.getInstance().open(this.cameraSession, surfaceTexture, new Runnable() {
-                public final void run() {
-                    CameraView.this.lambda$createCamera$1$CameraView();
-                }
-            }, new Runnable() {
-                public final void run() {
-                    CameraView.this.lambda$createCamera$2$CameraView();
-                }
-            });
+            Size size = this.previewSize;
+            if (size != null) {
+                surfaceTexture.setDefaultBufferSize(size.getWidth(), this.previewSize.getHeight());
+                CameraSession cameraSession2 = new CameraSession(this.info, this.previewSize, this.pictureSize, 256);
+                this.cameraSession = cameraSession2;
+                this.cameraThread.setCurrentSession(cameraSession2);
+                requestLayout();
+                CameraController.getInstance().open(this.cameraSession, surfaceTexture, new Runnable() {
+                    public final void run() {
+                        CameraView.this.lambda$createCamera$1$CameraView();
+                    }
+                }, new Runnable() {
+                    public final void run() {
+                        CameraView.this.lambda$createCamera$2$CameraView();
+                    }
+                });
+            }
         }
     }
 

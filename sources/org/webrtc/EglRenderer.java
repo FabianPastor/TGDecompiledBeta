@@ -32,7 +32,7 @@ public class EglRenderer implements VideoSink {
     private final EglSurfaceCreation eglSurfaceBackgroundCreationRunnable;
     private final EglSurfaceCreation eglSurfaceCreationRunnable;
     private volatile ErrorCallback errorCallback;
-    private boolean firstFrameRendered;
+    public boolean firstFrameRendered;
     private final Object fpsReductionLock;
     private final VideoFrameDrawer frameDrawer;
     private final ArrayList<FrameListenerAndParams> frameListeners;

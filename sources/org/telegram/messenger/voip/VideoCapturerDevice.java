@@ -241,9 +241,12 @@ public class VideoCapturerDevice {
     /* renamed from: lambda$init$2 */
     public /* synthetic */ void lambda$init$2$VideoCapturerDevice(int i, int i2) {
         if (this.videoCapturerSurfaceTextureHelper != null) {
-            this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(this.nativePtr);
-            this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
-            this.videoCapturer.startCapture(i, i2, 30);
+            long j = this.nativePtr;
+            if (j != 0) {
+                this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(j);
+                this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
+                this.videoCapturer.startCapture(i, i2, 30);
+            }
         }
     }
 
@@ -341,6 +344,7 @@ public class VideoCapturerDevice {
 
     private void onDestroy() {
         if (Build.VERSION.SDK_INT >= 18) {
+            this.nativePtr = 0;
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
                     VideoCapturerDevice.this.lambda$onDestroy$9$VideoCapturerDevice();

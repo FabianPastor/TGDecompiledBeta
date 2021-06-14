@@ -10235,6 +10235,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         Browser.bindCustomTabsService(this);
         ApplicationLoader.mainInterfaceStopped = false;
         GroupCallPip.updateVisibility(this);
+        GroupCallActivity groupCallActivity = GroupCallActivity.groupCallInstance;
+        if (groupCallActivity != null) {
+            groupCallActivity.onResume();
+        }
     }
 
     /* access modifiers changed from: protected */
@@ -10243,6 +10247,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         Browser.unbindCustomTabsService(this);
         ApplicationLoader.mainInterfaceStopped = true;
         GroupCallPip.updateVisibility(this);
+        GroupCallActivity groupCallActivity = GroupCallActivity.groupCallInstance;
+        if (groupCallActivity != null) {
+            groupCallActivity.onPause();
+        }
     }
 
     /* access modifiers changed from: protected */
@@ -12287,7 +12295,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         if (keyEvent.getAction() == 0 && (keyEvent.getKeyCode() == 24 || keyEvent.getKeyCode() == 25)) {
             boolean z = true;
             if (VoIPService.getSharedInstance() != null) {
-                if (Build.VERSION.SDK_INT >= 31 && !SharedConfig.useMediaStream) {
+                if (Build.VERSION.SDK_INT >= 32) {
                     boolean isSpeakerMuted = WebRtcAudioTrack.isSpeakerMuted();
                     AudioManager audioManager = (AudioManager) getSystemService("audio");
                     if (!(audioManager.getStreamVolume(0) == audioManager.getStreamMinVolume(0) && keyEvent.getKeyCode() == 25)) {

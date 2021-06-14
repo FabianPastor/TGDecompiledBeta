@@ -44,6 +44,7 @@ import org.telegram.ui.PhotoViewer;
 public class ChatActionCell extends BaseCell implements DownloadController.FileDownloadProgressListener {
     private int TAG;
     private AvatarDrawable avatarDrawable;
+    private int backgroundHeight;
     private Path backgroundPath = new Path();
     private int currentAccount = UserConfig.selectedAccount;
     private MessageObject currentMessageObject;
@@ -63,7 +64,6 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     private int overrideColor;
     private ColorFilter overrideColorFilter;
     private String overrideText;
-    private int parentHeight;
     private URLSpan pressedLink;
     private int previousWidth;
     private RectF rect = new RectF();
@@ -249,11 +249,10 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
         return this.imageReceiver;
     }
 
-    public void setVisiblePart(float f, int i, int i2) {
+    public void setVisiblePart(float f, int i) {
         this.visiblePartSet = true;
-        this.parentHeight = i - i2;
-        this.viewTop = f - ((float) i2);
-        FileLog.d("h = " + i + " offset = " + i2 + " top = " + f);
+        this.backgroundHeight = i;
+        this.viewTop = f;
         if (Theme.hasGradientService()) {
             invalidate();
         }
@@ -728,9 +727,9 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
                 this.backgroundPath.close();
             }
             if (!this.visiblePartSet) {
-                this.parentHeight = ((ViewGroup) getParent()).getMeasuredHeight();
+                this.backgroundHeight = ((ViewGroup) getParent()).getMeasuredHeight();
             }
-            Theme.applyServiceShaderMatrix(getMeasuredWidth(), this.parentHeight, 0.0f, this.viewTop + ((float) AndroidUtilities.dp(4.0f)));
+            Theme.applyServiceShaderMatrix(getMeasuredWidth(), this.backgroundHeight, 0.0f, this.viewTop + ((float) AndroidUtilities.dp(4.0f)));
             Canvas canvas4 = canvas;
             canvas4.drawPath(this.backgroundPath, Theme.chat_actionBackgroundPaint);
             if (Theme.hasGradientService()) {

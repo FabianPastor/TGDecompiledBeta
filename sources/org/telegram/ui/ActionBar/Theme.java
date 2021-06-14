@@ -16151,7 +16151,8 @@ public class Theme {
     }
 
     public static boolean isPatternWallpaper() {
-        return isPatternWallpaper;
+        String selectedBackgroundSlug = getSelectedBackgroundSlug();
+        return isPatternWallpaper || "CJz3BZ6YGEYBAAAABboWp6SAv04".equals(selectedBackgroundSlug) || "qeZWES8rGVIEAAAARfWlK1lnfiI".equals(selectedBackgroundSlug);
     }
 
     public static AudioVisualizerDrawable getCurrentAudiVisualizerDrawable() {

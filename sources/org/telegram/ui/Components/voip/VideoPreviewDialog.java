@@ -94,10 +94,11 @@ public abstract class VideoPreviewDialog extends FrameLayout {
         voIPTextureView2.clipToTexture = true;
         voIPTextureView2.renderer.setAlpha(0.0f);
         this.textureView.renderer.setRotateTextureWitchScreen(true);
+        this.textureView.renderer.setUseCameraRotation(true);
         TextView textView = new TextView(context2);
         this.subtitle = textView;
         textView.setTextColor(ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_nameText"), 102));
-        textView.setTextSize(15.0f);
+        textView.setTextSize(1, 15.0f);
         textView.setText(LocaleController.getString("VideoPreviewDesrciption", NUM));
         textView.setGravity(1);
         this.container.addView(textView, LayoutHelper.createFrame(-1, -2.0f, 80, 24.0f, 0.0f, 24.0f, 108.0f));

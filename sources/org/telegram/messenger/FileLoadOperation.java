@@ -2987,6 +2987,10 @@ public class FileLoadOperation {
     public void onFail(boolean z, int i) {
         cleanup();
         this.state = 2;
+        FileLoadOperationDelegate fileLoadOperationDelegate = this.delegate;
+        if (fileLoadOperationDelegate == null) {
+            return;
+        }
         if (z) {
             Utilities.stageQueue.postRunnable(new Runnable(i) {
                 public final /* synthetic */ int f$1;
@@ -3000,7 +3004,7 @@ public class FileLoadOperation {
                 }
             });
         } else {
-            this.delegate.didFailedLoadingFile(this, i);
+            fileLoadOperationDelegate.didFailedLoadingFile(this, i);
         }
     }
 

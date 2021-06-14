@@ -24,23 +24,24 @@ import org.telegram.messenger.Utilities;
 
 public class MotionBackgroundDrawable extends Drawable {
     private BitmapShader bitmapShader;
-    private int[] colors;
+    private int[] colors = {-12423849, -531317, -7888252, -133430};
     private Bitmap currentBitmap;
     private BitmapShader gradientShader;
-    private int intensity;
-    private CubicBezierInterpolator interpolator;
+    private int intensity = 100;
+    private CubicBezierInterpolator interpolator = new CubicBezierInterpolator(0.33d, 0.0d, 0.0d, 1.0d);
     private boolean isPreview;
     private long lastUpdateTime;
     private Bitmap legacyBitmap;
     private Canvas legacyCanvas;
     private Matrix matrix;
-    private Paint paint;
-    private Paint paint2;
+    private Paint paint = new Paint(2);
+    private Paint paint2 = new Paint(2);
     private WeakReference<View> parentView;
     private Bitmap patternBitmap;
+    private Rect patternBounds = new Rect();
     private int phase;
-    private float posAnimationProgress;
-    private RectF rect;
+    private float posAnimationProgress = 1.0f;
+    private RectF rect = new RectF();
     private boolean rotatingPreview;
     private int roundRadius;
     private int translationY;
@@ -53,13 +54,6 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     public MotionBackgroundDrawable() {
-        this.colors = new int[]{-12423849, -531317, -7888252, -133430};
-        this.interpolator = new CubicBezierInterpolator(0.33d, 0.0d, 0.0d, 1.0d);
-        this.posAnimationProgress = 1.0f;
-        this.rect = new RectF();
-        this.paint = new Paint(2);
-        this.paint2 = new Paint(2);
-        this.intensity = 100;
         Bitmap createBitmap = Bitmap.createBitmap(60, 80, Bitmap.Config.ARGB_8888);
         this.currentBitmap = createBitmap;
         Utilities.generateGradient(createBitmap, true, this.phase, this.interpolator.getInterpolation(this.posAnimationProgress), this.currentBitmap.getWidth(), this.currentBitmap.getHeight(), this.currentBitmap.getRowBytes(), this.colors);
@@ -69,14 +63,6 @@ public class MotionBackgroundDrawable extends Drawable {
     }
 
     public MotionBackgroundDrawable(int i, int i2, int i3, int i4, boolean z) {
-        this.colors = new int[]{-12423849, -531317, -7888252, -133430};
-        this.interpolator = new CubicBezierInterpolator(0.33d, 0.0d, 0.0d, 1.0d);
-        this.posAnimationProgress = 1.0f;
-        this.rect = new RectF();
-        this.paint = new Paint(2);
-        Paint paint3 = new Paint(2);
-        this.paint2 = paint3;
-        this.intensity = 100;
         int[] iArr = this.colors;
         iArr[0] = i;
         iArr[1] = i2;
@@ -84,7 +70,7 @@ public class MotionBackgroundDrawable extends Drawable {
         iArr[3] = i4;
         this.isPreview = z;
         if (Build.VERSION.SDK_INT >= 29) {
-            paint3.setBlendMode(BlendMode.SOFT_LIGHT);
+            this.paint2.setBlendMode(BlendMode.SOFT_LIGHT);
         }
         Bitmap createBitmap = Bitmap.createBitmap(60, 80, Bitmap.Config.ARGB_8888);
         this.currentBitmap = createBitmap;
@@ -115,6 +101,11 @@ public class MotionBackgroundDrawable extends Drawable {
             averageColor = AndroidUtilities.getAverageColor(averageColor, i4);
         }
         return AndroidUtilities.RGBtoHSB(Color.red(averageColor), Color.green(averageColor), Color.blue(averageColor))[2] < 0.3f;
+    }
+
+    public void setBounds(Rect rect2) {
+        super.setBounds(rect2);
+        this.patternBounds.set(rect2);
     }
 
     public static int getPatternColor(int i, int i2, int i3, int i4) {
@@ -271,6 +262,7 @@ public class MotionBackgroundDrawable extends Drawable {
 
     public void setBounds(int i, int i2, int i3, int i4) {
         super.setBounds(i, i2, i3, i4);
+        this.patternBounds.set(i, i2, i3, i4);
         if (Build.VERSION.SDK_INT < 28 && this.intensity < 0) {
             int i5 = i3 - i;
             int i6 = i4 - i2;

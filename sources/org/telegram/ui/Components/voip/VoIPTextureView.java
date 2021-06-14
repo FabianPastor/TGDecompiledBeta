@@ -264,12 +264,17 @@ public class VoIPTextureView extends FrameLayout {
             this.ignoreLayout = false;
         }
         super.onMeasure(i, i2);
+        updateRendererSize();
+        super.onMeasure(i, i2);
+    }
+
+    /* access modifiers changed from: protected */
+    public void updateRendererSize() {
         TextureView textureView = this.blurRenderer;
         if (textureView != null) {
             textureView.getLayoutParams().width = this.renderer.getMeasuredWidth();
             this.blurRenderer.getLayoutParams().height = this.renderer.getMeasuredHeight();
         }
-        super.onMeasure(i, i2);
     }
 
     /* access modifiers changed from: protected */
