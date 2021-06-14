@@ -8176,16 +8176,14 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             this.renderersContainer.invalidate();
         }
         GroupCallUserCell groupCallUserCell = this.scrimView;
-        if (groupCallUserCell != null && !this.hasScrimAnchorView) {
-            groupCallUserCell.setProgressToAvatarPreview(0.0f);
-            this.scrimView.setAboutVisible(false);
-            if (this.scrimView.getParent() != null) {
-                this.containerView.removeView(this.scrimView);
-            }
+        if (!(groupCallUserCell == null || this.hasScrimAnchorView || groupCallUserCell.getParent() == null)) {
+            this.containerView.removeView(this.scrimView);
         }
         GroupCallUserCell groupCallUserCell2 = this.scrimView;
         if (groupCallUserCell2 != null) {
-            groupCallUserCell2.getAvatarImageView().setAlpha(1.0f);
+            groupCallUserCell2.setProgressToAvatarPreview(0.0f);
+            this.scrimView.setAboutVisible(false);
+            this.scrimView.getAvatarImageView().setAlpha(1.0f);
         }
         GroupCallFullscreenAdapter.GroupCallUserCell groupCallUserCell3 = this.scrimFullscreenView;
         if (groupCallUserCell3 != null) {

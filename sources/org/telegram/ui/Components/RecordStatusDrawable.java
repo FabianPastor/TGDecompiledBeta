@@ -8,7 +8,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class RecordStatusDrawable extends StatusDrawable {
-    int alpha;
+    int alpha = 255;
     Paint currentPaint;
     private boolean isChat = false;
     private long lastUpdateTime = 0;

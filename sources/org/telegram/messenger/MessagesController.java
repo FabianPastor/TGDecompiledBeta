@@ -20080,7 +20080,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         }
                     });
                     getMessagesStorage().putUsersAndChats(tLRPC$TL_channels_channelParticipant.users, tLRPC$TL_channels_channelParticipant.chats, true, true);
-                    if (!z || getMessagesStorage().hasInviteMeMessage(i2)) {
+                    if (!z || Math.abs(getConnectionsManager().getCurrentTime() - tLRPC$TL_channels_channelParticipant.participant.date) >= 86400 || getMessagesStorage().hasInviteMeMessage(i2)) {
                         arrayList = null;
                     } else {
                         TLRPC$TL_messageService tLRPC$TL_messageService = new TLRPC$TL_messageService();

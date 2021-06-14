@@ -20,7 +20,7 @@ import android.text.TextUtils;
 import androidx.multidex.MultiDex;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.installations.FirebaseInstallations;
+import com.google.firebase.messaging.FirebaseMessaging;
 import java.io.File;
 import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.tgnet.ConnectionsManager;
@@ -236,26 +236,25 @@ public class ApplicationLoader extends Application {
 
     static /* synthetic */ void lambda$initPlayServices$1() {
         try {
-            FirebaseInstallations.getInstance().getId().addOnCompleteListener($$Lambda$ApplicationLoader$uH1noiBBUj9vNZJEae0KZQ4oQc.INSTANCE);
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener($$Lambda$ApplicationLoader$uH1noiBBUj9vNZJEae0KZQ4oQc.INSTANCE);
         } catch (Throwable th) {
             FileLog.e(th);
         }
     }
 
     static /* synthetic */ void lambda$initPlayServices$0(Task task) {
-        if (task.isSuccessful()) {
-            String str = (String) task.getResult();
-            if (!TextUtils.isEmpty(str)) {
-                GcmPushListenerService.sendRegistrationToServer(str);
-                return;
+        if (!task.isSuccessful()) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("Failed to get regid");
             }
+            SharedConfig.pushStringStatus = "__FIREBASE_FAILED__";
+            GcmPushListenerService.sendRegistrationToServer((String) null);
             return;
         }
-        if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("Failed to get regid");
+        String str = (String) task.getResult();
+        if (!TextUtils.isEmpty(str)) {
+            GcmPushListenerService.sendRegistrationToServer(str);
         }
-        SharedConfig.pushStringStatus = "__FIREBASE_FAILED__";
-        GcmPushListenerService.sendRegistrationToServer((String) null);
     }
 
     private boolean checkPlayServices() {
