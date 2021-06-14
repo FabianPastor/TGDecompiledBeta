@@ -846,7 +846,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             AnimatedFileDrawable animatedFileDrawable = (AnimatedFileDrawable) drawable;
             animatedFileDrawable.setParentView(this.parentView);
             animatedFileDrawable.setUseSharedQueue(this.useSharedAnimationQueue);
-            if (this.allowStartAnimation) {
+            if (this.allowStartAnimation && this.currentOpenedLayerFlags == 0) {
                 animatedFileDrawable.start();
             }
             animatedFileDrawable.setAllowDecodeSingleFrame(this.allowDecodeSingleFrame);
@@ -1038,6 +1038,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         RLottieDrawable lottieAnimation = getLottieAnimation();
         if (lottieAnimation != null && this.allowStartLottieAnimation && (!lottieAnimation.isHeavyDrawable() || this.currentOpenedLayerFlags == 0)) {
             lottieAnimation.start();
+        }
+        AnimatedFileDrawable animation = getAnimation();
+        if (animation != null && this.allowStartAnimation && this.currentOpenedLayerFlags == 0) {
+            animation.stop();
         }
         if (NotificationCenter.getGlobalInstance().isAnimationInProgress()) {
             didReceivedNotification(i, this.currentAccount, 512);
@@ -2621,11 +2625,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         /*
             r7 = this;
             r0 = 0
-            if (r8 == 0) goto L_0x0222
-            if (r9 == 0) goto L_0x0222
+            if (r8 == 0) goto L_0x0226
+            if (r9 == 0) goto L_0x0226
             int r1 = r7.currentGuid
             if (r1 == r12) goto L_0x000b
-            goto L_0x0222
+            goto L_0x0226
         L_0x000b:
             r12 = 0
             r1 = 1065353216(0x3var_, float:1.0)
@@ -2892,47 +2896,49 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             r9.didSetImage(r7, r12, r10, r11)
         L_0x01bf:
             boolean r9 = r8 instanceof org.telegram.ui.Components.AnimatedFileDrawable
-            if (r9 == 0) goto L_0x01de
+            if (r9 == 0) goto L_0x01e2
             org.telegram.ui.Components.AnimatedFileDrawable r8 = (org.telegram.ui.Components.AnimatedFileDrawable) r8
             android.view.View r9 = r7.parentView
             r8.setParentView(r9)
             boolean r9 = r7.useSharedAnimationQueue
             r8.setUseSharedQueue(r9)
             boolean r9 = r7.allowStartAnimation
-            if (r9 == 0) goto L_0x01d6
+            if (r9 == 0) goto L_0x01da
+            int r9 = r7.currentOpenedLayerFlags
+            if (r9 != 0) goto L_0x01da
             r8.start()
-        L_0x01d6:
+        L_0x01da:
             boolean r9 = r7.allowDecodeSingleFrame
             r8.setAllowDecodeSingleFrame(r9)
             r7.animationReadySent = r0
-            goto L_0x0204
-        L_0x01de:
+            goto L_0x0208
+        L_0x01e2:
             boolean r9 = r8 instanceof org.telegram.ui.Components.RLottieDrawable
-            if (r9 == 0) goto L_0x0204
+            if (r9 == 0) goto L_0x0208
             org.telegram.ui.Components.RLottieDrawable r8 = (org.telegram.ui.Components.RLottieDrawable) r8
             android.view.View r9 = r7.parentView
             r8.addParentView(r9)
             boolean r9 = r7.allowStartLottieAnimation
-            if (r9 == 0) goto L_0x01fa
+            if (r9 == 0) goto L_0x01fe
             boolean r9 = r8.isHeavyDrawable()
-            if (r9 == 0) goto L_0x01f7
+            if (r9 == 0) goto L_0x01fb
             int r9 = r7.currentOpenedLayerFlags
-            if (r9 != 0) goto L_0x01fa
-        L_0x01f7:
+            if (r9 != 0) goto L_0x01fe
+        L_0x01fb:
             r8.start()
-        L_0x01fa:
+        L_0x01fe:
             r8.setAllowDecodeSingleFrame(r2)
             int r9 = r7.autoRepeat
             r8.setAutoRepeat(r9)
             r7.animationReadySent = r0
-        L_0x0204:
+        L_0x0208:
             android.view.View r8 = r7.parentView
-            if (r8 == 0) goto L_0x0221
+            if (r8 == 0) goto L_0x0225
             boolean r9 = r7.invalidateAll
-            if (r9 == 0) goto L_0x0210
+            if (r9 == 0) goto L_0x0214
             r8.invalidate()
-            goto L_0x0221
-        L_0x0210:
+            goto L_0x0225
+        L_0x0214:
             float r9 = r7.imageX
             int r10 = (int) r9
             float r11 = r7.imageY
@@ -2944,9 +2950,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             float r11 = r11 + r0
             int r11 = (int) r11
             r8.invalidate(r10, r12, r9, r11)
-        L_0x0221:
+        L_0x0225:
             return r2
-        L_0x0222:
+        L_0x0226:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.setImageBitmapByKey(android.graphics.drawable.Drawable, java.lang.String, int, boolean, int):boolean");
@@ -3022,7 +3028,6 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         int i3;
-        RLottieDrawable lottieAnimation;
         if (i == NotificationCenter.didReplacedPhotoInMemCache) {
             String str = objArr[0];
             String str2 = this.currentMediaKey;
@@ -3057,8 +3062,15 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             if (this.currentLayerNum < num.intValue()) {
                 int intValue = num.intValue() | this.currentOpenedLayerFlags;
                 this.currentOpenedLayerFlags = intValue;
-                if (intValue != 0 && (lottieAnimation = getLottieAnimation()) != null && lottieAnimation.isHeavyDrawable()) {
-                    lottieAnimation.stop();
+                if (intValue != 0) {
+                    RLottieDrawable lottieAnimation = getLottieAnimation();
+                    if (lottieAnimation != null && lottieAnimation.isHeavyDrawable()) {
+                        lottieAnimation.stop();
+                    }
+                    AnimatedFileDrawable animation = getAnimation();
+                    if (animation != null) {
+                        animation.stop();
+                    }
                 }
             }
         } else if (i == NotificationCenter.startAllHeavyOperations) {
@@ -3070,6 +3082,10 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     RLottieDrawable lottieAnimation2 = getLottieAnimation();
                     if (this.allowStartLottieAnimation && lottieAnimation2 != null && lottieAnimation2.isHeavyDrawable()) {
                         lottieAnimation2.start();
+                    }
+                    AnimatedFileDrawable animation2 = getAnimation();
+                    if (this.allowStartAnimation && animation2 != null) {
+                        animation2.start();
                     }
                 }
             }

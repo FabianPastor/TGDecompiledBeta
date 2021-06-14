@@ -4214,11 +4214,11 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 }
                 char c = 2;
                 if (ThemePreviewActivity.this.screenType == 1 || ThemePreviewActivity.this.screenType == 2) {
-                    WallpaperCheckBoxView[] access$6500 = ThemePreviewActivity.this.checkBoxView;
+                    WallpaperCheckBoxView[] access$4500 = ThemePreviewActivity.this.checkBoxView;
                     if (z2) {
                         c = 0;
                     }
-                    access$6500[c].setVisibility(4);
+                    access$4500[c].setVisibility(4);
                 } else if (i12 == 1) {
                     ThemePreviewActivity.this.patternLayout[i11].setAlpha(0.0f);
                 }

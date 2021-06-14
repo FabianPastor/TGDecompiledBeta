@@ -83,9 +83,9 @@ public class ActionBarPopupWindow extends PopupWindow {
         /* access modifiers changed from: private */
         public boolean fitItems;
         /* access modifiers changed from: private */
-        public int gapEndY;
+        public int gapEndY = Integer.MIN_VALUE;
         /* access modifiers changed from: private */
-        public int gapStartY;
+        public int gapStartY = Integer.MIN_VALUE;
         /* access modifiers changed from: private */
         public ArrayList<AnimatorSet> itemAnimators;
         /* access modifiers changed from: private */

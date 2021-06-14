@@ -56,6 +56,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     /* access modifiers changed from: private */
     public boolean hasActiveVideo;
     /* access modifiers changed from: private */
+    public int imagesLayerNum;
+    /* access modifiers changed from: private */
     public ArrayList<ImageLocation> imagesLocations = new ArrayList<>();
     /* access modifiers changed from: private */
     public ArrayList<Integer> imagesLocationsSizes = new ArrayList<>();
@@ -197,6 +199,10 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.reloadDialogPhotos);
+    }
+
+    public void setImagesLayerNum(int i) {
+        this.imagesLayerNum = i;
     }
 
     public ProfileGalleryView(Context context, long j, ActionBar actionBar, RecyclerListView recyclerListView, ProfileActivity.AvatarImageView avatarImageView, int i, Callback callback2) {
@@ -1639,6 +1645,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             super(context);
             this.position = i;
             this.placeholderPaint = paint;
+            setLayerNum(ProfileGalleryView.this.imagesLayerNum);
         }
 
         /* access modifiers changed from: protected */

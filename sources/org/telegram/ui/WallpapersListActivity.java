@@ -2158,23 +2158,23 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 int r0 = r13.getItemViewType()
                 r1 = 0
                 r2 = 1
-                if (r0 == 0) goto L_0x0206
+                if (r0 == 0) goto L_0x021b
                 r3 = 2
                 if (r0 == r3) goto L_0x002a
                 r1 = 3
                 if (r0 == r1) goto L_0x0010
-                goto L_0x024e
+                goto L_0x0263
             L_0x0010:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.TextInfoPrivacyCell r13 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r13
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.resetInfoRow
-                if (r14 != r0) goto L_0x024e
+                if (r14 != r0) goto L_0x0263
                 r14 = 2131627229(0x7f0e0cdd, float:1.8881717E38)
                 java.lang.String r0 = "ResetChatBackgroundsInfo"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14)
-                goto L_0x024e
+                goto L_0x0263
             L_0x002a:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.WallpaperCell r13 = (org.telegram.ui.Cells.WallpaperCell) r13
@@ -2209,7 +2209,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             L_0x0060:
                 org.telegram.ui.WallpapersListActivity r3 = org.telegram.ui.WallpapersListActivity.this
                 int r3 = r3.columnsCount
-                if (r0 >= r3) goto L_0x024e
+                if (r0 >= r3) goto L_0x0263
                 int r3 = r14 + r0
                 org.telegram.ui.WallpapersListActivity r4 = org.telegram.ui.WallpapersListActivity.this
                 java.util.ArrayList r4 = r4.wallPapers
@@ -2289,86 +2289,94 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 r5 = r3
             L_0x0118:
                 long r7 = r3.id
-                goto L_0x01c3
+                goto L_0x01d8
             L_0x011c:
                 boolean r3 = r6 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
-                if (r3 == 0) goto L_0x01ad
+                if (r3 == 0) goto L_0x01c2
                 r3 = r6
                 org.telegram.ui.WallpapersListActivity$ColorWallpaper r3 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r3
                 java.lang.String r4 = r3.slug
                 java.lang.String r9 = "d"
                 boolean r4 = r9.equals(r4)
-                if (r4 == 0) goto L_0x013c
+                if (r4 == 0) goto L_0x013d
                 org.telegram.ui.WallpapersListActivity r4 = org.telegram.ui.WallpapersListActivity.this
                 java.lang.String r4 = r4.selectedBackgroundSlug
                 java.lang.String r9 = r3.slug
                 boolean r4 = r4.equals(r9)
-                if (r4 == 0) goto L_0x013c
-                goto L_0x01a4
-            L_0x013c:
+                if (r4 == 0) goto L_0x013d
+                goto L_0x01b9
+            L_0x013d:
                 int r4 = r3.color
                 org.telegram.ui.WallpapersListActivity r9 = org.telegram.ui.WallpapersListActivity.this
                 int r9 = r9.selectedColor
-                if (r4 != r9) goto L_0x01a5
+                if (r4 != r9) goto L_0x01ba
                 int r4 = r3.gradientColor1
                 org.telegram.ui.WallpapersListActivity r9 = org.telegram.ui.WallpapersListActivity.this
                 int r9 = r9.selectedGradientColor1
-                if (r4 != r9) goto L_0x01a5
+                if (r4 != r9) goto L_0x01ba
                 int r4 = r3.gradientColor2
                 org.telegram.ui.WallpapersListActivity r9 = org.telegram.ui.WallpapersListActivity.this
                 int r9 = r9.selectedGradientColor2
-                if (r4 != r9) goto L_0x01a5
+                if (r4 != r9) goto L_0x01ba
                 int r4 = r3.gradientColor3
                 org.telegram.ui.WallpapersListActivity r9 = org.telegram.ui.WallpapersListActivity.this
                 int r9 = r9.selectedGradientColor3
-                if (r4 != r9) goto L_0x01a5
+                if (r4 != r9) goto L_0x01ba
                 org.telegram.ui.WallpapersListActivity r4 = org.telegram.ui.WallpapersListActivity.this
                 int r4 = r4.selectedGradientColor1
-                if (r4 == 0) goto L_0x0177
+                if (r4 == 0) goto L_0x0178
                 int r4 = r3.gradientRotation
                 org.telegram.ui.WallpapersListActivity r9 = org.telegram.ui.WallpapersListActivity.this
                 int r9 = r9.selectedGradientRotation
-                if (r4 == r9) goto L_0x0177
-                goto L_0x01a5
-            L_0x0177:
+                if (r4 == r9) goto L_0x0178
+                goto L_0x01ba
+            L_0x0178:
                 org.telegram.ui.WallpapersListActivity r4 = org.telegram.ui.WallpapersListActivity.this
                 java.lang.String r4 = r4.selectedBackgroundSlug
                 java.lang.String r9 = "c"
                 boolean r4 = r9.equals(r4)
-                if (r4 == 0) goto L_0x0189
+                if (r4 == 0) goto L_0x018a
                 java.lang.String r4 = r3.slug
-                if (r4 != 0) goto L_0x01a5
-            L_0x0189:
+                if (r4 != 0) goto L_0x01ba
+            L_0x018a:
                 org.telegram.ui.WallpapersListActivity r4 = org.telegram.ui.WallpapersListActivity.this
                 java.lang.String r4 = r4.selectedBackgroundSlug
                 boolean r4 = r9.equals(r4)
-                if (r4 != 0) goto L_0x01a4
+                if (r4 != 0) goto L_0x01b9
                 org.telegram.ui.WallpapersListActivity r4 = org.telegram.ui.WallpapersListActivity.this
                 java.lang.String r4 = r4.selectedBackgroundSlug
                 java.lang.String r9 = r3.slug
                 boolean r4 = android.text.TextUtils.equals(r4, r9)
-                if (r4 != 0) goto L_0x01a4
-                goto L_0x01a5
-            L_0x01a4:
+                if (r4 == 0) goto L_0x01ba
+                float r4 = r3.intensity
+                org.telegram.ui.WallpapersListActivity r9 = org.telegram.ui.WallpapersListActivity.this
+                float r9 = r9.selectedIntensity
+                float r4 = r4 - r9
+                float r4 = java.lang.Math.abs(r4)
+                r9 = 1008981770(0x3CLASSNAMEd70a, float:0.01)
+                int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
+                if (r4 <= 0) goto L_0x01b9
+                goto L_0x01ba
+            L_0x01b9:
                 r5 = r6
-            L_0x01a5:
+            L_0x01ba:
                 org.telegram.tgnet.TLRPC$WallPaper r3 = r3.parentWallpaper
-                if (r3 == 0) goto L_0x01c3
+                if (r3 == 0) goto L_0x01d8
                 long r3 = r3.id
                 r7 = r3
-                goto L_0x01c3
-            L_0x01ad:
+                goto L_0x01d8
+            L_0x01c2:
                 boolean r3 = r6 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper
-                if (r3 == 0) goto L_0x01c3
+                if (r3 == 0) goto L_0x01d8
                 r3 = r6
                 org.telegram.ui.WallpapersListActivity$FileWallpaper r3 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r3
                 org.telegram.ui.WallpapersListActivity r4 = org.telegram.ui.WallpapersListActivity.this
                 java.lang.String r4 = r4.selectedBackgroundSlug
                 java.lang.String r3 = r3.slug
                 boolean r3 = r4.equals(r3)
-                if (r3 == 0) goto L_0x01c3
+                if (r3 == 0) goto L_0x01d8
                 r5 = r6
-            L_0x01c3:
+            L_0x01d8:
                 r10 = r7
                 r7 = r5
                 org.telegram.ui.WallpapersListActivity r3 = org.telegram.ui.WallpapersListActivity.this
@@ -2381,60 +2389,60 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 org.telegram.ui.WallpapersListActivity r3 = org.telegram.ui.WallpapersListActivity.this
                 org.telegram.ui.ActionBar.ActionBar r3 = r3.actionBar
                 boolean r3 = r3.isActionModeShowed()
-                if (r3 == 0) goto L_0x01f8
+                if (r3 == 0) goto L_0x020d
                 org.telegram.ui.WallpapersListActivity r3 = org.telegram.ui.WallpapersListActivity.this
                 android.util.LongSparseArray r3 = r3.selectedWallPapers
                 int r3 = r3.indexOfKey(r10)
-                if (r3 < 0) goto L_0x01ec
+                if (r3 < 0) goto L_0x0201
                 r3 = 1
-                goto L_0x01ed
-            L_0x01ec:
+                goto L_0x0202
+            L_0x0201:
                 r3 = 0
-            L_0x01ed:
+            L_0x0202:
                 org.telegram.ui.WallpapersListActivity r4 = org.telegram.ui.WallpapersListActivity.this
                 boolean r4 = r4.scrolling
                 r4 = r4 ^ r2
                 r13.setChecked(r0, r3, r4)
-                goto L_0x0202
-            L_0x01f8:
+                goto L_0x0217
+            L_0x020d:
                 org.telegram.ui.WallpapersListActivity r3 = org.telegram.ui.WallpapersListActivity.this
                 boolean r3 = r3.scrolling
                 r3 = r3 ^ r2
                 r13.setChecked(r0, r1, r3)
-            L_0x0202:
+            L_0x0217:
                 int r0 = r0 + 1
                 goto L_0x0060
-            L_0x0206:
+            L_0x021b:
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.Cells.TextCell r13 = (org.telegram.ui.Cells.TextCell) r13
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.uploadImageRow
-                if (r14 != r0) goto L_0x0222
+                if (r14 != r0) goto L_0x0237
                 r14 = 2131627364(0x7f0e0d64, float:1.888199E38)
                 java.lang.String r0 = "SelectFromGallery"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r0 = 2131165975(0x7var_, float:1.7946182E38)
                 r13.setTextAndIcon((java.lang.String) r14, (int) r0, (boolean) r2)
-                goto L_0x024e
-            L_0x0222:
+                goto L_0x0263
+            L_0x0237:
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.setColorRow
-                if (r14 != r0) goto L_0x023a
+                if (r14 != r0) goto L_0x024f
                 r14 = 2131627429(0x7f0e0da5, float:1.8882122E38)
                 java.lang.String r0 = "SetColor"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r0 = 2131165666(0x7var_e2, float:1.7945556E38)
                 r13.setTextAndIcon((java.lang.String) r14, (int) r0, (boolean) r2)
-                goto L_0x024e
-            L_0x023a:
+                goto L_0x0263
+            L_0x024f:
                 org.telegram.ui.WallpapersListActivity r0 = org.telegram.ui.WallpapersListActivity.this
                 int r0 = r0.resetRow
-                if (r14 != r0) goto L_0x024e
+                if (r14 != r0) goto L_0x0263
                 r14 = 2131627226(0x7f0e0cda, float:1.888171E38)
                 java.lang.String r0 = "ResetChatBackgrounds"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
                 r13.setText(r14, r1)
-            L_0x024e:
+            L_0x0263:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.WallpapersListActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");
