@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utilities {
+    public static volatile DispatchQueue cacheClearQueue = new DispatchQueue("cacheClearQueue");
     public static volatile DispatchQueue globalQueue = new DispatchQueue("globalQueue");
     protected static final char[] hexArray = "0123456789ABCDEF".toCharArray();
     public static Pattern pattern = Pattern.compile("[\\-0-9]+");

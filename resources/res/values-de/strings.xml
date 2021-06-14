@@ -579,7 +579,6 @@
     <string name="BackgroundBlurred">Unscharf</string>
     <string name="BackgroundBrightness">Helligkeit</string>
     <string name="BackgroundChoosePattern">Muster wählen</string>
-    <string name="BackgroundColor">Farbe</string>
     <string name="BackgroundColorPreviewLine1">Für mehr Farben, nach links oder rechts wischen.</string>
     <string name="BackgroundColorPreviewLine2">Lachs ist ein Fisch, keine Farbe.</string>
     <string name="BackgroundColorSinglePreviewLine1">\'Festlegen\' antippen, um den Hintergrund anzuwenden.</string>

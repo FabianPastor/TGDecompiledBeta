@@ -54,7 +54,7 @@ public class NativeInstance {
 
     public static native void destroyVideoCapturer(long j);
 
-    private static native long makeGroupNativeInstance(NativeInstance nativeInstance, String str, boolean z, long j, boolean z2);
+    private static native long makeGroupNativeInstance(NativeInstance nativeInstance, String str, boolean z, long j, boolean z2, boolean z3);
 
     private static native long makeNativeInstance(String str, NativeInstance nativeInstance, Instance.Config config, String str2, Instance.Endpoint[] endpointArr, Instance.Proxy proxy, int i, Instance.EncryptionKey encryptionKey, VideoSink videoSink, long j, float f);
 
@@ -114,6 +114,8 @@ public class NativeInstance {
 
     public native void setNetworkType(int i);
 
+    public native void setNoiseSuppressionEnabled(boolean z);
+
     public native void setVideoEndpointQuality(String str, int i);
 
     public native void setVideoState(int i);
@@ -146,7 +148,7 @@ public class NativeInstance {
         return nativeInstance;
     }
 
-    public static NativeInstance makeGroup(String str, long j, boolean z, PayloadCallback payloadCallback2, AudioLevelsCallback audioLevelsCallback2, VideoSourcesCallback videoSourcesCallback, RequestBroadcastPartCallback requestBroadcastPartCallback2, RequestBroadcastPartCallback requestBroadcastPartCallback3) {
+    public static NativeInstance makeGroup(String str, long j, boolean z, boolean z2, PayloadCallback payloadCallback2, AudioLevelsCallback audioLevelsCallback2, VideoSourcesCallback videoSourcesCallback, RequestBroadcastPartCallback requestBroadcastPartCallback2, RequestBroadcastPartCallback requestBroadcastPartCallback3) {
         ContextUtils.initialize(ApplicationLoader.applicationContext);
         NativeInstance nativeInstance = new NativeInstance();
         nativeInstance.payloadCallback = payloadCallback2;
@@ -155,7 +157,7 @@ public class NativeInstance {
         nativeInstance.requestBroadcastPartCallback = requestBroadcastPartCallback2;
         nativeInstance.cancelRequestBroadcastPartCallback = requestBroadcastPartCallback3;
         nativeInstance.isGroup = true;
-        nativeInstance.nativePtr = makeGroupNativeInstance(nativeInstance, str, SharedConfig.disableVoiceAudioEffects, j, z);
+        nativeInstance.nativePtr = makeGroupNativeInstance(nativeInstance, str, SharedConfig.disableVoiceAudioEffects, j, z, z2);
         return nativeInstance;
     }
 

@@ -516,7 +516,7 @@ public class EmbedBottomSheet extends BottomSheet {
             android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r12)
             android.widget.ImageView r2 = r0.pipButton
-            r12 = 2131166113(0x7var_a1, float:1.7946462E38)
+            r12 = 2131166115(0x7var_a3, float:1.7946466E38)
             r2.setImageResource(r12)
             android.widget.ImageView r2 = r0.pipButton
             r12 = 2131624010(0x7f0e004a, float:1.8875188E38)
@@ -559,7 +559,7 @@ public class EmbedBottomSheet extends BottomSheet {
             r12.<init>(r1)
             android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
             r12.setScaleType(r13)
-            r13 = 2131166105(0x7var_, float:1.7946446E38)
+            r13 = 2131166107(0x7var_b, float:1.794645E38)
             r12.setImageResource(r13)
             r13 = 2131625013(0x7f0e0435, float:1.8877222E38)
             java.lang.String r14 = "CopyLink"
@@ -636,7 +636,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r2.setPadding(r1, r6, r4, r6)
-            r1 = 2131626553(0x7f0e0a39, float:1.8880345E38)
+            r1 = 2131626554(0x7f0e0a3a, float:1.8880347E38)
             java.lang.String r4 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             java.lang.String r1 = r1.toUpperCase()

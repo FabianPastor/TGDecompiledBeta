@@ -579,7 +579,6 @@
     <string name="BackgroundBlurred">흐림</string>
     <string name="BackgroundBrightness">밝기</string>
     <string name="BackgroundChoosePattern">패턴 선택</string>
-    <string name="BackgroundColor">색</string>
     <string name="BackgroundColorPreviewLine1">좌우로 쓸어넘겨 다양한 색을 입혀 보세요.</string>
     <string name="BackgroundColorPreviewLine2">Salmon is a fish, not a color.</string>
     <string name="BackgroundColorSinglePreviewLine1">\'설정\'을 눌러 배경을 적용하세요.</string>

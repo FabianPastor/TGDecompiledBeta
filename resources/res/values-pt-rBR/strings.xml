@@ -579,7 +579,6 @@
     <string name="BackgroundBlurred">Desfoque</string>
     <string name="BackgroundBrightness">Brilho</string>
     <string name="BackgroundChoosePattern">Escolha a textura</string>
-    <string name="BackgroundColor">Cor</string>
     <string name="BackgroundColorPreviewLine1">Deslize para os lados para ver mais cores</string>
     <string name="BackgroundColorPreviewLine2">Salmão é um peixe, não uma cor.</string>
     <string name="BackgroundColorSinglePreviewLine1">Toque em \'Definir\' para aplicar a imagem.</string>

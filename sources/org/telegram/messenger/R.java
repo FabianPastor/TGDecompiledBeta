@@ -758,6 +758,8 @@ public final class R {
         public static final int msg_msgbubble2 = NUM;
         public static final int msg_msgbubble3 = NUM;
         public static final int msg_mute = NUM;
+        public static final int msg_noise_off = NUM;
+        public static final int msg_noise_on = NUM;
         public static final int msg_openin = NUM;
         public static final int msg_openprofile = NUM;
         public static final int msg_panel_clear = NUM;
@@ -2292,7 +2294,6 @@ public final class R {
         public static final int BackgroundBlurred = NUM;
         public static final int BackgroundBrightness = NUM;
         public static final int BackgroundChoosePattern = NUM;
-        public static final int BackgroundColor = NUM;
         public static final int BackgroundColorPreviewLine1 = NUM;
         public static final int BackgroundColorPreviewLine2 = NUM;
         public static final int BackgroundColorSinglePreviewLine1 = NUM;
@@ -2868,6 +2869,7 @@ public final class R {
         public static final int DebugMenuReloadContacts = NUM;
         public static final int DebugMenuResetContacts = NUM;
         public static final int DebugMenuResetDialogs = NUM;
+        public static final int DebugSendLastLogs = NUM;
         public static final int DebugSendLogs = NUM;
         public static final int December = NUM;
         public static final int Decline = NUM;
@@ -5960,6 +5962,7 @@ public final class R {
         public static final int VoipNeedCameraPermission = NUM;
         public static final int VoipNeedMicCameraPermission = NUM;
         public static final int VoipNeedMicPermission = NUM;
+        public static final int VoipNoiseCancellation = NUM;
         public static final int VoipNotificationSettings = NUM;
         public static final int VoipOffline = NUM;
         public static final int VoipOfflineAirplane = NUM;

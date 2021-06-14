@@ -587,7 +587,6 @@
     <string name="BackgroundBlurred">Blurred</string>
     <string name="BackgroundBrightness">Brightness</string>
     <string name="BackgroundChoosePattern">Choose pattern</string>
-    <string name="BackgroundColor">Color</string>
     <string name="BackgroundColorPreviewLine1">Swipe left or right to see more colors.</string>
     <string name="BackgroundColorPreviewLine2">Salmon is a fish, not a color.</string>
     <string name="BackgroundColorSinglePreviewLine1">Press \'Set\' to apply the background.</string>
@@ -1163,6 +1162,7 @@
     <string name="DebugMenuReloadContacts">Reload Contacts</string>
     <string name="DebugMenuResetContacts">Reset Imported Contacts</string>
     <string name="DebugMenuResetDialogs">Reset Dialogs</string>
+    <string name="DebugSendLastLogs">Send Last Logs</string>
     <string name="DebugSendLogs">Send Logs</string>
     <string name="December">December</string>
     <string name="Decline">Decline</string>
@@ -4255,6 +4255,7 @@
     <string name="VoipNeedCameraPermission">Telegram needs access to your camera so that you can make video calls.</string>
     <string name="VoipNeedMicCameraPermission">Telegram needs access to your microphone and camera so that you can make video calls.</string>
     <string name="VoipNeedMicPermission">Telegram needs access to your microphone so that you can make calls.</string>
+    <string name="VoipNoiseCancellation">Noise сancellation</string>
     <string name="VoipNotificationSettings">Voice calls</string>
     <string name="VoipOffline">You\'re currently offline. Please connect to the Internet in order to make calls.</string>
     <string name="VoipOfflineAirplane">You currently have airplane mode enabled. Please turn it off or connect to Wi-Fi in order to make calls.</string>

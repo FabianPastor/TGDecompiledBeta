@@ -84,27 +84,27 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r20 = r2
             android.content.res.Resources r2 = r19.getResources()
             r19 = r3
-            r3 = 2131165960(0x7var_, float:1.7946152E38)
+            r3 = 2131165962(0x7var_a, float:1.7946156E38)
             android.graphics.drawable.Drawable r2 = r2.getDrawable(r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             org.telegram.ui.ActionBar.Theme.setDrawableColor(r2, r7)
             android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.content.res.Resources r3 = r3.getResources()
             r21 = r2
-            r2 = 2131165962(0x7var_a, float:1.7946156E38)
+            r2 = 2131165964(0x7var_c, float:1.794616E38)
             android.graphics.drawable.Drawable r2 = r3.getDrawable(r2)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             org.telegram.ui.ActionBar.Theme.setDrawableColor(r2, r7)
             android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.content.res.Resources r3 = r3.getResources()
-            r7 = 2131165965(0x7var_d, float:1.7946162E38)
+            r7 = 2131165967(0x7var_f, float:1.7946166E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r7)
             android.graphics.drawable.Drawable r7 = r3.mutate()
             org.telegram.ui.ActionBar.Theme.setDrawableColor(r7, r8)
             android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext
             android.content.res.Resources r3 = r3.getResources()
             r22 = r7
-            r7 = 2131165963(0x7var_b, float:1.7946158E38)
+            r7 = 2131165965(0x7var_d, float:1.7946162E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r7)
             android.graphics.drawable.Drawable r7 = r3.mutate()
             org.telegram.ui.ActionBar.Theme.setDrawableColor(r7, r8)

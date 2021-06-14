@@ -777,6 +777,8 @@
     <public type="drawable" name="msg_msgbubble2" id="NUM" />
     <public type="drawable" name="msg_msgbubble3" id="NUM" />
     <public type="drawable" name="msg_mute" id="NUM" />
+    <public type="drawable" name="msg_noise_off" id="NUM" />
+    <public type="drawable" name="msg_noise_on" id="NUM" />
     <public type="drawable" name="msg_openin" id="NUM" />
     <public type="drawable" name="msg_openprofile" id="NUM" />
     <public type="drawable" name="msg_panel_clear" id="NUM" />
@@ -2153,7 +2155,6 @@
     <public type="string" name="BackgroundBlurred" id="NUM" />
     <public type="string" name="BackgroundBrightness" id="NUM" />
     <public type="string" name="BackgroundChoosePattern" id="NUM" />
-    <public type="string" name="BackgroundColor" id="NUM" />
     <public type="string" name="BackgroundColorPreviewLine1" id="NUM" />
     <public type="string" name="BackgroundColorPreviewLine2" id="NUM" />
     <public type="string" name="BackgroundColorSinglePreviewLine1" id="NUM" />
@@ -2729,6 +2730,7 @@
     <public type="string" name="DebugMenuReloadContacts" id="NUM" />
     <public type="string" name="DebugMenuResetContacts" id="NUM" />
     <public type="string" name="DebugMenuResetDialogs" id="NUM" />
+    <public type="string" name="DebugSendLastLogs" id="NUM" />
     <public type="string" name="DebugSendLogs" id="NUM" />
     <public type="string" name="December" id="NUM" />
     <public type="string" name="Decline" id="NUM" />
@@ -5821,6 +5823,7 @@
     <public type="string" name="VoipNeedCameraPermission" id="NUM" />
     <public type="string" name="VoipNeedMicCameraPermission" id="NUM" />
     <public type="string" name="VoipNeedMicPermission" id="NUM" />
+    <public type="string" name="VoipNoiseCancellation" id="NUM" />
     <public type="string" name="VoipNotificationSettings" id="NUM" />
     <public type="string" name="VoipOffline" id="NUM" />
     <public type="string" name="VoipOfflineAirplane" id="NUM" />

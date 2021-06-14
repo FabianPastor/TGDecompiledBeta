@@ -579,7 +579,6 @@
     <string name="BackgroundBlurred">تأثير ضبابي</string>
     <string name="BackgroundBrightness">السطوع</string>
     <string name="BackgroundChoosePattern">اختر نقشًا</string>
-    <string name="BackgroundColor">لون</string>
     <string name="BackgroundColorPreviewLine1">اسحب لليمين أو لليسار لرؤية المزيد من الألوان.</string>
     <string name="BackgroundColorPreviewLine2">استخدم النقش لإضفاء لمسة جمالية.</string>
     <string name="BackgroundColorSinglePreviewLine1">اضغط على «تعيين» لتطبيق الخلفية.</string>

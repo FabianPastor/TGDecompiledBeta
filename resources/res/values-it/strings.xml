@@ -579,7 +579,6 @@
     <string name="BackgroundBlurred">Sfocato</string>
     <string name="BackgroundBrightness">Luminosità</string>
     <string name="BackgroundChoosePattern">Scegli motivo</string>
-    <string name="BackgroundColor">Colore</string>
     <string name="BackgroundColorPreviewLine1">Scorri a sinistra o destra per vedere altri colori.</string>
     <string name="BackgroundColorPreviewLine2">Il salmone è un pesce, non un colore.</string>
     <string name="BackgroundColorSinglePreviewLine1">Premi \'Imposta\' per applicare lo sfondo.</string>

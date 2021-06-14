@@ -579,7 +579,6 @@
     <string name="BackgroundBlurred">Difuminado</string>
     <string name="BackgroundBrightness">Brillo</string>
     <string name="BackgroundChoosePattern">Elige un patrón</string>
-    <string name="BackgroundColor">Color</string>
     <string name="BackgroundColorPreviewLine1">Desliza a la izquierda o derecha para ver más colores.</string>
     <string name="BackgroundColorPreviewLine2">El salmón es un pez, no un color.</string>
     <string name="BackgroundColorSinglePreviewLine1">Pulsa Establecer para aplicar el fondo.</string>
