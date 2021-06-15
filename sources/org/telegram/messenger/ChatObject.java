@@ -197,16 +197,22 @@ public class ChatObject {
             sortParticipants();
             this.nextLoadOffset = tLRPC$TL_phone_groupCall.participants_next_offset;
             loadMembers(true);
-            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant2 = new TLRPC$TL_groupCallParticipant();
-            TLRPC$TL_peerChannel tLRPC$TL_peerChannel = new TLRPC$TL_peerChannel();
-            tLRPC$TL_groupCallParticipant2.peer = tLRPC$TL_peerChannel;
-            tLRPC$TL_peerChannel.channel_id = i;
-            tLRPC$TL_groupCallParticipant2.muted = true;
-            TLRPC$TL_groupCallParticipantVideo tLRPC$TL_groupCallParticipantVideo = new TLRPC$TL_groupCallParticipantVideo();
-            tLRPC$TL_groupCallParticipant2.video = tLRPC$TL_groupCallParticipantVideo;
-            tLRPC$TL_groupCallParticipantVideo.paused = true;
-            tLRPC$TL_groupCallParticipantVideo.endpoint = "";
-            this.videoNotAvailableParticipant = new VideoParticipant(tLRPC$TL_groupCallParticipant2, false, false);
+            createNoVideoParticipant();
+        }
+
+        public void createNoVideoParticipant() {
+            if (this.videoNotAvailableParticipant == null) {
+                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = new TLRPC$TL_groupCallParticipant();
+                TLRPC$TL_peerChannel tLRPC$TL_peerChannel = new TLRPC$TL_peerChannel();
+                tLRPC$TL_groupCallParticipant.peer = tLRPC$TL_peerChannel;
+                tLRPC$TL_peerChannel.channel_id = this.chatId;
+                tLRPC$TL_groupCallParticipant.muted = true;
+                TLRPC$TL_groupCallParticipantVideo tLRPC$TL_groupCallParticipantVideo = new TLRPC$TL_groupCallParticipantVideo();
+                tLRPC$TL_groupCallParticipant.video = tLRPC$TL_groupCallParticipantVideo;
+                tLRPC$TL_groupCallParticipantVideo.paused = true;
+                tLRPC$TL_groupCallParticipantVideo.endpoint = "";
+                this.videoNotAvailableParticipant = new VideoParticipant(tLRPC$TL_groupCallParticipant, false, false);
+            }
         }
 
         public void addSelfDummyParticipant(boolean z) {
@@ -1195,9 +1201,9 @@ public class ChatObject {
                 this.nextLoadOffset = null;
                 loadMembers(true);
             }
-            TLRPC$GroupCall tLRPC$GroupCall = tLRPC$TL_updateGroupCall.call;
-            this.call = tLRPC$GroupCall;
-            this.recording = tLRPC$GroupCall.record_start_date != 0;
+            this.call = tLRPC$TL_updateGroupCall.call;
+            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.participants.get(getSelfId());
+            this.recording = this.call.record_start_date != 0;
             this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.groupCallUpdated, Integer.valueOf(this.chatId), Long.valueOf(this.call.id), Boolean.FALSE);
         }
 

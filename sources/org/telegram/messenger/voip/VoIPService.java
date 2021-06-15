@@ -2390,10 +2390,12 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
                 TLRPC$GroupCall tLRPC$GroupCall = call2.call;
                 tLRPC$GroupCall.participants_count = 0;
                 tLRPC$GroupCall.version = 1;
+                tLRPC$GroupCall.can_start_video = true;
                 tLRPC$GroupCall.can_change_join_muted = true;
                 call2.chatId = this.chat.id;
                 call2.currentAccount = AccountInstance.getInstance(this.currentAccount);
                 this.groupCall.setSelfPeer(this.groupCallPeer);
+                this.groupCall.createNoVideoParticipant();
                 dispatchStateChanged(6);
                 TLRPC$TL_phone_createGroupCall tLRPC$TL_phone_createGroupCall = new TLRPC$TL_phone_createGroupCall();
                 tLRPC$TL_phone_createGroupCall.peer = MessagesController.getInputPeer(this.chat);

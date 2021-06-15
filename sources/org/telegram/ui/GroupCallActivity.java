@@ -4379,6 +4379,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         TLRPC$GroupCall tLRPC$GroupCall = call3.call;
         tLRPC$GroupCall.participants_count = 0;
         tLRPC$GroupCall.version = 1;
+        tLRPC$GroupCall.can_start_video = true;
         tLRPC$GroupCall.can_change_join_muted = true;
         call3.chatId = tLRPC$Chat.id;
         tLRPC$GroupCall.schedule_date = this.scheduleStartAt;
@@ -4390,7 +4391,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         TLRPC$GroupCall tLRPC$GroupCall3 = tLRPC$TL_updateGroupCall.call;
         tLRPC$GroupCall2.access_hash = tLRPC$GroupCall3.access_hash;
         tLRPC$GroupCall2.id = tLRPC$GroupCall3.id;
-        this.fullscreenAdapter.setGroupCall(call4);
+        call4.createNoVideoParticipant();
+        this.fullscreenAdapter.setGroupCall(this.call);
         this.renderersContainer.setGroupCall(this.call);
         this.tabletGridAdapter.setGroupCall(this.call);
         MessagesController messagesController = this.accountInstance.getMessagesController();
