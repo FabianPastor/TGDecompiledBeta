@@ -5863,6 +5863,7 @@
     <public type="string" name="VoipUseLessData" id="NUM" />
     <public type="string" name="VoipUserCameraIsOff" id="NUM" />
     <public type="string" name="VoipUserMicrophoneIsOff" id="NUM" />
+    <public type="string" name="VoipVideoNotAvailable" id="NUM" />
     <public type="string" name="VoipVideoOnPause" id="NUM" />
     <public type="string" name="VoipVideoScreenSharing" id="NUM" />
     <public type="string" name="VoipVideoScreenSharingTwoLines" id="NUM" />

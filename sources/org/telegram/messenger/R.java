@@ -6002,6 +6002,7 @@ public final class R {
         public static final int VoipUseLessData = NUM;
         public static final int VoipUserCameraIsOff = NUM;
         public static final int VoipUserMicrophoneIsOff = NUM;
+        public static final int VoipVideoNotAvailable = NUM;
         public static final int VoipVideoOnPause = NUM;
         public static final int VoipVideoScreenSharing = NUM;
         public static final int VoipVideoScreenSharingTwoLines = NUM;

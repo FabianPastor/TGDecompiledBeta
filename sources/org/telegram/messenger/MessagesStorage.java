@@ -4996,7 +4996,7 @@ public class MessagesStorage extends BaseController {
         SQLitePreparedStatement sQLitePreparedStatement;
         if (i == 1) {
             try {
-                this.database.executeFast("DELETE FROM wallpapers2 WHERE num >= 0").stepThis().dispose();
+                this.database.executeFast("DELETE FROM wallpapers2 WHERE num >= -1").stepThis().dispose();
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
                 return;

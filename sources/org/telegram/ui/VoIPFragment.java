@@ -579,6 +579,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
         VoIPTextureView voIPTextureView2 = new VoIPTextureView(context2, true, false);
         this.currentUserTextureView = voIPTextureView2;
         voIPTextureView2.renderer.setIsCamera(true);
+        this.currentUserTextureView.renderer.setUseCameraRotation(true);
         this.currentUserCameraFloatingLayout.setOnTapListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 VoIPFragment.this.lambda$createView$5$VoIPFragment(view);
@@ -1461,7 +1462,7 @@ public class VoIPFragment implements VoIPService.StateListener, NotificationCent
             goto L_0x0283
         L_0x00f3:
             org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131628241(0x7f0e10d1, float:1.888377E38)
+            r10 = 2131628242(0x7f0e10d2, float:1.8883771E38)
             java.lang.String r11 = "VoipWaiting"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.setText(r10, r4, r2)

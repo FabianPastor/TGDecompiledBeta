@@ -1071,7 +1071,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r11 = r1.participant
             boolean r1 = r1.presentation
             org.telegram.messenger.ChatObject$Call r12 = r0.call
-            boolean r1 = org.telegram.ui.GroupCallActivity.videoIsActive(r11, r1, r12)
+            boolean r1 = org.telegram.messenger.ChatObject.Call.videoIsActive(r11, r1, r12)
             if (r1 != 0) goto L_0x00aa
         L_0x006f:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = r0.fullscreenTextureView
@@ -1533,14 +1533,14 @@ public class GroupCallRenderersContainer extends FrameLayout {
         return onTouchEvent(motionEvent);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x021b  */
+    /* JADX WARNING: Removed duplicated region for block: B:103:0x021d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r14) {
         /*
             r13 = this;
             boolean r0 = r13.inFullscreenMode
             r1 = 0
-            if (r0 == 0) goto L_0x04a3
+            if (r0 == 0) goto L_0x04a5
             boolean r0 = r13.maybeSwipeToBackGesture
             if (r0 != 0) goto L_0x0023
             boolean r0 = r13.swipeToBackGesture
@@ -1554,11 +1554,11 @@ public class GroupCallRenderersContainer extends FrameLayout {
             boolean r0 = r13.zoomStarted
             if (r0 != 0) goto L_0x0023
             int r0 = r14.getActionMasked()
-            if (r0 != 0) goto L_0x04a3
+            if (r0 != 0) goto L_0x04a5
         L_0x0023:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r0 = r13.fullscreenTextureView
             if (r0 != 0) goto L_0x0029
-            goto L_0x04a3
+            goto L_0x04a5
         L_0x0029:
             int r0 = r14.getActionMasked()
             if (r0 != 0) goto L_0x0039
@@ -1721,17 +1721,18 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r13.maybeSwipeToBackGesture = r1
         L_0x016d:
             boolean r0 = r13.tapGesture
-            if (r0 == 0) goto L_0x0226
+            if (r0 == 0) goto L_0x0228
             int r0 = r14.getActionMasked()
-            if (r0 != r3) goto L_0x0226
+            if (r0 != r3) goto L_0x0228
             long r7 = java.lang.System.currentTimeMillis()
             long r9 = r13.tapTime
             long r7 = r7 - r9
             r9 = 200(0xc8, double:9.9E-322)
             int r0 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r0 >= 0) goto L_0x0226
+            if (r0 >= 0) goto L_0x0228
+            r13.tapGesture = r1
             boolean r0 = r13.showSpeakingMembersToast
-            if (r0 == 0) goto L_0x0218
+            if (r0 == 0) goto L_0x021a
             android.graphics.RectF r0 = org.telegram.messenger.AndroidUtilities.rectTmp
             android.widget.FrameLayout r7 = r13.speakingMembersToast
             float r7 = r7.getX()
@@ -1751,19 +1752,19 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r10 = r10 + r11
             r0.set(r7, r8, r9, r10)
             org.telegram.messenger.ChatObject$Call r7 = r13.call
-            if (r7 == 0) goto L_0x0218
+            if (r7 == 0) goto L_0x021a
             float r7 = r14.getX()
             float r8 = r14.getY()
             boolean r0 = r0.contains(r7, r8)
-            if (r0 == 0) goto L_0x0218
+            if (r0 == 0) goto L_0x021a
             r0 = 0
             r7 = 0
             r8 = 0
-        L_0x01ca:
+        L_0x01cc:
             org.telegram.messenger.ChatObject$Call r9 = r13.call
             java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r9 = r9.visibleVideoParticipants
             int r9 = r9.size()
-            if (r0 >= r9) goto L_0x01fe
+            if (r0 >= r9) goto L_0x0200
             int r9 = r13.speakingToastPeerId
             org.telegram.messenger.ChatObject$Call r10 = r13.call
             java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r10 = r10.visibleVideoParticipants
@@ -1772,7 +1773,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r10 = r10.participant
             org.telegram.tgnet.TLRPC$Peer r10 = r10.peer
             int r10 = org.telegram.messenger.MessageObject.getPeerId(r10)
-            if (r9 != r10) goto L_0x01fb
+            if (r9 != r10) goto L_0x01fd
             org.telegram.ui.GroupCallActivity r7 = r13.groupCallActivity
             org.telegram.messenger.ChatObject$Call r8 = r13.call
             java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r8 = r8.visibleVideoParticipants
@@ -1781,11 +1782,11 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r7.fullscreenFor(r8)
             r7 = 1
             r8 = 1
-        L_0x01fb:
+        L_0x01fd:
             int r0 = r0 + 1
-            goto L_0x01ca
-        L_0x01fe:
-            if (r7 != 0) goto L_0x0219
+            goto L_0x01cc
+        L_0x0200:
+            if (r7 != 0) goto L_0x021b
             org.telegram.messenger.ChatObject$Call r0 = r13.call
             android.util.SparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r0 = r0.participants
             int r7 = r13.speakingToastPeerId
@@ -1796,94 +1797,94 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r8.<init>(r0, r1, r1)
             r7.fullscreenFor(r8)
             r8 = 1
-            goto L_0x0219
-        L_0x0218:
+            goto L_0x021b
+        L_0x021a:
             r8 = 0
-        L_0x0219:
-            if (r8 != 0) goto L_0x0221
+        L_0x021b:
+            if (r8 != 0) goto L_0x0223
             boolean r0 = r13.uiVisible
             r0 = r0 ^ r3
             r13.setUiVisible(r0)
-        L_0x0221:
+        L_0x0223:
             r13.swipeToBackDy = r5
             r13.invalidate()
-        L_0x0226:
+        L_0x0228:
             boolean r0 = r13.maybeSwipeToBackGesture
             r7 = 3
-            if (r0 != 0) goto L_0x022f
+            if (r0 != 0) goto L_0x0231
             boolean r0 = r13.swipeToBackGesture
-            if (r0 == 0) goto L_0x0235
-        L_0x022f:
+            if (r0 == 0) goto L_0x0237
+        L_0x0231:
             int r0 = r14.getActionMasked()
-            if (r0 == r3) goto L_0x023b
-        L_0x0235:
+            if (r0 == r3) goto L_0x023d
+        L_0x0237:
             int r0 = r14.getActionMasked()
-            if (r0 != r7) goto L_0x0264
-        L_0x023b:
+            if (r0 != r7) goto L_0x0266
+        L_0x023d:
             r13.maybeSwipeToBackGesture = r1
             boolean r0 = r13.swipeToBackGesture
-            if (r0 == 0) goto L_0x0261
+            if (r0 == 0) goto L_0x0263
             int r0 = r14.getActionMasked()
-            if (r0 != r3) goto L_0x025e
+            if (r0 != r3) goto L_0x0260
             float r0 = r13.swipeToBackDy
             float r0 = java.lang.Math.abs(r0)
             r8 = 1123024896(0x42var_, float:120.0)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
             float r8 = (float) r8
             int r0 = (r0 > r8 ? 1 : (r0 == r8 ? 0 : -1))
-            if (r0 <= 0) goto L_0x025e
+            if (r0 <= 0) goto L_0x0260
             org.telegram.ui.GroupCallActivity r0 = r13.groupCallActivity
             r0.fullscreenFor(r2)
-            goto L_0x0261
-        L_0x025e:
+            goto L_0x0263
+        L_0x0260:
             r13.animateSwipeToBack(r1)
-        L_0x0261:
+        L_0x0263:
             r13.invalidate()
-        L_0x0264:
+        L_0x0266:
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r0 = r13.fullscreenTextureView
             boolean r0 = r0.hasVideo
-            if (r0 == 0) goto L_0x0492
+            if (r0 == 0) goto L_0x0494
             boolean r0 = r13.swipeToBackGesture
-            if (r0 == 0) goto L_0x0270
-            goto L_0x0492
-        L_0x0270:
+            if (r0 == 0) goto L_0x0272
+            goto L_0x0494
+        L_0x0272:
             int r0 = r14.getActionMasked()
             r2 = 1065353216(0x3var_, float:1.0)
             r8 = 1073741824(0x40000000, float:2.0)
-            if (r0 == 0) goto L_0x037e
+            if (r0 == 0) goto L_0x0380
             int r0 = r14.getActionMasked()
             r9 = 5
-            if (r0 != r9) goto L_0x0283
-            goto L_0x037e
-        L_0x0283:
+            if (r0 != r9) goto L_0x0285
+            goto L_0x0380
+        L_0x0285:
             int r0 = r14.getActionMasked()
-            if (r0 != r6) goto L_0x0359
+            if (r0 != r6) goto L_0x035b
             boolean r0 = r13.isInPinchToZoomTouchMode
-            if (r0 == 0) goto L_0x0359
+            if (r0 == 0) goto L_0x035b
             r0 = -1
             r4 = 0
             r6 = -1
             r7 = -1
-        L_0x0291:
+        L_0x0293:
             int r9 = r14.getPointerCount()
-            if (r4 >= r9) goto L_0x02ac
+            if (r4 >= r9) goto L_0x02ae
             int r9 = r13.pointerId1
             int r10 = r14.getPointerId(r4)
-            if (r9 != r10) goto L_0x02a0
+            if (r9 != r10) goto L_0x02a2
             r6 = r4
-        L_0x02a0:
+        L_0x02a2:
             int r9 = r13.pointerId2
             int r10 = r14.getPointerId(r4)
-            if (r9 != r10) goto L_0x02a9
+            if (r9 != r10) goto L_0x02ab
             r7 = r4
-        L_0x02a9:
+        L_0x02ab:
             int r4 = r4 + 1
-            goto L_0x0291
-        L_0x02ac:
-            if (r6 == r0) goto L_0x034c
-            if (r7 != r0) goto L_0x02b2
-            goto L_0x034c
-        L_0x02b2:
+            goto L_0x0293
+        L_0x02ae:
+            if (r6 == r0) goto L_0x034e
+            if (r7 != r0) goto L_0x02b4
+            goto L_0x034e
+        L_0x02b4:
             float r0 = r14.getX(r7)
             float r4 = r14.getX(r6)
             float r0 = r0 - r4
@@ -1899,9 +1900,9 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r13.pinchScale = r0
             r4 = 1065395159(0x3var_a3d7, float:1.005)
             int r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r0 <= 0) goto L_0x0323
+            if (r0 <= 0) goto L_0x0325
             boolean r0 = r13.zoomStarted
-            if (r0 != 0) goto L_0x0323
+            if (r0 != 0) goto L_0x0325
             float r0 = r14.getX(r7)
             float r4 = r14.getX(r6)
             float r0 = r0 - r4
@@ -1932,7 +1933,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             r0.requestDisallowInterceptTouchEvent(r3)
             r13.zoomStarted = r3
             r13.isInPinchToZoomTouchMode = r3
-        L_0x0323:
+        L_0x0325:
             float r0 = r14.getX(r6)
             float r2 = r14.getX(r7)
             float r0 = r0 + r2
@@ -1953,32 +1954,32 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r14 = r14 / r2
             r13.pinchTranslationY = r14
             r13.invalidate()
-            goto L_0x0484
-        L_0x034c:
+            goto L_0x0486
+        L_0x034e:
             android.view.ViewParent r14 = r13.getParent()
             r14.requestDisallowInterceptTouchEvent(r1)
             r13.finishZoom()
             boolean r14 = r13.maybeSwipeToBackGesture
             return r14
-        L_0x0359:
+        L_0x035b:
             int r0 = r14.getActionMasked()
-            if (r0 == r3) goto L_0x0372
+            if (r0 == r3) goto L_0x0374
             int r0 = r14.getActionMasked()
             r2 = 6
-            if (r0 != r2) goto L_0x036c
+            if (r0 != r2) goto L_0x036e
             boolean r0 = r13.checkPointerIds(r14)
-            if (r0 != 0) goto L_0x0372
-        L_0x036c:
+            if (r0 != 0) goto L_0x0374
+        L_0x036e:
             int r14 = r14.getActionMasked()
-            if (r14 != r7) goto L_0x0484
-        L_0x0372:
+            if (r14 != r7) goto L_0x0486
+        L_0x0374:
             android.view.ViewParent r14 = r13.getParent()
             r14.requestDisallowInterceptTouchEvent(r1)
             r13.finishZoom()
-            goto L_0x0484
-        L_0x037e:
+            goto L_0x0486
+        L_0x0380:
             int r0 = r14.getActionMasked()
-            if (r0 != 0) goto L_0x0433
+            if (r0 != 0) goto L_0x0435
             org.telegram.ui.Components.voip.GroupCallMiniTextureView r0 = r13.fullscreenTextureView
             org.telegram.ui.Components.voip.VoIPTextureView r0 = r0.textureView
             org.webrtc.TextureViewRenderer r0 = r0.renderer
@@ -2016,7 +2017,7 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r9 = r9 / r8
             r5.inset(r7, r9)
             boolean r0 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-            if (r0 != 0) goto L_0x03fc
+            if (r0 != 0) goto L_0x03fe
             float r0 = r5.top
             int r7 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
             float r7 = (float) r7
@@ -2030,8 +2031,8 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r4 = (float) r7
             float r0 = java.lang.Math.min(r0, r4)
             r5.bottom = r0
-            goto L_0x041d
-        L_0x03fc:
+            goto L_0x041f
+        L_0x03fe:
             float r0 = r5.top
             int r7 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
             float r7 = (float) r7
@@ -2045,20 +2046,20 @@ public class GroupCallRenderersContainer extends FrameLayout {
             float r4 = (float) r7
             float r0 = java.lang.Math.min(r0, r4)
             r5.right = r0
-        L_0x041d:
+        L_0x041f:
             float r0 = r14.getX()
             float r4 = r14.getY()
             boolean r0 = r5.contains(r0, r4)
             r13.canZoomGesture = r0
-            if (r0 != 0) goto L_0x0433
+            if (r0 != 0) goto L_0x0435
             r13.finishZoom()
             boolean r14 = r13.maybeSwipeToBackGesture
             return r14
-        L_0x0433:
+        L_0x0435:
             boolean r0 = r13.isInPinchToZoomTouchMode
-            if (r0 != 0) goto L_0x0484
+            if (r0 != 0) goto L_0x0486
             int r0 = r14.getPointerCount()
-            if (r0 != r6) goto L_0x0484
+            if (r0 != r6) goto L_0x0486
             float r0 = r14.getX(r3)
             float r4 = r14.getX(r1)
             float r0 = r0 - r4
@@ -2088,30 +2089,30 @@ public class GroupCallRenderersContainer extends FrameLayout {
             int r14 = r14.getPointerId(r3)
             r13.pointerId2 = r14
             r13.isInPinchToZoomTouchMode = r3
-        L_0x0484:
+        L_0x0486:
             boolean r14 = r13.canZoomGesture
-            if (r14 != 0) goto L_0x0490
+            if (r14 != 0) goto L_0x0492
             boolean r14 = r13.tapGesture
-            if (r14 != 0) goto L_0x0490
+            if (r14 != 0) goto L_0x0492
             boolean r14 = r13.maybeSwipeToBackGesture
-            if (r14 == 0) goto L_0x0491
-        L_0x0490:
-            r1 = 1
-        L_0x0491:
-            return r1
+            if (r14 == 0) goto L_0x0493
         L_0x0492:
+            r1 = 1
+        L_0x0493:
+            return r1
+        L_0x0494:
             r13.finishZoom()
             boolean r14 = r13.tapGesture
-            if (r14 != 0) goto L_0x04a1
+            if (r14 != 0) goto L_0x04a3
             boolean r14 = r13.swipeToBackGesture
-            if (r14 != 0) goto L_0x04a1
+            if (r14 != 0) goto L_0x04a3
             boolean r14 = r13.maybeSwipeToBackGesture
-            if (r14 == 0) goto L_0x04a2
-        L_0x04a1:
-            r1 = 1
-        L_0x04a2:
-            return r1
+            if (r14 == 0) goto L_0x04a4
         L_0x04a3:
+            r1 = 1
+        L_0x04a4:
+            return r1
+        L_0x04a5:
             r13.finishZoom()
             return r1
         */

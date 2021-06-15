@@ -6084,7 +6084,7 @@ public class MessageObject {
             org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
             org.telegram.messenger.time.FastDateFormat r2 = r2.formatterYear
             if (r2 == 0) goto L_0x06e3
-            r2 = 2131628364(0x7f0e114c, float:1.8884019E38)
+            r2 = 2131628365(0x7f0e114d, float:1.888402E38)
             r3 = 2
             java.lang.Object[] r7 = new java.lang.Object[r3]
             org.telegram.messenger.LocaleController r3 = org.telegram.messenger.LocaleController.getInstance()
@@ -6250,7 +6250,7 @@ public class MessageObject {
         L_0x0821:
             boolean r7 = r9 instanceof org.telegram.tgnet.TLRPC$TL_messageActionCreatedBroadcastList
             if (r7 == 0) goto L_0x0835
-            r0 = 2131628292(0x7f0e1104, float:1.8883873E38)
+            r0 = 2131628293(0x7f0e1105, float:1.8883875E38)
             r1 = 0
             java.lang.Object[] r1 = new java.lang.Object[r1]
             java.lang.String r2 = "YouCreatedBroadcastList"
@@ -11285,98 +11285,106 @@ public class MessageObject {
         return canEditMessageAnytime(this.currentAccount, this.messageOwner, tLRPC$Chat);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:55:0x00a0, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:55:0x00a1, code lost:
         r4 = r6.admin_rights;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:59:0x00a9, code lost:
+        r4 = r6.default_banned_rights;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static boolean canEditMessageAnytime(int r4, org.telegram.tgnet.TLRPC$Message r5, org.telegram.tgnet.TLRPC$Chat r6) {
         /*
             r0 = 0
-            if (r5 == 0) goto L_0x00a9
+            if (r5 == 0) goto L_0x00b2
             org.telegram.tgnet.TLRPC$Peer r1 = r5.peer_id
-            if (r1 == 0) goto L_0x00a9
+            if (r1 == 0) goto L_0x00b2
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r5.media
             r2 = 1
             if (r1 == 0) goto L_0x0028
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             boolean r1 = isRoundVideoDocument(r1)
-            if (r1 != 0) goto L_0x00a9
+            if (r1 != 0) goto L_0x00b2
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r5.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             boolean r1 = isStickerDocument(r1)
-            if (r1 != 0) goto L_0x00a9
+            if (r1 != 0) goto L_0x00b2
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r5.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             boolean r1 = isAnimatedStickerDocument(r1, r2)
-            if (r1 != 0) goto L_0x00a9
+            if (r1 != 0) goto L_0x00b2
         L_0x0028:
             org.telegram.tgnet.TLRPC$MessageAction r1 = r5.action
             if (r1 == 0) goto L_0x0030
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_messageActionEmpty
-            if (r1 == 0) goto L_0x00a9
+            if (r1 == 0) goto L_0x00b2
         L_0x0030:
             boolean r1 = isForwardedMessage(r5)
-            if (r1 != 0) goto L_0x00a9
+            if (r1 != 0) goto L_0x00b2
             int r1 = r5.via_bot_id
-            if (r1 != 0) goto L_0x00a9
+            if (r1 != 0) goto L_0x00b2
             int r1 = r5.id
-            if (r1 >= 0) goto L_0x003f
-            goto L_0x00a9
-        L_0x003f:
+            if (r1 >= 0) goto L_0x0040
+            goto L_0x00b2
+        L_0x0040:
             org.telegram.tgnet.TLRPC$Peer r1 = r5.from_id
             boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
-            if (r3 == 0) goto L_0x005e
+            if (r3 == 0) goto L_0x005f
             int r1 = r1.user_id
             org.telegram.tgnet.TLRPC$Peer r3 = r5.peer_id
             int r3 = r3.user_id
-            if (r1 != r3) goto L_0x005e
+            if (r1 != r3) goto L_0x005f
             org.telegram.messenger.UserConfig r4 = org.telegram.messenger.UserConfig.getInstance(r4)
             int r4 = r4.getClientUserId()
-            if (r1 != r4) goto L_0x005e
+            if (r1 != r4) goto L_0x005f
             boolean r4 = isLiveLocationMessage(r5)
-            if (r4 != 0) goto L_0x005e
+            if (r4 != 0) goto L_0x005f
             return r2
-        L_0x005e:
-            if (r6 != 0) goto L_0x007b
+        L_0x005f:
+            if (r6 != 0) goto L_0x007c
             org.telegram.tgnet.TLRPC$Peer r4 = r5.peer_id
             int r4 = r4.channel_id
-            if (r4 == 0) goto L_0x007b
+            if (r4 == 0) goto L_0x007c
             int r4 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
             org.telegram.tgnet.TLRPC$Peer r6 = r5.peer_id
             int r6 = r6.channel_id
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             org.telegram.tgnet.TLRPC$Chat r6 = r4.getChat(r6)
-            if (r6 != 0) goto L_0x007b
+            if (r6 != 0) goto L_0x007c
             return r0
-        L_0x007b:
+        L_0x007c:
             boolean r4 = org.telegram.messenger.ChatObject.isChannel(r6)
-            if (r4 == 0) goto L_0x0092
+            if (r4 == 0) goto L_0x0093
             boolean r4 = r6.megagroup
+            if (r4 != 0) goto L_0x0093
+            boolean r4 = r6.creator
             if (r4 != 0) goto L_0x0092
-            boolean r4 = r6.creator
-            if (r4 != 0) goto L_0x0091
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r4 = r6.admin_rights
-            if (r4 == 0) goto L_0x0092
+            if (r4 == 0) goto L_0x0093
             boolean r4 = r4.edit_messages
-            if (r4 == 0) goto L_0x0092
-        L_0x0091:
-            return r2
+            if (r4 == 0) goto L_0x0093
         L_0x0092:
+            return r2
+        L_0x0093:
             boolean r4 = r5.out
-            if (r4 == 0) goto L_0x00a9
-            if (r6 == 0) goto L_0x00a9
+            if (r4 == 0) goto L_0x00b2
+            if (r6 == 0) goto L_0x00b2
             boolean r4 = r6.megagroup
-            if (r4 == 0) goto L_0x00a9
+            if (r4 == 0) goto L_0x00b2
             boolean r4 = r6.creator
-            if (r4 != 0) goto L_0x00a8
+            if (r4 != 0) goto L_0x00b1
             org.telegram.tgnet.TLRPC$TL_chatAdminRights r4 = r6.admin_rights
             if (r4 == 0) goto L_0x00a9
             boolean r4 = r4.pin_messages
-            if (r4 == 0) goto L_0x00a9
-        L_0x00a8:
-            return r2
+            if (r4 != 0) goto L_0x00b1
         L_0x00a9:
+            org.telegram.tgnet.TLRPC$TL_chatBannedRights r4 = r6.default_banned_rights
+            if (r4 == 0) goto L_0x00b2
+            boolean r4 = r4.pin_messages
+            if (r4 != 0) goto L_0x00b2
+        L_0x00b1:
+            return r2
+        L_0x00b2:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.canEditMessageAnytime(int, org.telegram.tgnet.TLRPC$Message, org.telegram.tgnet.TLRPC$Chat):boolean");

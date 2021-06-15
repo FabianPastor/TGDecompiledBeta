@@ -86,9 +86,11 @@ public class GroupCallFullscreenAdapter extends RecyclerListView.SelectionAdapte
         if (i < this.videoParticipants.size()) {
             videoParticipant = this.videoParticipants.get(i);
             tLRPC$TL_groupCallParticipant = this.videoParticipants.get(i).participant;
-        } else {
+        } else if (i - this.videoParticipants.size() < this.participants.size()) {
             videoParticipant = null;
             tLRPC$TL_groupCallParticipant = this.participants.get(i - this.videoParticipants.size());
+        } else {
+            return;
         }
         groupCallUserCell.setParticipant(videoParticipant, tLRPC$TL_groupCallParticipant);
         if (videoParticipant2 != null && !videoParticipant2.equals(videoParticipant) && groupCallUserCell.attached && groupCallUserCell.getRenderer() != null) {

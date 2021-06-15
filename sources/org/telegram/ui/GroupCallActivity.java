@@ -1959,7 +1959,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r2 = r1.participant
             boolean r1 = r1.presentation
             org.telegram.messenger.ChatObject$Call r3 = r10.call
-            boolean r1 = videoIsActive(r2, r1, r3)
+            boolean r1 = org.telegram.messenger.ChatObject.Call.videoIsActive(r2, r1, r3)
             if (r1 != 0) goto L_0x0208
             java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r1 = r10.visibleVideoParticipants
             boolean r1 = r1.isEmpty()
@@ -9250,32 +9250,6 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         VideoPreviewDialog videoPreviewDialog = this.previewDialog;
         if (videoPreviewDialog != null) {
             videoPreviewDialog.update();
-        }
-    }
-
-    public static boolean videoIsActive(TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, boolean z, ChatObject.Call call2) {
-        VoIPService sharedInstance = VoIPService.getSharedInstance();
-        if (sharedInstance == null) {
-            return false;
-        }
-        if (tLRPC$TL_groupCallParticipant.self) {
-            if (sharedInstance.getVideoState(z) == 2) {
-                return true;
-            }
-            return false;
-        } else if (call2.participants.get(MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer)) == null) {
-            return false;
-        } else {
-            if (z) {
-                if (tLRPC$TL_groupCallParticipant.presentation != null) {
-                    return true;
-                }
-                return false;
-            } else if (tLRPC$TL_groupCallParticipant.video != null) {
-                return true;
-            } else {
-                return false;
-            }
         }
     }
 

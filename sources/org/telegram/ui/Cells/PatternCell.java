@@ -231,8 +231,10 @@ public class PatternCell extends BackupImageView implements DownloadController.F
             canvas2.drawRoundRect(this.rect, (float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(6.0f), this.backgroundPaint);
         }
         super.onDraw(canvas);
-        this.radialProgress.setColors(checkColor, checkColor, -1, -1);
-        this.radialProgress.draw(canvas2);
+        if (this.radialProgress.getIcon() != 4) {
+            this.radialProgress.setColors(checkColor, checkColor, -1, -1);
+            this.radialProgress.draw(canvas2);
+        }
     }
 
     /* access modifiers changed from: protected */
@@ -241,21 +243,32 @@ public class PatternCell extends BackupImageView implements DownloadController.F
     }
 
     public void onFailedDownload(String str, boolean z) {
+        TLRPC$TL_wallPaper selectedPattern = this.delegate.getSelectedPattern();
+        TLRPC$TL_wallPaper tLRPC$TL_wallPaper = this.currentPattern;
+        if (!((tLRPC$TL_wallPaper == null && selectedPattern == null) || !(selectedPattern == null || tLRPC$TL_wallPaper == null || tLRPC$TL_wallPaper.id != selectedPattern.id))) {
+            return;
+        }
         if (z) {
             this.radialProgress.setIcon(4, false, true);
         } else {
-            updateButtonState(this.currentPattern, true, z);
+            updateButtonState(tLRPC$TL_wallPaper, true, z);
         }
     }
 
     public void onSuccessDownload(String str) {
         this.radialProgress.setProgress(1.0f, true);
-        updateButtonState(this.currentPattern, false, true);
+        TLRPC$TL_wallPaper selectedPattern = this.delegate.getSelectedPattern();
+        TLRPC$TL_wallPaper tLRPC$TL_wallPaper = this.currentPattern;
+        if ((tLRPC$TL_wallPaper == null && selectedPattern == null) || !(selectedPattern == null || tLRPC$TL_wallPaper == null || tLRPC$TL_wallPaper.id != selectedPattern.id)) {
+            updateButtonState(tLRPC$TL_wallPaper, false, true);
+        }
     }
 
     public void onProgressDownload(String str, long j, long j2) {
         this.radialProgress.setProgress(Math.min(1.0f, ((float) j) / ((float) j2)), true);
-        if (this.radialProgress.getIcon() != 10) {
+        TLRPC$TL_wallPaper selectedPattern = this.delegate.getSelectedPattern();
+        TLRPC$TL_wallPaper tLRPC$TL_wallPaper = this.currentPattern;
+        if (((tLRPC$TL_wallPaper == null && selectedPattern == null) || !(selectedPattern == null || tLRPC$TL_wallPaper == null || tLRPC$TL_wallPaper.id != selectedPattern.id)) && this.radialProgress.getIcon() != 10) {
             updateButtonState(this.currentPattern, false, true);
         }
     }

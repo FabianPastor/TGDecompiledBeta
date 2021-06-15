@@ -754,13 +754,11 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 this.hasWhiteBackground = true;
             }
             if (this.themeInfo.getPreviewBackgroundColor() == 0 && this.themeInfo.previewParsed && this.backgroundDrawable == null) {
-                BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(NUM).mutate();
-                Bitmap bitmap = bitmapDrawable.getBitmap();
-                Shader.TileMode tileMode2 = Shader.TileMode.REPEAT;
-                BitmapShader bitmapShader3 = new BitmapShader(bitmap, tileMode2, tileMode2);
-                this.bitmapShader = bitmapShader3;
-                this.bitmapPaint.setShader(bitmapShader3);
-                this.backgroundDrawable = bitmapDrawable;
+                Drawable createDefaultWallpaper = Theme.createDefaultWallpaper(100, 200);
+                this.backgroundDrawable = createDefaultWallpaper;
+                if (createDefaultWallpaper instanceof MotionBackgroundDrawable) {
+                    ((MotionBackgroundDrawable) createDefaultWallpaper).setRoundRadius(AndroidUtilities.dp(6.0f));
+                }
             }
             invalidate();
         }

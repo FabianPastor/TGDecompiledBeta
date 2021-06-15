@@ -834,6 +834,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             if (recyclerListView != null) {
                 recyclerListView.invalidateViews();
             }
+            updateMenuItem();
         } else if (i == NotificationCenter.themeAccentListUpdated) {
             ListAdapter listAdapter2 = this.listAdapter;
             if (listAdapter2 != null && (i3 = this.themeAccentListRow) != -1) {
@@ -977,6 +978,15 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 if (ThemeActivity.this.themesHorizontalListCell != null) {
                     Theme.ThemeInfo theme = Theme.getTheme("Blue");
                     Theme.ThemeInfo currentTheme = Theme.getCurrentTheme();
+                    Theme.ThemeAccent themeAccent = theme.themeAccentsMap.get(Theme.DEFALT_THEME_ACCENT_ID);
+                    if (themeAccent != null) {
+                        Theme.OverrideWallpaperInfo overrideWallpaperInfo = new Theme.OverrideWallpaperInfo();
+                        overrideWallpaperInfo.slug = "d";
+                        overrideWallpaperInfo.fileName = "Blue_99_wp.jpg";
+                        overrideWallpaperInfo.originalFileName = "Blue_99_wp.jpg";
+                        themeAccent.overrideWallpaper = overrideWallpaperInfo;
+                        theme.setOverrideWallpaper(overrideWallpaperInfo);
+                    }
                     boolean z = false;
                     if (theme != currentTheme) {
                         theme.setCurrentAccentId(Theme.DEFALT_THEME_ACCENT_ID);
@@ -996,6 +1006,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         objArr[3] = Integer.valueOf(Theme.DEFALT_THEME_ACCENT_ID);
                         globalInstance.postNotificationName(i2, objArr);
                         ThemeActivity.this.listAdapter.notifyItemChanged(ThemeActivity.this.themeAccentListRow);
+                    } else {
+                        Theme.reloadWallpaper();
                     }
                 }
             }
@@ -1256,6 +1268,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     }
 
     private void updateMenuItem() {
+        Theme.OverrideWallpaperInfo overrideWallpaperInfo;
         if (this.menuItem != null) {
             Theme.ThemeInfo currentTheme = Theme.getCurrentTheme();
             Theme.ThemeAccent accent = currentTheme.getAccent(false);
@@ -1269,7 +1282,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             }
             int i = AndroidUtilities.isTablet() ? 18 : 16;
             Theme.ThemeInfo currentTheme2 = Theme.getCurrentTheme();
-            if (SharedConfig.fontSize == i && SharedConfig.bubbleRadius == 10 && currentTheme2.firstAccentIsDefault && currentTheme2.currentAccentId == Theme.DEFALT_THEME_ACCENT_ID) {
+            if (SharedConfig.fontSize == i && SharedConfig.bubbleRadius == 10 && currentTheme2.firstAccentIsDefault && currentTheme2.currentAccentId == Theme.DEFALT_THEME_ACCENT_ID && (accent == null || (overrideWallpaperInfo = accent.overrideWallpaper) == null || "d".equals(overrideWallpaperInfo.slug))) {
                 this.menuItem.hideSubItem(4);
             } else {
                 this.menuItem.showSubItem(4);

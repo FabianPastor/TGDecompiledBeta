@@ -326,34 +326,30 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r9 = 2
             r0 = 0
         L_0x029a:
-            if (r0 != 0) goto L_0x02d4
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext
-            android.content.res.Resources r0 = r0.getResources()
-            r2 = 2131165337(0x7var_, float:1.7944888E38)
-            android.graphics.drawable.Drawable r0 = r0.getDrawable(r2)
-            android.graphics.drawable.Drawable r0 = r0.mutate()
-            android.graphics.drawable.BitmapDrawable r0 = (android.graphics.drawable.BitmapDrawable) r0
-            if (r4 != 0) goto L_0x02be
+            if (r0 != 0) goto L_0x02c9
+            int r0 = r10.getWidth()
+            int r2 = r10.getHeight()
+            int r2 = r2 - r1
+            android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.createDefaultWallpaper(r0, r2)
+            if (r4 != 0) goto L_0x02b8
             int[] r2 = org.telegram.messenger.AndroidUtilities.calcDrawableColor(r0)
             r7 = 0
             r2 = r2[r7]
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r4 = r2
-            goto L_0x02bf
-        L_0x02be:
+            goto L_0x02b9
+        L_0x02b8:
             r7 = 0
-        L_0x02bf:
-            android.graphics.Shader$TileMode r2 = android.graphics.Shader.TileMode.REPEAT
-            r0.setTileModeXY(r2, r2)
+        L_0x02b9:
             int r2 = r10.getWidth()
             int r5 = r10.getHeight()
             int r5 = r5 - r1
             r0.setBounds(r7, r1, r2, r5)
             r0.draw(r11)
-            goto L_0x02d5
-        L_0x02d4:
+            goto L_0x02ca
+        L_0x02c9:
             r7 = 0
-        L_0x02d5:
+        L_0x02ca:
             r0 = r4
             r4 = r19
             r2 = r25
@@ -371,7 +367,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r7 = r8
             r8 = r2
             r3.drawRect(r4, r5, r6, r7, r8)
-            if (r21 == 0) goto L_0x030f
+            if (r21 == 0) goto L_0x0304
             r3 = 13
             int r4 = r21.getIntrinsicHeight()
             int r4 = 120 - r4
@@ -383,8 +379,8 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r7 = r21
             r7.setBounds(r3, r4, r5, r6)
             r7.draw(r11)
-        L_0x030f:
-            if (r24 == 0) goto L_0x0335
+        L_0x0304:
+            if (r24 == 0) goto L_0x032a
             int r3 = r10.getWidth()
             int r4 = r24.getIntrinsicWidth()
             int r3 = r3 - r4
@@ -399,7 +395,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r7 = r24
             r7.setBounds(r3, r4, r5, r6)
             r7.draw(r11)
-        L_0x0335:
+        L_0x032a:
             r3 = 1
             r4 = r12[r3]
             r5 = 216(0xd8, float:3.03E-43)
@@ -432,7 +428,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r1.setTop(r6, r5, r15, r15)
             r1 = r12[r15]
             r1.draw(r11)
-            if (r0 == 0) goto L_0x03a3
+            if (r0 == 0) goto L_0x0398
             int r1 = r10.getWidth()
             int r1 = r1 + -126
             int r1 = r1 / r9
@@ -449,7 +445,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r2.setColor(r0)
             r0 = 1101529088(0x41a80000, float:21.0)
             r11.drawRoundRect(r6, r0, r0, r2)
-        L_0x03a3:
+        L_0x0398:
             r0 = r18
             r2.setColor(r0)
             r4 = 0
@@ -465,7 +461,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             r8 = r2
             r3.drawRect(r4, r5, r6, r7, r8)
             r0 = 22
-            if (r13 == 0) goto L_0x03e3
+            if (r13 == 0) goto L_0x03d8
             int r1 = r10.getHeight()
             r2 = 120(0x78, float:1.68E-43)
             int r1 = r1 - r2
@@ -479,8 +475,8 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             int r3 = r3 + r1
             r13.setBounds(r0, r1, r2, r3)
             r13.draw(r11)
-        L_0x03e3:
-            if (r14 == 0) goto L_0x040d
+        L_0x03d8:
+            if (r14 == 0) goto L_0x0402
             int r1 = r10.getWidth()
             int r2 = r14.getIntrinsicWidth()
             int r1 = r1 - r2
@@ -498,7 +494,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
             int r3 = r3 + r0
             r14.setBounds(r1, r0, r2, r3)
             r14.draw(r11)
-        L_0x040d:
+        L_0x0402:
             return r10
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemePreviewDrawable.createPreview(java.io.File, org.telegram.messenger.DocumentObject$ThemeDocument):android.graphics.Bitmap");

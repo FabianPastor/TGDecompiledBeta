@@ -15214,19 +15214,23 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             /*
                 r2 = this;
                 org.telegram.ui.ChatActivity r0 = r2.parentChatActivity
-                if (r0 == 0) goto L_0x0014
+                if (r0 == 0) goto L_0x001e
                 org.telegram.tgnet.TLRPC$User r1 = r0.currentUser
-                if (r1 != 0) goto L_0x0012
+                if (r1 != 0) goto L_0x001c
                 org.telegram.tgnet.TLRPC$Chat r0 = r0.currentChat
-                if (r0 == 0) goto L_0x0014
+                if (r0 == 0) goto L_0x001e
+                boolean r0 = org.telegram.messenger.ChatObject.isNotInChat(r0)
+                if (r0 != 0) goto L_0x001e
+                org.telegram.ui.ChatActivity r0 = r2.parentChatActivity
+                org.telegram.tgnet.TLRPC$Chat r0 = r0.currentChat
                 boolean r0 = org.telegram.messenger.ChatObject.canSendMedia(r0)
-                if (r0 == 0) goto L_0x0014
-            L_0x0012:
+                if (r0 == 0) goto L_0x001e
+            L_0x001c:
                 r0 = 1
-                goto L_0x0015
-            L_0x0014:
+                goto L_0x001f
+            L_0x001e:
                 r0 = 0
-            L_0x0015:
+            L_0x001f:
                 return r0
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.canSendMediaToParentChatActivity():boolean");
@@ -15497,7 +15501,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 long r13 = (long) r5
                 r18 = 1000(0x3e8, double:4.94E-321)
                 long r13 = r13 * r18
-                r5 = 2131628364(0x7f0e114c, float:1.8884019E38)
+                r5 = 2131628365(0x7f0e114d, float:1.888402E38)
                 r7 = 2
                 java.lang.Object[] r9 = new java.lang.Object[r7]
                 org.telegram.messenger.LocaleController r7 = org.telegram.messenger.LocaleController.getInstance()
