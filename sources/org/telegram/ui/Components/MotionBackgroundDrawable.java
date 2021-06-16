@@ -302,7 +302,6 @@ public class MotionBackgroundDrawable extends Drawable {
             canvas.clipRect(i, i2, bounds.right, bounds.bottom);
         }
         if (this.patternBitmap == null || this.intensity >= 0) {
-            canvas.translate(0.0f, f2);
             if (this.roundRadius != 0) {
                 this.matrix.reset();
                 this.matrix.setTranslate(f7, f8);
@@ -314,6 +313,7 @@ public class MotionBackgroundDrawable extends Drawable {
                 int i3 = this.roundRadius;
                 canvas.drawRoundRect(rectF, (float) i3, (float) i3, this.paint);
             } else {
+                canvas.translate(0.0f, f2);
                 this.rect.set(f7, f8, f5 + f7, f6 + f8);
                 canvas.drawBitmap(this.currentBitmap, (Rect) null, this.rect, this.paint);
             }

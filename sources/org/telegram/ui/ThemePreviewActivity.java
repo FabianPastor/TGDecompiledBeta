@@ -2034,20 +2034,21 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x0261  */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x0263  */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x026c  */
-    /* JADX WARNING: Removed duplicated region for block: B:134:0x02af  */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x0248  */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x02a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x02a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:150:0x02b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:159:0x02f4  */
     /* JADX WARNING: Removed duplicated region for block: B:24:0x0077  */
     /* JADX WARNING: Removed duplicated region for block: B:83:0x018c A[SYNTHETIC, Splitter:B:83:0x018c] */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x01b7  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x01c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x01b9  */
+    /* JADX WARNING: Removed duplicated region for block: B:93:0x01c4  */
     /* renamed from: lambda$createView$6 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$createView$6$ThemePreviewActivity(android.view.View r20) {
+    public /* synthetic */ void lambda$createView$6$ThemePreviewActivity(android.view.View r24) {
         /*
-            r19 = this;
-            r1 = r19
+            r23 = this;
+            r1 = r23
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
             boolean r2 = r1.isBlurred
             r3 = 0
@@ -2282,140 +2283,168 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r3 = 45
             java.lang.Object r10 = r1.currentWallpaper
             boolean r12 = r10 instanceof org.telegram.tgnet.TLRPC$TL_wallPaper
-            java.lang.String r13 = "d"
-            if (r12 == 0) goto L_0x01c3
+            java.lang.String r13 = "c"
+            java.lang.String r14 = "d"
+            if (r12 == 0) goto L_0x01c4
             org.telegram.tgnet.TLRPC$TL_wallPaper r10 = (org.telegram.tgnet.TLRPC$TL_wallPaper) r10
-            java.lang.String r13 = r10.slug
-        L_0x01bb:
-            r14 = r13
-            r8 = 0
+            java.lang.String r8 = r10.slug
+        L_0x01bd:
             r10 = 0
             r12 = 0
-            r13 = 0
             r15 = 0
-            goto L_0x0228
-        L_0x01c3:
+        L_0x01c0:
+            r17 = 0
+            goto L_0x0221
+        L_0x01c4:
             boolean r12 = r10 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
-            if (r12 == 0) goto L_0x01f7
+            if (r12 == 0) goto L_0x01ed
             org.telegram.ui.WallpapersListActivity$ColorWallpaper r10 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r10
             java.lang.String r8 = r10.slug
-            boolean r8 = r13.equals(r8)
-            if (r8 == 0) goto L_0x01d7
-            r14 = r13
-            r8 = 0
-            r10 = 0
-            r12 = 0
-            r13 = 0
-            goto L_0x01f4
-        L_0x01d7:
+            boolean r8 = r14.equals(r8)
+            if (r8 == 0) goto L_0x01d4
+            r8 = r14
+            goto L_0x01bd
+        L_0x01d4:
             org.telegram.tgnet.TLRPC$TL_wallPaper r3 = r1.selectedPattern
-            if (r3 == 0) goto L_0x01de
+            if (r3 == 0) goto L_0x01db
             java.lang.String r3 = r3.slug
-            goto L_0x01e0
-        L_0x01de:
-            java.lang.String r3 = "c"
-        L_0x01e0:
-            r13 = r3
-            int r3 = r1.backgroundColor
-            int r8 = r1.backgroundGradientColor1
-            int r10 = r1.backgroundGradientColor2
-            int r12 = r1.backgroundGradientColor3
-            int r14 = r1.backgroundRotation
-            r18 = r8
+            goto L_0x01dc
+        L_0x01db:
+            r3 = r13
+        L_0x01dc:
+            int r8 = r1.backgroundColor
+            int r10 = r1.backgroundGradientColor1
+            int r12 = r1.backgroundGradientColor2
+            int r15 = r1.backgroundGradientColor3
+            int r5 = r1.backgroundRotation
+            r22 = r8
             r8 = r3
-            r3 = r14
-            r14 = r13
-            r13 = r12
-            r12 = r10
-            r10 = r18
-        L_0x01f4:
-            r15 = r13
-            r13 = 0
-            goto L_0x0228
-        L_0x01f7:
-            boolean r12 = r10 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper
-            if (r12 == 0) goto L_0x0208
+            r3 = r5
+            r5 = r22
+            goto L_0x01c0
+        L_0x01ed:
+            boolean r5 = r10 instanceof org.telegram.ui.WallpapersListActivity.FileWallpaper
+            if (r5 == 0) goto L_0x01fe
             org.telegram.ui.WallpapersListActivity$FileWallpaper r10 = (org.telegram.ui.WallpapersListActivity.FileWallpaper) r10
-            java.lang.String r13 = r10.slug
-            java.io.File r8 = r10.path
-        L_0x0201:
-            r14 = r13
+            java.lang.String r8 = r10.slug
+            java.io.File r5 = r10.path
+        L_0x01f7:
+            r17 = r5
+            r5 = 0
             r10 = 0
             r12 = 0
             r15 = 0
-            r13 = r8
-            r8 = 0
-            goto L_0x0228
-        L_0x0208:
-            boolean r12 = r10 instanceof org.telegram.messenger.MediaController.SearchImage
-            if (r12 == 0) goto L_0x01bb
+            goto L_0x0221
+        L_0x01fe:
+            boolean r5 = r10 instanceof org.telegram.messenger.MediaController.SearchImage
+            if (r5 == 0) goto L_0x021e
             org.telegram.messenger.MediaController$SearchImage r10 = (org.telegram.messenger.MediaController.SearchImage) r10
-            org.telegram.tgnet.TLRPC$Photo r12 = r10.photo
-            if (r12 == 0) goto L_0x021f
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r8 = r12.sizes
-            int r10 = r1.maxWallpaperSize
-            org.telegram.tgnet.TLRPC$PhotoSize r8 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r8, r10, r11)
-            java.io.File r8 = org.telegram.messenger.FileLoader.getPathToAttach(r8, r11)
-            goto L_0x0225
-        L_0x021f:
-            java.lang.String r10 = r10.imageUrl
-            java.io.File r8 = org.telegram.messenger.ImageLoader.getHttpFilePath(r10, r8)
-        L_0x0225:
-            java.lang.String r13 = ""
-            goto L_0x0201
-        L_0x0228:
-            org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo r5 = new org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo
-            r5.<init>()
-            r5.fileName = r4
-            r5.originalFileName = r2
-            r5.slug = r14
+            org.telegram.tgnet.TLRPC$Photo r5 = r10.photo
+            if (r5 == 0) goto L_0x0215
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r5 = r5.sizes
+            int r8 = r1.maxWallpaperSize
+            org.telegram.tgnet.TLRPC$PhotoSize r5 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r5, r8, r11)
+            java.io.File r5 = org.telegram.messenger.FileLoader.getPathToAttach(r5, r11)
+            goto L_0x021b
+        L_0x0215:
+            java.lang.String r5 = r10.imageUrl
+            java.io.File r5 = org.telegram.messenger.ImageLoader.getHttpFilePath(r5, r8)
+        L_0x021b:
+            java.lang.String r8 = ""
+            goto L_0x01f7
+        L_0x021e:
+            r8 = r14
+            r5 = 0
+            goto L_0x01bd
+        L_0x0221:
+            org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo r11 = new org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo
+            r11.<init>()
+            r11.fileName = r4
+            r11.originalFileName = r2
+            r11.slug = r8
             boolean r2 = r1.isBlurred
-            r5.isBlurred = r2
+            r11.isBlurred = r2
             boolean r2 = r1.isMotion
-            r5.isMotion = r2
-            r5.color = r8
-            r5.gradientColor1 = r10
-            r5.gradientColor2 = r12
-            r5.gradientColor3 = r15
-            r5.rotation = r3
+            r11.isMotion = r2
+            r11.color = r5
+            r11.gradientColor1 = r10
+            r11.gradientColor2 = r12
+            r11.gradientColor3 = r15
+            r11.rotation = r3
             float r2 = r1.currentIntensity
-            r5.intensity = r2
+            r11.intensity = r2
             java.lang.Object r2 = r1.currentWallpaper
-            boolean r3 = r2 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
-            if (r3 == 0) goto L_0x0259
+            boolean r4 = r2 instanceof org.telegram.ui.WallpapersListActivity.ColorWallpaper
+            if (r4 == 0) goto L_0x0299
             org.telegram.ui.WallpapersListActivity$ColorWallpaper r2 = (org.telegram.ui.WallpapersListActivity.ColorWallpaper) r2
+            boolean r4 = r13.equals(r8)
+            if (r4 != 0) goto L_0x025e
+            boolean r4 = r9.equals(r8)
+            if (r4 != 0) goto L_0x025e
+            boolean r4 = r14.equals(r8)
+            if (r4 != 0) goto L_0x025e
+            r4 = r8
+            goto L_0x025f
+        L_0x025e:
+            r4 = 0
+        L_0x025f:
+            org.telegram.tgnet.TLRPC$WallPaper r13 = r2.parentWallpaper
+            if (r13 == 0) goto L_0x0299
+            int r13 = r2.color
+            if (r13 != r5) goto L_0x0299
+            int r5 = r2.gradientColor1
+            if (r5 != r10) goto L_0x0299
+            int r5 = r2.gradientColor2
+            if (r5 != r12) goto L_0x0299
+            int r5 = r2.gradientColor3
+            if (r5 != r15) goto L_0x0299
+            java.lang.String r5 = r2.slug
+            boolean r4 = android.text.TextUtils.equals(r5, r4)
+            if (r4 == 0) goto L_0x0299
+            int r4 = r2.gradientRotation
+            if (r4 != r3) goto L_0x0299
+            org.telegram.tgnet.TLRPC$TL_wallPaper r3 = r1.selectedPattern
+            if (r3 == 0) goto L_0x0293
+            float r3 = r2.intensity
+            float r4 = r1.currentIntensity
+            float r3 = r3 - r4
+            float r3 = java.lang.Math.abs(r3)
+            r4 = 981668463(0x3a83126f, float:0.001)
+            int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
+            if (r3 >= 0) goto L_0x0299
+        L_0x0293:
             org.telegram.tgnet.TLRPC$WallPaper r2 = r2.parentWallpaper
-            if (r2 == 0) goto L_0x0259
             long r2 = r2.id
-            r5.wallpaperId = r2
-        L_0x0259:
+            r11.wallpaperId = r2
+        L_0x0299:
             int r2 = r1.currentAccount
-            org.telegram.messenger.MessagesController r12 = org.telegram.messenger.MessagesController.getInstance(r2)
-            if (r14 == 0) goto L_0x0263
-            r15 = 1
-            goto L_0x0264
-        L_0x0263:
-            r15 = 0
-        L_0x0264:
-            r16 = 0
-            r14 = r5
-            r12.saveWallpaperToServer(r13, r14, r15, r16)
-            if (r0 == 0) goto L_0x02ab
+            org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
+            if (r8 == 0) goto L_0x02a4
+            r19 = 1
+            goto L_0x02a6
+        L_0x02a4:
+            r19 = 0
+        L_0x02a6:
+            r20 = 0
+            r16 = r2
+            r18 = r11
+            r16.saveWallpaperToServer(r17, r18, r19, r20)
+            if (r0 == 0) goto L_0x02f0
             java.lang.String r0 = "chat_serviceBackground"
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
             org.telegram.ui.ActionBar.Theme.serviceMessageColorBackup = r0
-            java.lang.String r0 = r5.slug
+            java.lang.String r0 = r11.slug
             boolean r0 = r9.equals(r0)
-            if (r0 == 0) goto L_0x027e
+            if (r0 == 0) goto L_0x02c3
             r3 = 0
-            goto L_0x027f
-        L_0x027e:
-            r3 = r5
-        L_0x027f:
+            goto L_0x02c4
+        L_0x02c3:
+            r3 = r11
+        L_0x02c4:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r0 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
             r0.setOverrideWallpaper(r3)
             org.telegram.ui.ActionBar.Theme.reloadWallpaper()
-            if (r7 != 0) goto L_0x02ab
+            if (r7 != 0) goto L_0x02f0
             org.telegram.messenger.ImageLoader r0 = org.telegram.messenger.ImageLoader.getInstance()
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
@@ -2426,12 +2455,12 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r2.append(r3)
             java.lang.String r2 = r2.toString()
             r0.removeImage(r2)
-        L_0x02ab:
+        L_0x02f0:
             org.telegram.ui.ThemePreviewActivity$WallpaperActivityDelegate r0 = r1.delegate
-            if (r0 == 0) goto L_0x02b2
+            if (r0 == 0) goto L_0x02f7
             r0.didSetNewBackground()
-        L_0x02b2:
-            r19.finishFragment()
+        L_0x02f7:
+            r23.finishFragment()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemePreviewActivity.lambda$createView$6$ThemePreviewActivity(android.view.View):void");

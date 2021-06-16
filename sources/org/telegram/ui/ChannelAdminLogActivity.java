@@ -2367,6 +2367,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         this.roundVideoContainer.invalidate();
                         z2 = true;
                     }
+                } else if (childAt instanceof ChatActionCell) {
+                    ((ChatActionCell) childAt).setVisiblePart((childAt.getY() + ((float) this.actionBar.getMeasuredHeight())) - ((float) this.contentView.getBackgroundTranslationY()), this.contentView.getBackgroundSizeY());
                 }
                 if (childAt.getBottom() > this.chatListView.getPaddingTop()) {
                     int bottom = childAt.getBottom();
@@ -4226,28 +4228,40 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         return arrayList.get((arrayList.size() - (i - this.messagesStartRow)) - 1).contentType;
                                     }
 
-                                    public void onViewAttachedToWindow(RecyclerView.ViewHolder viewHolder) {
-                                        View view = viewHolder.itemView;
-                                        if (view instanceof ChatMessageCell) {
-                                            final ChatMessageCell chatMessageCell = (ChatMessageCell) view;
-                                            chatMessageCell.getMessageObject();
-                                            chatMessageCell.setBackgroundDrawable((Drawable) null);
-                                            chatMessageCell.setCheckPressed(true, false);
-                                            chatMessageCell.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                                    public void onViewAttachedToWindow(final RecyclerView.ViewHolder viewHolder) {
+                                        final View view = viewHolder.itemView;
+                                        if ((view instanceof ChatMessageCell) || (view instanceof ChatActionCell)) {
+                                            view.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                                                 public boolean onPreDraw() {
-                                                    chatMessageCell.getViewTreeObserver().removeOnPreDrawListener(this);
+                                                    view.getViewTreeObserver().removeOnPreDrawListener(this);
                                                     int measuredHeight = ChannelAdminLogActivity.this.chatListView.getMeasuredHeight();
-                                                    int top = chatMessageCell.getTop();
-                                                    chatMessageCell.getBottom();
+                                                    int top = view.getTop();
+                                                    view.getBottom();
                                                     int i = top >= 0 ? 0 : -top;
-                                                    int measuredHeight2 = chatMessageCell.getMeasuredHeight();
+                                                    int measuredHeight2 = view.getMeasuredHeight();
                                                     if (measuredHeight2 > measuredHeight) {
                                                         measuredHeight2 = i + measuredHeight;
                                                     }
-                                                    chatMessageCell.setVisiblePart(i, measuredHeight2 - i, (ChannelAdminLogActivity.this.contentView.getHeightWithKeyboard() - AndroidUtilities.dp(48.0f)) - ChannelAdminLogActivity.this.chatListView.getTop(), 0.0f, (chatMessageCell.getY() + ((float) ChannelAdminLogActivity.this.actionBar.getMeasuredHeight())) - ((float) ChannelAdminLogActivity.this.contentView.getBackgroundTranslationY()), ChannelAdminLogActivity.this.contentView.getBackgroundSizeY());
-                                                    return true;
+                                                    View view = viewHolder.itemView;
+                                                    if (view instanceof ChatMessageCell) {
+                                                        ((ChatMessageCell) view).setVisiblePart(i, measuredHeight2 - i, (ChannelAdminLogActivity.this.contentView.getHeightWithKeyboard() - AndroidUtilities.dp(48.0f)) - ChannelAdminLogActivity.this.chatListView.getTop(), 0.0f, (view.getY() + ((float) ChannelAdminLogActivity.this.actionBar.getMeasuredHeight())) - ((float) ChannelAdminLogActivity.this.contentView.getBackgroundTranslationY()), ChannelAdminLogActivity.this.contentView.getBackgroundSizeY());
+                                                        return true;
+                                                    } else if (!(view instanceof ChatActionCell) || ChannelAdminLogActivity.this.actionBar == null || ChannelAdminLogActivity.this.contentView == null) {
+                                                        return true;
+                                                    } else {
+                                                        View view2 = view;
+                                                        ((ChatActionCell) view2).setVisiblePart((view2.getY() + ((float) ChannelAdminLogActivity.this.actionBar.getMeasuredHeight())) - ((float) ChannelAdminLogActivity.this.contentView.getBackgroundTranslationY()), ChannelAdminLogActivity.this.contentView.getBackgroundSizeY());
+                                                        return true;
+                                                    }
                                                 }
                                             });
+                                        }
+                                        View view2 = viewHolder.itemView;
+                                        if (view2 instanceof ChatMessageCell) {
+                                            ChatMessageCell chatMessageCell = (ChatMessageCell) view2;
+                                            chatMessageCell.getMessageObject();
+                                            chatMessageCell.setBackgroundDrawable((Drawable) null);
+                                            chatMessageCell.setCheckPressed(true, false);
                                             chatMessageCell.setHighlighted(false);
                                         }
                                     }
@@ -4366,12 +4380,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                             tLRPC$TL_channelAdminLogEvent.action = tLRPC$TL_channelAdminLogEventActionExportedInviteRevoke;
                                             tLRPC$TL_channelAdminLogEvent.date = (int) (System.currentTimeMillis() / 1000);
                                             tLRPC$TL_channelAdminLogEvent.user_id = ChannelAdminLogActivity.this.getAccountInstance().getUserConfig().clientUserId;
-                                            int access$6700 = ChannelAdminLogActivity.this.currentAccount;
+                                            int access$6900 = ChannelAdminLogActivity.this.currentAccount;
                                             ChannelAdminLogActivity channelAdminLogActivity = ChannelAdminLogActivity.this;
                                             ArrayList<MessageObject> arrayList = channelAdminLogActivity.messages;
-                                            HashMap access$6800 = channelAdminLogActivity.messagesByDays;
+                                            HashMap access$7000 = channelAdminLogActivity.messagesByDays;
                                             ChannelAdminLogActivity channelAdminLogActivity2 = ChannelAdminLogActivity.this;
-                                            if (new MessageObject(access$6700, tLRPC$TL_channelAdminLogEvent, arrayList, (HashMap<String, ArrayList<MessageObject>>) access$6800, channelAdminLogActivity2.currentChat, channelAdminLogActivity2.mid, true).contentType >= 0) {
+                                            if (new MessageObject(access$6900, tLRPC$TL_channelAdminLogEvent, arrayList, (HashMap<String, ArrayList<MessageObject>>) access$7000, channelAdminLogActivity2.currentChat, channelAdminLogActivity2.mid, true).contentType >= 0) {
                                                 int size2 = ChannelAdminLogActivity.this.messages.size() - size;
                                                 if (size2 > 0) {
                                                     ChannelAdminLogActivity.this.chatListItemAnimator.setShouldAnimateEnterFromBottom(true);
@@ -4391,12 +4405,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                             tLRPC$TL_channelAdminLogEvent.action = tLRPC$TL_channelAdminLogEventActionExportedInviteDelete;
                                             tLRPC$TL_channelAdminLogEvent.date = (int) (System.currentTimeMillis() / 1000);
                                             tLRPC$TL_channelAdminLogEvent.user_id = ChannelAdminLogActivity.this.getAccountInstance().getUserConfig().clientUserId;
-                                            int access$7400 = ChannelAdminLogActivity.this.currentAccount;
+                                            int access$7600 = ChannelAdminLogActivity.this.currentAccount;
                                             ChannelAdminLogActivity channelAdminLogActivity = ChannelAdminLogActivity.this;
                                             ArrayList<MessageObject> arrayList = channelAdminLogActivity.messages;
-                                            HashMap access$6800 = channelAdminLogActivity.messagesByDays;
+                                            HashMap access$7000 = channelAdminLogActivity.messagesByDays;
                                             ChannelAdminLogActivity channelAdminLogActivity2 = ChannelAdminLogActivity.this;
-                                            if (new MessageObject(access$7400, tLRPC$TL_channelAdminLogEvent, arrayList, (HashMap<String, ArrayList<MessageObject>>) access$6800, channelAdminLogActivity2.currentChat, channelAdminLogActivity2.mid, true).contentType >= 0) {
+                                            if (new MessageObject(access$7600, tLRPC$TL_channelAdminLogEvent, arrayList, (HashMap<String, ArrayList<MessageObject>>) access$7000, channelAdminLogActivity2.currentChat, channelAdminLogActivity2.mid, true).contentType >= 0) {
                                                 int size2 = ChannelAdminLogActivity.this.messages.size() - size;
                                                 if (size2 > 0) {
                                                     ChannelAdminLogActivity.this.chatListItemAnimator.setShouldAnimateEnterFromBottom(true);
@@ -4415,12 +4429,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                             tLRPC$TL_channelAdminLogEvent.action = tLRPC$TL_channelAdminLogEventActionExportedInviteEdit;
                                             tLRPC$TL_channelAdminLogEvent.date = (int) (System.currentTimeMillis() / 1000);
                                             tLRPC$TL_channelAdminLogEvent.user_id = ChannelAdminLogActivity.this.getAccountInstance().getUserConfig().clientUserId;
-                                            int access$7500 = ChannelAdminLogActivity.this.currentAccount;
+                                            int access$7700 = ChannelAdminLogActivity.this.currentAccount;
                                             ChannelAdminLogActivity channelAdminLogActivity = ChannelAdminLogActivity.this;
                                             ArrayList<MessageObject> arrayList = channelAdminLogActivity.messages;
-                                            HashMap access$6800 = channelAdminLogActivity.messagesByDays;
+                                            HashMap access$7000 = channelAdminLogActivity.messagesByDays;
                                             ChannelAdminLogActivity channelAdminLogActivity2 = ChannelAdminLogActivity.this;
-                                            if (new MessageObject(access$7500, tLRPC$TL_channelAdminLogEvent, arrayList, (HashMap<String, ArrayList<MessageObject>>) access$6800, channelAdminLogActivity2.currentChat, channelAdminLogActivity2.mid, true).contentType >= 0) {
+                                            if (new MessageObject(access$7700, tLRPC$TL_channelAdminLogEvent, arrayList, (HashMap<String, ArrayList<MessageObject>>) access$7000, channelAdminLogActivity2.currentChat, channelAdminLogActivity2.mid, true).contentType >= 0) {
                                                 ChannelAdminLogActivity.this.chatAdapter.notifyDataSetChanged();
                                                 ChannelAdminLogActivity.this.moveScrollToLastMessage();
                                             }

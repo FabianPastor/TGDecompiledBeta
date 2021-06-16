@@ -42,7 +42,6 @@ import org.telegram.tgnet.TLRPC$TL_videoSize;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
 import org.telegram.tgnet.TLRPC$WebDocument;
 import org.telegram.tgnet.TLRPC$WebPage;
-import org.telegram.ui.WallpapersListActivity;
 
 public class FileLoader extends BaseController {
     public static final int IMAGE_TYPE_ANIMATION = 2;
@@ -1162,9 +1161,6 @@ public class FileLoader extends BaseController {
     private void loadFile(TLRPC$Document tLRPC$Document, SecureDocument secureDocument, WebFile webFile, TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated, ImageLocation imageLocation, Object obj, String str, int i, int i2, int i3) {
         String str2;
         TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated2 = tLRPC$TL_fileLocationToBeDeprecated;
-        if (obj instanceof WallpapersListActivity.ColorWallpaper) {
-            FileLog.d("test");
-        }
         if (tLRPC$TL_fileLocationToBeDeprecated2 != null) {
             str2 = getAttachFileName(tLRPC$TL_fileLocationToBeDeprecated2, str);
         } else {
