@@ -9,6 +9,8 @@ import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -364,6 +366,7 @@ public class ContentPreviewViewer {
     private int startX;
     private int startY;
     private StaticLayout stickerEmojiLayout;
+    VibrationEffect vibrationEffect;
     /* access modifiers changed from: private */
     public BottomSheet visibleDialog;
     private WindowManager.LayoutParams windowLayoutParams;
@@ -485,27 +488,27 @@ public class ContentPreviewViewer {
             r2 = 0
             if (r1 != 0) goto L_0x0012
             boolean r1 = r14.isVisible()
-            if (r1 == 0) goto L_0x0264
+            if (r1 == 0) goto L_0x0267
         L_0x0012:
             int r1 = r15.getAction()
             r3 = 0
             r8 = 1
-            if (r1 == r8) goto L_0x0222
+            if (r1 == r8) goto L_0x0225
             int r1 = r15.getAction()
             r4 = 3
-            if (r1 == r4) goto L_0x0222
+            if (r1 == r4) goto L_0x0225
             int r1 = r15.getAction()
             r4 = 6
             if (r1 != r4) goto L_0x002a
-            goto L_0x0222
+            goto L_0x0225
         L_0x002a:
             int r1 = r15.getAction()
-            if (r1 == 0) goto L_0x0264
+            if (r1 == 0) goto L_0x0267
             boolean r1 = r7.isVisible
             r4 = 2
-            if (r1 == 0) goto L_0x01e7
+            if (r1 == 0) goto L_0x01ea
             int r1 = r15.getAction()
-            if (r1 != r4) goto L_0x01e6
+            if (r1 != r4) goto L_0x01e9
             int r1 = r7.currentContentType
             if (r1 != r8) goto L_0x00b7
             org.telegram.ui.ActionBar.BottomSheet r0 = r7.visibleDialog
@@ -577,7 +580,7 @@ public class ContentPreviewViewer {
             int r5 = r16.getChildCount()
             r6 = 0
         L_0x00c6:
-            if (r6 >= r5) goto L_0x01e6
+            if (r6 >= r5) goto L_0x01e9
             android.view.View r9 = r0.getChildAt(r6)
             if (r9 != 0) goto L_0x00cf
             return r2
@@ -586,11 +589,11 @@ public class ContentPreviewViewer {
             int r11 = r9.getBottom()
             int r12 = r9.getLeft()
             int r13 = r9.getRight()
-            if (r10 > r4) goto L_0x01e0
-            if (r11 < r4) goto L_0x01e0
-            if (r12 > r1) goto L_0x01e0
+            if (r10 > r4) goto L_0x01e3
+            if (r11 < r4) goto L_0x01e3
+            if (r12 > r1) goto L_0x01e3
             if (r13 >= r1) goto L_0x00e9
-            goto L_0x01e0
+            goto L_0x01e3
         L_0x00e9:
             boolean r0 = r9 instanceof org.telegram.ui.Cells.StickerEmojiCell
             r1 = -1
@@ -628,10 +631,10 @@ public class ContentPreviewViewer {
         L_0x0125:
             r10 = -1
         L_0x0126:
-            if (r10 == r1) goto L_0x01e6
+            if (r10 == r1) goto L_0x01e9
             android.view.View r0 = r7.currentPreviewCell
             if (r9 != r0) goto L_0x012e
-            goto L_0x01e6
+            goto L_0x01e9
         L_0x012e:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
             if (r1 == 0) goto L_0x0138
@@ -730,18 +733,19 @@ public class ContentPreviewViewer {
             if (r10 == r8) goto L_0x01df
             r9.setScaled(r8)
         L_0x01df:
+            r14.runSmoothHaptic()
             return r8
-        L_0x01e0:
+        L_0x01e3:
             r9 = r17
             int r6 = r6 + 1
             goto L_0x00c6
-        L_0x01e6:
+        L_0x01e9:
             return r8
-        L_0x01e7:
+        L_0x01ea:
             java.lang.Runnable r0 = r7.openPreviewRunnable
-            if (r0 == 0) goto L_0x0264
+            if (r0 == 0) goto L_0x0267
             int r0 = r15.getAction()
-            if (r0 != r4) goto L_0x021a
+            if (r0 != r4) goto L_0x021d
             int r0 = r7.startX
             float r0 = (float) r0
             float r1 = r15.getX()
@@ -757,52 +761,52 @@ public class ContentPreviewViewer {
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             double r4 = (double) r4
             int r6 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r6 <= 0) goto L_0x0264
+            if (r6 <= 0) goto L_0x0267
             java.lang.Runnable r0 = r7.openPreviewRunnable
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
             r7.openPreviewRunnable = r3
-            goto L_0x0264
-        L_0x021a:
+            goto L_0x0267
+        L_0x021d:
             java.lang.Runnable r0 = r7.openPreviewRunnable
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
             r7.openPreviewRunnable = r3
-            goto L_0x0264
-        L_0x0222:
+            goto L_0x0267
+        L_0x0225:
             org.telegram.ui.-$$Lambda$ContentPreviewViewer$fTVdUVOkyauWT6lnO5eDqKhjScQ r1 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$fTVdUVOkyauWT6lnO5eDqKhjScQ
             r4 = r18
             r1.<init>(r4)
             r4 = 150(0x96, double:7.4E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r4)
             java.lang.Runnable r0 = r7.openPreviewRunnable
-            if (r0 == 0) goto L_0x0238
+            if (r0 == 0) goto L_0x023b
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
             r7.openPreviewRunnable = r3
-            goto L_0x0264
-        L_0x0238:
+            goto L_0x0267
+        L_0x023b:
             boolean r0 = r14.isVisible()
-            if (r0 == 0) goto L_0x0264
+            if (r0 == 0) goto L_0x0267
             r14.close()
             android.view.View r0 = r7.currentPreviewCell
-            if (r0 == 0) goto L_0x0264
+            if (r0 == 0) goto L_0x0267
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
-            if (r1 == 0) goto L_0x024f
+            if (r1 == 0) goto L_0x0252
             org.telegram.ui.Cells.StickerEmojiCell r0 = (org.telegram.ui.Cells.StickerEmojiCell) r0
             r0.setScaled(r2)
-            goto L_0x0262
-        L_0x024f:
+            goto L_0x0265
+        L_0x0252:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerCell
-            if (r1 == 0) goto L_0x0259
+            if (r1 == 0) goto L_0x025c
             org.telegram.ui.Cells.StickerCell r0 = (org.telegram.ui.Cells.StickerCell) r0
             r0.setScaled(r2)
-            goto L_0x0262
-        L_0x0259:
+            goto L_0x0265
+        L_0x025c:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.ContextLinkCell
-            if (r1 == 0) goto L_0x0262
+            if (r1 == 0) goto L_0x0265
             org.telegram.ui.Cells.ContextLinkCell r0 = (org.telegram.ui.Cells.ContextLinkCell) r0
             r0.setScaled(r2)
-        L_0x0262:
+        L_0x0265:
             r7.currentPreviewCell = r3
-        L_0x0264:
+        L_0x0267:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onTouch(android.view.MotionEvent, org.telegram.ui.Components.RecyclerListView, int, java.lang.Object, org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate):boolean");
@@ -811,6 +815,18 @@ public class ContentPreviewViewer {
     static /* synthetic */ void lambda$onTouch$0(RecyclerListView recyclerListView, Object obj) {
         if (recyclerListView instanceof RecyclerListView) {
             recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) obj);
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void runSmoothHaptic() {
+        if (Build.VERSION.SDK_INT >= 26) {
+            Vibrator vibrator = (Vibrator) this.containerView.getContext().getSystemService("vibrator");
+            if (this.vibrationEffect == null) {
+                this.vibrationEffect = VibrationEffect.createWaveform(new long[]{0, 2}, -1);
+            }
+            vibrator.cancel();
+            vibrator.vibrate(this.vibrationEffect);
         }
     }
 
@@ -957,6 +973,7 @@ public class ContentPreviewViewer {
                     contextLinkCell.setScaled(true);
                 }
             }
+            this.currentPreviewCell.performHapticFeedback(0, 2);
         }
     }
 

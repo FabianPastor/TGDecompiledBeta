@@ -2410,9 +2410,9 @@ public final class R {
         public static final int CallReportSent = NUM;
         public static final int CallText = NUM;
         public static final int CallViaTelegram = NUM;
-        public static final int CallViedeoPin = NUM;
-        public static final int CallViedeoPreviewTitle = NUM;
-        public static final int CallViedeoUnpin = NUM;
+        public static final int CallVideoPin = NUM;
+        public static final int CallVideoPreviewTitle = NUM;
+        public static final int CallVideoUnpin = NUM;
         public static final int Calling = NUM;
         public static final int Calls = NUM;
         public static final int CallsDataUsage = NUM;
@@ -5963,6 +5963,8 @@ public final class R {
         public static final int VoipNeedMicCameraPermission = NUM;
         public static final int VoipNeedMicPermission = NUM;
         public static final int VoipNoiseCancellation = NUM;
+        public static final int VoipNoiseCancellationDisabled = NUM;
+        public static final int VoipNoiseCancellationEnabled = NUM;
         public static final int VoipNotificationSettings = NUM;
         public static final int VoipOffline = NUM;
         public static final int VoipOfflineAirplane = NUM;

@@ -2271,9 +2271,9 @@
     <public type="string" name="CallReportSent" id="NUM" />
     <public type="string" name="CallText" id="NUM" />
     <public type="string" name="CallViaTelegram" id="NUM" />
-    <public type="string" name="CallViedeoPin" id="NUM" />
-    <public type="string" name="CallViedeoPreviewTitle" id="NUM" />
-    <public type="string" name="CallViedeoUnpin" id="NUM" />
+    <public type="string" name="CallVideoPin" id="NUM" />
+    <public type="string" name="CallVideoPreviewTitle" id="NUM" />
+    <public type="string" name="CallVideoUnpin" id="NUM" />
     <public type="string" name="Calling" id="NUM" />
     <public type="string" name="Calls" id="NUM" />
     <public type="string" name="CallsDataUsage" id="NUM" />
@@ -5824,6 +5824,8 @@
     <public type="string" name="VoipNeedMicCameraPermission" id="NUM" />
     <public type="string" name="VoipNeedMicPermission" id="NUM" />
     <public type="string" name="VoipNoiseCancellation" id="NUM" />
+    <public type="string" name="VoipNoiseCancellationDisabled" id="NUM" />
+    <public type="string" name="VoipNoiseCancellationEnabled" id="NUM" />
     <public type="string" name="VoipNotificationSettings" id="NUM" />
     <public type="string" name="VoipOffline" id="NUM" />
     <public type="string" name="VoipOfflineAirplane" id="NUM" />

@@ -127,6 +127,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
     /* access modifiers changed from: private */
     public ArrayList<ColorWallpaper> localWallPapers = new ArrayList<>();
     private ArrayList<Object> patterns = new ArrayList<>();
+    private HashMap<String, Object> patternsDict = new HashMap<>();
     /* access modifiers changed from: private */
     public AlertDialog progressDialog;
     /* access modifiers changed from: private */
@@ -1004,7 +1005,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         L_0x00a2:
             org.telegram.ui.ThemePreviewActivity r3 = new org.telegram.ui.ThemePreviewActivity
             r5 = 0
-            r3.<init>(r1, r5)
+            r3.<init>(r1, r5, r4)
             int r1 = r0.currentType
             if (r1 != r4) goto L_0x00b4
             org.telegram.ui.-$$Lambda$ZDp1w5QTP9jiU8NB-0j1dp5QyQk r1 = new org.telegram.ui.-$$Lambda$ZDp1w5QTP9jiU8NB-0j1dp5QyQk
@@ -1062,6 +1063,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         if (i4 == NotificationCenter.wallpapersDidLoad) {
             ArrayList arrayList = objArr[0];
             this.patterns.clear();
+            this.patternsDict.clear();
             if (this.currentType != 1) {
                 this.wallPapers.clear();
                 this.localWallPapers.clear();
@@ -1104,8 +1106,9 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                         this.wallPapers.add(colorWallpaper);
                     }
                 } else {
-                    if (tLRPC$WallPaper.pattern) {
+                    if (tLRPC$WallPaper.pattern && !this.patternsDict.containsKey(tLRPC$WallPaper.slug)) {
                         this.patterns.add(tLRPC$WallPaper);
+                        this.patternsDict.put(tLRPC$WallPaper.slug, tLRPC$WallPaper);
                     }
                     this.allWallPapersDict.put(tLRPC$WallPaper.slug, tLRPC$WallPaper);
                     if (this.currentType != 1 && (!tLRPC$WallPaper.pattern || !((tLRPC$WallPaperSettings = tLRPC$WallPaper.settings) == null || tLRPC$WallPaperSettings.background_color == 0))) {
@@ -1187,6 +1190,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         if (tLObject instanceof TLRPC$TL_account_wallPapers) {
             TLRPC$TL_account_wallPapers tLRPC$TL_account_wallPapers = (TLRPC$TL_account_wallPapers) tLObject;
             this.patterns.clear();
+            this.patternsDict.clear();
             if (this.currentType != 1) {
                 this.wallPapers.clear();
                 this.allWallPapersDict.clear();
@@ -1216,8 +1220,9 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     }
                 } else {
                     this.allWallPapersDict.put(tLRPC$WallPaper.slug, tLRPC$WallPaper);
-                    if (tLRPC$WallPaper.pattern) {
+                    if (tLRPC$WallPaper.pattern && !this.patternsDict.containsKey(tLRPC$WallPaper.slug)) {
                         this.patterns.add(tLRPC$WallPaper);
+                        this.patternsDict.put(tLRPC$WallPaper.slug, tLRPC$WallPaper);
                     }
                     if (this.currentType != 1 && (!tLRPC$WallPaper.pattern || !((tLRPC$WallPaperSettings = tLRPC$WallPaper.settings) == null || tLRPC$WallPaperSettings.background_color == 0))) {
                         this.wallPapers.add(tLRPC$WallPaper);
@@ -2031,7 +2036,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 view = new WallpaperCell(this.mContext) {
                     /* access modifiers changed from: protected */
                     public void onWallpaperClick(Object obj, int i) {
-                        WallpapersListActivity.this.presentFragment(new ThemePreviewActivity(obj, (Bitmap) null));
+                        WallpapersListActivity.this.presentFragment(new ThemePreviewActivity(obj, (Bitmap) null, true));
                     }
                 };
             } else if (i == 1) {

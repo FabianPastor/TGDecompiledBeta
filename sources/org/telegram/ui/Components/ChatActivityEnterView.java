@@ -7,6 +7,9 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipDescription;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -2874,7 +2877,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (!ChatActivityEnterView.this.stickersDragging && ChatActivityEnterView.this.stickersExpansionAnim == null) {
-                    if (ChatActivityEnterView.this.isPopupShowing() && motionEvent.getAction() == 0) {
+                    if (!ChatActivityEnterView.this.isPopupShowing() || motionEvent.getAction() != 0) {
+                        try {
+                            return super.onTouchEvent(motionEvent);
+                        } catch (Exception e) {
+                            FileLog.e((Throwable) e);
+                        }
+                    } else {
                         if (ChatActivityEnterView.this.searchingType != 0) {
                             int unused = ChatActivityEnterView.this.searchingType = 0;
                             ChatActivityEnterView.this.emojiView.closeSearch(false);
@@ -2891,11 +2900,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         } else {
                             ChatActivityEnterView.this.openKeyboardInternal();
                         }
-                    }
-                    try {
-                        return super.onTouchEvent(motionEvent);
-                    } catch (Exception e) {
-                        FileLog.e((Throwable) e);
+                        return false;
                     }
                 }
                 return false;
@@ -2948,6 +2953,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             public boolean onTextContextMenuItem(int i) {
                 if (i == 16908322) {
                     boolean unused = ChatActivityEnterView.this.isPaste = true;
+                }
+                ClipData primaryClip = ((ClipboardManager) getContext().getSystemService("clipboard")).getPrimaryClip();
+                if (primaryClip != null) {
+                    ClipDescription description = primaryClip.getDescription();
+                    if (primaryClip.getItemCount() == 1 && primaryClip.getDescription().hasMimeType("image/*")) {
+                        if (description.hasMimeType("image/gif")) {
+                            SendMessagesHelper.prepareSendingDocument(ChatActivityEnterView.this.accountInstance, (String) null, (String) null, primaryClip.getItemAt(0).getUri(), (String) null, "image/gif", ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), (InputContentInfoCompat) null, (MessageObject) null, true, 0);
+                        } else {
+                            SendMessagesHelper.prepareSendingPhoto(ChatActivityEnterView.this.accountInstance, (String) null, primaryClip.getItemAt(0).getUri(), ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), (CharSequence) null, (ArrayList<TLRPC$MessageEntity>) null, (ArrayList<TLRPC$InputDocument>) null, (InputContentInfoCompat) null, 0, (MessageObject) null, true, 0);
+                        }
+                    }
                 }
                 return super.onTextContextMenuItem(i);
             }

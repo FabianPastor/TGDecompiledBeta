@@ -10,6 +10,7 @@ import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 
 public class CellFlickerDrawable {
+    public boolean drawFrame = true;
     private final Shader gradientShader;
     private final Shader gradientShader2;
     long lastUpdateTime;
@@ -18,6 +19,7 @@ public class CellFlickerDrawable {
     private final Paint paintOutline;
     int parentWidth;
     float progress;
+    public float repeatProgress = 1.2f;
     int size = AndroidUtilities.dp(160.0f);
 
     public CellFlickerDrawable() {
@@ -36,15 +38,15 @@ public class CellFlickerDrawable {
         paint3.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
     }
 
-    public void draw(Canvas canvas, RectF rectF) {
+    public void draw(Canvas canvas, RectF rectF, float f) {
         long currentTimeMillis = System.currentTimeMillis();
         long j = this.lastUpdateTime;
         if (j != 0) {
             long j2 = currentTimeMillis - j;
             if (j2 > 10) {
-                float f = this.progress + (((float) j2) / 1200.0f);
-                this.progress = f;
-                if (f > 1.2f) {
+                float f2 = this.progress + (((float) j2) / 1200.0f);
+                this.progress = f2;
+                if (f2 > this.repeatProgress) {
                     this.progress = 0.0f;
                 }
                 this.lastUpdateTime = currentTimeMillis;
@@ -52,15 +54,17 @@ public class CellFlickerDrawable {
         } else {
             this.lastUpdateTime = currentTimeMillis;
         }
-        float f2 = this.progress;
-        if (f2 <= 1.0f) {
+        float f3 = this.progress;
+        if (f3 <= 1.0f) {
             int i = this.parentWidth;
             int i2 = this.size;
-            this.matrix.setTranslate((((float) (i + (i2 * 2))) * f2) - ((float) i2), 0.0f);
+            this.matrix.setTranslate((((float) (i + (i2 * 2))) * f3) - ((float) i2), 0.0f);
             this.gradientShader.setLocalMatrix(this.matrix);
             this.gradientShader2.setLocalMatrix(this.matrix);
-            canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(8.0f), this.paint);
-            canvas.drawRoundRect(rectF, (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(8.0f), this.paintOutline);
+            canvas.drawRoundRect(rectF, f, f, this.paint);
+            if (this.drawFrame) {
+                canvas.drawRoundRect(rectF, f, f, this.paintOutline);
+            }
         }
     }
 
@@ -94,8 +98,10 @@ public class CellFlickerDrawable {
             VoIPTextureView voIPTextureView2 = groupCallMiniTextureView.textureView;
             rectF.set(f3, f4, ((float) voIPTextureView.getMeasuredWidth()) - voIPTextureView2.currentClipHorizontal, ((float) voIPTextureView2.getMeasuredHeight()) - groupCallMiniTextureView.textureView.currentClipVertical);
             canvas.drawRect(rectF, this.paint);
-            float f5 = groupCallMiniTextureView.textureView.roundRadius;
-            canvas.drawRoundRect(rectF, f5, f5, this.paintOutline);
+            if (this.drawFrame) {
+                float f5 = groupCallMiniTextureView.textureView.roundRadius;
+                canvas.drawRoundRect(rectF, f5, f5, this.paintOutline);
+            }
         }
     }
 

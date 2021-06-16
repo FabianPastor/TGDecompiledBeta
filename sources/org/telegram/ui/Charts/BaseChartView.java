@@ -14,6 +14,8 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.text.TextPaint;
 import android.view.MotionEvent;
 import android.view.View;
@@ -186,6 +188,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     Paint unactiveBottomChartPaint = new Paint();
     boolean useAlphaSignature = false;
     protected boolean useMinHeight = false;
+    VibrationEffect vibrationEffect;
     Paint whiteLinePaint = new Paint(1);
 
     public interface DateSelectionListener {
@@ -1535,6 +1538,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
 
     /* access modifiers changed from: protected */
     public void selectXOnChart(int i, int i2) {
+        int i3 = this.selectedIndex;
         T t = this.chartData;
         if (t != null) {
             float f = this.chartFullWidth;
@@ -1550,32 +1554,47 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             } else {
                 int findIndex = t.findIndex(this.startXIndex, this.endXIndex, f3);
                 this.selectedIndex = findIndex;
-                int i3 = findIndex + 1;
+                int i4 = findIndex + 1;
                 float[] fArr = this.chartData.xPercentage;
-                if (i3 < fArr.length) {
+                if (i4 < fArr.length) {
                     if (Math.abs(this.chartData.xPercentage[this.selectedIndex + 1] - f3) < Math.abs(fArr[findIndex] - f3)) {
                         this.selectedIndex++;
                     }
                 }
             }
-            int i4 = this.selectedIndex;
-            int i5 = this.endXIndex;
-            if (i4 > i5) {
-                this.selectedIndex = i5;
+            int i5 = this.selectedIndex;
+            int i6 = this.endXIndex;
+            if (i5 > i6) {
+                this.selectedIndex = i6;
             }
-            int i6 = this.selectedIndex;
-            int i7 = this.startXIndex;
-            if (i6 < i7) {
-                this.selectedIndex = i7;
+            int i7 = this.selectedIndex;
+            int i8 = this.startXIndex;
+            if (i7 < i8) {
+                this.selectedIndex = i8;
             }
-            this.legendShowing = true;
-            animateLegend(true);
-            moveLegend(f2);
-            DateSelectionListener dateSelectionListener2 = this.dateSelectionListener;
-            if (dateSelectionListener2 != null) {
-                dateSelectionListener2.onDateSelected(getSelectedDate());
+            if (i3 != this.selectedIndex) {
+                this.legendShowing = true;
+                animateLegend(true);
+                moveLegend(f2);
+                DateSelectionListener dateSelectionListener2 = this.dateSelectionListener;
+                if (dateSelectionListener2 != null) {
+                    dateSelectionListener2.onDateSelected(getSelectedDate());
+                }
+                runSmoothHaptic();
+                invalidate();
             }
-            invalidate();
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void runSmoothHaptic() {
+        if (Build.VERSION.SDK_INT >= 26) {
+            Vibrator vibrator = (Vibrator) getContext().getSystemService("vibrator");
+            if (this.vibrationEffect == null) {
+                this.vibrationEffect = VibrationEffect.createWaveform(new long[]{0, 2}, -1);
+            }
+            vibrator.cancel();
+            vibrator.vibrate(this.vibrationEffect);
         }
     }
 

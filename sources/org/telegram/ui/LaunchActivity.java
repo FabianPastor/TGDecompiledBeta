@@ -11263,7 +11263,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             if (r0 <= 0) goto L_0x06ed
-            r0 = 2131628314(0x7f0e111a, float:1.8883917E38)
+            r0 = 2131628316(0x7f0e111c, float:1.8883921E38)
             java.lang.String r3 = "YourNameChanged"
             goto L_0x06f2
         L_0x06ed:
@@ -11286,7 +11286,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.Integer r0 = (java.lang.Integer) r0
             int r0 = r0.intValue()
             if (r0 <= 0) goto L_0x071c
-            r0 = 2131628297(0x7f0e1109, float:1.8883883E38)
+            r0 = 2131628299(0x7f0e110b, float:1.8883887E38)
             java.lang.String r3 = "YourBioChanged"
             goto L_0x0721
         L_0x071c:

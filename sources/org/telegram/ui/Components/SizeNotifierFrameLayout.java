@@ -70,37 +70,39 @@ public class SizeNotifierFrameLayout extends FrameLayout {
     }
 
     public void setBackgroundImage(Drawable drawable, boolean z) {
-        if (drawable instanceof MotionBackgroundDrawable) {
-            ((MotionBackgroundDrawable) drawable).setParentView(this);
-        }
-        this.backgroundDrawable = drawable;
-        if (z) {
-            if (this.parallaxEffect == null) {
-                WallpaperParallaxEffect wallpaperParallaxEffect = new WallpaperParallaxEffect(getContext());
-                this.parallaxEffect = wallpaperParallaxEffect;
-                wallpaperParallaxEffect.setCallback(new WallpaperParallaxEffect.Callback() {
-                    public final void onOffsetsChanged(int i, int i2, float f) {
-                        SizeNotifierFrameLayout.this.lambda$setBackgroundImage$0$SizeNotifierFrameLayout(i, i2, f);
+        if (this.backgroundDrawable != drawable) {
+            if (drawable instanceof MotionBackgroundDrawable) {
+                ((MotionBackgroundDrawable) drawable).setParentView(this);
+            }
+            this.backgroundDrawable = drawable;
+            if (z) {
+                if (this.parallaxEffect == null) {
+                    WallpaperParallaxEffect wallpaperParallaxEffect = new WallpaperParallaxEffect(getContext());
+                    this.parallaxEffect = wallpaperParallaxEffect;
+                    wallpaperParallaxEffect.setCallback(new WallpaperParallaxEffect.Callback() {
+                        public final void onOffsetsChanged(int i, int i2, float f) {
+                            SizeNotifierFrameLayout.this.lambda$setBackgroundImage$0$SizeNotifierFrameLayout(i, i2, f);
+                        }
+                    });
+                    if (!(getMeasuredWidth() == 0 || getMeasuredHeight() == 0)) {
+                        this.parallaxScale = this.parallaxEffect.getScale(getMeasuredWidth(), getMeasuredHeight());
                     }
-                });
-                if (!(getMeasuredWidth() == 0 || getMeasuredHeight() == 0)) {
-                    this.parallaxScale = this.parallaxEffect.getScale(getMeasuredWidth(), getMeasuredHeight());
+                }
+                if (!this.paused) {
+                    this.parallaxEffect.setEnabled(true);
+                }
+            } else {
+                WallpaperParallaxEffect wallpaperParallaxEffect2 = this.parallaxEffect;
+                if (wallpaperParallaxEffect2 != null) {
+                    wallpaperParallaxEffect2.setEnabled(false);
+                    this.parallaxEffect = null;
+                    this.parallaxScale = 1.0f;
+                    this.translationX = 0.0f;
+                    this.translationY = 0.0f;
                 }
             }
-            if (!this.paused) {
-                this.parallaxEffect.setEnabled(true);
-            }
-        } else {
-            WallpaperParallaxEffect wallpaperParallaxEffect2 = this.parallaxEffect;
-            if (wallpaperParallaxEffect2 != null) {
-                wallpaperParallaxEffect2.setEnabled(false);
-                this.parallaxEffect = null;
-                this.parallaxScale = 1.0f;
-                this.translationX = 0.0f;
-                this.translationY = 0.0f;
-            }
+            invalidate();
         }
-        invalidate();
     }
 
     /* access modifiers changed from: private */

@@ -1144,6 +1144,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if (!this.takingPhoto && (cameraView2 = this.cameraView) != null && cameraView2.isInitied()) {
             this.canSaveCameraPreview = false;
             this.cameraView.switchCamera();
+            this.cameraView.startSwitchingAnimation();
             ObjectAnimator duration = ObjectAnimator.ofFloat(this.switchCameraButton, View.SCALE_X, new float[]{0.0f}).setDuration(100);
             duration.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {

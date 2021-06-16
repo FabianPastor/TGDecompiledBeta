@@ -67,7 +67,7 @@ public abstract class VideoPreviewDialog extends FrameLayout {
         actionBar2.setBackButtonDrawable(new BackDrawable(false));
         actionBar2.setBackgroundColor(0);
         actionBar2.setItemsColor(Theme.getColor("voipgroup_actionBarItems"), false);
-        actionBar2.setTitle(LocaleController.getString("CallViedeoPreviewTitle", NUM));
+        actionBar2.setTitle(LocaleController.getString("CallVideoPreviewTitle", NUM));
         actionBar2.setOccupyStatusBar(false);
         actionBar2.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
             public void onItemClick(int i) {
@@ -328,7 +328,7 @@ public abstract class VideoPreviewDialog extends FrameLayout {
                 rectF.bottom -= height;
             }
             this.drawable.setParentWidth(getMeasuredWidth());
-            this.drawable.draw(canvas, rectF);
+            this.drawable.draw(canvas, rectF, (float) AndroidUtilities.dp(8.0f));
             invalidate();
         }
         super.onDraw(canvas);
@@ -355,7 +355,7 @@ public abstract class VideoPreviewDialog extends FrameLayout {
             marginLayoutParams2.bottomMargin = AndroidUtilities.dp(16.0f);
         } else {
             ViewGroup.MarginLayoutParams marginLayoutParams3 = (ViewGroup.MarginLayoutParams) this.textureView.getLayoutParams();
-            this.actionBar.setTitle(LocaleController.getString("CallViedeoPreviewTitle", NUM));
+            this.actionBar.setTitle(LocaleController.getString("CallVideoPreviewTitle", NUM));
             marginLayoutParams3.topMargin = ActionBar.getCurrentActionBarHeight() + AndroidUtilities.dp(8.0f);
             marginLayoutParams3.bottomMargin = AndroidUtilities.dp(168.0f);
             int dp3 = AndroidUtilities.dp(12.0f);

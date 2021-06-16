@@ -703,9 +703,9 @@
     <string name="CallReportSent">Thank you for helping make Telegram calls better.</string>
     <string name="CallText">Telegram will call you in %1$d:%2$02d</string>
     <string name="CallViaTelegram">Telegram Call</string>
-    <string name="CallViedeoPin">Pin</string>
-    <string name="CallViedeoPreviewTitle">Preview</string>
-    <string name="CallViedeoUnpin">Unpin</string>
+    <string name="CallVideoPin">Pin</string>
+    <string name="CallVideoPreviewTitle">Preview</string>
+    <string name="CallVideoUnpin">Unpin</string>
     <string name="Calling">Calling you...</string>
     <string name="Calls">Calls</string>
     <string name="CallsDataUsage">Calls</string>
@@ -4255,7 +4255,9 @@
     <string name="VoipNeedCameraPermission">Telegram needs access to your camera so that you can make video calls.</string>
     <string name="VoipNeedMicCameraPermission">Telegram needs access to your microphone and camera so that you can make video calls.</string>
     <string name="VoipNeedMicPermission">Telegram needs access to your microphone so that you can make calls.</string>
-    <string name="VoipNoiseCancellation">Noise сancellation</string>
+    <string name="VoipNoiseCancellation">Noise suppression</string>
+    <string name="VoipNoiseCancellationDisabled">Disabled</string>
+    <string name="VoipNoiseCancellationEnabled">Enabled</string>
     <string name="VoipNotificationSettings">Voice calls</string>
     <string name="VoipOffline">You\'re currently offline. Please connect to the Internet in order to make calls.</string>
     <string name="VoipOfflineAirplane">You currently have airplane mode enabled. Please turn it off or connect to Wi-Fi in order to make calls.</string>

@@ -247,13 +247,13 @@ public class GroupCallRenderersContainer extends FrameLayout {
         textView.setTextColor(-1);
         this.pinTextView.setTextSize(1, 15.0f);
         this.pinTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.pinTextView.setText(LocaleController.getString("CallViedeoPin", NUM));
+        this.pinTextView.setText(LocaleController.getString("CallVideoPin", NUM));
         TextView textView2 = new TextView(context2);
         this.unpinTextView = textView2;
         textView2.setTextColor(-1);
         this.unpinTextView.setTextSize(1, 15.0f);
         this.unpinTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.unpinTextView.setText(LocaleController.getString("CallViedeoUnpin", NUM));
+        this.unpinTextView.setText(LocaleController.getString("CallVideoUnpin", NUM));
         addView(this.pinTextView, LayoutHelper.createFrame(-2, -2, 51));
         addView(this.unpinTextView, LayoutHelper.createFrame(-2, -2, 51));
         final Drawable createRoundRectDrawable = Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_listViewBackground"), 204));

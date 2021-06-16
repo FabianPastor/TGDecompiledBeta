@@ -28,6 +28,7 @@ import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_wallPaper;
+import org.telegram.tgnet.TLRPC$WallPaperSettings;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.WallpaperCell;
 import org.telegram.ui.Components.BackupImageView;
@@ -124,6 +125,7 @@ public class WallpaperCell extends FrameLayout {
 
         public void setWallpaper(Object obj, Object obj2, Drawable drawable, boolean z) {
             int i;
+            int i2;
             Object obj3 = obj;
             this.currentWallpaper = obj3;
             this.imageView.setVisibility(0);
@@ -142,16 +144,39 @@ public class WallpaperCell extends FrameLayout {
                 if (closestPhotoSizeWithSize2 != closestPhotoSizeWithSize) {
                     tLRPC$PhotoSize = closestPhotoSizeWithSize2;
                 }
-                int i2 = tLRPC$PhotoSize != null ? tLRPC$PhotoSize.size : tLRPC$TL_wallPaper.document.size;
+                int i3 = tLRPC$PhotoSize != null ? tLRPC$PhotoSize.size : tLRPC$TL_wallPaper.document.size;
                 if (tLRPC$TL_wallPaper.pattern) {
-                    this.imageView.setBackgroundColor(tLRPC$TL_wallPaper.settings.background_color | -16777216);
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), (String) null, "jpg", i2, 1, tLRPC$TL_wallPaper);
-                    this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(AndroidUtilities.getPatternColor(tLRPC$TL_wallPaper.settings.background_color), PorterDuff.Mode.SRC_IN));
+                    TLRPC$WallPaperSettings tLRPC$WallPaperSettings = tLRPC$TL_wallPaper.settings;
+                    if (tLRPC$WallPaperSettings.third_background_color != 0) {
+                        TLRPC$WallPaperSettings tLRPC$WallPaperSettings2 = tLRPC$TL_wallPaper.settings;
+                        MotionBackgroundDrawable motionBackgroundDrawable = new MotionBackgroundDrawable(tLRPC$WallPaperSettings2.background_color, tLRPC$WallPaperSettings2.second_background_color, tLRPC$WallPaperSettings2.third_background_color, tLRPC$WallPaperSettings2.fourth_background_color, true);
+                        if (tLRPC$TL_wallPaper.settings.intensity >= 0 || !Theme.getActiveTheme().isDark()) {
+                            this.imageView.setBackground(motionBackgroundDrawable);
+                            if (Build.VERSION.SDK_INT >= 29) {
+                                this.imageView.getImageReceiver().setBlendMode(BlendMode.SOFT_LIGHT);
+                            }
+                        } else {
+                            this.imageView.getImageReceiver().setGradientBitmap(motionBackgroundDrawable.getBitmap());
+                        }
+                        TLRPC$WallPaperSettings tLRPC$WallPaperSettings3 = tLRPC$TL_wallPaper.settings;
+                        i2 = MotionBackgroundDrawable.getPatternColor(tLRPC$WallPaperSettings3.background_color, tLRPC$WallPaperSettings3.second_background_color, tLRPC$WallPaperSettings3.third_background_color, tLRPC$WallPaperSettings3.fourth_background_color);
+                    } else {
+                        this.imageView.setBackgroundColor(tLRPC$WallPaperSettings.background_color | -16777216);
+                        i2 = AndroidUtilities.getPatternColor(tLRPC$TL_wallPaper.settings.background_color);
+                    }
+                    if (Build.VERSION.SDK_INT < 29 || tLRPC$TL_wallPaper.settings.third_background_color == 0) {
+                        this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(AndroidUtilities.getPatternColor(i2), PorterDuff.Mode.SRC_IN));
+                    }
+                    if (tLRPC$PhotoSize != null) {
+                        this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), (String) null, "jpg", i3, 1, tLRPC$TL_wallPaper);
+                    } else {
+                        this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100", (ImageLocation) null, (String) null, "jpg", i3, 1, tLRPC$TL_wallPaper);
+                    }
                     this.imageView.getImageReceiver().setAlpha(((float) Math.abs(tLRPC$TL_wallPaper.settings.intensity)) / 100.0f);
                 } else if (tLRPC$PhotoSize != null) {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100_b", "jpg", i2, 1, tLRPC$TL_wallPaper);
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$PhotoSize, tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100_b", "jpg", i3, 1, tLRPC$TL_wallPaper);
                 } else {
-                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100_b", "jpg", i2, 1, tLRPC$TL_wallPaper);
+                    this.imageView.setImage(ImageLocation.getForDocument(tLRPC$TL_wallPaper.document), "100_100", ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$TL_wallPaper.document), "100_100_b", "jpg", i3, 1, tLRPC$TL_wallPaper);
                 }
             } else if (obj3 instanceof WallpapersListActivity.ColorWallpaper) {
                 WallpapersListActivity.ColorWallpaper colorWallpaper = (WallpapersListActivity.ColorWallpaper) obj3;
@@ -166,14 +191,14 @@ public class WallpaperCell extends FrameLayout {
                     }
                 } else {
                     if (colorWallpaper.gradientColor2 != 0) {
-                        MotionBackgroundDrawable motionBackgroundDrawable = new MotionBackgroundDrawable(colorWallpaper.color, colorWallpaper.gradientColor1, colorWallpaper.gradientColor2, colorWallpaper.gradientColor3, true);
+                        MotionBackgroundDrawable motionBackgroundDrawable2 = new MotionBackgroundDrawable(colorWallpaper.color, colorWallpaper.gradientColor1, colorWallpaper.gradientColor2, colorWallpaper.gradientColor3, true);
                         if (colorWallpaper.intensity >= 0.0f) {
                             this.imageView.setBackground(new MotionBackgroundDrawable(colorWallpaper.color, colorWallpaper.gradientColor1, colorWallpaper.gradientColor2, colorWallpaper.gradientColor3, true));
                             if (Build.VERSION.SDK_INT >= 29) {
                                 this.imageView.getImageReceiver().setBlendMode(BlendMode.SOFT_LIGHT);
                             }
                         } else {
-                            this.imageView.getImageReceiver().setGradientBitmap(motionBackgroundDrawable.getBitmap());
+                            this.imageView.getImageReceiver().setGradientBitmap(motionBackgroundDrawable2.getBitmap());
                         }
                         i = MotionBackgroundDrawable.getPatternColor(colorWallpaper.color, colorWallpaper.gradientColor1, colorWallpaper.gradientColor2, colorWallpaper.gradientColor3);
                     } else {
@@ -195,7 +220,7 @@ public class WallpaperCell extends FrameLayout {
                     TLRPC$PhotoSize closestPhotoSizeWithSize3 = FileLoader.getClosestPhotoSizeWithSize(colorWallpaper.pattern.document.thumbs, 100);
                     this.imageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize3, colorWallpaper.pattern.document), "100_100", (ImageLocation) null, (String) null, "jpg", closestPhotoSizeWithSize3 != null ? closestPhotoSizeWithSize3.size : colorWallpaper.pattern.document.size, 1, colorWallpaper.pattern);
                     this.imageView.getImageReceiver().setAlpha(Math.abs(colorWallpaper.intensity));
-                    if (Build.VERSION.SDK_INT < 29) {
+                    if (Build.VERSION.SDK_INT < 29 || colorWallpaper.gradientColor2 == 0) {
                         this.imageView.getImageReceiver().setColorFilter(new PorterDuffColorFilter(AndroidUtilities.getPatternColor(i), PorterDuff.Mode.SRC_IN));
                     }
                 }
