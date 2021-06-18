@@ -408,7 +408,7 @@ public class UserCell2 extends FrameLayout {
             int r1 = r12.statusOnlineColor
             r13.setTextColor(r1)
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r1 = 2131626537(0x7f0e0a29, float:1.8880313E38)
+            r1 = 2131626552(0x7f0e0a38, float:1.8880343E38)
             java.lang.String r2 = "Online"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r13.setText(r1)
@@ -462,7 +462,7 @@ public class UserCell2 extends FrameLayout {
             boolean r13 = r1.has_geo
             if (r13 == 0) goto L_0x01fb
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r0 = 2131626103(0x7f0e0877, float:1.8879433E38)
+            r0 = 2131626118(0x7f0e0886, float:1.8879463E38)
             java.lang.String r2 = "MegaLocation"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r13.setText(r0)
@@ -472,14 +472,14 @@ public class UserCell2 extends FrameLayout {
             boolean r13 = android.text.TextUtils.isEmpty(r13)
             if (r13 == 0) goto L_0x0212
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r0 = 2131626104(0x7f0e0878, float:1.8879435E38)
+            r0 = 2131626119(0x7f0e0887, float:1.8879465E38)
             java.lang.String r2 = "MegaPrivate"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r13.setText(r0)
             goto L_0x0220
         L_0x0212:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r0 = 2131626107(0x7f0e087b, float:1.887944E38)
+            r0 = 2131626122(0x7f0e088a, float:1.8879471E38)
             java.lang.String r2 = "MegaPublic"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r13.setText(r0)

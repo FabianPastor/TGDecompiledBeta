@@ -115,30 +115,11 @@ public class MotionBackgroundDrawable extends Drawable {
         if (Build.VERSION.SDK_INT >= 29) {
             return -16777216;
         }
-        double[] rgbToHsv = AndroidUtilities.rgbToHsv(i);
-        double[] rgbToHsv2 = AndroidUtilities.rgbToHsv(i2);
-        double[] rgbToHsv3 = AndroidUtilities.rgbToHsv(i3);
-        double[] rgbToHsv4 = i4 != 0 ? AndroidUtilities.rgbToHsv(i4) : null;
-        double d = rgbToHsv[0] + rgbToHsv2[0] + rgbToHsv3[0];
-        int i5 = 3;
-        if (rgbToHsv4 != null) {
-            d += rgbToHsv4[0];
-            i5 = 4;
-        }
-        double d2 = (double) i5;
-        Double.isNaN(d2);
-        double d3 = d / d2;
-        if (Math.abs(rgbToHsv[0] - d3) >= 0.19444444444444445d || Math.abs(rgbToHsv2[0] - d3) >= 0.19444444444444445d || Math.abs(rgbToHsv3[0] - d3) >= 0.19444444444444445d) {
-            return NUM;
-        }
-        if (rgbToHsv4 != null && Math.abs(rgbToHsv4[0] - d3) >= 0.19444444444444445d) {
-            return NUM;
-        }
         int averageColor = AndroidUtilities.getAverageColor(i3, AndroidUtilities.getAverageColor(i, i2));
         if (i4 != 0) {
             averageColor = AndroidUtilities.getAverageColor(i4, averageColor);
         }
-        return AndroidUtilities.getPatternColor(averageColor, true);
+        return (AndroidUtilities.getPatternColor(averageColor, true) & 16777215) | NUM;
     }
 
     public int getPatternColor() {

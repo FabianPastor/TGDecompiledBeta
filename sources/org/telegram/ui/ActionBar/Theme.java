@@ -501,6 +501,10 @@ public class Theme {
     public static void destroyResources() {
     }
 
+    public static int getWallpaperColor(int i) {
+        return i | -16777216;
+    }
+
     public static class MessageDrawable extends Drawable {
         private int alpha;
         private Drawable[][] backgroundDrawable = ((Drawable[][]) Array.newInstance(Drawable.class, new int[]{2, 4}));
@@ -2400,10 +2404,16 @@ public class Theme {
         }
 
         public File getPathToWallpaper() {
-            if (TextUtils.isEmpty(this.patternSlug)) {
+            if (this.id < 100) {
+                if (TextUtils.isEmpty(this.patternSlug)) {
+                    return null;
+                }
+                return new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s_v3.jpg", new Object[]{this.parentTheme.getKey(), Integer.valueOf(this.id), this.patternSlug}));
+            } else if (TextUtils.isEmpty(this.patternSlug)) {
                 return null;
+            } else {
+                return new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s.jpg", new Object[]{this.parentTheme.getKey(), Integer.valueOf(this.id), this.patternSlug}));
             }
-            return new File(ApplicationLoader.getFilesDirFixed(), String.format(Locale.US, "%s_%d_%s_v2.jpg", new Object[]{this.parentTheme.getKey(), Integer.valueOf(this.id), this.patternSlug}));
         }
 
         /* JADX WARNING: Removed duplicated region for block: B:77:0x02e6 A[SYNTHETIC, Splitter:B:77:0x02e6] */
@@ -2770,6 +2780,7 @@ public class Theme {
     }
 
     public static class OverrideWallpaperInfo {
+        public long accessHash;
         public int color;
         public String fileName = "";
         public int gradientColor1;
@@ -3343,11 +3354,12 @@ public class Theme {
 
         public static boolean accentEquals(ThemeAccent themeAccent, TLRPC$TL_themeSettings tLRPC$TL_themeSettings) {
             long j;
-            long j2;
-            long j3;
             int i;
+            long j2;
             int i2;
             TLRPC$WallPaperSettings tLRPC$WallPaperSettings;
+            long j3;
+            long j4;
             ThemeAccent themeAccent2 = themeAccent;
             TLRPC$TL_themeSettings tLRPC$TL_themeSettings2 = tLRPC$TL_themeSettings;
             int i3 = tLRPC$TL_themeSettings2.message_top_color;
@@ -3357,30 +3369,46 @@ public class Theme {
             String str = null;
             float f = 0.0f;
             TLRPC$WallPaper tLRPC$WallPaper = tLRPC$TL_themeSettings2.wallpaper;
+            long j5 = 0;
             if (tLRPC$WallPaper == null || (tLRPC$WallPaperSettings = tLRPC$WallPaper.settings) == null) {
                 j2 = 0;
                 j = 0;
                 i2 = 0;
-                j3 = 0;
                 i = 0;
             } else {
-                i = tLRPC$WallPaperSettings.background_color;
-                int i4 = tLRPC$WallPaperSettings.second_background_color;
-                j2 = i4 == 0 ? 4294967296L : (long) i4;
-                int i5 = tLRPC$WallPaperSettings.third_background_color;
-                j = i5 == 0 ? 4294967296L : (long) i5;
-                int i6 = tLRPC$WallPaperSettings.fourth_background_color;
-                j3 = i6 == 0 ? 4294967296L : (long) i6;
-                i2 = AndroidUtilities.getWallpaperRotation(tLRPC$WallPaperSettings.rotation, false);
+                i2 = Theme.getWallpaperColor(tLRPC$WallPaperSettings.background_color);
+                int i4 = tLRPC$TL_themeSettings2.wallpaper.settings.second_background_color;
+                if (i4 == 0) {
+                    j3 = 4294967296L;
+                } else {
+                    j3 = (long) Theme.getWallpaperColor(i4);
+                }
+                int i5 = tLRPC$TL_themeSettings2.wallpaper.settings.third_background_color;
+                if (i5 == 0) {
+                    j = 4294967296L;
+                } else {
+                    j = (long) Theme.getWallpaperColor(i5);
+                }
+                int i6 = tLRPC$TL_themeSettings2.wallpaper.settings.fourth_background_color;
+                if (i6 == 0) {
+                    j4 = 4294967296L;
+                } else {
+                    j4 = (long) Theme.getWallpaperColor(i6);
+                }
+                int wallpaperRotation = AndroidUtilities.getWallpaperRotation(tLRPC$TL_themeSettings2.wallpaper.settings.rotation, false);
                 TLRPC$WallPaper tLRPC$WallPaper2 = tLRPC$TL_themeSettings2.wallpaper;
                 if (!(tLRPC$WallPaper2 instanceof TLRPC$TL_wallPaperNoFile) && tLRPC$WallPaper2.pattern) {
                     str = tLRPC$WallPaper2.slug;
                     f = ((float) tLRPC$WallPaper2.settings.intensity) / 100.0f;
                 }
+                i = wallpaperRotation;
+                j2 = j4;
+                j5 = j3;
             }
-            if (tLRPC$TL_themeSettings2.accent_color == themeAccent2.accentColor && tLRPC$TL_themeSettings2.message_bottom_color == themeAccent2.myMessagesAccentColor && i3 == themeAccent2.myMessagesGradientAccentColor) {
-                return ((long) i) == themeAccent2.backgroundOverrideColor && j2 == themeAccent2.backgroundGradientOverrideColor1 && j == themeAccent2.backgroundGradientOverrideColor2 && j3 == themeAccent2.backgroundGradientOverrideColor3 && i2 == themeAccent2.backgroundRotation && TextUtils.equals(str, themeAccent2.patternSlug) && ((double) Math.abs(f - themeAccent2.patternIntensity)) < 0.001d;
+            if (tLRPC$TL_themeSettings2.accent_color == themeAccent2.accentColor && tLRPC$TL_themeSettings2.message_bottom_color == themeAccent2.myMessagesAccentColor && i3 == themeAccent2.myMessagesGradientAccentColor && ((long) i2) == themeAccent2.backgroundOverrideColor && j5 == themeAccent2.backgroundGradientOverrideColor1 && j == themeAccent2.backgroundGradientOverrideColor2 && j2 == themeAccent2.backgroundGradientOverrideColor3 && i == themeAccent2.backgroundRotation && TextUtils.equals(str, themeAccent2.patternSlug) && ((double) Math.abs(f - themeAccent2.patternIntensity)) < 0.001d) {
+                return true;
             }
+            return false;
         }
 
         public static void fillAccentValues(ThemeAccent themeAccent, TLRPC$TL_themeSettings tLRPC$TL_themeSettings) {
@@ -3395,30 +3423,32 @@ public class Theme {
             }
             TLRPC$WallPaper tLRPC$WallPaper = tLRPC$TL_themeSettings.wallpaper;
             if (tLRPC$WallPaper != null && (tLRPC$WallPaperSettings = tLRPC$WallPaper.settings) != null) {
-                themeAccent.backgroundOverrideColor = (long) tLRPC$WallPaperSettings.background_color;
-                int i3 = tLRPC$WallPaperSettings.flags;
-                if ((i3 & 16) == 0 || tLRPC$WallPaperSettings.second_background_color != 0) {
-                    themeAccent.backgroundGradientOverrideColor1 = (long) tLRPC$WallPaperSettings.second_background_color;
+                themeAccent.backgroundOverrideColor = (long) Theme.getWallpaperColor(tLRPC$WallPaperSettings.background_color);
+                TLRPC$WallPaperSettings tLRPC$WallPaperSettings2 = tLRPC$TL_themeSettings.wallpaper.settings;
+                if ((tLRPC$WallPaperSettings2.flags & 16) == 0 || tLRPC$WallPaperSettings2.second_background_color != 0) {
+                    themeAccent.backgroundGradientOverrideColor1 = (long) Theme.getWallpaperColor(tLRPC$WallPaperSettings2.second_background_color);
                 } else {
                     themeAccent.backgroundGradientOverrideColor1 = 4294967296L;
                 }
-                if ((i3 & 32) == 0 || tLRPC$WallPaperSettings.third_background_color != 0) {
-                    themeAccent.backgroundGradientOverrideColor2 = (long) tLRPC$WallPaperSettings.third_background_color;
+                TLRPC$WallPaperSettings tLRPC$WallPaperSettings3 = tLRPC$TL_themeSettings.wallpaper.settings;
+                if ((tLRPC$WallPaperSettings3.flags & 32) == 0 || tLRPC$WallPaperSettings3.third_background_color != 0) {
+                    themeAccent.backgroundGradientOverrideColor2 = (long) Theme.getWallpaperColor(tLRPC$WallPaperSettings3.third_background_color);
                 } else {
                     themeAccent.backgroundGradientOverrideColor2 = 4294967296L;
                 }
-                if ((i3 & 64) == 0 || tLRPC$WallPaperSettings.fourth_background_color != 0) {
-                    themeAccent.backgroundGradientOverrideColor3 = (long) tLRPC$WallPaperSettings.fourth_background_color;
+                TLRPC$WallPaperSettings tLRPC$WallPaperSettings4 = tLRPC$TL_themeSettings.wallpaper.settings;
+                if ((tLRPC$WallPaperSettings4.flags & 64) == 0 || tLRPC$WallPaperSettings4.fourth_background_color != 0) {
+                    themeAccent.backgroundGradientOverrideColor3 = (long) Theme.getWallpaperColor(tLRPC$WallPaperSettings4.fourth_background_color);
                 } else {
                     themeAccent.backgroundGradientOverrideColor3 = 4294967296L;
                 }
-                themeAccent.backgroundRotation = AndroidUtilities.getWallpaperRotation(tLRPC$WallPaperSettings.rotation, false);
+                themeAccent.backgroundRotation = AndroidUtilities.getWallpaperRotation(tLRPC$TL_themeSettings.wallpaper.settings.rotation, false);
                 TLRPC$WallPaper tLRPC$WallPaper2 = tLRPC$TL_themeSettings.wallpaper;
                 if (!(tLRPC$WallPaper2 instanceof TLRPC$TL_wallPaperNoFile) && tLRPC$WallPaper2.pattern) {
                     themeAccent.patternSlug = tLRPC$WallPaper2.slug;
-                    TLRPC$WallPaperSettings tLRPC$WallPaperSettings2 = tLRPC$WallPaper2.settings;
-                    themeAccent.patternIntensity = ((float) tLRPC$WallPaperSettings2.intensity) / 100.0f;
-                    themeAccent.patternMotion = tLRPC$WallPaperSettings2.motion;
+                    TLRPC$WallPaperSettings tLRPC$WallPaperSettings5 = tLRPC$WallPaper2.settings;
+                    themeAccent.patternIntensity = ((float) tLRPC$WallPaperSettings5.intensity) / 100.0f;
+                    themeAccent.patternMotion = tLRPC$WallPaperSettings5.motion;
                 }
             }
         }
@@ -9650,6 +9680,10 @@ public class Theme {
         return combinedDrawable;
     }
 
+    public static float getThemeIntensity(float f) {
+        return (f >= 0.0f || getActiveTheme().isDark()) ? f : -f;
+    }
+
     public static void setCombinedDrawableColor(Drawable drawable, int i, boolean z) {
         Drawable drawable2;
         if (drawable instanceof CombinedDrawable) {
@@ -15158,9 +15192,39 @@ public class Theme {
                         serviceBitmapMatrix = new Matrix();
                     }
                 }
+                setDrawableColor(chat_msgStickerPinnedDrawable, -1);
+                setDrawableColor(chat_msgStickerCheckDrawable, -1);
+                setDrawableColor(chat_msgStickerHalfCheckDrawable, -1);
+                setDrawableColor(chat_msgStickerClockDrawable, -1);
+                setDrawableColor(chat_msgStickerViewsDrawable, -1);
+                setDrawableColor(chat_msgStickerRepliesDrawable, -1);
+                chat_actionTextPaint.setColor(-1);
+                chat_actionTextPaint.setColor(-1);
+                chat_actionTextPaint.linkColor = -1;
+                setDrawableColor(chat_commentStickerDrawable, -1);
+                setDrawableColor(chat_shareIconDrawable, -1);
+                setDrawableColor(chat_replyIconDrawable, -1);
+                setDrawableColor(chat_goIconDrawable, -1);
+                setDrawableColor(chat_botInlineDrawable, -1);
+                setDrawableColor(chat_botLinkDrawalbe, -1);
             } else {
                 serviceBitmap = null;
                 serviceBitmapShader = null;
+                setDrawableColorByKey(chat_msgStickerPinnedDrawable, "chat_serviceText");
+                setDrawableColorByKey(chat_msgStickerCheckDrawable, "chat_serviceText");
+                setDrawableColorByKey(chat_msgStickerHalfCheckDrawable, "chat_serviceText");
+                setDrawableColorByKey(chat_msgStickerClockDrawable, "chat_serviceText");
+                setDrawableColorByKey(chat_msgStickerViewsDrawable, "chat_serviceText");
+                setDrawableColorByKey(chat_msgStickerRepliesDrawable, "chat_serviceText");
+                chat_actionTextPaint.setColor(getColor("chat_serviceText"));
+                chat_actionTextPaint.setColor(getColor("chat_serviceText"));
+                chat_actionTextPaint.linkColor = getColor("chat_serviceLink");
+                setDrawableColorByKey(chat_commentStickerDrawable, "chat_serviceIcon");
+                setDrawableColorByKey(chat_shareIconDrawable, "chat_serviceIcon");
+                setDrawableColorByKey(chat_replyIconDrawable, "chat_serviceIcon");
+                setDrawableColorByKey(chat_goIconDrawable, "chat_serviceIcon");
+                setDrawableColorByKey(chat_botInlineDrawable, "chat_serviceIcon");
+                setDrawableColorByKey(chat_botLinkDrawalbe, "chat_serviceIcon");
             }
             chat_actionBackgroundPaint.setColor(num2.intValue());
             chat_actionBackgroundSelectedPaint.setColor(num.intValue());
@@ -15276,6 +15340,9 @@ public class Theme {
         Integer num;
         if (!z && (hashMap = animatingColors) != null && (num = hashMap.get(str)) != null) {
             return num.intValue();
+        }
+        if (serviceBitmapShader != null && ("chat_serviceText".equals(str) || "chat_serviceLink".equals(str) || "chat_serviceIcon".equals(str))) {
+            return -1;
         }
         if (currentTheme == defaultTheme) {
             if (myMessagesColorKeys.contains(str)) {

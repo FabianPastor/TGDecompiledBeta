@@ -1775,7 +1775,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r2 = r10.getParentActivity()
             r1.<init>((android.content.Context) r2)
-            r2 = 2131626532(0x7f0e0a24, float:1.8880303E38)
+            r2 = 2131626547(0x7f0e0a33, float:1.8880333E38)
             java.lang.String r4 = "OK"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             org.telegram.ui.-$$Lambda$TwoStepVerificationSetupActivity$cKtqZl1hLLkF3CB6wTW0mmtLe7E r4 = new org.telegram.ui.-$$Lambda$TwoStepVerificationSetupActivity$cKtqZl1hLLkF3CB6wTW0mmtLe7E
@@ -1786,18 +1786,18 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (r2 == 0) goto L_0x00a9
             boolean r2 = r2.has_password
             if (r2 == 0) goto L_0x00a9
-            r2 = 2131628313(0x7f0e1119, float:1.8883915E38)
+            r2 = 2131628328(0x7f0e1128, float:1.8883946E38)
             java.lang.String r3 = "YourEmailSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
             goto L_0x00b5
         L_0x00a9:
-            r2 = 2131628318(0x7f0e111e, float:1.8883925E38)
+            r2 = 2131628333(0x7f0e112d, float:1.8883956E38)
             java.lang.String r3 = "YourPasswordChangedSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
         L_0x00b5:
-            r2 = 2131628319(0x7f0e111f, float:1.8883927E38)
+            r2 = 2131628334(0x7f0e112e, float:1.8883958E38)
             java.lang.String r3 = "YourPasswordSuccess"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setTitle(r2)
@@ -1885,7 +1885,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             java.lang.String r4 = "AppName"
             if (r2 == 0) goto L_0x017a
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r2 = 2131626801(0x7f0e0b31, float:1.8880848E38)
+            r2 = 2131626816(0x7f0e0b40, float:1.8880879E38)
             java.lang.String r3 = "PasswordEmailInvalid"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r10.showAlertWithText(r1, r2)

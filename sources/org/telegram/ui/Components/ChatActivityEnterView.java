@@ -5339,39 +5339,47 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     /* access modifiers changed from: private */
     public void updateFieldHint(boolean z) {
         boolean z2;
-        if (this.editingMessageObject != null) {
+        MessageObject messageObject;
+        TLRPC$ReplyMarkup tLRPC$ReplyMarkup;
+        TLRPC$ReplyMarkup tLRPC$ReplyMarkup2;
+        MessageObject messageObject2 = this.replyingMessageObject;
+        if (messageObject2 != null && (tLRPC$ReplyMarkup2 = messageObject2.messageOwner.reply_markup) != null && !TextUtils.isEmpty(tLRPC$ReplyMarkup2.placeholder)) {
+            this.messageEditText.setHintText(this.replyingMessageObject.messageOwner.reply_markup.placeholder, z);
+        } else if (this.editingMessageObject != null) {
             this.messageEditText.setHintText(this.editingCaption ? LocaleController.getString("Caption", NUM) : LocaleController.getString("TypeMessage", NUM));
-            return;
-        }
-        boolean z3 = false;
-        if (((int) this.dialog_id) < 0) {
-            TLRPC$Chat chat = this.accountInstance.getMessagesController().getChat(Integer.valueOf(-((int) this.dialog_id)));
-            if (ChatObject.isChannel(chat) && !chat.megagroup) {
-                z3 = true;
-            }
-            boolean z4 = z3;
-            z3 = ChatObject.shouldSendAnonymously(chat);
-            z2 = z4;
-        } else {
-            z2 = false;
-        }
-        if (z3) {
-            this.messageEditText.setHintText(LocaleController.getString("SendAnonymously", NUM));
-            return;
-        }
-        ChatActivity chatActivity = this.parentFragment;
-        if (chatActivity == null || !chatActivity.isThreadChat()) {
-            if (!z2) {
-                this.messageEditText.setHintText(LocaleController.getString("TypeMessage", NUM));
-            } else if (this.silent) {
-                this.messageEditText.setHintText(LocaleController.getString("ChannelSilentBroadcast", NUM), z);
+        } else if (!this.botKeyboardViewVisible || (messageObject = this.botButtonsMessageObject) == null || (tLRPC$ReplyMarkup = messageObject.messageOwner.reply_markup) == null || TextUtils.isEmpty(tLRPC$ReplyMarkup.placeholder)) {
+            boolean z3 = false;
+            if (((int) this.dialog_id) < 0) {
+                TLRPC$Chat chat = this.accountInstance.getMessagesController().getChat(Integer.valueOf(-((int) this.dialog_id)));
+                if (ChatObject.isChannel(chat) && !chat.megagroup) {
+                    z3 = true;
+                }
+                boolean z4 = z3;
+                z3 = ChatObject.shouldSendAnonymously(chat);
+                z2 = z4;
             } else {
-                this.messageEditText.setHintText(LocaleController.getString("ChannelBroadcast", NUM), z);
+                z2 = false;
             }
-        } else if (this.parentFragment.isReplyChatComment()) {
-            this.messageEditText.setHintText(LocaleController.getString("Comment", NUM));
+            if (z3) {
+                this.messageEditText.setHintText(LocaleController.getString("SendAnonymously", NUM));
+                return;
+            }
+            ChatActivity chatActivity = this.parentFragment;
+            if (chatActivity == null || !chatActivity.isThreadChat()) {
+                if (!z2) {
+                    this.messageEditText.setHintText(LocaleController.getString("TypeMessage", NUM));
+                } else if (this.silent) {
+                    this.messageEditText.setHintText(LocaleController.getString("ChannelSilentBroadcast", NUM), z);
+                } else {
+                    this.messageEditText.setHintText(LocaleController.getString("ChannelBroadcast", NUM), z);
+                }
+            } else if (this.parentFragment.isReplyChatComment()) {
+                this.messageEditText.setHintText(LocaleController.getString("Comment", NUM));
+            } else {
+                this.messageEditText.setHintText(LocaleController.getString("Reply", NUM));
+            }
         } else {
-            this.messageEditText.setHintText(LocaleController.getString("Reply", NUM));
+            this.messageEditText.setHintText(this.botButtonsMessageObject.messageOwner.reply_markup.placeholder, z);
         }
     }
 
@@ -5391,6 +5399,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.replyingMessageObject = null;
         }
         MediaController.getInstance().setReplyingMessage(messageObject, getThreadMessage());
+        updateFieldHint(false);
     }
 
     public void setWebPage(TLRPC$WebPage tLRPC$WebPage, boolean z) {
@@ -10143,6 +10152,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (this.stickersExpanded && i != 1) {
                 setStickersExpanded(false, false, false);
             }
+            updateFieldHint(false);
         }
     }
 

@@ -1759,7 +1759,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             r3.setBackground(r7)
         L_0x06f2:
             android.widget.ImageView r3 = r0.stickerSettingsButton
-            r7 = 2131627446(0x7f0e0db6, float:1.8882157E38)
+            r7 = 2131627461(0x7f0e0dc5, float:1.8882187E38)
             java.lang.String r8 = "Settings"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setContentDescription(r7)
@@ -1815,7 +1815,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
             r3.setScaleType(r7)
             android.widget.ImageView r3 = r0.searchButton
-            r7 = 2131627295(0x7f0e0d1f, float:1.888185E38)
+            r7 = 2131627310(0x7f0e0d2e, float:1.888188E38)
             java.lang.String r8 = "Search"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setContentDescription(r7)
@@ -4411,7 +4411,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 java.util.ArrayList r0 = r0.recentStickers
                 if (r8 != r0) goto L_0x00b7
-                r8 = 2131627135(0x7f0e0c7f, float:1.8881526E38)
+                r8 = 2131627150(0x7f0e0c8e, float:1.8881556E38)
                 java.lang.String r0 = "RecentStickers"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r7.setText(r8, r1)
@@ -7207,7 +7207,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             android.widget.TextView r0 = new android.widget.TextView
                             android.content.Context r2 = r13.context
                             r0.<init>(r2)
-                            r2 = 2131626342(0x7f0e0966, float:1.8879917E38)
+                            r2 = 2131626357(0x7f0e0975, float:1.8879948E38)
                             java.lang.String r4 = "NoStickersFound"
                             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
                             r0.setText(r2)
@@ -7276,11 +7276,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v0, resolved type: boolean} */
                     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v1, resolved type: boolean} */
                     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v2, resolved type: boolean} */
-                    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v12, resolved type: java.lang.Object} */
-                    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v17, resolved type: int} */
+                    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v11, resolved type: java.lang.Object} */
+                    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v16, resolved type: int} */
                     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v3, resolved type: boolean} */
                     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v4, resolved type: boolean} */
-                    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v10, resolved type: java.lang.Integer} */
+                    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v11, resolved type: java.lang.Integer} */
                     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v11, resolved type: boolean} */
                     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v12, resolved type: boolean} */
                     /* JADX WARNING: Multi-variable type inference failed */
@@ -7291,14 +7291,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             int r0 = r10.getItemViewType()
                             r1 = 1
                             r2 = 0
-                            if (r0 == 0) goto L_0x01ae
+                            if (r0 == 0) goto L_0x01af
                             r3 = 0
                             if (r0 == r1) goto L_0x0128
                             r4 = 2
                             if (r0 == r4) goto L_0x00c4
                             r3 = 3
                             if (r0 == r3) goto L_0x0013
-                            goto L_0x01e8
+                            goto L_0x01ee
                         L_0x0013:
                             android.util.SparseArray<java.lang.Object> r0 = r9.cache
                             java.lang.Object r11 = r0.get(r11)
@@ -7371,30 +7371,30 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             java.lang.String r10 = r9.searchQuery
                             int r8 = r10.length()
                             r3.setStickerSet(r4, r5, r6, r7, r8)
-                            goto L_0x01e8
+                            goto L_0x01ee
                         L_0x009e:
                             r3.setStickerSet(r4, r2)
                             java.lang.String r10 = r9.searchQuery
                             boolean r10 = android.text.TextUtils.isEmpty(r10)
-                            if (r10 != 0) goto L_0x01e8
+                            if (r10 != 0) goto L_0x01ee
                             org.telegram.tgnet.TLRPC$StickerSet r10 = r4.set
                             java.lang.String r10 = r10.short_name
                             java.lang.String r11 = r9.searchQuery
                             int r10 = org.telegram.messenger.AndroidUtilities.indexOfIgnoreCase(r10, r11)
-                            if (r10 != 0) goto L_0x01e8
+                            if (r10 != 0) goto L_0x01ee
                             org.telegram.tgnet.TLRPC$StickerSet r10 = r4.set
                             java.lang.String r10 = r10.short_name
                             java.lang.String r11 = r9.searchQuery
                             int r11 = r11.length()
                             r3.setUrl(r10, r11)
-                            goto L_0x01e8
+                            goto L_0x01ee
                         L_0x00c4:
                             android.view.View r10 = r10.itemView
                             org.telegram.ui.Cells.StickerSetNameCell r10 = (org.telegram.ui.Cells.StickerSetNameCell) r10
                             android.util.SparseArray<java.lang.Object> r0 = r9.cache
                             java.lang.Object r11 = r0.get(r11)
                             boolean r0 = r11 instanceof org.telegram.tgnet.TLRPC$TL_messages_stickerSet
-                            if (r0 == 0) goto L_0x01e8
+                            if (r0 == 0) goto L_0x01ee
                             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r11 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r11
                             java.lang.String r0 = r9.searchQuery
                             boolean r0 = android.text.TextUtils.isEmpty(r0)
@@ -7412,7 +7412,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             java.lang.String r0 = r9.searchQuery
                             int r0 = r0.length()
                             r10.setUrl(r11, r0)
-                            goto L_0x01e8
+                            goto L_0x01ee
                         L_0x00fc:
                             java.util.HashMap<org.telegram.tgnet.TLRPC$TL_messages_stickerSet, java.lang.Integer> r0 = r9.localPacksByName
                             java.lang.Object r0 = r0.get(r11)
@@ -7434,20 +7434,20 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             r10.setText(r11, r2, r0, r1)
                         L_0x0123:
                             r10.setUrl(r3, r2)
-                            goto L_0x01e8
+                            goto L_0x01ee
                         L_0x0128:
                             android.view.View r10 = r10.itemView
                             org.telegram.ui.Cells.EmptyCell r10 = (org.telegram.ui.Cells.EmptyCell) r10
                             int r0 = r9.totalItems
                             r2 = 1118044160(0x42a40000, float:82.0)
-                            if (r11 != r0) goto L_0x01a6
+                            if (r11 != r0) goto L_0x01a7
                             android.util.SparseIntArray r0 = r9.positionToRow
                             int r11 = r11 - r1
                             r4 = -2147483648(0xfffffffvar_, float:-0.0)
                             int r11 = r0.get(r11, r4)
                             if (r11 != r4) goto L_0x0142
                             r10.setHeight(r1)
-                            goto L_0x01e8
+                            goto L_0x01ee
                         L_0x0142:
                             android.util.SparseArray<java.lang.Object> r0 = r9.rowStartPack
                             java.lang.Object r11 = r0.get(r11)
@@ -7466,15 +7466,15 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         L_0x0160:
                             if (r3 != 0) goto L_0x0167
                             r10.setHeight(r1)
-                            goto L_0x01e8
+                            goto L_0x01ee
                         L_0x0167:
                             int r11 = r3.intValue()
-                            if (r11 != 0) goto L_0x0177
+                            if (r11 != 0) goto L_0x0178
                             r11 = 1090519040(0x41000000, float:8.0)
                             int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
                             r10.setHeight(r11)
-                            goto L_0x01e8
-                        L_0x0177:
+                            goto L_0x01ee
+                        L_0x0178:
                             org.telegram.ui.Components.EmojiView r11 = org.telegram.ui.Components.EmojiView.this
                             androidx.viewpager.widget.ViewPager r11 = r11.pager
                             int r11 = r11.getHeight()
@@ -7491,41 +7491,46 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
                             int r0 = r0 * r2
                             int r11 = r11 - r0
-                            if (r11 <= 0) goto L_0x01a2
+                            if (r11 <= 0) goto L_0x01a3
                             r1 = r11
-                        L_0x01a2:
+                        L_0x01a3:
                             r10.setHeight(r1)
-                            goto L_0x01e8
-                        L_0x01a6:
+                            goto L_0x01ee
+                        L_0x01a7:
                             int r11 = org.telegram.messenger.AndroidUtilities.dp(r2)
                             r10.setHeight(r11)
-                            goto L_0x01e8
-                        L_0x01ae:
+                            goto L_0x01ee
+                        L_0x01af:
                             android.util.SparseArray<java.lang.Object> r0 = r9.cache
                             java.lang.Object r0 = r0.get(r11)
                             org.telegram.tgnet.TLRPC$Document r0 = (org.telegram.tgnet.TLRPC$Document) r0
                             android.view.View r10 = r10.itemView
                             org.telegram.ui.Cells.StickerEmojiCell r10 = (org.telegram.ui.Cells.StickerEmojiCell) r10
+                            r5 = 0
                             android.util.SparseArray<java.lang.Object> r3 = r9.cacheParent
-                            java.lang.Object r3 = r3.get(r11)
-                            android.util.SparseArray<java.lang.String> r4 = r9.positionToEmoji
-                            java.lang.Object r11 = r4.get(r11)
-                            java.lang.String r11 = (java.lang.String) r11
-                            r10.setSticker(r0, r3, r11, r2)
+                            java.lang.Object r6 = r3.get(r11)
+                            android.util.SparseArray<java.lang.String> r3 = r9.positionToEmoji
+                            java.lang.Object r11 = r3.get(r11)
+                            r7 = r11
+                            java.lang.String r7 = (java.lang.String) r7
+                            r8 = 0
+                            r3 = r10
+                            r4 = r0
+                            r3.setSticker(r4, r5, r6, r7, r8)
                             org.telegram.ui.Components.EmojiView r11 = org.telegram.ui.Components.EmojiView.this
                             java.util.ArrayList r11 = r11.recentStickers
                             boolean r11 = r11.contains(r0)
-                            if (r11 != 0) goto L_0x01e5
+                            if (r11 != 0) goto L_0x01eb
                             org.telegram.ui.Components.EmojiView r11 = org.telegram.ui.Components.EmojiView.this
                             java.util.ArrayList r11 = r11.favouriteStickers
                             boolean r11 = r11.contains(r0)
-                            if (r11 == 0) goto L_0x01e4
-                            goto L_0x01e5
-                        L_0x01e4:
+                            if (r11 == 0) goto L_0x01ea
+                            goto L_0x01eb
+                        L_0x01ea:
                             r1 = 0
-                        L_0x01e5:
+                        L_0x01eb:
                             r10.setRecent(r1)
-                        L_0x01e8:
+                        L_0x01ee:
                             return
                         */
                         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

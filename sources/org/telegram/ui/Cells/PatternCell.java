@@ -8,6 +8,8 @@ import android.graphics.Canvas;
 import android.graphics.LinearGradient;
 import android.graphics.Outline;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
@@ -65,6 +67,8 @@ public class PatternCell extends BackupImageView implements DownloadController.F
 
         float getIntensity();
 
+        int getPatternColor();
+
         TLRPC$TL_wallPaper getSelectedPattern();
     }
 
@@ -116,6 +120,10 @@ public class PatternCell extends BackupImageView implements DownloadController.F
             this.radialProgress.setIcon(4, false, z);
         }
         invalidate();
+    }
+
+    public void invalidate() {
+        super.invalidate();
     }
 
     private void updateButtonState(Object obj, boolean z, boolean z2) {
@@ -208,7 +216,7 @@ public class PatternCell extends BackupImageView implements DownloadController.F
                     if (Build.VERSION.SDK_INT >= 29) {
                         this.imageReceiver.setBlendMode(BlendMode.SOFT_LIGHT);
                     } else {
-                        this.imageReceiver.setAlpha(Math.abs(intensity / 2.0f));
+                        this.imageReceiver.setColorFilter(new PorterDuffColorFilter(this.delegate.getPatternColor(), PorterDuff.Mode.SRC_IN));
                     }
                 }
             } else {

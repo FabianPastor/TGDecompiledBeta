@@ -302,7 +302,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2.setImeOptions(r4)
                 if (r3 != 0) goto L_0x014c
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627323(0x7f0e0d3b, float:1.8881907E38)
+                r3 = 2131627338(0x7f0e0d4a, float:1.8881938E38)
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -310,7 +310,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             L_0x014c:
                 if (r3 != r6) goto L_0x015d
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627299(0x7f0e0d23, float:1.8881859E38)
+                r3 = 2131627314(0x7f0e0d32, float:1.8881889E38)
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -319,7 +319,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2 = 2
                 if (r3 != r2) goto L_0x016e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627314(0x7f0e0d32, float:1.8881889E38)
+                r3 = 2131627329(0x7f0e0d41, float:1.888192E38)
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -2116,14 +2116,14 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             return new RecyclerListView.Holder(r13);
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v13, resolved type: java.lang.Object} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v12, resolved type: java.lang.Integer} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v12, resolved type: java.lang.Object} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v13, resolved type: java.lang.Integer} */
         /* JADX WARNING: Multi-variable type inference failed */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r6, int r7) {
+        public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r10, int r11) {
             /*
-                r5 = this;
-                int r0 = r6.getItemViewType()
+                r9 = this;
+                int r0 = r10.getItemViewType()
                 r1 = 0
                 r2 = 1
                 if (r0 == 0) goto L_0x00fb
@@ -2131,97 +2131,97 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 if (r0 == r2) goto L_0x0074
                 r2 = 2
                 if (r0 == r2) goto L_0x0010
-                goto L_0x013c
+                goto L_0x0141
             L_0x0010:
-                android.view.View r6 = r6.itemView
-                org.telegram.ui.Cells.StickerSetNameCell r6 = (org.telegram.ui.Cells.StickerSetNameCell) r6
-                android.util.SparseArray<java.lang.Object> r0 = r5.cache
-                java.lang.Object r7 = r0.get(r7)
-                boolean r0 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messages_stickerSet
-                if (r0 == 0) goto L_0x013c
-                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r7 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r7
-                java.lang.String r0 = r5.searchQuery
+                android.view.View r10 = r10.itemView
+                org.telegram.ui.Cells.StickerSetNameCell r10 = (org.telegram.ui.Cells.StickerSetNameCell) r10
+                android.util.SparseArray<java.lang.Object> r0 = r9.cache
+                java.lang.Object r11 = r0.get(r11)
+                boolean r0 = r11 instanceof org.telegram.tgnet.TLRPC$TL_messages_stickerSet
+                if (r0 == 0) goto L_0x0141
+                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r11 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r11
+                java.lang.String r0 = r9.searchQuery
                 boolean r0 = android.text.TextUtils.isEmpty(r0)
                 if (r0 != 0) goto L_0x0048
-                java.util.HashMap<org.telegram.tgnet.TLRPC$TL_messages_stickerSet, java.lang.Boolean> r0 = r5.localPacksByShortName
-                boolean r0 = r0.containsKey(r7)
+                java.util.HashMap<org.telegram.tgnet.TLRPC$TL_messages_stickerSet, java.lang.Boolean> r0 = r9.localPacksByShortName
+                boolean r0 = r0.containsKey(r11)
                 if (r0 == 0) goto L_0x0048
-                org.telegram.tgnet.TLRPC$StickerSet r0 = r7.set
+                org.telegram.tgnet.TLRPC$StickerSet r0 = r11.set
                 if (r0 == 0) goto L_0x0039
                 java.lang.String r0 = r0.title
-                r6.setText(r0, r1)
+                r10.setText(r0, r1)
             L_0x0039:
-                org.telegram.tgnet.TLRPC$StickerSet r7 = r7.set
-                java.lang.String r7 = r7.short_name
-                java.lang.String r0 = r5.searchQuery
+                org.telegram.tgnet.TLRPC$StickerSet r11 = r11.set
+                java.lang.String r11 = r11.short_name
+                java.lang.String r0 = r9.searchQuery
                 int r0 = r0.length()
-                r6.setUrl(r7, r0)
-                goto L_0x013c
+                r10.setUrl(r11, r0)
+                goto L_0x0141
             L_0x0048:
-                java.util.HashMap<org.telegram.tgnet.TLRPC$TL_messages_stickerSet, java.lang.Integer> r0 = r5.localPacksByName
-                java.lang.Object r0 = r0.get(r7)
+                java.util.HashMap<org.telegram.tgnet.TLRPC$TL_messages_stickerSet, java.lang.Integer> r0 = r9.localPacksByName
+                java.lang.Object r0 = r0.get(r11)
                 java.lang.Integer r0 = (java.lang.Integer) r0
-                org.telegram.tgnet.TLRPC$StickerSet r7 = r7.set
-                if (r7 == 0) goto L_0x006f
+                org.telegram.tgnet.TLRPC$StickerSet r11 = r11.set
+                if (r11 == 0) goto L_0x006f
                 if (r0 == 0) goto L_0x006f
-                java.lang.String r7 = r7.title
+                java.lang.String r11 = r11.title
                 int r0 = r0.intValue()
-                java.lang.String r2 = r5.searchQuery
+                java.lang.String r2 = r9.searchQuery
                 boolean r2 = android.text.TextUtils.isEmpty(r2)
                 if (r2 != 0) goto L_0x006b
-                java.lang.String r2 = r5.searchQuery
+                java.lang.String r2 = r9.searchQuery
                 int r2 = r2.length()
                 goto L_0x006c
             L_0x006b:
                 r2 = 0
             L_0x006c:
-                r6.setText(r7, r1, r0, r2)
+                r10.setText(r11, r1, r0, r2)
             L_0x006f:
-                r6.setUrl(r3, r1)
-                goto L_0x013c
+                r10.setUrl(r3, r1)
+                goto L_0x0141
             L_0x0074:
-                android.view.View r6 = r6.itemView
-                org.telegram.ui.Cells.EmptyCell r6 = (org.telegram.ui.Cells.EmptyCell) r6
-                int r0 = r5.totalItems
+                android.view.View r10 = r10.itemView
+                org.telegram.ui.Cells.EmptyCell r10 = (org.telegram.ui.Cells.EmptyCell) r10
+                int r0 = r9.totalItems
                 r1 = 1118044160(0x42a40000, float:82.0)
-                if (r7 != r0) goto L_0x00f3
-                android.util.SparseIntArray r0 = r5.positionToRow
-                int r7 = r7 - r2
+                if (r11 != r0) goto L_0x00f3
+                android.util.SparseIntArray r0 = r9.positionToRow
+                int r11 = r11 - r2
                 r4 = -2147483648(0xfffffffvar_, float:-0.0)
-                int r7 = r0.get(r7, r4)
-                if (r7 != r4) goto L_0x008e
-                r6.setHeight(r2)
-                goto L_0x013c
+                int r11 = r0.get(r11, r4)
+                if (r11 != r4) goto L_0x008e
+                r10.setHeight(r2)
+                goto L_0x0141
             L_0x008e:
-                android.util.SparseArray<java.lang.Object> r0 = r5.rowStartPack
-                java.lang.Object r7 = r0.get(r7)
-                boolean r0 = r7 instanceof org.telegram.tgnet.TLRPC$TL_messages_stickerSet
+                android.util.SparseArray<java.lang.Object> r0 = r9.rowStartPack
+                java.lang.Object r11 = r0.get(r11)
+                boolean r0 = r11 instanceof org.telegram.tgnet.TLRPC$TL_messages_stickerSet
                 if (r0 == 0) goto L_0x00a5
-                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r7 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r7
-                java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r7 = r7.documents
-                int r7 = r7.size()
-                java.lang.Integer r3 = java.lang.Integer.valueOf(r7)
+                org.telegram.tgnet.TLRPC$TL_messages_stickerSet r11 = (org.telegram.tgnet.TLRPC$TL_messages_stickerSet) r11
+                java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r11 = r11.documents
+                int r11 = r11.size()
+                java.lang.Integer r3 = java.lang.Integer.valueOf(r11)
                 goto L_0x00ac
             L_0x00a5:
-                boolean r0 = r7 instanceof java.lang.Integer
+                boolean r0 = r11 instanceof java.lang.Integer
                 if (r0 == 0) goto L_0x00ac
-                r3 = r7
+                r3 = r11
                 java.lang.Integer r3 = (java.lang.Integer) r3
             L_0x00ac:
                 if (r3 != 0) goto L_0x00b3
-                r6.setHeight(r2)
-                goto L_0x013c
+                r10.setHeight(r2)
+                goto L_0x0141
             L_0x00b3:
-                int r7 = r3.intValue()
-                if (r7 != 0) goto L_0x00c4
-                r7 = 1090519040(0x41000000, float:8.0)
-                int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                r6.setHeight(r7)
-                goto L_0x013c
+                int r11 = r3.intValue()
+                if (r11 != 0) goto L_0x00c4
+                r11 = 1090519040(0x41000000, float:8.0)
+                int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+                r10.setHeight(r11)
+                goto L_0x0141
             L_0x00c4:
-                org.telegram.ui.Components.StickerMasksAlert r7 = org.telegram.ui.Components.StickerMasksAlert.this
-                org.telegram.ui.Components.RecyclerListView r7 = r7.gridView
-                int r7 = r7.getHeight()
+                org.telegram.ui.Components.StickerMasksAlert r11 = org.telegram.ui.Components.StickerMasksAlert.this
+                org.telegram.ui.Components.RecyclerListView r11 = r11.gridView
+                int r11 = r11.getHeight()
                 int r0 = r3.intValue()
                 float r0 = (float) r0
                 org.telegram.ui.Components.StickerMasksAlert r3 = org.telegram.ui.Components.StickerMasksAlert.this
@@ -2234,44 +2234,49 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 int r0 = (int) r3
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                 int r0 = r0 * r1
-                int r7 = r7 - r0
-                if (r7 <= 0) goto L_0x00ef
-                r2 = r7
+                int r11 = r11 - r0
+                if (r11 <= 0) goto L_0x00ef
+                r2 = r11
             L_0x00ef:
-                r6.setHeight(r2)
-                goto L_0x013c
+                r10.setHeight(r2)
+                goto L_0x0141
             L_0x00f3:
-                int r7 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                r6.setHeight(r7)
-                goto L_0x013c
+                int r11 = org.telegram.messenger.AndroidUtilities.dp(r1)
+                r10.setHeight(r11)
+                goto L_0x0141
             L_0x00fb:
-                android.util.SparseArray<java.lang.Object> r0 = r5.cache
-                java.lang.Object r0 = r0.get(r7)
+                android.util.SparseArray<java.lang.Object> r0 = r9.cache
+                java.lang.Object r0 = r0.get(r11)
                 org.telegram.tgnet.TLRPC$Document r0 = (org.telegram.tgnet.TLRPC$Document) r0
-                android.view.View r6 = r6.itemView
-                org.telegram.ui.Cells.StickerEmojiCell r6 = (org.telegram.ui.Cells.StickerEmojiCell) r6
-                android.util.SparseArray<java.lang.Object> r3 = r5.cacheParent
-                java.lang.Object r3 = r3.get(r7)
-                android.util.SparseArray<java.lang.String> r4 = r5.positionToEmoji
-                java.lang.Object r7 = r4.get(r7)
+                android.view.View r10 = r10.itemView
+                org.telegram.ui.Cells.StickerEmojiCell r10 = (org.telegram.ui.Cells.StickerEmojiCell) r10
+                r5 = 0
+                android.util.SparseArray<java.lang.Object> r3 = r9.cacheParent
+                java.lang.Object r6 = r3.get(r11)
+                android.util.SparseArray<java.lang.String> r3 = r9.positionToEmoji
+                java.lang.Object r11 = r3.get(r11)
+                r7 = r11
                 java.lang.String r7 = (java.lang.String) r7
-                r6.setSticker(r0, r3, r7, r1)
-                org.telegram.ui.Components.StickerMasksAlert r7 = org.telegram.ui.Components.StickerMasksAlert.this
-                java.util.ArrayList[] r7 = r7.recentStickers
+                r8 = 0
+                r3 = r10
+                r4 = r0
+                r3.setSticker(r4, r5, r6, r7, r8)
+                org.telegram.ui.Components.StickerMasksAlert r11 = org.telegram.ui.Components.StickerMasksAlert.this
+                java.util.ArrayList[] r11 = r11.recentStickers
                 org.telegram.ui.Components.StickerMasksAlert r3 = org.telegram.ui.Components.StickerMasksAlert.this
                 int r3 = r3.currentType
-                r7 = r7[r3]
-                boolean r7 = r7.contains(r0)
-                if (r7 != 0) goto L_0x0138
-                org.telegram.ui.Components.StickerMasksAlert r7 = org.telegram.ui.Components.StickerMasksAlert.this
-                java.util.ArrayList r7 = r7.favouriteStickers
-                boolean r7 = r7.contains(r0)
-                if (r7 == 0) goto L_0x0139
-            L_0x0138:
+                r11 = r11[r3]
+                boolean r11 = r11.contains(r0)
+                if (r11 != 0) goto L_0x013d
+                org.telegram.ui.Components.StickerMasksAlert r11 = org.telegram.ui.Components.StickerMasksAlert.this
+                java.util.ArrayList r11 = r11.favouriteStickers
+                boolean r11 = r11.contains(r0)
+                if (r11 == 0) goto L_0x013e
+            L_0x013d:
                 r1 = 1
-            L_0x0139:
-                r6.setRecent(r1)
-            L_0x013c:
+            L_0x013e:
+                r10.setRecent(r1)
+            L_0x0141:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

@@ -7018,266 +7018,293 @@ public class MessagesController extends BaseController implements NotificationCe
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$saveThemeToServer$88$MessagesController(java.lang.String, java.lang.String, org.telegram.ui.ActionBar.Theme$ThemeAccent, org.telegram.ui.ActionBar.Theme$ThemeInfo):void");
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v6, resolved type: org.telegram.tgnet.TLRPC$TL_account_saveWallPaper} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v8, resolved type: org.telegram.tgnet.TLRPC$TL_account_installWallPaper} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v20, resolved type: org.telegram.tgnet.TLRPC$TL_account_saveWallPaper} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v21, resolved type: org.telegram.tgnet.TLRPC$TL_account_saveWallPaper} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v15, resolved type: org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v8, resolved type: org.telegram.tgnet.TLRPC$TL_account_saveWallPaper} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v10, resolved type: org.telegram.tgnet.TLRPC$TL_account_installWallPaper} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v22, resolved type: org.telegram.tgnet.TLRPC$TL_inputWallPaper} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v28, resolved type: org.telegram.tgnet.TLRPC$TL_account_saveWallPaper} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v29, resolved type: org.telegram.tgnet.TLRPC$TL_account_saveWallPaper} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v25, resolved type: org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v26, resolved type: org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug} */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x013b  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0162  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void saveWallpaperToServer(java.io.File r9, org.telegram.ui.ActionBar.Theme.OverrideWallpaperInfo r10, boolean r11, long r12) {
+    public void saveWallpaperToServer(java.io.File r10, org.telegram.ui.ActionBar.Theme.OverrideWallpaperInfo r11, boolean r12, long r13) {
         /*
-            r8 = this;
-            java.lang.String r0 = r8.uploadingWallpaper
+            r9 = this;
+            java.lang.String r0 = r9.uploadingWallpaper
             r1 = 0
             r2 = 0
             if (r0 == 0) goto L_0x0035
             java.io.File r0 = new java.io.File
             java.io.File r3 = org.telegram.messenger.ApplicationLoader.getFilesDirFixed()
-            java.lang.String r4 = r10.originalFileName
+            java.lang.String r4 = r11.originalFileName
             r0.<init>(r3, r4)
-            if (r9 == 0) goto L_0x0028
-            java.lang.String r3 = r9.getAbsolutePath()
-            java.lang.String r4 = r8.uploadingWallpaper
+            if (r10 == 0) goto L_0x0028
+            java.lang.String r3 = r10.getAbsolutePath()
+            java.lang.String r4 = r9.uploadingWallpaper
             boolean r3 = r3.equals(r4)
             if (r3 != 0) goto L_0x0025
-            boolean r0 = r9.equals(r0)
+            boolean r0 = r10.equals(r0)
             if (r0 == 0) goto L_0x0028
         L_0x0025:
-            r8.uploadingWallpaperInfo = r10
+            r9.uploadingWallpaperInfo = r11
             return
         L_0x0028:
-            org.telegram.messenger.FileLoader r0 = r8.getFileLoader()
-            java.lang.String r3 = r8.uploadingWallpaper
+            org.telegram.messenger.FileLoader r0 = r9.getFileLoader()
+            java.lang.String r3 = r9.uploadingWallpaper
             r0.cancelUploadFile(r3, r1)
-            r8.uploadingWallpaper = r2
-            r8.uploadingWallpaperInfo = r2
+            r9.uploadingWallpaper = r2
+            r9.uploadingWallpaperInfo = r2
         L_0x0035:
             r0 = 1120403456(0x42CLASSNAME, float:100.0)
-            r3 = 0
-            r5 = 1
-            if (r9 == 0) goto L_0x0051
-            java.lang.String r9 = r9.getAbsolutePath()
-            r8.uploadingWallpaper = r9
-            r8.uploadingWallpaperInfo = r10
-            org.telegram.messenger.FileLoader r9 = r8.getFileLoader()
-            java.lang.String r11 = r8.uploadingWallpaper
-            r12 = 16777216(0x1000000, float:2.3509887E-38)
-            r9.uploadFile(r11, r1, r5, r12)
-            goto L_0x0131
+            r3 = 1
+            r4 = 0
+            if (r10 == 0) goto L_0x0051
+            java.lang.String r10 = r10.getAbsolutePath()
+            r9.uploadingWallpaper = r10
+            r9.uploadingWallpaperInfo = r11
+            org.telegram.messenger.FileLoader r10 = r9.getFileLoader()
+            java.lang.String r12 = r9.uploadingWallpaper
+            r13 = 16777216(0x1000000, float:2.3509887E-38)
+            r10.uploadFile(r12, r1, r3, r13)
+            goto L_0x0152
         L_0x0051:
-            boolean r9 = r10.isDefault()
-            if (r9 != 0) goto L_0x0131
-            boolean r9 = r10.isColor()
-            if (r9 != 0) goto L_0x0131
-            boolean r9 = r10.isTheme()
-            if (r9 != 0) goto L_0x0131
-            org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug r9 = new org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug
-            r9.<init>()
-            java.lang.String r1 = r10.slug
-            r9.slug = r1
+            boolean r10 = r11.isDefault()
+            if (r10 != 0) goto L_0x0152
+            boolean r10 = r11.isColor()
+            if (r10 != 0) goto L_0x0152
+            long r6 = r11.wallpaperId
+            int r10 = (r6 > r4 ? 1 : (r6 == r4 ? 0 : -1))
+            if (r10 <= 0) goto L_0x0152
+            boolean r10 = r11.isTheme()
+            if (r10 != 0) goto L_0x0152
+            long r6 = r11.wallpaperId
+            int r10 = (r6 > r4 ? 1 : (r6 == r4 ? 0 : -1))
+            if (r10 <= 0) goto L_0x007d
+            org.telegram.tgnet.TLRPC$TL_inputWallPaper r10 = new org.telegram.tgnet.TLRPC$TL_inputWallPaper
+            r10.<init>()
+            long r6 = r11.wallpaperId
+            r10.id = r6
+            long r6 = r11.accessHash
+            r10.access_hash = r6
+            goto L_0x0086
+        L_0x007d:
+            org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug r10 = new org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug
+            r10.<init>()
+            java.lang.String r1 = r11.slug
+            r10.slug = r1
+        L_0x0086:
             org.telegram.tgnet.TLRPC$TL_wallPaperSettings r1 = new org.telegram.tgnet.TLRPC$TL_wallPaperSettings
             r1.<init>()
-            boolean r6 = r10.isBlurred
+            boolean r6 = r11.isBlurred
             r1.blur = r6
-            boolean r6 = r10.isMotion
+            boolean r6 = r11.isMotion
             r1.motion = r6
-            int r6 = r10.color
-            if (r6 == 0) goto L_0x008f
+            int r6 = r11.color
+            r7 = 16777215(0xffffff, float:2.3509886E-38)
+            if (r6 == 0) goto L_0x00ad
+            r6 = r6 & r7
             r1.background_color = r6
             int r6 = r1.flags
-            r6 = r6 | r5
+            r6 = r6 | r3
             r1.flags = r6
-            float r7 = r10.intensity
-            float r7 = r7 * r0
-            int r7 = (int) r7
-            r1.intensity = r7
+            float r8 = r11.intensity
+            float r8 = r8 * r0
+            int r8 = (int) r8
+            r1.intensity = r8
             r6 = r6 | 8
             r1.flags = r6
-        L_0x008f:
-            int r6 = r10.gradientColor1
-            if (r6 == 0) goto L_0x00a3
+        L_0x00ad:
+            int r6 = r11.gradientColor1
+            if (r6 == 0) goto L_0x00c2
+            r6 = r6 & r7
             r1.second_background_color = r6
-            int r6 = r10.rotation
-            int r6 = org.telegram.messenger.AndroidUtilities.getWallpaperRotation(r6, r5)
+            int r6 = r11.rotation
+            int r6 = org.telegram.messenger.AndroidUtilities.getWallpaperRotation(r6, r3)
             r1.rotation = r6
             int r6 = r1.flags
             r6 = r6 | 16
             r1.flags = r6
-        L_0x00a3:
-            int r6 = r10.gradientColor2
-            if (r6 == 0) goto L_0x00af
+        L_0x00c2:
+            int r6 = r11.gradientColor2
+            if (r6 == 0) goto L_0x00cf
+            r6 = r6 & r7
             r1.third_background_color = r6
             int r6 = r1.flags
             r6 = r6 | 32
             r1.flags = r6
-        L_0x00af:
-            int r6 = r10.gradientColor3
-            if (r6 == 0) goto L_0x00bb
+        L_0x00cf:
+            int r6 = r11.gradientColor3
+            if (r6 == 0) goto L_0x00dc
+            r6 = r6 & r7
             r1.fourth_background_color = r6
             int r6 = r1.flags
             r6 = r6 | 64
             r1.flags = r6
-        L_0x00bb:
-            if (r11 == 0) goto L_0x00c7
+        L_0x00dc:
+            if (r12 == 0) goto L_0x00e8
             org.telegram.tgnet.TLRPC$TL_account_installWallPaper r6 = new org.telegram.tgnet.TLRPC$TL_account_installWallPaper
             r6.<init>()
-            r6.wallpaper = r9
+            r6.wallpaper = r10
             r6.settings = r1
-            goto L_0x00d0
-        L_0x00c7:
+            goto L_0x00f1
+        L_0x00e8:
             org.telegram.tgnet.TLRPC$TL_account_saveWallPaper r6 = new org.telegram.tgnet.TLRPC$TL_account_saveWallPaper
             r6.<init>()
-            r6.wallpaper = r9
+            r6.wallpaper = r10
             r6.settings = r1
-        L_0x00d0:
-            int r9 = (r12 > r3 ? 1 : (r12 == r3 ? 0 : -1))
-            if (r9 == 0) goto L_0x00d5
-            goto L_0x0125
-        L_0x00d5:
-            org.telegram.tgnet.NativeByteBuffer r9 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0118 }
-            r12 = 1024(0x400, float:1.435E-42)
-            r9.<init>((int) r12)     // Catch:{ Exception -> 0x0118 }
-            r12 = 21
-            r9.writeInt32(r12)     // Catch:{ Exception -> 0x0115 }
-            boolean r12 = r10.isBlurred     // Catch:{ Exception -> 0x0115 }
-            r9.writeBool(r12)     // Catch:{ Exception -> 0x0115 }
-            boolean r12 = r10.isMotion     // Catch:{ Exception -> 0x0115 }
-            r9.writeBool(r12)     // Catch:{ Exception -> 0x0115 }
-            int r12 = r10.color     // Catch:{ Exception -> 0x0115 }
-            r9.writeInt32(r12)     // Catch:{ Exception -> 0x0115 }
-            int r12 = r10.gradientColor1     // Catch:{ Exception -> 0x0115 }
-            r9.writeInt32(r12)     // Catch:{ Exception -> 0x0115 }
-            int r12 = r10.rotation     // Catch:{ Exception -> 0x0115 }
-            r9.writeInt32(r12)     // Catch:{ Exception -> 0x0115 }
-            float r12 = r10.intensity     // Catch:{ Exception -> 0x0115 }
-            double r12 = (double) r12     // Catch:{ Exception -> 0x0115 }
-            r9.writeDouble(r12)     // Catch:{ Exception -> 0x0115 }
-            r9.writeBool(r11)     // Catch:{ Exception -> 0x0115 }
-            java.lang.String r11 = r10.slug     // Catch:{ Exception -> 0x0115 }
-            r9.writeString(r11)     // Catch:{ Exception -> 0x0115 }
-            java.lang.String r11 = r10.originalFileName     // Catch:{ Exception -> 0x0115 }
-            r9.writeString(r11)     // Catch:{ Exception -> 0x0115 }
-            int r11 = r9.position()     // Catch:{ Exception -> 0x0115 }
-            r9.limit(r11)     // Catch:{ Exception -> 0x0115 }
-            goto L_0x011d
-        L_0x0115:
-            r11 = move-exception
-            r2 = r9
-            goto L_0x0119
-        L_0x0118:
-            r11 = move-exception
-        L_0x0119:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
-            r9 = r2
-        L_0x011d:
-            org.telegram.messenger.MessagesStorage r11 = r8.getMessagesStorage()
-            long r12 = r11.createPendingTask(r9)
-        L_0x0125:
-            org.telegram.tgnet.ConnectionsManager r9 = r8.getConnectionsManager()
-            org.telegram.messenger.-$$Lambda$MessagesController$IuGmQgnN3Dxn4oovwpgn6p8QgZw r11 = new org.telegram.messenger.-$$Lambda$MessagesController$IuGmQgnN3Dxn4oovwpgn6p8QgZw
-            r11.<init>(r12)
-            r9.sendRequest(r6, r11)
-        L_0x0131:
-            boolean r9 = r10.isColor()
-            if (r9 != 0) goto L_0x013b
-            int r9 = r10.gradientColor2
-            if (r9 == 0) goto L_0x01f1
-        L_0x013b:
-            boolean r9 = r10.isColor()
-            if (r9 == 0) goto L_0x0147
-            org.telegram.tgnet.TLRPC$TL_wallPaperNoFile r9 = new org.telegram.tgnet.TLRPC$TL_wallPaperNoFile
-            r9.<init>()
-            goto L_0x0157
-        L_0x0147:
-            org.telegram.tgnet.TLRPC$TL_wallPaper r9 = new org.telegram.tgnet.TLRPC$TL_wallPaper
-            r9.<init>()
-            java.lang.String r11 = r10.slug
-            r9.slug = r11
-            org.telegram.tgnet.TLRPC$TL_documentEmpty r11 = new org.telegram.tgnet.TLRPC$TL_documentEmpty
-            r11.<init>()
-            r9.document = r11
-        L_0x0157:
-            long r11 = r10.wallpaperId
-            int r13 = (r11 > r3 ? 1 : (r11 == r3 ? 0 : -1))
-            if (r13 != 0) goto L_0x016d
-            java.security.SecureRandom r11 = org.telegram.messenger.Utilities.random
-            long r11 = r11.nextLong()
-            r9.id = r11
-            int r13 = (r11 > r3 ? 1 : (r11 == r3 ? 0 : -1))
-            if (r13 <= 0) goto L_0x016f
-            long r11 = -r11
-            r9.id = r11
-            goto L_0x016f
-        L_0x016d:
-            r9.id = r11
-        L_0x016f:
-            int r11 = r10.color
-            int r12 = r10.gradientColor1
-            int r13 = r10.gradientColor2
-            int r1 = r10.gradientColor3
-            boolean r11 = org.telegram.ui.Components.MotionBackgroundDrawable.isDark(r11, r12, r13, r1)
-            r9.dark = r11
-            int r11 = r9.flags
-            r11 = r11 | 4
-            r9.flags = r11
-            org.telegram.tgnet.TLRPC$TL_wallPaperSettings r11 = new org.telegram.tgnet.TLRPC$TL_wallPaperSettings
-            r11.<init>()
-            r9.settings = r11
-            boolean r12 = r10.isBlurred
-            r11.blur = r12
-            boolean r12 = r10.isMotion
-            r11.motion = r12
-            int r12 = r10.color
-            if (r12 == 0) goto L_0x01a8
-            r11.background_color = r12
-            int r12 = r11.flags
-            r12 = r12 | r5
-            r11.flags = r12
-            float r13 = r10.intensity
-            float r13 = r13 * r0
-            int r13 = (int) r13
-            r11.intensity = r13
-            r12 = r12 | 8
-            r11.flags = r12
-        L_0x01a8:
-            int r12 = r10.gradientColor1
-            if (r12 == 0) goto L_0x01be
-            r11.second_background_color = r12
-            int r12 = r10.rotation
-            int r12 = org.telegram.messenger.AndroidUtilities.getWallpaperRotation(r12, r5)
-            r11.rotation = r12
-            org.telegram.tgnet.TLRPC$WallPaperSettings r11 = r9.settings
-            int r12 = r11.flags
-            r12 = r12 | 16
-            r11.flags = r12
-        L_0x01be:
-            int r11 = r10.gradientColor2
-            if (r11 == 0) goto L_0x01cc
-            org.telegram.tgnet.TLRPC$WallPaperSettings r12 = r9.settings
-            r12.third_background_color = r11
-            int r11 = r12.flags
-            r11 = r11 | 32
-            r12.flags = r11
-        L_0x01cc:
-            int r10 = r10.gradientColor3
-            if (r10 == 0) goto L_0x01da
-            org.telegram.tgnet.TLRPC$WallPaperSettings r11 = r9.settings
-            r11.fourth_background_color = r10
-            int r10 = r11.flags
-            r10 = r10 | 64
-            r11.flags = r10
-        L_0x01da:
-            java.util.ArrayList r10 = new java.util.ArrayList
+        L_0x00f1:
+            int r10 = (r13 > r4 ? 1 : (r13 == r4 ? 0 : -1))
+            if (r10 == 0) goto L_0x00f6
+            goto L_0x0146
+        L_0x00f6:
+            org.telegram.tgnet.NativeByteBuffer r10 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0139 }
+            r13 = 1024(0x400, float:1.435E-42)
+            r10.<init>((int) r13)     // Catch:{ Exception -> 0x0139 }
+            r13 = 21
+            r10.writeInt32(r13)     // Catch:{ Exception -> 0x0136 }
+            boolean r13 = r11.isBlurred     // Catch:{ Exception -> 0x0136 }
+            r10.writeBool(r13)     // Catch:{ Exception -> 0x0136 }
+            boolean r13 = r11.isMotion     // Catch:{ Exception -> 0x0136 }
+            r10.writeBool(r13)     // Catch:{ Exception -> 0x0136 }
+            int r13 = r11.color     // Catch:{ Exception -> 0x0136 }
+            r10.writeInt32(r13)     // Catch:{ Exception -> 0x0136 }
+            int r13 = r11.gradientColor1     // Catch:{ Exception -> 0x0136 }
+            r10.writeInt32(r13)     // Catch:{ Exception -> 0x0136 }
+            int r13 = r11.rotation     // Catch:{ Exception -> 0x0136 }
+            r10.writeInt32(r13)     // Catch:{ Exception -> 0x0136 }
+            float r13 = r11.intensity     // Catch:{ Exception -> 0x0136 }
+            double r13 = (double) r13     // Catch:{ Exception -> 0x0136 }
+            r10.writeDouble(r13)     // Catch:{ Exception -> 0x0136 }
+            r10.writeBool(r12)     // Catch:{ Exception -> 0x0136 }
+            java.lang.String r12 = r11.slug     // Catch:{ Exception -> 0x0136 }
+            r10.writeString(r12)     // Catch:{ Exception -> 0x0136 }
+            java.lang.String r12 = r11.originalFileName     // Catch:{ Exception -> 0x0136 }
+            r10.writeString(r12)     // Catch:{ Exception -> 0x0136 }
+            int r12 = r10.position()     // Catch:{ Exception -> 0x0136 }
+            r10.limit(r12)     // Catch:{ Exception -> 0x0136 }
+            goto L_0x013e
+        L_0x0136:
+            r12 = move-exception
+            r2 = r10
+            goto L_0x013a
+        L_0x0139:
+            r12 = move-exception
+        L_0x013a:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)
+            r10 = r2
+        L_0x013e:
+            org.telegram.messenger.MessagesStorage r12 = r9.getMessagesStorage()
+            long r13 = r12.createPendingTask(r10)
+        L_0x0146:
+            org.telegram.tgnet.ConnectionsManager r10 = r9.getConnectionsManager()
+            org.telegram.messenger.-$$Lambda$MessagesController$IuGmQgnN3Dxn4oovwpgn6p8QgZw r12 = new org.telegram.messenger.-$$Lambda$MessagesController$IuGmQgnN3Dxn4oovwpgn6p8QgZw
+            r12.<init>(r13)
+            r10.sendRequest(r6, r12)
+        L_0x0152:
+            boolean r10 = r11.isColor()
+            if (r10 != 0) goto L_0x015c
+            int r10 = r11.gradientColor2
+            if (r10 == 0) goto L_0x0218
+        L_0x015c:
+            long r12 = r11.wallpaperId
+            int r10 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
+            if (r10 > 0) goto L_0x0218
+            boolean r10 = r11.isColor()
+            if (r10 == 0) goto L_0x016e
+            org.telegram.tgnet.TLRPC$TL_wallPaperNoFile r10 = new org.telegram.tgnet.TLRPC$TL_wallPaperNoFile
             r10.<init>()
-            r10.add(r9)
-            org.telegram.messenger.MessagesStorage r9 = r8.getMessagesStorage()
-            r11 = -3
-            r9.putWallpapers(r10, r11)
-            org.telegram.messenger.MessagesStorage r9 = r8.getMessagesStorage()
-            r9.getWallpapers()
-        L_0x01f1:
+            goto L_0x017e
+        L_0x016e:
+            org.telegram.tgnet.TLRPC$TL_wallPaper r10 = new org.telegram.tgnet.TLRPC$TL_wallPaper
+            r10.<init>()
+            java.lang.String r12 = r11.slug
+            r10.slug = r12
+            org.telegram.tgnet.TLRPC$TL_documentEmpty r12 = new org.telegram.tgnet.TLRPC$TL_documentEmpty
+            r12.<init>()
+            r10.document = r12
+        L_0x017e:
+            long r12 = r11.wallpaperId
+            int r14 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
+            if (r14 != 0) goto L_0x0194
+            java.security.SecureRandom r12 = org.telegram.messenger.Utilities.random
+            long r12 = r12.nextLong()
+            r10.id = r12
+            int r14 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
+            if (r14 <= 0) goto L_0x0196
+            long r12 = -r12
+            r10.id = r12
+            goto L_0x0196
+        L_0x0194:
+            r10.id = r12
+        L_0x0196:
+            int r12 = r11.color
+            int r13 = r11.gradientColor1
+            int r14 = r11.gradientColor2
+            int r1 = r11.gradientColor3
+            boolean r12 = org.telegram.ui.Components.MotionBackgroundDrawable.isDark(r12, r13, r14, r1)
+            r10.dark = r12
+            int r12 = r10.flags
+            r12 = r12 | 4
+            r10.flags = r12
+            org.telegram.tgnet.TLRPC$TL_wallPaperSettings r12 = new org.telegram.tgnet.TLRPC$TL_wallPaperSettings
+            r12.<init>()
+            r10.settings = r12
+            boolean r13 = r11.isBlurred
+            r12.blur = r13
+            boolean r13 = r11.isMotion
+            r12.motion = r13
+            int r13 = r11.color
+            if (r13 == 0) goto L_0x01cf
+            r12.background_color = r13
+            int r13 = r12.flags
+            r13 = r13 | r3
+            r12.flags = r13
+            float r14 = r11.intensity
+            float r14 = r14 * r0
+            int r14 = (int) r14
+            r12.intensity = r14
+            r13 = r13 | 8
+            r12.flags = r13
+        L_0x01cf:
+            int r13 = r11.gradientColor1
+            if (r13 == 0) goto L_0x01e5
+            r12.second_background_color = r13
+            int r13 = r11.rotation
+            int r13 = org.telegram.messenger.AndroidUtilities.getWallpaperRotation(r13, r3)
+            r12.rotation = r13
+            org.telegram.tgnet.TLRPC$WallPaperSettings r12 = r10.settings
+            int r13 = r12.flags
+            r13 = r13 | 16
+            r12.flags = r13
+        L_0x01e5:
+            int r12 = r11.gradientColor2
+            if (r12 == 0) goto L_0x01f3
+            org.telegram.tgnet.TLRPC$WallPaperSettings r13 = r10.settings
+            r13.third_background_color = r12
+            int r12 = r13.flags
+            r12 = r12 | 32
+            r13.flags = r12
+        L_0x01f3:
+            int r11 = r11.gradientColor3
+            if (r11 == 0) goto L_0x0201
+            org.telegram.tgnet.TLRPC$WallPaperSettings r12 = r10.settings
+            r12.fourth_background_color = r11
+            int r11 = r12.flags
+            r11 = r11 | 64
+            r12.flags = r11
+        L_0x0201:
+            java.util.ArrayList r11 = new java.util.ArrayList
+            r11.<init>()
+            r11.add(r10)
+            org.telegram.messenger.MessagesStorage r10 = r9.getMessagesStorage()
+            r12 = -3
+            r10.putWallpapers(r11, r12)
+            org.telegram.messenger.MessagesStorage r10 = r9.getMessagesStorage()
+            r10.getWallpapers()
+        L_0x0218:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.saveWallpaperToServer(java.io.File, org.telegram.ui.ActionBar.Theme$OverrideWallpaperInfo, boolean, long):void");
@@ -10764,10 +10791,10 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:139:0x03d4, code lost:
-        if (r1[0] >= 129) goto L_0x03d9;
+        if (r1[0] >= 130) goto L_0x03d9;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:144:0x03e3, code lost:
-        if (org.telegram.messenger.Utilities.bytesToInt(r1) < 129) goto L_0x03e8;
+        if (org.telegram.messenger.Utilities.bytesToInt(r1) < 130) goto L_0x03e8;
      */
     /* JADX WARNING: Removed duplicated region for block: B:111:0x032c  */
     /* JADX WARNING: Removed duplicated region for block: B:114:0x0331 A[ADDED_TO_REGION] */
@@ -11270,7 +11297,7 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r42 == 0) goto L_0x043a
             r2 = r38
             boolean r7 = r2.legacy
-            r1 = 129(0x81, float:1.81E-43)
+            r1 = 130(0x82, float:1.82E-43)
             if (r7 == 0) goto L_0x03bc
             int r7 = r2.layer
             if (r7 >= r1) goto L_0x03bc
@@ -11292,17 +11319,17 @@ public class MessagesController extends BaseController implements NotificationCe
             if (r7 != r0) goto L_0x03d7
             r7 = 0
             byte r0 = r1[r7]
-            r7 = 129(0x81, float:1.81E-43)
+            r7 = 130(0x82, float:1.82E-43)
             if (r0 < r7) goto L_0x03e8
             goto L_0x03d9
         L_0x03d7:
-            r7 = 129(0x81, float:1.81E-43)
+            r7 = 130(0x82, float:1.82E-43)
         L_0x03d9:
             int r0 = r1.length
             r7 = 4
             if (r0 != r7) goto L_0x03f4
             int r0 = org.telegram.messenger.Utilities.bytesToInt(r1)
-            r1 = 129(0x81, float:1.81E-43)
+            r1 = 130(0x82, float:1.82E-43)
             if (r0 >= r1) goto L_0x03f4
             goto L_0x03e8
         L_0x03e6:

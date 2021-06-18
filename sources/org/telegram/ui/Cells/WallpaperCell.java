@@ -80,7 +80,7 @@ public class WallpaperCell extends FrameLayout {
                 /* access modifiers changed from: protected */
                 public void onDraw(Canvas canvas) {
                     super.onDraw(canvas);
-                    if (WallpaperView.this.currentWallpaper instanceof WallpapersListActivity.ColorWallpaper) {
+                    if ((WallpaperView.this.currentWallpaper instanceof WallpapersListActivity.ColorWallpaper) || (WallpaperView.this.currentWallpaper instanceof WallpapersListActivity.FileWallpaper)) {
                         Canvas canvas2 = canvas;
                         canvas2.drawLine(1.0f, 0.0f, (float) (getMeasuredWidth() - 1), 0.0f, WallpaperCell.this.framePaint);
                         Canvas canvas3 = canvas;
@@ -161,7 +161,7 @@ public class WallpaperCell extends FrameLayout {
                         TLRPC$WallPaperSettings tLRPC$WallPaperSettings3 = tLRPC$TL_wallPaper.settings;
                         i2 = MotionBackgroundDrawable.getPatternColor(tLRPC$WallPaperSettings3.background_color, tLRPC$WallPaperSettings3.second_background_color, tLRPC$WallPaperSettings3.third_background_color, tLRPC$WallPaperSettings3.fourth_background_color);
                     } else {
-                        this.imageView.setBackgroundColor(tLRPC$WallPaperSettings.background_color | -16777216);
+                        this.imageView.setBackgroundColor(Theme.getWallpaperColor(tLRPC$WallPaperSettings.background_color));
                         i2 = AndroidUtilities.getPatternColor(tLRPC$TL_wallPaper.settings.background_color);
                     }
                     if (Build.VERSION.SDK_INT < 29 || tLRPC$TL_wallPaper.settings.third_background_color == 0) {

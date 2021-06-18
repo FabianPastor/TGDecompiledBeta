@@ -5672,7 +5672,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r5 = 2
             r4.<init>(r14, r5)     // Catch:{ Exception -> 0x0066 }
             java.lang.String r1 = "Loading"
-            r5 = 2131626001(0x7f0e0811, float:1.8879226E38)
+            r5 = 2131626016(0x7f0e0820, float:1.8879256E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)     // Catch:{ Exception -> 0x0066 }
             r4.setMessage(r1)     // Catch:{ Exception -> 0x0066 }
             r4.setCanceledOnTouchOutside(r2)     // Catch:{ Exception -> 0x0066 }
@@ -6017,6 +6017,113 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
+    }
+
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x0087 A[SYNTHETIC, Splitter:B:48:0x0087] */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x0094 A[SYNTHETIC, Splitter:B:56:0x0094] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static java.lang.String isWebpOrPng(android.net.Uri r6) {
+        /*
+            java.lang.String r0 = "webp"
+            r1 = 0
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0080, all -> 0x007e }
+            android.content.ContentResolver r2 = r2.getContentResolver()     // Catch:{ Exception -> 0x0080, all -> 0x007e }
+            java.io.InputStream r6 = r2.openInputStream(r6)     // Catch:{ Exception -> 0x0080, all -> 0x007e }
+            r2 = 12
+            byte[] r3 = new byte[r2]     // Catch:{ Exception -> 0x007c }
+            r4 = 0
+            int r5 = r6.read(r3, r4, r2)     // Catch:{ Exception -> 0x007c }
+            if (r5 != r2) goto L_0x0078
+            byte r2 = r3[r4]     // Catch:{ Exception -> 0x007c }
+            r4 = 137(0x89, float:1.92E-43)
+            if (r2 != r4) goto L_0x0058
+            r2 = 1
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x007c }
+            r4 = 80
+            if (r2 != r4) goto L_0x0058
+            r2 = 2
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x007c }
+            r4 = 78
+            if (r2 != r4) goto L_0x0058
+            r2 = 3
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x007c }
+            r4 = 71
+            if (r2 != r4) goto L_0x0058
+            r2 = 4
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x007c }
+            r4 = 13
+            if (r2 != r4) goto L_0x0058
+            r2 = 5
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x007c }
+            r4 = 10
+            if (r2 != r4) goto L_0x0058
+            r2 = 6
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x007c }
+            r5 = 26
+            if (r2 != r5) goto L_0x0058
+            r2 = 7
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x007c }
+            if (r2 != r4) goto L_0x0058
+            java.lang.String r0 = "png"
+            r6.close()     // Catch:{ Exception -> 0x0053 }
+            goto L_0x0057
+        L_0x0053:
+            r6 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)
+        L_0x0057:
+            return r0
+        L_0x0058:
+            java.lang.String r2 = new java.lang.String     // Catch:{ Exception -> 0x007c }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x007c }
+            java.lang.String r2 = r2.toLowerCase()     // Catch:{ Exception -> 0x007c }
+            java.lang.String r3 = "riff"
+            boolean r3 = r2.startsWith(r3)     // Catch:{ Exception -> 0x007c }
+            if (r3 == 0) goto L_0x0078
+            boolean r2 = r2.endsWith(r0)     // Catch:{ Exception -> 0x007c }
+            if (r2 == 0) goto L_0x0078
+            r6.close()     // Catch:{ Exception -> 0x0073 }
+            goto L_0x0077
+        L_0x0073:
+            r6 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)
+        L_0x0077:
+            return r0
+        L_0x0078:
+            r6.close()     // Catch:{ Exception -> 0x008b }
+            goto L_0x008f
+        L_0x007c:
+            r0 = move-exception
+            goto L_0x0082
+        L_0x007e:
+            r0 = move-exception
+            goto L_0x0092
+        L_0x0080:
+            r0 = move-exception
+            r6 = r1
+        L_0x0082:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0090 }
+            if (r6 == 0) goto L_0x008f
+            r6.close()     // Catch:{ Exception -> 0x008b }
+            goto L_0x008f
+        L_0x008b:
+            r6 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)
+        L_0x008f:
+            return r1
+        L_0x0090:
+            r0 = move-exception
+            r1 = r6
+        L_0x0092:
+            if (r1 == 0) goto L_0x009c
+            r1.close()     // Catch:{ Exception -> 0x0098 }
+            goto L_0x009c
+        L_0x0098:
+            r6 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)
+        L_0x009c:
+            throw r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.isWebpOrPng(android.net.Uri):java.lang.String");
     }
 
     public static boolean isWebp(Uri uri) {

@@ -5718,7 +5718,7 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02e6 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e6 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02e6 }
-            r10 = 2131626253(0x7f0e090d, float:1.8879737E38)
+            r10 = 2131626268(0x7f0e091c, float:1.8879767E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e6 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02e6 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e6 }
@@ -6579,7 +6579,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0249 }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627172(0x7f0e0ca4, float:1.88816E38)
+            r9 = 2131627187(0x7f0e0cb3, float:1.8881631E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0249 }
         L_0x0067:
             r9 = r4
@@ -6589,7 +6589,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0249 }
             if (r8 == 0) goto L_0x007a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627283(0x7f0e0d13, float:1.8881826E38)
+            r9 = 2131627298(0x7f0e0d22, float:1.8881856E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0249 }
             goto L_0x0067
         L_0x007a:

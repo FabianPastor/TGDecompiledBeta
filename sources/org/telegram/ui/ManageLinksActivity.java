@@ -1563,7 +1563,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.messenger.UserConfig r0 = r0.getUserConfig()
                 int r0 = r0.clientUserId
                 if (r7 != r0) goto L_0x0214
-                r7 = 2131627093(0x7f0e0CLASSNAME, float:1.888144E38)
+                r7 = 2131627108(0x7f0e0CLASSNAME, float:1.8881471E38)
                 java.lang.String r0 = "PublicLink"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1582,7 +1582,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r6.setText(r7)
                 goto L_0x0280
             L_0x0235:
-                r7 = 2131626902(0x7f0e0b96, float:1.8881053E38)
+                r7 = 2131626917(0x7f0e0ba5, float:1.8881084E38)
                 java.lang.String r0 = "PermanentLinkForThisAdmin"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1591,7 +1591,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.revokedHeader
                 if (r7 != r0) goto L_0x0257
-                r7 = 2131627269(0x7f0e0d05, float:1.8881798E38)
+                r7 = 2131627284(0x7f0e0d14, float:1.8881828E38)
                 java.lang.String r0 = "RevokedLinks"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1600,7 +1600,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.linksHeaderRow
                 if (r7 != r0) goto L_0x026c
-                r7 = 2131625988(0x7f0e0804, float:1.88792E38)
+                r7 = 2131626003(0x7f0e0813, float:1.887923E38)
                 java.lang.String r0 = "LinksCreatedByThisAdmin"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1609,7 +1609,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.adminsHeaderRow
                 if (r7 != r0) goto L_0x0280
-                r7 = 2131625987(0x7f0e0803, float:1.8879197E38)
+                r7 = 2131626002(0x7f0e0812, float:1.8879228E38)
                 java.lang.String r0 = "LinksCreatedByOtherAdmins"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1902,7 +1902,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r0.add(r2)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r4)
                 r1.add(r2)
-                r2 = 2131627459(0x7f0e0dc3, float:1.8882183E38)
+                r2 = 2131627474(0x7f0e0dd2, float:1.8882213E38)
                 java.lang.String r6 = "ShareLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1931,7 +1931,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r2 = org.telegram.ui.ManageLinksActivity.this
                 boolean r2 = r2.canEdit
                 if (r2 == 0) goto L_0x00c8
-                r2 = 2131627264(0x7f0e0d00, float:1.8881788E38)
+                r2 = 2131627279(0x7f0e0d0f, float:1.8881818E38)
                 java.lang.String r6 = "RevokeLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1955,7 +1955,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.-$$Lambda$ManageLinksActivity$LinkCell$6WOTWE2QlARDKBPxMERVDFywqN8 r6 = new org.telegram.ui.-$$Lambda$ManageLinksActivity$LinkCell$6WOTWE2QlARDKBPxMERVDFywqN8
                 r6.<init>(r1)
                 r3.setItems(r4, r0, r6)
-                r0 = 2131625864(0x7f0e0788, float:1.8878948E38)
+                r0 = 2131625879(0x7f0e0797, float:1.8878978E38)
                 java.lang.String r1 = "InviteLink"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r3.setTitle(r0)

@@ -541,7 +541,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 java.lang.String r4 = r0.name
                 r3[r2] = r4
-                r4 = 2131625922(0x7f0e07c2, float:1.8879066E38)
+                r4 = 2131625937(0x7f0e07d1, float:1.8879096E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r3[r1] = r4

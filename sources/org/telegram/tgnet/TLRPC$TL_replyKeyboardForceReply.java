@@ -12,6 +12,9 @@ public class TLRPC$TL_replyKeyboardForceReply extends TLRPC$ReplyMarkup {
             z2 = false;
         }
         this.selective = z2;
+        if ((readInt32 & 8) != 0) {
+            this.placeholder = abstractSerializedData.readString(z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -21,5 +24,8 @@ public class TLRPC$TL_replyKeyboardForceReply extends TLRPC$ReplyMarkup {
         int i2 = this.selective ? i | 4 : i & -5;
         this.flags = i2;
         abstractSerializedData.writeInt32(i2);
+        if ((this.flags & 8) != 0) {
+            abstractSerializedData.writeString(this.placeholder);
+        }
     }
 }

@@ -91,7 +91,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r3 = 2131427352(0x7f0b0018, float:1.8476318E38)
             r0.<init>(r2, r3)
             r2 = 2131230940(0x7var_dc, float:1.8077947E38)
-            r3 = 2131628274(0x7f0e10f2, float:1.8883836E38)
+            r3 = 2131628289(0x7f0e1101, float:1.8883866E38)
             java.lang.String r4 = "WidgetLoggedOff"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setTextViewText(r2, r3)
@@ -108,7 +108,7 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             r5 = 2131427353(0x7f0b0019, float:1.847632E38)
             r0.<init>(r2, r5)
             r2 = 2131230942(0x7var_de, float:1.807795E38)
-            r5 = 2131627681(0x7f0e0ea1, float:1.8882633E38)
+            r5 = 2131627696(0x7f0e0eb0, float:1.8882664E38)
             java.lang.String r6 = "TapToEditWidget"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r0.setTextViewText(r2, r5)
@@ -148,14 +148,14 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             if (r0 == 0) goto L_0x00fe
             boolean r6 = org.telegram.messenger.UserObject.isUserSelf(r0)
             if (r6 == 0) goto L_0x00b2
-            r6 = 2131627283(0x7f0e0d13, float:1.8881826E38)
+            r6 = 2131627298(0x7f0e0d22, float:1.8881856E38)
             java.lang.String r7 = "SavedMessages"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x00da
         L_0x00b2:
             boolean r6 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
             if (r6 == 0) goto L_0x00c2
-            r6 = 2131627172(0x7f0e0ca4, float:1.88816E38)
+            r6 = 2131627187(0x7f0e0cb3, float:1.8881631E38)
             java.lang.String r7 = "RepliesTitle"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             goto L_0x00da

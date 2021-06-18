@@ -3426,6 +3426,7 @@
     <public type="string" name="IVInteractionsChartTitle" id="NUM" />
     <public type="string" name="ImagesTab2" id="NUM" />
     <public type="string" name="ImporImportingService" id="NUM" />
+    <public type="string" name="ImporImportingStickersService" id="NUM" />
     <public type="string" name="Import" id="NUM" />
     <public type="string" name="ImportContacts" id="NUM" />
     <public type="string" name="ImportCount" id="NUM" />
@@ -3449,6 +3450,20 @@
     <public type="string" name="ImportMessages" id="NUM" />
     <public type="string" name="ImportMutualError" id="NUM" />
     <public type="string" name="ImportNotAdmin" id="NUM" />
+    <public type="string" name="ImportStickers" id="NUM" />
+    <public type="string" name="ImportStickersDoneInfo" id="NUM" />
+    <public type="string" name="ImportStickersDoneTitle" id="NUM" />
+    <public type="string" name="ImportStickersEnterName" id="NUM" />
+    <public type="string" name="ImportStickersEnterNameInfo" id="NUM" />
+    <public type="string" name="ImportStickersEnterUrlInfo" id="NUM" />
+    <public type="string" name="ImportStickersImportingTitle" id="NUM" />
+    <public type="string" name="ImportStickersLinkAvailable" id="NUM" />
+    <public type="string" name="ImportStickersLinkChecking" id="NUM" />
+    <public type="string" name="ImportStickersLinkInvalid" id="NUM" />
+    <public type="string" name="ImportStickersLinkInvalidLong" id="NUM" />
+    <public type="string" name="ImportStickersLinkInvalidShort" id="NUM" />
+    <public type="string" name="ImportStickersLinkTaken" id="NUM" />
+    <public type="string" name="ImportStickersRemove" id="NUM" />
     <public type="string" name="ImportToChat" id="NUM" />
     <public type="string" name="ImportToChatNoTitle" id="NUM" />
     <public type="string" name="ImportToUser" id="NUM" />

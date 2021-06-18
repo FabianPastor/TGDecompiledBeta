@@ -475,69 +475,69 @@ public class ContentPreviewViewer {
     /* JADX WARNING: Removed duplicated region for block: B:66:0x0132  */
     /* JADX WARNING: Removed duplicated region for block: B:67:0x0138  */
     /* JADX WARNING: Removed duplicated region for block: B:75:0x015a  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x017f  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x018d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouch(android.view.MotionEvent r15, org.telegram.ui.Components.RecyclerListView r16, int r17, java.lang.Object r18, org.telegram.ui.ContentPreviewViewer.ContentPreviewViewerDelegate r19) {
         /*
             r14 = this;
-            r7 = r14
+            r9 = r14
             r0 = r16
             r1 = r19
-            r7.delegate = r1
-            java.lang.Runnable r1 = r7.openPreviewRunnable
+            r9.delegate = r1
+            java.lang.Runnable r1 = r9.openPreviewRunnable
             r2 = 0
             if (r1 != 0) goto L_0x0012
             boolean r1 = r14.isVisible()
-            if (r1 == 0) goto L_0x0267
+            if (r1 == 0) goto L_0x0282
         L_0x0012:
             int r1 = r15.getAction()
             r3 = 0
-            r8 = 1
-            if (r1 == r8) goto L_0x0225
+            r10 = 1
+            if (r1 == r10) goto L_0x0240
             int r1 = r15.getAction()
             r4 = 3
-            if (r1 == r4) goto L_0x0225
+            if (r1 == r4) goto L_0x0240
             int r1 = r15.getAction()
             r4 = 6
             if (r1 != r4) goto L_0x002a
-            goto L_0x0225
+            goto L_0x0240
         L_0x002a:
             int r1 = r15.getAction()
-            if (r1 == 0) goto L_0x0267
-            boolean r1 = r7.isVisible
+            if (r1 == 0) goto L_0x0282
+            boolean r1 = r9.isVisible
             r4 = 2
-            if (r1 == 0) goto L_0x01ea
+            if (r1 == 0) goto L_0x0205
             int r1 = r15.getAction()
-            if (r1 != r4) goto L_0x01e9
-            int r1 = r7.currentContentType
-            if (r1 != r8) goto L_0x00b7
-            org.telegram.ui.ActionBar.BottomSheet r0 = r7.visibleDialog
+            if (r1 != r4) goto L_0x0204
+            int r1 = r9.currentContentType
+            if (r1 != r10) goto L_0x00b7
+            org.telegram.ui.ActionBar.BottomSheet r0 = r9.visibleDialog
             if (r0 != 0) goto L_0x00b6
-            float r0 = r7.showProgress
+            float r0 = r9.showProgress
             r1 = 1065353216(0x3var_, float:1.0)
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
             if (r0 != 0) goto L_0x00b6
-            float r0 = r7.lastTouchY
+            float r0 = r9.lastTouchY
             r1 = -971227136(0xffffffffCLASSNAMECLASSNAME, float:-10000.0)
             r2 = 0
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
             if (r0 != 0) goto L_0x0060
             float r0 = r15.getY()
-            r7.lastTouchY = r0
-            r7.currentMoveY = r2
-            r7.moveY = r2
+            r9.lastTouchY = r0
+            r9.currentMoveY = r2
+            r9.moveY = r2
             goto L_0x00b6
         L_0x0060:
             float r0 = r15.getY()
-            float r1 = r7.currentMoveY
-            float r3 = r7.lastTouchY
+            float r1 = r9.currentMoveY
+            float r3 = r9.lastTouchY
             float r3 = r0 - r3
             float r1 = r1 + r3
-            r7.currentMoveY = r1
-            r7.lastTouchY = r0
+            r9.currentMoveY = r1
+            r9.lastTouchY = r0
             int r0 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
             if (r0 <= 0) goto L_0x0076
-            r7.currentMoveY = r2
+            r9.currentMoveY = r2
             goto L_0x008a
         L_0x0076:
             r0 = 1114636288(0x42700000, float:60.0)
@@ -549,29 +549,29 @@ public class ContentPreviewViewer {
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r0 = -r0
             float r0 = (float) r0
-            r7.currentMoveY = r0
+            r9.currentMoveY = r0
         L_0x008a:
-            float r0 = r7.currentMoveY
+            float r0 = r9.currentMoveY
             r1 = 1128792064(0x43480000, float:200.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r1 = (float) r1
             float r0 = r14.rubberYPoisition(r0, r1)
-            r7.moveY = r0
-            org.telegram.ui.ContentPreviewViewer$FrameLayoutDrawer r0 = r7.containerView
+            r9.moveY = r0
+            org.telegram.ui.ContentPreviewViewer$FrameLayoutDrawer r0 = r9.containerView
             r0.invalidate()
-            float r0 = r7.currentMoveY
+            float r0 = r9.currentMoveY
             r1 = 1113325568(0x425CLASSNAME, float:55.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r1 = -r1
             float r1 = (float) r1
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
             if (r0 > 0) goto L_0x00b6
-            java.lang.Runnable r0 = r7.showSheetRunnable
+            java.lang.Runnable r0 = r9.showSheetRunnable
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
-            java.lang.Runnable r0 = r7.showSheetRunnable
+            java.lang.Runnable r0 = r9.showSheetRunnable
             r0.run()
         L_0x00b6:
-            return r8
+            return r10
         L_0x00b7:
             float r1 = r15.getX()
             int r1 = (int) r1
@@ -580,61 +580,61 @@ public class ContentPreviewViewer {
             int r5 = r16.getChildCount()
             r6 = 0
         L_0x00c6:
-            if (r6 >= r5) goto L_0x01e9
-            android.view.View r9 = r0.getChildAt(r6)
-            if (r9 != 0) goto L_0x00cf
+            if (r6 >= r5) goto L_0x0204
+            android.view.View r7 = r0.getChildAt(r6)
+            if (r7 != 0) goto L_0x00cf
             return r2
         L_0x00cf:
-            int r10 = r9.getTop()
-            int r11 = r9.getBottom()
-            int r12 = r9.getLeft()
-            int r13 = r9.getRight()
-            if (r10 > r4) goto L_0x01e3
-            if (r11 < r4) goto L_0x01e3
-            if (r12 > r1) goto L_0x01e3
+            int r8 = r7.getTop()
+            int r11 = r7.getBottom()
+            int r12 = r7.getLeft()
+            int r13 = r7.getRight()
+            if (r8 > r4) goto L_0x01fe
+            if (r11 < r4) goto L_0x01fe
+            if (r12 > r1) goto L_0x01fe
             if (r13 >= r1) goto L_0x00e9
-            goto L_0x01e3
+            goto L_0x01fe
         L_0x00e9:
-            boolean r0 = r9 instanceof org.telegram.ui.Cells.StickerEmojiCell
+            boolean r0 = r7 instanceof org.telegram.ui.Cells.StickerEmojiCell
             r1 = -1
             if (r0 == 0) goto L_0x00f5
-            org.telegram.messenger.ImageReceiver r0 = r7.centerImage
+            org.telegram.messenger.ImageReceiver r0 = r9.centerImage
             r0.setRoundRadius((int) r2)
         L_0x00f3:
-            r10 = 0
+            r11 = 0
             goto L_0x0126
         L_0x00f5:
-            boolean r0 = r9 instanceof org.telegram.ui.Cells.StickerCell
+            boolean r0 = r7 instanceof org.telegram.ui.Cells.StickerCell
             if (r0 == 0) goto L_0x00ff
-            org.telegram.messenger.ImageReceiver r0 = r7.centerImage
+            org.telegram.messenger.ImageReceiver r0 = r9.centerImage
             r0.setRoundRadius((int) r2)
             goto L_0x00f3
         L_0x00ff:
-            boolean r0 = r9 instanceof org.telegram.ui.Cells.ContextLinkCell
+            boolean r0 = r7 instanceof org.telegram.ui.Cells.ContextLinkCell
             if (r0 == 0) goto L_0x0125
-            r0 = r9
+            r0 = r7
             org.telegram.ui.Cells.ContextLinkCell r0 = (org.telegram.ui.Cells.ContextLinkCell) r0
             boolean r4 = r0.isSticker()
             if (r4 == 0) goto L_0x0112
-            org.telegram.messenger.ImageReceiver r0 = r7.centerImage
+            org.telegram.messenger.ImageReceiver r0 = r9.centerImage
             r0.setRoundRadius((int) r2)
             goto L_0x00f3
         L_0x0112:
             boolean r0 = r0.isGif()
             if (r0 == 0) goto L_0x0125
-            org.telegram.messenger.ImageReceiver r0 = r7.centerImage
+            org.telegram.messenger.ImageReceiver r0 = r9.centerImage
             r4 = 1086324736(0x40CLASSNAME, float:6.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r0.setRoundRadius((int) r4)
-            r10 = 1
+            r11 = 1
             goto L_0x0126
         L_0x0125:
-            r10 = -1
+            r11 = -1
         L_0x0126:
-            if (r10 == r1) goto L_0x01e9
-            android.view.View r0 = r7.currentPreviewCell
-            if (r9 != r0) goto L_0x012e
-            goto L_0x01e9
+            if (r11 == r1) goto L_0x0204
+            android.view.View r0 = r9.currentPreviewCell
+            if (r7 != r0) goto L_0x012e
+            goto L_0x0204
         L_0x012e:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
             if (r1 == 0) goto L_0x0138
@@ -653,105 +653,126 @@ public class ContentPreviewViewer {
             org.telegram.ui.Cells.ContextLinkCell r0 = (org.telegram.ui.Cells.ContextLinkCell) r0
             r0.setScaled(r2)
         L_0x014b:
-            r7.currentPreviewCell = r9
-            r9 = r17
-            r14.setKeyboardHeight(r9)
-            r7.clearsInputField = r2
-            android.view.View r0 = r7.currentPreviewCell
+            r9.currentPreviewCell = r7
+            r7 = r17
+            r14.setKeyboardHeight(r7)
+            r9.clearsInputField = r2
+            android.view.View r0 = r9.currentPreviewCell
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
-            if (r1 == 0) goto L_0x017f
-            r9 = r0
-            org.telegram.ui.Cells.StickerEmojiCell r9 = (org.telegram.ui.Cells.StickerEmojiCell) r9
-            org.telegram.tgnet.TLRPC$Document r1 = r9.getSticker()
-            org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r7.delegate
-            if (r0 == 0) goto L_0x016b
+            if (r1 == 0) goto L_0x018d
+            r12 = r0
+            org.telegram.ui.Cells.StickerEmojiCell r12 = (org.telegram.ui.Cells.StickerEmojiCell) r12
+            org.telegram.tgnet.TLRPC$Document r1 = r12.getSticker()
+            java.lang.String r4 = r12.getStickerPath()
+            java.lang.String r5 = r12.getEmoji()
+            org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r9.delegate
+            if (r0 == 0) goto L_0x0173
             java.lang.String r0 = r0.getQuery(r2)
-            r2 = r0
-            goto L_0x016c
-        L_0x016b:
-            r2 = r3
-        L_0x016c:
-            r3 = 0
-            boolean r5 = r9.isRecent()
-            java.lang.Object r6 = r9.getParentObject()
-            r0 = r14
-            r4 = r10
-            r0.open(r1, r2, r3, r4, r5, r6)
-            r9.setScaled(r8)
-            goto L_0x01df
-        L_0x017f:
-            boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerCell
-            if (r1 == 0) goto L_0x01aa
-            r9 = r0
-            org.telegram.ui.Cells.StickerCell r9 = (org.telegram.ui.Cells.StickerCell) r9
-            org.telegram.tgnet.TLRPC$Document r1 = r9.getSticker()
-            org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r7.delegate
-            if (r0 == 0) goto L_0x0194
-            java.lang.String r0 = r0.getQuery(r2)
-            r2 = r0
-            goto L_0x0195
-        L_0x0194:
-            r2 = r3
-        L_0x0195:
-            r3 = 0
-            r5 = 0
-            java.lang.Object r6 = r9.getParentObject()
-            r0 = r14
-            r4 = r10
-            r0.open(r1, r2, r3, r4, r5, r6)
-            r9.setScaled(r8)
-            boolean r0 = r9.isClearsInputField()
-            r7.clearsInputField = r0
-            goto L_0x01df
-        L_0x01aa:
-            boolean r1 = r0 instanceof org.telegram.ui.Cells.ContextLinkCell
-            if (r1 == 0) goto L_0x01df
-            r9 = r0
-            org.telegram.ui.Cells.ContextLinkCell r9 = (org.telegram.ui.Cells.ContextLinkCell) r9
-            org.telegram.tgnet.TLRPC$Document r1 = r9.getDocument()
-            org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r7.delegate
-            if (r0 == 0) goto L_0x01bf
-            java.lang.String r0 = r0.getQuery(r8)
-            r2 = r0
-            goto L_0x01c0
-        L_0x01bf:
-            r2 = r3
-        L_0x01c0:
-            org.telegram.tgnet.TLRPC$BotInlineResult r3 = r9.getBotInlineResult()
-            r5 = 0
-            org.telegram.tgnet.TLRPC$BotInlineResult r0 = r9.getBotInlineResult()
-            if (r0 == 0) goto L_0x01d0
-            org.telegram.tgnet.TLRPC$User r0 = r9.getInlineBot()
-            goto L_0x01d4
-        L_0x01d0:
-            java.lang.Object r0 = r9.getParentObject()
-        L_0x01d4:
             r6 = r0
+            goto L_0x0174
+        L_0x0173:
+            r6 = r3
+        L_0x0174:
+            r7 = 0
+            boolean r8 = r12.isRecent()
+            java.lang.Object r13 = r12.getParentObject()
             r0 = r14
-            r4 = r10
-            r0.open(r1, r2, r3, r4, r5, r6)
-            if (r10 == r8) goto L_0x01df
-            r9.setScaled(r8)
-        L_0x01df:
+            r2 = r4
+            r3 = r5
+            r4 = r6
+            r5 = r7
+            r6 = r11
+            r7 = r8
+            r8 = r13
+            r0.open(r1, r2, r3, r4, r5, r6, r7, r8)
+            r12.setScaled(r10)
+            goto L_0x01fa
+        L_0x018d:
+            boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerCell
+            if (r1 == 0) goto L_0x01c0
+            r12 = r0
+            org.telegram.ui.Cells.StickerCell r12 = (org.telegram.ui.Cells.StickerCell) r12
+            org.telegram.tgnet.TLRPC$Document r1 = r12.getSticker()
+            r4 = 0
+            r5 = 0
+            org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r9.delegate
+            if (r0 == 0) goto L_0x01a4
+            java.lang.String r0 = r0.getQuery(r2)
+            r6 = r0
+            goto L_0x01a5
+        L_0x01a4:
+            r6 = r3
+        L_0x01a5:
+            r7 = 0
+            r8 = 0
+            java.lang.Object r13 = r12.getParentObject()
+            r0 = r14
+            r2 = r4
+            r3 = r5
+            r4 = r6
+            r5 = r7
+            r6 = r11
+            r7 = r8
+            r8 = r13
+            r0.open(r1, r2, r3, r4, r5, r6, r7, r8)
+            r12.setScaled(r10)
+            boolean r0 = r12.isClearsInputField()
+            r9.clearsInputField = r0
+            goto L_0x01fa
+        L_0x01c0:
+            boolean r1 = r0 instanceof org.telegram.ui.Cells.ContextLinkCell
+            if (r1 == 0) goto L_0x01fa
+            r12 = r0
+            org.telegram.ui.Cells.ContextLinkCell r12 = (org.telegram.ui.Cells.ContextLinkCell) r12
+            org.telegram.tgnet.TLRPC$Document r1 = r12.getDocument()
+            r2 = 0
+            r4 = 0
+            org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r9.delegate
+            if (r0 == 0) goto L_0x01d7
+            java.lang.String r0 = r0.getQuery(r10)
+            r5 = r0
+            goto L_0x01d8
+        L_0x01d7:
+            r5 = r3
+        L_0x01d8:
+            org.telegram.tgnet.TLRPC$BotInlineResult r6 = r12.getBotInlineResult()
+            r7 = 0
+            org.telegram.tgnet.TLRPC$BotInlineResult r0 = r12.getBotInlineResult()
+            if (r0 == 0) goto L_0x01e8
+            org.telegram.tgnet.TLRPC$User r0 = r12.getInlineBot()
+            goto L_0x01ec
+        L_0x01e8:
+            java.lang.Object r0 = r12.getParentObject()
+        L_0x01ec:
+            r8 = r0
+            r0 = r14
+            r3 = r4
+            r4 = r5
+            r5 = r6
+            r6 = r11
+            r0.open(r1, r2, r3, r4, r5, r6, r7, r8)
+            if (r11 == r10) goto L_0x01fa
+            r12.setScaled(r10)
+        L_0x01fa:
             r14.runSmoothHaptic()
-            return r8
-        L_0x01e3:
-            r9 = r17
+            return r10
+        L_0x01fe:
+            r7 = r17
             int r6 = r6 + 1
             goto L_0x00c6
-        L_0x01e9:
-            return r8
-        L_0x01ea:
-            java.lang.Runnable r0 = r7.openPreviewRunnable
-            if (r0 == 0) goto L_0x0267
+        L_0x0204:
+            return r10
+        L_0x0205:
+            java.lang.Runnable r0 = r9.openPreviewRunnable
+            if (r0 == 0) goto L_0x0282
             int r0 = r15.getAction()
-            if (r0 != r4) goto L_0x021d
-            int r0 = r7.startX
+            if (r0 != r4) goto L_0x0238
+            int r0 = r9.startX
             float r0 = (float) r0
             float r1 = r15.getX()
             float r0 = r0 - r1
             double r0 = (double) r0
-            int r4 = r7.startY
+            int r4 = r9.startY
             float r4 = (float) r4
             float r5 = r15.getY()
             float r4 = r4 - r5
@@ -761,52 +782,52 @@ public class ContentPreviewViewer {
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             double r4 = (double) r4
             int r6 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r6 <= 0) goto L_0x0267
-            java.lang.Runnable r0 = r7.openPreviewRunnable
+            if (r6 <= 0) goto L_0x0282
+            java.lang.Runnable r0 = r9.openPreviewRunnable
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
-            r7.openPreviewRunnable = r3
-            goto L_0x0267
-        L_0x021d:
-            java.lang.Runnable r0 = r7.openPreviewRunnable
+            r9.openPreviewRunnable = r3
+            goto L_0x0282
+        L_0x0238:
+            java.lang.Runnable r0 = r9.openPreviewRunnable
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
-            r7.openPreviewRunnable = r3
-            goto L_0x0267
-        L_0x0225:
+            r9.openPreviewRunnable = r3
+            goto L_0x0282
+        L_0x0240:
             org.telegram.ui.-$$Lambda$ContentPreviewViewer$fTVdUVOkyauWT6lnO5eDqKhjScQ r1 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$fTVdUVOkyauWT6lnO5eDqKhjScQ
             r4 = r18
             r1.<init>(r4)
             r4 = 150(0x96, double:7.4E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1, r4)
-            java.lang.Runnable r0 = r7.openPreviewRunnable
-            if (r0 == 0) goto L_0x023b
+            java.lang.Runnable r0 = r9.openPreviewRunnable
+            if (r0 == 0) goto L_0x0256
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
-            r7.openPreviewRunnable = r3
-            goto L_0x0267
-        L_0x023b:
+            r9.openPreviewRunnable = r3
+            goto L_0x0282
+        L_0x0256:
             boolean r0 = r14.isVisible()
-            if (r0 == 0) goto L_0x0267
+            if (r0 == 0) goto L_0x0282
             r14.close()
-            android.view.View r0 = r7.currentPreviewCell
-            if (r0 == 0) goto L_0x0267
+            android.view.View r0 = r9.currentPreviewCell
+            if (r0 == 0) goto L_0x0282
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerEmojiCell
-            if (r1 == 0) goto L_0x0252
+            if (r1 == 0) goto L_0x026d
             org.telegram.ui.Cells.StickerEmojiCell r0 = (org.telegram.ui.Cells.StickerEmojiCell) r0
             r0.setScaled(r2)
-            goto L_0x0265
-        L_0x0252:
+            goto L_0x0280
+        L_0x026d:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.StickerCell
-            if (r1 == 0) goto L_0x025c
+            if (r1 == 0) goto L_0x0277
             org.telegram.ui.Cells.StickerCell r0 = (org.telegram.ui.Cells.StickerCell) r0
             r0.setScaled(r2)
-            goto L_0x0265
-        L_0x025c:
+            goto L_0x0280
+        L_0x0277:
             boolean r1 = r0 instanceof org.telegram.ui.Cells.ContextLinkCell
-            if (r1 == 0) goto L_0x0265
+            if (r1 == 0) goto L_0x0280
             org.telegram.ui.Cells.ContextLinkCell r0 = (org.telegram.ui.Cells.ContextLinkCell) r0
             r0.setScaled(r2)
-        L_0x0265:
-            r7.currentPreviewCell = r3
-        L_0x0267:
+        L_0x0280:
+            r9.currentPreviewCell = r3
+        L_0x0282:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onTouch(android.view.MotionEvent, org.telegram.ui.Components.RecyclerListView, int, java.lang.Object, org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate):boolean");
@@ -945,11 +966,13 @@ public class ContentPreviewViewer {
             if (view instanceof StickerEmojiCell) {
                 StickerEmojiCell stickerEmojiCell = (StickerEmojiCell) view;
                 TLRPC$Document sticker = stickerEmojiCell.getSticker();
+                String stickerPath = stickerEmojiCell.getStickerPath();
+                String emoji = stickerEmojiCell.getEmoji();
                 ContentPreviewViewerDelegate contentPreviewViewerDelegate = this.delegate;
                 if (contentPreviewViewerDelegate != null) {
                     str = contentPreviewViewerDelegate.getQuery(false);
                 }
-                open(sticker, str, (TLRPC$BotInlineResult) null, i2, stickerEmojiCell.isRecent(), stickerEmojiCell.getParentObject());
+                open(sticker, stickerPath, emoji, str, (TLRPC$BotInlineResult) null, i2, stickerEmojiCell.isRecent(), stickerEmojiCell.getParentObject());
                 stickerEmojiCell.setScaled(true);
             } else if (view instanceof StickerCell) {
                 StickerCell stickerCell = (StickerCell) view;
@@ -958,7 +981,7 @@ public class ContentPreviewViewer {
                 if (contentPreviewViewerDelegate2 != null) {
                     str = contentPreviewViewerDelegate2.getQuery(false);
                 }
-                open(sticker2, str, (TLRPC$BotInlineResult) null, i2, false, stickerCell.getParentObject());
+                open(sticker2, (String) null, (String) null, str, (TLRPC$BotInlineResult) null, i2, false, stickerCell.getParentObject());
                 stickerCell.setScaled(true);
                 this.clearsInputField = stickerCell.isClearsInputField();
             } else if (view instanceof ContextLinkCell) {
@@ -968,7 +991,7 @@ public class ContentPreviewViewer {
                 if (contentPreviewViewerDelegate3 != null) {
                     str = contentPreviewViewerDelegate3.getQuery(true);
                 }
-                open(document, str, contextLinkCell.getBotInlineResult(), i2, false, contextLinkCell.getBotInlineResult() != null ? contextLinkCell.getInlineBot() : contextLinkCell.getParentObject());
+                open(document, (String) null, (String) null, str, contextLinkCell.getBotInlineResult(), i2, false, contextLinkCell.getBotInlineResult() != null ? contextLinkCell.getInlineBot() : contextLinkCell.getParentObject());
                 if (i2 != 1) {
                     contextLinkCell.setScaled(true);
                 }
@@ -1044,22 +1067,46 @@ public class ContentPreviewViewer {
         this.keyboardHeight = i;
     }
 
-    public void open(TLRPC$Document tLRPC$Document, String str, TLRPC$BotInlineResult tLRPC$BotInlineResult, int i, boolean z, Object obj) {
+    public void open(TLRPC$Document tLRPC$Document, String str, String str2, String str3, TLRPC$BotInlineResult tLRPC$BotInlineResult, int i, boolean z, Object obj) {
         TLRPC$InputStickerSet tLRPC$InputStickerSet;
         ContentPreviewViewerDelegate contentPreviewViewerDelegate;
         TLRPC$Document tLRPC$Document2 = tLRPC$Document;
+        String str4 = str2;
         TLRPC$BotInlineResult tLRPC$BotInlineResult2 = tLRPC$BotInlineResult;
         int i2 = i;
         if (this.parentActivity != null && this.windowView != null) {
             this.isRecentSticker = z;
             this.stickerEmojiLayout = null;
-            if (i2 == 0) {
+            if (i2 != 0) {
                 if (tLRPC$Document2 != null) {
-                    if (textPaint == null) {
-                        TextPaint textPaint2 = new TextPaint(1);
-                        textPaint = textPaint2;
-                        textPaint2.setTextSize((float) AndroidUtilities.dp(24.0f));
+                    TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
+                    TLRPC$VideoSize documentVideoThumb = MessageObject.getDocumentVideoThumb(tLRPC$Document);
+                    ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$Document);
+                    forDocument.imageType = 2;
+                    if (documentVideoThumb != null) {
+                        this.centerImage.setImage(forDocument, (String) null, ImageLocation.getForDocument(documentVideoThumb, tLRPC$Document2), (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), "90_90_b", (Drawable) null, tLRPC$Document2.size, (String) null, "gif" + tLRPC$Document2, 0);
+                    } else {
+                        this.centerImage.setImage(forDocument, (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), "90_90_b", tLRPC$Document2.size, (String) null, "gif" + tLRPC$Document2, 0);
                     }
+                } else if (tLRPC$BotInlineResult2 != null && tLRPC$BotInlineResult2.content != null) {
+                    TLRPC$WebDocument tLRPC$WebDocument = tLRPC$BotInlineResult2.thumb;
+                    if (!(tLRPC$WebDocument instanceof TLRPC$TL_webDocument) || !"video/mp4".equals(tLRPC$WebDocument.mime_type)) {
+                        this.centerImage.setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.content)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), "90_90_b", tLRPC$BotInlineResult2.content.size, (String) null, "gif" + tLRPC$BotInlineResult2, 1);
+                    } else {
+                        this.centerImage.setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.content)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), "90_90_b", (Drawable) null, tLRPC$BotInlineResult2.content.size, (String) null, "gif" + tLRPC$BotInlineResult2, 1);
+                    }
+                } else {
+                    return;
+                }
+                AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
+                AndroidUtilities.runOnUIThread(this.showSheetRunnable, 2000);
+            } else if (tLRPC$Document2 != null || str != null) {
+                if (textPaint == null) {
+                    TextPaint textPaint2 = new TextPaint(1);
+                    textPaint = textPaint2;
+                    textPaint2.setTextSize((float) AndroidUtilities.dp(24.0f));
+                }
+                if (tLRPC$Document2 != null) {
                     int i3 = 0;
                     while (true) {
                         if (i3 >= tLRPC$Document2.attributes.size()) {
@@ -1100,36 +1147,18 @@ public class ContentPreviewViewer {
                         }
                         i4++;
                     }
-                } else {
-                    return;
+                } else if (str != null) {
+                    this.centerImage.setImage(str, (String) null, (Drawable) null, (String) null, 0);
+                    if (str4 != null) {
+                        this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(str4, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                    }
                 }
             } else {
-                if (tLRPC$Document2 != null) {
-                    TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
-                    TLRPC$VideoSize documentVideoThumb = MessageObject.getDocumentVideoThumb(tLRPC$Document);
-                    ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$Document);
-                    forDocument.imageType = 2;
-                    if (documentVideoThumb != null) {
-                        this.centerImage.setImage(forDocument, (String) null, ImageLocation.getForDocument(documentVideoThumb, tLRPC$Document2), (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), "90_90_b", (Drawable) null, tLRPC$Document2.size, (String) null, "gif" + tLRPC$Document2, 0);
-                    } else {
-                        this.centerImage.setImage(forDocument, (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), "90_90_b", tLRPC$Document2.size, (String) null, "gif" + tLRPC$Document2, 0);
-                    }
-                } else if (tLRPC$BotInlineResult2 != null && tLRPC$BotInlineResult2.content != null) {
-                    TLRPC$WebDocument tLRPC$WebDocument = tLRPC$BotInlineResult2.thumb;
-                    if (!(tLRPC$WebDocument instanceof TLRPC$TL_webDocument) || !"video/mp4".equals(tLRPC$WebDocument.mime_type)) {
-                        this.centerImage.setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.content)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), "90_90_b", tLRPC$BotInlineResult2.content.size, (String) null, "gif" + tLRPC$BotInlineResult2, 1);
-                    } else {
-                        this.centerImage.setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.content)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), "90_90_b", (Drawable) null, tLRPC$BotInlineResult2.content.size, (String) null, "gif" + tLRPC$BotInlineResult2, 1);
-                    }
-                } else {
-                    return;
-                }
-                AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
-                AndroidUtilities.runOnUIThread(this.showSheetRunnable, 2000);
+                return;
             }
             this.currentContentType = i2;
             this.currentDocument = tLRPC$Document2;
-            this.currentQuery = str;
+            this.currentQuery = str3;
             this.inlineResult = tLRPC$BotInlineResult2;
             this.parentObject = obj;
             this.containerView.invalidate();

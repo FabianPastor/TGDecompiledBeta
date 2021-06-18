@@ -103,6 +103,7 @@ import org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable;
 import org.telegram.tgnet.TLRPC$TL_fileLocation_layer82;
 import org.telegram.tgnet.TLRPC$TL_game;
 import org.telegram.tgnet.TLRPC$TL_geoPoint;
+import org.telegram.tgnet.TLRPC$TL_inputDocument;
 import org.telegram.tgnet.TLRPC$TL_inputEncryptedFile;
 import org.telegram.tgnet.TLRPC$TL_inputMediaDocument;
 import org.telegram.tgnet.TLRPC$TL_inputMediaGame;
@@ -111,9 +112,12 @@ import org.telegram.tgnet.TLRPC$TL_inputMediaUploadedDocument;
 import org.telegram.tgnet.TLRPC$TL_inputMediaUploadedPhoto;
 import org.telegram.tgnet.TLRPC$TL_inputPeerChannel;
 import org.telegram.tgnet.TLRPC$TL_inputPeerChat;
+import org.telegram.tgnet.TLRPC$TL_inputPeerSelf;
 import org.telegram.tgnet.TLRPC$TL_inputPeerUser;
 import org.telegram.tgnet.TLRPC$TL_inputSingleMedia;
+import org.telegram.tgnet.TLRPC$TL_inputStickerSetItem;
 import org.telegram.tgnet.TLRPC$TL_inputStickerSetShortName;
+import org.telegram.tgnet.TLRPC$TL_inputUserSelf;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonBuy;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonGame;
 import org.telegram.tgnet.TLRPC$TL_keyboardButtonUrlAuth;
@@ -125,6 +129,7 @@ import org.telegram.tgnet.TLRPC$TL_messageEntityItalic;
 import org.telegram.tgnet.TLRPC$TL_messageEntityPre;
 import org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl;
 import org.telegram.tgnet.TLRPC$TL_messageEntityUrl;
+import org.telegram.tgnet.TLRPC$TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC$TL_messageMediaEmpty;
 import org.telegram.tgnet.TLRPC$TL_messageMediaGame;
 import org.telegram.tgnet.TLRPC$TL_messageMediaGeo;
@@ -166,6 +171,7 @@ import org.telegram.tgnet.TLRPC$TL_photoSize_layer127;
 import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$TL_pollAnswer;
 import org.telegram.tgnet.TLRPC$TL_restrictionReason;
+import org.telegram.tgnet.TLRPC$TL_stickers_createStickerSet;
 import org.telegram.tgnet.TLRPC$TL_updateEditChannelMessage;
 import org.telegram.tgnet.TLRPC$TL_updateEditMessage;
 import org.telegram.tgnet.TLRPC$TL_updateMessageID;
@@ -203,6 +209,9 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     private HashMap<String, ImportingHistory> importingHistoryFiles = new HashMap<>();
     /* access modifiers changed from: private */
     public LongSparseArray<ImportingHistory> importingHistoryMap = new LongSparseArray<>();
+    private HashMap<String, ImportingStickers> importingStickersFiles = new HashMap<>();
+    /* access modifiers changed from: private */
+    public HashMap<String, ImportingStickers> importingStickersMap = new HashMap<>();
     private LocationProvider locationProvider = new LocationProvider(new LocationProvider.LocationProviderDelegate() {
         public void onLocationAcquired(Location location) {
             SendMessagesHelper.this.sendLocation(location);
@@ -793,6 +802,451 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         }
     }
 
+    public class UploadingStickerFile {
+        public String emoji;
+        public TLRPC$TL_inputStickerSetItem item;
+        public String mimeType;
+        public String path;
+
+        public UploadingStickerFile() {
+        }
+    }
+
+    public class ImportingStickers {
+        public double estimatedUploadSpeed;
+        private long lastUploadSize;
+        private long lastUploadTime;
+        public String shortName;
+        public String software;
+        public int timeUntilFinish = Integer.MAX_VALUE;
+        public String title;
+        public long totalSize;
+        public ArrayList<UploadingStickerFile> uploadMedia = new ArrayList<>();
+        public int uploadProgress;
+        public HashMap<String, Float> uploadProgresses = new HashMap<>();
+        public HashMap<String, UploadingStickerFile> uploadSet = new HashMap<>();
+        public HashMap<String, Long> uploadSize = new HashMap<>();
+        public long uploadedSize;
+
+        public ImportingStickers() {
+        }
+
+        /* access modifiers changed from: private */
+        public void initImport() {
+            SendMessagesHelper.this.getNotificationCenter().postNotificationName(NotificationCenter.stickersImportProgressChanged, this.shortName);
+            this.lastUploadTime = SystemClock.elapsedRealtime();
+            int size = this.uploadMedia.size();
+            for (int i = 0; i < size; i++) {
+                SendMessagesHelper.this.getFileLoader().uploadFile(this.uploadMedia.get(i).path, false, true, 67108864);
+            }
+        }
+
+        public long getUploadedCount() {
+            return this.uploadedSize;
+        }
+
+        public long getTotalCount() {
+            return this.totalSize;
+        }
+
+        /* access modifiers changed from: private */
+        public void onFileFailedToUpload(String str) {
+            UploadingStickerFile remove = this.uploadSet.remove(str);
+            if (remove != null) {
+                this.uploadMedia.remove(remove);
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public void addUploadProgress(String str, long j, float f) {
+            this.uploadProgresses.put(str, Float.valueOf(f));
+            this.uploadSize.put(str, Long.valueOf(j));
+            this.uploadedSize = 0;
+            for (Map.Entry<String, Long> value : this.uploadSize.entrySet()) {
+                this.uploadedSize += ((Long) value.getValue()).longValue();
+            }
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            long j2 = this.uploadedSize;
+            long j3 = this.lastUploadSize;
+            if (j2 != j3) {
+                long j4 = this.lastUploadTime;
+                if (elapsedRealtime != j4) {
+                    double d = (double) (elapsedRealtime - j4);
+                    Double.isNaN(d);
+                    double d2 = (double) (j2 - j3);
+                    Double.isNaN(d2);
+                    double d3 = d2 / (d / 1000.0d);
+                    double d4 = this.estimatedUploadSpeed;
+                    if (d4 == 0.0d) {
+                        this.estimatedUploadSpeed = d3;
+                    } else {
+                        this.estimatedUploadSpeed = (d3 * 0.01d) + (0.99d * d4);
+                    }
+                    double d5 = (double) ((this.totalSize - j2) * 1000);
+                    double d6 = this.estimatedUploadSpeed;
+                    Double.isNaN(d5);
+                    this.timeUntilFinish = (int) (d5 / d6);
+                    this.lastUploadSize = j2;
+                    this.lastUploadTime = elapsedRealtime;
+                }
+            }
+            int uploadedCount = (int) ((((float) getUploadedCount()) / ((float) getTotalCount())) * 100.0f);
+            if (this.uploadProgress != uploadedCount) {
+                this.uploadProgress = uploadedCount;
+                SendMessagesHelper.this.getNotificationCenter().postNotificationName(NotificationCenter.stickersImportProgressChanged, this.shortName);
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public void onMediaImport(final String str, long j, TLRPC$InputFile tLRPC$InputFile) {
+            addUploadProgress(str, j, 1.0f);
+            final UploadingStickerFile uploadingStickerFile = this.uploadSet.get(str);
+            if (uploadingStickerFile != null) {
+                TLRPC$TL_messages_uploadMedia tLRPC$TL_messages_uploadMedia = new TLRPC$TL_messages_uploadMedia();
+                tLRPC$TL_messages_uploadMedia.peer = new TLRPC$TL_inputPeerSelf();
+                TLRPC$TL_inputMediaUploadedDocument tLRPC$TL_inputMediaUploadedDocument = new TLRPC$TL_inputMediaUploadedDocument();
+                tLRPC$TL_messages_uploadMedia.media = tLRPC$TL_inputMediaUploadedDocument;
+                tLRPC$TL_inputMediaUploadedDocument.file = tLRPC$InputFile;
+                tLRPC$TL_inputMediaUploadedDocument.mime_type = uploadingStickerFile.mimeType;
+                SendMessagesHelper.this.getConnectionsManager().sendRequest(tLRPC$TL_messages_uploadMedia, new RequestDelegate() {
+                    public void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                        AndroidUtilities.runOnUIThread(
+                        /*  JADX ERROR: Method code generation error
+                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0009: INVOKE  
+                              (wrap: org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$1$dsd0-50pcu9Ww1Zka1lK_fEdlAA : 0x0006: CONSTRUCTOR  (r1v0 org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$1$dsd0-50pcu9Ww1Zka1lK_fEdlAA) = 
+                              (r2v0 'this' org.telegram.messenger.SendMessagesHelper$ImportingStickers$1 A[THIS])
+                              (r3v0 'tLObject' org.telegram.tgnet.TLObject)
+                              (wrap: org.telegram.messenger.SendMessagesHelper$UploadingStickerFile : 0x0000: IGET  (r4v1 org.telegram.messenger.SendMessagesHelper$UploadingStickerFile) = 
+                              (r2v0 'this' org.telegram.messenger.SendMessagesHelper$ImportingStickers$1 A[THIS])
+                             org.telegram.messenger.SendMessagesHelper.ImportingStickers.1.val$file org.telegram.messenger.SendMessagesHelper$UploadingStickerFile)
+                              (wrap: java.lang.String : 0x0002: IGET  (r0v0 java.lang.String) = 
+                              (r2v0 'this' org.telegram.messenger.SendMessagesHelper$ImportingStickers$1 A[THIS])
+                             org.telegram.messenger.SendMessagesHelper.ImportingStickers.1.val$path java.lang.String)
+                             call: org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$1$dsd0-50pcu9Ww1Zka1lK_fEdlAA.<init>(org.telegram.messenger.SendMessagesHelper$ImportingStickers$1, org.telegram.tgnet.TLObject, org.telegram.messenger.SendMessagesHelper$UploadingStickerFile, java.lang.String):void type: CONSTRUCTOR)
+                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.messenger.SendMessagesHelper.ImportingStickers.1.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                            	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
+                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                            	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                            	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                            	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                            	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                            	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                            	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                            	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0006: CONSTRUCTOR  (r1v0 org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$1$dsd0-50pcu9Ww1Zka1lK_fEdlAA) = 
+                              (r2v0 'this' org.telegram.messenger.SendMessagesHelper$ImportingStickers$1 A[THIS])
+                              (r3v0 'tLObject' org.telegram.tgnet.TLObject)
+                              (wrap: org.telegram.messenger.SendMessagesHelper$UploadingStickerFile : 0x0000: IGET  (r4v1 org.telegram.messenger.SendMessagesHelper$UploadingStickerFile) = 
+                              (r2v0 'this' org.telegram.messenger.SendMessagesHelper$ImportingStickers$1 A[THIS])
+                             org.telegram.messenger.SendMessagesHelper.ImportingStickers.1.val$file org.telegram.messenger.SendMessagesHelper$UploadingStickerFile)
+                              (wrap: java.lang.String : 0x0002: IGET  (r0v0 java.lang.String) = 
+                              (r2v0 'this' org.telegram.messenger.SendMessagesHelper$ImportingStickers$1 A[THIS])
+                             org.telegram.messenger.SendMessagesHelper.ImportingStickers.1.val$path java.lang.String)
+                             call: org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$1$dsd0-50pcu9Ww1Zka1lK_fEdlAA.<init>(org.telegram.messenger.SendMessagesHelper$ImportingStickers$1, org.telegram.tgnet.TLObject, org.telegram.messenger.SendMessagesHelper$UploadingStickerFile, java.lang.String):void type: CONSTRUCTOR in method: org.telegram.messenger.SendMessagesHelper.ImportingStickers.1.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                            	... 83 more
+                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$1$dsd0-50pcu9Ww1Zka1lK_fEdlAA, state: NOT_LOADED
+                            	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                            	... 89 more
+                            */
+                        /*
+                            this = this;
+                            org.telegram.messenger.SendMessagesHelper$UploadingStickerFile r4 = r3
+                            java.lang.String r0 = r2
+                            org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$1$dsd0-50pcu9Ww1Zka1lK_fEdlAA r1 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$1$dsd0-50pcu9Ww1Zka1lK_fEdlAA
+                            r1.<init>(r2, r3, r4, r0)
+                            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
+                            return
+                        */
+                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.ImportingStickers.AnonymousClass1.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+                    }
+
+                    /* access modifiers changed from: private */
+                    /* renamed from: lambda$run$0 */
+                    public /* synthetic */ void lambda$run$0$SendMessagesHelper$ImportingStickers$1(TLObject tLObject, UploadingStickerFile uploadingStickerFile, String str) {
+                        if (tLObject instanceof TLRPC$TL_messageMediaDocument) {
+                            TLRPC$TL_inputStickerSetItem tLRPC$TL_inputStickerSetItem = new TLRPC$TL_inputStickerSetItem();
+                            uploadingStickerFile.item = tLRPC$TL_inputStickerSetItem;
+                            tLRPC$TL_inputStickerSetItem.document = new TLRPC$TL_inputDocument();
+                            TLRPC$TL_inputStickerSetItem tLRPC$TL_inputStickerSetItem2 = uploadingStickerFile.item;
+                            TLRPC$InputDocument tLRPC$InputDocument = tLRPC$TL_inputStickerSetItem2.document;
+                            TLRPC$Document tLRPC$Document = ((TLRPC$TL_messageMediaDocument) tLObject).document;
+                            tLRPC$InputDocument.id = tLRPC$Document.id;
+                            tLRPC$InputDocument.access_hash = tLRPC$Document.access_hash;
+                            tLRPC$InputDocument.file_reference = tLRPC$Document.file_reference;
+                            String str2 = uploadingStickerFile.emoji;
+                            if (str2 == null) {
+                                str2 = "";
+                            }
+                            tLRPC$TL_inputStickerSetItem2.emoji = str2;
+                        }
+                        ImportingStickers.this.uploadSet.remove(str);
+                        SendMessagesHelper.this.getNotificationCenter().postNotificationName(NotificationCenter.stickersImportProgressChanged, ImportingStickers.this.shortName);
+                        if (ImportingStickers.this.uploadSet.isEmpty()) {
+                            ImportingStickers.this.startImport();
+                        }
+                    }
+                }, 2);
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public void startImport() {
+            final TLRPC$TL_stickers_createStickerSet tLRPC$TL_stickers_createStickerSet = new TLRPC$TL_stickers_createStickerSet();
+            tLRPC$TL_stickers_createStickerSet.user_id = new TLRPC$TL_inputUserSelf();
+            tLRPC$TL_stickers_createStickerSet.title = this.title;
+            tLRPC$TL_stickers_createStickerSet.short_name = this.shortName;
+            String str = this.software;
+            if (str != null) {
+                tLRPC$TL_stickers_createStickerSet.software = str;
+                tLRPC$TL_stickers_createStickerSet.flags |= 8;
+            }
+            int size = this.uploadMedia.size();
+            for (int i = 0; i < size; i++) {
+                TLRPC$TL_inputStickerSetItem tLRPC$TL_inputStickerSetItem = this.uploadMedia.get(i).item;
+                if (tLRPC$TL_inputStickerSetItem != null) {
+                    tLRPC$TL_stickers_createStickerSet.stickers.add(tLRPC$TL_inputStickerSetItem);
+                }
+            }
+            SendMessagesHelper.this.getConnectionsManager().sendRequest(tLRPC$TL_stickers_createStickerSet, new RequestDelegate() {
+                public void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    AndroidUtilities.runOnUIThread(
+                    /*  JADX ERROR: Method code generation error
+                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0007: INVOKE  
+                          (wrap: org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$2$BQjBa1zbbOwOdfpxnUKGOucp6LI : 0x0004: CONSTRUCTOR  (r1v0 org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$2$BQjBa1zbbOwOdfpxnUKGOucp6LI) = 
+                          (r2v0 'this' org.telegram.messenger.SendMessagesHelper$ImportingStickers$2 A[THIS])
+                          (r4v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
+                          (wrap: org.telegram.tgnet.TLRPC$TL_stickers_createStickerSet : 0x0000: IGET  (r0v0 org.telegram.tgnet.TLRPC$TL_stickers_createStickerSet) = 
+                          (r2v0 'this' org.telegram.messenger.SendMessagesHelper$ImportingStickers$2 A[THIS])
+                         org.telegram.messenger.SendMessagesHelper.ImportingStickers.2.val$req org.telegram.tgnet.TLRPC$TL_stickers_createStickerSet)
+                          (r3v0 'tLObject' org.telegram.tgnet.TLObject)
+                         call: org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$2$BQjBa1zbbOwOdfpxnUKGOucp6LI.<init>(org.telegram.messenger.SendMessagesHelper$ImportingStickers$2, org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLRPC$TL_stickers_createStickerSet, org.telegram.tgnet.TLObject):void type: CONSTRUCTOR)
+                         org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.messenger.SendMessagesHelper.ImportingStickers.2.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                        	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
+                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
+                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0004: CONSTRUCTOR  (r1v0 org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$2$BQjBa1zbbOwOdfpxnUKGOucp6LI) = 
+                          (r2v0 'this' org.telegram.messenger.SendMessagesHelper$ImportingStickers$2 A[THIS])
+                          (r4v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
+                          (wrap: org.telegram.tgnet.TLRPC$TL_stickers_createStickerSet : 0x0000: IGET  (r0v0 org.telegram.tgnet.TLRPC$TL_stickers_createStickerSet) = 
+                          (r2v0 'this' org.telegram.messenger.SendMessagesHelper$ImportingStickers$2 A[THIS])
+                         org.telegram.messenger.SendMessagesHelper.ImportingStickers.2.val$req org.telegram.tgnet.TLRPC$TL_stickers_createStickerSet)
+                          (r3v0 'tLObject' org.telegram.tgnet.TLObject)
+                         call: org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$2$BQjBa1zbbOwOdfpxnUKGOucp6LI.<init>(org.telegram.messenger.SendMessagesHelper$ImportingStickers$2, org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLRPC$TL_stickers_createStickerSet, org.telegram.tgnet.TLObject):void type: CONSTRUCTOR in method: org.telegram.messenger.SendMessagesHelper.ImportingStickers.2.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                        	... 76 more
+                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$2$BQjBa1zbbOwOdfpxnUKGOucp6LI, state: NOT_LOADED
+                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                        	... 82 more
+                        */
+                    /*
+                        this = this;
+                        org.telegram.tgnet.TLRPC$TL_stickers_createStickerSet r0 = r0
+                        org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$2$BQjBa1zbbOwOdfpxnUKGOucp6LI r1 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$ImportingStickers$2$BQjBa1zbbOwOdfpxnUKGOucp6LI
+                        r1.<init>(r2, r4, r0, r3)
+                        org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
+                        return
+                    */
+                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.ImportingStickers.AnonymousClass2.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+                }
+
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$run$0 */
+                public /* synthetic */ void lambda$run$0$SendMessagesHelper$ImportingStickers$2(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_stickers_createStickerSet tLRPC$TL_stickers_createStickerSet, TLObject tLObject) {
+                    SendMessagesHelper.this.importingStickersMap.remove(ImportingStickers.this.shortName);
+                    if (tLRPC$TL_error == null) {
+                        SendMessagesHelper.this.getNotificationCenter().postNotificationName(NotificationCenter.stickersImportProgressChanged, ImportingStickers.this.shortName);
+                    } else {
+                        SendMessagesHelper.this.getNotificationCenter().postNotificationName(NotificationCenter.stickersImportProgressChanged, ImportingStickers.this.shortName, tLRPC$TL_stickers_createStickerSet, tLRPC$TL_error);
+                    }
+                    if (tLObject instanceof TLRPC$TL_messages_stickerSet) {
+                        NotificationCenter notificationCenter = SendMessagesHelper.this.getNotificationCenter();
+                        int i = NotificationCenter.stickersImportComplete;
+                        if (notificationCenter.hasObservers(i)) {
+                            SendMessagesHelper.this.getNotificationCenter().postNotificationName(i, tLObject);
+                            return;
+                        }
+                        SendMessagesHelper.this.getMediaDataController().toggleStickerSet((Context) null, tLObject, 2, (BaseFragment) null, false, false);
+                    }
+                }
+            });
+        }
+
+        public void setImportProgress(int i) {
+            if (i == 100) {
+                SendMessagesHelper.this.importingStickersMap.remove(this.shortName);
+            }
+            SendMessagesHelper.this.getNotificationCenter().postNotificationName(NotificationCenter.stickersImportProgressChanged, this.shortName);
+        }
+    }
+
     static {
         int availableProcessors = Build.VERSION.SDK_INT >= 17 ? Runtime.getRuntime().availableProcessors() : 2;
         mediaSendThreadPool = new ThreadPoolExecutor(availableProcessors, availableProcessors, 60, TimeUnit.SECONDS, new LinkedBlockingQueue());
@@ -1061,8 +1515,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     SendMessagesHelper.this.processSentMessage(messageObject.getId());
                     SendMessagesHelper.this.removeFromUploadingMessages(messageObject.getId(), this.scheduled);
                 }
-                HashMap access$1100 = SendMessagesHelper.this.delayedMessages;
-                access$1100.remove("group_" + this.groupId);
+                HashMap access$1300 = SendMessagesHelper.this.delayedMessages;
+                access$1300.remove("group_" + this.groupId);
             } else {
                 MessagesStorage messagesStorage = SendMessagesHelper.this.getMessagesStorage();
                 MessageObject messageObject2 = this.obj;
@@ -1129,6 +1583,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         this.waitingForVote.clear();
         this.importingHistoryFiles.clear();
         this.importingHistoryMap.clear();
+        this.importingStickersFiles.clear();
+        this.importingStickersMap.clear();
         this.locationProvider.stop();
     }
 
@@ -1162,6 +1618,11 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 Long l = objArr[1];
                 importingHistory.addUploadProgress(str4, l.longValue(), ((float) l.longValue()) / ((float) objArr[2].longValue()));
             }
+            ImportingStickers importingStickers = this.importingStickersFiles.get(str4);
+            if (importingStickers != null) {
+                Long l2 = objArr[1];
+                importingStickers.addUploadProgress(str4, l2.longValue(), ((float) l2.longValue()) / ((float) objArr[2].longValue()));
+            }
         } else if (i5 == NotificationCenter.FileDidUpload) {
             String str5 = objArr[0];
             TLRPC$InputFile tLRPC$InputFile2 = objArr[1];
@@ -1173,6 +1634,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 } else {
                     importingHistory2.onMediaImport(str5, objArr[5].longValue(), tLRPC$InputFile2);
                 }
+            }
+            ImportingStickers importingStickers2 = this.importingStickersFiles.get(str5);
+            if (importingStickers2 != null) {
+                importingStickers2.onMediaImport(str5, objArr[5].longValue(), tLRPC$InputFile2);
             }
             ArrayList arrayList4 = this.delayedMessages.get(str5);
             if (arrayList4 != null) {
@@ -1344,6 +1809,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             if (importingHistory3 != null) {
                 importingHistory3.onFileFailedToUpload(str7);
             }
+            ImportingStickers importingStickers3 = this.importingStickersFiles.get(str7);
+            if (importingStickers3 != null) {
+                importingStickers3.onFileFailedToUpload(str7);
+            }
             ArrayList arrayList5 = this.delayedMessages.get(str7);
             if (arrayList5 != null) {
                 while (i6 < arrayList5.size()) {
@@ -1463,7 +1932,6 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                                         i11++;
                                     }
                                 }
-                                i10++;
                             } else if (delayedMessage9.obj == messageObject10) {
                                 delayedMessage9.markAsError();
                                 arrayList10.remove(i10);
@@ -5307,7 +5775,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r7.sendCallback(r3, r4, r5, r6)
             goto L_0x04a5
         L_0x001d:
-            r8 = 2131626532(0x7f0e0a24, float:1.8880303E38)
+            r8 = 2131626547(0x7f0e0a33, float:1.8880333E38)
             java.lang.String r9 = "OK"
             r10 = 0
             r11 = 1
@@ -5827,7 +6295,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r15 = 0
             android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r11, r12, r13, r14, r15)
             r4.addView(r1, r2)
-            r1 = 2131626532(0x7f0e0a24, float:1.8880303E38)
+            r1 = 2131626547(0x7f0e0a33, float:1.8880333E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r9, r1)
             r2 = 0
             r0.setNegativeButton(r1, r2)
@@ -13578,8 +14046,16 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         }
     }
 
+    public ImportingStickers getImportingStickers(String str) {
+        return this.importingStickersMap.get(str);
+    }
+
     public ImportingHistory getImportingHistory(long j) {
         return this.importingHistoryMap.get(j);
+    }
+
+    public boolean isImportingStickers() {
+        return this.importingStickersMap.size() != 0;
     }
 
     public boolean isImportingHistory() {
@@ -13739,6 +14215,104 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         getFileLoader().uploadFile(importingHistory.historyPath, false, true, 0, 67108864, true);
         getNotificationCenter().postNotificationName(NotificationCenter.historyImportProgressChanged, Long.valueOf(j));
         intCallback.run((int) j);
+        try {
+            ApplicationLoader.applicationContext.startService(new Intent(ApplicationLoader.applicationContext, ImportingService.class));
+        } catch (Throwable th) {
+            FileLog.e(th);
+        }
+    }
+
+    public void prepareImportStickers(String str, String str2, String str3, ArrayList<String> arrayList, ArrayList<String> arrayList2, ArrayList<String> arrayList3, MessagesStorage.StringCallback stringCallback) {
+        String str4 = str2;
+        if (this.importingStickersMap.get(str2) != null) {
+            stringCallback.run((String) null);
+            return;
+        }
+        new Thread(new Runnable(str, str2, str3, arrayList, stringCallback, arrayList3, arrayList2) {
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$2;
+            public final /* synthetic */ String f$3;
+            public final /* synthetic */ ArrayList f$4;
+            public final /* synthetic */ MessagesStorage.StringCallback f$5;
+            public final /* synthetic */ ArrayList f$6;
+            public final /* synthetic */ ArrayList f$7;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
+                this.f$4 = r5;
+                this.f$5 = r6;
+                this.f$6 = r7;
+                this.f$7 = r8;
+            }
+
+            public final void run() {
+                SendMessagesHelper.this.lambda$prepareImportStickers$72$SendMessagesHelper(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+            }
+        }).start();
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$prepareImportStickers$72 */
+    public /* synthetic */ void lambda$prepareImportStickers$72$SendMessagesHelper(String str, String str2, String str3, ArrayList arrayList, MessagesStorage.StringCallback stringCallback, ArrayList arrayList2, ArrayList arrayList3) {
+        ImportingStickers importingStickers = new ImportingStickers();
+        importingStickers.title = str;
+        importingStickers.shortName = str2;
+        importingStickers.software = str3;
+        HashMap hashMap = new HashMap();
+        int size = arrayList.size();
+        for (int i = 0; i < size; i++) {
+            File file = new File((String) arrayList.get(i));
+            if (file.exists()) {
+                long length = file.length();
+                if (length != 0) {
+                    importingStickers.totalSize += length;
+                    UploadingStickerFile uploadingStickerFile = new UploadingStickerFile();
+                    uploadingStickerFile.emoji = arrayList2 != null ? (String) arrayList2.get(i) : "";
+                    uploadingStickerFile.mimeType = (String) arrayList3.get(i);
+                    uploadingStickerFile.path = (String) arrayList.get(i);
+                    importingStickers.uploadMedia.add(uploadingStickerFile);
+                    importingStickers.uploadSet.put(uploadingStickerFile.path, uploadingStickerFile);
+                    hashMap.put(uploadingStickerFile.path, importingStickers);
+                }
+            }
+            if (i == 0) {
+                AndroidUtilities.runOnUIThread(new Runnable() {
+                    public final void run() {
+                        MessagesStorage.StringCallback.this.run((String) null);
+                    }
+                });
+                return;
+            }
+        }
+        AndroidUtilities.runOnUIThread(new Runnable(hashMap, str2, importingStickers, stringCallback) {
+            public final /* synthetic */ HashMap f$1;
+            public final /* synthetic */ String f$2;
+            public final /* synthetic */ SendMessagesHelper.ImportingStickers f$3;
+            public final /* synthetic */ MessagesStorage.StringCallback f$4;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+                this.f$3 = r4;
+                this.f$4 = r5;
+            }
+
+            public final void run() {
+                SendMessagesHelper.this.lambda$prepareImportStickers$71$SendMessagesHelper(this.f$1, this.f$2, this.f$3, this.f$4);
+            }
+        });
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$prepareImportStickers$71 */
+    public /* synthetic */ void lambda$prepareImportStickers$71$SendMessagesHelper(HashMap hashMap, String str, ImportingStickers importingStickers, MessagesStorage.StringCallback stringCallback) {
+        this.importingStickersFiles.putAll(hashMap);
+        this.importingStickersMap.put(str, importingStickers);
+        importingStickers.initImport();
+        getNotificationCenter().postNotificationName(NotificationCenter.historyImportProgressChanged, str);
+        stringCallback.run(str);
         try {
             ApplicationLoader.applicationContext.startService(new Intent(ApplicationLoader.applicationContext, ImportingService.class));
         } catch (Throwable th) {
@@ -14626,7 +15200,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r5 = r34
             r14 = r50
         L_0x050d:
-            org.telegram.messenger.-$$Lambda$SendMessagesHelper$1ohYHH27eZsZ2t5ZLRjw7Jhajz4 r15 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$1ohYHH27eZsZ2t5ZLRjw7Jhajz4
+            org.telegram.messenger.-$$Lambda$SendMessagesHelper$jGLh_IU5C1DNj1CZQAojRRGJq_o r15 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$jGLh_IU5C1DNj1CZQAojRRGJq_o
             r0 = r15
             r1 = r45
             r2 = r34
@@ -14650,7 +15224,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.prepareSendingDocumentInternal(org.telegram.messenger.AccountInstance, java.lang.String, java.lang.String, android.net.Uri, java.lang.String, long, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, java.lang.CharSequence, java.util.ArrayList, org.telegram.messenger.MessageObject, long[], boolean, boolean, boolean, int, java.lang.Integer[]):boolean");
     }
 
-    static /* synthetic */ void lambda$prepareSendingDocumentInternal$70(MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_document tLRPC$TL_document, String str, HashMap hashMap, String str2, long j, MessageObject messageObject2, MessageObject messageObject3, String str3, ArrayList arrayList, boolean z, int i) {
+    static /* synthetic */ void lambda$prepareSendingDocumentInternal$73(MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_document tLRPC$TL_document, String str, HashMap hashMap, String str2, long j, MessageObject messageObject2, MessageObject messageObject3, String str3, ArrayList arrayList, boolean z, int i) {
         if (messageObject != null) {
             accountInstance.getSendMessagesHelper().editMessage(messageObject, (TLRPC$TL_photo) null, (VideoEditedInfo) null, tLRPC$TL_document, str, hashMap, false, str2);
         } else {
@@ -14703,7 +15277,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             }
 
             public final void run() {
-                SendMessagesHelper.lambda$prepareSendingAudioDocuments$72(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+                SendMessagesHelper.lambda$prepareSendingAudioDocuments$75(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
             }
         }).start();
     }
@@ -14717,7 +15291,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:43:0x00e3  */
     /* JADX WARNING: Removed duplicated region for block: B:49:0x00ea A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ void lambda$prepareSendingAudioDocuments$72(java.util.ArrayList r24, long r25, org.telegram.messenger.AccountInstance r27, java.lang.String r28, org.telegram.messenger.MessageObject r29, org.telegram.messenger.MessageObject r30, org.telegram.messenger.MessageObject r31, boolean r32, int r33) {
+    static /* synthetic */ void lambda$prepareSendingAudioDocuments$75(java.util.ArrayList r24, long r25, org.telegram.messenger.AccountInstance r27, java.lang.String r28, org.telegram.messenger.MessageObject r29, org.telegram.messenger.MessageObject r30, org.telegram.messenger.MessageObject r31, boolean r32, int r33) {
         /*
             r14 = r25
             int r13 = r24.size()
@@ -14848,7 +15422,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r1 = "1"
             r6.put(r0, r1)
         L_0x00ea:
-            org.telegram.messenger.-$$Lambda$SendMessagesHelper$PSnkcTXZ-lAE6w_MLW3VIl4MHzA r17 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$PSnkcTXZ-lAE6w_MLW3VIl4MHzA
+            org.telegram.messenger.-$$Lambda$SendMessagesHelper$vzpIAayPgK114vrJxm98OnSjII4 r17 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$vzpIAayPgK114vrJxm98OnSjII4
             r0 = r17
             r1 = r29
             r2 = r27
@@ -14875,10 +15449,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x0119:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingAudioDocuments$72(java.util.ArrayList, long, org.telegram.messenger.AccountInstance, java.lang.String, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, boolean, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingAudioDocuments$75(java.util.ArrayList, long, org.telegram.messenger.AccountInstance, java.lang.String, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, boolean, int):void");
     }
 
-    static /* synthetic */ void lambda$prepareSendingAudioDocuments$71(MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_document tLRPC$TL_document, MessageObject messageObject2, HashMap hashMap, String str, long j, MessageObject messageObject3, MessageObject messageObject4, String str2, boolean z, int i) {
+    static /* synthetic */ void lambda$prepareSendingAudioDocuments$74(MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_document tLRPC$TL_document, MessageObject messageObject2, HashMap hashMap, String str, long j, MessageObject messageObject3, MessageObject messageObject4, String str2, boolean z, int i) {
         MessageObject messageObject5 = messageObject2;
         if (messageObject != null) {
             accountInstance.getSendMessagesHelper().editMessage(messageObject, (TLRPC$TL_photo) null, (VideoEditedInfo) null, tLRPC$TL_document, messageObject5.messageOwner.attachPath, hashMap, false, str);
@@ -14898,12 +15472,12 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             }
 
             public final void run() {
-                SendMessagesHelper.lambda$finishGroup$73(AccountInstance.this, this.f$1, this.f$2);
+                SendMessagesHelper.lambda$finishGroup$76(AccountInstance.this, this.f$1, this.f$2);
             }
         });
     }
 
-    static /* synthetic */ void lambda$finishGroup$73(AccountInstance accountInstance, long j, int i) {
+    static /* synthetic */ void lambda$finishGroup$76(AccountInstance accountInstance, long j, int i) {
         SendMessagesHelper sendMessagesHelper = accountInstance.getSendMessagesHelper();
         HashMap<String, ArrayList<DelayedMessage>> hashMap = sendMessagesHelper.delayedMessages;
         ArrayList arrayList = hashMap.get("group_" + j);
@@ -14923,8 +15497,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     public static void prepareSendingDocuments(AccountInstance accountInstance, ArrayList<String> arrayList, ArrayList<String> arrayList2, ArrayList<Uri> arrayList3, String str, String str2, long j, MessageObject messageObject, MessageObject messageObject2, InputContentInfoCompat inputContentInfoCompat, MessageObject messageObject3, boolean z, int i) {
         if (arrayList != null || arrayList2 != null || arrayList3 != null) {
             if (arrayList == null || arrayList2 == null || arrayList.size() == arrayList2.size()) {
-                $$Lambda$SendMessagesHelper$pYqXP7cPOWCZYg8ajPyzkrc1Z1Y r15 = r0;
-                $$Lambda$SendMessagesHelper$pYqXP7cPOWCZYg8ajPyzkrc1Z1Y r0 = new Runnable(j, arrayList, str, accountInstance, i, arrayList2, str2, messageObject, messageObject2, messageObject3, inputContentInfoCompat, z, arrayList3) {
+                $$Lambda$SendMessagesHelper$j0FztGvZ0hkCme42LfaMdms0s5M r15 = r0;
+                $$Lambda$SendMessagesHelper$j0FztGvZ0hkCme42LfaMdms0s5M r0 = new Runnable(j, arrayList, str, accountInstance, i, arrayList2, str2, messageObject, messageObject2, messageObject3, inputContentInfoCompat, z, arrayList3) {
                     public final /* synthetic */ long f$0;
                     public final /* synthetic */ ArrayList f$1;
                     public final /* synthetic */ InputContentInfoCompat f$10;
@@ -14956,7 +15530,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     }
 
                     public final void run() {
-                        SendMessagesHelper.lambda$prepareSendingDocuments$75(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12);
+                        SendMessagesHelper.lambda$prepareSendingDocuments$78(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12);
                     }
                 };
                 new Thread(r15).start();
@@ -14964,7 +15538,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         }
     }
 
-    static /* synthetic */ void lambda$prepareSendingDocuments$75(long j, ArrayList arrayList, String str, AccountInstance accountInstance, int i, ArrayList arrayList2, String str2, MessageObject messageObject, MessageObject messageObject2, MessageObject messageObject3, InputContentInfoCompat inputContentInfoCompat, boolean z, ArrayList arrayList3) {
+    static /* synthetic */ void lambda$prepareSendingDocuments$78(long j, ArrayList arrayList, String str, AccountInstance accountInstance, int i, ArrayList arrayList2, String str2, MessageObject messageObject, MessageObject messageObject2, MessageObject messageObject3, InputContentInfoCompat inputContentInfoCompat, boolean z, ArrayList arrayList3) {
         long[] jArr;
         Integer[] numArr;
         boolean z2;
@@ -15064,11 +15638,11 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             inputContentInfoCompat.releasePermission();
         }
         if (z2) {
-            AndroidUtilities.runOnUIThread($$Lambda$SendMessagesHelper$aRrhAl5OBiclAw23TvlxavjOdkw.INSTANCE);
+            AndroidUtilities.runOnUIThread($$Lambda$SendMessagesHelper$H9uKUGd2R7qDb0RgIROwEmVrE.INSTANCE);
         }
     }
 
-    static /* synthetic */ void lambda$prepareSendingDocuments$74() {
+    static /* synthetic */ void lambda$prepareSendingDocuments$77() {
         try {
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.showBulletin, 1, LocaleController.getString("UnsupportedAttachment", NUM));
         } catch (Exception e) {
@@ -15127,7 +15701,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                     }
 
                     public final void run() {
-                        SendMessagesHelper.lambda$prepareSendingBotContextResult$77(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+                        SendMessagesHelper.lambda$prepareSendingBotContextResult$80(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
                     }
                 }).run();
             } else if (tLRPC$BotInlineMessage instanceof TLRPC$TL_botInlineMessageText) {
@@ -15258,7 +15832,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:174:0x044f  */
     /* JADX WARNING: Removed duplicated region for block: B:185:0x049b  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ void lambda$prepareSendingBotContextResult$77(long r21, org.telegram.tgnet.TLRPC$BotInlineResult r23, org.telegram.messenger.AccountInstance r24, java.util.HashMap r25, org.telegram.messenger.MessageObject r26, org.telegram.messenger.MessageObject r27, boolean r28, int r29) {
+    static /* synthetic */ void lambda$prepareSendingBotContextResult$80(long r21, org.telegram.tgnet.TLRPC$BotInlineResult r23, org.telegram.messenger.AccountInstance r24, java.util.HashMap r25, org.telegram.messenger.MessageObject r26, org.telegram.messenger.MessageObject r27, boolean r28, int r29) {
         /*
             r11 = r23
             r12 = r25
@@ -15938,7 +16512,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r5 = 0
             r4[r5] = r1
         L_0x04c5:
-            org.telegram.messenger.-$$Lambda$SendMessagesHelper$WsqJBuyXy9DjkUXZDlCL9nT3fb4 r17 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$WsqJBuyXy9DjkUXZDlCL9nT3fb4
+            org.telegram.messenger.-$$Lambda$SendMessagesHelper$ZYm6fSMmY5bOn4G1sKg81MI7dis r17 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$ZYm6fSMmY5bOn4G1sKg81MI7dis
             r1 = r17
             r5 = r24
             r7 = r21
@@ -15954,10 +16528,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r17)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingBotContextResult$77(long, org.telegram.tgnet.TLRPC$BotInlineResult, org.telegram.messenger.AccountInstance, java.util.HashMap, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, boolean, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingBotContextResult$80(long, org.telegram.tgnet.TLRPC$BotInlineResult, org.telegram.messenger.AccountInstance, java.util.HashMap, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, boolean, int):void");
     }
 
-    static /* synthetic */ void lambda$prepareSendingBotContextResult$76(TLRPC$TL_document tLRPC$TL_document, Bitmap[] bitmapArr, String[] strArr, AccountInstance accountInstance, String str, long j, MessageObject messageObject, MessageObject messageObject2, TLRPC$BotInlineResult tLRPC$BotInlineResult, HashMap hashMap, boolean z, int i, TLRPC$TL_photo tLRPC$TL_photo, TLRPC$TL_game tLRPC$TL_game) {
+    static /* synthetic */ void lambda$prepareSendingBotContextResult$79(TLRPC$TL_document tLRPC$TL_document, Bitmap[] bitmapArr, String[] strArr, AccountInstance accountInstance, String str, long j, MessageObject messageObject, MessageObject messageObject2, TLRPC$BotInlineResult tLRPC$BotInlineResult, HashMap hashMap, boolean z, int i, TLRPC$TL_photo tLRPC$TL_photo, TLRPC$TL_game tLRPC$TL_game) {
         TLRPC$BotInlineResult tLRPC$BotInlineResult2 = tLRPC$BotInlineResult;
         if (tLRPC$TL_document != null) {
             if (!(bitmapArr[0] == null || strArr[0] == null)) {
@@ -16040,7 +16614,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                             }
 
                             public final void run() {
-                                SendMessagesHelper.lambda$prepareSendingText$78(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4);
+                                SendMessagesHelper.lambda$prepareSendingText$81(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4);
                             }
                         });
                     }
@@ -16049,7 +16623,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         });
     }
 
-    static /* synthetic */ void lambda$prepareSendingText$78(String str, AccountInstance accountInstance, long j, boolean z, int i) {
+    static /* synthetic */ void lambda$prepareSendingText$81(String str, AccountInstance accountInstance, long j, boolean z, int i) {
         String trimmedString = getTrimmedString(str);
         if (trimmedString.length() != 0) {
             int ceil = (int) Math.ceil((double) (((float) trimmedString.length()) / 4096.0f));
@@ -16184,7 +16758,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 }
 
                 public final void run() {
-                    SendMessagesHelper.lambda$prepareSendingMedia$86(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10);
+                    SendMessagesHelper.lambda$prepareSendingMedia$89(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10);
                 }
             });
         }
@@ -16245,7 +16819,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:579:0x0dff  */
     /* JADX WARNING: Removed duplicated region for block: B:593:0x0be5 A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ void lambda$prepareSendingMedia$86(java.util.ArrayList r66, long r67, boolean r69, boolean r70, org.telegram.messenger.AccountInstance r71, org.telegram.messenger.MessageObject r72, org.telegram.messenger.MessageObject r73, org.telegram.messenger.MessageObject r74, boolean r75, int r76, androidx.core.view.inputmethod.InputContentInfoCompat r77) {
+    static /* synthetic */ void lambda$prepareSendingMedia$89(java.util.ArrayList r66, long r67, boolean r69, boolean r70, org.telegram.messenger.AccountInstance r71, org.telegram.messenger.MessageObject r72, org.telegram.messenger.MessageObject r73, org.telegram.messenger.MessageObject r74, boolean r75, int r76, androidx.core.view.inputmethod.InputContentInfoCompat r77) {
         /*
             r1 = r66
             r15 = r71
@@ -16423,7 +16997,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r2.<init>(r5)
             r3.sync = r2
             java.util.concurrent.ThreadPoolExecutor r2 = mediaSendThreadPool
-            org.telegram.messenger.-$$Lambda$SendMessagesHelper$KIdsvO1RBb3SOl7wLe5VBAka8qQ r5 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$KIdsvO1RBb3SOl7wLe5VBAka8qQ
+            org.telegram.messenger.-$$Lambda$SendMessagesHelper$7qbiOAvR3Q_olLlWNG5rdHLauSU r5 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$7qbiOAvR3Q_olLlWNG5rdHLauSU
             r5.<init>(r15, r4, r10)
             r2.execute(r5)
             goto L_0x0152
@@ -16702,7 +17276,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             if (r1 == 0) goto L_0x0342
             r7.put(r9, r1)
         L_0x0342:
-            org.telegram.messenger.-$$Lambda$SendMessagesHelper$2J4sSgy0F4rY2-UMREuGQwtyLGo r1 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$2J4sSgy0F4rY2-UMREuGQwtyLGo
+            org.telegram.messenger.-$$Lambda$SendMessagesHelper$27F7SRFEKQWubf0ckJn5KWBkpHE r1 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$27F7SRFEKQWubf0ckJn5KWBkpHE
             r9 = 0
             r4 = r25
             r2 = r1
@@ -16899,7 +17473,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r10 = r49
             r1 = r52
         L_0x04ce:
-            org.telegram.messenger.-$$Lambda$SendMessagesHelper$ifzCnTGChZEN9DBQvsg6IdZA4oY r16 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$ifzCnTGChZEN9DBQvsg6IdZA4oY
+            org.telegram.messenger.-$$Lambda$SendMessagesHelper$Uy7Uuld9QXJfeD2hnIo89xuZ-Qw r16 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$Uy7Uuld9QXJfeD2hnIo89xuZ-Qw
             r9 = 0
             r2 = r16
             r3 = r72
@@ -17451,7 +18025,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r10 = r53
             r9 = r55
         L_0x08a8:
-            org.telegram.messenger.-$$Lambda$SendMessagesHelper$ge5CLASSNAMEayR-QXR7nc6GmJCBjv3Ws r0 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$ge5CLASSNAMEayR-QXR7nc6GmJCBjv3Ws
+            org.telegram.messenger.-$$Lambda$SendMessagesHelper$Ex_TZmAR4O0JVYud54nBZ3sa8QA r0 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$Ex_TZmAR4O0JVYud54nBZ3sa8QA
             r7 = r2
             r2 = r0
             r8 = r4
@@ -18020,7 +18594,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r13.put(r12, r2)
             r1.cleanup()
         L_0x0cce:
-            org.telegram.messenger.-$$Lambda$SendMessagesHelper$Kp70e8qtXlfUdDA41PbeTdxYVxA r1 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$Kp70e8qtXlfUdDA41PbeTdxYVxA
+            org.telegram.messenger.-$$Lambda$SendMessagesHelper$0XWDoTgotfqWsMgB7J-D_H4m8pQ r1 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$0XWDoTgotfqWsMgB7J-D_H4m8pQ
             r2 = r1
             r37 = r4
             r4 = r9
@@ -18239,10 +18813,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x0e6d:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingMedia$86(java.util.ArrayList, long, boolean, boolean, org.telegram.messenger.AccountInstance, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, boolean, int, androidx.core.view.inputmethod.InputContentInfoCompat):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingMedia$89(java.util.ArrayList, long, boolean, boolean, org.telegram.messenger.AccountInstance, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, boolean, int, androidx.core.view.inputmethod.InputContentInfoCompat):void");
     }
 
-    static /* synthetic */ void lambda$prepareSendingMedia$81(MediaSendPrepareWorker mediaSendPrepareWorker, AccountInstance accountInstance, SendingMediaInfo sendingMediaInfo, boolean z) {
+    static /* synthetic */ void lambda$prepareSendingMedia$84(MediaSendPrepareWorker mediaSendPrepareWorker, AccountInstance accountInstance, SendingMediaInfo sendingMediaInfo, boolean z) {
         mediaSendPrepareWorker.photo = accountInstance.getSendMessagesHelper().generatePhotoSizes(sendingMediaInfo.path, sendingMediaInfo.uri);
         if (z && sendingMediaInfo.canDeleteAfter) {
             new File(sendingMediaInfo.path).delete();
@@ -18250,7 +18824,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         mediaSendPrepareWorker.sync.countDown();
     }
 
-    static /* synthetic */ void lambda$prepareSendingMedia$82(MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_document tLRPC$TL_document, String str, HashMap hashMap, String str2, long j, MessageObject messageObject2, MessageObject messageObject3, SendingMediaInfo sendingMediaInfo, boolean z, int i) {
+    static /* synthetic */ void lambda$prepareSendingMedia$85(MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_document tLRPC$TL_document, String str, HashMap hashMap, String str2, long j, MessageObject messageObject2, MessageObject messageObject3, SendingMediaInfo sendingMediaInfo, boolean z, int i) {
         SendingMediaInfo sendingMediaInfo2 = sendingMediaInfo;
         if (messageObject != null) {
             accountInstance.getSendMessagesHelper().editMessage(messageObject, (TLRPC$TL_photo) null, (VideoEditedInfo) null, tLRPC$TL_document, str, hashMap, false, str2);
@@ -18259,7 +18833,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         accountInstance.getSendMessagesHelper().sendMessage(tLRPC$TL_document, (VideoEditedInfo) null, str, j, messageObject2, messageObject3, sendingMediaInfo2.caption, sendingMediaInfo2.entities, (TLRPC$ReplyMarkup) null, hashMap, z, i, 0, str2, (MessageObject.SendAnimationData) null);
     }
 
-    static /* synthetic */ void lambda$prepareSendingMedia$83(MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_photo tLRPC$TL_photo, boolean z, SendingMediaInfo sendingMediaInfo, HashMap hashMap, String str, long j, MessageObject messageObject2, MessageObject messageObject3, boolean z2, int i) {
+    static /* synthetic */ void lambda$prepareSendingMedia$86(MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_photo tLRPC$TL_photo, boolean z, SendingMediaInfo sendingMediaInfo, HashMap hashMap, String str, long j, MessageObject messageObject2, MessageObject messageObject3, boolean z2, int i) {
         SendingMediaInfo sendingMediaInfo2 = sendingMediaInfo;
         String str2 = null;
         if (messageObject != null) {
@@ -18277,7 +18851,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         sendMessagesHelper2.sendMessage(tLRPC$TL_photo, str2, j, messageObject2, messageObject3, sendingMediaInfo2.caption, sendingMediaInfo2.entities, (TLRPC$ReplyMarkup) null, hashMap, z2, i, sendingMediaInfo2.ttl, str);
     }
 
-    static /* synthetic */ void lambda$prepareSendingMedia$84(Bitmap bitmap, String str, MessageObject messageObject, AccountInstance accountInstance, VideoEditedInfo videoEditedInfo, TLRPC$TL_document tLRPC$TL_document, String str2, HashMap hashMap, String str3, long j, MessageObject messageObject2, MessageObject messageObject3, SendingMediaInfo sendingMediaInfo, boolean z, int i) {
+    static /* synthetic */ void lambda$prepareSendingMedia$87(Bitmap bitmap, String str, MessageObject messageObject, AccountInstance accountInstance, VideoEditedInfo videoEditedInfo, TLRPC$TL_document tLRPC$TL_document, String str2, HashMap hashMap, String str3, long j, MessageObject messageObject2, MessageObject messageObject3, SendingMediaInfo sendingMediaInfo, boolean z, int i) {
         Bitmap bitmap2 = bitmap;
         String str4 = str;
         SendingMediaInfo sendingMediaInfo2 = sendingMediaInfo;
@@ -18291,7 +18865,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         accountInstance.getSendMessagesHelper().sendMessage(tLRPC$TL_document, videoEditedInfo, str2, j, messageObject2, messageObject3, sendingMediaInfo2.caption, sendingMediaInfo2.entities, (TLRPC$ReplyMarkup) null, hashMap, z, i, sendingMediaInfo2.ttl, str3, (MessageObject.SendAnimationData) null);
     }
 
-    static /* synthetic */ void lambda$prepareSendingMedia$85(Bitmap[] bitmapArr, String[] strArr, MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_photo tLRPC$TL_photo, HashMap hashMap, String str, long j, MessageObject messageObject2, MessageObject messageObject3, SendingMediaInfo sendingMediaInfo, boolean z, int i) {
+    static /* synthetic */ void lambda$prepareSendingMedia$88(Bitmap[] bitmapArr, String[] strArr, MessageObject messageObject, AccountInstance accountInstance, TLRPC$TL_photo tLRPC$TL_photo, HashMap hashMap, String str, long j, MessageObject messageObject2, MessageObject messageObject3, SendingMediaInfo sendingMediaInfo, boolean z, int i) {
         SendingMediaInfo sendingMediaInfo2 = sendingMediaInfo;
         if (!(bitmapArr[0] == null || strArr[0] == null)) {
             ImageLoader.getInstance().putImageToCache(new BitmapDrawable(bitmapArr[0]), strArr[0]);
@@ -18623,8 +19197,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
 
     public static void prepareSendingVideo(AccountInstance accountInstance, String str, VideoEditedInfo videoEditedInfo, long j, MessageObject messageObject, MessageObject messageObject2, CharSequence charSequence, ArrayList<TLRPC$MessageEntity> arrayList, int i, MessageObject messageObject3, boolean z, int i2, boolean z2) {
         if (str != null && str.length() != 0) {
-            $$Lambda$SendMessagesHelper$q8xhY9QBqbyOGPNun70AU9lSOg r15 = r0;
-            $$Lambda$SendMessagesHelper$q8xhY9QBqbyOGPNun70AU9lSOg r0 = new Runnable(str, j, i, accountInstance, charSequence, messageObject3, messageObject, messageObject2, arrayList, z, i2, z2) {
+            $$Lambda$SendMessagesHelper$TlZTFsyjJSXicoxQUyyVzPbjY r15 = r0;
+            $$Lambda$SendMessagesHelper$TlZTFsyjJSXicoxQUyyVzPbjY r0 = new Runnable(str, j, i, accountInstance, charSequence, messageObject3, messageObject, messageObject2, arrayList, z, i2, z2) {
                 public final /* synthetic */ String f$1;
                 public final /* synthetic */ boolean f$10;
                 public final /* synthetic */ int f$11;
@@ -18654,7 +19228,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 }
 
                 public final void run() {
-                    SendMessagesHelper.lambda$prepareSendingVideo$88(VideoEditedInfo.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12);
+                    SendMessagesHelper.lambda$prepareSendingVideo$91(VideoEditedInfo.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12);
                 }
             };
             new Thread(r15).start();
@@ -18670,7 +19244,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     /* JADX WARNING: Removed duplicated region for block: B:140:0x0355  */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x0124  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    static /* synthetic */ void lambda$prepareSendingVideo$88(org.telegram.messenger.VideoEditedInfo r29, java.lang.String r30, long r31, int r33, org.telegram.messenger.AccountInstance r34, java.lang.CharSequence r35, org.telegram.messenger.MessageObject r36, org.telegram.messenger.MessageObject r37, org.telegram.messenger.MessageObject r38, java.util.ArrayList r39, boolean r40, int r41, boolean r42) {
+    static /* synthetic */ void lambda$prepareSendingVideo$91(org.telegram.messenger.VideoEditedInfo r29, java.lang.String r30, long r31, int r33, org.telegram.messenger.AccountInstance r34, java.lang.CharSequence r35, org.telegram.messenger.MessageObject r36, org.telegram.messenger.MessageObject r37, org.telegram.messenger.MessageObject r38, java.util.ArrayList r39, boolean r40, int r41, boolean r42) {
         /*
             r6 = r30
             r10 = r31
@@ -19130,7 +19704,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             java.lang.String r0 = "parentObject"
             r12.put(r0, r5)
         L_0x035a:
-            org.telegram.messenger.-$$Lambda$SendMessagesHelper$D76OmOnDm5kC7bjLbV0xLPFDFy8 r19 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$D76OmOnDm5kC7bjLbV0xLPFDFy8
+            org.telegram.messenger.-$$Lambda$SendMessagesHelper$yZUEP0LUKl_Q0MsjHJbbLsVP1LQ r19 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$yZUEP0LUKl_Q0MsjHJbbLsVP1LQ
             r0 = r19
             r3 = r36
             r4 = r34
@@ -19152,10 +19726,10 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         L_0x037e:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingVideo$88(org.telegram.messenger.VideoEditedInfo, java.lang.String, long, int, org.telegram.messenger.AccountInstance, java.lang.CharSequence, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, java.util.ArrayList, boolean, int, boolean):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$prepareSendingVideo$91(org.telegram.messenger.VideoEditedInfo, java.lang.String, long, int, org.telegram.messenger.AccountInstance, java.lang.CharSequence, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, org.telegram.messenger.MessageObject, java.util.ArrayList, boolean, int, boolean):void");
     }
 
-    static /* synthetic */ void lambda$prepareSendingVideo$87(Bitmap bitmap, String str, MessageObject messageObject, AccountInstance accountInstance, VideoEditedInfo videoEditedInfo, TLRPC$TL_document tLRPC$TL_document, String str2, HashMap hashMap, String str3, long j, MessageObject messageObject2, MessageObject messageObject3, String str4, ArrayList arrayList, boolean z, int i, int i2) {
+    static /* synthetic */ void lambda$prepareSendingVideo$90(Bitmap bitmap, String str, MessageObject messageObject, AccountInstance accountInstance, VideoEditedInfo videoEditedInfo, TLRPC$TL_document tLRPC$TL_document, String str2, HashMap hashMap, String str3, long j, MessageObject messageObject2, MessageObject messageObject3, String str4, ArrayList arrayList, boolean z, int i, int i2) {
         Bitmap bitmap2 = bitmap;
         String str5 = str;
         if (!(bitmap2 == null || str5 == null)) {
