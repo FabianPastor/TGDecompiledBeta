@@ -15201,6 +15201,7 @@ public class Theme {
                 chat_actionTextPaint.setColor(-1);
                 chat_actionTextPaint.setColor(-1);
                 chat_actionTextPaint.linkColor = -1;
+                chat_botButtonPaint.setColor(-1);
                 setDrawableColor(chat_commentStickerDrawable, -1);
                 setDrawableColor(chat_shareIconDrawable, -1);
                 setDrawableColor(chat_replyIconDrawable, -1);
@@ -15225,6 +15226,7 @@ public class Theme {
                 setDrawableColorByKey(chat_goIconDrawable, "chat_serviceIcon");
                 setDrawableColorByKey(chat_botInlineDrawable, "chat_serviceIcon");
                 setDrawableColorByKey(chat_botLinkDrawalbe, "chat_serviceIcon");
+                chat_botButtonPaint.setColor(getColor("chat_botButtonText"));
             }
             chat_actionBackgroundPaint.setColor(num2.intValue());
             chat_actionBackgroundSelectedPaint.setColor(num.intValue());

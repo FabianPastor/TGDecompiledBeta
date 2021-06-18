@@ -442,6 +442,9 @@ class HardwareVideoEncoder implements VideoEncoder {
                 if (!z || !((videoCodecMimeType = this.codecType) == VideoCodecMimeType.H264 || videoCodecMimeType == VideoCodecMimeType.H265)) {
                     byteBuffer = byteBuffer2.slice();
                 } else {
+                    if (this.configBuffer == null) {
+                        this.configBuffer = ByteBuffer.allocateDirect(bufferInfo.size);
+                    }
                     Logging.d("HardwareVideoEncoder", "Prepending config frame of size " + this.configBuffer.capacity() + " to output buffer with offset " + bufferInfo.offset + ", size " + bufferInfo.size);
                     byteBuffer = ByteBuffer.allocateDirect(bufferInfo.size + this.configBuffer.capacity());
                     this.configBuffer.rewind();

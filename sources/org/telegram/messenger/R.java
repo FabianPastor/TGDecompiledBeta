@@ -2371,6 +2371,7 @@ public final class R {
         public static final int BotStatusRead = NUM;
         public static final int BotStop = NUM;
         public static final int BotUnblock = NUM;
+        public static final int BotsMenuTitle = NUM;
         public static final int BroadcastGroup = NUM;
         public static final int BroadcastGroupConvert = NUM;
         public static final int BroadcastGroupConvertInfo = NUM;
@@ -3603,6 +3604,7 @@ public final class R {
         public static final int ImportStickersLinkInvalidShort = NUM;
         public static final int ImportStickersLinkTaken = NUM;
         public static final int ImportStickersRemove = NUM;
+        public static final int ImportStickersRemoveMenu = NUM;
         public static final int ImportToChat = NUM;
         public static final int ImportToChatNoTitle = NUM;
         public static final int ImportToUser = NUM;

@@ -89,11 +89,19 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             return ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$needOpen(this);
         }
 
+        public /* synthetic */ boolean needRemove() {
+            return ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$needRemove(this);
+        }
+
         public boolean needSend() {
             return false;
         }
 
         public void openSet(TLRPC$InputStickerSet tLRPC$InputStickerSet, boolean z) {
+        }
+
+        public /* synthetic */ void remove(String str) {
+            ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$remove(this, str);
         }
 
         public /* synthetic */ void sendGif(Object obj, Object obj2, boolean z, int i) {
@@ -302,7 +310,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2.setImeOptions(r4)
                 if (r3 != 0) goto L_0x014c
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627338(0x7f0e0d4a, float:1.8881938E38)
+                r3 = 2131627340(0x7f0e0d4c, float:1.8881942E38)
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -310,7 +318,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             L_0x014c:
                 if (r3 != r6) goto L_0x015d
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627314(0x7f0e0d32, float:1.8881889E38)
+                r3 = 2131627316(0x7f0e0d34, float:1.8881893E38)
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -319,7 +327,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2 = 2
                 if (r3 != r2) goto L_0x016e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627329(0x7f0e0d41, float:1.888192E38)
+                r3 = 2131627331(0x7f0e0d43, float:1.8881923E38)
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)

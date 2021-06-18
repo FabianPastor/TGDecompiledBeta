@@ -5402,7 +5402,7 @@ public class MessagesController extends BaseController implements NotificationCe
         long j = (long) i4;
         applyDialogNotificationsSettings(j, tLRPC$TL_messages_chatFull.full_chat.notify_settings);
         for (int i5 = 0; i5 < tLRPC$TL_messages_chatFull.full_chat.bot_info.size(); i5++) {
-            getMediaDataController().putBotInfo(tLRPC$TL_messages_chatFull.full_chat.bot_info.get(i5));
+            getMediaDataController().putBotInfo(j, tLRPC$TL_messages_chatFull.full_chat.bot_info.get(i5));
         }
         int indexOfKey = this.blockePeers.indexOfKey(i4);
         if (tLRPC$TL_messages_chatFull.full_chat.blocked) {
@@ -5508,7 +5508,7 @@ public class MessagesController extends BaseController implements NotificationCe
         savePeerSettings((long) tLRPC$UserFull.user.id, tLRPC$UserFull.settings, false);
         applyDialogNotificationsSettings((long) tLRPC$User.id, tLRPC$UserFull.notify_settings);
         if (tLRPC$UserFull.bot_info instanceof TLRPC$TL_botInfo) {
-            getMediaDataController().putBotInfo(tLRPC$UserFull.bot_info);
+            getMediaDataController().putBotInfo((long) tLRPC$User.id, tLRPC$UserFull.bot_info);
         }
         int indexOfKey = this.blockePeers.indexOfKey(tLRPC$User.id);
         if (tLRPC$UserFull.blocked) {

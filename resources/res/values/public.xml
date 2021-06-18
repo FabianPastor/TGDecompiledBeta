@@ -2232,6 +2232,7 @@
     <public type="string" name="BotStatusRead" id="NUM" />
     <public type="string" name="BotStop" id="NUM" />
     <public type="string" name="BotUnblock" id="NUM" />
+    <public type="string" name="BotsMenuTitle" id="NUM" />
     <public type="string" name="BroadcastGroup" id="NUM" />
     <public type="string" name="BroadcastGroupConvert" id="NUM" />
     <public type="string" name="BroadcastGroupConvertInfo" id="NUM" />
@@ -3464,6 +3465,7 @@
     <public type="string" name="ImportStickersLinkInvalidShort" id="NUM" />
     <public type="string" name="ImportStickersLinkTaken" id="NUM" />
     <public type="string" name="ImportStickersRemove" id="NUM" />
+    <public type="string" name="ImportStickersRemoveMenu" id="NUM" />
     <public type="string" name="ImportToChat" id="NUM" />
     <public type="string" name="ImportToChatNoTitle" id="NUM" />
     <public type="string" name="ImportToUser" id="NUM" />

@@ -1758,7 +1758,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     /* access modifiers changed from: private */
     public void openCamera(boolean z) {
         CameraView cameraView2 = this.cameraView;
-        if (cameraView2 != null && this.cameraInitAnimation == null && cameraView2.isInitied()) {
+        if (cameraView2 != null && this.cameraInitAnimation == null && cameraView2.isInitied() && !this.parentAlert.isDismissed()) {
             ChatAttachAlert chatAttachAlert = this.parentAlert;
             int i = 0;
             if (chatAttachAlert.avatarPicker == 2 || (chatAttachAlert.baseFragment instanceof ChatActivity)) {

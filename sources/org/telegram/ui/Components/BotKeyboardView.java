@@ -37,8 +37,17 @@ public class BotKeyboardView extends LinearLayout {
         this.container = linearLayout;
         linearLayout.setOrientation(1);
         this.scrollView.addView(this.container);
+        updateColors();
+    }
+
+    public void updateColors() {
         AndroidUtilities.setScrollViewEdgeEffectColor(this.scrollView, Theme.getColor("chat_emojiPanelBackground"));
         setBackgroundColor(Theme.getColor("chat_emojiPanelBackground"));
+        for (int i = 0; i < this.buttonViews.size(); i++) {
+            this.buttonViews.get(i).setTextColor(Theme.getColor("chat_botKeyboardButtonText"));
+            this.buttonViews.get(i).setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("chat_botKeyboardButtonBackground"), Theme.getColor("chat_botKeyboardButtonBackgroundPressed")));
+        }
+        invalidate();
     }
 
     public void setDelegate(BotKeyboardViewDelegate botKeyboardViewDelegate) {
@@ -103,9 +112,9 @@ public class BotKeyboardView extends LinearLayout {
                     TextView textView = new TextView(getContext());
                     textView.setTag(tLRPC$KeyboardButton);
                     textView.setTextColor(Theme.getColor("chat_botKeyboardButtonText"));
+                    textView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("chat_botKeyboardButtonBackground"), Theme.getColor("chat_botKeyboardButtonBackgroundPressed")));
                     textView.setTextSize(1, 16.0f);
                     textView.setGravity(17);
-                    textView.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("chat_botKeyboardButtonBackground"), Theme.getColor("chat_botKeyboardButtonBackgroundPressed")));
                     textView.setPadding(AndroidUtilities.dp(4.0f), z ? 1 : 0, AndroidUtilities.dp(4.0f), z);
                     textView.setText(Emoji.replaceEmoji(tLRPC$KeyboardButton.text, textView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(16.0f), z));
                     TextView textView2 = textView;

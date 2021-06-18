@@ -74,6 +74,8 @@ public class ContentPreviewViewer {
     private float currentMoveY;
     /* access modifiers changed from: private */
     public float currentMoveYProgress;
+    /* access modifiers changed from: private */
+    public String currentPath;
     private View currentPreviewCell;
     /* access modifiers changed from: private */
     public String currentQuery;
@@ -128,6 +130,11 @@ public class ContentPreviewViewer {
                             arrayList3.add(NUM);
                             arrayList2.add(1);
                         }
+                        if (ContentPreviewViewer.this.delegate.needRemove()) {
+                            arrayList.add(LocaleController.getString("ImportStickersRemoveMenu", NUM));
+                            arrayList3.add(NUM);
+                            arrayList2.add(5);
+                        }
                     }
                     if (!MessageObject.isMaskDocument(ContentPreviewViewer.this.currentDocument) && (isStickerInFavorites || (MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).canAddStickerToFavorites() && MessageObject.isStickerHasSet(ContentPreviewViewer.this.currentDocument)))) {
                         if (isStickerInFavorites) {
@@ -173,6 +180,11 @@ public class ContentPreviewViewer {
                         });
                         ContentPreviewViewer.this.visibleDialog.show();
                         ContentPreviewViewer.this.containerView.performHapticFeedback(0);
+                        if (ContentPreviewViewer.this.delegate.needRemove()) {
+                            BottomSheet.BottomSheetCell bottomSheetCell = ContentPreviewViewer.this.visibleDialog.getItemViews().get(0);
+                            bottomSheetCell.setTextColor(Theme.getColor("dialogTextRed"));
+                            bottomSheetCell.setIconColor(Theme.getColor("dialogRedIcon"));
+                        }
                     }
                 } else if (ContentPreviewViewer.this.delegate != null) {
                     boolean unused2 = ContentPreviewViewer.this.animateY = true;
@@ -289,6 +301,8 @@ public class ContentPreviewViewer {
                     });
                 } else if (((Integer) arrayList.get(i)).intValue() == 4) {
                     MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentSticker(0, ContentPreviewViewer.this.parentObject, ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000), true);
+                } else if (((Integer) arrayList.get(i)).intValue() == 5) {
+                    ContentPreviewViewer.this.delegate.remove(ContentPreviewViewer.this.currentPath);
                 }
             }
         }
@@ -391,6 +405,13 @@ public class ContentPreviewViewer {
                 return true;
             }
 
+            public static boolean $default$needRemove(ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
+                return false;
+            }
+
+            public static void $default$remove(ContentPreviewViewerDelegate contentPreviewViewerDelegate, String str) {
+            }
+
             public static void $default$sendGif(ContentPreviewViewerDelegate contentPreviewViewerDelegate, Object obj, Object obj2, boolean z, int i) {
             }
         }
@@ -409,9 +430,13 @@ public class ContentPreviewViewer {
 
         boolean needOpen();
 
+        boolean needRemove();
+
         boolean needSend();
 
         void openSet(TLRPC$InputStickerSet tLRPC$InputStickerSet, boolean z);
+
+        void remove(String str);
 
         void sendGif(Object obj, Object obj2, boolean z, int i);
 
@@ -1071,7 +1096,8 @@ public class ContentPreviewViewer {
         TLRPC$InputStickerSet tLRPC$InputStickerSet;
         ContentPreviewViewerDelegate contentPreviewViewerDelegate;
         TLRPC$Document tLRPC$Document2 = tLRPC$Document;
-        String str4 = str2;
+        String str4 = str;
+        String str5 = str2;
         TLRPC$BotInlineResult tLRPC$BotInlineResult2 = tLRPC$BotInlineResult;
         int i2 = i;
         if (this.parentActivity != null && this.windowView != null) {
@@ -1100,7 +1126,7 @@ public class ContentPreviewViewer {
                 }
                 AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
                 AndroidUtilities.runOnUIThread(this.showSheetRunnable, 2000);
-            } else if (tLRPC$Document2 != null || str != null) {
+            } else if (tLRPC$Document2 != null || str4 != null) {
                 if (textPaint == null) {
                     TextPaint textPaint2 = new TextPaint(1);
                     textPaint = textPaint2;
@@ -1147,10 +1173,24 @@ public class ContentPreviewViewer {
                         }
                         i4++;
                     }
-                } else if (str != null) {
+                } else if (str4 != null) {
                     this.centerImage.setImage(str, (String) null, (Drawable) null, (String) null, 0);
-                    if (str4 != null) {
-                        this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(str4, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                    if (str5 != null) {
+                        this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(str5, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                    }
+                    if (this.delegate.needMenu()) {
+                        try {
+                            BottomSheet bottomSheet2 = this.visibleDialog;
+                            if (bottomSheet2 != null) {
+                                bottomSheet2.setOnDismissListener((DialogInterface.OnDismissListener) null);
+                                this.visibleDialog.dismiss();
+                                this.visibleDialog = null;
+                            }
+                        } catch (Exception e2) {
+                            FileLog.e((Throwable) e2);
+                        }
+                        AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
+                        AndroidUtilities.runOnUIThread(this.showSheetRunnable, 1300);
                     }
                 }
             } else {
@@ -1158,6 +1198,7 @@ public class ContentPreviewViewer {
             }
             this.currentContentType = i2;
             this.currentDocument = tLRPC$Document2;
+            this.currentPath = str4;
             this.currentQuery = str3;
             this.inlineResult = tLRPC$BotInlineResult2;
             this.parentObject = obj;
@@ -1168,8 +1209,8 @@ public class ContentPreviewViewer {
                     if (this.windowView.getParent() != null) {
                         ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
                     }
-                } catch (Exception e2) {
-                    FileLog.e((Throwable) e2);
+                } catch (Exception e3) {
+                    FileLog.e((Throwable) e3);
                 }
                 ((WindowManager) this.parentActivity.getSystemService("window")).addView(this.windowView, this.windowLayoutParams);
                 this.isVisible = true;

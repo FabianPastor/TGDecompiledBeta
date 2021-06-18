@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.os.SystemClock;
 import android.view.View;
+import java.util.Random;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SharedConfig;
@@ -30,6 +31,7 @@ public class FlickerLoadingView extends View {
     private int paddingLeft;
     private int paddingTop;
     private Paint paint = new Paint();
+    float[] randomParams;
     private RectF rectF = new RectF();
     private boolean showDate = true;
     private int skipDrawItemsCount;
@@ -43,6 +45,13 @@ public class FlickerLoadingView extends View {
 
     public void setViewType(int i) {
         this.viewType = i;
+        if (i == 11) {
+            Random random = new Random();
+            this.randomParams = new float[2];
+            for (int i2 = 0; i2 < 2; i2++) {
+                this.randomParams[i2] = ((float) Math.abs(random.nextInt() % 1000)) / 1000.0f;
+            }
+        }
         invalidate();
     }
 
@@ -310,6 +319,21 @@ public class FlickerLoadingView extends View {
                     break;
                 }
             }
+        } else if (getViewType() == 11) {
+            int i12 = 0;
+            while (i2 <= getMeasuredHeight()) {
+                this.rectF.set((float) AndroidUtilities.dp(18.0f), (float) AndroidUtilities.dp(14.0f), (((float) getMeasuredWidth()) * 0.5f) + ((float) AndroidUtilities.dp(this.randomParams[0] * 40.0f)), (float) (AndroidUtilities.dp(14.0f) + AndroidUtilities.dp(8.0f)));
+                checkRtl(this.rectF);
+                canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
+                this.rectF.set((float) (getMeasuredWidth() - AndroidUtilities.dp(18.0f)), (float) AndroidUtilities.dp(14.0f), (((float) getMeasuredWidth()) - (((float) getMeasuredWidth()) * 0.2f)) - ((float) AndroidUtilities.dp(this.randomParams[0] * 20.0f)), (float) (AndroidUtilities.dp(14.0f) + AndroidUtilities.dp(8.0f)));
+                checkRtl(this.rectF);
+                canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
+                i2 += getCellHeight(getMeasuredWidth());
+                i12++;
+                if (this.isSingleCell && i12 >= this.itemsCount) {
+                    break;
+                }
+            }
         }
         long elapsedRealtime = SystemClock.elapsedRealtime();
         long abs = Math.abs(this.lastUpdateTime - elapsedRealtime);
@@ -376,6 +400,9 @@ public class FlickerLoadingView extends View {
             }
             if (getViewType() == 8) {
                 return AndroidUtilities.dp(61.0f);
+            }
+            if (getViewType() == 11) {
+                return AndroidUtilities.dp(36.0f);
             }
             return 0;
         }

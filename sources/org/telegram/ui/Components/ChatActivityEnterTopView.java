@@ -1,4 +1,4 @@
-package org.telegram.ui;
+package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.view.View;

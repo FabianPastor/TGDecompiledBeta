@@ -664,6 +664,7 @@
     <string name="BotStatusRead">has access to messages</string>
     <string name="BotStop">Stop bot</string>
     <string name="BotUnblock">RESTART</string>
+    <string name="BotsMenuTitle">Menu</string>
     <string name="BroadcastGroup">Broadcast Group</string>
     <string name="BroadcastGroupConvert">Convert to Broadcast Group</string>
     <string name="BroadcastGroupConvertInfo">Broadcast groups can have over 200,000 members, but only admins can send messages in them.</string>
@@ -1896,6 +1897,7 @@
     <string name="ImportStickersLinkInvalidShort">Link must have at least 5 characters.</string>
     <string name="ImportStickersLinkTaken">Sorry, this link is already taken.</string>
     <string name="ImportStickersRemove">REMOVE FROM IMPORT</string>
+    <string name="ImportStickersRemoveMenu">Remove from import</string>
     <string name="ImportToChat">Do you want to import messages from **%1$s** to the group **%2$s**?</string>
     <string name="ImportToChatNoTitle">Do you want to import messages to the group **%1$s**?</string>
     <string name="ImportToUser">Do you want to import messages from **%1$s** to the chat with **%2$s**?</string>

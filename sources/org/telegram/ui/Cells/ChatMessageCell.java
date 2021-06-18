@@ -5902,7 +5902,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x0479:
             boolean r2 = r1.isRepliesChat
             if (r2 == 0) goto L_0x0489
-            r2 = 2131628024(0x7f0e0ff8, float:1.888333E38)
+            r2 = 2131628026(0x7f0e0ffa, float:1.8883333E38)
             java.lang.String r3 = "ViewInChat"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x0486:
@@ -5912,7 +5912,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
             if (r2 == 0) goto L_0x04a0
             if (r0 != 0) goto L_0x0499
-            r2 = 2131625965(0x7f0e07ed, float:1.8879153E38)
+            r2 = 2131625967(0x7f0e07ef, float:1.8879157E38)
             java.lang.String r3 = "LeaveAComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x04b2
@@ -5922,7 +5922,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             goto L_0x04b2
         L_0x04a0:
             if (r0 != 0) goto L_0x04ac
-            r2 = 2131625965(0x7f0e07ed, float:1.8879153E38)
+            r2 = 2131625967(0x7f0e07ef, float:1.8879157E38)
             java.lang.String r3 = "LeaveAComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x04b2
@@ -6683,7 +6683,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r3 = r3 + 1
             goto L_0x0a4c
         L_0x0a74:
-            r2 = 2131626549(0x7f0e0a35, float:1.8880337E38)
+            r2 = 2131626551(0x7f0e0a37, float:1.8880341E38)
             r3 = 2
             java.lang.Object[] r5 = new java.lang.Object[r3]
             java.lang.Integer r3 = java.lang.Integer.valueOf(r13)
@@ -7109,7 +7109,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r39 = r8
             r8 = 9
             if (r9 != r8) goto L_0x0d6d
-            r0 = 2131628189(0x7f0e109d, float:1.8883664E38)
+            r0 = 2131628191(0x7f0e109f, float:1.8883668E38)
             java.lang.String r8 = "VoipGroupVoiceChat"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r8, r0)
             org.telegram.tgnet.TLRPC$Message r0 = r14.messageOwner
@@ -7120,7 +7120,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x0d6d:
             r8 = 6
             if (r9 != r8) goto L_0x0d7a
-            r0 = 2131624815(0x7f0e036f, float:1.887682E38)
+            r0 = 2131624816(0x7f0e0370, float:1.8876822E38)
             java.lang.String r8 = "ChatBackground"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r8, r0)
             goto L_0x0d8e
@@ -7128,7 +7128,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.String r8 = "telegram_theme"
             boolean r0 = r8.equals(r0)
             if (r0 == 0) goto L_0x0d8c
-            r0 = 2131624945(0x7f0e03f1, float:1.8877084E38)
+            r0 = 2131624946(0x7f0e03f2, float:1.8877086E38)
             java.lang.String r8 = "ColorTheme"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r8, r0)
             goto L_0x0d8e
@@ -9422,7 +9422,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r12 = 4
             r2 = r2 & r12
             if (r2 == 0) goto L_0x1db1
-            r0 = 2131626863(0x7f0e0b6f, float:1.8880974E38)
+            r0 = 2131626865(0x7f0e0b71, float:1.8880978E38)
             java.lang.String r2 = "PaymentReceipt"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -9430,13 +9430,13 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x1db1:
             boolean r0 = r0.test
             if (r0 == 0) goto L_0x1dc3
-            r0 = 2131626881(0x7f0e0b81, float:1.888101E38)
+            r0 = 2131626883(0x7f0e0b83, float:1.8881015E38)
             java.lang.String r2 = "PaymentTestInvoice"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             java.lang.String r0 = r0.toUpperCase()
             goto L_0x1dd0
         L_0x1dc3:
-            r0 = 2131626850(0x7f0e0b62, float:1.8880948E38)
+            r0 = 2131626852(0x7f0e0b64, float:1.8880952E38)
             java.lang.String r2 = "PaymentInvoice"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -9628,24 +9628,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x1f5b
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x1var_
-            r4 = 2131624631(0x7f0e02b7, float:1.8876447E38)
+            r4 = 2131624632(0x7f0e02b8, float:1.887645E38)
             java.lang.String r5 = "CallMessageVideoOutgoingMissed"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x1fc2
         L_0x1var_:
-            r4 = 2131624625(0x7f0e02b1, float:1.8876435E38)
+            r4 = 2131624626(0x7f0e02b2, float:1.8876437E38)
             java.lang.String r5 = "CallMessageOutgoingMissed"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x1fc2
         L_0x1f5b:
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x1var_
-            r4 = 2131624630(0x7f0e02b6, float:1.8876445E38)
+            r4 = 2131624631(0x7f0e02b7, float:1.8876447E38)
             java.lang.String r5 = "CallMessageVideoOutgoing"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x1fc2
         L_0x1var_:
-            r4 = 2131624624(0x7f0e02b0, float:1.8876433E38)
+            r4 = 2131624625(0x7f0e02b1, float:1.8876435E38)
             java.lang.String r5 = "CallMessageOutgoing"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x1fc2
@@ -9653,12 +9653,12 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x1f8d
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x1var_
-            r4 = 2131624629(0x7f0e02b5, float:1.8876443E38)
+            r4 = 2131624630(0x7f0e02b6, float:1.8876445E38)
             java.lang.String r5 = "CallMessageVideoIncomingMissed"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x1fc2
         L_0x1var_:
-            r4 = 2131624623(0x7f0e02af, float:1.887643E38)
+            r4 = 2131624624(0x7f0e02b0, float:1.8876433E38)
             java.lang.String r5 = "CallMessageIncomingMissed"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x1fc2
@@ -9668,24 +9668,24 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x1fab
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x1fa1
-            r4 = 2131624628(0x7f0e02b4, float:1.8876441E38)
+            r4 = 2131624629(0x7f0e02b5, float:1.8876443E38)
             java.lang.String r5 = "CallMessageVideoIncomingDeclined"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x1fc2
         L_0x1fa1:
-            r4 = 2131624622(0x7f0e02ae, float:1.8876429E38)
+            r4 = 2131624623(0x7f0e02af, float:1.887643E38)
             java.lang.String r5 = "CallMessageIncomingDeclined"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x1fc2
         L_0x1fab:
             boolean r4 = r3.video
             if (r4 == 0) goto L_0x1fb9
-            r4 = 2131624627(0x7f0e02b3, float:1.887644E38)
+            r4 = 2131624628(0x7f0e02b4, float:1.8876441E38)
             java.lang.String r5 = "CallMessageVideoIncoming"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x1fc2
         L_0x1fb9:
-            r4 = 2131624621(0x7f0e02ad, float:1.8876427E38)
+            r4 = 2131624622(0x7f0e02ae, float:1.8876429E38)
             java.lang.String r5 = "CallMessageIncoming"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x1fc2:
@@ -9897,7 +9897,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.String r0 = r3.format(r0)
             goto L_0x2133
         L_0x2171:
-            r0 = 2131626546(0x7f0e0a32, float:1.8880331E38)
+            r0 = 2131626548(0x7f0e0a34, float:1.8880335E38)
             java.lang.String r3 = "NumberUnknown"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             goto L_0x2133
@@ -10288,7 +10288,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x2472:
             boolean r4 = r1.pollClosed
             if (r4 == 0) goto L_0x2480
-            r4 = 2131625570(0x7f0e0662, float:1.8878352E38)
+            r4 = 2131625571(0x7f0e0663, float:1.8878354E38)
             java.lang.String r5 = "FinalResults"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x24b5
@@ -10298,7 +10298,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r5 == 0) goto L_0x249e
             boolean r4 = r4.public_voters
             if (r4 == 0) goto L_0x2494
-            r4 = 2131627130(0x7f0e0c7a, float:1.8881516E38)
+            r4 = 2131627132(0x7f0e0c7c, float:1.888152E38)
             java.lang.String r5 = "QuizPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x24b5
@@ -10310,7 +10310,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x249e:
             boolean r4 = r4.public_voters
             if (r4 == 0) goto L_0x24ac
-            r4 = 2131627109(0x7f0e0CLASSNAME, float:1.8881473E38)
+            r4 = 2131627111(0x7f0e0CLASSNAME, float:1.8881477E38)
             java.lang.String r5 = "PublicPoll"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x24b5
@@ -10391,7 +10391,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$PollResults r4 = r2.results
             int r4 = r4.total_voters
             if (r4 != 0) goto L_0x254b
-            r4 = 2131626360(0x7f0e0978, float:1.8879954E38)
+            r4 = 2131626362(0x7f0e097a, float:1.8879958E38)
             java.lang.String r6 = "NoVotesQuiz"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             goto L_0x2551
@@ -10407,7 +10407,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.tgnet.TLRPC$PollResults r4 = r2.results
             int r4 = r4.total_voters
             if (r4 != 0) goto L_0x2569
-            r4 = 2131626359(0x7f0e0977, float:1.8879952E38)
+            r4 = 2131626361(0x7f0e0979, float:1.8879956E38)
             java.lang.String r6 = "NoVotes"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
             goto L_0x256f
@@ -11021,19 +11021,19 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         L_0x29ee:
             if (r12 >= r2) goto L_0x2a26
             if (r12 != 0) goto L_0x29fc
-            r2 = 2131627027(0x7f0e0CLASSNAME, float:1.8881307E38)
+            r2 = 2131627029(0x7f0e0CLASSNAME, float:1.888131E38)
             java.lang.String r3 = "PollViewResults"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x2a12
         L_0x29fc:
             r2 = 1
             if (r12 != r2) goto L_0x2a09
-            r2 = 2131627025(0x7f0e0CLASSNAME, float:1.8881303E38)
+            r2 = 2131627027(0x7f0e0CLASSNAME, float:1.8881307E38)
             java.lang.String r3 = "PollSubmitVotes"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x2a12
         L_0x2a09:
-            r2 = 2131626359(0x7f0e0977, float:1.8879952E38)
+            r2 = 2131626361(0x7f0e0979, float:1.8879956E38)
             java.lang.String r3 = "NoVotes"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x2a12:
@@ -15158,7 +15158,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r4 = 4
             r3 = r3 & r4
             if (r3 == 0) goto L_0x47a5
-            r3 = 2131626863(0x7f0e0b6f, float:1.8880974E38)
+            r3 = 2131626865(0x7f0e0b71, float:1.8880978E38)
             java.lang.String r4 = "PaymentReceipt"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             goto L_0x47cb
@@ -23264,7 +23264,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r6 == 0) goto L_0x0079
             int r5 = r5.date
             int r1 = r1.date
-            r6 = 2131625839(0x7f0e076f, float:1.8878897E38)
+            r6 = 2131625841(0x7f0e0771, float:1.8878901E38)
             java.lang.String r7 = "ImportedMessage"
             if (r5 != r1) goto L_0x0057
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -23410,7 +23410,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r0 == 0) goto L_0x0198
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
-            r6 = 2131625287(0x7f0e0547, float:1.8877778E38)
+            r6 = 2131625288(0x7f0e0548, float:1.887778E38)
             java.lang.String r12 = "EditedMessage"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r12, r6)
             r0.append(r6)
@@ -23849,7 +23849,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r6 = r0.via_bot_id
             java.lang.String r7 = " %s <b>%s</b>"
             java.lang.String r8 = "@"
-            r9 = 2131627986(0x7f0e0fd2, float:1.8883252E38)
+            r9 = 2131627988(0x7f0e0fd4, float:1.8883256E38)
             java.lang.String r10 = "ViaBot"
             r11 = 2
             if (r6 == 0) goto L_0x00f2
@@ -23953,7 +23953,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.messenger.MessageObject r12 = r1.currentMessageObject
             boolean r12 = r12.isForwardedChannelPost()
             if (r12 == 0) goto L_0x019e
-            r12 = 2131625203(0x7f0e04f3, float:1.8877607E38)
+            r12 = 2131625204(0x7f0e04f4, float:1.887761E38)
             java.lang.String r4 = "DiscussChannel"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r12)
             android.text.TextPaint r12 = org.telegram.ui.ActionBar.Theme.chat_adminPaint
@@ -24015,7 +24015,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r4 == 0) goto L_0x021f
             int r9 = r4.length()
             if (r9 != 0) goto L_0x020c
-            r4 = 2131624812(0x7f0e036c, float:1.8876814E38)
+            r4 = 2131624813(0x7f0e036d, float:1.8876816E38)
             java.lang.String r9 = "ChatAdmin"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
         L_0x020c:
@@ -24077,7 +24077,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
         L_0x0279:
             r13 = r21
-            r12 = 2131627986(0x7f0e0fd2, float:1.8883252E38)
+            r12 = 2131627988(0x7f0e0fd4, float:1.8883256E38)
             goto L_0x0291
         L_0x027f:
             org.telegram.messenger.MessageObject r4 = r1.currentMessageObject
@@ -24371,10 +24371,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r3 = r3 - r5
             r1.forwardedNameWidth = r3
         L_0x04c6:
-            r3 = 2131625659(0x7f0e06bb, float:1.8878532E38)
+            r3 = 2131625660(0x7f0e06bc, float:1.8878534E38)
             java.lang.String r5 = "From"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
-            r5 = 2131625667(0x7f0e06c3, float:1.8878548E38)
+            r5 = 2131625668(0x7f0e06c4, float:1.887855E38)
             java.lang.String r9 = "FromFormatted"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r9, r5)
             java.lang.String r9 = "%1$s"
@@ -24417,7 +24417,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             java.lang.Object[] r7 = new java.lang.Object[r7]
             r12 = 0
             r7[r12] = r11
-            r12 = 2131627986(0x7f0e0fd2, float:1.8883252E38)
+            r12 = 2131627988(0x7f0e0fd4, float:1.8883256E38)
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             r13 = 1
             r7[r13] = r12
@@ -24625,7 +24625,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r0 = r0 + r2
         L_0x06dd:
             android.text.StaticLayout r10 = new android.text.StaticLayout
-            r2 = 2131626016(0x7f0e0820, float:1.8879256E38)
+            r2 = 2131626018(0x7f0e0822, float:1.887926E38)
             java.lang.String r3 = "Loading"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r2)
             android.text.TextPaint r4 = org.telegram.ui.ActionBar.Theme.chat_replyNamePaint
@@ -24844,7 +24844,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r3 = 0
         L_0x0899:
             if (r3 != 0) goto L_0x08a4
-            r3 = 2131626016(0x7f0e0820, float:1.8879256E38)
+            r3 = 2131626018(0x7f0e0822, float:1.887926E38)
             java.lang.String r4 = "Loading"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
         L_0x08a4:
@@ -25040,10 +25040,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.currentForwardNameString = r3
         L_0x0a27:
             java.lang.String r3 = r38.getForwardedMessageText(r39)
-            r4 = 2131625659(0x7f0e06bb, float:1.8878532E38)
+            r4 = 2131625660(0x7f0e06bc, float:1.8878534E38)
             java.lang.String r6 = "From"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
-            r6 = 2131625667(0x7f0e06c3, float:1.8878548E38)
+            r6 = 2131625668(0x7f0e06c4, float:1.887855E38)
             java.lang.String r7 = "FromFormatted"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             java.lang.String r7 = "%1$s"
@@ -34073,7 +34073,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 org.telegram.ui.Cells.ChatMessageCell r3 = org.telegram.ui.Cells.ChatMessageCell.this
                 android.text.StaticLayout r3 = r3.timeLayout
                 if (r3 == 0) goto L_0x0153
-                r3 = 2131625287(0x7f0e0547, float:1.8877778E38)
+                r3 = 2131625288(0x7f0e0548, float:1.887778E38)
                 java.lang.String r6 = "EditedMessage"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
                 org.telegram.ui.Cells.ChatMessageCell r6 = org.telegram.ui.Cells.ChatMessageCell.this

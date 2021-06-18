@@ -1218,14 +1218,11 @@ public class ChatObject {
             if (sharedInstance == null) {
                 return false;
             }
-            if (tLRPC$TL_groupCallParticipant.self) {
-                if (sharedInstance.getVideoState(z) == 2) {
-                    return true;
+            if (!tLRPC$TL_groupCallParticipant.self) {
+                VideoParticipant videoParticipant = call2.videoNotAvailableParticipant;
+                if ((videoParticipant == null || videoParticipant.participant != tLRPC$TL_groupCallParticipant) && call2.participants.get(MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer)) == null) {
+                    return false;
                 }
-                return false;
-            } else if (call2.videoNotAvailableParticipant.participant != tLRPC$TL_groupCallParticipant && call2.participants.get(MessageObject.getPeerId(tLRPC$TL_groupCallParticipant.peer)) == null) {
-                return false;
-            } else {
                 if (z) {
                     if (tLRPC$TL_groupCallParticipant.presentation != null) {
                         return true;
@@ -1236,6 +1233,10 @@ public class ChatObject {
                 } else {
                     return false;
                 }
+            } else if (sharedInstance.getVideoState(z) == 2) {
+                return true;
+            } else {
+                return false;
             }
         }
 

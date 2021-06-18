@@ -5718,7 +5718,7 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02e6 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e6 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02e6 }
-            r10 = 2131626268(0x7f0e091c, float:1.8879767E38)
+            r10 = 2131626270(0x7f0e091e, float:1.8879771E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e6 }
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02e6 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e6 }
@@ -6579,7 +6579,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0249 }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627187(0x7f0e0cb3, float:1.8881631E38)
+            r9 = 2131627189(0x7f0e0cb5, float:1.8881635E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0249 }
         L_0x0067:
             r9 = r4
@@ -6589,7 +6589,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0249 }
             if (r8 == 0) goto L_0x007a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627298(0x7f0e0d22, float:1.8881856E38)
+            r9 = 2131627300(0x7f0e0d24, float:1.888186E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0249 }
             goto L_0x0067
         L_0x007a:
@@ -9578,20 +9578,22 @@ public class MediaDataController extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.botKeyboardDidLoad, tLRPC$Message, Long.valueOf(j));
     }
 
-    public void loadBotInfo(int i, boolean z, int i2) {
+    public void loadBotInfo(int i, long j, boolean z, int i2) {
         TLRPC$BotInfo tLRPC$BotInfo;
         if (!z || (tLRPC$BotInfo = this.botInfos.get(i)) == null) {
-            getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, i2) {
+            getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, j, i2) {
                 public final /* synthetic */ int f$1;
-                public final /* synthetic */ int f$2;
+                public final /* synthetic */ long f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
                     this.f$2 = r3;
+                    this.f$3 = r5;
                 }
 
                 public final void run() {
-                    MediaDataController.this.lambda$loadBotInfo$133$MediaDataController(this.f$1, this.f$2);
+                    MediaDataController.this.lambda$loadBotInfo$133$MediaDataController(this.f$1, this.f$2, this.f$3);
                 }
             });
             return;
@@ -9601,11 +9603,11 @@ public class MediaDataController extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$loadBotInfo$133 */
-    public /* synthetic */ void lambda$loadBotInfo$133$MediaDataController(int i, int i2) {
+    public /* synthetic */ void lambda$loadBotInfo$133$MediaDataController(int i, long j, int i2) {
         NativeByteBuffer byteBufferValue;
         TLRPC$BotInfo tLRPC$BotInfo = null;
         try {
-            SQLiteCursor queryFinalized = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT info FROM bot_info WHERE uid = %d", new Object[]{Integer.valueOf(i)}), new Object[0]);
+            SQLiteCursor queryFinalized = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT info FROM bot_info_v2 WHERE uid = %d AND dialogId = %d", new Object[]{Integer.valueOf(i), Long.valueOf(j)}), new Object[0]);
             if (queryFinalized.next() && !queryFinalized.isNull(0) && (byteBufferValue = queryFinalized.byteBufferValue(0)) != null) {
                 tLRPC$BotInfo = TLRPC$BotInfo.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
                 byteBufferValue.reuse();
@@ -9689,18 +9691,20 @@ public class MediaDataController extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.botKeyboardDidLoad, tLRPC$Message, Long.valueOf(j));
     }
 
-    public void putBotInfo(TLRPC$BotInfo tLRPC$BotInfo) {
+    public void putBotInfo(long j, TLRPC$BotInfo tLRPC$BotInfo) {
         if (tLRPC$BotInfo != null) {
             this.botInfos.put(tLRPC$BotInfo.user_id, tLRPC$BotInfo);
-            getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$BotInfo) {
+            getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$BotInfo, j) {
                 public final /* synthetic */ TLRPC$BotInfo f$1;
+                public final /* synthetic */ long f$2;
 
                 {
                     this.f$1 = r2;
+                    this.f$2 = r3;
                 }
 
                 public final void run() {
-                    MediaDataController.this.lambda$putBotInfo$135$MediaDataController(this.f$1);
+                    MediaDataController.this.lambda$putBotInfo$135$MediaDataController(this.f$1, this.f$2);
                 }
             });
         }
@@ -9708,14 +9712,15 @@ public class MediaDataController extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$putBotInfo$135 */
-    public /* synthetic */ void lambda$putBotInfo$135$MediaDataController(TLRPC$BotInfo tLRPC$BotInfo) {
+    public /* synthetic */ void lambda$putBotInfo$135$MediaDataController(TLRPC$BotInfo tLRPC$BotInfo, long j) {
         try {
-            SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO bot_info(uid, info) VALUES(?, ?)");
+            SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO bot_info_v2 VALUES(?, ?, ?)");
             executeFast.requery();
             NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$BotInfo.getObjectSize());
             tLRPC$BotInfo.serializeToStream(nativeByteBuffer);
             executeFast.bindInteger(1, tLRPC$BotInfo.user_id);
-            executeFast.bindByteBuffer(2, nativeByteBuffer);
+            executeFast.bindLong(2, j);
+            executeFast.bindByteBuffer(3, nativeByteBuffer);
             executeFast.step();
             nativeByteBuffer.reuse();
             executeFast.dispose();

@@ -104,38 +104,83 @@ public class VideoCapturerDevice {
 
     public static void checkScreenCapturerSize() {
         if (instance[1] != null) {
-            Display defaultDisplay = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay();
-            Point point = new Point();
-            defaultDisplay.getRealSize(point);
-            float max = Math.max(((float) point.x) / 970.0f, ((float) point.y) / 970.0f);
-            int i = (int) (((float) point.x) / max);
-            int i2 = (int) (((float) point.y) / max);
+            Point screenCaptureSize = getScreenCaptureSize();
             VideoCapturerDevice[] videoCapturerDeviceArr = instance;
-            if (videoCapturerDeviceArr[1].currentWidth != i || videoCapturerDeviceArr[1].currentHeight != i2) {
-                videoCapturerDeviceArr[1].currentWidth = i;
-                videoCapturerDeviceArr[1].currentHeight = i2;
-                videoCapturerDeviceArr[1].handler.post(new Runnable(i, i2) {
-                    public final /* synthetic */ int f$1;
-                    public final /* synthetic */ int f$2;
+            int i = videoCapturerDeviceArr[1].currentWidth;
+            int i2 = screenCaptureSize.x;
+            if (i != i2 || videoCapturerDeviceArr[1].currentHeight != screenCaptureSize.y) {
+                videoCapturerDeviceArr[1].currentWidth = i2;
+                videoCapturerDeviceArr[1].currentHeight = screenCaptureSize.y;
+                videoCapturerDeviceArr[1].handler.post(new Runnable(screenCaptureSize) {
+                    public final /* synthetic */ Point f$1;
 
                     {
                         this.f$1 = r2;
-                        this.f$2 = r3;
                     }
 
                     public final void run() {
-                        VideoCapturerDevice.lambda$checkScreenCapturerSize$1(VideoCapturerDevice.this, this.f$1, this.f$2);
+                        VideoCapturerDevice.lambda$checkScreenCapturerSize$1(VideoCapturerDevice.this, this.f$1);
                     }
                 });
             }
         }
     }
 
-    static /* synthetic */ void lambda$checkScreenCapturerSize$1(VideoCapturerDevice videoCapturerDevice, int i, int i2) {
+    static /* synthetic */ void lambda$checkScreenCapturerSize$1(VideoCapturerDevice videoCapturerDevice, Point point) {
         VideoCapturer videoCapturer2 = videoCapturerDevice.videoCapturer;
         if (videoCapturer2 != null) {
-            videoCapturer2.changeCaptureFormat(i, i2, 30);
+            videoCapturer2.changeCaptureFormat(point.x, point.y, 30);
         }
+    }
+
+    private static Point getScreenCaptureSize() {
+        int i;
+        int i2;
+        Display defaultDisplay = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay();
+        Point point = new Point();
+        defaultDisplay.getRealSize(point);
+        int i3 = point.x;
+        int i4 = point.y;
+        float f = i3 > i4 ? ((float) i4) / ((float) i3) : ((float) i3) / ((float) i4);
+        int i5 = 1;
+        while (true) {
+            if (i5 > 100) {
+                i5 = -1;
+                i = -1;
+                break;
+            }
+            float f2 = ((float) i5) * f;
+            i = (int) f2;
+            if (f2 != ((float) i)) {
+                i5++;
+            } else if (point.x <= point.y) {
+                int i6 = i;
+                i = i5;
+                i5 = i6;
+            }
+        }
+        if (i5 != -1 && f != 1.0f) {
+            while (true) {
+                int i7 = point.x;
+                if (i7 <= 1000 && (i2 = point.y) <= 1000 && i7 % 4 == 0 && i2 % 4 == 0) {
+                    break;
+                }
+                int i8 = i7 - i5;
+                point.x = i8;
+                int i9 = point.y - i;
+                point.y = i9;
+                if (i8 < 800 && i9 < 800) {
+                    i5 = -1;
+                    break;
+                }
+            }
+        }
+        if (i5 == -1 || f == 1.0f) {
+            float max = Math.max(((float) point.x) / 970.0f, ((float) point.y) / 970.0f);
+            point.x = ((int) Math.ceil((double) ((((float) point.x) / max) / 4.0f))) * 4;
+            point.y = ((int) Math.ceil((double) ((((float) point.y) / max) / 4.0f))) * 4;
+        }
+        return point;
     }
 
     private void init(long j, String str) {
@@ -211,26 +256,19 @@ public class VideoCapturerDevice {
                         }
                     }
                 });
-                Display defaultDisplay = ((WindowManager) ApplicationLoader.applicationContext.getSystemService("window")).getDefaultDisplay();
-                Point point = new Point();
-                defaultDisplay.getRealSize(point);
-                float max = Math.max(((float) point.x) / 970.0f, ((float) point.y) / 970.0f);
-                int i2 = (int) (((float) point.x) / max);
-                this.currentWidth = i2;
-                int i3 = (int) (((float) point.y) / max);
-                this.currentHeight = i3;
+                Point screenCaptureSize = getScreenCaptureSize();
+                this.currentWidth = screenCaptureSize.x;
+                this.currentHeight = screenCaptureSize.y;
                 this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("ScreenCapturerThread", eglBase.getEglBaseContext());
-                this.handler.post(new Runnable(i2, i3) {
-                    public final /* synthetic */ int f$1;
-                    public final /* synthetic */ int f$2;
+                this.handler.post(new Runnable(screenCaptureSize) {
+                    public final /* synthetic */ Point f$1;
 
                     {
                         this.f$1 = r2;
-                        this.f$2 = r3;
                     }
 
                     public final void run() {
-                        VideoCapturerDevice.this.lambda$init$2$VideoCapturerDevice(this.f$1, this.f$2);
+                        VideoCapturerDevice.this.lambda$init$2$VideoCapturerDevice(this.f$1);
                     }
                 });
             }
@@ -239,13 +277,13 @@ public class VideoCapturerDevice {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$init$2 */
-    public /* synthetic */ void lambda$init$2$VideoCapturerDevice(int i, int i2) {
+    public /* synthetic */ void lambda$init$2$VideoCapturerDevice(Point point) {
         if (this.videoCapturerSurfaceTextureHelper != null) {
             long j = this.nativePtr;
             if (j != 0) {
                 this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(j);
                 this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
-                this.videoCapturer.startCapture(i, i2, 30);
+                this.videoCapturer.startCapture(point.x, point.y, 30);
             }
         }
     }

@@ -39,6 +39,7 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Property;
+import android.util.SparseArray;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -64,6 +65,7 @@ import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.core.view.inputmethod.InputConnectionCompat;
 import androidx.core.view.inputmethod.InputContentInfoCompat;
 import androidx.customview.widget.ExploreByTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,6 +90,7 @@ import org.telegram.messenger.UserObject;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.camera.CameraController;
 import org.telegram.tgnet.ConnectionsManager;
+import org.telegram.tgnet.TLRPC$BotInfo;
 import org.telegram.tgnet.TLRPC$BotInlineResult;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
@@ -136,9 +139,11 @@ import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.BotCommandsMenuView;
 import org.telegram.ui.Components.ChatActivityEnterView;
 import org.telegram.ui.Components.EditTextCaption;
 import org.telegram.ui.Components.EmojiView;
+import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SeekBar;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.StickersAlert;
@@ -159,6 +164,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     public int animatedTop;
     /* access modifiers changed from: private */
     public int animatingContentType;
+    /* access modifiers changed from: private */
+    public HashMap<View, Float> animationParamsX = new HashMap<>();
     private ImageView attachButton;
     /* access modifiers changed from: private */
     public LinearLayout attachLayout;
@@ -174,9 +181,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     public FrameLayout audioVideoButtonContainer;
     /* access modifiers changed from: private */
     public ImageView botButton;
-    private ReplaceableIconDrawable botButtonDrawablel;
+    private ReplaceableIconDrawable botButtonDrawable;
     /* access modifiers changed from: private */
     public MessageObject botButtonsMessageObject;
+    int botCommandLastPosition;
+    int botCommandLastTop;
+    private BotCommandsMenuView.BotCommandsAdapter botCommandsAdapter;
+    /* access modifiers changed from: private */
+    public BotCommandsMenuView botCommandsMenuButton;
+    public BotCommandsMenuContainer botCommandsMenuContainer;
     private int botCount;
     /* access modifiers changed from: private */
     public BotKeyboardView botKeyboardView;
@@ -309,7 +322,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     public int notificationsIndex;
     /* access modifiers changed from: private */
     public ImageView notifyButton;
-    CrossOutDrawable notifySilentDrawable;
+    /* access modifiers changed from: private */
+    public CrossOutDrawable notifySilentDrawable;
     /* access modifiers changed from: private */
     public Runnable onFinishInitCameraRunnable;
     /* access modifiers changed from: private */
@@ -541,7 +555,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         void scrollToSendingMessage();
     }
 
-    static /* synthetic */ boolean lambda$new$8(View view, MotionEvent motionEvent) {
+    static /* synthetic */ boolean lambda$new$9(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -2709,9 +2723,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.rect = new Rect();
         this.topViewUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
             public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                ChatActivityEnterView.this.lambda$new$24$ChatActivityEnterView(valueAnimator);
+                ChatActivityEnterView.this.lambda$new$25$ChatActivityEnterView(valueAnimator);
             }
         };
+        this.botCommandLastPosition = -1;
         this.smoothKeyboard = z && SharedConfig.smoothKeyboard && !AndroidUtilities.isInMultiwindow && (chatActivity2 == null || !chatActivity.isInBubbleMode());
         Paint paint2 = new Paint(1);
         this.dotPaint = paint2;
@@ -2758,6 +2773,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (ChatActivityEnterView.this.scheduledButton != null) {
                     int measuredWidth = (getMeasuredWidth() - AndroidUtilities.dp((ChatActivityEnterView.this.botButton == null || ChatActivityEnterView.this.botButton.getVisibility() != 0) ? 48.0f : 96.0f)) - AndroidUtilities.dp(48.0f);
                     ChatActivityEnterView.this.scheduledButton.layout(measuredWidth, ChatActivityEnterView.this.scheduledButton.getTop(), ChatActivityEnterView.this.scheduledButton.getMeasuredWidth() + measuredWidth, ChatActivityEnterView.this.scheduledButton.getBottom());
+                }
+                if (!ChatActivityEnterView.this.animationParamsX.isEmpty()) {
+                    for (int i5 = 0; i5 < getChildCount(); i5++) {
+                        View childAt = getChildAt(i5);
+                        Float f = (Float) ChatActivityEnterView.this.animationParamsX.get(childAt);
+                        if (f != null) {
+                            childAt.setTranslationX(f.floatValue() - ((float) childAt.getLeft()));
+                            childAt.animate().translationX(0.0f).setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+                        }
+                    }
+                    ChatActivityEnterView.this.animationParamsX.clear();
                 }
             }
 
@@ -3096,7 +3122,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
 
             /* JADX WARNING: Removed duplicated region for block: B:34:0x013e  */
-            /* JADX WARNING: Removed duplicated region for block: B:47:? A[RETURN, SYNTHETIC] */
+            /* JADX WARNING: Removed duplicated region for block: B:47:0x018e  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public void afterTextChanged(android.text.Editable r10) {
                 /*
@@ -3268,6 +3294,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     android.animation.ValueAnimator r10 = r10.setDuration(r0)
                     r10.start()
                 L_0x0188:
+                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    org.telegram.ui.Components.BotCommandsMenuContainer r10 = r10.botCommandsMenuContainer
+                    if (r10 == 0) goto L_0x0191
+                    r10.dismiss()
+                L_0x0191:
+                    org.telegram.ui.Components.ChatActivityEnterView r10 = org.telegram.ui.Components.ChatActivityEnterView.this
+                    r10.checkBotMenu()
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.AnonymousClass13.afterTextChanged(android.text.Editable):void");
@@ -3313,13 +3346,90 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.attachLayout.setPivotX((float) AndroidUtilities.dp(48.0f));
             this.attachLayout.setClipChildren(false);
             r2.addView(this.attachLayout, LayoutHelper.createFrame(-2, 48, 85));
+            BotCommandsMenuView botCommandsMenuView = new BotCommandsMenuView(getContext());
+            this.botCommandsMenuButton = botCommandsMenuView;
+            botCommandsMenuView.setOnClickListener(new View.OnClickListener() {
+                public final void onClick(View view) {
+                    ChatActivityEnterView.this.lambda$new$4$ChatActivityEnterView(view);
+                }
+            });
+            r2.addView(this.botCommandsMenuButton, LayoutHelper.createFrame(-2, 32.0f, 83, 10.0f, 8.0f, 10.0f, 8.0f));
+            AndroidUtilities.updateViewVisibilityAnimated(this.botCommandsMenuButton, false, 1.0f, false);
+            this.botCommandsMenuButton.setExpanded(true, false);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(activity2);
+            AnonymousClass14 r7 = new BotCommandsMenuContainer(activity2) {
+                /* access modifiers changed from: protected */
+                public void onDismiss() {
+                    super.onDismiss();
+                    ChatActivityEnterView.this.botCommandsMenuButton.setOpened(false);
+                }
+            };
+            this.botCommandsMenuContainer = r7;
+            r7.listView.setLayoutManager(linearLayoutManager);
+            RecyclerListView recyclerListView = this.botCommandsMenuContainer.listView;
+            BotCommandsMenuView.BotCommandsAdapter botCommandsAdapter2 = new BotCommandsMenuView.BotCommandsAdapter();
+            this.botCommandsAdapter = botCommandsAdapter2;
+            recyclerListView.setAdapter(botCommandsAdapter2);
+            this.botCommandsMenuContainer.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
+                public void onItemClick(View view, int i) {
+                    View view2 = view;
+                    if (view2 instanceof BotCommandsMenuView.BotCommandView) {
+                        String command = ((BotCommandsMenuView.BotCommandView) view2).getCommand();
+                        if (!TextUtils.isEmpty(command)) {
+                            if (ChatActivityEnterView.this.isInScheduleMode()) {
+                                AlertsCreator.createScheduleDatePickerDialog(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.dialog_id, new AlertsCreator.ScheduleDatePickerDelegate(command) {
+                                    public final /* synthetic */ String f$1;
+
+                                    {
+                                        this.f$1 = r2;
+                                    }
+
+                                    public final void didSelectDate(boolean z, int i) {
+                                        ChatActivityEnterView.AnonymousClass15.this.lambda$onItemClick$0$ChatActivityEnterView$15(this.f$1, z, i);
+                                    }
+                                });
+                                return;
+                            }
+                            ChatActivity chatActivity = chatActivity2;
+                            if (chatActivity == null || !chatActivity.checkSlowMode(view2)) {
+                                SendMessagesHelper.getInstance(ChatActivityEnterView.this.currentAccount).sendMessage(command, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), (TLRPC$WebPage) null, false, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0, (MessageObject.SendAnimationData) null);
+                                ChatActivityEnterView.this.setFieldText("");
+                                ChatActivityEnterView.this.botCommandsMenuContainer.dismiss();
+                            }
+                        }
+                    }
+                }
+
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$onItemClick$0 */
+                public /* synthetic */ void lambda$onItemClick$0$ChatActivityEnterView$15(String str, boolean z, int i) {
+                    SendMessagesHelper.getInstance(ChatActivityEnterView.this.currentAccount).sendMessage(str, ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.replyingMessageObject, ChatActivityEnterView.this.getThreadMessage(), (TLRPC$WebPage) null, false, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i, (MessageObject.SendAnimationData) null);
+                    ChatActivityEnterView.this.setFieldText("");
+                    ChatActivityEnterView.this.botCommandsMenuContainer.dismiss();
+                }
+            });
+            this.botCommandsMenuContainer.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
+                public boolean onItemClick(View view, int i) {
+                    if (!(view instanceof BotCommandsMenuView.BotCommandView)) {
+                        return false;
+                    }
+                    String command = ((BotCommandsMenuView.BotCommandView) view).getCommand();
+                    ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
+                    chatActivityEnterView.setFieldText(command + " ");
+                    ChatActivityEnterView.this.botCommandsMenuContainer.dismiss();
+                    return true;
+                }
+            });
+            this.botCommandsMenuContainer.setClipToPadding(false);
+            this.sizeNotifierLayout.addView(this.botCommandsMenuContainer, 14, LayoutHelper.createFrame(-1, -1.0f, 80, 0.0f, 0.0f, 0.0f, 47.0f));
+            this.botCommandsMenuContainer.setVisibility(8);
             ImageView imageView2 = new ImageView(activity2);
             this.botButton = imageView2;
             ReplaceableIconDrawable replaceableIconDrawable = new ReplaceableIconDrawable(activity2);
-            this.botButtonDrawablel = replaceableIconDrawable;
+            this.botButtonDrawable = replaceableIconDrawable;
             imageView2.setImageDrawable(replaceableIconDrawable);
-            this.botButtonDrawablel.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
-            this.botButtonDrawablel.setIcon(NUM, false);
+            this.botButtonDrawable.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelIcons"), PorterDuff.Mode.MULTIPLY));
+            this.botButtonDrawable.setIcon(NUM, false);
             this.botButton.setScaleType(ImageView.ScaleType.CENTER);
             int i5 = Build.VERSION.SDK_INT;
             if (i5 >= 21) {
@@ -3329,7 +3439,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.attachLayout.addView(this.botButton, LayoutHelper.createLinear(48, 48));
             this.botButton.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
-                    ChatActivityEnterView.this.lambda$new$4$ChatActivityEnterView(view);
+                    ChatActivityEnterView.this.lambda$new$5$ChatActivityEnterView(view);
                 }
             });
             this.notifyButton = new ImageView(activity2);
@@ -3361,12 +3471,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     int i;
                     ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
                     boolean unused = chatActivityEnterView.silent = !chatActivityEnterView.silent;
-                    ChatActivityEnterView chatActivityEnterView2 = ChatActivityEnterView.this;
-                    if (chatActivityEnterView2.notifySilentDrawable == null) {
-                        chatActivityEnterView2.notifySilentDrawable = new CrossOutDrawable(activity2, NUM, "chat_messagePanelIcons");
+                    if (ChatActivityEnterView.this.notifySilentDrawable == null) {
+                        CrossOutDrawable unused2 = ChatActivityEnterView.this.notifySilentDrawable = new CrossOutDrawable(activity2, NUM, "chat_messagePanelIcons");
                     }
-                    ChatActivityEnterView chatActivityEnterView3 = ChatActivityEnterView.this;
-                    chatActivityEnterView3.notifySilentDrawable.setCrossOut(chatActivityEnterView3.silent, true);
+                    ChatActivityEnterView.this.notifySilentDrawable.setCrossOut(ChatActivityEnterView.this.silent, true);
                     ChatActivityEnterView.this.notifyButton.setImageDrawable(ChatActivityEnterView.this.notifySilentDrawable);
                     SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(ChatActivityEnterView.this.currentAccount).edit();
                     edit.putBoolean("silent_" + ChatActivityEnterView.this.dialog_id, ChatActivityEnterView.this.silent).commit();
@@ -3380,7 +3488,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         FileLog.e((Throwable) e);
                     }
                     chatActivity2.getUndoView().showWithAction(0, !ChatActivityEnterView.this.silent ? 54 : 55, (Runnable) null);
-                    ImageView access$8200 = ChatActivityEnterView.this.notifyButton;
+                    ImageView access$8600 = ChatActivityEnterView.this.notifyButton;
                     if (ChatActivityEnterView.this.silent) {
                         i = NUM;
                         str = "AccDescrChanSilentOn";
@@ -3388,7 +3496,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         i = NUM;
                         str = "AccDescrChanSilentOff";
                     }
-                    access$8200.setContentDescription(LocaleController.getString(str, i));
+                    access$8600.setContentDescription(LocaleController.getString(str, i));
                     ChatActivityEnterView.this.updateFieldHint(true);
                 }
             });
@@ -3403,7 +3511,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.attachLayout.addView(this.attachButton, LayoutHelper.createLinear(48, 48));
             this.attachButton.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
-                    ChatActivityEnterView.this.lambda$new$5$ChatActivityEnterView(view);
+                    ChatActivityEnterView.this.lambda$new$6$ChatActivityEnterView(view);
                 }
             });
             this.attachButton.setContentDescription(LocaleController.getString("AccDescrAttachButton", NUM));
@@ -3429,7 +3537,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.recordedAudioPanel.addView(this.recordDeleteImageView, LayoutHelper.createFrame(48, 48.0f));
         this.recordDeleteImageView.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                ChatActivityEnterView.this.lambda$new$6$ChatActivityEnterView(view);
+                ChatActivityEnterView.this.lambda$new$7$ChatActivityEnterView(view);
             }
         });
         VideoTimelineView videoTimelineView2 = new VideoTimelineView(activity2);
@@ -3482,7 +3590,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.recordedAudioPanel.addView(this.recordedAudioPlayButton, LayoutHelper.createFrame(48, 48.0f, 83, 48.0f, 0.0f, 13.0f, 0.0f));
         this.recordedAudioPlayButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                ChatActivityEnterView.this.lambda$new$7$ChatActivityEnterView(view);
+                ChatActivityEnterView.this.lambda$new$8$ChatActivityEnterView(view);
             }
         });
         TextView textView = new TextView(activity2);
@@ -3496,7 +3604,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         frameLayout2.setClipChildren(false);
         this.recordPanel.setVisibility(8);
         r2.addView(this.recordPanel, LayoutHelper.createFrame(-1, 48.0f));
-        this.recordPanel.setOnTouchListener($$Lambda$ChatActivityEnterView$icxiBQJo_0mpbPmrdY3qFOu84.INSTANCE);
+        this.recordPanel.setOnTouchListener($$Lambda$ChatActivityEnterView$0e_zd0s8aRihfxc4NG1jgGBP7ao.INSTANCE);
         SlideTextView slideTextView = new SlideTextView(activity2);
         this.slideText = slideTextView;
         this.recordPanel.addView(slideTextView, LayoutHelper.createFrame(-1, -1.0f, 0, 45.0f, 0.0f, 0.0f, 0.0f));
@@ -3522,7 +3630,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.sendButtonContainer.addView(this.audioVideoButtonContainer, LayoutHelper.createFrame(48, 48.0f));
         this.audioVideoButtonContainer.setOnTouchListener(new View.OnTouchListener() {
             public final boolean onTouch(View view, MotionEvent motionEvent) {
-                return ChatActivityEnterView.this.lambda$new$15$ChatActivityEnterView(view, motionEvent);
+                return ChatActivityEnterView.this.lambda$new$16$ChatActivityEnterView(view, motionEvent);
             }
         });
         ImageView imageView5 = new ImageView(activity2);
@@ -3571,7 +3679,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.sendButtonContainer.addView(this.cancelBotButton, LayoutHelper.createFrame(48, 48.0f));
         this.cancelBotButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                ChatActivityEnterView.this.lambda$new$16$ChatActivityEnterView(view);
+                ChatActivityEnterView.this.lambda$new$17$ChatActivityEnterView(view);
             }
         });
         if (isInScheduleMode()) {
@@ -3583,7 +3691,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.sendButtonInverseDrawable = activity.getResources().getDrawable(NUM).mutate();
             this.inactinveSendButtonDrawable = activity.getResources().getDrawable(NUM).mutate();
         }
-        AnonymousClass16 r22 = new View(activity2) {
+        AnonymousClass19 r22 = new View(activity2) {
             private float animationDuration;
             private float animationProgress;
             private int drawableColor;
@@ -3703,7 +3811,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.sendButtonContainer.addView(this.sendButton, LayoutHelper.createFrame(48, 48.0f));
         this.sendButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                ChatActivityEnterView.this.lambda$new$17$ChatActivityEnterView(view);
+                ChatActivityEnterView.this.lambda$new$18$ChatActivityEnterView(view);
             }
         });
         this.sendButton.setOnLongClickListener(new View.OnLongClickListener() {
@@ -3725,15 +3833,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.sendButtonContainer.addView(this.slowModeButton, LayoutHelper.createFrame(64, 48, 53));
         this.slowModeButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                ChatActivityEnterView.this.lambda$new$18$ChatActivityEnterView(view);
+                ChatActivityEnterView.this.lambda$new$19$ChatActivityEnterView(view);
             }
         });
         this.slowModeButton.setOnLongClickListener(new View.OnLongClickListener() {
             public final boolean onLongClick(View view) {
-                return ChatActivityEnterView.this.lambda$new$19$ChatActivityEnterView(view);
+                return ChatActivityEnterView.this.lambda$new$20$ChatActivityEnterView(view);
             }
         });
-        AnonymousClass17 r23 = new ImageView(activity2) {
+        AnonymousClass20 r23 = new ImageView(activity2) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (getAlpha() <= 0.0f) {
                     return false;
@@ -3757,7 +3865,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.sendButtonContainer.addView(this.expandStickersButton, LayoutHelper.createFrame(48, 48.0f));
         this.expandStickersButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                ChatActivityEnterView.this.lambda$new$20$ChatActivityEnterView(view);
+                ChatActivityEnterView.this.lambda$new$21$ChatActivityEnterView(view);
             }
         });
         this.expandStickersButton.setContentDescription(LocaleController.getString("AccDescrExpandPanel", NUM));
@@ -3767,7 +3875,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         this.textFieldContainer.addView(this.doneButtonContainer, LayoutHelper.createLinear(48, 48, 80));
         this.doneButtonContainer.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                ChatActivityEnterView.this.lambda$new$21$ChatActivityEnterView(view);
+                ChatActivityEnterView.this.lambda$new$22$ChatActivityEnterView(view);
             }
         });
         ShapeDrawable createCircleDrawable = Theme.createCircleDrawable(AndroidUtilities.dp(16.0f), Theme.getColor("chat_messagePanelSend"));
@@ -3859,6 +3967,18 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$4 */
     public /* synthetic */ void lambda$new$4$ChatActivityEnterView(View view) {
+        boolean z = !this.botCommandsMenuButton.isOpened();
+        this.botCommandsMenuButton.setOpened(z);
+        if (z) {
+            this.botCommandsMenuContainer.show();
+        } else {
+            this.botCommandsMenuContainer.dismiss();
+        }
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$5 */
+    public /* synthetic */ void lambda$new$5$ChatActivityEnterView(View view) {
         if (this.searchingType != 0) {
             this.searchingType = 0;
             this.emojiView.closeSearch(false);
@@ -3887,8 +4007,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$5 */
-    public /* synthetic */ void lambda$new$5$ChatActivityEnterView(View view) {
+    /* renamed from: lambda$new$6 */
+    public /* synthetic */ void lambda$new$6$ChatActivityEnterView(View view) {
         AdjustPanLayoutHelper adjustPanLayoutHelper2 = this.adjustPanLayoutHelper;
         if (adjustPanLayoutHelper2 == null || !adjustPanLayoutHelper2.animationInProgress()) {
             this.delegate.didPressAttachButton();
@@ -3896,8 +4016,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$6 */
-    public /* synthetic */ void lambda$new$6$ChatActivityEnterView(View view) {
+    /* renamed from: lambda$new$7 */
+    public /* synthetic */ void lambda$new$7$ChatActivityEnterView(View view) {
         AnimatorSet animatorSet = this.runningAnimationAudio;
         if (animatorSet == null || !animatorSet.isRunning()) {
             if (this.videoToSendMessageObject != null) {
@@ -3918,8 +4038,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$7 */
-    public /* synthetic */ void lambda$new$7$ChatActivityEnterView(View view) {
+    /* renamed from: lambda$new$8 */
+    public /* synthetic */ void lambda$new$8$ChatActivityEnterView(View view) {
         if (this.audioToSend != null) {
             if (!MediaController.getInstance().isPlayingMessage(this.audioToSendMessageObject) || MediaController.getInstance().isMessagePaused()) {
                 this.playPauseDrawable.setIcon(1, true);
@@ -3934,8 +4054,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$15 */
-    public /* synthetic */ boolean lambda$new$15$ChatActivityEnterView(View view, MotionEvent motionEvent) {
+    /* renamed from: lambda$new$16 */
+    public /* synthetic */ boolean lambda$new$16$ChatActivityEnterView(View view, MotionEvent motionEvent) {
         TLRPC$Chat currentChat;
         int i = 3;
         boolean z = false;
@@ -3988,7 +4108,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.startedDraggingX = -1.0f;
                         if (!z2 || this.videoSendButton.getTag() == null) {
                             if (this.recordingAudioVideo && isInScheduleMode()) {
-                                AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) $$Lambda$ChatActivityEnterView$S5U7ZD9Drz2ZeKhQzmHUfLiJcmw.INSTANCE, (Runnable) $$Lambda$ChatActivityEnterView$jHmW4dMMcdkxHZAbFNR_a01rFNM.INSTANCE);
+                                AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) $$Lambda$ChatActivityEnterView$2qMbG7RhYFjf5DGZry30sFnt1D8.INSTANCE, (Runnable) $$Lambda$ChatActivityEnterView$A_nC1eD4I1yfzYCneX_xvHnwg8.INSTANCE);
                             }
                             this.delegate.needStartRecordAudio(0);
                             MediaController instance = MediaController.getInstance();
@@ -4001,9 +4121,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             this.delegate.needStartRecordVideo(1, true, 0);
                         }
                         this.recordingAudioVideo = false;
-                        $$Lambda$ChatActivityEnterView$ShoP9qOe0lyHR66HqB1rx6deZE r0 = new Runnable() {
+                        $$Lambda$ChatActivityEnterView$W151PjnI1oawgMqW3qnpqIlxVr4 r0 = new Runnable() {
                             public final void run() {
-                                ChatActivityEnterView.this.lambda$new$14$ChatActivityEnterView();
+                                ChatActivityEnterView.this.lambda$new$15$ChatActivityEnterView();
                             }
                         };
                         this.moveToSendStateRunnable = r0;
@@ -4060,7 +4180,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.startedDraggingX = -1.0f;
                 if (!z3 || this.videoSendButton.getTag() == null) {
                     if (this.recordingAudioVideo && isInScheduleMode()) {
-                        AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) $$Lambda$ChatActivityEnterView$wFEtqCBwiiiE1xvcfZrBpj0ovE.INSTANCE, (Runnable) $$Lambda$ChatActivityEnterView$8Oh6CeevGq3KAcAkDoemVZdCQzI.INSTANCE);
+                        AlertsCreator.createScheduleDatePickerDialog((Context) this.parentActivity, this.parentFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) $$Lambda$ChatActivityEnterView$D9M_Co8T87H5Pehr6gNXX9I6Cdk.INSTANCE, (Runnable) $$Lambda$ChatActivityEnterView$1_S0vOQvkoPajvvL58TRMSrmPU.INSTANCE);
                     }
                     MediaController instance2 = MediaController.getInstance();
                     if (!isInScheduleMode()) {
@@ -4072,9 +4192,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.delegate.needStartRecordVideo(1, true, 0);
                 }
                 this.recordingAudioVideo = false;
-                $$Lambda$ChatActivityEnterView$KE4LkcCragtqbn7Y1NgJgPExJ8 r13 = new Runnable() {
+                $$Lambda$ChatActivityEnterView$qNji1T63RTeQFMMaEGtyzpD5ocY r13 = new Runnable() {
                     public final void run() {
-                        ChatActivityEnterView.this.lambda$new$11$ChatActivityEnterView();
+                        ChatActivityEnterView.this.lambda$new$12$ChatActivityEnterView();
                     }
                 };
                 this.moveToSendStateRunnable = r13;
@@ -4099,24 +4219,24 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$11 */
-    public /* synthetic */ void lambda$new$11$ChatActivityEnterView() {
+    /* renamed from: lambda$new$12 */
+    public /* synthetic */ void lambda$new$12$ChatActivityEnterView() {
         this.moveToSendStateRunnable = null;
         this.messageTransitionIsRunning = false;
         updateRecordIntefrace(1);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$14 */
-    public /* synthetic */ void lambda$new$14$ChatActivityEnterView() {
+    /* renamed from: lambda$new$15 */
+    public /* synthetic */ void lambda$new$15$ChatActivityEnterView() {
         this.moveToSendStateRunnable = null;
         this.messageTransitionIsRunning = false;
         updateRecordIntefrace(1);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$16 */
-    public /* synthetic */ void lambda$new$16$ChatActivityEnterView(View view) {
+    /* renamed from: lambda$new$17 */
+    public /* synthetic */ void lambda$new$17$ChatActivityEnterView(View view) {
         String obj = this.messageEditText.getText().toString();
         int indexOf = obj.indexOf(32);
         if (indexOf == -1 || indexOf == obj.length() - 1) {
@@ -4127,8 +4247,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$17 */
-    public /* synthetic */ void lambda$new$17$ChatActivityEnterView(View view) {
+    /* renamed from: lambda$new$18 */
+    public /* synthetic */ void lambda$new$18$ChatActivityEnterView(View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow == null || !actionBarPopupWindow.isShowing()) {
             AnimatorSet animatorSet = this.runningAnimationAudio;
@@ -4139,8 +4259,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$18 */
-    public /* synthetic */ void lambda$new$18$ChatActivityEnterView(View view) {
+    /* renamed from: lambda$new$19 */
+    public /* synthetic */ void lambda$new$19$ChatActivityEnterView(View view) {
         ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
         if (chatActivityEnterViewDelegate != null) {
             SimpleTextView simpleTextView = this.slowModeButton;
@@ -4149,8 +4269,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$19 */
-    public /* synthetic */ boolean lambda$new$19$ChatActivityEnterView(View view) {
+    /* renamed from: lambda$new$20 */
+    public /* synthetic */ boolean lambda$new$20$ChatActivityEnterView(View view) {
         if (this.messageEditText.length() == 0) {
             return false;
         }
@@ -4158,8 +4278,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$20 */
-    public /* synthetic */ void lambda$new$20$ChatActivityEnterView(View view) {
+    /* renamed from: lambda$new$21 */
+    public /* synthetic */ void lambda$new$21$ChatActivityEnterView(View view) {
         EmojiView emojiView2;
         if (this.expandStickersButton.getVisibility() != 0 || this.expandStickersButton.getAlpha() != 1.0f || this.waitingForKeyboardOpen) {
             return;
@@ -4186,9 +4306,18 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$21 */
-    public /* synthetic */ void lambda$new$21$ChatActivityEnterView(View view) {
+    /* renamed from: lambda$new$22 */
+    public /* synthetic */ void lambda$new$22$ChatActivityEnterView(View view) {
         doneEditingMessage();
+    }
+
+    /* access modifiers changed from: private */
+    public void checkBotMenu() {
+        BotCommandsMenuView botCommandsMenuView = this.botCommandsMenuButton;
+        if (botCommandsMenuView != null) {
+            botCommandsMenuView.setExpanded(TextUtils.isEmpty(this.messageEditText.getText()) && !this.keyboardVisible && !this.waitingForKeyboardOpen && !isPopupShowing(), true);
+            beginDelayedTransition();
+        }
     }
 
     private void startLockTransition() {
@@ -4275,7 +4404,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 });
                 this.sendPopupLayout.setDispatchKeyEventListener(new ActionBarPopupWindow.OnDispatchKeyEventListener() {
                     public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-                        ChatActivityEnterView.this.lambda$onSendLongClick$22$ChatActivityEnterView(keyEvent);
+                        ChatActivityEnterView.this.lambda$onSendLongClick$23$ChatActivityEnterView(keyEvent);
                     }
                 });
                 this.sendPopupLayout.setShownFromBotton(false);
@@ -4300,14 +4429,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             }
 
                             public final void onClick(View view) {
-                                ChatActivityEnterView.this.lambda$onSendLongClick$23$ChatActivityEnterView(this.f$1, view);
+                                ChatActivityEnterView.this.lambda$onSendLongClick$24$ChatActivityEnterView(this.f$1, view);
                             }
                         });
                     }
                     i2++;
                 }
                 this.sendPopupLayout.setupRadialSelectors(Theme.getColor("dialogButtonSelector"));
-                AnonymousClass19 r0 = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2) {
+                AnonymousClass22 r0 = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2) {
                     public void dismiss() {
                         super.dismiss();
                         ChatActivityEnterView.this.sendButton.invalidate();
@@ -4351,8 +4480,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onSendLongClick$22 */
-    public /* synthetic */ void lambda$onSendLongClick$22$ChatActivityEnterView(KeyEvent keyEvent) {
+    /* renamed from: lambda$onSendLongClick$23 */
+    public /* synthetic */ void lambda$onSendLongClick$23$ChatActivityEnterView(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.sendPopupWindow) != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -4360,8 +4489,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onSendLongClick$23 */
-    public /* synthetic */ void lambda$onSendLongClick$23$ChatActivityEnterView(int i, View view) {
+    /* renamed from: lambda$onSendLongClick$24 */
+    public /* synthetic */ void lambda$onSendLongClick$24$ChatActivityEnterView(int i, View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.sendPopupWindow.dismiss();
@@ -4530,7 +4659,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r5[r1] = r12
             r13.playTogether(r5)
             android.animation.AnimatorSet r12 = r11.audioVideoButtonAnimation
-            org.telegram.ui.Components.ChatActivityEnterView$20 r13 = new org.telegram.ui.Components.ChatActivityEnterView$20
+            org.telegram.ui.Components.ChatActivityEnterView$23 r13 = new org.telegram.ui.Components.ChatActivityEnterView$23
             r13.<init>()
             r12.addListener(r13)
             android.animation.AnimatorSet r12 = r11.audioVideoButtonAnimation
@@ -4827,8 +4956,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$new$24 */
-    public /* synthetic */ void lambda$new$24$ChatActivityEnterView(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$new$25 */
+    public /* synthetic */ void lambda$new$25$ChatActivityEnterView(ValueAnimator valueAnimator) {
         if (this.topView != null) {
             float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             this.topViewEnterProgress = floatValue;
@@ -4894,9 +5023,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (runnable != null) {
                 AndroidUtilities.cancelRunOnUIThread(runnable);
             }
-            $$Lambda$ChatActivityEnterView$qOWMtjG0TqnwDwUP5tYuEiT5tMg r5 = new Runnable() {
+            $$Lambda$ChatActivityEnterView$tN0OEYP6os5Brq0S4UeKZiKI_0 r5 = new Runnable() {
                 public final void run() {
-                    ChatActivityEnterView.this.lambda$showTopView$25$ChatActivityEnterView();
+                    ChatActivityEnterView.this.lambda$showTopView$26$ChatActivityEnterView();
                 }
             };
             this.showTopViewRunnable = r5;
@@ -4910,8 +5039,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showTopView$25 */
-    public /* synthetic */ void lambda$showTopView$25$ChatActivityEnterView() {
+    /* renamed from: lambda$showTopView$26 */
+    public /* synthetic */ void lambda$showTopView$26$ChatActivityEnterView() {
         showTopView(true, false, true);
         this.showTopViewRunnable = null;
     }
@@ -5168,9 +5297,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         if (this.keyboardVisible) {
             this.showKeyboardOnResume = true;
         }
-        $$Lambda$ChatActivityEnterView$vom2GcQ_zSgIShv5HYqZx87tpZ4 r0 = new Runnable() {
+        $$Lambda$ChatActivityEnterView$wClVXHGsGSCr2uoQAlJwjlikDkQ r0 = new Runnable() {
             public final void run() {
-                ChatActivityEnterView.this.lambda$onPause$26$ChatActivityEnterView();
+                ChatActivityEnterView.this.lambda$onPause$27$ChatActivityEnterView();
             }
         };
         this.hideKeyboardRunnable = r0;
@@ -5178,8 +5307,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onPause$26 */
-    public /* synthetic */ void lambda$onPause$26$ChatActivityEnterView() {
+    /* renamed from: lambda$onPause$27 */
+    public /* synthetic */ void lambda$onPause$27$ChatActivityEnterView() {
         ChatActivity chatActivity = this.parentFragment;
         if (chatActivity == null || chatActivity.isLastFragment()) {
             closeKeyboard();
@@ -5441,6 +5570,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 AnimatorSet animatorSet3 = new AnimatorSet();
                 this.recordPannelAnimation = animatorSet3;
                 animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordedAudioPanel, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.attachButton, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.TRANSLATION_X, new float[]{0.0f})});
+                BotCommandsMenuView botCommandsMenuView = this.botCommandsMenuButton;
+                if (botCommandsMenuView != null) {
+                    botCommandsMenuView.setAlpha(0.0f);
+                    this.botCommandsMenuButton.setScaleY(0.0f);
+                    this.botCommandsMenuButton.setScaleX(0.0f);
+                    this.recordPannelAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.botCommandsMenuButton, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.botCommandsMenuButton, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.botCommandsMenuButton, View.SCALE_Y, new float[]{1.0f})});
+                }
                 this.recordPannelAnimation.setDuration(150);
                 this.recordPannelAnimation.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
@@ -5479,6 +5615,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 this.emojiButton[1].setScaleY(0.0f);
                 AnimatorSet animatorSet6 = new AnimatorSet();
                 animatorSet6.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.recordDeleteImageView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{1.0f})});
+                BotCommandsMenuView botCommandsMenuView2 = this.botCommandsMenuButton;
+                if (botCommandsMenuView2 != null) {
+                    botCommandsMenuView2.setAlpha(0.0f);
+                    this.botCommandsMenuButton.setScaleY(0.0f);
+                    this.botCommandsMenuButton.setScaleX(0.0f);
+                    animatorSet6.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.botCommandsMenuButton, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.botCommandsMenuButton, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.botCommandsMenuButton, View.SCALE_Y, new float[]{1.0f})});
+                }
                 animatorSet6.setDuration(150);
                 animatorSet6.setStartDelay(600);
                 AnimatorSet animatorSet7 = new AnimatorSet();
@@ -5981,7 +6124,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                         LinearLayout linearLayout2 = this.attachLayout;
                         if (linearLayout2 != null) {
-                            linearLayout2.setVisibility(0);
+                            if (linearLayout2.getVisibility() != 0) {
+                                this.attachLayout.setVisibility(0);
+                                this.attachLayout.setAlpha(0.0f);
+                                this.attachLayout.setScaleX(0.0f);
+                            }
                             this.runningAnimation2 = new AnimatorSet();
                             ArrayList arrayList3 = new ArrayList();
                             arrayList3.add(ObjectAnimator.ofFloat(this.attachLayout, View.ALPHA, new float[]{1.0f}));
@@ -6456,14 +6603,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x02c9 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x02ca  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x02f5 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x02f6  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void updateRecordIntefrace(int r25) {
+    public void updateRecordIntefrace(int r24) {
         /*
-            r24 = this;
-            r1 = r24
-            r2 = r25
+            r23 = this;
+            r1 = r23
+            r2 = r24
             java.lang.Runnable r0 = r1.moveToSendStateRunnable
             r3 = 0
             if (r0 == 0) goto L_0x000e
@@ -6477,13 +6624,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r5 = 12
             r11 = 1101004800(0x41a00000, float:20.0)
             r12 = 5
-            r14 = 4
-            r15 = 3
-            r3 = 2
+            r3 = 4
+            r13 = 3
+            r14 = 2
             r6 = 0
             r7 = 1065353216(0x3var_, float:1.0)
             r8 = 1
-            if (r0 == 0) goto L_0x02a3
+            if (r0 == 0) goto L_0x02cf
             int r0 = r1.recordInterfaceState
             if (r0 != r8) goto L_0x0028
             return
@@ -6504,8 +6651,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             java.lang.Object r0 = r0.getSystemService(r2)     // Catch:{ Exception -> 0x0055 }
             android.os.PowerManager r0 = (android.os.PowerManager) r0     // Catch:{ Exception -> 0x0055 }
             r2 = 536870918(0x20000006, float:1.084203E-19)
-            java.lang.String r13 = "telegram:audio_record_lock"
-            android.os.PowerManager$WakeLock r0 = r0.newWakeLock(r2, r13)     // Catch:{ Exception -> 0x0055 }
+            java.lang.String r15 = "telegram:audio_record_lock"
+            android.os.PowerManager$WakeLock r0 = r0.newWakeLock(r2, r15)     // Catch:{ Exception -> 0x0055 }
             r1.wakeLock = r0     // Catch:{ Exception -> 0x0055 }
             r0.acquire()     // Catch:{ Exception -> 0x0055 }
             goto L_0x0059
@@ -6590,173 +6737,193 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             float[] r10 = new float[r8]
             r10[r4] = r6
             android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
-            r2[r3] = r5
-            android.widget.ImageView[] r5 = r1.emojiButton
-            r5 = r5[r8]
-            android.util.Property r9 = android.view.View.SCALE_Y
-            float[] r10 = new float[r8]
-            r10[r4] = r6
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
-            r2[r15] = r5
-            android.widget.ImageView[] r5 = r1.emojiButton
-            r5 = r5[r8]
-            android.util.Property r9 = android.view.View.SCALE_X
-            float[] r10 = new float[r8]
-            r10[r4] = r6
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
             r2[r14] = r5
             android.widget.ImageView[] r5 = r1.emojiButton
             r5 = r5[r8]
-            android.util.Property r9 = android.view.View.ALPHA
-            float[] r10 = new float[r8]
-            r10[r4] = r6
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
-            r2[r12] = r5
-            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r5 = r1.recordDot
             android.util.Property r9 = android.view.View.SCALE_Y
             float[] r10 = new float[r8]
-            r10[r4] = r7
+            r10[r4] = r6
             android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
-            r9 = 6
-            r2[r9] = r5
-            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r5 = r1.recordDot
+            r2[r13] = r5
+            android.widget.ImageView[] r5 = r1.emojiButton
+            r5 = r5[r8]
             android.util.Property r9 = android.view.View.SCALE_X
             float[] r10 = new float[r8]
-            r10[r4] = r7
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
-            r9 = 7
-            r2[r9] = r5
-            org.telegram.ui.Components.ChatActivityEnterView$TimerView r5 = r1.recordTimerView
-            android.util.Property r9 = android.view.View.TRANSLATION_X
-            float[] r10 = new float[r8]
             r10[r4] = r6
             android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
-            r9 = 8
-            r2[r9] = r5
-            org.telegram.ui.Components.ChatActivityEnterView$TimerView r5 = r1.recordTimerView
-            android.util.Property r9 = android.view.View.ALPHA
-            float[] r10 = new float[r8]
-            r10[r4] = r7
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
-            r9 = 9
-            r2[r9] = r5
-            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r5 = r1.slideText
-            android.util.Property r9 = android.view.View.TRANSLATION_X
-            float[] r10 = new float[r8]
-            r10[r4] = r6
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
-            r9 = 10
-            r2[r9] = r5
-            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r5 = r1.slideText
-            android.util.Property r9 = android.view.View.ALPHA
-            float[] r10 = new float[r8]
-            r10[r4] = r7
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
-            r9 = 11
-            r2[r9] = r5
+            r2[r3] = r5
+            android.widget.ImageView[] r3 = r1.emojiButton
+            r3 = r3[r8]
+            android.util.Property r5 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r5, r9)
+            r2[r12] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r3 = r1.recordDot
+            android.util.Property r5 = android.view.View.SCALE_Y
+            float[] r9 = new float[r8]
+            r9[r4] = r7
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r5, r9)
+            r5 = 6
+            r2[r5] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r3 = r1.recordDot
+            android.util.Property r5 = android.view.View.SCALE_X
+            float[] r9 = new float[r8]
+            r9[r4] = r7
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r5, r9)
+            r5 = 7
+            r2[r5] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$TimerView r3 = r1.recordTimerView
+            android.util.Property r5 = android.view.View.TRANSLATION_X
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r5, r9)
+            r5 = 8
+            r2[r5] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$TimerView r3 = r1.recordTimerView
+            android.util.Property r5 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            r9[r4] = r7
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r5, r9)
+            r5 = 9
+            r2[r5] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r3 = r1.slideText
+            android.util.Property r5 = android.view.View.TRANSLATION_X
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r5, r9)
+            r5 = 10
+            r2[r5] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r3 = r1.slideText
+            android.util.Property r5 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            r9[r4] = r7
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r5, r9)
+            r5 = 11
+            r2[r5] = r3
             r0.playTogether(r2)
             android.widget.ImageView r2 = r1.audioSendButton
             if (r2 == 0) goto L_0x01b3
-            android.animation.Animator[] r5 = new android.animation.Animator[r8]
-            android.util.Property r9 = android.view.View.ALPHA
-            float[] r10 = new float[r8]
-            r10[r4] = r6
-            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r9, r10)
-            r5[r4] = r2
-            r0.playTogether(r5)
+            android.animation.Animator[] r3 = new android.animation.Animator[r8]
+            android.util.Property r5 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r5, r9)
+            r3[r4] = r2
+            r0.playTogether(r3)
         L_0x01b3:
             android.widget.ImageView r2 = r1.videoSendButton
             if (r2 == 0) goto L_0x01c8
-            android.animation.Animator[] r5 = new android.animation.Animator[r8]
+            android.animation.Animator[] r3 = new android.animation.Animator[r8]
+            android.util.Property r5 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r5, r9)
+            r3[r4] = r2
+            r0.playTogether(r3)
+        L_0x01c8:
+            org.telegram.ui.Components.BotCommandsMenuView r2 = r1.botCommandsMenuButton
+            if (r2 == 0) goto L_0x01f9
+            android.animation.Animator[] r3 = new android.animation.Animator[r13]
+            android.util.Property r5 = android.view.View.SCALE_Y
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r5, r9)
+            r3[r4] = r2
+            org.telegram.ui.Components.BotCommandsMenuView r2 = r1.botCommandsMenuButton
+            android.util.Property r5 = android.view.View.SCALE_X
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r5, r9)
+            r3[r8] = r2
+            org.telegram.ui.Components.BotCommandsMenuView r2 = r1.botCommandsMenuButton
+            android.util.Property r5 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r5, r9)
+            r3[r14] = r2
+            r0.playTogether(r3)
+        L_0x01f9:
+            android.animation.AnimatorSet r2 = new android.animation.AnimatorSet
+            r2.<init>()
+            android.animation.Animator[] r3 = new android.animation.Animator[r13]
+            org.telegram.ui.Components.EditTextCaption r5 = r1.messageEditText
+            android.util.Property r9 = android.view.View.TRANSLATION_X
+            float[] r10 = new float[r8]
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            float r11 = (float) r11
+            r10[r4] = r11
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r3[r4] = r5
+            org.telegram.ui.Components.EditTextCaption r5 = r1.messageEditText
             android.util.Property r9 = android.view.View.ALPHA
             float[] r10 = new float[r8]
             r10[r4] = r6
-            android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r9, r10)
-            r5[r4] = r2
-            r0.playTogether(r5)
-        L_0x01c8:
-            r9 = 150(0x96, double:7.4E-322)
-            r0.setStartDelay(r9)
-            android.animation.AnimatorSet r2 = new android.animation.AnimatorSet
-            r2.<init>()
-            android.animation.Animator[] r5 = new android.animation.Animator[r15]
-            org.telegram.ui.Components.EditTextCaption r9 = r1.messageEditText
-            android.util.Property r10 = android.view.View.TRANSLATION_X
-            float[] r12 = new float[r8]
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r3[r8] = r5
+            android.widget.FrameLayout r5 = r1.recordedAudioPanel
+            android.util.Property r9 = android.view.View.ALPHA
+            float[] r10 = new float[r8]
+            r10[r4] = r7
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r3[r14] = r5
+            r2.playTogether(r3)
+            android.widget.ImageView r3 = r1.scheduledButton
+            if (r3 == 0) goto L_0x025c
+            android.animation.Animator[] r5 = new android.animation.Animator[r14]
+            android.util.Property r9 = android.view.View.TRANSLATION_X
+            float[] r10 = new float[r8]
+            r11 = 1106247680(0x41var_, float:30.0)
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
             float r11 = (float) r11
-            r12[r4] = r11
-            android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r10, r12)
-            r5[r4] = r9
-            org.telegram.ui.Components.EditTextCaption r9 = r1.messageEditText
-            android.util.Property r10 = android.view.View.ALPHA
-            float[] r11 = new float[r8]
-            r11[r4] = r6
-            android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r10, r11)
-            r5[r8] = r9
-            android.widget.FrameLayout r9 = r1.recordedAudioPanel
-            android.util.Property r10 = android.view.View.ALPHA
-            float[] r11 = new float[r8]
-            r11[r4] = r7
-            android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r10, r11)
-            r5[r3] = r9
+            r10[r4] = r11
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r9, r10)
+            r5[r4] = r3
+            android.widget.ImageView r3 = r1.scheduledButton
+            android.util.Property r9 = android.view.View.ALPHA
+            float[] r10 = new float[r8]
+            r10[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r9, r10)
+            r5[r8] = r3
             r2.playTogether(r5)
-            android.widget.ImageView r5 = r1.scheduledButton
-            if (r5 == 0) goto L_0x0230
-            android.animation.Animator[] r9 = new android.animation.Animator[r3]
-            android.util.Property r10 = android.view.View.TRANSLATION_X
-            float[] r11 = new float[r8]
-            r12 = 1106247680(0x41var_, float:30.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            float r12 = (float) r12
-            r11[r4] = r12
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r10, r11)
-            r9[r4] = r5
-            android.widget.ImageView r5 = r1.scheduledButton
-            android.util.Property r10 = android.view.View.ALPHA
-            float[] r11 = new float[r8]
-            r11[r4] = r6
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r10, r11)
-            r9[r8] = r5
-            r2.playTogether(r9)
-        L_0x0230:
-            android.widget.LinearLayout r5 = r1.attachLayout
-            if (r5 == 0) goto L_0x025a
-            android.animation.Animator[] r9 = new android.animation.Animator[r3]
-            android.util.Property r10 = android.view.View.TRANSLATION_X
-            float[] r11 = new float[r8]
-            r12 = 1106247680(0x41var_, float:30.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            float r12 = (float) r12
-            r11[r4] = r12
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r10, r11)
-            r9[r4] = r5
-            android.widget.LinearLayout r5 = r1.attachLayout
-            android.util.Property r10 = android.view.View.ALPHA
-            float[] r11 = new float[r8]
-            r11[r4] = r6
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r10, r11)
-            r9[r8] = r5
-            r2.playTogether(r9)
-        L_0x025a:
-            android.animation.AnimatorSet r5 = r1.runningAnimationAudio
-            android.animation.Animator[] r6 = new android.animation.Animator[r15]
+        L_0x025c:
+            android.widget.LinearLayout r3 = r1.attachLayout
+            if (r3 == 0) goto L_0x0286
+            android.animation.Animator[] r5 = new android.animation.Animator[r14]
+            android.util.Property r9 = android.view.View.TRANSLATION_X
+            float[] r10 = new float[r8]
+            r11 = 1106247680(0x41var_, float:30.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            float r11 = (float) r11
+            r10[r4] = r11
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r9, r10)
+            r5[r4] = r3
+            android.widget.LinearLayout r3 = r1.attachLayout
+            android.util.Property r9 = android.view.View.ALPHA
+            float[] r10 = new float[r8]
+            r10[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r9, r10)
+            r5[r8] = r3
+            r2.playTogether(r5)
+        L_0x0286:
+            android.animation.AnimatorSet r3 = r1.runningAnimationAudio
+            android.animation.Animator[] r5 = new android.animation.Animator[r13]
             r9 = 150(0x96, double:7.4E-322)
             android.animation.AnimatorSet r0 = r0.setDuration(r9)
-            r6[r4] = r0
+            r5[r4] = r0
             android.animation.AnimatorSet r0 = r2.setDuration(r9)
-            r6[r8] = r0
+            r5[r8] = r0
             org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r0 = r1.recordCircle
             android.util.Property<org.telegram.ui.Components.ChatActivityEnterView$RecordCircle, java.lang.Float> r2 = r1.recordCircleScale
-            float[] r8 = new float[r8]
-            r8[r4] = r7
-            android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r2, r8)
-            r7 = 300(0x12c, double:1.48E-321)
-            android.animation.ObjectAnimator r0 = r0.setDuration(r7)
-            r6[r3] = r0
-            r5.playTogether(r6)
+            float[] r6 = new float[r8]
+            r6[r4] = r7
+            android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r2, r6)
+            r6 = 300(0x12c, double:1.48E-321)
+            android.animation.ObjectAnimator r0 = r0.setDuration(r6)
+            r5[r14] = r0
+            r3.playTogether(r5)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            org.telegram.ui.Components.ChatActivityEnterView$34 r2 = new org.telegram.ui.Components.ChatActivityEnterView$34
+            org.telegram.ui.Components.ChatActivityEnterView$37 r2 = new org.telegram.ui.Components.ChatActivityEnterView$37
             r2.<init>()
             r0.addListener(r2)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
@@ -6767,102 +6934,102 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r0.start()
             org.telegram.ui.Components.ChatActivityEnterView$TimerView r0 = r1.recordTimerView
             r0.start()
-            goto L_0x0d9b
-        L_0x02a3:
+            goto L_0x0e8f
+        L_0x02cf:
             boolean r0 = r1.recordIsCanceled
-            if (r0 == 0) goto L_0x02aa
-            if (r2 != r15) goto L_0x02aa
+            if (r0 == 0) goto L_0x02d6
+            if (r2 != r13) goto L_0x02d6
             return
-        L_0x02aa:
+        L_0x02d6:
             android.os.PowerManager$WakeLock r0 = r1.wakeLock
-            if (r0 == 0) goto L_0x02bd
-            r0.release()     // Catch:{ Exception -> 0x02b7 }
-            r10 = 0
-            r1.wakeLock = r10     // Catch:{ Exception -> 0x02b5 }
-            goto L_0x02be
-        L_0x02b5:
+            if (r0 == 0) goto L_0x02e9
+            r0.release()     // Catch:{ Exception -> 0x02e3 }
+            r9 = 0
+            r1.wakeLock = r9     // Catch:{ Exception -> 0x02e1 }
+            goto L_0x02ea
+        L_0x02e1:
             r0 = move-exception
-            goto L_0x02b9
-        L_0x02b7:
+            goto L_0x02e5
+        L_0x02e3:
             r0 = move-exception
-            r10 = 0
-        L_0x02b9:
+            r9 = 0
+        L_0x02e5:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x02be
-        L_0x02bd:
-            r10 = 0
-        L_0x02be:
+            goto L_0x02ea
+        L_0x02e9:
+            r9 = 0
+        L_0x02ea:
             android.app.Activity r0 = r1.parentActivity
             org.telegram.messenger.AndroidUtilities.unlockOrientation(r0)
             r1.wasSendTyping = r4
             int r0 = r1.recordInterfaceState
-            if (r0 != 0) goto L_0x02ca
+            if (r0 != 0) goto L_0x02f6
             return
-        L_0x02ca:
+        L_0x02f6:
             org.telegram.messenger.AccountInstance r0 = r1.accountInstance
-            org.telegram.messenger.MessagesController r18 = r0.getMessagesController()
+            org.telegram.messenger.MessagesController r17 = r0.getMessagesController()
             long r9 = r1.dialog_id
-            int r21 = r24.getThreadMessageId()
-            r22 = 2
-            r23 = 0
-            r19 = r9
-            r18.sendTyping(r19, r21, r22, r23)
+            int r20 = r23.getThreadMessageId()
+            r21 = 2
+            r22 = 0
+            r18 = r9
+            r17.sendTyping(r18, r20, r21, r22)
             r1.recordInterfaceState = r4
             org.telegram.ui.Components.EmojiView r0 = r1.emojiView
-            if (r0 == 0) goto L_0x02e8
+            if (r0 == 0) goto L_0x0314
             r0.setEnabled(r8)
-        L_0x02e8:
+        L_0x0314:
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            if (r0 == 0) goto L_0x0313
+            if (r0 == 0) goto L_0x033f
             boolean r0 = r0.isRunning()
             android.widget.ImageView r9 = r1.videoSendButton
-            if (r9 == 0) goto L_0x02fc
+            if (r9 == 0) goto L_0x0328
             r9.setScaleX(r7)
             android.widget.ImageView r9 = r1.videoSendButton
             r9.setScaleY(r7)
-        L_0x02fc:
+        L_0x0328:
             android.widget.ImageView r9 = r1.audioSendButton
-            if (r9 == 0) goto L_0x0308
+            if (r9 == 0) goto L_0x0334
             r9.setScaleX(r7)
             android.widget.ImageView r9 = r1.audioSendButton
             r9.setScaleY(r7)
-        L_0x0308:
+        L_0x0334:
             android.animation.AnimatorSet r9 = r1.runningAnimationAudio
             r9.removeAllListeners()
             android.animation.AnimatorSet r9 = r1.runningAnimationAudio
             r9.cancel()
-            goto L_0x0314
-        L_0x0313:
+            goto L_0x0340
+        L_0x033f:
             r0 = 0
-        L_0x0314:
+        L_0x0340:
             android.animation.AnimatorSet r9 = r1.recordPannelAnimation
-            if (r9 == 0) goto L_0x031b
+            if (r9 == 0) goto L_0x0347
             r9.cancel()
-        L_0x031b:
+        L_0x0347:
             org.telegram.ui.Components.EditTextCaption r9 = r1.messageEditText
             r9.setVisibility(r4)
             android.animation.AnimatorSet r9 = new android.animation.AnimatorSet
             r9.<init>()
             r1.runningAnimationAudio = r9
-            java.lang.String r13 = "slideToCancelProgress"
-            if (r0 != 0) goto L_0x0bb2
-            if (r2 != r14) goto L_0x032f
-            goto L_0x0bb2
-        L_0x032f:
-            if (r2 != r15) goto L_0x0612
+            java.lang.String r15 = "slideToCancelProgress"
+            if (r0 != 0) goto L_0x0CLASSNAME
+            if (r2 != r3) goto L_0x035b
+            goto L_0x0CLASSNAME
+        L_0x035b:
+            if (r2 != r13) goto L_0x066f
             org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r0 = r1.slideText
             r0.setEnabled(r4)
-            boolean r0 = r24.isInVideoMode()
-            if (r0 == 0) goto L_0x0367
+            boolean r0 = r23.isInVideoMode()
+            if (r0 == 0) goto L_0x0393
             android.view.View r0 = r1.recordedAudioBackground
-            r13 = 8
-            r0.setVisibility(r13)
+            r15 = 8
+            r0.setVisibility(r15)
             android.widget.TextView r0 = r1.recordedAudioTimeTextView
-            r0.setVisibility(r13)
+            r0.setVisibility(r15)
             android.widget.ImageView r0 = r1.recordedAudioPlayButton
-            r0.setVisibility(r13)
+            r0.setVisibility(r15)
             org.telegram.ui.Components.ChatActivityEnterView$SeekBarWaveformView r0 = r1.recordedAudioSeekBar
-            r0.setVisibility(r13)
+            r0.setVisibility(r15)
             android.widget.FrameLayout r0 = r1.recordedAudioPanel
             r0.setAlpha(r7)
             android.widget.FrameLayout r0 = r1.recordedAudioPanel
@@ -6871,11 +7038,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r0.setProgress(r6)
             org.telegram.ui.Components.RLottieImageView r0 = r1.recordDeleteImageView
             r0.stopAnimation()
-            goto L_0x03a0
-        L_0x0367:
-            r13 = 8
+            goto L_0x03cc
+        L_0x0393:
+            r15 = 8
             org.telegram.ui.Components.VideoTimelineView r0 = r1.videoTimelineView
-            r0.setVisibility(r13)
+            r0.setVisibility(r15)
             android.view.View r0 = r1.recordedAudioBackground
             r0.setVisibility(r4)
             android.widget.TextView r0 = r1.recordedAudioTimeTextView
@@ -6896,7 +7063,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r0.setAlpha(r6)
             android.widget.FrameLayout r0 = r1.recordedAudioPanel
             r0.setVisibility(r4)
-        L_0x03a0:
+        L_0x03cc:
             org.telegram.ui.Components.RLottieImageView r0 = r1.recordDeleteImageView
             r0.setAlpha(r6)
             org.telegram.ui.Components.RLottieImageView r0 = r1.recordDeleteImageView
@@ -6907,25 +7074,25 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r0.setProgress(r6)
             org.telegram.ui.Components.RLottieImageView r0 = r1.recordDeleteImageView
             r0.stopAnimation()
-            float[] r0 = new float[r3]
+            float[] r0 = new float[r14]
             r0 = {0, NUM} // fill-array
             android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
-            org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$UjvkGKWG8VoaZqEi5q_fIaHeEnw r13 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$UjvkGKWG8VoaZqEi5q_fIaHeEnw
-            r13.<init>()
-            r0.addUpdateListener(r13)
-            boolean r13 = r24.isInVideoMode()
-            if (r13 != 0) goto L_0x0405
-            android.widget.FrameLayout r13 = r1.recordedAudioPanel
-            android.view.ViewParent r13 = r13.getParent()
-            android.view.ViewGroup r13 = (android.view.ViewGroup) r13
+            org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$PYhmNUMeA9B3RCVAJvS9mPVUwwY r15 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$PYhmNUMeA9B3RCVAJvS9mPVUwwY
+            r15.<init>()
+            r0.addUpdateListener(r15)
+            boolean r15 = r23.isInVideoMode()
+            if (r15 != 0) goto L_0x0431
+            android.widget.FrameLayout r15 = r1.recordedAudioPanel
+            android.view.ViewParent r15 = r15.getParent()
+            android.view.ViewGroup r15 = (android.view.ViewGroup) r15
             android.widget.FrameLayout r9 = r1.recordedAudioPanel
             android.view.ViewGroup$LayoutParams r9 = r9.getLayoutParams()
             android.widget.FrameLayout r10 = r1.recordedAudioPanel
-            r13.removeView(r10)
+            r15.removeView(r10)
             android.widget.FrameLayout$LayoutParams r10 = new android.widget.FrameLayout$LayoutParams
-            int r5 = r13.getMeasuredWidth()
-            r17 = 1111490560(0x42400000, float:48.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r17)
+            int r5 = r15.getMeasuredWidth()
+            r16 = 1111490560(0x42400000, float:48.0)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r16)
             r10.<init>(r5, r12)
             r5 = 80
             r10.gravity = r5
@@ -6935,13 +7102,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             org.telegram.ui.Components.VideoTimelineView r5 = r1.videoTimelineView
             r10 = 8
             r5.setVisibility(r10)
-            goto L_0x040c
-        L_0x0405:
+            goto L_0x0438
+        L_0x0431:
             org.telegram.ui.Components.VideoTimelineView r5 = r1.videoTimelineView
             r5.setVisibility(r4)
             r9 = 0
-            r13 = 0
-        L_0x040c:
+            r15 = 0
+        L_0x0438:
             org.telegram.ui.Components.RLottieImageView r5 = r1.recordDeleteImageView
             r5.setAlpha(r6)
             org.telegram.ui.Components.RLottieImageView r5 = r1.recordDeleteImageView
@@ -6954,834 +7121,487 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.Animator[] r10 = new android.animation.Animator[r10]
             org.telegram.ui.Components.ChatActivityEnterView$RecordDot r12 = r1.recordDot
             android.util.Property r7 = android.view.View.SCALE_Y
-            float[] r14 = new float[r8]
-            r14[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r12, r7, r14)
-            r10[r4] = r7
-            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r7 = r1.recordDot
-            android.util.Property r12 = android.view.View.SCALE_X
-            float[] r14 = new float[r8]
-            r14[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r12, r14)
-            r10[r8] = r7
-            org.telegram.ui.Components.ChatActivityEnterView$TimerView r7 = r1.recordTimerView
-            android.util.Property r12 = android.view.View.ALPHA
-            float[] r14 = new float[r8]
-            r14[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r12, r14)
-            r10[r3] = r7
-            org.telegram.ui.Components.ChatActivityEnterView$TimerView r7 = r1.recordTimerView
-            android.util.Property r12 = android.view.View.TRANSLATION_X
-            float[] r14 = new float[r8]
+            float[] r3 = new float[r8]
+            r3[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r12, r7, r3)
+            r10[r4] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r3 = r1.recordDot
+            android.util.Property r7 = android.view.View.SCALE_X
+            float[] r12 = new float[r8]
+            r12[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r10[r8] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$TimerView r3 = r1.recordTimerView
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r12 = new float[r8]
+            r12[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r10[r14] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$TimerView r3 = r1.recordTimerView
+            android.util.Property r7 = android.view.View.TRANSLATION_X
+            float[] r12 = new float[r8]
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
             int r11 = -r11
             float r11 = (float) r11
-            r14[r4] = r11
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r12, r14)
-            r10[r15] = r7
-            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r7 = r1.slideText
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r12[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r11 = 4
-            r10[r11] = r7
-            org.telegram.ui.Components.RLottieImageView r7 = r1.recordDeleteImageView
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r14 = 1065353216(0x3var_, float:1.0)
-            r12[r4] = r14
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r11 = 5
-            r10[r11] = r7
-            org.telegram.ui.Components.RLottieImageView r7 = r1.recordDeleteImageView
-            android.util.Property r11 = android.view.View.SCALE_Y
-            float[] r12 = new float[r8]
-            r12[r4] = r14
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r11 = 6
-            r10[r11] = r7
-            org.telegram.ui.Components.RLottieImageView r7 = r1.recordDeleteImageView
-            android.util.Property r11 = android.view.View.SCALE_X
-            float[] r12 = new float[r8]
-            r12[r4] = r14
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r11 = 7
-            r10[r11] = r7
-            android.widget.ImageView[] r7 = r1.emojiButton
-            r7 = r7[r4]
-            android.util.Property r11 = android.view.View.SCALE_Y
-            float[] r12 = new float[r8]
-            r12[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r11 = 8
-            r10[r11] = r7
-            android.widget.ImageView[] r7 = r1.emojiButton
-            r7 = r7[r4]
-            android.util.Property r11 = android.view.View.SCALE_X
-            float[] r12 = new float[r8]
-            r12[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r11 = 9
-            r10[r11] = r7
-            android.widget.ImageView[] r7 = r1.emojiButton
-            r7 = r7[r4]
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r12[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r11 = 10
-            r10[r11] = r7
-            android.widget.ImageView[] r7 = r1.emojiButton
-            r7 = r7[r8]
-            android.util.Property r11 = android.view.View.SCALE_Y
-            float[] r12 = new float[r8]
-            r12[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r11 = 11
-            r10[r11] = r7
-            android.widget.ImageView[] r7 = r1.emojiButton
-            r7 = r7[r8]
-            android.util.Property r11 = android.view.View.SCALE_X
-            float[] r12 = new float[r8]
-            r12[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r11 = 12
-            r10[r11] = r7
-            android.widget.ImageView[] r7 = r1.emojiButton
-            r7 = r7[r8]
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r12[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r11 = 13
-            r10[r11] = r7
-            org.telegram.ui.Components.EditTextCaption r7 = r1.messageEditText
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r12[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r11 = 14
-            r10[r11] = r7
+            r12[r4] = r11
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r10[r13] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r3 = r1.slideText
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r7 = 4
+            r10[r7] = r3
+            org.telegram.ui.Components.RLottieImageView r3 = r1.recordDeleteImageView
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r12 = 1065353216(0x3var_, float:1.0)
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r7 = 5
+            r10[r7] = r3
+            org.telegram.ui.Components.RLottieImageView r3 = r1.recordDeleteImageView
+            android.util.Property r7 = android.view.View.SCALE_Y
+            float[] r11 = new float[r8]
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r7 = 6
+            r10[r7] = r3
+            org.telegram.ui.Components.RLottieImageView r3 = r1.recordDeleteImageView
+            android.util.Property r7 = android.view.View.SCALE_X
+            float[] r11 = new float[r8]
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r7 = 7
+            r10[r7] = r3
+            android.widget.ImageView[] r3 = r1.emojiButton
+            r3 = r3[r4]
+            android.util.Property r7 = android.view.View.SCALE_Y
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r7 = 8
+            r10[r7] = r3
+            android.widget.ImageView[] r3 = r1.emojiButton
+            r3 = r3[r4]
+            android.util.Property r7 = android.view.View.SCALE_X
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r7 = 9
+            r10[r7] = r3
+            android.widget.ImageView[] r3 = r1.emojiButton
+            r3 = r3[r4]
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r7 = 10
+            r10[r7] = r3
+            android.widget.ImageView[] r3 = r1.emojiButton
+            r3 = r3[r8]
+            android.util.Property r7 = android.view.View.SCALE_Y
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r7 = 11
+            r10[r7] = r3
+            android.widget.ImageView[] r3 = r1.emojiButton
+            r3 = r3[r8]
+            android.util.Property r7 = android.view.View.SCALE_X
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r7 = 12
+            r10[r7] = r3
+            android.widget.ImageView[] r3 = r1.emojiButton
+            r3 = r3[r8]
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r7 = 13
+            r10[r7] = r3
+            org.telegram.ui.Components.EditTextCaption r3 = r1.messageEditText
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r7 = 14
+            r10[r7] = r3
             r5.playTogether(r10)
-            android.widget.ImageView r7 = r1.videoSendButton
-            if (r7 == 0) goto L_0x055c
-            android.animation.Animator[] r10 = new android.animation.Animator[r15]
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            boolean r14 = r24.isInVideoMode()
-            if (r14 == 0) goto L_0x0532
-            r14 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0533
-        L_0x0532:
-            r14 = 0
-        L_0x0533:
-            r12[r4] = r14
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r10[r4] = r7
-            android.widget.ImageView r7 = r1.videoSendButton
-            android.util.Property r11 = android.view.View.SCALE_X
-            float[] r12 = new float[r8]
-            r14 = 1065353216(0x3var_, float:1.0)
-            r12[r4] = r14
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r10[r8] = r7
-            android.widget.ImageView r7 = r1.videoSendButton
-            android.util.Property r11 = android.view.View.SCALE_Y
-            float[] r12 = new float[r8]
-            r12[r4] = r14
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r10[r3] = r7
-            r5.playTogether(r10)
-        L_0x055c:
-            android.widget.ImageView r7 = r1.audioSendButton
-            if (r7 == 0) goto L_0x0599
-            android.animation.Animator[] r10 = new android.animation.Animator[r15]
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            boolean r14 = r24.isInVideoMode()
-            if (r14 == 0) goto L_0x056e
-            r14 = 0
-            goto L_0x0570
-        L_0x056e:
-            r14 = 1065353216(0x3var_, float:1.0)
-        L_0x0570:
-            r12[r4] = r14
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r10[r4] = r7
-            android.widget.ImageView r7 = r1.audioSendButton
-            android.util.Property r11 = android.view.View.SCALE_X
-            float[] r12 = new float[r8]
-            r14 = 1065353216(0x3var_, float:1.0)
-            r12[r4] = r14
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r10[r8] = r7
-            android.widget.ImageView r7 = r1.audioSendButton
-            android.util.Property r11 = android.view.View.SCALE_Y
-            float[] r12 = new float[r8]
-            r12[r4] = r14
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r10[r3] = r7
-            r5.playTogether(r10)
-        L_0x0599:
-            org.telegram.ui.Components.ChatActivityEnterView$35 r7 = new org.telegram.ui.Components.ChatActivityEnterView$35
-            r7.<init>()
-            r5.addListener(r7)
+            android.widget.ImageView r3 = r1.videoSendButton
+            if (r3 == 0) goto L_0x0588
+            android.animation.Animator[] r7 = new android.animation.Animator[r13]
+            android.util.Property r10 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            boolean r12 = r23.isInVideoMode()
+            if (r12 == 0) goto L_0x055e
+            r12 = 1065353216(0x3var_, float:1.0)
+            goto L_0x055f
+        L_0x055e:
+            r12 = 0
+        L_0x055f:
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r10, r11)
+            r7[r4] = r3
+            android.widget.ImageView r3 = r1.videoSendButton
+            android.util.Property r10 = android.view.View.SCALE_X
+            float[] r11 = new float[r8]
+            r12 = 1065353216(0x3var_, float:1.0)
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r10, r11)
+            r7[r8] = r3
+            android.widget.ImageView r3 = r1.videoSendButton
+            android.util.Property r10 = android.view.View.SCALE_Y
+            float[] r11 = new float[r8]
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r10, r11)
+            r7[r14] = r3
+            r5.playTogether(r7)
+        L_0x0588:
+            android.widget.ImageView r3 = r1.audioSendButton
+            if (r3 == 0) goto L_0x05c5
+            android.animation.Animator[] r7 = new android.animation.Animator[r13]
+            android.util.Property r10 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            boolean r12 = r23.isInVideoMode()
+            if (r12 == 0) goto L_0x059a
+            r12 = 0
+            goto L_0x059c
+        L_0x059a:
+            r12 = 1065353216(0x3var_, float:1.0)
+        L_0x059c:
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r10, r11)
+            r7[r4] = r3
+            android.widget.ImageView r3 = r1.audioSendButton
+            android.util.Property r10 = android.view.View.SCALE_X
+            float[] r11 = new float[r8]
+            r12 = 1065353216(0x3var_, float:1.0)
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r10, r11)
+            r7[r8] = r3
+            android.widget.ImageView r3 = r1.audioSendButton
+            android.util.Property r10 = android.view.View.SCALE_Y
+            float[] r11 = new float[r8]
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r10, r11)
+            r7[r14] = r3
+            r5.playTogether(r7)
+        L_0x05c5:
+            org.telegram.ui.Components.BotCommandsMenuView r3 = r1.botCommandsMenuButton
+            if (r3 == 0) goto L_0x05f6
+            android.animation.Animator[] r7 = new android.animation.Animator[r13]
+            android.util.Property r10 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r10, r11)
+            r7[r4] = r3
+            org.telegram.ui.Components.BotCommandsMenuView r3 = r1.botCommandsMenuButton
+            android.util.Property r10 = android.view.View.SCALE_X
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r10, r11)
+            r7[r8] = r3
+            org.telegram.ui.Components.BotCommandsMenuView r3 = r1.botCommandsMenuButton
+            android.util.Property r10 = android.view.View.SCALE_Y
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r10, r11)
+            r7[r14] = r3
+            r5.playTogether(r7)
+        L_0x05f6:
+            org.telegram.ui.Components.ChatActivityEnterView$38 r3 = new org.telegram.ui.Components.ChatActivityEnterView$38
+            r3.<init>()
+            r5.addListener(r3)
             r10 = 150(0x96, double:7.4E-322)
             r5.setDuration(r10)
             r5.setStartDelay(r10)
-            android.animation.AnimatorSet r7 = new android.animation.AnimatorSet
-            r7.<init>()
-            boolean r10 = r24.isInVideoMode()
-            if (r10 == 0) goto L_0x05eb
-            android.widget.TextView r10 = r1.recordedAudioTimeTextView
-            r10.setAlpha(r6)
-            org.telegram.ui.Components.VideoTimelineView r10 = r1.videoTimelineView
-            r10.setAlpha(r6)
-            android.animation.Animator[] r6 = new android.animation.Animator[r3]
-            android.widget.TextView r10 = r1.recordedAudioTimeTextView
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r14 = 1065353216(0x3var_, float:1.0)
-            r12[r4] = r14
-            android.animation.ObjectAnimator r10 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12)
-            r6[r4] = r10
-            org.telegram.ui.Components.VideoTimelineView r10 = r1.videoTimelineView
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r12[r4] = r14
-            android.animation.ObjectAnimator r10 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12)
-            r6[r8] = r10
-            r7.playTogether(r6)
-            r10 = 150(0x96, double:7.4E-322)
-            r7.setDuration(r10)
-            r10 = 430(0x1ae, double:2.124E-321)
-            r7.setStartDelay(r10)
-        L_0x05eb:
-            boolean r6 = r24.isInVideoMode()
-            if (r6 == 0) goto L_0x05f4
-            r10 = 490(0x1ea, double:2.42E-321)
-            goto L_0x05f6
-        L_0x05f4:
-            r10 = 580(0x244, double:2.866E-321)
-        L_0x05f6:
-            r0.setDuration(r10)
+            android.animation.AnimatorSet r3 = new android.animation.AnimatorSet
+            r3.<init>()
+            boolean r7 = r23.isInVideoMode()
+            if (r7 == 0) goto L_0x0648
+            android.widget.TextView r7 = r1.recordedAudioTimeTextView
+            r7.setAlpha(r6)
+            org.telegram.ui.Components.VideoTimelineView r7 = r1.videoTimelineView
+            r7.setAlpha(r6)
+            android.animation.Animator[] r6 = new android.animation.Animator[r14]
+            android.widget.TextView r7 = r1.recordedAudioTimeTextView
+            android.util.Property r10 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r12 = 1065353216(0x3var_, float:1.0)
+            r11[r4] = r12
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
+            r6[r4] = r7
+            org.telegram.ui.Components.VideoTimelineView r7 = r1.videoTimelineView
+            android.util.Property r10 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r11[r4] = r12
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
+            r6[r8] = r7
+            r3.playTogether(r6)
+            r6 = 150(0x96, double:7.4E-322)
+            r3.setDuration(r6)
+            r6 = 430(0x1ae, double:2.124E-321)
+            r3.setStartDelay(r6)
+        L_0x0648:
+            boolean r6 = r23.isInVideoMode()
+            if (r6 == 0) goto L_0x0651
+            r6 = 490(0x1ea, double:2.42E-321)
+            goto L_0x0653
+        L_0x0651:
+            r6 = 580(0x244, double:2.866E-321)
+        L_0x0653:
+            r0.setDuration(r6)
             android.animation.AnimatorSet r6 = r1.runningAnimationAudio
-            android.animation.Animator[] r10 = new android.animation.Animator[r15]
-            r10[r4] = r5
-            r10[r8] = r0
-            r10[r3] = r7
-            r6.playTogether(r10)
+            android.animation.Animator[] r7 = new android.animation.Animator[r13]
+            r7[r4] = r5
+            r7[r8] = r0
+            r7[r14] = r3
+            r6.playTogether(r7)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            org.telegram.ui.Components.ChatActivityEnterView$36 r3 = new org.telegram.ui.Components.ChatActivityEnterView$36
-            r3.<init>(r13, r9)
+            org.telegram.ui.Components.ChatActivityEnterView$39 r3 = new org.telegram.ui.Components.ChatActivityEnterView$39
+            r3.<init>(r15, r9)
             r0.addListener(r3)
-            goto L_0x0d87
-        L_0x0612:
+            goto L_0x0e7b
+        L_0x066f:
             r9 = 200(0xc8, double:9.9E-322)
-            if (r2 == r3) goto L_0x0803
-            r7 = 5
-            if (r2 != r7) goto L_0x061b
-            goto L_0x0803
-        L_0x061b:
+            if (r2 == r14) goto L_0x0891
+            r5 = 5
+            if (r2 != r5) goto L_0x0678
+            goto L_0x0891
+        L_0x0678:
             android.widget.ImageView r0 = r1.videoSendButton
-            if (r0 == 0) goto L_0x062b
-            boolean r0 = r24.isInVideoMode()
-            if (r0 == 0) goto L_0x062b
+            if (r0 == 0) goto L_0x0688
+            boolean r0 = r23.isInVideoMode()
+            if (r0 == 0) goto L_0x0688
             android.widget.ImageView r0 = r1.videoSendButton
             r0.setVisibility(r4)
-            goto L_0x0632
-        L_0x062b:
+            goto L_0x068f
+        L_0x0688:
             android.widget.ImageView r0 = r1.audioSendButton
-            if (r0 == 0) goto L_0x0632
+            if (r0 == 0) goto L_0x068f
             r0.setVisibility(r4)
-        L_0x0632:
+        L_0x068f:
             android.animation.AnimatorSet r0 = new android.animation.AnimatorSet
             r0.<init>()
-            r7 = 9
-            android.animation.Animator[] r7 = new android.animation.Animator[r7]
-            android.widget.ImageView[] r11 = r1.emojiButton
-            r11 = r11[r4]
-            android.util.Property r12 = android.view.View.SCALE_Y
-            float[] r13 = new float[r8]
-            r14 = 1065353216(0x3var_, float:1.0)
-            r13[r4] = r14
-            android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r11, r12, r13)
-            r7[r4] = r11
-            android.widget.ImageView[] r11 = r1.emojiButton
-            r11 = r11[r4]
-            android.util.Property r12 = android.view.View.SCALE_X
-            float[] r13 = new float[r8]
-            r13[r4] = r14
-            android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r11, r12, r13)
-            r7[r8] = r11
-            android.widget.ImageView[] r11 = r1.emojiButton
-            r11 = r11[r4]
-            android.util.Property r12 = android.view.View.ALPHA
-            float[] r13 = new float[r8]
-            r13[r4] = r14
-            android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r11, r12, r13)
-            r7[r3] = r11
-            android.widget.ImageView[] r11 = r1.emojiButton
-            r11 = r11[r8]
-            android.util.Property r12 = android.view.View.SCALE_Y
-            float[] r13 = new float[r8]
-            r13[r4] = r14
-            android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r11, r12, r13)
-            r7[r15] = r11
-            android.widget.ImageView[] r11 = r1.emojiButton
-            r11 = r11[r8]
-            android.util.Property r12 = android.view.View.SCALE_X
-            float[] r13 = new float[r8]
-            r13[r4] = r14
-            android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r11, r12, r13)
-            r12 = 4
-            r7[r12] = r11
-            android.widget.ImageView[] r11 = r1.emojiButton
-            r11 = r11[r8]
-            android.util.Property r12 = android.view.View.ALPHA
-            float[] r13 = new float[r8]
-            r13[r4] = r14
-            android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r11, r12, r13)
-            r12 = 5
-            r7[r12] = r11
-            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r11 = r1.recordDot
-            android.util.Property r12 = android.view.View.SCALE_Y
-            float[] r13 = new float[r8]
-            r13[r4] = r6
-            android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r11, r12, r13)
-            r12 = 6
-            r7[r12] = r11
-            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r11 = r1.recordDot
-            android.util.Property r12 = android.view.View.SCALE_X
-            float[] r13 = new float[r8]
-            r13[r4] = r6
-            android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r11, r12, r13)
-            r5 = 7
-            r7[r5] = r11
-            android.widget.FrameLayout r5 = r1.audioVideoButtonContainer
-            android.util.Property r11 = android.view.View.ALPHA
+            r5 = 9
+            android.animation.Animator[] r5 = new android.animation.Animator[r5]
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r4]
+            android.util.Property r11 = android.view.View.SCALE_Y
             float[] r12 = new float[r8]
-            r13 = 1065353216(0x3var_, float:1.0)
-            r12[r4] = r13
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r11, r12)
-            r11 = 8
-            r7[r11] = r5
-            r0.playTogether(r7)
-            android.widget.ImageView r5 = r1.audioSendButton
-            if (r5 == 0) goto L_0x06fb
-            r5.setScaleX(r13)
-            android.widget.ImageView r5 = r1.audioSendButton
-            r5.setScaleY(r13)
-            android.animation.Animator[] r5 = new android.animation.Animator[r8]
-            android.widget.ImageView r7 = r1.audioSendButton
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            boolean r13 = r24.isInVideoMode()
-            if (r13 == 0) goto L_0x06ee
-            r13 = 0
-            goto L_0x06f0
-        L_0x06ee:
-            r13 = 1065353216(0x3var_, float:1.0)
-        L_0x06f0:
-            r12[r4] = r13
+            r15 = 1065353216(0x3var_, float:1.0)
+            r12[r4] = r15
             android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
             r5[r4] = r7
-            r0.playTogether(r5)
-        L_0x06fb:
-            android.widget.ImageView r5 = r1.videoSendButton
-            if (r5 == 0) goto L_0x0726
-            r7 = 1065353216(0x3var_, float:1.0)
-            r5.setScaleX(r7)
-            android.widget.ImageView r5 = r1.videoSendButton
-            r5.setScaleY(r7)
-            android.animation.Animator[] r5 = new android.animation.Animator[r8]
-            android.widget.ImageView r7 = r1.videoSendButton
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r4]
+            android.util.Property r11 = android.view.View.SCALE_X
+            float[] r12 = new float[r8]
+            r12[r4] = r15
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
+            r5[r8] = r7
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r4]
             android.util.Property r11 = android.view.View.ALPHA
             float[] r12 = new float[r8]
-            boolean r13 = r24.isInVideoMode()
-            if (r13 == 0) goto L_0x071a
-            r13 = 1065353216(0x3var_, float:1.0)
-            goto L_0x071b
-        L_0x071a:
-            r13 = 0
-        L_0x071b:
-            r12[r4] = r13
+            r12[r4] = r15
             android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r5[r4] = r7
+            r5[r14] = r7
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r8]
+            android.util.Property r11 = android.view.View.SCALE_Y
+            float[] r12 = new float[r8]
+            r12[r4] = r15
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
+            r5[r13] = r7
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r8]
+            android.util.Property r11 = android.view.View.SCALE_X
+            float[] r12 = new float[r8]
+            r12[r4] = r15
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
+            r11 = 4
+            r5[r11] = r7
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r8]
+            android.util.Property r11 = android.view.View.ALPHA
+            float[] r12 = new float[r8]
+            r12[r4] = r15
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
+            r11 = 5
+            r5[r11] = r7
+            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r7 = r1.recordDot
+            android.util.Property r11 = android.view.View.SCALE_Y
+            float[] r12 = new float[r8]
+            r12[r4] = r6
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
+            r11 = 6
+            r5[r11] = r7
+            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r7 = r1.recordDot
+            android.util.Property r11 = android.view.View.SCALE_X
+            float[] r12 = new float[r8]
+            r12[r4] = r6
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
+            r3 = 7
+            r5[r3] = r7
+            android.widget.FrameLayout r3 = r1.audioVideoButtonContainer
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r12 = 1065353216(0x3var_, float:1.0)
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r7 = 8
+            r5[r7] = r3
             r0.playTogether(r5)
-        L_0x0726:
+            org.telegram.ui.Components.BotCommandsMenuView r3 = r1.botCommandsMenuButton
+            if (r3 == 0) goto L_0x0760
+            android.animation.Animator[] r5 = new android.animation.Animator[r13]
+            android.util.Property r7 = android.view.View.SCALE_Y
+            float[] r11 = new float[r8]
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r5[r4] = r3
+            org.telegram.ui.Components.BotCommandsMenuView r3 = r1.botCommandsMenuButton
+            android.util.Property r7 = android.view.View.SCALE_X
+            float[] r11 = new float[r8]
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r5[r8] = r3
+            org.telegram.ui.Components.BotCommandsMenuView r3 = r1.botCommandsMenuButton
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r11[r4] = r12
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r11)
+            r5[r14] = r3
+            r0.playTogether(r5)
+        L_0x0760:
+            android.widget.ImageView r3 = r1.audioSendButton
+            if (r3 == 0) goto L_0x0789
+            r3.setScaleX(r12)
+            android.widget.ImageView r3 = r1.audioSendButton
+            r3.setScaleY(r12)
+            android.animation.Animator[] r3 = new android.animation.Animator[r8]
+            android.widget.ImageView r5 = r1.audioSendButton
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            boolean r12 = r23.isInVideoMode()
+            if (r12 == 0) goto L_0x077c
+            r12 = 0
+            goto L_0x077e
+        L_0x077c:
+            r12 = 1065353216(0x3var_, float:1.0)
+        L_0x077e:
+            r11[r4] = r12
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r7, r11)
+            r3[r4] = r5
+            r0.playTogether(r3)
+        L_0x0789:
+            android.widget.ImageView r3 = r1.videoSendButton
+            if (r3 == 0) goto L_0x07b4
+            r5 = 1065353216(0x3var_, float:1.0)
+            r3.setScaleX(r5)
+            android.widget.ImageView r3 = r1.videoSendButton
+            r3.setScaleY(r5)
+            android.animation.Animator[] r3 = new android.animation.Animator[r8]
+            android.widget.ImageView r5 = r1.videoSendButton
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            boolean r12 = r23.isInVideoMode()
+            if (r12 == 0) goto L_0x07a8
+            r12 = 1065353216(0x3var_, float:1.0)
+            goto L_0x07a9
+        L_0x07a8:
+            r12 = 0
+        L_0x07a9:
+            r11[r4] = r12
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r7, r11)
+            r3[r4] = r5
+            r0.playTogether(r3)
+        L_0x07b4:
+            android.widget.LinearLayout r3 = r1.attachLayout
+            if (r3 == 0) goto L_0x07d0
+            r3.setTranslationX(r6)
+            android.animation.Animator[] r3 = new android.animation.Animator[r8]
             android.widget.LinearLayout r5 = r1.attachLayout
-            if (r5 == 0) goto L_0x0742
-            r5.setTranslationX(r6)
-            android.animation.Animator[] r5 = new android.animation.Animator[r8]
-            android.widget.LinearLayout r7 = r1.attachLayout
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r13 = 1065353216(0x3var_, float:1.0)
-            r12[r4] = r13
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r5[r4] = r7
-            r0.playTogether(r5)
-        L_0x0742:
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r12 = 1065353216(0x3var_, float:1.0)
+            r11[r4] = r12
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r7, r11)
+            r3[r4] = r5
+            r0.playTogether(r3)
+        L_0x07d0:
+            android.widget.ImageView r3 = r1.scheduledButton
+            if (r3 == 0) goto L_0x07ec
+            r3.setTranslationX(r6)
+            android.animation.Animator[] r3 = new android.animation.Animator[r8]
             android.widget.ImageView r5 = r1.scheduledButton
-            if (r5 == 0) goto L_0x075e
-            r5.setTranslationX(r6)
-            android.animation.Animator[] r5 = new android.animation.Animator[r8]
-            android.widget.ImageView r7 = r1.scheduledButton
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r13 = 1065353216(0x3var_, float:1.0)
-            r12[r4] = r13
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r11, r12)
-            r5[r4] = r7
-            r0.playTogether(r5)
-        L_0x075e:
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r12 = 1065353216(0x3var_, float:1.0)
+            r11[r4] = r12
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r7, r11)
+            r3[r4] = r5
+            r0.playTogether(r3)
+        L_0x07ec:
             r11 = 150(0x96, double:7.4E-322)
             r0.setDuration(r11)
             r0.setStartDelay(r9)
-            android.animation.AnimatorSet r5 = new android.animation.AnimatorSet
-            r5.<init>()
-            r7 = 4
-            android.animation.Animator[] r11 = new android.animation.Animator[r7]
-            org.telegram.ui.Components.ChatActivityEnterView$TimerView r7 = r1.recordTimerView
-            android.util.Property r12 = android.view.View.ALPHA
-            float[] r13 = new float[r8]
-            r13[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r12, r13)
-            r11[r4] = r7
-            org.telegram.ui.Components.ChatActivityEnterView$TimerView r7 = r1.recordTimerView
-            android.util.Property r12 = android.view.View.TRANSLATION_X
-            float[] r13 = new float[r8]
-            r14 = 1109393408(0x42200000, float:40.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            float r14 = (float) r14
-            r13[r4] = r14
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r12, r13)
-            r11[r8] = r7
-            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r7 = r1.slideText
-            android.util.Property r12 = android.view.View.ALPHA
-            float[] r13 = new float[r8]
-            r13[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r12, r13)
-            r11[r3] = r7
-            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r7 = r1.slideText
-            android.util.Property r12 = android.view.View.TRANSLATION_X
-            float[] r13 = new float[r8]
-            r14 = 1109393408(0x42200000, float:40.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            float r14 = (float) r14
-            r13[r4] = r14
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r12, r13)
-            r11[r15] = r7
-            r5.playTogether(r11)
-            r11 = 150(0x96, double:7.4E-322)
-            r5.setDuration(r11)
-            org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r7 = r1.recordCircle
-            float[] r11 = new float[r8]
-            r12 = 1065353216(0x3var_, float:1.0)
-            r11[r4] = r12
-            java.lang.String r12 = "exitTransition"
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r12, r11)
-            boolean r11 = r1.messageTransitionIsRunning
-            if (r11 == 0) goto L_0x07d1
-            r11 = 220(0xdc, double:1.087E-321)
-            goto L_0x07d3
-        L_0x07d1:
-            r11 = 360(0x168, double:1.78E-321)
-        L_0x07d3:
-            r7.setDuration(r11)
-            org.telegram.ui.Components.EditTextCaption r11 = r1.messageEditText
-            r11.setTranslationX(r6)
-            org.telegram.ui.Components.EditTextCaption r6 = r1.messageEditText
+            android.animation.AnimatorSet r3 = new android.animation.AnimatorSet
+            r3.<init>()
+            r5 = 4
+            android.animation.Animator[] r7 = new android.animation.Animator[r5]
+            org.telegram.ui.Components.ChatActivityEnterView$TimerView r5 = r1.recordTimerView
             android.util.Property r11 = android.view.View.ALPHA
             float[] r12 = new float[r8]
-            r13 = 1065353216(0x3var_, float:1.0)
-            r12[r4] = r13
-            android.animation.ObjectAnimator r6 = android.animation.ObjectAnimator.ofFloat(r6, r11, r12)
-            r11 = 150(0x96, double:7.4E-322)
-            r6.setStartDelay(r11)
-            r6.setDuration(r9)
-            android.animation.AnimatorSet r9 = r1.runningAnimationAudio
-            r10 = 4
-            android.animation.Animator[] r10 = new android.animation.Animator[r10]
-            r10[r4] = r0
-            r10[r8] = r5
-            r10[r3] = r6
-            r10[r15] = r7
-            r9.playTogether(r10)
-            goto L_0x0d87
-        L_0x0803:
-            android.widget.ImageView r0 = r1.videoSendButton
-            if (r0 == 0) goto L_0x0813
-            boolean r0 = r24.isInVideoMode()
-            if (r0 == 0) goto L_0x0813
-            android.widget.ImageView r0 = r1.videoSendButton
-            r0.setVisibility(r4)
-            goto L_0x081a
-        L_0x0813:
-            android.widget.ImageView r0 = r1.audioSendButton
-            if (r0 == 0) goto L_0x081a
-            r0.setVisibility(r4)
-        L_0x081a:
-            r1.recordIsCanceled = r8
-            android.animation.AnimatorSet r0 = new android.animation.AnimatorSet
-            r0.<init>()
-            r7 = 8
-            android.animation.Animator[] r7 = new android.animation.Animator[r7]
-            android.widget.ImageView[] r12 = r1.emojiButton
-            r12 = r12[r4]
-            android.util.Property r14 = android.view.View.SCALE_Y
-            float[] r5 = new float[r8]
-            r16 = 1065353216(0x3var_, float:1.0)
-            r5[r4] = r16
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r12, r14, r5)
+            r12[r4] = r6
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r11, r12)
             r7[r4] = r5
-            android.widget.ImageView[] r5 = r1.emojiButton
-            r5 = r5[r4]
-            android.util.Property r12 = android.view.View.SCALE_X
-            float[] r14 = new float[r8]
-            r14[r4] = r16
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r12, r14)
+            org.telegram.ui.Components.ChatActivityEnterView$TimerView r5 = r1.recordTimerView
+            android.util.Property r11 = android.view.View.TRANSLATION_X
+            float[] r12 = new float[r8]
+            r15 = 1109393408(0x42200000, float:40.0)
+            int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            float r15 = (float) r15
+            r12[r4] = r15
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r11, r12)
             r7[r8] = r5
-            android.widget.ImageView[] r5 = r1.emojiButton
-            r5 = r5[r4]
-            android.util.Property r12 = android.view.View.ALPHA
-            float[] r14 = new float[r8]
-            r14[r4] = r16
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r12, r14)
-            r7[r3] = r5
-            android.widget.ImageView[] r5 = r1.emojiButton
-            r5 = r5[r8]
-            android.util.Property r12 = android.view.View.SCALE_Y
-            float[] r14 = new float[r8]
-            r14[r4] = r16
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r12, r14)
-            r7[r15] = r5
-            android.widget.ImageView[] r5 = r1.emojiButton
-            r5 = r5[r8]
-            android.util.Property r12 = android.view.View.SCALE_X
-            float[] r14 = new float[r8]
-            r14[r4] = r16
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r12, r14)
-            r12 = 4
-            r7[r12] = r5
-            android.widget.ImageView[] r5 = r1.emojiButton
-            r5 = r5[r8]
-            android.util.Property r12 = android.view.View.ALPHA
-            float[] r14 = new float[r8]
-            r14[r4] = r16
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r12, r14)
-            r12 = 5
-            r7[r12] = r5
-            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r5 = r1.recordDot
-            android.util.Property r12 = android.view.View.SCALE_Y
-            float[] r14 = new float[r8]
-            r14[r4] = r6
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r12, r14)
-            r12 = 6
-            r7[r12] = r5
-            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r5 = r1.recordDot
-            android.util.Property r12 = android.view.View.SCALE_X
-            float[] r14 = new float[r8]
-            r14[r4] = r6
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r12, r14)
-            r12 = 7
-            r7[r12] = r5
-            r0.playTogether(r7)
-            android.animation.AnimatorSet r5 = new android.animation.AnimatorSet
-            r5.<init>()
-            r7 = 4
-            android.animation.Animator[] r12 = new android.animation.Animator[r7]
-            org.telegram.ui.Components.ChatActivityEnterView$TimerView r7 = r1.recordTimerView
-            android.util.Property r14 = android.view.View.ALPHA
-            float[] r9 = new float[r8]
-            r9[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r14, r9)
-            r12[r4] = r7
-            org.telegram.ui.Components.ChatActivityEnterView$TimerView r7 = r1.recordTimerView
-            android.util.Property r9 = android.view.View.TRANSLATION_X
-            float[] r10 = new float[r8]
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            int r14 = -r14
-            float r14 = (float) r14
-            r10[r4] = r14
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
-            r12[r8] = r7
-            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r7 = r1.slideText
-            android.util.Property r9 = android.view.View.ALPHA
-            float[] r10 = new float[r8]
-            r10[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
-            r12[r3] = r7
-            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r7 = r1.slideText
-            android.util.Property r9 = android.view.View.TRANSLATION_X
-            float[] r10 = new float[r8]
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            int r11 = -r11
-            float r11 = (float) r11
-            r10[r4] = r11
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
-            r12[r15] = r7
-            r5.playTogether(r12)
-            r7 = 5
-            if (r2 == r7) goto L_0x0a92
-            android.widget.FrameLayout r7 = r1.audioVideoButtonContainer
-            r7.setScaleX(r6)
-            android.widget.FrameLayout r7 = r1.audioVideoButtonContainer
-            r7.setScaleY(r6)
-            android.widget.ImageView r7 = r1.attachButton
-            if (r7 == 0) goto L_0x091a
-            int r7 = r7.getVisibility()
-            if (r7 != 0) goto L_0x091a
-            android.widget.ImageView r7 = r1.attachButton
-            r7.setScaleX(r6)
-            android.widget.ImageView r7 = r1.attachButton
-            r7.setScaleY(r6)
-        L_0x091a:
-            android.widget.ImageView r7 = r1.botButton
-            if (r7 == 0) goto L_0x092e
-            int r7 = r7.getVisibility()
-            if (r7 != 0) goto L_0x092e
-            android.widget.ImageView r7 = r1.botButton
-            r7.setScaleX(r6)
-            android.widget.ImageView r7 = r1.botButton
-            r7.setScaleY(r6)
-        L_0x092e:
-            r7 = 4
-            android.animation.Animator[] r9 = new android.animation.Animator[r7]
-            org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r7 = r1.recordCircle
-            float[] r10 = new float[r8]
+            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r5 = r1.slideText
+            android.util.Property r11 = android.view.View.ALPHA
+            float[] r12 = new float[r8]
+            r12[r4] = r6
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r11, r12)
+            r7[r14] = r5
+            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r5 = r1.slideText
+            android.util.Property r11 = android.view.View.TRANSLATION_X
+            float[] r12 = new float[r8]
+            r15 = 1109393408(0x42200000, float:40.0)
+            int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            float r15 = (float) r15
+            r12[r4] = r15
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r11, r12)
+            r7[r13] = r5
+            r3.playTogether(r7)
+            r11 = 150(0x96, double:7.4E-322)
+            r3.setDuration(r11)
+            org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r5 = r1.recordCircle
+            float[] r7 = new float[r8]
             r11 = 1065353216(0x3var_, float:1.0)
-            r10[r4] = r11
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r13, r10)
-            r9[r4] = r7
-            android.widget.FrameLayout r7 = r1.audioVideoButtonContainer
-            android.util.Property r10 = android.view.View.SCALE_X
-            float[] r12 = new float[r8]
-            r12[r4] = r11
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r12)
-            r9[r8] = r7
-            android.widget.FrameLayout r7 = r1.audioVideoButtonContainer
-            android.util.Property r10 = android.view.View.SCALE_Y
-            float[] r12 = new float[r8]
-            r12[r4] = r11
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r12)
-            r9[r3] = r7
-            android.widget.FrameLayout r7 = r1.audioVideoButtonContainer
-            android.util.Property r10 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r12[r4] = r11
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r12)
-            r9[r15] = r7
-            r0.playTogether(r9)
-            android.widget.LinearLayout r7 = r1.attachLayout
-            if (r7 == 0) goto L_0x098f
-            android.animation.Animator[] r9 = new android.animation.Animator[r3]
-            android.util.Property r10 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r12[r4] = r11
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r12)
-            r9[r4] = r7
-            android.widget.LinearLayout r7 = r1.attachLayout
-            android.util.Property r10 = android.view.View.TRANSLATION_X
-            float[] r11 = new float[r8]
-            r11[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r9[r8] = r7
-            r0.playTogether(r9)
-        L_0x098f:
-            android.widget.ImageView r7 = r1.attachButton
-            if (r7 == 0) goto L_0x09b5
-            android.animation.Animator[] r9 = new android.animation.Animator[r3]
-            android.util.Property r10 = android.view.View.SCALE_X
-            float[] r11 = new float[r8]
-            r12 = 1065353216(0x3var_, float:1.0)
-            r11[r4] = r12
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r9[r4] = r7
-            android.widget.ImageView r7 = r1.attachButton
-            android.util.Property r10 = android.view.View.SCALE_Y
-            float[] r11 = new float[r8]
-            r11[r4] = r12
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r9[r8] = r7
-            r0.playTogether(r9)
-            goto L_0x09b7
-        L_0x09b5:
-            r12 = 1065353216(0x3var_, float:1.0)
-        L_0x09b7:
-            android.widget.ImageView r7 = r1.botButton
-            if (r7 == 0) goto L_0x09da
-            android.animation.Animator[] r9 = new android.animation.Animator[r3]
-            android.util.Property r10 = android.view.View.SCALE_X
-            float[] r11 = new float[r8]
-            r11[r4] = r12
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r9[r4] = r7
-            android.widget.ImageView r7 = r1.botButton
-            android.util.Property r10 = android.view.View.SCALE_Y
-            float[] r11 = new float[r8]
-            r11[r4] = r12
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r9[r8] = r7
-            r0.playTogether(r9)
-        L_0x09da:
-            android.widget.ImageView r7 = r1.videoSendButton
-            if (r7 == 0) goto L_0x0a21
-            android.animation.Animator[] r9 = new android.animation.Animator[r8]
-            android.util.Property r10 = android.view.View.ALPHA
-            float[] r11 = new float[r8]
-            boolean r12 = r24.isInVideoMode()
-            if (r12 == 0) goto L_0x09ed
-            r12 = 1065353216(0x3var_, float:1.0)
-            goto L_0x09ee
-        L_0x09ed:
-            r12 = 0
-        L_0x09ee:
-            r11[r4] = r12
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r9[r4] = r7
-            r0.playTogether(r9)
-            android.animation.Animator[] r7 = new android.animation.Animator[r8]
-            android.widget.ImageView r9 = r1.videoSendButton
-            android.util.Property r10 = android.view.View.SCALE_X
-            float[] r11 = new float[r8]
-            r12 = 1065353216(0x3var_, float:1.0)
-            r11[r4] = r12
-            android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r10, r11)
-            r7[r4] = r9
-            r0.playTogether(r7)
-            android.animation.Animator[] r7 = new android.animation.Animator[r8]
-            android.widget.ImageView r9 = r1.videoSendButton
-            android.util.Property r10 = android.view.View.SCALE_Y
-            float[] r11 = new float[r8]
-            r11[r4] = r12
-            android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r10, r11)
-            r7[r4] = r9
-            r0.playTogether(r7)
-        L_0x0a21:
-            android.widget.ImageView r7 = r1.audioSendButton
-            if (r7 == 0) goto L_0x0a69
-            android.animation.Animator[] r9 = new android.animation.Animator[r8]
-            android.util.Property r10 = android.view.View.ALPHA
-            float[] r11 = new float[r8]
-            boolean r12 = r24.isInVideoMode()
-            if (r12 == 0) goto L_0x0a33
-            r12 = 0
-            goto L_0x0a35
-        L_0x0a33:
-            r12 = 1065353216(0x3var_, float:1.0)
-        L_0x0a35:
-            r11[r4] = r12
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r9[r4] = r7
-            r0.playTogether(r9)
-            android.animation.Animator[] r7 = new android.animation.Animator[r8]
-            android.widget.ImageView r9 = r1.audioSendButton
-            android.util.Property r10 = android.view.View.SCALE_X
-            float[] r11 = new float[r8]
-            r12 = 1065353216(0x3var_, float:1.0)
-            r11[r4] = r12
-            android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r10, r11)
-            r7[r4] = r9
-            r0.playTogether(r7)
-            android.animation.Animator[] r7 = new android.animation.Animator[r8]
-            android.widget.ImageView r9 = r1.audioSendButton
-            android.util.Property r10 = android.view.View.SCALE_Y
-            float[] r11 = new float[r8]
-            r11[r4] = r12
-            android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r10, r11)
-            r7[r4] = r9
-            r0.playTogether(r7)
-            goto L_0x0a6b
-        L_0x0a69:
-            r12 = 1065353216(0x3var_, float:1.0)
-        L_0x0a6b:
-            android.widget.ImageView r7 = r1.scheduledButton
-            if (r7 == 0) goto L_0x0a8e
-            android.animation.Animator[] r9 = new android.animation.Animator[r3]
-            android.util.Property r10 = android.view.View.ALPHA
-            float[] r11 = new float[r8]
-            r11[r4] = r12
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r9[r4] = r7
-            android.widget.ImageView r7 = r1.scheduledButton
-            android.util.Property r10 = android.view.View.TRANSLATION_X
-            float[] r11 = new float[r8]
-            r11[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r9[r8] = r7
-            r0.playTogether(r9)
-        L_0x0a8e:
-            r9 = 150(0x96, double:7.4E-322)
-            goto L_0x0b12
-        L_0x0a92:
-            android.animation.AnimatorSet r7 = new android.animation.AnimatorSet
-            r7.<init>()
-            android.animation.Animator[] r9 = new android.animation.Animator[r8]
-            android.widget.FrameLayout r10 = r1.audioVideoButtonContainer
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r14 = 1065353216(0x3var_, float:1.0)
-            r12[r4] = r14
-            android.animation.ObjectAnimator r10 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12)
-            r9[r4] = r10
-            r7.playTogether(r9)
-            android.widget.LinearLayout r9 = r1.attachLayout
-            if (r9 == 0) goto L_0x0ad2
-            android.animation.Animator[] r10 = new android.animation.Animator[r3]
-            android.util.Property r11 = android.view.View.TRANSLATION_X
-            float[] r12 = new float[r8]
-            r12[r4] = r6
-            android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r11, r12)
-            r10[r4] = r9
-            android.widget.LinearLayout r9 = r1.attachLayout
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r14 = 1065353216(0x3var_, float:1.0)
-            r12[r4] = r14
-            android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r11, r12)
-            r10[r8] = r9
-            r7.playTogether(r10)
-            goto L_0x0ad4
-        L_0x0ad2:
-            r14 = 1065353216(0x3var_, float:1.0)
-        L_0x0ad4:
-            android.widget.ImageView r9 = r1.scheduledButton
-            if (r9 == 0) goto L_0x0af7
-            android.animation.Animator[] r10 = new android.animation.Animator[r3]
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r12[r4] = r14
-            android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r11, r12)
-            r10[r4] = r9
-            android.widget.ImageView r9 = r1.scheduledButton
-            android.util.Property r11 = android.view.View.TRANSLATION_X
-            float[] r12 = new float[r8]
-            r12[r4] = r6
-            android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r11, r12)
-            r10[r8] = r9
-            r7.playTogether(r10)
-        L_0x0af7:
-            r9 = 150(0x96, double:7.4E-322)
-            r7.setDuration(r9)
-            r11 = 110(0x6e, double:5.43E-322)
-            r7.setStartDelay(r11)
-            org.telegram.ui.Components.ChatActivityEnterView$37 r11 = new org.telegram.ui.Components.ChatActivityEnterView$37
-            r11.<init>()
-            r7.addListener(r11)
-            android.animation.AnimatorSet r11 = r1.runningAnimationAudio
-            android.animation.Animator[] r12 = new android.animation.Animator[r8]
-            r12[r4] = r7
-            r11.playTogether(r12)
-        L_0x0b12:
-            r0.setDuration(r9)
-            r9 = 700(0x2bc, double:3.46E-321)
-            r0.setStartDelay(r9)
-            r9 = 200(0xc8, double:9.9E-322)
-            r5.setDuration(r9)
-            r5.setStartDelay(r9)
+            r7[r4] = r11
+            java.lang.String r11 = "exitTransition"
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r11, r7)
+            boolean r7 = r1.messageTransitionIsRunning
+            if (r7 == 0) goto L_0x085f
+            r11 = 220(0xdc, double:1.087E-321)
+            goto L_0x0861
+        L_0x085f:
+            r11 = 360(0x168, double:1.78E-321)
+        L_0x0861:
+            r5.setDuration(r11)
             org.telegram.ui.Components.EditTextCaption r7 = r1.messageEditText
             r7.setTranslationX(r6)
             org.telegram.ui.Components.EditTextCaption r6 = r1.messageEditText
@@ -7790,43 +7610,457 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r12 = 1065353216(0x3var_, float:1.0)
             r11[r4] = r12
             android.animation.ObjectAnimator r6 = android.animation.ObjectAnimator.ofFloat(r6, r7, r11)
-            r11 = 300(0x12c, double:1.48E-321)
+            r11 = 150(0x96, double:7.4E-322)
             r6.setStartDelay(r11)
             r6.setDuration(r9)
             android.animation.AnimatorSet r7 = r1.runningAnimationAudio
             r9 = 4
             android.animation.Animator[] r9 = new android.animation.Animator[r9]
             r9[r4] = r0
-            r9[r8] = r5
-            r9[r3] = r6
+            r9[r8] = r3
+            r9[r14] = r6
+            r9[r13] = r5
+            r7.playTogether(r9)
+            goto L_0x0e7b
+        L_0x0891:
+            android.widget.ImageView r0 = r1.videoSendButton
+            if (r0 == 0) goto L_0x08a1
+            boolean r0 = r23.isInVideoMode()
+            if (r0 == 0) goto L_0x08a1
+            android.widget.ImageView r0 = r1.videoSendButton
+            r0.setVisibility(r4)
+            goto L_0x08a8
+        L_0x08a1:
+            android.widget.ImageView r0 = r1.audioSendButton
+            if (r0 == 0) goto L_0x08a8
+            r0.setVisibility(r4)
+        L_0x08a8:
+            r1.recordIsCanceled = r8
+            android.animation.AnimatorSet r0 = new android.animation.AnimatorSet
+            r0.<init>()
+            r5 = 8
+            android.animation.Animator[] r5 = new android.animation.Animator[r5]
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r4]
+            android.util.Property r12 = android.view.View.SCALE_Y
+            float[] r3 = new float[r8]
+            r16 = 1065353216(0x3var_, float:1.0)
+            r3[r4] = r16
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r7, r12, r3)
+            r5[r4] = r3
+            android.widget.ImageView[] r3 = r1.emojiButton
+            r3 = r3[r4]
+            android.util.Property r7 = android.view.View.SCALE_X
+            float[] r12 = new float[r8]
+            r12[r4] = r16
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r5[r8] = r3
+            android.widget.ImageView[] r3 = r1.emojiButton
+            r3 = r3[r4]
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r12 = new float[r8]
+            r12[r4] = r16
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r5[r14] = r3
+            android.widget.ImageView[] r3 = r1.emojiButton
+            r3 = r3[r8]
+            android.util.Property r7 = android.view.View.SCALE_Y
+            float[] r12 = new float[r8]
+            r12[r4] = r16
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r5[r13] = r3
+            android.widget.ImageView[] r3 = r1.emojiButton
+            r3 = r3[r8]
+            android.util.Property r7 = android.view.View.SCALE_X
+            float[] r12 = new float[r8]
+            r12[r4] = r16
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r7 = 4
+            r5[r7] = r3
+            android.widget.ImageView[] r3 = r1.emojiButton
+            r3 = r3[r8]
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r12 = new float[r8]
+            r12[r4] = r16
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r7 = 5
+            r5[r7] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r3 = r1.recordDot
+            android.util.Property r7 = android.view.View.SCALE_Y
+            float[] r12 = new float[r8]
+            r12[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r7 = 6
+            r5[r7] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r3 = r1.recordDot
+            android.util.Property r7 = android.view.View.SCALE_X
+            float[] r12 = new float[r8]
+            r12[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r7 = 7
+            r5[r7] = r3
+            r0.playTogether(r5)
+            org.telegram.ui.Components.BotCommandsMenuView r3 = r1.botCommandsMenuButton
+            if (r3 == 0) goto L_0x096b
+            android.animation.Animator[] r5 = new android.animation.Animator[r13]
+            android.util.Property r7 = android.view.View.SCALE_Y
+            float[] r12 = new float[r8]
+            r16 = 1065353216(0x3var_, float:1.0)
+            r12[r4] = r16
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r5[r4] = r3
+            org.telegram.ui.Components.BotCommandsMenuView r3 = r1.botCommandsMenuButton
+            android.util.Property r7 = android.view.View.SCALE_X
+            float[] r12 = new float[r8]
+            r12[r4] = r16
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r5[r8] = r3
+            org.telegram.ui.Components.BotCommandsMenuView r3 = r1.botCommandsMenuButton
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r12 = new float[r8]
+            r12[r4] = r16
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r12)
+            r5[r14] = r3
+            r0.playTogether(r5)
+        L_0x096b:
+            android.animation.AnimatorSet r3 = new android.animation.AnimatorSet
+            r3.<init>()
+            r5 = 4
+            android.animation.Animator[] r7 = new android.animation.Animator[r5]
+            org.telegram.ui.Components.ChatActivityEnterView$TimerView r5 = r1.recordTimerView
+            android.util.Property r12 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r12, r9)
+            r7[r4] = r5
+            org.telegram.ui.Components.ChatActivityEnterView$TimerView r5 = r1.recordTimerView
+            android.util.Property r9 = android.view.View.TRANSLATION_X
+            float[] r10 = new float[r8]
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            int r12 = -r12
+            float r12 = (float) r12
+            r10[r4] = r12
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r7[r8] = r5
+            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r5 = r1.slideText
+            android.util.Property r9 = android.view.View.ALPHA
+            float[] r10 = new float[r8]
+            r10[r4] = r6
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r7[r14] = r5
+            org.telegram.ui.Components.ChatActivityEnterView$SlideTextView r5 = r1.slideText
+            android.util.Property r9 = android.view.View.TRANSLATION_X
+            float[] r10 = new float[r8]
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            int r11 = -r11
+            float r11 = (float) r11
+            r10[r4] = r11
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r7[r13] = r5
+            r3.playTogether(r7)
+            r5 = 5
+            if (r2 == r5) goto L_0x0b53
+            android.widget.FrameLayout r5 = r1.audioVideoButtonContainer
+            r5.setScaleX(r6)
+            android.widget.FrameLayout r5 = r1.audioVideoButtonContainer
+            r5.setScaleY(r6)
+            android.widget.ImageView r5 = r1.attachButton
+            if (r5 == 0) goto L_0x09db
+            int r5 = r5.getVisibility()
+            if (r5 != 0) goto L_0x09db
+            android.widget.ImageView r5 = r1.attachButton
+            r5.setScaleX(r6)
+            android.widget.ImageView r5 = r1.attachButton
+            r5.setScaleY(r6)
+        L_0x09db:
+            android.widget.ImageView r5 = r1.botButton
+            if (r5 == 0) goto L_0x09ef
+            int r5 = r5.getVisibility()
+            if (r5 != 0) goto L_0x09ef
+            android.widget.ImageView r5 = r1.botButton
+            r5.setScaleX(r6)
+            android.widget.ImageView r5 = r1.botButton
+            r5.setScaleY(r6)
+        L_0x09ef:
+            r5 = 4
+            android.animation.Animator[] r7 = new android.animation.Animator[r5]
+            org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r5 = r1.recordCircle
+            float[] r9 = new float[r8]
+            r10 = 1065353216(0x3var_, float:1.0)
+            r9[r4] = r10
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r15, r9)
+            r7[r4] = r5
+            android.widget.FrameLayout r5 = r1.audioVideoButtonContainer
+            android.util.Property r9 = android.view.View.SCALE_X
+            float[] r11 = new float[r8]
+            r11[r4] = r10
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r11)
+            r7[r8] = r5
+            android.widget.FrameLayout r5 = r1.audioVideoButtonContainer
+            android.util.Property r9 = android.view.View.SCALE_Y
+            float[] r11 = new float[r8]
+            r11[r4] = r10
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r11)
+            r7[r14] = r5
+            android.widget.FrameLayout r5 = r1.audioVideoButtonContainer
+            android.util.Property r9 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r11[r4] = r10
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r11)
+            r7[r13] = r5
+            r0.playTogether(r7)
+            android.widget.LinearLayout r5 = r1.attachLayout
+            if (r5 == 0) goto L_0x0a50
+            android.animation.Animator[] r7 = new android.animation.Animator[r14]
+            android.util.Property r9 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r11[r4] = r10
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r11)
+            r7[r4] = r5
+            android.widget.LinearLayout r5 = r1.attachLayout
+            android.util.Property r9 = android.view.View.TRANSLATION_X
+            float[] r10 = new float[r8]
+            r10[r4] = r6
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r7[r8] = r5
+            r0.playTogether(r7)
+        L_0x0a50:
+            android.widget.ImageView r5 = r1.attachButton
+            if (r5 == 0) goto L_0x0a76
+            android.animation.Animator[] r7 = new android.animation.Animator[r14]
+            android.util.Property r9 = android.view.View.SCALE_X
+            float[] r10 = new float[r8]
+            r11 = 1065353216(0x3var_, float:1.0)
+            r10[r4] = r11
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r7[r4] = r5
+            android.widget.ImageView r5 = r1.attachButton
+            android.util.Property r9 = android.view.View.SCALE_Y
+            float[] r10 = new float[r8]
+            r10[r4] = r11
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r7[r8] = r5
+            r0.playTogether(r7)
+            goto L_0x0a78
+        L_0x0a76:
+            r11 = 1065353216(0x3var_, float:1.0)
+        L_0x0a78:
+            android.widget.ImageView r5 = r1.botButton
+            if (r5 == 0) goto L_0x0a9b
+            android.animation.Animator[] r7 = new android.animation.Animator[r14]
+            android.util.Property r9 = android.view.View.SCALE_X
+            float[] r10 = new float[r8]
+            r10[r4] = r11
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r7[r4] = r5
+            android.widget.ImageView r5 = r1.botButton
+            android.util.Property r9 = android.view.View.SCALE_Y
+            float[] r10 = new float[r8]
+            r10[r4] = r11
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r7[r8] = r5
+            r0.playTogether(r7)
+        L_0x0a9b:
+            android.widget.ImageView r5 = r1.videoSendButton
+            if (r5 == 0) goto L_0x0ae2
+            android.animation.Animator[] r7 = new android.animation.Animator[r8]
+            android.util.Property r9 = android.view.View.ALPHA
+            float[] r10 = new float[r8]
+            boolean r11 = r23.isInVideoMode()
+            if (r11 == 0) goto L_0x0aae
+            r11 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0aaf
+        L_0x0aae:
+            r11 = 0
+        L_0x0aaf:
+            r10[r4] = r11
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r7[r4] = r5
+            r0.playTogether(r7)
+            android.animation.Animator[] r5 = new android.animation.Animator[r8]
+            android.widget.ImageView r7 = r1.videoSendButton
+            android.util.Property r9 = android.view.View.SCALE_X
+            float[] r10 = new float[r8]
+            r11 = 1065353216(0x3var_, float:1.0)
+            r10[r4] = r11
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
+            r5[r4] = r7
+            r0.playTogether(r5)
+            android.animation.Animator[] r5 = new android.animation.Animator[r8]
+            android.widget.ImageView r7 = r1.videoSendButton
+            android.util.Property r9 = android.view.View.SCALE_Y
+            float[] r10 = new float[r8]
+            r10[r4] = r11
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
+            r5[r4] = r7
+            r0.playTogether(r5)
+        L_0x0ae2:
+            android.widget.ImageView r5 = r1.audioSendButton
+            if (r5 == 0) goto L_0x0b2a
+            android.animation.Animator[] r7 = new android.animation.Animator[r8]
+            android.util.Property r9 = android.view.View.ALPHA
+            float[] r10 = new float[r8]
+            boolean r11 = r23.isInVideoMode()
+            if (r11 == 0) goto L_0x0af4
+            r11 = 0
+            goto L_0x0af6
+        L_0x0af4:
+            r11 = 1065353216(0x3var_, float:1.0)
+        L_0x0af6:
+            r10[r4] = r11
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r7[r4] = r5
+            r0.playTogether(r7)
+            android.animation.Animator[] r5 = new android.animation.Animator[r8]
+            android.widget.ImageView r7 = r1.audioSendButton
+            android.util.Property r9 = android.view.View.SCALE_X
+            float[] r10 = new float[r8]
+            r11 = 1065353216(0x3var_, float:1.0)
+            r10[r4] = r11
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
+            r5[r4] = r7
+            r0.playTogether(r5)
+            android.animation.Animator[] r5 = new android.animation.Animator[r8]
+            android.widget.ImageView r7 = r1.audioSendButton
+            android.util.Property r9 = android.view.View.SCALE_Y
+            float[] r10 = new float[r8]
+            r10[r4] = r11
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
+            r5[r4] = r7
+            r0.playTogether(r5)
+            goto L_0x0b2c
+        L_0x0b2a:
+            r11 = 1065353216(0x3var_, float:1.0)
+        L_0x0b2c:
+            android.widget.ImageView r5 = r1.scheduledButton
+            if (r5 == 0) goto L_0x0b4f
+            android.animation.Animator[] r7 = new android.animation.Animator[r14]
+            android.util.Property r9 = android.view.View.ALPHA
+            float[] r10 = new float[r8]
+            r10[r4] = r11
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r7[r4] = r5
+            android.widget.ImageView r5 = r1.scheduledButton
+            android.util.Property r9 = android.view.View.TRANSLATION_X
+            float[] r10 = new float[r8]
+            r10[r4] = r6
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r9, r10)
+            r7[r8] = r5
+            r0.playTogether(r7)
+        L_0x0b4f:
+            r9 = 150(0x96, double:7.4E-322)
+            goto L_0x0bd3
+        L_0x0b53:
+            android.animation.AnimatorSet r5 = new android.animation.AnimatorSet
+            r5.<init>()
+            android.animation.Animator[] r7 = new android.animation.Animator[r8]
+            android.widget.FrameLayout r9 = r1.audioVideoButtonContainer
+            android.util.Property r10 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r12 = 1065353216(0x3var_, float:1.0)
+            r11[r4] = r12
+            android.animation.ObjectAnimator r9 = android.animation.ObjectAnimator.ofFloat(r9, r10, r11)
+            r7[r4] = r9
+            r5.playTogether(r7)
+            android.widget.LinearLayout r7 = r1.attachLayout
+            if (r7 == 0) goto L_0x0b93
+            android.animation.Animator[] r9 = new android.animation.Animator[r14]
+            android.util.Property r10 = android.view.View.TRANSLATION_X
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
+            r9[r4] = r7
+            android.widget.LinearLayout r7 = r1.attachLayout
+            android.util.Property r10 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r12 = 1065353216(0x3var_, float:1.0)
+            r11[r4] = r12
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
+            r9[r8] = r7
+            r5.playTogether(r9)
+            goto L_0x0b95
+        L_0x0b93:
+            r12 = 1065353216(0x3var_, float:1.0)
+        L_0x0b95:
+            android.widget.ImageView r7 = r1.scheduledButton
+            if (r7 == 0) goto L_0x0bb8
+            android.animation.Animator[] r9 = new android.animation.Animator[r14]
+            android.util.Property r10 = android.view.View.ALPHA
+            float[] r11 = new float[r8]
+            r11[r4] = r12
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
+            r9[r4] = r7
+            android.widget.ImageView r7 = r1.scheduledButton
+            android.util.Property r10 = android.view.View.TRANSLATION_X
+            float[] r11 = new float[r8]
+            r11[r4] = r6
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
+            r9[r8] = r7
+            r5.playTogether(r9)
+        L_0x0bb8:
+            r9 = 150(0x96, double:7.4E-322)
+            r5.setDuration(r9)
+            r11 = 110(0x6e, double:5.43E-322)
+            r5.setStartDelay(r11)
+            org.telegram.ui.Components.ChatActivityEnterView$40 r7 = new org.telegram.ui.Components.ChatActivityEnterView$40
+            r7.<init>()
+            r5.addListener(r7)
+            android.animation.AnimatorSet r7 = r1.runningAnimationAudio
+            android.animation.Animator[] r11 = new android.animation.Animator[r8]
+            r11[r4] = r5
+            r7.playTogether(r11)
+        L_0x0bd3:
+            r0.setDuration(r9)
+            r9 = 700(0x2bc, double:3.46E-321)
+            r0.setStartDelay(r9)
+            r9 = 200(0xc8, double:9.9E-322)
+            r3.setDuration(r9)
+            r3.setStartDelay(r9)
+            org.telegram.ui.Components.EditTextCaption r5 = r1.messageEditText
+            r5.setTranslationX(r6)
+            org.telegram.ui.Components.EditTextCaption r5 = r1.messageEditText
+            android.util.Property r6 = android.view.View.ALPHA
+            float[] r7 = new float[r8]
+            r11 = 1065353216(0x3var_, float:1.0)
+            r7[r4] = r11
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r6, r7)
+            r6 = 300(0x12c, double:1.48E-321)
+            r5.setStartDelay(r6)
+            r5.setDuration(r9)
+            android.animation.AnimatorSet r6 = r1.runningAnimationAudio
+            r7 = 4
+            android.animation.Animator[] r7 = new android.animation.Animator[r7]
+            r7[r4] = r0
+            r7[r8] = r3
+            r7[r14] = r5
             org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r0 = r1.recordCircle
             float[] r3 = new float[r8]
             float r5 = r0.startTranslation
             r3[r4] = r5
             java.lang.String r5 = "lockAnimatedTranslation"
             android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r5, r3)
-            r5 = 200(0xc8, double:9.9E-322)
-            android.animation.ObjectAnimator r0 = r0.setDuration(r5)
-            r9[r15] = r0
-            r7.playTogether(r9)
+            r9 = 200(0xc8, double:9.9E-322)
+            android.animation.ObjectAnimator r0 = r0.setDuration(r9)
+            r7[r13] = r0
+            r6.playTogether(r7)
             r3 = 5
-            if (r2 != r3) goto L_0x0b8a
+            if (r2 != r3) goto L_0x0c4b
             org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r0 = r1.recordCircle
             r0.canceledByGesture()
             org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r0 = r1.recordCircle
             float[] r3 = new float[r8]
-            r7 = 1065353216(0x3var_, float:1.0)
-            r3[r4] = r7
-            android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r13, r3)
-            android.animation.ObjectAnimator r0 = r0.setDuration(r5)
+            r5 = 1065353216(0x3var_, float:1.0)
+            r3[r4] = r5
+            android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r15, r3)
+            android.animation.ObjectAnimator r0 = r0.setDuration(r9)
             org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
             r0.setInterpolator(r3)
             android.animation.AnimatorSet r3 = r1.runningAnimationAudio
             android.animation.Animator[] r5 = new android.animation.Animator[r8]
             r5[r4] = r0
             r3.playTogether(r5)
-            goto L_0x0bab
-        L_0x0b8a:
+            goto L_0x0c6c
+        L_0x0c4b:
             org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r0 = r1.recordCircle
             float[] r3 = new float[r8]
             r5 = 1065353216(0x3var_, float:1.0)
@@ -7841,239 +8075,262 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.animation.Animator[] r5 = new android.animation.Animator[r8]
             r5[r4] = r0
             r3.playTogether(r5)
-        L_0x0bab:
+        L_0x0c6c:
             org.telegram.ui.Components.ChatActivityEnterView$RecordDot r0 = r1.recordDot
             r0.playDeleteAnimation()
-            goto L_0x0d87
-        L_0x0bb2:
+            goto L_0x0e7b
+        L_0x0CLASSNAME:
             android.widget.ImageView r0 = r1.videoSendButton
-            if (r0 == 0) goto L_0x0bc2
-            boolean r0 = r24.isInVideoMode()
-            if (r0 == 0) goto L_0x0bc2
+            if (r0 == 0) goto L_0x0CLASSNAME
+            boolean r0 = r23.isInVideoMode()
+            if (r0 == 0) goto L_0x0CLASSNAME
             android.widget.ImageView r0 = r1.videoSendButton
             r0.setVisibility(r4)
-            goto L_0x0bc9
-        L_0x0bc2:
+            goto L_0x0c8a
+        L_0x0CLASSNAME:
             android.widget.ImageView r0 = r1.audioSendButton
-            if (r0 == 0) goto L_0x0bc9
+            if (r0 == 0) goto L_0x0c8a
             r0.setVisibility(r4)
-        L_0x0bc9:
+        L_0x0c8a:
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            r9 = 16
-            android.animation.Animator[] r9 = new android.animation.Animator[r9]
-            android.widget.ImageView[] r10 = r1.emojiButton
-            r10 = r10[r4]
-            android.util.Property r11 = android.view.View.SCALE_Y
-            float[] r12 = new float[r8]
-            r14 = 1065353216(0x3var_, float:1.0)
-            r12[r4] = r14
-            android.animation.ObjectAnimator r10 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12)
+            r5 = 16
+            android.animation.Animator[] r5 = new android.animation.Animator[r5]
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r4]
+            android.util.Property r9 = android.view.View.SCALE_Y
+            float[] r10 = new float[r8]
+            r11 = 1065353216(0x3var_, float:1.0)
+            r10[r4] = r11
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
+            r5[r4] = r7
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r4]
+            android.util.Property r9 = android.view.View.SCALE_X
+            float[] r10 = new float[r8]
+            r10[r4] = r11
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
+            r5[r8] = r7
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r4]
+            android.util.Property r9 = android.view.View.ALPHA
+            float[] r10 = new float[r8]
+            r10[r4] = r11
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
+            r5[r14] = r7
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r8]
+            android.util.Property r9 = android.view.View.SCALE_Y
+            float[] r10 = new float[r8]
+            r10[r4] = r11
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
+            r5[r13] = r7
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r8]
+            android.util.Property r9 = android.view.View.SCALE_X
+            float[] r10 = new float[r8]
+            r10[r4] = r11
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
+            r9 = 4
+            r5[r9] = r7
+            android.widget.ImageView[] r7 = r1.emojiButton
+            r7 = r7[r8]
+            android.util.Property r9 = android.view.View.ALPHA
+            float[] r10 = new float[r8]
+            r10[r4] = r11
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
+            r9 = 5
+            r5[r9] = r7
+            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r7 = r1.recordDot
+            android.util.Property r9 = android.view.View.SCALE_Y
+            float[] r10 = new float[r8]
+            r10[r4] = r6
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
+            r9 = 6
+            r5[r9] = r7
+            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r7 = r1.recordDot
+            android.util.Property r9 = android.view.View.SCALE_X
+            float[] r10 = new float[r8]
+            r10[r4] = r6
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
+            r3 = 7
+            r5[r3] = r7
+            org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r3 = r1.recordCircle
+            android.util.Property<org.telegram.ui.Components.ChatActivityEnterView$RecordCircle, java.lang.Float> r7 = r1.recordCircleScale
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r9)
+            r7 = 8
+            r5[r7] = r3
+            android.widget.FrameLayout r3 = r1.audioVideoButtonContainer
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            r10 = 1065353216(0x3var_, float:1.0)
             r9[r4] = r10
-            android.widget.ImageView[] r10 = r1.emojiButton
-            r10 = r10[r4]
-            android.util.Property r11 = android.view.View.SCALE_X
-            float[] r12 = new float[r8]
-            r12[r4] = r14
-            android.animation.ObjectAnimator r10 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12)
-            r9[r8] = r10
-            android.widget.ImageView[] r10 = r1.emojiButton
-            r10 = r10[r4]
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r12[r4] = r14
-            android.animation.ObjectAnimator r10 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12)
-            r9[r3] = r10
-            android.widget.ImageView[] r10 = r1.emojiButton
-            r10 = r10[r8]
-            android.util.Property r11 = android.view.View.SCALE_Y
-            float[] r12 = new float[r8]
-            r12[r4] = r14
-            android.animation.ObjectAnimator r10 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12)
-            r9[r15] = r10
-            android.widget.ImageView[] r10 = r1.emojiButton
-            r10 = r10[r8]
-            android.util.Property r11 = android.view.View.SCALE_X
-            float[] r12 = new float[r8]
-            r12[r4] = r14
-            android.animation.ObjectAnimator r10 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12)
-            r11 = 4
-            r9[r11] = r10
-            android.widget.ImageView[] r10 = r1.emojiButton
-            r10 = r10[r8]
-            android.util.Property r11 = android.view.View.ALPHA
-            float[] r12 = new float[r8]
-            r12[r4] = r14
-            android.animation.ObjectAnimator r10 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12)
-            r11 = 5
-            r9[r11] = r10
-            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r10 = r1.recordDot
-            android.util.Property r11 = android.view.View.SCALE_Y
-            float[] r12 = new float[r8]
-            r12[r4] = r6
-            android.animation.ObjectAnimator r10 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12)
-            r11 = 6
-            r9[r11] = r10
-            org.telegram.ui.Components.ChatActivityEnterView$RecordDot r10 = r1.recordDot
-            android.util.Property r11 = android.view.View.SCALE_X
-            float[] r12 = new float[r8]
-            r12[r4] = r6
-            android.animation.ObjectAnimator r10 = android.animation.ObjectAnimator.ofFloat(r10, r11, r12)
-            r7 = 7
-            r9[r7] = r10
-            org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r7 = r1.recordCircle
-            android.util.Property<org.telegram.ui.Components.ChatActivityEnterView$RecordCircle, java.lang.Float> r10 = r1.recordCircleScale
-            float[] r11 = new float[r8]
-            r11[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r10 = 8
-            r9[r10] = r7
-            android.widget.FrameLayout r7 = r1.audioVideoButtonContainer
-            android.util.Property r10 = android.view.View.ALPHA
-            float[] r11 = new float[r8]
-            r12 = 1065353216(0x3var_, float:1.0)
-            r11[r4] = r12
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r10 = 9
-            r9[r10] = r7
-            org.telegram.ui.Components.ChatActivityEnterView$TimerView r7 = r1.recordTimerView
-            android.util.Property r10 = android.view.View.ALPHA
-            float[] r11 = new float[r8]
-            r11[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r10 = 10
-            r9[r10] = r7
-            org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r7 = r1.recordCircle
-            android.util.Property<org.telegram.ui.Components.ChatActivityEnterView$RecordCircle, java.lang.Float> r10 = r1.recordCircleScale
-            float[] r11 = new float[r8]
-            r11[r4] = r6
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r10, r11)
-            r5 = 11
-            r9[r5] = r7
-            android.widget.FrameLayout r5 = r1.audioVideoButtonContainer
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r9)
+            r7 = 9
+            r5[r7] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$TimerView r3 = r1.recordTimerView
             android.util.Property r7 = android.view.View.ALPHA
-            float[] r10 = new float[r8]
-            r11 = 1065353216(0x3var_, float:1.0)
-            r10[r4] = r11
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r7, r10)
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r9)
+            r7 = 10
+            r5[r7] = r3
+            org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r3 = r1.recordCircle
+            android.util.Property<org.telegram.ui.Components.ChatActivityEnterView$RecordCircle, java.lang.Float> r7 = r1.recordCircleScale
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r9)
+            r7 = 11
+            r5[r7] = r3
+            android.widget.FrameLayout r3 = r1.audioVideoButtonContainer
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            r10 = 1065353216(0x3var_, float:1.0)
+            r9[r4] = r10
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r9)
             r7 = 12
-            r9[r7] = r5
-            org.telegram.ui.Components.EditTextCaption r5 = r1.messageEditText
+            r5[r7] = r3
+            org.telegram.ui.Components.EditTextCaption r3 = r1.messageEditText
             android.util.Property r7 = android.view.View.ALPHA
-            float[] r10 = new float[r8]
-            r10[r4] = r11
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r7, r10)
+            float[] r9 = new float[r8]
+            r9[r4] = r10
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r9)
             r7 = 13
-            r9[r7] = r5
-            org.telegram.ui.Components.EditTextCaption r5 = r1.messageEditText
+            r5[r7] = r3
+            org.telegram.ui.Components.EditTextCaption r3 = r1.messageEditText
             android.util.Property r7 = android.view.View.TRANSLATION_X
-            float[] r10 = new float[r8]
-            r10[r4] = r6
-            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r7, r10)
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r9)
             r7 = 14
-            r9[r7] = r5
-            r5 = 15
+            r5[r7] = r3
+            r3 = 15
             org.telegram.ui.Components.ChatActivityEnterView$RecordCircle r7 = r1.recordCircle
-            float[] r10 = new float[r8]
-            r11 = 1065353216(0x3var_, float:1.0)
-            r10[r4] = r11
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r13, r10)
-            r9[r5] = r7
-            r0.playTogether(r9)
-            android.widget.ImageView r0 = r1.audioSendButton
-            if (r0 == 0) goto L_0x0d03
-            r0.setScaleX(r11)
-            android.widget.ImageView r0 = r1.audioSendButton
-            r0.setScaleY(r11)
-            android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            android.animation.Animator[] r5 = new android.animation.Animator[r8]
-            android.widget.ImageView r7 = r1.audioSendButton
-            android.util.Property r9 = android.view.View.ALPHA
-            float[] r10 = new float[r8]
-            boolean r11 = r24.isInVideoMode()
-            if (r11 == 0) goto L_0x0cf6
-            r11 = 0
-            goto L_0x0cf8
-        L_0x0cf6:
-            r11 = 1065353216(0x3var_, float:1.0)
-        L_0x0cf8:
-            r10[r4] = r11
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
-            r5[r4] = r7
+            float[] r9 = new float[r8]
+            r10 = 1065353216(0x3var_, float:1.0)
+            r9[r4] = r10
+            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r15, r9)
+            r5[r3] = r7
             r0.playTogether(r5)
-        L_0x0d03:
-            android.widget.ImageView r0 = r1.videoSendButton
-            if (r0 == 0) goto L_0x0d30
-            r5 = 1065353216(0x3var_, float:1.0)
-            r0.setScaleX(r5)
-            android.widget.ImageView r0 = r1.videoSendButton
-            r0.setScaleY(r5)
+            org.telegram.ui.Components.BotCommandsMenuView r0 = r1.botCommandsMenuButton
+            if (r0 == 0) goto L_0x0dcc
+            android.animation.AnimatorSet r3 = r1.runningAnimationAudio
+            android.animation.Animator[] r5 = new android.animation.Animator[r13]
+            android.util.Property r7 = android.view.View.SCALE_Y
+            float[] r9 = new float[r8]
+            r9[r4] = r10
+            android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r7, r9)
+            r5[r4] = r0
+            org.telegram.ui.Components.BotCommandsMenuView r0 = r1.botCommandsMenuButton
+            android.util.Property r7 = android.view.View.SCALE_X
+            float[] r9 = new float[r8]
+            r9[r4] = r10
+            android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r7, r9)
+            r5[r8] = r0
+            org.telegram.ui.Components.BotCommandsMenuView r0 = r1.botCommandsMenuButton
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            r9[r4] = r10
+            android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r7, r9)
+            r5[r14] = r0
+            r3.playTogether(r5)
+        L_0x0dcc:
+            android.widget.ImageView r0 = r1.audioSendButton
+            if (r0 == 0) goto L_0x0df7
+            r0.setScaleX(r10)
+            android.widget.ImageView r0 = r1.audioSendButton
+            r0.setScaleY(r10)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            android.animation.Animator[] r5 = new android.animation.Animator[r8]
-            android.widget.ImageView r7 = r1.videoSendButton
-            android.util.Property r9 = android.view.View.ALPHA
-            float[] r10 = new float[r8]
-            boolean r11 = r24.isInVideoMode()
-            if (r11 == 0) goto L_0x0d24
-            r11 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0d25
-        L_0x0d24:
-            r11 = 0
-        L_0x0d25:
-            r10[r4] = r11
-            android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r9, r10)
-            r5[r4] = r7
-            r0.playTogether(r5)
-        L_0x0d30:
+            android.animation.Animator[] r3 = new android.animation.Animator[r8]
+            android.widget.ImageView r5 = r1.audioSendButton
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            boolean r10 = r23.isInVideoMode()
+            if (r10 == 0) goto L_0x0dea
+            r10 = 0
+            goto L_0x0dec
+        L_0x0dea:
+            r10 = 1065353216(0x3var_, float:1.0)
+        L_0x0dec:
+            r9[r4] = r10
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r7, r9)
+            r3[r4] = r5
+            r0.playTogether(r3)
+        L_0x0df7:
+            android.widget.ImageView r0 = r1.videoSendButton
+            if (r0 == 0) goto L_0x0e24
+            r3 = 1065353216(0x3var_, float:1.0)
+            r0.setScaleX(r3)
+            android.widget.ImageView r0 = r1.videoSendButton
+            r0.setScaleY(r3)
+            android.animation.AnimatorSet r0 = r1.runningAnimationAudio
+            android.animation.Animator[] r3 = new android.animation.Animator[r8]
+            android.widget.ImageView r5 = r1.videoSendButton
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            boolean r10 = r23.isInVideoMode()
+            if (r10 == 0) goto L_0x0e18
+            r10 = 1065353216(0x3var_, float:1.0)
+            goto L_0x0e19
+        L_0x0e18:
+            r10 = 0
+        L_0x0e19:
+            r9[r4] = r10
+            android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r7, r9)
+            r3[r4] = r5
+            r0.playTogether(r3)
+        L_0x0e24:
             android.widget.ImageView r0 = r1.scheduledButton
-            if (r0 == 0) goto L_0x0d57
-            android.animation.AnimatorSet r5 = r1.runningAnimationAudio
-            android.animation.Animator[] r7 = new android.animation.Animator[r3]
-            android.util.Property r9 = android.view.View.TRANSLATION_X
-            float[] r10 = new float[r8]
-            r10[r4] = r6
-            android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r9, r10)
-            r7[r4] = r0
-            android.widget.ImageView r0 = r1.scheduledButton
-            android.util.Property r9 = android.view.View.ALPHA
-            float[] r10 = new float[r8]
-            r11 = 1065353216(0x3var_, float:1.0)
-            r10[r4] = r11
-            android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r9, r10)
-            r7[r8] = r0
-            r5.playTogether(r7)
-        L_0x0d57:
-            android.widget.LinearLayout r0 = r1.attachLayout
-            if (r0 == 0) goto L_0x0d7e
-            android.animation.AnimatorSet r5 = r1.runningAnimationAudio
-            android.animation.Animator[] r3 = new android.animation.Animator[r3]
+            if (r0 == 0) goto L_0x0e4b
+            android.animation.AnimatorSet r3 = r1.runningAnimationAudio
+            android.animation.Animator[] r5 = new android.animation.Animator[r14]
             android.util.Property r7 = android.view.View.TRANSLATION_X
             float[] r9 = new float[r8]
             r9[r4] = r6
             android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r7, r9)
-            r3[r4] = r0
+            r5[r4] = r0
+            android.widget.ImageView r0 = r1.scheduledButton
+            android.util.Property r7 = android.view.View.ALPHA
+            float[] r9 = new float[r8]
+            r10 = 1065353216(0x3var_, float:1.0)
+            r9[r4] = r10
+            android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r7, r9)
+            r5[r8] = r0
+            r3.playTogether(r5)
+        L_0x0e4b:
+            android.widget.LinearLayout r0 = r1.attachLayout
+            if (r0 == 0) goto L_0x0e72
+            android.animation.AnimatorSet r3 = r1.runningAnimationAudio
+            android.animation.Animator[] r5 = new android.animation.Animator[r14]
+            android.util.Property r7 = android.view.View.TRANSLATION_X
+            float[] r9 = new float[r8]
+            r9[r4] = r6
+            android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r7, r9)
+            r5[r4] = r0
             android.widget.LinearLayout r0 = r1.attachLayout
             android.util.Property r6 = android.view.View.ALPHA
             float[] r7 = new float[r8]
             r9 = 1065353216(0x3var_, float:1.0)
             r7[r4] = r9
             android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r6, r7)
-            r3[r8] = r0
-            r5.playTogether(r3)
-        L_0x0d7e:
+            r5[r8] = r0
+            r3.playTogether(r5)
+        L_0x0e72:
             r1.recordIsCanceled = r8
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
             r3 = 150(0x96, double:7.4E-322)
             r0.setDuration(r3)
-        L_0x0d87:
+        L_0x0e7b:
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
-            org.telegram.ui.Components.ChatActivityEnterView$38 r3 = new org.telegram.ui.Components.ChatActivityEnterView$38
+            org.telegram.ui.Components.ChatActivityEnterView$41 r3 = new org.telegram.ui.Components.ChatActivityEnterView$41
             r3.<init>(r2)
             r0.addListener(r3)
             android.animation.AnimatorSet r0 = r1.runningAnimationAudio
             r0.start()
             org.telegram.ui.Components.ChatActivityEnterView$TimerView r0 = r1.recordTimerView
             r0.stop()
-        L_0x0d9b:
+        L_0x0e8f:
             org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r0 = r1.delegate
             r0.onAudioVideoInterfaceUpdated()
             return
@@ -8082,8 +8339,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateRecordIntefrace$27 */
-    public /* synthetic */ void lambda$updateRecordIntefrace$27$ChatActivityEnterView(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$updateRecordIntefrace$28 */
+    public /* synthetic */ void lambda$updateRecordIntefrace$28$ChatActivityEnterView(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         if (!isInVideoMode()) {
             this.recordCircle.setTransformToSeekbar(floatValue);
@@ -8432,7 +8689,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         L_0x021a:
             boolean r13 = r12.keyboardVisible
             if (r13 != 0) goto L_0x022b
-            org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$9gYEsI64KBJCa7Af5rCGx3UV_0o r13 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$9gYEsI64KBJCa7Af5rCGx3UV_0o
+            org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$dtmts_vEQuxCnB6KRfKLR_WqUOs r13 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$dtmts_vEQuxCnB6KRfKLR_WqUOs
             r13.<init>(r1)
             r12.setTextFieldRunnable = r13
             r0 = 200(0xc8, double:9.9E-322)
@@ -8610,8 +8867,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setEditingMessageObject$28 */
-    public /* synthetic */ void lambda$setEditingMessageObject$28$ChatActivityEnterView(CharSequence charSequence) {
+    /* renamed from: lambda$setEditingMessageObject$29 */
+    public /* synthetic */ void lambda$setEditingMessageObject$29$ChatActivityEnterView(CharSequence charSequence) {
         setFieldText(charSequence);
         this.setTextFieldRunnable = null;
     }
@@ -8674,6 +8931,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
         int color = Theme.getColor("chat_messagePanelVoicePressed");
         this.doneCheckDrawable.setColorFilter(new PorterDuffColorFilter(ColorUtils.setAlphaComponent(color, (int) (((float) Color.alpha(color)) * ((this.doneButtonEnabledProgress * 0.42f) + 0.58f))), PorterDuff.Mode.MULTIPLY));
+        BotCommandsMenuContainer botCommandsMenuContainer2 = this.botCommandsMenuContainer;
+        if (botCommandsMenuContainer2 != null) {
+            botCommandsMenuContainer2.updateColors();
+        }
+        BotKeyboardView botKeyboardView2 = this.botKeyboardView;
+        if (botKeyboardView2 != null) {
+            botKeyboardView2.updateColors();
+        }
     }
 
     private void updateRecordedDeleteIconColors() {
@@ -8772,9 +9037,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                 }
             } else if (this.searchingType == 0 && !this.messageEditText.isFocused()) {
-                $$Lambda$ChatActivityEnterView$BU4i6UEaK53qjO5Nl5qt3B4ebR0 r3 = new Runnable() {
+                $$Lambda$ChatActivityEnterView$YjKWlFzCPQnQEEMSRS3CN_Mn84 r3 = new Runnable() {
                     public final void run() {
-                        ChatActivityEnterView.this.lambda$setFieldFocused$29$ChatActivityEnterView();
+                        ChatActivityEnterView.this.lambda$setFieldFocused$30$ChatActivityEnterView();
                     }
                 };
                 this.focusRunnable = r3;
@@ -8784,8 +9049,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setFieldFocused$29 */
-    public /* synthetic */ void lambda$setFieldFocused$29$ChatActivityEnterView() {
+    /* renamed from: lambda$setFieldFocused$30 */
+    public /* synthetic */ void lambda$setFieldFocused$30$ChatActivityEnterView() {
         EditTextCaption editTextCaption;
         ActionBarLayout layersActionBarLayout;
         this.focusRunnable = null;
@@ -9048,7 +9313,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r0 = 180(0xb4, double:8.9E-322)
             r14.setDuration(r0)
             android.animation.AnimatorSet r14 = r13.scheduledButtonAnimation
-            org.telegram.ui.Components.ChatActivityEnterView$39 r0 = new org.telegram.ui.Components.ChatActivityEnterView$39
+            org.telegram.ui.Components.ChatActivityEnterView$42 r0 = new org.telegram.ui.Components.ChatActivityEnterView$42
             r0.<init>(r4)
             r14.addListener(r0)
             android.animation.AnimatorSet r14 = r13.scheduledButtonAnimation
@@ -9117,94 +9382,47 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.updateScheduleButton(boolean):void");
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:24:0x0083, code lost:
-        r1 = r4.notifyButton;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private void updateBotButton() {
-        /*
-            r4 = this;
-            android.widget.ImageView r0 = r4.botButton
-            if (r0 != 0) goto L_0x0005
-            return
-        L_0x0005:
-            boolean r1 = r4.hasBotCommands
-            r2 = 8
-            if (r1 != 0) goto L_0x0014
-            org.telegram.tgnet.TLRPC$TL_replyKeyboardMarkup r1 = r4.botReplyMarkup
-            if (r1 == 0) goto L_0x0010
-            goto L_0x0014
-        L_0x0010:
-            r0.setVisibility(r2)
-            goto L_0x0073
-        L_0x0014:
-            int r0 = r0.getVisibility()
-            if (r0 == 0) goto L_0x0020
-            android.widget.ImageView r0 = r4.botButton
-            r1 = 0
-            r0.setVisibility(r1)
-        L_0x0020:
-            org.telegram.tgnet.TLRPC$TL_replyKeyboardMarkup r0 = r4.botReplyMarkup
-            r1 = 1
-            if (r0 == 0) goto L_0x005d
-            boolean r0 = r4.isPopupShowing()
-            if (r0 == 0) goto L_0x0046
-            int r0 = r4.currentPopupContentType
-            if (r0 != r1) goto L_0x0046
-            org.telegram.ui.Components.ReplaceableIconDrawable r0 = r4.botButtonDrawablel
-            r3 = 2131165533(0x7var_d, float:1.7945286E38)
-            r0.setIcon((int) r3, (boolean) r1)
-            android.widget.ImageView r0 = r4.botButton
-            r1 = 2131624050(0x7f0e0072, float:1.8875269E38)
-            java.lang.String r3 = "AccDescrShowKeyboard"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-            r0.setContentDescription(r1)
-            goto L_0x0073
-        L_0x0046:
-            org.telegram.ui.Components.ReplaceableIconDrawable r0 = r4.botButtonDrawablel
-            r3 = 2131165526(0x7var_, float:1.7945272E38)
-            r0.setIcon((int) r3, (boolean) r1)
-            android.widget.ImageView r0 = r4.botButton
-            r1 = 2131623955(0x7f0e0013, float:1.8875076E38)
-            java.lang.String r3 = "AccDescrBotKeyboard"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-            r0.setContentDescription(r1)
-            goto L_0x0073
-        L_0x005d:
-            org.telegram.ui.Components.ReplaceableIconDrawable r0 = r4.botButtonDrawablel
-            r3 = 2131165525(0x7var_, float:1.794527E38)
-            r0.setIcon((int) r3, (boolean) r1)
-            android.widget.ImageView r0 = r4.botButton
-            r1 = 2131623954(0x7f0e0012, float:1.8875074E38)
-            java.lang.String r3 = "AccDescrBotCommands"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-            r0.setContentDescription(r1)
-        L_0x0073:
-            r0 = 2
-            r4.updateFieldRight(r0)
-            android.widget.LinearLayout r0 = r4.attachLayout
-            android.widget.ImageView r1 = r4.botButton
-            if (r1 == 0) goto L_0x0083
-            int r1 = r1.getVisibility()
-            if (r1 != r2) goto L_0x008e
-        L_0x0083:
-            android.widget.ImageView r1 = r4.notifyButton
-            if (r1 == 0) goto L_0x0091
-            int r1 = r1.getVisibility()
-            if (r1 != r2) goto L_0x008e
-            goto L_0x0091
-        L_0x008e:
-            r1 = 1119879168(0x42CLASSNAME, float:96.0)
-            goto L_0x0093
-        L_0x0091:
-            r1 = 1111490560(0x42400000, float:48.0)
-        L_0x0093:
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            float r1 = (float) r1
-            r0.setPivotX(r1)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.updateBotButton():void");
+    private void updateBotButton(boolean z) {
+        ImageView imageView;
+        if (this.botButton != null) {
+            boolean z2 = false;
+            if (!this.parentFragment.openAnimationEnded) {
+                z = false;
+            }
+            boolean z3 = this.dialog_id < 0 ? !this.accountInstance.getMessagesController().getChat(Integer.valueOf(-((int) this.dialog_id))).megagroup : true;
+            if (!this.hasBotCommands && this.botReplyMarkup == null) {
+                this.botButton.setVisibility(8);
+            } else if (this.botReplyMarkup != null) {
+                if (this.botButton.getVisibility() != 0) {
+                    this.botButton.setVisibility(0);
+                }
+                if (!isPopupShowing() || this.currentPopupContentType != 1) {
+                    this.botButtonDrawable.setIcon(NUM, true);
+                    this.botButton.setContentDescription(LocaleController.getString("AccDescrBotKeyboard", NUM));
+                } else {
+                    this.botButtonDrawable.setIcon(NUM, true);
+                    this.botButton.setContentDescription(LocaleController.getString("AccDescrShowKeyboard", NUM));
+                }
+            } else if (!z3) {
+                this.botButtonDrawable.setIcon(NUM, true);
+                this.botButton.setContentDescription(LocaleController.getString("AccDescrBotCommands", NUM));
+                this.botButton.setVisibility(0);
+            } else {
+                this.botButton.setVisibility(8);
+            }
+            BotCommandsMenuView botCommandsMenuView = this.botCommandsMenuButton;
+            if (z3 && this.hasBotCommands) {
+                z2 = true;
+            }
+            AndroidUtilities.updateViewVisibilityAnimated(botCommandsMenuView, z2, 0.5f, z);
+            if (z) {
+                beginDelayedTransition();
+            }
+            updateFieldRight(2);
+            LinearLayout linearLayout = this.attachLayout;
+            ImageView imageView2 = this.botButton;
+            linearLayout.setPivotX((float) AndroidUtilities.dp(((imageView2 == null || imageView2.getVisibility() == 8) && ((imageView = this.notifyButton) == null || imageView.getVisibility() == 8)) ? 48.0f : 96.0f));
+        }
     }
 
     public boolean isRtlText() {
@@ -9215,11 +9433,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
     }
 
-    public void setBotsCount(int i, boolean z) {
+    public void setBotsCount(int i, boolean z, boolean z2) {
         this.botCount = i;
         if (this.hasBotCommands != z) {
             this.hasBotCommands = z;
-            updateBotButton();
+            updateBotButton(z2);
         }
     }
 
@@ -9260,7 +9478,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r1 = 0
             r2 = 1
             if (r0 != 0) goto L_0x0049
-            org.telegram.ui.Components.ChatActivityEnterView$40 r0 = new org.telegram.ui.Components.ChatActivityEnterView$40
+            org.telegram.ui.Components.ChatActivityEnterView$43 r0 = new org.telegram.ui.Components.ChatActivityEnterView$43
             android.app.Activity r3 = r6.parentActivity
             r0.<init>(r3)
             r6.botKeyboardView = r0
@@ -9268,7 +9486,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r0.setVisibility(r3)
             r6.botKeyboardViewVisible = r1
             org.telegram.ui.Components.BotKeyboardView r0 = r6.botKeyboardView
-            org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$CGKRKAZIu97uR8B2kp6YNMfm8iw r3 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$CGKRKAZIu97uR8B2kp6YNMfm8iw
+            org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$efA7ZCpCsVnq_QQ1xnOnAZF3DAM r3 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$efA7ZCpCsVnq_QQ1xnOnAZF3DAM
             r3.<init>()
             r0.setDelegate(r3)
             org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r6.sizeNotifierLayout
@@ -9364,7 +9582,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         L_0x00f1:
             r6.showPopup(r1, r2)
         L_0x00f4:
-            r6.updateBotButton()
+            r6.updateBotButton(r2)
         L_0x00f7:
             return
         */
@@ -9372,8 +9590,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setButtons$30 */
-    public /* synthetic */ void lambda$setButtons$30$ChatActivityEnterView(TLRPC$KeyboardButton tLRPC$KeyboardButton) {
+    /* renamed from: lambda$setButtons$31 */
+    public /* synthetic */ void lambda$setButtons$31$ChatActivityEnterView(TLRPC$KeyboardButton tLRPC$KeyboardButton) {
         MessageObject messageObject = this.replyingMessageObject;
         MessageObject messageObject2 = messageObject != null ? messageObject : ((int) this.dialog_id) < 0 ? this.botButtonsMessageObject : null;
         if (messageObject == null) {
@@ -9436,7 +9654,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
 
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        ChatActivityEnterView.this.lambda$didPressedBotButton$31$ChatActivityEnterView(this.f$1, this.f$2, dialogInterface, i);
+                        ChatActivityEnterView.this.lambda$didPressedBotButton$32$ChatActivityEnterView(this.f$1, this.f$2, dialogInterface, i);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -9473,7 +9691,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
 
                         public final void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
-                            ChatActivityEnterView.this.lambda$didPressedBotButton$32$ChatActivityEnterView(this.f$1, this.f$2, dialogsActivity, arrayList, charSequence, z);
+                            ChatActivityEnterView.this.lambda$didPressedBotButton$33$ChatActivityEnterView(this.f$1, this.f$2, dialogsActivity, arrayList, charSequence, z);
                         }
                     });
                     this.parentFragment.presentFragment(dialogsActivity);
@@ -9484,8 +9702,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didPressedBotButton$31 */
-    public /* synthetic */ void lambda$didPressedBotButton$31$ChatActivityEnterView(MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$didPressedBotButton$32 */
+    public /* synthetic */ void lambda$didPressedBotButton$32$ChatActivityEnterView(MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, DialogInterface dialogInterface, int i) {
         if (Build.VERSION.SDK_INT < 23 || this.parentActivity.checkSelfPermission("android.permission.ACCESS_COARSE_LOCATION") == 0) {
             SendMessagesHelper.getInstance(this.currentAccount).sendCurrentLocation(messageObject, tLRPC$KeyboardButton);
             return;
@@ -9496,8 +9714,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didPressedBotButton$32 */
-    public /* synthetic */ void lambda$didPressedBotButton$32$ChatActivityEnterView(MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
+    /* renamed from: lambda$didPressedBotButton$33 */
+    public /* synthetic */ void lambda$didPressedBotButton$33$ChatActivityEnterView(MessageObject messageObject, TLRPC$KeyboardButton tLRPC$KeyboardButton, DialogsActivity dialogsActivity, ArrayList arrayList, CharSequence charSequence, boolean z) {
         TLRPC$Message tLRPC$Message = messageObject.messageOwner;
         int i = tLRPC$Message.from_id.user_id;
         int i2 = tLRPC$Message.via_bot_id;
@@ -9546,7 +9764,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void createEmojiView() {
         if (this.emojiView == null) {
-            AnonymousClass41 r1 = new EmojiView(this.allowStickers, this.allowGifs, this.parentActivity, true, this.info) {
+            AnonymousClass44 r1 = new EmojiView(this.allowStickers, this.allowGifs, this.parentActivity, true, this.info) {
                 public void setTranslationY(float f) {
                     super.setTranslationY(f);
                     if (ChatActivityEnterView.this.panelAnimation != null && ChatActivityEnterView.this.animatingContentType == 0) {
@@ -9600,7 +9818,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             }
                             ChatActivityEnterView.this.setStickersExpanded(false, true, false);
                         }
-                        ChatActivityEnterView.this.lambda$onStickerSelected$33(tLRPC$Document, str, obj, sendAnimationData, false, z, i);
+                        ChatActivityEnterView.this.lambda$onStickerSelected$34(tLRPC$Document, str, obj, sendAnimationData, false, z, i);
                         if (((int) ChatActivityEnterView.this.dialog_id) == 0 && MessageObject.isGifDocument(tLRPC$Document)) {
                             TLRPC$Document tLRPC$Document2 = tLRPC$Document;
                             ChatActivityEnterView.this.accountInstance.getMessagesController().saveGif(obj, tLRPC$Document);
@@ -9636,7 +9854,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             }
 
                             public final void didSelectDate(boolean z, int i) {
-                                ChatActivityEnterView.AnonymousClass42.this.lambda$onGifSelected$0$ChatActivityEnterView$42(this.f$1, this.f$2, this.f$3, this.f$4, z, i);
+                                ChatActivityEnterView.AnonymousClass45.this.lambda$onGifSelected$0$ChatActivityEnterView$45(this.f$1, this.f$2, this.f$3, this.f$4, z, i);
                             }
                         });
                     } else if (ChatActivityEnterView.this.slowModeTimer <= 0 || isInScheduleMode()) {
@@ -9694,7 +9912,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         builder.setMessage(LocaleController.getString("ClearRecentEmoji", NUM));
                         builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new DialogInterface.OnClickListener() {
                             public final void onClick(DialogInterface dialogInterface, int i) {
-                                ChatActivityEnterView.AnonymousClass42.this.lambda$onClearEmojiRecent$1$ChatActivityEnterView$42(dialogInterface, i);
+                                ChatActivityEnterView.AnonymousClass45.this.lambda$onClearEmojiRecent$1$ChatActivityEnterView$45(dialogInterface, i);
                             }
                         });
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -9704,7 +9922,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
                 /* access modifiers changed from: private */
                 /* renamed from: lambda$onClearEmojiRecent$1 */
-                public /* synthetic */ void lambda$onClearEmojiRecent$1$ChatActivityEnterView$42(DialogInterface dialogInterface, int i) {
+                public /* synthetic */ void lambda$onClearEmojiRecent$1$ChatActivityEnterView$45(DialogInterface dialogInterface, int i) {
                     ChatActivityEnterView.this.emojiView.clearRecentEmoji();
                 }
 
@@ -9812,10 +10030,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         int unused3 = chatActivityEnterView.stickersExpandedHeight = (((height - i) - ActionBar.getCurrentActionBarHeight()) - ChatActivityEnterView.this.getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                         if (ChatActivityEnterView.this.searchingType == 2) {
                             ChatActivityEnterView chatActivityEnterView2 = ChatActivityEnterView.this;
-                            int access$11900 = chatActivityEnterView2.stickersExpandedHeight;
+                            int access$12300 = chatActivityEnterView2.stickersExpandedHeight;
                             int dp = AndroidUtilities.dp(120.0f);
                             Point point = AndroidUtilities.displaySize;
-                            int unused4 = chatActivityEnterView2.stickersExpandedHeight = Math.min(access$11900, dp + (point.x > point.y ? ChatActivityEnterView.this.keyboardHeightLand : ChatActivityEnterView.this.keyboardHeight));
+                            int unused4 = chatActivityEnterView2.stickersExpandedHeight = Math.min(access$12300, dp + (point.x > point.y ? ChatActivityEnterView.this.keyboardHeightLand : ChatActivityEnterView.this.keyboardHeight));
                         }
                         ChatActivityEnterView.this.emojiView.getLayoutParams().height = ChatActivityEnterView.this.stickersExpandedHeight;
                         ChatActivityEnterView.this.emojiView.setLayerType(2, (Paint) null);
@@ -9849,12 +10067,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 public void onDrag(int i) {
                     if (allowDragging()) {
                         Point point = AndroidUtilities.displaySize;
-                        int access$12000 = point.x > point.y ? ChatActivityEnterView.this.keyboardHeightLand : ChatActivityEnterView.this.keyboardHeight;
-                        float max = (float) Math.max(Math.min(i + this.initialOffset, 0), -(ChatActivityEnterView.this.stickersExpandedHeight - access$12000));
+                        int access$12400 = point.x > point.y ? ChatActivityEnterView.this.keyboardHeightLand : ChatActivityEnterView.this.keyboardHeight;
+                        float max = (float) Math.max(Math.min(i + this.initialOffset, 0), -(ChatActivityEnterView.this.stickersExpandedHeight - access$12400));
                         ChatActivityEnterView.this.emojiView.setTranslationY(max);
                         ChatActivityEnterView.this.setTranslationY(max);
                         ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
-                        float unused = chatActivityEnterView.stickersExpansionProgress = max / ((float) (-(chatActivityEnterView.stickersExpandedHeight - access$12000)));
+                        float unused = chatActivityEnterView.stickersExpansionProgress = max / ((float) (-(chatActivityEnterView.stickersExpandedHeight - access$12400)));
                         ChatActivityEnterView.this.sizeNotifierLayout.invalidate();
                     }
                 }
@@ -9870,7 +10088,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* renamed from: onStickerSelected */
-    public void lambda$onStickerSelected$33(TLRPC$Document tLRPC$Document, String str, Object obj, MessageObject.SendAnimationData sendAnimationData, boolean z, boolean z2, int i) {
+    public void lambda$onStickerSelected$34(TLRPC$Document tLRPC$Document, String str, Object obj, MessageObject.SendAnimationData sendAnimationData, boolean z, boolean z2, int i) {
         int i2 = i;
         if (isInScheduleMode() && i2 == 0) {
             AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tLRPC$Document, str, obj, sendAnimationData, z) {
@@ -9889,7 +10107,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
 
                 public final void didSelectDate(boolean z, int i) {
-                    ChatActivityEnterView.this.lambda$onStickerSelected$33$ChatActivityEnterView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, z, i);
+                    ChatActivityEnterView.this.lambda$onStickerSelected$34$ChatActivityEnterView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, z, i);
                 }
             });
         } else if (this.slowModeTimer <= 0 || isInScheduleMode()) {
@@ -10018,7 +10236,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.emojiPadding = i5;
                     sizeNotifierFrameLayout2.requestLayout();
                     setEmojiButtonImage(true, true);
-                    updateBotButton();
+                    updateBotButton(true);
                     onWindowSizeChanged();
                     if (this.smoothKeyboard && !this.keyboardVisible && i5 != i3) {
                         this.panelAnimation = new AnimatorSet();
@@ -10144,7 +10362,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     sizeNotifierFrameLayout3.requestLayout();
                     onWindowSizeChanged();
                 }
-                updateBotButton();
+                updateBotButton(true);
             }
             if (this.stickersTabOpen || this.emojiTabOpen) {
                 checkSendButton(true);
@@ -10153,6 +10371,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 setStickersExpanded(false, false, false);
             }
             updateFieldHint(false);
+            checkBotMenu();
         }
     }
 
@@ -10350,7 +10569,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             r6[r0] = r1
             r12.playTogether(r6)
             android.animation.AnimatorSet r12 = r10.emojiButtonAnimation
-            org.telegram.ui.Components.ChatActivityEnterView$47 r0 = new org.telegram.ui.Components.ChatActivityEnterView$47
+            org.telegram.ui.Components.ChatActivityEnterView$50 r0 = new org.telegram.ui.Components.ChatActivityEnterView$50
             r0.<init>()
             r12.addListener(r0)
             android.animation.AnimatorSet r12 = r10.emojiButtonAnimation
@@ -10547,6 +10766,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 z3 = false;
             }
             this.keyboardVisible = z3;
+            checkBotMenu();
             return;
         }
         if (i > AndroidUtilities.dp(50.0f) && this.keyboardVisible && !AndroidUtilities.isInMultiwindow) {
@@ -10623,7 +10843,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             z3 = false;
         }
         this.keyboardVisible = z3;
-        if (z3 && isPopupShowing() && this.stickersExpansionAnim == null) {
+        checkBotMenu();
+        if (this.keyboardVisible && isPopupShowing() && this.stickersExpansionAnim == null) {
             showPopup(0, this.currentPopupContentType);
         }
         if (this.emojiPadding != 0 && !(z2 = this.keyboardVisible) && z2 != z4 && !isPopupShowing()) {
@@ -10927,7 +11148,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     animatorSet.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)})});
                     ((ObjectAnimator) animatorSet.getChildAnimations().get(0)).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            ChatActivityEnterView.this.lambda$checkStickresExpandHeight$34$ChatActivityEnterView(valueAnimator);
+                            ChatActivityEnterView.this.lambda$checkStickresExpandHeight$35$ChatActivityEnterView(valueAnimator);
                         }
                     });
                     animatorSet.setDuration(300);
@@ -10957,7 +11178,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)})});
                 ((ObjectAnimator) animatorSet2.getChildAnimations().get(0)).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        ChatActivityEnterView.this.lambda$checkStickresExpandHeight$35$ChatActivityEnterView(valueAnimator);
+                        ChatActivityEnterView.this.lambda$checkStickresExpandHeight$36$ChatActivityEnterView(valueAnimator);
                     }
                 });
                 animatorSet2.setDuration(300);
@@ -10976,14 +11197,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkStickresExpandHeight$34 */
-    public /* synthetic */ void lambda$checkStickresExpandHeight$34$ChatActivityEnterView(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$checkStickresExpandHeight$35 */
+    public /* synthetic */ void lambda$checkStickresExpandHeight$35$ChatActivityEnterView(ValueAnimator valueAnimator) {
         this.sizeNotifierLayout.invalidate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkStickresExpandHeight$35 */
-    public /* synthetic */ void lambda$checkStickresExpandHeight$35$ChatActivityEnterView(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$checkStickresExpandHeight$36 */
+    public /* synthetic */ void lambda$checkStickresExpandHeight$36$ChatActivityEnterView(ValueAnimator valueAnimator) {
         this.sizeNotifierLayout.invalidate();
     }
 
@@ -11036,7 +11257,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
 
                         public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            ChatActivityEnterView.this.lambda$setStickersExpanded$36$ChatActivityEnterView(this.f$1, valueAnimator);
+                            ChatActivityEnterView.this.lambda$setStickersExpanded$37$ChatActivityEnterView(this.f$1, valueAnimator);
                         }
                     });
                     animatorSet.addListener(new AnimatorListenerAdapter() {
@@ -11074,7 +11295,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
 
                         public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            ChatActivityEnterView.this.lambda$setStickersExpanded$37$ChatActivityEnterView(this.f$1, valueAnimator);
+                            ChatActivityEnterView.this.lambda$setStickersExpanded$38$ChatActivityEnterView(this.f$1, valueAnimator);
                         }
                     });
                     animatorSet2.addListener(new AnimatorListenerAdapter() {
@@ -11123,15 +11344,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setStickersExpanded$36 */
-    public /* synthetic */ void lambda$setStickersExpanded$36$ChatActivityEnterView(int i, ValueAnimator valueAnimator) {
+    /* renamed from: lambda$setStickersExpanded$37 */
+    public /* synthetic */ void lambda$setStickersExpanded$37$ChatActivityEnterView(int i, ValueAnimator valueAnimator) {
         this.stickersExpansionProgress = Math.abs(getTranslationY() / ((float) (-(this.stickersExpandedHeight - i))));
         this.sizeNotifierLayout.invalidate();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$setStickersExpanded$37 */
-    public /* synthetic */ void lambda$setStickersExpanded$37$ChatActivityEnterView(int i, ValueAnimator valueAnimator) {
+    /* renamed from: lambda$setStickersExpanded$38 */
+    public /* synthetic */ void lambda$setStickersExpanded$38$ChatActivityEnterView(int i, ValueAnimator valueAnimator) {
         this.stickersExpansionProgress = getTranslationY() / ((float) (-(this.stickersExpandedHeight - i)));
         this.sizeNotifierLayout.invalidate();
     }
@@ -11646,5 +11867,183 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     public RecordCircle getRecordCicle() {
         return this.recordCircle;
+    }
+
+    /* access modifiers changed from: protected */
+    /* JADX WARNING: Code restructure failed: missing block: B:28:0x00dc, code lost:
+        r2 = (androidx.recyclerview.widget.LinearLayoutManager) r5.botCommandsMenuContainer.listView.getLayoutManager();
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void onMeasure(int r6, int r7) {
+        /*
+            r5 = this;
+            org.telegram.ui.Components.BotCommandsMenuView r0 = r5.botCommandsMenuButton
+            r1 = 0
+            if (r0 == 0) goto L_0x0048
+            java.lang.Object r0 = r0.getTag()
+            if (r0 == 0) goto L_0x0048
+            org.telegram.ui.Components.BotCommandsMenuView r0 = r5.botCommandsMenuButton
+            r0.measure(r6, r7)
+            r0 = 0
+        L_0x0011:
+            android.widget.ImageView[] r2 = r5.emojiButton
+            int r3 = r2.length
+            if (r0 >= r3) goto L_0x0030
+            r2 = r2[r0]
+            android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
+            android.view.ViewGroup$MarginLayoutParams r2 = (android.view.ViewGroup.MarginLayoutParams) r2
+            r3 = 1092616192(0x41200000, float:10.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            org.telegram.ui.Components.BotCommandsMenuView r4 = r5.botCommandsMenuButton
+            int r4 = r4.getMeasuredWidth()
+            int r3 = r3 + r4
+            r2.leftMargin = r3
+            int r0 = r0 + 1
+            goto L_0x0011
+        L_0x0030:
+            org.telegram.ui.Components.EditTextCaption r0 = r5.messageEditText
+            android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
+            android.view.ViewGroup$MarginLayoutParams r0 = (android.view.ViewGroup.MarginLayoutParams) r0
+            r2 = 1113849856(0x42640000, float:57.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            org.telegram.ui.Components.BotCommandsMenuView r3 = r5.botCommandsMenuButton
+            int r3 = r3.getMeasuredWidth()
+            int r2 = r2 + r3
+            r0.leftMargin = r2
+            goto L_0x0071
+        L_0x0048:
+            r0 = 0
+        L_0x0049:
+            android.widget.ImageView[] r2 = r5.emojiButton
+            int r3 = r2.length
+            if (r0 >= r3) goto L_0x0061
+            r2 = r2[r0]
+            android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
+            android.view.ViewGroup$MarginLayoutParams r2 = (android.view.ViewGroup.MarginLayoutParams) r2
+            r3 = 1077936128(0x40400000, float:3.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r2.leftMargin = r3
+            int r0 = r0 + 1
+            goto L_0x0049
+        L_0x0061:
+            org.telegram.ui.Components.EditTextCaption r0 = r5.messageEditText
+            android.view.ViewGroup$LayoutParams r0 = r0.getLayoutParams()
+            android.view.ViewGroup$MarginLayoutParams r0 = (android.view.ViewGroup.MarginLayoutParams) r0
+            r2 = 1112014848(0x42480000, float:50.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r0.leftMargin = r2
+        L_0x0071:
+            org.telegram.ui.Components.BotCommandsMenuContainer r0 = r5.botCommandsMenuContainer
+            if (r0 == 0) goto L_0x0110
+            org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter r0 = r5.botCommandsAdapter
+            int r0 = r0.getItemCount()
+            r2 = 4
+            if (r0 <= r2) goto L_0x0091
+            org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r5.sizeNotifierLayout
+            int r0 = r0.getMeasuredHeight()
+            r2 = 1129630925(0x4354cccd, float:212.8)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r0 = r0 - r2
+            int r0 = java.lang.Math.max(r1, r0)
+            goto L_0x00b4
+        L_0x0091:
+            org.telegram.ui.Components.SizeNotifierFrameLayout r0 = r5.sizeNotifierLayout
+            int r0 = r0.getMeasuredHeight()
+            org.telegram.ui.Components.BotCommandsMenuView$BotCommandsAdapter r3 = r5.botCommandsAdapter
+            int r3 = r3.getItemCount()
+            int r2 = java.lang.Math.min(r2, r3)
+            r3 = 1
+            int r2 = java.lang.Math.max(r3, r2)
+            int r2 = r2 * 36
+            int r2 = r2 + 58
+            float r2 = (float) r2
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            int r0 = r0 - r2
+            int r0 = java.lang.Math.max(r1, r0)
+        L_0x00b4:
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
+            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
+            int r2 = r2.getPaddingTop()
+            if (r2 == r0) goto L_0x0110
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
+            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
+            r2.setTopGlowOffset(r0)
+            int r2 = r5.botCommandLastPosition
+            r3 = -1
+            if (r2 != r3) goto L_0x0103
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
+            int r2 = r2.getVisibility()
+            if (r2 != 0) goto L_0x0103
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
+            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
+            androidx.recyclerview.widget.RecyclerView$LayoutManager r2 = r2.getLayoutManager()
+            if (r2 == 0) goto L_0x0103
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
+            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
+            androidx.recyclerview.widget.RecyclerView$LayoutManager r2 = r2.getLayoutManager()
+            androidx.recyclerview.widget.LinearLayoutManager r2 = (androidx.recyclerview.widget.LinearLayoutManager) r2
+            int r3 = r2.findFirstVisibleItemPosition()
+            if (r3 < 0) goto L_0x0103
+            android.view.View r2 = r2.findViewByPosition(r3)
+            if (r2 == 0) goto L_0x0103
+            r5.botCommandLastPosition = r3
+            int r2 = r2.getTop()
+            org.telegram.ui.Components.BotCommandsMenuContainer r3 = r5.botCommandsMenuContainer
+            org.telegram.ui.Components.RecyclerListView r3 = r3.listView
+            int r3 = r3.getPaddingTop()
+            int r2 = r2 - r3
+            r5.botCommandLastTop = r2
+        L_0x0103:
+            org.telegram.ui.Components.BotCommandsMenuContainer r2 = r5.botCommandsMenuContainer
+            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
+            r3 = 1090519040(0x41000000, float:8.0)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r2.setPadding(r1, r0, r1, r3)
+        L_0x0110:
+            super.onMeasure(r6, r7)
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.onMeasure(int, int):void");
+    }
+
+    /* access modifiers changed from: protected */
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        super.onLayout(z, i, i2, i3, i4);
+        if (this.botCommandLastPosition != -1) {
+            LinearLayoutManager linearLayoutManager = (LinearLayoutManager) this.botCommandsMenuContainer.listView.getLayoutManager();
+            if (linearLayoutManager != null) {
+                linearLayoutManager.scrollToPositionWithOffset(this.botCommandLastPosition, this.botCommandLastTop);
+            }
+            this.botCommandLastPosition = -1;
+        }
+    }
+
+    private void beginDelayedTransition() {
+        HashMap<View, Float> hashMap = this.animationParamsX;
+        ImageView[] imageViewArr = this.emojiButton;
+        hashMap.put(imageViewArr[0], Float.valueOf(imageViewArr[0].getX()));
+        HashMap<View, Float> hashMap2 = this.animationParamsX;
+        ImageView[] imageViewArr2 = this.emojiButton;
+        hashMap2.put(imageViewArr2[1], Float.valueOf(imageViewArr2[1].getX()));
+        HashMap<View, Float> hashMap3 = this.animationParamsX;
+        EditTextCaption editTextCaption = this.messageEditText;
+        hashMap3.put(editTextCaption, Float.valueOf(editTextCaption.getX()));
+    }
+
+    public void setBotInfo(SparseArray<TLRPC$BotInfo> sparseArray) {
+        BotCommandsMenuView.BotCommandsAdapter botCommandsAdapter2 = this.botCommandsAdapter;
+        if (botCommandsAdapter2 != null) {
+            botCommandsAdapter2.setBotInfo(sparseArray);
+        }
+    }
+
+    public boolean botCommandsMenuIsShowing() {
+        BotCommandsMenuView botCommandsMenuView = this.botCommandsMenuButton;
+        return botCommandsMenuView != null && botCommandsMenuView.isOpened();
+    }
+
+    public void hideBotCommands() {
+        this.botCommandsMenuButton.setOpened(false);
+        this.botCommandsMenuContainer.dismiss();
     }
 }

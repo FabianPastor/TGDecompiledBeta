@@ -175,8 +175,28 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             return StickersAlert.this.delegate != null && StickersAlert.this.delegate.isInScheduleMode();
         }
 
+        public boolean needRemove() {
+            return StickersAlert.this.importingStickers != null;
+        }
+
+        public void remove(String str) {
+            int indexOf = StickersAlert.this.importingStickersPaths.indexOf(str);
+            if (indexOf >= 0) {
+                StickersAlert.this.importingStickersPaths.remove(indexOf);
+                if (StickersAlert.this.importingStickersEmojis != null) {
+                    StickersAlert.this.importingStickersEmojis.remove(indexOf);
+                }
+                StickersAlert.this.adapter.notifyItemRemoved(indexOf);
+                if (StickersAlert.this.importingStickersPaths.isEmpty()) {
+                    StickersAlert.this.dismiss();
+                } else {
+                    StickersAlert.this.updateFields();
+                }
+            }
+        }
+
         public boolean needSend() {
-            return StickersAlert.this.previewSendButton.getVisibility() == 0;
+            return StickersAlert.this.previewSendButton.getVisibility() == 0 && StickersAlert.this.importingStickers == null;
         }
 
         public long getDialogId() {
@@ -595,11 +615,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     }
 
                     public Animator createAnimator(ViewGroup viewGroup, TransitionValues transitionValues, TransitionValues transitionValues2) {
-                        int access$400 = StickersAlert.this.scrollOffsetY;
+                        int access$900 = StickersAlert.this.scrollOffsetY;
                         int intValue = ((Integer) transitionValues.values.get("offset")).intValue() - ((Integer) transitionValues2.values.get("offset")).intValue();
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                         ofFloat.setDuration(250);
-                        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(intValue, access$400) {
+                        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(intValue, access$900) {
                             public final /* synthetic */ int f$1;
                             public final /* synthetic */ int f$2;
 
@@ -1302,6 +1322,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         }
     }
 
+    /* access modifiers changed from: private */
     /* JADX WARNING: Code restructure failed: missing block: B:65:0x0084, code lost:
         r6 = r6;
      */
@@ -1309,7 +1330,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     /* JADX WARNING: Removed duplicated region for block: B:38:0x00ad  */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x0103  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private void updateFields() {
+    public void updateFields() {
         /*
             r12 = this;
             android.widget.TextView r0 = r12.titleTextView
@@ -1410,7 +1431,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r2 = r0.set
             boolean r2 = r2.masks
-            r6 = 2131627171(0x7f0e0ca3, float:1.8881599E38)
+            r6 = 2131627173(0x7f0e0ca5, float:1.8881603E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r2 == 0) goto L_0x00d1
             java.lang.Object[] r2 = new java.lang.Object[r5]
@@ -1490,7 +1511,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.setText(r1)
             org.telegram.ui.Components.-$$Lambda$StickersAlert$ekNx1b09uSe2umZqR4EaIlPaJH0 r0 = new org.telegram.ui.Components.-$$Lambda$StickersAlert$ekNx1b09uSe2umZqR4EaIlPaJH0
             r0.<init>()
-            r1 = 2131625819(0x7f0e075b, float:1.8878857E38)
+            r1 = 2131625820(0x7f0e075c, float:1.8878859E38)
             java.lang.Object[] r5 = new java.lang.Object[r5]
             java.util.ArrayList<java.lang.String> r6 = r12.importingStickersPaths
             if (r6 == 0) goto L_0x0174
@@ -1507,7 +1528,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r12.setButton(r0, r1, r2)
             goto L_0x01a3
         L_0x018e:
-            r0 = 2131624928(0x7f0e03e0, float:1.887705E38)
+            r0 = 2131624929(0x7f0e03e1, float:1.8877052E38)
             java.lang.String r1 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -1618,7 +1639,6 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         FrameLayout frameLayout = new FrameLayout(context);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(LocaleController.getString("ImportStickersEnterName", NUM));
-        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setPositiveButton(LocaleController.getString("Next", NUM), $$Lambda$StickersAlert$jhjBFLXHowefmVI8fpPTvqlBZgY.INSTANCE);
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
@@ -1672,6 +1692,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
         });
         editTextBoldCursor.setSelection(editTextBoldCursor.length());
+        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new DialogInterface.OnClickListener() {
+            public final void onClick(DialogInterface dialogInterface, int i) {
+                AndroidUtilities.hideKeyboard(EditTextBoldCursor.this);
+            }
+        });
         textView.setText(AndroidUtilities.replaceTags(LocaleController.getString("ImportStickersEnterNameInfo", NUM)));
         textView.setTextSize(1, 14.0f);
         textView.setPadding(AndroidUtilities.dp(23.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(23.0f), AndroidUtilities.dp(6.0f));
@@ -1682,7 +1707,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             public final void onShow(DialogInterface dialogInterface) {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public final void run() {
-                        StickersAlert.lambda$showNameEnterAlert$22(EditTextBoldCursor.this);
+                        StickersAlert.lambda$showNameEnterAlert$23(EditTextBoldCursor.this);
                     }
                 });
             }
@@ -1705,7 +1730,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void onClick(View view) {
-                StickersAlert.this.lambda$showNameEnterAlert$27$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
+                StickersAlert.this.lambda$showNameEnterAlert$28$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
             }
         });
     }
@@ -1718,14 +1743,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         return true;
     }
 
-    static /* synthetic */ void lambda$showNameEnterAlert$22(EditTextBoldCursor editTextBoldCursor) {
+    static /* synthetic */ void lambda$showNameEnterAlert$23(EditTextBoldCursor editTextBoldCursor) {
         editTextBoldCursor.requestFocus();
         AndroidUtilities.showKeyboard(editTextBoldCursor);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showNameEnterAlert$27 */
-    public /* synthetic */ void lambda$showNameEnterAlert$27$StickersAlert(int[] iArr, EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, AlertDialog.Builder builder, View view) {
+    /* renamed from: lambda$showNameEnterAlert$28 */
+    public /* synthetic */ void lambda$showNameEnterAlert$28$StickersAlert(int[] iArr, EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, AlertDialog.Builder builder, View view) {
         if (iArr[0] != 1) {
             if (iArr[0] == 0) {
                 iArr[0] = 1;
@@ -1747,7 +1772,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        StickersAlert.this.lambda$showNameEnterAlert$25$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
+                        StickersAlert.this.lambda$showNameEnterAlert$26$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
                     }
                 });
             } else if (iArr[0] == 2) {
@@ -1759,7 +1784,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 AndroidUtilities.hideKeyboard(editTextBoldCursor);
                 SendMessagesHelper.getInstance(this.currentAccount).prepareImportStickers(this.setTitle, this.lastCheckName, this.importingSoftware, this.importingStickersPaths, this.importingStickersMimeTypes, this.importingStickersEmojis, new MessagesStorage.StringCallback() {
                     public final void run(String str) {
-                        StickersAlert.this.lambda$showNameEnterAlert$26$StickersAlert(str);
+                        StickersAlert.this.lambda$showNameEnterAlert$27$StickersAlert(str);
                     }
                 });
                 builder.getDismissRunnable().run();
@@ -1769,8 +1794,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showNameEnterAlert$25 */
-    public /* synthetic */ void lambda$showNameEnterAlert$25$StickersAlert(EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$showNameEnterAlert$26 */
+    public /* synthetic */ void lambda$showNameEnterAlert$26$StickersAlert(EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, editTextBoldCursor, textView, textView2, iArr) {
             public final /* synthetic */ TLObject f$1;
             public final /* synthetic */ EditTextBoldCursor f$2;
@@ -1787,14 +1812,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run() {
-                StickersAlert.this.lambda$showNameEnterAlert$24$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                StickersAlert.this.lambda$showNameEnterAlert$25$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showNameEnterAlert$24 */
-    public /* synthetic */ void lambda$showNameEnterAlert$24$StickersAlert(TLObject tLObject, EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr) {
+    /* renamed from: lambda$showNameEnterAlert$25 */
+    public /* synthetic */ void lambda$showNameEnterAlert$25$StickersAlert(TLObject tLObject, EditTextBoldCursor editTextBoldCursor, TextView textView, TextView textView2, int[] iArr) {
         String str;
         boolean z = true;
         if (!(tLObject instanceof TLRPC$TL_stickers_suggestedShortName) || (str = ((TLRPC$TL_stickers_suggestedShortName) tLObject).short_name) == null) {
@@ -1813,8 +1838,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showNameEnterAlert$26 */
-    public /* synthetic */ void lambda$showNameEnterAlert$26$StickersAlert(String str) {
+    /* renamed from: lambda$showNameEnterAlert$27 */
+    public /* synthetic */ void lambda$showNameEnterAlert$27$StickersAlert(String str) {
         new ImportingAlert(getContext(), this.lastCheckName, (ChatActivity) null).show();
     }
 
@@ -1868,7 +1893,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             textView.setText(LocaleController.getString("ImportStickersLinkChecking", NUM));
             textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
             this.lastCheckName = str;
-            $$Lambda$StickersAlert$F7e81d1uIbqk9hExWsRFitMoENY r9 = new Runnable(str, textView) {
+            $$Lambda$StickersAlert$m3CJ98f8mkvar_z2oVEW0Xquakw r9 = new Runnable(str, textView) {
                 public final /* synthetic */ String f$1;
                 public final /* synthetic */ TextView f$2;
 
@@ -1878,7 +1903,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 }
 
                 public final void run() {
-                    StickersAlert.this.lambda$checkUrlAvailable$30$StickersAlert(this.f$1, this.f$2);
+                    StickersAlert.this.lambda$checkUrlAvailable$31$StickersAlert(this.f$1, this.f$2);
                 }
             };
             this.checkRunnable = r9;
@@ -1887,8 +1912,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkUrlAvailable$30 */
-    public /* synthetic */ void lambda$checkUrlAvailable$30$StickersAlert(String str, TextView textView) {
+    /* renamed from: lambda$checkUrlAvailable$31 */
+    public /* synthetic */ void lambda$checkUrlAvailable$31$StickersAlert(String str, TextView textView) {
         TLRPC$TL_stickers_checkShortName tLRPC$TL_stickers_checkShortName = new TLRPC$TL_stickers_checkShortName();
         tLRPC$TL_stickers_checkShortName.short_name = str;
         this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_stickers_checkShortName, new RequestDelegate(str, textView) {
@@ -1901,14 +1926,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                StickersAlert.this.lambda$checkUrlAvailable$29$StickersAlert(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                StickersAlert.this.lambda$checkUrlAvailable$30$StickersAlert(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
             }
         }, 2);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkUrlAvailable$29 */
-    public /* synthetic */ void lambda$checkUrlAvailable$29$StickersAlert(String str, TextView textView, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$checkUrlAvailable$30 */
+    public /* synthetic */ void lambda$checkUrlAvailable$30$StickersAlert(String str, TextView textView, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error, tLObject, textView) {
             public final /* synthetic */ String f$1;
             public final /* synthetic */ TLRPC$TL_error f$2;
@@ -1923,14 +1948,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
 
             public final void run() {
-                StickersAlert.this.lambda$checkUrlAvailable$28$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4);
+                StickersAlert.this.lambda$checkUrlAvailable$29$StickersAlert(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkUrlAvailable$28 */
-    public /* synthetic */ void lambda$checkUrlAvailable$28$StickersAlert(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TextView textView) {
+    /* renamed from: lambda$checkUrlAvailable$29 */
+    public /* synthetic */ void lambda$checkUrlAvailable$29$StickersAlert(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TextView textView) {
         this.checkReqId = 0;
         String str2 = this.lastCheckName;
         if (str2 != null && str2.equals(str)) {
