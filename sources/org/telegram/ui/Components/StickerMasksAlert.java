@@ -37,6 +37,7 @@ import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -100,8 +101,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         public void openSet(TLRPC$InputStickerSet tLRPC$InputStickerSet, boolean z) {
         }
 
-        public /* synthetic */ void remove(String str) {
-            ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$remove(this, str);
+        public /* synthetic */ void remove(SendMessagesHelper.ImportingSticker importingSticker) {
+            ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$remove(this, importingSticker);
         }
 
         public /* synthetic */ void sendGif(Object obj, Object obj2, boolean z, int i) {
@@ -310,7 +311,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2.setImeOptions(r4)
                 if (r3 != 0) goto L_0x014c
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627340(0x7f0e0d4c, float:1.8881942E38)
+                r3 = 2131627341(0x7f0e0d4d, float:1.8881944E38)
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -318,7 +319,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             L_0x014c:
                 if (r3 != r6) goto L_0x015d
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627316(0x7f0e0d34, float:1.8881893E38)
+                r3 = 2131627317(0x7f0e0d35, float:1.8881895E38)
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -327,7 +328,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2 = 2
                 if (r3 != r2) goto L_0x016e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131627331(0x7f0e0d43, float:1.8881923E38)
+                r3 = 2131627332(0x7f0e0d44, float:1.8881925E38)
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -427,7 +428,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         this.behindKeyboardColor = -14342875;
         this.useLightStatusBar = false;
         this.currentType = 0;
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.recentDocumentsDidLoad);
         MediaDataController.getInstance(this.currentAccount).loadRecents(0, false, true, false);
@@ -1006,7 +1007,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
 
     public void dismissInternal() {
         super.dismissInternal();
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.stickersDidLoad);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.recentDocumentsDidLoad);
     }
@@ -1062,7 +1063,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             if (intValue == this.currentType || intValue == 2) {
                 checkDocuments(false);
             }
-        } else if (i == NotificationCenter.emojiDidLoad && (recyclerListView = this.gridView) != null) {
+        } else if (i == NotificationCenter.emojiLoaded && (recyclerListView = this.gridView) != null) {
             int childCount = recyclerListView.getChildCount();
             for (int i3 = 0; i3 < childCount; i3++) {
                 View childAt = this.gridView.getChildAt(i3);

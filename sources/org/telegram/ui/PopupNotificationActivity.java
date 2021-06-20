@@ -144,7 +144,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.contactsDidLoad);
         }
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.pushMessagesUpdated);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         this.classGuid = ConnectionsManager.generateClassGuid();
         this.statusDrawables[0] = new TypingDotsDrawable(false);
         this.statusDrawables[1] = new RecordStatusDrawable(false);
@@ -2123,7 +2123,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
             int r3 = r3 + 1
             goto L_0x0148
         L_0x0181:
-            int r9 = org.telegram.messenger.NotificationCenter.emojiDidLoad
+            int r9 = org.telegram.messenger.NotificationCenter.emojiLoaded
             if (r7 != r9) goto L_0x01b5
             android.view.ViewGroup r7 = r6.messageContainer
             if (r7 == 0) goto L_0x01c0
@@ -2186,7 +2186,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.contactsDidLoad);
             }
             NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.pushMessagesUpdated);
-            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
+            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
             ChatActivityEnterView chatActivityEnterView2 = this.chatActivityEnterView;
             if (chatActivityEnterView2 != null) {
                 chatActivityEnterView2.onDestroy();

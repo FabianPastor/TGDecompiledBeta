@@ -1284,8 +1284,8 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         for (int i = 0; i < 3; i++) {
-            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.fileDidLoad);
-            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.fileDidFailToLoad);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.fileLoaded);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.fileLoadFailed);
         }
     }
 
@@ -1293,13 +1293,13 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         for (int i = 0; i < 3; i++) {
-            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.fileDidLoad);
-            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.fileDidFailToLoad);
+            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.fileLoaded);
+            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.fileLoadFailed);
         }
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.fileDidLoad) {
+        if (i == NotificationCenter.fileLoaded) {
             String str = objArr[0];
             File file = objArr[1];
             Theme.ThemeInfo themeInfo = this.loadingThemes.get(str);
@@ -1323,7 +1323,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                     lambda$didReceivedNotification$2(themeInfo);
                 }
             }
-        } else if (i == NotificationCenter.fileDidFailToLoad) {
+        } else if (i == NotificationCenter.fileLoadFailed) {
             this.loadingThemes.remove(objArr[0]);
         }
     }

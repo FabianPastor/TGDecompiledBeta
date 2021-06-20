@@ -336,7 +336,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
     }
 
     static /* synthetic */ void lambda$onChannelOpened$0(File file, CyclicBarrier cyclicBarrier, int i, int i2, Object[] objArr) {
-        if (i == NotificationCenter.fileDidLoad) {
+        if (i == NotificationCenter.fileLoaded) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("file loaded: " + objArr[0] + " " + objArr[0].getClass().getName());
             }
@@ -355,14 +355,14 @@ public class WearDataLayerListenerService extends WearableListenerService {
     /* access modifiers changed from: private */
     /* renamed from: lambda$onChannelOpened$1 */
     public /* synthetic */ void lambda$onChannelOpened$1$WearDataLayerListenerService(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate, TLRPC$User tLRPC$User) {
-        NotificationCenter.getInstance(this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.fileLoaded);
         FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForUserOrChat(tLRPC$User, 1), tLRPC$User, (String) null, 1, 1);
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$onChannelOpened$2 */
     public /* synthetic */ void lambda$onChannelOpened$2$WearDataLayerListenerService(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate) {
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(notificationCenterDelegate, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(notificationCenterDelegate, NotificationCenter.fileLoaded);
     }
 
     static /* synthetic */ void lambda$onChannelOpened$3(String[] strArr, CyclicBarrier cyclicBarrier, int i, int i2, Object[] objArr) {

@@ -22,6 +22,7 @@ import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
@@ -689,7 +690,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         int itemViewType = viewHolder.getItemViewType();
         if (itemViewType == 0) {
-            ((StickerEmojiCell) viewHolder.itemView).setSticker((TLRPC$Document) this.cache.get(i), (String) null, this.cacheParent.get(i), this.positionToEmoji.get(i), false);
+            ((StickerEmojiCell) viewHolder.itemView).setSticker((TLRPC$Document) this.cache.get(i), (SendMessagesHelper.ImportingSticker) null, this.cacheParent.get(i), this.positionToEmoji.get(i), false);
         } else if (itemViewType == 1) {
             ((EmptyCell) viewHolder.itemView).setHeight(0);
         } else if (itemViewType == 2) {

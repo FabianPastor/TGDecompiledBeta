@@ -502,6 +502,9 @@ public class Theme {
     }
 
     public static int getWallpaperColor(int i) {
+        if (i == 0) {
+            return 0;
+        }
         return i | -16777216;
     }
 
@@ -2051,12 +2054,12 @@ public class Theme {
             if (!z) {
                 HashMap<String, LoadingPattern> hashMap = this.watingForLoad;
                 if (hashMap == null || hashMap.isEmpty()) {
-                    NotificationCenter.getInstance(this.account).removeObserver(this, NotificationCenter.fileDidLoad);
-                    NotificationCenter.getInstance(this.account).removeObserver(this, NotificationCenter.fileDidFailToLoad);
+                    NotificationCenter.getInstance(this.account).removeObserver(this, NotificationCenter.fileLoaded);
+                    NotificationCenter.getInstance(this.account).removeObserver(this, NotificationCenter.fileLoadFailed);
                 }
             } else if (this.watingForLoad != null) {
-                NotificationCenter.getInstance(this.account).addObserver(this, NotificationCenter.fileDidLoad);
-                NotificationCenter.getInstance(this.account).addObserver(this, NotificationCenter.fileDidFailToLoad);
+                NotificationCenter.getInstance(this.account).addObserver(this, NotificationCenter.fileLoaded);
+                NotificationCenter.getInstance(this.account).addObserver(this, NotificationCenter.fileLoadFailed);
                 for (Map.Entry<String, LoadingPattern> value : this.watingForLoad.entrySet()) {
                     FileLoader.getInstance(this.account).loadFile(ImageLocation.getForDocument(((LoadingPattern) value.getValue()).pattern.document), "wallpaper", (String) null, 0, 1);
                 }
@@ -2159,7 +2162,7 @@ public class Theme {
         public void didReceivedNotification(int i, int i2, Object... objArr) {
             HashMap<String, LoadingPattern> hashMap = this.watingForLoad;
             if (hashMap != null) {
-                if (i == NotificationCenter.fileDidLoad) {
+                if (i == NotificationCenter.fileLoaded) {
                     LoadingPattern remove = hashMap.remove(objArr[0]);
                     if (remove != null) {
                         Utilities.globalQueue.postRunnable(new Runnable(remove) {
@@ -2174,7 +2177,7 @@ public class Theme {
                             }
                         });
                     }
-                } else if (i == NotificationCenter.fileDidFailToLoad && hashMap.remove(objArr[0]) != null) {
+                } else if (i == NotificationCenter.fileLoadFailed && hashMap.remove(objArr[0]) != null) {
                     checkCurrentWallpaper((ArrayList<ThemeAccent>) null, false);
                 }
             }
@@ -3321,14 +3324,14 @@ public class Theme {
         }
 
         private void addObservers() {
-            NotificationCenter.getInstance(this.account).addObserver(this, NotificationCenter.fileDidLoad);
-            NotificationCenter.getInstance(this.account).addObserver(this, NotificationCenter.fileDidFailToLoad);
+            NotificationCenter.getInstance(this.account).addObserver(this, NotificationCenter.fileLoaded);
+            NotificationCenter.getInstance(this.account).addObserver(this, NotificationCenter.fileLoadFailed);
         }
 
         /* access modifiers changed from: private */
         public void removeObservers() {
-            NotificationCenter.getInstance(this.account).removeObserver(this, NotificationCenter.fileDidLoad);
-            NotificationCenter.getInstance(this.account).removeObserver(this, NotificationCenter.fileDidFailToLoad);
+            NotificationCenter.getInstance(this.account).removeObserver(this, NotificationCenter.fileLoaded);
+            NotificationCenter.getInstance(this.account).removeObserver(this, NotificationCenter.fileLoadFailed);
         }
 
         /* access modifiers changed from: private */
@@ -3567,8 +3570,8 @@ public class Theme {
         }
 
         public void didReceivedNotification(int i, int i2, Object... objArr) {
-            int i3 = NotificationCenter.fileDidLoad;
-            if (i == i3 || i == NotificationCenter.fileDidFailToLoad) {
+            int i3 = NotificationCenter.fileLoaded;
+            if (i == i3 || i == NotificationCenter.fileLoadFailed) {
                 String str = objArr[0];
                 TLRPC$TL_theme tLRPC$TL_theme = this.info;
                 if (tLRPC$TL_theme != null && tLRPC$TL_theme.document != null) {

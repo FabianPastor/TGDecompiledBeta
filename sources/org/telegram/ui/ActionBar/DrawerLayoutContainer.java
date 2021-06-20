@@ -170,15 +170,17 @@ public class DrawerLayoutContainer extends FrameLayout {
             if (this.drawerLayout.getVisibility() != i) {
                 this.drawerLayout.setVisibility(i);
             }
-            BaseFragment baseFragment = this.parentActionBarLayout.fragmentsStack.get(0);
-            if (this.drawerPosition == ((float) this.drawerLayout.getMeasuredWidth())) {
-                baseFragment.setProgressToDrawerOpened(1.0f);
-            } else {
-                float f2 = this.drawerPosition;
-                if (f2 == 0.0f) {
-                    baseFragment.setProgressToDrawerOpened(0.0f);
+            if (!this.parentActionBarLayout.fragmentsStack.isEmpty()) {
+                BaseFragment baseFragment = this.parentActionBarLayout.fragmentsStack.get(0);
+                if (this.drawerPosition == ((float) this.drawerLayout.getMeasuredWidth())) {
+                    baseFragment.setProgressToDrawerOpened(1.0f);
                 } else {
-                    baseFragment.setProgressToDrawerOpened(f2 / ((float) this.drawerLayout.getMeasuredWidth()));
+                    float f2 = this.drawerPosition;
+                    if (f2 == 0.0f) {
+                        baseFragment.setProgressToDrawerOpened(0.0f);
+                    } else {
+                        baseFragment.setProgressToDrawerOpened(f2 / ((float) this.drawerLayout.getMeasuredWidth()));
+                    }
                 }
             }
             setScrimOpacity(this.drawerPosition / ((float) this.drawerLayout.getMeasuredWidth()));

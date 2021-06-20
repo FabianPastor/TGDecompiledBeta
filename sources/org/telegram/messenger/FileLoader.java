@@ -289,7 +289,7 @@ public class FileLoader extends BaseController {
         return isLoadingVideo(tLRPC$Document, false) || isLoadingVideo(tLRPC$Document, true);
     }
 
-    public void cancelUploadFile(String str, boolean z) {
+    public void cancelFileUpload(String str, boolean z) {
         fileLoaderQueue.postRunnable(new Runnable(z, str) {
             public final /* synthetic */ boolean f$1;
             public final /* synthetic */ String f$2;
@@ -300,14 +300,14 @@ public class FileLoader extends BaseController {
             }
 
             public final void run() {
-                FileLoader.this.lambda$cancelUploadFile$2$FileLoader(this.f$1, this.f$2);
+                FileLoader.this.lambda$cancelFileUpload$2$FileLoader(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$cancelUploadFile$2 */
-    public /* synthetic */ void lambda$cancelUploadFile$2$FileLoader(boolean z, String str) {
+    /* renamed from: lambda$cancelFileUpload$2 */
+    public /* synthetic */ void lambda$cancelFileUpload$2$FileLoader(boolean z, String str) {
         FileUploadOperation fileUploadOperation;
         if (!z) {
             fileUploadOperation = (FileUploadOperation) this.uploadOperationPaths.get(str);
@@ -1983,6 +1983,9 @@ public class FileLoader extends BaseController {
                 if (tLRPC$FileLocation2 != null && tLRPC$FileLocation2.local_id == tLRPC$FileLocation.local_id && tLRPC$FileLocation2.volume_id == tLRPC$FileLocation.volume_id) {
                     return true;
                 }
+            }
+            if ((-tLRPC$FileLocation.volume_id) == tLRPC$Photo.id) {
+                return true;
             }
         }
         return false;

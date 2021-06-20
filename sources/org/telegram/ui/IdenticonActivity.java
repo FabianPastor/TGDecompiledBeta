@@ -83,13 +83,13 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
 
     public boolean onFragmentCreate() {
         this.chat_id = getArguments().getInt("chat_id");
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         return super.onFragmentCreate();
     }
 
     public void onFragmentDestroy() {
         super.onFragmentDestroy();
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
     }
 
     public View createView(Context context) {
@@ -222,7 +222,7 @@ public class IdenticonActivity extends BaseFragment implements NotificationCente
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         TextView textView2;
-        if (i == NotificationCenter.emojiDidLoad && (textView2 = this.emojiTextView) != null) {
+        if (i == NotificationCenter.emojiLoaded && (textView2 = this.emojiTextView) != null) {
             textView2.invalidate();
         }
     }

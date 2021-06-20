@@ -78,7 +78,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingDidSeek);
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.httpFileDidLoad);
-            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.fileLoaded);
         }
         ImageReceiver imageReceiver2 = new ImageReceiver((View) null);
         this.imageReceiver = imageReceiver2;
@@ -488,7 +488,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.messagePlayingDidSeek);
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.httpFileDidLoad);
-            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.fileLoaded);
         }
     }
 
@@ -513,7 +513,7 @@ public class MusicPlayerService extends Service implements NotificationCenter.No
             if (playingMessageObject3 != null && (str2 = this.loadingFilePath) != null && str2.equals(str3)) {
                 createNotification(playingMessageObject3, false);
             }
-        } else if (i == NotificationCenter.fileDidLoad) {
+        } else if (i == NotificationCenter.fileLoaded) {
             String str4 = objArr[0];
             MessageObject playingMessageObject4 = MediaController.getInstance().getPlayingMessageObject();
             if (playingMessageObject4 != null && (str = this.loadingFilePath) != null && str.equals(str4)) {

@@ -3603,6 +3603,7 @@ public final class R {
         public static final int ImportStickersLinkInvalidLong = NUM;
         public static final int ImportStickersLinkInvalidShort = NUM;
         public static final int ImportStickersLinkTaken = NUM;
+        public static final int ImportStickersProcessing = NUM;
         public static final int ImportStickersRemove = NUM;
         public static final int ImportStickersRemoveMenu = NUM;
         public static final int ImportToChat = NUM;

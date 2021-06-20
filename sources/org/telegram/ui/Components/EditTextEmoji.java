@@ -113,7 +113,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
     public EditTextEmoji(Context context, SizeNotifierFrameLayout sizeNotifierFrameLayout, BaseFragment baseFragment, int i) {
         super(context);
         this.currentStyle = i;
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         this.parentFragment = baseFragment;
         this.sizeNotifierLayout = sizeNotifierFrameLayout;
         sizeNotifierFrameLayout.setDelegate(this);
@@ -229,7 +229,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         EmojiView emojiView2;
-        if (i == NotificationCenter.emojiDidLoad && (emojiView2 = this.emojiView) != null) {
+        if (i == NotificationCenter.emojiLoaded && (emojiView2 = this.emojiView) != null) {
             emojiView2.invalidateViews();
         }
     }
@@ -281,7 +281,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
 
     public void onDestroy() {
         this.destroyed = true;
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         EmojiView emojiView2 = this.emojiView;
         if (emojiView2 != null) {
             emojiView2.onDestroy();

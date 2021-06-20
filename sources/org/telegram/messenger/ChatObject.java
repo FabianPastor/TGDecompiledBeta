@@ -109,7 +109,6 @@ public class ChatObject {
         private Runnable checkQueueRunnable;
         public AccountInstance currentAccount;
         public final SparseArray<TLRPC$TL_groupCallParticipant> currentSpeakingPeers = new SparseArray<>();
-        public TLRPC$TL_groupCallParticipant fullscreenParticipant;
         public ArrayList<Integer> invitedUsers = new ArrayList<>();
         public HashSet<Integer> invitedUsersMap = new HashSet<>();
         private long lastGroupCallReloadTime;
@@ -745,10 +744,6 @@ public class ChatObject {
                 }
                 this.currentAccount.getNotificationCenter().postNotificationName(NotificationCenter.groupCallSpeakingUsersUpdated, Integer.valueOf(this.chatId), Long.valueOf(this.call.id), Boolean.FALSE);
             }
-        }
-
-        public void setFullscreenParticipant(TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant) {
-            this.fullscreenParticipant = tLRPC$TL_groupCallParticipant;
         }
 
         public void updateVisibleParticipants() {

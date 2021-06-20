@@ -32,6 +32,7 @@ import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.WebFile;
 import org.telegram.tgnet.TLRPC$BotInlineResult;
@@ -74,8 +75,6 @@ public class ContentPreviewViewer {
     private float currentMoveY;
     /* access modifiers changed from: private */
     public float currentMoveYProgress;
-    /* access modifiers changed from: private */
-    public String currentPath;
     private View currentPreviewCell;
     /* access modifiers changed from: private */
     public String currentQuery;
@@ -85,6 +84,8 @@ public class ContentPreviewViewer {
     public ContentPreviewViewerDelegate delegate;
     /* access modifiers changed from: private */
     public float finalMoveY;
+    /* access modifiers changed from: private */
+    public SendMessagesHelper.ImportingSticker importingSticker;
     /* access modifiers changed from: private */
     public TLRPC$BotInlineResult inlineResult;
     /* access modifiers changed from: private */
@@ -302,7 +303,7 @@ public class ContentPreviewViewer {
                 } else if (((Integer) arrayList.get(i)).intValue() == 4) {
                     MediaDataController.getInstance(ContentPreviewViewer.this.currentAccount).addRecentSticker(0, ContentPreviewViewer.this.parentObject, ContentPreviewViewer.this.currentDocument, (int) (System.currentTimeMillis() / 1000), true);
                 } else if (((Integer) arrayList.get(i)).intValue() == 5) {
-                    ContentPreviewViewer.this.delegate.remove(ContentPreviewViewer.this.currentPath);
+                    ContentPreviewViewer.this.delegate.remove(ContentPreviewViewer.this.importingSticker);
                 }
             }
         }
@@ -409,7 +410,7 @@ public class ContentPreviewViewer {
                 return false;
             }
 
-            public static void $default$remove(ContentPreviewViewerDelegate contentPreviewViewerDelegate, String str) {
+            public static void $default$remove(ContentPreviewViewerDelegate contentPreviewViewerDelegate, SendMessagesHelper.ImportingSticker importingSticker) {
             }
 
             public static void $default$sendGif(ContentPreviewViewerDelegate contentPreviewViewerDelegate, Object obj, Object obj2, boolean z, int i) {
@@ -436,7 +437,7 @@ public class ContentPreviewViewer {
 
         void openSet(TLRPC$InputStickerSet tLRPC$InputStickerSet, boolean z);
 
-        void remove(String str);
+        void remove(SendMessagesHelper.ImportingSticker importingSticker);
 
         void sendGif(Object obj, Object obj2, boolean z, int i);
 
@@ -688,7 +689,7 @@ public class ContentPreviewViewer {
             r12 = r0
             org.telegram.ui.Cells.StickerEmojiCell r12 = (org.telegram.ui.Cells.StickerEmojiCell) r12
             org.telegram.tgnet.TLRPC$Document r1 = r12.getSticker()
-            java.lang.String r4 = r12.getStickerPath()
+            org.telegram.messenger.SendMessagesHelper$ImportingSticker r4 = r12.getStickerPath()
             java.lang.String r5 = r12.getEmoji()
             org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate r0 = r9.delegate
             if (r0 == 0) goto L_0x0173
@@ -991,7 +992,7 @@ public class ContentPreviewViewer {
             if (view instanceof StickerEmojiCell) {
                 StickerEmojiCell stickerEmojiCell = (StickerEmojiCell) view;
                 TLRPC$Document sticker = stickerEmojiCell.getSticker();
-                String stickerPath = stickerEmojiCell.getStickerPath();
+                SendMessagesHelper.ImportingSticker stickerPath = stickerEmojiCell.getStickerPath();
                 String emoji = stickerEmojiCell.getEmoji();
                 ContentPreviewViewerDelegate contentPreviewViewerDelegate = this.delegate;
                 if (contentPreviewViewerDelegate != null) {
@@ -1006,7 +1007,7 @@ public class ContentPreviewViewer {
                 if (contentPreviewViewerDelegate2 != null) {
                     str = contentPreviewViewerDelegate2.getQuery(false);
                 }
-                open(sticker2, (String) null, (String) null, str, (TLRPC$BotInlineResult) null, i2, false, stickerCell.getParentObject());
+                open(sticker2, (SendMessagesHelper.ImportingSticker) null, (String) null, str, (TLRPC$BotInlineResult) null, i2, false, stickerCell.getParentObject());
                 stickerCell.setScaled(true);
                 this.clearsInputField = stickerCell.isClearsInputField();
             } else if (view instanceof ContextLinkCell) {
@@ -1016,7 +1017,7 @@ public class ContentPreviewViewer {
                 if (contentPreviewViewerDelegate3 != null) {
                     str = contentPreviewViewerDelegate3.getQuery(true);
                 }
-                open(document, (String) null, (String) null, str, contextLinkCell.getBotInlineResult(), i2, false, contextLinkCell.getBotInlineResult() != null ? contextLinkCell.getInlineBot() : contextLinkCell.getParentObject());
+                open(document, (SendMessagesHelper.ImportingSticker) null, (String) null, str, contextLinkCell.getBotInlineResult(), i2, false, contextLinkCell.getBotInlineResult() != null ? contextLinkCell.getInlineBot() : contextLinkCell.getParentObject());
                 if (i2 != 1) {
                     contextLinkCell.setScaled(true);
                 }
@@ -1092,12 +1093,12 @@ public class ContentPreviewViewer {
         this.keyboardHeight = i;
     }
 
-    public void open(TLRPC$Document tLRPC$Document, String str, String str2, String str3, TLRPC$BotInlineResult tLRPC$BotInlineResult, int i, boolean z, Object obj) {
+    public void open(TLRPC$Document tLRPC$Document, SendMessagesHelper.ImportingSticker importingSticker2, String str, String str2, TLRPC$BotInlineResult tLRPC$BotInlineResult, int i, boolean z, Object obj) {
         TLRPC$InputStickerSet tLRPC$InputStickerSet;
         ContentPreviewViewerDelegate contentPreviewViewerDelegate;
         TLRPC$Document tLRPC$Document2 = tLRPC$Document;
-        String str4 = str;
-        String str5 = str2;
+        SendMessagesHelper.ImportingSticker importingSticker3 = importingSticker2;
+        String str3 = str;
         TLRPC$BotInlineResult tLRPC$BotInlineResult2 = tLRPC$BotInlineResult;
         int i2 = i;
         if (this.parentActivity != null && this.windowView != null) {
@@ -1126,7 +1127,7 @@ public class ContentPreviewViewer {
                 }
                 AndroidUtilities.cancelRunOnUIThread(this.showSheetRunnable);
                 AndroidUtilities.runOnUIThread(this.showSheetRunnable, 2000);
-            } else if (tLRPC$Document2 != null || str4 != null) {
+            } else if (tLRPC$Document2 != null || importingSticker3 != null) {
                 if (textPaint == null) {
                     TextPaint textPaint2 = new TextPaint(1);
                     textPaint = textPaint2;
@@ -1173,10 +1174,10 @@ public class ContentPreviewViewer {
                         }
                         i4++;
                     }
-                } else if (str4 != null) {
-                    this.centerImage.setImage(str, (String) null, (Drawable) null, (String) null, 0);
-                    if (str5 != null) {
-                        this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(str5, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                } else if (importingSticker3 != null) {
+                    this.centerImage.setImage(importingSticker3.path, (String) null, (Drawable) null, importingSticker3.animated ? "tgs" : null, 0);
+                    if (str3 != null) {
+                        this.stickerEmojiLayout = new StaticLayout(Emoji.replaceEmoji(str3, textPaint.getFontMetricsInt(), AndroidUtilities.dp(24.0f), false), textPaint, AndroidUtilities.dp(100.0f), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
                     }
                     if (this.delegate.needMenu()) {
                         try {
@@ -1198,8 +1199,8 @@ public class ContentPreviewViewer {
             }
             this.currentContentType = i2;
             this.currentDocument = tLRPC$Document2;
-            this.currentPath = str4;
-            this.currentQuery = str3;
+            this.importingSticker = importingSticker3;
+            this.currentQuery = str2;
             this.inlineResult = tLRPC$BotInlineResult2;
             this.parentObject = obj;
             this.containerView.invalidate();

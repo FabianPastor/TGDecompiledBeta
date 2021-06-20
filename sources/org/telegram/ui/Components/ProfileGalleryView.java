@@ -196,7 +196,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         this.adapter = viewPagerAdapter;
         setAdapter((CircularViewPager.Adapter) viewPagerAdapter);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.dialogPhotosLoaded);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileLoaded);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.reloadDialogPhotos);
     }
@@ -262,7 +262,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             }
         });
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.dialogPhotosLoaded);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileLoaded);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.reloadDialogPhotos);
         MessagesController.getInstance(this.currentAccount).loadDialogPhotos((int) j, 80, 0, true, i);
@@ -270,7 +270,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
 
     public void onDestroy() {
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.dialogPhotosLoaded);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileLoaded);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.reloadDialogPhotos);
         int childCount = getChildCount();
@@ -994,7 +994,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             r0.addUploadingImage(r1, r2)
             goto L_0x030d
         L_0x0260:
-            int r2 = org.telegram.messenger.NotificationCenter.fileDidLoad
+            int r2 = org.telegram.messenger.NotificationCenter.fileLoaded
             r4 = 1065353216(0x3var_, float:1.0)
             if (r1 != r2) goto L_0x029d
             r1 = r19[r5]

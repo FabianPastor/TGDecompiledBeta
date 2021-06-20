@@ -647,7 +647,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     public void onCreate() {
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         this.sizeNotifierLayout.setDelegate(this);
     }
 
@@ -657,7 +657,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             closeKeyboard();
         }
         this.keyboardVisible = false;
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto = this.sizeNotifierLayout;
         if (sizeNotifierFrameLayoutPhoto != null) {
             sizeNotifierFrameLayoutPhoto.setDelegate((SizeNotifierFrameLayoutPhoto.SizeNotifierFrameLayoutPhotoDelegate) null);
@@ -1065,7 +1065,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         EmojiView emojiView2;
-        if (i == NotificationCenter.emojiDidLoad && (emojiView2 = this.emojiView) != null) {
+        if (i == NotificationCenter.emojiLoaded && (emojiView2 = this.emojiView) != null) {
             emojiView2.invalidateViews();
         }
     }

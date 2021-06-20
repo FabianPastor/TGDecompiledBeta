@@ -341,7 +341,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
         this.titleTextView.setText(LocaleController.getString("FilterChoose", NUM));
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.containerView.addView(this.titleTextView, LayoutHelper.createFrame(-1, 50.0f, 51, 0.0f, 0.0f, 40.0f, 0.0f));
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
     }
 
     /* access modifiers changed from: private */
@@ -425,12 +425,12 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
 
     public void dismiss() {
         super.dismiss();
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         RecyclerListView recyclerListView;
-        if (i == NotificationCenter.emojiDidLoad && (recyclerListView = this.listView) != null) {
+        if (i == NotificationCenter.emojiLoaded && (recyclerListView = this.listView) != null) {
             int childCount = recyclerListView.getChildCount();
             for (int i3 = 0; i3 < childCount; i3++) {
                 this.listView.getChildAt(i3).invalidate();

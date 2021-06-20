@@ -1157,10 +1157,10 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.util.HashSet r4 = new java.util.HashSet
             r4.<init>()
             boolean r0 = org.telegram.messenger.BuildVars.NO_SCOPED_STORAGE
-            r5 = 2131625859(0x7f0e0783, float:1.8878938E38)
+            r5 = 2131625860(0x7f0e0784, float:1.887894E38)
             java.lang.String r6 = "InternalFolderInfo"
             r7 = 2131165400(0x7var_d8, float:1.7945016E38)
-            r8 = 2131625860(0x7f0e0784, float:1.887894E38)
+            r8 = 2131625861(0x7f0e0785, float:1.8878942E38)
             java.lang.String r9 = "InternalStorage"
             if (r0 != 0) goto L_0x003f
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
@@ -1182,7 +1182,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r12 = 2131625466(0x7f0e05fa, float:1.887814E38)
             java.lang.String r13 = "ExternalFolderInfo"
             r14 = 2131165398(0x7var_d6, float:1.7945012E38)
-            r15 = 2131627311(0x7f0e0d2f, float:1.8881883E38)
+            r15 = 2131627312(0x7f0e0d30, float:1.8881885E38)
             java.lang.String r5 = "SdCard"
             if (r11 != 0) goto L_0x0068
             java.lang.String r11 = "mounted_ro"
@@ -1203,7 +1203,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r10.title = r8
             r10.icon = r7
-            r7 = 2131625859(0x7f0e0783, float:1.8878938E38)
+            r7 = 2131625860(0x7f0e0784, float:1.887894E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r7)
             r10.subtitle = r6
         L_0x0093:
@@ -1378,7 +1378,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.String r4 = "AttachMusic"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.title = r2
-            r2 = 2131626244(0x7f0e0904, float:1.8879719E38)
+            r2 = 2131626245(0x7f0e0905, float:1.887972E38)
             java.lang.String r4 = "MusicInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.subtitle = r2

@@ -377,20 +377,20 @@ public class AvatarPreviewer {
         /* access modifiers changed from: protected */
         public void onAttachedToWindow() {
             super.onAttachedToWindow();
-            NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         }
 
         /* access modifiers changed from: protected */
         public void onDetachedFromWindow() {
             super.onDetachedFromWindow();
-            NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
         }
 
         public void didReceivedNotification(int i, int i2, Object... objArr) {
             if (this.showProgress && !TextUtils.isEmpty(this.videoFileName)) {
-                if (i == NotificationCenter.fileDidLoad) {
+                if (i == NotificationCenter.fileLoaded) {
                     if (TextUtils.equals(objArr[0], this.videoFileName)) {
                         this.radialProgress.setProgress(1.0f, true);
                     }

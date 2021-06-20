@@ -1535,7 +1535,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         r0 = 2
                         java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
                         r1 = 0
-                        r2 = 2131626564(0x7f0e0a44, float:1.8880368E38)
+                        r2 = 2131626565(0x7f0e0a45, float:1.888037E38)
                         java.lang.String r3 = "Open"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
@@ -1943,17 +1943,17 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             super.onAttachedToWindow();
             int i = UserConfig.selectedAccount;
             this.lastAccount = i;
-            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.emojiDidLoad);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.emojiLoaded);
         }
 
         /* access modifiers changed from: protected */
         public void onDetachedFromWindow() {
             super.onDetachedFromWindow();
-            NotificationCenter.getInstance(this.lastAccount).removeObserver(this, NotificationCenter.emojiDidLoad);
+            NotificationCenter.getInstance(this.lastAccount).removeObserver(this, NotificationCenter.emojiLoaded);
         }
 
         public void didReceivedNotification(int i, int i2, Object... objArr) {
-            if (i == NotificationCenter.emojiDidLoad) {
+            if (i == NotificationCenter.emojiLoaded) {
                 int childCount = this.recyclerListView.getChildCount();
                 for (int i3 = 0; i3 < childCount; i3++) {
                     if (this.recyclerListView.getChildAt(i3) instanceof DialogCell) {
@@ -2035,7 +2035,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     org.telegram.ui.Cells.GraySectionCell r5 = new org.telegram.ui.Cells.GraySectionCell
                     android.content.Context r4 = r4.getContext()
                     r5.<init>(r4)
-                    r4 = 2131627337(0x7f0e0d49, float:1.8881936E38)
+                    r4 = 2131627338(0x7f0e0d4a, float:1.8881938E38)
                     java.lang.String r0 = "SearchMessages"
                     java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r0, r4)
                     r5.setText(r4)

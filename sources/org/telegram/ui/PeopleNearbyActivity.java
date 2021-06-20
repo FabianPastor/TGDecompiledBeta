@@ -222,12 +222,12 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
 
     private class DiffCallback extends DiffUtil.Callback {
         SparseIntArray newPositionToItem;
-        private ArrayList<TLRPC$TL_peerLocated> oldChats;
+        private final ArrayList<TLRPC$TL_peerLocated> oldChats;
         int oldChatsEndRow;
         int oldChatsStartRow;
         SparseIntArray oldPositionToItem;
         int oldRowCount;
-        private ArrayList<TLRPC$TL_peerLocated> oldUsers;
+        private final ArrayList<TLRPC$TL_peerLocated> oldUsers;
         int oldUsersEndRow;
         int oldUsersStartRow;
 
@@ -1055,7 +1055,6 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         }
         int currentTime = getConnectionsManager().getCurrentTime();
         int i = 0;
-        boolean z2 = false;
         int i2 = Integer.MAX_VALUE;
         while (i < 2) {
             ArrayList<TLRPC$TL_peerLocated> arrayList = i == 0 ? this.users : this.chats;
@@ -1063,34 +1062,27 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             int i3 = 0;
             while (i3 < size) {
                 int i4 = arrayList.get(i3).expires;
-                if (i4 <= currentTime) {
-                    arrayList.remove(i3);
-                    i3--;
-                    size--;
-                    z2 = true;
-                } else {
+                if (i4 > currentTime) {
                     i2 = Math.min(i2, i4);
+                    i3++;
+                } else {
+                    new DiffCallback();
+                    throw null;
                 }
-                i3++;
             }
             i++;
         }
-        if (z2 && this.listViewAdapter != null) {
-            DiffCallback diffCallback = new DiffCallback();
-            diffCallback.saveCurrentState();
-            updateRows(diffCallback);
-        }
-        if (z2 || z) {
+        if (z) {
             getLocationController().setCachedNearbyUsersAndChats(this.users, this.chats);
         }
         if (i2 != Integer.MAX_VALUE) {
-            $$Lambda$PeopleNearbyActivity$R_UluTvOElowLB2XSMbtq4RY7gk r13 = new Runnable() {
+            $$Lambda$PeopleNearbyActivity$R_UluTvOElowLB2XSMbtq4RY7gk r11 = new Runnable() {
                 public final void run() {
                     PeopleNearbyActivity.this.lambda$checkForExpiredLocations$9$PeopleNearbyActivity();
                 }
             };
-            this.checkExpiredRunnable = r13;
-            AndroidUtilities.runOnUIThread(r13, (long) ((i2 - currentTime) * 1000));
+            this.checkExpiredRunnable = r11;
+            AndroidUtilities.runOnUIThread(r11, (long) ((i2 - currentTime) * 1000));
         }
     }
 

@@ -1,5 +1,7 @@
 package org.telegram.messenger;
 
+import android.graphics.Paint;
+import android.graphics.Path;
 import java.util.ArrayList;
 import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC$Document;
@@ -80,6 +82,19 @@ public class DocumentObject {
 
     public static SvgHelper.SvgDrawable getSvgThumb(TLRPC$Document tLRPC$Document, String str, float f) {
         return getSvgThumb(tLRPC$Document, str, f, 1.0f);
+    }
+
+    public static SvgHelper.SvgDrawable getSvgRectThumb(String str, float f) {
+        Path path = new Path();
+        path.addRect(0.0f, 0.0f, 512.0f, 512.0f, Path.Direction.CW);
+        path.close();
+        SvgHelper.SvgDrawable svgDrawable = new SvgHelper.SvgDrawable();
+        svgDrawable.commands.add(path);
+        svgDrawable.paints.put(path, new Paint(1));
+        svgDrawable.width = 512;
+        svgDrawable.height = 512;
+        svgDrawable.setupGradient(str, f);
+        return svgDrawable;
     }
 
     public static SvgHelper.SvgDrawable getSvgThumb(TLRPC$Document tLRPC$Document, String str, float f, float f2) {

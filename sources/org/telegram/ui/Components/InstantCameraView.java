@@ -386,17 +386,17 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileDidUpload);
+        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileUploaded);
     }
 
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidUpload);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileUploaded);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.FileDidUpload) {
+        if (i == NotificationCenter.fileUploaded) {
             String str = objArr[0];
             File file2 = this.cameraFile;
             if (file2 != null && file2.getAbsolutePath().equals(str)) {
@@ -744,7 +744,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     if (j6 > 0) {
                         videoEditedInfo3.endTime = j6 * 1000;
                     }
-                    FileLoader.getInstance(this.currentAccount).cancelUploadFile(this.cameraFile.getAbsolutePath(), false);
+                    FileLoader.getInstance(this.currentAccount).cancelFileUpload(this.cameraFile.getAbsolutePath(), false);
                 } else {
                     this.videoEditedInfo.estimatedSize = Math.max(1, this.size);
                 }
@@ -2743,7 +2743,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         }
                     });
                 } else {
-                    FileLoader.getInstance(InstantCameraView.this.currentAccount).cancelUploadFile(this.videoFile.getAbsolutePath(), false);
+                    FileLoader.getInstance(InstantCameraView.this.currentAccount).cancelFileUpload(this.videoFile.getAbsolutePath(), false);
                     this.videoFile.delete();
                 }
                 EGL14.eglDestroySurface(this.eglDisplay, this.eglSurface);

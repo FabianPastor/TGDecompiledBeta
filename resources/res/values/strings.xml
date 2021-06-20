@@ -1896,6 +1896,7 @@
     <string name="ImportStickersLinkInvalidLong">Link must not exceed 32 characters.</string>
     <string name="ImportStickersLinkInvalidShort">Link must have at least 5 characters.</string>
     <string name="ImportStickersLinkTaken">Sorry, this link is already taken.</string>
+    <string name="ImportStickersProcessing">Processing stickers...</string>
     <string name="ImportStickersRemove">REMOVE FROM IMPORT</string>
     <string name="ImportStickersRemoveMenu">Remove from import</string>
     <string name="ImportToChat">Do you want to import messages from **%1$s** to the group **%2$s**?</string>

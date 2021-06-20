@@ -9,11 +9,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Parcelable;
 import android.text.Editable;
@@ -37,7 +40,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.telegram.messenger.AndroidUtilities;
@@ -47,6 +52,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.FileRefController;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
@@ -117,10 +123,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     /* access modifiers changed from: private */
     public ArrayList<Parcelable> importingStickers;
     /* access modifiers changed from: private */
-    public ArrayList<String> importingStickersEmojis;
-    private ArrayList<String> importingStickersMimeTypes;
-    /* access modifiers changed from: private */
-    public ArrayList<String> importingStickersPaths;
+    public ArrayList<SendMessagesHelper.ImportingSticker> importingStickersPaths;
     private TLRPC$InputStickerSet inputStickerSet;
     private StickersAlertInstallDelegate installDelegate;
     /* access modifiers changed from: private */
@@ -179,20 +182,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             return StickersAlert.this.importingStickers != null;
         }
 
-        public void remove(String str) {
-            int indexOf = StickersAlert.this.importingStickersPaths.indexOf(str);
-            if (indexOf >= 0) {
-                StickersAlert.this.importingStickersPaths.remove(indexOf);
-                if (StickersAlert.this.importingStickersEmojis != null) {
-                    StickersAlert.this.importingStickersEmojis.remove(indexOf);
-                }
-                StickersAlert.this.adapter.notifyItemRemoved(indexOf);
-                if (StickersAlert.this.importingStickersPaths.isEmpty()) {
-                    StickersAlert.this.dismiss();
-                } else {
-                    StickersAlert.this.updateFields();
-                }
-            }
+        public void remove(SendMessagesHelper.ImportingSticker importingSticker) {
+            StickersAlert.this.removeSticker(importingSticker);
         }
 
         public boolean needSend() {
@@ -213,7 +204,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     /* access modifiers changed from: private */
     public int scrollOffsetY;
     private TLRPC$Document selectedSticker;
-    private String selectedStickerPath;
+    private SendMessagesHelper.ImportingSticker selectedStickerPath;
     private String setTitle;
     /* access modifiers changed from: private */
     public View[] shadow = new View[2];
@@ -234,6 +225,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     private RecyclerListView.OnItemClickListener stickersOnItemClickListener;
     /* access modifiers changed from: private */
     public TextView titleTextView;
+    private HashMap<String, SendMessagesHelper.ImportingSticker> uploadImportStickers;
     private Pattern urlPattern;
 
     public interface StickersAlertDelegate {
@@ -422,105 +414,91 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:4:0x0028, code lost:
-        r6 = (android.net.Uri) r6;
-     */
     /* renamed from: lambda$new$4 */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$new$4$StickersAlert(java.util.ArrayList r12, java.util.ArrayList r13) {
-        /*
-            r11 = this;
-            java.util.ArrayList r0 = new java.util.ArrayList
-            r0.<init>()
-            java.util.ArrayList r1 = new java.util.ArrayList
-            r1.<init>()
-            java.util.ArrayList r2 = new java.util.ArrayList
-            r2.<init>()
-            android.graphics.BitmapFactory$Options r3 = new android.graphics.BitmapFactory$Options
-            r3.<init>()
-            r4 = 1
-            r3.inJustDecodeBounds = r4
-            int r4 = r12.size()
-            r5 = 0
-        L_0x001c:
-            if (r5 >= r4) goto L_0x008e
-            java.lang.Object r6 = r12.get(r5)
-            android.os.Parcelable r6 = (android.os.Parcelable) r6
-            boolean r7 = r6 instanceof android.net.Uri
-            if (r7 == 0) goto L_0x008b
-            android.net.Uri r6 = (android.net.Uri) r6
-            java.lang.String r7 = org.telegram.messenger.MediaController.isWebpOrPng(r6)
-            if (r7 != 0) goto L_0x0031
-            goto L_0x008b
-        L_0x0031:
-            boolean r8 = r11.isDismissed()
-            if (r8 == 0) goto L_0x0038
-            return
-        L_0x0038:
-            java.lang.String r6 = org.telegram.messenger.MediaController.copyFileToCache(r6, r7)
-            android.graphics.BitmapFactory.decodeFile(r6, r3)
-            int r8 = r3.outWidth
-            r9 = 512(0x200, float:7.175E-43)
-            if (r8 != r9) goto L_0x004b
-            int r10 = r3.outHeight
-            if (r10 <= 0) goto L_0x004b
-            if (r10 <= r9) goto L_0x0054
-        L_0x004b:
-            int r10 = r3.outHeight
-            if (r10 != r9) goto L_0x008b
-            if (r8 <= 0) goto L_0x008b
-            if (r8 <= r9) goto L_0x0054
-            goto L_0x008b
-        L_0x0054:
-            if (r13 == 0) goto L_0x0066
-            int r8 = r13.size()
-            if (r8 != r4) goto L_0x0066
-            java.lang.Object r8 = r13.get(r5)
-            java.lang.String r8 = (java.lang.String) r8
-            r1.add(r8)
-            goto L_0x006b
-        L_0x0066:
-            java.lang.String r8 = "#️⃣"
-            r1.add(r8)
-        L_0x006b:
-            java.lang.StringBuilder r8 = new java.lang.StringBuilder
-            r8.<init>()
-            java.lang.String r9 = "image/"
-            r8.append(r9)
-            r8.append(r7)
-            java.lang.String r7 = r8.toString()
-            r2.add(r7)
-            r0.add(r6)
-            int r6 = r0.size()
-            r7 = 200(0xc8, float:2.8E-43)
-            if (r6 < r7) goto L_0x008b
-            goto L_0x008e
-        L_0x008b:
-            int r5 = r5 + 1
-            goto L_0x001c
-        L_0x008e:
-            org.telegram.ui.Components.-$$Lambda$StickersAlert$kfVdAWKqaSFD3SL3_P-I962u3bU r12 = new org.telegram.ui.Components.-$$Lambda$StickersAlert$kfVdAWKqaSFD3SL3_P-I962u3bU
-            r12.<init>(r0, r2, r1)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r12)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.lambda$new$4$StickersAlert(java.util.ArrayList, java.util.ArrayList):void");
+    public /* synthetic */ void lambda$new$4$StickersAlert(ArrayList arrayList, ArrayList arrayList2) {
+        Uri uri;
+        String stickerExt;
+        int i;
+        ArrayList arrayList3 = new ArrayList();
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        int size = arrayList.size();
+        Boolean bool = null;
+        for (int i2 = 0; i2 < size; i2++) {
+            Parcelable parcelable = (Parcelable) arrayList.get(i2);
+            if ((parcelable instanceof Uri) && (stickerExt = MediaController.getStickerExt(uri)) != null) {
+                boolean equals = "tgs".equals(stickerExt);
+                if (bool == null) {
+                    bool = Boolean.valueOf(equals);
+                } else if (bool.booleanValue() != equals) {
+                    continue;
+                }
+                if (!isDismissed()) {
+                    SendMessagesHelper.ImportingSticker importingSticker = new SendMessagesHelper.ImportingSticker();
+                    importingSticker.animated = equals;
+                    String copyFileToCache = MediaController.copyFileToCache((uri = (Uri) parcelable), stickerExt, (long) ((equals ? 64 : 512) * 1024));
+                    importingSticker.path = copyFileToCache;
+                    if (copyFileToCache != null) {
+                        if (!equals) {
+                            BitmapFactory.decodeFile(copyFileToCache, options);
+                            int i3 = options.outWidth;
+                            if ((i3 == 512 && (i = options.outHeight) > 0 && i <= 512) || (options.outHeight == 512 && i3 > 0 && i3 <= 512)) {
+                                importingSticker.mimeType = "image/" + stickerExt;
+                                importingSticker.validated = true;
+                            }
+                        } else {
+                            importingSticker.mimeType = "application/x-tgsticker";
+                        }
+                        if (arrayList2 == null || arrayList2.size() != size) {
+                            importingSticker.emoji = "#️⃣";
+                        } else {
+                            importingSticker.emoji = (String) arrayList2.get(i2);
+                        }
+                        arrayList3.add(importingSticker);
+                        if (arrayList3.size() >= 200) {
+                            break;
+                        }
+                    } else {
+                        continue;
+                    }
+                } else {
+                    return;
+                }
+            }
+        }
+        AndroidUtilities.runOnUIThread(new Runnable(arrayList3, bool) {
+            public final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ Boolean f$2;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+            }
+
+            public final void run() {
+                StickersAlert.this.lambda$new$3$StickersAlert(this.f$1, this.f$2);
+            }
+        });
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$3 */
-    public /* synthetic */ void lambda$new$3$StickersAlert(ArrayList arrayList, ArrayList arrayList2, ArrayList<String> arrayList3) {
+    public /* synthetic */ void lambda$new$3$StickersAlert(ArrayList arrayList, Boolean bool) {
         this.importingStickersPaths = arrayList;
-        this.importingStickersMimeTypes = arrayList2;
-        if (arrayList3.isEmpty()) {
-            arrayList3 = null;
-        }
-        this.importingStickersEmojis = arrayList3;
-        if (this.importingStickersPaths.isEmpty()) {
+        if (arrayList.isEmpty()) {
             dismiss();
             return;
         }
         this.adapter.notifyDataSetChanged();
+        if (bool.booleanValue()) {
+            this.uploadImportStickers = new HashMap<>();
+            int size = this.importingStickersPaths.size();
+            for (int i = 0; i < size; i++) {
+                SendMessagesHelper.ImportingSticker importingSticker = this.importingStickersPaths.get(i);
+                this.uploadImportStickers.put(importingSticker.path, importingSticker);
+                FileLoader.getInstance(this.currentAccount).uploadFile(importingSticker.path, false, true, 67108864);
+            }
+        }
         updateFields();
     }
 
@@ -615,11 +593,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     }
 
                     public Animator createAnimator(ViewGroup viewGroup, TransitionValues transitionValues, TransitionValues transitionValues2) {
-                        int access$900 = StickersAlert.this.scrollOffsetY;
+                        int access$600 = StickersAlert.this.scrollOffsetY;
                         int intValue = ((Integer) transitionValues.values.get("offset")).intValue() - ((Integer) transitionValues2.values.get("offset")).intValue();
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                         ofFloat.setDuration(250);
-                        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(intValue, access$900) {
+                        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(intValue, access$600) {
                             public final /* synthetic */ int f$1;
                             public final /* synthetic */ int f$2;
 
@@ -1133,7 +1111,11 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.previewSendButtonShadow = view;
         view.setBackgroundColor(Theme.getColor("dialogShadowLine"));
         this.stickerPreviewLayout.addView(this.previewSendButtonShadow, layoutParams3);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
+        if (this.importingStickers != null) {
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileUploaded);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileUploadFailed);
+        }
         updateFields();
         updateSendButton();
         updateColors();
@@ -1164,7 +1146,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             }
             return;
         }
-        ArrayList<String> arrayList = this.importingStickersPaths;
+        ArrayList<SendMessagesHelper.ImportingSticker> arrayList = this.importingStickersPaths;
         if (arrayList == null) {
             TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.stickerSet;
             if (tLRPC$TL_messages_stickerSet != null && i2 >= 0 && i2 < tLRPC$TL_messages_stickerSet.documents.size()) {
@@ -1201,22 +1183,21 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 animatorSet.start();
             }
         } else if (i2 >= 0 && i2 < arrayList.size()) {
-            this.selectedStickerPath = this.importingStickersPaths.get(i2);
-            ArrayList<String> arrayList2 = this.importingStickersEmojis;
-            if (arrayList2 != null) {
-                this.stickerEmojiTextView.setText(Emoji.replaceEmoji(arrayList2.get(i2), this.stickerEmojiTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(30.0f), false));
-            } else {
-                this.stickerEmojiTextView.setText("");
+            SendMessagesHelper.ImportingSticker importingSticker = this.importingStickersPaths.get(i2);
+            this.selectedStickerPath = importingSticker;
+            if (importingSticker.validated) {
+                TextView textView2 = this.stickerEmojiTextView;
+                textView2.setText(Emoji.replaceEmoji(importingSticker.emoji, textView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(30.0f), false));
+                this.stickerImageView.setImage(ImageLocation.getForPath(this.selectedStickerPath.path), (String) null, (ImageLocation) null, (String) null, (Drawable) null, (Bitmap) null, this.selectedStickerPath.animated ? "tgs" : null, 0, (Object) null);
+                FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.stickerPreviewLayout.getLayoutParams();
+                layoutParams2.topMargin = this.scrollOffsetY;
+                this.stickerPreviewLayout.setLayoutParams(layoutParams2);
+                this.stickerPreviewLayout.setVisibility(0);
+                AnimatorSet animatorSet2 = new AnimatorSet();
+                animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.stickerPreviewLayout, View.ALPHA, new float[]{0.0f, 1.0f})});
+                animatorSet2.setDuration(200);
+                animatorSet2.start();
             }
-            this.stickerImageView.setImage(this.selectedStickerPath, (String) null, (Drawable) null);
-            FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.stickerPreviewLayout.getLayoutParams();
-            layoutParams2.topMargin = this.scrollOffsetY;
-            this.stickerPreviewLayout.setLayoutParams(layoutParams2);
-            this.stickerPreviewLayout.setVisibility(0);
-            AnimatorSet animatorSet2 = new AnimatorSet();
-            animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.stickerPreviewLayout, View.ALPHA, new float[]{0.0f, 1.0f})});
-            animatorSet2.setDuration(200);
-            animatorSet2.start();
         }
     }
 
@@ -1235,24 +1216,10 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     /* access modifiers changed from: private */
     /* renamed from: lambda$init$12 */
     public /* synthetic */ void lambda$init$12$StickersAlert(View view) {
-        ArrayList<String> arrayList = this.importingStickersPaths;
-        if (arrayList != null) {
-            int indexOf = arrayList.indexOf(this.selectedStickerPath);
-            if (indexOf >= 0) {
-                this.importingStickersPaths.remove(indexOf);
-                ArrayList<String> arrayList2 = this.importingStickersEmojis;
-                if (arrayList2 != null) {
-                    arrayList2.remove(indexOf);
-                }
-                this.selectedStickerPath = null;
-                this.adapter.notifyItemRemoved(indexOf);
-                if (this.importingStickersPaths.isEmpty()) {
-                    dismiss();
-                    return;
-                }
-            }
+        if (this.importingStickersPaths != null) {
+            removeSticker(this.selectedStickerPath);
             hidePreview();
-            updateFields();
+            this.selectedStickerPath = null;
             return;
         }
         this.delegate.onStickerSelected(this.selectedSticker, (String) null, this.stickerSet, (MessageObject.SendAnimationData) null, this.clearsInputField, true, 0);
@@ -1284,6 +1251,20 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             this.stickerEmojiTextView.setLayoutParams(LayoutHelper.createFrame(min, f2, 17, 0.0f, 0.0f, 0.0f, 30.0f));
             this.previewSendButton.setVisibility(0);
             this.previewSendButtonShadow.setVisibility(0);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public void removeSticker(SendMessagesHelper.ImportingSticker importingSticker) {
+        int indexOf = this.importingStickersPaths.indexOf(importingSticker);
+        if (indexOf >= 0) {
+            this.importingStickersPaths.remove(indexOf);
+            this.adapter.notifyItemRemoved(indexOf);
+            if (this.importingStickersPaths.isEmpty()) {
+                dismiss();
+            } else {
+                updateFields();
+            }
         }
     }
 
@@ -1322,15 +1303,14 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         }
     }
 
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:65:0x0084, code lost:
-        r6 = r6;
+    /* JADX WARNING: Code restructure failed: missing block: B:69:0x0084, code lost:
+        r1 = r1;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x0089  */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x00ad  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0103  */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x0089  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00ad  */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x0103  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void updateFields() {
+    private void updateFields() {
         /*
             r12 = this;
             android.widget.TextView r0 = r12.titleTextView
@@ -1339,45 +1319,45 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         L_0x0005:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r1 = r12.stickerSet
             java.lang.String r2 = "dialogTextBlue2"
-            java.lang.String r3 = "Stickers"
-            r4 = 0
-            r5 = 1
-            if (r1 == 0) goto L_0x014d
-            r0 = 0
-            java.util.regex.Pattern r1 = r12.urlPattern     // Catch:{ Exception -> 0x007f }
-            if (r1 != 0) goto L_0x001c
-            java.lang.String r1 = "@[a-zA-Z\\d_]{1,32}"
-            java.util.regex.Pattern r1 = java.util.regex.Pattern.compile(r1)     // Catch:{ Exception -> 0x007f }
-            r12.urlPattern = r1     // Catch:{ Exception -> 0x007f }
+            r3 = 0
+            java.lang.String r4 = "Stickers"
+            r5 = 0
+            r6 = 1
+            if (r1 == 0) goto L_0x014e
+            java.util.regex.Pattern r0 = r12.urlPattern     // Catch:{ Exception -> 0x007f }
+            if (r0 != 0) goto L_0x001c
+            java.lang.String r0 = "@[a-zA-Z\\d_]{1,32}"
+            java.util.regex.Pattern r0 = java.util.regex.Pattern.compile(r0)     // Catch:{ Exception -> 0x007f }
+            r12.urlPattern = r0     // Catch:{ Exception -> 0x007f }
         L_0x001c:
-            java.util.regex.Pattern r1 = r12.urlPattern     // Catch:{ Exception -> 0x007f }
-            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r6 = r12.stickerSet     // Catch:{ Exception -> 0x007f }
-            org.telegram.tgnet.TLRPC$StickerSet r6 = r6.set     // Catch:{ Exception -> 0x007f }
-            java.lang.String r6 = r6.title     // Catch:{ Exception -> 0x007f }
-            java.util.regex.Matcher r1 = r1.matcher(r6)     // Catch:{ Exception -> 0x007f }
-            r6 = r0
+            java.util.regex.Pattern r0 = r12.urlPattern     // Catch:{ Exception -> 0x007f }
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r1 = r12.stickerSet     // Catch:{ Exception -> 0x007f }
+            org.telegram.tgnet.TLRPC$StickerSet r1 = r1.set     // Catch:{ Exception -> 0x007f }
+            java.lang.String r1 = r1.title     // Catch:{ Exception -> 0x007f }
+            java.util.regex.Matcher r0 = r0.matcher(r1)     // Catch:{ Exception -> 0x007f }
+            r1 = r3
         L_0x0029:
-            boolean r7 = r1.find()     // Catch:{ Exception -> 0x007c }
+            boolean r7 = r0.find()     // Catch:{ Exception -> 0x007c }
             if (r7 == 0) goto L_0x0084
-            if (r6 != 0) goto L_0x004b
+            if (r1 != 0) goto L_0x004b
             android.text.SpannableStringBuilder r7 = new android.text.SpannableStringBuilder     // Catch:{ Exception -> 0x007c }
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r8 = r12.stickerSet     // Catch:{ Exception -> 0x007c }
             org.telegram.tgnet.TLRPC$StickerSet r8 = r8.set     // Catch:{ Exception -> 0x007c }
             java.lang.String r8 = r8.title     // Catch:{ Exception -> 0x007c }
             r7.<init>(r8)     // Catch:{ Exception -> 0x007c }
-            android.widget.TextView r6 = r12.titleTextView     // Catch:{ Exception -> 0x0048 }
+            android.widget.TextView r1 = r12.titleTextView     // Catch:{ Exception -> 0x0048 }
             org.telegram.ui.Components.StickersAlert$LinkMovementMethodMy r8 = new org.telegram.ui.Components.StickersAlert$LinkMovementMethodMy     // Catch:{ Exception -> 0x0048 }
             r8.<init>()     // Catch:{ Exception -> 0x0048 }
-            r6.setMovementMethod(r8)     // Catch:{ Exception -> 0x0048 }
-            r6 = r7
+            r1.setMovementMethod(r8)     // Catch:{ Exception -> 0x0048 }
+            r1 = r7
             goto L_0x004b
         L_0x0048:
-            r1 = move-exception
-            r0 = r7
+            r0 = move-exception
+            r3 = r7
             goto L_0x0080
         L_0x004b:
-            int r7 = r1.start()     // Catch:{ Exception -> 0x007c }
-            int r8 = r1.end()     // Catch:{ Exception -> 0x007c }
+            int r7 = r0.start()     // Catch:{ Exception -> 0x007c }
+            int r8 = r0.end()     // Catch:{ Exception -> 0x007c }
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r9 = r12.stickerSet     // Catch:{ Exception -> 0x007c }
             org.telegram.tgnet.TLRPC$StickerSet r9 = r9.set     // Catch:{ Exception -> 0x007c }
             java.lang.String r9 = r9.title     // Catch:{ Exception -> 0x007c }
@@ -1394,61 +1374,61 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             java.lang.CharSequence r10 = r10.subSequence(r11, r8)     // Catch:{ Exception -> 0x007c }
             java.lang.String r10 = r10.toString()     // Catch:{ Exception -> 0x007c }
             r9.<init>(r10)     // Catch:{ Exception -> 0x007c }
-            r6.setSpan(r9, r7, r8, r4)     // Catch:{ Exception -> 0x007c }
+            r1.setSpan(r9, r7, r8, r5)     // Catch:{ Exception -> 0x007c }
             goto L_0x0029
         L_0x007c:
-            r1 = move-exception
-            r0 = r6
+            r0 = move-exception
+            r3 = r1
             goto L_0x0080
         L_0x007f:
-            r1 = move-exception
+            r0 = move-exception
         L_0x0080:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-            r6 = r0
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+            r1 = r3
         L_0x0084:
             android.widget.TextView r0 = r12.titleTextView
-            if (r6 == 0) goto L_0x0089
+            if (r1 == 0) goto L_0x0089
             goto L_0x008f
         L_0x0089:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r1 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r1 = r1.set
-            java.lang.String r6 = r1.title
+            java.lang.String r1 = r1.title
         L_0x008f:
-            r0.setText(r6)
+            r0.setText(r1)
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r0 = r0.set
             java.lang.String r1 = "MasksCount"
             if (r0 == 0) goto L_0x0103
             int r0 = r12.currentAccount
             org.telegram.messenger.MediaDataController r0 = org.telegram.messenger.MediaDataController.getInstance(r0)
-            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r6 = r12.stickerSet
-            org.telegram.tgnet.TLRPC$StickerSet r6 = r6.set
-            long r6 = r6.id
-            boolean r0 = r0.isStickerPackInstalled((long) r6)
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r3 = r12.stickerSet
+            org.telegram.tgnet.TLRPC$StickerSet r3 = r3.set
+            long r7 = r3.id
+            boolean r0 = r0.isStickerPackInstalled((long) r7)
             if (r0 != 0) goto L_0x00ad
             goto L_0x0103
         L_0x00ad:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r2 = r0.set
             boolean r2 = r2.masks
-            r6 = 2131627173(0x7f0e0ca5, float:1.8881603E38)
+            r3 = 2131627174(0x7f0e0ca6, float:1.8881605E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r2 == 0) goto L_0x00d1
-            java.lang.Object[] r2 = new java.lang.Object[r5]
+            java.lang.Object[] r2 = new java.lang.Object[r6]
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
             int r0 = r0.size()
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r1, r0)
-            r2[r4] = r0
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r7, r6, r2)
+            r2[r5] = r0
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r7, r3, r2)
             java.lang.String r0 = r0.toUpperCase()
             goto L_0x00e7
         L_0x00d1:
-            java.lang.Object[] r1 = new java.lang.Object[r5]
+            java.lang.Object[] r1 = new java.lang.Object[r6]
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
             int r0 = r0.size()
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r3, r0)
-            r1[r4] = r0
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r7, r6, r1)
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r4, r0)
+            r1[r5] = r0
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r7, r3, r1)
             java.lang.String r0 = r0.toUpperCase()
         L_0x00e7:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r1 = r12.stickerSet
@@ -1467,26 +1447,26 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             goto L_0x0147
         L_0x0103:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
-            org.telegram.tgnet.TLRPC$StickerSet r6 = r0.set
+            org.telegram.tgnet.TLRPC$StickerSet r3 = r0.set
             r7 = 2131624217(0x7f0e0119, float:1.8875607E38)
             java.lang.String r8 = "AddStickersCount"
-            if (r6 == 0) goto L_0x0129
-            boolean r6 = r6.masks
-            if (r6 == 0) goto L_0x0129
-            java.lang.Object[] r3 = new java.lang.Object[r5]
+            if (r3 == 0) goto L_0x0129
+            boolean r3 = r3.masks
+            if (r3 == 0) goto L_0x0129
+            java.lang.Object[] r3 = new java.lang.Object[r6]
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
             int r0 = r0.size()
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r1, r0)
-            r3[r4] = r0
+            r3[r5] = r0
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r7, r3)
             java.lang.String r0 = r0.toUpperCase()
             goto L_0x013f
         L_0x0129:
-            java.lang.Object[] r1 = new java.lang.Object[r5]
+            java.lang.Object[] r1 = new java.lang.Object[r6]
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
             int r0 = r0.size()
-            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r3, r0)
-            r1[r4] = r0
+            java.lang.String r0 = org.telegram.messenger.LocaleController.formatPluralString(r4, r0)
+            r1[r5] = r0
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r7, r1)
             java.lang.String r0 = r0.toUpperCase()
         L_0x013f:
@@ -1496,38 +1476,56 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         L_0x0147:
             org.telegram.ui.Components.StickersAlert$GridAdapter r0 = r12.adapter
             r0.notifyDataSetChanged()
-            goto L_0x01a3
-        L_0x014d:
+            goto L_0x01cc
+        L_0x014e:
             java.util.ArrayList<android.os.Parcelable> r1 = r12.importingStickers
-            if (r1 == 0) goto L_0x018e
-            java.util.ArrayList<java.lang.String> r6 = r12.importingStickersPaths
-            if (r6 == 0) goto L_0x015a
-            int r1 = r6.size()
-            goto L_0x015e
-        L_0x015a:
+            if (r1 == 0) goto L_0x01b7
+            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$ImportingSticker> r7 = r12.importingStickersPaths
+            if (r7 == 0) goto L_0x015b
+            int r1 = r7.size()
+            goto L_0x015f
+        L_0x015b:
             int r1 = r1.size()
-        L_0x015e:
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r3, r1)
+        L_0x015f:
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r4, r1)
             r0.setText(r1)
+            java.util.HashMap<java.lang.String, org.telegram.messenger.SendMessagesHelper$ImportingSticker> r0 = r12.uploadImportStickers
+            if (r0 == 0) goto L_0x0189
+            boolean r0 = r0.isEmpty()
+            if (r0 == 0) goto L_0x0171
+            goto L_0x0189
+        L_0x0171:
+            r0 = 2131625833(0x7f0e0769, float:1.8878885E38)
+            java.lang.String r1 = "ImportStickersProcessing"
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+            java.lang.String r0 = r0.toUpperCase()
+            java.lang.String r1 = "dialogTextGray2"
+            r12.setButton(r3, r0, r1)
+            android.widget.TextView r0 = r12.pickerBottomLayout
+            r0.setEnabled(r5)
+            goto L_0x01cc
+        L_0x0189:
             org.telegram.ui.Components.-$$Lambda$StickersAlert$ekNx1b09uSe2umZqR4EaIlPaJH0 r0 = new org.telegram.ui.Components.-$$Lambda$StickersAlert$ekNx1b09uSe2umZqR4EaIlPaJH0
             r0.<init>()
             r1 = 2131625820(0x7f0e075c, float:1.8878859E38)
-            java.lang.Object[] r5 = new java.lang.Object[r5]
-            java.util.ArrayList<java.lang.String> r6 = r12.importingStickersPaths
-            if (r6 == 0) goto L_0x0174
-            goto L_0x0176
-        L_0x0174:
-            java.util.ArrayList<android.os.Parcelable> r6 = r12.importingStickers
-        L_0x0176:
-            int r6 = r6.size()
-            java.lang.String r3 = org.telegram.messenger.LocaleController.formatPluralString(r3, r6)
-            r5[r4] = r3
-            java.lang.String r3 = "ImportStickers"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r3, r1, r5)
+            java.lang.Object[] r3 = new java.lang.Object[r6]
+            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$ImportingSticker> r7 = r12.importingStickersPaths
+            if (r7 == 0) goto L_0x0198
+            goto L_0x019a
+        L_0x0198:
+            java.util.ArrayList<android.os.Parcelable> r7 = r12.importingStickers
+        L_0x019a:
+            int r7 = r7.size()
+            java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r4, r7)
+            r3[r5] = r4
+            java.lang.String r4 = "ImportStickers"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r4, r1, r3)
             java.lang.String r1 = r1.toUpperCase()
             r12.setButton(r0, r1, r2)
-            goto L_0x01a3
-        L_0x018e:
+            android.widget.TextView r0 = r12.pickerBottomLayout
+            r0.setEnabled(r6)
+            goto L_0x01cc
+        L_0x01b7:
             r0 = 2131624929(0x7f0e03e1, float:1.8877052E38)
             java.lang.String r1 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
@@ -1535,7 +1533,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.ui.Components.-$$Lambda$StickersAlert$NYfa2lp5kamtx6KM7_-7AwCFf4g r1 = new org.telegram.ui.Components.-$$Lambda$StickersAlert$NYfa2lp5kamtx6KM7_-7AwCFf4g
             r1.<init>()
             r12.setButton(r1, r0, r2)
-        L_0x01a3:
+        L_0x01cc:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.updateFields():void");
@@ -1782,7 +1780,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     editTextBoldCursor.performHapticFeedback(3, 2);
                 }
                 AndroidUtilities.hideKeyboard(editTextBoldCursor);
-                SendMessagesHelper.getInstance(this.currentAccount).prepareImportStickers(this.setTitle, this.lastCheckName, this.importingSoftware, this.importingStickersPaths, this.importingStickersMimeTypes, this.importingStickersEmojis, new MessagesStorage.StringCallback() {
+                SendMessagesHelper.getInstance(this.currentAccount).prepareImportStickers(this.setTitle, this.lastCheckName, this.importingSoftware, this.importingStickersPaths, new MessagesStorage.StringCallback() {
                     public final void run(String str) {
                         StickersAlert.this.lambda$showNameEnterAlert$27$StickersAlert(str);
                     }
@@ -2074,7 +2072,24 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.reqId, true);
             this.reqId = 0;
         }
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
+        if (this.importingStickers != null) {
+            ArrayList<SendMessagesHelper.ImportingSticker> arrayList = this.importingStickersPaths;
+            if (arrayList != null) {
+                int size = arrayList.size();
+                for (int i = 0; i < size; i++) {
+                    SendMessagesHelper.ImportingSticker importingSticker = this.importingStickersPaths.get(i);
+                    if (!importingSticker.validated) {
+                        FileLoader.getInstance(this.currentAccount).cancelFileUpload(importingSticker.path, false);
+                    }
+                    if (importingSticker.animated) {
+                        new File(importingSticker.path).delete();
+                    }
+                }
+            }
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileUploaded);
+            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileUploadFailed);
+        }
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.startAllHeavyOperations, 4);
     }
 
@@ -2109,19 +2124,102 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         Bulletin.removeDelegate((FrameLayout) this.containerView);
     }
 
-    public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.emojiDidLoad) {
-            RecyclerListView recyclerListView = this.gridView;
-            if (recyclerListView != null) {
-                int childCount = recyclerListView.getChildCount();
-                for (int i3 = 0; i3 < childCount; i3++) {
-                    this.gridView.getChildAt(i3).invalidate();
+    /* JADX WARNING: Code restructure failed: missing block: B:16:0x003d, code lost:
+        r4 = r5[0];
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void didReceivedNotification(int r3, int r4, java.lang.Object... r5) {
+        /*
+            r2 = this;
+            int r4 = org.telegram.messenger.NotificationCenter.emojiLoaded
+            r0 = 0
+            if (r3 != r4) goto L_0x0034
+            org.telegram.ui.Components.RecyclerListView r3 = r2.gridView
+            if (r3 == 0) goto L_0x001b
+            int r3 = r3.getChildCount()
+        L_0x000d:
+            if (r0 >= r3) goto L_0x001b
+            org.telegram.ui.Components.RecyclerListView r4 = r2.gridView
+            android.view.View r4 = r4.getChildAt(r0)
+            r4.invalidate()
+            int r0 = r0 + 1
+            goto L_0x000d
+        L_0x001b:
+            org.telegram.ui.ContentPreviewViewer r3 = org.telegram.ui.ContentPreviewViewer.getInstance()
+            boolean r3 = r3.isVisible()
+            if (r3 == 0) goto L_0x002c
+            org.telegram.ui.ContentPreviewViewer r3 = org.telegram.ui.ContentPreviewViewer.getInstance()
+            r3.close()
+        L_0x002c:
+            org.telegram.ui.ContentPreviewViewer r3 = org.telegram.ui.ContentPreviewViewer.getInstance()
+            r3.reset()
+            goto L_0x007c
+        L_0x0034:
+            int r4 = org.telegram.messenger.NotificationCenter.fileUploaded
+            if (r3 != r4) goto L_0x0059
+            java.util.HashMap<java.lang.String, org.telegram.messenger.SendMessagesHelper$ImportingSticker> r3 = r2.uploadImportStickers
+            if (r3 != 0) goto L_0x003d
+            return
+        L_0x003d:
+            r4 = r5[r0]
+            java.lang.String r4 = (java.lang.String) r4
+            java.lang.Object r3 = r3.get(r4)
+            org.telegram.messenger.SendMessagesHelper$ImportingSticker r3 = (org.telegram.messenger.SendMessagesHelper.ImportingSticker) r3
+            if (r3 == 0) goto L_0x007c
+            int r0 = r2.currentAccount
+            r1 = 1
+            r5 = r5[r1]
+            org.telegram.tgnet.TLRPC$InputFile r5 = (org.telegram.tgnet.TLRPC$InputFile) r5
+            org.telegram.ui.Components.-$$Lambda$StickersAlert$9CLASSNAME-3jT9rPDvH81RRXvCMhUbZk r1 = new org.telegram.ui.Components.-$$Lambda$StickersAlert$9CLASSNAME-3jT9rPDvH81RRXvCMhUbZk
+            r1.<init>(r4, r3)
+            r3.uploadMedia(r0, r5, r1)
+            goto L_0x007c
+        L_0x0059:
+            int r4 = org.telegram.messenger.NotificationCenter.fileUploadFailed
+            if (r3 != r4) goto L_0x007c
+            java.util.HashMap<java.lang.String, org.telegram.messenger.SendMessagesHelper$ImportingSticker> r3 = r2.uploadImportStickers
+            if (r3 != 0) goto L_0x0062
+            return
+        L_0x0062:
+            r4 = r5[r0]
+            java.lang.String r4 = (java.lang.String) r4
+            java.lang.Object r3 = r3.remove(r4)
+            org.telegram.messenger.SendMessagesHelper$ImportingSticker r3 = (org.telegram.messenger.SendMessagesHelper.ImportingSticker) r3
+            if (r3 == 0) goto L_0x0071
+            r2.removeSticker(r3)
+        L_0x0071:
+            java.util.HashMap<java.lang.String, org.telegram.messenger.SendMessagesHelper$ImportingSticker> r3 = r2.uploadImportStickers
+            boolean r3 = r3.isEmpty()
+            if (r3 == 0) goto L_0x007c
+            r2.updateFields()
+        L_0x007c:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.didReceivedNotification(int, int, java.lang.Object[]):void");
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$didReceivedNotification$32 */
+    public /* synthetic */ void lambda$didReceivedNotification$32$StickersAlert(String str, SendMessagesHelper.ImportingSticker importingSticker) {
+        if (!isDismissed()) {
+            this.uploadImportStickers.remove(str);
+            if ("application/x-bad-tgsticker".equals(importingSticker.mimeType)) {
+                removeSticker(importingSticker);
+            } else {
+                importingSticker.validated = true;
+                int indexOf = this.importingStickersPaths.indexOf(importingSticker);
+                if (indexOf >= 0) {
+                    RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.gridView.findViewHolderForAdapterPosition(indexOf);
+                    if (findViewHolderForAdapterPosition != null) {
+                        ((StickerEmojiCell) findViewHolderForAdapterPosition.itemView).setSticker(importingSticker);
+                    }
+                } else {
+                    this.adapter.notifyDataSetChanged();
                 }
             }
-            if (ContentPreviewViewer.getInstance().isVisible()) {
-                ContentPreviewViewer.getInstance().close();
+            if (this.uploadImportStickers.isEmpty()) {
+                updateFields();
             }
-            ContentPreviewViewer.getInstance().reset();
         }
     }
 
@@ -2278,7 +2376,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                     ((FeaturedStickerSetInfoCell) viewHolder.itemView).setStickerSet((TLRPC$StickerSetCovered) StickersAlert.this.stickerSetCovereds.get(((Integer) this.cache.get(i)).intValue()), false);
                 }
             } else if (StickersAlert.this.importingStickers != null) {
-                ((StickerEmojiCell) viewHolder.itemView).setSticker((String) StickersAlert.this.importingStickersPaths.get(i), StickersAlert.this.importingStickersEmojis != null ? (String) StickersAlert.this.importingStickersEmojis.get(i) : null);
+                ((StickerEmojiCell) viewHolder.itemView).setSticker((SendMessagesHelper.ImportingSticker) StickersAlert.this.importingStickersPaths.get(i));
             } else {
                 ((StickerEmojiCell) viewHolder.itemView).setSticker(StickersAlert.this.stickerSet.documents.get(i), StickersAlert.this.stickerSet, StickersAlert.this.showEmoji);
             }

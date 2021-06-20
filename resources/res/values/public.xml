@@ -3464,6 +3464,7 @@
     <public type="string" name="ImportStickersLinkInvalidLong" id="NUM" />
     <public type="string" name="ImportStickersLinkInvalidShort" id="NUM" />
     <public type="string" name="ImportStickersLinkTaken" id="NUM" />
+    <public type="string" name="ImportStickersProcessing" id="NUM" />
     <public type="string" name="ImportStickersRemove" id="NUM" />
     <public type="string" name="ImportStickersRemoveMenu" id="NUM" />
     <public type="string" name="ImportToChat" id="NUM" />

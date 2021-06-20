@@ -285,7 +285,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         int i;
         int i2;
         if (this.pictureSize == null || (cameraSession2 = this.cameraSession) == null) {
-            return 0.0f;
+            return f2;
         }
         if (cameraSession2.getWorldAngle() == 90 || this.cameraSession.getWorldAngle() == 270) {
             i2 = this.pictureSize.getWidth();

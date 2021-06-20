@@ -1384,10 +1384,10 @@ public class MessagesController extends BaseController implements NotificationCe
     /* renamed from: lambda$new$4 */
     public /* synthetic */ void lambda$new$4$MessagesController() {
         MessagesController messagesController = getMessagesController();
-        getNotificationCenter().addObserver(messagesController, NotificationCenter.FileDidUpload);
-        getNotificationCenter().addObserver(messagesController, NotificationCenter.FileDidFailUpload);
-        getNotificationCenter().addObserver(messagesController, NotificationCenter.fileDidLoad);
-        getNotificationCenter().addObserver(messagesController, NotificationCenter.fileDidFailToLoad);
+        getNotificationCenter().addObserver(messagesController, NotificationCenter.fileUploaded);
+        getNotificationCenter().addObserver(messagesController, NotificationCenter.fileUploadFailed);
+        getNotificationCenter().addObserver(messagesController, NotificationCenter.fileLoaded);
+        getNotificationCenter().addObserver(messagesController, NotificationCenter.fileLoadFailed);
         getNotificationCenter().addObserver(messagesController, NotificationCenter.messageReceivedByServer);
         getNotificationCenter().addObserver(messagesController, NotificationCenter.updateMessageMedia);
     }
@@ -3702,7 +3702,7 @@ public class MessagesController extends BaseController implements NotificationCe
         TLRPC$InputFile tLRPC$InputFile2;
         TLRPC$TL_theme tLRPC$TL_theme;
         TLRPC$TL_inputThemeSettings tLRPC$TL_inputThemeSettings = null;
-        if (i == NotificationCenter.FileDidUpload) {
+        if (i == NotificationCenter.fileUploaded) {
             String str = objArr[0];
             TLRPC$InputFile tLRPC$InputFile3 = objArr[1];
             String str2 = this.uploadingAvatar;
@@ -3871,7 +3871,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     MessagesController.this.lambda$didReceivedNotification$19$MessagesController(tLObject, tLRPC$TL_error);
                 }
             });
-        } else if (i == NotificationCenter.FileDidFailUpload) {
+        } else if (i == NotificationCenter.fileUploadFailed) {
             String str4 = objArr[0];
             String str5 = this.uploadingAvatar;
             if (str5 == null || !str5.equals(str4)) {
@@ -7054,7 +7054,7 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x0028:
             org.telegram.messenger.FileLoader r0 = r9.getFileLoader()
             java.lang.String r3 = r9.uploadingWallpaper
-            r0.cancelUploadFile(r3, r1)
+            r0.cancelFileUpload(r3, r1)
             r9.uploadingWallpaper = r2
             r9.uploadingWallpaperInfo = r2
         L_0x0035:

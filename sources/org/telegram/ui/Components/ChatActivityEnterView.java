@@ -2748,7 +2748,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messageReceivedByServer);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.sendingMessagesChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.audioRecordTooShort);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         this.parentActivity = activity2;
         this.parentFragment = chatActivity2;
         if (chatActivity2 != null) {
@@ -5247,7 +5247,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messageReceivedByServer);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.sendingMessagesChanged);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.audioRecordTooShort);
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         EmojiView emojiView2 = this.emojiView;
         if (emojiView2 != null) {
             emojiView2.onDestroy();
@@ -9389,7 +9389,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (!this.parentFragment.openAnimationEnded) {
                 z = false;
             }
-            boolean z3 = this.dialog_id < 0 ? !this.accountInstance.getMessagesController().getChat(Integer.valueOf(-((int) this.dialog_id))).megagroup : true;
+            boolean z3 = this.hasBotCommands;
+            if (z3 && this.dialog_id < 0) {
+                TLRPC$Chat chat = this.accountInstance.getMessagesController().getChat(Integer.valueOf(-((int) this.dialog_id)));
+                z3 = chat == null || !chat.megagroup;
+            }
             if (!this.hasBotCommands && this.botReplyMarkup == null) {
                 this.botButton.setVisibility(8);
             } else if (this.botReplyMarkup != null) {
@@ -10888,7 +10892,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         TLRPC$ChatFull tLRPC$ChatFull;
         TLRPC$Chat chat;
         int i3;
-        if (i == NotificationCenter.emojiDidLoad) {
+        if (i == NotificationCenter.emojiLoaded) {
             EmojiView emojiView2 = this.emojiView;
             if (emojiView2 != null) {
                 emojiView2.invalidateViews();
