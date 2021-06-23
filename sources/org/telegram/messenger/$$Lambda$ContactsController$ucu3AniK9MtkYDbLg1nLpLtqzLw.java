@@ -6,18 +6,17 @@ import j$.util.function.ToDoubleFunction;
 import j$.util.function.ToIntFunction;
 import j$.util.function.ToLongFunction;
 import java.util.Comparator;
-import org.telegram.messenger.ContactsController;
 
-/* renamed from: org.telegram.messenger.-$$Lambda$ContactsController$blJ94lXmSDb1Y3assau-bI1Ozn4  reason: invalid class name */
+/* renamed from: org.telegram.messenger.-$$Lambda$ContactsController$ucu3AniK9MtkYDbLg1nLpLtqzLw  reason: invalid class name */
 /* compiled from: lambda */
-public final /* synthetic */ class $$Lambda$ContactsController$blJ94lXmSDb1Y3assaubI1Ozn4 implements Comparator, j$.util.Comparator {
-    public static final /* synthetic */ $$Lambda$ContactsController$blJ94lXmSDb1Y3assaubI1Ozn4 INSTANCE = new $$Lambda$ContactsController$blJ94lXmSDb1Y3assaubI1Ozn4();
+public final /* synthetic */ class $$Lambda$ContactsController$ucu3AniK9MtkYDbLg1nLpLtqzLw implements Comparator, j$.util.Comparator {
+    public static final /* synthetic */ $$Lambda$ContactsController$ucu3AniK9MtkYDbLg1nLpLtqzLw INSTANCE = new $$Lambda$ContactsController$ucu3AniK9MtkYDbLg1nLpLtqzLw();
 
-    private /* synthetic */ $$Lambda$ContactsController$blJ94lXmSDb1Y3assaubI1Ozn4() {
+    private /* synthetic */ $$Lambda$ContactsController$ucu3AniK9MtkYDbLg1nLpLtqzLw() {
     }
 
     public final int compare(Object obj, Object obj2) {
-        return ContactsController.lambda$updateUnregisteredContacts$40((ContactsController.Contact) obj, (ContactsController.Contact) obj2);
+        return ContactsController.lambda$processLoadedContacts$31((String) obj, (String) obj2);
     }
 
     public /* synthetic */ Comparator reversed() {

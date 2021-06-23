@@ -82,7 +82,6 @@ import org.telegram.tgnet.TLRPC$TL_auth_acceptLoginToken;
 import org.telegram.tgnet.TLRPC$TL_authorization;
 import org.telegram.tgnet.TLRPC$TL_channels_getChannels;
 import org.telegram.tgnet.TLRPC$TL_contacts_resolvedPeer;
-import org.telegram.tgnet.TLRPC$TL_document;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.tgnet.TLRPC$TL_help_appUpdate;
@@ -94,7 +93,6 @@ import org.telegram.tgnet.TLRPC$TL_inputGameShortName;
 import org.telegram.tgnet.TLRPC$TL_inputMediaGame;
 import org.telegram.tgnet.TLRPC$TL_langPackLanguage;
 import org.telegram.tgnet.TLRPC$TL_langpack_getStrings;
-import org.telegram.tgnet.TLRPC$TL_messageEntityBold;
 import org.telegram.tgnet.TLRPC$TL_messages_chats;
 import org.telegram.tgnet.TLRPC$TL_messages_getDiscussionMessage;
 import org.telegram.tgnet.TLRPC$TL_theme;
@@ -357,7 +355,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x011c:
         L_0x011d:
             android.view.Window r0 = r23.getWindow()
-            r8 = 2131166100(0x7var_, float:1.7946436E38)
+            r8 = 2131166101(0x7var_, float:1.7946438E38)
             r0.setBackgroundDrawableResource(r8)
             java.lang.String r0 = org.telegram.messenger.SharedConfig.passcodeHash
             int r0 = r0.length()
@@ -2455,7 +2453,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r25v74, resolved type: boolean} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v23, resolved type: java.lang.Integer} */
     /* JADX WARNING: type inference failed for: r3v6, types: [android.os.Bundle, java.lang.String] */
-    /* JADX WARNING: type inference failed for: r2v2, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r2v2, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r3v10 */
     /* JADX WARNING: type inference failed for: r2v15 */
     /* JADX WARNING: type inference failed for: r2v17 */
@@ -9601,30 +9599,21 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     public /* synthetic */ void lambda$checkAppUpdate$56$LaunchActivity(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         SharedConfig.lastUpdateCheckTime = System.currentTimeMillis();
         SharedConfig.saveConfig();
-        TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate = new TLRPC$TL_help_appUpdate();
-        tLRPC$TL_help_appUpdate.id = 1;
-        tLRPC$TL_help_appUpdate.version = "7.8.0";
-        tLRPC$TL_help_appUpdate.text = "some text";
-        TLRPC$TL_messageEntityBold tLRPC$TL_messageEntityBold = new TLRPC$TL_messageEntityBold();
-        tLRPC$TL_messageEntityBold.offset = 0;
-        tLRPC$TL_messageEntityBold.length = 4;
-        tLRPC$TL_help_appUpdate.entities.add(tLRPC$TL_messageEntityBold);
-        TLRPC$TL_document tLRPC$TL_document = new TLRPC$TL_document();
-        tLRPC$TL_help_appUpdate.document = tLRPC$TL_document;
-        tLRPC$TL_document.size = 1048576;
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_help_appUpdate, i) {
-            public final /* synthetic */ TLRPC$TL_help_appUpdate f$1;
-            public final /* synthetic */ int f$2;
+        if (tLObject instanceof TLRPC$TL_help_appUpdate) {
+            AndroidUtilities.runOnUIThread(new Runnable((TLRPC$TL_help_appUpdate) tLObject, i) {
+                public final /* synthetic */ TLRPC$TL_help_appUpdate f$1;
+                public final /* synthetic */ int f$2;
 
-            {
-                this.f$1 = r2;
-                this.f$2 = r3;
-            }
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                }
 
-            public final void run() {
-                LaunchActivity.this.lambda$checkAppUpdate$55$LaunchActivity(this.f$1, this.f$2);
-            }
-        });
+                public final void run() {
+                    LaunchActivity.this.lambda$checkAppUpdate$55$LaunchActivity(this.f$1, this.f$2);
+                }
+            });
+        }
     }
 
     /* access modifiers changed from: private */
@@ -9635,7 +9624,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             showUpdateActivity(i, tLRPC$TL_help_appUpdate, false);
         } else {
             this.drawerLayoutAdapter.notifyDataSetChanged();
-            new UpdateAppAlertDialog(this, tLRPC$TL_help_appUpdate, i).show();
+            try {
+                new UpdateAppAlertDialog(this, tLRPC$TL_help_appUpdate, i).show();
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+            }
         }
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.appUpdateAvailable, new Object[0]);
     }

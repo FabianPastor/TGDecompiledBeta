@@ -444,7 +444,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131165996(0x7var_c, float:1.7946225E38)
+            r3 = 2131165997(0x7var_d, float:1.7946227E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>(r2)

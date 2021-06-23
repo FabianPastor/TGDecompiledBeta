@@ -10182,7 +10182,7 @@ public class NotificationsController extends BaseController {
             r10 = 0
             android.app.PendingIntent r0 = android.app.PendingIntent.getActivity(r7, r10, r0, r9)     // Catch:{ Exception -> 0x0a07 }
             androidx.core.app.NotificationCompat$Builder r3 = r4.setContentTitle(r3)     // Catch:{ Exception -> 0x0a07 }
-            r7 = 2131165866(0x7var_aa, float:1.7945961E38)
+            r7 = 2131165867(0x7var_ab, float:1.7945963E38)
             androidx.core.app.NotificationCompat$Builder r3 = r3.setSmallIcon(r7)     // Catch:{ Exception -> 0x0a07 }
             r7 = 1
             androidx.core.app.NotificationCompat$Builder r3 = r3.setAutoCancel(r7)     // Catch:{ Exception -> 0x0a07 }
@@ -12139,7 +12139,7 @@ public class NotificationsController extends BaseController {
             r13 = r64
             androidx.core.app.NotificationCompat$Builder r12 = r12.setContentTitle(r13)
             r33 = r14
-            r14 = 2131165866(0x7var_aa, float:1.7945961E38)
+            r14 = 2131165867(0x7var_ab, float:1.7945963E38)
             androidx.core.app.NotificationCompat$Builder r12 = r12.setSmallIcon(r14)
             java.lang.String r14 = r54.toString()
             androidx.core.app.NotificationCompat$Builder r12 = r12.setContentText(r14)

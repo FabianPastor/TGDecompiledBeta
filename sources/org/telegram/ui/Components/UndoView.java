@@ -1459,7 +1459,7 @@ public class UndoView extends FrameLayout {
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
             org.telegram.ui.Components.RLottieImageView r0 = r1.leftImageView
-            r2 = 2131166092(0x7var_c, float:1.794642E38)
+            r2 = 2131166093(0x7var_d, float:1.7946422E38)
             r0.setImageResource(r2)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r18)
             r7.leftMargin = r0

@@ -2547,7 +2547,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             int r4 = org.telegram.messenger.NotificationCenter.didEndCall
             r3.addObserver(r8, r4)
             android.content.res.Resources r3 = r40.getResources()
-            r4 = 2131166023(0x7var_, float:1.794628E38)
+            r4 = 2131166024(0x7var_, float:1.7946282E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             android.graphics.drawable.Drawable r3 = r3.mutate()
             r8.shadowDrawable = r3
@@ -3129,7 +3129,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r8.pipItem = r1
             r1.setLongClickEnabled(r3)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r8.pipItem
-            r2 = 2131165846(0x7var_, float:1.794592E38)
+            r2 = 2131165847(0x7var_, float:1.7945923E38)
             r1.setIcon((int) r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r8.pipItem
             r2 = 2131624010(0x7f0e004a, float:1.8875188E38)
@@ -3348,7 +3348,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r1.setStrokeCap(r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r8.otherItem
             r22 = 10
-            r23 = 2131165847(0x7var_, float:1.7945923E38)
+            r23 = 2131165848(0x7var_, float:1.7945925E38)
             r24 = 0
             r2 = 2131628100(0x7f0e1044, float:1.8883483E38)
             java.lang.String r3 = "VoipGroupAudio"
@@ -7275,7 +7275,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             float r5 = r7.colorProgress
             r6 = 1065353216(0x3var_, float:1.0)
             int r3 = org.telegram.messenger.AndroidUtilities.getOffsetColor(r3, r4, r5, r6)
-            r4 = 2131165958(0x7var_, float:1.7946148E38)
+            r4 = 2131165959(0x7var_, float:1.794615E38)
             if (r0 == 0) goto L_0x01b9
             boolean r5 = r10.isSelfUser()
             if (r5 != 0) goto L_0x01b9
@@ -7533,8 +7533,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             boolean r5 = org.telegram.messenger.ChatObject.canManageCalls(r5)
             java.lang.String r8 = "VoipGroupOpenChannel"
             r22 = 6
-            r23 = 2131165848(0x7var_, float:1.7945925E38)
-            r24 = 2131165844(0x7var_, float:1.7945917E38)
+            r23 = 2131165849(0x7var_, float:1.7945927E38)
+            r24 = 2131165845(0x7var_, float:1.7945919E38)
             if (r5 == 0) goto L_0x0477
             if (r1 == 0) goto L_0x03af
             boolean r5 = r12.muted

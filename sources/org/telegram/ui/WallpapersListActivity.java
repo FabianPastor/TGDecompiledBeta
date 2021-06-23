@@ -1250,7 +1250,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v1, resolved type: org.telegram.ui.WallpapersListActivity$ColorWallpaper} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v0, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v28, resolved type: org.telegram.ui.WallpapersListActivity$ColorWallpaper} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v38, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v40, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v10, resolved type: org.telegram.ui.WallpapersListActivity$ColorWallpaper} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v12, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v13, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
@@ -1659,17 +1659,22 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         L_0x02fc:
             java.lang.String r0 = r7.selectedBackgroundSlug
             boolean r0 = r2.equals(r0)
-            if (r0 == 0) goto L_0x030c
+            if (r0 != 0) goto L_0x0316
             java.util.ArrayList<java.lang.Object> r0 = r7.wallPapers
-            org.telegram.ui.WallpapersListActivity$ColorWallpaper r1 = r7.catsWallpaper
-            r0.add(r9, r1)
-            goto L_0x0314
-        L_0x030c:
+            boolean r0 = r0.isEmpty()
+            if (r0 == 0) goto L_0x030d
+            goto L_0x0316
+        L_0x030d:
             java.util.ArrayList<java.lang.Object> r0 = r7.wallPapers
             org.telegram.ui.WallpapersListActivity$ColorWallpaper r1 = r7.catsWallpaper
             r2 = 1
             r0.add(r2, r1)
-        L_0x0314:
+            goto L_0x031d
+        L_0x0316:
+            java.util.ArrayList<java.lang.Object> r0 = r7.wallPapers
+            org.telegram.ui.WallpapersListActivity$ColorWallpaper r1 = r7.catsWallpaper
+            r0.add(r9, r1)
+        L_0x031d:
             r22.updateRows()
             return
         */
@@ -2567,7 +2572,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 r14 = 2131627383(0x7f0e0d77, float:1.8882029E38)
                 java.lang.String r0 = "SelectFromGallery"
                 java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r0, r14)
-                r0 = 2131165977(0x7var_, float:1.7946186E38)
+                r0 = 2131165978(0x7var_a, float:1.7946188E38)
                 r13.setTextAndIcon((java.lang.String) r14, (int) r0, (boolean) r2)
                 goto L_0x027e
             L_0x0252:

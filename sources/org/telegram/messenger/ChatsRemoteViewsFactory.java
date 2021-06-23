@@ -783,11 +783,11 @@ class ChatsRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             boolean r6 = r6.isDialogMuted(r7)
             java.lang.String r7 = "setBackgroundResource"
             if (r6 == 0) goto L_0x05ae
-            r6 = 2131166145(0x7var_c1, float:1.7946527E38)
+            r6 = 2131166146(0x7var_c2, float:1.794653E38)
             r13.setInt(r4, r7, r6)
             goto L_0x05b9
         L_0x05ae:
-            r6 = 2131166144(0x7var_c0, float:1.7946525E38)
+            r6 = 2131166145(0x7var_c1, float:1.7946527E38)
             r13.setInt(r4, r7, r6)
             goto L_0x05b9
         L_0x05b5:

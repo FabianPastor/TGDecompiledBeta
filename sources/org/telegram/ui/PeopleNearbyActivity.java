@@ -1054,7 +1054,9 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             this.checkExpiredRunnable = null;
         }
         int currentTime = getConnectionsManager().getCurrentTime();
+        DiffCallback diffCallback = null;
         int i = 0;
+        boolean z2 = false;
         int i2 = Integer.MAX_VALUE;
         while (i < 2) {
             ArrayList<TLRPC$TL_peerLocated> arrayList = i == 0 ? this.users : this.chats;
@@ -1062,27 +1064,36 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             int i3 = 0;
             while (i3 < size) {
                 int i4 = arrayList.get(i3).expires;
-                if (i4 > currentTime) {
-                    i2 = Math.min(i2, i4);
-                    i3++;
+                if (i4 <= currentTime) {
+                    if (diffCallback == null) {
+                        diffCallback = new DiffCallback();
+                        diffCallback.saveCurrentState();
+                    }
+                    arrayList.remove(i3);
+                    i3--;
+                    size--;
+                    z2 = true;
                 } else {
-                    new DiffCallback();
-                    throw null;
+                    i2 = Math.min(i2, i4);
                 }
+                i3++;
             }
             i++;
         }
-        if (z) {
+        if (z2 && this.listViewAdapter != null) {
+            updateRows(diffCallback);
+        }
+        if (z2 || z) {
             getLocationController().setCachedNearbyUsersAndChats(this.users, this.chats);
         }
         if (i2 != Integer.MAX_VALUE) {
-            $$Lambda$PeopleNearbyActivity$R_UluTvOElowLB2XSMbtq4RY7gk r11 = new Runnable() {
+            $$Lambda$PeopleNearbyActivity$R_UluTvOElowLB2XSMbtq4RY7gk r14 = new Runnable() {
                 public final void run() {
                     PeopleNearbyActivity.this.lambda$checkForExpiredLocations$9$PeopleNearbyActivity();
                 }
             };
-            this.checkExpiredRunnable = r11;
-            AndroidUtilities.runOnUIThread(r11, (long) ((i2 - currentTime) * 1000));
+            this.checkExpiredRunnable = r14;
+            AndroidUtilities.runOnUIThread(r14, (long) ((i2 - currentTime) * 1000));
         }
     }
 

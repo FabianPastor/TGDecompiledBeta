@@ -13955,7 +13955,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r2 == 0) goto L_0x3eb7
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             android.content.res.Resources r3 = r67.getResources()
-            r4 = 2131166081(0x7var_, float:1.7946397E38)
+            r4 = 2131166082(0x7var_, float:1.79464E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             r2.setImageBitmap((android.graphics.drawable.Drawable) r3)
         L_0x3eb3:
@@ -23722,7 +23722,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v4, resolved type: android.text.StaticLayout[]} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v2, resolved type: java.lang.String} */
-    /* JADX WARNING: type inference failed for: r4v1, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r4v1, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r3v4, types: [org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$User, java.lang.String] */
     /* JADX WARNING: type inference failed for: r3v156 */
     /* JADX WARNING: type inference failed for: r4v88 */

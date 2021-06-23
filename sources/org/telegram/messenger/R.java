@@ -800,6 +800,7 @@ public final class R {
         public static final int msg_screencast = NUM;
         public static final int msg_screencast_off = NUM;
         public static final int msg_search = NUM;
+        public static final int msg_sendfile = NUM;
         public static final int msg_sendphoto = NUM;
         public static final int msg_share = NUM;
         public static final int msg_share_filled = NUM;

@@ -396,7 +396,7 @@ public class JoinCallAlert extends BottomSheet {
             r0.delegate = r3
             r0.currentType = r2
             android.content.res.Resources r6 = r19.getResources()
-            r7 = 2131166023(0x7var_, float:1.794628E38)
+            r7 = 2131166024(0x7var_, float:1.7946282E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.shadowDrawable = r6

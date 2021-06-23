@@ -5509,7 +5509,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 int r3 = r3.changeInfoRow
                 if (r2 != r3) goto L_0x02d0
             L_0x02c8:
-                r2 = 2131165904(0x7var_d0, float:1.7946038E38)
+                r2 = 2131165905(0x7var_d1, float:1.794604E38)
                 r1.setIcon(r2)
                 goto L_0x07c1
             L_0x02d0:
@@ -5743,7 +5743,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r2 = 2131624728(0x7f0e0318, float:1.8876644E38)
                 java.lang.String r3 = "ChannelInviteViaLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-                r3 = 2131165974(0x7var_, float:1.794618E38)
+                r3 = 2131165975(0x7var_, float:1.7946182E38)
                 r1.setText(r2, r6, r3, r8)
                 goto L_0x07c1
             L_0x04f1:

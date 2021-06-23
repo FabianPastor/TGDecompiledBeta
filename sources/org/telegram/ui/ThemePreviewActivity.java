@@ -775,7 +775,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar2
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
             r1 = 5
-            r2 = 2131165818(0x7var_a, float:1.7945864E38)
+            r2 = 2131165819(0x7var_b, float:1.7945866E38)
             r0.addItem((int) r1, (int) r2)
             goto L_0x02a6
         L_0x02ef:
@@ -1088,7 +1088,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.graphics.Rect r0 = new android.graphics.Rect
             r0.<init>()
             android.content.res.Resources r1 = r36.getResources()
-            r5 = 2131166023(0x7var_, float:1.794628E38)
+            r5 = 2131166024(0x7var_, float:1.7946282E38)
             android.graphics.drawable.Drawable r1 = r1.getDrawable(r5)
             android.graphics.drawable.Drawable r1 = r1.mutate()
             r6.sheetDrawable = r1

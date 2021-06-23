@@ -3999,7 +3999,8 @@ public class ImageLoader {
                 }
                 File file2 = new File(externalStorageDirectory, "Telegram");
                 this.telegramPath = file2;
-                if (Build.VERSION.SDK_INT >= 19 && !file2.isDirectory() && (dataDirs = AndroidUtilities.getDataDirs()) != null) {
+                file2.mkdirs();
+                if (Build.VERSION.SDK_INT >= 19 && !this.telegramPath.isDirectory() && (dataDirs = AndroidUtilities.getDataDirs()) != null) {
                     int size2 = dataDirs.size();
                     int i2 = 0;
                     while (true) {

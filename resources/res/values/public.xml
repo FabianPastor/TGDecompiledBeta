@@ -819,6 +819,7 @@
     <public type="drawable" name="msg_screencast" id="NUM" />
     <public type="drawable" name="msg_screencast_off" id="NUM" />
     <public type="drawable" name="msg_search" id="NUM" />
+    <public type="drawable" name="msg_sendfile" id="NUM" />
     <public type="drawable" name="msg_sendphoto" id="NUM" />
     <public type="drawable" name="msg_share" id="NUM" />
     <public type="drawable" name="msg_share_filled" id="NUM" />

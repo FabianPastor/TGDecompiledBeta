@@ -9384,20 +9384,18 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
     private void updateBotButton(boolean z) {
         ImageView imageView;
-        if (this.botButton != null) {
+        ImageView imageView2 = this.botButton;
+        if (imageView2 != null) {
             boolean z2 = false;
             if (!this.parentFragment.openAnimationEnded) {
                 z = false;
             }
             boolean z3 = this.hasBotCommands;
-            if (z3 && this.dialog_id < 0) {
-                TLRPC$Chat chat = this.accountInstance.getMessagesController().getChat(Integer.valueOf(-((int) this.dialog_id)));
-                z3 = chat == null || !chat.megagroup;
-            }
-            if (!this.hasBotCommands && this.botReplyMarkup == null) {
-                this.botButton.setVisibility(8);
+            boolean z4 = z3 && this.dialog_id > 0;
+            if (!z3 && this.botReplyMarkup == null) {
+                imageView2.setVisibility(8);
             } else if (this.botReplyMarkup != null) {
-                if (this.botButton.getVisibility() != 0) {
+                if (imageView2.getVisibility() != 0) {
                     this.botButton.setVisibility(0);
                 }
                 if (!isPopupShowing() || this.currentPopupContentType != 1) {
@@ -9407,15 +9405,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.botButtonDrawable.setIcon(NUM, true);
                     this.botButton.setContentDescription(LocaleController.getString("AccDescrShowKeyboard", NUM));
                 }
-            } else if (!z3) {
+            } else if (!z4) {
                 this.botButtonDrawable.setIcon(NUM, true);
                 this.botButton.setContentDescription(LocaleController.getString("AccDescrBotCommands", NUM));
                 this.botButton.setVisibility(0);
             } else {
-                this.botButton.setVisibility(8);
+                imageView2.setVisibility(8);
             }
             BotCommandsMenuView botCommandsMenuView = this.botCommandsMenuButton;
-            if (z3 && this.hasBotCommands) {
+            if (z4 && this.hasBotCommands) {
                 z2 = true;
             }
             AndroidUtilities.updateViewVisibilityAnimated(botCommandsMenuView, z2, 0.5f, z);
@@ -9424,8 +9422,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             }
             updateFieldRight(2);
             LinearLayout linearLayout = this.attachLayout;
-            ImageView imageView2 = this.botButton;
-            linearLayout.setPivotX((float) AndroidUtilities.dp(((imageView2 == null || imageView2.getVisibility() == 8) && ((imageView = this.notifyButton) == null || imageView.getVisibility() == 8)) ? 48.0f : 96.0f));
+            ImageView imageView3 = this.botButton;
+            linearLayout.setPivotX((float) AndroidUtilities.dp(((imageView3 == null || imageView3.getVisibility() == 8) && ((imageView = this.notifyButton) == null || imageView.getVisibility() == 8)) ? 48.0f : 96.0f));
         }
     }
 

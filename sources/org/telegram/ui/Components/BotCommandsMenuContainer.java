@@ -159,6 +159,7 @@ public class BotCommandsMenuContainer extends FrameLayout implements NestedScrol
             this.dismissed = false;
         } else if (this.dismissed) {
             this.dismissed = false;
+            cancelCurrentAnimation();
             playEnterAnim(false);
         }
     }

@@ -5540,7 +5540,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v6, resolved type: java.lang.String} */
     /* JADX WARNING: type inference failed for: r7v11 */
     /* JADX WARNING: type inference failed for: r7v12 */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v4, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v4, types: [boolean, int] */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x00ea  */
     /* JADX WARNING: Removed duplicated region for block: B:32:0x013a  */
@@ -5571,7 +5571,7 @@ public class VoIPService extends Service implements SensorEventListener, AudioMa
         L_0x002e:
             android.app.Notification$Builder r5 = r5.setContentTitle(r10)
             android.app.Notification$Builder r5 = r5.setContentText(r0)
-            r10 = 2131165866(0x7var_aa, float:1.7945961E38)
+            r10 = 2131165867(0x7var_ab, float:1.7945963E38)
             android.app.Notification$Builder r5 = r5.setSmallIcon(r10)
             android.app.Notification$Builder r5 = r5.setSubText(r2)
             r10 = 0

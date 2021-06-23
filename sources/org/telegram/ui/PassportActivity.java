@@ -3447,7 +3447,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
             r8 = 1
-            r1 = 2131165973(0x7var_, float:1.7946178E38)
+            r1 = 2131165974(0x7var_, float:1.794618E38)
             r0.addItem((int) r8, (int) r1)
             org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
             r0.<init>(r7)
@@ -3564,7 +3564,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.emptyImageView = r0
-            r2 = 2131165860(0x7var_a4, float:1.794595E38)
+            r2 = 2131165861(0x7var_a5, float:1.7945951E38)
             r0.setImageResource(r2)
             android.widget.ImageView r0 = r6.emptyImageView
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -10616,7 +10616,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165910(0x7var_d6, float:1.794605E38)
+                r14 = 2131165911(0x7var_d7, float:1.7946052E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
                 if (r14 == 0) goto L_0x00f9
@@ -10684,7 +10684,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131166056(0x7var_, float:1.7946347E38)
+                r11 = 2131166057(0x7var_, float:1.7946349E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -10705,7 +10705,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166054(0x7var_, float:1.7946343E38)
+                r10 = 2131166055(0x7var_, float:1.7946345E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -10726,7 +10726,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131166055(0x7var_, float:1.7946345E38)
+                r10 = 2131166056(0x7var_, float:1.7946347E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter

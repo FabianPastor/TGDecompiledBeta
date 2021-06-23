@@ -556,7 +556,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER
             r6.setScaleType(r12)
             android.widget.ImageView r6 = r0.playbackSpeedButton
-            r12 = 2131166124(0x7var_ac, float:1.7946484E38)
+            r12 = 2131166125(0x7var_ad, float:1.7946487E38)
             r6.setImageResource(r12)
             android.widget.ImageView r6 = r0.playbackSpeedButton
             r12 = 2131624012(0x7f0e004c, float:1.8875192E38)
@@ -631,7 +631,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             r7.<init>()
             r4.setOnClickListener(r7)
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.repeatButton
-            r7 = 2131165948(0x7var_fc, float:1.7946128E38)
+            r7 = 2131165949(0x7var_fd, float:1.794613E38)
             r3 = 2131627187(0x7f0e0cb3, float:1.8881631E38)
             java.lang.String r15 = "RepeatSong"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r15, r3)
@@ -639,21 +639,21 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r4.addSubItem(r15, r7, r3)
             r0.repeatSongItem = r3
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.repeatButton
-            r4 = 2131165947(0x7var_fb, float:1.7946125E38)
+            r4 = 2131165948(0x7var_fc, float:1.7946128E38)
             r7 = 2131627184(0x7f0e0cb0, float:1.8881625E38)
             java.lang.String r15 = "RepeatList"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r15, r7)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r3.addSubItem(r9, r4, r7)
             r0.repeatListItem = r3
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.repeatButton
-            r4 = 2131165949(0x7var_fd, float:1.794613E38)
+            r4 = 2131165950(0x7var_fe, float:1.7946132E38)
             r7 = 2131627546(0x7f0e0e1a, float:1.888236E38)
             java.lang.String r15 = "ShuffleList"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r15, r7)
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r3.addSubItem(r11, r4, r7)
             r0.shuffleListItem = r3
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.repeatButton
-            r4 = 2131165941(0x7var_f5, float:1.7946113E38)
+            r4 = 2131165942(0x7var_f6, float:1.7946115E38)
             r7 = 2131627278(0x7f0e0d0e, float:1.8881816E38)
             java.lang.String r15 = "ReverseOrder"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r15, r7)
@@ -824,7 +824,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r3.addSubItem(r2, r4, r5)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
-            r4 = 2131165819(0x7var_b, float:1.7945866E38)
+            r4 = 2131165820(0x7var_c, float:1.7945868E38)
             r5 = 2131627476(0x7f0e0dd4, float:1.8882218E38)
             java.lang.String r6 = "ShareFile"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
@@ -881,7 +881,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             android.widget.ImageView r3 = new android.widget.ImageView
             r3.<init>(r1)
             r0.emptyImageView = r3
-            r4 = 2131165853(0x7var_d, float:1.7945935E38)
+            r4 = 2131165854(0x7var_e, float:1.7945937E38)
             r3.setImageResource(r4)
             android.widget.ImageView r3 = r0.emptyImageView
             android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter

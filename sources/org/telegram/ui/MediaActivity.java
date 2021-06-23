@@ -531,7 +531,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1.<init>()
             r0.setActionBarMenuOnItemClick(r1)
             android.content.res.Resources r0 = r27.getResources()
-            r1 = 2131165928(0x7var_e8, float:1.7946087E38)
+            r1 = 2131165929(0x7var_e9, float:1.7946089E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             r6.pinnedHeaderShadowDrawable = r0
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
