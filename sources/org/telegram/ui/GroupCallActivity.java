@@ -1488,7 +1488,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 if (this.scrimView != null) {
                     this.delayedGroupCallUpdated = true;
                 } else {
-                    applyCallParticipantUpdates();
+                    applyCallParticipantUpdates(true);
                 }
                 updateSubtitle();
                 boolean booleanValue = objArr[2].booleanValue();
@@ -1589,7 +1589,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             ChatObject.Call call5 = this.call;
             if (call5 != null && tLRPC$ChatFull.id == (-peerId) && (tLRPC$TL_groupCallParticipant2 = call5.participants.get(peerId)) != null) {
                 tLRPC$TL_groupCallParticipant2.about = tLRPC$ChatFull.about;
-                applyCallParticipantUpdates();
+                applyCallParticipantUpdates(true);
                 AndroidUtilities.updateVisibleRows(this.listView);
                 if (this.currentOptionsLayout != null) {
                     while (i7 < this.currentOptionsLayout.getChildCount()) {
@@ -1632,7 +1632,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             int peerId2 = MessageObject.getPeerId(this.selfPeer);
             if (this.call != null && peerId2 == num.intValue() && (tLRPC$TL_groupCallParticipant = this.call.participants.get(peerId2)) != null) {
                 tLRPC$TL_groupCallParticipant.about = objArr[1].about;
-                applyCallParticipantUpdates();
+                applyCallParticipantUpdates(true);
                 AndroidUtilities.updateVisibleRows(this.listView);
                 if (this.currentOptionsLayout != null) {
                     while (i7 < this.currentOptionsLayout.getChildCount()) {
@@ -1653,11 +1653,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 }
             }
         } else if (i == NotificationCenter.mainUserInfoChanged) {
-            applyCallParticipantUpdates();
+            applyCallParticipantUpdates(true);
             AndroidUtilities.updateVisibleRows(this.listView);
         } else if (i == NotificationCenter.updateInterfaces) {
             if ((objArr[0].intValue() & 16) != 0) {
-                applyCallParticipantUpdates();
+                applyCallParticipantUpdates(true);
                 AndroidUtilities.updateVisibleRows(this.listView);
             }
         } else if (i == NotificationCenter.groupCallScreencastStateChanged) {
@@ -1712,19 +1712,20 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:112:? A[RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x011a  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x0171  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x017a  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x0189  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x01a3 A[LOOP:2: B:68:0x019b->B:70:0x01a3, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x01bb  */
-    /* JADX WARNING: Removed duplicated region for block: B:88:0x01f4  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x0204  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x0215  */
+    /* JADX WARNING: Removed duplicated region for block: B:101:0x0237  */
+    /* JADX WARNING: Removed duplicated region for block: B:118:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x00f8  */
+    /* JADX WARNING: Removed duplicated region for block: B:47:0x013b  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x01a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x01b6  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x01b9  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x01cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x01d5  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x01e5  */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x01fe A[LOOP:2: B:89:0x01f6->B:91:0x01fe, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x0211  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void applyCallParticipantUpdates() {
+    public void applyCallParticipantUpdates(boolean r18) {
         /*
             r17 = this;
             r10 = r17
@@ -1735,10 +1736,10 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r0.setVisibleParticipant(r11)
         L_0x000c:
             org.telegram.messenger.ChatObject$Call r0 = r10.call
-            if (r0 == 0) goto L_0x0220
+            if (r0 == 0) goto L_0x0242
             boolean r1 = r10.delayedGroupCallUpdated
             if (r1 == 0) goto L_0x0016
-            goto L_0x0220
+            goto L_0x0242
         L_0x0016:
             org.telegram.tgnet.TLRPC$Peer r0 = r0.selfPeer
             int r0 = org.telegram.messenger.MessageObject.getPeerId(r0)
@@ -1785,56 +1786,72 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             goto L_0x0042
         L_0x0073:
             r17.updateVideoParticipantList()
-            org.telegram.ui.GroupCallActivity$UpdateCallback r0 = new org.telegram.ui.GroupCallActivity$UpdateCallback     // Catch:{ Exception -> 0x00c6 }
-            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00c6 }
-            r0.<init>(r1)     // Catch:{ Exception -> 0x00c6 }
-            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00c6 }
-            int r2 = r1.addMemberRow     // Catch:{ Exception -> 0x00c6 }
-            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00c6 }
-            int r3 = r1.usersStartRow     // Catch:{ Exception -> 0x00c6 }
-            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00c6 }
-            int r4 = r1.usersEndRow     // Catch:{ Exception -> 0x00c6 }
-            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00c6 }
-            int r5 = r1.invitedStartRow     // Catch:{ Exception -> 0x00c6 }
-            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00c6 }
-            int r6 = r1.invitedEndRow     // Catch:{ Exception -> 0x00c6 }
-            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00c6 }
-            int r7 = r1.usersVideoGridStartRow     // Catch:{ Exception -> 0x00c6 }
-            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00c6 }
-            int r8 = r1.usersVideoGridEndRow     // Catch:{ Exception -> 0x00c6 }
-            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00c6 }
-            int r16 = r1.videoGridDividerRow     // Catch:{ Exception -> 0x00c6 }
+            org.telegram.ui.Components.RecyclerListView r0 = r10.listView
+            androidx.recyclerview.widget.RecyclerView$ItemAnimator r0 = r0.getItemAnimator()
+            if (r0 == 0) goto L_0x0086
+            if (r18 != 0) goto L_0x0086
+            org.telegram.ui.Components.RecyclerListView r0 = r10.listView
+            r0.setItemAnimator(r13)
+            goto L_0x0097
+        L_0x0086:
+            org.telegram.ui.Components.RecyclerListView r0 = r10.listView
+            androidx.recyclerview.widget.RecyclerView$ItemAnimator r0 = r0.getItemAnimator()
+            if (r0 != 0) goto L_0x0097
+            if (r18 == 0) goto L_0x0097
+            org.telegram.ui.Components.RecyclerListView r0 = r10.listView
+            org.telegram.ui.GroupCallActivity$GroupCallItemAnimator r1 = r10.itemAnimator
+            r0.setItemAnimator(r1)
+        L_0x0097:
+            org.telegram.ui.GroupCallActivity$UpdateCallback r0 = new org.telegram.ui.GroupCallActivity$UpdateCallback     // Catch:{ Exception -> 0x00e7 }
+            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00e7 }
+            r0.<init>(r1)     // Catch:{ Exception -> 0x00e7 }
+            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00e7 }
+            int r2 = r1.addMemberRow     // Catch:{ Exception -> 0x00e7 }
+            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00e7 }
+            int r3 = r1.usersStartRow     // Catch:{ Exception -> 0x00e7 }
+            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00e7 }
+            int r4 = r1.usersEndRow     // Catch:{ Exception -> 0x00e7 }
+            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00e7 }
+            int r5 = r1.invitedStartRow     // Catch:{ Exception -> 0x00e7 }
+            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00e7 }
+            int r6 = r1.invitedEndRow     // Catch:{ Exception -> 0x00e7 }
+            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00e7 }
+            int r7 = r1.usersVideoGridStartRow     // Catch:{ Exception -> 0x00e7 }
+            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00e7 }
+            int r8 = r1.usersVideoGridEndRow     // Catch:{ Exception -> 0x00e7 }
+            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00e7 }
+            int r16 = r1.videoGridDividerRow     // Catch:{ Exception -> 0x00e7 }
             r1 = r17
-            r13 = r9
+            r11 = r9
             r9 = r16
-            r1.setOldRows(r2, r3, r4, r5, r6, r7, r8, r9)     // Catch:{ Exception -> 0x00c4 }
-            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00c4 }
-            r1.updateRows()     // Catch:{ Exception -> 0x00c4 }
-            androidx.recyclerview.widget.DiffUtil$Callback r1 = r10.diffUtilsCallback     // Catch:{ Exception -> 0x00c4 }
-            androidx.recyclerview.widget.DiffUtil$DiffResult r1 = androidx.recyclerview.widget.DiffUtil.calculateDiff(r1)     // Catch:{ Exception -> 0x00c4 }
-            r1.dispatchUpdatesTo((androidx.recyclerview.widget.ListUpdateCallback) r0)     // Catch:{ Exception -> 0x00c4 }
-            goto L_0x00d0
-        L_0x00c4:
+            r1.setOldRows(r2, r3, r4, r5, r6, r7, r8, r9)     // Catch:{ Exception -> 0x00e5 }
+            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r10.listAdapter     // Catch:{ Exception -> 0x00e5 }
+            r1.updateRows()     // Catch:{ Exception -> 0x00e5 }
+            androidx.recyclerview.widget.DiffUtil$Callback r1 = r10.diffUtilsCallback     // Catch:{ Exception -> 0x00e5 }
+            androidx.recyclerview.widget.DiffUtil$DiffResult r1 = androidx.recyclerview.widget.DiffUtil.calculateDiff(r1)     // Catch:{ Exception -> 0x00e5 }
+            r1.dispatchUpdatesTo((androidx.recyclerview.widget.ListUpdateCallback) r0)     // Catch:{ Exception -> 0x00e5 }
+            goto L_0x00f1
+        L_0x00e5:
             r0 = move-exception
-            goto L_0x00c8
-        L_0x00c6:
+            goto L_0x00e9
+        L_0x00e7:
             r0 = move-exception
-            r13 = r9
-        L_0x00c8:
+            r11 = r9
+        L_0x00e9:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             org.telegram.ui.GroupCallActivity$ListAdapter r0 = r10.listAdapter
             r0.notifyDataSetChanged()
-        L_0x00d0:
+        L_0x00f1:
             org.telegram.messenger.ChatObject$Call r0 = r10.call
             r0.saveActiveDates()
-            if (r15 == 0) goto L_0x00e7
+            if (r15 == 0) goto L_0x0108
             org.telegram.ui.Components.FillLastGridLayoutManager r0 = r10.layoutManager
             int r1 = r15.getTop()
             org.telegram.ui.Components.RecyclerListView r2 = r10.listView
             int r2 = r2.getPaddingTop()
             int r1 = r1 - r2
-            r0.scrollToPositionWithOffset(r13, r1)
-        L_0x00e7:
+            r0.scrollToPositionWithOffset(r11, r1)
+        L_0x0108:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r0 = r10.oldParticipants
             r0.clear()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r0 = r10.oldParticipants
@@ -1856,144 +1873,147 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             int r0 = r0.getItemCount()
             r10.oldCount = r0
             r0 = 0
-        L_0x0118:
-            if (r0 >= r12) goto L_0x0162
+        L_0x0139:
+            if (r0 >= r12) goto L_0x0183
             org.telegram.ui.Components.RecyclerListView r1 = r10.listView
             android.view.View r1 = r1.getChildAt(r0)
             boolean r2 = r1 instanceof org.telegram.ui.Cells.GroupCallUserCell
-            if (r2 != 0) goto L_0x0128
+            if (r2 != 0) goto L_0x0149
             boolean r3 = r1 instanceof org.telegram.ui.Cells.GroupCallInvitedCell
-            if (r3 == 0) goto L_0x015f
-        L_0x0128:
+            if (r3 == 0) goto L_0x0180
+        L_0x0149:
             org.telegram.ui.Components.RecyclerListView r3 = r10.listView
             androidx.recyclerview.widget.RecyclerView$ViewHolder r3 = r3.findContainingViewHolder(r1)
-            if (r3 == 0) goto L_0x015f
-            if (r2 == 0) goto L_0x0149
+            if (r3 == 0) goto L_0x0180
+            if (r2 == 0) goto L_0x016a
             org.telegram.ui.Cells.GroupCallUserCell r1 = (org.telegram.ui.Cells.GroupCallUserCell) r1
             int r2 = r3.getAdapterPosition()
             org.telegram.ui.GroupCallActivity$ListAdapter r3 = r10.listAdapter
             int r3 = r3.getItemCount()
             int r3 = r3 + -2
-            if (r2 == r3) goto L_0x0144
+            if (r2 == r3) goto L_0x0165
             r2 = 1
-            goto L_0x0145
-        L_0x0144:
+            goto L_0x0166
+        L_0x0165:
             r2 = 0
-        L_0x0145:
+        L_0x0166:
             r1.setDrawDivider(r2)
-            goto L_0x015f
-        L_0x0149:
+            goto L_0x0180
+        L_0x016a:
             org.telegram.ui.Cells.GroupCallInvitedCell r1 = (org.telegram.ui.Cells.GroupCallInvitedCell) r1
             int r2 = r3.getAdapterPosition()
             org.telegram.ui.GroupCallActivity$ListAdapter r3 = r10.listAdapter
             int r3 = r3.getItemCount()
             int r3 = r3 + -2
-            if (r2 == r3) goto L_0x015b
+            if (r2 == r3) goto L_0x017c
             r2 = 1
-            goto L_0x015c
-        L_0x015b:
+            goto L_0x017d
+        L_0x017c:
             r2 = 0
-        L_0x015c:
+        L_0x017d:
             r1.setDrawDivider(r2)
-        L_0x015f:
+        L_0x0180:
             int r0 = r0 + 1
-            goto L_0x0118
-        L_0x0162:
+            goto L_0x0139
+        L_0x0183:
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer r0 = r10.renderersContainer
+            boolean r0 = r0.autoPinEnabled()
+            org.telegram.ui.Components.voip.GroupCallRenderersContainer r1 = r10.renderersContainer
+            boolean r2 = r1.inFullscreenMode
+            if (r2 == 0) goto L_0x01bc
+            org.telegram.messenger.ChatObject$VideoParticipant r1 = r1.fullscreenParticipant
+            if (r1 == 0) goto L_0x01bc
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r2 = r1.participant
+            boolean r1 = r1.presentation
+            org.telegram.messenger.ChatObject$Call r3 = r10.call
+            boolean r1 = org.telegram.messenger.ChatObject.Call.videoIsActive(r2, r1, r3)
+            if (r1 != 0) goto L_0x01bc
+            java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r1 = r10.visibleVideoParticipants
+            boolean r1 = r1.isEmpty()
+            if (r1 != 0) goto L_0x01b6
+            if (r0 == 0) goto L_0x01b4
+            java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r0 = r10.visibleVideoParticipants
+            java.lang.Object r0 = r0.get(r14)
+            org.telegram.messenger.ChatObject$VideoParticipant r0 = (org.telegram.messenger.ChatObject.VideoParticipant) r0
+            r10.fullscreenFor(r0)
+        L_0x01b4:
+            r0 = 1
+            goto L_0x01b7
+        L_0x01b6:
+            r0 = 0
+        L_0x01b7:
+            if (r0 != 0) goto L_0x01bc
+            r10.fullscreenFor(r13)
+        L_0x01bc:
             org.telegram.ui.Components.GroupCallFullscreenAdapter r0 = r10.fullscreenAdapter
             org.telegram.ui.Components.RecyclerListView r1 = r10.fullscreenUsersListView
-            r0.update(r11, r1)
+            r2 = 1
+            r0.update(r2, r1)
             org.telegram.ui.Components.RecyclerListView r0 = r10.fullscreenUsersListView
             int r0 = r0.getVisibility()
-            if (r0 != 0) goto L_0x0176
+            if (r0 != 0) goto L_0x01d1
             org.telegram.ui.Components.RecyclerListView r0 = r10.fullscreenUsersListView
             org.telegram.messenger.AndroidUtilities.updateVisibleRows(r0)
-        L_0x0176:
+        L_0x01d1:
             boolean r0 = isTabletMode
-            if (r0 == 0) goto L_0x0181
+            if (r0 == 0) goto L_0x01dd
             org.telegram.ui.GroupCallTabletGridAdapter r0 = r10.tabletGridAdapter
             org.telegram.ui.Components.RecyclerListView r1 = r10.tabletVideoGridView
-            r0.update(r11, r1)
-        L_0x0181:
+            r2 = 1
+            r0.update(r2, r1)
+        L_0x01dd:
             org.telegram.ui.Components.RecyclerListView r0 = r10.listView
             int r0 = r0.getVisibility()
-            if (r0 != 0) goto L_0x018e
+            if (r0 != 0) goto L_0x01ea
             org.telegram.ui.Components.RecyclerListView r0 = r10.listView
             org.telegram.messenger.AndroidUtilities.updateVisibleRows(r0)
-        L_0x018e:
+        L_0x01ea:
             java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r0 = r10.attachedRenderersTmp
             r0.clear()
             java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r0 = r10.attachedRenderersTmp
             java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r1 = r10.attachedRenderers
             r0.addAll(r1)
-            r0 = 0
-        L_0x019b:
-            java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r1 = r10.attachedRenderersTmp
-            int r1 = r1.size()
-            if (r0 >= r1) goto L_0x01b1
-            java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r1 = r10.attachedRenderersTmp
-            java.lang.Object r1 = r1.get(r0)
-            org.telegram.ui.Components.voip.GroupCallMiniTextureView r1 = (org.telegram.ui.Components.voip.GroupCallMiniTextureView) r1
-            r1.updateAttachState(r11)
-            int r0 = r0 + 1
-            goto L_0x019b
-        L_0x01b1:
-            org.telegram.ui.Components.voip.GroupCallRenderersContainer r0 = r10.renderersContainer
-            boolean r0 = r0.autoPinEnabled()
-            org.telegram.messenger.ChatObject$Call r1 = r10.call
-            if (r1 == 0) goto L_0x01d6
-            org.telegram.ui.Components.voip.GroupCallRenderersContainer r2 = r10.renderersContainer
-            boolean r3 = r2.inFullscreenMode
-            if (r3 == 0) goto L_0x01d6
-            org.telegram.messenger.ChatObject$VideoParticipant r2 = r2.fullscreenParticipant
-            if (r2 == 0) goto L_0x01d6
-            android.util.SparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r1 = r1.participants
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r2 = r2.participant
-            org.telegram.tgnet.TLRPC$Peer r2 = r2.peer
-            int r2 = org.telegram.messenger.MessageObject.getPeerId(r2)
-            java.lang.Object r1 = r1.get(r2)
-            if (r1 != 0) goto L_0x01d6
-            r0 = 1
-        L_0x01d6:
+        L_0x01f6:
+            java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r0 = r10.attachedRenderersTmp
+            int r0 = r0.size()
+            if (r14 >= r0) goto L_0x020d
+            java.util.ArrayList<org.telegram.ui.Components.voip.GroupCallMiniTextureView> r0 = r10.attachedRenderersTmp
+            java.lang.Object r0 = r0.get(r14)
+            org.telegram.ui.Components.voip.GroupCallMiniTextureView r0 = (org.telegram.ui.Components.voip.GroupCallMiniTextureView) r0
+            r1 = 1
+            r0.updateAttachState(r1)
+            int r14 = r14 + 1
+            goto L_0x01f6
+        L_0x020d:
+            org.telegram.messenger.ChatObject$Call r0 = r10.call
+            if (r0 == 0) goto L_0x0229
             org.telegram.ui.Components.voip.GroupCallRenderersContainer r1 = r10.renderersContainer
             boolean r2 = r1.inFullscreenMode
-            if (r2 == 0) goto L_0x0208
+            if (r2 == 0) goto L_0x0229
             org.telegram.messenger.ChatObject$VideoParticipant r1 = r1.fullscreenParticipant
-            if (r1 == 0) goto L_0x0208
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r2 = r1.participant
-            boolean r1 = r1.presentation
-            org.telegram.messenger.ChatObject$Call r3 = r10.call
-            boolean r1 = org.telegram.messenger.ChatObject.Call.videoIsActive(r2, r1, r3)
-            if (r1 != 0) goto L_0x0208
-            java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r1 = r10.visibleVideoParticipants
-            boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x0202
-            if (r0 == 0) goto L_0x0201
-            java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r0 = r10.visibleVideoParticipants
-            java.lang.Object r0 = r0.get(r14)
-            org.telegram.messenger.ChatObject$VideoParticipant r0 = (org.telegram.messenger.ChatObject.VideoParticipant) r0
-            r10.fullscreenFor(r0)
-        L_0x0201:
-            r14 = 1
-        L_0x0202:
-            if (r14 != 0) goto L_0x0208
-            r1 = 0
-            r10.fullscreenFor(r1)
-        L_0x0208:
+            if (r1 == 0) goto L_0x0229
+            android.util.SparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r0 = r0.participants
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r1 = r1.participant
+            org.telegram.tgnet.TLRPC$Peer r1 = r1.peer
+            int r1 = org.telegram.messenger.MessageObject.getPeerId(r1)
+            java.lang.Object r0 = r0.get(r1)
+        L_0x0229:
             org.telegram.messenger.ChatObject$Call r0 = r10.call
             java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r0 = r0.visibleVideoParticipants
             boolean r0 = r0.isEmpty()
-            r0 = r0 ^ r11
+            r1 = 1
+            r0 = r0 ^ r1
             boolean r1 = r10.hasVideo
-            if (r0 == r1) goto L_0x0220
+            if (r0 == r1) goto L_0x0242
             r10.hasVideo = r0
             boolean r0 = isTabletMode
-            if (r0 == 0) goto L_0x0220
+            if (r0 == 0) goto L_0x0242
             android.view.ViewGroup r0 = r10.containerView
             r0.requestLayout()
-        L_0x0220:
+        L_0x0242:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCallActivity.applyCallParticipantUpdates():void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.GroupCallActivity.applyCallParticipantUpdates(boolean):void");
     }
 
     private void updateVideoParticipantList() {
@@ -2024,6 +2044,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
 
     /* access modifiers changed from: private */
     public void updateItems() {
+        boolean z;
         String str;
         int i;
         TLObject tLObject;
@@ -2041,12 +2062,22 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             if (chat != null) {
                 this.currentChat = chat;
             }
+            boolean z2 = true;
             if (ChatObject.canUserDoAdminAction(this.currentChat, 3)) {
                 this.inviteItem.setVisibility(0);
+                z = true;
             } else {
                 this.inviteItem.setVisibility(8);
+                z = false;
             }
-            this.noiseItem.setVisibility(0);
+            TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.call.participants.get(MessageObject.getPeerId(this.selfPeer));
+            ChatObject.Call call3 = this.call;
+            if (call3 == null || call3.isScheduled() || (tLRPC$TL_groupCallParticipant != null && !tLRPC$TL_groupCallParticipant.can_self_unmute && tLRPC$TL_groupCallParticipant.muted)) {
+                this.noiseItem.setVisibility(8);
+            } else {
+                this.noiseItem.setVisibility(0);
+                z = true;
+            }
             this.noiseItem.setIcon(SharedConfig.noiseSupression ? NUM : NUM);
             ActionBarMenuSubItem actionBarMenuSubItem = this.noiseItem;
             if (SharedConfig.noiseSupression) {
@@ -2066,8 +2097,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 } else {
                     this.recordItem.setVisibility(0);
                 }
-                ChatObject.Call call3 = this.call;
-                if (!call3.canStreamVideo || call3.isScheduled() || Build.VERSION.SDK_INT < 21) {
+                ChatObject.Call call4 = this.call;
+                if (!call4.canStreamVideo || call4.isScheduled() || Build.VERSION.SDK_INT < 21) {
                     this.screenItem.setVisibility(8);
                 } else {
                     this.screenItem.setVisibility(0);
@@ -2099,22 +2130,25 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     this.screenItem.setTextAndIcon(LocaleController.getString("VoipChatStopScreenCapture", NUM), NUM);
                 }
                 updateRecordCallText();
+                z = true;
             } else {
-                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.call.participants.get(MessageObject.getPeerId(this.selfPeer));
-                boolean z = tLRPC$TL_groupCallParticipant != null && !tLRPC$TL_groupCallParticipant.can_self_unmute && tLRPC$TL_groupCallParticipant.muted && !ChatObject.canManageCalls(this.currentChat);
-                if (Build.VERSION.SDK_INT < 21 || z || !this.call.canStreamVideo) {
+                boolean z3 = tLRPC$TL_groupCallParticipant != null && !tLRPC$TL_groupCallParticipant.can_self_unmute && tLRPC$TL_groupCallParticipant.muted && !ChatObject.canManageCalls(this.currentChat);
+                if (Build.VERSION.SDK_INT < 21 || z3 || !this.call.canStreamVideo) {
                     this.screenShareItem.setVisibility(8);
                     this.screenItem.setVisibility(8);
-                } else if (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getVideoState(true) != 2) {
-                    this.screenItem.setTextAndIcon(LocaleController.getString("VoipChatStartScreenCapture", NUM), NUM);
-                    this.screenItem.setContentDescription(LocaleController.getString("VoipChatStartScreenCapture", NUM));
-                    this.screenShareItem.setVisibility(8);
-                    this.screenItem.setVisibility(0);
                 } else {
-                    this.screenShareItem.setVisibility(8);
-                    this.screenItem.setVisibility(0);
-                    this.screenItem.setTextAndIcon(LocaleController.getString("VoipChatStopScreenCapture", NUM), NUM);
-                    this.screenItem.setContentDescription(LocaleController.getString("VoipChatStopScreenCapture", NUM));
+                    if (VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getVideoState(true) != 2) {
+                        this.screenItem.setTextAndIcon(LocaleController.getString("VoipChatStartScreenCapture", NUM), NUM);
+                        this.screenItem.setContentDescription(LocaleController.getString("VoipChatStartScreenCapture", NUM));
+                        this.screenShareItem.setVisibility(8);
+                        this.screenItem.setVisibility(0);
+                    } else {
+                        this.screenShareItem.setVisibility(8);
+                        this.screenItem.setVisibility(0);
+                        this.screenItem.setTextAndIcon(LocaleController.getString("VoipChatStopScreenCapture", NUM), NUM);
+                        this.screenItem.setContentDescription(LocaleController.getString("VoipChatStopScreenCapture", NUM));
+                    }
+                    z = true;
                 }
                 this.leaveItem.setVisibility(8);
                 this.editTitleItem.setVisibility(8);
@@ -2124,18 +2158,20 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 this.permissionItem.setVisibility(8);
             } else {
                 this.permissionItem.setVisibility(0);
+                z = true;
             }
             if (this.soundButton.getVisibility() != 0) {
                 this.soundItem.setVisibility(0);
                 this.soundItemDivider.setVisibility(0);
+                z = true;
             } else {
                 this.soundItem.setVisibility(8);
                 this.soundItemDivider.setVisibility(8);
             }
-            this.otherItem.setVisibility(0);
             if ((VoIPService.getSharedInstance() == null || !VoIPService.getSharedInstance().hasFewPeers) && !this.scheduleHasFewPeers) {
                 this.accountSelectCell.setVisibility(8);
                 this.accountGap.setVisibility(8);
+                z2 = z;
             } else {
                 this.accountSelectCell.setVisibility(0);
                 this.accountGap.setVisibility(0);
@@ -2146,6 +2182,11 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     tLObject = this.accountInstance.getMessagesController().getChat(Integer.valueOf(-peerId));
                 }
                 this.accountSelectCell.setObject(tLObject);
+            }
+            if (z2) {
+                this.otherItem.setVisibility(0);
+            } else {
+                this.otherItem.setVisibility(8);
             }
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.titleTextView.getLayoutParams();
             float f = (float) 96;
@@ -3689,15 +3730,15 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             r28 = 1096810496(0x41600000, float:14.0)
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r22, r23, r24, r25, r26, r27, r28)
             r1.addView(r0, r2)
-            r39.applyCallParticipantUpdates()
-            org.telegram.ui.GroupCallActivity$ListAdapter r0 = r8.listAdapter
-            r0.notifyDataSetChanged()
-            boolean r0 = isTabletMode
-            if (r0 == 0) goto L_0x0da0
-            org.telegram.ui.GroupCallTabletGridAdapter r0 = r8.tabletGridAdapter
-            org.telegram.ui.Components.RecyclerListView r1 = r8.tabletVideoGridView
-            r2 = 0
-            r0.update(r2, r1)
+            r0 = 0
+            r8.applyCallParticipantUpdates(r0)
+            org.telegram.ui.GroupCallActivity$ListAdapter r1 = r8.listAdapter
+            r1.notifyDataSetChanged()
+            boolean r1 = isTabletMode
+            if (r1 == 0) goto L_0x0da0
+            org.telegram.ui.GroupCallTabletGridAdapter r1 = r8.tabletGridAdapter
+            org.telegram.ui.Components.RecyclerListView r2 = r8.tabletVideoGridView
+            r1.update(r0, r2)
         L_0x0da0:
             org.telegram.ui.GroupCallActivity$ListAdapter r0 = r8.listAdapter
             int r0 = r0.getItemCount()
@@ -4450,7 +4491,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                                 }
                                 GroupCallActivity.this.updateState(true, false);
                                 GroupCallActivity.this.call.sortParticipants();
-                                GroupCallActivity.this.applyCallParticipantUpdates();
+                                GroupCallActivity.this.applyCallParticipantUpdates(true);
                                 GroupCallActivity.this.buttonsContainer.requestLayout();
                             } else if (sharedInstance != null) {
                                 VoIPService.getSharedInstance().setVideoState(false, 0);
@@ -4471,7 +4512,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             updateState(true, false);
             updateSpeakerPhoneIcon(false);
             this.call.sortParticipants();
-            applyCallParticipantUpdates();
+            applyCallParticipantUpdates(true);
             this.buttonsContainer.requestLayout();
         }
     }
@@ -4565,13 +4606,13 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                         groupCallActivity.renderersContainer.requestFullscreen(videoParticipant);
                         if (GroupCallActivity.this.delayedGroupCallUpdated) {
                             boolean unused = GroupCallActivity.this.delayedGroupCallUpdated = false;
-                            GroupCallActivity.this.applyCallParticipantUpdates();
+                            GroupCallActivity.this.applyCallParticipantUpdates(true);
                             if (z && videoParticipant != null) {
                                 GroupCallActivity.this.listView.scrollToPosition(0);
                             }
                             boolean unused2 = GroupCallActivity.this.delayedGroupCallUpdated = true;
                         } else {
-                            GroupCallActivity.this.applyCallParticipantUpdates();
+                            GroupCallActivity.this.applyCallParticipantUpdates(true);
                         }
                         return false;
                     }
@@ -4611,7 +4652,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 AndroidUtilities.updateVisibleRows(this.fullscreenUsersListView);
             } else if (this.listView.getVisibility() != 0) {
                 this.listView.setVisibility(0);
-                applyCallParticipantUpdates();
+                applyCallParticipantUpdates(false);
                 this.delayedGroupCallUpdated = true;
                 ViewTreeObserver viewTreeObserver3 = this.listView.getViewTreeObserver();
                 AnonymousClass43 r0 = new ViewTreeObserver.OnPreDrawListener() {
@@ -5431,7 +5472,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
         ChatObject.Call call2 = this.call;
         if (call2 != null && !this.delayedGroupCallUpdated) {
             call2.addInvitedUser(i);
-            applyCallParticipantUpdates();
+            applyCallParticipantUpdates(true);
             GroupVoipInviteAlert groupVoipInviteAlert2 = this.groupVoipInviteAlert;
             if (groupVoipInviteAlert2 != null) {
                 groupVoipInviteAlert2.dismiss();
@@ -8272,7 +8313,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                     GroupCallActivity.this.blurredView.setVisibility(8);
                     if (GroupCallActivity.this.delayedGroupCallUpdated) {
                         boolean unused5 = GroupCallActivity.this.delayedGroupCallUpdated = false;
-                        GroupCallActivity.this.applyCallParticipantUpdates();
+                        GroupCallActivity.this.applyCallParticipantUpdates(true);
                     }
                     if (GroupCallActivity.this.scrimRenderer != null) {
                         GroupCallActivity.this.scrimRenderer.textureView.setRoundCorners(0.0f);
@@ -8348,7 +8389,7 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
             this.blurredView.setVisibility(8);
             if (this.delayedGroupCallUpdated) {
                 this.delayedGroupCallUpdated = false;
-                applyCallParticipantUpdates();
+                applyCallParticipantUpdates(true);
             }
             checkContentOverlayed();
         }
@@ -9010,17 +9051,15 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
     }
 
     public void onBackPressed() {
-        if (this.avatarsPreviewShowed) {
+        VideoPreviewDialog videoPreviewDialog = this.previewDialog;
+        if (videoPreviewDialog != null) {
+            videoPreviewDialog.dismiss(false);
+        } else if (this.avatarsPreviewShowed) {
             dismissAvatarPreview(true);
         } else if (this.renderersContainer.inFullscreenMode) {
             fullscreenFor((ChatObject.VideoParticipant) null);
         } else {
-            VideoPreviewDialog videoPreviewDialog = this.previewDialog;
-            if (videoPreviewDialog != null) {
-                videoPreviewDialog.dismiss(false);
-            } else {
-                super.onBackPressed();
-            }
+            super.onBackPressed();
         }
     }
 

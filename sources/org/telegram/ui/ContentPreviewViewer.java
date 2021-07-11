@@ -181,7 +181,7 @@ public class ContentPreviewViewer {
                         });
                         ContentPreviewViewer.this.visibleDialog.show();
                         ContentPreviewViewer.this.containerView.performHapticFeedback(0);
-                        if (ContentPreviewViewer.this.delegate.needRemove()) {
+                        if (ContentPreviewViewer.this.delegate != null && ContentPreviewViewer.this.delegate.needRemove()) {
                             BottomSheet.BottomSheetCell bottomSheetCell = ContentPreviewViewer.this.visibleDialog.getItemViews().get(0);
                             bottomSheetCell.setTextColor(Theme.getColor("dialogTextRed"));
                             bottomSheetCell.setIconColor(Theme.getColor("dialogRedIcon"));

@@ -2045,6 +2045,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                     this.localTipDates.clear();
                     this.localTipChats.clear();
                     updateFiltersView(false, (ArrayList<Object>) null, (ArrayList<FiltersView.DateData>) null, true);
+                    return;
                 }
                 int i2 = 1 + this.requestIndex;
                 this.requestIndex = i2;

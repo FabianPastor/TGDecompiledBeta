@@ -6035,7 +6035,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             int r5 = r8.read(r3, r4, r2)     // Catch:{ Exception -> 0x0093 }
             if (r5 != r2) goto L_0x008f
             byte r2 = r3[r4]     // Catch:{ Exception -> 0x0093 }
-            r5 = 137(0x89, float:1.92E-43)
+            r5 = -119(0xfffffffffffffvar_, float:NaN)
             r6 = 1
             if (r2 != r5) goto L_0x0058
             byte r2 = r3[r6]     // Catch:{ Exception -> 0x0093 }

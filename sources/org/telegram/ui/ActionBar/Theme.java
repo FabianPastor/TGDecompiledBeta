@@ -15346,7 +15346,7 @@ public class Theme {
         if (!z && (hashMap = animatingColors) != null && (num = hashMap.get(str)) != null) {
             return num.intValue();
         }
-        if (serviceBitmapShader != null && ("chat_serviceText".equals(str) || "chat_serviceLink".equals(str) || "chat_serviceIcon".equals(str))) {
+        if (serviceBitmapShader != null && ("chat_serviceText".equals(str) || "chat_serviceLink".equals(str) || "chat_serviceIcon".equals(str) || "chat_stickerReplyLine".equals(str) || "chat_stickerReplyNameText".equals(str) || "chat_stickerReplyMessageText".equals(str))) {
             return -1;
         }
         if (currentTheme == defaultTheme) {
