@@ -2857,6 +2857,7 @@ public final class R {
         public static final int DebugClearLogs = NUM;
         public static final int DebugMenu = NUM;
         public static final int DebugMenuCallSettings = NUM;
+        public static final int DebugMenuCheckAppUpdate = NUM;
         public static final int DebugMenuClearMediaCache = NUM;
         public static final int DebugMenuDisableCamera = NUM;
         public static final int DebugMenuDisableLogs = NUM;

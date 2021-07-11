@@ -2718,6 +2718,7 @@
     <public type="string" name="DebugClearLogs" id="NUM" />
     <public type="string" name="DebugMenu" id="NUM" />
     <public type="string" name="DebugMenuCallSettings" id="NUM" />
+    <public type="string" name="DebugMenuCheckAppUpdate" id="NUM" />
     <public type="string" name="DebugMenuClearMediaCache" id="NUM" />
     <public type="string" name="DebugMenuDisableCamera" id="NUM" />
     <public type="string" name="DebugMenuDisableLogs" id="NUM" />

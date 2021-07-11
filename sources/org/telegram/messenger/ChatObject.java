@@ -1364,152 +1364,153 @@ public class ChatObject {
             L_0x00ea:
                 r12.checkOnlineParticipants()
                 boolean r0 = r12.canStreamVideo
-                if (r0 != 0) goto L_0x00fa
-                if (r6 == 0) goto L_0x00fa
-                java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r0 = r12.visibleVideoParticipants
-                org.telegram.messenger.ChatObject$VideoParticipant r1 = r12.videoNotAvailableParticipant
-                r0.add(r1)
-            L_0x00fa:
+                if (r0 != 0) goto L_0x00fc
+                if (r6 == 0) goto L_0x00fc
+                org.telegram.messenger.ChatObject$VideoParticipant r0 = r12.videoNotAvailableParticipant
+                if (r0 == 0) goto L_0x00fc
+                java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r1 = r12.visibleVideoParticipants
+                r1.add(r0)
+            L_0x00fc:
                 r0 = 0
                 r1 = 0
-            L_0x00fc:
+            L_0x00fe:
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r2 = r12.sortedParticipants
                 int r2 = r2.size()
-                if (r0 >= r2) goto L_0x01ef
+                if (r0 >= r2) goto L_0x01f1
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r2 = r12.sortedParticipants
                 java.lang.Object r2 = r2.get(r0)
                 org.telegram.tgnet.TLRPC$TL_groupCallParticipant r2 = (org.telegram.tgnet.TLRPC$TL_groupCallParticipant) r2
                 boolean r3 = r12.canStreamVideo
-                if (r3 == 0) goto L_0x01e6
+                if (r3 == 0) goto L_0x01e8
                 int r3 = r2.videoIndex
-                if (r3 == 0) goto L_0x01e6
+                if (r3 == 0) goto L_0x01e8
                 boolean r3 = r2.self
                 r6 = 1065353216(0x3var_, float:1.0)
-                if (r3 != 0) goto L_0x0182
+                if (r3 != 0) goto L_0x0184
                 boolean r3 = videoIsActive(r2, r5, r12)
-                if (r3 == 0) goto L_0x0182
+                if (r3 == 0) goto L_0x0184
                 boolean r3 = videoIsActive(r2, r4, r12)
-                if (r3 == 0) goto L_0x0182
+                if (r3 == 0) goto L_0x0184
                 java.util.HashMap<java.lang.String, org.telegram.messenger.ChatObject$VideoParticipant> r3 = r12.videoParticipantsCache
                 java.lang.String r7 = r2.videoEndpoint
                 java.lang.Object r3 = r3.get(r7)
                 org.telegram.messenger.ChatObject$VideoParticipant r3 = (org.telegram.messenger.ChatObject.VideoParticipant) r3
-                if (r3 != 0) goto L_0x013f
+                if (r3 != 0) goto L_0x0141
                 org.telegram.messenger.ChatObject$VideoParticipant r3 = new org.telegram.messenger.ChatObject$VideoParticipant
                 r3.<init>(r2, r4, r5)
                 java.util.HashMap<java.lang.String, org.telegram.messenger.ChatObject$VideoParticipant> r7 = r12.videoParticipantsCache
                 java.lang.String r8 = r2.videoEndpoint
                 r7.put(r8, r3)
-                goto L_0x0145
-            L_0x013f:
+                goto L_0x0147
+            L_0x0141:
                 r3.participant = r2
                 r3.presentation = r4
                 r3.hasSame = r5
-            L_0x0145:
+            L_0x0147:
                 java.util.HashMap<java.lang.String, org.telegram.messenger.ChatObject$VideoParticipant> r7 = r12.videoParticipantsCache
                 java.lang.String r8 = r2.presentationEndpoint
                 java.lang.Object r7 = r7.get(r8)
                 org.telegram.messenger.ChatObject$VideoParticipant r7 = (org.telegram.messenger.ChatObject.VideoParticipant) r7
-                if (r7 != 0) goto L_0x0157
+                if (r7 != 0) goto L_0x0159
                 org.telegram.messenger.ChatObject$VideoParticipant r7 = new org.telegram.messenger.ChatObject$VideoParticipant
                 r7.<init>(r2, r5, r5)
-                goto L_0x015d
-            L_0x0157:
+                goto L_0x015f
+            L_0x0159:
                 r7.participant = r2
                 r7.presentation = r5
                 r7.hasSame = r5
-            L_0x015d:
+            L_0x015f:
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r2 = r12.visibleVideoParticipants
                 r2.add(r3)
                 float r2 = r3.aspectRatio
                 int r2 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-                if (r2 <= 0) goto L_0x016f
+                if (r2 <= 0) goto L_0x0171
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r1 = r12.visibleVideoParticipants
                 int r1 = r1.size()
                 int r1 = r1 - r5
-            L_0x016f:
+            L_0x0171:
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r2 = r12.visibleVideoParticipants
                 r2.add(r7)
                 float r2 = r7.aspectRatio
                 int r2 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-                if (r2 <= 0) goto L_0x01eb
+                if (r2 <= 0) goto L_0x01ed
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r1 = r12.visibleVideoParticipants
                 int r1 = r1.size()
-            L_0x0180:
-                int r1 = r1 - r5
-                goto L_0x01eb
             L_0x0182:
+                int r1 = r1 - r5
+                goto L_0x01ed
+            L_0x0184:
                 boolean r3 = r2.self
-                if (r3 == 0) goto L_0x01a7
+                if (r3 == 0) goto L_0x01a9
                 boolean r3 = videoIsActive(r2, r5, r12)
-                if (r3 == 0) goto L_0x0196
+                if (r3 == 0) goto L_0x0198
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r3 = r12.visibleVideoParticipants
                 org.telegram.messenger.ChatObject$VideoParticipant r6 = new org.telegram.messenger.ChatObject$VideoParticipant
                 r6.<init>(r2, r5, r4)
                 r3.add(r6)
-            L_0x0196:
+            L_0x0198:
                 boolean r3 = videoIsActive(r2, r4, r12)
-                if (r3 == 0) goto L_0x01eb
+                if (r3 == 0) goto L_0x01ed
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r3 = r12.visibleVideoParticipants
                 org.telegram.messenger.ChatObject$VideoParticipant r6 = new org.telegram.messenger.ChatObject$VideoParticipant
                 r6.<init>(r2, r4, r4)
                 r3.add(r6)
-                goto L_0x01eb
-            L_0x01a7:
+                goto L_0x01ed
+            L_0x01a9:
                 boolean r3 = videoIsActive(r2, r5, r12)
                 java.util.HashMap<java.lang.String, org.telegram.messenger.ChatObject$VideoParticipant> r7 = r12.videoParticipantsCache
-                if (r3 == 0) goto L_0x01b2
+                if (r3 == 0) goto L_0x01b4
                 java.lang.String r8 = r2.presentationEndpoint
-                goto L_0x01b4
-            L_0x01b2:
-                java.lang.String r8 = r2.videoEndpoint
+                goto L_0x01b6
             L_0x01b4:
+                java.lang.String r8 = r2.videoEndpoint
+            L_0x01b6:
                 java.lang.Object r7 = r7.get(r8)
                 org.telegram.messenger.ChatObject$VideoParticipant r7 = (org.telegram.messenger.ChatObject.VideoParticipant) r7
-                if (r7 != 0) goto L_0x01ce
+                if (r7 != 0) goto L_0x01d0
                 org.telegram.messenger.ChatObject$VideoParticipant r7 = new org.telegram.messenger.ChatObject$VideoParticipant
                 r7.<init>(r2, r3, r4)
                 java.util.HashMap<java.lang.String, org.telegram.messenger.ChatObject$VideoParticipant> r8 = r12.videoParticipantsCache
-                if (r3 == 0) goto L_0x01c8
+                if (r3 == 0) goto L_0x01ca
                 java.lang.String r2 = r2.presentationEndpoint
-                goto L_0x01ca
-            L_0x01c8:
-                java.lang.String r2 = r2.videoEndpoint
+                goto L_0x01cc
             L_0x01ca:
+                java.lang.String r2 = r2.videoEndpoint
+            L_0x01cc:
                 r8.put(r2, r7)
-                goto L_0x01d4
-            L_0x01ce:
+                goto L_0x01d6
+            L_0x01d0:
                 r7.participant = r2
                 r7.presentation = r3
                 r7.hasSame = r4
-            L_0x01d4:
+            L_0x01d6:
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r2 = r12.visibleVideoParticipants
                 r2.add(r7)
                 float r2 = r7.aspectRatio
                 int r2 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-                if (r2 <= 0) goto L_0x01eb
+                if (r2 <= 0) goto L_0x01ed
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r1 = r12.visibleVideoParticipants
                 int r1 = r1.size()
-                goto L_0x0180
-            L_0x01e6:
+                goto L_0x0182
+            L_0x01e8:
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r3 = r12.visibleParticipants
                 r3.add(r2)
-            L_0x01eb:
+            L_0x01ed:
                 int r0 = r0 + 1
-                goto L_0x00fc
-            L_0x01ef:
+                goto L_0x00fe
+            L_0x01f1:
                 boolean r0 = org.telegram.ui.GroupCallActivity.isLandscapeMode
-                if (r0 != 0) goto L_0x020a
+                if (r0 != 0) goto L_0x020c
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r0 = r12.visibleVideoParticipants
                 int r0 = r0.size()
                 int r0 = r0 % 2
-                if (r0 != r5) goto L_0x020a
+                if (r0 != r5) goto L_0x020c
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r0 = r12.visibleVideoParticipants
                 java.lang.Object r0 = r0.remove(r1)
                 org.telegram.messenger.ChatObject$VideoParticipant r0 = (org.telegram.messenger.ChatObject.VideoParticipant) r0
                 java.util.ArrayList<org.telegram.messenger.ChatObject$VideoParticipant> r1 = r12.visibleVideoParticipants
                 r1.add(r0)
-            L_0x020a:
+            L_0x020c:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ChatObject.Call.sortParticipants():void");

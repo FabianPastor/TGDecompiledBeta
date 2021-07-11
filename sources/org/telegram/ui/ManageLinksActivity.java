@@ -1247,7 +1247,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r12.<init>(r13)
                 int r13 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r12.setBackgroundColor(r13)
-                r13 = 2131625119(0x7f0e049f, float:1.8877437E38)
+                r13 = 2131625120(0x7f0e04a0, float:1.8877439E38)
                 java.lang.String r0 = "DeleteAllRevokedLinks"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13, r1)
@@ -1563,7 +1563,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.messenger.UserConfig r0 = r0.getUserConfig()
                 int r0 = r0.clientUserId
                 if (r7 != r0) goto L_0x0214
-                r7 = 2131627108(0x7f0e0CLASSNAME, float:1.8881471E38)
+                r7 = 2131627109(0x7f0e0CLASSNAME, float:1.8881473E38)
                 java.lang.String r0 = "PublicLink"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1582,7 +1582,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r6.setText(r7)
                 goto L_0x0280
             L_0x0235:
-                r7 = 2131626917(0x7f0e0ba5, float:1.8881084E38)
+                r7 = 2131626918(0x7f0e0ba6, float:1.8881086E38)
                 java.lang.String r0 = "PermanentLinkForThisAdmin"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1591,7 +1591,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.revokedHeader
                 if (r7 != r0) goto L_0x0257
-                r7 = 2131627284(0x7f0e0d14, float:1.8881828E38)
+                r7 = 2131627285(0x7f0e0d15, float:1.888183E38)
                 java.lang.String r0 = "RevokedLinks"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1600,7 +1600,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.linksHeaderRow
                 if (r7 != r0) goto L_0x026c
-                r7 = 2131626005(0x7f0e0815, float:1.8879234E38)
+                r7 = 2131626006(0x7f0e0816, float:1.8879236E38)
                 java.lang.String r0 = "LinksCreatedByThisAdmin"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1609,7 +1609,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r0 = org.telegram.ui.ManageLinksActivity.this
                 int r0 = r0.adminsHeaderRow
                 if (r7 != r0) goto L_0x0280
-                r7 = 2131626004(0x7f0e0814, float:1.8879232E38)
+                r7 = 2131626005(0x7f0e0815, float:1.8879234E38)
                 java.lang.String r0 = "LinksCreatedByOtherAdmins"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1880,7 +1880,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r4 = 0
                 r5 = 1
                 if (r2 == 0) goto L_0x003d
-                r2 = 2131625107(0x7f0e0493, float:1.8877413E38)
+                r2 = 2131625108(0x7f0e0494, float:1.8877415E38)
                 java.lang.String r6 = "Delete"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1902,7 +1902,7 @@ public class ManageLinksActivity extends BaseFragment {
                 r0.add(r2)
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r4)
                 r1.add(r2)
-                r2 = 2131627474(0x7f0e0dd2, float:1.8882213E38)
+                r2 = 2131627475(0x7f0e0dd3, float:1.8882215E38)
                 java.lang.String r6 = "ShareLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1917,7 +1917,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r2 = org.telegram.ui.ManageLinksActivity.this
                 boolean r2 = r2.canEdit
                 if (r2 == 0) goto L_0x00a3
-                r2 = 2131625269(0x7f0e0535, float:1.8877741E38)
+                r2 = 2131625270(0x7f0e0536, float:1.8877743E38)
                 java.lang.String r6 = "EditLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1931,7 +1931,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.ManageLinksActivity r2 = org.telegram.ui.ManageLinksActivity.this
                 boolean r2 = r2.canEdit
                 if (r2 == 0) goto L_0x00c8
-                r2 = 2131627279(0x7f0e0d0f, float:1.8881818E38)
+                r2 = 2131627280(0x7f0e0d10, float:1.888182E38)
                 java.lang.String r6 = "RevokeLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
                 r8.add(r2)
@@ -1955,7 +1955,7 @@ public class ManageLinksActivity extends BaseFragment {
                 org.telegram.ui.-$$Lambda$ManageLinksActivity$LinkCell$6WOTWE2QlARDKBPxMERVDFywqN8 r6 = new org.telegram.ui.-$$Lambda$ManageLinksActivity$LinkCell$6WOTWE2QlARDKBPxMERVDFywqN8
                 r6.<init>(r1)
                 r3.setItems(r4, r0, r6)
-                r0 = 2131625881(0x7f0e0799, float:1.8878982E38)
+                r0 = 2131625882(0x7f0e079a, float:1.8878984E38)
                 java.lang.String r1 = "InviteLink"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r3.setTitle(r0)

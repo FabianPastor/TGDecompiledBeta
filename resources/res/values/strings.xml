@@ -1149,6 +1149,7 @@
     <string name="DebugClearLogs">Clear Logs</string>
     <string name="DebugMenu">Debug Menu</string>
     <string name="DebugMenuCallSettings">Call settings</string>
+    <string name="DebugMenuCheckAppUpdate">Check app update</string>
     <string name="DebugMenuClearMediaCache">Clear sent media cache</string>
     <string name="DebugMenuDisableCamera">Disable in-app camera</string>
     <string name="DebugMenuDisableLogs">Disable Logs</string>
