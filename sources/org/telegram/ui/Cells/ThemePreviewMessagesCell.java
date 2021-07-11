@@ -30,12 +30,18 @@ import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.MotionBackgroundDrawable;
 import org.telegram.ui.PinchToZoomHelper;
 
 public class ThemePreviewMessagesCell extends LinearLayout {
     private Drawable backgroundDrawable;
     private BackgroundGradientDrawable.Disposable backgroundGradientDisposable;
     private ChatMessageCell[] cells = new ChatMessageCell[2];
+    private final Runnable invalidateRunnable = new Runnable() {
+        public final void run() {
+            ThemePreviewMessagesCell.this.invalidate();
+        }
+    };
     private Drawable oldBackgroundDrawable;
     private BackgroundGradientDrawable.Disposable oldBackgroundGradientDisposable;
     private ActionBarLayout parentLayout;
@@ -154,7 +160,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
             ChatMessageCell[] chatMessageCellArr = this.cells;
             if (i3 < chatMessageCellArr.length) {
                 chatMessageCellArr[i3] = new ChatMessageCell(context2);
-                this.cells[i3].setDelegate(new ChatMessageCell.ChatMessageCellDelegate(this) {
+                this.cells[i3].setDelegate(new ChatMessageCell.ChatMessageCellDelegate() {
                     public /* synthetic */ boolean canPerformActions() {
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$canPerformActions(this);
                     }
@@ -347,7 +353,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                 } else {
                     drawable.setAlpha((int) (255.0f * themeAnimationValue));
                 }
-                if ((drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable)) {
+                if ((drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable) || (drawable instanceof MotionBackgroundDrawable)) {
                     drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                     if (drawable instanceof BackgroundGradientDrawable) {
                         this.backgroundGradientDisposable = ((BackgroundGradientDrawable) drawable).drawExactBoundsSize(canvas, this);

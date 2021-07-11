@@ -12,12 +12,11 @@ public class ChatLoadingCell extends FrameLayout {
     private FrameLayout frameLayout;
     private RadialProgressView progressBar;
 
-    public ChatLoadingCell(Context context) {
+    public ChatLoadingCell(Context context, View view) {
         super(context);
         FrameLayout frameLayout2 = new FrameLayout(context);
         this.frameLayout = frameLayout2;
-        frameLayout2.setBackgroundResource(NUM);
-        this.frameLayout.getBackground().setColorFilter(Theme.colorFilter);
+        frameLayout2.setBackground(Theme.createServiceDrawable(AndroidUtilities.dp(18.0f), this.frameLayout, view));
         addView(this.frameLayout, LayoutHelper.createFrame(36, 36, 17));
         RadialProgressView radialProgressView = new RadialProgressView(context);
         this.progressBar = radialProgressView;

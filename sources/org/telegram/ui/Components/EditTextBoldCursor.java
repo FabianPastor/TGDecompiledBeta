@@ -261,7 +261,7 @@ public class EditTextBoldCursor extends EditText {
         L_0x00ab:
             java.lang.reflect.Field r0 = mCursorDrawableResField     // Catch:{ all -> 0x00b9 }
             if (r0 == 0) goto L_0x00b9
-            r1 = 2131165402(0x7var_da, float:1.794502E38)
+            r1 = 2131165394(0x7var_d2, float:1.7945004E38)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x00b9 }
             r0.set(r7, r1)     // Catch:{ all -> 0x00b9 }
         L_0x00b9:
@@ -467,7 +467,11 @@ public class EditTextBoldCursor extends EditText {
 
     /* access modifiers changed from: protected */
     public void onFocusChanged(boolean z, int i, Rect rect2) {
-        super.onFocusChanged(z, i, rect2);
+        try {
+            super.onFocusChanged(z, i, rect2);
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
         checkHeaderVisibility(true);
     }
 

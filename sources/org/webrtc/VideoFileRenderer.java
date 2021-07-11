@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
 import java.util.concurrent.CountDownLatch;
 import org.webrtc.EglBase;
 import org.webrtc.VideoFrame;
+import org.webrtc.VideoSink;
 
 public class VideoFileRenderer implements VideoSink {
     private static final String TAG = "VideoFileRenderer";
@@ -27,6 +28,10 @@ public class VideoFileRenderer implements VideoSink {
     private final FileOutputStream videoOutFile;
     /* access modifiers changed from: private */
     public YuvConverter yuvConverter;
+
+    public /* synthetic */ void setParentSink(VideoSink videoSink) {
+        VideoSink.CC.$default$setParentSink(this, videoSink);
+    }
 
     public VideoFileRenderer(String str, int i, int i2, final EglBase.Context context) throws IOException {
         if (i % 2 == 1 || i2 % 2 == 1) {

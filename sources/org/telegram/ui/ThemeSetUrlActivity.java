@@ -74,6 +74,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     /* access modifiers changed from: private */
     public CharSequence infoText;
     private String lastCheckName;
+    private boolean lastNameAvailable;
     private LinearLayout linearLayoutTypeContainer;
     /* access modifiers changed from: private */
     public EditTextBoldCursor linkField;
@@ -214,7 +215,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                 return ThemeSetUrlActivity.this.lambda$createView$1$ThemeSetUrlActivity(textView, i, keyEvent);
             }
         });
-        AnonymousClass2 r4 = new View(this, context2) {
+        AnonymousClass2 r4 = new View(context2) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
@@ -417,7 +418,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                 }
             }
             final BottomSheet.Builder builder2 = builder;
-            AnonymousClass4 r0 = new ThemesHorizontalListCell(this, context, 2, arrayList, new ArrayList()) {
+            AnonymousClass4 r0 = new ThemesHorizontalListCell(context, 2, arrayList, new ArrayList()) {
                 /* access modifiers changed from: protected */
                 public void updateRows() {
                     builder2.getDismissRunnable().run();
@@ -481,6 +482,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                 ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.checkReqId, true);
             }
         }
+        this.lastNameAvailable = false;
         if (str != null) {
             if (str.startsWith("_") || str.endsWith("_")) {
                 setCheckText(LocaleController.getString("SetUrlInvalid", NUM), "windowBackgroundWhiteRedText4");
@@ -598,9 +600,11 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         if (str2 != null && str2.equals(str)) {
             if (tLRPC$TL_error == null || (!"THEME_SLUG_INVALID".equals(tLRPC$TL_error.text) && !"THEME_SLUG_OCCUPIED".equals(tLRPC$TL_error.text))) {
                 setCheckText(LocaleController.formatString("SetUrlAvailable", NUM, str), "windowBackgroundWhiteGreenText");
+                this.lastNameAvailable = true;
                 return;
             }
             setCheckText(LocaleController.getString("SetUrlInUse", NUM), "windowBackgroundWhiteRedText4");
+            this.lastNameAvailable = false;
         }
     }
 

@@ -10,7 +10,7 @@ public class TLRPC$TL_video_old3 extends TLRPC$TL_video_layer45 {
         this.date = abstractSerializedData.readInt32(z);
         this.duration = abstractSerializedData.readInt32(z);
         this.size = abstractSerializedData.readInt32(z);
-        this.thumb = TLRPC$PhotoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        this.thumb = TLRPC$PhotoSize.TLdeserialize(0, 0, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.dc_id = abstractSerializedData.readInt32(z);
         this.w = abstractSerializedData.readInt32(z);
         this.h = abstractSerializedData.readInt32(z);

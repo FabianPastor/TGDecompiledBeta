@@ -74,6 +74,7 @@ import org.telegram.ui.StickersActivity;
 public class StickersActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
     public int activeReorderingRequests;
+    private ActionBarMenuItem archiveMenuItem;
     /* access modifiers changed from: private */
     public int archivedInfoRow;
     /* access modifiers changed from: private */
@@ -225,7 +226,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         this.selectedCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
         createActionMode.addView(this.selectedCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
         this.selectedCountTextView.setOnTouchListener($$Lambda$StickersActivity$Xk67QgVSNe1W5ZwlRfSZIQcgygo.INSTANCE);
-        createActionMode.addItemWithWidth(0, NUM, AndroidUtilities.dp(54.0f));
+        this.archiveMenuItem = createActionMode.addItemWithWidth(0, NUM, AndroidUtilities.dp(54.0f));
         this.deleteMenuItem = createActionMode.addItemWithWidth(1, NUM, AndroidUtilities.dp(54.0f));
         this.listAdapter = new ListAdapter(context, MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType));
         FrameLayout frameLayout = new FrameLayout(context);

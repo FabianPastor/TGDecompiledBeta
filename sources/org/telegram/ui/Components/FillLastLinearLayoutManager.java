@@ -31,10 +31,6 @@ public class FillLastLinearLayoutManager extends LinearLayoutManager {
         this.bind = z;
     }
 
-    public void setCanScrollVertically(boolean z) {
-        this.canScrollVertically = z;
-    }
-
     public boolean canScrollVertically() {
         return this.canScrollVertically;
     }

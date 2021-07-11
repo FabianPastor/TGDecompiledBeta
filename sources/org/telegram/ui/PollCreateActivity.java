@@ -289,7 +289,7 @@ public class PollCreateActivity extends BaseFragment {
         this.fragmentView = frameLayout;
         frameLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
         FrameLayout frameLayout2 = (FrameLayout) this.fragmentView;
-        AnonymousClass2 r3 = new RecyclerListView(this, context) {
+        AnonymousClass2 r3 = new RecyclerListView(context) {
             /* access modifiers changed from: protected */
             public void requestChildOnScreen(View view, View view2) {
                 if (view instanceof PollEditTextCell) {

@@ -9,6 +9,6 @@ public final /* synthetic */ class $$Lambda$Emoji$jetPe9LKmqTb2VDJvKzA7BWYlM imp
     }
 
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiDidLoad, new Object[0]);
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.emojiLoaded, new Object[0]);
     }
 }

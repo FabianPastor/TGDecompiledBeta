@@ -3,10 +3,8 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public abstract class TLRPC$channels_ChannelParticipants extends TLObject {
-    public TLRPC$channels_ChannelParticipants() {
-        new ArrayList();
-        new ArrayList();
-    }
+    public ArrayList<TLRPC$ChannelParticipant> participants = new ArrayList<>();
+    public ArrayList<TLRPC$User> users = new ArrayList<>();
 
     public static TLRPC$channels_ChannelParticipants TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$channels_ChannelParticipants tLRPC$channels_ChannelParticipants;

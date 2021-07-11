@@ -796,12 +796,10 @@ public class Emoji {
                 fontMetricsInt.descent = i4;
                 return size2;
             }
-            if (fontMetricsInt != null) {
-                fontMetricsInt.ascent = fontMetricsInt2.ascent;
-                fontMetricsInt.descent = fontMetricsInt2.descent;
-                fontMetricsInt.top = fontMetricsInt2.top;
-                fontMetricsInt.bottom = fontMetricsInt2.bottom;
-            }
+            fontMetricsInt.ascent = fontMetricsInt2.ascent;
+            fontMetricsInt.descent = fontMetricsInt2.descent;
+            fontMetricsInt.top = fontMetricsInt2.top;
+            fontMetricsInt.bottom = fontMetricsInt2.bottom;
             if (getDrawable() != null) {
                 Drawable drawable = getDrawable();
                 int i5 = this.size;

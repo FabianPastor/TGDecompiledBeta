@@ -84,6 +84,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
     public boolean closeVideoAfterWatch;
     /* access modifiers changed from: private */
     public FrameLayoutDrawer containerView;
+    private int[] coords = new int[2];
     /* access modifiers changed from: private */
     public int currentAccount;
     /* access modifiers changed from: private */

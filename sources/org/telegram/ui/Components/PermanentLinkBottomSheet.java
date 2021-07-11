@@ -35,7 +35,9 @@ public class PermanentLinkBottomSheet extends BottomSheet {
     private int chatId;
     private BaseFragment fragment;
     private final RLottieImageView imageView;
+    TLRPC$ChatFull info;
     TLRPC$TL_chatInviteExported invite;
+    private boolean isChannel;
     private final LinkActionView linkActionView;
     boolean linkGenerating;
     RLottieDrawable linkIcon;
@@ -51,7 +53,10 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported;
         Context context2 = context;
         TLRPC$ChatFull tLRPC$ChatFull2 = tLRPC$ChatFull;
+        boolean z3 = z2;
+        this.info = tLRPC$ChatFull2;
         this.chatId = i;
+        this.isChannel = z3;
         setAllowNestedScroll(true);
         setApplyBottomPadding(false);
         LinkActionView linkActionView2 = new LinkActionView(context, baseFragment, this, i, true, z2);
@@ -90,7 +95,7 @@ public class PermanentLinkBottomSheet extends BottomSheet {
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         TextView textView2 = new TextView(context2);
         this.subtitle = textView2;
-        if (z2) {
+        if (z3) {
             i2 = NUM;
             str = "LinkInfoChannel";
         } else {

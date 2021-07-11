@@ -24,6 +24,8 @@ public interface EglBase {
         long getNativeEglContext();
     }
 
+    void createBackgroundSurface(SurfaceTexture surfaceTexture);
+
     void createDummyPbufferSurface();
 
     void createPbufferSurface(int i, int i2);
@@ -36,21 +38,25 @@ public interface EglBase {
 
     Context getEglBaseContext();
 
+    boolean hasBackgroundSurface();
+
     boolean hasSurface();
+
+    void makeBackgroundCurrent();
 
     void makeCurrent();
 
     void release();
 
-    void releaseSurface();
+    void releaseSurface(boolean z);
 
     int surfaceHeight();
 
     int surfaceWidth();
 
-    void swapBuffers();
+    void swapBuffers(long j, boolean z);
 
-    void swapBuffers(long j);
+    void swapBuffers(boolean z);
 
     /* renamed from: org.webrtc.EglBase$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {

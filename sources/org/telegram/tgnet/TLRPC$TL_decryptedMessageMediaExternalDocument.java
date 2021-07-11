@@ -10,7 +10,7 @@ public class TLRPC$TL_decryptedMessageMediaExternalDocument extends TLRPC$Decryp
         this.date = abstractSerializedData.readInt32(z);
         this.mime_type = abstractSerializedData.readString(z);
         this.size = abstractSerializedData.readInt32(z);
-        this.thumb = TLRPC$PhotoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        this.thumb = TLRPC$PhotoSize.TLdeserialize(0, this.id, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.dc_id = abstractSerializedData.readInt32(z);
         int readInt32 = abstractSerializedData.readInt32(z);
         int i = 0;

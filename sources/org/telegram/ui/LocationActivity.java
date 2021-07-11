@@ -587,9 +587,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 this.actionBar.setTitle(LocaleController.getString("ShareLocation", NUM));
                 if (this.locationType != 4) {
                     this.overlayView = new MapOverlayView(context2);
-                    ActionBarMenuItem addItem = createMenu.addItem(0, NUM);
-                    addItem.setIsSearchField(true);
-                    addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+                    ActionBarMenuItem actionBarMenuItemSearchListener = createMenu.addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
                         public void onSearchExpand() {
                             boolean unused = LocationActivity.this.searching = true;
                         }
@@ -636,8 +634,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                             }
                         }
                     });
-                    this.searchItem = addItem;
-                    addItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
+                    this.searchItem = actionBarMenuItemSearchListener;
+                    actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", NUM));
                     this.searchItem.setContentDescription(LocaleController.getString("Search", NUM));
                     EditTextBoldCursor searchField = this.searchItem.getSearchField();
                     searchField.setTextColor(Theme.getColor("dialogTextBlack"));
@@ -653,9 +651,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 } else {
                     this.actionBar.setTitle(LocaleController.getString("SharedPlace", NUM));
                 }
-                ActionBarMenuItem addItem2 = createMenu.addItem(0, NUM);
-                this.otherItem = addItem2;
-                addItem2.addSubItem(1, NUM, LocaleController.getString("OpenInExternalApp", NUM));
+                ActionBarMenuItem addItem = createMenu.addItem(0, NUM);
+                this.otherItem = addItem;
+                addItem.addSubItem(1, NUM, LocaleController.getString("OpenInExternalApp", NUM));
                 if (!getLocationController().isSharingLocation(this.dialogId)) {
                     this.otherItem.addSubItem(5, NUM, LocaleController.getString("SendLiveLocationMenu", NUM));
                 }
@@ -732,7 +730,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 stateListAnimator.addState(new int[]{16842919}, ObjectAnimator.ofFloat(searchButton2, property, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
                 stateListAnimator.addState(new int[0], ObjectAnimator.ofFloat(this.searchAreaButton, property, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
                 this.searchAreaButton.setStateListAnimator(stateListAnimator);
-                this.searchAreaButton.setOutlineProvider(new ViewOutlineProvider(this) {
+                this.searchAreaButton.setOutlineProvider(new ViewOutlineProvider() {
                     @SuppressLint({"NewApi"})
                     public void getOutline(View view, Outline outline) {
                         outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) (view.getMeasuredHeight() / 2));
@@ -782,7 +780,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             frameLayout = frameLayout2;
             stateListAnimator2.addState(new int[0], ObjectAnimator.ofFloat(this.mapTypeButton, property2, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.mapTypeButton.setStateListAnimator(stateListAnimator2);
-            this.mapTypeButton.setOutlineProvider(new ViewOutlineProvider(this) {
+            this.mapTypeButton.setOutlineProvider(new ViewOutlineProvider() {
                 @SuppressLint({"NewApi"})
                 public void getOutline(View view, Outline outline) {
                     outline.setOval(0, 0, AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
@@ -817,7 +815,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             stateListAnimator3.addState(new int[]{16842919}, ObjectAnimator.ofFloat(imageView, property3, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             stateListAnimator3.addState(new int[0], ObjectAnimator.ofFloat(this.locationButton, property3, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.locationButton.setStateListAnimator(stateListAnimator3);
-            this.locationButton.setOutlineProvider(new ViewOutlineProvider(this) {
+            this.locationButton.setOutlineProvider(new ViewOutlineProvider() {
                 @SuppressLint({"NewApi"})
                 public void getOutline(View view, Outline outline) {
                     outline.setOval(0, 0, AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
@@ -856,7 +854,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             stateListAnimator4.addState(new int[]{16842919}, ObjectAnimator.ofFloat(imageView2, property4, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             stateListAnimator4.addState(new int[0], ObjectAnimator.ofFloat(this.proximityButton, property4, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.proximityButton.setStateListAnimator(stateListAnimator4);
-            this.proximityButton.setOutlineProvider(new ViewOutlineProvider(this) {
+            this.proximityButton.setOutlineProvider(new ViewOutlineProvider() {
                 @SuppressLint({"NewApi"})
                 public void getOutline(View view, Outline outline) {
                     outline.setOval(0, 0, AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
@@ -1674,7 +1672,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             r6.<init>(r3)     // Catch:{ all -> 0x00fc }
             android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x00fc }
             android.content.res.Resources r7 = r7.getResources()     // Catch:{ all -> 0x00fc }
-            r8 = 2131165611(0x7var_ab, float:1.7945444E38)
+            r8 = 2131165603(0x7var_a3, float:1.7945428E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r8)     // Catch:{ all -> 0x00fc }
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)     // Catch:{ all -> 0x00fc }
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)     // Catch:{ all -> 0x00fc }
@@ -2001,14 +1999,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 try {
                     MarkerOptions markerOptions = new MarkerOptions();
                     TLRPC$GeoPoint tLRPC$GeoPoint = tLRPC$TL_messageMediaVenue.geo;
-                    markerOptions.position(new LatLng(tLRPC$GeoPoint.lat, tLRPC$GeoPoint._long));
-                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createPlaceBitmap(i2)));
-                    markerOptions.anchor(0.5f, 0.5f);
-                    markerOptions.title(tLRPC$TL_messageMediaVenue.title);
-                    markerOptions.snippet(tLRPC$TL_messageMediaVenue.address);
+                    MarkerOptions position = markerOptions.position(new LatLng(tLRPC$GeoPoint.lat, tLRPC$GeoPoint._long));
+                    position.icon(BitmapDescriptorFactory.fromBitmap(createPlaceBitmap(i2)));
+                    position.anchor(0.5f, 0.5f);
+                    position.title(tLRPC$TL_messageMediaVenue.title);
+                    position.snippet(tLRPC$TL_messageMediaVenue.address);
                     VenueLocation venueLocation = new VenueLocation();
                     venueLocation.num = i2;
-                    Marker addMarker = this.googleMap.addMarker(markerOptions);
+                    Marker addMarker = this.googleMap.addMarker(position);
                     venueLocation.marker = addMarker;
                     venueLocation.venue = tLRPC$TL_messageMediaVenue;
                     addMarker.setTag(venueLocation);
@@ -2040,19 +2038,16 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 liveLocation.id = dialogId2;
             }
             try {
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
+                MarkerOptions position = new MarkerOptions().position(latLng);
                 Bitmap createUserBitmap = createUserBitmap(liveLocation);
                 if (createUserBitmap != null) {
-                    markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createUserBitmap));
-                    markerOptions.anchor(0.5f, 0.907f);
-                    liveLocation.marker = this.googleMap.addMarker(markerOptions);
+                    position.icon(BitmapDescriptorFactory.fromBitmap(createUserBitmap));
+                    position.anchor(0.5f, 0.907f);
+                    liveLocation.marker = this.googleMap.addMarker(position);
                     if (!UserObject.isUserSelf(liveLocation.user)) {
-                        MarkerOptions markerOptions2 = new MarkerOptions();
-                        markerOptions2.position(latLng);
-                        markerOptions2.flat(true);
-                        markerOptions2.anchor(0.5f, 0.5f);
-                        Marker addMarker = this.googleMap.addMarker(markerOptions2);
+                        MarkerOptions flat = new MarkerOptions().position(latLng).flat(true);
+                        flat.anchor(0.5f, 0.5f);
+                        Marker addMarker = this.googleMap.addMarker(flat);
                         liveLocation.directionMarker = addMarker;
                         int i = tLRPC$Message.media.heading;
                         if (i != 0) {
@@ -2098,20 +2093,17 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
         liveLocation.id = i;
         try {
-            MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(latLng);
+            MarkerOptions position = new MarkerOptions().position(latLng);
             Bitmap createUserBitmap = createUserBitmap(liveLocation);
             if (createUserBitmap != null) {
-                markerOptions.icon(BitmapDescriptorFactory.fromBitmap(createUserBitmap));
-                markerOptions.anchor(0.5f, 0.907f);
-                liveLocation.marker = this.googleMap.addMarker(markerOptions);
+                position.icon(BitmapDescriptorFactory.fromBitmap(createUserBitmap));
+                position.anchor(0.5f, 0.907f);
+                liveLocation.marker = this.googleMap.addMarker(position);
                 if (!UserObject.isUserSelf(liveLocation.user)) {
-                    MarkerOptions markerOptions2 = new MarkerOptions();
-                    markerOptions2.position(latLng);
-                    markerOptions2.flat(true);
-                    markerOptions2.icon(BitmapDescriptorFactory.fromResource(NUM));
-                    markerOptions2.anchor(0.5f, 0.5f);
-                    liveLocation.directionMarker = this.googleMap.addMarker(markerOptions2);
+                    MarkerOptions flat = new MarkerOptions().position(latLng).flat(true);
+                    flat.icon(BitmapDescriptorFactory.fromResource(NUM));
+                    flat.anchor(0.5f, 0.5f);
+                    liveLocation.directionMarker = this.googleMap.addMarker(flat);
                 }
                 this.markers.add(liveLocation);
                 this.markersMap.put(liveLocation.id, liveLocation);
@@ -2154,11 +2146,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 } else {
                     LatLng latLng2 = new LatLng(this.userLocation.getLatitude(), this.userLocation.getLongitude());
                     try {
-                        GoogleMap googleMap3 = this.googleMap;
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.position(latLng2);
-                        markerOptions.icon(BitmapDescriptorFactory.fromResource(NUM));
-                        googleMap3.addMarker(markerOptions);
+                        this.googleMap.addMarker(new MarkerOptions().position(latLng2).icon(BitmapDescriptorFactory.fromResource(NUM)));
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);
                     }
@@ -2431,7 +2419,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
             org.telegram.ui.Components.HintView r1 = r7.hintView
-            r3 = 2131627045(0x7f0e0CLASSNAME, float:1.8881343E38)
+            r3 = 2131627091(0x7f0e0CLASSNAME, float:1.8881437E38)
             java.lang.Object[] r5 = new java.lang.Object[r4]
             java.lang.String r0 = org.telegram.messenger.UserObject.getFirstName(r0)
             r5[r2] = r0
@@ -2441,7 +2429,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             goto L_0x0063
         L_0x0055:
             org.telegram.ui.Components.HintView r0 = r7.hintView
-            r1 = 2131627044(0x7f0e0CLASSNAME, float:1.8881341E38)
+            r1 = 2131627090(0x7f0e0CLASSNAME, float:1.8881435E38)
             java.lang.String r2 = "ProximityTooltioGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setOverrideText(r1)

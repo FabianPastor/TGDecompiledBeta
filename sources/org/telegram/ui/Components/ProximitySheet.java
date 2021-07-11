@@ -36,6 +36,7 @@ import org.telegram.ui.Components.ProximitySheet;
 
 public class ProximitySheet extends FrameLayout {
     private int backgroundPaddingLeft;
+    private Paint backgroundPaint = new Paint();
     private TextView buttonTextView;
     private ViewGroup containerView;
     /* access modifiers changed from: private */
@@ -55,7 +56,7 @@ public class ProximitySheet extends FrameLayout {
     private boolean maybeStartTracking = false;
     private Runnable onDismissCallback;
     private onRadiusPickerChange onRadiusChange;
-    private Interpolator openInterpolator;
+    private Interpolator openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
     private boolean radiusSet;
     private Rect rect = new Rect();
     private boolean startedTracking = false;
@@ -67,7 +68,7 @@ public class ProximitySheet extends FrameLayout {
     private int touchSlop;
     private boolean useFastDismiss;
     /* access modifiers changed from: private */
-    public boolean useHardwareLayer;
+    public boolean useHardwareLayer = true;
     private boolean useImperialSystem;
     private VelocityTracker velocityTracker = null;
 
@@ -87,9 +88,6 @@ public class ProximitySheet extends FrameLayout {
     public ProximitySheet(Context context, TLRPC$User tLRPC$User, onRadiusPickerChange onradiuspickerchange, onRadiusPickerChange onradiuspickerchange2, Runnable runnable) {
         super(context);
         Context context2 = context;
-        new Paint();
-        this.useHardwareLayer = true;
-        this.openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
         setWillNotDraw(false);
         this.onDismissCallback = runnable;
         this.touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
@@ -98,7 +96,7 @@ public class ProximitySheet extends FrameLayout {
         mutate.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogBackground"), PorterDuff.Mode.MULTIPLY));
         mutate.getPadding(rect2);
         this.backgroundPaddingLeft = rect2.left;
-        AnonymousClass1 r7 = new FrameLayout(this, getContext()) {
+        AnonymousClass1 r7 = new FrameLayout(getContext()) {
             public boolean hasOverlappingRendering() {
                 return false;
             }
@@ -163,7 +161,7 @@ public class ProximitySheet extends FrameLayout {
         System.currentTimeMillis();
         FrameLayout frameLayout2 = new FrameLayout(context2);
         this.infoTextView = new TextView(context2);
-        this.buttonTextView = new TextView(this, context2) {
+        this.buttonTextView = new TextView(context2) {
             public CharSequence getAccessibilityClassName() {
                 return Button.class.getName();
             }
@@ -613,6 +611,7 @@ public class ProximitySheet extends FrameLayout {
         if (animatorSet != null) {
             animatorSet.cancel();
             this.currentSheetAnimation = null;
+            this.currentSheetAnimationType = 0;
         }
     }
 
@@ -624,6 +623,7 @@ public class ProximitySheet extends FrameLayout {
             }
             ViewGroup viewGroup = this.containerView;
             viewGroup.setTranslationY((float) viewGroup.getMeasuredHeight());
+            this.currentSheetAnimationType = 1;
             AnimatorSet animatorSet = new AnimatorSet();
             this.currentSheetAnimation = animatorSet;
             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.containerView, View.TRANSLATION_Y, new float[]{0.0f})});
@@ -665,6 +665,7 @@ public class ProximitySheet extends FrameLayout {
         if (!this.dismissed) {
             this.dismissed = true;
             cancelSheetAnimation();
+            this.currentSheetAnimationType = 2;
             AnimatorSet animatorSet = new AnimatorSet();
             this.currentSheetAnimation = animatorSet;
             ViewGroup viewGroup = this.containerView;

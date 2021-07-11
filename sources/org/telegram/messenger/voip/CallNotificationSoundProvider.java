@@ -38,7 +38,7 @@ public class CallNotificationSoundProvider extends ContentProvider {
             throw new SecurityException("Unexpected file mode " + str);
         } else if (ApplicationLoader.applicationContext != null) {
             try {
-                VoIPBaseService sharedInstance = VoIPBaseService.getSharedInstance();
+                VoIPService sharedInstance = VoIPService.getSharedInstance();
                 if (sharedInstance != null) {
                     sharedInstance.startRingtoneAndVibration();
                 }

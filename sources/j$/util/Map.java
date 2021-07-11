@@ -1,5 +1,6 @@
 package j$.util;
 
+import j$.time.a;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
 import j$.util.function.Function;
@@ -90,7 +91,7 @@ public interface Map<K, V> {
 
         public static boolean $default$remove(java.util.Map map, Object obj, Object obj2) {
             Object obj3 = map.get(obj);
-            if (!k.r(obj3, obj2)) {
+            if (!a.u(obj3, obj2)) {
                 return false;
             }
             if (obj3 == null && !map.containsKey(obj)) {
@@ -107,7 +108,7 @@ public interface Map<K, V> {
 
         public static boolean $default$replace(java.util.Map map, Object obj, Object obj2, Object obj3) {
             Object obj4 = map.get(obj);
-            if (!k.r(obj4, obj2)) {
+            if (!a.u(obj4, obj2)) {
                 return false;
             }
             if (obj4 == null && !map.containsKey(obj)) {

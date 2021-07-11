@@ -174,6 +174,7 @@ public class StackBarChartView extends BaseChartView<StackBarChartData, StackBar
         float f;
         T t = this.chartData;
         if (t != null) {
+            int i3 = this.selectedIndex;
             float f2 = this.chartFullWidth;
             float f3 = (this.pickerDelegate.pickerStart * f2) - BaseChartView.HORIZONTAL_PADDING;
             if (((StackBarChartData) t).xPercentage.length < 2) {
@@ -182,31 +183,37 @@ public class StackBarChartView extends BaseChartView<StackBarChartData, StackBar
                 f = ((StackBarChartData) t).xPercentage[1] * f2;
             }
             float f4 = (((float) i) + f3) / (f2 - f);
+            this.selectedCoordinate = f4;
             if (f4 < 0.0f) {
                 this.selectedIndex = 0;
+                this.selectedCoordinate = 0.0f;
             } else if (f4 > 1.0f) {
                 this.selectedIndex = ((StackBarChartData) t).x.length - 1;
+                this.selectedCoordinate = 1.0f;
             } else {
                 int findIndex = ((StackBarChartData) t).findIndex(this.startXIndex, this.endXIndex, f4);
                 this.selectedIndex = findIndex;
-                int i3 = this.endXIndex;
-                if (findIndex > i3) {
-                    this.selectedIndex = i3;
+                int i4 = this.endXIndex;
+                if (findIndex > i4) {
+                    this.selectedIndex = i4;
                 }
-                int i4 = this.selectedIndex;
-                int i5 = this.startXIndex;
-                if (i4 < i5) {
-                    this.selectedIndex = i5;
+                int i5 = this.selectedIndex;
+                int i6 = this.startXIndex;
+                if (i5 < i6) {
+                    this.selectedIndex = i6;
                 }
             }
-            this.legendShowing = true;
-            animateLegend(true);
-            moveLegend(f3);
-            BaseChartView.DateSelectionListener dateSelectionListener = this.dateSelectionListener;
-            if (dateSelectionListener != null) {
-                dateSelectionListener.onDateSelected(getSelectedDate());
+            if (i3 != this.selectedIndex) {
+                this.legendShowing = true;
+                animateLegend(true);
+                moveLegend(f3);
+                BaseChartView.DateSelectionListener dateSelectionListener = this.dateSelectionListener;
+                if (dateSelectionListener != null) {
+                    dateSelectionListener.onDateSelected(getSelectedDate());
+                }
+                invalidate();
+                runSmoothHaptic();
             }
-            invalidate();
         }
     }
 

@@ -1,45 +1,46 @@
 package j$.util.stream;
 
+import j$.time.a;
 import j$.util.Spliterator;
 import j$.util.concurrent.ConcurrentHashMap;
-import j$.util.function.CLASSNAMEe;
 import j$.util.function.Consumer;
-import j$.util.k;
 import java.util.Comparator;
 
 final class Y2<T> implements Spliterator<T>, Consumer<T> {
-    private static final Object d = new Object();
-
-    /* renamed from: a  reason: collision with root package name */
-    private final Spliterator var_a;
-    private final ConcurrentHashMap b;
-    private Object c;
+    private static final Object a = new Object();
+    private final Spliterator b;
+    private final ConcurrentHashMap c;
+    private Object d;
 
     Y2(Spliterator spliterator) {
         ConcurrentHashMap concurrentHashMap = new ConcurrentHashMap();
-        this.var_a = spliterator;
-        this.b = concurrentHashMap;
+        this.b = spliterator;
+        this.c = concurrentHashMap;
     }
 
     private Y2(Spliterator spliterator, ConcurrentHashMap concurrentHashMap) {
-        this.var_a = spliterator;
-        this.b = concurrentHashMap;
+        this.b = spliterator;
+        this.c = concurrentHashMap;
     }
 
     public void accept(Object obj) {
-        this.c = obj;
+        this.d = obj;
+    }
+
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
     }
 
     public boolean b(Consumer consumer) {
-        while (this.var_a.b(this)) {
-            ConcurrentHashMap concurrentHashMap = this.b;
-            Object obj = this.c;
+        while (this.b.b(this)) {
+            ConcurrentHashMap concurrentHashMap = this.c;
+            Object obj = this.d;
             if (obj == null) {
-                obj = d;
+                obj = a;
             }
             if (concurrentHashMap.putIfAbsent(obj, Boolean.TRUE) == null) {
-                consumer.accept(this.c);
-                this.c = null;
+                consumer.accept(this.d);
+                this.d = null;
                 return true;
             }
         }
@@ -47,44 +48,39 @@ final class Y2<T> implements Spliterator<T>, Consumer<T> {
     }
 
     public int characteristics() {
-        return (this.var_a.characteristics() & -16469) | 1;
+        return (this.b.characteristics() & -16469) | 1;
     }
 
     public long estimateSize() {
-        return this.var_a.estimateSize();
+        return this.b.estimateSize();
     }
 
-    public Consumer f(Consumer consumer) {
-        consumer.getClass();
-        return new CLASSNAMEe(this, consumer);
-    }
-
-    public void forEachRemaining(Consumer consumer) {
-        this.var_a.forEachRemaining(new CLASSNAMEx0(this, consumer));
-    }
-
-    public void g(Consumer consumer, Object obj) {
-        if (this.b.putIfAbsent(obj != null ? obj : d, Boolean.TRUE) == null) {
+    public void f(Consumer consumer, Object obj) {
+        if (this.c.putIfAbsent(obj != null ? obj : a, Boolean.TRUE) == null) {
             consumer.accept(obj);
         }
     }
 
+    public void forEachRemaining(Consumer consumer) {
+        this.b.forEachRemaining(new CLASSNAMEx0(this, consumer));
+    }
+
     public Comparator getComparator() {
-        return this.var_a.getComparator();
+        return this.b.getComparator();
     }
 
     public /* synthetic */ long getExactSizeIfKnown() {
-        return k.e(this);
+        return a.e(this);
     }
 
     public /* synthetic */ boolean hasCharacteristics(int i) {
-        return k.f(this, i);
+        return a.f(this, i);
     }
 
     public Spliterator trySplit() {
-        Spliterator trySplit = this.var_a.trySplit();
+        Spliterator trySplit = this.b.trySplit();
         if (trySplit != null) {
-            return new Y2(trySplit, this.b);
+            return new Y2(trySplit, this.c);
         }
         return null;
     }

@@ -18,26 +18,26 @@ final class R2<T> extends F2<T> {
         objArr[i] = obj;
     }
 
-    public void m() {
+    public void l() {
         int i = 0;
         Arrays.sort(this.d, 0, this.e, this.b);
-        this.var_a.n((long) this.e);
+        this.a.m((long) this.e);
         if (!this.c) {
             while (i < this.e) {
-                this.var_a.accept(this.d[i]);
+                this.a.accept(this.d[i]);
                 i++;
             }
         } else {
-            while (i < this.e && !this.var_a.p()) {
-                this.var_a.accept(this.d[i]);
+            while (i < this.e && !this.a.o()) {
+                this.a.accept(this.d[i]);
                 i++;
             }
         }
-        this.var_a.m();
+        this.a.l();
         this.d = null;
     }
 
-    public void n(long j) {
+    public void m(long j) {
         if (j < NUM) {
             this.d = new Object[((int) j)];
             return;

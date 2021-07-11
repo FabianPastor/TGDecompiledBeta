@@ -232,13 +232,13 @@ public class InviteLinkBottomSheet extends BottomSheet {
             java.lang.String r4 = "fonts/rmedium.ttf"
             android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r1.setTypeface(r4)
-            r1 = 2131625847(0x7f0e0777, float:1.8878914E38)
+            r1 = 2131625881(0x7f0e0799, float:1.8878982E38)
             java.lang.String r4 = "InviteLink"
             if (r5 != 0) goto L_0x0150
             boolean r5 = r2.expired
             if (r5 == 0) goto L_0x0131
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131625445(0x7f0e05e5, float:1.8878098E38)
+            r4 = 2131625462(0x7f0e05f6, float:1.8878133E38)
             java.lang.String r5 = "ExpiredLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
@@ -247,7 +247,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
             boolean r5 = r2.revoked
             if (r5 == 0) goto L_0x0144
             android.widget.TextView r1 = r0.titleTextView
-            r4 = 2131627237(0x7f0e0ce5, float:1.8881733E38)
+            r4 = 2131627283(0x7f0e0d13, float:1.8881826E38)
             java.lang.String r5 = "RevokedLink"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r1.setText(r4)
@@ -562,12 +562,12 @@ public class InviteLinkBottomSheet extends BottomSheet {
             L_0x0043:
                 org.telegram.ui.Components.InviteLinkBottomSheet$EmptyHintRow r10 = new org.telegram.ui.Components.InviteLinkBottomSheet$EmptyHintRow
                 org.telegram.ui.Components.InviteLinkBottomSheet r11 = org.telegram.ui.Components.InviteLinkBottomSheet.this
-                r10.<init>(r11, r1)
+                r10.<init>(r1)
                 goto L_0x00dd
             L_0x004c:
                 org.telegram.ui.Cells.ShadowSectionCell r11 = new org.telegram.ui.Cells.ShadowSectionCell
                 r11.<init>(r1, r2)
-                r2 = 2131165450(0x7var_a, float:1.7945117E38)
+                r2 = 2131165442(0x7var_, float:1.7945101E38)
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r2, (java.lang.String) r10)
                 android.graphics.drawable.ColorDrawable r1 = new android.graphics.drawable.ColorDrawable
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
@@ -579,7 +579,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 goto L_0x00a6
             L_0x006d:
                 org.telegram.ui.Components.InviteLinkBottomSheet$Adapter$2 r10 = new org.telegram.ui.Components.InviteLinkBottomSheet$Adapter$2
-                r10.<init>(r9, r1)
+                r10.<init>(r1)
                 goto L_0x00dd
             L_0x0073:
                 org.telegram.ui.Components.FlickerLoadingView r10 = new org.telegram.ui.Components.FlickerLoadingView
@@ -597,7 +597,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
                 android.graphics.drawable.ColorDrawable r4 = new android.graphics.drawable.ColorDrawable
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r4.<init>(r0)
-                r0 = 2131165449(0x7var_, float:1.7945115E38)
+                r0 = 2131165441(0x7var_, float:1.79451E38)
                 android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r0, (java.lang.String) r10)
                 r2.<init>(r4, r10)
                 r2.setFullsize(r3)
@@ -989,7 +989,7 @@ public class InviteLinkBottomSheet extends BottomSheet {
     private class EmptyHintRow extends FrameLayout {
         TextView textView;
 
-        public EmptyHintRow(InviteLinkBottomSheet inviteLinkBottomSheet, Context context) {
+        public EmptyHintRow(Context context) {
             super(context);
             TextView textView2 = new TextView(context);
             this.textView = textView2;

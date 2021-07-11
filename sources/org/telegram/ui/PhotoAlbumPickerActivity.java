@@ -482,7 +482,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), PorterDuff.Mode.MULTIPLY));
         this.writeButton.setScaleType(ImageView.ScaleType.CENTER);
         if (i >= 21) {
-            this.writeButton.setOutlineProvider(new ViewOutlineProvider(this) {
+            this.writeButton.setOutlineProvider(new ViewOutlineProvider() {
                 @SuppressLint({"NewApi"})
                 public void getOutline(View view, Outline outline) {
                     outline.setOval(0, 0, AndroidUtilities.dp(56.0f), AndroidUtilities.dp(56.0f));
@@ -899,7 +899,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     /* access modifiers changed from: private */
     public void openPhotoPicker(MediaController.AlbumEntry albumEntry, int i) {
         if (albumEntry != null) {
-            PhotoPickerActivity photoPickerActivity = new PhotoPickerActivity(i, albumEntry, this.selectedPhotos, this.selectedPhotosOrder, this.selectPhotoType, this.allowCaption, this.chatActivity);
+            PhotoPickerActivity photoPickerActivity = new PhotoPickerActivity(i, albumEntry, this.selectedPhotos, this.selectedPhotosOrder, this.selectPhotoType, this.allowCaption, this.chatActivity, false);
             Editable text = this.commentTextView.getText();
             this.caption = text;
             photoPickerActivity.setCaption(text);
@@ -921,9 +921,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
 
                 public void onCaptionChanged(CharSequence charSequence) {
-                    EditTextEmoji access$200 = PhotoAlbumPickerActivity.this.commentTextView;
-                    CharSequence unused = PhotoAlbumPickerActivity.this.caption = charSequence;
-                    access$200.setText(charSequence);
+                    PhotoAlbumPickerActivity.this.commentTextView.setText(PhotoAlbumPickerActivity.this.caption = charSequence);
                 }
             });
             photoPickerActivity.setMaxSelectedPhotos(this.maxSelectedPhotos, this.allowOrder);
@@ -953,16 +951,14 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 }
 
                 public void onCaptionChanged(CharSequence charSequence) {
-                    EditTextEmoji access$200 = PhotoAlbumPickerActivity.this.commentTextView;
-                    CharSequence unused = PhotoAlbumPickerActivity.this.caption = charSequence;
-                    access$200.setText(charSequence);
+                    PhotoAlbumPickerActivity.this.commentTextView.setText(PhotoAlbumPickerActivity.this.caption = charSequence);
                 }
             });
             photoPickerSearchActivity.setMaxSelectedPhotos(this.maxSelectedPhotos, this.allowOrder);
             presentFragment(photoPickerSearchActivity);
             return;
         }
-        PhotoPickerActivity photoPickerActivity2 = new PhotoPickerActivity(0, albumEntry, hashMap, arrayList, this.selectPhotoType, this.allowCaption, this.chatActivity);
+        PhotoPickerActivity photoPickerActivity2 = new PhotoPickerActivity(0, albumEntry, hashMap, arrayList, this.selectPhotoType, this.allowCaption, this.chatActivity, false);
         Editable text3 = this.commentTextView.getText();
         this.caption = text3;
         photoPickerActivity2.setCaption(text3);
@@ -982,9 +978,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             }
 
             public void onCaptionChanged(CharSequence charSequence) {
-                EditTextEmoji access$200 = PhotoAlbumPickerActivity.this.commentTextView;
-                CharSequence unused = PhotoAlbumPickerActivity.this.caption = charSequence;
-                access$200.setText(charSequence);
+                PhotoAlbumPickerActivity.this.commentTextView.setText(PhotoAlbumPickerActivity.this.caption = charSequence);
             }
         });
         photoPickerActivity2.setMaxSelectedPhotos(this.maxSelectedPhotos, this.allowOrder);

@@ -14,6 +14,7 @@ import java.util.HashSet;
 import org.telegram.ui.Components.RecyclerItemsEnterAnimator;
 
 public class RecyclerItemsEnterAnimator {
+    boolean alwaysCheckItemsAlpha;
     ArrayList<AnimatorSet> currentAnimations = new ArrayList<>();
     HashSet<View> ignoreView = new HashSet<>();
     boolean invalidateAlpha;
@@ -23,12 +24,13 @@ public class RecyclerItemsEnterAnimator {
     public final RecyclerListView listView;
     ArrayList<ViewTreeObserver.OnPreDrawListener> preDrawListeners = new ArrayList<>();
 
-    public RecyclerItemsEnterAnimator(RecyclerListView recyclerListView) {
+    public RecyclerItemsEnterAnimator(RecyclerListView recyclerListView, boolean z) {
         this.listView = recyclerListView;
+        this.alwaysCheckItemsAlpha = z;
     }
 
     public void dispatchDraw() {
-        if (this.invalidateAlpha) {
+        if (this.invalidateAlpha || this.alwaysCheckItemsAlpha) {
             for (int i = 0; i < this.listView.getChildCount(); i++) {
                 View childAt = this.listView.getChildAt(i);
                 int childAdapterPosition = this.listView.getChildAdapterPosition(childAt);

@@ -20,12 +20,11 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
-import org.telegram.messenger.voip.VoIPBaseService;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.ui.ActionBar.Theme;
 
-public class GroupCallPipButton extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, VoIPBaseService.StateListener {
+public class GroupCallPipButton extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, VoIPService.StateListener {
     float amplitude;
     float animateAmplitudeDiff;
     float animateToAmplitude;
@@ -55,23 +54,23 @@ public class GroupCallPipButton extends FrameLayout implements NotificationCente
     float wavesEnter = 0.0f;
 
     public /* synthetic */ void onCameraSwitch(boolean z) {
-        VoIPBaseService.StateListener.CC.$default$onCameraSwitch(this, z);
+        VoIPService.StateListener.CC.$default$onCameraSwitch(this, z);
     }
 
     public /* synthetic */ void onMediaStateUpdated(int i, int i2) {
-        VoIPBaseService.StateListener.CC.$default$onMediaStateUpdated(this, i, i2);
+        VoIPService.StateListener.CC.$default$onMediaStateUpdated(this, i, i2);
     }
 
     public /* synthetic */ void onScreenOnChange(boolean z) {
-        VoIPBaseService.StateListener.CC.$default$onScreenOnChange(this, z);
+        VoIPService.StateListener.CC.$default$onScreenOnChange(this, z);
     }
 
     public /* synthetic */ void onSignalBarsCountChanged(int i) {
-        VoIPBaseService.StateListener.CC.$default$onSignalBarsCountChanged(this, i);
+        VoIPService.StateListener.CC.$default$onSignalBarsCountChanged(this, i);
     }
 
     public /* synthetic */ void onVideoAvailableChange(boolean z) {
-        VoIPBaseService.StateListener.CC.$default$onVideoAvailableChange(this, z);
+        VoIPService.StateListener.CC.$default$onVideoAvailableChange(this, z);
     }
 
     public GroupCallPipButton(Context context, int i, boolean z) {

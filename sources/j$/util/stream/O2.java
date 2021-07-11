@@ -17,26 +17,26 @@ final class O2 extends C2 {
         dArr[i] = d2;
     }
 
-    public void m() {
+    public void l() {
         int i = 0;
         Arrays.sort(this.c, 0, this.d);
-        this.var_a.n((long) this.d);
+        this.a.m((long) this.d);
         if (!this.b) {
             while (i < this.d) {
-                this.var_a.accept(this.c[i]);
+                this.a.accept(this.c[i]);
                 i++;
             }
         } else {
-            while (i < this.d && !this.var_a.p()) {
-                this.var_a.accept(this.c[i]);
+            while (i < this.d && !this.a.o()) {
+                this.a.accept(this.c[i]);
                 i++;
             }
         }
-        this.var_a.m();
+        this.a.l();
         this.c = null;
     }
 
-    public void n(long j) {
+    public void m(long j) {
         if (j < NUM) {
             this.c = new double[((int) j)];
             return;

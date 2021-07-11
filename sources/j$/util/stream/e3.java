@@ -16,8 +16,8 @@ final class e3<P_IN, P_OUT> extends W2<P_IN, P_OUT, S2<P_OUT>> {
     public boolean b(Consumer consumer) {
         Object obj;
         consumer.getClass();
-        boolean a2 = a();
-        if (a2) {
+        boolean a = a();
+        if (a) {
             S2 s2 = (S2) this.h;
             long j = this.g;
             if (s2.c == 0) {
@@ -44,7 +44,7 @@ final class e3<P_IN, P_OUT> extends W2<P_IN, P_OUT, S2<P_OUT>> {
             }
             consumer.accept(obj);
         }
-        return a2;
+        return a;
     }
 
     public void forEachRemaining(Consumer consumer) {
@@ -54,13 +54,13 @@ final class e3<P_IN, P_OUT> extends W2<P_IN, P_OUT, S2<P_OUT>> {
             return;
         }
         consumer.getClass();
-        g();
+        h();
         this.b.t0(new N0(consumer), this.d);
         this.i = true;
     }
 
     /* access modifiers changed from: package-private */
-    public void i() {
+    public void j() {
         S2 s2 = new S2();
         this.h = s2;
         this.e = this.b.u0(new CLASSNAMEg(s2));
@@ -69,6 +69,6 @@ final class e3<P_IN, P_OUT> extends W2<P_IN, P_OUT, S2<P_OUT>> {
 
     /* access modifiers changed from: package-private */
     public W2 k(Spliterator spliterator) {
-        return new e3(this.b, spliterator, this.var_a);
+        return new e3(this.b, spliterator, this.a);
     }
 }

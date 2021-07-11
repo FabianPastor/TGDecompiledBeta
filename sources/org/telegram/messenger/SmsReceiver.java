@@ -27,7 +27,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     if (matcher.find()) {
                         String replace = matcher.group(0).replace("-", "");
                         if (replace.length() >= 3) {
-                            if (!(sharedPreferences == null || string == null)) {
+                            if (string != null) {
                                 SharedPreferences.Editor edit = sharedPreferences.edit();
                                 edit.putString("sms_hash_code", string + "|" + replace).commit();
                             }

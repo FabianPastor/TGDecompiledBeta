@@ -150,7 +150,6 @@ public class ChatGreetingsView extends LinearLayout {
     private void updateColors() {
         this.titleView.setTextColor(Theme.getColor("chat_serviceText"));
         this.descriptionView.setTextColor(Theme.getColor("chat_serviceText"));
-        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(10.0f), Theme.getColor("chat_serviceBackground")));
     }
 
     public void setListener(Listener listener2) {

@@ -39,6 +39,9 @@ class StroageUsageView extends FrameLayout {
     TextView telegramCacheTextView;
     TextView telegramDatabaseTextView;
     TextSettingsCell textSettingsCell;
+    private long totalDeviceFreeSize;
+    private long totalDeviceSize;
+    private long totalSize;
     TextView totlaSizeTextView;
     ValueAnimator valueAnimator;
     ValueAnimator valueAnimator2;
@@ -58,7 +61,7 @@ class StroageUsageView extends FrameLayout {
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
         addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f));
-        AnonymousClass1 r5 = new FrameLayout(this, context) {
+        AnonymousClass1 r5 = new FrameLayout(context) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), i2);
@@ -144,11 +147,16 @@ class StroageUsageView extends FrameLayout {
 
     public void setStorageUsage(boolean z, long j, long j2, long j3, long j4) {
         boolean z2 = z;
-        long j5 = j4;
+        long j5 = j2;
+        long j6 = j3;
+        long j7 = j4;
         this.calculating = z2;
+        this.totalSize = j5;
+        this.totalDeviceFreeSize = j6;
+        this.totalDeviceSize = j7;
         this.freeSizeTextView.setText(LocaleController.formatString("TotalDeviceFreeSize", NUM, AndroidUtilities.formatFileSize(j3)));
-        long j6 = j5 - j3;
-        this.totlaSizeTextView.setText(LocaleController.formatString("TotalDeviceSize", NUM, AndroidUtilities.formatFileSize(j6)));
+        long j8 = j7 - j6;
+        this.totlaSizeTextView.setText(LocaleController.formatString("TotalDeviceSize", NUM, AndroidUtilities.formatFileSize(j8)));
         if (z2) {
             this.calculatingTextView.setVisibility(0);
             this.telegramCacheTextView.setVisibility(8);
@@ -161,13 +169,13 @@ class StroageUsageView extends FrameLayout {
             this.progress2 = 0.0f;
         } else {
             this.calculatingTextView.setVisibility(8);
-            if (j2 > 0) {
+            if (j5 > 0) {
                 this.divider.setVisibility(0);
                 this.textSettingsCell.setVisibility(0);
                 this.telegramCacheTextView.setVisibility(0);
                 this.telegramDatabaseTextView.setVisibility(8);
                 this.textSettingsCell.setText(LocaleController.getString("ClearTelegramCache", NUM), false);
-                this.telegramCacheTextView.setText(LocaleController.formatString("TelegramCacheSize", NUM, AndroidUtilities.formatFileSize(j2 + j)));
+                this.telegramCacheTextView.setText(LocaleController.formatString("TelegramCacheSize", NUM, AndroidUtilities.formatFileSize(j5 + j)));
             } else {
                 this.telegramCacheTextView.setVisibility(8);
                 this.telegramDatabaseTextView.setVisibility(0);
@@ -177,15 +185,16 @@ class StroageUsageView extends FrameLayout {
             }
             this.freeSizeTextView.setVisibility(0);
             this.totlaSizeTextView.setVisibility(0);
-            float f = (float) j5;
-            float f2 = ((float) (j2 + j)) / f;
-            float f3 = ((float) j6) / f;
-            if (this.progress != f2) {
+            float f = (float) (j5 + j);
+            float f2 = (float) j7;
+            float f3 = f / f2;
+            float f4 = ((float) j8) / f2;
+            if (this.progress != f3) {
                 ValueAnimator valueAnimator3 = this.valueAnimator;
                 if (valueAnimator3 != null) {
                     valueAnimator3.cancel();
                 }
-                ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.progress, f2});
+                ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.progress, f3});
                 this.valueAnimator = ofFloat;
                 ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -194,12 +203,12 @@ class StroageUsageView extends FrameLayout {
                 });
                 this.valueAnimator.start();
             }
-            if (this.progress2 != f3) {
+            if (this.progress2 != f4) {
                 ValueAnimator valueAnimator4 = this.valueAnimator2;
                 if (valueAnimator4 != null) {
                     valueAnimator4.cancel();
                 }
-                ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{this.progress2, f3});
+                ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{this.progress2, f4});
                 this.valueAnimator2 = ofFloat2;
                 ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     public final void onAnimationUpdate(ValueAnimator valueAnimator) {

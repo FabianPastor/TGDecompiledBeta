@@ -17,6 +17,7 @@ public class ImportingService extends Service implements NotificationCenter.Noti
     public ImportingService() {
         for (int i = 0; i < 3; i++) {
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.historyImportProgressChanged);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.stickersImportProgressChanged);
         }
     }
 
@@ -29,6 +30,7 @@ public class ImportingService extends Service implements NotificationCenter.Noti
         NotificationManagerCompat.from(ApplicationLoader.applicationContext).cancel(5);
         for (int i = 0; i < 3; i++) {
             NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.historyImportProgressChanged);
+            NotificationCenter.getInstance(i).removeObserver(this, NotificationCenter.stickersImportProgressChanged);
         }
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("destroy import service");
@@ -36,12 +38,12 @@ public class ImportingService extends Service implements NotificationCenter.Noti
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.historyImportProgressChanged && !hasImports()) {
+        if ((i == NotificationCenter.historyImportProgressChanged || i == NotificationCenter.stickersImportProgressChanged) && !hasImportingStickers() && !hasImportingStickers()) {
             stopSelf();
         }
     }
 
-    private boolean hasImports() {
+    private boolean hasImportingHistory() {
         for (int i = 0; i < 3; i++) {
             if (SendMessagesHelper.getInstance(i).isImportingHistory()) {
                 return true;
@@ -50,28 +52,42 @@ public class ImportingService extends Service implements NotificationCenter.Noti
         return false;
     }
 
+    private boolean hasImportingStickers() {
+        for (int i = 0; i < 3; i++) {
+            if (SendMessagesHelper.getInstance(i).isImportingStickers()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public int onStartCommand(Intent intent, int i, int i2) {
-        if (!hasImports()) {
-            stopSelf();
+        if (hasImportingStickers() || hasImportingHistory()) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("start import service");
+            }
+            if (this.builder == null) {
+                NotificationsController.checkOtherNotificationsChannel();
+                NotificationCompat.Builder builder2 = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
+                this.builder = builder2;
+                builder2.setSmallIcon(17301640);
+                this.builder.setWhen(System.currentTimeMillis());
+                this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
+                this.builder.setContentTitle(LocaleController.getString("AppName", NUM));
+                if (hasImportingHistory()) {
+                    this.builder.setTicker(LocaleController.getString("ImporImportingService", NUM));
+                    this.builder.setContentText(LocaleController.getString("ImporImportingService", NUM));
+                } else {
+                    this.builder.setTicker(LocaleController.getString("ImporImportingStickersService", NUM));
+                    this.builder.setContentText(LocaleController.getString("ImporImportingStickersService", NUM));
+                }
+            }
+            this.builder.setProgress(100, 0, true);
+            startForeground(5, this.builder.build());
+            NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(5, this.builder.build());
             return 2;
         }
-        if (BuildVars.LOGS_ENABLED) {
-            FileLog.d("start import service");
-        }
-        if (this.builder == null) {
-            NotificationsController.checkOtherNotificationsChannel();
-            NotificationCompat.Builder builder2 = new NotificationCompat.Builder(ApplicationLoader.applicationContext);
-            this.builder = builder2;
-            builder2.setSmallIcon(17301640);
-            this.builder.setWhen(System.currentTimeMillis());
-            this.builder.setChannelId(NotificationsController.OTHER_NOTIFICATIONS_CHANNEL);
-            this.builder.setContentTitle(LocaleController.getString("AppName", NUM));
-            this.builder.setTicker(LocaleController.getString("ImporImportingService", NUM));
-            this.builder.setContentText(LocaleController.getString("ImporImportingService", NUM));
-        }
-        this.builder.setProgress(100, 0, true);
-        startForeground(5, this.builder.build());
-        NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(5, this.builder.build());
+        stopSelf();
         return 2;
     }
 }

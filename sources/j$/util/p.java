@@ -3,39 +3,37 @@ package j$.util;
 import java.util.NoSuchElementException;
 
 public final class p {
-    private static final p c = new p();
-
-    /* renamed from: a  reason: collision with root package name */
-    private final boolean var_a;
-    private final double b;
+    private static final p a = new p();
+    private final boolean b;
+    private final int c;
 
     private p() {
-        this.var_a = false;
-        this.b = Double.NaN;
+        this.b = false;
+        this.c = 0;
     }
 
-    private p(double d) {
-        this.var_a = true;
-        this.b = d;
+    private p(int i) {
+        this.b = true;
+        this.c = i;
     }
 
     public static p a() {
-        return c;
+        return a;
     }
 
-    public static p d(double d) {
-        return new p(d);
+    public static p d(int i) {
+        return new p(i);
     }
 
-    public double b() {
-        if (this.var_a) {
-            return this.b;
+    public int b() {
+        if (this.b) {
+            return this.c;
         }
         throw new NoSuchElementException("No value present");
     }
 
     public boolean c() {
-        return this.var_a;
+        return this.b;
     }
 
     public boolean equals(Object obj) {
@@ -46,28 +44,28 @@ public final class p {
             return false;
         }
         p pVar = (p) obj;
-        boolean z = this.var_a;
-        if (!z || !pVar.var_a) {
-            if (z == pVar.var_a) {
+        boolean z = this.b;
+        if (!z || !pVar.b) {
+            if (z == pVar.b) {
                 return true;
             }
-        } else if (Double.compare(this.b, pVar.b) == 0) {
+        } else if (this.c == pVar.c) {
             return true;
         }
         return false;
     }
 
     public int hashCode() {
-        if (this.var_a) {
-            return Double.doubleToLongBits(this.b);
+        if (this.b) {
+            return this.c;
         }
         return 0;
     }
 
     public String toString() {
-        if (!this.var_a) {
-            return "OptionalDouble.empty";
+        if (!this.b) {
+            return "OptionalInt.empty";
         }
-        return String.format("OptionalDouble[%s]", new Object[]{Double.valueOf(this.b)});
+        return String.format("OptionalInt[%s]", new Object[]{Integer.valueOf(this.c)});
     }
 }

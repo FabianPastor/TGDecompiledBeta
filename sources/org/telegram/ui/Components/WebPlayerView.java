@@ -84,6 +84,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     public boolean allowInlineAnimation;
     /* access modifiers changed from: private */
     public AspectRatioFrameLayout aspectRatioFrameLayout;
+    private int audioFocus;
     private Paint backgroundPaint;
     /* access modifiers changed from: private */
     public TextureView changedTextureView;
@@ -103,6 +104,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     public boolean drawImage;
     /* access modifiers changed from: private */
     public boolean firstFrameRendered;
+    private int fragment_container_id;
     private ImageView fullscreenButton;
     private boolean hasAudioFocus;
     /* access modifiers changed from: private */
@@ -117,6 +119,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     private boolean isCompleted;
     /* access modifiers changed from: private */
     public boolean isInline;
+    private boolean isLoading;
     /* access modifiers changed from: private */
     public boolean isStream;
     /* access modifiers changed from: private */
@@ -708,6 +711,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     private class YoutubeVideoTask extends AsyncTask<Void, Void, String[]> {
+        private boolean canRetry = true;
         private CountDownLatch countDownLatch = new CountDownLatch(1);
         private String[] result = new String[2];
         private String sig;
@@ -1365,6 +1369,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     private class VimeoVideoTask extends AsyncTask<Void, Void, String> {
+        private boolean canRetry = true;
         private String[] results = new String[2];
         private String videoId;
 
@@ -1419,6 +1424,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     private class AparatVideoTask extends AsyncTask<Void, Void, String> {
+        private boolean canRetry = true;
         private String[] results = new String[2];
         private String videoId;
 
@@ -1474,10 +1480,13 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     private class TwitchClipVideoTask extends AsyncTask<Void, Void, String> {
+        private boolean canRetry = true;
         private String currentUrl;
         private String[] results = new String[2];
+        private String videoId;
 
         public TwitchClipVideoTask(String str, String str2) {
+            this.videoId = str2;
             this.currentUrl = str;
         }
 
@@ -1520,11 +1529,14 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     private class TwitchStreamVideoTask extends AsyncTask<Void, Void, String> {
+        private boolean canRetry = true;
+        private String currentUrl;
         private String[] results = new String[2];
         private String videoId;
 
         public TwitchStreamVideoTask(String str, String str2) {
             this.videoId = str2;
+            this.currentUrl = str;
         }
 
         /* access modifiers changed from: protected */
@@ -1578,6 +1590,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     }
 
     private class CoubVideoTask extends AsyncTask<Void, Void, String> {
+        private boolean canRetry = true;
         private String[] results = new String[4];
         private String videoId;
 
@@ -2093,7 +2106,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     @SuppressLint({"SetJavaScriptEnabled", "AddJavascriptInterface"})
     public WebPlayerView(Context context, boolean z, boolean z2, WebPlayerViewDelegate webPlayerViewDelegate) {
         super(context);
-        lastContainerId++;
+        int i = lastContainerId;
+        lastContainerId = i + 1;
+        this.fragment_container_id = i;
         this.allowInlineAnimation = Build.VERSION.SDK_INT >= 21;
         this.backgroundPaint = new Paint();
         this.progressRunnable = new Runnable() {
@@ -2753,7 +2768,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
     private void checkAudioFocus() {
         if (!this.hasAudioFocus) {
             this.hasAudioFocus = true;
-            int requestAudioFocus = ((AudioManager) ApplicationLoader.applicationContext.getSystemService("audio")).requestAudioFocus(this, 3, 1);
+            if (((AudioManager) ApplicationLoader.applicationContext.getSystemService("audio")).requestAudioFocus(this, 3, 1) == 1) {
+                this.audioFocus = 2;
+            }
         }
     }
 
@@ -2780,15 +2797,22 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                 updatePlayButton();
             }
             this.hasAudioFocus = false;
+            this.audioFocus = 0;
         } else if (i == 1) {
+            this.audioFocus = 2;
             if (this.resumeAudioOnFocusGain) {
                 this.resumeAudioOnFocusGain = false;
                 this.videoPlayer.play();
             }
-        } else if (i != -3 && i == -2 && this.videoPlayer.isPlaying()) {
-            this.resumeAudioOnFocusGain = true;
-            this.videoPlayer.pause();
-            updatePlayButton();
+        } else if (i == -3) {
+            this.audioFocus = 1;
+        } else if (i == -2) {
+            this.audioFocus = 0;
+            if (this.videoPlayer.isPlaying()) {
+                this.resumeAudioOnFocusGain = true;
+                this.videoPlayer.pause();
+                updatePlayButton();
+            }
         }
     }
 
@@ -2848,6 +2872,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                 this.videoPlayer.preparePlayerLoop(Uri.parse(str), this.playVideoType, Uri.parse(this.playAudioUrl), this.playAudioType);
             }
             this.videoPlayer.setPlayWhenReady(this.isAutoplay);
+            this.isLoading = false;
             if (this.videoPlayer.getDuration() != -9223372036854775807L) {
                 this.controlsView.setDuration((int) (this.videoPlayer.getDuration() / 1000));
             } else {
@@ -3037,10 +3062,10 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
 
     /* JADX WARNING: Removed duplicated region for block: B:100:0x0185  */
     /* JADX WARNING: Removed duplicated region for block: B:103:0x018b  */
-    /* JADX WARNING: Removed duplicated region for block: B:106:0x0197  */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x019c  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x01b5  */
-    /* JADX WARNING: Removed duplicated region for block: B:127:0x024e A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:106:0x0199  */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x019e  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x01b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:127:0x0250 A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:44:0x00b2 A[SYNTHETIC, Splitter:B:44:0x00b2] */
     /* JADX WARNING: Removed duplicated region for block: B:56:0x00d1 A[SYNTHETIC, Splitter:B:56:0x00d1] */
     /* JADX WARNING: Removed duplicated region for block: B:68:0x00f0 A[SYNTHETIC, Splitter:B:68:0x00f0] */
@@ -3292,28 +3317,29 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r3.cancel()
             r1.progressAnimation = r9
         L_0x0190:
+            r1.isLoading = r8
             org.telegram.ui.Components.WebPlayerView$ControlsView r3 = r1.controlsView
             r3.setProgress(r7)
-            if (r4 == 0) goto L_0x019a
+            if (r4 == 0) goto L_0x019c
             r1.currentYoutubeId = r4
             r4 = r9
-        L_0x019a:
-            if (r0 == 0) goto L_0x01b5
+        L_0x019c:
+            if (r0 == 0) goto L_0x01b7
             r1.initied = r8
             r1.playVideoUrl = r0
             java.lang.String r2 = "other"
             r1.playVideoType = r2
             boolean r2 = r1.isAutoplay
-            if (r2 == 0) goto L_0x01ab
+            if (r2 == 0) goto L_0x01ad
             r25.preparePlayer()
-        L_0x01ab:
+        L_0x01ad:
             r1.showProgress(r7, r7)
             org.telegram.ui.Components.WebPlayerView$ControlsView r2 = r1.controlsView
             r2.show(r8, r8)
-            goto L_0x024c
-        L_0x01b5:
+            goto L_0x024e
+        L_0x01b7:
             r3 = 2
-            if (r4 == 0) goto L_0x01ce
+            if (r4 == 0) goto L_0x01d0
             org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$YoutubeVideoTask
             r2.<init>(r4)
             java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
@@ -3323,9 +3349,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r6[r3] = r9
             r2.executeOnExecutor(r14, r6)
             r1.currentTask = r2
-            goto L_0x0244
-        L_0x01ce:
-            if (r10 == 0) goto L_0x01e5
+            goto L_0x0246
+        L_0x01d0:
+            if (r10 == 0) goto L_0x01e7
             org.telegram.ui.Components.WebPlayerView$VimeoVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$VimeoVideoTask
             r2.<init>(r10)
             java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
@@ -3335,9 +3361,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r6[r3] = r9
             r2.executeOnExecutor(r14, r6)
             r1.currentTask = r2
-            goto L_0x0244
-        L_0x01e5:
-            if (r5 == 0) goto L_0x01fe
+            goto L_0x0246
+        L_0x01e7:
+            if (r5 == 0) goto L_0x0200
             org.telegram.ui.Components.WebPlayerView$CoubVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$CoubVideoTask
             r2.<init>(r5)
             java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
@@ -3348,9 +3374,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r2.executeOnExecutor(r14, r6)
             r1.currentTask = r2
             r1.isStream = r8
-            goto L_0x0244
-        L_0x01fe:
-            if (r11 == 0) goto L_0x0215
+            goto L_0x0246
+        L_0x0200:
+            if (r11 == 0) goto L_0x0217
             org.telegram.ui.Components.WebPlayerView$AparatVideoTask r2 = new org.telegram.ui.Components.WebPlayerView$AparatVideoTask
             r2.<init>(r11)
             java.util.concurrent.Executor r14 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
@@ -3360,9 +3386,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r6[r3] = r9
             r2.executeOnExecutor(r14, r6)
             r1.currentTask = r2
-            goto L_0x0244
-        L_0x0215:
-            if (r12 == 0) goto L_0x022c
+            goto L_0x0246
+        L_0x0217:
+            if (r12 == 0) goto L_0x022e
             org.telegram.ui.Components.WebPlayerView$TwitchClipVideoTask r14 = new org.telegram.ui.Components.WebPlayerView$TwitchClipVideoTask
             r14.<init>(r2, r12)
             java.util.concurrent.Executor r2 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
@@ -3372,9 +3398,9 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r6[r3] = r9
             r14.executeOnExecutor(r2, r6)
             r1.currentTask = r14
-            goto L_0x0244
-        L_0x022c:
-            if (r13 == 0) goto L_0x0244
+            goto L_0x0246
+        L_0x022e:
+            if (r13 == 0) goto L_0x0246
             org.telegram.ui.Components.WebPlayerView$TwitchStreamVideoTask r14 = new org.telegram.ui.Components.WebPlayerView$TwitchStreamVideoTask
             r14.<init>(r2, r13)
             java.util.concurrent.Executor r2 = android.os.AsyncTask.THREAD_POOL_EXECUTOR
@@ -3385,25 +3411,25 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             r14.executeOnExecutor(r2, r6)
             r1.currentTask = r14
             r1.isStream = r8
-        L_0x0244:
+        L_0x0246:
             org.telegram.ui.Components.WebPlayerView$ControlsView r2 = r1.controlsView
             r2.show(r7, r7)
             r1.showProgress(r8, r7)
-        L_0x024c:
-            if (r4 != 0) goto L_0x0263
-            if (r10 != 0) goto L_0x0263
-            if (r5 != 0) goto L_0x0263
-            if (r11 != 0) goto L_0x0263
-            if (r0 != 0) goto L_0x0263
-            if (r12 != 0) goto L_0x0263
-            if (r13 == 0) goto L_0x025b
-            goto L_0x0263
-        L_0x025b:
+        L_0x024e:
+            if (r4 != 0) goto L_0x0265
+            if (r10 != 0) goto L_0x0265
+            if (r5 != 0) goto L_0x0265
+            if (r11 != 0) goto L_0x0265
+            if (r0 != 0) goto L_0x0265
+            if (r12 != 0) goto L_0x0265
+            if (r13 == 0) goto L_0x025d
+            goto L_0x0265
+        L_0x025d:
             org.telegram.ui.Components.WebPlayerView$ControlsView r0 = r1.controlsView
             r2 = 8
             r0.setVisibility(r2)
             return r7
-        L_0x0263:
+        L_0x0265:
             org.telegram.ui.Components.WebPlayerView$ControlsView r0 = r1.controlsView
             r0.setVisibility(r7)
             return r8

@@ -61,6 +61,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     /* access modifiers changed from: private */
     public CropViewListener listener;
     private Matrix overlayMatrix;
+    private PaintingOverlay paintingOverlay;
     private RectF previousAreaRect;
     private float rotationStartScale;
     RectF sizeRect = new RectF(0.0f, 0.0f, 1280.0f, 1280.0f);
@@ -298,8 +299,9 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         this.areaView.setActualRect(f);
     }
 
-    public void setBitmap(Bitmap bitmap2, int i, boolean z, boolean z2, PaintingOverlay paintingOverlay, CropTransform cropTransform2, VideoEditTextureView videoEditTextureView2, final MediaController.CropState cropState) {
+    public void setBitmap(Bitmap bitmap2, int i, boolean z, boolean z2, PaintingOverlay paintingOverlay2, CropTransform cropTransform2, VideoEditTextureView videoEditTextureView2, final MediaController.CropState cropState) {
         this.freeform = z;
+        this.paintingOverlay = paintingOverlay2;
         this.videoEditTextureView = videoEditTextureView2;
         this.cropTransform = cropTransform2;
         this.bitmapRotation = i;
@@ -406,6 +408,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
 
     public void onHide() {
         this.videoEditTextureView = null;
+        this.paintingOverlay = null;
         this.isVisible = false;
     }
 
@@ -949,10 +952,9 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
                     mediaEntity.viewHeight = width2;
                     mediaEntity.viewWidth = width2;
                 } else if (b == 1) {
-                    int width3 = bitmap3.getWidth() / 9;
-                    mediaEntity.fontSize = width3;
+                    mediaEntity.fontSize = bitmap3.getWidth() / 9;
                     if (textPaintView == null) {
-                        textPaintView = new TextPaintView(context, new Point(0.0f, 0.0f), width3, "", new Swatch(-16777216, 0.85f, 0.1f), 0);
+                        textPaintView = new TextPaintView(context, new Point(0.0f, 0.0f), mediaEntity.fontSize, "", new Swatch(-16777216, 0.85f, 0.1f), 0);
                         textPaintView.setMaxWidth(bitmap3.getWidth() - 20);
                     }
                     byte b2 = mediaEntity.subType;
@@ -1177,8 +1179,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
                 }
                 i++;
             }
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setItems(strArr, new DialogInterface.OnClickListener(numArr) {
+            AlertDialog create = new AlertDialog.Builder(getContext()).setItems(strArr, new DialogInterface.OnClickListener(numArr) {
                 public final /* synthetic */ Integer[][] f$1;
 
                 {
@@ -1188,8 +1189,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     CropView.this.lambda$showAspectRatioDialog$2$CropView(this.f$1, dialogInterface, i);
                 }
-            });
-            AlertDialog create = builder.create();
+            }).create();
             create.setCanceledOnTouchOutside(true);
             create.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 public final void onCancel(DialogInterface dialogInterface) {

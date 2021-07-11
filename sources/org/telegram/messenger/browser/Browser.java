@@ -28,12 +28,13 @@ public class Browser {
     private static WeakReference<Activity> currentCustomTabsActivity;
     /* access modifiers changed from: private */
     public static CustomTabsClient customTabsClient;
+    private static WeakReference<CustomTabsSession> customTabsCurrentSession;
     private static String customTabsPackageToBind;
     private static CustomTabsServiceConnection customTabsServiceConnection;
     private static CustomTabsSession customTabsSession;
 
     private static void setCurrentSession(CustomTabsSession customTabsSession2) {
-        new WeakReference(customTabsSession2);
+        customTabsCurrentSession = new WeakReference<>(customTabsSession2);
     }
 
     private static CustomTabsSession getSession() {
@@ -147,34 +148,34 @@ public class Browser {
         return false;
     }
 
-    /* JADX WARNING: Can't wrap try/catch for region: R(18:3|(3:5|6|(2:12|13))|14|15|16|(2:18|19)(1:20)|21|(3:25|26|27)|32|(1:34)|35|(7:37|(1:39)|40|(1:42)(1:43)|44|(1:46)|47)|(14:54|55|56|(3:60|61|(4:62|63|(3:65|(2:67|120)(1:121)|68)(0)|71))|69|71|72|(3:74|(4:77|(2:78|(1:123)(2:80|(3:125|82|124)(1:83)))|84|75)|122)(3:85|(4:88|(2:92|127)(1:128)|93|86)|126)|94|(3:96|(3:99|100|97)|129)|101|103|104|(2:109|110))|113|114|(1:116)|117|133) */
-    /* JADX WARNING: Code restructure failed: missing block: B:111:0x02f2, code lost:
+    /* JADX WARNING: Can't wrap try/catch for region: R(14:3|(3:5|6|(2:12|13))|14|15|16|(2:18|19)(1:20)|21|(3:25|26|27)|32|(1:34)|35|(9:37|(1:39)|40|41|(2:43|44)|45|(1:47)(1:48)|(1:50)|51)|(14:58|59|60|(3:64|65|(4:66|67|(3:69|(2:71|124)(1:125)|72)(0)|75))|73|75|76|(3:78|(4:81|(2:82|(1:127)(2:84|(3:129|86|128)(1:87)))|88|79)|126)(3:89|(4:92|(2:96|131)(1:132)|97|90)|130)|98|(3:100|(3:103|104|101)|133)|105|107|108|(2:113|114))|(5:117|118|(1:120)|121|137)) */
+    /* JADX WARNING: Code restructure failed: missing block: B:115:0x030c, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:112:0x02f3, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:116:0x030d, code lost:
         org.telegram.messenger.FileLog.e((java.lang.Throwable) r0);
      */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:14:0x0083 */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:71:0x01cd */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x02fd A[Catch:{ Exception -> 0x0322 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x008b A[SYNTHETIC, Splitter:B:18:0x008b] */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x0095 A[Catch:{ Exception -> 0x02f2 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x00b7 A[Catch:{ Exception -> 0x02f2 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x00cf A[Catch:{ Exception -> 0x02f2 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x01a3 A[Catch:{ Exception -> 0x01cd }] */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x01dd A[Catch:{ Exception -> 0x0279 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x0206 A[Catch:{ Exception -> 0x0279 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x0245 A[Catch:{ Exception -> 0x0279 }] */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:14:0x0085 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:75:0x01e7 */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x025f A[Catch:{ Exception -> 0x0293 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x0317 A[Catch:{ Exception -> 0x033c }] */
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x008d A[SYNTHETIC, Splitter:B:18:0x008d] */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0097 A[Catch:{ Exception -> 0x030c }] */
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x00b9 A[Catch:{ Exception -> 0x030c }] */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x00d1 A[Catch:{ Exception -> 0x030c }] */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x01bd A[Catch:{ Exception -> 0x01e7 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x01f7 A[Catch:{ Exception -> 0x0293 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:89:0x0220 A[Catch:{ Exception -> 0x0293 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static void openUrl(android.content.Context r16, android.net.Uri r17, boolean r18, boolean r19) {
         /*
             r7 = r16
             r8 = r17
             java.lang.String r9 = "android.intent.action.VIEW"
-            if (r7 == 0) goto L_0x0326
+            if (r7 == 0) goto L_0x0340
             if (r8 != 0) goto L_0x000c
-            goto L_0x0326
+            goto L_0x0340
         L_0x000c:
             int r10 = org.telegram.messenger.UserConfig.selectedAccount
             r11 = 1
@@ -183,33 +184,33 @@ public class Browser {
             r12[r13] = r13
             boolean r14 = isInternalUri(r8, r12)
             r15 = 3
-            if (r19 == 0) goto L_0x0083
-            java.lang.String r0 = r17.getHost()     // Catch:{ Exception -> 0x0083 }
-            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0083 }
-            boolean r0 = isTelegraphUrl(r0, r11)     // Catch:{ Exception -> 0x0083 }
-            if (r0 != 0) goto L_0x0049
-            java.lang.String r0 = r17.toString()     // Catch:{ Exception -> 0x0083 }
-            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0083 }
+            if (r19 == 0) goto L_0x0085
+            java.lang.String r0 = r17.getHost()     // Catch:{ Exception -> 0x0085 }
+            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0085 }
+            boolean r0 = isTelegraphUrl(r0, r11)     // Catch:{ Exception -> 0x0085 }
+            if (r0 != 0) goto L_0x004b
+            java.lang.String r0 = r17.toString()     // Catch:{ Exception -> 0x0085 }
+            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0085 }
             java.lang.String r1 = "telegram.org/faq"
-            boolean r0 = r0.contains(r1)     // Catch:{ Exception -> 0x0083 }
-            if (r0 != 0) goto L_0x0049
-            java.lang.String r0 = r17.toString()     // Catch:{ Exception -> 0x0083 }
-            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0083 }
+            boolean r0 = r0.contains(r1)     // Catch:{ Exception -> 0x0085 }
+            if (r0 != 0) goto L_0x004b
+            java.lang.String r0 = r17.toString()     // Catch:{ Exception -> 0x0085 }
+            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x0085 }
             java.lang.String r1 = "telegram.org/privacy"
-            boolean r0 = r0.contains(r1)     // Catch:{ Exception -> 0x0083 }
-            if (r0 == 0) goto L_0x0083
-        L_0x0049:
-            org.telegram.ui.ActionBar.AlertDialog[] r0 = new org.telegram.ui.ActionBar.AlertDialog[r11]     // Catch:{ Exception -> 0x0083 }
-            org.telegram.ui.ActionBar.AlertDialog r1 = new org.telegram.ui.ActionBar.AlertDialog     // Catch:{ Exception -> 0x0083 }
-            r1.<init>(r7, r15)     // Catch:{ Exception -> 0x0083 }
-            r0[r13] = r1     // Catch:{ Exception -> 0x0083 }
-            org.telegram.tgnet.TLRPC$TL_messages_getWebPagePreview r6 = new org.telegram.tgnet.TLRPC$TL_messages_getWebPagePreview     // Catch:{ Exception -> 0x0083 }
-            r6.<init>()     // Catch:{ Exception -> 0x0083 }
-            java.lang.String r1 = r17.toString()     // Catch:{ Exception -> 0x0083 }
-            r6.message = r1     // Catch:{ Exception -> 0x0083 }
-            int r1 = org.telegram.messenger.UserConfig.selectedAccount     // Catch:{ Exception -> 0x0083 }
-            org.telegram.tgnet.ConnectionsManager r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)     // Catch:{ Exception -> 0x0083 }
-            org.telegram.messenger.browser.-$$Lambda$Browser$_zN60Kb3XuLRe7fnfkBX1uzUNj0 r4 = new org.telegram.messenger.browser.-$$Lambda$Browser$_zN60Kb3XuLRe7fnfkBX1uzUNj0     // Catch:{ Exception -> 0x0083 }
+            boolean r0 = r0.contains(r1)     // Catch:{ Exception -> 0x0085 }
+            if (r0 == 0) goto L_0x0085
+        L_0x004b:
+            org.telegram.ui.ActionBar.AlertDialog[] r0 = new org.telegram.ui.ActionBar.AlertDialog[r11]     // Catch:{ Exception -> 0x0085 }
+            org.telegram.ui.ActionBar.AlertDialog r1 = new org.telegram.ui.ActionBar.AlertDialog     // Catch:{ Exception -> 0x0085 }
+            r1.<init>(r7, r15)     // Catch:{ Exception -> 0x0085 }
+            r0[r13] = r1     // Catch:{ Exception -> 0x0085 }
+            org.telegram.tgnet.TLRPC$TL_messages_getWebPagePreview r6 = new org.telegram.tgnet.TLRPC$TL_messages_getWebPagePreview     // Catch:{ Exception -> 0x0085 }
+            r6.<init>()     // Catch:{ Exception -> 0x0085 }
+            java.lang.String r1 = r17.toString()     // Catch:{ Exception -> 0x0085 }
+            r6.message = r1     // Catch:{ Exception -> 0x0085 }
+            int r1 = org.telegram.messenger.UserConfig.selectedAccount     // Catch:{ Exception -> 0x0085 }
+            org.telegram.tgnet.ConnectionsManager r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)     // Catch:{ Exception -> 0x0085 }
+            org.telegram.messenger.browser.-$$Lambda$Browser$_zN60Kb3XuLRe7fnfkBX1uzUNj0 r4 = new org.telegram.messenger.browser.-$$Lambda$Browser$_zN60Kb3XuLRe7fnfkBX1uzUNj0     // Catch:{ Exception -> 0x0085 }
             r1 = r4
             r2 = r0
             r3 = r10
@@ -219,315 +220,323 @@ public class Browser {
             r5 = r16
             r15 = r6
             r6 = r18
-            r1.<init>(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0083 }
-            int r1 = r13.sendRequest(r15, r11)     // Catch:{ Exception -> 0x0083 }
-            org.telegram.messenger.browser.-$$Lambda$Browser$a6Dg6G-glg3khQ9JuF9Le4Oec2o r2 = new org.telegram.messenger.browser.-$$Lambda$Browser$a6Dg6G-glg3khQ9JuF9Le4Oec2o     // Catch:{ Exception -> 0x0083 }
-            r2.<init>(r0, r1)     // Catch:{ Exception -> 0x0083 }
+            r1.<init>(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x0085 }
+            int r1 = r13.sendRequest(r15, r11)     // Catch:{ Exception -> 0x0085 }
+            org.telegram.messenger.browser.-$$Lambda$Browser$a6Dg6G-glg3khQ9JuF9Le4Oec2o r2 = new org.telegram.messenger.browser.-$$Lambda$Browser$a6Dg6G-glg3khQ9JuF9Le4Oec2o     // Catch:{ Exception -> 0x0085 }
+            r2.<init>(r0, r1)     // Catch:{ Exception -> 0x0085 }
             r0 = 1000(0x3e8, double:4.94E-321)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2, r0)     // Catch:{ Exception -> 0x0083 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2, r0)     // Catch:{ Exception -> 0x0085 }
             return
-        L_0x0083:
-            java.lang.String r0 = r17.getScheme()     // Catch:{ Exception -> 0x02f2 }
+        L_0x0085:
+            java.lang.String r0 = r17.getScheme()     // Catch:{ Exception -> 0x030c }
             java.lang.String r1 = ""
-            if (r0 == 0) goto L_0x0095
-            java.lang.String r0 = r17.getScheme()     // Catch:{ Exception -> 0x02f2 }
-            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x02f2 }
+            if (r0 == 0) goto L_0x0097
+            java.lang.String r0 = r17.getScheme()     // Catch:{ Exception -> 0x030c }
+            java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x030c }
             r2 = r0
-            goto L_0x0096
-        L_0x0095:
+            goto L_0x0098
+        L_0x0097:
             r2 = r1
-        L_0x0096:
+        L_0x0098:
             java.lang.String r0 = "http"
-            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02f2 }
-            if (r0 != 0) goto L_0x00a6
+            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x030c }
+            if (r0 != 0) goto L_0x00a8
             java.lang.String r0 = "https"
-            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x02f2 }
-            if (r0 == 0) goto L_0x00b1
-        L_0x00a6:
-            android.net.Uri r0 = r17.normalizeScheme()     // Catch:{ Exception -> 0x00ac }
+            boolean r0 = r0.equals(r2)     // Catch:{ Exception -> 0x030c }
+            if (r0 == 0) goto L_0x00b3
+        L_0x00a8:
+            android.net.Uri r0 = r17.normalizeScheme()     // Catch:{ Exception -> 0x00ae }
             r8 = r0
-            goto L_0x00b1
-        L_0x00ac:
+            goto L_0x00b3
+        L_0x00ae:
             r0 = move-exception
             r3 = r0
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ Exception -> 0x02f2 }
-        L_0x00b1:
-            java.lang.String r0 = r8.getHost()     // Catch:{ Exception -> 0x02f2 }
-            if (r0 == 0) goto L_0x00bf
-            java.lang.String r0 = r8.getHost()     // Catch:{ Exception -> 0x02f2 }
-            java.lang.String r1 = r0.toLowerCase()     // Catch:{ Exception -> 0x02f2 }
-        L_0x00bf:
-            org.telegram.messenger.AccountInstance r0 = org.telegram.messenger.AccountInstance.getInstance(r10)     // Catch:{ Exception -> 0x02f2 }
-            org.telegram.messenger.MessagesController r0 = r0.getMessagesController()     // Catch:{ Exception -> 0x02f2 }
-            java.util.Set<java.lang.String> r0 = r0.autologinDomains     // Catch:{ Exception -> 0x02f2 }
-            boolean r0 = r0.contains(r1)     // Catch:{ Exception -> 0x02f2 }
-            if (r0 == 0) goto L_0x0169
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02f2 }
-            r0.<init>()     // Catch:{ Exception -> 0x02f2 }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ Exception -> 0x030c }
+        L_0x00b3:
+            java.lang.String r0 = r8.getHost()     // Catch:{ Exception -> 0x030c }
+            if (r0 == 0) goto L_0x00c1
+            java.lang.String r0 = r8.getHost()     // Catch:{ Exception -> 0x030c }
+            java.lang.String r1 = r0.toLowerCase()     // Catch:{ Exception -> 0x030c }
+        L_0x00c1:
+            org.telegram.messenger.AccountInstance r0 = org.telegram.messenger.AccountInstance.getInstance(r10)     // Catch:{ Exception -> 0x030c }
+            org.telegram.messenger.MessagesController r0 = r0.getMessagesController()     // Catch:{ Exception -> 0x030c }
+            java.util.Set<java.lang.String> r0 = r0.autologinDomains     // Catch:{ Exception -> 0x030c }
+            boolean r0 = r0.contains(r1)     // Catch:{ Exception -> 0x030c }
+            if (r0 == 0) goto L_0x0182
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x030c }
+            r0.<init>()     // Catch:{ Exception -> 0x030c }
             java.lang.String r1 = "autologin_token="
-            r0.append(r1)     // Catch:{ Exception -> 0x02f2 }
-            int r1 = org.telegram.messenger.UserConfig.selectedAccount     // Catch:{ Exception -> 0x02f2 }
-            org.telegram.messenger.AccountInstance r1 = org.telegram.messenger.AccountInstance.getInstance(r1)     // Catch:{ Exception -> 0x02f2 }
-            org.telegram.messenger.MessagesController r1 = r1.getMessagesController()     // Catch:{ Exception -> 0x02f2 }
-            java.lang.String r1 = r1.autologinToken     // Catch:{ Exception -> 0x02f2 }
+            r0.append(r1)     // Catch:{ Exception -> 0x030c }
+            int r1 = org.telegram.messenger.UserConfig.selectedAccount     // Catch:{ Exception -> 0x030c }
+            org.telegram.messenger.AccountInstance r1 = org.telegram.messenger.AccountInstance.getInstance(r1)     // Catch:{ Exception -> 0x030c }
+            org.telegram.messenger.MessagesController r1 = r1.getMessagesController()     // Catch:{ Exception -> 0x030c }
+            java.lang.String r1 = r1.autologinToken     // Catch:{ Exception -> 0x030c }
             java.lang.String r3 = "UTF-8"
-            java.lang.String r1 = java.net.URLEncoder.encode(r1, r3)     // Catch:{ Exception -> 0x02f2 }
-            r0.append(r1)     // Catch:{ Exception -> 0x02f2 }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x02f2 }
-            java.lang.String r1 = r8.toString()     // Catch:{ Exception -> 0x02f2 }
+            java.lang.String r1 = java.net.URLEncoder.encode(r1, r3)     // Catch:{ Exception -> 0x030c }
+            r0.append(r1)     // Catch:{ Exception -> 0x030c }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x030c }
+            java.lang.String r1 = r8.toString()     // Catch:{ Exception -> 0x030c }
             java.lang.String r3 = "://"
-            int r3 = r1.indexOf(r3)     // Catch:{ Exception -> 0x02f2 }
-            if (r3 < 0) goto L_0x0104
+            int r3 = r1.indexOf(r3)     // Catch:{ Exception -> 0x030c }
+            if (r3 < 0) goto L_0x0106
             r4 = 3
             int r3 = r3 + r4
-            java.lang.String r1 = r1.substring(r3)     // Catch:{ Exception -> 0x02f2 }
-        L_0x0104:
-            java.lang.String r3 = "#"
-            java.lang.String[] r1 = r1.split(r3)     // Catch:{ Exception -> 0x02f2 }
-            r3 = 0
-            r4 = r1[r3]     // Catch:{ Exception -> 0x02f2 }
-            r3 = 63
-            int r3 = r4.indexOf(r3)     // Catch:{ Exception -> 0x02f2 }
-            if (r3 < 0) goto L_0x012a
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02f2 }
-            r3.<init>()     // Catch:{ Exception -> 0x02f2 }
-            r3.append(r4)     // Catch:{ Exception -> 0x02f2 }
-            java.lang.String r4 = "&"
-            r3.append(r4)     // Catch:{ Exception -> 0x02f2 }
-            r3.append(r0)     // Catch:{ Exception -> 0x02f2 }
-            java.lang.String r0 = r3.toString()     // Catch:{ Exception -> 0x02f2 }
-            goto L_0x013e
-        L_0x012a:
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02f2 }
-            r3.<init>()     // Catch:{ Exception -> 0x02f2 }
-            r3.append(r4)     // Catch:{ Exception -> 0x02f2 }
-            java.lang.String r4 = "?"
-            r3.append(r4)     // Catch:{ Exception -> 0x02f2 }
-            r3.append(r0)     // Catch:{ Exception -> 0x02f2 }
-            java.lang.String r0 = r3.toString()     // Catch:{ Exception -> 0x02f2 }
-        L_0x013e:
-            int r3 = r1.length     // Catch:{ Exception -> 0x02f2 }
-            r4 = 1
-            if (r3 <= r4) goto L_0x0153
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02f2 }
-            r3.<init>()     // Catch:{ Exception -> 0x02f2 }
-            r3.append(r0)     // Catch:{ Exception -> 0x02f2 }
-            r0 = r1[r4]     // Catch:{ Exception -> 0x02f2 }
-            r3.append(r0)     // Catch:{ Exception -> 0x02f2 }
-            java.lang.String r0 = r3.toString()     // Catch:{ Exception -> 0x02f2 }
-        L_0x0153:
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02f2 }
-            r1.<init>()     // Catch:{ Exception -> 0x02f2 }
+            java.lang.String r1 = r1.substring(r3)     // Catch:{ Exception -> 0x030c }
+        L_0x0106:
+            java.lang.String r3 = r8.getEncodedFragment()     // Catch:{ Exception -> 0x030c }
+            java.lang.String r4 = "#"
+            if (r3 != 0) goto L_0x010f
+            goto L_0x0127
+        L_0x010f:
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x030c }
+            r5.<init>()     // Catch:{ Exception -> 0x030c }
+            r5.append(r4)     // Catch:{ Exception -> 0x030c }
+            r5.append(r3)     // Catch:{ Exception -> 0x030c }
+            java.lang.String r5 = r5.toString()     // Catch:{ Exception -> 0x030c }
+            int r5 = r1.indexOf(r5)     // Catch:{ Exception -> 0x030c }
+            r6 = 0
+            java.lang.String r1 = r1.substring(r6, r5)     // Catch:{ Exception -> 0x030c }
+        L_0x0127:
+            r5 = 63
+            int r5 = r1.indexOf(r5)     // Catch:{ Exception -> 0x030c }
+            if (r5 < 0) goto L_0x0144
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x030c }
+            r5.<init>()     // Catch:{ Exception -> 0x030c }
+            r5.append(r1)     // Catch:{ Exception -> 0x030c }
+            java.lang.String r1 = "&"
+            r5.append(r1)     // Catch:{ Exception -> 0x030c }
+            r5.append(r0)     // Catch:{ Exception -> 0x030c }
+            java.lang.String r0 = r5.toString()     // Catch:{ Exception -> 0x030c }
+            goto L_0x0158
+        L_0x0144:
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x030c }
+            r5.<init>()     // Catch:{ Exception -> 0x030c }
+            r5.append(r1)     // Catch:{ Exception -> 0x030c }
+            java.lang.String r1 = "?"
+            r5.append(r1)     // Catch:{ Exception -> 0x030c }
+            r5.append(r0)     // Catch:{ Exception -> 0x030c }
+            java.lang.String r0 = r5.toString()     // Catch:{ Exception -> 0x030c }
+        L_0x0158:
+            if (r3 == 0) goto L_0x016c
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x030c }
+            r1.<init>()     // Catch:{ Exception -> 0x030c }
+            r1.append(r0)     // Catch:{ Exception -> 0x030c }
+            r1.append(r4)     // Catch:{ Exception -> 0x030c }
+            r1.append(r3)     // Catch:{ Exception -> 0x030c }
+            java.lang.String r0 = r1.toString()     // Catch:{ Exception -> 0x030c }
+        L_0x016c:
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x030c }
+            r1.<init>()     // Catch:{ Exception -> 0x030c }
             java.lang.String r3 = "https://"
-            r1.append(r3)     // Catch:{ Exception -> 0x02f2 }
-            r1.append(r0)     // Catch:{ Exception -> 0x02f2 }
-            java.lang.String r0 = r1.toString()     // Catch:{ Exception -> 0x02f2 }
-            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x02f2 }
+            r1.append(r3)     // Catch:{ Exception -> 0x030c }
+            r1.append(r0)     // Catch:{ Exception -> 0x030c }
+            java.lang.String r0 = r1.toString()     // Catch:{ Exception -> 0x030c }
+            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x030c }
             r8 = r0
-        L_0x0169:
-            if (r18 == 0) goto L_0x02f6
-            boolean r0 = org.telegram.messenger.SharedConfig.customTabs     // Catch:{ Exception -> 0x02f2 }
-            if (r0 == 0) goto L_0x02f6
-            if (r14 != 0) goto L_0x02f6
+        L_0x0182:
+            if (r18 == 0) goto L_0x0310
+            boolean r0 = org.telegram.messenger.SharedConfig.customTabs     // Catch:{ Exception -> 0x030c }
+            if (r0 == 0) goto L_0x0310
+            if (r14 != 0) goto L_0x0310
             java.lang.String r0 = "tel"
-            boolean r0 = r2.equals(r0)     // Catch:{ Exception -> 0x02f2 }
-            if (r0 != 0) goto L_0x02f6
+            boolean r0 = r2.equals(r0)     // Catch:{ Exception -> 0x030c }
+            if (r0 != 0) goto L_0x0310
             r0 = 0
-            android.content.Intent r1 = new android.content.Intent     // Catch:{ Exception -> 0x01cc }
+            android.content.Intent r1 = new android.content.Intent     // Catch:{ Exception -> 0x01e6 }
             java.lang.String r2 = "http://www.google.com"
-            android.net.Uri r2 = android.net.Uri.parse(r2)     // Catch:{ Exception -> 0x01cc }
-            r1.<init>(r9, r2)     // Catch:{ Exception -> 0x01cc }
-            android.content.pm.PackageManager r2 = r16.getPackageManager()     // Catch:{ Exception -> 0x01cc }
+            android.net.Uri r2 = android.net.Uri.parse(r2)     // Catch:{ Exception -> 0x01e6 }
+            r1.<init>(r9, r2)     // Catch:{ Exception -> 0x01e6 }
+            android.content.pm.PackageManager r2 = r16.getPackageManager()     // Catch:{ Exception -> 0x01e6 }
             r3 = 0
-            java.util.List r1 = r2.queryIntentActivities(r1, r3)     // Catch:{ Exception -> 0x01cc }
-            if (r1 == 0) goto L_0x01cc
-            boolean r2 = r1.isEmpty()     // Catch:{ Exception -> 0x01cc }
-            if (r2 != 0) goto L_0x01cc
-            int r2 = r1.size()     // Catch:{ Exception -> 0x01cc }
-            java.lang.String[] r2 = new java.lang.String[r2]     // Catch:{ Exception -> 0x01cc }
+            java.util.List r1 = r2.queryIntentActivities(r1, r3)     // Catch:{ Exception -> 0x01e6 }
+            if (r1 == 0) goto L_0x01e6
+            boolean r2 = r1.isEmpty()     // Catch:{ Exception -> 0x01e6 }
+            if (r2 != 0) goto L_0x01e6
+            int r2 = r1.size()     // Catch:{ Exception -> 0x01e6 }
+            java.lang.String[] r2 = new java.lang.String[r2]     // Catch:{ Exception -> 0x01e6 }
             r3 = 0
-        L_0x019d:
-            int r4 = r1.size()     // Catch:{ Exception -> 0x01cd }
-            if (r3 >= r4) goto L_0x01cd
-            java.lang.Object r4 = r1.get(r3)     // Catch:{ Exception -> 0x01cd }
-            android.content.pm.ResolveInfo r4 = (android.content.pm.ResolveInfo) r4     // Catch:{ Exception -> 0x01cd }
-            android.content.pm.ActivityInfo r4 = r4.activityInfo     // Catch:{ Exception -> 0x01cd }
-            java.lang.String r4 = r4.packageName     // Catch:{ Exception -> 0x01cd }
-            r2[r3] = r4     // Catch:{ Exception -> 0x01cd }
-            boolean r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x01cd }
-            if (r4 == 0) goto L_0x01c9
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01cd }
-            r4.<init>()     // Catch:{ Exception -> 0x01cd }
+        L_0x01b7:
+            int r4 = r1.size()     // Catch:{ Exception -> 0x01e7 }
+            if (r3 >= r4) goto L_0x01e7
+            java.lang.Object r4 = r1.get(r3)     // Catch:{ Exception -> 0x01e7 }
+            android.content.pm.ResolveInfo r4 = (android.content.pm.ResolveInfo) r4     // Catch:{ Exception -> 0x01e7 }
+            android.content.pm.ActivityInfo r4 = r4.activityInfo     // Catch:{ Exception -> 0x01e7 }
+            java.lang.String r4 = r4.packageName     // Catch:{ Exception -> 0x01e7 }
+            r2[r3] = r4     // Catch:{ Exception -> 0x01e7 }
+            boolean r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x01e7 }
+            if (r4 == 0) goto L_0x01e3
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01e7 }
+            r4.<init>()     // Catch:{ Exception -> 0x01e7 }
             java.lang.String r5 = "default browser name = "
-            r4.append(r5)     // Catch:{ Exception -> 0x01cd }
-            r5 = r2[r3]     // Catch:{ Exception -> 0x01cd }
-            r4.append(r5)     // Catch:{ Exception -> 0x01cd }
-            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x01cd }
-            org.telegram.messenger.FileLog.d(r4)     // Catch:{ Exception -> 0x01cd }
-        L_0x01c9:
+            r4.append(r5)     // Catch:{ Exception -> 0x01e7 }
+            r5 = r2[r3]     // Catch:{ Exception -> 0x01e7 }
+            r4.append(r5)     // Catch:{ Exception -> 0x01e7 }
+            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x01e7 }
+            org.telegram.messenger.FileLog.d(r4)     // Catch:{ Exception -> 0x01e7 }
+        L_0x01e3:
             int r3 = r3 + 1
-            goto L_0x019d
-        L_0x01cc:
+            goto L_0x01b7
+        L_0x01e6:
             r2 = r0
-        L_0x01cd:
-            android.content.Intent r1 = new android.content.Intent     // Catch:{ Exception -> 0x0279 }
-            r1.<init>(r9, r8)     // Catch:{ Exception -> 0x0279 }
-            android.content.pm.PackageManager r3 = r16.getPackageManager()     // Catch:{ Exception -> 0x0279 }
+        L_0x01e7:
+            android.content.Intent r1 = new android.content.Intent     // Catch:{ Exception -> 0x0293 }
+            r1.<init>(r9, r8)     // Catch:{ Exception -> 0x0293 }
+            android.content.pm.PackageManager r3 = r16.getPackageManager()     // Catch:{ Exception -> 0x0293 }
             r4 = 0
-            java.util.List r0 = r3.queryIntentActivities(r1, r4)     // Catch:{ Exception -> 0x0279 }
-            if (r2 == 0) goto L_0x0206
+            java.util.List r0 = r3.queryIntentActivities(r1, r4)     // Catch:{ Exception -> 0x0293 }
+            if (r2 == 0) goto L_0x0220
             r1 = 0
-        L_0x01de:
-            int r3 = r0.size()     // Catch:{ Exception -> 0x0279 }
-            if (r1 >= r3) goto L_0x0241
+        L_0x01f8:
+            int r3 = r0.size()     // Catch:{ Exception -> 0x0293 }
+            if (r1 >= r3) goto L_0x025b
             r3 = 0
-        L_0x01e5:
-            int r4 = r2.length     // Catch:{ Exception -> 0x0279 }
-            if (r3 >= r4) goto L_0x0203
-            r4 = r2[r3]     // Catch:{ Exception -> 0x0279 }
-            java.lang.Object r5 = r0.get(r1)     // Catch:{ Exception -> 0x0279 }
-            android.content.pm.ResolveInfo r5 = (android.content.pm.ResolveInfo) r5     // Catch:{ Exception -> 0x0279 }
-            android.content.pm.ActivityInfo r5 = r5.activityInfo     // Catch:{ Exception -> 0x0279 }
-            java.lang.String r5 = r5.packageName     // Catch:{ Exception -> 0x0279 }
-            boolean r4 = r4.equals(r5)     // Catch:{ Exception -> 0x0279 }
-            if (r4 == 0) goto L_0x0200
-            r0.remove(r1)     // Catch:{ Exception -> 0x0279 }
+        L_0x01ff:
+            int r4 = r2.length     // Catch:{ Exception -> 0x0293 }
+            if (r3 >= r4) goto L_0x021d
+            r4 = r2[r3]     // Catch:{ Exception -> 0x0293 }
+            java.lang.Object r5 = r0.get(r1)     // Catch:{ Exception -> 0x0293 }
+            android.content.pm.ResolveInfo r5 = (android.content.pm.ResolveInfo) r5     // Catch:{ Exception -> 0x0293 }
+            android.content.pm.ActivityInfo r5 = r5.activityInfo     // Catch:{ Exception -> 0x0293 }
+            java.lang.String r5 = r5.packageName     // Catch:{ Exception -> 0x0293 }
+            boolean r4 = r4.equals(r5)     // Catch:{ Exception -> 0x0293 }
+            if (r4 == 0) goto L_0x021a
+            r0.remove(r1)     // Catch:{ Exception -> 0x0293 }
             int r1 = r1 + -1
-            goto L_0x0203
-        L_0x0200:
+            goto L_0x021d
+        L_0x021a:
             int r3 = r3 + 1
-            goto L_0x01e5
-        L_0x0203:
+            goto L_0x01ff
+        L_0x021d:
             r3 = 1
             int r1 = r1 + r3
-            goto L_0x01de
-        L_0x0206:
+            goto L_0x01f8
+        L_0x0220:
             r1 = 0
-        L_0x0207:
-            int r2 = r0.size()     // Catch:{ Exception -> 0x0279 }
-            if (r1 >= r2) goto L_0x0241
-            java.lang.Object r2 = r0.get(r1)     // Catch:{ Exception -> 0x0279 }
-            android.content.pm.ResolveInfo r2 = (android.content.pm.ResolveInfo) r2     // Catch:{ Exception -> 0x0279 }
-            android.content.pm.ActivityInfo r2 = r2.activityInfo     // Catch:{ Exception -> 0x0279 }
-            java.lang.String r2 = r2.packageName     // Catch:{ Exception -> 0x0279 }
-            java.lang.String r2 = r2.toLowerCase()     // Catch:{ Exception -> 0x0279 }
+        L_0x0221:
+            int r2 = r0.size()     // Catch:{ Exception -> 0x0293 }
+            if (r1 >= r2) goto L_0x025b
+            java.lang.Object r2 = r0.get(r1)     // Catch:{ Exception -> 0x0293 }
+            android.content.pm.ResolveInfo r2 = (android.content.pm.ResolveInfo) r2     // Catch:{ Exception -> 0x0293 }
+            android.content.pm.ActivityInfo r2 = r2.activityInfo     // Catch:{ Exception -> 0x0293 }
+            java.lang.String r2 = r2.packageName     // Catch:{ Exception -> 0x0293 }
+            java.lang.String r2 = r2.toLowerCase()     // Catch:{ Exception -> 0x0293 }
             java.lang.String r3 = "browser"
-            boolean r2 = r2.contains(r3)     // Catch:{ Exception -> 0x0279 }
-            if (r2 != 0) goto L_0x0239
-            java.lang.Object r2 = r0.get(r1)     // Catch:{ Exception -> 0x0279 }
-            android.content.pm.ResolveInfo r2 = (android.content.pm.ResolveInfo) r2     // Catch:{ Exception -> 0x0279 }
-            android.content.pm.ActivityInfo r2 = r2.activityInfo     // Catch:{ Exception -> 0x0279 }
-            java.lang.String r2 = r2.packageName     // Catch:{ Exception -> 0x0279 }
-            java.lang.String r2 = r2.toLowerCase()     // Catch:{ Exception -> 0x0279 }
+            boolean r2 = r2.contains(r3)     // Catch:{ Exception -> 0x0293 }
+            if (r2 != 0) goto L_0x0253
+            java.lang.Object r2 = r0.get(r1)     // Catch:{ Exception -> 0x0293 }
+            android.content.pm.ResolveInfo r2 = (android.content.pm.ResolveInfo) r2     // Catch:{ Exception -> 0x0293 }
+            android.content.pm.ActivityInfo r2 = r2.activityInfo     // Catch:{ Exception -> 0x0293 }
+            java.lang.String r2 = r2.packageName     // Catch:{ Exception -> 0x0293 }
+            java.lang.String r2 = r2.toLowerCase()     // Catch:{ Exception -> 0x0293 }
             java.lang.String r3 = "chrome"
-            boolean r2 = r2.contains(r3)     // Catch:{ Exception -> 0x0279 }
-            if (r2 == 0) goto L_0x023e
-        L_0x0239:
-            r0.remove(r1)     // Catch:{ Exception -> 0x0279 }
+            boolean r2 = r2.contains(r3)     // Catch:{ Exception -> 0x0293 }
+            if (r2 == 0) goto L_0x0258
+        L_0x0253:
+            r0.remove(r1)     // Catch:{ Exception -> 0x0293 }
             int r1 = r1 + -1
-        L_0x023e:
+        L_0x0258:
             r2 = 1
             int r1 = r1 + r2
-            goto L_0x0207
-        L_0x0241:
-            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0279 }
-            if (r1 == 0) goto L_0x0279
+            goto L_0x0221
+        L_0x025b:
+            boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0293 }
+            if (r1 == 0) goto L_0x0293
             r1 = 0
-        L_0x0246:
-            int r2 = r0.size()     // Catch:{ Exception -> 0x0279 }
-            if (r1 >= r2) goto L_0x0279
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0279 }
-            r2.<init>()     // Catch:{ Exception -> 0x0279 }
+        L_0x0260:
+            int r2 = r0.size()     // Catch:{ Exception -> 0x0293 }
+            if (r1 >= r2) goto L_0x0293
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0293 }
+            r2.<init>()     // Catch:{ Exception -> 0x0293 }
             java.lang.String r3 = "device has "
-            r2.append(r3)     // Catch:{ Exception -> 0x0279 }
-            java.lang.Object r3 = r0.get(r1)     // Catch:{ Exception -> 0x0279 }
-            android.content.pm.ResolveInfo r3 = (android.content.pm.ResolveInfo) r3     // Catch:{ Exception -> 0x0279 }
-            android.content.pm.ActivityInfo r3 = r3.activityInfo     // Catch:{ Exception -> 0x0279 }
-            java.lang.String r3 = r3.packageName     // Catch:{ Exception -> 0x0279 }
-            r2.append(r3)     // Catch:{ Exception -> 0x0279 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0293 }
+            java.lang.Object r3 = r0.get(r1)     // Catch:{ Exception -> 0x0293 }
+            android.content.pm.ResolveInfo r3 = (android.content.pm.ResolveInfo) r3     // Catch:{ Exception -> 0x0293 }
+            android.content.pm.ActivityInfo r3 = r3.activityInfo     // Catch:{ Exception -> 0x0293 }
+            java.lang.String r3 = r3.packageName     // Catch:{ Exception -> 0x0293 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0293 }
             java.lang.String r3 = " to open "
-            r2.append(r3)     // Catch:{ Exception -> 0x0279 }
-            java.lang.String r3 = r8.toString()     // Catch:{ Exception -> 0x0279 }
-            r2.append(r3)     // Catch:{ Exception -> 0x0279 }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x0279 }
-            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x0279 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0293 }
+            java.lang.String r3 = r8.toString()     // Catch:{ Exception -> 0x0293 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0293 }
+            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x0293 }
+            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x0293 }
             int r1 = r1 + 1
-            goto L_0x0246
-        L_0x0279:
+            goto L_0x0260
+        L_0x0293:
             r1 = 0
-            boolean r2 = r12[r1]     // Catch:{ Exception -> 0x02f2 }
-            if (r2 != 0) goto L_0x0286
-            if (r0 == 0) goto L_0x0286
-            boolean r0 = r0.isEmpty()     // Catch:{ Exception -> 0x02f2 }
-            if (r0 == 0) goto L_0x02f6
-        L_0x0286:
-            android.content.Intent r0 = new android.content.Intent     // Catch:{ Exception -> 0x02f2 }
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x02f2 }
+            boolean r2 = r12[r1]     // Catch:{ Exception -> 0x030c }
+            if (r2 != 0) goto L_0x02a0
+            if (r0 == 0) goto L_0x02a0
+            boolean r0 = r0.isEmpty()     // Catch:{ Exception -> 0x030c }
+            if (r0 == 0) goto L_0x0310
+        L_0x02a0:
+            android.content.Intent r0 = new android.content.Intent     // Catch:{ Exception -> 0x030c }
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x030c }
             java.lang.Class<org.telegram.messenger.ShareBroadcastReceiver> r2 = org.telegram.messenger.ShareBroadcastReceiver.class
-            r0.<init>(r1, r2)     // Catch:{ Exception -> 0x02f2 }
+            r0.<init>(r1, r2)     // Catch:{ Exception -> 0x030c }
             java.lang.String r1 = "android.intent.action.SEND"
-            r0.setAction(r1)     // Catch:{ Exception -> 0x02f2 }
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x02f2 }
-            android.content.Intent r2 = new android.content.Intent     // Catch:{ Exception -> 0x02f2 }
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x02f2 }
+            r0.setAction(r1)     // Catch:{ Exception -> 0x030c }
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x030c }
+            android.content.Intent r2 = new android.content.Intent     // Catch:{ Exception -> 0x030c }
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x030c }
             java.lang.Class<org.telegram.messenger.CustomTabsCopyReceiver> r4 = org.telegram.messenger.CustomTabsCopyReceiver.class
-            r2.<init>(r3, r4)     // Catch:{ Exception -> 0x02f2 }
+            r2.<init>(r3, r4)     // Catch:{ Exception -> 0x030c }
             r3 = 134217728(0x8000000, float:3.85186E-34)
             r4 = 0
-            android.app.PendingIntent r1 = android.app.PendingIntent.getBroadcast(r1, r4, r2, r3)     // Catch:{ Exception -> 0x02f2 }
-            org.telegram.messenger.support.customtabs.CustomTabsIntent$Builder r2 = new org.telegram.messenger.support.customtabs.CustomTabsIntent$Builder     // Catch:{ Exception -> 0x02f2 }
-            org.telegram.messenger.support.customtabs.CustomTabsSession r3 = getSession()     // Catch:{ Exception -> 0x02f2 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x02f2 }
+            android.app.PendingIntent r1 = android.app.PendingIntent.getBroadcast(r1, r4, r2, r3)     // Catch:{ Exception -> 0x030c }
+            org.telegram.messenger.support.customtabs.CustomTabsIntent$Builder r2 = new org.telegram.messenger.support.customtabs.CustomTabsIntent$Builder     // Catch:{ Exception -> 0x030c }
+            org.telegram.messenger.support.customtabs.CustomTabsSession r3 = getSession()     // Catch:{ Exception -> 0x030c }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x030c }
             java.lang.String r3 = "CopyLink"
-            r4 = 2131624997(0x7f0e0425, float:1.887719E38)
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x02f2 }
-            r2.addMenuItem(r3, r1)     // Catch:{ Exception -> 0x02f2 }
+            r4 = 2131625013(0x7f0e0435, float:1.8877222E38)
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x030c }
+            r2.addMenuItem(r3, r1)     // Catch:{ Exception -> 0x030c }
             java.lang.String r1 = "actionBarBrowser"
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)     // Catch:{ Exception -> 0x02f2 }
-            r2.setToolbarColor(r1)     // Catch:{ Exception -> 0x02f2 }
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)     // Catch:{ Exception -> 0x030c }
+            r2.setToolbarColor(r1)     // Catch:{ Exception -> 0x030c }
             r1 = 1
-            r2.setShowTitle(r1)     // Catch:{ Exception -> 0x02f2 }
-            android.content.res.Resources r1 = r16.getResources()     // Catch:{ Exception -> 0x02f2 }
+            r2.setShowTitle(r1)     // Catch:{ Exception -> 0x030c }
+            android.content.res.Resources r1 = r16.getResources()     // Catch:{ Exception -> 0x030c }
             r3 = 2131165243(0x7var_b, float:1.7944698E38)
-            android.graphics.Bitmap r1 = android.graphics.BitmapFactory.decodeResource(r1, r3)     // Catch:{ Exception -> 0x02f2 }
+            android.graphics.Bitmap r1 = android.graphics.BitmapFactory.decodeResource(r1, r3)     // Catch:{ Exception -> 0x030c }
             java.lang.String r3 = "ShareFile"
-            r4 = 2131627427(0x7f0e0da3, float:1.8882118E38)
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x02f2 }
-            android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x02f2 }
+            r4 = 2131627473(0x7f0e0dd1, float:1.8882211E38)
+            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x030c }
+            android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x030c }
             r5 = 0
-            android.app.PendingIntent r0 = android.app.PendingIntent.getBroadcast(r4, r5, r0, r5)     // Catch:{ Exception -> 0x02f2 }
+            android.app.PendingIntent r0 = android.app.PendingIntent.getBroadcast(r4, r5, r0, r5)     // Catch:{ Exception -> 0x030c }
             r4 = 1
-            r2.setActionButton(r1, r3, r0, r4)     // Catch:{ Exception -> 0x02f2 }
-            org.telegram.messenger.support.customtabs.CustomTabsIntent r0 = r2.build()     // Catch:{ Exception -> 0x02f2 }
-            r0.setUseNewTask()     // Catch:{ Exception -> 0x02f2 }
-            r0.launchUrl(r7, r8)     // Catch:{ Exception -> 0x02f2 }
+            r2.setActionButton(r1, r3, r0, r4)     // Catch:{ Exception -> 0x030c }
+            org.telegram.messenger.support.customtabs.CustomTabsIntent r0 = r2.build()     // Catch:{ Exception -> 0x030c }
+            r0.setUseNewTask()     // Catch:{ Exception -> 0x030c }
+            r0.launchUrl(r7, r8)     // Catch:{ Exception -> 0x030c }
             return
-        L_0x02f2:
+        L_0x030c:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x02f6:
-            android.content.Intent r0 = new android.content.Intent     // Catch:{ Exception -> 0x0322 }
-            r0.<init>(r9, r8)     // Catch:{ Exception -> 0x0322 }
-            if (r14 == 0) goto L_0x030f
-            android.content.ComponentName r1 = new android.content.ComponentName     // Catch:{ Exception -> 0x0322 }
-            java.lang.String r2 = r16.getPackageName()     // Catch:{ Exception -> 0x0322 }
+        L_0x0310:
+            android.content.Intent r0 = new android.content.Intent     // Catch:{ Exception -> 0x033c }
+            r0.<init>(r9, r8)     // Catch:{ Exception -> 0x033c }
+            if (r14 == 0) goto L_0x0329
+            android.content.ComponentName r1 = new android.content.ComponentName     // Catch:{ Exception -> 0x033c }
+            java.lang.String r2 = r16.getPackageName()     // Catch:{ Exception -> 0x033c }
             java.lang.Class<org.telegram.ui.LaunchActivity> r3 = org.telegram.ui.LaunchActivity.class
-            java.lang.String r3 = r3.getName()     // Catch:{ Exception -> 0x0322 }
-            r1.<init>(r2, r3)     // Catch:{ Exception -> 0x0322 }
-            r0.setComponent(r1)     // Catch:{ Exception -> 0x0322 }
-        L_0x030f:
+            java.lang.String r3 = r3.getName()     // Catch:{ Exception -> 0x033c }
+            r1.<init>(r2, r3)     // Catch:{ Exception -> 0x033c }
+            r0.setComponent(r1)     // Catch:{ Exception -> 0x033c }
+        L_0x0329:
             java.lang.String r1 = "create_new_tab"
             r2 = 1
-            r0.putExtra(r1, r2)     // Catch:{ Exception -> 0x0322 }
+            r0.putExtra(r1, r2)     // Catch:{ Exception -> 0x033c }
             java.lang.String r1 = "com.android.browser.application_id"
-            java.lang.String r2 = r16.getPackageName()     // Catch:{ Exception -> 0x0322 }
-            r0.putExtra(r1, r2)     // Catch:{ Exception -> 0x0322 }
-            r7.startActivity(r0)     // Catch:{ Exception -> 0x0322 }
-            goto L_0x0326
-        L_0x0322:
+            java.lang.String r2 = r16.getPackageName()     // Catch:{ Exception -> 0x033c }
+            r0.putExtra(r1, r2)     // Catch:{ Exception -> 0x033c }
+            r7.startActivity(r0)     // Catch:{ Exception -> 0x033c }
+            goto L_0x0340
+        L_0x033c:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0326:
+        L_0x0340:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.browser.Browser.openUrl(android.content.Context, android.net.Uri, boolean, boolean):void");

@@ -7,11 +7,11 @@ public class RendererCommon {
     private static float BALANCED_VISIBLE_FRACTION = 0.5625f;
 
     public interface GlDrawer {
-        void drawOes(int i, float[] fArr, int i2, int i3, int i4, int i5, int i6, int i7);
+        void drawOes(int i, int i2, int i3, int i4, int i5, float[] fArr, int i6, int i7, int i8, int i9, int i10, int i11, boolean z);
 
-        void drawRgb(int i, float[] fArr, int i2, int i3, int i4, int i5, int i6, int i7);
+        void drawRgb(int i, int i2, int i3, int i4, int i5, float[] fArr, int i6, int i7, int i8, int i9, int i10, int i11, boolean z);
 
-        void drawYuv(int[] iArr, float[] fArr, int i, int i2, int i3, int i4, int i5, int i6);
+        void drawYuv(int[] iArr, int i, int i2, int i3, int i4, float[] fArr, int i5, int i6, int i7, int i8, int i9, int i10, boolean z);
 
         void release();
     }
@@ -52,7 +52,7 @@ public class RendererCommon {
             this.visibleFractionMismatchOrientation = f2;
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:29:0x0056, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:30:0x0056, code lost:
             if (r8 == r2) goto L_0x0058;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -98,14 +98,14 @@ public class RendererCommon {
                 float r5 = r7.visibleFractionMismatchOrientation
             L_0x0033:
                 android.graphics.Point r5 = org.webrtc.RendererCommon.getDisplaySize((float) r5, (float) r11, (int) r1, (int) r0)
-                int r9 = android.view.View.MeasureSpec.getMode(r9)
-                r6 = 1073741824(0x40000000, float:2.0)
-                if (r9 != r6) goto L_0x0041
-                r5.x = r1
-            L_0x0041:
-                int r9 = android.view.View.MeasureSpec.getMode(r10)
-                if (r9 == r6) goto L_0x0058
                 if (r8 != 0) goto L_0x005a
+                int r8 = android.view.View.MeasureSpec.getMode(r9)
+                r9 = 1073741824(0x40000000, float:2.0)
+                if (r8 != r9) goto L_0x0043
+                r5.x = r1
+            L_0x0043:
+                int r8 = android.view.View.MeasureSpec.getMode(r10)
+                if (r8 == r9) goto L_0x0058
                 int r8 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
                 if (r8 <= 0) goto L_0x004f
                 r8 = 1

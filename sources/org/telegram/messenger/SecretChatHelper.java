@@ -9,7 +9,6 @@ import android.util.SparseArray;
 import android.util.SparseIntArray;
 import java.io.File;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
@@ -87,9 +86,6 @@ public class SecretChatHelper extends BaseController {
     private SparseArray<ArrayList<TL_decryptedMessageHolder>> secretHolesQueue = new SparseArray<>();
     private ArrayList<Integer> sendingNotifyLayer = new ArrayList<>();
     private boolean startingSecretChat = false;
-
-    static /* synthetic */ void lambda$declineSecretChat$20(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-    }
 
     public static class TL_decryptedMessageHolder extends TLObject {
         public static int constructor = NUM;
@@ -718,302 +714,278 @@ public class SecretChatHelper extends BaseController {
     /* JADX WARNING: Multi-variable type inference failed */
     /* renamed from: lambda$performSendEncryptedRequest$8 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$performSendEncryptedRequest$8$SecretChatHelper(org.telegram.tgnet.TLRPC$EncryptedChat r21, org.telegram.tgnet.TLRPC$DecryptedMessage r22, org.telegram.tgnet.TLRPC$Message r23, org.telegram.tgnet.TLRPC$InputEncryptedFile r24, org.telegram.messenger.MessageObject r25, java.lang.String r26) {
+    public /* synthetic */ void lambda$performSendEncryptedRequest$8$SecretChatHelper(org.telegram.tgnet.TLRPC$EncryptedChat r20, org.telegram.tgnet.TLRPC$DecryptedMessage r21, org.telegram.tgnet.TLRPC$Message r22, org.telegram.tgnet.TLRPC$InputEncryptedFile r23, org.telegram.messenger.MessageObject r24, java.lang.String r25) {
         /*
-            r20 = this;
-            r0 = r21
-            r3 = r22
-            r5 = r23
-            r1 = r24
-            org.telegram.tgnet.TLRPC$TL_decryptedMessageLayer r2 = new org.telegram.tgnet.TLRPC$TL_decryptedMessageLayer     // Catch:{ Exception -> 0x024a }
-            r2.<init>()     // Catch:{ Exception -> 0x024a }
-            int r4 = r0.layer     // Catch:{ Exception -> 0x024a }
-            int r4 = org.telegram.messenger.AndroidUtilities.getMyLayerVersion(r4)     // Catch:{ Exception -> 0x024a }
+            r19 = this;
+            r0 = r20
+            r3 = r21
+            r5 = r22
+            r1 = r23
+            org.telegram.tgnet.TLRPC$TL_decryptedMessageLayer r2 = new org.telegram.tgnet.TLRPC$TL_decryptedMessageLayer     // Catch:{ Exception -> 0x0220 }
+            r2.<init>()     // Catch:{ Exception -> 0x0220 }
+            int r4 = r0.layer     // Catch:{ Exception -> 0x0220 }
+            int r4 = org.telegram.messenger.AndroidUtilities.getMyLayerVersion(r4)     // Catch:{ Exception -> 0x0220 }
             r6 = 46
-            int r4 = java.lang.Math.max(r6, r4)     // Catch:{ Exception -> 0x024a }
-            int r7 = r0.layer     // Catch:{ Exception -> 0x024a }
-            int r7 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r7)     // Catch:{ Exception -> 0x024a }
-            int r6 = java.lang.Math.max(r6, r7)     // Catch:{ Exception -> 0x024a }
-            int r4 = java.lang.Math.min(r4, r6)     // Catch:{ Exception -> 0x024a }
-            r2.layer = r4     // Catch:{ Exception -> 0x024a }
-            r2.message = r3     // Catch:{ Exception -> 0x024a }
+            int r4 = java.lang.Math.max(r6, r4)     // Catch:{ Exception -> 0x0220 }
+            int r7 = r0.layer     // Catch:{ Exception -> 0x0220 }
+            int r7 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r7)     // Catch:{ Exception -> 0x0220 }
+            int r6 = java.lang.Math.max(r6, r7)     // Catch:{ Exception -> 0x0220 }
+            int r4 = java.lang.Math.min(r4, r6)     // Catch:{ Exception -> 0x0220 }
+            r2.layer = r4     // Catch:{ Exception -> 0x0220 }
+            r2.message = r3     // Catch:{ Exception -> 0x0220 }
             r4 = 15
-            byte[] r4 = new byte[r4]     // Catch:{ Exception -> 0x024a }
-            r2.random_bytes = r4     // Catch:{ Exception -> 0x024a }
-            java.security.SecureRandom r6 = org.telegram.messenger.Utilities.random     // Catch:{ Exception -> 0x024a }
-            r6.nextBytes(r4)     // Catch:{ Exception -> 0x024a }
-            int r4 = r0.layer     // Catch:{ Exception -> 0x024a }
-            int r4 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r4)     // Catch:{ Exception -> 0x024a }
-            r6 = 73
-            r7 = 1
-            r8 = 2
-            if (r4 < r6) goto L_0x0044
-            r4 = 2
-            goto L_0x0045
-        L_0x0044:
-            r4 = 1
-        L_0x0045:
-            int r6 = r0.seq_in     // Catch:{ Exception -> 0x024a }
-            if (r6 != 0) goto L_0x0062
-            int r6 = r0.seq_out     // Catch:{ Exception -> 0x024a }
-            if (r6 != 0) goto L_0x0062
-            int r6 = r0.admin_id     // Catch:{ Exception -> 0x024a }
-            org.telegram.messenger.UserConfig r9 = r20.getUserConfig()     // Catch:{ Exception -> 0x024a }
-            int r9 = r9.getClientUserId()     // Catch:{ Exception -> 0x024a }
-            if (r6 != r9) goto L_0x005f
-            r0.seq_out = r7     // Catch:{ Exception -> 0x024a }
-            r6 = -2
-            r0.seq_in = r6     // Catch:{ Exception -> 0x024a }
-            goto L_0x0062
-        L_0x005f:
-            r6 = -1
-            r0.seq_in = r6     // Catch:{ Exception -> 0x024a }
-        L_0x0062:
-            int r6 = r5.seq_in     // Catch:{ Exception -> 0x024a }
-            r9 = 0
-            if (r6 != 0) goto L_0x00dd
-            int r10 = r5.seq_out     // Catch:{ Exception -> 0x024a }
-            if (r10 != 0) goto L_0x00dd
-            int r6 = r0.seq_in     // Catch:{ Exception -> 0x024a }
-            if (r6 <= 0) goto L_0x0070
-            goto L_0x0072
-        L_0x0070:
-            int r6 = r6 + 2
-        L_0x0072:
-            r2.in_seq_no = r6     // Catch:{ Exception -> 0x024a }
-            int r6 = r0.seq_out     // Catch:{ Exception -> 0x024a }
-            r2.out_seq_no = r6     // Catch:{ Exception -> 0x024a }
-            int r6 = r6 + r8
-            r0.seq_out = r6     // Catch:{ Exception -> 0x024a }
-            int r6 = r0.layer     // Catch:{ Exception -> 0x024a }
-            int r6 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r6)     // Catch:{ Exception -> 0x024a }
-            r10 = 20
-            if (r6 < r10) goto L_0x00be
-            int r6 = r0.key_create_date     // Catch:{ Exception -> 0x024a }
-            if (r6 != 0) goto L_0x0093
-            org.telegram.tgnet.ConnectionsManager r6 = r20.getConnectionsManager()     // Catch:{ Exception -> 0x024a }
-            int r6 = r6.getCurrentTime()     // Catch:{ Exception -> 0x024a }
-            r0.key_create_date = r6     // Catch:{ Exception -> 0x024a }
-        L_0x0093:
-            short r6 = r0.key_use_count_out     // Catch:{ Exception -> 0x024a }
-            int r6 = r6 + r7
-            short r6 = (short) r6     // Catch:{ Exception -> 0x024a }
-            r0.key_use_count_out = r6     // Catch:{ Exception -> 0x024a }
-            r10 = 100
-            if (r6 >= r10) goto L_0x00ad
-            int r6 = r0.key_create_date     // Catch:{ Exception -> 0x024a }
-            org.telegram.tgnet.ConnectionsManager r10 = r20.getConnectionsManager()     // Catch:{ Exception -> 0x024a }
-            int r10 = r10.getCurrentTime()     // Catch:{ Exception -> 0x024a }
-            r11 = 604800(0x93a80, float:8.47505E-40)
-            int r10 = r10 - r11
-            if (r6 >= r10) goto L_0x00be
-        L_0x00ad:
-            long r10 = r0.exchange_id     // Catch:{ Exception -> 0x024a }
-            r12 = 0
-            int r6 = (r10 > r12 ? 1 : (r10 == r12 ? 0 : -1))
-            if (r6 != 0) goto L_0x00be
-            long r10 = r0.future_key_fingerprint     // Catch:{ Exception -> 0x024a }
-            int r6 = (r10 > r12 ? 1 : (r10 == r12 ? 0 : -1))
-            if (r6 != 0) goto L_0x00be
-            r20.requestNewSecretChatKey(r21)     // Catch:{ Exception -> 0x024a }
-        L_0x00be:
-            org.telegram.messenger.MessagesStorage r6 = r20.getMessagesStorage()     // Catch:{ Exception -> 0x024a }
-            r6.updateEncryptedChatSeq(r0, r9)     // Catch:{ Exception -> 0x024a }
-            if (r5 == 0) goto L_0x00e3
-            int r6 = r2.in_seq_no     // Catch:{ Exception -> 0x024a }
-            r5.seq_in = r6     // Catch:{ Exception -> 0x024a }
-            int r6 = r2.out_seq_no     // Catch:{ Exception -> 0x024a }
-            r5.seq_out = r6     // Catch:{ Exception -> 0x024a }
-            org.telegram.messenger.MessagesStorage r6 = r20.getMessagesStorage()     // Catch:{ Exception -> 0x024a }
-            int r10 = r5.id     // Catch:{ Exception -> 0x024a }
-            int r11 = r5.seq_in     // Catch:{ Exception -> 0x024a }
-            int r12 = r5.seq_out     // Catch:{ Exception -> 0x024a }
-            r6.setMessageSeq(r10, r11, r12)     // Catch:{ Exception -> 0x024a }
-            goto L_0x00e3
-        L_0x00dd:
-            r2.in_seq_no = r6     // Catch:{ Exception -> 0x024a }
-            int r6 = r5.seq_out     // Catch:{ Exception -> 0x024a }
-            r2.out_seq_no = r6     // Catch:{ Exception -> 0x024a }
-        L_0x00e3:
-            boolean r6 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x024a }
-            if (r6 == 0) goto L_0x010a
-            java.lang.StringBuilder r6 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x024a }
-            r6.<init>()     // Catch:{ Exception -> 0x024a }
-            r6.append(r3)     // Catch:{ Exception -> 0x024a }
-            java.lang.String r10 = " send message with in_seq = "
-            r6.append(r10)     // Catch:{ Exception -> 0x024a }
-            int r10 = r2.in_seq_no     // Catch:{ Exception -> 0x024a }
-            r6.append(r10)     // Catch:{ Exception -> 0x024a }
-            java.lang.String r10 = " out_seq = "
-            r6.append(r10)     // Catch:{ Exception -> 0x024a }
-            int r10 = r2.out_seq_no     // Catch:{ Exception -> 0x024a }
-            r6.append(r10)     // Catch:{ Exception -> 0x024a }
-            java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x024a }
-            org.telegram.messenger.FileLog.d(r6)     // Catch:{ Exception -> 0x024a }
-        L_0x010a:
-            int r6 = r2.getObjectSize()     // Catch:{ Exception -> 0x024a }
-            org.telegram.tgnet.NativeByteBuffer r10 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x024a }
-            int r11 = r6 + 4
-            r10.<init>((int) r11)     // Catch:{ Exception -> 0x024a }
-            r10.writeInt32(r6)     // Catch:{ Exception -> 0x024a }
-            r2.serializeToStream(r10)     // Catch:{ Exception -> 0x024a }
-            int r2 = r10.length()     // Catch:{ Exception -> 0x024a }
-            int r6 = r2 % 16
-            r11 = 16
-            if (r6 == 0) goto L_0x012a
-            int r6 = r2 % 16
-            int r6 = 16 - r6
-            goto L_0x012b
-        L_0x012a:
+            byte[] r4 = new byte[r4]     // Catch:{ Exception -> 0x0220 }
+            r2.random_bytes = r4     // Catch:{ Exception -> 0x0220 }
+            java.security.SecureRandom r6 = org.telegram.messenger.Utilities.random     // Catch:{ Exception -> 0x0220 }
+            r6.nextBytes(r4)     // Catch:{ Exception -> 0x0220 }
+            int r4 = r0.seq_in     // Catch:{ Exception -> 0x0220 }
+            r6 = 1
+            if (r4 != 0) goto L_0x0054
+            int r4 = r0.seq_out     // Catch:{ Exception -> 0x0220 }
+            if (r4 != 0) goto L_0x0054
+            int r4 = r0.admin_id     // Catch:{ Exception -> 0x0220 }
+            org.telegram.messenger.UserConfig r7 = r19.getUserConfig()     // Catch:{ Exception -> 0x0220 }
+            int r7 = r7.getClientUserId()     // Catch:{ Exception -> 0x0220 }
+            if (r4 != r7) goto L_0x0051
+            r0.seq_out = r6     // Catch:{ Exception -> 0x0220 }
+            r4 = -2
+            r0.seq_in = r4     // Catch:{ Exception -> 0x0220 }
+            goto L_0x0054
+        L_0x0051:
+            r4 = -1
+            r0.seq_in = r4     // Catch:{ Exception -> 0x0220 }
+        L_0x0054:
+            int r4 = r5.seq_in     // Catch:{ Exception -> 0x0220 }
+            r7 = 2
+            r8 = 0
+            if (r4 != 0) goto L_0x00c4
+            int r9 = r5.seq_out     // Catch:{ Exception -> 0x0220 }
+            if (r9 != 0) goto L_0x00c4
+            int r4 = r0.seq_in     // Catch:{ Exception -> 0x0220 }
+            if (r4 <= 0) goto L_0x0063
+            goto L_0x0065
+        L_0x0063:
+            int r4 = r4 + 2
+        L_0x0065:
+            r2.in_seq_no = r4     // Catch:{ Exception -> 0x0220 }
+            int r4 = r0.seq_out     // Catch:{ Exception -> 0x0220 }
+            r2.out_seq_no = r4     // Catch:{ Exception -> 0x0220 }
+            int r4 = r4 + r7
+            r0.seq_out = r4     // Catch:{ Exception -> 0x0220 }
+            int r4 = r0.key_create_date     // Catch:{ Exception -> 0x0220 }
+            if (r4 != 0) goto L_0x007c
+            org.telegram.tgnet.ConnectionsManager r4 = r19.getConnectionsManager()     // Catch:{ Exception -> 0x0220 }
+            int r4 = r4.getCurrentTime()     // Catch:{ Exception -> 0x0220 }
+            r0.key_create_date = r4     // Catch:{ Exception -> 0x0220 }
+        L_0x007c:
+            short r4 = r0.key_use_count_out     // Catch:{ Exception -> 0x0220 }
+            int r4 = r4 + r6
+            short r4 = (short) r4     // Catch:{ Exception -> 0x0220 }
+            r0.key_use_count_out = r4     // Catch:{ Exception -> 0x0220 }
+            r9 = 100
+            if (r4 >= r9) goto L_0x0096
+            int r4 = r0.key_create_date     // Catch:{ Exception -> 0x0220 }
+            org.telegram.tgnet.ConnectionsManager r9 = r19.getConnectionsManager()     // Catch:{ Exception -> 0x0220 }
+            int r9 = r9.getCurrentTime()     // Catch:{ Exception -> 0x0220 }
+            r10 = 604800(0x93a80, float:8.47505E-40)
+            int r9 = r9 - r10
+            if (r4 >= r9) goto L_0x00a7
+        L_0x0096:
+            long r9 = r0.exchange_id     // Catch:{ Exception -> 0x0220 }
+            r11 = 0
+            int r4 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
+            if (r4 != 0) goto L_0x00a7
+            long r9 = r0.future_key_fingerprint     // Catch:{ Exception -> 0x0220 }
+            int r4 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
+            if (r4 != 0) goto L_0x00a7
+            r19.requestNewSecretChatKey(r20)     // Catch:{ Exception -> 0x0220 }
+        L_0x00a7:
+            org.telegram.messenger.MessagesStorage r4 = r19.getMessagesStorage()     // Catch:{ Exception -> 0x0220 }
+            r4.updateEncryptedChatSeq(r0, r8)     // Catch:{ Exception -> 0x0220 }
+            int r4 = r2.in_seq_no     // Catch:{ Exception -> 0x0220 }
+            r5.seq_in = r4     // Catch:{ Exception -> 0x0220 }
+            int r4 = r2.out_seq_no     // Catch:{ Exception -> 0x0220 }
+            r5.seq_out = r4     // Catch:{ Exception -> 0x0220 }
+            org.telegram.messenger.MessagesStorage r4 = r19.getMessagesStorage()     // Catch:{ Exception -> 0x0220 }
+            int r9 = r5.id     // Catch:{ Exception -> 0x0220 }
+            int r10 = r5.seq_in     // Catch:{ Exception -> 0x0220 }
+            int r11 = r5.seq_out     // Catch:{ Exception -> 0x0220 }
+            r4.setMessageSeq(r9, r10, r11)     // Catch:{ Exception -> 0x0220 }
+            goto L_0x00ca
+        L_0x00c4:
+            r2.in_seq_no = r4     // Catch:{ Exception -> 0x0220 }
+            int r4 = r5.seq_out     // Catch:{ Exception -> 0x0220 }
+            r2.out_seq_no = r4     // Catch:{ Exception -> 0x0220 }
+        L_0x00ca:
+            boolean r4 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0220 }
+            if (r4 == 0) goto L_0x00f1
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0220 }
+            r4.<init>()     // Catch:{ Exception -> 0x0220 }
+            r4.append(r3)     // Catch:{ Exception -> 0x0220 }
+            java.lang.String r9 = " send message with in_seq = "
+            r4.append(r9)     // Catch:{ Exception -> 0x0220 }
+            int r9 = r2.in_seq_no     // Catch:{ Exception -> 0x0220 }
+            r4.append(r9)     // Catch:{ Exception -> 0x0220 }
+            java.lang.String r9 = " out_seq = "
+            r4.append(r9)     // Catch:{ Exception -> 0x0220 }
+            int r9 = r2.out_seq_no     // Catch:{ Exception -> 0x0220 }
+            r4.append(r9)     // Catch:{ Exception -> 0x0220 }
+            java.lang.String r4 = r4.toString()     // Catch:{ Exception -> 0x0220 }
+            org.telegram.messenger.FileLog.d(r4)     // Catch:{ Exception -> 0x0220 }
+        L_0x00f1:
+            int r4 = r2.getObjectSize()     // Catch:{ Exception -> 0x0220 }
+            org.telegram.tgnet.NativeByteBuffer r9 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0220 }
+            int r10 = r4 + 4
+            r9.<init>((int) r10)     // Catch:{ Exception -> 0x0220 }
+            r9.writeInt32(r4)     // Catch:{ Exception -> 0x0220 }
+            r2.serializeToStream(r9)     // Catch:{ Exception -> 0x0220 }
+            int r2 = r9.length()     // Catch:{ Exception -> 0x0220 }
+            int r4 = r2 % 16
+            r10 = 16
+            if (r4 == 0) goto L_0x0111
+            int r4 = r2 % 16
+            int r4 = 16 - r4
+            goto L_0x0112
+        L_0x0111:
+            r4 = 0
+        L_0x0112:
+            java.security.SecureRandom r11 = org.telegram.messenger.Utilities.random     // Catch:{ Exception -> 0x0220 }
+            r12 = 3
+            int r11 = r11.nextInt(r12)     // Catch:{ Exception -> 0x0220 }
+            int r11 = r11 + r7
+            int r11 = r11 * 16
+            int r4 = r4 + r11
+            org.telegram.tgnet.NativeByteBuffer r11 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0220 }
+            int r2 = r2 + r4
+            r11.<init>((int) r2)     // Catch:{ Exception -> 0x0220 }
+            r9.position(r8)     // Catch:{ Exception -> 0x0220 }
+            r11.writeBytes((org.telegram.tgnet.NativeByteBuffer) r9)     // Catch:{ Exception -> 0x0220 }
+            if (r4 == 0) goto L_0x0135
+            byte[] r2 = new byte[r4]     // Catch:{ Exception -> 0x0220 }
+            java.security.SecureRandom r4 = org.telegram.messenger.Utilities.random     // Catch:{ Exception -> 0x0220 }
+            r4.nextBytes(r2)     // Catch:{ Exception -> 0x0220 }
+            r11.writeBytes((byte[]) r2)     // Catch:{ Exception -> 0x0220 }
+        L_0x0135:
+            byte[] r2 = new byte[r10]     // Catch:{ Exception -> 0x0220 }
+            int r4 = r0.admin_id     // Catch:{ Exception -> 0x0220 }
+            org.telegram.messenger.UserConfig r12 = r19.getUserConfig()     // Catch:{ Exception -> 0x0220 }
+            int r12 = r12.getClientUserId()     // Catch:{ Exception -> 0x0220 }
+            if (r4 == r12) goto L_0x0144
+            goto L_0x0145
+        L_0x0144:
             r6 = 0
-        L_0x012b:
-            if (r4 != r8) goto L_0x0138
-            java.security.SecureRandom r12 = org.telegram.messenger.Utilities.random     // Catch:{ Exception -> 0x024a }
-            r13 = 3
-            int r12 = r12.nextInt(r13)     // Catch:{ Exception -> 0x024a }
-            int r12 = r12 + r8
-            int r12 = r12 * 16
-            int r6 = r6 + r12
-        L_0x0138:
-            org.telegram.tgnet.NativeByteBuffer r12 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x024a }
-            int r2 = r2 + r6
-            r12.<init>((int) r2)     // Catch:{ Exception -> 0x024a }
-            r10.position(r9)     // Catch:{ Exception -> 0x024a }
-            r12.writeBytes((org.telegram.tgnet.NativeByteBuffer) r10)     // Catch:{ Exception -> 0x024a }
+        L_0x0145:
+            byte[] r12 = r0.auth_key     // Catch:{ Exception -> 0x0220 }
+            r4 = 88
+            r15 = 8
             if (r6 == 0) goto L_0x0150
-            byte[] r2 = new byte[r6]     // Catch:{ Exception -> 0x024a }
-            java.security.SecureRandom r6 = org.telegram.messenger.Utilities.random     // Catch:{ Exception -> 0x024a }
-            r6.nextBytes(r2)     // Catch:{ Exception -> 0x024a }
-            r12.writeBytes((byte[]) r2)     // Catch:{ Exception -> 0x024a }
+            r13 = 8
+            goto L_0x0151
         L_0x0150:
-            byte[] r2 = new byte[r11]     // Catch:{ Exception -> 0x024a }
-            if (r4 != r8) goto L_0x0161
-            int r6 = r0.admin_id     // Catch:{ Exception -> 0x024a }
-            org.telegram.messenger.UserConfig r13 = r20.getUserConfig()     // Catch:{ Exception -> 0x024a }
-            int r13 = r13.getClientUserId()     // Catch:{ Exception -> 0x024a }
-            if (r6 == r13) goto L_0x0161
-            goto L_0x0162
-        L_0x0161:
-            r7 = 0
-        L_0x0162:
-            if (r4 != r8) goto L_0x0185
-            byte[] r13 = r0.auth_key     // Catch:{ Exception -> 0x024a }
-            r6 = 88
-            r8 = 8
-            if (r7 == 0) goto L_0x016f
-            r14 = 8
-            goto L_0x0170
-        L_0x016f:
-            r14 = 0
-        L_0x0170:
-            int r14 = r14 + r6
-            r15 = 32
-            java.nio.ByteBuffer r6 = r12.buffer     // Catch:{ Exception -> 0x024a }
+            r13 = 0
+        L_0x0151:
+            int r13 = r13 + r4
+            r14 = 32
+            java.nio.ByteBuffer r4 = r11.buffer     // Catch:{ Exception -> 0x0220 }
+            r16 = 0
+            int r17 = r4.limit()     // Catch:{ Exception -> 0x0220 }
+            r7 = 8
+            r15 = r4
+            byte[] r4 = org.telegram.messenger.Utilities.computeSHA256(r12, r13, r14, r15, r16, r17)     // Catch:{ Exception -> 0x0220 }
+            java.lang.System.arraycopy(r4, r7, r2, r8, r10)     // Catch:{ Exception -> 0x0220 }
+            r9.reuse()     // Catch:{ Exception -> 0x0220 }
+            byte[] r4 = r0.auth_key     // Catch:{ Exception -> 0x0220 }
+            r7 = 2
+            org.telegram.messenger.MessageKeyData r4 = org.telegram.messenger.MessageKeyData.generateMessageKeyData(r4, r2, r6, r7)     // Catch:{ Exception -> 0x0220 }
+            java.nio.ByteBuffer r12 = r11.buffer     // Catch:{ Exception -> 0x0220 }
+            byte[] r13 = r4.aesKey     // Catch:{ Exception -> 0x0220 }
+            byte[] r14 = r4.aesIv     // Catch:{ Exception -> 0x0220 }
+            r15 = 1
+            r16 = 0
             r17 = 0
-            int r18 = r6.limit()     // Catch:{ Exception -> 0x024a }
-            r16 = r6
-            byte[] r6 = org.telegram.messenger.Utilities.computeSHA256(r13, r14, r15, r16, r17, r18)     // Catch:{ Exception -> 0x024a }
-            java.lang.System.arraycopy(r6, r8, r2, r9, r11)     // Catch:{ Exception -> 0x024a }
-            goto L_0x0190
-        L_0x0185:
-            java.nio.ByteBuffer r6 = r10.buffer     // Catch:{ Exception -> 0x024a }
-            byte[] r6 = org.telegram.messenger.Utilities.computeSHA1((java.nio.ByteBuffer) r6)     // Catch:{ Exception -> 0x024a }
-            int r8 = r6.length     // Catch:{ Exception -> 0x024a }
-            int r8 = r8 - r11
-            java.lang.System.arraycopy(r6, r8, r2, r9, r11)     // Catch:{ Exception -> 0x024a }
-        L_0x0190:
-            r10.reuse()     // Catch:{ Exception -> 0x024a }
-            byte[] r6 = r0.auth_key     // Catch:{ Exception -> 0x024a }
-            org.telegram.messenger.MessageKeyData r4 = org.telegram.messenger.MessageKeyData.generateMessageKeyData(r6, r2, r7, r4)     // Catch:{ Exception -> 0x024a }
-            java.nio.ByteBuffer r13 = r12.buffer     // Catch:{ Exception -> 0x024a }
-            byte[] r14 = r4.aesKey     // Catch:{ Exception -> 0x024a }
-            byte[] r15 = r4.aesIv     // Catch:{ Exception -> 0x024a }
-            r16 = 1
-            r17 = 0
-            r18 = 0
-            int r19 = r12.limit()     // Catch:{ Exception -> 0x024a }
-            org.telegram.messenger.Utilities.aesIgeEncryption(r13, r14, r15, r16, r17, r18, r19)     // Catch:{ Exception -> 0x024a }
-            org.telegram.tgnet.NativeByteBuffer r4 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x024a }
+            int r18 = r11.limit()     // Catch:{ Exception -> 0x0220 }
+            org.telegram.messenger.Utilities.aesIgeEncryption(r12, r13, r14, r15, r16, r17, r18)     // Catch:{ Exception -> 0x0220 }
+            org.telegram.tgnet.NativeByteBuffer r4 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x0220 }
             r6 = 24
-            int r7 = r12.length()     // Catch:{ Exception -> 0x024a }
+            int r7 = r11.length()     // Catch:{ Exception -> 0x0220 }
             int r6 = r6 + r7
-            r4.<init>((int) r6)     // Catch:{ Exception -> 0x024a }
-            r12.position(r9)     // Catch:{ Exception -> 0x024a }
-            long r6 = r0.key_fingerprint     // Catch:{ Exception -> 0x024a }
-            r4.writeInt64(r6)     // Catch:{ Exception -> 0x024a }
-            r4.writeBytes((byte[]) r2)     // Catch:{ Exception -> 0x024a }
-            r4.writeBytes((org.telegram.tgnet.NativeByteBuffer) r12)     // Catch:{ Exception -> 0x024a }
-            r12.reuse()     // Catch:{ Exception -> 0x024a }
-            r4.position(r9)     // Catch:{ Exception -> 0x024a }
-            if (r1 != 0) goto L_0x020d
-            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageService     // Catch:{ Exception -> 0x024a }
-            if (r1 == 0) goto L_0x01ee
-            org.telegram.tgnet.TLRPC$TL_messages_sendEncryptedService r1 = new org.telegram.tgnet.TLRPC$TL_messages_sendEncryptedService     // Catch:{ Exception -> 0x024a }
-            r1.<init>()     // Catch:{ Exception -> 0x024a }
-            r1.data = r4     // Catch:{ Exception -> 0x024a }
-            long r6 = r3.random_id     // Catch:{ Exception -> 0x024a }
-            r1.random_id = r6     // Catch:{ Exception -> 0x024a }
-            org.telegram.tgnet.TLRPC$TL_inputEncryptedChat r2 = new org.telegram.tgnet.TLRPC$TL_inputEncryptedChat     // Catch:{ Exception -> 0x024a }
-            r2.<init>()     // Catch:{ Exception -> 0x024a }
-            r1.peer = r2     // Catch:{ Exception -> 0x024a }
-            int r4 = r0.id     // Catch:{ Exception -> 0x024a }
-            r2.chat_id = r4     // Catch:{ Exception -> 0x024a }
-            long r6 = r0.access_hash     // Catch:{ Exception -> 0x024a }
-            r2.access_hash = r6     // Catch:{ Exception -> 0x024a }
-        L_0x01ec:
+            r4.<init>((int) r6)     // Catch:{ Exception -> 0x0220 }
+            r11.position(r8)     // Catch:{ Exception -> 0x0220 }
+            long r6 = r0.key_fingerprint     // Catch:{ Exception -> 0x0220 }
+            r4.writeInt64(r6)     // Catch:{ Exception -> 0x0220 }
+            r4.writeBytes((byte[]) r2)     // Catch:{ Exception -> 0x0220 }
+            r4.writeBytes((org.telegram.tgnet.NativeByteBuffer) r11)     // Catch:{ Exception -> 0x0220 }
+            r11.reuse()     // Catch:{ Exception -> 0x0220 }
+            r4.position(r8)     // Catch:{ Exception -> 0x0220 }
+            if (r1 != 0) goto L_0x01e3
+            boolean r1 = r3 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageService     // Catch:{ Exception -> 0x0220 }
+            if (r1 == 0) goto L_0x01c4
+            org.telegram.tgnet.TLRPC$TL_messages_sendEncryptedService r1 = new org.telegram.tgnet.TLRPC$TL_messages_sendEncryptedService     // Catch:{ Exception -> 0x0220 }
+            r1.<init>()     // Catch:{ Exception -> 0x0220 }
+            r1.data = r4     // Catch:{ Exception -> 0x0220 }
+            long r6 = r3.random_id     // Catch:{ Exception -> 0x0220 }
+            r1.random_id = r6     // Catch:{ Exception -> 0x0220 }
+            org.telegram.tgnet.TLRPC$TL_inputEncryptedChat r2 = new org.telegram.tgnet.TLRPC$TL_inputEncryptedChat     // Catch:{ Exception -> 0x0220 }
+            r2.<init>()     // Catch:{ Exception -> 0x0220 }
+            r1.peer = r2     // Catch:{ Exception -> 0x0220 }
+            int r4 = r0.id     // Catch:{ Exception -> 0x0220 }
+            r2.chat_id = r4     // Catch:{ Exception -> 0x0220 }
+            long r6 = r0.access_hash     // Catch:{ Exception -> 0x0220 }
+            r2.access_hash = r6     // Catch:{ Exception -> 0x0220 }
+        L_0x01c2:
             r8 = r1
-            goto L_0x022e
-        L_0x01ee:
-            org.telegram.tgnet.TLRPC$TL_messages_sendEncrypted r1 = new org.telegram.tgnet.TLRPC$TL_messages_sendEncrypted     // Catch:{ Exception -> 0x024a }
-            r1.<init>()     // Catch:{ Exception -> 0x024a }
-            boolean r2 = r5.silent     // Catch:{ Exception -> 0x024a }
-            r1.silent = r2     // Catch:{ Exception -> 0x024a }
-            r1.data = r4     // Catch:{ Exception -> 0x024a }
-            long r6 = r3.random_id     // Catch:{ Exception -> 0x024a }
-            r1.random_id = r6     // Catch:{ Exception -> 0x024a }
-            org.telegram.tgnet.TLRPC$TL_inputEncryptedChat r2 = new org.telegram.tgnet.TLRPC$TL_inputEncryptedChat     // Catch:{ Exception -> 0x024a }
-            r2.<init>()     // Catch:{ Exception -> 0x024a }
-            r1.peer = r2     // Catch:{ Exception -> 0x024a }
-            int r4 = r0.id     // Catch:{ Exception -> 0x024a }
-            r2.chat_id = r4     // Catch:{ Exception -> 0x024a }
-            long r6 = r0.access_hash     // Catch:{ Exception -> 0x024a }
-            r2.access_hash = r6     // Catch:{ Exception -> 0x024a }
-            goto L_0x01ec
-        L_0x020d:
-            org.telegram.tgnet.TLRPC$TL_messages_sendEncryptedFile r2 = new org.telegram.tgnet.TLRPC$TL_messages_sendEncryptedFile     // Catch:{ Exception -> 0x024a }
-            r2.<init>()     // Catch:{ Exception -> 0x024a }
-            boolean r6 = r5.silent     // Catch:{ Exception -> 0x024a }
-            r2.silent = r6     // Catch:{ Exception -> 0x024a }
-            r2.data = r4     // Catch:{ Exception -> 0x024a }
-            long r6 = r3.random_id     // Catch:{ Exception -> 0x024a }
-            r2.random_id = r6     // Catch:{ Exception -> 0x024a }
-            org.telegram.tgnet.TLRPC$TL_inputEncryptedChat r4 = new org.telegram.tgnet.TLRPC$TL_inputEncryptedChat     // Catch:{ Exception -> 0x024a }
-            r4.<init>()     // Catch:{ Exception -> 0x024a }
-            r2.peer = r4     // Catch:{ Exception -> 0x024a }
-            int r6 = r0.id     // Catch:{ Exception -> 0x024a }
-            r4.chat_id = r6     // Catch:{ Exception -> 0x024a }
-            long r6 = r0.access_hash     // Catch:{ Exception -> 0x024a }
-            r4.access_hash = r6     // Catch:{ Exception -> 0x024a }
-            r2.file = r1     // Catch:{ Exception -> 0x024a }
+            goto L_0x0204
+        L_0x01c4:
+            org.telegram.tgnet.TLRPC$TL_messages_sendEncrypted r1 = new org.telegram.tgnet.TLRPC$TL_messages_sendEncrypted     // Catch:{ Exception -> 0x0220 }
+            r1.<init>()     // Catch:{ Exception -> 0x0220 }
+            boolean r2 = r5.silent     // Catch:{ Exception -> 0x0220 }
+            r1.silent = r2     // Catch:{ Exception -> 0x0220 }
+            r1.data = r4     // Catch:{ Exception -> 0x0220 }
+            long r6 = r3.random_id     // Catch:{ Exception -> 0x0220 }
+            r1.random_id = r6     // Catch:{ Exception -> 0x0220 }
+            org.telegram.tgnet.TLRPC$TL_inputEncryptedChat r2 = new org.telegram.tgnet.TLRPC$TL_inputEncryptedChat     // Catch:{ Exception -> 0x0220 }
+            r2.<init>()     // Catch:{ Exception -> 0x0220 }
+            r1.peer = r2     // Catch:{ Exception -> 0x0220 }
+            int r4 = r0.id     // Catch:{ Exception -> 0x0220 }
+            r2.chat_id = r4     // Catch:{ Exception -> 0x0220 }
+            long r6 = r0.access_hash     // Catch:{ Exception -> 0x0220 }
+            r2.access_hash = r6     // Catch:{ Exception -> 0x0220 }
+            goto L_0x01c2
+        L_0x01e3:
+            org.telegram.tgnet.TLRPC$TL_messages_sendEncryptedFile r2 = new org.telegram.tgnet.TLRPC$TL_messages_sendEncryptedFile     // Catch:{ Exception -> 0x0220 }
+            r2.<init>()     // Catch:{ Exception -> 0x0220 }
+            boolean r6 = r5.silent     // Catch:{ Exception -> 0x0220 }
+            r2.silent = r6     // Catch:{ Exception -> 0x0220 }
+            r2.data = r4     // Catch:{ Exception -> 0x0220 }
+            long r6 = r3.random_id     // Catch:{ Exception -> 0x0220 }
+            r2.random_id = r6     // Catch:{ Exception -> 0x0220 }
+            org.telegram.tgnet.TLRPC$TL_inputEncryptedChat r4 = new org.telegram.tgnet.TLRPC$TL_inputEncryptedChat     // Catch:{ Exception -> 0x0220 }
+            r4.<init>()     // Catch:{ Exception -> 0x0220 }
+            r2.peer = r4     // Catch:{ Exception -> 0x0220 }
+            int r6 = r0.id     // Catch:{ Exception -> 0x0220 }
+            r4.chat_id = r6     // Catch:{ Exception -> 0x0220 }
+            long r6 = r0.access_hash     // Catch:{ Exception -> 0x0220 }
+            r4.access_hash = r6     // Catch:{ Exception -> 0x0220 }
+            r2.file = r1     // Catch:{ Exception -> 0x0220 }
             r8 = r2
-        L_0x022e:
-            org.telegram.tgnet.ConnectionsManager r9 = r20.getConnectionsManager()     // Catch:{ Exception -> 0x024a }
-            org.telegram.messenger.-$$Lambda$SecretChatHelper$qV4UOl7EvNCM-VukH9K64mWr-Jk r10 = new org.telegram.messenger.-$$Lambda$SecretChatHelper$qV4UOl7EvNCM-VukH9K64mWr-Jk     // Catch:{ Exception -> 0x024a }
+        L_0x0204:
+            org.telegram.tgnet.ConnectionsManager r9 = r19.getConnectionsManager()     // Catch:{ Exception -> 0x0220 }
+            org.telegram.messenger.-$$Lambda$SecretChatHelper$qV4UOl7EvNCM-VukH9K64mWr-Jk r10 = new org.telegram.messenger.-$$Lambda$SecretChatHelper$qV4UOl7EvNCM-VukH9K64mWr-Jk     // Catch:{ Exception -> 0x0220 }
             r1 = r10
-            r2 = r20
-            r3 = r22
-            r4 = r21
-            r5 = r23
-            r6 = r25
-            r7 = r26
-            r1.<init>(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x024a }
+            r2 = r19
+            r3 = r21
+            r4 = r20
+            r5 = r22
+            r6 = r24
+            r7 = r25
+            r1.<init>(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0220 }
             r0 = 64
-            r9.sendRequest(r8, r10, r0)     // Catch:{ Exception -> 0x024a }
-            goto L_0x024e
-        L_0x024a:
+            r9.sendRequest(r8, r10, r0)     // Catch:{ Exception -> 0x0220 }
+            goto L_0x0224
+        L_0x0220:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x024e:
+        L_0x0224:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SecretChatHelper.lambda$performSendEncryptedRequest$8$SecretChatHelper(org.telegram.tgnet.TLRPC$EncryptedChat, org.telegram.tgnet.TLRPC$DecryptedMessage, org.telegram.tgnet.TLRPC$Message, org.telegram.tgnet.TLRPC$InputEncryptedFile, org.telegram.messenger.MessageObject, java.lang.String):void");
@@ -1031,7 +1003,7 @@ public class SecretChatHelper extends BaseController {
             if (encryptedChat.key_hash == null) {
                 encryptedChat.key_hash = AndroidUtilities.calcAuthKeyHash(encryptedChat.auth_key);
             }
-            if (AndroidUtilities.getPeerLayerVersion(encryptedChat.layer) >= 46 && encryptedChat.key_hash.length == 16) {
+            if (encryptedChat.key_hash.length == 16) {
                 try {
                     byte[] bArr = tLRPC$EncryptedChat.auth_key;
                     byte[] computeSHA256 = Utilities.computeSHA256(bArr, 0, bArr.length);
@@ -1167,7 +1139,7 @@ public class SecretChatHelper extends BaseController {
     private void applyPeerLayer(TLRPC$EncryptedChat tLRPC$EncryptedChat, int i) {
         int peerLayerVersion = AndroidUtilities.getPeerLayerVersion(tLRPC$EncryptedChat.layer);
         if (i > peerLayerVersion) {
-            if (tLRPC$EncryptedChat.key_hash.length == 16 && peerLayerVersion >= 46) {
+            if (tLRPC$EncryptedChat.key_hash.length == 16) {
                 try {
                     byte[] bArr = tLRPC$EncryptedChat.auth_key;
                     byte[] computeSHA256 = Utilities.computeSHA256(bArr, 0, bArr.length);
@@ -1205,8 +1177,8 @@ public class SecretChatHelper extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.encryptedChatUpdated, tLRPC$EncryptedChat);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:299:0x07f4  */
-    /* JADX WARNING: Removed duplicated region for block: B:300:0x0805  */
+    /* JADX WARNING: Removed duplicated region for block: B:293:0x07d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:294:0x07e7  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public org.telegram.tgnet.TLRPC$Message processDecryptedObject(org.telegram.tgnet.TLRPC$EncryptedChat r17, org.telegram.tgnet.TLRPC$EncryptedFile r18, int r19, org.telegram.tgnet.TLObject r20, boolean r21) {
         /*
@@ -1216,48 +1188,44 @@ public class SecretChatHelper extends BaseController {
             r2 = r18
             r3 = r19
             r4 = r20
-            if (r4 == 0) goto L_0x0962
+            if (r4 == 0) goto L_0x0944
             int r6 = r1.admin_id
             org.telegram.messenger.UserConfig r7 = r16.getUserConfig()
             int r7 = r7.getClientUserId()
             if (r6 != r7) goto L_0x001a
             int r6 = r1.participant_id
         L_0x001a:
-            int r7 = r1.layer
-            int r7 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r7)
-            r8 = 20
-            r9 = 0
-            if (r7 < r8) goto L_0x003b
             long r7 = r1.exchange_id
+            r9 = 0
             int r11 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r11 != 0) goto L_0x003b
+            if (r11 != 0) goto L_0x0031
             long r7 = r1.future_key_fingerprint
             int r11 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r11 != 0) goto L_0x003b
+            if (r11 != 0) goto L_0x0031
             short r7 = r1.key_use_count_in
             r8 = 120(0x78, float:1.68E-43)
-            if (r7 < r8) goto L_0x003b
+            if (r7 < r8) goto L_0x0031
             r16.requestNewSecretChatKey(r17)
-        L_0x003b:
+        L_0x0031:
             long r7 = r1.exchange_id
             r11 = 0
             r12 = 256(0x100, float:3.59E-43)
             int r13 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r13 != 0) goto L_0x005a
+            if (r13 != 0) goto L_0x0050
             long r13 = r1.future_key_fingerprint
             int r15 = (r13 > r9 ? 1 : (r13 == r9 ? 0 : -1))
-            if (r15 == 0) goto L_0x005a
-            if (r21 != 0) goto L_0x005a
+            if (r15 == 0) goto L_0x0050
+            if (r21 != 0) goto L_0x0050
             byte[] r7 = new byte[r12]
             r1.future_auth_key = r7
             r1.future_key_fingerprint = r9
             org.telegram.messenger.MessagesStorage r7 = r16.getMessagesStorage()
             r7.updateEncryptedChat(r1)
-            goto L_0x0085
-        L_0x005a:
+            goto L_0x007b
+        L_0x0050:
             int r13 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r13 == 0) goto L_0x0085
-            if (r21 == 0) goto L_0x0085
+            if (r13 == 0) goto L_0x007b
+            if (r21 == 0) goto L_0x007b
             long r7 = r1.future_key_fingerprint
             r1.key_fingerprint = r7
             byte[] r7 = r1.future_auth_key
@@ -1273,30 +1241,19 @@ public class SecretChatHelper extends BaseController {
             r1.exchange_id = r9
             org.telegram.messenger.MessagesStorage r7 = r16.getMessagesStorage()
             r7.updateEncryptedChat(r1)
-        L_0x0085:
+        L_0x007b:
             boolean r7 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessage
             r8 = 8
             r13 = 32
             r14 = 1
-            if (r7 == 0) goto L_0x0633
+            if (r7 == 0) goto L_0x0615
             org.telegram.tgnet.TLRPC$TL_decryptedMessage r4 = (org.telegram.tgnet.TLRPC$TL_decryptedMessage) r4
-            int r7 = r1.layer
-            int r7 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r7)
-            r12 = 17
-            if (r7 < r12) goto L_0x00a8
             org.telegram.tgnet.TLRPC$TL_message_secret r7 = new org.telegram.tgnet.TLRPC$TL_message_secret
             r7.<init>()
             int r12 = r4.ttl
             r7.ttl = r12
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r12 = r4.entities
             r7.entities = r12
-            goto L_0x00b1
-        L_0x00a8:
-            org.telegram.tgnet.TLRPC$TL_message r7 = new org.telegram.tgnet.TLRPC$TL_message
-            r7.<init>()
-            int r12 = r1.ttl
-            r7.ttl = r12
-        L_0x00b1:
             java.lang.String r12 = r4.message
             r7.message = r12
             r7.date = r3
@@ -1324,31 +1281,31 @@ public class SecretChatHelper extends BaseController {
             r5 = 768(0x300, float:1.076E-42)
             r7.flags = r5
             java.lang.String r5 = r4.via_bot_name
-            if (r5 == 0) goto L_0x0106
+            if (r5 == 0) goto L_0x00e8
             int r5 = r5.length()
-            if (r5 <= 0) goto L_0x0106
+            if (r5 <= 0) goto L_0x00e8
             java.lang.String r5 = r4.via_bot_name
             r7.via_bot_name = r5
             int r5 = r7.flags
             r5 = r5 | 2048(0x800, float:2.87E-42)
             r7.flags = r5
-        L_0x0106:
+        L_0x00e8:
             long r5 = r4.grouped_id
             int r12 = (r5 > r9 ? 1 : (r5 == r9 ? 0 : -1))
-            if (r12 == 0) goto L_0x0115
+            if (r12 == 0) goto L_0x00f7
             r7.grouped_id = r5
             int r5 = r7.flags
             r6 = 131072(0x20000, float:1.83671E-40)
             r5 = r5 | r6
             r7.flags = r5
-        L_0x0115:
+        L_0x00f7:
             int r1 = r1.id
             long r5 = (long) r1
             long r5 = r5 << r13
             r7.dialog_id = r5
             long r5 = r4.reply_to_random_id
             int r1 = (r5 > r9 ? 1 : (r5 == r9 ? 0 : -1))
-            if (r1 == 0) goto L_0x0131
+            if (r1 == 0) goto L_0x0113
             org.telegram.tgnet.TLRPC$TL_messageReplyHeader r1 = new org.telegram.tgnet.TLRPC$TL_messageReplyHeader
             r1.<init>()
             r7.reply_to = r1
@@ -1357,15 +1314,15 @@ public class SecretChatHelper extends BaseController {
             int r1 = r7.flags
             r1 = r1 | r8
             r7.flags = r1
-        L_0x0131:
+        L_0x0113:
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r1 = r4.media
-            if (r1 == 0) goto L_0x060d
+            if (r1 == 0) goto L_0x05ef
             boolean r5 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaEmpty
-            if (r5 == 0) goto L_0x013b
-            goto L_0x060d
-        L_0x013b:
+            if (r5 == 0) goto L_0x011d
+            goto L_0x05ef
+        L_0x011d:
             boolean r5 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaWebPage
-            if (r5 == 0) goto L_0x0159
+            if (r5 == 0) goto L_0x013b
             org.telegram.tgnet.TLRPC$TL_messageMediaWebPage r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
             r1.<init>()
             r7.media = r1
@@ -1377,11 +1334,11 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r2 = r4.media
             java.lang.String r2 = r2.url
             r1.url = r2
-            goto L_0x0614
-        L_0x0159:
+            goto L_0x05f6
+        L_0x013b:
             boolean r5 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaContact
             java.lang.String r6 = ""
-            if (r5 == 0) goto L_0x017c
+            if (r5 == 0) goto L_0x015e
             org.telegram.tgnet.TLRPC$TL_messageMediaContact r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaContact
             r1.<init>()
             r7.media = r1
@@ -1395,10 +1352,10 @@ public class SecretChatHelper extends BaseController {
             int r2 = r2.user_id
             r1.user_id = r2
             r1.vcard = r6
-            goto L_0x0614
-        L_0x017c:
+            goto L_0x05f6
+        L_0x015e:
             boolean r5 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaGeoPoint
-            if (r5 == 0) goto L_0x019e
+            if (r5 == 0) goto L_0x0180
             org.telegram.tgnet.TLRPC$TL_messageMediaGeo r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaGeo
             r1.<init>()
             r7.media = r1
@@ -1412,23 +1369,23 @@ public class SecretChatHelper extends BaseController {
             r1.lat = r3
             double r2 = r2._long
             r1._long = r2
-            goto L_0x0614
-        L_0x019e:
+            goto L_0x05f6
+        L_0x0180:
             boolean r5 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaPhoto
             r8 = 6000(0x1770, float:8.408E-42)
             r9 = 100
             java.lang.String r10 = "s"
-            if (r5 == 0) goto L_0x0279
+            if (r5 == 0) goto L_0x025b
             byte[] r3 = r1.key
-            if (r3 == 0) goto L_0x0277
+            if (r3 == 0) goto L_0x0259
             int r3 = r3.length
-            if (r3 != r13) goto L_0x0277
+            if (r3 != r13) goto L_0x0259
             byte[] r1 = r1.iv
-            if (r1 == 0) goto L_0x0277
+            if (r1 == 0) goto L_0x0259
             int r1 = r1.length
-            if (r1 == r13) goto L_0x01b8
-            goto L_0x0277
-        L_0x01b8:
+            if (r1 == r13) goto L_0x019a
+            goto L_0x0259
+        L_0x019a:
             org.telegram.tgnet.TLRPC$TL_messageMediaPhoto r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaPhoto
             r1.<init>()
             r7.media = r1
@@ -1437,14 +1394,14 @@ public class SecretChatHelper extends BaseController {
             r1.flags = r3
             java.lang.String r1 = r7.message
             boolean r1 = android.text.TextUtils.isEmpty(r1)
-            if (r1 == 0) goto L_0x01d6
+            if (r1 == 0) goto L_0x01b8
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r1 = r4.media
             java.lang.String r1 = r1.caption
-            if (r1 == 0) goto L_0x01d4
+            if (r1 == 0) goto L_0x01b6
             r6 = r1
-        L_0x01d4:
+        L_0x01b6:
             r7.message = r6
-        L_0x01d6:
+        L_0x01b8:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$TL_photo r3 = new org.telegram.tgnet.TLRPC$TL_photo
             r3.<init>()
@@ -1459,15 +1416,15 @@ public class SecretChatHelper extends BaseController {
             r3 = r1
             org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaPhoto r3 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaPhoto) r3
             byte[] r3 = r3.thumb
-            if (r3 == 0) goto L_0x0225
+            if (r3 == 0) goto L_0x0207
             int r5 = r3.length
-            if (r5 == 0) goto L_0x0225
+            if (r5 == 0) goto L_0x0207
             int r5 = r3.length
-            if (r5 > r8) goto L_0x0225
+            if (r5 > r8) goto L_0x0207
             int r5 = r1.thumb_w
-            if (r5 > r9) goto L_0x0225
+            if (r5 > r9) goto L_0x0207
             int r1 = r1.thumb_h
-            if (r1 > r9) goto L_0x0225
+            if (r1 > r9) goto L_0x0207
             org.telegram.tgnet.TLRPC$TL_photoCachedSize r1 = new org.telegram.tgnet.TLRPC$TL_photoCachedSize
             r1.<init>()
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r5 = r4.media
@@ -1484,16 +1441,16 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$Photo r3 = r3.photo
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r3.sizes
             r3.add(r1)
-        L_0x0225:
+        L_0x0207:
             int r1 = r7.ttl
-            if (r1 == 0) goto L_0x0233
+            if (r1 == 0) goto L_0x0215
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r7.media
             r3.ttl_seconds = r1
             int r1 = r3.flags
             r1 = r1 | 4
             r3.flags = r1
-        L_0x0233:
-            org.telegram.tgnet.TLRPC$TL_photoSize r1 = new org.telegram.tgnet.TLRPC$TL_photoSize
+        L_0x0215:
+            org.telegram.tgnet.TLRPC$TL_photoSize_layer127 r1 = new org.telegram.tgnet.TLRPC$TL_photoSize_layer127
             r1.<init>()
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r3 = r4.media
             int r5 = r3.w
@@ -1524,23 +1481,23 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$Photo r2 = r2.photo
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r2.sizes
             r2.add(r1)
-            goto L_0x0614
-        L_0x0277:
+            goto L_0x05f6
+        L_0x0259:
             r1 = 0
             return r1
-        L_0x0279:
+        L_0x025b:
             boolean r5 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaVideo
-            if (r5 == 0) goto L_0x0369
+            if (r5 == 0) goto L_0x034b
             byte[] r5 = r1.key
-            if (r5 == 0) goto L_0x0367
+            if (r5 == 0) goto L_0x0349
             int r5 = r5.length
-            if (r5 != r13) goto L_0x0367
+            if (r5 != r13) goto L_0x0349
             byte[] r1 = r1.iv
-            if (r1 == 0) goto L_0x0367
+            if (r1 == 0) goto L_0x0349
             int r1 = r1.length
-            if (r1 == r13) goto L_0x028d
-            goto L_0x0367
-        L_0x028d:
+            if (r1 == r13) goto L_0x026f
+            goto L_0x0349
+        L_0x026f:
             org.telegram.tgnet.TLRPC$TL_messageMediaDocument r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument
             r1.<init>()
             r7.media = r1
@@ -1561,14 +1518,14 @@ public class SecretChatHelper extends BaseController {
             r1.dc_id = r5
             java.lang.String r1 = r7.message
             boolean r1 = android.text.TextUtils.isEmpty(r1)
-            if (r1 == 0) goto L_0x02c4
+            if (r1 == 0) goto L_0x02a6
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r1 = r4.media
             java.lang.String r1 = r1.caption
-            if (r1 == 0) goto L_0x02c2
+            if (r1 == 0) goto L_0x02a4
             r6 = r1
-        L_0x02c2:
+        L_0x02a4:
             r7.message = r6
-        L_0x02c4:
+        L_0x02a6:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             r1.date = r3
@@ -1581,22 +1538,22 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r2 = r4.media
             java.lang.String r3 = r2.mime_type
             r1.mime_type = r3
-            if (r3 != 0) goto L_0x02e3
+            if (r3 != 0) goto L_0x02c5
             java.lang.String r3 = "video/mp4"
             r1.mime_type = r3
-        L_0x02e3:
+        L_0x02c5:
             r1 = r2
             org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaVideo r1 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaVideo) r1
             byte[] r1 = r1.thumb
-            if (r1 == 0) goto L_0x0313
+            if (r1 == 0) goto L_0x02f5
             int r3 = r1.length
-            if (r3 == 0) goto L_0x0313
+            if (r3 == 0) goto L_0x02f5
             int r3 = r1.length
-            if (r3 > r8) goto L_0x0313
+            if (r3 > r8) goto L_0x02f5
             int r3 = r2.thumb_w
-            if (r3 > r9) goto L_0x0313
+            if (r3 > r9) goto L_0x02f5
             int r2 = r2.thumb_h
-            if (r2 > r9) goto L_0x0313
+            if (r2 > r9) goto L_0x02f5
             org.telegram.tgnet.TLRPC$TL_photoCachedSize r2 = new org.telegram.tgnet.TLRPC$TL_photoCachedSize
             r2.<init>()
             r2.bytes = r1
@@ -1609,12 +1566,12 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable r1 = new org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable
             r1.<init>()
             r2.location = r1
-            goto L_0x031a
-        L_0x0313:
+            goto L_0x02fc
+        L_0x02f5:
             org.telegram.tgnet.TLRPC$TL_photoSizeEmpty r2 = new org.telegram.tgnet.TLRPC$TL_photoSizeEmpty
             r2.<init>()
             r2.type = r10
-        L_0x031a:
+        L_0x02fc:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r1.thumbs
@@ -1639,36 +1596,36 @@ public class SecretChatHelper extends BaseController {
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r2 = r2.attributes
             r2.add(r1)
             int r1 = r7.ttl
-            if (r1 == 0) goto L_0x0358
+            if (r1 == 0) goto L_0x033a
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r7.media
             r2.ttl_seconds = r1
             int r3 = r2.flags
             r3 = r3 | 4
             r2.flags = r3
-        L_0x0358:
-            if (r1 == 0) goto L_0x0614
+        L_0x033a:
+            if (r1 == 0) goto L_0x05f6
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r2 = r4.media
             int r2 = r2.duration
             int r2 = r2 + r14
             int r1 = java.lang.Math.max(r2, r1)
             r7.ttl = r1
-            goto L_0x0614
-        L_0x0367:
+            goto L_0x05f6
+        L_0x0349:
             r1 = 0
             return r1
-        L_0x0369:
+        L_0x034b:
             boolean r5 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaDocument
-            if (r5 == 0) goto L_0x04c0
+            if (r5 == 0) goto L_0x04a2
             byte[] r5 = r1.key
-            if (r5 == 0) goto L_0x04be
+            if (r5 == 0) goto L_0x04a0
             int r5 = r5.length
-            if (r5 != r13) goto L_0x04be
+            if (r5 != r13) goto L_0x04a0
             byte[] r1 = r1.iv
-            if (r1 == 0) goto L_0x04be
+            if (r1 == 0) goto L_0x04a0
             int r1 = r1.length
-            if (r1 == r13) goto L_0x037d
-            goto L_0x04be
-        L_0x037d:
+            if (r1 == r13) goto L_0x035f
+            goto L_0x04a0
+        L_0x035f:
             org.telegram.tgnet.TLRPC$TL_messageMediaDocument r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument
             r1.<init>()
             r7.media = r1
@@ -1677,16 +1634,16 @@ public class SecretChatHelper extends BaseController {
             r1.flags = r5
             java.lang.String r1 = r7.message
             boolean r1 = android.text.TextUtils.isEmpty(r1)
-            if (r1 == 0) goto L_0x039c
+            if (r1 == 0) goto L_0x037e
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r1 = r4.media
             java.lang.String r1 = r1.caption
-            if (r1 == 0) goto L_0x0399
-            goto L_0x039a
-        L_0x0399:
+            if (r1 == 0) goto L_0x037b
+            goto L_0x037c
+        L_0x037b:
             r1 = r6
-        L_0x039a:
+        L_0x037c:
             r7.message = r1
-        L_0x039c:
+        L_0x037e:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$TL_documentEncrypted r5 = new org.telegram.tgnet.TLRPC$TL_documentEncrypted
             r5.<init>()
@@ -1702,7 +1659,7 @@ public class SecretChatHelper extends BaseController {
             java.lang.String r11 = r3.mime_type
             r1.mime_type = r11
             boolean r11 = r3 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaDocument_layer8
-            if (r11 == 0) goto L_0x03d2
+            if (r11 == 0) goto L_0x03b4
             org.telegram.tgnet.TLRPC$TL_documentAttributeFilename r1 = new org.telegram.tgnet.TLRPC$TL_documentAttributeFilename
             r1.<init>()
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r3 = r4.media
@@ -1712,58 +1669,58 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$Document r3 = r3.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r3 = r3.attributes
             r3.add(r1)
-            goto L_0x03d6
-        L_0x03d2:
+            goto L_0x03b8
+        L_0x03b4:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r3 = r3.attributes
             r1.attributes = r3
-        L_0x03d6:
+        L_0x03b8:
             int r1 = r7.ttl
-            if (r1 <= 0) goto L_0x0417
+            if (r1 <= 0) goto L_0x03f9
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r1 = r1.attributes
             int r1 = r1.size()
             r11 = 0
-        L_0x03e5:
-            if (r11 >= r1) goto L_0x040a
+        L_0x03c7:
+            if (r11 >= r1) goto L_0x03ec
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r7.media
             org.telegram.tgnet.TLRPC$Document r3 = r3.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r3 = r3.attributes
             java.lang.Object r3 = r3.get(r11)
             org.telegram.tgnet.TLRPC$DocumentAttribute r3 = (org.telegram.tgnet.TLRPC$DocumentAttribute) r3
             boolean r5 = r3 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeAudio
-            if (r5 != 0) goto L_0x03ff
+            if (r5 != 0) goto L_0x03e1
             boolean r5 = r3 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeVideo
-            if (r5 == 0) goto L_0x03fc
-            goto L_0x03ff
-        L_0x03fc:
+            if (r5 == 0) goto L_0x03de
+            goto L_0x03e1
+        L_0x03de:
             int r11 = r11 + 1
-            goto L_0x03e5
-        L_0x03ff:
+            goto L_0x03c7
+        L_0x03e1:
             int r1 = r3.duration
             int r1 = r1 + r14
             int r3 = r7.ttl
             int r1 = java.lang.Math.max(r1, r3)
             r7.ttl = r1
-        L_0x040a:
+        L_0x03ec:
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r1 = r4.media
             int r1 = r1.duration
             int r1 = r1 + r14
             int r3 = r7.ttl
             int r1 = java.lang.Math.max(r1, r3)
             r7.ttl = r1
-        L_0x0417:
+        L_0x03f9:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r3 = r4.media
             int r3 = r3.size
-            if (r3 == 0) goto L_0x0428
+            if (r3 == 0) goto L_0x040a
             int r5 = r2.size
             int r3 = java.lang.Math.min(r3, r5)
-            goto L_0x042a
-        L_0x0428:
+            goto L_0x040c
+        L_0x040a:
             int r3 = r2.size
-        L_0x042a:
+        L_0x040c:
             r1.size = r3
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
@@ -1773,38 +1730,38 @@ public class SecretChatHelper extends BaseController {
             byte[] r3 = r3.iv
             r1.iv = r3
             java.lang.String r3 = r1.mime_type
-            if (r3 != 0) goto L_0x0441
+            if (r3 != 0) goto L_0x0423
             r1.mime_type = r6
-            goto L_0x045f
-        L_0x0441:
+            goto L_0x0441
+        L_0x0423:
             java.lang.String r1 = "application/x-tgsticker"
             boolean r1 = r1.equals(r3)
-            if (r1 != 0) goto L_0x0457
+            if (r1 != 0) goto L_0x0439
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             java.lang.String r1 = r1.mime_type
             java.lang.String r3 = "application/x-tgsdice"
             boolean r1 = r3.equals(r1)
-            if (r1 == 0) goto L_0x045f
-        L_0x0457:
+            if (r1 == 0) goto L_0x0441
+        L_0x0439:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             java.lang.String r3 = "application/x-bad_tgsticker"
             r1.mime_type = r3
-        L_0x045f:
+        L_0x0441:
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r1 = r4.media
             r3 = r1
             org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaDocument r3 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaDocument) r3
             byte[] r3 = r3.thumb
-            if (r3 == 0) goto L_0x0491
+            if (r3 == 0) goto L_0x0473
             int r5 = r3.length
-            if (r5 == 0) goto L_0x0491
+            if (r5 == 0) goto L_0x0473
             int r5 = r3.length
-            if (r5 > r8) goto L_0x0491
+            if (r5 > r8) goto L_0x0473
             int r5 = r1.thumb_w
-            if (r5 > r9) goto L_0x0491
+            if (r5 > r9) goto L_0x0473
             int r1 = r1.thumb_h
-            if (r1 > r9) goto L_0x0491
+            if (r1 > r9) goto L_0x0473
             org.telegram.tgnet.TLRPC$TL_photoCachedSize r1 = new org.telegram.tgnet.TLRPC$TL_photoCachedSize
             r1.<init>()
             r1.bytes = r3
@@ -1817,12 +1774,12 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable r3 = new org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable
             r3.<init>()
             r1.location = r3
-            goto L_0x0498
-        L_0x0491:
+            goto L_0x047a
+        L_0x0473:
             org.telegram.tgnet.TLRPC$TL_photoSizeEmpty r1 = new org.telegram.tgnet.TLRPC$TL_photoSizeEmpty
             r1.<init>()
             r1.type = r10
-        L_0x0498:
+        L_0x047a:
             org.telegram.tgnet.TLRPC$MessageMedia r3 = r7.media
             org.telegram.tgnet.TLRPC$Document r3 = r3.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r3.thumbs
@@ -1835,18 +1792,18 @@ public class SecretChatHelper extends BaseController {
             int r2 = r2.dc_id
             r1.dc_id = r2
             boolean r1 = org.telegram.messenger.MessageObject.isVoiceMessage(r7)
-            if (r1 != 0) goto L_0x04ba
+            if (r1 != 0) goto L_0x049c
             boolean r1 = org.telegram.messenger.MessageObject.isRoundVideoMessage(r7)
-            if (r1 == 0) goto L_0x0614
-        L_0x04ba:
+            if (r1 == 0) goto L_0x05f6
+        L_0x049c:
             r7.media_unread = r14
-            goto L_0x0614
-        L_0x04be:
+            goto L_0x05f6
+        L_0x04a0:
             r1 = 0
             return r1
-        L_0x04c0:
+        L_0x04a2:
             boolean r8 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaExternalDocument
-            if (r8 == 0) goto L_0x052b
+            if (r8 == 0) goto L_0x050d
             org.telegram.tgnet.TLRPC$TL_messageMediaDocument r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument
             r1.<init>()
             r7.media = r1
@@ -1887,29 +1844,29 @@ public class SecretChatHelper extends BaseController {
             r2 = r2 | r14
             r1.flags = r2
             java.lang.String r2 = r1.mime_type
-            if (r2 != 0) goto L_0x0519
+            if (r2 != 0) goto L_0x04fb
             r1.mime_type = r6
-        L_0x0519:
+        L_0x04fb:
             boolean r1 = org.telegram.messenger.MessageObject.isAnimatedStickerMessage(r7)
-            if (r1 == 0) goto L_0x0614
+            if (r1 == 0) goto L_0x05f6
             r1 = 0
             r7.stickerVerified = r1
             org.telegram.messenger.MediaDataController r1 = r16.getMediaDataController()
             r1.verifyAnimatedStickerMessage(r7, r14)
-            goto L_0x0614
-        L_0x052b:
+            goto L_0x05f6
+        L_0x050d:
             boolean r5 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaAudio
-            if (r5 == 0) goto L_0x05d8
+            if (r5 == 0) goto L_0x05ba
             byte[] r5 = r1.key
-            if (r5 == 0) goto L_0x05d6
+            if (r5 == 0) goto L_0x05b8
             int r5 = r5.length
-            if (r5 != r13) goto L_0x05d6
+            if (r5 != r13) goto L_0x05b8
             byte[] r1 = r1.iv
-            if (r1 == 0) goto L_0x05d6
+            if (r1 == 0) goto L_0x05b8
             int r1 = r1.length
-            if (r1 == r13) goto L_0x053f
-            goto L_0x05d6
-        L_0x053f:
+            if (r1 == r13) goto L_0x0521
+            goto L_0x05b8
+        L_0x0521:
             org.telegram.tgnet.TLRPC$TL_messageMediaDocument r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaDocument
             r1.<init>()
             r7.media = r1
@@ -1939,21 +1896,21 @@ public class SecretChatHelper extends BaseController {
             r1.mime_type = r2
             java.lang.String r1 = r7.message
             boolean r1 = android.text.TextUtils.isEmpty(r1)
-            if (r1 == 0) goto L_0x0588
+            if (r1 == 0) goto L_0x056a
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r1 = r4.media
             java.lang.String r1 = r1.caption
-            if (r1 == 0) goto L_0x0586
+            if (r1 == 0) goto L_0x0568
             r6 = r1
-        L_0x0586:
+        L_0x0568:
             r7.message = r6
-        L_0x0588:
+        L_0x056a:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             java.lang.String r2 = r1.mime_type
-            if (r2 != 0) goto L_0x0594
+            if (r2 != 0) goto L_0x0576
             java.lang.String r2 = "audio/ogg"
             r1.mime_type = r2
-        L_0x0594:
+        L_0x0576:
             org.telegram.tgnet.TLRPC$TL_documentAttributeAudio r1 = new org.telegram.tgnet.TLRPC$TL_documentAttributeAudio
             r1.<init>()
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r2 = r4.media
@@ -1965,18 +1922,18 @@ public class SecretChatHelper extends BaseController {
             java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r2 = r2.attributes
             r2.add(r1)
             int r1 = r7.ttl
-            if (r1 == 0) goto L_0x05b9
+            if (r1 == 0) goto L_0x059b
             org.telegram.tgnet.TLRPC$DecryptedMessageMedia r2 = r4.media
             int r2 = r2.duration
             int r2 = r2 + r14
             int r1 = java.lang.Math.max(r2, r1)
             r7.ttl = r1
-        L_0x05b9:
+        L_0x059b:
             org.telegram.tgnet.TLRPC$MessageMedia r1 = r7.media
             org.telegram.tgnet.TLRPC$Document r1 = r1.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r1.thumbs
             boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x0614
+            if (r1 == 0) goto L_0x05f6
             org.telegram.tgnet.TLRPC$TL_photoSizeEmpty r1 = new org.telegram.tgnet.TLRPC$TL_photoSizeEmpty
             r1.<init>()
             r1.type = r10
@@ -1984,13 +1941,13 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$Document r2 = r2.document
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r2.thumbs
             r2.add(r1)
-            goto L_0x0614
-        L_0x05d6:
+            goto L_0x05f6
+        L_0x05b8:
             r1 = 0
             return r1
-        L_0x05d8:
+        L_0x05ba:
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageMediaVenue
-            if (r1 == 0) goto L_0x060b
+            if (r1 == 0) goto L_0x05ed
             org.telegram.tgnet.TLRPC$TL_messageMediaVenue r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaVenue
             r1.<init>()
             r7.media = r1
@@ -2013,46 +1970,46 @@ public class SecretChatHelper extends BaseController {
             java.lang.String r2 = r3.venue_id
             r1.venue_id = r2
             r1.venue_type = r6
-            goto L_0x0614
-        L_0x060b:
+            goto L_0x05f6
+        L_0x05ed:
             r1 = 0
             return r1
-        L_0x060d:
+        L_0x05ef:
             org.telegram.tgnet.TLRPC$TL_messageMediaEmpty r1 = new org.telegram.tgnet.TLRPC$TL_messageMediaEmpty
             r1.<init>()
             r7.media = r1
-        L_0x0614:
+        L_0x05f6:
             int r1 = r7.ttl
-            if (r1 == 0) goto L_0x0626
+            if (r1 == 0) goto L_0x0608
             org.telegram.tgnet.TLRPC$MessageMedia r2 = r7.media
             int r3 = r2.ttl_seconds
-            if (r3 != 0) goto L_0x0626
+            if (r3 != 0) goto L_0x0608
             r2.ttl_seconds = r1
             int r1 = r2.flags
             r1 = r1 | 4
             r2.flags = r1
-        L_0x0626:
+        L_0x0608:
             java.lang.String r1 = r7.message
-            if (r1 == 0) goto L_0x0632
+            if (r1 == 0) goto L_0x0614
             r2 = 8238(0x202e, float:1.1544E-41)
             java.lang.String r1 = r1.replace(r2, r13)
             r7.message = r1
-        L_0x0632:
+        L_0x0614:
             return r7
-        L_0x0633:
+        L_0x0615:
             boolean r2 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageService
-            if (r2 == 0) goto L_0x0948
+            if (r2 == 0) goto L_0x092a
             r2 = r4
             org.telegram.tgnet.TLRPC$TL_decryptedMessageService r2 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageService) r2
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r4 = r2.action
             boolean r7 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL
-            if (r7 != 0) goto L_0x08d1
+            if (r7 != 0) goto L_0x08b3
             boolean r7 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionScreenshotMessages
-            if (r7 == 0) goto L_0x0646
-            goto L_0x08d1
-        L_0x0646:
+            if (r7 == 0) goto L_0x0628
+            goto L_0x08b3
+        L_0x0628:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionFlushHistory
-            if (r3 == 0) goto L_0x0658
+            if (r3 == 0) goto L_0x063a
             int r1 = r1.id
             long r1 = (long) r1
             long r1 = r1 << r13
@@ -2061,25 +2018,25 @@ public class SecretChatHelper extends BaseController {
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r3)
             r1 = 0
             return r1
-        L_0x0658:
+        L_0x063a:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionDeleteMessages
-            if (r3 == 0) goto L_0x066f
+            if (r3 == 0) goto L_0x0651
             java.util.ArrayList<java.lang.Long> r1 = r4.random_ids
             boolean r1 = r1.isEmpty()
-            if (r1 != 0) goto L_0x066d
+            if (r1 != 0) goto L_0x064f
             java.util.ArrayList<java.lang.Long> r1 = r0.pendingEncMessagesToDelete
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             java.util.ArrayList<java.lang.Long> r2 = r2.random_ids
             r1.addAll(r2)
-        L_0x066d:
+        L_0x064f:
             r1 = 0
             return r1
-        L_0x066f:
+        L_0x0651:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionReadMessages
-            if (r3 == 0) goto L_0x0694
+            if (r3 == 0) goto L_0x0676
             java.util.ArrayList<java.lang.Long> r3 = r4.random_ids
             boolean r3 = r3.isEmpty()
-            if (r3 != 0) goto L_0x096c
+            if (r3 != 0) goto L_0x094e
             org.telegram.tgnet.ConnectionsManager r3 = r16.getConnectionsManager()
             int r7 = r3.getCurrentTime()
             org.telegram.messenger.MessagesStorage r4 = r16.getMessagesStorage()
@@ -2089,33 +2046,33 @@ public class SecretChatHelper extends BaseController {
             java.util.ArrayList<java.lang.Long> r9 = r1.random_ids
             r6 = r7
             r4.createTaskForSecretChat(r5, r6, r7, r8, r9)
-            goto L_0x096c
-        L_0x0694:
+            goto L_0x094e
+        L_0x0676:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionNotifyLayer
-            if (r3 == 0) goto L_0x069f
+            if (r3 == 0) goto L_0x0681
             int r2 = r4.layer
             r0.applyPeerLayer(r1, r2)
-            goto L_0x096c
-        L_0x069f:
+            goto L_0x094e
+        L_0x0681:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionRequestKey
-            if (r3 == 0) goto L_0x0769
+            if (r3 == 0) goto L_0x074b
             long r6 = r1.exchange_id
             int r3 = (r6 > r9 ? 1 : (r6 == r9 ? 0 : -1))
-            if (r3 == 0) goto L_0x06bf
+            if (r3 == 0) goto L_0x06a1
             long r3 = r4.exchange_id
             int r9 = (r6 > r3 ? 1 : (r6 == r3 ? 0 : -1))
-            if (r9 <= 0) goto L_0x06bb
+            if (r9 <= 0) goto L_0x069d
             boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r1 == 0) goto L_0x06b9
+            if (r1 == 0) goto L_0x069b
             java.lang.String r1 = "we already have request key with higher exchange_id"
             org.telegram.messenger.FileLog.d(r1)
-        L_0x06b9:
+        L_0x069b:
             r3 = 0
             return r3
-        L_0x06bb:
+        L_0x069d:
             r3 = 0
             r0.sendAbortKeyMessage(r1, r3, r6)
-        L_0x06bf:
+        L_0x06a1:
             byte[] r3 = new byte[r12]
             java.security.SecureRandom r4 = org.telegram.messenger.Utilities.random
             r4.nextBytes(r3)
@@ -2135,53 +2092,53 @@ public class SecretChatHelper extends BaseController {
             byte[] r9 = r9.g_a
             r7.<init>(r14, r9)
             boolean r9 = org.telegram.messenger.Utilities.isGoodGaAndGb(r7, r4)
-            if (r9 != 0) goto L_0x0701
+            if (r9 != 0) goto L_0x06e3
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             long r2 = r2.exchange_id
             r4 = 0
             r0.sendAbortKeyMessage(r1, r4, r2)
             return r4
-        L_0x0701:
+        L_0x06e3:
             byte[] r6 = r6.toByteArray()
             int r9 = r6.length
-            if (r9 <= r12) goto L_0x070f
+            if (r9 <= r12) goto L_0x06f1
             byte[] r9 = new byte[r12]
             r5 = 0
             java.lang.System.arraycopy(r6, r14, r9, r5, r12)
             r6 = r9
-        L_0x070f:
+        L_0x06f1:
             java.math.BigInteger r9 = new java.math.BigInteger
             r9.<init>(r14, r3)
             java.math.BigInteger r3 = r7.modPow(r9, r4)
             byte[] r3 = r3.toByteArray()
             int r4 = r3.length
-            if (r4 <= r12) goto L_0x0729
+            if (r4 <= r12) goto L_0x070b
             byte[] r4 = new byte[r12]
             int r7 = r3.length
             int r7 = r7 - r12
             r5 = 0
             java.lang.System.arraycopy(r3, r7, r4, r5, r12)
-        L_0x0727:
+        L_0x0709:
             r3 = r4
-            goto L_0x0741
-        L_0x0729:
+            goto L_0x0723
+        L_0x070b:
             r5 = 0
             int r4 = r3.length
-            if (r4 >= r12) goto L_0x0741
+            if (r4 >= r12) goto L_0x0723
             byte[] r4 = new byte[r12]
             int r7 = r3.length
             int r7 = 256 - r7
             int r9 = r3.length
             java.lang.System.arraycopy(r3, r5, r4, r7, r9)
             r7 = 0
-        L_0x0737:
+        L_0x0719:
             int r9 = r3.length
             int r9 = 256 - r9
-            if (r7 >= r9) goto L_0x0727
+            if (r7 >= r9) goto L_0x0709
             r4[r7] = r5
             int r7 = r7 + 1
-            goto L_0x0737
-        L_0x0741:
+            goto L_0x0719
+        L_0x0723:
             byte[] r4 = org.telegram.messenger.Utilities.computeSHA1((byte[]) r3)
             byte[] r7 = new byte[r8]
             int r9 = r4.length
@@ -2198,14 +2155,14 @@ public class SecretChatHelper extends BaseController {
             r2.updateEncryptedChat(r1)
             r2 = 0
             r0.sendAcceptKeyMessage(r1, r2)
-            goto L_0x096c
-        L_0x0769:
+            goto L_0x094e
+        L_0x074b:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionAcceptKey
-            if (r3 == 0) goto L_0x0837
+            if (r3 == 0) goto L_0x0819
             long r6 = r1.exchange_id
             long r3 = r4.exchange_id
             int r11 = (r6 > r3 ? 1 : (r6 == r3 ? 0 : -1))
-            if (r11 != 0) goto L_0x081e
+            if (r11 != 0) goto L_0x0800
             java.math.BigInteger r3 = new java.math.BigInteger
             org.telegram.messenger.MessagesStorage r4 = r16.getMessagesStorage()
             byte[] r4 = r4.getSecretPBytes()
@@ -2215,7 +2172,7 @@ public class SecretChatHelper extends BaseController {
             byte[] r6 = r6.g_b
             r4.<init>(r14, r6)
             boolean r6 = org.telegram.messenger.Utilities.isGoodGaAndGb(r4, r3)
-            if (r6 != 0) goto L_0x07a9
+            if (r6 != 0) goto L_0x078b
             byte[] r3 = new byte[r12]
             r1.future_auth_key = r3
             r1.future_key_fingerprint = r9
@@ -2227,40 +2184,40 @@ public class SecretChatHelper extends BaseController {
             r4 = 0
             r0.sendAbortKeyMessage(r1, r4, r2)
             return r4
-        L_0x07a9:
+        L_0x078b:
             java.math.BigInteger r6 = new java.math.BigInteger
             byte[] r7 = r1.a_or_b
             r6.<init>(r14, r7)
             java.math.BigInteger r3 = r4.modPow(r6, r3)
             byte[] r3 = r3.toByteArray()
             int r4 = r3.length
-            if (r4 <= r12) goto L_0x07c5
+            if (r4 <= r12) goto L_0x07a7
             byte[] r4 = new byte[r12]
             int r6 = r3.length
             int r6 = r6 - r12
             r5 = 0
             java.lang.System.arraycopy(r3, r6, r4, r5, r12)
-        L_0x07c3:
+        L_0x07a5:
             r3 = r4
-            goto L_0x07dd
-        L_0x07c5:
+            goto L_0x07bf
+        L_0x07a7:
             r5 = 0
             int r4 = r3.length
-            if (r4 >= r12) goto L_0x07dd
+            if (r4 >= r12) goto L_0x07bf
             byte[] r4 = new byte[r12]
             int r6 = r3.length
             int r6 = 256 - r6
             int r7 = r3.length
             java.lang.System.arraycopy(r3, r5, r4, r6, r7)
             r6 = 0
-        L_0x07d3:
+        L_0x07b5:
             int r7 = r3.length
             int r7 = 256 - r7
-            if (r6 >= r7) goto L_0x07c3
+            if (r6 >= r7) goto L_0x07a5
             r4[r6] = r5
             int r6 = r6 + 1
-            goto L_0x07d3
-        L_0x07dd:
+            goto L_0x07b5
+        L_0x07bf:
             byte[] r4 = org.telegram.messenger.Utilities.computeSHA1((byte[]) r3)
             byte[] r6 = new byte[r8]
             int r7 = r4.length
@@ -2270,15 +2227,15 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r6 = r2.action
             long r6 = r6.key_fingerprint
             int r8 = (r6 > r4 ? 1 : (r6 == r4 ? 0 : -1))
-            if (r8 != 0) goto L_0x0805
+            if (r8 != 0) goto L_0x07e7
             r1.future_auth_key = r3
             r1.future_key_fingerprint = r4
             org.telegram.messenger.MessagesStorage r2 = r16.getMessagesStorage()
             r2.updateEncryptedChat(r1)
             r3 = 0
             r0.sendCommitKeyMessage(r1, r3)
-            goto L_0x096c
-        L_0x0805:
+            goto L_0x094e
+        L_0x07e7:
             r3 = 0
             byte[] r4 = new byte[r12]
             r1.future_auth_key = r4
@@ -2289,8 +2246,8 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             long r4 = r2.exchange_id
             r0.sendAbortKeyMessage(r1, r3, r4)
-            goto L_0x096c
-        L_0x081e:
+            goto L_0x094e
+        L_0x0800:
             r3 = 0
             byte[] r4 = new byte[r12]
             r1.future_auth_key = r4
@@ -2301,18 +2258,18 @@ public class SecretChatHelper extends BaseController {
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             long r4 = r2.exchange_id
             r0.sendAbortKeyMessage(r1, r3, r4)
-            goto L_0x096c
-        L_0x0837:
+            goto L_0x094e
+        L_0x0819:
             boolean r3 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionCommitKey
-            if (r3 == 0) goto L_0x0890
+            if (r3 == 0) goto L_0x0872
             long r6 = r1.exchange_id
             long r13 = r4.exchange_id
             int r3 = (r6 > r13 ? 1 : (r6 == r13 ? 0 : -1))
-            if (r3 != 0) goto L_0x0877
+            if (r3 != 0) goto L_0x0859
             long r6 = r1.future_key_fingerprint
             long r3 = r4.key_fingerprint
             int r8 = (r6 > r3 ? 1 : (r6 == r3 ? 0 : -1))
-            if (r8 != 0) goto L_0x0877
+            if (r8 != 0) goto L_0x0859
             long r2 = r1.key_fingerprint
             byte[] r4 = r1.auth_key
             r1.key_fingerprint = r6
@@ -2331,8 +2288,8 @@ public class SecretChatHelper extends BaseController {
             r2.updateEncryptedChat(r1)
             r2 = 0
             r0.sendNoopMessage(r1, r2)
-            goto L_0x096c
-        L_0x0877:
+            goto L_0x094e
+        L_0x0859:
             byte[] r3 = new byte[r12]
             r1.future_auth_key = r3
             r1.future_key_fingerprint = r9
@@ -2343,79 +2300,79 @@ public class SecretChatHelper extends BaseController {
             long r2 = r2.exchange_id
             r4 = 0
             r0.sendAbortKeyMessage(r1, r4, r2)
-            goto L_0x096c
-        L_0x0890:
+            goto L_0x094e
+        L_0x0872:
             boolean r2 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionAbortKey
-            if (r2 == 0) goto L_0x08ad
+            if (r2 == 0) goto L_0x088f
             long r2 = r1.exchange_id
             long r4 = r4.exchange_id
             int r6 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r6 != 0) goto L_0x096c
+            if (r6 != 0) goto L_0x094e
             byte[] r2 = new byte[r12]
             r1.future_auth_key = r2
             r1.future_key_fingerprint = r9
             r1.exchange_id = r9
             org.telegram.messenger.MessagesStorage r2 = r16.getMessagesStorage()
             r2.updateEncryptedChat(r1)
-            goto L_0x096c
-        L_0x08ad:
+            goto L_0x094e
+        L_0x088f:
             boolean r2 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionNoop
-            if (r2 == 0) goto L_0x08b3
-            goto L_0x096c
-        L_0x08b3:
+            if (r2 == 0) goto L_0x0895
+            goto L_0x094e
+        L_0x0895:
             boolean r2 = r4 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionResend
-            if (r2 == 0) goto L_0x08cf
+            if (r2 == 0) goto L_0x08b1
             int r2 = r4.end_seq_no
             int r3 = r1.in_seq_no
-            if (r2 < r3) goto L_0x08cd
+            if (r2 < r3) goto L_0x08af
             int r5 = r4.start_seq_no
-            if (r2 >= r5) goto L_0x08c2
-            goto L_0x08cd
-        L_0x08c2:
-            if (r5 >= r3) goto L_0x08c6
+            if (r2 >= r5) goto L_0x08a4
+            goto L_0x08af
+        L_0x08a4:
+            if (r5 >= r3) goto L_0x08a8
             r4.start_seq_no = r3
-        L_0x08c6:
+        L_0x08a8:
             int r3 = r4.start_seq_no
             r0.resendMessages(r3, r2, r1)
-            goto L_0x096c
-        L_0x08cd:
+            goto L_0x094e
+        L_0x08af:
             r1 = 0
             return r1
-        L_0x08cf:
+        L_0x08b1:
             r1 = 0
             return r1
-        L_0x08d1:
+        L_0x08b3:
             org.telegram.tgnet.TLRPC$TL_messageService r4 = new org.telegram.tgnet.TLRPC$TL_messageService
             r4.<init>()
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r7 = r2.action
             boolean r8 = r7 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionSetMessageTTL
-            if (r8 == 0) goto L_0x08fe
+            if (r8 == 0) goto L_0x08e0
             org.telegram.tgnet.TLRPC$TL_messageEncryptedAction r7 = new org.telegram.tgnet.TLRPC$TL_messageEncryptedAction
             r7.<init>()
             r4.action = r7
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             int r8 = r2.ttl_seconds
             r9 = 31536000(0x1e13380, float:8.2725845E-38)
-            if (r8 < 0) goto L_0x08ee
-            if (r8 <= r9) goto L_0x08f0
-        L_0x08ee:
+            if (r8 < 0) goto L_0x08d0
+            if (r8 <= r9) goto L_0x08d2
+        L_0x08d0:
             r2.ttl_seconds = r9
-        L_0x08f0:
+        L_0x08d2:
             int r8 = r2.ttl_seconds
             r1.ttl = r8
             r7.encryptedAction = r2
             org.telegram.messenger.MessagesStorage r2 = r16.getMessagesStorage()
             r2.updateEncryptedChatTTL(r1)
-            goto L_0x090d
-        L_0x08fe:
+            goto L_0x08ef
+        L_0x08e0:
             boolean r7 = r7 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionScreenshotMessages
-            if (r7 == 0) goto L_0x090d
+            if (r7 == 0) goto L_0x08ef
             org.telegram.tgnet.TLRPC$TL_messageEncryptedAction r7 = new org.telegram.tgnet.TLRPC$TL_messageEncryptedAction
             r7.<init>()
             r4.action = r7
             org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action
             r7.encryptedAction = r2
-        L_0x090d:
+        L_0x08ef:
             org.telegram.messenger.UserConfig r2 = r16.getUserConfig()
             int r2 = r2.getNewMessageId()
             r4.id = r2
@@ -2441,9 +2398,9 @@ public class SecretChatHelper extends BaseController {
             long r1 = r1 << r13
             r4.dialog_id = r1
             return r4
-        L_0x0948:
+        L_0x092a:
             boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r1 == 0) goto L_0x096c
+            if (r1 == 0) goto L_0x094e
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             java.lang.String r2 = "unknown message "
@@ -2451,13 +2408,13 @@ public class SecretChatHelper extends BaseController {
             r1.append(r4)
             java.lang.String r1 = r1.toString()
             org.telegram.messenger.FileLog.e((java.lang.String) r1)
-            goto L_0x096c
-        L_0x0962:
+            goto L_0x094e
+        L_0x0944:
             boolean r1 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r1 == 0) goto L_0x096c
+            if (r1 == 0) goto L_0x094e
             java.lang.String r1 = "unknown TLObject"
             org.telegram.messenger.FileLog.e((java.lang.String) r1)
-        L_0x096c:
+        L_0x094e:
             r1 = 0
             return r1
         */
@@ -2485,7 +2442,7 @@ public class SecretChatHelper extends BaseController {
         });
         getMessagesStorage().deleteDialog(j, 1);
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
-        getNotificationCenter().postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(j), Boolean.FALSE);
+        getNotificationCenter().postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(j), Boolean.FALSE, null);
     }
 
     /* access modifiers changed from: private */
@@ -2756,113 +2713,212 @@ public class SecretChatHelper extends BaseController {
         return i < i2 ? -1 : 0;
     }
 
-    private boolean decryptWithMtProtoVersion(NativeByteBuffer nativeByteBuffer, byte[] bArr, byte[] bArr2, int i, boolean z, boolean z2) {
-        NativeByteBuffer nativeByteBuffer2 = nativeByteBuffer;
-        byte[] bArr3 = bArr2;
-        int i2 = i;
-        byte[] bArr4 = bArr;
-        boolean z3 = i2 == 1 ? false : z;
-        MessageKeyData generateMessageKeyData = MessageKeyData.generateMessageKeyData(bArr4, bArr3, z3, i2);
-        Utilities.aesIgeEncryption(nativeByteBuffer2.buffer, generateMessageKeyData.aesKey, generateMessageKeyData.aesIv, false, false, 24, nativeByteBuffer.limit() - 24);
-        int readInt32 = nativeByteBuffer2.readInt32(false);
-        if (i2 == 2) {
-            int i3 = z3 ? 8 : 0;
-            ByteBuffer byteBuffer = nativeByteBuffer2.buffer;
-            if (!Utilities.arraysEquals(bArr3, 0, Utilities.computeSHA256(bArr, i3 + 88, 32, byteBuffer, 24, byteBuffer.limit()), 8)) {
-                if (z2) {
-                    Utilities.aesIgeEncryption(nativeByteBuffer2.buffer, generateMessageKeyData.aesKey, generateMessageKeyData.aesIv, true, false, 24, nativeByteBuffer.limit() - 24);
-                    nativeByteBuffer2.position(24);
-                }
-                return false;
-            }
-        } else {
-            int i4 = readInt32 + 28;
-            if (i4 < nativeByteBuffer2.buffer.limit() - 15 || i4 > nativeByteBuffer2.buffer.limit()) {
-                i4 = nativeByteBuffer2.buffer.limit();
-            }
-            byte[] computeSHA1 = Utilities.computeSHA1(nativeByteBuffer2.buffer, 24, i4);
-            if (!Utilities.arraysEquals(bArr3, 0, computeSHA1, computeSHA1.length - 16)) {
-                if (z2) {
-                    Utilities.aesIgeEncryption(nativeByteBuffer2.buffer, generateMessageKeyData.aesKey, generateMessageKeyData.aesIv, true, false, 24, nativeByteBuffer.limit() - 24);
-                    nativeByteBuffer2.position(24);
-                }
-                return false;
-            }
-        }
-        if (readInt32 <= 0 || readInt32 > nativeByteBuffer.limit() - 28) {
-            return false;
-        }
-        int limit = (nativeByteBuffer.limit() - 28) - readInt32;
-        if ((i2 != 2 || (limit >= 12 && limit <= 1024)) && (i2 != 1 || limit <= 15)) {
-            return true;
-        }
-        return false;
+    /* JADX WARNING: Code restructure failed: missing block: B:35:0x00e6, code lost:
+        if (r0 > 1024) goto L_0x00eb;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:36:0x00e9, code lost:
+        if (r0 > 15) goto L_0x00eb;
+     */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x00c9  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x00d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x00de  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x00e9  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private boolean decryptWithMtProtoVersion(org.telegram.tgnet.NativeByteBuffer r26, byte[] r27, byte[] r28, int r29, boolean r30, boolean r31) {
+        /*
+            r25 = this;
+            r0 = r26
+            r1 = r28
+            r2 = r29
+            r3 = 0
+            r4 = 1
+            r6 = r27
+            if (r2 != r4) goto L_0x000e
+            r5 = 0
+            goto L_0x0010
+        L_0x000e:
+            r5 = r30
+        L_0x0010:
+            org.telegram.messenger.MessageKeyData r12 = org.telegram.messenger.MessageKeyData.generateMessageKeyData(r6, r1, r5, r2)
+            java.nio.ByteBuffer r13 = r0.buffer
+            byte[] r14 = r12.aesKey
+            byte[] r15 = r12.aesIv
+            r16 = 0
+            r17 = 0
+            r18 = 24
+            int r7 = r26.limit()
+            r11 = 24
+            int r19 = r7 + -24
+            org.telegram.messenger.Utilities.aesIgeEncryption(r13, r14, r15, r16, r17, r18, r19)
+            int r13 = r0.readInt32(r3)
+            r14 = 15
+            r15 = 2
+            if (r2 != r15) goto L_0x007c
+            r10 = 8
+            if (r5 == 0) goto L_0x003b
+            r5 = 8
+            goto L_0x003c
+        L_0x003b:
+            r5 = 0
+        L_0x003c:
+            int r7 = r5 + 88
+            r8 = 32
+            java.nio.ByteBuffer r9 = r0.buffer
+            r5 = 24
+            int r16 = r9.limit()
+            r6 = r27
+            r4 = 8
+            r10 = r5
+            r5 = 24
+            r11 = r16
+            byte[] r6 = org.telegram.messenger.Utilities.computeSHA256(r6, r7, r8, r9, r10, r11)
+            boolean r1 = org.telegram.messenger.Utilities.arraysEquals(r1, r3, r6, r4)
+            if (r1 != 0) goto L_0x00c7
+            if (r31 == 0) goto L_0x00c6
+            java.nio.ByteBuffer r1 = r0.buffer
+            byte[] r3 = r12.aesKey
+            byte[] r4 = r12.aesIv
+            r21 = 1
+            r22 = 0
+            r23 = 24
+            int r6 = r26.limit()
+            int r24 = r6 + -24
+            r18 = r1
+            r19 = r3
+            r20 = r4
+            org.telegram.messenger.Utilities.aesIgeEncryption(r18, r19, r20, r21, r22, r23, r24)
+            r0.position(r5)
+            goto L_0x00c6
+        L_0x007c:
+            r5 = 24
+            int r4 = r13 + 28
+            java.nio.ByteBuffer r6 = r0.buffer
+            int r6 = r6.limit()
+            int r6 = r6 - r14
+            if (r4 < r6) goto L_0x0091
+            java.nio.ByteBuffer r6 = r0.buffer
+            int r6 = r6.limit()
+            if (r4 <= r6) goto L_0x0097
+        L_0x0091:
+            java.nio.ByteBuffer r4 = r0.buffer
+            int r4 = r4.limit()
+        L_0x0097:
+            java.nio.ByteBuffer r6 = r0.buffer
+            byte[] r4 = org.telegram.messenger.Utilities.computeSHA1((java.nio.ByteBuffer) r6, (int) r5, (int) r4)
+            int r6 = r4.length
+            int r6 = r6 + -16
+            boolean r1 = org.telegram.messenger.Utilities.arraysEquals(r1, r3, r4, r6)
+            if (r1 != 0) goto L_0x00c7
+            if (r31 == 0) goto L_0x00c6
+            java.nio.ByteBuffer r1 = r0.buffer
+            byte[] r3 = r12.aesKey
+            byte[] r4 = r12.aesIv
+            r21 = 1
+            r22 = 0
+            r23 = 24
+            int r6 = r26.limit()
+            int r24 = r6 + -24
+            r18 = r1
+            r19 = r3
+            r20 = r4
+            org.telegram.messenger.Utilities.aesIgeEncryption(r18, r19, r20, r21, r22, r23, r24)
+            r0.position(r5)
+        L_0x00c6:
+            r3 = 1
+        L_0x00c7:
+            if (r13 > 0) goto L_0x00cb
+            r3 = r3 | 1
+        L_0x00cb:
+            int r1 = r26.limit()
+            int r1 = r1 + -28
+            if (r13 <= r1) goto L_0x00d5
+            r3 = r3 | 1
+        L_0x00d5:
+            int r0 = r26.limit()
+            int r0 = r0 + -28
+            int r0 = r0 - r13
+            if (r2 != r15) goto L_0x00e9
+            r1 = 12
+            if (r0 >= r1) goto L_0x00e4
+            r3 = r3 | 1
+        L_0x00e4:
+            r1 = 1024(0x400, float:1.435E-42)
+            if (r0 <= r1) goto L_0x00ed
+            goto L_0x00eb
+        L_0x00e9:
+            if (r0 <= r14) goto L_0x00ed
+        L_0x00eb:
+            r3 = r3 | 1
+        L_0x00ed:
+            r0 = 1
+            r0 = r0 ^ r3
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SecretChatHelper.decryptWithMtProtoVersion(org.telegram.tgnet.NativeByteBuffer, byte[], byte[], int, boolean, boolean):boolean");
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:110:0x0262 A[Catch:{ Exception -> 0x027c }] */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x007e A[Catch:{ Exception -> 0x027c }] */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x0080 A[Catch:{ Exception -> 0x027c }] */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x0083 A[Catch:{ Exception -> 0x027c }] */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0234 A[Catch:{ Exception -> 0x024e }] */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x0075 A[Catch:{ Exception -> 0x024e }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> decryptMessage(org.telegram.tgnet.TLRPC$EncryptedMessage r22) {
+    public java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> decryptMessage(org.telegram.tgnet.TLRPC$EncryptedMessage r20) {
         /*
-            r21 = this;
-            r8 = r21
-            r0 = r22
+            r19 = this;
+            r8 = r19
+            r0 = r20
             java.lang.String r9 = " out_seq = "
-            org.telegram.messenger.MessagesController r1 = r21.getMessagesController()
+            org.telegram.messenger.MessagesController r1 = r19.getMessagesController()
             int r2 = r0.chat_id
             r10 = 1
             org.telegram.tgnet.TLRPC$EncryptedChat r11 = r1.getEncryptedChatDB(r2, r10)
             r12 = 0
-            if (r11 == 0) goto L_0x0280
+            if (r11 == 0) goto L_0x0252
             boolean r1 = r11 instanceof org.telegram.tgnet.TLRPC$TL_encryptedChatDiscarded
             if (r1 == 0) goto L_0x001a
-            goto L_0x0280
+            goto L_0x0252
         L_0x001a:
-            boolean r1 = r11 instanceof org.telegram.tgnet.TLRPC$TL_encryptedChatWaiting     // Catch:{ Exception -> 0x027c }
+            boolean r1 = r11 instanceof org.telegram.tgnet.TLRPC$TL_encryptedChatWaiting     // Catch:{ Exception -> 0x024e }
             if (r1 == 0) goto L_0x0041
-            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Update>> r1 = r8.pendingSecretMessages     // Catch:{ Exception -> 0x027c }
-            int r2 = r11.id     // Catch:{ Exception -> 0x027c }
-            java.lang.Object r1 = r1.get(r2)     // Catch:{ Exception -> 0x027c }
-            java.util.ArrayList r1 = (java.util.ArrayList) r1     // Catch:{ Exception -> 0x027c }
+            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Update>> r1 = r8.pendingSecretMessages     // Catch:{ Exception -> 0x024e }
+            int r2 = r11.id     // Catch:{ Exception -> 0x024e }
+            java.lang.Object r1 = r1.get(r2)     // Catch:{ Exception -> 0x024e }
+            java.util.ArrayList r1 = (java.util.ArrayList) r1     // Catch:{ Exception -> 0x024e }
             if (r1 != 0) goto L_0x0036
-            java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ Exception -> 0x027c }
-            r1.<init>()     // Catch:{ Exception -> 0x027c }
-            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Update>> r2 = r8.pendingSecretMessages     // Catch:{ Exception -> 0x027c }
-            int r3 = r11.id     // Catch:{ Exception -> 0x027c }
-            r2.put(r3, r1)     // Catch:{ Exception -> 0x027c }
+            java.util.ArrayList r1 = new java.util.ArrayList     // Catch:{ Exception -> 0x024e }
+            r1.<init>()     // Catch:{ Exception -> 0x024e }
+            android.util.SparseArray<java.util.ArrayList<org.telegram.tgnet.TLRPC$Update>> r2 = r8.pendingSecretMessages     // Catch:{ Exception -> 0x024e }
+            int r3 = r11.id     // Catch:{ Exception -> 0x024e }
+            r2.put(r3, r1)     // Catch:{ Exception -> 0x024e }
         L_0x0036:
-            org.telegram.tgnet.TLRPC$TL_updateNewEncryptedMessage r2 = new org.telegram.tgnet.TLRPC$TL_updateNewEncryptedMessage     // Catch:{ Exception -> 0x027c }
-            r2.<init>()     // Catch:{ Exception -> 0x027c }
-            r2.message = r0     // Catch:{ Exception -> 0x027c }
-            r1.add(r2)     // Catch:{ Exception -> 0x027c }
+            org.telegram.tgnet.TLRPC$TL_updateNewEncryptedMessage r2 = new org.telegram.tgnet.TLRPC$TL_updateNewEncryptedMessage     // Catch:{ Exception -> 0x024e }
+            r2.<init>()     // Catch:{ Exception -> 0x024e }
+            r2.message = r0     // Catch:{ Exception -> 0x024e }
+            r1.add(r2)     // Catch:{ Exception -> 0x024e }
             return r12
         L_0x0041:
-            org.telegram.tgnet.NativeByteBuffer r13 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x027c }
-            byte[] r1 = r0.bytes     // Catch:{ Exception -> 0x027c }
-            int r1 = r1.length     // Catch:{ Exception -> 0x027c }
-            r13.<init>((int) r1)     // Catch:{ Exception -> 0x027c }
-            byte[] r1 = r0.bytes     // Catch:{ Exception -> 0x027c }
-            r13.writeBytes((byte[]) r1)     // Catch:{ Exception -> 0x027c }
+            org.telegram.tgnet.NativeByteBuffer r13 = new org.telegram.tgnet.NativeByteBuffer     // Catch:{ Exception -> 0x024e }
+            byte[] r1 = r0.bytes     // Catch:{ Exception -> 0x024e }
+            int r1 = r1.length     // Catch:{ Exception -> 0x024e }
+            r13.<init>((int) r1)     // Catch:{ Exception -> 0x024e }
+            byte[] r1 = r0.bytes     // Catch:{ Exception -> 0x024e }
+            r13.writeBytes((byte[]) r1)     // Catch:{ Exception -> 0x024e }
             r14 = 0
-            r13.position(r14)     // Catch:{ Exception -> 0x027c }
-            long r1 = r13.readInt64(r14)     // Catch:{ Exception -> 0x027c }
-            long r3 = r11.key_fingerprint     // Catch:{ Exception -> 0x027c }
+            r13.position(r14)     // Catch:{ Exception -> 0x024e }
+            long r1 = r13.readInt64(r14)     // Catch:{ Exception -> 0x024e }
+            long r3 = r11.key_fingerprint     // Catch:{ Exception -> 0x024e }
             int r5 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1))
             if (r5 != 0) goto L_0x0060
-            byte[] r3 = r11.auth_key     // Catch:{ Exception -> 0x027c }
+            byte[] r3 = r11.auth_key     // Catch:{ Exception -> 0x024e }
             r15 = r3
             goto L_0x0072
         L_0x0060:
-            long r3 = r11.future_key_fingerprint     // Catch:{ Exception -> 0x027c }
+            long r3 = r11.future_key_fingerprint     // Catch:{ Exception -> 0x024e }
             r5 = 0
             int r7 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
             if (r7 == 0) goto L_0x0071
             int r5 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1))
             if (r5 != 0) goto L_0x0071
-            byte[] r3 = r11.future_auth_key     // Catch:{ Exception -> 0x027c }
+            byte[] r3 = r11.future_auth_key     // Catch:{ Exception -> 0x024e }
             r15 = r3
             r7 = 1
             goto L_0x0073
@@ -2871,287 +2927,263 @@ public class SecretChatHelper extends BaseController {
         L_0x0072:
             r7 = 0
         L_0x0073:
-            int r3 = r11.layer     // Catch:{ Exception -> 0x027c }
-            int r3 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r3)     // Catch:{ Exception -> 0x027c }
-            r4 = 73
-            r6 = 2
-            if (r3 < r4) goto L_0x0080
-            r5 = 2
-            goto L_0x0081
-        L_0x0080:
-            r5 = 1
-        L_0x0081:
-            if (r15 == 0) goto L_0x0262
+            if (r15 == 0) goto L_0x0234
             r1 = 16
-            byte[] r16 = r13.readData(r1, r14)     // Catch:{ Exception -> 0x027c }
-            int r1 = r11.admin_id     // Catch:{ Exception -> 0x027c }
-            org.telegram.messenger.UserConfig r2 = r21.getUserConfig()     // Catch:{ Exception -> 0x027c }
-            int r2 = r2.getClientUserId()     // Catch:{ Exception -> 0x027c }
-            if (r1 != r2) goto L_0x0098
+            byte[] r16 = r13.readData(r1, r14)     // Catch:{ Exception -> 0x024e }
+            int r1 = r11.admin_id     // Catch:{ Exception -> 0x024e }
+            org.telegram.messenger.UserConfig r2 = r19.getUserConfig()     // Catch:{ Exception -> 0x024e }
+            int r2 = r2.getClientUserId()     // Catch:{ Exception -> 0x024e }
+            if (r1 != r2) goto L_0x008a
             r17 = 1
-            goto L_0x009a
-        L_0x0098:
+            goto L_0x008c
+        L_0x008a:
             r17 = 0
-        L_0x009a:
-            if (r5 != r6) goto L_0x00a3
-            int r1 = r11.mtproto_seq     // Catch:{ Exception -> 0x027c }
-            if (r1 == 0) goto L_0x00a3
+        L_0x008c:
+            int r1 = r11.mtproto_seq     // Catch:{ Exception -> 0x024e }
+            if (r1 == 0) goto L_0x0093
             r18 = 0
-            goto L_0x00a5
-        L_0x00a3:
+            goto L_0x0095
+        L_0x0093:
             r18 = 1
-        L_0x00a5:
-            r1 = r21
-            r2 = r13
-            r3 = r15
-            r4 = r16
-            r19 = r5
-            r10 = 2
-            r6 = r17
-            r20 = r7
-            r7 = r18
-            boolean r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x027c }
-            r6 = r19
-            if (r1 != 0) goto L_0x00e7
-            if (r6 != r10) goto L_0x00d4
-            if (r18 == 0) goto L_0x00d3
-            r5 = 1
-            r7 = 0
-            r1 = r21
-            r2 = r13
-            r3 = r15
-            r4 = r16
-            r6 = r17
-            boolean r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x027c }
-            if (r1 != 0) goto L_0x00d1
-            goto L_0x00d3
-        L_0x00d1:
-            r6 = 1
-            goto L_0x00e7
-        L_0x00d3:
-            return r12
-        L_0x00d4:
+        L_0x0095:
             r5 = 2
-            r1 = r21
+            r1 = r19
             r2 = r13
             r3 = r15
             r4 = r16
             r6 = r17
+            r10 = r7
             r7 = r18
-            boolean r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x027c }
-            if (r1 != 0) goto L_0x00e6
+            boolean r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x024e }
+            r7 = 2
+            if (r1 != 0) goto L_0x00c2
+            if (r18 == 0) goto L_0x00c1
+            r5 = 1
+            r18 = 0
+            r1 = r19
+            r2 = r13
+            r3 = r15
+            r4 = r16
+            r6 = r17
+            r15 = 2
+            r7 = r18
+            boolean r1 = r1.decryptWithMtProtoVersion(r2, r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x024e }
+            if (r1 != 0) goto L_0x00bf
+            goto L_0x00c1
+        L_0x00bf:
+            r1 = 1
+            goto L_0x00c4
+        L_0x00c1:
             return r12
-        L_0x00e6:
-            r6 = 2
-        L_0x00e7:
-            org.telegram.tgnet.TLClassStore r1 = org.telegram.tgnet.TLClassStore.Instance()     // Catch:{ Exception -> 0x027c }
-            int r2 = r13.readInt32(r14)     // Catch:{ Exception -> 0x027c }
-            org.telegram.tgnet.TLObject r1 = r1.TLdeserialize(r13, r2, r14)     // Catch:{ Exception -> 0x027c }
-            r13.reuse()     // Catch:{ Exception -> 0x027c }
-            r7 = r20
-            if (r7 != 0) goto L_0x010b
-            int r2 = r11.layer     // Catch:{ Exception -> 0x027c }
-            int r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2)     // Catch:{ Exception -> 0x027c }
-            r3 = 20
-            if (r2 < r3) goto L_0x010b
-            short r2 = r11.key_use_count_in     // Catch:{ Exception -> 0x027c }
-            r3 = 1
-            int r2 = r2 + r3
-            short r2 = (short) r2     // Catch:{ Exception -> 0x027c }
-            r11.key_use_count_in = r2     // Catch:{ Exception -> 0x027c }
-        L_0x010b:
-            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageLayer     // Catch:{ Exception -> 0x027c }
-            if (r2 == 0) goto L_0x0238
-            org.telegram.tgnet.TLRPC$TL_decryptedMessageLayer r1 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageLayer) r1     // Catch:{ Exception -> 0x027c }
-            int r2 = r11.seq_in     // Catch:{ Exception -> 0x027c }
-            if (r2 != 0) goto L_0x012f
-            int r2 = r11.seq_out     // Catch:{ Exception -> 0x027c }
-            if (r2 != 0) goto L_0x012f
-            int r2 = r11.admin_id     // Catch:{ Exception -> 0x027c }
-            org.telegram.messenger.UserConfig r3 = r21.getUserConfig()     // Catch:{ Exception -> 0x027c }
-            int r3 = r3.getClientUserId()     // Catch:{ Exception -> 0x027c }
-            if (r2 != r3) goto L_0x012c
-            r2 = 1
-            r11.seq_out = r2     // Catch:{ Exception -> 0x027c }
-            r2 = -2
-            r11.seq_in = r2     // Catch:{ Exception -> 0x027c }
-            goto L_0x012f
-        L_0x012c:
-            r2 = -1
-            r11.seq_in = r2     // Catch:{ Exception -> 0x027c }
-        L_0x012f:
-            byte[] r2 = r1.random_bytes     // Catch:{ Exception -> 0x027c }
-            int r2 = r2.length     // Catch:{ Exception -> 0x027c }
-            r3 = 15
-            if (r2 >= r3) goto L_0x0140
-            boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x027c }
-            if (r0 == 0) goto L_0x013f
-            java.lang.String r0 = "got random bytes less than needed"
-            org.telegram.messenger.FileLog.e((java.lang.String) r0)     // Catch:{ Exception -> 0x027c }
-        L_0x013f:
-            return r12
-        L_0x0140:
-            boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x027c }
-            if (r2 == 0) goto L_0x0180
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x027c }
-            r2.<init>()     // Catch:{ Exception -> 0x027c }
-            java.lang.String r3 = "current chat in_seq = "
-            r2.append(r3)     // Catch:{ Exception -> 0x027c }
-            int r3 = r11.seq_in     // Catch:{ Exception -> 0x027c }
-            r2.append(r3)     // Catch:{ Exception -> 0x027c }
-            r2.append(r9)     // Catch:{ Exception -> 0x027c }
-            int r3 = r11.seq_out     // Catch:{ Exception -> 0x027c }
-            r2.append(r3)     // Catch:{ Exception -> 0x027c }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x027c }
-            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x027c }
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x027c }
-            r2.<init>()     // Catch:{ Exception -> 0x027c }
-            java.lang.String r3 = "got message with in_seq = "
-            r2.append(r3)     // Catch:{ Exception -> 0x027c }
-            int r3 = r1.in_seq_no     // Catch:{ Exception -> 0x027c }
-            r2.append(r3)     // Catch:{ Exception -> 0x027c }
-            r2.append(r9)     // Catch:{ Exception -> 0x027c }
-            int r3 = r1.out_seq_no     // Catch:{ Exception -> 0x027c }
-            r2.append(r3)     // Catch:{ Exception -> 0x027c }
-            java.lang.String r2 = r2.toString()     // Catch:{ Exception -> 0x027c }
-            org.telegram.messenger.FileLog.d(r2)     // Catch:{ Exception -> 0x027c }
-        L_0x0180:
-            int r2 = r1.out_seq_no     // Catch:{ Exception -> 0x027c }
-            int r3 = r11.seq_in     // Catch:{ Exception -> 0x027c }
-            if (r2 > r3) goto L_0x0187
-            return r12
-        L_0x0187:
+        L_0x00c2:
+            r15 = 2
+            r1 = 2
+        L_0x00c4:
+            org.telegram.tgnet.TLClassStore r2 = org.telegram.tgnet.TLClassStore.Instance()     // Catch:{ Exception -> 0x024e }
+            int r3 = r13.readInt32(r14)     // Catch:{ Exception -> 0x024e }
+            org.telegram.tgnet.TLObject r2 = r2.TLdeserialize(r13, r3, r14)     // Catch:{ Exception -> 0x024e }
+            r13.reuse()     // Catch:{ Exception -> 0x024e }
+            if (r10 != 0) goto L_0x00dc
+            short r3 = r11.key_use_count_in     // Catch:{ Exception -> 0x024e }
             r4 = 1
-            if (r6 != r4) goto L_0x0191
-            int r4 = r11.mtproto_seq     // Catch:{ Exception -> 0x027c }
-            if (r4 == 0) goto L_0x0191
-            if (r2 < r4) goto L_0x0191
-            return r12
-        L_0x0191:
-            int r2 = r2 - r10
-            if (r3 == r2) goto L_0x0216
-            boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x027c }
-            if (r2 == 0) goto L_0x019d
-            java.lang.String r2 = "got hole"
-            org.telegram.messenger.FileLog.e((java.lang.String) r2)     // Catch:{ Exception -> 0x027c }
-        L_0x019d:
-            int r2 = r11.seq_in     // Catch:{ Exception -> 0x027c }
-            int r2 = r2 + r10
-            int r3 = r1.out_seq_no     // Catch:{ Exception -> 0x027c }
-            int r3 = r3 - r10
-            r8.sendResendMessage(r11, r2, r3, r12)     // Catch:{ Exception -> 0x027c }
-            android.util.SparseArray<java.util.ArrayList<org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder>> r2 = r8.secretHolesQueue     // Catch:{ Exception -> 0x027c }
-            int r3 = r11.id     // Catch:{ Exception -> 0x027c }
-            java.lang.Object r2 = r2.get(r3)     // Catch:{ Exception -> 0x027c }
-            java.util.ArrayList r2 = (java.util.ArrayList) r2     // Catch:{ Exception -> 0x027c }
-            if (r2 != 0) goto L_0x01be
-            java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x027c }
-            r2.<init>()     // Catch:{ Exception -> 0x027c }
-            android.util.SparseArray<java.util.ArrayList<org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder>> r3 = r8.secretHolesQueue     // Catch:{ Exception -> 0x027c }
-            int r4 = r11.id     // Catch:{ Exception -> 0x027c }
-            r3.put(r4, r2)     // Catch:{ Exception -> 0x027c }
-        L_0x01be:
-            int r3 = r2.size()     // Catch:{ Exception -> 0x027c }
-            r4 = 4
-            if (r3 < r4) goto L_0x01ff
-            android.util.SparseArray<java.util.ArrayList<org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder>> r0 = r8.secretHolesQueue     // Catch:{ Exception -> 0x027c }
-            int r1 = r11.id     // Catch:{ Exception -> 0x027c }
-            r0.remove(r1)     // Catch:{ Exception -> 0x027c }
-            org.telegram.tgnet.TLRPC$TL_encryptedChatDiscarded r0 = new org.telegram.tgnet.TLRPC$TL_encryptedChatDiscarded     // Catch:{ Exception -> 0x027c }
-            r0.<init>()     // Catch:{ Exception -> 0x027c }
-            int r1 = r11.id     // Catch:{ Exception -> 0x027c }
-            r0.id = r1     // Catch:{ Exception -> 0x027c }
-            int r1 = r11.user_id     // Catch:{ Exception -> 0x027c }
-            r0.user_id = r1     // Catch:{ Exception -> 0x027c }
-            byte[] r1 = r11.auth_key     // Catch:{ Exception -> 0x027c }
-            r0.auth_key = r1     // Catch:{ Exception -> 0x027c }
-            int r1 = r11.key_create_date     // Catch:{ Exception -> 0x027c }
-            r0.key_create_date = r1     // Catch:{ Exception -> 0x027c }
-            short r1 = r11.key_use_count_in     // Catch:{ Exception -> 0x027c }
-            r0.key_use_count_in = r1     // Catch:{ Exception -> 0x027c }
-            short r1 = r11.key_use_count_out     // Catch:{ Exception -> 0x027c }
-            r0.key_use_count_out = r1     // Catch:{ Exception -> 0x027c }
-            int r1 = r11.seq_in     // Catch:{ Exception -> 0x027c }
-            r0.seq_in = r1     // Catch:{ Exception -> 0x027c }
-            int r1 = r11.seq_out     // Catch:{ Exception -> 0x027c }
-            r0.seq_out = r1     // Catch:{ Exception -> 0x027c }
-            org.telegram.messenger.-$$Lambda$SecretChatHelper$BbpTygtjm8T4Uw7DQIahjZrtV-s r1 = new org.telegram.messenger.-$$Lambda$SecretChatHelper$BbpTygtjm8T4Uw7DQIahjZrtV-s     // Catch:{ Exception -> 0x027c }
-            r1.<init>(r0)     // Catch:{ Exception -> 0x027c }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x027c }
-            int r0 = r11.id     // Catch:{ Exception -> 0x027c }
-            r8.declineSecretChat(r0, r14)     // Catch:{ Exception -> 0x027c }
-            return r12
-        L_0x01ff:
-            org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder r3 = new org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder     // Catch:{ Exception -> 0x027c }
-            r3.<init>()     // Catch:{ Exception -> 0x027c }
-            r3.layer = r1     // Catch:{ Exception -> 0x027c }
-            org.telegram.tgnet.TLRPC$EncryptedFile r1 = r0.file     // Catch:{ Exception -> 0x027c }
-            r3.file = r1     // Catch:{ Exception -> 0x027c }
-            int r0 = r0.date     // Catch:{ Exception -> 0x027c }
-            r3.date = r0     // Catch:{ Exception -> 0x027c }
-            r3.new_key_used = r7     // Catch:{ Exception -> 0x027c }
-            r3.decryptedWithVersion = r6     // Catch:{ Exception -> 0x027c }
-            r2.add(r3)     // Catch:{ Exception -> 0x027c }
-            return r12
-        L_0x0216:
-            if (r6 != r10) goto L_0x0220
-            int r2 = r11.mtproto_seq     // Catch:{ Exception -> 0x027c }
-            int r2 = java.lang.Math.min(r2, r3)     // Catch:{ Exception -> 0x027c }
-            r11.mtproto_seq = r2     // Catch:{ Exception -> 0x027c }
-        L_0x0220:
-            int r2 = r1.layer     // Catch:{ Exception -> 0x027c }
-            r8.applyPeerLayer(r11, r2)     // Catch:{ Exception -> 0x027c }
-            int r2 = r1.out_seq_no     // Catch:{ Exception -> 0x027c }
-            r11.seq_in = r2     // Catch:{ Exception -> 0x027c }
-            int r2 = r1.in_seq_no     // Catch:{ Exception -> 0x027c }
-            r11.in_seq_no = r2     // Catch:{ Exception -> 0x027c }
-            org.telegram.messenger.MessagesStorage r2 = r21.getMessagesStorage()     // Catch:{ Exception -> 0x027c }
+            int r3 = r3 + r4
+            short r3 = (short) r3     // Catch:{ Exception -> 0x024e }
+            r11.key_use_count_in = r3     // Catch:{ Exception -> 0x024e }
+        L_0x00dc:
+            boolean r3 = r2 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageLayer     // Catch:{ Exception -> 0x024e }
+            if (r3 == 0) goto L_0x020a
+            org.telegram.tgnet.TLRPC$TL_decryptedMessageLayer r2 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageLayer) r2     // Catch:{ Exception -> 0x024e }
+            int r3 = r11.seq_in     // Catch:{ Exception -> 0x024e }
+            if (r3 != 0) goto L_0x0100
+            int r3 = r11.seq_out     // Catch:{ Exception -> 0x024e }
+            if (r3 != 0) goto L_0x0100
+            int r3 = r11.admin_id     // Catch:{ Exception -> 0x024e }
+            org.telegram.messenger.UserConfig r4 = r19.getUserConfig()     // Catch:{ Exception -> 0x024e }
+            int r4 = r4.getClientUserId()     // Catch:{ Exception -> 0x024e }
+            if (r3 != r4) goto L_0x00fd
             r3 = 1
-            r2.updateEncryptedChatSeq(r11, r3)     // Catch:{ Exception -> 0x027c }
-            org.telegram.tgnet.TLRPC$DecryptedMessage r1 = r1.message     // Catch:{ Exception -> 0x027c }
-            goto L_0x0246
-        L_0x0238:
-            boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageService     // Catch:{ Exception -> 0x027c }
-            if (r2 == 0) goto L_0x0261
-            r2 = r1
-            org.telegram.tgnet.TLRPC$TL_decryptedMessageService r2 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageService) r2     // Catch:{ Exception -> 0x027c }
-            org.telegram.tgnet.TLRPC$DecryptedMessageAction r2 = r2.action     // Catch:{ Exception -> 0x027c }
-            boolean r2 = r2 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionNotifyLayer     // Catch:{ Exception -> 0x027c }
-            if (r2 != 0) goto L_0x0246
-            goto L_0x0261
-        L_0x0246:
-            r5 = r1
-            java.util.ArrayList r9 = new java.util.ArrayList     // Catch:{ Exception -> 0x027c }
-            r9.<init>()     // Catch:{ Exception -> 0x027c }
-            org.telegram.tgnet.TLRPC$EncryptedFile r3 = r0.file     // Catch:{ Exception -> 0x027c }
-            int r4 = r0.date     // Catch:{ Exception -> 0x027c }
-            r1 = r21
-            r2 = r11
-            r6 = r7
-            org.telegram.tgnet.TLRPC$Message r0 = r1.processDecryptedObject(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x027c }
-            if (r0 == 0) goto L_0x025d
-            r9.add(r0)     // Catch:{ Exception -> 0x027c }
-        L_0x025d:
-            r8.checkSecretHoles(r11, r9)     // Catch:{ Exception -> 0x027c }
-            return r9
-        L_0x0261:
+            r11.seq_out = r3     // Catch:{ Exception -> 0x024e }
+            r3 = -2
+            r11.seq_in = r3     // Catch:{ Exception -> 0x024e }
+            goto L_0x0100
+        L_0x00fd:
+            r3 = -1
+            r11.seq_in = r3     // Catch:{ Exception -> 0x024e }
+        L_0x0100:
+            byte[] r3 = r2.random_bytes     // Catch:{ Exception -> 0x024e }
+            int r3 = r3.length     // Catch:{ Exception -> 0x024e }
+            r4 = 15
+            if (r3 >= r4) goto L_0x0111
+            boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x024e }
+            if (r0 == 0) goto L_0x0110
+            java.lang.String r0 = "got random bytes less than needed"
+            org.telegram.messenger.FileLog.e((java.lang.String) r0)     // Catch:{ Exception -> 0x024e }
+        L_0x0110:
             return r12
-        L_0x0262:
-            r13.reuse()     // Catch:{ Exception -> 0x027c }
-            boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x027c }
-            if (r0 == 0) goto L_0x0280
+        L_0x0111:
+            boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x024e }
+            if (r3 == 0) goto L_0x0151
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x024e }
+            r3.<init>()     // Catch:{ Exception -> 0x024e }
+            java.lang.String r4 = "current chat in_seq = "
+            r3.append(r4)     // Catch:{ Exception -> 0x024e }
+            int r4 = r11.seq_in     // Catch:{ Exception -> 0x024e }
+            r3.append(r4)     // Catch:{ Exception -> 0x024e }
+            r3.append(r9)     // Catch:{ Exception -> 0x024e }
+            int r4 = r11.seq_out     // Catch:{ Exception -> 0x024e }
+            r3.append(r4)     // Catch:{ Exception -> 0x024e }
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x024e }
+            org.telegram.messenger.FileLog.d(r3)     // Catch:{ Exception -> 0x024e }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x024e }
+            r3.<init>()     // Catch:{ Exception -> 0x024e }
+            java.lang.String r4 = "got message with in_seq = "
+            r3.append(r4)     // Catch:{ Exception -> 0x024e }
+            int r4 = r2.in_seq_no     // Catch:{ Exception -> 0x024e }
+            r3.append(r4)     // Catch:{ Exception -> 0x024e }
+            r3.append(r9)     // Catch:{ Exception -> 0x024e }
+            int r4 = r2.out_seq_no     // Catch:{ Exception -> 0x024e }
+            r3.append(r4)     // Catch:{ Exception -> 0x024e }
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x024e }
+            org.telegram.messenger.FileLog.d(r3)     // Catch:{ Exception -> 0x024e }
+        L_0x0151:
+            int r3 = r2.out_seq_no     // Catch:{ Exception -> 0x024e }
+            int r4 = r11.seq_in     // Catch:{ Exception -> 0x024e }
+            if (r3 > r4) goto L_0x0158
+            return r12
+        L_0x0158:
+            r5 = 1
+            if (r1 != r5) goto L_0x0162
+            int r5 = r11.mtproto_seq     // Catch:{ Exception -> 0x024e }
+            if (r5 == 0) goto L_0x0162
+            if (r3 < r5) goto L_0x0162
+            return r12
+        L_0x0162:
+            int r3 = r3 - r15
+            if (r4 == r3) goto L_0x01e7
+            boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x024e }
+            if (r3 == 0) goto L_0x016e
+            java.lang.String r3 = "got hole"
+            org.telegram.messenger.FileLog.e((java.lang.String) r3)     // Catch:{ Exception -> 0x024e }
+        L_0x016e:
+            int r3 = r11.seq_in     // Catch:{ Exception -> 0x024e }
+            int r3 = r3 + r15
+            int r4 = r2.out_seq_no     // Catch:{ Exception -> 0x024e }
+            int r4 = r4 - r15
+            r8.sendResendMessage(r11, r3, r4, r12)     // Catch:{ Exception -> 0x024e }
+            android.util.SparseArray<java.util.ArrayList<org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder>> r3 = r8.secretHolesQueue     // Catch:{ Exception -> 0x024e }
+            int r4 = r11.id     // Catch:{ Exception -> 0x024e }
+            java.lang.Object r3 = r3.get(r4)     // Catch:{ Exception -> 0x024e }
+            java.util.ArrayList r3 = (java.util.ArrayList) r3     // Catch:{ Exception -> 0x024e }
+            if (r3 != 0) goto L_0x018f
+            java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ Exception -> 0x024e }
+            r3.<init>()     // Catch:{ Exception -> 0x024e }
+            android.util.SparseArray<java.util.ArrayList<org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder>> r4 = r8.secretHolesQueue     // Catch:{ Exception -> 0x024e }
+            int r5 = r11.id     // Catch:{ Exception -> 0x024e }
+            r4.put(r5, r3)     // Catch:{ Exception -> 0x024e }
+        L_0x018f:
+            int r4 = r3.size()     // Catch:{ Exception -> 0x024e }
+            r5 = 4
+            if (r4 < r5) goto L_0x01d0
+            android.util.SparseArray<java.util.ArrayList<org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder>> r0 = r8.secretHolesQueue     // Catch:{ Exception -> 0x024e }
+            int r1 = r11.id     // Catch:{ Exception -> 0x024e }
+            r0.remove(r1)     // Catch:{ Exception -> 0x024e }
+            org.telegram.tgnet.TLRPC$TL_encryptedChatDiscarded r0 = new org.telegram.tgnet.TLRPC$TL_encryptedChatDiscarded     // Catch:{ Exception -> 0x024e }
+            r0.<init>()     // Catch:{ Exception -> 0x024e }
+            int r1 = r11.id     // Catch:{ Exception -> 0x024e }
+            r0.id = r1     // Catch:{ Exception -> 0x024e }
+            int r1 = r11.user_id     // Catch:{ Exception -> 0x024e }
+            r0.user_id = r1     // Catch:{ Exception -> 0x024e }
+            byte[] r1 = r11.auth_key     // Catch:{ Exception -> 0x024e }
+            r0.auth_key = r1     // Catch:{ Exception -> 0x024e }
+            int r1 = r11.key_create_date     // Catch:{ Exception -> 0x024e }
+            r0.key_create_date = r1     // Catch:{ Exception -> 0x024e }
+            short r1 = r11.key_use_count_in     // Catch:{ Exception -> 0x024e }
+            r0.key_use_count_in = r1     // Catch:{ Exception -> 0x024e }
+            short r1 = r11.key_use_count_out     // Catch:{ Exception -> 0x024e }
+            r0.key_use_count_out = r1     // Catch:{ Exception -> 0x024e }
+            int r1 = r11.seq_in     // Catch:{ Exception -> 0x024e }
+            r0.seq_in = r1     // Catch:{ Exception -> 0x024e }
+            int r1 = r11.seq_out     // Catch:{ Exception -> 0x024e }
+            r0.seq_out = r1     // Catch:{ Exception -> 0x024e }
+            org.telegram.messenger.-$$Lambda$SecretChatHelper$BbpTygtjm8T4Uw7DQIahjZrtV-s r1 = new org.telegram.messenger.-$$Lambda$SecretChatHelper$BbpTygtjm8T4Uw7DQIahjZrtV-s     // Catch:{ Exception -> 0x024e }
+            r1.<init>(r0)     // Catch:{ Exception -> 0x024e }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x024e }
+            int r0 = r11.id     // Catch:{ Exception -> 0x024e }
+            r8.declineSecretChat(r0, r14)     // Catch:{ Exception -> 0x024e }
+            return r12
+        L_0x01d0:
+            org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder r4 = new org.telegram.messenger.SecretChatHelper$TL_decryptedMessageHolder     // Catch:{ Exception -> 0x024e }
+            r4.<init>()     // Catch:{ Exception -> 0x024e }
+            r4.layer = r2     // Catch:{ Exception -> 0x024e }
+            org.telegram.tgnet.TLRPC$EncryptedFile r2 = r0.file     // Catch:{ Exception -> 0x024e }
+            r4.file = r2     // Catch:{ Exception -> 0x024e }
+            int r0 = r0.date     // Catch:{ Exception -> 0x024e }
+            r4.date = r0     // Catch:{ Exception -> 0x024e }
+            r4.new_key_used = r10     // Catch:{ Exception -> 0x024e }
+            r4.decryptedWithVersion = r1     // Catch:{ Exception -> 0x024e }
+            r3.add(r4)     // Catch:{ Exception -> 0x024e }
+            return r12
+        L_0x01e7:
+            if (r1 != r15) goto L_0x01f1
+            int r1 = r11.mtproto_seq     // Catch:{ Exception -> 0x024e }
+            int r1 = java.lang.Math.min(r1, r4)     // Catch:{ Exception -> 0x024e }
+            r11.mtproto_seq = r1     // Catch:{ Exception -> 0x024e }
+        L_0x01f1:
+            int r1 = r2.layer     // Catch:{ Exception -> 0x024e }
+            r8.applyPeerLayer(r11, r1)     // Catch:{ Exception -> 0x024e }
+            int r1 = r2.out_seq_no     // Catch:{ Exception -> 0x024e }
+            r11.seq_in = r1     // Catch:{ Exception -> 0x024e }
+            int r1 = r2.in_seq_no     // Catch:{ Exception -> 0x024e }
+            r11.in_seq_no = r1     // Catch:{ Exception -> 0x024e }
+            org.telegram.messenger.MessagesStorage r1 = r19.getMessagesStorage()     // Catch:{ Exception -> 0x024e }
+            r3 = 1
+            r1.updateEncryptedChatSeq(r11, r3)     // Catch:{ Exception -> 0x024e }
+            org.telegram.tgnet.TLRPC$DecryptedMessage r1 = r2.message     // Catch:{ Exception -> 0x024e }
+            r5 = r1
+            goto L_0x0219
+        L_0x020a:
+            boolean r1 = r2 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageService     // Catch:{ Exception -> 0x024e }
+            if (r1 == 0) goto L_0x0233
+            r1 = r2
+            org.telegram.tgnet.TLRPC$TL_decryptedMessageService r1 = (org.telegram.tgnet.TLRPC$TL_decryptedMessageService) r1     // Catch:{ Exception -> 0x024e }
+            org.telegram.tgnet.TLRPC$DecryptedMessageAction r1 = r1.action     // Catch:{ Exception -> 0x024e }
+            boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_decryptedMessageActionNotifyLayer     // Catch:{ Exception -> 0x024e }
+            if (r1 != 0) goto L_0x0218
+            goto L_0x0233
+        L_0x0218:
+            r5 = r2
+        L_0x0219:
+            java.util.ArrayList r7 = new java.util.ArrayList     // Catch:{ Exception -> 0x024e }
+            r7.<init>()     // Catch:{ Exception -> 0x024e }
+            org.telegram.tgnet.TLRPC$EncryptedFile r3 = r0.file     // Catch:{ Exception -> 0x024e }
+            int r4 = r0.date     // Catch:{ Exception -> 0x024e }
+            r1 = r19
+            r2 = r11
+            r6 = r10
+            org.telegram.tgnet.TLRPC$Message r0 = r1.processDecryptedObject(r2, r3, r4, r5, r6)     // Catch:{ Exception -> 0x024e }
+            if (r0 == 0) goto L_0x022f
+            r7.add(r0)     // Catch:{ Exception -> 0x024e }
+        L_0x022f:
+            r8.checkSecretHoles(r11, r7)     // Catch:{ Exception -> 0x024e }
+            return r7
+        L_0x0233:
+            return r12
+        L_0x0234:
+            r13.reuse()     // Catch:{ Exception -> 0x024e }
+            boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x024e }
+            if (r0 == 0) goto L_0x0252
             java.lang.String r0 = "fingerprint mismatch %x"
             r3 = 1
-            java.lang.Object[] r3 = new java.lang.Object[r3]     // Catch:{ Exception -> 0x027c }
-            java.lang.Long r1 = java.lang.Long.valueOf(r1)     // Catch:{ Exception -> 0x027c }
-            r3[r14] = r1     // Catch:{ Exception -> 0x027c }
-            java.lang.String r0 = java.lang.String.format(r0, r3)     // Catch:{ Exception -> 0x027c }
-            org.telegram.messenger.FileLog.e((java.lang.String) r0)     // Catch:{ Exception -> 0x027c }
-            goto L_0x0280
-        L_0x027c:
+            java.lang.Object[] r3 = new java.lang.Object[r3]     // Catch:{ Exception -> 0x024e }
+            java.lang.Long r1 = java.lang.Long.valueOf(r1)     // Catch:{ Exception -> 0x024e }
+            r3[r14] = r1     // Catch:{ Exception -> 0x024e }
+            java.lang.String r0 = java.lang.String.format(r0, r3)     // Catch:{ Exception -> 0x024e }
+            org.telegram.messenger.FileLog.e((java.lang.String) r0)     // Catch:{ Exception -> 0x024e }
+            goto L_0x0252
+        L_0x024e:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0280:
+        L_0x0252:
             return r12
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SecretChatHelper.decryptMessage(org.telegram.tgnet.TLRPC$EncryptedMessage):java.util.ArrayList");
@@ -3166,21 +3198,19 @@ public class SecretChatHelper extends BaseController {
     }
 
     public void requestNewSecretChatKey(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
-        if (AndroidUtilities.getPeerLayerVersion(tLRPC$EncryptedChat.layer) >= 20) {
-            byte[] bArr = new byte[256];
-            Utilities.random.nextBytes(bArr);
-            byte[] byteArray = BigInteger.valueOf((long) getMessagesStorage().getSecretG()).modPow(new BigInteger(1, bArr), new BigInteger(1, getMessagesStorage().getSecretPBytes())).toByteArray();
-            if (byteArray.length > 256) {
-                byte[] bArr2 = new byte[256];
-                System.arraycopy(byteArray, 1, bArr2, 0, 256);
-                byteArray = bArr2;
-            }
-            tLRPC$EncryptedChat.exchange_id = getSendMessagesHelper().getNextRandomId();
-            tLRPC$EncryptedChat.a_or_b = bArr;
-            tLRPC$EncryptedChat.g_a = byteArray;
-            getMessagesStorage().updateEncryptedChat(tLRPC$EncryptedChat);
-            sendRequestKeyMessage(tLRPC$EncryptedChat, (TLRPC$Message) null);
+        byte[] bArr = new byte[256];
+        Utilities.random.nextBytes(bArr);
+        byte[] byteArray = BigInteger.valueOf((long) getMessagesStorage().getSecretG()).modPow(new BigInteger(1, bArr), new BigInteger(1, getMessagesStorage().getSecretPBytes())).toByteArray();
+        if (byteArray.length > 256) {
+            byte[] bArr2 = new byte[256];
+            System.arraycopy(byteArray, 1, bArr2, 0, 256);
+            byteArray = bArr2;
         }
+        tLRPC$EncryptedChat.exchange_id = getSendMessagesHelper().getNextRandomId();
+        tLRPC$EncryptedChat.a_or_b = bArr;
+        tLRPC$EncryptedChat.g_a = byteArray;
+        getMessagesStorage().updateEncryptedChat(tLRPC$EncryptedChat);
+        sendRequestKeyMessage(tLRPC$EncryptedChat, (TLRPC$Message) null);
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:16:0x006d  */
@@ -3328,10 +3358,67 @@ public class SecretChatHelper extends BaseController {
     }
 
     public void declineSecretChat(int i, boolean z) {
-        TLRPC$TL_messages_discardEncryption tLRPC$TL_messages_discardEncryption = new TLRPC$TL_messages_discardEncryption();
-        tLRPC$TL_messages_discardEncryption.chat_id = i;
-        tLRPC$TL_messages_discardEncryption.delete_history = z;
-        getConnectionsManager().sendRequest(tLRPC$TL_messages_discardEncryption, $$Lambda$SecretChatHelper$zQzZ1UYItYsNZWpUqG3pche4Mk.INSTANCE);
+        declineSecretChat(i, z, 0);
+    }
+
+    public void declineSecretChat(int i, boolean z, long j) {
+        NativeByteBuffer nativeByteBuffer;
+        Exception e;
+        if (j == 0) {
+            try {
+                nativeByteBuffer = new NativeByteBuffer(12);
+                try {
+                    nativeByteBuffer.writeInt32(100);
+                    nativeByteBuffer.writeInt32(i);
+                    nativeByteBuffer.writeBool(z);
+                } catch (Exception e2) {
+                    e = e2;
+                }
+            } catch (Exception e3) {
+                Exception exc = e3;
+                nativeByteBuffer = null;
+                e = exc;
+                FileLog.e((Throwable) e);
+                j = getMessagesStorage().createPendingTask(nativeByteBuffer);
+                TLRPC$TL_messages_discardEncryption tLRPC$TL_messages_discardEncryption = new TLRPC$TL_messages_discardEncryption();
+                tLRPC$TL_messages_discardEncryption.chat_id = i;
+                tLRPC$TL_messages_discardEncryption.delete_history = z;
+                getConnectionsManager().sendRequest(tLRPC$TL_messages_discardEncryption, new RequestDelegate(j) {
+                    public final /* synthetic */ long f$1;
+
+                    {
+                        this.f$1 = r2;
+                    }
+
+                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                        SecretChatHelper.this.lambda$declineSecretChat$20$SecretChatHelper(this.f$1, tLObject, tLRPC$TL_error);
+                    }
+                });
+            }
+            j = getMessagesStorage().createPendingTask(nativeByteBuffer);
+        }
+        TLRPC$TL_messages_discardEncryption tLRPC$TL_messages_discardEncryption2 = new TLRPC$TL_messages_discardEncryption();
+        tLRPC$TL_messages_discardEncryption2.chat_id = i;
+        tLRPC$TL_messages_discardEncryption2.delete_history = z;
+        getConnectionsManager().sendRequest(tLRPC$TL_messages_discardEncryption2, new RequestDelegate(j) {
+            public final /* synthetic */ long f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                SecretChatHelper.this.lambda$declineSecretChat$20$SecretChatHelper(this.f$1, tLObject, tLRPC$TL_error);
+            }
+        });
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$declineSecretChat$20 */
+    public /* synthetic */ void lambda$declineSecretChat$20$SecretChatHelper(long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        if (j != 0) {
+            getMessagesStorage().removePendingTask(j);
+        }
     }
 
     public void acceptSecretChat(TLRPC$EncryptedChat tLRPC$EncryptedChat) {

@@ -1,34 +1,35 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEe;
+import j$.time.a;
 import j$.util.function.CLASSNAMEg;
 import j$.util.function.Consumer;
 import j$.util.function.w;
-import j$.util.k;
 import j$.util.stream.A2;
 import j$.util.stream.S2;
 
 public final /* synthetic */ class L0 implements A2.f {
-
-    /* renamed from: a  reason: collision with root package name */
-    public final /* synthetic */ S2.c var_a;
+    public final /* synthetic */ S2.c a;
 
     public /* synthetic */ L0(S2.c cVar) {
-        this.var_a = cVar;
+        this.a = cVar;
     }
 
     public /* synthetic */ void accept(double d) {
-        k.c(this);
+        a.c(this);
         throw null;
     }
 
     public final void accept(int i) {
-        this.var_a.accept(i);
+        this.a.accept(i);
     }
 
     public /* synthetic */ void accept(long j) {
-        k.b(this);
+        a.b(this);
         throw null;
+    }
+
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return Consumer.CC.$default$andThen(this, consumer);
     }
 
     /* renamed from: b */
@@ -36,23 +37,18 @@ public final /* synthetic */ class L0 implements A2.f {
         Q1.b(this, num);
     }
 
-    public Consumer f(Consumer consumer) {
-        consumer.getClass();
-        return new CLASSNAMEe(this, consumer);
-    }
-
-    public w l(w wVar) {
+    public w k(w wVar) {
         wVar.getClass();
         return new CLASSNAMEg(this, wVar);
     }
 
-    public void m() {
+    public void l() {
     }
 
-    public void n(long j) {
+    public void m(long j) {
     }
 
-    public /* synthetic */ boolean p() {
+    public /* synthetic */ boolean o() {
         return false;
     }
 }

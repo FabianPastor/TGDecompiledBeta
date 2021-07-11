@@ -1,10 +1,9 @@
 package j$.util;
 
-import a.CLASSNAMEb;
-import a.E0;
-import a.G0;
-import a.I0;
-import a.P;
+import j$.B0;
+import j$.D0;
+import j$.F0;
+import j$.M;
 import j$.util.Comparator;
 import j$.util.function.ToIntFunction;
 import java.io.Serializable;
@@ -14,16 +13,20 @@ import java.util.function.ToDoubleFunction;
 import java.util.function.ToLongFunction;
 
 public final /* synthetic */ class e implements Comparator, Serializable {
-
-    /* renamed from: a  reason: collision with root package name */
-    public final /* synthetic */ ToIntFunction var_a;
+    public final /* synthetic */ ToIntFunction a;
 
     public /* synthetic */ e(ToIntFunction toIntFunction) {
-        this.var_a = toIntFunction;
+        this.a = toIntFunction;
     }
 
     public final int compare(Object obj, Object obj2) {
-        return CLASSNAMEb.a(this.var_a.applyAsInt(obj), this.var_a.applyAsInt(obj2));
+        ToIntFunction toIntFunction = this.a;
+        int applyAsInt = toIntFunction.applyAsInt(obj);
+        int applyAsInt2 = toIntFunction.applyAsInt(obj2);
+        if (applyAsInt == applyAsInt2) {
+            return 0;
+        }
+        return applyAsInt < applyAsInt2 ? -1 : 1;
     }
 
     public /* synthetic */ Comparator reversed() {
@@ -35,22 +38,22 @@ public final /* synthetic */ class e implements Comparator, Serializable {
     }
 
     public /* synthetic */ java.util.Comparator thenComparing(Function function) {
-        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, P.c(function));
+        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, M.c(function));
     }
 
     public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
-        return Comparator.CC.$default$thenComparingDouble(this, E0.a(toDoubleFunction));
+        return Comparator.CC.$default$thenComparingDouble(this, B0.a(toDoubleFunction));
     }
 
     public /* synthetic */ java.util.Comparator thenComparingInt(java.util.function.ToIntFunction toIntFunction) {
-        return Comparator.CC.$default$thenComparingInt(this, G0.a(toIntFunction));
+        return Comparator.CC.$default$thenComparingInt(this, D0.a(toIntFunction));
     }
 
     public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
-        return Comparator.CC.$default$thenComparingLong(this, I0.a(toLongFunction));
+        return Comparator.CC.$default$thenComparingLong(this, F0.a(toLongFunction));
     }
 
     public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
-        return Comparator.CC.$default$thenComparing(this, P.c(function), comparator);
+        return Comparator.CC.$default$thenComparing(this, M.c(function), comparator);
     }
 }

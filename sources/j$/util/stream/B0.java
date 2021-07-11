@@ -4,9 +4,7 @@ import j$.util.function.CLASSNAMEf;
 import j$.util.function.q;
 
 public final /* synthetic */ class B0 implements q {
-
-    /* renamed from: a  reason: collision with root package name */
-    public static final /* synthetic */ B0 var_a = new B0();
+    public static final /* synthetic */ B0 a = new B0();
 
     private /* synthetic */ B0() {
     }
@@ -14,7 +12,7 @@ public final /* synthetic */ class B0 implements q {
     public final void accept(double d) {
     }
 
-    public q k(q qVar) {
+    public q j(q qVar) {
         qVar.getClass();
         return new CLASSNAMEf(this, qVar);
     }

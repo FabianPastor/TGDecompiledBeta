@@ -29,8 +29,7 @@ import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.voip.VideoCameraCapturer;
-import org.telegram.messenger.voip.VoIPBaseService;
+import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
@@ -40,7 +39,7 @@ import org.telegram.ui.VoIPFragment;
 import org.webrtc.EglBase;
 import org.webrtc.RendererCommon;
 
-public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationCenter.NotificationCenterDelegate {
+public class VoIPPiPView implements VoIPService.StateListener, NotificationCenter.NotificationCenterDelegate {
     public static int bottomInset = 0;
     /* access modifiers changed from: private */
     public static VoIPPiPView expandedInstance = null;
@@ -48,6 +47,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
     public static VoIPPiPView instance = null;
     public static boolean switchingToPip = false;
     public static int topInset;
+    int animationIndex = -1;
     ValueAnimator animatorToCameraMini;
     ValueAnimator.AnimatorUpdateListener animatorToCameraMiniUpdater = new ValueAnimator.AnimatorUpdateListener() {
         public final void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -57,7 +57,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
     boolean callingUserIsVideo;
     public final VoIPTextureView callingUserTextureView;
     ImageView closeIcon;
-    Runnable collapseRunnable = new Runnable(this) {
+    Runnable collapseRunnable = new Runnable() {
         public void run() {
             if (VoIPPiPView.instance != null) {
                 VoIPPiPView.instance.floatingView.expand(false);
@@ -135,7 +135,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
 
     public static void show(Activity activity, int i, int i2, int i3, int i4) {
         WindowManager windowManager2;
-        if (instance == null && VideoCameraCapturer.eglBase != null) {
+        if (instance == null && VideoCapturerDevice.eglBase != null) {
             WindowManager.LayoutParams createWindowLayoutParams = createWindowLayoutParams(activity, i2, i3, 0.25f);
             instance = new VoIPPiPView(activity, i2, i3, false);
             if (AndroidUtilities.checkInlinePermissions(activity)) {
@@ -151,8 +151,8 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
             instance.setRelativePosition(sharedPreferences.getFloat("relativeX", 1.0f), sharedPreferences.getFloat("relativeY", 0.0f));
             NotificationCenter.getGlobalInstance().addObserver(instance, NotificationCenter.didEndCall);
             windowManager2.addView(instance.windowView, createWindowLayoutParams);
-            instance.currentUserTextureView.renderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
-            instance.callingUserTextureView.renderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
+            instance.currentUserTextureView.renderer.init(VideoCapturerDevice.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
+            instance.callingUserTextureView.renderer.init(VideoCapturerDevice.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
             if (i4 == 0) {
                 instance.windowView.setScaleX(0.5f);
                 instance.windowView.setScaleY(0.5f);
@@ -282,9 +282,10 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
         int i4 = this.yOffset;
         frameLayout.setPadding(i3, i4, i3, i4);
         this.floatingView = new FloatingView(context);
-        VoIPTextureView voIPTextureView = new VoIPTextureView(context, false);
+        VoIPTextureView voIPTextureView = new VoIPTextureView(context, false, true);
         this.callingUserTextureView = voIPTextureView;
-        VoIPTextureView voIPTextureView2 = new VoIPTextureView(context, false);
+        voIPTextureView.scaleType = VoIPTextureView.SCALE_TYPE_NONE;
+        VoIPTextureView voIPTextureView2 = new VoIPTextureView(context, false, true);
         this.currentUserTextureView = voIPTextureView2;
         voIPTextureView2.renderer.setMirror(true);
         this.floatingView.addView(voIPTextureView);
@@ -400,9 +401,9 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
             if (!z && this.currentUserIsVideo) {
-                sharedInstance.setVideoState(1);
-            } else if (z && sharedInstance.getVideoState() == 1) {
-                sharedInstance.setVideoState(2);
+                sharedInstance.setVideoState(false, 1);
+            } else if (z && sharedInstance.getVideoState(false) == 1) {
+                sharedInstance.setVideoState(false, 2);
             }
         }
     }
@@ -412,8 +413,8 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
         boolean z2 = this.callingUserIsVideo;
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
-            this.callingUserIsVideo = sharedInstance.getCurrentVideoState() == 2;
-            this.currentUserIsVideo = sharedInstance.getVideoState() == 2 || sharedInstance.getVideoState() == 1;
+            this.callingUserIsVideo = sharedInstance.getRemoteVideoState() == 2;
+            this.currentUserIsVideo = sharedInstance.getVideoState(false) == 2 || sharedInstance.getVideoState(false) == 1;
             this.currentUserTextureView.renderer.setMirror(sharedInstance.isFrontFaceCamera());
         }
         float f = 1.0f;
@@ -451,15 +452,15 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
         if (this.windowLayoutParams.type == 99) {
             VoIPService sharedInstance = VoIPService.getSharedInstance();
             if (this.currentUserIsVideo) {
-                sharedInstance.setVideoState(1);
+                sharedInstance.setVideoState(false, 1);
             }
         }
     }
 
     public void onResume() {
         VoIPService sharedInstance = VoIPService.getSharedInstance();
-        if (sharedInstance != null && sharedInstance.getVideoState() == 1) {
-            sharedInstance.setVideoState(2);
+        if (sharedInstance != null && sharedInstance.getVideoState(false) == 1) {
+            sharedInstance.setVideoState(false, 2);
         }
     }
 
@@ -480,7 +481,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
             super(context);
             this.touchSlop = (float) ViewConfiguration.get(context).getScaledTouchSlop();
             if (Build.VERSION.SDK_INT >= 21) {
-                setOutlineProvider(new ViewOutlineProvider(this, VoIPPiPView.this) {
+                setOutlineProvider(new ViewOutlineProvider(VoIPPiPView.this) {
                     @TargetApi(21)
                     public void getOutline(View view, Outline outline) {
                         outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), (1.0f / view.getScaleX()) * ((float) AndroidUtilities.dp(4.0f)));
@@ -1191,10 +1192,10 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
                 voIPPiPView2.callingUserTextureView.setStub(voIPPiPView.callingUserTextureView);
                 voIPPiPView.currentUserTextureView.renderer.release();
                 voIPPiPView.callingUserTextureView.renderer.release();
-                EglBase eglBase = VideoCameraCapturer.eglBase;
+                EglBase eglBase = VideoCapturerDevice.eglBase;
                 if (eglBase != null) {
                     voIPPiPView2.currentUserTextureView.renderer.init(eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
-                    voIPPiPView2.callingUserTextureView.renderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
+                    voIPPiPView2.callingUserTextureView.renderer.init(VideoCapturerDevice.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
                     if (VoIPService.getSharedInstance() != null) {
                         VoIPService.getSharedInstance().setSinks(voIPPiPView2.currentUserTextureView.renderer, voIPPiPView2.callingUserTextureView.renderer);
                     }

@@ -14,9 +14,9 @@ class I1 extends M1<T> {
     }
 
     public void accept(Object obj) {
-        if (!this.var_a && this.d.test(obj) == this.c.var_a) {
-            this.var_a = true;
-            this.b = this.c.b;
+        if (!this.a && this.d.test(obj) == this.c.b) {
+            this.a = true;
+            this.b = this.c.c;
         }
     }
 }

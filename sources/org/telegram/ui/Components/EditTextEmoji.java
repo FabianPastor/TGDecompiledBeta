@@ -21,6 +21,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
@@ -112,7 +113,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
     public EditTextEmoji(Context context, SizeNotifierFrameLayout sizeNotifierFrameLayout, BaseFragment baseFragment, int i) {
         super(context);
         this.currentStyle = i;
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         this.parentFragment = baseFragment;
         this.sizeNotifierLayout = sizeNotifierFrameLayout;
         sizeNotifierFrameLayout.setDelegate(this);
@@ -228,7 +229,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         EmojiView emojiView2;
-        if (i == NotificationCenter.emojiDidLoad && (emojiView2 = this.emojiView) != null) {
+        if (i == NotificationCenter.emojiLoaded && (emojiView2 = this.emojiView) != null) {
             emojiView2.invalidateViews();
         }
     }
@@ -280,7 +281,7 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
 
     public void onDestroy() {
         this.destroyed = true;
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         EmojiView emojiView2 = this.emojiView;
         if (emojiView2 != null) {
             emojiView2.onDestroy();
@@ -556,8 +557,8 @@ public class EditTextEmoji extends FrameLayout implements NotificationCenter.Not
                     EmojiView.EmojiViewDelegate.CC.$default$onShowStickerSet(this, tLRPC$StickerSet, tLRPC$InputStickerSet);
                 }
 
-                public /* synthetic */ void onStickerSelected(View view, TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, int i) {
-                    EmojiView.EmojiViewDelegate.CC.$default$onStickerSelected(this, view, tLRPC$Document, str, obj, z, i);
+                public /* synthetic */ void onStickerSelected(View view, TLRPC$Document tLRPC$Document, String str, Object obj, MessageObject.SendAnimationData sendAnimationData, boolean z, int i) {
+                    EmojiView.EmojiViewDelegate.CC.$default$onStickerSelected(this, view, tLRPC$Document, str, obj, sendAnimationData, z, i);
                 }
 
                 public /* synthetic */ void onStickerSetAdd(TLRPC$StickerSetCovered tLRPC$StickerSetCovered) {

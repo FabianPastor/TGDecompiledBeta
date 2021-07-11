@@ -88,7 +88,7 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         this.listView.setLayoutAnimation((LayoutAnimationController) null);
         this.listView.setFocusable(true);
         this.listView.setTag(14);
-        AnonymousClass2 r2 = new LinearLayoutManager(this, context) {
+        AnonymousClass2 r2 = new LinearLayoutManager(context) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }

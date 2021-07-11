@@ -8,6 +8,8 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
     public boolean can_self_unmute;
     public int date;
     public int flags;
+    public int hasCameraFrame;
+    public int hasPresentationFrame;
     public boolean hasVoice;
     public boolean hasVoiceDelayed;
     public boolean just_joined;
@@ -21,12 +23,17 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
     public boolean min;
     public boolean muted;
     public boolean muted_by_you;
-    public TLRPC$TL_dataJSON params;
     public TLRPC$Peer peer;
+    public TLRPC$TL_groupCallParticipantVideo presentation;
+    public String presentationEndpoint;
     public long raise_hand_rating;
     public boolean self;
     public int source;
     public boolean versioned;
+    public TLRPC$TL_groupCallParticipantVideo video;
+    public String videoEndpoint;
+    public int videoIndex;
+    public boolean video_joined;
     public int volume;
     public boolean volume_by_admin;
 
@@ -54,10 +61,11 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         this.min = (readInt32 & 256) != 0;
         this.muted_by_you = (readInt32 & 512) != 0;
         this.volume_by_admin = (readInt32 & 1024) != 0;
-        if ((readInt32 & 4096) != 0) {
+        this.self = (readInt32 & 4096) != 0;
+        if ((readInt32 & 32768) != 0) {
             z2 = true;
         }
-        this.self = z2;
+        this.video_joined = z2;
         this.peer = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.date = abstractSerializedData.readInt32(z);
         if ((this.flags & 8) != 0) {
@@ -74,7 +82,10 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
             this.raise_hand_rating = abstractSerializedData.readInt64(z);
         }
         if ((this.flags & 64) != 0) {
-            this.params = TLRPC$TL_dataJSON.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+            this.video = TLRPC$TL_groupCallParticipantVideo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        }
+        if ((this.flags & 16384) != 0) {
+            this.presentation = TLRPC$TL_groupCallParticipantVideo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
     }
 
@@ -98,7 +109,9 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
         this.flags = i8;
         int i9 = this.self ? i8 | 4096 : i8 & -4097;
         this.flags = i9;
-        abstractSerializedData.writeInt32(i9);
+        int i10 = this.video_joined ? i9 | 32768 : i9 & -32769;
+        this.flags = i10;
+        abstractSerializedData.writeInt32(i10);
         this.peer.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.date);
         if ((this.flags & 8) != 0) {
@@ -115,7 +128,10 @@ public class TLRPC$TL_groupCallParticipant extends TLObject {
             abstractSerializedData.writeInt64(this.raise_hand_rating);
         }
         if ((this.flags & 64) != 0) {
-            this.params.serializeToStream(abstractSerializedData);
+            this.video.serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 16384) != 0) {
+            this.presentation.serializeToStream(abstractSerializedData);
         }
     }
 }

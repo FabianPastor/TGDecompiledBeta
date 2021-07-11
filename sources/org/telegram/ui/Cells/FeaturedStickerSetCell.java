@@ -132,7 +132,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.textView.setText(this.stickersSet.set.title);
         TLRPC$Document tLRPC$Document = null;
         if (z2) {
-            AnonymousClass1 r2 = new Drawable(this) {
+            AnonymousClass1 r2 = new Drawable() {
                 Paint paint = new Paint(1);
 
                 public int getOpacity() {
@@ -185,7 +185,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
             if (z6) {
                 imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
             } else {
-                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document);
+                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) closestPhotoSizeWithSize, tLRPC$Document, tLRPC$StickerSetCovered2.set.thumb_version);
             }
             ImageLocation imageLocation2 = imageLocation;
             if (!z6 || !MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {

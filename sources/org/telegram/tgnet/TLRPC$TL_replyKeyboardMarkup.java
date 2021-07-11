@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_replyKeyboardMarkup extends TLRPC$ReplyMarkup {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -22,6 +22,9 @@ public class TLRPC$TL_replyKeyboardMarkup extends TLRPC$ReplyMarkup {
                     return;
                 }
             }
+            if ((this.flags & 8) != 0) {
+                this.placeholder = abstractSerializedData.readString(z);
+            }
         } else if (z) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
         }
@@ -41,6 +44,9 @@ public class TLRPC$TL_replyKeyboardMarkup extends TLRPC$ReplyMarkup {
         abstractSerializedData.writeInt32(size);
         for (int i4 = 0; i4 < size; i4++) {
             this.rows.get(i4).serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 8) != 0) {
+            abstractSerializedData.writeString(this.placeholder);
         }
     }
 }

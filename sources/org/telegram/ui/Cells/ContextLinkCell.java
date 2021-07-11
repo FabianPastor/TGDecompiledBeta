@@ -51,6 +51,7 @@ import org.telegram.ui.Components.RadialProgress2;
 import org.telegram.ui.PhotoViewer;
 
 public class ContextLinkCell extends FrameLayout implements DownloadController.FileDownloadProgressListener {
+    private static AccelerateInterpolator interpolator = new AccelerateInterpolator(0.5f);
     public final Property<ContextLinkCell, Float> IMAGE_SCALE;
     private int TAG;
     /* access modifiers changed from: private */
@@ -98,10 +99,6 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
-    static {
-        new AccelerateInterpolator(0.5f);
-    }
-
     public ContextLinkCell(Context context) {
         this(context, false);
     }
@@ -145,7 +142,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         setWillNotDraw(false);
     }
 
-    /* JADX WARNING: type inference failed for: r3v1, types: [int, boolean] */
+    /* JADX WARNING: type inference failed for: r3v1, types: [boolean, int] */
     /* JADX WARNING: type inference failed for: r11v29, types: [org.telegram.tgnet.TLRPC$WebDocument] */
     /* JADX WARNING: type inference failed for: r11v32, types: [org.telegram.tgnet.TLRPC$WebDocument] */
     /* JADX WARNING: type inference failed for: r3v24 */

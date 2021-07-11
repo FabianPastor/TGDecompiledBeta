@@ -253,7 +253,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r10.<init>()
             r2.setOnClickListener(r10)
             org.telegram.ui.Components.PhotoPaintView$3 r2 = new org.telegram.ui.Components.PhotoPaintView$3
-            r2.<init>(r0, r1)
+            r2.<init>(r1)
             r0.selectionContainerView = r2
             r0.addView(r2)
             org.telegram.ui.Components.Paint.Views.ColorPicker r2 = new org.telegram.ui.Components.Paint.Views.ColorPicker
@@ -295,7 +295,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r14, r7, r15, r7)
             android.widget.TextView r2 = r0.cancelTextView
             java.lang.String r14 = "Cancel"
-            r15 = 2131624639(0x7f0e02bf, float:1.8876463E38)
+            r15 = 2131624654(0x7f0e02ce, float:1.8876494E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r14, r15)
             java.lang.String r14 = r14.toUpperCase()
             r2.setText(r14)
@@ -327,7 +327,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r5, r7, r10, r7)
             android.widget.TextView r2 = r0.doneTextView
             java.lang.String r5 = "Done"
-            r10 = 2131625212(0x7f0e04fc, float:1.8877626E38)
+            r10 = 2131625229(0x7f0e050d, float:1.887766E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r10)
             java.lang.String r5 = r5.toUpperCase()
             r2.setText(r5)
@@ -345,7 +345,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r4)
             android.widget.ImageView r2 = r0.paintButton
-            r4 = 2131165911(0x7var_d7, float:1.7946052E38)
+            r4 = 2131165916(0x7var_dc, float:1.7946063E38)
             r2.setImageResource(r4)
             android.widget.ImageView r2 = r0.paintButton
             r4 = 1090519039(0x40ffffff, float:7.9999995)
@@ -370,7 +370,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r5)
-            r5 = 2131165915(0x7var_db, float:1.794606E38)
+            r5 = 2131165920(0x7var_e0, float:1.794607E38)
             r2.setImageResource(r5)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r5)
@@ -385,7 +385,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r1)
-            r1 = 2131165913(0x7var_d9, float:1.7946057E38)
+            r1 = 2131165918(0x7var_de, float:1.7946067E38)
             r2.setImageResource(r1)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r1)
@@ -1584,7 +1584,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     private LinearLayout buttonForBrush(int i, int i2, String str, boolean z) {
-        AnonymousClass8 r0 = new LinearLayout(this, getContext()) {
+        AnonymousClass8 r0 = new LinearLayout(getContext()) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 return true;
             }
@@ -1660,7 +1660,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     private LinearLayout buttonForText(int i, String str, int i2, boolean z) {
-        AnonymousClass9 r0 = new LinearLayout(this, getContext()) {
+        AnonymousClass9 r0 = new LinearLayout(getContext()) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 return true;
             }
@@ -1852,26 +1852,16 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     public /* synthetic */ void lambda$detectFaces$21$PhotoPaintView() {
         FaceDetector faceDetector = null;
         try {
-            FaceDetector.Builder builder = new FaceDetector.Builder(getContext());
-            builder.setMode(1);
-            builder.setLandmarkType(1);
-            builder.setTrackingEnabled(false);
-            faceDetector = builder.build();
+            faceDetector = new FaceDetector.Builder(getContext()).setMode(1).setLandmarkType(1).setTrackingEnabled(false).build();
             if (!faceDetector.isOperational()) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("face detection is not operational");
                 }
-                if (faceDetector != null) {
-                    faceDetector.release();
-                    return;
-                }
+                faceDetector.release();
                 return;
             }
-            Frame.Builder builder2 = new Frame.Builder();
-            builder2.setBitmap(this.facesBitmap);
-            builder2.setRotation(getFrameRotation());
             try {
-                SparseArray<Face> detect = faceDetector.detect(builder2.build());
+                SparseArray<Face> detect = faceDetector.detect(new Frame.Builder().setBitmap(this.facesBitmap).setRotation(getFrameRotation()).build());
                 ArrayList<PhotoFace> arrayList = new ArrayList<>();
                 Size paintingSize2 = getPaintingSize();
                 for (int i = 0; i < detect.size(); i++) {
@@ -1881,14 +1871,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                     }
                 }
                 this.faces = arrayList;
-                if (faceDetector != null) {
-                    faceDetector.release();
-                }
+                faceDetector.release();
             } catch (Throwable th) {
                 FileLog.e(th);
-                if (faceDetector != null) {
-                    faceDetector.release();
-                }
+                faceDetector.release();
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);

@@ -973,7 +973,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 linearLayout2.setOrientation(1);
                 this.buttonsLayout = linearLayout2;
             } else {
-                this.buttonsLayout = new FrameLayout(this, getContext()) {
+                this.buttonsLayout = new FrameLayout(getContext()) {
                     /* access modifiers changed from: protected */
                     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                         int i5;
@@ -1055,7 +1055,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.buttonsLayout.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             r1.addView(this.buttonsLayout, LayoutHelper.createLinear(-1, 52));
             if (this.positiveButtonText != null) {
-                AnonymousClass4 r12 = new TextView(this, getContext()) {
+                AnonymousClass4 r12 = new TextView(getContext()) {
                     public void setEnabled(boolean z) {
                         super.setEnabled(z);
                         setAlpha(z ? 1.0f : 0.5f);
@@ -1087,7 +1087,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 });
             }
             if (this.negativeButtonText != null) {
-                AnonymousClass5 r13 = new TextView(this, getContext()) {
+                AnonymousClass5 r13 = new TextView(getContext()) {
                     public void setEnabled(boolean z) {
                         super.setEnabled(z);
                         setAlpha(z ? 1.0f : 0.5f);
@@ -1121,7 +1121,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 });
             }
             if (this.neutralButtonText != null) {
-                AnonymousClass6 r14 = new TextView(this, getContext()) {
+                AnonymousClass6 r14 = new TextView(getContext()) {
                     public void setEnabled(boolean z) {
                         super.setEnabled(z);
                         setAlpha(z ? 1.0f : 0.5f);
@@ -1370,10 +1370,6 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
     }
 
-    public void setDismissDialogByButtons(boolean z) {
-        this.dismissDialogByButtons = z;
-    }
-
     public void setProgress(int i) {
         this.currentProgress = i;
         LineProgressView lineProgressView2 = this.lineProgressView;
@@ -1429,30 +1425,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         super.setCanceledOnTouchOutside(z);
     }
 
-    public void setTopImage(int i, int i2) {
-        this.topResId = i;
-        this.topBackgroundColor = i2;
-    }
-
-    public void setTopHeight(int i) {
-        this.topHeight = i;
-    }
-
     public void setTitle(CharSequence charSequence) {
         this.title = charSequence;
         TextView textView = this.titleTextView;
         if (textView != null) {
             textView.setText(charSequence);
         }
-    }
-
-    public void setSecondTitle(CharSequence charSequence) {
-        this.secondTitle = charSequence;
-    }
-
-    public void setPositiveButton(CharSequence charSequence, DialogInterface.OnClickListener onClickListener2) {
-        this.positiveButtonText = charSequence;
-        this.positiveButtonListener = onClickListener2;
     }
 
     public void setNeutralButton(CharSequence charSequence, DialogInterface.OnClickListener onClickListener2) {
@@ -1569,8 +1547,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
 
         public Builder setView(View view) {
-            setView(view, -2);
-            return this;
+            return setView(view, -2);
         }
 
         public Builder setView(View view, int i) {

@@ -16,6 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utilities {
+    public static volatile DispatchQueue cacheClearQueue = new DispatchQueue("cacheClearQueue");
     public static volatile DispatchQueue globalQueue = new DispatchQueue("globalQueue");
     protected static final char[] hexArray = "0123456789ABCDEF".toCharArray();
     public static Pattern pattern = Pattern.compile("[\\-0-9]+");
@@ -46,7 +47,13 @@ public class Utilities {
 
     public static native void drawDitheredGradient(Bitmap bitmap, int[] iArr, int i, int i2, int i3, int i4);
 
+    public static native void generateGradient(Bitmap bitmap, boolean z, int i, float f, int i2, int i3, int i4, int[] iArr);
+
     public static native long getDirSize(String str, int i, boolean z);
+
+    public static byte[] intToBytes(int i) {
+        return new byte[]{(byte) (i >>> 24), (byte) (i >>> 16), (byte) (i >>> 8), (byte) i};
+    }
 
     public static native boolean loadWebpImage(Bitmap bitmap, ByteBuffer byteBuffer, int i, BitmapFactory.Options options, boolean z);
 

@@ -673,7 +673,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     return ChannelCreateActivity.this.lambda$createView$7$ChannelCreateActivity(textView, i, keyEvent);
                 }
             });
-            this.descriptionTextView.addTextChangedListener(new TextWatcher(this) {
+            this.descriptionTextView.addTextChangedListener(new TextWatcher() {
                 public void afterTextChanged(Editable editable) {
                 }
 

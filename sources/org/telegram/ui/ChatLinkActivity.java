@@ -246,6 +246,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
 
     public View createView(Context context) {
         this.searching = false;
+        this.searchWas = false;
         this.actionBar.setBackButtonImage(NUM);
         int i = 1;
         this.actionBar.setAllowOverlayTitle(true);
@@ -257,9 +258,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 }
             }
         });
-        ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, NUM);
-        addItem.setIsSearchField(true);
-        addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             public void onSearchExpand() {
                 boolean unused = ChatLinkActivity.this.searching = true;
                 ChatLinkActivity.this.emptyView.setShowAtCenter(true);
@@ -298,8 +297,8 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 }
             }
         });
-        this.searchItem = addItem;
-        addItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        this.searchItem = actionBarMenuItemSearchListener;
+        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", NUM));
         this.searchAdapter = new SearchAdapter(context);
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
@@ -835,7 +834,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         private EmptyView emptyView;
         private TextView messageTextView;
 
-        public HintInnerCell(ChatLinkActivity chatLinkActivity, Context context) {
+        public HintInnerCell(Context context) {
             super(context);
             EmptyView emptyView2 = new EmptyView(context);
             this.emptyView = emptyView2;
@@ -845,15 +844,15 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             textView.setTextColor(Theme.getColor("chats_message"));
             this.messageTextView.setTextSize(1, 14.0f);
             this.messageTextView.setGravity(17);
-            if (!chatLinkActivity.isChannel) {
-                TLRPC$Chat chat = chatLinkActivity.getMessagesController().getChat(Integer.valueOf(chatLinkActivity.info.linked_chat_id));
+            if (!ChatLinkActivity.this.isChannel) {
+                TLRPC$Chat chat = ChatLinkActivity.this.getMessagesController().getChat(Integer.valueOf(ChatLinkActivity.this.info.linked_chat_id));
                 if (chat != null) {
                     this.messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("DiscussionGroupHelp", NUM, chat.title)));
                 }
-            } else if (chatLinkActivity.info == null || chatLinkActivity.info.linked_chat_id == 0) {
+            } else if (ChatLinkActivity.this.info == null || ChatLinkActivity.this.info.linked_chat_id == 0) {
                 this.messageTextView.setText(LocaleController.getString("DiscussionChannelHelp3", NUM));
             } else {
-                TLRPC$Chat chat2 = chatLinkActivity.getMessagesController().getChat(Integer.valueOf(chatLinkActivity.info.linked_chat_id));
+                TLRPC$Chat chat2 = ChatLinkActivity.this.getMessagesController().getChat(Integer.valueOf(ChatLinkActivity.this.info.linked_chat_id));
                 if (chat2 != null) {
                     this.messageTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("DiscussionChannelGroupSetHelp2", NUM, chat2.title)));
                 }
@@ -1191,7 +1190,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                     view = new TextInfoPrivacyCell(this.mContext);
                     view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                 } else if (i != 2) {
-                    view = new HintInnerCell(ChatLinkActivity.this, this.mContext);
+                    view = new HintInnerCell(this.mContext);
                 } else {
                     view2 = new ManageChatTextCell(this.mContext);
                     view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));

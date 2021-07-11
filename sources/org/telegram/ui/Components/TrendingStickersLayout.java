@@ -20,6 +20,7 @@ import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
@@ -416,7 +417,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
 
     private void showStickerSet(final TLRPC$InputStickerSet tLRPC$InputStickerSet) {
         StickersAlert stickersAlert = new StickersAlert(getContext(), this.parentFragment, tLRPC$InputStickerSet, (TLRPC$TL_messages_stickerSet) null, this.delegate.canSendSticker() ? new StickersAlert.StickersAlertDelegate() {
-            public void onStickerSelected(TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, boolean z2, int i) {
+            public void onStickerSelected(TLRPC$Document tLRPC$Document, String str, Object obj, MessageObject.SendAnimationData sendAnimationData, boolean z, boolean z2, int i) {
                 TrendingStickersLayout.this.delegate.onStickerSelected(tLRPC$Document, obj, z, z2, i);
             }
 
@@ -730,7 +731,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 org.telegram.ui.Components.TrendingStickersLayout$TrendingStickersAdapter$1 r4 = new org.telegram.ui.Components.TrendingStickersLayout$TrendingStickersAdapter$1
                 android.content.Context r0 = r2.context
                 r1 = 0
-                r4.<init>(r2, r0, r1)
+                r4.<init>(r0, r1)
                 org.telegram.ui.Components.BackupImageView r0 = r4.getImageView()
                 r0.setLayerNum(r3)
             L_0x0063:

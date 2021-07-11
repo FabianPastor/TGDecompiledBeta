@@ -28,6 +28,7 @@ public class ChecksHintView extends FrameLayout {
     private RLottieImageView[] imageView = new RLottieImageView[2];
     /* access modifiers changed from: private */
     public ChatMessageCell messageCell;
+    private long showingDuration = 2000;
     /* access modifiers changed from: private */
     public TextView[] textView = new TextView[2];
     private float translationY;
@@ -124,6 +125,7 @@ public class ChecksHintView extends FrameLayout {
         }
         setPivotX(left2);
         setPivotY((float) getMeasuredHeight());
+        this.messageCell = chatMessageCell;
         AnimatorSet animatorSet2 = this.animatorSet;
         if (animatorSet2 != null) {
             animatorSet2.cancel();
@@ -138,14 +140,11 @@ public class ChecksHintView extends FrameLayout {
             this.animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     AnimatorSet unused = ChecksHintView.this.animatorSet = null;
-                    ChecksHintView checksHintView = ChecksHintView.this;
-                    $$Lambda$ChecksHintView$1$4wSIi5HkMWTkcQTBqhmdbCal4 r0 = new Runnable() {
+                    AndroidUtilities.runOnUIThread(ChecksHintView.this.hideRunnable = new Runnable() {
                         public final void run() {
                             ChecksHintView.AnonymousClass1.this.lambda$onAnimationEnd$0$ChecksHintView$1();
                         }
-                    };
-                    Runnable unused2 = checksHintView.hideRunnable = r0;
-                    AndroidUtilities.runOnUIThread(r0, 3000);
+                    }, 3000);
                 }
 
                 /* access modifiers changed from: private */

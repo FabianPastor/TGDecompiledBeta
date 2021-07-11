@@ -298,7 +298,7 @@ public class LinkEditActivity extends BaseFragment {
         });
         resetUses();
         r2.addView(this.usesChooseView);
-        AnonymousClass4 r3 = new EditText(this, context) {
+        AnonymousClass4 r3 = new EditText(context) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 1) {
                     setCursorVisible(true);

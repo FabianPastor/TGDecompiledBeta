@@ -210,13 +210,15 @@ public class RecyclerListView extends RecyclerView {
 
         public abstract int getCountForSection(int i);
 
+        public abstract Object getItem(int i, int i2);
+
         public abstract int getItemViewType(int i, int i2);
 
         public abstract int getSectionCount();
 
         public abstract View getSectionHeaderView(int i, View view);
 
-        public abstract boolean isEnabled(int i, int i2);
+        public abstract boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2);
 
         public abstract void onBindViewHolder(int i, int i2, RecyclerView.ViewHolder viewHolder);
 
@@ -250,7 +252,7 @@ public class RecyclerListView extends RecyclerView {
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             int adapterPosition = viewHolder.getAdapterPosition();
-            return isEnabled(getSectionForPosition(adapterPosition), getPositionInSectionForPosition(adapterPosition));
+            return isEnabled(viewHolder, getSectionForPosition(adapterPosition), getPositionInSectionForPosition(adapterPosition));
         }
 
         public int getItemCount() {
@@ -264,6 +266,10 @@ public class RecyclerListView extends RecyclerView {
                 this.count += internalGetCountForSection(i2);
             }
             return this.count;
+        }
+
+        public final Object getItem(int i) {
+            return getItem(getSectionForPosition(i), getPositionInSectionForPosition(i));
         }
 
         public final int getItemViewType(int i) {
@@ -858,8 +864,7 @@ public class RecyclerListView extends RecyclerView {
                                 RecyclerListView.this.onItemClickListenerExtended.onItemClick(access$300, access$600, x - access$300.getX(), y - access$300.getY());
                             }
                         }
-                        RecyclerListView recyclerListView2 = RecyclerListView.this;
-                        AnonymousClass1 r2 = new Runnable() {
+                        AndroidUtilities.runOnUIThread(RecyclerListView.this.clickRunnable = new Runnable() {
                             public void run() {
                                 if (this == RecyclerListView.this.clickRunnable) {
                                     Runnable unused = RecyclerListView.this.clickRunnable = null;
@@ -883,15 +888,13 @@ public class RecyclerListView extends RecyclerView {
                                     }
                                 }
                             }
-                        };
-                        Runnable unused = recyclerListView2.clickRunnable = r2;
-                        AndroidUtilities.runOnUIThread(r2, (long) ViewConfiguration.getPressedStateDuration());
+                        }, (long) ViewConfiguration.getPressedStateDuration());
                         if (RecyclerListView.this.selectChildRunnable != null) {
                             View access$3002 = RecyclerListView.this.currentChildView;
                             AndroidUtilities.cancelRunOnUIThread(RecyclerListView.this.selectChildRunnable);
-                            Runnable unused2 = RecyclerListView.this.selectChildRunnable = null;
-                            View unused3 = RecyclerListView.this.currentChildView = null;
-                            boolean unused4 = RecyclerListView.this.interceptedByChild = false;
+                            Runnable unused = RecyclerListView.this.selectChildRunnable = null;
+                            View unused2 = RecyclerListView.this.currentChildView = null;
+                            boolean unused3 = RecyclerListView.this.interceptedByChild = false;
                             RecyclerListView.this.removeSelection(access$3002, motionEvent);
                         }
                     }
@@ -907,7 +910,7 @@ public class RecyclerListView extends RecyclerView {
                                     access$300.performHapticFeedback(0);
                                     access$300.sendAccessibilityEvent(2);
                                 }
-                            } else if (RecyclerListView.this.onItemLongClickListenerExtended != null && RecyclerListView.this.onItemLongClickListenerExtended.onItemClick(RecyclerListView.this.currentChildView, RecyclerListView.this.currentChildPosition, motionEvent.getX() - RecyclerListView.this.currentChildView.getX(), motionEvent.getY() - RecyclerListView.this.currentChildView.getY())) {
+                            } else if (RecyclerListView.this.onItemLongClickListenerExtended.onItemClick(RecyclerListView.this.currentChildView, RecyclerListView.this.currentChildPosition, motionEvent.getX() - RecyclerListView.this.currentChildView.getX(), motionEvent.getY() - RecyclerListView.this.currentChildView.getY())) {
                                 access$300.performHapticFeedback(0);
                                 access$300.sendAccessibilityEvent(2);
                                 boolean unused = RecyclerListView.this.longPressCalled = true;
@@ -960,7 +963,7 @@ public class RecyclerListView extends RecyclerView {
                     obtain.recycle();
                 }
             }
-            if (!(RecyclerListView.this.currentChildView == null || RecyclerListView.this.interceptedByChild || motionEvent2 == null)) {
+            if (RecyclerListView.this.currentChildView != null && !RecyclerListView.this.interceptedByChild) {
                 try {
                     RecyclerListView.this.gestureDetector.onTouchEvent(motionEvent2);
                 } catch (Exception e) {
@@ -1290,10 +1293,9 @@ public class RecyclerListView extends RecyclerView {
         RecyclerView.ViewHolder childViewHolder;
         int adapterPosition;
         int sectionForPosition;
-        int i;
         RecyclerView.ViewHolder childViewHolder2;
         View view;
-        int i2;
+        int i;
         if ((this.scrollingByUser && this.fastScroll != null) || (this.sectionsType != 0 && this.sectionsAdapter != null)) {
             RecyclerView.LayoutManager layoutManager = getLayoutManager();
             if (layoutManager instanceof LinearLayoutManager) {
@@ -1303,25 +1305,25 @@ public class RecyclerListView extends RecyclerView {
                 }
                 if (this.sectionsAdapter != null) {
                     int paddingTop = getPaddingTop();
-                    int i3 = this.sectionsType;
-                    int i4 = Integer.MAX_VALUE;
-                    int i5 = 0;
-                    if (i3 == 1) {
+                    int i2 = this.sectionsType;
+                    int i3 = Integer.MAX_VALUE;
+                    int i4 = 0;
+                    if (i2 == 1) {
                         int childCount = getChildCount();
-                        int i6 = Integer.MAX_VALUE;
+                        int i5 = Integer.MAX_VALUE;
                         View view2 = null;
-                        int i7 = 0;
-                        for (int i8 = 0; i8 < childCount; i8++) {
-                            View childAt = getChildAt(i8);
+                        int i6 = 0;
+                        for (int i7 = 0; i7 < childCount; i7++) {
+                            View childAt = getChildAt(i7);
                             int bottom = childAt.getBottom();
                             if (bottom > this.sectionOffset + paddingTop) {
-                                if (bottom < i4) {
-                                    i4 = bottom;
+                                if (bottom < i3) {
                                     view2 = childAt;
+                                    i3 = bottom;
                                 }
-                                i7 = Math.max(i7, bottom);
-                                if (bottom >= this.sectionOffset + paddingTop + AndroidUtilities.dp(32.0f) && bottom < i6) {
-                                    i6 = bottom;
+                                i6 = Math.max(i6, bottom);
+                                if (bottom >= this.sectionOffset + paddingTop + AndroidUtilities.dp(32.0f) && bottom < i5) {
+                                    i5 = bottom;
                                 }
                             }
                         }
@@ -1349,65 +1351,65 @@ public class RecyclerListView extends RecyclerView {
                                         this.sectionsCount++;
                                     }
                                 }
-                                int i9 = adapterPosition2;
-                                for (int i10 = this.startSection; i10 < this.startSection + this.sectionsCount; i10++) {
+                                int i8 = adapterPosition2;
+                                for (int i9 = this.startSection; i9 < this.startSection + this.sectionsCount; i9++) {
                                     if (!this.headersCache.isEmpty()) {
                                         view = this.headersCache.get(0);
                                         this.headersCache.remove(0);
                                     } else {
                                         view = null;
                                     }
-                                    View sectionHeaderView = getSectionHeaderView(i10, view);
+                                    View sectionHeaderView = getSectionHeaderView(i9, view);
                                     this.headers.add(sectionHeaderView);
-                                    int countForSection2 = this.sectionsAdapter.getCountForSection(i10);
-                                    if (i10 == this.startSection) {
-                                        int positionInSectionForPosition = this.sectionsAdapter.getPositionInSectionForPosition(i9);
+                                    int countForSection2 = this.sectionsAdapter.getCountForSection(i9);
+                                    if (i9 == this.startSection) {
+                                        int positionInSectionForPosition = this.sectionsAdapter.getPositionInSectionForPosition(i8);
                                         if (positionInSectionForPosition == countForSection2 - 1) {
                                             sectionHeaderView.setTag(Integer.valueOf((-sectionHeaderView.getHeight()) + paddingTop));
                                         } else if (positionInSectionForPosition == countForSection2 - 2) {
-                                            View childAt2 = getChildAt(i9 - adapterPosition2);
+                                            View childAt2 = getChildAt(i8 - adapterPosition2);
                                             if (childAt2 != null) {
-                                                i2 = childAt2.getTop() + paddingTop;
+                                                i = childAt2.getTop() + paddingTop;
                                             } else {
-                                                i2 = -AndroidUtilities.dp(100.0f);
+                                                i = -AndroidUtilities.dp(100.0f);
                                             }
-                                            sectionHeaderView.setTag(Integer.valueOf(Math.min(i2, 0)));
+                                            sectionHeaderView.setTag(Integer.valueOf(Math.min(i, 0)));
                                         } else {
                                             sectionHeaderView.setTag(0);
                                         }
                                         countForSection2 -= this.sectionsAdapter.getPositionInSectionForPosition(adapterPosition2);
                                     } else {
-                                        View childAt3 = getChildAt(i9 - adapterPosition2);
+                                        View childAt3 = getChildAt(i8 - adapterPosition2);
                                         if (childAt3 != null) {
                                             sectionHeaderView.setTag(Integer.valueOf(childAt3.getTop() + paddingTop));
                                         } else {
                                             sectionHeaderView.setTag(Integer.valueOf(-AndroidUtilities.dp(100.0f)));
                                         }
                                     }
-                                    i9 += countForSection2;
+                                    i8 += countForSection2;
                                 }
                             }
                         }
-                    } else if (i3 == 2) {
+                    } else if (i2 == 2) {
                         this.pinnedHeaderShadowTargetAlpha = 0.0f;
                         if (this.sectionsAdapter.getItemCount() != 0) {
                             int childCount2 = getChildCount();
-                            int i11 = Integer.MAX_VALUE;
+                            int i10 = Integer.MAX_VALUE;
                             View view3 = null;
-                            int i12 = 0;
+                            int i11 = 0;
                             View view4 = null;
-                            for (int i13 = 0; i13 < childCount2; i13++) {
-                                View childAt4 = getChildAt(i13);
+                            for (int i12 = 0; i12 < childCount2; i12++) {
+                                View childAt4 = getChildAt(i12);
                                 int bottom2 = childAt4.getBottom();
                                 if (bottom2 > this.sectionOffset + paddingTop) {
-                                    if (bottom2 < i4) {
+                                    if (bottom2 < i3) {
                                         view3 = childAt4;
-                                        i4 = bottom2;
+                                        i3 = bottom2;
                                     }
-                                    i12 = Math.max(i12, bottom2);
-                                    if (bottom2 >= this.sectionOffset + paddingTop + AndroidUtilities.dp(32.0f) && bottom2 < i11) {
+                                    i11 = Math.max(i11, bottom2);
+                                    if (bottom2 >= this.sectionOffset + paddingTop + AndroidUtilities.dp(32.0f) && bottom2 < i10) {
                                         view4 = childAt4;
-                                        i11 = bottom2;
+                                        i10 = bottom2;
                                     }
                                 }
                             }
@@ -1425,24 +1427,20 @@ public class RecyclerListView extends RecyclerView {
                                 }
                                 int countForSection3 = this.sectionsAdapter.getCountForSection(sectionForPosition);
                                 int positionInSectionForPosition2 = this.sectionsAdapter.getPositionInSectionForPosition((adapterPosition = childViewHolder.getAdapterPosition()));
-                                if (i12 == 0 || i12 >= getMeasuredHeight() - getPaddingBottom()) {
-                                    i5 = this.sectionOffset;
+                                if (i11 == 0 || i11 >= getMeasuredHeight() - getPaddingBottom()) {
+                                    i4 = this.sectionOffset;
                                 }
                                 if (positionInSectionForPosition2 == countForSection3 - 1) {
                                     int height = this.pinnedHeader.getHeight();
-                                    if (view3 != null) {
-                                        int top = ((view3.getTop() - paddingTop) - this.sectionOffset) + view3.getHeight();
-                                        i = top < height ? top - height : paddingTop;
+                                    int top = ((view3.getTop() - paddingTop) - this.sectionOffset) + view3.getHeight();
+                                    int i13 = top < height ? top - height : paddingTop;
+                                    if (i13 < 0) {
+                                        this.pinnedHeader.setTag(Integer.valueOf(paddingTop + i4 + i13));
                                     } else {
-                                        i = -AndroidUtilities.dp(100.0f);
-                                    }
-                                    if (i < 0) {
-                                        this.pinnedHeader.setTag(Integer.valueOf(paddingTop + i5 + i));
-                                    } else {
-                                        this.pinnedHeader.setTag(Integer.valueOf(paddingTop + i5));
+                                        this.pinnedHeader.setTag(Integer.valueOf(paddingTop + i4));
                                     }
                                 } else {
-                                    this.pinnedHeader.setTag(Integer.valueOf(paddingTop + i5));
+                                    this.pinnedHeader.setTag(Integer.valueOf(paddingTop + i4));
                                 }
                                 invalidate();
                             }

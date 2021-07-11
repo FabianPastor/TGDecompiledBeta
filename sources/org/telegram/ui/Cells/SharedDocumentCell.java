@@ -56,6 +56,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
     private int currentAccount;
     private TextView dateTextView;
     private SpannableStringBuilder dotSpan;
+    private boolean drawDownloadIcon;
     /* access modifiers changed from: private */
     public TextView extTextView;
     boolean ignoreRequestLayout;
@@ -86,6 +87,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         super(context);
         Context context2 = context;
         int i2 = i;
+        this.drawDownloadIcon = true;
         int i3 = UserConfig.selectedAccount;
         this.currentAccount = i3;
         this.viewType = i2;
@@ -255,6 +257,10 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         }
     }
 
+    public void setDrawDownloadIcon(boolean z) {
+        this.drawDownloadIcon = z;
+    }
+
     public void setTextAndValueAndTypeAndThumb(String str, String str2, String str3, String str4, int i, boolean z) {
         String str5;
         String str6;
@@ -400,28 +406,12 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         this.loaded = false;
         this.loading = false;
         TLRPC$Document document = messageObject.getDocument();
-        int i = 8;
         String str3 = "";
-        if (messageObject2 == null || document == null) {
-            this.nameTextView.setText(str3);
-            this.extTextView.setText(str3);
-            this.dateTextView.setText(str3);
-            this.placeholderImageView.setVisibility(0);
-            this.extTextView.setVisibility(0);
-            this.extTextView.setAlpha(1.0f);
-            this.placeholderImageView.setAlpha(1.0f);
-            this.thumbImageView.setVisibility(4);
-            this.thumbImageView.setImageBitmap((Bitmap) null);
-            this.caption = null;
-            TextView textView = this.captionTextView;
-            if (textView != null) {
-                textView.setVisibility(8);
-            }
-        } else {
+        if (document != null) {
             String str4 = null;
             if (messageObject.isMusic()) {
-                for (int i2 = 0; i2 < document.attributes.size(); i2++) {
-                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute = document.attributes.get(i2);
+                for (int i = 0; i < document.attributes.size(); i++) {
+                    TLRPC$DocumentAttribute tLRPC$DocumentAttribute = document.attributes.get(i);
                     if ((tLRPC$DocumentAttribute instanceof TLRPC$TL_documentAttributeAudio) && !(((str = tLRPC$DocumentAttribute.performer) == null || str.length() == 0) && ((str2 = tLRPC$DocumentAttribute.title) == null || str2.length() == 0))) {
                         str4 = messageObject.getMusicAuthor() + " - " + messageObject.getMusicTitle();
                     }
@@ -440,12 +430,12 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             this.placeholderImageView.setVisibility(0);
             this.extTextView.setVisibility(0);
             this.placeholderImageView.setImageResource(AndroidUtilities.getThumbForNameOrMime(documentFileName, document.mime_type, false));
-            TextView textView2 = this.extTextView;
+            TextView textView = this.extTextView;
             int lastIndexOf = documentFileName.lastIndexOf(46);
             if (lastIndexOf != -1) {
                 str3 = documentFileName.substring(lastIndexOf + 1).toLowerCase();
             }
-            textView2.setText(str3);
+            textView.setText(str3);
             TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 320);
             TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 40);
             if (closestPhotoSizeWithSize2 == closestPhotoSizeWithSize) {
@@ -460,7 +450,11 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                 this.thumbImageView.getImageReceiver().setNeedsQualityThumb(closestPhotoSizeWithSize == null);
                 this.thumbImageView.getImageReceiver().setShouldGenerateQualityThumb(closestPhotoSizeWithSize == null);
                 this.thumbImageView.setVisibility(0);
-                this.thumbImageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, document), "40_40", ImageLocation.getForDocument(closestPhotoSizeWithSize2, document), "40_40_b", (String) null, 0, 1, messageObject);
+                if (messageObject2.strippedThumb != null) {
+                    this.thumbImageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, document), "40_40", (ImageLocation) null, (String) null, messageObject2.strippedThumb, (Bitmap) null, (String) null, 1, messageObject);
+                } else {
+                    this.thumbImageView.setImage(ImageLocation.getForDocument(closestPhotoSizeWithSize, document), "40_40", ImageLocation.getForDocument(closestPhotoSizeWithSize2, document), "40_40_b", (String) null, 0, 1, messageObject);
+                }
             }
             long j = ((long) messageObject2.messageOwner.date) * 1000;
             if (this.viewType == 2) {
@@ -470,20 +464,32 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                 this.dateTextView.setText(String.format("%s, %s", new Object[]{AndroidUtilities.formatFileSize((long) document.size), LocaleController.formatString("formatDateAtTime", NUM, LocaleController.getInstance().formatterYear.format(new Date(j)), LocaleController.getInstance().formatterDay.format(new Date(j)))}));
             }
             if (!messageObject.hasHighlightedWords() || TextUtils.isEmpty(this.message.messageOwner.message)) {
-                TextView textView3 = this.captionTextView;
-                if (textView3 != null) {
-                    textView3.setVisibility(8);
+                TextView textView2 = this.captionTextView;
+                if (textView2 != null) {
+                    textView2.setVisibility(8);
                 }
             } else {
                 CharSequence highlightText2 = AndroidUtilities.highlightText((CharSequence) this.message.messageOwner.message.replace("\n", " ").replaceAll(" +", " ").trim(), this.message.highlightedWords);
                 this.caption = highlightText2;
-                TextView textView4 = this.captionTextView;
-                if (textView4 != null) {
-                    if (highlightText2 != null) {
-                        i = 0;
-                    }
-                    textView4.setVisibility(i);
+                TextView textView3 = this.captionTextView;
+                if (textView3 != null) {
+                    textView3.setVisibility(highlightText2 == null ? 8 : 0);
                 }
+            }
+        } else {
+            this.nameTextView.setText(str3);
+            this.extTextView.setText(str3);
+            this.dateTextView.setText(str3);
+            this.placeholderImageView.setVisibility(0);
+            this.extTextView.setVisibility(0);
+            this.extTextView.setAlpha(1.0f);
+            this.placeholderImageView.setAlpha(1.0f);
+            this.thumbImageView.setVisibility(4);
+            this.thumbImageView.setImageBitmap((Bitmap) null);
+            this.caption = null;
+            TextView textView4 = this.captionTextView;
+            if (textView4 != null) {
+                textView4.setVisibility(8);
             }
         }
         setWillNotDraw(!this.needDivider);
@@ -523,7 +529,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             return;
         }
         this.loaded = false;
-        if (messageObject.attachPathExists || messageObject.mediaExists) {
+        if (messageObject.attachPathExists || messageObject.mediaExists || !this.drawDownloadIcon) {
             this.statusImageView.setVisibility(4);
             this.progressView.setVisibility(4);
             FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.dateTextView.getLayoutParams();

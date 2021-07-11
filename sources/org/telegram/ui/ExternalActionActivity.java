@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Shader;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -43,12 +41,13 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PasscodeView;
+import org.telegram.ui.Components.SizeNotifierFrameLayout;
 
 public class ExternalActionActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate {
     private static ArrayList<BaseFragment> layerFragmentsStack = new ArrayList<>();
     private static ArrayList<BaseFragment> mainFragmentsStack = new ArrayList<>();
     protected ActionBarLayout actionBarLayout;
-    protected View backgroundTablet;
+    protected SizeNotifierFrameLayout backgroundTablet;
     protected DrawerLayoutContainer drawerLayoutContainer;
     private boolean finished;
     protected ActionBarLayout layersActionBarLayout;
@@ -109,11 +108,15 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
             layoutParams.width = -1;
             layoutParams.height = -1;
             relativeLayout.setLayoutParams(layoutParams);
-            this.backgroundTablet = new View(this);
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(NUM);
-            Shader.TileMode tileMode = Shader.TileMode.REPEAT;
-            bitmapDrawable.setTileModeXY(tileMode, tileMode);
-            this.backgroundTablet.setBackgroundDrawable(bitmapDrawable);
+            AnonymousClass1 r5 = new SizeNotifierFrameLayout(this) {
+                /* access modifiers changed from: protected */
+                public boolean isActionBarVisible() {
+                    return false;
+                }
+            };
+            this.backgroundTablet = r5;
+            r5.setOccupyStatusBar(false);
+            this.backgroundTablet.setBackgroundImage(Theme.getCachedWallpaper(), Theme.isWallpaperMotion());
             relativeLayout.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
             relativeLayout.addView(this.actionBarLayout, LayoutHelper.createRelative(-1, -1));
             FrameLayout frameLayout = new FrameLayout(this);
@@ -138,11 +141,15 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         } else {
             RelativeLayout relativeLayout2 = new RelativeLayout(this);
             this.drawerLayoutContainer.addView(relativeLayout2, LayoutHelper.createFrame(-1, -1.0f));
-            this.backgroundTablet = new View(this);
-            BitmapDrawable bitmapDrawable2 = (BitmapDrawable) getResources().getDrawable(NUM);
-            Shader.TileMode tileMode2 = Shader.TileMode.REPEAT;
-            bitmapDrawable2.setTileModeXY(tileMode2, tileMode2);
-            this.backgroundTablet.setBackgroundDrawable(bitmapDrawable2);
+            AnonymousClass2 r52 = new SizeNotifierFrameLayout(this) {
+                /* access modifiers changed from: protected */
+                public boolean isActionBarVisible() {
+                    return false;
+                }
+            };
+            this.backgroundTablet = r52;
+            r52.setOccupyStatusBar(false);
+            this.backgroundTablet.setBackgroundImage(Theme.getCachedWallpaper(), Theme.isWallpaperMotion());
             relativeLayout2.addView(this.backgroundTablet, LayoutHelper.createRelative(-1, -1));
             relativeLayout2.addView(this.actionBarLayout, LayoutHelper.createRelative(-1, -1));
         }
@@ -232,9 +239,9 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         if (actionBarLayout2 != null) {
             actionBarLayout2.removeAllFragments();
         }
-        View view = this.backgroundTablet;
-        if (view != null) {
-            view.setVisibility(0);
+        SizeNotifierFrameLayout sizeNotifierFrameLayout = this.backgroundTablet;
+        if (sizeNotifierFrameLayout != null) {
+            sizeNotifierFrameLayout.setVisibility(0);
         }
     }
 
@@ -680,7 +687,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         }
         if (SharedConfig.passcodeHash.length() != 0) {
             SharedConfig.lastPauseTime = (int) (SystemClock.elapsedRealtime() / 1000);
-            AnonymousClass2 r0 = new Runnable() {
+            AnonymousClass4 r0 = new Runnable() {
                 public void run() {
                     if (ExternalActionActivity.this.lockRunnable == this) {
                         if (AndroidUtilities.needShowPasscode(true)) {

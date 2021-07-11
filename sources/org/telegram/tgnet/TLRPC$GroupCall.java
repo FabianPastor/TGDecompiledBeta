@@ -3,12 +3,12 @@ package org.telegram.tgnet;
 public abstract class TLRPC$GroupCall extends TLObject {
     public long access_hash;
     public boolean can_change_join_muted;
+    public boolean can_start_video;
     public int duration;
     public int flags;
     public long id;
     public boolean join_date_asc;
     public boolean join_muted;
-    public TLRPC$TL_dataJSON params;
     public int participants_count;
     public int record_start_date;
     public int schedule_date;
@@ -19,7 +19,7 @@ public abstract class TLRPC$GroupCall extends TLObject {
 
     public static TLRPC$GroupCall TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$GroupCall tLRPC$GroupCall;
-        if (i != -NUM) {
+        if (i != NUM) {
             tLRPC$GroupCall = i != NUM ? null : new TLRPC$TL_groupCallDiscarded();
         } else {
             tLRPC$GroupCall = new TLRPC$TL_groupCall();

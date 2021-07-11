@@ -3,39 +3,37 @@ package j$.util;
 import java.util.NoSuchElementException;
 
 public final class q {
-    private static final q c = new q();
-
-    /* renamed from: a  reason: collision with root package name */
-    private final boolean var_a;
-    private final int b;
+    private static final q a = new q();
+    private final boolean b;
+    private final long c;
 
     private q() {
-        this.var_a = false;
-        this.b = 0;
+        this.b = false;
+        this.c = 0;
     }
 
-    private q(int i) {
-        this.var_a = true;
-        this.b = i;
+    private q(long j) {
+        this.b = true;
+        this.c = j;
     }
 
     public static q a() {
-        return c;
+        return a;
     }
 
-    public static q d(int i) {
-        return new q(i);
+    public static q d(long j) {
+        return new q(j);
     }
 
-    public int b() {
-        if (this.var_a) {
-            return this.b;
+    public long b() {
+        if (this.b) {
+            return this.c;
         }
         throw new NoSuchElementException("No value present");
     }
 
     public boolean c() {
-        return this.var_a;
+        return this.b;
     }
 
     public boolean equals(Object obj) {
@@ -46,28 +44,29 @@ public final class q {
             return false;
         }
         q qVar = (q) obj;
-        boolean z = this.var_a;
-        if (!z || !qVar.var_a) {
-            if (z == qVar.var_a) {
+        boolean z = this.b;
+        if (!z || !qVar.b) {
+            if (z == qVar.b) {
                 return true;
             }
-        } else if (this.b == qVar.b) {
+        } else if (this.c == qVar.c) {
             return true;
         }
         return false;
     }
 
     public int hashCode() {
-        if (this.var_a) {
-            return this.b;
+        if (!this.b) {
+            return 0;
         }
-        return 0;
+        long j = this.c;
+        return (int) (j ^ (j >>> 32));
     }
 
     public String toString() {
-        if (!this.var_a) {
-            return "OptionalInt.empty";
+        if (!this.b) {
+            return "OptionalLong.empty";
         }
-        return String.format("OptionalInt[%s]", new Object[]{Integer.valueOf(this.b)});
+        return String.format("OptionalLong[%s]", new Object[]{Long.valueOf(this.c)});
     }
 }

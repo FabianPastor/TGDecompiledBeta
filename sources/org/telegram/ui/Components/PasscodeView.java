@@ -88,7 +88,7 @@ public class PasscodeView extends FrameLayout {
         return true;
     }
 
-    private class AnimatingTextView extends FrameLayout {
+    private static class AnimatingTextView extends FrameLayout {
         /* access modifiers changed from: private */
         public ArrayList<TextView> characterTextViews = new ArrayList<>(4);
         /* access modifiers changed from: private */
@@ -99,7 +99,7 @@ public class PasscodeView extends FrameLayout {
         public ArrayList<TextView> dotTextViews = new ArrayList<>(4);
         private StringBuilder stringBuilder = new StringBuilder(4);
 
-        public AnimatingTextView(PasscodeView passcodeView, Context context) {
+        public AnimatingTextView(Context context) {
             super(context);
             for (int i = 0; i < 4; i++) {
                 TextView textView = new TextView(context);
@@ -447,7 +447,7 @@ public class PasscodeView extends FrameLayout {
         this.retryTextView.setGravity(1);
         this.retryTextView.setVisibility(4);
         addView(this.retryTextView, LayoutHelper.createFrame(-2, -2, 17));
-        AnimatingTextView animatingTextView = new AnimatingTextView(this, context2);
+        AnimatingTextView animatingTextView = new AnimatingTextView(context2);
         this.passwordEditText2 = animatingTextView;
         this.passwordFrameLayout.addView(animatingTextView);
         FrameLayout.LayoutParams layoutParams4 = (FrameLayout.LayoutParams) this.passwordEditText2.getLayoutParams();
@@ -497,7 +497,7 @@ public class PasscodeView extends FrameLayout {
                 }
             }
         });
-        this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
+        this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 return false;
             }
@@ -628,7 +628,7 @@ public class PasscodeView extends FrameLayout {
         layoutParams11.gravity = 51;
         this.eraseView.setLayoutParams(layoutParams11);
         for (int i3 = 0; i3 < 11; i3++) {
-            AnonymousClass3 r3 = new FrameLayout(this, context2) {
+            AnonymousClass3 r3 = new FrameLayout(context2) {
                 public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
                     super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
                     accessibilityNodeInfo.setClassName("android.widget.Button");
@@ -1369,7 +1369,7 @@ public class PasscodeView extends FrameLayout {
             Drawable drawable = this.backgroundDrawable;
             if (drawable == null) {
                 super.onDraw(canvas);
-            } else if ((drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable)) {
+            } else if ((drawable instanceof MotionBackgroundDrawable) || (drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable)) {
                 drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 this.backgroundDrawable.draw(canvas);
             } else {

@@ -66,6 +66,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
     public static class UserCell extends FrameLayout {
         private AvatarDrawable avatarDrawable = new AvatarDrawable();
         private BackupImageView avatarImageView;
+        private int currentAccount = UserConfig.selectedAccount;
         private int currentId;
         private CharSequence currentName;
         private CharSequence currentStatus;
@@ -83,13 +84,12 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
         public UserCell(Context context) {
             super(context);
-            int i = UserConfig.selectedAccount;
             BackupImageView backupImageView = new BackupImageView(context);
             this.avatarImageView = backupImageView;
             backupImageView.setRoundRadius(AndroidUtilities.dp(23.0f));
             BackupImageView backupImageView2 = this.avatarImageView;
             boolean z = LocaleController.isRTL;
-            int i2 = 5;
+            int i = 5;
             addView(backupImageView2, LayoutHelper.createFrame(46, 46.0f, (z ? 5 : 3) | 48, z ? 0.0f : 14.0f, 9.0f, z ? 14.0f : 0.0f, 0.0f));
             SimpleTextView simpleTextView = new SimpleTextView(context);
             this.nameTextView = simpleTextView;
@@ -107,7 +107,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
             SimpleTextView simpleTextView4 = this.statusTextView;
             boolean z3 = LocaleController.isRTL;
-            addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (!z3 ? 3 : i2) | 48, z3 ? 28.0f : 72.0f, 36.0f, z3 ? 72.0f : 28.0f, 0.0f));
+            addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (!z3 ? 3 : i) | 48, z3 ? 28.0f : 72.0f, 36.0f, z3 ? 72.0f : 28.0f, 0.0f));
         }
 
         public void setCurrentId(int i) {
@@ -286,7 +286,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 boolean r12 = android.text.TextUtils.isEmpty(r12)
                 if (r12 == 0) goto L_0x00e6
                 org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
-                r0 = 2131626506(0x7f0e0a0a, float:1.888025E38)
+                r0 = 2131626547(0x7f0e0a33, float:1.8880333E38)
                 java.lang.String r1 = "NumberUnknown"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 r12.setText(r0)
@@ -719,7 +719,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             return null;
         }
 
-        public boolean isEnabled(int i, int i2) {
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
             if (i == 0 || i == getSectionCount() - 1) {
                 return false;
             }

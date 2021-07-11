@@ -123,9 +123,9 @@ public class ShutterButton extends View {
                     this.redProgress = this.interpolator.getInterpolation(((float) this.totalTime) / 120.0f);
                     invalidate();
                 }
-                canvas.drawCircle(f, f2, ((float) AndroidUtilities.dp(26.0f)) * scaleX * this.redProgress, this.redPaint);
+                canvas.drawCircle(f, f2, ((float) AndroidUtilities.dp(26.5f)) * scaleX * this.redProgress, this.redPaint);
             } else if (this.redProgress != 0.0f) {
-                canvas.drawCircle(f, f2, ((float) AndroidUtilities.dp(26.0f)) * scaleX, this.redPaint);
+                canvas.drawCircle(f, f2, ((float) AndroidUtilities.dp(26.5f)) * scaleX, this.redPaint);
             }
         } else if (this.redProgress != 0.0f) {
             this.redProgress = 0.0f;

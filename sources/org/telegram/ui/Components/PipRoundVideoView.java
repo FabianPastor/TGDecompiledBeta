@@ -52,6 +52,7 @@ public class PipRoundVideoView implements NotificationCenter.NotificationCenterD
     private ImageView imageView;
     /* access modifiers changed from: private */
     public Runnable onCloseRunnable;
+    private Activity parentActivity;
     private SharedPreferences preferences;
     /* access modifiers changed from: private */
     public RectF rect = new RectF();
@@ -181,7 +182,7 @@ public class PipRoundVideoView implements NotificationCenter.NotificationCenterD
                     }
                 };
                 this.aspectRatioFrameLayout = r132;
-                r132.setOutlineProvider(new ViewOutlineProvider(this) {
+                r132.setOutlineProvider(new ViewOutlineProvider() {
                     @TargetApi(21)
                     public void getOutline(View view, Outline outline) {
                         outline.setOval(0, 0, AndroidUtilities.dp(120.0f), AndroidUtilities.dp(120.0f));
@@ -264,6 +265,7 @@ public class PipRoundVideoView implements NotificationCenter.NotificationCenterD
                 layoutParams2.type = 99;
                 layoutParams2.flags = 16777736;
                 this.windowManager.addView(this.windowView, layoutParams2);
+                this.parentActivity = activity;
                 int i4 = UserConfig.selectedAccount;
                 this.currentAccount = i4;
                 NotificationCenter.getInstance(i4).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
@@ -340,6 +342,7 @@ public class PipRoundVideoView implements NotificationCenter.NotificationCenterD
         if (instance == this) {
             instance = null;
         }
+        this.parentActivity = null;
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
     }
 

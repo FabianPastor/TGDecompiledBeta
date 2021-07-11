@@ -193,7 +193,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         super(chatAttachAlert, context);
         updateRows();
         this.listAdapter = new ListAdapter(context);
-        AnonymousClass1 r1 = new RecyclerListView(this, context) {
+        AnonymousClass1 r1 = new RecyclerListView(context) {
             /* access modifiers changed from: protected */
             public void requestChildOnScreen(View view, View view2) {
                 if (view instanceof PollEditTextCell) {
@@ -1122,7 +1122,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 android.content.Context r12 = r10.mContext
                 r11.<init>(r12)
                 android.content.Context r12 = r10.mContext
-                r2 = 2131165449(0x7var_, float:1.7945115E38)
+                r2 = 2131165441(0x7var_, float:1.79451E38)
                 java.lang.String r3 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r2, (java.lang.String) r3)
                 org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable

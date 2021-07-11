@@ -30,6 +30,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
@@ -45,6 +46,7 @@ import org.telegram.ui.Components.EmojiView;
 import org.telegram.ui.Components.SizeNotifierFrameLayoutPhoto;
 
 public class PhotoViewerCaptionEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayoutPhoto.SizeNotifierFrameLayoutPhotoDelegate {
+    float animationProgress = 0.0f;
     /* access modifiers changed from: private */
     public NumberTextView captionLimitView;
     /* access modifiers changed from: private */
@@ -73,6 +75,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     private int keyboardHeight;
     private int keyboardHeightLand;
     private boolean keyboardVisible;
+    int lastShow;
     private int lastSizeChangeValue1;
     private boolean lastSizeChangeValue2;
     /* access modifiers changed from: private */
@@ -644,7 +647,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     public void onCreate() {
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiLoaded);
         this.sizeNotifierLayout.setDelegate(this);
     }
 
@@ -654,7 +657,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             closeKeyboard();
         }
         this.keyboardVisible = false;
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiDidLoad);
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.emojiLoaded);
         SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto = this.sizeNotifierLayout;
         if (sizeNotifierFrameLayoutPhoto != null) {
             sizeNotifierFrameLayoutPhoto.setDelegate((SizeNotifierFrameLayoutPhoto.SizeNotifierFrameLayoutPhotoDelegate) null);
@@ -741,8 +744,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                     EmojiView.EmojiViewDelegate.CC.$default$onShowStickerSet(this, tLRPC$StickerSet, tLRPC$InputStickerSet);
                 }
 
-                public /* synthetic */ void onStickerSelected(View view, TLRPC$Document tLRPC$Document, String str, Object obj, boolean z, int i) {
-                    EmojiView.EmojiViewDelegate.CC.$default$onStickerSelected(this, view, tLRPC$Document, str, obj, z, i);
+                public /* synthetic */ void onStickerSelected(View view, TLRPC$Document tLRPC$Document, String str, Object obj, MessageObject.SendAnimationData sendAnimationData, boolean z, int i) {
+                    EmojiView.EmojiViewDelegate.CC.$default$onStickerSelected(this, view, tLRPC$Document, str, obj, sendAnimationData, z, i);
                 }
 
                 public /* synthetic */ void onStickerSetAdd(TLRPC$StickerSetCovered tLRPC$StickerSetCovered) {
@@ -864,6 +867,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     private void showPopup(int i, boolean z) {
         EmojiView emojiView2;
+        this.lastShow = i;
         if (i == 1) {
             if (this.emojiView == null) {
                 createEmojiView();
@@ -1061,7 +1065,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         EmojiView emojiView2;
-        if (i == NotificationCenter.emojiDidLoad && (emojiView2 = this.emojiView) != null) {
+        if (i == NotificationCenter.emojiLoaded && (emojiView2 = this.emojiView) != null) {
             emojiView2.invalidateViews();
         }
     }

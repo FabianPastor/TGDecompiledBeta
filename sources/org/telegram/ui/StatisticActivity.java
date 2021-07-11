@@ -516,7 +516,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2);
         this.layoutManager = linearLayoutManager;
         this.recyclerListView.setLayoutManager(linearLayoutManager);
-        this.animator = new DefaultItemAnimator(this) {
+        this.animator = new DefaultItemAnimator() {
             /* access modifiers changed from: protected */
             public long getAddAnimationDelay(long j, long j2, long j3) {
                 return j;
@@ -875,7 +875,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 android.content.Context r5 = r5.getContext()
                 org.telegram.ui.StatisticActivity r2 = org.telegram.ui.StatisticActivity.this
                 org.telegram.ui.Charts.BaseChartView$SharedUiComponents r2 = r2.sharedUi
-                r1.<init>(r4, r5, r6, r2)
+                r1.<init>(r5, r6, r2)
                 r1.setWillNotDraw(r0)
                 goto L_0x00c2
             L_0x001a:
@@ -885,7 +885,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 android.content.Context r5 = r5.getContext()
                 org.telegram.ui.StatisticActivity r6 = org.telegram.ui.StatisticActivity.this
                 org.telegram.tgnet.TLRPC$ChatFull r6 = r6.chat
-                r1.<init>(r4, r5, r6)
+                r1.<init>(r5, r6)
                 r1.setWillNotDraw(r0)
                 goto L_0x00c2
             L_0x0032:
@@ -912,7 +912,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 if (r6 != r3) goto L_0x0085
                 org.telegram.ui.StatisticActivity$Adapter$3 r1 = new org.telegram.ui.StatisticActivity$Adapter$3
                 android.content.Context r5 = r5.getContext()
-                r1.<init>(r4, r5)
+                r1.<init>(r5)
                 r1.setWillNotDraw(r0)
                 int r5 = r1.getPaddingLeft()
                 r6 = 1098907648(0x41800000, float:16.0)
@@ -1543,7 +1543,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.chartType = i;
             LinearLayout linearLayout = new LinearLayout(context);
             linearLayout.setOrientation(1);
-            this.checkboxContainer = new FrameLayout(this, context) {
+            this.checkboxContainer = new FrameLayout(context) {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
                     super.onMeasure(i, i2);
@@ -1835,9 +1835,10 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             baseChartView.transitionMode = 2;
             baseChartView2.transitionMode = 1;
             TransitionParams transitionParams = new TransitionParams();
-            ChartPickerDelegate chartPickerDelegate = baseChartView.pickerDelegate;
+            ChartPickerDelegate chartPickerDelegate = this.chartView.pickerDelegate;
             transitionParams.pickerEndOut = chartPickerDelegate.pickerEnd;
             transitionParams.pickerStartOut = chartPickerDelegate.pickerStart;
+            transitionParams.date = j;
             int binarySearch = Arrays.binarySearch(this.data.chartData.x, j);
             if (binarySearch < 0) {
                 binarySearch = this.data.chartData.x.length - 1;
@@ -1966,10 +1967,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     if (z) {
                         this.chartView.transitionMode = 3;
                         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                        BaseChartView baseChartView = this.chartView;
-                        TransitionParams transitionParams = new TransitionParams();
-                        baseChartView.transitionParams = transitionParams;
-                        transitionParams.progress = 0.0f;
+                        this.chartView.transitionParams = new TransitionParams();
+                        this.chartView.transitionParams.progress = 0.0f;
                         ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                             public final void onAnimationUpdate(ValueAnimator valueAnimator) {
                                 StatisticActivity.BaseChartCell.this.lambda$updateData$5$StatisticActivity$BaseChartCell(valueAnimator);
@@ -3443,21 +3442,21 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r11 = r6
                 r12 = r11
             L_0x0064:
-                r9 = 2131627548(0x7f0e0e1c, float:1.8882364E38)
+                r9 = 2131627595(0x7f0e0e4b, float:1.8882459E38)
                 java.lang.String r10 = "StatisticOpenProfile"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165678(0x7var_ee, float:1.794558E38)
+                r9 = 2131165670(0x7var_e6, float:1.7945564E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 2
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r2.add(r9)
-                r9 = 2131627550(0x7f0e0e1e, float:1.8882368E38)
+                r9 = 2131627597(0x7f0e0e4d, float:1.8882463E38)
                 java.lang.String r10 = "StatisticSearchUserHistory"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165640(0x7var_c8, float:1.7945503E38)
+                r9 = 2131165632(0x7var_c0, float:1.7945487E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 1
@@ -3567,11 +3566,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r9 = 0
             L_0x0176:
                 if (r9 == 0) goto L_0x017e
-                r0 = 2131627396(0x7f0e0d84, float:1.8882055E38)
+                r0 = 2131627442(0x7f0e0db2, float:1.8882149E38)
                 java.lang.String r6 = "SetAsAdmin"
                 goto L_0x0183
             L_0x017e:
-                r0 = 2131625234(0x7f0e0512, float:1.887767E38)
+                r0 = 2131625251(0x7f0e0523, float:1.8877705E38)
                 java.lang.String r6 = "EditAdminRights"
             L_0x0183:
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
@@ -3727,7 +3726,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     }
                 };
                 final boolean z2 = z;
-                AnonymousClass2 r02 = new ChatRightsEditActivity.ChatRightsEditActivityDelegate(this) {
+                AnonymousClass2 r02 = new ChatRightsEditActivity.ChatRightsEditActivityDelegate() {
                     public void didChangeOwner(TLRPC$User tLRPC$User) {
                     }
 

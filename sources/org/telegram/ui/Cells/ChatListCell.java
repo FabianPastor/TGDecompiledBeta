@@ -30,7 +30,7 @@ public class ChatListCell extends LinearLayout {
         private RectF rect = new RectF();
         private TextPaint textPaint;
 
-        public ListView(ChatListCell chatListCell, Context context, boolean z) {
+        public ListView(Context context, boolean z) {
             super(context);
             int i;
             String str;
@@ -47,7 +47,7 @@ public class ChatListCell extends LinearLayout {
             }
             setContentDescription(LocaleController.getString(str, i));
             this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
-            AnonymousClass1 r12 = new RadioButton(context, chatListCell) {
+            AnonymousClass1 r12 = new RadioButton(context, ChatListCell.this) {
                 public void invalidate() {
                     super.invalidate();
                     ListView.this.invalidate();
@@ -148,7 +148,7 @@ public class ChatListCell extends LinearLayout {
             ListView[] listViewArr = this.listView;
             if (i < listViewArr.length) {
                 boolean z = i == 1;
-                listViewArr[i] = new ListView(this, context, z);
+                listViewArr[i] = new ListView(context, z);
                 addView(this.listView[i], LayoutHelper.createLinear(-1, -1, 0.5f, i == 1 ? 10 : 0, 0, 0, 0));
                 this.listView[i].setOnClickListener(new View.OnClickListener(z) {
                     public final /* synthetic */ boolean f$1;

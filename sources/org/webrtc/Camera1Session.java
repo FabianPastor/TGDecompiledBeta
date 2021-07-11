@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import org.webrtc.Camera1Session;
 import org.webrtc.CameraEnumerationAndroid;
 import org.webrtc.CameraSession;
+import org.webrtc.VideoSink;
 
 class Camera1Session implements CameraSession {
     private static final int NUMBER_OF_CAPTURE_BUFFERS = 3;
@@ -97,7 +98,6 @@ class Camera1Session implements CameraSession {
         parameters.setPreviewSize(captureFormat2.width, captureFormat2.height);
         parameters.setPictureSize(size.width, size.height);
         if (!z) {
-            captureFormat2.getClass();
             parameters.setPreviewFormat(17);
         }
         if (parameters.isVideoStabilizationSupported()) {
@@ -210,6 +210,10 @@ class Camera1Session implements CameraSession {
             public final void onFrame(VideoFrame videoFrame) {
                 Camera1Session.this.lambda$listenForTextureFrames$0$Camera1Session(videoFrame);
             }
+
+            public /* synthetic */ void setParentSink(VideoSink videoSink) {
+                VideoSink.CC.$default$setParentSink(this, videoSink);
+            }
         });
     }
 
@@ -294,6 +298,7 @@ class Camera1Session implements CameraSession {
     /* access modifiers changed from: private */
     public int getFrameOrientation() {
         int orientation = this.orientationHelper.getOrientation();
+        OrientationHelper.cameraOrientation = orientation;
         if (this.info.facing == 1) {
             orientation = 360 - orientation;
         }

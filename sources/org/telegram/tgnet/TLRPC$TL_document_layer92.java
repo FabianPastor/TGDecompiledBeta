@@ -10,7 +10,7 @@ public class TLRPC$TL_document_layer92 extends TLRPC$TL_document {
         this.date = abstractSerializedData.readInt32(z);
         this.mime_type = abstractSerializedData.readString(z);
         this.size = abstractSerializedData.readInt32(z);
-        this.thumbs.add(TLRPC$PhotoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z));
+        this.thumbs.add(TLRPC$PhotoSize.TLdeserialize(0, 0, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z));
         this.dc_id = abstractSerializedData.readInt32(z);
         int readInt32 = abstractSerializedData.readInt32(z);
         int i = 0;

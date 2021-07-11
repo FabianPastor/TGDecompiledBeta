@@ -149,14 +149,7 @@ public class JavaI420Buffer implements VideoFrame.I420Buffer {
             dataU2.position((i420Buffer.getStrideU() * i10) + i9);
             dataV2.position(i9 + (i10 * i420Buffer.getStrideV()));
             i420Buffer.retain();
-            ByteBuffer slice = dataY2.slice();
-            int strideY2 = i420Buffer.getStrideY();
-            ByteBuffer slice2 = dataU2.slice();
-            int strideU2 = i420Buffer.getStrideU();
-            ByteBuffer slice3 = dataV2.slice();
-            int strideV2 = i420Buffer.getStrideV();
-            i420Buffer.getClass();
-            return wrap(i5, i6, slice, strideY2, slice2, strideU2, slice3, strideV2, new Runnable() {
+            return wrap(i5, i6, dataY2.slice(), i420Buffer.getStrideY(), dataU2.slice(), i420Buffer.getStrideU(), dataV2.slice(), i420Buffer.getStrideV(), new Runnable() {
                 public final void run() {
                     VideoFrame.I420Buffer.this.release();
                 }

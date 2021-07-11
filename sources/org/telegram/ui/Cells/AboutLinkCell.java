@@ -2,6 +2,7 @@ package org.telegram.ui.Cells;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.os.Build;
 import android.text.Layout;
@@ -9,6 +10,7 @@ import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
@@ -18,16 +20,73 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Cells.AboutLinkCell;
+import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.BulletinFactory;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.Components.StaticLayoutEx;
+import org.telegram.ui.Components.URLSpanNoUnderline;
 
 public class AboutLinkCell extends FrameLayout {
+    Runnable longPressedRunnable = new Runnable() {
+        public void run() {
+            String str;
+            if (AboutLinkCell.this.pressedLink != null) {
+                if (AboutLinkCell.this.pressedLink instanceof URLSpanNoUnderline) {
+                    str = ((URLSpanNoUnderline) AboutLinkCell.this.pressedLink).getURL();
+                } else if (AboutLinkCell.this.pressedLink instanceof URLSpan) {
+                    str = ((URLSpan) AboutLinkCell.this.pressedLink).getURL();
+                } else {
+                    str = AboutLinkCell.this.pressedLink.toString();
+                }
+                ClickableSpan access$000 = AboutLinkCell.this.pressedLink;
+                BottomSheet.Builder builder = new BottomSheet.Builder(AboutLinkCell.this.parentFragment.getParentActivity());
+                builder.setTitle(str);
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new DialogInterface.OnClickListener(access$000, str) {
+                    public final /* synthetic */ ClickableSpan f$1;
+                    public final /* synthetic */ String f$2;
+
+                    {
+                        this.f$1 = r2;
+                        this.f$2 = r3;
+                    }
+
+                    public final void onClick(DialogInterface dialogInterface, int i) {
+                        AboutLinkCell.AnonymousClass1.this.lambda$run$0$AboutLinkCell$1(this.f$1, this.f$2, dialogInterface, i);
+                    }
+                });
+                builder.show();
+                AboutLinkCell.this.resetPressedLink();
+            }
+        }
+
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$run$0 */
+        public /* synthetic */ void lambda$run$0$AboutLinkCell$1(ClickableSpan clickableSpan, String str, DialogInterface dialogInterface, int i) {
+            if (i == 0) {
+                AboutLinkCell.this.onLinkClick(clickableSpan);
+            } else if (i == 1) {
+                AndroidUtilities.addToClipboard(str);
+                if (str.startsWith("@")) {
+                    BulletinFactory.of(AboutLinkCell.this.parentFragment).createSimpleBulletin(NUM, LocaleController.getString("UsernameCopied", NUM)).show();
+                } else if (str.startsWith("#") || str.startsWith("$")) {
+                    BulletinFactory.of(AboutLinkCell.this.parentFragment).createSimpleBulletin(NUM, LocaleController.getString("HashtagCopied", NUM)).show();
+                } else {
+                    BulletinFactory.of(AboutLinkCell.this.parentFragment).createSimpleBulletin(NUM, LocaleController.getString("LinkCopied", NUM)).show();
+                }
+            }
+        }
+    };
     private String oldText;
-    private BaseFragment parentFragment;
-    private ClickableSpan pressedLink;
+    /* access modifiers changed from: private */
+    public BaseFragment parentFragment;
+    /* access modifiers changed from: private */
+    public ClickableSpan pressedLink;
     private SpannableStringBuilder stringBuilder;
     private StaticLayout textLayout;
     private int textX;
@@ -56,10 +115,12 @@ public class AboutLinkCell extends FrameLayout {
         setWillNotDraw(false);
     }
 
-    private void resetPressedLink() {
+    /* access modifiers changed from: private */
+    public void resetPressedLink() {
         if (this.pressedLink != null) {
             this.pressedLink = null;
         }
+        AndroidUtilities.cancelRunOnUIThread(this.longPressedRunnable);
         invalidate();
     }
 
@@ -84,8 +145,8 @@ public class AboutLinkCell extends FrameLayout {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x010e A[ORIG_RETURN, RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:63:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x00d2 A[ORIG_RETURN, RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:49:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r8) {
         /*
@@ -95,7 +156,7 @@ public class AboutLinkCell extends FrameLayout {
             android.text.StaticLayout r2 = r7.textLayout
             r3 = 0
             r4 = 1
-            if (r2 == 0) goto L_0x0105
+            if (r2 == 0) goto L_0x00c9
             int r2 = r8.getAction()
             if (r2 == 0) goto L_0x002b
             android.text.style.ClickableSpan r2 = r7.pressedLink
@@ -106,135 +167,128 @@ public class AboutLinkCell extends FrameLayout {
         L_0x001f:
             int r0 = r8.getAction()
             r1 = 3
-            if (r0 != r1) goto L_0x0105
+            if (r0 != r1) goto L_0x00c9
             r7.resetPressedLink()
-            goto L_0x0105
+            goto L_0x00c9
         L_0x002b:
             int r2 = r8.getAction()
-            if (r2 != 0) goto L_0x00b0
+            if (r2 != 0) goto L_0x00b8
             r7.resetPressedLink()
-            int r2 = r7.textX     // Catch:{ Exception -> 0x00a6 }
-            float r2 = (float) r2     // Catch:{ Exception -> 0x00a6 }
+            int r2 = r7.textX     // Catch:{ Exception -> 0x00ae }
+            float r2 = (float) r2     // Catch:{ Exception -> 0x00ae }
             float r0 = r0 - r2
-            int r0 = (int) r0     // Catch:{ Exception -> 0x00a6 }
-            int r2 = r7.textY     // Catch:{ Exception -> 0x00a6 }
-            float r2 = (float) r2     // Catch:{ Exception -> 0x00a6 }
+            int r0 = (int) r0     // Catch:{ Exception -> 0x00ae }
+            int r2 = r7.textY     // Catch:{ Exception -> 0x00ae }
+            float r2 = (float) r2     // Catch:{ Exception -> 0x00ae }
             float r1 = r1 - r2
-            int r1 = (int) r1     // Catch:{ Exception -> 0x00a6 }
-            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x00a6 }
-            int r1 = r2.getLineForVertical(r1)     // Catch:{ Exception -> 0x00a6 }
-            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x00a6 }
-            float r0 = (float) r0     // Catch:{ Exception -> 0x00a6 }
-            int r2 = r2.getOffsetForHorizontal(r1, r0)     // Catch:{ Exception -> 0x00a6 }
-            android.text.StaticLayout r5 = r7.textLayout     // Catch:{ Exception -> 0x00a6 }
-            float r5 = r5.getLineLeft(r1)     // Catch:{ Exception -> 0x00a6 }
+            int r1 = (int) r1     // Catch:{ Exception -> 0x00ae }
+            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x00ae }
+            int r1 = r2.getLineForVertical(r1)     // Catch:{ Exception -> 0x00ae }
+            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x00ae }
+            float r0 = (float) r0     // Catch:{ Exception -> 0x00ae }
+            int r2 = r2.getOffsetForHorizontal(r1, r0)     // Catch:{ Exception -> 0x00ae }
+            android.text.StaticLayout r5 = r7.textLayout     // Catch:{ Exception -> 0x00ae }
+            float r5 = r5.getLineLeft(r1)     // Catch:{ Exception -> 0x00ae }
             int r6 = (r5 > r0 ? 1 : (r5 == r0 ? 0 : -1))
-            if (r6 > 0) goto L_0x00a2
-            android.text.StaticLayout r6 = r7.textLayout     // Catch:{ Exception -> 0x00a6 }
-            float r1 = r6.getLineWidth(r1)     // Catch:{ Exception -> 0x00a6 }
+            if (r6 > 0) goto L_0x00aa
+            android.text.StaticLayout r6 = r7.textLayout     // Catch:{ Exception -> 0x00ae }
+            float r1 = r6.getLineWidth(r1)     // Catch:{ Exception -> 0x00ae }
             float r5 = r5 + r1
             int r0 = (r5 > r0 ? 1 : (r5 == r0 ? 0 : -1))
-            if (r0 < 0) goto L_0x00a2
-            android.text.StaticLayout r0 = r7.textLayout     // Catch:{ Exception -> 0x00a6 }
-            java.lang.CharSequence r0 = r0.getText()     // Catch:{ Exception -> 0x00a6 }
-            android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x00a6 }
+            if (r0 < 0) goto L_0x00aa
+            android.text.StaticLayout r0 = r7.textLayout     // Catch:{ Exception -> 0x00ae }
+            java.lang.CharSequence r0 = r0.getText()     // Catch:{ Exception -> 0x00ae }
+            android.text.Spannable r0 = (android.text.Spannable) r0     // Catch:{ Exception -> 0x00ae }
             java.lang.Class<android.text.style.ClickableSpan> r1 = android.text.style.ClickableSpan.class
-            java.lang.Object[] r1 = r0.getSpans(r2, r2, r1)     // Catch:{ Exception -> 0x00a6 }
-            android.text.style.ClickableSpan[] r1 = (android.text.style.ClickableSpan[]) r1     // Catch:{ Exception -> 0x00a6 }
-            int r2 = r1.length     // Catch:{ Exception -> 0x00a6 }
-            if (r2 == 0) goto L_0x009e
-            r7.resetPressedLink()     // Catch:{ Exception -> 0x00a6 }
-            r1 = r1[r3]     // Catch:{ Exception -> 0x00a6 }
-            r7.pressedLink = r1     // Catch:{ Exception -> 0x00a6 }
-            int r1 = r0.getSpanStart(r1)     // Catch:{ Exception -> 0x0095 }
-            org.telegram.ui.Components.LinkPath r2 = r7.urlPath     // Catch:{ Exception -> 0x0095 }
-            android.text.StaticLayout r5 = r7.textLayout     // Catch:{ Exception -> 0x0095 }
+            java.lang.Object[] r1 = r0.getSpans(r2, r2, r1)     // Catch:{ Exception -> 0x00ae }
+            android.text.style.ClickableSpan[] r1 = (android.text.style.ClickableSpan[]) r1     // Catch:{ Exception -> 0x00ae }
+            int r2 = r1.length     // Catch:{ Exception -> 0x00ae }
+            if (r2 == 0) goto L_0x00a6
+            r7.resetPressedLink()     // Catch:{ Exception -> 0x00ae }
+            r1 = r1[r3]     // Catch:{ Exception -> 0x00ae }
+            r7.pressedLink = r1     // Catch:{ Exception -> 0x00ae }
+            int r1 = r0.getSpanStart(r1)     // Catch:{ Exception -> 0x0094 }
+            org.telegram.ui.Components.LinkPath r2 = r7.urlPath     // Catch:{ Exception -> 0x0094 }
+            android.text.StaticLayout r5 = r7.textLayout     // Catch:{ Exception -> 0x0094 }
             r6 = 0
-            r2.setCurrentLayout(r5, r1, r6)     // Catch:{ Exception -> 0x0095 }
-            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x0095 }
-            android.text.style.ClickableSpan r5 = r7.pressedLink     // Catch:{ Exception -> 0x0095 }
-            int r0 = r0.getSpanEnd(r5)     // Catch:{ Exception -> 0x0095 }
-            org.telegram.ui.Components.LinkPath r5 = r7.urlPath     // Catch:{ Exception -> 0x0095 }
-            r2.getSelectionPath(r1, r0, r5)     // Catch:{ Exception -> 0x0095 }
-            goto L_0x0103
-        L_0x0095:
+            r2.setCurrentLayout(r5, r1, r6)     // Catch:{ Exception -> 0x0094 }
+            android.text.StaticLayout r2 = r7.textLayout     // Catch:{ Exception -> 0x0094 }
+            android.text.style.ClickableSpan r5 = r7.pressedLink     // Catch:{ Exception -> 0x0094 }
+            int r0 = r0.getSpanEnd(r5)     // Catch:{ Exception -> 0x0094 }
+            org.telegram.ui.Components.LinkPath r5 = r7.urlPath     // Catch:{ Exception -> 0x0094 }
+            r2.getSelectionPath(r1, r0, r5)     // Catch:{ Exception -> 0x0094 }
+            goto L_0x0098
+        L_0x0094:
             r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x009b }
-            goto L_0x0103
-        L_0x009b:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x00a3 }
+        L_0x0098:
+            java.lang.Runnable r0 = r7.longPressedRunnable     // Catch:{ Exception -> 0x00a3 }
+            int r1 = android.view.ViewConfiguration.getLongPressTimeout()     // Catch:{ Exception -> 0x00a3 }
+            long r1 = (long) r1     // Catch:{ Exception -> 0x00a3 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)     // Catch:{ Exception -> 0x00a3 }
+            goto L_0x00c7
+        L_0x00a3:
             r0 = move-exception
             r1 = 1
-            goto L_0x00a8
-        L_0x009e:
-            r7.resetPressedLink()     // Catch:{ Exception -> 0x00a6 }
-            goto L_0x0105
-        L_0x00a2:
-            r7.resetPressedLink()     // Catch:{ Exception -> 0x00a6 }
-            goto L_0x0105
+            goto L_0x00b0
         L_0x00a6:
+            r7.resetPressedLink()     // Catch:{ Exception -> 0x00ae }
+            goto L_0x00c9
+        L_0x00aa:
+            r7.resetPressedLink()     // Catch:{ Exception -> 0x00ae }
+            goto L_0x00c9
+        L_0x00ae:
             r0 = move-exception
             r1 = 0
-        L_0x00a8:
+        L_0x00b0:
             r7.resetPressedLink()
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             r0 = r1
-            goto L_0x0106
-        L_0x00b0:
+            goto L_0x00ca
+        L_0x00b8:
             android.text.style.ClickableSpan r0 = r7.pressedLink
-            if (r0 == 0) goto L_0x0105
-            boolean r1 = r0 instanceof org.telegram.ui.Components.URLSpanNoUnderline     // Catch:{ Exception -> 0x00fc }
-            if (r1 == 0) goto L_0x00da
-            org.telegram.ui.Components.URLSpanNoUnderline r0 = (org.telegram.ui.Components.URLSpanNoUnderline) r0     // Catch:{ Exception -> 0x00fc }
-            java.lang.String r0 = r0.getURL()     // Catch:{ Exception -> 0x00fc }
-            java.lang.String r1 = "@"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00fc }
-            if (r1 != 0) goto L_0x00d6
-            java.lang.String r1 = "#"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00fc }
-            if (r1 != 0) goto L_0x00d6
-            java.lang.String r1 = "/"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00fc }
-            if (r1 == 0) goto L_0x0100
-        L_0x00d6:
-            r7.didPressUrl(r0)     // Catch:{ Exception -> 0x00fc }
-            goto L_0x0100
-        L_0x00da:
-            boolean r1 = r0 instanceof android.text.style.URLSpan     // Catch:{ Exception -> 0x00fc }
-            if (r1 == 0) goto L_0x00f8
-            android.text.style.URLSpan r0 = (android.text.style.URLSpan) r0     // Catch:{ Exception -> 0x00fc }
-            java.lang.String r0 = r0.getURL()     // Catch:{ Exception -> 0x00fc }
-            boolean r1 = org.telegram.messenger.AndroidUtilities.shouldShowUrlInAlert(r0)     // Catch:{ Exception -> 0x00fc }
-            if (r1 == 0) goto L_0x00f0
-            org.telegram.ui.ActionBar.BaseFragment r1 = r7.parentFragment     // Catch:{ Exception -> 0x00fc }
-            org.telegram.ui.Components.AlertsCreator.showOpenUrlAlert(r1, r0, r4, r4)     // Catch:{ Exception -> 0x00fc }
-            goto L_0x0100
-        L_0x00f0:
-            android.content.Context r1 = r7.getContext()     // Catch:{ Exception -> 0x00fc }
-            org.telegram.messenger.browser.Browser.openUrl((android.content.Context) r1, (java.lang.String) r0)     // Catch:{ Exception -> 0x00fc }
-            goto L_0x0100
-        L_0x00f8:
-            r0.onClick(r7)     // Catch:{ Exception -> 0x00fc }
-            goto L_0x0100
-        L_0x00fc:
+            if (r0 == 0) goto L_0x00c9
+            r7.onLinkClick(r0)     // Catch:{ Exception -> 0x00c0 }
+            goto L_0x00c4
+        L_0x00c0:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0100:
+        L_0x00c4:
             r7.resetPressedLink()
-        L_0x0103:
+        L_0x00c7:
             r0 = 1
-            goto L_0x0106
-        L_0x0105:
+            goto L_0x00ca
+        L_0x00c9:
             r0 = 0
-        L_0x0106:
-            if (r0 != 0) goto L_0x010e
+        L_0x00ca:
+            if (r0 != 0) goto L_0x00d2
             boolean r8 = super.onTouchEvent(r8)
-            if (r8 == 0) goto L_0x010f
-        L_0x010e:
+            if (r8 == 0) goto L_0x00d3
+        L_0x00d2:
             r3 = 1
-        L_0x010f:
+        L_0x00d3:
             return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.AboutLinkCell.onTouchEvent(android.view.MotionEvent):boolean");
+    }
+
+    /* access modifiers changed from: private */
+    public void onLinkClick(ClickableSpan clickableSpan) {
+        if (clickableSpan instanceof URLSpanNoUnderline) {
+            String url = ((URLSpanNoUnderline) clickableSpan).getURL();
+            if (url.startsWith("@") || url.startsWith("#") || url.startsWith("/")) {
+                didPressUrl(url);
+            }
+        } else if (clickableSpan instanceof URLSpan) {
+            String url2 = ((URLSpan) clickableSpan).getURL();
+            if (AndroidUtilities.shouldShowUrlInAlert(url2)) {
+                AlertsCreator.showOpenUrlAlert(this.parentFragment, url2, true, true);
+            } else {
+                Browser.openUrl(getContext(), url2);
+            }
+        } else {
+            clickableSpan.onClick(this);
+        }
     }
 
     /* access modifiers changed from: protected */

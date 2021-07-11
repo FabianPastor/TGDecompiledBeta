@@ -35,7 +35,7 @@ final class B2 {
                     long j2 = this.c;
                     if (j2 > 0) {
                         this.c = j2 - 1;
-                        this.var_a.accept(obj);
+                        this.a.accept(obj);
                         return;
                     }
                     return;
@@ -43,12 +43,12 @@ final class B2 {
                 this.b = j - 1;
             }
 
-            public void n(long j) {
-                this.var_a.n(B2.c(j, a.this.l, this.c));
+            public void m(long j) {
+                this.a.m(B2.c(j, a.this.l, this.c));
             }
 
-            public boolean p() {
-                return this.c == 0 || this.var_a.p();
+            public boolean o() {
+                return this.c == 0 || this.a.o();
             }
         }
 
@@ -90,7 +90,7 @@ final class B2 {
             if (!T2.ORDERED.d(t1.r0())) {
                 return K0(t1.v0(spliterator), this.l, this.m, p0);
             }
-            return ((R1) new e(this, t1, spliterator, CLASSNAMEt0.var_a, this.l, this.m).invoke()).spliterator();
+            return ((R1) new e(this, t1, spliterator, CLASSNAMEt0.a, this.l, this.m).invoke()).spliterator();
         }
 
         /* access modifiers changed from: package-private */
@@ -135,7 +135,7 @@ final class B2 {
                     long j2 = this.c;
                     if (j2 > 0) {
                         this.c = j2 - 1;
-                        this.var_a.accept(i);
+                        this.a.accept(i);
                         return;
                     }
                     return;
@@ -143,12 +143,12 @@ final class B2 {
                 this.b = j - 1;
             }
 
-            public void n(long j) {
-                this.var_a.n(B2.c(j, b.this.l, this.c));
+            public void m(long j) {
+                this.a.m(B2.c(j, b.this.l, this.c));
             }
 
-            public boolean p() {
-                return this.c == 0 || this.var_a.p();
+            public boolean o() {
+                return this.c == 0 || this.a.o();
             }
         }
 
@@ -188,7 +188,7 @@ final class B2 {
             if (!T2.ORDERED.d(t1.r0())) {
                 return M0((Spliterator.b) t1.v0(spliterator), this.l, this.m, p0);
             }
-            return ((R1) new e(this, t1, spliterator, CLASSNAMEs0.var_a, this.l, this.m).invoke()).spliterator();
+            return ((R1) new e(this, t1, spliterator, CLASSNAMEs0.a, this.l, this.m).invoke()).spliterator();
         }
 
         /* access modifiers changed from: package-private */
@@ -233,7 +233,7 @@ final class B2 {
                     long j3 = this.c;
                     if (j3 > 0) {
                         this.c = j3 - 1;
-                        this.var_a.accept(j);
+                        this.a.accept(j);
                         return;
                     }
                     return;
@@ -241,12 +241,12 @@ final class B2 {
                 this.b = j2 - 1;
             }
 
-            public void n(long j) {
-                this.var_a.n(B2.c(j, c.this.l, this.c));
+            public void m(long j) {
+                this.a.m(B2.c(j, c.this.l, this.c));
             }
 
-            public boolean p() {
-                return this.c == 0 || this.var_a.p();
+            public boolean o() {
+                return this.c == 0 || this.a.o();
             }
         }
 
@@ -286,7 +286,7 @@ final class B2 {
             if (!T2.ORDERED.d(t1.r0())) {
                 return M0((Spliterator.c) t1.v0(spliterator), this.l, this.m, p0);
             }
-            return ((R1) new e(this, t1, spliterator, CLASSNAMEu0.var_a, this.l, this.m).invoke()).spliterator();
+            return ((R1) new e(this, t1, spliterator, CLASSNAMEu0.a, this.l, this.m).invoke()).spliterator();
         }
 
         /* access modifiers changed from: package-private */
@@ -331,7 +331,7 @@ final class B2 {
                     long j2 = this.c;
                     if (j2 > 0) {
                         this.c = j2 - 1;
-                        this.var_a.accept(d2);
+                        this.a.accept(d2);
                         return;
                     }
                     return;
@@ -339,12 +339,12 @@ final class B2 {
                 this.b = j - 1;
             }
 
-            public void n(long j) {
-                this.var_a.n(B2.c(j, d.this.l, this.c));
+            public void m(long j) {
+                this.a.m(B2.c(j, d.this.l, this.c));
             }
 
-            public boolean p() {
-                return this.c == 0 || this.var_a.p();
+            public boolean o() {
+                return this.c == 0 || this.a.o();
             }
         }
 
@@ -384,7 +384,7 @@ final class B2 {
             if (!T2.ORDERED.d(t1.r0())) {
                 return M0((Spliterator.a) t1.v0(spliterator), this.l, this.m, p0);
             }
-            return ((R1) new e(this, t1, spliterator, CLASSNAMEv0.var_a, this.l, this.m).invoke()).spliterator();
+            return ((R1) new e(this, t1, spliterator, CLASSNAMEv0.a, this.l, this.m).invoke()).spliterator();
         }
 
         /* access modifiers changed from: package-private */
@@ -436,8 +436,8 @@ final class B2 {
             if (this.o) {
                 return this.n;
             }
-            e eVar = (e) this.d;
-            e eVar2 = (e) this.e;
+            e eVar = (e) this.e;
+            e eVar2 = (e) this.f;
             if (eVar == null || eVar2 == null) {
                 return this.n;
             }
@@ -450,22 +450,22 @@ final class B2 {
             long j2 = -1;
             if (e()) {
                 if (T2.SIZED.e(this.j.c)) {
-                    j2 = this.j.p0(this.b);
+                    j2 = this.j.p0(this.c);
                 }
                 R1.a s0 = this.j.s0(j2, this.k);
-                A2 G0 = this.j.G0(this.var_a.r0(), s0);
-                T1 t1 = this.var_a;
-                t1.n0(t1.u0(G0), this.b);
+                A2 G0 = this.j.G0(this.b.r0(), s0);
+                T1 t1 = this.b;
+                t1.n0(t1.u0(G0), this.c);
                 return s0.a();
             }
-            T1 t12 = this.var_a;
+            T1 t12 = this.b;
             R1.a s02 = t12.s0(-1, this.k);
-            t12.t0(s02, this.b);
-            R1 a2 = s02.a();
-            this.n = a2.count();
+            t12.t0(s02, this.c);
+            R1 a = s02.a();
+            this.n = a.count();
             this.o = true;
-            this.b = null;
-            return a2;
+            this.c = null;
+            return a;
         }
 
         /* access modifiers changed from: protected */
@@ -496,10 +496,10 @@ final class B2 {
                 r0 = 1
                 r1 = 0
                 if (r12 != 0) goto L_0x0089
-                j$.util.stream.k1 r12 = r11.d
+                j$.util.stream.k1 r12 = r11.e
                 j$.util.stream.B2$e r12 = (j$.util.stream.B2.e) r12
                 long r3 = r12.n
-                j$.util.stream.k1 r12 = r11.e
+                j$.util.stream.k1 r12 = r11.f
                 j$.util.stream.B2$e r12 = (j$.util.stream.B2.e) r12
                 long r5 = r12.n
                 long r3 = r3 + r5
@@ -518,12 +518,12 @@ final class B2 {
                 if (r12 != 0) goto L_0x002b
                 goto L_0x001e
             L_0x002b:
-                j$.util.stream.k1 r12 = r11.d
+                j$.util.stream.k1 r12 = r11.e
                 j$.util.stream.B2$e r12 = (j$.util.stream.B2.e) r12
                 long r3 = r12.n
                 int r12 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1))
                 if (r12 != 0) goto L_0x0040
-                j$.util.stream.k1 r12 = r11.e
+                j$.util.stream.k1 r12 = r11.f
                 j$.util.stream.B2$e r12 = (j$.util.stream.B2.e) r12
                 java.lang.Object r12 = r12.b()
                 j$.util.stream.R1 r12 = (j$.util.stream.R1) r12
@@ -531,11 +531,11 @@ final class B2 {
             L_0x0040:
                 j$.util.stream.h1 r12 = r11.j
                 j$.util.stream.U2 r12 = r12.A0()
-                j$.util.stream.k1 r3 = r11.d
+                j$.util.stream.k1 r3 = r11.e
                 j$.util.stream.B2$e r3 = (j$.util.stream.B2.e) r3
                 java.lang.Object r3 = r3.b()
                 j$.util.stream.R1 r3 = (j$.util.stream.R1) r3
-                j$.util.stream.k1 r4 = r11.e
+                j$.util.stream.k1 r4 = r11.f
                 j$.util.stream.B2$e r4 = (j$.util.stream.B2.e) r4
                 java.lang.Object r4 = r4.b()
                 j$.util.stream.R1 r4 = (j$.util.stream.R1) r4
@@ -559,7 +559,7 @@ final class B2 {
                 r6 = r4
                 long r4 = r11.l
                 j$.util.function.x r8 = r11.k
-                j$.util.stream.R1 r3 = r3.r(r4, r6, r8)
+                j$.util.stream.R1 r3 = r3.q(r4, r6, r8)
             L_0x0084:
                 r11.g(r3)
                 r11.o = r0
@@ -588,9 +588,9 @@ final class B2 {
                 r5 = r11
             L_0x00b1:
                 if (r12 == 0) goto L_0x00d1
-                j$.util.stream.k1 r6 = r12.e
+                j$.util.stream.k1 r6 = r12.f
                 if (r5 != r6) goto L_0x00c7
-                j$.util.stream.k1 r5 = r12.d
+                j$.util.stream.k1 r5 = r12.e
                 j$.util.stream.B2$e r5 = (j$.util.stream.B2.e) r5
                 if (r5 == 0) goto L_0x00c7
                 long r5 = r5.m(r1)
@@ -616,9 +616,9 @@ final class B2 {
                 r11.j()
             L_0x00dc:
                 r12 = 0
-                r11.b = r12
+                r11.c = r12
+                r11.f = r12
                 r11.e = r12
-                r11.d = r12
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: j$.util.stream.B2.e.onCompletion(java.util.concurrent.CountedCompleter):void");
@@ -660,7 +660,7 @@ final class B2 {
     }
 
     private static int e(long j) {
-        return (j != -1 ? T2.u : 0) | T2.t;
+        return (j != -1 ? T2.p : 0) | T2.o;
     }
 
     public static CLASSNAMEs1 f(CLASSNAMEh1 h1Var, long j, long j2) {

@@ -62,6 +62,7 @@ public class EmbedBottomSheet extends BottomSheet {
     public LinearLayout imageButtonsContainer;
     /* access modifiers changed from: private */
     public boolean isYouTube;
+    private int lastOrientation = -1;
     /* access modifiers changed from: private */
     public DialogInterface.OnShowListener onShowListener = new DialogInterface.OnShowListener() {
         public void onShow(DialogInterface dialogInterface) {
@@ -105,6 +106,7 @@ public class EmbedBottomSheet extends BottomSheet {
     public WebView webView;
     /* access modifiers changed from: private */
     public int width;
+    private final String youtubeFrame = "<!DOCTYPE html><html><head><style>body { margin: 0; width:100%%; height:100%%;  background-color:#000; }html { width:100%%; height:100%%; background-color:#000; }.embed-container iframe,.embed-container object,   .embed-container embed {       position: absolute;       top: 0;       left: 0;       width: 100%% !important;       height: 100%% !important;   }   </style></head><body>   <div class=\"embed-container\">       <div id=\"player\"></div>   </div>   <script src=\"https://www.youtube.com/iframe_api\"></script>   <script>   var player;   var observer;   var videoEl;   var playing;   var posted = false;   YT.ready(function() {       player = new YT.Player(\"player\", {                              \"width\" : \"100%%\",                              \"events\" : {                              \"onReady\" : \"onReady\",                              \"onError\" : \"onError\",                              \"onStateChange\" : \"onStateChange\",                              },                              \"videoId\" : \"%1$s\",                              \"height\" : \"100%%\",                              \"playerVars\" : {                              \"start\" : %2$d,                              \"rel\" : 1,                              \"showinfo\" : 0,                              \"modestbranding\" : 0,                              \"iv_load_policy\" : 3,                              \"autohide\" : 1,                              \"autoplay\" : 1,                              \"cc_load_policy\" : 1,                              \"playsinline\" : 1,                              \"controls\" : 1                              }                            });        player.setSize(window.innerWidth, window.innerHeight);    });    function hideControls() {        playing = !videoEl.paused;       videoEl.controls = 0;       observer.observe(videoEl, {attributes: true});    }    function showControls() {        playing = !videoEl.paused;       observer.disconnect();       videoEl.controls = 1;    }    function onError(event) {       if (!posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onStateChange(event) {       if (event.data == YT.PlayerState.PLAYING && !posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onReady(event) {       player.playVideo();    }    window.onresize = function() {       player.setSize(window.innerWidth, window.innerHeight);       player.playVideo();    }    </script></body></html>";
 
     static /* synthetic */ boolean lambda$new$0(View view, MotionEvent motionEvent) {
         return true;
@@ -160,387 +162,392 @@ public class EmbedBottomSheet extends BottomSheet {
     /* JADX WARNING: Illegal instructions before constructor call */
     @android.annotation.SuppressLint({"SetJavaScriptEnabled"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private EmbedBottomSheet(android.content.Context r26, java.lang.String r27, java.lang.String r28, java.lang.String r29, java.lang.String r30, int r31, int r32, int r33) {
+    private EmbedBottomSheet(android.content.Context r25, java.lang.String r26, java.lang.String r27, java.lang.String r28, java.lang.String r29, int r30, int r31, int r32) {
         /*
-            r25 = this;
-            r0 = r25
-            r1 = r26
-            r2 = r28
-            r3 = r29
-            r4 = r31
-            r5 = r32
+            r24 = this;
+            r0 = r24
+            r1 = r25
+            r2 = r27
+            r3 = r28
+            r4 = r30
+            r5 = r31
             r6 = 0
             r0.<init>(r1, r6)
             r7 = 2
             int[] r8 = new int[r7]
             r0.position = r8
-            r8 = -2
-            r0.prevOrientation = r8
-            org.telegram.ui.Components.EmbedBottomSheet$1 r9 = new org.telegram.ui.Components.EmbedBottomSheet$1
-            r9.<init>()
-            r0.onShowListener = r9
-            r9 = 1
-            r0.fullWidth = r9
+            r8 = -1
+            r0.lastOrientation = r8
+            r9 = -2
+            r0.prevOrientation = r9
+            java.lang.String r10 = "<!DOCTYPE html><html><head><style>body { margin: 0; width:100%%; height:100%%;  background-color:#000; }html { width:100%%; height:100%%; background-color:#000; }.embed-container iframe,.embed-container object,   .embed-container embed {       position: absolute;       top: 0;       left: 0;       width: 100%% !important;       height: 100%% !important;   }   </style></head><body>   <div class=\"embed-container\">       <div id=\"player\"></div>   </div>   <script src=\"https://www.youtube.com/iframe_api\"></script>   <script>   var player;   var observer;   var videoEl;   var playing;   var posted = false;   YT.ready(function() {       player = new YT.Player(\"player\", {                              \"width\" : \"100%%\",                              \"events\" : {                              \"onReady\" : \"onReady\",                              \"onError\" : \"onError\",                              \"onStateChange\" : \"onStateChange\",                              },                              \"videoId\" : \"%1$s\",                              \"height\" : \"100%%\",                              \"playerVars\" : {                              \"start\" : %2$d,                              \"rel\" : 1,                              \"showinfo\" : 0,                              \"modestbranding\" : 0,                              \"iv_load_policy\" : 3,                              \"autohide\" : 1,                              \"autoplay\" : 1,                              \"cc_load_policy\" : 1,                              \"playsinline\" : 1,                              \"controls\" : 1                              }                            });        player.setSize(window.innerWidth, window.innerHeight);    });    function hideControls() {        playing = !videoEl.paused;       videoEl.controls = 0;       observer.observe(videoEl, {attributes: true});    }    function showControls() {        playing = !videoEl.paused;       observer.disconnect();       videoEl.controls = 1;    }    function onError(event) {       if (!posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onStateChange(event) {       if (event.data == YT.PlayerState.PLAYING && !posted) {            if (window.YoutubeProxy !== undefined) {                   YoutubeProxy.postEvent(\"loaded\", null);             }            posted = true;       }    }    function onReady(event) {       player.playVideo();    }    window.onresize = function() {       player.setSize(window.innerWidth, window.innerHeight);       player.playVideo();    }    </script></body></html>"
+            r0.youtubeFrame = r10
+            org.telegram.ui.Components.EmbedBottomSheet$1 r10 = new org.telegram.ui.Components.EmbedBottomSheet$1
+            r10.<init>()
+            r0.onShowListener = r10
+            r10 = 1
+            r0.fullWidth = r10
             r0.setApplyTopPadding(r6)
             r0.setApplyBottomPadding(r6)
-            r10 = r33
-            r0.seekTimeOverride = r10
-            boolean r10 = r1 instanceof android.app.Activity
-            if (r10 == 0) goto L_0x0035
-            r10 = r1
-            android.app.Activity r10 = (android.app.Activity) r10
-            r0.parentActivity = r10
-        L_0x0035:
-            r10 = r30
-            r0.embedUrl = r10
-            if (r2 == 0) goto L_0x0043
-            int r10 = r28.length()
-            if (r10 <= 0) goto L_0x0043
-            r10 = 1
-            goto L_0x0044
-        L_0x0043:
-            r10 = 0
-        L_0x0044:
-            r0.hasDescription = r10
+            r11 = r32
+            r0.seekTimeOverride = r11
+            boolean r11 = r1 instanceof android.app.Activity
+            if (r11 == 0) goto L_0x003c
+            r11 = r1
+            android.app.Activity r11 = (android.app.Activity) r11
+            r0.parentActivity = r11
+        L_0x003c:
+            r11 = r29
+            r0.embedUrl = r11
+            if (r2 == 0) goto L_0x004a
+            int r11 = r27.length()
+            if (r11 <= 0) goto L_0x004a
+            r11 = 1
+            goto L_0x004b
+        L_0x004a:
+            r11 = 0
+        L_0x004b:
+            r0.hasDescription = r11
             r0.openUrl = r3
             r0.width = r4
             r0.height = r5
-            if (r4 == 0) goto L_0x0050
-            if (r5 != 0) goto L_0x005b
-        L_0x0050:
+            if (r4 == 0) goto L_0x0057
+            if (r5 != 0) goto L_0x0062
+        L_0x0057:
             android.graphics.Point r4 = org.telegram.messenger.AndroidUtilities.displaySize
             int r5 = r4.x
             r0.width = r5
             int r4 = r4.y
             int r4 = r4 / r7
             r0.height = r4
-        L_0x005b:
+        L_0x0062:
             android.widget.FrameLayout r4 = new android.widget.FrameLayout
             r4.<init>(r1)
             r0.fullscreenVideoContainer = r4
-            r4.setKeepScreenOn(r9)
+            r4.setKeepScreenOn(r10)
             android.widget.FrameLayout r4 = r0.fullscreenVideoContainer
             r5 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             r4.setBackgroundColor(r5)
             int r4 = android.os.Build.VERSION.SDK_INT
-            r10 = 21
-            if (r4 < r10) goto L_0x0077
-            android.widget.FrameLayout r11 = r0.fullscreenVideoContainer
-            r11.setFitsSystemWindows(r9)
-        L_0x0077:
-            android.widget.FrameLayout r11 = r0.fullscreenVideoContainer
-            org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$cb9sTrvuLN2SnbMqw2O6rOTFOTU r12 = org.telegram.ui.Components.$$Lambda$EmbedBottomSheet$cb9sTrvuLN2SnbMqw2O6rOTFOTU.INSTANCE
-            r11.setOnTouchListener(r12)
-            org.telegram.ui.ActionBar.BottomSheet$ContainerView r11 = r0.container
+            r11 = 21
+            if (r4 < r11) goto L_0x007e
             android.widget.FrameLayout r12 = r0.fullscreenVideoContainer
-            r13 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r14 = -1
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r13)
-            r11.addView(r12, r13)
-            android.widget.FrameLayout r11 = r0.fullscreenVideoContainer
-            r12 = 4
-            r11.setVisibility(r12)
-            android.widget.FrameLayout r11 = r0.fullscreenVideoContainer
-            org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$yeJ86qJGstOrYeqodDuAHTACaW8 r13 = org.telegram.ui.Components.$$Lambda$EmbedBottomSheet$yeJ86qJGstOrYeqodDuAHTACaW8.INSTANCE
-            r11.setOnTouchListener(r13)
-            org.telegram.ui.Components.EmbedBottomSheet$2 r11 = new org.telegram.ui.Components.EmbedBottomSheet$2
-            r11.<init>(r1)
-            r0.containerLayout = r11
-            org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$tTd-7OOoZY26OWhGbfqVDTuIMW8 r13 = org.telegram.ui.Components.$$Lambda$EmbedBottomSheet$tTd7OOoZY26OWhGbfqVDTuIMW8.INSTANCE
-            r11.setOnTouchListener(r13)
-            android.widget.FrameLayout r11 = r0.containerLayout
-            r0.setCustomView(r11)
-            org.telegram.ui.Components.EmbedBottomSheet$3 r11 = new org.telegram.ui.Components.EmbedBottomSheet$3
-            r11.<init>(r1)
-            r0.webView = r11
-            android.webkit.WebSettings r11 = r11.getSettings()
-            r11.setJavaScriptEnabled(r9)
-            android.webkit.WebView r11 = r0.webView
-            android.webkit.WebSettings r11 = r11.getSettings()
-            r11.setDomStorageEnabled(r9)
-            r11 = 17
-            if (r4 < r11) goto L_0x00ce
-            android.webkit.WebView r13 = r0.webView
-            android.webkit.WebSettings r13 = r13.getSettings()
-            r13.setMediaPlaybackRequiresUserGesture(r6)
-        L_0x00ce:
-            if (r4 < r10) goto L_0x00e2
+            r12.setFitsSystemWindows(r10)
+        L_0x007e:
+            android.widget.FrameLayout r12 = r0.fullscreenVideoContainer
+            org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$cb9sTrvuLN2SnbMqw2O6rOTFOTU r13 = org.telegram.ui.Components.$$Lambda$EmbedBottomSheet$cb9sTrvuLN2SnbMqw2O6rOTFOTU.INSTANCE
+            r12.setOnTouchListener(r13)
+            org.telegram.ui.ActionBar.BottomSheet$ContainerView r12 = r0.container
+            android.widget.FrameLayout r13 = r0.fullscreenVideoContainer
+            r14 = -1082130432(0xffffffffbvar_, float:-1.0)
+            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r14)
+            r12.addView(r13, r14)
+            android.widget.FrameLayout r12 = r0.fullscreenVideoContainer
+            r13 = 4
+            r12.setVisibility(r13)
+            android.widget.FrameLayout r12 = r0.fullscreenVideoContainer
+            org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$yeJ86qJGstOrYeqodDuAHTACaW8 r14 = org.telegram.ui.Components.$$Lambda$EmbedBottomSheet$yeJ86qJGstOrYeqodDuAHTACaW8.INSTANCE
+            r12.setOnTouchListener(r14)
+            org.telegram.ui.Components.EmbedBottomSheet$2 r12 = new org.telegram.ui.Components.EmbedBottomSheet$2
+            r12.<init>(r1)
+            r0.containerLayout = r12
+            org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$tTd-7OOoZY26OWhGbfqVDTuIMW8 r14 = org.telegram.ui.Components.$$Lambda$EmbedBottomSheet$tTd7OOoZY26OWhGbfqVDTuIMW8.INSTANCE
+            r12.setOnTouchListener(r14)
+            android.widget.FrameLayout r12 = r0.containerLayout
+            r0.setCustomView(r12)
+            org.telegram.ui.Components.EmbedBottomSheet$3 r12 = new org.telegram.ui.Components.EmbedBottomSheet$3
+            r12.<init>(r1)
+            r0.webView = r12
+            android.webkit.WebSettings r12 = r12.getSettings()
+            r12.setJavaScriptEnabled(r10)
+            android.webkit.WebView r12 = r0.webView
+            android.webkit.WebSettings r12 = r12.getSettings()
+            r12.setDomStorageEnabled(r10)
+            r12 = 17
+            if (r4 < r12) goto L_0x00d4
+            android.webkit.WebView r14 = r0.webView
+            android.webkit.WebSettings r14 = r14.getSettings()
+            r14.setMediaPlaybackRequiresUserGesture(r6)
+        L_0x00d4:
+            if (r4 < r11) goto L_0x00e8
             android.webkit.WebView r4 = r0.webView
             android.webkit.WebSettings r4 = r4.getSettings()
             r4.setMixedContentMode(r6)
             android.webkit.CookieManager r4 = android.webkit.CookieManager.getInstance()
-            android.webkit.WebView r10 = r0.webView
-            r4.setAcceptThirdPartyCookies(r10, r9)
-        L_0x00e2:
+            android.webkit.WebView r11 = r0.webView
+            r4.setAcceptThirdPartyCookies(r11, r10)
+        L_0x00e8:
             android.webkit.WebView r4 = r0.webView
-            org.telegram.ui.Components.EmbedBottomSheet$4 r10 = new org.telegram.ui.Components.EmbedBottomSheet$4
-            r10.<init>()
-            r4.setWebChromeClient(r10)
+            org.telegram.ui.Components.EmbedBottomSheet$4 r11 = new org.telegram.ui.Components.EmbedBottomSheet$4
+            r11.<init>()
+            r4.setWebChromeClient(r11)
             android.webkit.WebView r4 = r0.webView
-            org.telegram.ui.Components.EmbedBottomSheet$5 r10 = new org.telegram.ui.Components.EmbedBottomSheet$5
-            r10.<init>()
-            r4.setWebViewClient(r10)
+            org.telegram.ui.Components.EmbedBottomSheet$5 r11 = new org.telegram.ui.Components.EmbedBottomSheet$5
+            r11.<init>()
+            r4.setWebViewClient(r11)
             android.widget.FrameLayout r4 = r0.containerLayout
-            android.webkit.WebView r10 = r0.webView
-            r15 = -1
-            r16 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r17 = 51
+            android.webkit.WebView r11 = r0.webView
+            r14 = -1
+            r15 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r16 = 51
+            r17 = 0
             r18 = 0
             r19 = 0
-            r20 = 0
-            boolean r13 = r0.hasDescription
-            r22 = 22
-            if (r13 == 0) goto L_0x010e
-            r13 = 22
-            goto L_0x010f
-        L_0x010e:
-            r13 = 0
-        L_0x010f:
-            int r13 = r13 + 84
-            float r13 = (float) r13
-            r21 = r13
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r16, r17, r18, r19, r20, r21)
-            r4.addView(r10, r13)
+            boolean r12 = r0.hasDescription
+            r21 = 22
+            if (r12 == 0) goto L_0x0114
+            r12 = 22
+            goto L_0x0115
+        L_0x0114:
+            r12 = 0
+        L_0x0115:
+            int r12 = r12 + 84
+            float r12 = (float) r12
+            r20 = r12
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
+            r4.addView(r11, r12)
             org.telegram.ui.Components.WebPlayerView r4 = new org.telegram.ui.Components.WebPlayerView
-            org.telegram.ui.Components.EmbedBottomSheet$6 r10 = new org.telegram.ui.Components.EmbedBottomSheet$6
-            r10.<init>()
-            r4.<init>(r1, r9, r6, r10)
+            org.telegram.ui.Components.EmbedBottomSheet$6 r11 = new org.telegram.ui.Components.EmbedBottomSheet$6
+            r11.<init>()
+            r4.<init>(r1, r10, r6, r11)
             r0.videoView = r4
-            r4.setVisibility(r12)
+            r4.setVisibility(r13)
             android.widget.FrameLayout r4 = r0.containerLayout
-            org.telegram.ui.Components.WebPlayerView r10 = r0.videoView
-            r15 = -1
-            r16 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r17 = 51
+            org.telegram.ui.Components.WebPlayerView r11 = r0.videoView
+            r14 = -1
+            r15 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r16 = 51
+            r17 = 0
             r18 = 0
             r19 = 0
-            r20 = 0
-            boolean r13 = r0.hasDescription
-            if (r13 == 0) goto L_0x0140
-            r13 = 22
-            goto L_0x0141
-        L_0x0140:
-            r13 = 0
-        L_0x0141:
-            int r13 = r13 + 84
-            int r13 = r13 + -10
-            float r13 = (float) r13
-            r21 = r13
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r16, r17, r18, r19, r20, r21)
-            r4.addView(r10, r13)
+            boolean r12 = r0.hasDescription
+            if (r12 == 0) goto L_0x0146
+            r12 = 22
+            goto L_0x0147
+        L_0x0146:
+            r12 = 0
+        L_0x0147:
+            int r12 = r12 + 84
+            int r12 = r12 + -10
+            float r12 = (float) r12
+            r20 = r12
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
+            r4.addView(r11, r12)
             android.view.View r4 = new android.view.View
             r4.<init>(r1)
             r0.progressBarBlackBackground = r4
             r4.setBackgroundColor(r5)
             android.view.View r4 = r0.progressBarBlackBackground
-            r4.setVisibility(r12)
+            r4.setVisibility(r13)
             android.widget.FrameLayout r4 = r0.containerLayout
             android.view.View r5 = r0.progressBarBlackBackground
-            r15 = -1
-            r16 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r17 = 51
+            r14 = -1
+            r15 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r16 = 51
+            r17 = 0
             r18 = 0
             r19 = 0
-            r20 = 0
-            boolean r10 = r0.hasDescription
-            if (r10 == 0) goto L_0x0174
-            r10 = 22
-            goto L_0x0175
-        L_0x0174:
-            r10 = 0
-        L_0x0175:
-            int r10 = r10 + 84
-            float r10 = (float) r10
-            r21 = r10
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r16, r17, r18, r19, r20, r21)
-            r4.addView(r5, r10)
+            boolean r11 = r0.hasDescription
+            if (r11 == 0) goto L_0x017a
+            r11 = 22
+            goto L_0x017b
+        L_0x017a:
+            r11 = 0
+        L_0x017b:
+            int r11 = r11 + 84
+            float r11 = (float) r11
+            r20 = r11
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
+            r4.addView(r5, r11)
             org.telegram.ui.Components.RadialProgressView r4 = new org.telegram.ui.Components.RadialProgressView
             r4.<init>(r1)
             r0.progressBar = r4
-            r4.setVisibility(r12)
+            r4.setVisibility(r13)
             android.widget.FrameLayout r4 = r0.containerLayout
             org.telegram.ui.Components.RadialProgressView r5 = r0.progressBar
-            r15 = -2
-            r16 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r17 = 17
+            r14 = -2
+            r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r16 = 17
+            r17 = 0
             r18 = 0
             r19 = 0
-            r20 = 0
-            boolean r10 = r0.hasDescription
-            if (r10 == 0) goto L_0x019f
-            goto L_0x01a1
-        L_0x019f:
-            r22 = 0
-        L_0x01a1:
-            int r22 = r22 + 84
-            int r7 = r22 / 2
+            boolean r11 = r0.hasDescription
+            if (r11 == 0) goto L_0x01a5
+            goto L_0x01a7
+        L_0x01a5:
+            r21 = 0
+        L_0x01a7:
+            int r21 = r21 + 84
+            int r7 = r21 / 2
             float r7 = (float) r7
-            r21 = r7
-            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r16, r17, r18, r19, r20, r21)
+            r20 = r7
+            android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
             r4.addView(r5, r7)
             boolean r4 = r0.hasDescription
             java.lang.String r5 = "fonts/rmedium.ttf"
             r7 = 1099956224(0x41900000, float:18.0)
-            if (r4 == 0) goto L_0x01fd
+            if (r4 == 0) goto L_0x0203
             android.widget.TextView r4 = new android.widget.TextView
             r4.<init>(r1)
-            r10 = 1098907648(0x41800000, float:16.0)
-            r4.setTextSize(r9, r10)
-            java.lang.String r10 = "dialogTextBlack"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r4.setTextColor(r10)
+            r11 = 1098907648(0x41800000, float:16.0)
+            r4.setTextSize(r10, r11)
+            java.lang.String r11 = "dialogTextBlack"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r4.setTextColor(r11)
             r4.setText(r2)
-            r4.setSingleLine(r9)
+            r4.setSingleLine(r10)
             android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r4.setTypeface(r2)
             android.text.TextUtils$TruncateAt r2 = android.text.TextUtils.TruncateAt.END
             r4.setEllipsize(r2)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r4.setPadding(r2, r6, r10, r6)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r4.setPadding(r2, r6, r11, r6)
             android.widget.FrameLayout r2 = r0.containerLayout
-            r15 = -1
-            r16 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r17 = 83
+            r14 = -1
+            r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r16 = 83
+            r17 = 0
             r18 = 0
             r19 = 0
-            r20 = 0
-            r21 = 1117388800(0x429a0000, float:77.0)
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r16, r17, r18, r19, r20, r21)
-            r2.addView(r4, r10)
-        L_0x01fd:
+            r20 = 1117388800(0x429a0000, float:77.0)
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
+            r2.addView(r4, r11)
+        L_0x0203:
             android.widget.TextView r2 = new android.widget.TextView
             r2.<init>(r1)
             r4 = 1096810496(0x41600000, float:14.0)
-            r2.setTextSize(r9, r4)
-            java.lang.String r10 = "dialogTextGray"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r2.setTextColor(r10)
-            r10 = r27
-            r2.setText(r10)
-            r2.setSingleLine(r9)
-            android.text.TextUtils$TruncateAt r10 = android.text.TextUtils.TruncateAt.END
-            r2.setEllipsize(r10)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r2.setPadding(r10, r6, r13, r6)
-            android.widget.FrameLayout r10 = r0.containerLayout
-            r15 = -1
-            r16 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r17 = 83
+            r2.setTextSize(r10, r4)
+            java.lang.String r11 = "dialogTextGray"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r2.setTextColor(r11)
+            r11 = r26
+            r2.setText(r11)
+            r2.setSingleLine(r10)
+            android.text.TextUtils$TruncateAt r11 = android.text.TextUtils.TruncateAt.END
+            r2.setEllipsize(r11)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r2.setPadding(r11, r6, r12, r6)
+            android.widget.FrameLayout r11 = r0.containerLayout
+            r14 = -1
+            r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r16 = 83
+            r17 = 0
             r18 = 0
             r19 = 0
-            r20 = 0
-            r21 = 1113849856(0x42640000, float:57.0)
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r15, r16, r17, r18, r19, r20, r21)
-            r10.addView(r2, r13)
+            r20 = 1113849856(0x42640000, float:57.0)
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
+            r11.addView(r2, r12)
             android.view.View r2 = new android.view.View
             r2.<init>(r1)
-            java.lang.String r10 = "dialogGrayLine"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r2.setBackgroundColor(r10)
-            android.widget.FrameLayout r10 = r0.containerLayout
-            android.widget.FrameLayout$LayoutParams r13 = new android.widget.FrameLayout$LayoutParams
-            r15 = 83
-            r13.<init>(r14, r9, r15)
-            r10.addView(r2, r13)
+            java.lang.String r11 = "dialogGrayLine"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r2.setBackgroundColor(r11)
+            android.widget.FrameLayout r11 = r0.containerLayout
+            android.widget.FrameLayout$LayoutParams r12 = new android.widget.FrameLayout$LayoutParams
+            r14 = 83
+            r12.<init>(r8, r10, r14)
+            r11.addView(r2, r12)
             android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
-            r10 = 1111490560(0x42400000, float:48.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r2.bottomMargin = r10
+            r11 = 1111490560(0x42400000, float:48.0)
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            r2.bottomMargin = r11
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
-            java.lang.String r10 = "dialogBackground"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r2.setBackgroundColor(r10)
-            android.widget.FrameLayout r10 = r0.containerLayout
-            r13 = 48
-            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r13, r15)
-            r10.addView(r2, r15)
-            android.widget.LinearLayout r10 = new android.widget.LinearLayout
-            r10.<init>(r1)
-            r10.setOrientation(r6)
-            r15 = 1065353216(0x3var_, float:1.0)
-            r10.setWeightSum(r15)
-            r15 = 53
-            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r14, r15)
-            r2.addView(r10, r15)
-            android.widget.TextView r15 = new android.widget.TextView
-            r15.<init>(r1)
-            r15.setTextSize(r9, r4)
-            java.lang.String r16 = "dialogTextBlue4"
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r16)
-            r15.setTextColor(r4)
-            r15.setGravity(r11)
-            r15.setSingleLine(r9)
+            java.lang.String r11 = "dialogBackground"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r2.setBackgroundColor(r11)
+            android.widget.FrameLayout r11 = r0.containerLayout
+            r12 = 48
+            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r12, r14)
+            r11.addView(r2, r14)
+            android.widget.LinearLayout r11 = new android.widget.LinearLayout
+            r11.<init>(r1)
+            r11.setOrientation(r6)
+            r14 = 1065353216(0x3var_, float:1.0)
+            r11.setWeightSum(r14)
+            r14 = 53
+            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r8, r14)
+            r2.addView(r11, r14)
+            android.widget.TextView r14 = new android.widget.TextView
+            r14.<init>(r1)
+            r14.setTextSize(r10, r4)
+            java.lang.String r15 = "dialogTextBlue4"
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+            r14.setTextColor(r4)
+            r4 = 17
+            r14.setGravity(r4)
+            r14.setSingleLine(r10)
             android.text.TextUtils$TruncateAt r4 = android.text.TextUtils.TruncateAt.END
-            r15.setEllipsize(r4)
+            r14.setEllipsize(r4)
             java.lang.String r4 = "dialogButtonSelector"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9, r6)
-            r15.setBackgroundDrawable(r9)
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            r15.setPadding(r9, r6, r13, r6)
-            r9 = 2131624912(0x7f0e03d0, float:1.8877017E38)
-            java.lang.String r13 = "Close"
-            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r13, r9)
-            java.lang.String r9 = r9.toUpperCase()
-            r15.setText(r9)
-            android.graphics.Typeface r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
-            r15.setTypeface(r9)
-            r9 = 51
-            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r8, (int) r14, (int) r9)
-            r2.addView(r15, r13)
-            org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$1AQ1TuWQsKenxnL0mvKNj9FvFdU r13 = new org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$1AQ1TuWQsKenxnL0mvKNj9FvFdU
-            r13.<init>()
-            r15.setOnClickListener(r13)
-            android.widget.LinearLayout r13 = new android.widget.LinearLayout
-            r13.<init>(r1)
-            r0.imageButtonsContainer = r13
-            r13.setVisibility(r12)
-            android.widget.LinearLayout r13 = r0.imageButtonsContainer
-            android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r14, r11)
-            r2.addView(r13, r15)
+            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            android.graphics.drawable.Drawable r10 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r10, r6)
+            r14.setBackgroundDrawable(r10)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            r14.setPadding(r10, r6, r12, r6)
+            r10 = 2131624928(0x7f0e03e0, float:1.887705E38)
+            java.lang.String r12 = "Close"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
+            java.lang.String r10 = r10.toUpperCase()
+            r14.setText(r10)
+            android.graphics.Typeface r10 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
+            r14.setTypeface(r10)
+            r10 = 51
+            android.widget.LinearLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r9, (int) r8, (int) r10)
+            r2.addView(r14, r12)
+            org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$1AQ1TuWQsKenxnL0mvKNj9FvFdU r12 = new org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$1AQ1TuWQsKenxnL0mvKNj9FvFdU
+            r12.<init>()
+            r14.setOnClickListener(r12)
+            android.widget.LinearLayout r12 = new android.widget.LinearLayout
+            r12.<init>(r1)
+            r0.imageButtonsContainer = r12
+            r12.setVisibility(r13)
+            android.widget.LinearLayout r12 = r0.imageButtonsContainer
+            r14 = 17
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r8, r14)
+            r2.addView(r12, r13)
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             r0.pipButton = r2
-            android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
-            r2.setScaleType(r13)
+            android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r12)
             android.widget.ImageView r2 = r0.pipButton
-            r13 = 2131166108(0x7var_c, float:1.7946452E38)
-            r2.setImageResource(r13)
+            r12 = 2131166116(0x7var_a4, float:1.7946468E38)
+            r2.setImageResource(r12)
             android.widget.ImageView r2 = r0.pipButton
-            r13 = 2131624010(0x7f0e004a, float:1.8875188E38)
-            java.lang.String r15 = "AccDescrPipMode"
-            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
-            r2.setContentDescription(r13)
+            r12 = 2131624010(0x7f0e004a, float:1.8875188E38)
+            java.lang.String r13 = "AccDescrPipMode"
+            java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
+            r2.setContentDescription(r12)
             android.widget.ImageView r2 = r0.pipButton
             r2.setEnabled(r6)
             android.widget.ImageView r2 = r0.pipButton
-            r13 = 1056964608(0x3var_, float:0.5)
-            r2.setAlpha(r13)
+            r12 = 1056964608(0x3var_, float:0.5)
+            r2.setAlpha(r12)
             android.widget.ImageView r2 = r0.pipButton
-            android.graphics.PorterDuffColorFilter r13 = new android.graphics.PorterDuffColorFilter
-            int r15 = org.telegram.ui.ActionBar.Theme.getColor(r16)
-            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r13.<init>(r15, r12)
-            r2.setColorFilter(r13)
+            android.graphics.PorterDuffColorFilter r12 = new android.graphics.PorterDuffColorFilter
+            int r13 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+            android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r12.<init>(r13, r14)
+            r2.setColorFilter(r12)
             android.widget.ImageView r2 = r0.pipButton
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r12, r6)
             r2.setBackgroundDrawable(r12)
             android.widget.LinearLayout r2 = r0.imageButtonsContainer
             android.widget.ImageView r12 = r0.pipButton
-            r18 = 48
-            r19 = 1111490560(0x42400000, float:48.0)
-            r20 = 51
+            r17 = 48
+            r18 = 1111490560(0x42400000, float:48.0)
+            r19 = 51
+            r20 = 0
             r21 = 0
-            r22 = 0
-            r23 = 1082130432(0x40800000, float:4.0)
-            r24 = 0
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24)
+            r22 = 1082130432(0x40800000, float:4.0)
+            r23 = 0
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
             r2.addView(r12, r13)
             android.widget.ImageView r2 = r0.pipButton
             org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$JZq6mwtzPK_x1a6eXFenQU1hvuo r12 = new org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$JZq6mwtzPK_x1a6eXFenQU1hvuo
@@ -552,23 +559,23 @@ public class EmbedBottomSheet extends BottomSheet {
             r12.<init>(r1)
             android.widget.ImageView$ScaleType r13 = android.widget.ImageView.ScaleType.CENTER
             r12.setScaleType(r13)
-            r13 = 2131166100(0x7var_, float:1.7946436E38)
+            r13 = 2131166108(0x7var_c, float:1.7946452E38)
             r12.setImageResource(r13)
-            r13 = 2131624997(0x7f0e0425, float:1.887719E38)
-            java.lang.String r15 = "CopyLink"
-            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
+            r13 = 2131625013(0x7f0e0435, float:1.8877222E38)
+            java.lang.String r14 = "CopyLink"
+            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r12.setContentDescription(r13)
             android.graphics.PorterDuffColorFilter r13 = new android.graphics.PorterDuffColorFilter
-            int r15 = org.telegram.ui.ActionBar.Theme.getColor(r16)
+            int r14 = org.telegram.ui.ActionBar.Theme.getColor(r15)
             android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r13.<init>(r15, r8)
+            r13.<init>(r14, r8)
             r12.setColorFilter(r13)
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r8, r6)
             r12.setBackgroundDrawable(r8)
             android.widget.LinearLayout r8 = r0.imageButtonsContainer
             r13 = 48
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r13, r9)
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r13, r10)
             r8.addView(r12, r13)
             r12.setOnClickListener(r2)
             android.widget.TextView r8 = new android.widget.TextView
@@ -578,10 +585,11 @@ public class EmbedBottomSheet extends BottomSheet {
             r13 = 1
             r8.setTextSize(r13, r12)
             android.widget.TextView r8 = r0.copyTextButton
-            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r16)
+            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r15)
             r8.setTextColor(r12)
             android.widget.TextView r8 = r0.copyTextButton
-            r8.setGravity(r11)
+            r12 = 17
+            r8.setGravity(r12)
             android.widget.TextView r8 = r0.copyTextButton
             r8.setSingleLine(r13)
             android.widget.TextView r8 = r0.copyTextButton
@@ -596,7 +604,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r8.setPadding(r12, r6, r13, r6)
             android.widget.TextView r8 = r0.copyTextButton
-            r12 = 2131624995(0x7f0e0423, float:1.8877185E38)
+            r12 = 2131625011(0x7f0e0433, float:1.8877218E38)
             java.lang.String r13 = "Copy"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             java.lang.String r12 = r12.toUpperCase()
@@ -605,9 +613,9 @@ public class EmbedBottomSheet extends BottomSheet {
             android.graphics.Typeface r12 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r8.setTypeface(r12)
             android.widget.TextView r8 = r0.copyTextButton
-            r12 = -2
-            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r14, r9)
-            r10.addView(r8, r13)
+            r12 = -1
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r12, r10)
+            r11.addView(r8, r13)
             android.widget.TextView r8 = r0.copyTextButton
             r8.setOnClickListener(r2)
             android.widget.TextView r2 = new android.widget.TextView
@@ -615,9 +623,10 @@ public class EmbedBottomSheet extends BottomSheet {
             r1 = 1096810496(0x41600000, float:14.0)
             r8 = 1
             r2.setTextSize(r8, r1)
-            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r16)
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r15)
             r2.setTextColor(r1)
-            r2.setGravity(r11)
+            r1 = 17
+            r2.setGravity(r1)
             r2.setSingleLine(r8)
             android.text.TextUtils$TruncateAt r1 = android.text.TextUtils.TruncateAt.END
             r2.setEllipsize(r1)
@@ -627,45 +636,45 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r7)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r2.setPadding(r1, r6, r4, r6)
-            r1 = 2131626529(0x7f0e0a21, float:1.8880297E38)
+            r1 = 2131626570(0x7f0e0a4a, float:1.888038E38)
             java.lang.String r4 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             java.lang.String r1 = r1.toUpperCase()
             r2.setText(r1)
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r2.setTypeface(r1)
-            r1 = -2
-            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r1, r14, r9)
-            r10.addView(r2, r1)
+            r1 = -1
+            android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r1, r10)
+            r11.addView(r2, r1)
             org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$_pdhFnRV1w6sanI4Jg_8XImPJf4 r1 = new org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$_pdhFnRV1w6sanI4Jg_8XImPJf4
             r1.<init>()
             r2.setOnClickListener(r1)
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
             java.lang.String r2 = r0.embedUrl
             boolean r1 = r1.canHandleUrl(r2)
-            if (r1 != 0) goto L_0x0494
+            if (r1 != 0) goto L_0x04a2
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
             boolean r1 = r1.canHandleUrl(r3)
-            if (r1 == 0) goto L_0x0492
-            goto L_0x0494
-        L_0x0492:
+            if (r1 == 0) goto L_0x04a0
+            goto L_0x04a2
+        L_0x04a0:
             r13 = 0
-            goto L_0x0495
-        L_0x0494:
+            goto L_0x04a3
+        L_0x04a2:
             r13 = 1
-        L_0x0495:
+        L_0x04a3:
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
-            if (r13 == 0) goto L_0x049b
+            if (r13 == 0) goto L_0x04a9
             r2 = 0
-            goto L_0x049c
-        L_0x049b:
+            goto L_0x04aa
+        L_0x04a9:
             r2 = 4
-        L_0x049c:
+        L_0x04aa:
             r1.setVisibility(r2)
-            if (r13 == 0) goto L_0x04a6
+            if (r13 == 0) goto L_0x04b4
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
             r1.willHandle()
-        L_0x04a6:
+        L_0x04b4:
             org.telegram.ui.Components.EmbedBottomSheet$8 r1 = new org.telegram.ui.Components.EmbedBottomSheet$8
             r1.<init>(r13)
             r0.setDelegate(r1)
@@ -676,19 +685,19 @@ public class EmbedBottomSheet extends BottomSheet {
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
             java.lang.String r2 = r0.embedUrl
             java.lang.String r1 = r1.getYouTubeVideoId(r2)
-            if (r1 != 0) goto L_0x04c3
-            if (r13 != 0) goto L_0x0526
-        L_0x04c3:
+            if (r1 != 0) goto L_0x04d1
+            if (r13 != 0) goto L_0x0534
+        L_0x04d1:
             org.telegram.ui.Components.RadialProgressView r2 = r0.progressBar
             r2.setVisibility(r6)
             android.webkit.WebView r2 = r0.webView
             r2.setVisibility(r6)
             android.widget.LinearLayout r2 = r0.imageButtonsContainer
             r2.setVisibility(r6)
-            if (r1 == 0) goto L_0x04d9
+            if (r1 == 0) goto L_0x04e7
             android.view.View r2 = r0.progressBarBlackBackground
             r2.setVisibility(r6)
-        L_0x04d9:
+        L_0x04e7:
             android.widget.TextView r2 = r0.copyTextButton
             r3 = 4
             r2.setVisibility(r3)
@@ -705,34 +714,34 @@ public class EmbedBottomSheet extends BottomSheet {
             r2.setVisibility(r3)
             org.telegram.ui.Components.WebPlayerView r2 = r0.videoView
             android.widget.ImageView r2 = r2.getTextureImageView()
-            if (r2 == 0) goto L_0x050d
+            if (r2 == 0) goto L_0x051b
             org.telegram.ui.Components.WebPlayerView r2 = r0.videoView
             android.widget.ImageView r2 = r2.getTextureImageView()
             r2.setVisibility(r3)
-        L_0x050d:
-            if (r1 == 0) goto L_0x0526
+        L_0x051b:
+            if (r1 == 0) goto L_0x0534
             int r1 = r0.currentAccount
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
             java.lang.String r1 = r1.youtubePipType
             java.lang.String r2 = "disabled"
             boolean r1 = r2.equals(r1)
-            if (r1 == 0) goto L_0x0526
+            if (r1 == 0) goto L_0x0534
             android.widget.ImageView r1 = r0.pipButton
             r2 = 8
             r1.setVisibility(r2)
-        L_0x0526:
+        L_0x0534:
             android.view.OrientationEventListener r1 = r0.orientationEventListener
             boolean r1 = r1.canDetectOrientation()
-            if (r1 == 0) goto L_0x0534
+            if (r1 == 0) goto L_0x0542
             android.view.OrientationEventListener r1 = r0.orientationEventListener
             r1.enable()
-            goto L_0x053c
-        L_0x0534:
+            goto L_0x054a
+        L_0x0542:
             android.view.OrientationEventListener r1 = r0.orientationEventListener
             r1.disable()
             r1 = 0
             r0.orientationEventListener = r1
-        L_0x053c:
+        L_0x054a:
             instance = r0
             return
         */

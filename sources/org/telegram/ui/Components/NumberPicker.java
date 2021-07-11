@@ -23,6 +23,7 @@ import org.telegram.ui.ActionBar.Theme;
 public class NumberPicker extends LinearLayout {
     private int SELECTOR_MIDDLE_ITEM_INDEX;
     private int SELECTOR_WHEEL_ITEM_COUNT;
+    private SeekBarAccessibilityDelegate accessibilityDelegate;
     private boolean drawDividers;
     private Scroller mAdjustScroller;
     /* access modifiers changed from: private */
@@ -150,7 +151,7 @@ public class NumberPicker extends LinearLayout {
             this.mAdjustScroller = new Scroller(getContext(), new DecelerateInterpolator(2.5f));
             updateInputTextView();
             setImportantForAccessibility(1);
-            setAccessibilityDelegate(new SeekBarAccessibilityDelegate() {
+            AnonymousClass1 r0 = new SeekBarAccessibilityDelegate() {
                 /* access modifiers changed from: protected */
                 public boolean canScrollBackward(View view) {
                     return true;
@@ -170,7 +171,9 @@ public class NumberPicker extends LinearLayout {
                     NumberPicker numberPicker = NumberPicker.this;
                     return numberPicker.getContentDescription(numberPicker.mValue);
                 }
-            });
+            };
+            this.accessibilityDelegate = r0;
+            setAccessibilityDelegate(r0);
             return;
         }
         throw new IllegalArgumentException("minHeight > maxHeight");
@@ -959,6 +962,8 @@ public class NumberPicker extends LinearLayout {
     }
 
     class PressedStateHelper implements Runnable {
+        private final int MODE_PRESS = 1;
+        private final int MODE_TAPPED = 2;
         private int mManagedButton;
         private int mMode;
 

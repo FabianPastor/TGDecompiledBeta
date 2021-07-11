@@ -69,6 +69,7 @@ public class LinkActionView extends LinearLayout {
     /* access modifiers changed from: private */
     public QRCodeBottomSheet qrCodeBottomSheet;
     private final TextView removeView;
+    private boolean revoked;
     private final TextView shareView;
     /* access modifiers changed from: private */
     public int usersCount;
@@ -358,7 +359,7 @@ public class LinkActionView extends LinearLayout {
                         canvas.restore();
                     }
                 };
-                final AnonymousClass2 r8 = new ViewTreeObserver.OnPreDrawListener(this) {
+                final AnonymousClass2 r8 = new ViewTreeObserver.OnPreDrawListener() {
                     public boolean onPreDraw() {
                         r0.invalidate();
                         return true;
@@ -519,6 +520,7 @@ public class LinkActionView extends LinearLayout {
     }
 
     public void setRevoke(boolean z) {
+        this.revoked = z;
         if (z) {
             this.optionsView.setVisibility(8);
             this.shareView.setVisibility(8);

@@ -15,7 +15,7 @@ public interface Spliterator<T> {
 
         void forEachRemaining(Consumer consumer);
 
-        boolean o(q qVar);
+        boolean n(q qVar);
 
         a trySplit();
     }
@@ -27,7 +27,7 @@ public interface Spliterator<T> {
 
         void forEachRemaining(Consumer consumer);
 
-        boolean h(w wVar);
+        boolean g(w wVar);
 
         b trySplit();
     }
@@ -39,7 +39,7 @@ public interface Spliterator<T> {
 
         void forEachRemaining(Consumer consumer);
 
-        boolean j(C c);
+        boolean i(C c);
 
         c trySplit();
     }

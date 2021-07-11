@@ -208,7 +208,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     }
                 }
             });
-            this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
+            this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
                 public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                     return false;
                 }
@@ -263,7 +263,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
             frameLayout2.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
             RecyclerListView recyclerListView = new RecyclerListView(context2);
             this.listView = recyclerListView;
-            recyclerListView.setLayoutManager(new LinearLayoutManager(this, context2, 1, false) {
+            recyclerListView.setLayoutManager(new LinearLayoutManager(context2, 1, false) {
                 public boolean supportsPredictiveItemAnimations() {
                     return false;
                 }

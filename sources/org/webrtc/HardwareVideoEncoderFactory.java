@@ -4,6 +4,7 @@ import android.media.MediaCodecInfo;
 import android.os.Build;
 import java.util.ArrayList;
 import org.telegram.messenger.voip.Instance;
+import org.telegram.messenger.voip.VoIPService;
 import org.webrtc.EglBase;
 import org.webrtc.EglBase14;
 import org.webrtc.VideoEncoderFactory;
@@ -109,7 +110,7 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     }
 
     public VideoCodecInfo[] getSupportedCodecs() {
-        if (Build.VERSION.SDK_INT < 19) {
+        if (Build.VERSION.SDK_INT < 19 || (VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().groupCall != null)) {
             return new VideoCodecInfo[0];
         }
         ArrayList arrayList = new ArrayList();
@@ -150,6 +151,9 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     private boolean isHardwareSupportedInCurrentSdk(MediaCodecInfo mediaCodecInfo, VideoCodecMimeType videoCodecMimeType) {
         Instance.ServerConfig globalServerConfig = Instance.getGlobalServerConfig();
         if (!globalServerConfig.enable_h264_encoder && !globalServerConfig.enable_h265_encoder && !globalServerConfig.enable_vp8_encoder && !globalServerConfig.enable_vp9_encoder) {
+            return false;
+        }
+        if (VoIPService.getSharedInstance() != null && VoIPService.getSharedInstance().groupCall != null) {
             return false;
         }
         int i = AnonymousClass1.$SwitchMap$org$webrtc$VideoCodecMimeType[videoCodecMimeType.ordinal()];

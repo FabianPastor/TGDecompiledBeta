@@ -287,6 +287,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public static Paint webpageSearchPaint;
     /* access modifiers changed from: private */
     public static Paint webpageUrlPaint;
+    private final String BOTTOM_SHEET_VIEW_TAG = "bottomSheet";
     /* access modifiers changed from: private */
     public WebpageAdapter[] adapter;
     /* access modifiers changed from: private */
@@ -524,7 +525,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         /* access modifiers changed from: private */
         public TLRPC$TL_pageBlockList pageBlockList;
 
-        private TL_pageBlockListParent(ArticleViewer articleViewer) {
+        private TL_pageBlockListParent() {
             this.items = new ArrayList<>();
         }
     }
@@ -543,7 +544,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         /* access modifiers changed from: private */
         public TLRPC$RichText textItem;
 
-        private TL_pageBlockListItem(ArticleViewer articleViewer) {
+        private TL_pageBlockListItem() {
             this.index = Integer.MAX_VALUE;
         }
     }
@@ -562,7 +563,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         /* access modifiers changed from: private */
         public TLRPC$TL_pageBlockOrderedList pageBlockOrderedList;
 
-        private TL_pageBlockOrderedListParent(ArticleViewer articleViewer) {
+        private TL_pageBlockOrderedListParent() {
             this.items = new ArrayList<>();
         }
     }
@@ -581,7 +582,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         /* access modifiers changed from: private */
         public TLRPC$RichText textItem;
 
-        private TL_pageBlockOrderedListItem(ArticleViewer articleViewer) {
+        private TL_pageBlockOrderedListItem() {
             this.index = Integer.MAX_VALUE;
         }
     }
@@ -2188,7 +2189,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         }
                     }
                 });
-                AnonymousClass4 r3 = new TextView(this, this.parentActivity) {
+                AnonymousClass4 r3 = new TextView(this.parentActivity) {
                     /* access modifiers changed from: protected */
                     public void onDraw(Canvas canvas) {
                         canvas.drawLine(0.0f, (float) (getMeasuredHeight() - 1), (float) getMeasuredWidth(), (float) (getMeasuredHeight() - 1), ArticleViewer.dividerPaint);
@@ -2820,7 +2821,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return r11
         L_0x0310:
             boolean r1 = r9 instanceof org.telegram.tgnet.TLRPC$TL_textPhone
-            if (r1 == 0) goto L_0x0372
+            if (r1 == 0) goto L_0x0373
             android.text.SpannableStringBuilder r11 = new android.text.SpannableStringBuilder
             r1 = r9
             org.telegram.tgnet.TLRPC$TL_textPhone r1 = (org.telegram.tgnet.TLRPC$TL_textPhone) r1
@@ -2831,7 +2832,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r29
             r6 = r31
             r7 = r32
-            java.lang.CharSequence r1 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)     // Catch:{ all -> 0x0410 }
+            java.lang.CharSequence r1 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)     // Catch:{ all -> 0x0411 }
             r11.<init>(r1)
             int r1 = r11.length()
             java.lang.Class<android.text.style.MetricAffectingSpan> r2 = android.text.style.MetricAffectingSpan.class
@@ -2839,7 +2840,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             java.lang.Object[] r1 = r11.getSpans(r3, r1, r2)
             android.text.style.MetricAffectingSpan[] r1 = (android.text.style.MetricAffectingSpan[]) r1
             int r2 = r11.length()
-            if (r2 == 0) goto L_0x0371
+            if (r2 == 0) goto L_0x0372
             org.telegram.ui.Components.TextPaintUrlSpan r2 = new org.telegram.ui.Components.TextPaintUrlSpan
             if (r1 == 0) goto L_0x034b
             int r1 = r1.length
@@ -2863,17 +2864,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r1 = 33
             r3 = 0
             r11.setSpan(r2, r3, r0, r1)
-        L_0x0371:
-            return r11
         L_0x0372:
+            return r11
+        L_0x0373:
             boolean r0 = r9 instanceof org.telegram.tgnet.TLRPC$TL_textImage
-            if (r0 == 0) goto L_0x03fe
+            if (r0 == 0) goto L_0x03ff
             r0 = r9
             org.telegram.tgnet.TLRPC$TL_textImage r0 = (org.telegram.tgnet.TLRPC$TL_textImage) r0
             long r3 = r0.document_id
             r1 = r27
             org.telegram.tgnet.TLRPC$Document r20 = org.telegram.ui.ArticleViewer.WebPageUtils.getDocumentWithId(r1, r3)
-            if (r20 == 0) goto L_0x03fd
+            if (r20 == 0) goto L_0x03fe
             android.text.SpannableStringBuilder r2 = new android.text.SpannableStringBuilder
             java.lang.String r3 = "*"
             r2.<init>(r3)
@@ -2884,7 +2885,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             float r0 = (float) r0
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r4 = java.lang.Math.abs(r32)
-            if (r3 <= r4) goto L_0x03aa
+            if (r3 <= r4) goto L_0x03ab
             float r5 = (float) r4
             float r3 = (float) r3
             float r5 = r5 / r3
@@ -2893,12 +2894,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int r0 = (int) r0
             r23 = r0
             r22 = r4
-            goto L_0x03ae
-        L_0x03aa:
+            goto L_0x03af
+        L_0x03ab:
             r23 = r0
             r22 = r3
-        L_0x03ae:
-            if (r28 == 0) goto L_0x03fd
+        L_0x03af:
+            if (r28 == 0) goto L_0x03fe
             java.lang.String r0 = "windowBackgroundWhite"
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
             r3 = 1046066128(0x3e59b3d0, float:0.2126)
@@ -2921,12 +2922,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r24 = 0
             r3 = 1060403937(0x3var_ae1, float:0.705)
             int r3 = (r4 > r3 ? 1 : (r4 == r3 ? 0 : -1))
-            if (r3 > 0) goto L_0x03e8
+            if (r3 > 0) goto L_0x03e9
             r25 = 1
-            goto L_0x03ea
-        L_0x03e8:
+            goto L_0x03eb
+        L_0x03e9:
             r25 = 0
-        L_0x03ea:
+        L_0x03eb:
             r18 = r0
             r19 = r28
             r21 = r27
@@ -2935,9 +2936,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r3 = 33
             r4 = 0
             r2.setSpan(r0, r4, r1, r3)
-        L_0x03fd:
-            return r2
         L_0x03fe:
+            return r2
+        L_0x03ff:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r1 = "not supported "
@@ -2945,14 +2946,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r0.append(r9)
             java.lang.String r0 = r0.toString()
             return r0
-        L_0x0410:
+        L_0x0411:
             r0 = move-exception
             r1 = r0
-            goto L_0x0414
-        L_0x0413:
-            throw r1
+            goto L_0x0415
         L_0x0414:
-            goto L_0x0413
+            throw r1
+        L_0x0415:
+            goto L_0x0414
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.getText(org.telegram.tgnet.TLRPC$WebPage, android.view.View, org.telegram.tgnet.TLRPC$RichText, org.telegram.tgnet.TLRPC$RichText, org.telegram.tgnet.TLRPC$PageBlock, int):java.lang.CharSequence");
     }
@@ -3331,8 +3332,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:138:0x035e */
-    /* JADX WARNING: Removed duplicated region for block: B:148:0x037b A[Catch:{ Exception -> 0x03b9 }] */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:136:0x035a */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x0377 A[Catch:{ Exception -> 0x03b5 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public org.telegram.ui.ArticleViewer.DrawingText createLayoutForText(android.view.View r23, java.lang.CharSequence r24, org.telegram.tgnet.TLRPC$RichText r25, int r26, int r27, org.telegram.tgnet.TLRPC$PageBlock r28, android.text.Layout.Alignment r29, int r30, org.telegram.ui.ArticleViewer.WebpageAdapter r31) {
         /*
@@ -3623,29 +3624,28 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return r11
         L_0x0239:
             java.lang.CharSequence r3 = r1.getText()
-            if (r27 < 0) goto L_0x02a5
-            if (r1 == 0) goto L_0x02a5
+            if (r27 < 0) goto L_0x02a3
             java.util.ArrayList<org.telegram.ui.ArticleViewer$SearchResult> r4 = r7.searchResults
             boolean r4 = r4.isEmpty()
-            if (r4 != 0) goto L_0x02a5
+            if (r4 != 0) goto L_0x02a3
             java.lang.String r4 = r7.searchText
-            if (r4 == 0) goto L_0x02a5
+            if (r4 == 0) goto L_0x02a3
             java.lang.String r0 = r0.toString()
             java.lang.String r0 = r0.toLowerCase()
             r4 = 0
-        L_0x0256:
+        L_0x0254:
             java.lang.String r6 = r7.searchText
             int r4 = r0.indexOf(r6, r4)
-            if (r4 < 0) goto L_0x02a5
+            if (r4 < 0) goto L_0x02a3
             java.lang.String r6 = r7.searchText
             int r6 = r6.length()
             int r6 = r6 + r4
-            if (r4 == 0) goto L_0x0273
+            if (r4 == 0) goto L_0x0271
             int r8 = r4 + -1
             char r8 = r0.charAt(r8)
             boolean r8 = org.telegram.messenger.AndroidUtilities.isPunctuationCharacter(r8)
-            if (r8 == 0) goto L_0x02a3
-        L_0x0273:
+            if (r8 == 0) goto L_0x02a1
+        L_0x0271:
             org.telegram.ui.ArticleViewer$WebpageAdapter[] r8 = r7.adapter
             r8 = r8[r2]
             java.util.HashMap r8 = r8.searchTextOffset
@@ -3662,159 +3662,158 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int r4 = r27 + r4
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             r8.put(r12, r4)
-        L_0x02a3:
+        L_0x02a1:
             r4 = r6
-            goto L_0x0256
-        L_0x02a5:
-            if (r1 == 0) goto L_0x03bd
+            goto L_0x0254
+        L_0x02a3:
             boolean r0 = r3 instanceof android.text.Spanned
-            if (r0 == 0) goto L_0x03bd
+            if (r0 == 0) goto L_0x03b9
             android.text.Spanned r3 = (android.text.Spanned) r3
-            int r0 = r3.length()     // Catch:{ Exception -> 0x02fe }
+            int r0 = r3.length()     // Catch:{ Exception -> 0x02fa }
             java.lang.Class<org.telegram.ui.Components.AnchorSpan> r4 = org.telegram.ui.Components.AnchorSpan.class
-            java.lang.Object[] r0 = r3.getSpans(r2, r0, r4)     // Catch:{ Exception -> 0x02fe }
-            org.telegram.ui.Components.AnchorSpan[] r0 = (org.telegram.ui.Components.AnchorSpan[]) r0     // Catch:{ Exception -> 0x02fe }
-            int r4 = r1.getLineCount()     // Catch:{ Exception -> 0x02fe }
-            if (r0 == 0) goto L_0x02fe
-            int r6 = r0.length     // Catch:{ Exception -> 0x02fe }
-            if (r6 <= 0) goto L_0x02fe
+            java.lang.Object[] r0 = r3.getSpans(r2, r0, r4)     // Catch:{ Exception -> 0x02fa }
+            org.telegram.ui.Components.AnchorSpan[] r0 = (org.telegram.ui.Components.AnchorSpan[]) r0     // Catch:{ Exception -> 0x02fa }
+            int r4 = r1.getLineCount()     // Catch:{ Exception -> 0x02fa }
+            if (r0 == 0) goto L_0x02fa
+            int r6 = r0.length     // Catch:{ Exception -> 0x02fa }
+            if (r6 <= 0) goto L_0x02fa
             r6 = 0
-        L_0x02c3:
-            int r8 = r0.length     // Catch:{ Exception -> 0x02fe }
-            if (r6 >= r8) goto L_0x02fe
-            if (r4 > r5) goto L_0x02da
-            java.util.HashMap r8 = r31.anchorsOffset     // Catch:{ Exception -> 0x02fe }
-            r12 = r0[r6]     // Catch:{ Exception -> 0x02fe }
-            java.lang.String r12 = r12.getName()     // Catch:{ Exception -> 0x02fe }
-            java.lang.Integer r13 = java.lang.Integer.valueOf(r27)     // Catch:{ Exception -> 0x02fe }
-            r8.put(r12, r13)     // Catch:{ Exception -> 0x02fe }
-            goto L_0x02fb
-        L_0x02da:
-            java.util.HashMap r8 = r31.anchorsOffset     // Catch:{ Exception -> 0x02fe }
-            r12 = r0[r6]     // Catch:{ Exception -> 0x02fe }
-            java.lang.String r12 = r12.getName()     // Catch:{ Exception -> 0x02fe }
-            r13 = r0[r6]     // Catch:{ Exception -> 0x02fe }
-            int r13 = r3.getSpanStart(r13)     // Catch:{ Exception -> 0x02fe }
-            int r13 = r1.getLineForOffset(r13)     // Catch:{ Exception -> 0x02fe }
-            int r13 = r1.getLineTop(r13)     // Catch:{ Exception -> 0x02fe }
+        L_0x02bf:
+            int r8 = r0.length     // Catch:{ Exception -> 0x02fa }
+            if (r6 >= r8) goto L_0x02fa
+            if (r4 > r5) goto L_0x02d6
+            java.util.HashMap r8 = r31.anchorsOffset     // Catch:{ Exception -> 0x02fa }
+            r12 = r0[r6]     // Catch:{ Exception -> 0x02fa }
+            java.lang.String r12 = r12.getName()     // Catch:{ Exception -> 0x02fa }
+            java.lang.Integer r13 = java.lang.Integer.valueOf(r27)     // Catch:{ Exception -> 0x02fa }
+            r8.put(r12, r13)     // Catch:{ Exception -> 0x02fa }
+            goto L_0x02f7
+        L_0x02d6:
+            java.util.HashMap r8 = r31.anchorsOffset     // Catch:{ Exception -> 0x02fa }
+            r12 = r0[r6]     // Catch:{ Exception -> 0x02fa }
+            java.lang.String r12 = r12.getName()     // Catch:{ Exception -> 0x02fa }
+            r13 = r0[r6]     // Catch:{ Exception -> 0x02fa }
+            int r13 = r3.getSpanStart(r13)     // Catch:{ Exception -> 0x02fa }
+            int r13 = r1.getLineForOffset(r13)     // Catch:{ Exception -> 0x02fa }
+            int r13 = r1.getLineTop(r13)     // Catch:{ Exception -> 0x02fa }
             int r13 = r27 + r13
-            java.lang.Integer r13 = java.lang.Integer.valueOf(r13)     // Catch:{ Exception -> 0x02fe }
-            r8.put(r12, r13)     // Catch:{ Exception -> 0x02fe }
-        L_0x02fb:
+            java.lang.Integer r13 = java.lang.Integer.valueOf(r13)     // Catch:{ Exception -> 0x02fa }
+            r8.put(r12, r13)     // Catch:{ Exception -> 0x02fa }
+        L_0x02f7:
             int r6 = r6 + 1
-            goto L_0x02c3
-        L_0x02fe:
+            goto L_0x02bf
+        L_0x02fa:
             r4 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             r6 = 0
-            int r8 = r3.length()     // Catch:{ Exception -> 0x035d }
+            int r8 = r3.length()     // Catch:{ Exception -> 0x0359 }
             java.lang.Class<org.telegram.ui.Components.TextPaintWebpageUrlSpan> r12 = org.telegram.ui.Components.TextPaintWebpageUrlSpan.class
-            java.lang.Object[] r8 = r3.getSpans(r2, r8, r12)     // Catch:{ Exception -> 0x035d }
-            org.telegram.ui.Components.TextPaintWebpageUrlSpan[] r8 = (org.telegram.ui.Components.TextPaintWebpageUrlSpan[]) r8     // Catch:{ Exception -> 0x035d }
-            if (r8 == 0) goto L_0x035d
-            int r12 = r8.length     // Catch:{ Exception -> 0x035d }
-            if (r12 <= 0) goto L_0x035d
-            org.telegram.ui.Components.LinkPath r12 = new org.telegram.ui.Components.LinkPath     // Catch:{ Exception -> 0x035d }
-            r12.<init>(r5)     // Catch:{ Exception -> 0x035d }
-            r12.setAllowReset(r2)     // Catch:{ Exception -> 0x035e }
+            java.lang.Object[] r8 = r3.getSpans(r2, r8, r12)     // Catch:{ Exception -> 0x0359 }
+            org.telegram.ui.Components.TextPaintWebpageUrlSpan[] r8 = (org.telegram.ui.Components.TextPaintWebpageUrlSpan[]) r8     // Catch:{ Exception -> 0x0359 }
+            if (r8 == 0) goto L_0x0359
+            int r12 = r8.length     // Catch:{ Exception -> 0x0359 }
+            if (r12 <= 0) goto L_0x0359
+            org.telegram.ui.Components.LinkPath r12 = new org.telegram.ui.Components.LinkPath     // Catch:{ Exception -> 0x0359 }
+            r12.<init>(r5)     // Catch:{ Exception -> 0x0359 }
+            r12.setAllowReset(r2)     // Catch:{ Exception -> 0x035a }
             r13 = 0
-        L_0x031b:
-            int r14 = r8.length     // Catch:{ Exception -> 0x035e }
-            if (r13 >= r14) goto L_0x0359
-            r14 = r8[r13]     // Catch:{ Exception -> 0x035e }
-            int r14 = r3.getSpanStart(r14)     // Catch:{ Exception -> 0x035e }
-            r15 = r8[r13]     // Catch:{ Exception -> 0x035e }
-            int r15 = r3.getSpanEnd(r15)     // Catch:{ Exception -> 0x035e }
-            r12.setCurrentLayout(r1, r14, r6)     // Catch:{ Exception -> 0x035e }
-            r16 = r8[r13]     // Catch:{ Exception -> 0x035e }
-            android.text.TextPaint r16 = r16.getTextPaint()     // Catch:{ Exception -> 0x035e }
-            if (r16 == 0) goto L_0x033e
-            r16 = r8[r13]     // Catch:{ Exception -> 0x035e }
-            android.text.TextPaint r0 = r16.getTextPaint()     // Catch:{ Exception -> 0x035e }
-            int r0 = r0.baselineShift     // Catch:{ Exception -> 0x035e }
-            goto L_0x033f
-        L_0x033e:
+        L_0x0317:
+            int r14 = r8.length     // Catch:{ Exception -> 0x035a }
+            if (r13 >= r14) goto L_0x0355
+            r14 = r8[r13]     // Catch:{ Exception -> 0x035a }
+            int r14 = r3.getSpanStart(r14)     // Catch:{ Exception -> 0x035a }
+            r15 = r8[r13]     // Catch:{ Exception -> 0x035a }
+            int r15 = r3.getSpanEnd(r15)     // Catch:{ Exception -> 0x035a }
+            r12.setCurrentLayout(r1, r14, r6)     // Catch:{ Exception -> 0x035a }
+            r16 = r8[r13]     // Catch:{ Exception -> 0x035a }
+            android.text.TextPaint r16 = r16.getTextPaint()     // Catch:{ Exception -> 0x035a }
+            if (r16 == 0) goto L_0x033a
+            r16 = r8[r13]     // Catch:{ Exception -> 0x035a }
+            android.text.TextPaint r0 = r16.getTextPaint()     // Catch:{ Exception -> 0x035a }
+            int r0 = r0.baselineShift     // Catch:{ Exception -> 0x035a }
+            goto L_0x033b
+        L_0x033a:
             r0 = 0
-        L_0x033f:
-            if (r0 == 0) goto L_0x034f
-            if (r0 <= 0) goto L_0x0346
+        L_0x033b:
+            if (r0 == 0) goto L_0x034b
+            if (r0 <= 0) goto L_0x0342
             r16 = 1084227584(0x40a00000, float:5.0)
-            goto L_0x0348
-        L_0x0346:
+            goto L_0x0344
+        L_0x0342:
             r16 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-        L_0x0348:
-            int r16 = org.telegram.messenger.AndroidUtilities.dp(r16)     // Catch:{ Exception -> 0x035e }
+        L_0x0344:
+            int r16 = org.telegram.messenger.AndroidUtilities.dp(r16)     // Catch:{ Exception -> 0x035a }
             int r0 = r0 + r16
-            goto L_0x0350
-        L_0x034f:
+            goto L_0x034c
+        L_0x034b:
             r0 = 0
-        L_0x0350:
-            r12.setBaselineShift(r0)     // Catch:{ Exception -> 0x035e }
-            r1.getSelectionPath(r14, r15, r12)     // Catch:{ Exception -> 0x035e }
+        L_0x034c:
+            r12.setBaselineShift(r0)     // Catch:{ Exception -> 0x035a }
+            r1.getSelectionPath(r14, r15, r12)     // Catch:{ Exception -> 0x035a }
             int r13 = r13 + 1
-            goto L_0x031b
+            goto L_0x0317
+        L_0x0355:
+            r12.setAllowReset(r5)     // Catch:{ Exception -> 0x035a }
+            goto L_0x035a
         L_0x0359:
-            r12.setAllowReset(r5)     // Catch:{ Exception -> 0x035e }
-            goto L_0x035e
-        L_0x035d:
             r12 = r11
-        L_0x035e:
-            int r0 = r3.length()     // Catch:{ Exception -> 0x03ba }
+        L_0x035a:
+            int r0 = r3.length()     // Catch:{ Exception -> 0x03b6 }
             java.lang.Class<org.telegram.ui.Components.TextPaintMarkSpan> r8 = org.telegram.ui.Components.TextPaintMarkSpan.class
-            java.lang.Object[] r0 = r3.getSpans(r2, r0, r8)     // Catch:{ Exception -> 0x03ba }
-            org.telegram.ui.Components.TextPaintMarkSpan[] r0 = (org.telegram.ui.Components.TextPaintMarkSpan[]) r0     // Catch:{ Exception -> 0x03ba }
-            if (r0 == 0) goto L_0x03ba
-            int r8 = r0.length     // Catch:{ Exception -> 0x03ba }
-            if (r8 <= 0) goto L_0x03ba
-            org.telegram.ui.Components.LinkPath r8 = new org.telegram.ui.Components.LinkPath     // Catch:{ Exception -> 0x03ba }
-            r8.<init>(r5)     // Catch:{ Exception -> 0x03ba }
-            r8.setAllowReset(r2)     // Catch:{ Exception -> 0x03b9 }
+            java.lang.Object[] r0 = r3.getSpans(r2, r0, r8)     // Catch:{ Exception -> 0x03b6 }
+            org.telegram.ui.Components.TextPaintMarkSpan[] r0 = (org.telegram.ui.Components.TextPaintMarkSpan[]) r0     // Catch:{ Exception -> 0x03b6 }
+            if (r0 == 0) goto L_0x03b6
+            int r8 = r0.length     // Catch:{ Exception -> 0x03b6 }
+            if (r8 <= 0) goto L_0x03b6
+            org.telegram.ui.Components.LinkPath r8 = new org.telegram.ui.Components.LinkPath     // Catch:{ Exception -> 0x03b6 }
+            r8.<init>(r5)     // Catch:{ Exception -> 0x03b6 }
+            r8.setAllowReset(r2)     // Catch:{ Exception -> 0x03b5 }
             r11 = 0
-        L_0x0378:
-            int r13 = r0.length     // Catch:{ Exception -> 0x03b9 }
-            if (r11 >= r13) goto L_0x03b6
-            r13 = r0[r11]     // Catch:{ Exception -> 0x03b9 }
-            int r13 = r3.getSpanStart(r13)     // Catch:{ Exception -> 0x03b9 }
-            r14 = r0[r11]     // Catch:{ Exception -> 0x03b9 }
-            int r14 = r3.getSpanEnd(r14)     // Catch:{ Exception -> 0x03b9 }
-            r8.setCurrentLayout(r1, r13, r6)     // Catch:{ Exception -> 0x03b9 }
-            r15 = r0[r11]     // Catch:{ Exception -> 0x03b9 }
-            android.text.TextPaint r15 = r15.getTextPaint()     // Catch:{ Exception -> 0x03b9 }
-            if (r15 == 0) goto L_0x039b
-            r15 = r0[r11]     // Catch:{ Exception -> 0x03b9 }
-            android.text.TextPaint r15 = r15.getTextPaint()     // Catch:{ Exception -> 0x03b9 }
-            int r15 = r15.baselineShift     // Catch:{ Exception -> 0x03b9 }
-            goto L_0x039c
-        L_0x039b:
+        L_0x0374:
+            int r13 = r0.length     // Catch:{ Exception -> 0x03b5 }
+            if (r11 >= r13) goto L_0x03b2
+            r13 = r0[r11]     // Catch:{ Exception -> 0x03b5 }
+            int r13 = r3.getSpanStart(r13)     // Catch:{ Exception -> 0x03b5 }
+            r14 = r0[r11]     // Catch:{ Exception -> 0x03b5 }
+            int r14 = r3.getSpanEnd(r14)     // Catch:{ Exception -> 0x03b5 }
+            r8.setCurrentLayout(r1, r13, r6)     // Catch:{ Exception -> 0x03b5 }
+            r15 = r0[r11]     // Catch:{ Exception -> 0x03b5 }
+            android.text.TextPaint r15 = r15.getTextPaint()     // Catch:{ Exception -> 0x03b5 }
+            if (r15 == 0) goto L_0x0397
+            r15 = r0[r11]     // Catch:{ Exception -> 0x03b5 }
+            android.text.TextPaint r15 = r15.getTextPaint()     // Catch:{ Exception -> 0x03b5 }
+            int r15 = r15.baselineShift     // Catch:{ Exception -> 0x03b5 }
+            goto L_0x0398
+        L_0x0397:
             r15 = 0
-        L_0x039c:
-            if (r15 == 0) goto L_0x03ac
-            if (r15 <= 0) goto L_0x03a3
+        L_0x0398:
+            if (r15 == 0) goto L_0x03a8
+            if (r15 <= 0) goto L_0x039f
             r16 = 1084227584(0x40a00000, float:5.0)
-            goto L_0x03a5
-        L_0x03a3:
+            goto L_0x03a1
+        L_0x039f:
             r16 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-        L_0x03a5:
-            int r16 = org.telegram.messenger.AndroidUtilities.dp(r16)     // Catch:{ Exception -> 0x03b9 }
+        L_0x03a1:
+            int r16 = org.telegram.messenger.AndroidUtilities.dp(r16)     // Catch:{ Exception -> 0x03b5 }
             int r15 = r15 + r16
-            goto L_0x03ad
-        L_0x03ac:
+            goto L_0x03a9
+        L_0x03a8:
             r15 = 0
-        L_0x03ad:
-            r8.setBaselineShift(r15)     // Catch:{ Exception -> 0x03b9 }
-            r1.getSelectionPath(r13, r14, r8)     // Catch:{ Exception -> 0x03b9 }
+        L_0x03a9:
+            r8.setBaselineShift(r15)     // Catch:{ Exception -> 0x03b5 }
+            r1.getSelectionPath(r13, r14, r8)     // Catch:{ Exception -> 0x03b5 }
             int r11 = r11 + 1
-            goto L_0x0378
-        L_0x03b6:
-            r8.setAllowReset(r5)     // Catch:{ Exception -> 0x03b9 }
-        L_0x03b9:
+            goto L_0x0374
+        L_0x03b2:
+            r8.setAllowReset(r5)     // Catch:{ Exception -> 0x03b5 }
+        L_0x03b5:
             r11 = r8
-        L_0x03ba:
+        L_0x03b6:
             r0 = r11
             r11 = r12
-            goto L_0x03be
-        L_0x03bd:
+            goto L_0x03ba
+        L_0x03b9:
             r0 = r11
-        L_0x03be:
+        L_0x03ba:
             org.telegram.ui.ArticleViewer$DrawingText r2 = new org.telegram.ui.ArticleViewer$DrawingText
             r2.<init>()
             r2.textLayout = r1
@@ -3834,7 +3833,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         if (canvas != null && drawingText != null && this.pressedLinkOwnerLayout == drawingText) {
             if (this.pressedLink != null) {
                 canvas.drawPath(this.urlPath, urlPaint);
-            } else if (this.drawBlockSelection && drawingText != null) {
+            } else if (this.drawBlockSelection) {
                 if (drawingText.getLineCount() == 1) {
                     f = drawingText.getLineWidth(0);
                     f2 = drawingText.getLineLeft(0);
@@ -4825,7 +4824,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.searchContainer.setAlpha(0.0f);
         }
         this.headerView.addView(this.searchContainer, LayoutHelper.createFrame(-1, 56.0f));
-        AnonymousClass11 r03 = new EditTextBoldCursor(this, this.parentActivity) {
+        AnonymousClass11 r03 = new EditTextBoldCursor(this.parentActivity) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 0 && !AndroidUtilities.showKeyboard(this)) {
                     clearFocus();
@@ -4846,7 +4845,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.searchField.setPadding(0, 0, 0, 0);
         this.searchField.setInputType(this.searchField.getInputType() | 524288);
         if (i3 < 23) {
-            this.searchField.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
+            this.searchField.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
                 public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                     return false;
                 }
@@ -5013,7 +5012,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 ArticleViewer.this.lambda$setParentActivity$19$ArticleViewer(i);
             }
         });
-        AnonymousClass16 r06 = new FrameLayout(this, this.parentActivity) {
+        AnonymousClass16 r06 = new FrameLayout(this.parentActivity) {
             public void onDraw(Canvas canvas) {
                 int intrinsicHeight = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                 Theme.chat_composeShadowDrawable.setBounds(0, 0, getMeasuredWidth(), intrinsicHeight);
@@ -11206,6 +11205,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         private int textY;
 
         public class GroupedMessages {
+            public boolean hasSibling;
             private int maxSizeWidth = 1000;
             public ArrayList<MessageObject.GroupedMessagePosition> posArray = new ArrayList<>();
             public HashMap<TLObject, MessageObject.GroupedMessagePosition> positions = new HashMap<>();
@@ -11217,17 +11217,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 public float[] heights;
                 public int[] lineCounts;
 
-                public MessageGroupedLayoutAttempt(GroupedMessages groupedMessages, int i, int i2, float f, float f2) {
+                public MessageGroupedLayoutAttempt(int i, int i2, float f, float f2) {
                     this.lineCounts = new int[]{i, i2};
                     this.heights = new float[]{f, f2};
                 }
 
-                public MessageGroupedLayoutAttempt(GroupedMessages groupedMessages, int i, int i2, int i3, float f, float f2, float f3) {
+                public MessageGroupedLayoutAttempt(int i, int i2, int i3, float f, float f2, float f3) {
                     this.lineCounts = new int[]{i, i2, i3};
                     this.heights = new float[]{f, f2, f3};
                 }
 
-                public MessageGroupedLayoutAttempt(GroupedMessages groupedMessages, int i, int i2, int i3, int i4, float f, float f2, float f3, float f4) {
+                public MessageGroupedLayoutAttempt(int i, int i2, int i3, int i4, float f, float f2, float f3, float f4) {
                     this.lineCounts = new int[]{i, i2, i3, i4};
                     this.heights = new float[]{f, f2, f3, f4};
                 }
@@ -11262,6 +11262,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int size = BlockCollageCell.this.currentBlock.items.size();
                 if (size > 1) {
                     StringBuilder sb = new StringBuilder();
+                    this.hasSibling = false;
                     int i11 = 0;
                     float f3 = 1.0f;
                     boolean z = false;
@@ -11329,7 +11330,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                             int i16 = size2 - i15;
                             if (i15 <= 3 && i16 <= 3) {
                                 MessageGroupedLayoutAttempt messageGroupedLayoutAttempt = r0;
-                                MessageGroupedLayoutAttempt messageGroupedLayoutAttempt2 = new MessageGroupedLayoutAttempt(this, i15, i16, multiHeight(fArr, 0, i15), multiHeight(fArr, i15, size2));
+                                MessageGroupedLayoutAttempt messageGroupedLayoutAttempt2 = new MessageGroupedLayoutAttempt(i15, i16, multiHeight(fArr, 0, i15), multiHeight(fArr, i15, size2));
                                 arrayList.add(messageGroupedLayoutAttempt);
                             }
                         }
@@ -11348,7 +11349,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                                         MessageGroupedLayoutAttempt messageGroupedLayoutAttempt3 = r0;
                                         i10 = i18;
                                         i9 = i17;
-                                        MessageGroupedLayoutAttempt messageGroupedLayoutAttempt4 = new MessageGroupedLayoutAttempt(this, i17, i18, i20, multiHeight(fArr, 0, i17), multiHeight(fArr, i17, i21), multiHeight(fArr, i21, size2));
+                                        MessageGroupedLayoutAttempt messageGroupedLayoutAttempt4 = new MessageGroupedLayoutAttempt(i17, i18, i20, multiHeight(fArr, 0, i17), multiHeight(fArr, i17, i21), multiHeight(fArr, i21, size2));
                                         arrayList.add(messageGroupedLayoutAttempt3);
                                         i18 = i10 + 1;
                                         i17 = i9;
@@ -11405,7 +11406,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                                         float f9 = multiHeight3;
                                         i5 = size;
                                         i8 = dp2;
-                                        MessageGroupedLayoutAttempt messageGroupedLayoutAttempt6 = new MessageGroupedLayoutAttempt(this, i22, i30, i31, i27, f7, f8, f9, multiHeight4);
+                                        MessageGroupedLayoutAttempt messageGroupedLayoutAttempt6 = new MessageGroupedLayoutAttempt(i22, i30, i31, i27, f7, f8, f9, multiHeight4);
                                         arrayList.add(messageGroupedLayoutAttempt5);
                                     }
                                     i25 = i3 + 1;
@@ -11567,6 +11568,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                                 groupedMessagePosition6.siblingHeights = new float[]{var_, var_};
                                 groupedMessagePosition7.spanSize = i53 - round3;
                                 groupedMessagePosition8.leftSpanOffset = round3;
+                                this.hasSibling = true;
                             } else {
                                 float round4 = ((float) Math.round(Math.min(((float) this.maxSizeWidth) / groupedMessagePosition6.aspectRatio, 537.24005f))) / 814.0f;
                                 groupedMessagePosition6.set(0, 1, 0, 0, this.maxSizeWidth, round4, 7);
@@ -11614,6 +11616,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                                 groupedMessagePosition11.leftSpanOffset = round7;
                                 groupedMessagePosition12.leftSpanOffset = round7;
                                 groupedMessagePosition9.siblingHeights = new float[]{min5, min6, var_};
+                                this.hasSibling = true;
                             }
                         }
                         i = size;
@@ -11683,7 +11686,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
                 }
             });
-            AnonymousClass3 r1 = new GridLayoutManagerFixed(context, 1000, 1, true, ArticleViewer.this) {
+            final ArticleViewer articleViewer = ArticleViewer.this;
+            AnonymousClass3 r1 = new GridLayoutManagerFixed(context, 1000, 1, true) {
                 public boolean shouldLayoutChildFromOpositeSide(View view) {
                     return false;
                 }
@@ -11958,7 +11962,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     /* access modifiers changed from: private */
                     public View view;
 
-                    ObjectContainer(AnonymousClass3 r1) {
+                    ObjectContainer() {
                     }
                 }
 
@@ -12019,7 +12023,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     L_0x0046:
                         r6.addView(r0)
                         org.telegram.ui.ArticleViewer$BlockSlideshowCell$3$ObjectContainer r6 = new org.telegram.ui.ArticleViewer$BlockSlideshowCell$3$ObjectContainer
-                        r6.<init>(r5)
+                        r6.<init>()
                         android.view.View unused = r6.view = r0
                         org.telegram.tgnet.TLRPC$PageBlock unused = r6.block = r7
                         return r6
@@ -13432,9 +13436,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     private static class BlockDetailsBottomCell extends View {
+        private RectF rect = new RectF();
+
         public BlockDetailsBottomCell(Context context) {
             super(context);
-            new RectF();
         }
 
         /* access modifiers changed from: protected */
@@ -15655,7 +15660,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (r4 == 0) goto L_0x0060
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
                 if (r4 != 0) goto L_0x0060
-                r4 = 2131624368(0x7f0e01b0, float:1.8875914E38)
+                r4 = 2131624375(0x7f0e01b7, float:1.8875928E38)
                 r7 = 2
                 java.lang.Object[] r7 = new java.lang.Object[r7]
                 org.telegram.messenger.LocaleController r8 = org.telegram.messenger.LocaleController.getInstance()
@@ -15673,7 +15678,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             L_0x0060:
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
                 if (r4 != 0) goto L_0x0074
-                r4 = 2131624367(0x7f0e01af, float:1.8875912E38)
+                r4 = 2131624374(0x7f0e01b6, float:1.8875926E38)
                 java.lang.Object[] r15 = new java.lang.Object[r15]
                 r15[r3] = r0
                 java.lang.String r5 = "ArticleByAuthor"

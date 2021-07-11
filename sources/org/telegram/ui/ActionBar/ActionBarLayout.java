@@ -84,6 +84,7 @@ public class ActionBarLayout extends FrameLayout {
     public float innerTranslationX;
     /* access modifiers changed from: private */
     public long lastFrameTime;
+    private View layoutToIgnore;
     private boolean maybeStartTracking;
     /* access modifiers changed from: private */
     public BaseFragment newFragment;
@@ -570,46 +571,48 @@ public class ActionBarLayout extends FrameLayout {
     public void onSlideAnimationEnd(boolean z) {
         ViewGroup viewGroup;
         ViewGroup viewGroup2;
-        if (!z) {
+        if (z) {
             if (this.fragmentsStack.size() >= 2) {
                 ArrayList<BaseFragment> arrayList = this.fragmentsStack;
-                BaseFragment baseFragment = arrayList.get(arrayList.size() - 1);
-                baseFragment.prepareFragmentToSlide(true, false);
-                baseFragment.onPause();
-                baseFragment.onFragmentDestroy();
-                baseFragment.setParentLayout((ActionBarLayout) null);
+                arrayList.get(arrayList.size() - 1).prepareFragmentToSlide(true, false);
                 ArrayList<BaseFragment> arrayList2 = this.fragmentsStack;
-                arrayList2.remove(arrayList2.size() - 1);
-                LayoutContainer layoutContainer = this.containerView;
-                LayoutContainer layoutContainer2 = this.containerViewBack;
-                this.containerView = layoutContainer2;
-                this.containerViewBack = layoutContainer;
-                bringChildToFront(layoutContainer2);
-                ArrayList<BaseFragment> arrayList3 = this.fragmentsStack;
-                BaseFragment baseFragment2 = arrayList3.get(arrayList3.size() - 1);
-                this.currentActionBar = baseFragment2.actionBar;
-                baseFragment2.onResume();
-                baseFragment2.onBecomeFullyVisible();
-                baseFragment2.prepareFragmentToSlide(false, false);
-            } else {
-                return;
+                BaseFragment baseFragment = arrayList2.get(arrayList2.size() - 2);
+                baseFragment.prepareFragmentToSlide(false, false);
+                baseFragment.onPause();
+                View view = baseFragment.fragmentView;
+                if (!(view == null || (viewGroup2 = (ViewGroup) view.getParent()) == null)) {
+                    baseFragment.onRemoveFromParent();
+                    viewGroup2.removeViewInLayout(baseFragment.fragmentView);
+                }
+                ActionBar actionBar = baseFragment.actionBar;
+                if (!(actionBar == null || !actionBar.shouldAddToContainer() || (viewGroup = (ViewGroup) baseFragment.actionBar.getParent()) == null)) {
+                    viewGroup.removeViewInLayout(baseFragment.actionBar);
+                }
             }
+            this.layoutToIgnore = null;
         } else if (this.fragmentsStack.size() >= 2) {
+            ArrayList<BaseFragment> arrayList3 = this.fragmentsStack;
+            BaseFragment baseFragment2 = arrayList3.get(arrayList3.size() - 1);
+            baseFragment2.prepareFragmentToSlide(true, false);
+            baseFragment2.onPause();
+            baseFragment2.onFragmentDestroy();
+            baseFragment2.setParentLayout((ActionBarLayout) null);
             ArrayList<BaseFragment> arrayList4 = this.fragmentsStack;
-            arrayList4.get(arrayList4.size() - 1).prepareFragmentToSlide(true, false);
+            arrayList4.remove(arrayList4.size() - 1);
+            LayoutContainer layoutContainer = this.containerView;
+            LayoutContainer layoutContainer2 = this.containerViewBack;
+            this.containerView = layoutContainer2;
+            this.containerViewBack = layoutContainer;
+            bringChildToFront(layoutContainer2);
             ArrayList<BaseFragment> arrayList5 = this.fragmentsStack;
-            BaseFragment baseFragment3 = arrayList5.get(arrayList5.size() - 2);
+            BaseFragment baseFragment3 = arrayList5.get(arrayList5.size() - 1);
+            this.currentActionBar = baseFragment3.actionBar;
+            baseFragment3.onResume();
+            baseFragment3.onBecomeFullyVisible();
             baseFragment3.prepareFragmentToSlide(false, false);
-            baseFragment3.onPause();
-            View view = baseFragment3.fragmentView;
-            if (!(view == null || (viewGroup2 = (ViewGroup) view.getParent()) == null)) {
-                baseFragment3.onRemoveFromParent();
-                viewGroup2.removeViewInLayout(baseFragment3.fragmentView);
-            }
-            ActionBar actionBar = baseFragment3.actionBar;
-            if (!(actionBar == null || !actionBar.shouldAddToContainer() || (viewGroup = (ViewGroup) baseFragment3.actionBar.getParent()) == null)) {
-                viewGroup.removeViewInLayout(baseFragment3.actionBar);
-            }
+            this.layoutToIgnore = this.containerView;
+        } else {
+            return;
         }
         this.containerViewBack.setVisibility(4);
         this.startedTracking = false;
@@ -622,6 +625,7 @@ public class ActionBarLayout extends FrameLayout {
     private void prepareForMoving(MotionEvent motionEvent) {
         this.maybeStartTracking = false;
         this.startedTracking = true;
+        this.layoutToIgnore = this.containerViewBack;
         this.startedTrackingX = (int) motionEvent.getX();
         this.containerViewBack.setVisibility(0);
         this.beginTrackingSent = false;
@@ -767,9 +771,11 @@ public class ActionBarLayout extends FrameLayout {
                     });
                     animatorSet.start();
                     this.animationInProgress = true;
+                    this.layoutToIgnore = this.containerViewBack;
                 } else {
                     this.maybeStartTracking = false;
                     this.startedTracking = false;
+                    this.layoutToIgnore = null;
                 }
                 VelocityTracker velocityTracker3 = this.velocityTracker;
                 if (velocityTracker3 != null) {
@@ -779,6 +785,7 @@ public class ActionBarLayout extends FrameLayout {
             } else if (motionEvent == null) {
                 this.maybeStartTracking = false;
                 this.startedTracking = false;
+                this.layoutToIgnore = null;
                 VelocityTracker velocityTracker4 = this.velocityTracker;
                 if (velocityTracker4 != null) {
                     velocityTracker4.recycle();
@@ -1086,7 +1093,7 @@ public class ActionBarLayout extends FrameLayout {
         this.containerView.setTranslationY(0.0f);
         if (z7) {
             if (Build.VERSION.SDK_INT >= 21) {
-                view.setOutlineProvider(new ViewOutlineProvider(this) {
+                view.setOutlineProvider(new ViewOutlineProvider() {
                     @TargetApi(21)
                     public void getOutline(View view, Outline outline) {
                         outline.setRoundRect(0, AndroidUtilities.statusBarHeight, view.getMeasuredWidth(), view.getMeasuredHeight(), (float) AndroidUtilities.dp(6.0f));
@@ -1129,6 +1136,7 @@ public class ActionBarLayout extends FrameLayout {
             this.transitionAnimationPreviewMode = z7;
             this.transitionAnimationStartTime = System.currentTimeMillis();
             this.transitionAnimationInProgress = true;
+            this.layoutToIgnore = this.containerView;
             this.onOpenAnimationEndRunnable = new Runnable(z4, z, baseFragment2, baseFragment) {
                 public final /* synthetic */ boolean f$1;
                 public final /* synthetic */ boolean f$2;
@@ -1244,6 +1252,7 @@ public class ActionBarLayout extends FrameLayout {
             presentFragmentInternalRemoveOld(z5, baseFragment2);
             this.transitionAnimationStartTime = System.currentTimeMillis();
             this.transitionAnimationInProgress = true;
+            this.layoutToIgnore = this.containerView;
             this.onOpenAnimationEndRunnable = new Runnable(baseFragment3) {
                 public final /* synthetic */ BaseFragment f$1;
 
@@ -1559,6 +1568,7 @@ public class ActionBarLayout extends FrameLayout {
                 if (z2) {
                     this.transitionAnimationStartTime = System.currentTimeMillis();
                     this.transitionAnimationInProgress = true;
+                    this.layoutToIgnore = this.containerView;
                     this.onCloseAnimationEndRunnable = new Runnable(baseFragment2, baseFragment) {
                         public final /* synthetic */ BaseFragment f$1;
                         public final /* synthetic */ BaseFragment f$2;
@@ -1606,6 +1616,7 @@ public class ActionBarLayout extends FrameLayout {
             } else if (this.useAlphaAnimations) {
                 this.transitionAnimationStartTime = System.currentTimeMillis();
                 this.transitionAnimationInProgress = true;
+                this.layoutToIgnore = this.containerView;
                 this.onCloseAnimationEndRunnable = new Runnable(baseFragment2) {
                     public final /* synthetic */ BaseFragment f$1;
 
@@ -2004,6 +2015,7 @@ public class ActionBarLayout extends FrameLayout {
         Runnable runnable;
         if (this.transitionAnimationInProgress && (runnable = this.onCloseAnimationEndRunnable) != null) {
             this.transitionAnimationInProgress = false;
+            this.layoutToIgnore = null;
             this.transitionAnimationPreviewMode = false;
             this.transitionAnimationStartTime = 0;
             this.newFragment = null;
@@ -2030,6 +2042,7 @@ public class ActionBarLayout extends FrameLayout {
         Runnable runnable;
         if (this.transitionAnimationInProgress && (runnable = this.onOpenAnimationEndRunnable) != null) {
             this.transitionAnimationInProgress = false;
+            this.layoutToIgnore = null;
             this.transitionAnimationPreviewMode = false;
             this.transitionAnimationStartTime = 0;
             this.newFragment = null;

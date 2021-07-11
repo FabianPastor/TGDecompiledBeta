@@ -72,7 +72,7 @@ public class LocationController extends BaseController implements NotificationCe
     private ArrayList<TLRPC$TL_peerLocated> cachedNearbyChats = new ArrayList<>();
     private ArrayList<TLRPC$TL_peerLocated> cachedNearbyUsers = new ArrayList<>();
     private FusedLocationListener fusedLocationListener = new FusedLocationListener();
-    private GoogleApiClient googleApiClient;
+    private GoogleApiClient googleApiClient = new GoogleApiClient.Builder(ApplicationLoader.applicationContext).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
     private GpsLocationListener gpsLocationListener = new GpsLocationListener();
     /* access modifiers changed from: private */
     public Location lastKnownLocation;
@@ -177,11 +177,6 @@ public class LocationController extends BaseController implements NotificationCe
 
     public LocationController(int i) {
         super(i);
-        GoogleApiClient.Builder builder = new GoogleApiClient.Builder(ApplicationLoader.applicationContext);
-        builder.addApi(LocationServices.API);
-        builder.addConnectionCallbacks(this);
-        builder.addOnConnectionFailedListener(this);
-        this.googleApiClient = builder.build();
         LocationRequest locationRequest2 = new LocationRequest();
         this.locationRequest = locationRequest2;
         locationRequest2.setPriority(100);
@@ -298,9 +293,7 @@ public class LocationController extends BaseController implements NotificationCe
         this.wasConnectedToPlayServices = true;
         try {
             if (Build.VERSION.SDK_INT >= 21) {
-                LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-                builder.addLocationRequest(this.locationRequest);
-                LocationServices.SettingsApi.checkLocationSettings(this.googleApiClient, builder.build()).setResultCallback(new ResultCallback() {
+                LocationServices.SettingsApi.checkLocationSettings(this.googleApiClient, new LocationSettingsRequest.Builder().addLocationRequest(this.locationRequest).build()).setResultCallback(new ResultCallback() {
                     public final void onResult(Result result) {
                         LocationController.this.lambda$onConnected$4$LocationController((LocationSettingsResult) result);
                     }

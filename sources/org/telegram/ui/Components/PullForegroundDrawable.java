@@ -48,6 +48,7 @@ public class PullForegroundDrawable {
     public float outCx;
     public float outCy;
     public float outImageSize;
+    public float outOverScroll;
     public float outProgress;
     public float outRadius;
     private final Paint paintBackgroundAccent = new Paint(1);
@@ -101,7 +102,7 @@ public class PullForegroundDrawable {
     public PullForegroundDrawable(String str, String str2) {
         TextPaint textPaint = new TextPaint(1);
         this.tooltipTextPaint = textPaint;
-        this.arrowDrawable = new ArrowDrawable(this);
+        this.arrowDrawable = new ArrowDrawable();
         this.circleClipPath = new Path();
         this.textSwappingProgress = 1.0f;
         this.arrowRotateProgress = 1.0f;
@@ -542,8 +543,7 @@ public class PullForegroundDrawable {
             this.animateOut = true;
             this.bounceIn = true;
             this.bounceProgress = 0.0f;
-            this.listView.getTranslationY();
-            AndroidUtilities.dp(100.0f);
+            this.outOverScroll = this.listView.getTranslationY() / ((float) AndroidUtilities.dp(100.0f));
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -706,7 +706,7 @@ public class PullForegroundDrawable {
         public void setColorFilter(ColorFilter colorFilter) {
         }
 
-        public ArrowDrawable(PullForegroundDrawable pullForegroundDrawable) {
+        public ArrowDrawable() {
             updatePath();
         }
 

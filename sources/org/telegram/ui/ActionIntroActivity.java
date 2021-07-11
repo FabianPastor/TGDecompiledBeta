@@ -4,9 +4,11 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -43,6 +45,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.ShareLocationDrawable;
 import org.telegram.ui.Components.URLSpanNoUnderline;
+import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
 @TargetApi(23)
 public class ActionIntroActivity extends BaseFragment implements LocationController.LocationFetchCallback {
@@ -63,6 +66,8 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
     private TextView[] desctiptionLines = new TextView[6];
     private Drawable drawable1;
     private Drawable drawable2;
+    /* access modifiers changed from: private */
+    public boolean flickerButton;
     /* access modifiers changed from: private */
     public RLottieImageView imageView;
     /* access modifiers changed from: private */
@@ -189,7 +194,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                     ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec((int) (((float) size2) * 0.399f), NUM));
                     ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
                     ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
-                    ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
+                    ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(size - AndroidUtilities.dp(86.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
                 }
                 setMeasuredDimension(size, size2);
             }
@@ -502,9 +507,29 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             this.descriptionText2.setPadding(AndroidUtilities.dp(32.0f), 0, AndroidUtilities.dp(32.0f), 0);
         }
         viewGroup.addView(this.descriptionText2);
-        TextView textView6 = new TextView(context2);
-        this.buttonTextView = textView6;
-        textView6.setPadding(AndroidUtilities.dp(34.0f), i, AndroidUtilities.dp(34.0f), i);
+        AnonymousClass3 r3 = new TextView(context2) {
+            CellFlickerDrawable cellFlickerDrawable;
+
+            /* access modifiers changed from: protected */
+            public void onDraw(Canvas canvas) {
+                super.onDraw(canvas);
+                if (ActionIntroActivity.this.flickerButton) {
+                    if (this.cellFlickerDrawable == null) {
+                        CellFlickerDrawable cellFlickerDrawable2 = new CellFlickerDrawable();
+                        this.cellFlickerDrawable = cellFlickerDrawable2;
+                        cellFlickerDrawable2.drawFrame = false;
+                        cellFlickerDrawable2.repeatProgress = 2.0f;
+                    }
+                    this.cellFlickerDrawable.setParentWidth(getMeasuredWidth());
+                    RectF rectF = AndroidUtilities.rectTmp;
+                    rectF.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+                    this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(4.0f));
+                    invalidate();
+                }
+            }
+        };
+        this.buttonTextView = r3;
+        r3.setPadding(AndroidUtilities.dp(34.0f), i, AndroidUtilities.dp(34.0f), i);
         this.buttonTextView.setGravity(17);
         this.buttonTextView.setTextColor(Theme.getColor("featuredStickers_buttonText"));
         this.buttonTextView.setTextSize(1, 14.0f);
@@ -524,6 +549,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             this.descriptionText.setText(LocaleController.getString("ChannelAlertText", NUM));
             this.buttonTextView.setText(LocaleController.getString("ChannelAlertCreate2", NUM));
             this.imageView.playAnimation();
+            this.flickerButton = true;
         } else if (i10 == 1) {
             this.imageView.setBackgroundDrawable(Theme.createCircleDrawable(AndroidUtilities.dp(100.0f), Theme.getColor("chats_archiveBackground")));
             this.imageView.setImageDrawable(new ShareLocationDrawable(context2, 3));
@@ -536,12 +562,12 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             this.descriptionText2.setVisibility(0);
             this.imageView.setImageResource(Theme.getCurrentTheme().isDark() ? NUM : NUM);
             this.imageView.setScaleType(ImageView.ScaleType.CENTER);
-            TextView textView7 = this.subtitleTextView;
+            TextView textView6 = this.subtitleTextView;
             String str3 = this.currentGroupCreateDisplayAddress;
             if (str3 != null) {
                 str = str3;
             }
-            textView7.setText(str);
+            textView6.setText(str);
             this.titleTextView.setText(LocaleController.getString("NearbyCreateGroup", NUM));
             this.descriptionText.setText(LocaleController.getString("NearbyCreateGroupInfo", NUM));
             this.descriptionText2.setText(LocaleController.getString("NearbyCreateGroupInfo2", NUM));
@@ -560,9 +586,9 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 user = userConfig.getCurrentUser();
             }
             if (user != null) {
-                TextView textView8 = this.subtitleTextView;
+                TextView textView7 = this.subtitleTextView;
                 PhoneFormat instance = PhoneFormat.getInstance();
-                textView8.setText(instance.format("+" + user.phone));
+                textView7.setText(instance.format("+" + user.phone));
             }
             this.titleTextView.setText(LocaleController.getString("PhoneNumberChange2", NUM));
             this.descriptionText.setText(AndroidUtilities.replaceTags(LocaleController.getString("PhoneNumberHelp", NUM)));
@@ -582,6 +608,10 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             this.titleTextView.setText(LocaleController.getString("AuthAnotherClient", NUM));
             this.buttonTextView.setText(LocaleController.getString("AuthAnotherClientScan", NUM));
             this.imageView.playAnimation();
+        }
+        if (this.flickerButton) {
+            this.buttonTextView.setPadding(AndroidUtilities.dp(34.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(34.0f), AndroidUtilities.dp(8.0f));
+            this.buttonTextView.setTextSize(1, 15.0f);
         }
         return this.fragmentView;
     }

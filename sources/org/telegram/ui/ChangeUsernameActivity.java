@@ -62,6 +62,7 @@ public class ChangeUsernameActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public CharSequence infoText;
     private String lastCheckName;
+    private boolean lastNameAvailable;
 
     static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
         return true;
@@ -257,6 +258,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.checkReqId, true);
             }
         }
+        this.lastNameAvailable = false;
         if (str != null) {
             if (str.startsWith("_") || str.endsWith("_")) {
                 this.checkTextView.setText(LocaleController.getString("UsernameInvalid", NUM));
@@ -390,11 +392,13 @@ public class ChangeUsernameActivity extends BaseFragment {
                 this.checkTextView.setText(LocaleController.getString("UsernameInUse", NUM));
                 this.checkTextView.setTag("windowBackgroundWhiteRedText4");
                 this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteRedText4"));
+                this.lastNameAvailable = false;
                 return;
             }
             this.checkTextView.setText(LocaleController.formatString("UsernameAvailable", NUM, str));
             this.checkTextView.setTag("windowBackgroundWhiteGreenText");
             this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGreenText"));
+            this.lastNameAvailable = true;
         }
     }
 

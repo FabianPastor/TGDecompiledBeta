@@ -308,7 +308,7 @@ class HardwareVideoEncoder implements VideoEncoder {
         try {
             GLES20.glClear(16384);
             this.videoFrameDrawer.drawFrame(new VideoFrame(videoFrame.getBuffer(), 0, videoFrame.getTimestampNs()), this.textureDrawer, (Matrix) null);
-            this.textureEglBase.swapBuffers(videoFrame.getTimestampNs());
+            this.textureEglBase.swapBuffers(videoFrame.getTimestampNs(), false);
             return VideoCodecStatus.OK;
         } catch (RuntimeException e) {
             Logging.e("HardwareVideoEncoder", "encodeTexture failed", e);
@@ -441,6 +441,9 @@ class HardwareVideoEncoder implements VideoEncoder {
                 if (!z || !((videoCodecMimeType = this.codecType) == VideoCodecMimeType.H264 || videoCodecMimeType == VideoCodecMimeType.H265)) {
                     byteBuffer = byteBuffer2.slice();
                 } else {
+                    if (this.configBuffer == null) {
+                        this.configBuffer = ByteBuffer.allocateDirect(bufferInfo.size);
+                    }
                     Logging.d("HardwareVideoEncoder", "Prepending config frame of size " + this.configBuffer.capacity() + " to output buffer with offset " + bufferInfo.offset + ", size " + bufferInfo.size);
                     byteBuffer = ByteBuffer.allocateDirect(bufferInfo.size + this.configBuffer.capacity());
                     this.configBuffer.rewind();

@@ -22,7 +22,8 @@ class EglBase14Impl implements EglBase14 {
     private EGLConfig eglConfig;
     private EGLContext eglContext;
     private EGLDisplay eglDisplay;
-    private EGLSurface eglSurface = EGL14.EGL_NO_SURFACE;
+    private EGLSurface eglSurface;
+    private EGLSurface eglSurfaceBackground;
 
     public static boolean isEGL14Supported() {
         StringBuilder sb = new StringBuilder();
@@ -56,6 +57,9 @@ class EglBase14Impl implements EglBase14 {
     }
 
     public EglBase14Impl(EGLContext eGLContext, int[] iArr) {
+        EGLSurface eGLSurface = EGL14.EGL_NO_SURFACE;
+        this.eglSurface = eGLSurface;
+        this.eglSurfaceBackground = eGLSurface;
         EGLDisplay eglDisplay2 = getEglDisplay();
         this.eglDisplay = eglDisplay2;
         this.eglConfig = getEglConfig(eglDisplay2, iArr);
@@ -65,27 +69,42 @@ class EglBase14Impl implements EglBase14 {
     }
 
     public void createSurface(Surface surface) {
-        createSurfaceInternal(surface);
+        createSurfaceInternal(surface, false);
+    }
+
+    public void createBackgroundSurface(SurfaceTexture surfaceTexture) {
+        createSurfaceInternal(surfaceTexture, true);
     }
 
     public void createSurface(SurfaceTexture surfaceTexture) {
-        createSurfaceInternal(surfaceTexture);
+        createSurfaceInternal(surfaceTexture, false);
     }
 
-    private void createSurfaceInternal(Object obj) {
+    private void createSurfaceInternal(Object obj, boolean z) {
         if ((obj instanceof Surface) || (obj instanceof SurfaceTexture)) {
             checkIsNotReleased();
-            if (this.eglSurface == EGL14.EGL_NO_SURFACE) {
-                EGLSurface eglCreateWindowSurface = EGL14.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, obj, new int[]{12344}, 0);
-                this.eglSurface = eglCreateWindowSurface;
-                if (eglCreateWindowSurface == EGL14.EGL_NO_SURFACE) {
+            if (z) {
+                if (this.eglSurfaceBackground == EGL14.EGL_NO_SURFACE) {
+                    EGLSurface eglCreateWindowSurface = EGL14.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, obj, new int[]{12344}, 0);
+                    this.eglSurfaceBackground = eglCreateWindowSurface;
+                    if (eglCreateWindowSurface == EGL14.EGL_NO_SURFACE) {
+                        throw new RuntimeException("Failed to create window surface: 0x" + Integer.toHexString(EGL14.eglGetError()));
+                    }
+                    return;
+                }
+                throw new RuntimeException("Already has an EGLSurface");
+            } else if (this.eglSurface == EGL14.EGL_NO_SURFACE) {
+                EGLSurface eglCreateWindowSurface2 = EGL14.eglCreateWindowSurface(this.eglDisplay, this.eglConfig, obj, new int[]{12344}, 0);
+                this.eglSurface = eglCreateWindowSurface2;
+                if (eglCreateWindowSurface2 == EGL14.EGL_NO_SURFACE) {
                     throw new RuntimeException("Failed to create window surface: 0x" + Integer.toHexString(EGL14.eglGetError()));
                 }
-                return;
+            } else {
+                throw new RuntimeException("Already has an EGLSurface");
             }
-            throw new RuntimeException("Already has an EGLSurface");
+        } else {
+            throw new IllegalStateException("Input must be either a Surface or SurfaceTexture");
         }
-        throw new IllegalStateException("Input must be either a Surface or SurfaceTexture");
     }
 
     public void createDummyPbufferSurface() {
@@ -125,10 +144,19 @@ class EglBase14Impl implements EglBase14 {
         return iArr[0];
     }
 
-    public void releaseSurface() {
-        EGLSurface eGLSurface = this.eglSurface;
-        if (eGLSurface != EGL14.EGL_NO_SURFACE) {
-            EGL14.eglDestroySurface(this.eglDisplay, eGLSurface);
+    public void releaseSurface(boolean z) {
+        if (z) {
+            EGLSurface eGLSurface = this.eglSurfaceBackground;
+            if (eGLSurface != EGL14.EGL_NO_SURFACE) {
+                EGL14.eglDestroySurface(this.eglDisplay, eGLSurface);
+                this.eglSurfaceBackground = EGL14.EGL_NO_SURFACE;
+                return;
+            }
+            return;
+        }
+        EGLSurface eGLSurface2 = this.eglSurface;
+        if (eGLSurface2 != EGL14.EGL_NO_SURFACE) {
+            EGL14.eglDestroySurface(this.eglDisplay, eGLSurface2);
             this.eglSurface = EGL14.EGL_NO_SURFACE;
         }
     }
@@ -141,7 +169,8 @@ class EglBase14Impl implements EglBase14 {
 
     public void release() {
         checkIsNotReleased();
-        releaseSurface();
+        releaseSurface(false);
+        releaseSurface(true);
         detachCurrent();
         synchronized (EglBase.lock) {
             EGL14.eglDestroyContext(this.eglDisplay, this.eglContext);
@@ -168,6 +197,25 @@ class EglBase14Impl implements EglBase14 {
         throw new RuntimeException("No EGLSurface - can't make current");
     }
 
+    public void makeBackgroundCurrent() {
+        checkIsNotReleased();
+        if (this.eglSurfaceBackground != EGL14.EGL_NO_SURFACE) {
+            synchronized (EglBase.lock) {
+                EGLDisplay eGLDisplay = this.eglDisplay;
+                EGLSurface eGLSurface = this.eglSurfaceBackground;
+                if (!EGL14.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, this.eglContext)) {
+                    throw new RuntimeException("eglMakeCurrent failed: 0x" + Integer.toHexString(EGL14.eglGetError()));
+                }
+            }
+            return;
+        }
+        throw new RuntimeException("No EGLSurface - can't make current");
+    }
+
+    public boolean hasBackgroundSurface() {
+        return this.eglSurfaceBackground != EGL14.EGL_NO_SURFACE;
+    }
+
     public void detachCurrent() {
         synchronized (EglBase.lock) {
             EGLDisplay eGLDisplay = this.eglDisplay;
@@ -178,23 +226,25 @@ class EglBase14Impl implements EglBase14 {
         }
     }
 
-    public void swapBuffers() {
+    public void swapBuffers(boolean z) {
         checkIsNotReleased();
-        if (this.eglSurface != EGL14.EGL_NO_SURFACE) {
+        EGLSurface eGLSurface = z ? this.eglSurfaceBackground : this.eglSurface;
+        if (eGLSurface != EGL14.EGL_NO_SURFACE) {
             synchronized (EglBase.lock) {
-                EGL14.eglSwapBuffers(this.eglDisplay, this.eglSurface);
+                EGL14.eglSwapBuffers(this.eglDisplay, eGLSurface);
             }
             return;
         }
         throw new RuntimeException("No EGLSurface - can't swap buffers");
     }
 
-    public void swapBuffers(long j) {
+    public void swapBuffers(long j, boolean z) {
         checkIsNotReleased();
-        if (this.eglSurface != EGL14.EGL_NO_SURFACE) {
+        EGLSurface eGLSurface = z ? this.eglSurfaceBackground : this.eglSurface;
+        if (eGLSurface != EGL14.EGL_NO_SURFACE) {
             synchronized (EglBase.lock) {
-                EGLExt.eglPresentationTimeANDROID(this.eglDisplay, this.eglSurface, j);
-                EGL14.eglSwapBuffers(this.eglDisplay, this.eglSurface);
+                EGLExt.eglPresentationTimeANDROID(this.eglDisplay, eGLSurface, j);
+                EGL14.eglSwapBuffers(this.eglDisplay, eGLSurface);
             }
             return;
         }

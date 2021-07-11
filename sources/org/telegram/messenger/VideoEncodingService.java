@@ -29,7 +29,7 @@ public class VideoEncodingService extends Service implements NotificationCenter.
         }
         NotificationManagerCompat.from(ApplicationLoader.applicationContext).cancel(4);
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.stopEncodingService);
-        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileUploadProgressChanged);
         if (BuildVars.LOGS_ENABLED) {
             FileLog.d("destroy video service");
         }
@@ -38,7 +38,7 @@ public class VideoEncodingService extends Service implements NotificationCenter.
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         String str;
         boolean z = true;
-        if (i == NotificationCenter.FileUploadProgressChanged) {
+        if (i == NotificationCenter.fileUploadProgressChanged) {
             String str2 = objArr[0];
             if (i2 == this.currentAccount && (str = this.path) != null && str.equals(str2)) {
                 float min = Math.min(1.0f, ((float) objArr[1].longValue()) / ((float) objArr[2].longValue()));
@@ -78,7 +78,7 @@ public class VideoEncodingService extends Service implements NotificationCenter.
         }
         if (i3 != this.currentAccount) {
             NotificationCenter instance = NotificationCenter.getInstance(i3);
-            int i4 = NotificationCenter.FileUploadProgressChanged;
+            int i4 = NotificationCenter.fileUploadProgressChanged;
             instance.removeObserver(this, i4);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, i4);
         }

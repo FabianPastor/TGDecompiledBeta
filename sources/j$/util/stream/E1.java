@@ -1,11 +1,11 @@
 package j$.util.stream;
 
-import a.CLASSNAMEq0;
+import j$.CLASSNAMEn0;
 import j$.util.stream.A2;
 import j$.util.stream.CLASSNAMEz1;
 
 class E1 extends CLASSNAMEz1.k<Long> {
-    final /* synthetic */ CLASSNAMEq0 l;
+    final /* synthetic */ CLASSNAMEn0 l;
 
     class a extends A2.c<Integer> {
         a(A2 a2) {
@@ -13,14 +13,14 @@ class E1 extends CLASSNAMEz1.k<Long> {
         }
 
         public void accept(long j) {
-            this.var_a.accept(E1.this.l.a(j));
+            this.a.accept(E1.this.l.a(j));
         }
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    E1(D1 d1, CLASSNAMEh1 h1Var, U2 u2, int i, CLASSNAMEq0 q0Var) {
+    E1(D1 d1, CLASSNAMEh1 h1Var, U2 u2, int i, CLASSNAMEn0 n0Var) {
         super(h1Var, u2, i);
-        this.l = q0Var;
+        this.l = n0Var;
     }
 
     /* access modifiers changed from: package-private */

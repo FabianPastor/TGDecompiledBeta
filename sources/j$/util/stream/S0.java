@@ -4,12 +4,10 @@ import j$.util.function.Predicate;
 import j$.util.function.k;
 import j$.util.function.l;
 import j$.util.function.m;
-import j$.util.p;
+import j$.util.o;
 
 public final /* synthetic */ class S0 implements Predicate {
-
-    /* renamed from: a  reason: collision with root package name */
-    public static final /* synthetic */ S0 var_a = new S0();
+    public static final /* synthetic */ S0 a = new S0();
 
     private /* synthetic */ S0() {
     }
@@ -29,6 +27,6 @@ public final /* synthetic */ class S0 implements Predicate {
     }
 
     public final boolean test(Object obj) {
-        return ((p) obj).c();
+        return ((o) obj).c();
     }
 }

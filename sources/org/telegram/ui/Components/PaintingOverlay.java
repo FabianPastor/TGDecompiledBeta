@@ -158,7 +158,7 @@ public class PaintingOverlay extends FrameLayout {
                     }
                     mediaEntity.view = backupImageView;
                 } else if (b == 1) {
-                    AnonymousClass1 r5 = new EditTextOutline(this, getContext()) {
+                    AnonymousClass1 r5 = new EditTextOutline(getContext()) {
                         public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                             return false;
                         }

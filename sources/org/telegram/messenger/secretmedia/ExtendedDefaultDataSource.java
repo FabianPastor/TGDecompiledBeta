@@ -51,8 +51,7 @@ public final class ExtendedDefaultDataSource implements DataSource {
 
     public ExtendedDefaultDataSource(Context context2, DataSource dataSource2) {
         this.context = context2.getApplicationContext();
-        Assertions.checkNotNull(dataSource2);
-        this.baseDataSource = dataSource2;
+        this.baseDataSource = (DataSource) Assertions.checkNotNull(dataSource2);
         this.transferListeners = new ArrayList();
     }
 
@@ -117,9 +116,7 @@ public final class ExtendedDefaultDataSource implements DataSource {
     }
 
     public int read(byte[] bArr, int i, int i2) throws IOException {
-        DataSource dataSource2 = this.dataSource;
-        Assertions.checkNotNull(dataSource2);
-        return dataSource2.read(bArr, i, i2);
+        return ((DataSource) Assertions.checkNotNull(this.dataSource)).read(bArr, i, i2);
     }
 
     public Uri getUri() {

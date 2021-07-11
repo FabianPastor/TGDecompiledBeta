@@ -5,9 +5,7 @@ import j$.util.function.CLASSNAMEj;
 import j$.util.function.F;
 
 public final /* synthetic */ class U implements F {
-
-    /* renamed from: a  reason: collision with root package name */
-    public static final /* synthetic */ U var_a = new U();
+    public static final /* synthetic */ U a = new U();
 
     private /* synthetic */ U() {
     }

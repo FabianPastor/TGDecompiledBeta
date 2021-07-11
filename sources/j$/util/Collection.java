@@ -1,12 +1,13 @@
 package j$.util;
 
 import j$.lang.Iterable;
+import j$.time.a;
 import j$.util.function.Consumer;
 import j$.util.function.Predicate;
 import j$.util.function.x;
 import j$.util.stream.Q1;
 import j$.util.stream.Stream;
-import j$.util.v;
+import j$.util.u;
 import java.util.Iterator;
 
 public interface Collection<E> extends Iterable<E> {
@@ -14,11 +15,11 @@ public interface Collection<E> extends Iterable<E> {
     /* renamed from: j$.util.Collection$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {
         public static Stream $default$parallelStream(java.util.Collection collection) {
-            return Q1.v(k.C(collection), true);
+            return Q1.v(a.C(collection), true);
         }
 
         public static boolean $default$removeIf(java.util.Collection collection, Predicate predicate) {
-            if (DesugarCollections.var_a.isInstance(collection)) {
+            if (DesugarCollections.a.isInstance(collection)) {
                 return DesugarCollections.d(collection, predicate);
             }
             predicate.getClass();
@@ -35,11 +36,11 @@ public interface Collection<E> extends Iterable<E> {
 
         public static Spliterator $default$spliterator(java.util.Collection collection) {
             collection.getClass();
-            return new v.i(collection, 0);
+            return new u.i(collection, 0);
         }
 
         public static Stream $default$stream(java.util.Collection collection) {
-            return Q1.v(k.C(collection), false);
+            return Q1.v(a.C(collection), false);
         }
     }
 

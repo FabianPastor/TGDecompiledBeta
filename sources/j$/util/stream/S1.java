@@ -3,7 +3,6 @@ package j$.util.stream;
 import j$.util.Collection;
 import j$.util.Spliterator;
 import j$.util.function.C;
-import j$.util.function.CLASSNAMEe;
 import j$.util.function.CLASSNAMEf;
 import j$.util.function.CLASSNAMEg;
 import j$.util.function.CLASSNAMEh;
@@ -14,7 +13,6 @@ import j$.util.function.x;
 import j$.util.stream.A2;
 import j$.util.stream.R1;
 import j$.util.stream.S2;
-import j$.util.v;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,9 +21,7 @@ import java.util.Deque;
 import java.util.concurrent.CountedCompleter;
 
 final class S1 {
-
-    /* renamed from: a  reason: collision with root package name */
-    private static final R1 var_a = new j.d((a) null);
+    private static final R1 a = new j.d((a) null);
     private static final R1.c b = new j.b();
     private static final R1.d c = new j.c();
     private static final R1.b d = new j.a();
@@ -37,21 +33,19 @@ final class S1 {
     public static final double[] g = new double[0];
 
     private static abstract class b<T, T_NODE extends R1<T>> implements R1<T> {
-
-        /* renamed from: a  reason: collision with root package name */
-        protected final R1 var_a;
+        protected final R1 a;
         protected final R1 b;
         private final long c;
 
         b(R1 r1, R1 r12) {
-            this.var_a = r1;
+            this.a = r1;
             this.b = r12;
             this.c = r1.count() + r12.count();
         }
 
         public R1 b(int i) {
             if (i == 0) {
-                return this.var_a;
+                return this.a;
             }
             if (i == 1) {
                 return this.b;
@@ -63,20 +57,18 @@ final class S1 {
             return this.c;
         }
 
-        public int o() {
+        public int n() {
             return 2;
         }
     }
 
     private static class c<T> implements R1<T> {
-
-        /* renamed from: a  reason: collision with root package name */
-        final Object[] var_a;
+        final Object[] a;
         int b;
 
         c(long j, x xVar) {
             if (j < NUM) {
-                this.var_a = (Object[]) xVar.apply((int) j);
+                this.a = (Object[]) xVar.apply((int) j);
                 this.b = 0;
                 return;
             }
@@ -84,7 +76,7 @@ final class S1 {
         }
 
         c(Object[] objArr) {
-            this.var_a = objArr;
+            this.a = objArr;
             this.b = objArr.length;
         }
 
@@ -98,46 +90,44 @@ final class S1 {
 
         public void forEach(Consumer consumer) {
             for (int i = 0; i < this.b; i++) {
-                consumer.accept(this.var_a[i]);
+                consumer.accept(this.a[i]);
             }
         }
 
-        public void j(Object[] objArr, int i) {
-            System.arraycopy(this.var_a, 0, objArr, i, this.b);
+        public void i(Object[] objArr, int i) {
+            System.arraycopy(this.a, 0, objArr, i, this.b);
         }
 
-        public /* synthetic */ int o() {
+        public /* synthetic */ int n() {
             return 0;
         }
 
-        public Object[] q(x xVar) {
-            Object[] objArr = this.var_a;
+        public Object[] p(x xVar) {
+            Object[] objArr = this.a;
             if (objArr.length == this.b) {
                 return objArr;
             }
             throw new IllegalStateException();
         }
 
-        public /* synthetic */ R1 r(long j, long j2, x xVar) {
+        public /* synthetic */ R1 q(long j, long j2, x xVar) {
             return Q1.n(this, j, j2, xVar);
         }
 
         public Spliterator spliterator() {
-            return v.m(this.var_a, 0, this.b, 1040);
+            return j$.util.u.n(this.a, 0, this.b, 1040);
         }
 
         public String toString() {
-            return String.format("ArrayNode[%d][%s]", new Object[]{Integer.valueOf(this.var_a.length - this.b), Arrays.toString(this.var_a)});
+            return String.format("ArrayNode[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
         }
     }
 
     private static final class d<T> implements R1<T> {
-
-        /* renamed from: a  reason: collision with root package name */
-        private final Collection var_a;
+        private final Collection a;
 
         d(Collection collection) {
-            this.var_a = collection;
+            this.a = collection;
         }
 
         public R1 b(int i) {
@@ -145,40 +135,40 @@ final class S1 {
         }
 
         public long count() {
-            return (long) this.var_a.size();
+            return (long) this.a.size();
         }
 
         public void forEach(Consumer consumer) {
-            j$.util.k.s(this.var_a, consumer);
+            j$.time.a.r(this.a, consumer);
         }
 
-        public void j(Object[] objArr, int i) {
-            for (Object obj : this.var_a) {
+        public void i(Object[] objArr, int i) {
+            for (Object obj : this.a) {
                 objArr[i] = obj;
                 i++;
             }
         }
 
-        public /* synthetic */ int o() {
+        public /* synthetic */ int n() {
             return 0;
         }
 
-        public Object[] q(x xVar) {
-            Collection collection = this.var_a;
+        public Object[] p(x xVar) {
+            Collection collection = this.a;
             return collection.toArray((Object[]) xVar.apply(collection.size()));
         }
 
-        public /* synthetic */ R1 r(long j, long j2, x xVar) {
+        public /* synthetic */ R1 q(long j, long j2, x xVar) {
             return Q1.n(this, j, j2, xVar);
         }
 
         public Spliterator spliterator() {
-            Collection collection = this.var_a;
+            Collection collection = this.a;
             return (collection instanceof j$.util.Collection ? ((j$.util.Collection) collection).stream() : Collection.CC.$default$stream(collection)).spliterator();
         }
 
         public String toString() {
-            return String.format("CollectionNode[%d][%s]", new Object[]{Integer.valueOf(this.var_a.size()), this.var_a});
+            return String.format("CollectionNode[%d][%s]", new Object[]{Integer.valueOf(this.a.size()), this.a});
         }
     }
 
@@ -189,25 +179,25 @@ final class S1 {
 
         private static final class a<P_IN> extends e<P_IN, Double, R1.b, R1.a.CLASSNAMEa> {
             a(T1 t1, Spliterator spliterator) {
-                super(t1, spliterator, CLASSNAMEe1.var_a, Z.var_a);
+                super(t1, spliterator, CLASSNAMEe1.a, Z.a);
             }
         }
 
         private static final class b<P_IN> extends e<P_IN, Integer, R1.c, R1.a.b> {
             b(T1 t1, Spliterator spliterator) {
-                super(t1, spliterator, CLASSNAMEc1.var_a, CLASSNAMEf.var_a);
+                super(t1, spliterator, CLASSNAMEc1.a, CLASSNAMEf.a);
             }
         }
 
         private static final class c<P_IN> extends e<P_IN, Long, R1.d, R1.a.c> {
             c(T1 t1, Spliterator spliterator) {
-                super(t1, spliterator, B.var_a, CLASSNAMEy.var_a);
+                super(t1, spliterator, B.a, CLASSNAMEy.a);
             }
         }
 
         private static final class d<P_IN, P_OUT> extends e<P_IN, P_OUT, R1<P_OUT>, R1.a<P_OUT>> {
             d(T1 t1, x xVar, Spliterator spliterator) {
-                super(t1, spliterator, new CLASSNAMEj0(xVar), P0.var_a);
+                super(t1, spliterator, new CLASSNAMEj0(xVar), P0.a);
             }
         }
 
@@ -227,8 +217,8 @@ final class S1 {
 
         /* access modifiers changed from: protected */
         public Object a() {
-            R1.a aVar = (R1.a) this.i.apply(this.h.p0(this.b));
-            this.h.t0(aVar, this.b);
+            R1.a aVar = (R1.a) this.i.apply(this.h.p0(this.c));
+            this.h.t0(aVar, this.c);
             return aVar.a();
         }
 
@@ -239,11 +229,11 @@ final class S1 {
 
         public void onCompletion(CountedCompleter countedCompleter) {
             if (!d()) {
-                g((R1) this.j.apply((R1) ((e) this.d).b(), (R1) ((e) this.e).b()));
+                g((R1) this.j.apply((R1) ((e) this.e).b(), (R1) ((e) this.f).b()));
             }
-            this.b = null;
+            this.c = null;
+            this.f = null;
             this.e = null;
-            this.d = null;
         }
     }
 
@@ -255,7 +245,7 @@ final class S1 {
             }
 
             /* renamed from: a */
-            public /* synthetic */ void j(Double[] dArr, int i) {
+            public /* synthetic */ void i(Double[] dArr, int i) {
                 Q1.e(this, dArr, i);
             }
 
@@ -268,8 +258,8 @@ final class S1 {
                 Q1.h(this, consumer);
             }
 
-            /* renamed from: g */
-            public /* synthetic */ R1.b r(long j, long j2, x xVar) {
+            /* renamed from: h */
+            public /* synthetic */ R1.b q(long j, long j2, x xVar) {
                 return Q1.k(this, j, j2, xVar);
             }
 
@@ -278,7 +268,7 @@ final class S1 {
             }
 
             /* renamed from: spliterator  reason: collision with other method in class */
-            public Spliterator m12spliterator() {
+            public Spliterator m6spliterator() {
                 return new o.a(this);
             }
         }
@@ -289,7 +279,7 @@ final class S1 {
             }
 
             /* renamed from: a */
-            public /* synthetic */ void j(Integer[] numArr, int i) {
+            public /* synthetic */ void i(Integer[] numArr, int i) {
                 Q1.f(this, numArr, i);
             }
 
@@ -302,8 +292,8 @@ final class S1 {
                 Q1.i(this, consumer);
             }
 
-            /* renamed from: g */
-            public /* synthetic */ R1.c r(long j, long j2, x xVar) {
+            /* renamed from: h */
+            public /* synthetic */ R1.c q(long j, long j2, x xVar) {
                 return Q1.l(this, j, j2, xVar);
             }
 
@@ -312,7 +302,7 @@ final class S1 {
             }
 
             /* renamed from: spliterator  reason: collision with other method in class */
-            public Spliterator m13spliterator() {
+            public Spliterator m7spliterator() {
                 return new o.b(this);
             }
         }
@@ -323,7 +313,7 @@ final class S1 {
             }
 
             /* renamed from: a */
-            public /* synthetic */ void j(Long[] lArr, int i) {
+            public /* synthetic */ void i(Long[] lArr, int i) {
                 Q1.g(this, lArr, i);
             }
 
@@ -336,8 +326,8 @@ final class S1 {
                 Q1.j(this, consumer);
             }
 
-            /* renamed from: g */
-            public /* synthetic */ R1.d r(long j, long j2, x xVar) {
+            /* renamed from: h */
+            public /* synthetic */ R1.d q(long j, long j2, x xVar) {
                 return Q1.m(this, j, j2, xVar);
             }
 
@@ -346,7 +336,7 @@ final class S1 {
             }
 
             /* renamed from: spliterator  reason: collision with other method in class */
-            public Spliterator m14spliterator() {
+            public Spliterator m8spliterator() {
                 return new o.c(this);
             }
         }
@@ -357,8 +347,8 @@ final class S1 {
             }
 
             public void d(Object obj, int i) {
-                ((R1.e) this.var_a).d(obj, i);
-                ((R1.e) this.b).d(obj, i + ((int) ((R1.e) this.var_a).count()));
+                ((R1.e) this.a).d(obj, i);
+                ((R1.e) this.b).d(obj, i + ((int) ((R1.e) this.a).count()));
             }
 
             public Object e() {
@@ -371,18 +361,18 @@ final class S1 {
                 throw new IllegalArgumentException("Stream size exceeds max array size");
             }
 
-            public void h(Object obj) {
-                ((R1.e) this.var_a).h(obj);
-                ((R1.e) this.b).h(obj);
+            public void g(Object obj) {
+                ((R1.e) this.a).g(obj);
+                ((R1.e) this.b).g(obj);
             }
 
-            public /* synthetic */ Object[] q(x xVar) {
+            public /* synthetic */ Object[] p(x xVar) {
                 return Q1.d(this, xVar);
             }
 
             public String toString() {
                 if (count() < 32) {
-                    return String.format("%s[%s.%s]", new Object[]{getClass().getName(), this.var_a, this.b});
+                    return String.format("%s[%s.%s]", new Object[]{getClass().getName(), this.a, this.b});
                 }
                 return String.format("%s[size=%d]", new Object[]{getClass().getName(), Long.valueOf(count())});
             }
@@ -393,39 +383,39 @@ final class S1 {
         }
 
         public void forEach(Consumer consumer) {
-            this.var_a.forEach(consumer);
+            this.a.forEach(consumer);
             this.b.forEach(consumer);
         }
 
-        public void j(Object[] objArr, int i) {
+        public void i(Object[] objArr, int i) {
             objArr.getClass();
-            this.var_a.j(objArr, i);
-            this.b.j(objArr, i + ((int) this.var_a.count()));
+            this.a.i(objArr, i);
+            this.b.i(objArr, i + ((int) this.a.count()));
         }
 
-        public Object[] q(x xVar) {
+        public Object[] p(x xVar) {
             long count = count();
             if (count < NUM) {
                 Object[] objArr = (Object[]) xVar.apply((int) count);
-                j(objArr, 0);
+                i(objArr, 0);
                 return objArr;
             }
             throw new IllegalArgumentException("Stream size exceeds max array size");
         }
 
-        public R1 r(long j, long j2, x xVar) {
+        public R1 q(long j, long j2, x xVar) {
             if (j == 0 && j2 == count()) {
                 return this;
             }
-            long count = this.var_a.count();
+            long count = this.a.count();
             if (j >= count) {
-                return this.b.r(j - count, j2 - count, xVar);
+                return this.b.q(j - count, j2 - count, xVar);
             }
             if (j2 <= count) {
-                return this.var_a.r(j, j2, xVar);
+                return this.a.q(j, j2, xVar);
             }
             x xVar2 = xVar;
-            return S1.i(U2.REFERENCE, this.var_a.r(j, count, xVar2), this.b.r(0, j2 - count, xVar2));
+            return S1.i(U2.REFERENCE, this.a.q(j, count, xVar2), this.b.q(0, j2 - count, xVar2));
         }
 
         public Spliterator spliterator() {
@@ -434,7 +424,7 @@ final class S1 {
 
         public String toString() {
             if (count() < 32) {
-                return String.format("ConcNode[%s.%s]", new Object[]{this.var_a, this.b});
+                return String.format("ConcNode[%s.%s]", new Object[]{this.a, this.b});
             }
             return String.format("ConcNode[size=%d]", new Object[]{Long.valueOf(count())});
         }
@@ -446,68 +436,67 @@ final class S1 {
         }
 
         public R1.b a() {
-            if (this.b >= this.var_a.length) {
+            if (this.b >= this.a.length) {
                 return this;
             }
-            throw new IllegalStateException(String.format("Current size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.var_a.length)}));
+            throw new IllegalStateException(String.format("Current size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
         }
 
         public void accept(double d) {
             int i = this.b;
-            double[] dArr = this.var_a;
+            double[] dArr = this.a;
             if (i < dArr.length) {
                 this.b = i + 1;
                 dArr[i] = d;
                 return;
             }
-            throw new IllegalStateException(String.format("Accept exceeded fixed size of %d", new Object[]{Integer.valueOf(this.var_a.length)}));
+            throw new IllegalStateException(String.format("Accept exceeded fixed size of %d", new Object[]{Integer.valueOf(this.a.length)}));
         }
 
         public /* synthetic */ void accept(int i) {
-            j$.util.k.a(this);
+            j$.time.a.a(this);
             throw null;
         }
 
         public /* synthetic */ void accept(long j) {
-            j$.util.k.b(this);
+            j$.time.a.b(this);
             throw null;
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
 
-        public j$.util.function.q k(j$.util.function.q qVar) {
+        public j$.util.function.q j(j$.util.function.q qVar) {
             qVar.getClass();
             return new CLASSNAMEf(this, qVar);
         }
 
-        public void m() {
-            if (this.b < this.var_a.length) {
-                throw new IllegalStateException(String.format("End size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.var_a.length)}));
+        public void l() {
+            if (this.b < this.a.length) {
+                throw new IllegalStateException(String.format("End size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
             }
         }
 
-        public void n(long j) {
-            if (j == ((long) this.var_a.length)) {
+        public void m(long j) {
+            if (j == ((long) this.a.length)) {
                 this.b = 0;
             } else {
-                throw new IllegalStateException(String.format("Begin size %d is not equal to fixed size %d", new Object[]{Long.valueOf(j), Integer.valueOf(this.var_a.length)}));
+                throw new IllegalStateException(String.format("Begin size %d is not equal to fixed size %d", new Object[]{Long.valueOf(j), Integer.valueOf(this.a.length)}));
             }
         }
 
-        public /* synthetic */ boolean p() {
+        public /* synthetic */ boolean o() {
             return false;
         }
 
-        /* renamed from: s */
+        /* renamed from: r */
         public /* synthetic */ void accept(Double d) {
             Q1.a(this, d);
         }
 
         public String toString() {
-            return String.format("DoubleFixedNodeBuilder[%d][%s]", new Object[]{Integer.valueOf(this.var_a.length - this.b), Arrays.toString(this.var_a)});
+            return String.format("DoubleFixedNodeBuilder[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
         }
     }
 
@@ -517,22 +506,22 @@ final class S1 {
         i() {
         }
 
-        public Spliterator.a B() {
+        public Spliterator.a A() {
             return super.spliterator();
         }
 
-        /* renamed from: C */
+        /* renamed from: B */
         public /* synthetic */ void accept(Double d) {
             Q1.a(this, d);
         }
 
-        /* renamed from: D */
-        public /* synthetic */ void j(Double[] dArr, int i) {
+        /* renamed from: C */
+        public /* synthetic */ void i(Double[] dArr, int i) {
             Q1.e(this, dArr, i);
         }
 
-        /* renamed from: E */
-        public /* synthetic */ R1.b r(long j, long j2, x xVar) {
+        /* renamed from: D */
+        public /* synthetic */ R1.b q(long j, long j2, x xVar) {
             return Q1.k(this, j, j2, xVar);
         }
 
@@ -541,7 +530,7 @@ final class S1 {
         }
 
         /* renamed from: a  reason: collision with other method in class */
-        public R1 m16a() {
+        public R1 m10a() {
             return this;
         }
 
@@ -550,13 +539,17 @@ final class S1 {
         }
 
         public /* synthetic */ void accept(int i) {
-            j$.util.k.a(this);
+            j$.time.a.a(this);
             throw null;
         }
 
         public /* synthetic */ void accept(long j) {
-            j$.util.k.b(this);
+            j$.time.a.b(this);
             throw null;
+        }
+
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
 
         public R1.e b(int i) {
@@ -571,34 +564,29 @@ final class S1 {
             return (double[]) super.e();
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
+        public void g(Object obj) {
+            super.g((j$.util.function.q) obj);
         }
 
-        public void h(Object obj) {
-            super.h((j$.util.function.q) obj);
-        }
-
-        public void m() {
+        public void l() {
             this.g = false;
         }
 
-        public void n(long j) {
+        public void m(long j) {
             this.g = true;
             clear();
-            x(j);
+            w(j);
         }
 
-        public /* synthetic */ int o() {
+        public /* synthetic */ int n() {
             return 0;
         }
 
-        public /* synthetic */ boolean p() {
+        public /* synthetic */ boolean o() {
             return false;
         }
 
-        public /* synthetic */ Object[] q(x xVar) {
+        public /* synthetic */ Object[] p(x xVar) {
             return Q1.d(this, xVar);
         }
 
@@ -607,7 +595,7 @@ final class S1 {
         }
 
         /* renamed from: spliterator  reason: collision with other method in class */
-        public Spliterator m17spliterator() {
+        public Spliterator m11spliterator() {
             return super.spliterator();
         }
     }
@@ -619,7 +607,7 @@ final class S1 {
             }
 
             /* renamed from: a */
-            public /* synthetic */ void j(Double[] dArr, int i) {
+            public /* synthetic */ void i(Double[] dArr, int i) {
                 Q1.e(this, dArr, i);
             }
 
@@ -632,7 +620,7 @@ final class S1 {
             }
 
             /* renamed from: f */
-            public /* synthetic */ R1.b r(long j, long j2, x xVar) {
+            public /* synthetic */ R1.b q(long j, long j2, x xVar) {
                 return Q1.k(this, j, j2, xVar);
             }
 
@@ -641,12 +629,12 @@ final class S1 {
             }
 
             public Spliterator.d spliterator() {
-                return v.b();
+                return j$.util.u.b();
             }
 
             /* renamed from: spliterator  reason: collision with other method in class */
-            public Spliterator m18spliterator() {
-                return v.b();
+            public Spliterator m12spliterator() {
+                return j$.util.u.b();
             }
         }
 
@@ -655,7 +643,7 @@ final class S1 {
             }
 
             /* renamed from: a */
-            public /* synthetic */ void j(Integer[] numArr, int i) {
+            public /* synthetic */ void i(Integer[] numArr, int i) {
                 Q1.f(this, numArr, i);
             }
 
@@ -668,7 +656,7 @@ final class S1 {
             }
 
             /* renamed from: f */
-            public /* synthetic */ R1.c r(long j, long j2, x xVar) {
+            public /* synthetic */ R1.c q(long j, long j2, x xVar) {
                 return Q1.l(this, j, j2, xVar);
             }
 
@@ -677,12 +665,12 @@ final class S1 {
             }
 
             public Spliterator.d spliterator() {
-                return v.c();
+                return j$.util.u.c();
             }
 
             /* renamed from: spliterator  reason: collision with other method in class */
-            public Spliterator m19spliterator() {
-                return v.c();
+            public Spliterator m13spliterator() {
+                return j$.util.u.c();
             }
         }
 
@@ -691,7 +679,7 @@ final class S1 {
             }
 
             /* renamed from: a */
-            public /* synthetic */ void j(Long[] lArr, int i) {
+            public /* synthetic */ void i(Long[] lArr, int i) {
                 Q1.g(this, lArr, i);
             }
 
@@ -704,7 +692,7 @@ final class S1 {
             }
 
             /* renamed from: f */
-            public /* synthetic */ R1.d r(long j, long j2, x xVar) {
+            public /* synthetic */ R1.d q(long j, long j2, x xVar) {
                 return Q1.m(this, j, j2, xVar);
             }
 
@@ -713,12 +701,12 @@ final class S1 {
             }
 
             public Spliterator.d spliterator() {
-                return v.d();
+                return j$.util.u.d();
             }
 
             /* renamed from: spliterator  reason: collision with other method in class */
-            public Spliterator m20spliterator() {
-                return v.d();
+            public Spliterator m14spliterator() {
+                return j$.util.u.d();
             }
         }
 
@@ -729,11 +717,11 @@ final class S1 {
             public void forEach(Consumer consumer) {
             }
 
-            public void j(Object[] objArr, int i) {
+            public void i(Object[] objArr, int i) {
             }
 
             public Spliterator spliterator() {
-                return v.e();
+                return j$.util.u.e();
             }
         }
 
@@ -751,18 +739,18 @@ final class S1 {
         public void d(Object obj, int i) {
         }
 
-        public void h(Object obj) {
+        public void g(Object obj) {
         }
 
-        public /* synthetic */ int o() {
+        public /* synthetic */ int n() {
             return 0;
         }
 
-        public Object[] q(x xVar) {
+        public Object[] p(x xVar) {
             return (Object[]) xVar.apply(0);
         }
 
-        public /* synthetic */ R1 r(long j, long j2, x xVar) {
+        public /* synthetic */ R1 q(long j, long j2, x xVar) {
             return Q1.n(this, j, j2, xVar);
         }
     }
@@ -773,63 +761,62 @@ final class S1 {
         }
 
         public R1 a() {
-            if (this.b >= this.var_a.length) {
+            if (this.b >= this.a.length) {
                 return this;
             }
-            throw new IllegalStateException(String.format("Current size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.var_a.length)}));
+            throw new IllegalStateException(String.format("Current size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
         }
 
         public /* synthetic */ void accept(double d) {
-            j$.util.k.c(this);
+            j$.time.a.c(this);
             throw null;
         }
 
         public /* synthetic */ void accept(int i) {
-            j$.util.k.a(this);
+            j$.time.a.a(this);
             throw null;
         }
 
         public /* synthetic */ void accept(long j) {
-            j$.util.k.b(this);
+            j$.time.a.b(this);
             throw null;
         }
 
         public void accept(Object obj) {
             int i = this.b;
-            Object[] objArr = this.var_a;
+            Object[] objArr = this.a;
             if (i < objArr.length) {
                 this.b = i + 1;
                 objArr[i] = obj;
                 return;
             }
-            throw new IllegalStateException(String.format("Accept exceeded fixed size of %d", new Object[]{Integer.valueOf(this.var_a.length)}));
+            throw new IllegalStateException(String.format("Accept exceeded fixed size of %d", new Object[]{Integer.valueOf(this.a.length)}));
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
 
-        public void m() {
-            if (this.b < this.var_a.length) {
-                throw new IllegalStateException(String.format("End size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.var_a.length)}));
+        public void l() {
+            if (this.b < this.a.length) {
+                throw new IllegalStateException(String.format("End size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
             }
         }
 
-        public void n(long j) {
-            if (j == ((long) this.var_a.length)) {
+        public void m(long j) {
+            if (j == ((long) this.a.length)) {
                 this.b = 0;
             } else {
-                throw new IllegalStateException(String.format("Begin size %d is not equal to fixed size %d", new Object[]{Long.valueOf(j), Integer.valueOf(this.var_a.length)}));
+                throw new IllegalStateException(String.format("Begin size %d is not equal to fixed size %d", new Object[]{Long.valueOf(j), Integer.valueOf(this.a.length)}));
             }
         }
 
-        public /* synthetic */ boolean p() {
+        public /* synthetic */ boolean o() {
             return false;
         }
 
         public String toString() {
-            return String.format("FixedNodeBuilder[%d][%s]", new Object[]{Integer.valueOf(this.var_a.length - this.b), Arrays.toString(this.var_a)});
+            return String.format("FixedNodeBuilder[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
         }
     }
 
@@ -839,68 +826,67 @@ final class S1 {
         }
 
         public R1.c a() {
-            if (this.b >= this.var_a.length) {
+            if (this.b >= this.a.length) {
                 return this;
             }
-            throw new IllegalStateException(String.format("Current size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.var_a.length)}));
+            throw new IllegalStateException(String.format("Current size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
         }
 
         public /* synthetic */ void accept(double d) {
-            j$.util.k.c(this);
+            j$.time.a.c(this);
             throw null;
         }
 
         public void accept(int i) {
             int i2 = this.b;
-            int[] iArr = this.var_a;
+            int[] iArr = this.a;
             if (i2 < iArr.length) {
                 this.b = i2 + 1;
                 iArr[i2] = i;
                 return;
             }
-            throw new IllegalStateException(String.format("Accept exceeded fixed size of %d", new Object[]{Integer.valueOf(this.var_a.length)}));
+            throw new IllegalStateException(String.format("Accept exceeded fixed size of %d", new Object[]{Integer.valueOf(this.a.length)}));
         }
 
         public /* synthetic */ void accept(long j) {
-            j$.util.k.b(this);
+            j$.time.a.b(this);
             throw null;
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
 
-        public w l(w wVar) {
+        public w k(w wVar) {
             wVar.getClass();
             return new CLASSNAMEg(this, wVar);
         }
 
-        public void m() {
-            if (this.b < this.var_a.length) {
-                throw new IllegalStateException(String.format("End size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.var_a.length)}));
+        public void l() {
+            if (this.b < this.a.length) {
+                throw new IllegalStateException(String.format("End size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
             }
         }
 
-        public void n(long j) {
-            if (j == ((long) this.var_a.length)) {
+        public void m(long j) {
+            if (j == ((long) this.a.length)) {
                 this.b = 0;
             } else {
-                throw new IllegalStateException(String.format("Begin size %d is not equal to fixed size %d", new Object[]{Long.valueOf(j), Integer.valueOf(this.var_a.length)}));
+                throw new IllegalStateException(String.format("Begin size %d is not equal to fixed size %d", new Object[]{Long.valueOf(j), Integer.valueOf(this.a.length)}));
             }
         }
 
-        public /* synthetic */ boolean p() {
+        public /* synthetic */ boolean o() {
             return false;
         }
 
-        /* renamed from: s */
+        /* renamed from: r */
         public /* synthetic */ void accept(Integer num) {
             Q1.b(this, num);
         }
 
         public String toString() {
-            return String.format("IntFixedNodeBuilder[%d][%s]", new Object[]{Integer.valueOf(this.var_a.length - this.b), Arrays.toString(this.var_a)});
+            return String.format("IntFixedNodeBuilder[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
         }
     }
 
@@ -910,22 +896,22 @@ final class S1 {
         n() {
         }
 
-        public Spliterator.b B() {
+        public Spliterator.b A() {
             return super.spliterator();
         }
 
-        /* renamed from: C */
+        /* renamed from: B */
         public /* synthetic */ void accept(Integer num) {
             Q1.b(this, num);
         }
 
-        /* renamed from: D */
-        public /* synthetic */ void j(Integer[] numArr, int i) {
+        /* renamed from: C */
+        public /* synthetic */ void i(Integer[] numArr, int i) {
             Q1.f(this, numArr, i);
         }
 
-        /* renamed from: E */
-        public /* synthetic */ R1.c r(long j, long j2, x xVar) {
+        /* renamed from: D */
+        public /* synthetic */ R1.c q(long j, long j2, x xVar) {
             return Q1.l(this, j, j2, xVar);
         }
 
@@ -934,12 +920,12 @@ final class S1 {
         }
 
         /* renamed from: a  reason: collision with other method in class */
-        public R1 m22a() {
+        public R1 m16a() {
             return this;
         }
 
         public /* synthetic */ void accept(double d) {
-            j$.util.k.c(this);
+            j$.time.a.c(this);
             throw null;
         }
 
@@ -948,8 +934,12 @@ final class S1 {
         }
 
         public /* synthetic */ void accept(long j) {
-            j$.util.k.b(this);
+            j$.time.a.b(this);
             throw null;
+        }
+
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
 
         public R1.e b(int i) {
@@ -964,34 +954,29 @@ final class S1 {
             return (int[]) super.e();
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
+        public void g(Object obj) {
+            super.g((w) obj);
         }
 
-        public void h(Object obj) {
-            super.h((w) obj);
-        }
-
-        public void m() {
+        public void l() {
             this.g = false;
         }
 
-        public void n(long j) {
+        public void m(long j) {
             this.g = true;
             clear();
-            x(j);
+            w(j);
         }
 
-        public /* synthetic */ int o() {
+        public /* synthetic */ int n() {
             return 0;
         }
 
-        public /* synthetic */ boolean p() {
+        public /* synthetic */ boolean o() {
             return false;
         }
 
-        public /* synthetic */ Object[] q(x xVar) {
+        public /* synthetic */ Object[] p(x xVar) {
             return Q1.d(this, xVar);
         }
 
@@ -1000,15 +985,13 @@ final class S1 {
         }
 
         /* renamed from: spliterator  reason: collision with other method in class */
-        public Spliterator m23spliterator() {
+        public Spliterator m17spliterator() {
             return super.spliterator();
         }
     }
 
     private static abstract class o<T, S extends Spliterator<T>, N extends R1<T>> implements Spliterator<T> {
-
-        /* renamed from: a  reason: collision with root package name */
-        R1 var_a;
+        R1 a;
         int b;
         Spliterator c;
         Spliterator d;
@@ -1020,11 +1003,11 @@ final class S1 {
             }
 
             public /* synthetic */ boolean b(Consumer consumer) {
-                return j$.util.s.d(this, consumer);
+                return j$.util.r.e(this, consumer);
             }
 
             public /* synthetic */ void forEachRemaining(Consumer consumer) {
-                j$.util.s.a(this, consumer);
+                j$.util.r.a(this, consumer);
             }
         }
 
@@ -1034,11 +1017,11 @@ final class S1 {
             }
 
             public /* synthetic */ boolean b(Consumer consumer) {
-                return j$.util.s.e(this, consumer);
+                return j$.util.r.f(this, consumer);
             }
 
             public /* synthetic */ void forEachRemaining(Consumer consumer) {
-                j$.util.s.b(this, consumer);
+                j$.util.r.b(this, consumer);
             }
         }
 
@@ -1048,11 +1031,11 @@ final class S1 {
             }
 
             public /* synthetic */ boolean b(Consumer consumer) {
-                return j$.util.s.f(this, consumer);
+                return j$.util.r.g(this, consumer);
             }
 
             public /* synthetic */ void forEachRemaining(Consumer consumer) {
-                j$.util.s.c(this, consumer);
+                j$.util.r.c(this, consumer);
             }
         }
 
@@ -1063,7 +1046,7 @@ final class S1 {
 
             /* renamed from: forEachRemaining */
             public void e(Object obj) {
-                if (this.var_a != null) {
+                if (this.a != null) {
                     if (this.d == null) {
                         Spliterator spliterator = this.c;
                         if (spliterator == null) {
@@ -1071,9 +1054,9 @@ final class S1 {
                             while (true) {
                                 R1.e eVar = (R1.e) a(f);
                                 if (eVar != null) {
-                                    eVar.h(obj);
+                                    eVar.g(obj);
                                 } else {
-                                    this.var_a = null;
+                                    this.a = null;
                                     return;
                                 }
                             }
@@ -1082,21 +1065,21 @@ final class S1 {
                         }
                     } else {
                         do {
-                        } while (o(obj));
+                        } while (n(obj));
                     }
                 }
             }
 
             /* renamed from: tryAdvance */
-            public boolean o(Object obj) {
+            public boolean n(Object obj) {
                 R1.e eVar;
-                if (!g()) {
+                if (!h()) {
                     return false;
                 }
                 boolean tryAdvance = ((Spliterator.d) this.d).tryAdvance(obj);
                 if (!tryAdvance) {
                     if (this.c != null || (eVar = (R1.e) a(this.e)) == null) {
-                        this.var_a = null;
+                        this.a = null;
                     } else {
                         Spliterator.d spliterator = eVar.spliterator();
                         this.d = spliterator;
@@ -1113,16 +1096,16 @@ final class S1 {
             }
 
             public boolean b(Consumer consumer) {
-                R1 a2;
-                if (!g()) {
+                R1 a;
+                if (!h()) {
                     return false;
                 }
                 boolean b = this.d.b(consumer);
                 if (!b) {
-                    if (this.c != null || (a2 = a(this.e)) == null) {
-                        this.var_a = null;
+                    if (this.c != null || (a = a(this.e)) == null) {
+                        this.a = null;
                     } else {
-                        Spliterator spliterator = a2.spliterator();
+                        Spliterator spliterator = a.spliterator();
                         this.d = spliterator;
                         return spliterator.b(consumer);
                     }
@@ -1131,17 +1114,17 @@ final class S1 {
             }
 
             public void forEachRemaining(Consumer consumer) {
-                if (this.var_a != null) {
+                if (this.a != null) {
                     if (this.d == null) {
                         Spliterator spliterator = this.c;
                         if (spliterator == null) {
                             Deque f = f();
                             while (true) {
-                                R1 a2 = a(f);
-                                if (a2 != null) {
-                                    a2.forEach(consumer);
+                                R1 a = a(f);
+                                if (a != null) {
+                                    a.forEach(consumer);
                                 } else {
-                                    this.var_a = null;
+                                    this.a = null;
                                     return;
                                 }
                             }
@@ -1157,7 +1140,7 @@ final class S1 {
         }
 
         o(R1 r1) {
-            this.var_a = r1;
+            this.a = r1;
         }
 
         /* access modifiers changed from: protected */
@@ -1167,9 +1150,9 @@ final class S1 {
                 if (r1 == null) {
                     return null;
                 }
-                if (r1.o() != 0) {
-                    for (int o = r1.o() - 1; o >= 0; o--) {
-                        deque.addFirst(r1.b(o));
+                if (r1.n() != 0) {
+                    for (int n = r1.n() - 1; n >= 0; n--) {
+                        deque.addFirst(r1.b(n));
                     }
                 } else if (r1.count() > 0) {
                     return r1;
@@ -1183,15 +1166,15 @@ final class S1 {
 
         public final long estimateSize() {
             long j = 0;
-            if (this.var_a == null) {
+            if (this.a == null) {
                 return 0;
             }
             Spliterator spliterator = this.c;
             if (spliterator != null) {
                 return spliterator.estimateSize();
             }
-            for (int i = this.b; i < this.var_a.o(); i++) {
-                j += this.var_a.b(i).count();
+            for (int i = this.b; i < this.a.n(); i++) {
+                j += this.a.b(i).count();
             }
             return j;
         }
@@ -1199,19 +1182,27 @@ final class S1 {
         /* access modifiers changed from: protected */
         public final Deque f() {
             ArrayDeque arrayDeque = new ArrayDeque(8);
-            int o = this.var_a.o();
+            int n = this.a.n();
             while (true) {
-                o--;
-                if (o < this.b) {
+                n--;
+                if (n < this.b) {
                     return arrayDeque;
                 }
-                arrayDeque.addFirst(this.var_a.b(o));
+                arrayDeque.addFirst(this.a.b(n));
             }
         }
 
+        public Comparator getComparator() {
+            throw new IllegalStateException();
+        }
+
+        public /* synthetic */ long getExactSizeIfKnown() {
+            return j$.time.a.e(this);
+        }
+
         /* access modifiers changed from: protected */
-        public final boolean g() {
-            if (this.var_a == null) {
+        public final boolean h() {
+            if (this.a == null) {
                 return false;
             }
             if (this.d != null) {
@@ -1225,7 +1216,7 @@ final class S1 {
                 if (a2 != null) {
                     spliterator = a2.spliterator();
                 } else {
-                    this.var_a = null;
+                    this.a = null;
                     return false;
                 }
             }
@@ -1233,20 +1224,12 @@ final class S1 {
             return true;
         }
 
-        public Comparator getComparator() {
-            throw new IllegalStateException();
-        }
-
-        public /* synthetic */ long getExactSizeIfKnown() {
-            return j$.util.k.e(this);
-        }
-
         public /* synthetic */ boolean hasCharacteristics(int i) {
-            return j$.util.k.f(this, i);
+            return j$.time.a.f(this, i);
         }
 
         public final Spliterator trySplit() {
-            R1 r1 = this.var_a;
+            R1 r1 = this.a;
             if (r1 == null || this.d != null) {
                 return null;
             }
@@ -1254,21 +1237,21 @@ final class S1 {
             if (spliterator != null) {
                 return spliterator.trySplit();
             }
-            if (this.b < r1.o() - 1) {
-                R1 r12 = this.var_a;
+            if (this.b < r1.n() - 1) {
+                R1 r12 = this.a;
                 int i = this.b;
                 this.b = i + 1;
                 return r12.b(i).spliterator();
             }
-            R1 b2 = this.var_a.b(this.b);
-            this.var_a = b2;
-            if (b2.o() == 0) {
-                Spliterator spliterator2 = this.var_a.spliterator();
+            R1 b2 = this.a.b(this.b);
+            this.a = b2;
+            if (b2.n() == 0) {
+                Spliterator spliterator2 = this.a.spliterator();
                 this.c = spliterator2;
                 return spliterator2.trySplit();
             }
             this.b = 0;
-            R1 r13 = this.var_a;
+            R1 r13 = this.a;
             this.b = 1;
             return r13.b(0).spliterator();
         }
@@ -1280,68 +1263,67 @@ final class S1 {
         }
 
         public R1.d a() {
-            if (this.b >= this.var_a.length) {
+            if (this.b >= this.a.length) {
                 return this;
             }
-            throw new IllegalStateException(String.format("Current size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.var_a.length)}));
+            throw new IllegalStateException(String.format("Current size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
         }
 
         public /* synthetic */ void accept(double d) {
-            j$.util.k.c(this);
+            j$.time.a.c(this);
             throw null;
         }
 
         public /* synthetic */ void accept(int i) {
-            j$.util.k.a(this);
+            j$.time.a.a(this);
             throw null;
         }
 
         public void accept(long j) {
             int i = this.b;
-            long[] jArr = this.var_a;
+            long[] jArr = this.a;
             if (i < jArr.length) {
                 this.b = i + 1;
                 jArr[i] = j;
                 return;
             }
-            throw new IllegalStateException(String.format("Accept exceeded fixed size of %d", new Object[]{Integer.valueOf(this.var_a.length)}));
+            throw new IllegalStateException(String.format("Accept exceeded fixed size of %d", new Object[]{Integer.valueOf(this.a.length)}));
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
 
-        public C g(C c) {
+        public C f(C c) {
             c.getClass();
             return new CLASSNAMEh(this, c);
         }
 
-        public void m() {
-            if (this.b < this.var_a.length) {
-                throw new IllegalStateException(String.format("End size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.var_a.length)}));
+        public void l() {
+            if (this.b < this.a.length) {
+                throw new IllegalStateException(String.format("End size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
             }
         }
 
-        public void n(long j) {
-            if (j == ((long) this.var_a.length)) {
+        public void m(long j) {
+            if (j == ((long) this.a.length)) {
                 this.b = 0;
             } else {
-                throw new IllegalStateException(String.format("Begin size %d is not equal to fixed size %d", new Object[]{Long.valueOf(j), Integer.valueOf(this.var_a.length)}));
+                throw new IllegalStateException(String.format("Begin size %d is not equal to fixed size %d", new Object[]{Long.valueOf(j), Integer.valueOf(this.a.length)}));
             }
         }
 
-        public /* synthetic */ boolean p() {
+        public /* synthetic */ boolean o() {
             return false;
         }
 
-        /* renamed from: s */
+        /* renamed from: r */
         public /* synthetic */ void accept(Long l) {
             Q1.c(this, l);
         }
 
         public String toString() {
-            return String.format("LongFixedNodeBuilder[%d][%s]", new Object[]{Integer.valueOf(this.var_a.length - this.b), Arrays.toString(this.var_a)});
+            return String.format("LongFixedNodeBuilder[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
         }
     }
 
@@ -1351,22 +1333,22 @@ final class S1 {
         r() {
         }
 
-        public Spliterator.c B() {
+        public Spliterator.c A() {
             return super.spliterator();
         }
 
-        /* renamed from: C */
+        /* renamed from: B */
         public /* synthetic */ void accept(Long l) {
             Q1.c(this, l);
         }
 
-        /* renamed from: D */
-        public /* synthetic */ void j(Long[] lArr, int i) {
+        /* renamed from: C */
+        public /* synthetic */ void i(Long[] lArr, int i) {
             Q1.g(this, lArr, i);
         }
 
-        /* renamed from: E */
-        public /* synthetic */ R1.d r(long j, long j2, x xVar) {
+        /* renamed from: D */
+        public /* synthetic */ R1.d q(long j, long j2, x xVar) {
             return Q1.m(this, j, j2, xVar);
         }
 
@@ -1375,22 +1357,26 @@ final class S1 {
         }
 
         /* renamed from: a  reason: collision with other method in class */
-        public R1 m25a() {
+        public R1 m19a() {
             return this;
         }
 
         public /* synthetic */ void accept(double d) {
-            j$.util.k.c(this);
+            j$.time.a.c(this);
             throw null;
         }
 
         public /* synthetic */ void accept(int i) {
-            j$.util.k.a(this);
+            j$.time.a.a(this);
             throw null;
         }
 
         public void accept(long j) {
             super.accept(j);
+        }
+
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
 
         public R1.e b(int i) {
@@ -1405,34 +1391,29 @@ final class S1 {
             return (long[]) super.e();
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
+        public void g(Object obj) {
+            super.g((C) obj);
         }
 
-        public void h(Object obj) {
-            super.h((C) obj);
-        }
-
-        public void m() {
+        public void l() {
             this.g = false;
         }
 
-        public void n(long j) {
+        public void m(long j) {
             this.g = true;
             clear();
-            x(j);
+            w(j);
         }
 
-        public /* synthetic */ int o() {
+        public /* synthetic */ int n() {
             return 0;
         }
 
-        public /* synthetic */ boolean p() {
+        public /* synthetic */ boolean o() {
             return false;
         }
 
-        public /* synthetic */ Object[] q(x xVar) {
+        public /* synthetic */ Object[] p(x xVar) {
             return Q1.d(this, xVar);
         }
 
@@ -1441,15 +1422,13 @@ final class S1 {
         }
 
         /* renamed from: spliterator  reason: collision with other method in class */
-        public Spliterator m26spliterator() {
+        public Spliterator m20spliterator() {
             return super.spliterator();
         }
     }
 
     private static abstract class s<P_IN, P_OUT, T_SINK extends A2<P_OUT>, K extends s<P_IN, P_OUT, T_SINK, K>> extends CountedCompleter<Void> implements A2<P_OUT> {
-
-        /* renamed from: a  reason: collision with root package name */
-        protected final Spliterator var_a;
+        protected final Spliterator a;
         protected final T1 b;
         protected final long c;
         protected long d;
@@ -1491,7 +1470,7 @@ final class S1 {
                 Q1.a(this, d);
             }
 
-            public j$.util.function.q k(j$.util.function.q qVar) {
+            public j$.util.function.q j(j$.util.function.q qVar) {
                 qVar.getClass();
                 return new CLASSNAMEf(this, qVar);
             }
@@ -1531,7 +1510,7 @@ final class S1 {
                 Q1.b(this, num);
             }
 
-            public w l(w wVar) {
+            public w k(w wVar) {
                 wVar.getClass();
                 return new CLASSNAMEg(this, wVar);
             }
@@ -1571,7 +1550,7 @@ final class S1 {
                 Q1.c(this, l);
             }
 
-            public C g(C c) {
+            public C f(C c) {
                 c.getClass();
                 return new CLASSNAMEh(this, c);
             }
@@ -1608,7 +1587,7 @@ final class S1 {
         }
 
         s(Spliterator spliterator, T1 t1, int i) {
-            this.var_a = spliterator;
+            this.a = spliterator;
             this.b = t1;
             this.c = CLASSNAMEk1.h(spliterator.estimateSize());
             this.d = 0;
@@ -1617,7 +1596,7 @@ final class S1 {
 
         s(s sVar, Spliterator spliterator, long j, long j2, int i) {
             super(sVar);
-            this.var_a = spliterator;
+            this.a = spliterator;
             this.b = sVar.b;
             this.c = sVar.c;
             this.d = j;
@@ -1628,18 +1607,22 @@ final class S1 {
         }
 
         public /* synthetic */ void accept(double d2) {
-            j$.util.k.c(this);
+            j$.time.a.c(this);
             throw null;
         }
 
         public /* synthetic */ void accept(int i) {
-            j$.util.k.a(this);
+            j$.time.a.a(this);
             throw null;
         }
 
         public /* synthetic */ void accept(long j) {
-            j$.util.k.b(this);
+            j$.time.a.b(this);
             throw null;
+        }
+
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
         }
 
         /* access modifiers changed from: package-private */
@@ -1647,7 +1630,7 @@ final class S1 {
 
         public void compute() {
             Spliterator trySplit;
-            Spliterator spliterator = this.var_a;
+            Spliterator spliterator = this.a;
             s sVar = this;
             while (spliterator.estimateSize() > sVar.c && (trySplit = spliterator.trySplit()) != null) {
                 sVar.setPendingCount(1);
@@ -1661,15 +1644,10 @@ final class S1 {
             sVar.propagateCompletion();
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
+        public void l() {
         }
 
-        public void m() {
-        }
-
-        public void n(long j) {
+        public void m(long j) {
             long j2 = this.e;
             if (j <= j2) {
                 int i = (int) this.d;
@@ -1680,7 +1658,7 @@ final class S1 {
             throw new IllegalStateException("size passed to Sink.begin exceeds array length");
         }
 
-        public /* synthetic */ boolean p() {
+        public /* synthetic */ boolean o() {
             return false;
         }
     }
@@ -1696,17 +1674,17 @@ final class S1 {
         }
 
         public /* synthetic */ void accept(double d) {
-            j$.util.k.c(this);
+            j$.time.a.c(this);
             throw null;
         }
 
         public /* synthetic */ void accept(int i) {
-            j$.util.k.a(this);
+            j$.time.a.a(this);
             throw null;
         }
 
         public /* synthetic */ void accept(long j) {
-            j$.util.k.b(this);
+            j$.time.a.b(this);
             throw null;
         }
 
@@ -1722,39 +1700,39 @@ final class S1 {
             super.forEach(consumer);
         }
 
-        public void j(Object[] objArr, int i) {
-            super.j(objArr, i);
+        public void i(Object[] objArr, int i) {
+            super.i(objArr, i);
         }
 
-        public void m() {
+        public void l() {
             this.g = false;
         }
 
-        public void n(long j) {
+        public void m(long j) {
             this.g = true;
             clear();
-            u(j);
+            t(j);
         }
 
-        public /* synthetic */ int o() {
+        public /* synthetic */ int n() {
             return 0;
         }
 
-        public /* synthetic */ boolean p() {
+        public /* synthetic */ boolean o() {
             return false;
         }
 
-        public Object[] q(x xVar) {
+        public Object[] p(x xVar) {
             long count = count();
             if (count < NUM) {
                 Object[] objArr = (Object[]) xVar.apply((int) count);
-                j(objArr, 0);
+                i(objArr, 0);
                 return objArr;
             }
             throw new IllegalArgumentException("Stream size exceeds max array size");
         }
 
-        public /* synthetic */ R1 r(long j, long j2, x xVar) {
+        public /* synthetic */ R1 q(long j, long j2, x xVar) {
             return Q1.n(this, j, j2, xVar);
         }
 
@@ -1764,9 +1742,7 @@ final class S1 {
     }
 
     private static abstract class u<T, T_NODE extends R1<T>, K extends u<T, T_NODE, K>> extends CountedCompleter<Void> {
-
-        /* renamed from: a  reason: collision with root package name */
-        protected final R1 var_a;
+        protected final R1 a;
         protected final int b;
 
         private static final class a extends d<Double, j$.util.function.q, double[], Spliterator.a, R1.b> {
@@ -1802,12 +1778,12 @@ final class S1 {
 
             /* access modifiers changed from: package-private */
             public void a() {
-                ((R1.e) this.var_a).d(this.c, this.b);
+                ((R1.e) this.a).d(this.c, this.b);
             }
 
             /* access modifiers changed from: package-private */
             public u b(int i, int i2) {
-                return new d(this, ((R1.e) this.var_a).b(i), i2);
+                return new d(this, ((R1.e) this.a).b(i), i2);
             }
         }
 
@@ -1826,23 +1802,23 @@ final class S1 {
 
             /* access modifiers changed from: package-private */
             public void a() {
-                this.var_a.j(this.c, this.b);
+                this.a.i(this.c, this.b);
             }
 
             /* access modifiers changed from: package-private */
             public u b(int i, int i2) {
-                return new e(this, this.var_a.b(i), i2);
+                return new e(this, this.a.b(i), i2);
             }
         }
 
         u(R1 r1, int i) {
-            this.var_a = r1;
+            this.a = r1;
             this.b = i;
         }
 
         u(u uVar, R1 r1, int i) {
             super(uVar);
-            this.var_a = r1;
+            this.a = r1;
             this.b = i;
         }
 
@@ -1854,13 +1830,13 @@ final class S1 {
 
         public void compute() {
             u uVar = this;
-            while (uVar.var_a.o() != 0) {
-                uVar.setPendingCount(uVar.var_a.o() - 1);
+            while (uVar.a.n() != 0) {
+                uVar.setPendingCount(uVar.a.n() - 1);
                 int i = 0;
                 int i2 = 0;
-                while (i < uVar.var_a.o() - 1) {
+                while (i < uVar.a.n() - 1) {
                     u b2 = uVar.b(i, uVar.b + i2);
-                    i2 = (int) (((long) i2) + b2.var_a.count());
+                    i2 = (int) (((long) i2) + b2.a.count());
                     b2.fork();
                     i++;
                 }
@@ -1955,7 +1931,7 @@ final class S1 {
     static R1 k(U2 u2) {
         int ordinal = u2.ordinal();
         if (ordinal == 0) {
-            return var_a;
+            return a;
         }
         if (ordinal == 1) {
             return b;
@@ -1970,7 +1946,7 @@ final class S1 {
     }
 
     public static R1 l(R1 r1, x xVar) {
-        if (r1.o() <= 0) {
+        if (r1.n() <= 0) {
             return r1;
         }
         long count = r1.count();
@@ -1983,7 +1959,7 @@ final class S1 {
     }
 
     public static R1.b m(R1.b bVar) {
-        if (bVar.o() <= 0) {
+        if (bVar.n() <= 0) {
             return bVar;
         }
         long count = bVar.count();
@@ -1996,7 +1972,7 @@ final class S1 {
     }
 
     public static R1.c n(R1.c cVar) {
-        if (cVar.o() <= 0) {
+        if (cVar.n() <= 0) {
             return cVar;
         }
         long count = cVar.count();
@@ -2009,7 +1985,7 @@ final class S1 {
     }
 
     public static R1.d o(R1.d dVar) {
-        if (dVar.o() <= 0) {
+        if (dVar.n() <= 0) {
             return dVar;
         }
         long count = dVar.count();
@@ -2030,14 +2006,12 @@ final class S1 {
     }
 
     private static class g implements R1.b {
-
-        /* renamed from: a  reason: collision with root package name */
-        final double[] var_a;
+        final double[] a;
         int b;
 
         g(long j) {
             if (j < NUM) {
-                this.var_a = new double[((int) j)];
+                this.a = new double[((int) j)];
                 this.b = 0;
                 return;
             }
@@ -2045,7 +2019,7 @@ final class S1 {
         }
 
         g(double[] dArr) {
-            this.var_a = dArr;
+            this.a = dArr;
             this.b = dArr.length;
         }
 
@@ -2058,68 +2032,66 @@ final class S1 {
         }
 
         public void d(Object obj, int i) {
-            System.arraycopy(this.var_a, 0, (double[]) obj, i, this.b);
+            System.arraycopy(this.a, 0, (double[]) obj, i, this.b);
         }
 
         public Object e() {
-            double[] dArr = this.var_a;
+            double[] dArr = this.a;
             int length = dArr.length;
             int i = this.b;
             return length == i ? dArr : Arrays.copyOf(dArr, i);
+        }
+
+        /* renamed from: f */
+        public /* synthetic */ void i(Double[] dArr, int i) {
+            Q1.e(this, dArr, i);
         }
 
         public /* synthetic */ void forEach(Consumer consumer) {
             Q1.h(this, consumer);
         }
 
-        /* renamed from: g */
-        public /* synthetic */ void j(Double[] dArr, int i) {
-            Q1.e(this, dArr, i);
-        }
-
-        public void h(Object obj) {
+        public void g(Object obj) {
             j$.util.function.q qVar = (j$.util.function.q) obj;
             for (int i = 0; i < this.b; i++) {
-                qVar.accept(this.var_a[i]);
+                qVar.accept(this.a[i]);
             }
         }
 
-        /* renamed from: l */
-        public /* synthetic */ R1.b r(long j, long j2, x xVar) {
+        /* renamed from: k */
+        public /* synthetic */ R1.b q(long j, long j2, x xVar) {
             return Q1.k(this, j, j2, xVar);
         }
 
-        public /* synthetic */ int o() {
+        public /* synthetic */ int n() {
             return 0;
         }
 
-        public /* synthetic */ Object[] q(x xVar) {
+        public /* synthetic */ Object[] p(x xVar) {
             return Q1.d(this, xVar);
         }
 
         public Spliterator.d spliterator() {
-            return v.j(this.var_a, 0, this.b, 1040);
+            return j$.util.u.j(this.a, 0, this.b, 1040);
         }
 
         public String toString() {
-            return String.format("DoubleArrayNode[%d][%s]", new Object[]{Integer.valueOf(this.var_a.length - this.b), Arrays.toString(this.var_a)});
+            return String.format("DoubleArrayNode[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
         }
 
         /* renamed from: spliterator  reason: collision with other method in class */
-        public Spliterator m15spliterator() {
-            return v.j(this.var_a, 0, this.b, 1040);
+        public Spliterator m9spliterator() {
+            return j$.util.u.j(this.a, 0, this.b, 1040);
         }
     }
 
     private static class l implements R1.c {
-
-        /* renamed from: a  reason: collision with root package name */
-        final int[] var_a;
+        final int[] a;
         int b;
 
         l(long j) {
             if (j < NUM) {
-                this.var_a = new int[((int) j)];
+                this.a = new int[((int) j)];
                 this.b = 0;
                 return;
             }
@@ -2127,7 +2099,7 @@ final class S1 {
         }
 
         l(int[] iArr) {
-            this.var_a = iArr;
+            this.a = iArr;
             this.b = iArr.length;
         }
 
@@ -2140,68 +2112,66 @@ final class S1 {
         }
 
         public void d(Object obj, int i) {
-            System.arraycopy(this.var_a, 0, (int[]) obj, i, this.b);
+            System.arraycopy(this.a, 0, (int[]) obj, i, this.b);
         }
 
         public Object e() {
-            int[] iArr = this.var_a;
+            int[] iArr = this.a;
             int length = iArr.length;
             int i = this.b;
             return length == i ? iArr : Arrays.copyOf(iArr, i);
+        }
+
+        /* renamed from: f */
+        public /* synthetic */ void i(Integer[] numArr, int i) {
+            Q1.f(this, numArr, i);
         }
 
         public /* synthetic */ void forEach(Consumer consumer) {
             Q1.i(this, consumer);
         }
 
-        /* renamed from: g */
-        public /* synthetic */ void j(Integer[] numArr, int i) {
-            Q1.f(this, numArr, i);
-        }
-
-        public void h(Object obj) {
+        public void g(Object obj) {
             w wVar = (w) obj;
             for (int i = 0; i < this.b; i++) {
-                wVar.accept(this.var_a[i]);
+                wVar.accept(this.a[i]);
             }
         }
 
-        /* renamed from: k */
-        public /* synthetic */ R1.c r(long j, long j2, x xVar) {
+        /* renamed from: j */
+        public /* synthetic */ R1.c q(long j, long j2, x xVar) {
             return Q1.l(this, j, j2, xVar);
         }
 
-        public /* synthetic */ int o() {
+        public /* synthetic */ int n() {
             return 0;
         }
 
-        public /* synthetic */ Object[] q(x xVar) {
+        public /* synthetic */ Object[] p(x xVar) {
             return Q1.d(this, xVar);
         }
 
         public Spliterator.d spliterator() {
-            return v.k(this.var_a, 0, this.b, 1040);
+            return j$.util.u.k(this.a, 0, this.b, 1040);
         }
 
         public String toString() {
-            return String.format("IntArrayNode[%d][%s]", new Object[]{Integer.valueOf(this.var_a.length - this.b), Arrays.toString(this.var_a)});
+            return String.format("IntArrayNode[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
         }
 
         /* renamed from: spliterator  reason: collision with other method in class */
-        public Spliterator m21spliterator() {
-            return v.k(this.var_a, 0, this.b, 1040);
+        public Spliterator m15spliterator() {
+            return j$.util.u.k(this.a, 0, this.b, 1040);
         }
     }
 
     private static class p implements R1.d {
-
-        /* renamed from: a  reason: collision with root package name */
-        final long[] var_a;
+        final long[] a;
         int b;
 
         p(long j) {
             if (j < NUM) {
-                this.var_a = new long[((int) j)];
+                this.a = new long[((int) j)];
                 this.b = 0;
                 return;
             }
@@ -2209,7 +2179,7 @@ final class S1 {
         }
 
         p(long[] jArr) {
-            this.var_a = jArr;
+            this.a = jArr;
             this.b = jArr.length;
         }
 
@@ -2222,11 +2192,11 @@ final class S1 {
         }
 
         public void d(Object obj, int i) {
-            System.arraycopy(this.var_a, 0, (long[]) obj, i, this.b);
+            System.arraycopy(this.a, 0, (long[]) obj, i, this.b);
         }
 
         public Object e() {
-            long[] jArr = this.var_a;
+            long[] jArr = this.a;
             int length = jArr.length;
             int i = this.b;
             return length == i ? jArr : Arrays.copyOf(jArr, i);
@@ -2236,42 +2206,42 @@ final class S1 {
             Q1.j(this, consumer);
         }
 
-        public void h(Object obj) {
+        public void g(Object obj) {
             C c = (C) obj;
             for (int i = 0; i < this.b; i++) {
-                c.accept(this.var_a[i]);
+                c.accept(this.a[i]);
             }
         }
 
-        /* renamed from: k */
-        public /* synthetic */ void j(Long[] lArr, int i) {
+        /* renamed from: j */
+        public /* synthetic */ void i(Long[] lArr, int i) {
             Q1.g(this, lArr, i);
         }
 
-        /* renamed from: l */
-        public /* synthetic */ R1.d r(long j, long j2, x xVar) {
+        /* renamed from: k */
+        public /* synthetic */ R1.d q(long j, long j2, x xVar) {
             return Q1.m(this, j, j2, xVar);
         }
 
-        public /* synthetic */ int o() {
+        public /* synthetic */ int n() {
             return 0;
         }
 
-        public /* synthetic */ Object[] q(x xVar) {
+        public /* synthetic */ Object[] p(x xVar) {
             return Q1.d(this, xVar);
         }
 
         public Spliterator.d spliterator() {
-            return v.l(this.var_a, 0, this.b, 1040);
+            return j$.util.u.l(this.a, 0, this.b, 1040);
         }
 
         public String toString() {
-            return String.format("LongArrayNode[%d][%s]", new Object[]{Integer.valueOf(this.var_a.length - this.b), Arrays.toString(this.var_a)});
+            return String.format("LongArrayNode[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
         }
 
         /* renamed from: spliterator  reason: collision with other method in class */
-        public Spliterator m24spliterator() {
-            return v.l(this.var_a, 0, this.b, 1040);
+        public Spliterator m18spliterator() {
+            return j$.util.u.l(this.a, 0, this.b, 1040);
         }
     }
 }

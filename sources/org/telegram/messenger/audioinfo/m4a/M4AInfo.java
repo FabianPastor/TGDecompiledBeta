@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.telegram.messenger.audioinfo.AudioInfo;
@@ -12,6 +13,10 @@ import org.telegram.messenger.audioinfo.mp3.ID3v1Genre;
 public class M4AInfo extends AudioInfo {
     static final Logger LOGGER = Logger.getLogger(M4AInfo.class.getName());
     private final Level debugLevel;
+    private byte rating;
+    private BigDecimal speed;
+    private short tempo;
+    private BigDecimal volume;
 
     public M4AInfo(InputStream inputStream) throws IOException {
         this(inputStream, Level.FINEST);
@@ -41,7 +46,7 @@ public class M4AInfo extends AudioInfo {
         } else if (!this.brand.matches("M4A|M4P")) {
             logger.warning(mP4Atom.getPath() + ": brand=" + this.brand + " (expected M4A or M4P)");
         }
-        String.valueOf(mP4Atom.readInt());
+        this.version = String.valueOf(mP4Atom.readInt());
     }
 
     /* access modifiers changed from: package-private */
@@ -109,8 +114,8 @@ public class M4AInfo extends AudioInfo {
                 logger.log(level, "mvhd: duration " + this.duration + " -> " + j);
             }
         }
-        mP4Atom.readIntegerFixedPoint();
-        mP4Atom.readShortFixedPoint();
+        this.speed = mP4Atom.readIntegerFixedPoint();
+        this.volume = mP4Atom.readShortFixedPoint();
     }
 
     /* access modifiers changed from: package-private */
@@ -409,10 +414,10 @@ public class M4AInfo extends AudioInfo {
                 this.genre = mP4Atom.readString("UTF-8");
                 return;
             case 6:
-                mP4Atom.readByte();
+                this.rating = mP4Atom.readByte();
                 return;
             case 7:
-                mP4Atom.readShort();
+                this.tempo = mP4Atom.readShort();
                 return;
             case 8:
                 mP4Atom.skip(2);

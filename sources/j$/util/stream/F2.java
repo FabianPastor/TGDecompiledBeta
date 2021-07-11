@@ -12,7 +12,7 @@ abstract class F2<T> extends A2.d<T, T> {
         this.b = comparator;
     }
 
-    public final boolean p() {
+    public final boolean o() {
         this.c = true;
         return false;
     }

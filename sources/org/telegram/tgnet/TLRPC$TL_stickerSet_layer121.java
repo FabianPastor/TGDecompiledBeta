@@ -22,7 +22,7 @@ public class TLRPC$TL_stickerSet_layer121 extends TLRPC$TL_stickerSet {
         this.access_hash = abstractSerializedData.readInt64(z);
         this.title = abstractSerializedData.readString(z);
         this.short_name = abstractSerializedData.readString(z);
-        if (!((this.flags & 16) == 0 || (TLdeserialize = TLRPC$PhotoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z)) == null)) {
+        if (!((this.flags & 16) == 0 || (TLdeserialize = TLRPC$PhotoSize.TLdeserialize(0, 0, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z)) == null)) {
             this.thumbs.add(TLdeserialize);
         }
         if ((this.flags & 16) != 0) {

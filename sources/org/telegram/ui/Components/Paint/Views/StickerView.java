@@ -181,7 +181,7 @@ public class StickerView extends EntityView {
 
     /* access modifiers changed from: protected */
     public EntityView.SelectionView createSelectionView() {
-        return new StickerViewSelectionView(this, getContext());
+        return new StickerViewSelectionView(getContext());
     }
 
     public TLRPC$Document getSticker() {
@@ -200,7 +200,7 @@ public class StickerView extends EntityView {
         private Paint arcPaint = new Paint(1);
         private RectF arcRect = new RectF();
 
-        public StickerViewSelectionView(StickerView stickerView, Context context) {
+        public StickerViewSelectionView(Context context) {
             super(context);
             this.arcPaint.setColor(-1);
             this.arcPaint.setStrokeWidth((float) AndroidUtilities.dp(1.0f));

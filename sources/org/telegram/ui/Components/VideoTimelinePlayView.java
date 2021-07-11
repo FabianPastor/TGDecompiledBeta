@@ -23,6 +23,7 @@ public class VideoTimelinePlayView extends View {
     public static int TYPE_PROGRESS = 2;
     public static int TYPE_RIGHT = 1;
     private static final Object sync = new Object();
+    Paint bitmapPaint = new Paint();
     private int currentMode = 0;
     private AsyncTask<Integer, Integer, Bitmap> currentTask;
     private VideoTimelineViewDelegate delegate;
@@ -37,7 +38,7 @@ public class VideoTimelinePlayView extends View {
     /* access modifiers changed from: private */
     public int frameWidth;
     /* access modifiers changed from: private */
-    public ArrayList<Bitmap> frames = new ArrayList<>();
+    public ArrayList<BitmapFrame> frames = new ArrayList<>();
     /* access modifiers changed from: private */
     public int framesToLoad;
     private int lastWidth;
@@ -399,7 +400,7 @@ public class VideoTimelinePlayView extends View {
                 /* access modifiers changed from: protected */
                 public void onPostExecute(Bitmap bitmap) {
                     if (!isCancelled()) {
-                        VideoTimelinePlayView.this.frames.add(bitmap);
+                        VideoTimelinePlayView.this.frames.add(new BitmapFrame(bitmap));
                         VideoTimelinePlayView.this.invalidate();
                         if (this.frameNum < VideoTimelinePlayView.this.framesToLoad) {
                             VideoTimelinePlayView.this.reloadFrames(this.frameNum + 1);
@@ -413,6 +414,7 @@ public class VideoTimelinePlayView extends View {
     }
 
     public void destroy() {
+        Bitmap bitmap;
         synchronized (sync) {
             try {
                 MediaMetadataRetriever mediaMetadataRetriever2 = this.mediaMetadataRetriever;
@@ -425,8 +427,8 @@ public class VideoTimelinePlayView extends View {
             }
         }
         for (int i = 0; i < this.frames.size(); i++) {
-            Bitmap bitmap = this.frames.get(i);
-            if (bitmap != null) {
+            BitmapFrame bitmapFrame = this.frames.get(i);
+            if (!(bitmapFrame == null || (bitmap = bitmapFrame.bitmap) == null)) {
                 bitmap.recycle();
             }
         }
@@ -449,9 +451,9 @@ public class VideoTimelinePlayView extends View {
 
     public void clearFrames() {
         for (int i = 0; i < this.frames.size(); i++) {
-            Bitmap bitmap = this.frames.get(i);
-            if (bitmap != null) {
-                bitmap.recycle();
+            BitmapFrame bitmapFrame = this.frames.get(i);
+            if (bitmapFrame != null) {
+                bitmapFrame.bitmap.recycle();
             }
         }
         this.frames.clear();
@@ -482,46 +484,73 @@ public class VideoTimelinePlayView extends View {
         int dp2 = ((int) (this.progressRight * f)) + AndroidUtilities.dp(16.0f);
         canvas.save();
         canvas2.clipRect(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(20.0f) + measuredWidth, AndroidUtilities.dp(48.0f));
+        int i = 0;
+        float f2 = 1.0f;
         if (!this.frames.isEmpty() || this.currentTask != null) {
-            int i = 0;
-            for (int i2 = 0; i2 < this.frames.size(); i2++) {
-                Bitmap bitmap = this.frames.get(i2);
-                if (bitmap != null) {
-                    canvas2.drawBitmap(bitmap, (float) (AndroidUtilities.dp(16.0f) + (this.frameWidth * i)), (float) AndroidUtilities.dp(6.0f), (Paint) null);
+            int i2 = 0;
+            while (i < this.frames.size()) {
+                BitmapFrame bitmapFrame = this.frames.get(i);
+                if (bitmapFrame.bitmap != null) {
+                    int dp3 = AndroidUtilities.dp(16.0f) + (this.frameWidth * i2);
+                    int dp4 = AndroidUtilities.dp(6.0f);
+                    float f3 = bitmapFrame.alpha;
+                    if (f3 != f2) {
+                        float f4 = f3 + 0.16f;
+                        bitmapFrame.alpha = f4;
+                        if (f4 > f2) {
+                            bitmapFrame.alpha = f2;
+                        } else {
+                            invalidate();
+                        }
+                        this.bitmapPaint.setAlpha((int) (bitmapFrame.alpha * 255.0f));
+                        canvas2.drawBitmap(bitmapFrame.bitmap, (float) dp3, (float) dp4, this.bitmapPaint);
+                    } else {
+                        canvas2.drawBitmap(bitmapFrame.bitmap, (float) dp3, (float) dp4, (Paint) null);
+                    }
                 }
+                i2++;
                 i++;
+                f2 = 1.0f;
             }
         } else {
             reloadFrames(0);
         }
-        int dp3 = AndroidUtilities.dp(6.0f);
-        int dp4 = AndroidUtilities.dp(48.0f);
-        float f2 = (float) dp3;
-        float f3 = (float) dp;
-        Canvas canvas3 = canvas;
-        canvas3.drawRect((float) AndroidUtilities.dp(16.0f), f2, f3, (float) AndroidUtilities.dp(46.0f), this.paint2);
-        canvas.drawRect((float) (AndroidUtilities.dp(4.0f) + dp2), f2, (float) (AndroidUtilities.dp(16.0f) + measuredWidth + AndroidUtilities.dp(4.0f)), (float) AndroidUtilities.dp(46.0f), this.paint2);
-        float f4 = (float) dp4;
-        float f5 = f4;
-        canvas.drawRect(f3, (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(2.0f) + dp), f5, this.paint);
-        canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + dp2), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(4.0f) + dp2), f5, this.paint);
-        canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + dp), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(4.0f) + dp2), f2, this.paint);
-        canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + dp), (float) (dp4 - AndroidUtilities.dp(2.0f)), (float) (AndroidUtilities.dp(4.0f) + dp2), f4, this.paint);
+        int dp5 = AndroidUtilities.dp(6.0f);
+        int dp6 = AndroidUtilities.dp(48.0f);
+        float f5 = (float) dp5;
+        float f6 = (float) dp;
+        canvas.drawRect((float) AndroidUtilities.dp(16.0f), f5, f6, (float) AndroidUtilities.dp(46.0f), this.paint2);
+        canvas.drawRect((float) (AndroidUtilities.dp(4.0f) + dp2), f5, (float) (AndroidUtilities.dp(16.0f) + measuredWidth + AndroidUtilities.dp(4.0f)), (float) AndroidUtilities.dp(46.0f), this.paint2);
+        float f7 = (float) dp6;
+        float f8 = f7;
+        canvas.drawRect(f6, (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(2.0f) + dp), f8, this.paint);
+        canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + dp2), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(4.0f) + dp2), f8, this.paint);
+        canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + dp), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(4.0f) + dp2), f5, this.paint);
+        canvas.drawRect((float) (AndroidUtilities.dp(2.0f) + dp), (float) (dp6 - AndroidUtilities.dp(2.0f)), (float) (AndroidUtilities.dp(4.0f) + dp2), f7, this.paint);
         canvas.restore();
-        this.rect3.set((float) (dp - AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(2.0f) + dp), f4);
+        this.rect3.set((float) (dp - AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(2.0f) + dp), f7);
         canvas2.drawRoundRect(this.rect3, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), this.paint);
         this.drawableLeft.setBounds(dp - AndroidUtilities.dp(8.0f), AndroidUtilities.dp(4.0f) + ((AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(18.0f)) / 2), dp + AndroidUtilities.dp(2.0f), ((AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(18.0f)) / 2) + AndroidUtilities.dp(22.0f));
         this.drawableLeft.draw(canvas2);
-        this.rect3.set((float) (AndroidUtilities.dp(2.0f) + dp2), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(12.0f) + dp2), f4);
+        this.rect3.set((float) (AndroidUtilities.dp(2.0f) + dp2), (float) AndroidUtilities.dp(4.0f), (float) (AndroidUtilities.dp(12.0f) + dp2), f7);
         canvas2.drawRoundRect(this.rect3, (float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(2.0f), this.paint);
         this.drawableRight.setBounds(AndroidUtilities.dp(2.0f) + dp2, AndroidUtilities.dp(4.0f) + ((AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(18.0f)) / 2), dp2 + AndroidUtilities.dp(12.0f), ((AndroidUtilities.dp(44.0f) - AndroidUtilities.dp(18.0f)) / 2) + AndroidUtilities.dp(22.0f));
         this.drawableRight.draw(canvas2);
-        float dp5 = ((float) AndroidUtilities.dp(18.0f)) + (f * this.playProgress);
-        this.rect3.set(dp5 - ((float) AndroidUtilities.dp(1.5f)), (float) AndroidUtilities.dp(2.0f), ((float) AndroidUtilities.dp(1.5f)) + dp5, (float) AndroidUtilities.dp(50.0f));
+        float dp7 = ((float) AndroidUtilities.dp(18.0f)) + (f * this.playProgress);
+        this.rect3.set(dp7 - ((float) AndroidUtilities.dp(1.5f)), (float) AndroidUtilities.dp(2.0f), ((float) AndroidUtilities.dp(1.5f)) + dp7, (float) AndroidUtilities.dp(50.0f));
         canvas2.drawRoundRect(this.rect3, (float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(1.0f), this.paint2);
-        canvas2.drawCircle(dp5, (float) AndroidUtilities.dp(52.0f), (float) AndroidUtilities.dp(3.5f), this.paint2);
-        this.rect3.set(dp5 - ((float) AndroidUtilities.dp(1.0f)), (float) AndroidUtilities.dp(2.0f), ((float) AndroidUtilities.dp(1.0f)) + dp5, (float) AndroidUtilities.dp(50.0f));
+        canvas2.drawCircle(dp7, (float) AndroidUtilities.dp(52.0f), (float) AndroidUtilities.dp(3.5f), this.paint2);
+        this.rect3.set(dp7 - ((float) AndroidUtilities.dp(1.0f)), (float) AndroidUtilities.dp(2.0f), ((float) AndroidUtilities.dp(1.0f)) + dp7, (float) AndroidUtilities.dp(50.0f));
         canvas2.drawRoundRect(this.rect3, (float) AndroidUtilities.dp(1.0f), (float) AndroidUtilities.dp(1.0f), this.paint);
-        canvas2.drawCircle(dp5, (float) AndroidUtilities.dp(52.0f), (float) AndroidUtilities.dp(3.0f), this.paint);
+        canvas2.drawCircle(dp7, (float) AndroidUtilities.dp(52.0f), (float) AndroidUtilities.dp(3.0f), this.paint);
+    }
+
+    private static class BitmapFrame {
+        float alpha;
+        Bitmap bitmap;
+
+        public BitmapFrame(Bitmap bitmap2) {
+            this.bitmap = bitmap2;
+        }
     }
 }

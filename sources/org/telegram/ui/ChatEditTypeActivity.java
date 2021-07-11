@@ -88,6 +88,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     private LinearLayout linkContainer;
     private LoadingCell loadingAdminedCell;
     private boolean loadingAdminedChannels;
+    private boolean loadingInvite;
     private TextInfoPrivacyCell manageLinksInfoCell;
     private TextCell manageLinksTextView;
     private LinkActionView permanentLinkView;
@@ -289,7 +290,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             }
         });
         this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f), LocaleController.getString("Done", NUM));
-        AnonymousClass2 r0 = new ScrollView(this, context2) {
+        AnonymousClass2 r0 = new ScrollView(context2) {
             public boolean requestChildRectangleOnScreen(View view, Rect rect, boolean z) {
                 rect.bottom += AndroidUtilities.dp(60.0f);
                 return super.requestChildRectangleOnScreen(view, rect, z);
@@ -979,6 +980,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
     /* access modifiers changed from: private */
     public void generateLink(boolean z) {
+        this.loadingInvite = true;
         TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
         tLRPC$TL_messages_exportChatInvite.legacy_revoke_permanent = true;
         tLRPC$TL_messages_exportChatInvite.peer = getMessagesController().getInputPeer(-this.chatId);
@@ -1038,6 +1040,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
                 }
             }
         }
+        this.loadingInvite = false;
         LinkActionView linkActionView = this.permanentLinkView;
         if (linkActionView != null) {
             TLRPC$TL_chatInviteExported tLRPC$TL_chatInviteExported2 = this.invite;

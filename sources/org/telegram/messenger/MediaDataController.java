@@ -1675,7 +1675,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x008e A[DONT_GENERATE] */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x008c A[DONT_GENERATE] */
     /* renamed from: lambda$loadFeaturedStickers$21 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$loadFeaturedStickers$21$MediaDataController() {
@@ -1685,17 +1685,17 @@ public class MediaDataController extends BaseController {
             r2.<init>()
             r0 = 0
             r1 = 0
-            org.telegram.messenger.MessagesStorage r3 = r10.getMessagesStorage()     // Catch:{ all -> 0x0084 }
-            org.telegram.SQLite.SQLiteDatabase r3 = r3.getDatabase()     // Catch:{ all -> 0x0084 }
+            org.telegram.messenger.MessagesStorage r3 = r10.getMessagesStorage()     // Catch:{ all -> 0x0082 }
+            org.telegram.SQLite.SQLiteDatabase r3 = r3.getDatabase()     // Catch:{ all -> 0x0082 }
             java.lang.String r4 = "SELECT data, unread, date, hash FROM stickers_featured WHERE 1"
-            java.lang.Object[] r5 = new java.lang.Object[r1]     // Catch:{ all -> 0x0084 }
-            org.telegram.SQLite.SQLiteCursor r3 = r3.queryFinalized(r4, r5)     // Catch:{ all -> 0x0084 }
-            boolean r4 = r3.next()     // Catch:{ all -> 0x007f }
+            java.lang.Object[] r5 = new java.lang.Object[r1]     // Catch:{ all -> 0x0082 }
+            org.telegram.SQLite.SQLiteCursor r3 = r3.queryFinalized(r4, r5)     // Catch:{ all -> 0x0082 }
+            boolean r4 = r3.next()     // Catch:{ all -> 0x007d }
             if (r4 == 0) goto L_0x0075
-            org.telegram.tgnet.NativeByteBuffer r4 = r3.byteBufferValue(r1)     // Catch:{ all -> 0x007f }
+            org.telegram.tgnet.NativeByteBuffer r4 = r3.byteBufferValue(r1)     // Catch:{ all -> 0x007d }
             if (r4 == 0) goto L_0x0044
-            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ all -> 0x007f }
-            r5.<init>()     // Catch:{ all -> 0x007f }
+            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ all -> 0x007d }
+            r5.<init>()     // Catch:{ all -> 0x007d }
             int r0 = r4.readInt32(r1)     // Catch:{ all -> 0x0042 }
             r6 = 0
         L_0x002d:
@@ -1711,25 +1711,25 @@ public class MediaDataController extends BaseController {
             goto L_0x0044
         L_0x0042:
             r0 = move-exception
-            goto L_0x0082
+            goto L_0x0080
         L_0x0044:
             r4 = 1
-            org.telegram.tgnet.NativeByteBuffer r4 = r3.byteBufferValue(r4)     // Catch:{ all -> 0x007f }
+            org.telegram.tgnet.NativeByteBuffer r4 = r3.byteBufferValue(r4)     // Catch:{ all -> 0x007d }
             if (r4 == 0) goto L_0x0063
-            int r5 = r4.readInt32(r1)     // Catch:{ all -> 0x007f }
+            int r5 = r4.readInt32(r1)     // Catch:{ all -> 0x007d }
             r6 = 0
         L_0x0050:
             if (r6 >= r5) goto L_0x0060
-            long r7 = r4.readInt64(r1)     // Catch:{ all -> 0x007f }
-            java.lang.Long r7 = java.lang.Long.valueOf(r7)     // Catch:{ all -> 0x007f }
-            r2.add(r7)     // Catch:{ all -> 0x007f }
+            long r7 = r4.readInt64(r1)     // Catch:{ all -> 0x007d }
+            java.lang.Long r7 = java.lang.Long.valueOf(r7)     // Catch:{ all -> 0x007d }
+            r2.add(r7)     // Catch:{ all -> 0x007d }
             int r6 = r6 + 1
             goto L_0x0050
         L_0x0060:
-            r4.reuse()     // Catch:{ all -> 0x007f }
+            r4.reuse()     // Catch:{ all -> 0x007d }
         L_0x0063:
             r4 = 2
-            int r4 = r3.intValue(r4)     // Catch:{ all -> 0x007f }
+            int r4 = r3.intValue(r4)     // Catch:{ all -> 0x007d }
             int r1 = r10.calcFeaturedStickersHash(r0)     // Catch:{ all -> 0x0070 }
             r9 = r4
             r4 = r1
@@ -1740,52 +1740,50 @@ public class MediaDataController extends BaseController {
             r9 = r5
             r5 = r0
             r0 = r9
-            goto L_0x0089
+            goto L_0x0087
         L_0x0075:
             r4 = 0
         L_0x0076:
-            if (r3 == 0) goto L_0x007b
             r3.dispose()
-        L_0x007b:
             r5 = r4
             r4 = r1
             r1 = r0
-            goto L_0x0093
-        L_0x007f:
+            goto L_0x0091
+        L_0x007d:
             r4 = move-exception
             r5 = r0
             r0 = r4
-        L_0x0082:
+        L_0x0080:
             r4 = 0
-            goto L_0x0089
-        L_0x0084:
+            goto L_0x0087
+        L_0x0082:
             r3 = move-exception
             r5 = r0
             r4 = 0
             r0 = r3
             r3 = r5
-        L_0x0089:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0099 }
-            if (r3 == 0) goto L_0x0091
+        L_0x0087:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0097 }
+            if (r3 == 0) goto L_0x008f
             r3.dispose()
-        L_0x0091:
+        L_0x008f:
             r1 = r5
             r5 = 0
-        L_0x0093:
+        L_0x0091:
             r3 = 1
             r0 = r10
             r0.processLoadedFeaturedStickers(r1, r2, r3, r4, r5)
             return
-        L_0x0099:
+        L_0x0097:
             r0 = move-exception
-            if (r3 == 0) goto L_0x009f
+            if (r3 == 0) goto L_0x009d
             r3.dispose()
-        L_0x009f:
-            goto L_0x00a1
-        L_0x00a0:
+        L_0x009d:
+            goto L_0x009f
+        L_0x009e:
             throw r0
-        L_0x00a1:
-            goto L_0x00a0
+        L_0x009f:
+            goto L_0x009e
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$loadFeaturedStickers$21$MediaDataController():void");
     }
@@ -2450,7 +2448,7 @@ public class MediaDataController extends BaseController {
     /* JADX WARNING: type inference failed for: r0v5, types: [org.telegram.tgnet.TLRPC$TL_messages_stickerSet] */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x0044 A[DONT_GENERATE] */
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x0042 A[DONT_GENERATE] */
     /* JADX WARNING: Unknown variable types count: 1 */
     /* renamed from: lambda$loadStickersByEmojiOrName$40 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -2459,57 +2457,55 @@ public class MediaDataController extends BaseController {
             r11 = this;
             r0 = 0
             r1 = 0
-            org.telegram.messenger.MessagesStorage r2 = r11.getMessagesStorage()     // Catch:{ all -> 0x003d }
-            org.telegram.SQLite.SQLiteDatabase r2 = r2.getDatabase()     // Catch:{ all -> 0x003d }
+            org.telegram.messenger.MessagesStorage r2 = r11.getMessagesStorage()     // Catch:{ all -> 0x003b }
+            org.telegram.SQLite.SQLiteDatabase r2 = r2.getDatabase()     // Catch:{ all -> 0x003b }
             java.lang.String r3 = "SELECT data, date FROM stickers_dice WHERE emoji = ?"
             r4 = 1
-            java.lang.Object[] r5 = new java.lang.Object[r4]     // Catch:{ all -> 0x003d }
-            r5[r1] = r12     // Catch:{ all -> 0x003d }
-            org.telegram.SQLite.SQLiteCursor r2 = r2.queryFinalized(r3, r5)     // Catch:{ all -> 0x003d }
-            boolean r3 = r2.next()     // Catch:{ all -> 0x0038 }
+            java.lang.Object[] r5 = new java.lang.Object[r4]     // Catch:{ all -> 0x003b }
+            r5[r1] = r12     // Catch:{ all -> 0x003b }
+            org.telegram.SQLite.SQLiteCursor r2 = r2.queryFinalized(r3, r5)     // Catch:{ all -> 0x003b }
+            boolean r3 = r2.next()     // Catch:{ all -> 0x0036 }
             if (r3 == 0) goto L_0x0030
-            org.telegram.tgnet.NativeByteBuffer r3 = r2.byteBufferValue(r1)     // Catch:{ all -> 0x0038 }
+            org.telegram.tgnet.NativeByteBuffer r3 = r2.byteBufferValue(r1)     // Catch:{ all -> 0x0036 }
             if (r3 == 0) goto L_0x002c
-            int r5 = r3.readInt32(r1)     // Catch:{ all -> 0x0038 }
-            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = org.telegram.tgnet.TLRPC$TL_messages_stickerSet.TLdeserialize(r3, r5, r1)     // Catch:{ all -> 0x0038 }
-            r3.reuse()     // Catch:{ all -> 0x0038 }
+            int r5 = r3.readInt32(r1)     // Catch:{ all -> 0x0036 }
+            org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = org.telegram.tgnet.TLRPC$TL_messages_stickerSet.TLdeserialize(r3, r5, r1)     // Catch:{ all -> 0x0036 }
+            r3.reuse()     // Catch:{ all -> 0x0036 }
         L_0x002c:
-            int r1 = r2.intValue(r4)     // Catch:{ all -> 0x0038 }
+            int r1 = r2.intValue(r4)     // Catch:{ all -> 0x0036 }
         L_0x0030:
-            if (r2 == 0) goto L_0x0035
             r2.dispose()
-        L_0x0035:
             r7 = r0
             r9 = r1
-            goto L_0x0049
-        L_0x0038:
+            goto L_0x0047
+        L_0x0036:
             r3 = move-exception
             r10 = r2
             r2 = r0
             r0 = r10
-            goto L_0x003f
-        L_0x003d:
+            goto L_0x003d
+        L_0x003b:
             r3 = move-exception
             r2 = r0
-        L_0x003f:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ all -> 0x0051 }
-            if (r0 == 0) goto L_0x0047
+        L_0x003d:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)     // Catch:{ all -> 0x004f }
+            if (r0 == 0) goto L_0x0045
             r0.dispose()
-        L_0x0047:
+        L_0x0045:
             r7 = r2
             r9 = 0
-        L_0x0049:
+        L_0x0047:
             r8 = 1
             r4 = r11
             r5 = r12
             r6 = r13
             r4.processLoadedDiceStickers(r5, r6, r7, r8, r9)
             return
-        L_0x0051:
+        L_0x004f:
             r12 = move-exception
-            if (r0 == 0) goto L_0x0057
+            if (r0 == 0) goto L_0x0055
             r0.dispose()
-        L_0x0057:
+        L_0x0055:
             throw r12
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$loadStickersByEmojiOrName$40$MediaDataController(java.lang.String, boolean):void");
@@ -2818,7 +2814,7 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x007b A[DONT_GENERATE] */
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x0079 A[DONT_GENERATE] */
     /* renamed from: lambda$loadStickers$49 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$loadStickers$49$MediaDataController(int r13) {
@@ -2826,23 +2822,23 @@ public class MediaDataController extends BaseController {
             r12 = this;
             r0 = 0
             r1 = 0
-            org.telegram.messenger.MessagesStorage r2 = r12.getMessagesStorage()     // Catch:{ all -> 0x0071 }
-            org.telegram.SQLite.SQLiteDatabase r2 = r2.getDatabase()     // Catch:{ all -> 0x0071 }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x0071 }
-            r3.<init>()     // Catch:{ all -> 0x0071 }
+            org.telegram.messenger.MessagesStorage r2 = r12.getMessagesStorage()     // Catch:{ all -> 0x006f }
+            org.telegram.SQLite.SQLiteDatabase r2 = r2.getDatabase()     // Catch:{ all -> 0x006f }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x006f }
+            r3.<init>()     // Catch:{ all -> 0x006f }
             java.lang.String r4 = "SELECT data, date, hash FROM stickers_v2 WHERE id = "
-            r3.append(r4)     // Catch:{ all -> 0x0071 }
+            r3.append(r4)     // Catch:{ all -> 0x006f }
             int r4 = r13 + 1
-            r3.append(r4)     // Catch:{ all -> 0x0071 }
-            java.lang.String r3 = r3.toString()     // Catch:{ all -> 0x0071 }
-            java.lang.Object[] r4 = new java.lang.Object[r1]     // Catch:{ all -> 0x0071 }
-            org.telegram.SQLite.SQLiteCursor r2 = r2.queryFinalized(r3, r4)     // Catch:{ all -> 0x0071 }
-            boolean r3 = r2.next()     // Catch:{ all -> 0x006c }
+            r3.append(r4)     // Catch:{ all -> 0x006f }
+            java.lang.String r3 = r3.toString()     // Catch:{ all -> 0x006f }
+            java.lang.Object[] r4 = new java.lang.Object[r1]     // Catch:{ all -> 0x006f }
+            org.telegram.SQLite.SQLiteCursor r2 = r2.queryFinalized(r3, r4)     // Catch:{ all -> 0x006f }
+            boolean r3 = r2.next()     // Catch:{ all -> 0x006a }
             if (r3 == 0) goto L_0x0062
-            org.telegram.tgnet.NativeByteBuffer r3 = r2.byteBufferValue(r1)     // Catch:{ all -> 0x006c }
+            org.telegram.tgnet.NativeByteBuffer r3 = r2.byteBufferValue(r1)     // Catch:{ all -> 0x006a }
             if (r3 == 0) goto L_0x0050
-            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ all -> 0x006c }
-            r4.<init>()     // Catch:{ all -> 0x006c }
+            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ all -> 0x006a }
+            r4.<init>()     // Catch:{ all -> 0x006a }
             int r0 = r3.readInt32(r1)     // Catch:{ all -> 0x004e }
             r5 = 0
         L_0x0039:
@@ -2858,10 +2854,10 @@ public class MediaDataController extends BaseController {
             goto L_0x0050
         L_0x004e:
             r0 = move-exception
-            goto L_0x006f
+            goto L_0x006d
         L_0x0050:
             r3 = 1
-            int r3 = r2.intValue(r3)     // Catch:{ all -> 0x006c }
+            int r3 = r2.intValue(r3)     // Catch:{ all -> 0x006a }
             int r1 = calcStickersHash(r0)     // Catch:{ all -> 0x005d }
             r11 = r3
             r3 = r1
@@ -2872,54 +2868,52 @@ public class MediaDataController extends BaseController {
             r11 = r4
             r4 = r0
             r0 = r11
-            goto L_0x0076
+            goto L_0x0074
         L_0x0062:
             r3 = 0
         L_0x0063:
-            if (r2 == 0) goto L_0x0068
             r2.dispose()
-        L_0x0068:
             r7 = r0
             r9 = r1
             r10 = r3
-            goto L_0x0081
-        L_0x006c:
+            goto L_0x007f
+        L_0x006a:
             r3 = move-exception
             r4 = r0
             r0 = r3
-        L_0x006f:
+        L_0x006d:
             r3 = 0
-            goto L_0x0076
-        L_0x0071:
+            goto L_0x0074
+        L_0x006f:
             r2 = move-exception
             r4 = r0
             r3 = 0
             r0 = r2
             r2 = r4
-        L_0x0076:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0088 }
-            if (r2 == 0) goto L_0x007e
+        L_0x0074:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0086 }
+            if (r2 == 0) goto L_0x007c
             r2.dispose()
-        L_0x007e:
+        L_0x007c:
             r9 = r3
             r7 = r4
             r10 = 0
-        L_0x0081:
+        L_0x007f:
             r8 = 1
             r5 = r12
             r6 = r13
             r5.processLoadedStickers(r6, r7, r8, r9, r10)
             return
-        L_0x0088:
+        L_0x0086:
             r13 = move-exception
-            if (r2 == 0) goto L_0x008e
+            if (r2 == 0) goto L_0x008c
             r2.dispose()
-        L_0x008e:
-            goto L_0x0090
-        L_0x008f:
+        L_0x008c:
+            goto L_0x008e
+        L_0x008d:
             throw r13
-        L_0x0090:
-            goto L_0x008f
+        L_0x008e:
+            goto L_0x008d
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$loadStickers$49$MediaDataController(int):void");
     }
@@ -3344,7 +3338,7 @@ public class MediaDataController extends BaseController {
         ArrayList<TLRPC$Document> arrayList;
         TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_messages_stickerSet.set.thumbs, 90);
         if (closestPhotoSizeWithSize != null && (arrayList = tLRPC$TL_messages_stickerSet.documents) != null && !arrayList.isEmpty()) {
-            loadStickerSetThumbInternal(closestPhotoSizeWithSize, tLRPC$TL_messages_stickerSet, arrayList.get(0));
+            loadStickerSetThumbInternal(closestPhotoSizeWithSize, tLRPC$TL_messages_stickerSet, arrayList.get(0), tLRPC$TL_messages_stickerSet.set.thumb_version);
         }
     }
 
@@ -3359,12 +3353,12 @@ public class MediaDataController extends BaseController {
                     return;
                 }
             }
-            loadStickerSetThumbInternal(closestPhotoSizeWithSize, tLRPC$StickerSetCovered, tLRPC$Document);
+            loadStickerSetThumbInternal(closestPhotoSizeWithSize, tLRPC$StickerSetCovered, tLRPC$Document, tLRPC$StickerSetCovered.set.thumb_version);
         }
     }
 
-    private void loadStickerSetThumbInternal(TLRPC$PhotoSize tLRPC$PhotoSize, Object obj, TLRPC$Document tLRPC$Document) {
-        ImageLocation forSticker = ImageLocation.getForSticker(tLRPC$PhotoSize, tLRPC$Document);
+    private void loadStickerSetThumbInternal(TLRPC$PhotoSize tLRPC$PhotoSize, Object obj, TLRPC$Document tLRPC$Document, int i) {
+        ImageLocation forSticker = ImageLocation.getForSticker(tLRPC$PhotoSize, tLRPC$Document, i);
         if (forSticker != null) {
             getFileLoader().loadFile(forSticker, obj, forSticker.imageType == 1 ? "tgs" : "webp", 2, 1);
         }
@@ -3432,8 +3426,7 @@ public class MediaDataController extends BaseController {
             toggleStickerSetInternal(context, i, baseFragment, z, tLObject, tLRPC$StickerSet, i4, false);
         } else {
             StickerSetBulletinLayout stickerSetBulletinLayout = new StickerSetBulletinLayout(context2, tLObject2, i3);
-            Bulletin.UndoButton undoButton = new Bulletin.UndoButton(context2, false);
-            undoButton.setUndoAction(new Runnable(tLRPC$StickerSet, i4, i2, tLRPC$TL_messages_stickerSet) {
+            Bulletin.UndoButton delayedAction = new Bulletin.UndoButton(context2, false).setUndoAction(new Runnable(tLRPC$StickerSet, i4, i2, tLRPC$TL_messages_stickerSet) {
                 public final /* synthetic */ TLRPC$StickerSet f$1;
                 public final /* synthetic */ int f$2;
                 public final /* synthetic */ int f$3;
@@ -3449,8 +3442,7 @@ public class MediaDataController extends BaseController {
                 public final void run() {
                     MediaDataController.this.lambda$toggleStickerSet$59$MediaDataController(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
-            });
-            undoButton.setDelayedAction(new Runnable(context, i, baseFragment, z, tLObject, tLRPC$StickerSet, i4) {
+            }).setDelayedAction(new Runnable(context, i, baseFragment, z, tLObject, tLRPC$StickerSet, i4) {
                 public final /* synthetic */ Context f$1;
                 public final /* synthetic */ int f$2;
                 public final /* synthetic */ BaseFragment f$3;
@@ -3473,8 +3465,11 @@ public class MediaDataController extends BaseController {
                     MediaDataController.this.lambda$toggleStickerSet$60$MediaDataController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
                 }
             });
-            stickerSetBulletinLayout.setButton(undoButton);
-            this.removingStickerSetsUndos.put(tLRPC$StickerSet.id, new Runnable() {
+            stickerSetBulletinLayout.setButton(delayedAction);
+            LongSparseArray<Runnable> longSparseArray = this.removingStickerSetsUndos;
+            long j = tLRPC$StickerSet.id;
+            delayedAction.getClass();
+            longSparseArray.put(j, new Runnable() {
                 public final void run() {
                     Bulletin.UndoButton.this.undo();
                 }
@@ -4745,7 +4740,9 @@ public class MediaDataController extends BaseController {
         }
         ArrayList arrayList = new ArrayList();
         for (int i5 = 0; i5 < tLRPC$messages_Messages2.messages.size(); i5++) {
-            arrayList.add(new MessageObject(this.currentAccount, tLRPC$messages_Messages2.messages.get(i5), (SparseArray<TLRPC$User>) sparseArray, true, true));
+            MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$messages_Messages2.messages.get(i5), (SparseArray<TLRPC$User>) sparseArray, true, true);
+            messageObject.createStrippedThumb();
+            arrayList.add(messageObject);
         }
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$messages_Messages, i, j, arrayList, i2, i3, z) {
             public final /* synthetic */ TLRPC$messages_Messages f$1;
@@ -5611,14 +5608,14 @@ public class MediaDataController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x02cb A[Catch:{ all -> 0x02e0 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:101:0x02d1 A[Catch:{ all -> 0x02e0 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x01d1 A[SYNTHETIC, Splitter:B:67:0x01d1] */
-    /* JADX WARNING: Removed duplicated region for block: B:88:0x0278 A[Catch:{ all -> 0x02e0 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x028f A[Catch:{ all -> 0x02e0 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x02a5 A[Catch:{ all -> 0x02e0 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x02aa A[Catch:{ all -> 0x02e0 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x02b2 A[Catch:{ all -> 0x02e0 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x02d2 A[Catch:{ all -> 0x02e7 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:101:0x02d8 A[Catch:{ all -> 0x02e7 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x01d5 A[SYNTHETIC, Splitter:B:67:0x01d5] */
+    /* JADX WARNING: Removed duplicated region for block: B:88:0x027c A[Catch:{ all -> 0x02e7 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x0293 A[Catch:{ all -> 0x02e7 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x02ac A[Catch:{ all -> 0x02e7 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:96:0x02b1 A[Catch:{ all -> 0x02e7 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x02b9 A[Catch:{ all -> 0x02e7 }] */
     /* renamed from: lambda$buildShortcuts$86 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$buildShortcuts$86$MediaDataController(java.util.ArrayList r21) {
@@ -5626,356 +5623,356 @@ public class MediaDataController extends BaseController {
             r20 = this;
             r1 = r21
             java.lang.String r0 = "NewConversationShortcut"
-            java.lang.String r2 = org.telegram.messenger.SharedConfig.directShareHash     // Catch:{ all -> 0x02e0 }
+            java.lang.String r2 = org.telegram.messenger.SharedConfig.directShareHash     // Catch:{ all -> 0x02e7 }
             r3 = 0
             if (r2 != 0) goto L_0x002a
-            java.util.UUID r2 = java.util.UUID.randomUUID()     // Catch:{ all -> 0x02e0 }
-            java.lang.String r2 = r2.toString()     // Catch:{ all -> 0x02e0 }
-            org.telegram.messenger.SharedConfig.directShareHash = r2     // Catch:{ all -> 0x02e0 }
-            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
+            java.util.UUID r2 = java.util.UUID.randomUUID()     // Catch:{ all -> 0x02e7 }
+            java.lang.String r2 = r2.toString()     // Catch:{ all -> 0x02e7 }
+            org.telegram.messenger.SharedConfig.directShareHash = r2     // Catch:{ all -> 0x02e7 }
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
             java.lang.String r4 = "mainconfig"
-            android.content.SharedPreferences r2 = r2.getSharedPreferences(r4, r3)     // Catch:{ all -> 0x02e0 }
-            android.content.SharedPreferences$Editor r2 = r2.edit()     // Catch:{ all -> 0x02e0 }
+            android.content.SharedPreferences r2 = r2.getSharedPreferences(r4, r3)     // Catch:{ all -> 0x02e7 }
+            android.content.SharedPreferences$Editor r2 = r2.edit()     // Catch:{ all -> 0x02e7 }
             java.lang.String r4 = "directShareHash2"
-            java.lang.String r5 = org.telegram.messenger.SharedConfig.directShareHash     // Catch:{ all -> 0x02e0 }
-            android.content.SharedPreferences$Editor r2 = r2.putString(r4, r5)     // Catch:{ all -> 0x02e0 }
-            r2.commit()     // Catch:{ all -> 0x02e0 }
+            java.lang.String r5 = org.telegram.messenger.SharedConfig.directShareHash     // Catch:{ all -> 0x02e7 }
+            android.content.SharedPreferences$Editor r2 = r2.putString(r4, r5)     // Catch:{ all -> 0x02e7 }
+            r2.commit()     // Catch:{ all -> 0x02e7 }
         L_0x002a:
-            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            java.util.List r2 = androidx.core.content.pm.ShortcutManagerCompat.getDynamicShortcuts(r2)     // Catch:{ all -> 0x02e0 }
-            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ all -> 0x02e0 }
-            r4.<init>()     // Catch:{ all -> 0x02e0 }
-            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ all -> 0x02e0 }
-            r5.<init>()     // Catch:{ all -> 0x02e0 }
-            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ all -> 0x02e0 }
-            r6.<init>()     // Catch:{ all -> 0x02e0 }
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
+            java.util.List r2 = androidx.core.content.pm.ShortcutManagerCompat.getDynamicShortcuts(r2)     // Catch:{ all -> 0x02e7 }
+            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ all -> 0x02e7 }
+            r4.<init>()     // Catch:{ all -> 0x02e7 }
+            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ all -> 0x02e7 }
+            r5.<init>()     // Catch:{ all -> 0x02e7 }
+            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ all -> 0x02e7 }
+            r6.<init>()     // Catch:{ all -> 0x02e7 }
             java.lang.String r7 = "did3_"
             java.lang.String r8 = "compose"
             if (r2 == 0) goto L_0x00b5
-            boolean r9 = r2.isEmpty()     // Catch:{ all -> 0x02e0 }
+            boolean r9 = r2.isEmpty()     // Catch:{ all -> 0x02e7 }
             if (r9 != 0) goto L_0x00b5
-            r5.add(r8)     // Catch:{ all -> 0x02e0 }
+            r5.add(r8)     // Catch:{ all -> 0x02e7 }
             r9 = 0
         L_0x004f:
-            int r10 = r21.size()     // Catch:{ all -> 0x02e0 }
+            int r10 = r21.size()     // Catch:{ all -> 0x02e7 }
             if (r9 >= r10) goto L_0x0088
-            java.lang.Object r10 = r1.get(r9)     // Catch:{ all -> 0x02e0 }
-            org.telegram.tgnet.TLRPC$TL_topPeer r10 = (org.telegram.tgnet.TLRPC$TL_topPeer) r10     // Catch:{ all -> 0x02e0 }
-            org.telegram.tgnet.TLRPC$Peer r10 = r10.peer     // Catch:{ all -> 0x02e0 }
-            int r11 = r10.user_id     // Catch:{ all -> 0x02e0 }
+            java.lang.Object r10 = r1.get(r9)     // Catch:{ all -> 0x02e7 }
+            org.telegram.tgnet.TLRPC$TL_topPeer r10 = (org.telegram.tgnet.TLRPC$TL_topPeer) r10     // Catch:{ all -> 0x02e7 }
+            org.telegram.tgnet.TLRPC$Peer r10 = r10.peer     // Catch:{ all -> 0x02e7 }
+            int r11 = r10.user_id     // Catch:{ all -> 0x02e7 }
             if (r11 == 0) goto L_0x0063
-            long r10 = (long) r11     // Catch:{ all -> 0x02e0 }
+            long r10 = (long) r11     // Catch:{ all -> 0x02e7 }
             goto L_0x0073
         L_0x0063:
-            int r11 = r10.chat_id     // Catch:{ all -> 0x02e0 }
+            int r11 = r10.chat_id     // Catch:{ all -> 0x02e7 }
             int r11 = -r11
-            long r11 = (long) r11     // Catch:{ all -> 0x02e0 }
+            long r11 = (long) r11     // Catch:{ all -> 0x02e7 }
             r13 = 0
             int r15 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1))
             if (r15 != 0) goto L_0x0072
-            int r10 = r10.channel_id     // Catch:{ all -> 0x02e0 }
+            int r10 = r10.channel_id     // Catch:{ all -> 0x02e7 }
             int r10 = -r10
-            long r10 = (long) r10     // Catch:{ all -> 0x02e0 }
+            long r10 = (long) r10     // Catch:{ all -> 0x02e7 }
             goto L_0x0073
         L_0x0072:
             r10 = r11
         L_0x0073:
-            java.lang.StringBuilder r12 = new java.lang.StringBuilder     // Catch:{ all -> 0x02e0 }
-            r12.<init>()     // Catch:{ all -> 0x02e0 }
-            r12.append(r7)     // Catch:{ all -> 0x02e0 }
-            r12.append(r10)     // Catch:{ all -> 0x02e0 }
-            java.lang.String r10 = r12.toString()     // Catch:{ all -> 0x02e0 }
-            r5.add(r10)     // Catch:{ all -> 0x02e0 }
+            java.lang.StringBuilder r12 = new java.lang.StringBuilder     // Catch:{ all -> 0x02e7 }
+            r12.<init>()     // Catch:{ all -> 0x02e7 }
+            r12.append(r7)     // Catch:{ all -> 0x02e7 }
+            r12.append(r10)     // Catch:{ all -> 0x02e7 }
+            java.lang.String r10 = r12.toString()     // Catch:{ all -> 0x02e7 }
+            r5.add(r10)     // Catch:{ all -> 0x02e7 }
             int r9 = r9 + 1
             goto L_0x004f
         L_0x0088:
             r9 = 0
         L_0x0089:
-            int r10 = r2.size()     // Catch:{ all -> 0x02e0 }
+            int r10 = r2.size()     // Catch:{ all -> 0x02e7 }
             if (r9 >= r10) goto L_0x00a8
-            java.lang.Object r10 = r2.get(r9)     // Catch:{ all -> 0x02e0 }
-            androidx.core.content.pm.ShortcutInfoCompat r10 = (androidx.core.content.pm.ShortcutInfoCompat) r10     // Catch:{ all -> 0x02e0 }
-            java.lang.String r10 = r10.getId()     // Catch:{ all -> 0x02e0 }
-            boolean r11 = r5.remove(r10)     // Catch:{ all -> 0x02e0 }
+            java.lang.Object r10 = r2.get(r9)     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutInfoCompat r10 = (androidx.core.content.pm.ShortcutInfoCompat) r10     // Catch:{ all -> 0x02e7 }
+            java.lang.String r10 = r10.getId()     // Catch:{ all -> 0x02e7 }
+            boolean r11 = r5.remove(r10)     // Catch:{ all -> 0x02e7 }
             if (r11 != 0) goto L_0x00a2
-            r6.add(r10)     // Catch:{ all -> 0x02e0 }
+            r6.add(r10)     // Catch:{ all -> 0x02e7 }
         L_0x00a2:
-            r4.add(r10)     // Catch:{ all -> 0x02e0 }
+            r4.add(r10)     // Catch:{ all -> 0x02e7 }
             int r9 = r9 + 1
             goto L_0x0089
         L_0x00a8:
-            boolean r2 = r5.isEmpty()     // Catch:{ all -> 0x02e0 }
+            boolean r2 = r5.isEmpty()     // Catch:{ all -> 0x02e7 }
             if (r2 == 0) goto L_0x00b5
-            boolean r2 = r6.isEmpty()     // Catch:{ all -> 0x02e0 }
+            boolean r2 = r6.isEmpty()     // Catch:{ all -> 0x02e7 }
             if (r2 == 0) goto L_0x00b5
             return
         L_0x00b5:
-            android.content.Intent r2 = new android.content.Intent     // Catch:{ all -> 0x02e0 }
-            android.content.Context r5 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
+            android.content.Intent r2 = new android.content.Intent     // Catch:{ all -> 0x02e7 }
+            android.content.Context r5 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
             java.lang.Class<org.telegram.ui.LaunchActivity> r9 = org.telegram.ui.LaunchActivity.class
-            r2.<init>(r5, r9)     // Catch:{ all -> 0x02e0 }
+            r2.<init>(r5, r9)     // Catch:{ all -> 0x02e7 }
             java.lang.String r5 = "new_dialog"
-            r2.setAction(r5)     // Catch:{ all -> 0x02e0 }
-            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ all -> 0x02e0 }
-            r5.<init>()     // Catch:{ all -> 0x02e0 }
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02e0 }
-            android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02e0 }
-            r10 = 2131626230(0x7f0e08f6, float:1.887969E38)
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e0 }
-            r9.setShortLabel(r11)     // Catch:{ all -> 0x02e0 }
-            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e0 }
-            r9.setLongLabel(r0)     // Catch:{ all -> 0x02e0 }
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            r10 = 2131166019(0x7var_, float:1.7946272E38)
-            androidx.core.graphics.drawable.IconCompat r0 = androidx.core.graphics.drawable.IconCompat.createWithResource(r0, r10)     // Catch:{ all -> 0x02e0 }
-            r9.setIcon(r0)     // Catch:{ all -> 0x02e0 }
-            r9.setIntent(r2)     // Catch:{ all -> 0x02e0 }
-            androidx.core.content.pm.ShortcutInfoCompat r0 = r9.build()     // Catch:{ all -> 0x02e0 }
-            r5.add(r0)     // Catch:{ all -> 0x02e0 }
-            boolean r0 = r4.contains(r8)     // Catch:{ all -> 0x02e0 }
-            if (r0 == 0) goto L_0x0102
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            androidx.core.content.pm.ShortcutManagerCompat.updateShortcuts(r0, r5)     // Catch:{ all -> 0x02e0 }
-            goto L_0x0107
-        L_0x0102:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            androidx.core.content.pm.ShortcutManagerCompat.addDynamicShortcuts(r0, r5)     // Catch:{ all -> 0x02e0 }
-        L_0x0107:
-            r5.clear()     // Catch:{ all -> 0x02e0 }
-            boolean r0 = r6.isEmpty()     // Catch:{ all -> 0x02e0 }
-            if (r0 != 0) goto L_0x0115
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            androidx.core.content.pm.ShortcutManagerCompat.removeDynamicShortcuts(r0, r6)     // Catch:{ all -> 0x02e0 }
-        L_0x0115:
-            java.util.HashSet r2 = new java.util.HashSet     // Catch:{ all -> 0x02e0 }
+            r2.setAction(r5)     // Catch:{ all -> 0x02e7 }
+            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ all -> 0x02e7 }
+            r5.<init>()     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02e7 }
+            android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
+            r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02e7 }
+            r10 = 2131626270(0x7f0e091e, float:1.8879771E38)
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = r9.setShortLabel(r11)     // Catch:{ all -> 0x02e7 }
+            java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r9.setLongLabel(r0)     // Catch:{ all -> 0x02e7 }
+            android.content.Context r9 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
+            r10 = 2131166025(0x7var_, float:1.7946284E38)
+            androidx.core.graphics.drawable.IconCompat r9 = androidx.core.graphics.drawable.IconCompat.createWithResource(r9, r10)     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r0.setIcon(r9)     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r0.setIntent(r2)     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutInfoCompat r0 = r0.build()     // Catch:{ all -> 0x02e7 }
+            r5.add(r0)     // Catch:{ all -> 0x02e7 }
+            boolean r0 = r4.contains(r8)     // Catch:{ all -> 0x02e7 }
+            if (r0 == 0) goto L_0x0106
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutManagerCompat.updateShortcuts(r0, r5)     // Catch:{ all -> 0x02e7 }
+            goto L_0x010b
+        L_0x0106:
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutManagerCompat.addDynamicShortcuts(r0, r5)     // Catch:{ all -> 0x02e7 }
+        L_0x010b:
+            r5.clear()     // Catch:{ all -> 0x02e7 }
+            boolean r0 = r6.isEmpty()     // Catch:{ all -> 0x02e7 }
+            if (r0 != 0) goto L_0x0119
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutManagerCompat.removeDynamicShortcuts(r0, r6)     // Catch:{ all -> 0x02e7 }
+        L_0x0119:
+            java.util.HashSet r2 = new java.util.HashSet     // Catch:{ all -> 0x02e7 }
             r6 = 1
-            r2.<init>(r6)     // Catch:{ all -> 0x02e0 }
-            java.lang.String r0 = SHORTCUT_CATEGORY     // Catch:{ all -> 0x02e0 }
-            r2.add(r0)     // Catch:{ all -> 0x02e0 }
-        L_0x0120:
-            int r0 = r21.size()     // Catch:{ all -> 0x02e0 }
-            if (r3 >= r0) goto L_0x02e0
-            android.content.Intent r8 = new android.content.Intent     // Catch:{ all -> 0x02e0 }
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
+            r2.<init>(r6)     // Catch:{ all -> 0x02e7 }
+            java.lang.String r0 = SHORTCUT_CATEGORY     // Catch:{ all -> 0x02e7 }
+            r2.add(r0)     // Catch:{ all -> 0x02e7 }
+        L_0x0124:
+            int r0 = r21.size()     // Catch:{ all -> 0x02e7 }
+            if (r3 >= r0) goto L_0x02e7
+            android.content.Intent r8 = new android.content.Intent     // Catch:{ all -> 0x02e7 }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
             java.lang.Class<org.telegram.messenger.OpenChatReceiver> r9 = org.telegram.messenger.OpenChatReceiver.class
-            r8.<init>(r0, r9)     // Catch:{ all -> 0x02e0 }
-            java.lang.Object r0 = r1.get(r3)     // Catch:{ all -> 0x02e0 }
-            org.telegram.tgnet.TLRPC$TL_topPeer r0 = (org.telegram.tgnet.TLRPC$TL_topPeer) r0     // Catch:{ all -> 0x02e0 }
-            org.telegram.tgnet.TLRPC$Peer r9 = r0.peer     // Catch:{ all -> 0x02e0 }
-            int r10 = r9.user_id     // Catch:{ all -> 0x02e0 }
-            if (r10 == 0) goto L_0x0158
+            r8.<init>(r0, r9)     // Catch:{ all -> 0x02e7 }
+            java.lang.Object r0 = r1.get(r3)     // Catch:{ all -> 0x02e7 }
+            org.telegram.tgnet.TLRPC$TL_topPeer r0 = (org.telegram.tgnet.TLRPC$TL_topPeer) r0     // Catch:{ all -> 0x02e7 }
+            org.telegram.tgnet.TLRPC$Peer r9 = r0.peer     // Catch:{ all -> 0x02e7 }
+            int r10 = r9.user_id     // Catch:{ all -> 0x02e7 }
+            if (r10 == 0) goto L_0x015c
             java.lang.String r9 = "userId"
-            r8.putExtra(r9, r10)     // Catch:{ all -> 0x02e0 }
-            org.telegram.messenger.MessagesController r9 = r20.getMessagesController()     // Catch:{ all -> 0x02e0 }
-            org.telegram.tgnet.TLRPC$Peer r10 = r0.peer     // Catch:{ all -> 0x02e0 }
-            int r10 = r10.user_id     // Catch:{ all -> 0x02e0 }
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ all -> 0x02e0 }
-            org.telegram.tgnet.TLRPC$User r9 = r9.getUser(r10)     // Catch:{ all -> 0x02e0 }
-            org.telegram.tgnet.TLRPC$Peer r0 = r0.peer     // Catch:{ all -> 0x02e0 }
-            int r0 = r0.user_id     // Catch:{ all -> 0x02e0 }
-            long r12 = (long) r0     // Catch:{ all -> 0x02e0 }
+            r8.putExtra(r9, r10)     // Catch:{ all -> 0x02e7 }
+            org.telegram.messenger.MessagesController r9 = r20.getMessagesController()     // Catch:{ all -> 0x02e7 }
+            org.telegram.tgnet.TLRPC$Peer r10 = r0.peer     // Catch:{ all -> 0x02e7 }
+            int r10 = r10.user_id     // Catch:{ all -> 0x02e7 }
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r10)     // Catch:{ all -> 0x02e7 }
+            org.telegram.tgnet.TLRPC$User r9 = r9.getUser(r10)     // Catch:{ all -> 0x02e7 }
+            org.telegram.tgnet.TLRPC$Peer r0 = r0.peer     // Catch:{ all -> 0x02e7 }
+            int r0 = r0.user_id     // Catch:{ all -> 0x02e7 }
+            long r12 = (long) r0     // Catch:{ all -> 0x02e7 }
             r0 = 0
-            goto L_0x0173
-        L_0x0158:
-            int r0 = r9.chat_id     // Catch:{ all -> 0x02e0 }
-            if (r0 != 0) goto L_0x015e
-            int r0 = r9.channel_id     // Catch:{ all -> 0x02e0 }
-        L_0x015e:
-            org.telegram.messenger.MessagesController r9 = r20.getMessagesController()     // Catch:{ all -> 0x02e0 }
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r0)     // Catch:{ all -> 0x02e0 }
-            org.telegram.tgnet.TLRPC$Chat r9 = r9.getChat(r10)     // Catch:{ all -> 0x02e0 }
+            goto L_0x0177
+        L_0x015c:
+            int r0 = r9.chat_id     // Catch:{ all -> 0x02e7 }
+            if (r0 != 0) goto L_0x0162
+            int r0 = r9.channel_id     // Catch:{ all -> 0x02e7 }
+        L_0x0162:
+            org.telegram.messenger.MessagesController r9 = r20.getMessagesController()     // Catch:{ all -> 0x02e7 }
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r0)     // Catch:{ all -> 0x02e7 }
+            org.telegram.tgnet.TLRPC$Chat r9 = r9.getChat(r10)     // Catch:{ all -> 0x02e7 }
             java.lang.String r10 = "chatId"
-            r8.putExtra(r10, r0)     // Catch:{ all -> 0x02e0 }
+            r8.putExtra(r10, r0)     // Catch:{ all -> 0x02e7 }
             int r0 = -r0
-            long r12 = (long) r0     // Catch:{ all -> 0x02e0 }
+            long r12 = (long) r0     // Catch:{ all -> 0x02e7 }
             r0 = r9
             r9 = 0
-        L_0x0173:
-            if (r9 == 0) goto L_0x017b
-            boolean r10 = org.telegram.messenger.UserObject.isDeleted(r9)     // Catch:{ all -> 0x02e0 }
-            if (r10 == 0) goto L_0x017f
-        L_0x017b:
-            if (r0 != 0) goto L_0x017f
-            goto L_0x02d9
+        L_0x0177:
+            if (r9 == 0) goto L_0x017f
+            boolean r10 = org.telegram.messenger.UserObject.isDeleted(r9)     // Catch:{ all -> 0x02e7 }
+            if (r10 == 0) goto L_0x0183
         L_0x017f:
-            if (r9 == 0) goto L_0x0197
-            java.lang.String r0 = r9.first_name     // Catch:{ all -> 0x02e0 }
-            java.lang.String r10 = r9.last_name     // Catch:{ all -> 0x02e0 }
-            java.lang.String r0 = org.telegram.messenger.ContactsController.formatName(r0, r10)     // Catch:{ all -> 0x02e0 }
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r9 = r9.photo     // Catch:{ all -> 0x02e0 }
-            if (r9 == 0) goto L_0x0195
-            org.telegram.tgnet.TLRPC$FileLocation r9 = r9.photo_small     // Catch:{ all -> 0x02e0 }
+            if (r0 != 0) goto L_0x0183
+            goto L_0x02e0
+        L_0x0183:
+            if (r9 == 0) goto L_0x019b
+            java.lang.String r0 = r9.first_name     // Catch:{ all -> 0x02e7 }
+            java.lang.String r10 = r9.last_name     // Catch:{ all -> 0x02e7 }
+            java.lang.String r0 = org.telegram.messenger.ContactsController.formatName(r0, r10)     // Catch:{ all -> 0x02e7 }
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r9 = r9.photo     // Catch:{ all -> 0x02e7 }
+            if (r9 == 0) goto L_0x0199
+            org.telegram.tgnet.TLRPC$FileLocation r9 = r9.photo_small     // Catch:{ all -> 0x02e7 }
             r19 = r9
             r9 = r0
             r0 = r19
-            goto L_0x01a1
-        L_0x0195:
+            goto L_0x01a5
+        L_0x0199:
             r9 = r0
-            goto L_0x01a0
-        L_0x0197:
-            java.lang.String r9 = r0.title     // Catch:{ all -> 0x02e0 }
-            org.telegram.tgnet.TLRPC$ChatPhoto r0 = r0.photo     // Catch:{ all -> 0x02e0 }
-            if (r0 == 0) goto L_0x01a0
-            org.telegram.tgnet.TLRPC$FileLocation r0 = r0.photo_small     // Catch:{ all -> 0x02e0 }
-            goto L_0x01a1
-        L_0x01a0:
+            goto L_0x01a4
+        L_0x019b:
+            java.lang.String r9 = r0.title     // Catch:{ all -> 0x02e7 }
+            org.telegram.tgnet.TLRPC$ChatPhoto r0 = r0.photo     // Catch:{ all -> 0x02e7 }
+            if (r0 == 0) goto L_0x01a4
+            org.telegram.tgnet.TLRPC$FileLocation r0 = r0.photo_small     // Catch:{ all -> 0x02e7 }
+            goto L_0x01a5
+        L_0x01a4:
             r0 = 0
-        L_0x01a1:
+        L_0x01a5:
             java.lang.String r10 = "currentAccount"
             r14 = r20
-            int r15 = r14.currentAccount     // Catch:{ all -> 0x02e0 }
-            r8.putExtra(r10, r15)     // Catch:{ all -> 0x02e0 }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ all -> 0x02e0 }
-            r10.<init>()     // Catch:{ all -> 0x02e0 }
+            int r15 = r14.currentAccount     // Catch:{ all -> 0x02e7 }
+            r8.putExtra(r10, r15)     // Catch:{ all -> 0x02e7 }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ all -> 0x02e7 }
+            r10.<init>()     // Catch:{ all -> 0x02e7 }
             java.lang.String r15 = "com.tmessages.openchat"
-            r10.append(r15)     // Catch:{ all -> 0x02e0 }
-            r10.append(r12)     // Catch:{ all -> 0x02e0 }
-            java.lang.String r10 = r10.toString()     // Catch:{ all -> 0x02e0 }
-            r8.setAction(r10)     // Catch:{ all -> 0x02e0 }
+            r10.append(r15)     // Catch:{ all -> 0x02e7 }
+            r10.append(r12)     // Catch:{ all -> 0x02e7 }
+            java.lang.String r10 = r10.toString()     // Catch:{ all -> 0x02e7 }
+            r8.setAction(r10)     // Catch:{ all -> 0x02e7 }
             java.lang.String r10 = "dialogId"
-            r8.putExtra(r10, r12)     // Catch:{ all -> 0x02e0 }
+            r8.putExtra(r10, r12)     // Catch:{ all -> 0x02e7 }
             java.lang.String r10 = "hash"
-            java.lang.String r15 = org.telegram.messenger.SharedConfig.directShareHash     // Catch:{ all -> 0x02e0 }
-            r8.putExtra(r10, r15)     // Catch:{ all -> 0x02e0 }
+            java.lang.String r15 = org.telegram.messenger.SharedConfig.directShareHash     // Catch:{ all -> 0x02e7 }
+            r8.putExtra(r10, r15)     // Catch:{ all -> 0x02e7 }
             r10 = 67108864(0x4000000, float:1.5046328E-36)
-            r8.addFlags(r10)     // Catch:{ all -> 0x02e0 }
-            if (r0 == 0) goto L_0x0278
-            java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r6)     // Catch:{ all -> 0x0271 }
-            java.lang.String r0 = r0.toString()     // Catch:{ all -> 0x0271 }
-            android.graphics.Bitmap r10 = android.graphics.BitmapFactory.decodeFile(r0)     // Catch:{ all -> 0x0271 }
-            if (r10 == 0) goto L_0x026f
+            r8.addFlags(r10)     // Catch:{ all -> 0x02e7 }
+            if (r0 == 0) goto L_0x027c
+            java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r6)     // Catch:{ all -> 0x0275 }
+            java.lang.String r0 = r0.toString()     // Catch:{ all -> 0x0275 }
+            android.graphics.Bitmap r10 = android.graphics.BitmapFactory.decodeFile(r0)     // Catch:{ all -> 0x0275 }
+            if (r10 == 0) goto L_0x0273
             r0 = 1111490560(0x42400000, float:48.0)
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)     // Catch:{ all -> 0x026c }
-            android.graphics.Bitmap$Config r15 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x026c }
-            android.graphics.Bitmap r15 = android.graphics.Bitmap.createBitmap(r0, r0, r15)     // Catch:{ all -> 0x026c }
-            android.graphics.Canvas r11 = new android.graphics.Canvas     // Catch:{ all -> 0x026c }
-            r11.<init>(r15)     // Catch:{ all -> 0x026c }
-            android.graphics.Paint r16 = roundPaint     // Catch:{ all -> 0x026c }
+            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)     // Catch:{ all -> 0x0270 }
+            android.graphics.Bitmap$Config r15 = android.graphics.Bitmap.Config.ARGB_8888     // Catch:{ all -> 0x0270 }
+            android.graphics.Bitmap r15 = android.graphics.Bitmap.createBitmap(r0, r0, r15)     // Catch:{ all -> 0x0270 }
+            android.graphics.Canvas r11 = new android.graphics.Canvas     // Catch:{ all -> 0x0270 }
+            r11.<init>(r15)     // Catch:{ all -> 0x0270 }
+            android.graphics.Paint r16 = roundPaint     // Catch:{ all -> 0x0270 }
             r17 = 1073741824(0x40000000, float:2.0)
-            if (r16 != 0) goto L_0x023a
-            android.graphics.Paint r6 = new android.graphics.Paint     // Catch:{ all -> 0x026c }
+            if (r16 != 0) goto L_0x023e
+            android.graphics.Paint r6 = new android.graphics.Paint     // Catch:{ all -> 0x0270 }
             r1 = 3
-            r6.<init>(r1)     // Catch:{ all -> 0x026c }
-            roundPaint = r6     // Catch:{ all -> 0x026c }
-            android.graphics.RectF r1 = new android.graphics.RectF     // Catch:{ all -> 0x026c }
-            r1.<init>()     // Catch:{ all -> 0x026c }
-            bitmapRect = r1     // Catch:{ all -> 0x026c }
-            android.graphics.Paint r1 = new android.graphics.Paint     // Catch:{ all -> 0x026c }
+            r6.<init>(r1)     // Catch:{ all -> 0x0270 }
+            roundPaint = r6     // Catch:{ all -> 0x0270 }
+            android.graphics.RectF r1 = new android.graphics.RectF     // Catch:{ all -> 0x0270 }
+            r1.<init>()     // Catch:{ all -> 0x0270 }
+            bitmapRect = r1     // Catch:{ all -> 0x0270 }
+            android.graphics.Paint r1 = new android.graphics.Paint     // Catch:{ all -> 0x0270 }
             r6 = 1
-            r1.<init>(r6)     // Catch:{ all -> 0x026c }
-            erasePaint = r1     // Catch:{ all -> 0x026c }
-            android.graphics.PorterDuffXfermode r6 = new android.graphics.PorterDuffXfermode     // Catch:{ all -> 0x026c }
-            android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.CLEAR     // Catch:{ all -> 0x026c }
-            r6.<init>(r14)     // Catch:{ all -> 0x026c }
-            r1.setXfermode(r6)     // Catch:{ all -> 0x026c }
-            android.graphics.Path r1 = new android.graphics.Path     // Catch:{ all -> 0x026c }
-            r1.<init>()     // Catch:{ all -> 0x026c }
-            roundPath = r1     // Catch:{ all -> 0x026c }
+            r1.<init>(r6)     // Catch:{ all -> 0x0270 }
+            erasePaint = r1     // Catch:{ all -> 0x0270 }
+            android.graphics.PorterDuffXfermode r6 = new android.graphics.PorterDuffXfermode     // Catch:{ all -> 0x0270 }
+            android.graphics.PorterDuff$Mode r14 = android.graphics.PorterDuff.Mode.CLEAR     // Catch:{ all -> 0x0270 }
+            r6.<init>(r14)     // Catch:{ all -> 0x0270 }
+            r1.setXfermode(r6)     // Catch:{ all -> 0x0270 }
+            android.graphics.Path r1 = new android.graphics.Path     // Catch:{ all -> 0x0270 }
+            r1.<init>()     // Catch:{ all -> 0x0270 }
+            roundPath = r1     // Catch:{ all -> 0x0270 }
             int r6 = r0 / 2
-            float r6 = (float) r6     // Catch:{ all -> 0x026c }
+            float r6 = (float) r6     // Catch:{ all -> 0x0270 }
             int r14 = r0 / 2
-            float r14 = (float) r14     // Catch:{ all -> 0x026c }
+            float r14 = (float) r14     // Catch:{ all -> 0x0270 }
             int r0 = r0 / 2
-            int r18 = org.telegram.messenger.AndroidUtilities.dp(r17)     // Catch:{ all -> 0x026c }
+            int r18 = org.telegram.messenger.AndroidUtilities.dp(r17)     // Catch:{ all -> 0x0270 }
             int r0 = r0 - r18
-            float r0 = (float) r0     // Catch:{ all -> 0x026c }
+            float r0 = (float) r0     // Catch:{ all -> 0x0270 }
             r18 = r15
-            android.graphics.Path$Direction r15 = android.graphics.Path.Direction.CW     // Catch:{ all -> 0x026c }
-            r1.addCircle(r6, r14, r0, r15)     // Catch:{ all -> 0x026c }
-            android.graphics.Path r0 = roundPath     // Catch:{ all -> 0x026c }
-            r0.toggleInverseFillType()     // Catch:{ all -> 0x026c }
-            goto L_0x023c
-        L_0x023a:
+            android.graphics.Path$Direction r15 = android.graphics.Path.Direction.CW     // Catch:{ all -> 0x0270 }
+            r1.addCircle(r6, r14, r0, r15)     // Catch:{ all -> 0x0270 }
+            android.graphics.Path r0 = roundPath     // Catch:{ all -> 0x0270 }
+            r0.toggleInverseFillType()     // Catch:{ all -> 0x0270 }
+            goto L_0x0240
+        L_0x023e:
             r18 = r15
-        L_0x023c:
-            android.graphics.RectF r0 = bitmapRect     // Catch:{ all -> 0x026c }
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)     // Catch:{ all -> 0x026c }
-            float r1 = (float) r1     // Catch:{ all -> 0x026c }
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r17)     // Catch:{ all -> 0x026c }
-            float r6 = (float) r6     // Catch:{ all -> 0x026c }
+        L_0x0240:
+            android.graphics.RectF r0 = bitmapRect     // Catch:{ all -> 0x0270 }
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)     // Catch:{ all -> 0x0270 }
+            float r1 = (float) r1     // Catch:{ all -> 0x0270 }
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r17)     // Catch:{ all -> 0x0270 }
+            float r6 = (float) r6     // Catch:{ all -> 0x0270 }
             r14 = 1110966272(0x42380000, float:46.0)
-            int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)     // Catch:{ all -> 0x026c }
-            float r15 = (float) r15     // Catch:{ all -> 0x026c }
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)     // Catch:{ all -> 0x026c }
-            float r14 = (float) r14     // Catch:{ all -> 0x026c }
-            r0.set(r1, r6, r15, r14)     // Catch:{ all -> 0x026c }
-            android.graphics.RectF r0 = bitmapRect     // Catch:{ all -> 0x026c }
-            android.graphics.Paint r1 = roundPaint     // Catch:{ all -> 0x026c }
+            int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)     // Catch:{ all -> 0x0270 }
+            float r15 = (float) r15     // Catch:{ all -> 0x0270 }
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)     // Catch:{ all -> 0x0270 }
+            float r14 = (float) r14     // Catch:{ all -> 0x0270 }
+            r0.set(r1, r6, r15, r14)     // Catch:{ all -> 0x0270 }
+            android.graphics.RectF r0 = bitmapRect     // Catch:{ all -> 0x0270 }
+            android.graphics.Paint r1 = roundPaint     // Catch:{ all -> 0x0270 }
             r6 = 0
-            r11.drawBitmap(r10, r6, r0, r1)     // Catch:{ all -> 0x026c }
-            android.graphics.Path r0 = roundPath     // Catch:{ all -> 0x026c }
-            android.graphics.Paint r1 = erasePaint     // Catch:{ all -> 0x026c }
-            r11.drawPath(r0, r1)     // Catch:{ all -> 0x026c }
-            r11.setBitmap(r6)     // Catch:{ Exception -> 0x0269 }
-        L_0x0269:
+            r11.drawBitmap(r10, r6, r0, r1)     // Catch:{ all -> 0x0270 }
+            android.graphics.Path r0 = roundPath     // Catch:{ all -> 0x0270 }
+            android.graphics.Paint r1 = erasePaint     // Catch:{ all -> 0x0270 }
+            r11.drawPath(r0, r1)     // Catch:{ all -> 0x0270 }
+            r11.setBitmap(r6)     // Catch:{ Exception -> 0x026d }
+        L_0x026d:
             r11 = r18
-            goto L_0x027a
-        L_0x026c:
+            goto L_0x027e
+        L_0x0270:
             r0 = move-exception
             r11 = r10
-            goto L_0x0274
-        L_0x026f:
+            goto L_0x0278
+        L_0x0273:
             r11 = r10
-            goto L_0x027a
-        L_0x0271:
+            goto L_0x027e
+        L_0x0275:
             r0 = move-exception
             r6 = 0
             r11 = r6
-        L_0x0274:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x02e0 }
-            goto L_0x027a
         L_0x0278:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x02e7 }
+            goto L_0x027e
+        L_0x027c:
             r6 = 0
             r11 = r6
-        L_0x027a:
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ all -> 0x02e0 }
-            r0.<init>()     // Catch:{ all -> 0x02e0 }
-            r0.append(r7)     // Catch:{ all -> 0x02e0 }
-            r0.append(r12)     // Catch:{ all -> 0x02e0 }
-            java.lang.String r0 = r0.toString()     // Catch:{ all -> 0x02e0 }
-            boolean r1 = android.text.TextUtils.isEmpty(r9)     // Catch:{ all -> 0x02e0 }
-            if (r1 == 0) goto L_0x0291
+        L_0x027e:
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ all -> 0x02e7 }
+            r0.<init>()     // Catch:{ all -> 0x02e7 }
+            r0.append(r7)     // Catch:{ all -> 0x02e7 }
+            r0.append(r12)     // Catch:{ all -> 0x02e7 }
+            java.lang.String r0 = r0.toString()     // Catch:{ all -> 0x02e7 }
+            boolean r1 = android.text.TextUtils.isEmpty(r9)     // Catch:{ all -> 0x02e7 }
+            if (r1 == 0) goto L_0x0295
             java.lang.String r9 = " "
-        L_0x0291:
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r1 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02e0 }
-            android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            r1.<init>((android.content.Context) r6, (java.lang.String) r0)     // Catch:{ all -> 0x02e0 }
-            r1.setShortLabel(r9)     // Catch:{ all -> 0x02e0 }
-            r1.setLongLabel(r9)     // Catch:{ all -> 0x02e0 }
-            r1.setIntent(r8)     // Catch:{ all -> 0x02e0 }
-            boolean r6 = org.telegram.messenger.SharedConfig.directShare     // Catch:{ all -> 0x02e0 }
-            if (r6 == 0) goto L_0x02a8
-            r1.setCategories(r2)     // Catch:{ all -> 0x02e0 }
-        L_0x02a8:
-            if (r11 == 0) goto L_0x02b2
-            androidx.core.graphics.drawable.IconCompat r6 = androidx.core.graphics.drawable.IconCompat.createWithBitmap(r11)     // Catch:{ all -> 0x02e0 }
-            r1.setIcon(r6)     // Catch:{ all -> 0x02e0 }
-            goto L_0x02be
-        L_0x02b2:
-            android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            r8 = 2131166020(0x7var_, float:1.7946274E38)
-            androidx.core.graphics.drawable.IconCompat r6 = androidx.core.graphics.drawable.IconCompat.createWithResource(r6, r8)     // Catch:{ all -> 0x02e0 }
-            r1.setIcon(r6)     // Catch:{ all -> 0x02e0 }
-        L_0x02be:
-            androidx.core.content.pm.ShortcutInfoCompat r1 = r1.build()     // Catch:{ all -> 0x02e0 }
-            r5.add(r1)     // Catch:{ all -> 0x02e0 }
-            boolean r0 = r4.contains(r0)     // Catch:{ all -> 0x02e0 }
-            if (r0 == 0) goto L_0x02d1
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            androidx.core.content.pm.ShortcutManagerCompat.updateShortcuts(r0, r5)     // Catch:{ all -> 0x02e0 }
-            goto L_0x02d6
-        L_0x02d1:
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            androidx.core.content.pm.ShortcutManagerCompat.addDynamicShortcuts(r0, r5)     // Catch:{ all -> 0x02e0 }
-        L_0x02d6:
-            r5.clear()     // Catch:{ all -> 0x02e0 }
-        L_0x02d9:
+        L_0x0295:
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r1 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02e7 }
+            android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
+            r1.<init>((android.content.Context) r6, (java.lang.String) r0)     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r1 = r1.setShortLabel(r9)     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r1 = r1.setLongLabel(r9)     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r1 = r1.setIntent(r8)     // Catch:{ all -> 0x02e7 }
+            boolean r6 = org.telegram.messenger.SharedConfig.directShare     // Catch:{ all -> 0x02e7 }
+            if (r6 == 0) goto L_0x02af
+            r1.setCategories(r2)     // Catch:{ all -> 0x02e7 }
+        L_0x02af:
+            if (r11 == 0) goto L_0x02b9
+            androidx.core.graphics.drawable.IconCompat r6 = androidx.core.graphics.drawable.IconCompat.createWithBitmap(r11)     // Catch:{ all -> 0x02e7 }
+            r1.setIcon(r6)     // Catch:{ all -> 0x02e7 }
+            goto L_0x02c5
+        L_0x02b9:
+            android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
+            r8 = 2131166026(0x7var_a, float:1.7946286E38)
+            androidx.core.graphics.drawable.IconCompat r6 = androidx.core.graphics.drawable.IconCompat.createWithResource(r6, r8)     // Catch:{ all -> 0x02e7 }
+            r1.setIcon(r6)     // Catch:{ all -> 0x02e7 }
+        L_0x02c5:
+            androidx.core.content.pm.ShortcutInfoCompat r1 = r1.build()     // Catch:{ all -> 0x02e7 }
+            r5.add(r1)     // Catch:{ all -> 0x02e7 }
+            boolean r0 = r4.contains(r0)     // Catch:{ all -> 0x02e7 }
+            if (r0 == 0) goto L_0x02d8
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutManagerCompat.updateShortcuts(r0, r5)     // Catch:{ all -> 0x02e7 }
+            goto L_0x02dd
+        L_0x02d8:
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e7 }
+            androidx.core.content.pm.ShortcutManagerCompat.addDynamicShortcuts(r0, r5)     // Catch:{ all -> 0x02e7 }
+        L_0x02dd:
+            r5.clear()     // Catch:{ all -> 0x02e7 }
+        L_0x02e0:
             int r3 = r3 + 1
             r1 = r21
             r6 = 1
-            goto L_0x0120
-        L_0x02e0:
+            goto L_0x0124
+        L_0x02e7:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$buildShortcuts$86$MediaDataController(java.util.ArrayList):void");
@@ -6522,53 +6519,53 @@ public class MediaDataController extends BaseController {
         return intent;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:18:0x0058 A[Catch:{ Exception -> 0x0247 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x0089 A[Catch:{ Exception -> 0x0247 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:18:0x0058 A[Catch:{ Exception -> 0x0249 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x0089 A[Catch:{ Exception -> 0x0249 }] */
     /* JADX WARNING: Removed duplicated region for block: B:34:0x0096 A[ADDED_TO_REGION] */
     /* JADX WARNING: Removed duplicated region for block: B:37:0x009e A[SYNTHETIC, Splitter:B:37:0x009e] */
     /* JADX WARNING: Removed duplicated region for block: B:41:0x00af  */
     /* JADX WARNING: Removed duplicated region for block: B:48:0x00ca A[Catch:{ all -> 0x0163 }] */
     /* JADX WARNING: Removed duplicated region for block: B:53:0x00e5 A[Catch:{ all -> 0x0163 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x0179 A[Catch:{ Exception -> 0x0247 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x01e4 A[Catch:{ Exception -> 0x0247 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x0179 A[Catch:{ Exception -> 0x0249 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x01e6 A[Catch:{ Exception -> 0x0249 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void installShortcut(long r17) {
         /*
             r16 = this;
             r1 = r17
-            android.content.Intent r3 = r16.createIntrnalShortcutIntent(r17)     // Catch:{ Exception -> 0x0247 }
-            int r0 = (int) r1     // Catch:{ Exception -> 0x0247 }
+            android.content.Intent r3 = r16.createIntrnalShortcutIntent(r17)     // Catch:{ Exception -> 0x0249 }
+            int r0 = (int) r1     // Catch:{ Exception -> 0x0249 }
             r4 = 32
             long r4 = r1 >> r4
-            int r5 = (int) r4     // Catch:{ Exception -> 0x0247 }
+            int r5 = (int) r4     // Catch:{ Exception -> 0x0249 }
             r4 = 0
             if (r0 != 0) goto L_0x002d
-            org.telegram.messenger.MessagesController r0 = r16.getMessagesController()     // Catch:{ Exception -> 0x0247 }
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)     // Catch:{ Exception -> 0x0247 }
-            org.telegram.tgnet.TLRPC$EncryptedChat r0 = r0.getEncryptedChat(r5)     // Catch:{ Exception -> 0x0247 }
+            org.telegram.messenger.MessagesController r0 = r16.getMessagesController()     // Catch:{ Exception -> 0x0249 }
+            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)     // Catch:{ Exception -> 0x0249 }
+            org.telegram.tgnet.TLRPC$EncryptedChat r0 = r0.getEncryptedChat(r5)     // Catch:{ Exception -> 0x0249 }
             if (r0 != 0) goto L_0x001e
             return
         L_0x001e:
-            org.telegram.messenger.MessagesController r5 = r16.getMessagesController()     // Catch:{ Exception -> 0x0247 }
-            int r0 = r0.user_id     // Catch:{ Exception -> 0x0247 }
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x0247 }
-            org.telegram.tgnet.TLRPC$User r0 = r5.getUser(r0)     // Catch:{ Exception -> 0x0247 }
+            org.telegram.messenger.MessagesController r5 = r16.getMessagesController()     // Catch:{ Exception -> 0x0249 }
+            int r0 = r0.user_id     // Catch:{ Exception -> 0x0249 }
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x0249 }
+            org.telegram.tgnet.TLRPC$User r0 = r5.getUser(r0)     // Catch:{ Exception -> 0x0249 }
             goto L_0x003b
         L_0x002d:
             if (r0 <= 0) goto L_0x003e
-            org.telegram.messenger.MessagesController r5 = r16.getMessagesController()     // Catch:{ Exception -> 0x0247 }
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x0247 }
-            org.telegram.tgnet.TLRPC$User r0 = r5.getUser(r0)     // Catch:{ Exception -> 0x0247 }
+            org.telegram.messenger.MessagesController r5 = r16.getMessagesController()     // Catch:{ Exception -> 0x0249 }
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x0249 }
+            org.telegram.tgnet.TLRPC$User r0 = r5.getUser(r0)     // Catch:{ Exception -> 0x0249 }
         L_0x003b:
             r5 = r0
             r6 = r4
             goto L_0x004f
         L_0x003e:
-            if (r0 >= 0) goto L_0x0246
-            org.telegram.messenger.MessagesController r5 = r16.getMessagesController()     // Catch:{ Exception -> 0x0247 }
+            if (r0 >= 0) goto L_0x0248
+            org.telegram.messenger.MessagesController r5 = r16.getMessagesController()     // Catch:{ Exception -> 0x0249 }
             int r0 = -r0
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x0247 }
-            org.telegram.tgnet.TLRPC$Chat r0 = r5.getChat(r0)     // Catch:{ Exception -> 0x0247 }
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x0249 }
+            org.telegram.tgnet.TLRPC$Chat r0 = r5.getChat(r0)     // Catch:{ Exception -> 0x0249 }
             r6 = r0
             r5 = r4
         L_0x004f:
@@ -6579,35 +6576,35 @@ public class MediaDataController extends BaseController {
             r0 = 1
             r7 = 0
             if (r5 == 0) goto L_0x0089
-            boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0247 }
+            boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0249 }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131627141(0x7f0e0CLASSNAME, float:1.8881538E38)
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
+            r9 = 2131627187(0x7f0e0cb3, float:1.8881631E38)
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0249 }
         L_0x0067:
             r9 = r4
             r10 = 1
             goto L_0x0094
         L_0x006a:
-            boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0247 }
+            boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0249 }
             if (r8 == 0) goto L_0x007a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131627252(0x7f0e0cf4, float:1.8881763E38)
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
+            r9 = 2131627298(0x7f0e0d22, float:1.8881856E38)
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0249 }
             goto L_0x0067
         L_0x007a:
-            java.lang.String r8 = r5.first_name     // Catch:{ Exception -> 0x0247 }
-            java.lang.String r9 = r5.last_name     // Catch:{ Exception -> 0x0247 }
-            java.lang.String r8 = org.telegram.messenger.ContactsController.formatName(r8, r9)     // Catch:{ Exception -> 0x0247 }
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r9 = r5.photo     // Catch:{ Exception -> 0x0247 }
+            java.lang.String r8 = r5.first_name     // Catch:{ Exception -> 0x0249 }
+            java.lang.String r9 = r5.last_name     // Catch:{ Exception -> 0x0249 }
+            java.lang.String r8 = org.telegram.messenger.ContactsController.formatName(r8, r9)     // Catch:{ Exception -> 0x0249 }
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r9 = r5.photo     // Catch:{ Exception -> 0x0249 }
             if (r9 == 0) goto L_0x0092
-            org.telegram.tgnet.TLRPC$FileLocation r9 = r9.photo_small     // Catch:{ Exception -> 0x0247 }
+            org.telegram.tgnet.TLRPC$FileLocation r9 = r9.photo_small     // Catch:{ Exception -> 0x0249 }
             goto L_0x0093
         L_0x0089:
-            java.lang.String r8 = r6.title     // Catch:{ Exception -> 0x0247 }
-            org.telegram.tgnet.TLRPC$ChatPhoto r9 = r6.photo     // Catch:{ Exception -> 0x0247 }
+            java.lang.String r8 = r6.title     // Catch:{ Exception -> 0x0249 }
+            org.telegram.tgnet.TLRPC$ChatPhoto r9 = r6.photo     // Catch:{ Exception -> 0x0249 }
             if (r9 == 0) goto L_0x0092
-            org.telegram.tgnet.TLRPC$FileLocation r9 = r9.photo_small     // Catch:{ Exception -> 0x0247 }
+            org.telegram.tgnet.TLRPC$FileLocation r9 = r9.photo_small     // Catch:{ Exception -> 0x0249 }
             goto L_0x0093
         L_0x0092:
             r9 = r4
@@ -6717,115 +6714,115 @@ public class MediaDataController extends BaseController {
         L_0x0163:
             r0 = move-exception
         L_0x0164:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x0247 }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x0249 }
         L_0x0167:
-            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0247 }
+            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0249 }
             r10 = 26
             r11 = 2131165289(0x7var_, float:1.794479E38)
             r12 = 2131165290(0x7var_a, float:1.7944793E38)
             r13 = 2131165288(0x7var_, float:1.7944789E38)
             r14 = 2131165292(0x7var_c, float:1.7944797E38)
-            if (r0 < r10) goto L_0x01e4
-            androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ Exception -> 0x0247 }
-            android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0247 }
-            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0247 }
-            r10.<init>()     // Catch:{ Exception -> 0x0247 }
+            if (r0 < r10) goto L_0x01e6
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ Exception -> 0x0249 }
+            android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0249 }
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0249 }
+            r10.<init>()     // Catch:{ Exception -> 0x0249 }
             java.lang.String r15 = "sdid_"
-            r10.append(r15)     // Catch:{ Exception -> 0x0247 }
-            r10.append(r1)     // Catch:{ Exception -> 0x0247 }
-            java.lang.String r1 = r10.toString()     // Catch:{ Exception -> 0x0247 }
-            r0.<init>((android.content.Context) r7, (java.lang.String) r1)     // Catch:{ Exception -> 0x0247 }
-            r0.setShortLabel(r8)     // Catch:{ Exception -> 0x0247 }
-            r0.setIntent(r3)     // Catch:{ Exception -> 0x0247 }
-            if (r9 == 0) goto L_0x01a1
-            androidx.core.graphics.drawable.IconCompat r1 = androidx.core.graphics.drawable.IconCompat.createWithBitmap(r9)     // Catch:{ Exception -> 0x0247 }
-            r0.setIcon(r1)     // Catch:{ Exception -> 0x0247 }
-            goto L_0x01da
-        L_0x01a1:
-            if (r5 == 0) goto L_0x01bb
-            boolean r1 = r5.bot     // Catch:{ Exception -> 0x0247 }
-            if (r1 == 0) goto L_0x01b1
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0247 }
-            androidx.core.graphics.drawable.IconCompat r1 = androidx.core.graphics.drawable.IconCompat.createWithResource(r1, r13)     // Catch:{ Exception -> 0x0247 }
-            r0.setIcon(r1)     // Catch:{ Exception -> 0x0247 }
-            goto L_0x01da
-        L_0x01b1:
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0247 }
-            androidx.core.graphics.drawable.IconCompat r1 = androidx.core.graphics.drawable.IconCompat.createWithResource(r1, r14)     // Catch:{ Exception -> 0x0247 }
-            r0.setIcon(r1)     // Catch:{ Exception -> 0x0247 }
-            goto L_0x01da
-        L_0x01bb:
-            if (r6 == 0) goto L_0x01da
-            boolean r1 = org.telegram.messenger.ChatObject.isChannel(r6)     // Catch:{ Exception -> 0x0247 }
-            if (r1 == 0) goto L_0x01d1
-            boolean r1 = r6.megagroup     // Catch:{ Exception -> 0x0247 }
-            if (r1 != 0) goto L_0x01d1
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0247 }
-            androidx.core.graphics.drawable.IconCompat r1 = androidx.core.graphics.drawable.IconCompat.createWithResource(r1, r11)     // Catch:{ Exception -> 0x0247 }
-            r0.setIcon(r1)     // Catch:{ Exception -> 0x0247 }
-            goto L_0x01da
-        L_0x01d1:
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0247 }
-            androidx.core.graphics.drawable.IconCompat r1 = androidx.core.graphics.drawable.IconCompat.createWithResource(r1, r12)     // Catch:{ Exception -> 0x0247 }
-            r0.setIcon(r1)     // Catch:{ Exception -> 0x0247 }
-        L_0x01da:
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0247 }
-            androidx.core.content.pm.ShortcutInfoCompat r0 = r0.build()     // Catch:{ Exception -> 0x0247 }
-            androidx.core.content.pm.ShortcutManagerCompat.requestPinShortcut(r1, r0, r4)     // Catch:{ Exception -> 0x0247 }
-            goto L_0x024b
-        L_0x01e4:
-            android.content.Intent r0 = new android.content.Intent     // Catch:{ Exception -> 0x0247 }
-            r0.<init>()     // Catch:{ Exception -> 0x0247 }
-            if (r9 == 0) goto L_0x01f1
+            r10.append(r15)     // Catch:{ Exception -> 0x0249 }
+            r10.append(r1)     // Catch:{ Exception -> 0x0249 }
+            java.lang.String r1 = r10.toString()     // Catch:{ Exception -> 0x0249 }
+            r0.<init>((android.content.Context) r7, (java.lang.String) r1)     // Catch:{ Exception -> 0x0249 }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r0.setShortLabel(r8)     // Catch:{ Exception -> 0x0249 }
+            androidx.core.content.pm.ShortcutInfoCompat$Builder r0 = r0.setIntent(r3)     // Catch:{ Exception -> 0x0249 }
+            if (r9 == 0) goto L_0x01a3
+            androidx.core.graphics.drawable.IconCompat r1 = androidx.core.graphics.drawable.IconCompat.createWithBitmap(r9)     // Catch:{ Exception -> 0x0249 }
+            r0.setIcon(r1)     // Catch:{ Exception -> 0x0249 }
+            goto L_0x01dc
+        L_0x01a3:
+            if (r5 == 0) goto L_0x01bd
+            boolean r1 = r5.bot     // Catch:{ Exception -> 0x0249 }
+            if (r1 == 0) goto L_0x01b3
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0249 }
+            androidx.core.graphics.drawable.IconCompat r1 = androidx.core.graphics.drawable.IconCompat.createWithResource(r1, r13)     // Catch:{ Exception -> 0x0249 }
+            r0.setIcon(r1)     // Catch:{ Exception -> 0x0249 }
+            goto L_0x01dc
+        L_0x01b3:
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0249 }
+            androidx.core.graphics.drawable.IconCompat r1 = androidx.core.graphics.drawable.IconCompat.createWithResource(r1, r14)     // Catch:{ Exception -> 0x0249 }
+            r0.setIcon(r1)     // Catch:{ Exception -> 0x0249 }
+            goto L_0x01dc
+        L_0x01bd:
+            if (r6 == 0) goto L_0x01dc
+            boolean r1 = org.telegram.messenger.ChatObject.isChannel(r6)     // Catch:{ Exception -> 0x0249 }
+            if (r1 == 0) goto L_0x01d3
+            boolean r1 = r6.megagroup     // Catch:{ Exception -> 0x0249 }
+            if (r1 != 0) goto L_0x01d3
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0249 }
+            androidx.core.graphics.drawable.IconCompat r1 = androidx.core.graphics.drawable.IconCompat.createWithResource(r1, r11)     // Catch:{ Exception -> 0x0249 }
+            r0.setIcon(r1)     // Catch:{ Exception -> 0x0249 }
+            goto L_0x01dc
+        L_0x01d3:
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0249 }
+            androidx.core.graphics.drawable.IconCompat r1 = androidx.core.graphics.drawable.IconCompat.createWithResource(r1, r12)     // Catch:{ Exception -> 0x0249 }
+            r0.setIcon(r1)     // Catch:{ Exception -> 0x0249 }
+        L_0x01dc:
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0249 }
+            androidx.core.content.pm.ShortcutInfoCompat r0 = r0.build()     // Catch:{ Exception -> 0x0249 }
+            androidx.core.content.pm.ShortcutManagerCompat.requestPinShortcut(r1, r0, r4)     // Catch:{ Exception -> 0x0249 }
+            goto L_0x024d
+        L_0x01e6:
+            android.content.Intent r0 = new android.content.Intent     // Catch:{ Exception -> 0x0249 }
+            r0.<init>()     // Catch:{ Exception -> 0x0249 }
+            if (r9 == 0) goto L_0x01f3
             java.lang.String r1 = "android.intent.extra.shortcut.ICON"
-            r0.putExtra(r1, r9)     // Catch:{ Exception -> 0x0247 }
-            goto L_0x022c
-        L_0x01f1:
+            r0.putExtra(r1, r9)     // Catch:{ Exception -> 0x0249 }
+            goto L_0x022e
+        L_0x01f3:
             java.lang.String r1 = "android.intent.extra.shortcut.ICON_RESOURCE"
-            if (r5 == 0) goto L_0x020d
-            boolean r2 = r5.bot     // Catch:{ Exception -> 0x0247 }
-            if (r2 == 0) goto L_0x0203
-            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0247 }
-            android.content.Intent$ShortcutIconResource r2 = android.content.Intent.ShortcutIconResource.fromContext(r2, r13)     // Catch:{ Exception -> 0x0247 }
-            r0.putExtra(r1, r2)     // Catch:{ Exception -> 0x0247 }
-            goto L_0x022c
-        L_0x0203:
-            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0247 }
-            android.content.Intent$ShortcutIconResource r2 = android.content.Intent.ShortcutIconResource.fromContext(r2, r14)     // Catch:{ Exception -> 0x0247 }
-            r0.putExtra(r1, r2)     // Catch:{ Exception -> 0x0247 }
-            goto L_0x022c
-        L_0x020d:
-            if (r6 == 0) goto L_0x022c
-            boolean r2 = org.telegram.messenger.ChatObject.isChannel(r6)     // Catch:{ Exception -> 0x0247 }
-            if (r2 == 0) goto L_0x0223
-            boolean r2 = r6.megagroup     // Catch:{ Exception -> 0x0247 }
-            if (r2 != 0) goto L_0x0223
-            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0247 }
-            android.content.Intent$ShortcutIconResource r2 = android.content.Intent.ShortcutIconResource.fromContext(r2, r11)     // Catch:{ Exception -> 0x0247 }
-            r0.putExtra(r1, r2)     // Catch:{ Exception -> 0x0247 }
-            goto L_0x022c
-        L_0x0223:
-            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0247 }
-            android.content.Intent$ShortcutIconResource r2 = android.content.Intent.ShortcutIconResource.fromContext(r2, r12)     // Catch:{ Exception -> 0x0247 }
-            r0.putExtra(r1, r2)     // Catch:{ Exception -> 0x0247 }
-        L_0x022c:
+            if (r5 == 0) goto L_0x020f
+            boolean r2 = r5.bot     // Catch:{ Exception -> 0x0249 }
+            if (r2 == 0) goto L_0x0205
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0249 }
+            android.content.Intent$ShortcutIconResource r2 = android.content.Intent.ShortcutIconResource.fromContext(r2, r13)     // Catch:{ Exception -> 0x0249 }
+            r0.putExtra(r1, r2)     // Catch:{ Exception -> 0x0249 }
+            goto L_0x022e
+        L_0x0205:
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0249 }
+            android.content.Intent$ShortcutIconResource r2 = android.content.Intent.ShortcutIconResource.fromContext(r2, r14)     // Catch:{ Exception -> 0x0249 }
+            r0.putExtra(r1, r2)     // Catch:{ Exception -> 0x0249 }
+            goto L_0x022e
+        L_0x020f:
+            if (r6 == 0) goto L_0x022e
+            boolean r2 = org.telegram.messenger.ChatObject.isChannel(r6)     // Catch:{ Exception -> 0x0249 }
+            if (r2 == 0) goto L_0x0225
+            boolean r2 = r6.megagroup     // Catch:{ Exception -> 0x0249 }
+            if (r2 != 0) goto L_0x0225
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0249 }
+            android.content.Intent$ShortcutIconResource r2 = android.content.Intent.ShortcutIconResource.fromContext(r2, r11)     // Catch:{ Exception -> 0x0249 }
+            r0.putExtra(r1, r2)     // Catch:{ Exception -> 0x0249 }
+            goto L_0x022e
+        L_0x0225:
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0249 }
+            android.content.Intent$ShortcutIconResource r2 = android.content.Intent.ShortcutIconResource.fromContext(r2, r12)     // Catch:{ Exception -> 0x0249 }
+            r0.putExtra(r1, r2)     // Catch:{ Exception -> 0x0249 }
+        L_0x022e:
             java.lang.String r1 = "android.intent.extra.shortcut.INTENT"
-            r0.putExtra(r1, r3)     // Catch:{ Exception -> 0x0247 }
+            r0.putExtra(r1, r3)     // Catch:{ Exception -> 0x0249 }
             java.lang.String r1 = "android.intent.extra.shortcut.NAME"
-            r0.putExtra(r1, r8)     // Catch:{ Exception -> 0x0247 }
+            r0.putExtra(r1, r8)     // Catch:{ Exception -> 0x0249 }
             java.lang.String r1 = "duplicate"
-            r0.putExtra(r1, r7)     // Catch:{ Exception -> 0x0247 }
+            r0.putExtra(r1, r7)     // Catch:{ Exception -> 0x0249 }
             java.lang.String r1 = "com.android.launcher.action.INSTALL_SHORTCUT"
-            r0.setAction(r1)     // Catch:{ Exception -> 0x0247 }
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0247 }
-            r1.sendBroadcast(r0)     // Catch:{ Exception -> 0x0247 }
-            goto L_0x024b
-        L_0x0246:
+            r0.setAction(r1)     // Catch:{ Exception -> 0x0249 }
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0249 }
+            r1.sendBroadcast(r0)     // Catch:{ Exception -> 0x0249 }
+            goto L_0x024d
+        L_0x0248:
             return
-        L_0x0247:
+        L_0x0249:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x024b:
+        L_0x024d:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.installShortcut(long):void");
@@ -9581,20 +9578,22 @@ public class MediaDataController extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.botKeyboardDidLoad, tLRPC$Message, Long.valueOf(j));
     }
 
-    public void loadBotInfo(int i, boolean z, int i2) {
+    public void loadBotInfo(int i, long j, boolean z, int i2) {
         TLRPC$BotInfo tLRPC$BotInfo;
         if (!z || (tLRPC$BotInfo = this.botInfos.get(i)) == null) {
-            getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, i2) {
+            getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, j, i2) {
                 public final /* synthetic */ int f$1;
-                public final /* synthetic */ int f$2;
+                public final /* synthetic */ long f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
                     this.f$2 = r3;
+                    this.f$3 = r5;
                 }
 
                 public final void run() {
-                    MediaDataController.this.lambda$loadBotInfo$133$MediaDataController(this.f$1, this.f$2);
+                    MediaDataController.this.lambda$loadBotInfo$133$MediaDataController(this.f$1, this.f$2, this.f$3);
                 }
             });
             return;
@@ -9604,11 +9603,11 @@ public class MediaDataController extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$loadBotInfo$133 */
-    public /* synthetic */ void lambda$loadBotInfo$133$MediaDataController(int i, int i2) {
+    public /* synthetic */ void lambda$loadBotInfo$133$MediaDataController(int i, long j, int i2) {
         NativeByteBuffer byteBufferValue;
         TLRPC$BotInfo tLRPC$BotInfo = null;
         try {
-            SQLiteCursor queryFinalized = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT info FROM bot_info WHERE uid = %d", new Object[]{Integer.valueOf(i)}), new Object[0]);
+            SQLiteCursor queryFinalized = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT info FROM bot_info_v2 WHERE uid = %d AND dialogId = %d", new Object[]{Integer.valueOf(i), Long.valueOf(j)}), new Object[0]);
             if (queryFinalized.next() && !queryFinalized.isNull(0) && (byteBufferValue = queryFinalized.byteBufferValue(0)) != null) {
                 tLRPC$BotInfo = TLRPC$BotInfo.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
                 byteBufferValue.reuse();
@@ -9692,18 +9691,20 @@ public class MediaDataController extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.botKeyboardDidLoad, tLRPC$Message, Long.valueOf(j));
     }
 
-    public void putBotInfo(TLRPC$BotInfo tLRPC$BotInfo) {
+    public void putBotInfo(long j, TLRPC$BotInfo tLRPC$BotInfo) {
         if (tLRPC$BotInfo != null) {
             this.botInfos.put(tLRPC$BotInfo.user_id, tLRPC$BotInfo);
-            getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$BotInfo) {
+            getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$BotInfo, j) {
                 public final /* synthetic */ TLRPC$BotInfo f$1;
+                public final /* synthetic */ long f$2;
 
                 {
                     this.f$1 = r2;
+                    this.f$2 = r3;
                 }
 
                 public final void run() {
-                    MediaDataController.this.lambda$putBotInfo$135$MediaDataController(this.f$1);
+                    MediaDataController.this.lambda$putBotInfo$135$MediaDataController(this.f$1, this.f$2);
                 }
             });
         }
@@ -9711,14 +9712,15 @@ public class MediaDataController extends BaseController {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$putBotInfo$135 */
-    public /* synthetic */ void lambda$putBotInfo$135$MediaDataController(TLRPC$BotInfo tLRPC$BotInfo) {
+    public /* synthetic */ void lambda$putBotInfo$135$MediaDataController(TLRPC$BotInfo tLRPC$BotInfo, long j) {
         try {
-            SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO bot_info(uid, info) VALUES(?, ?)");
+            SQLitePreparedStatement executeFast = getMessagesStorage().getDatabase().executeFast("REPLACE INTO bot_info_v2 VALUES(?, ?, ?)");
             executeFast.requery();
             NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$BotInfo.getObjectSize());
             tLRPC$BotInfo.serializeToStream(nativeByteBuffer);
             executeFast.bindInteger(1, tLRPC$BotInfo.user_id);
-            executeFast.bindByteBuffer(2, nativeByteBuffer);
+            executeFast.bindLong(2, j);
+            executeFast.bindByteBuffer(3, nativeByteBuffer);
             executeFast.step();
             nativeByteBuffer.reuse();
             executeFast.dispose();

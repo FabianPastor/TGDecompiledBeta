@@ -11,18 +11,13 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadioButton;
 
 public class PhotoEditRadioCell extends FrameLayout {
-    /* access modifiers changed from: private */
-    public int currentColor;
-    /* access modifiers changed from: private */
-    public int currentType;
+    private int currentColor;
+    private int currentType;
     private TextView nameTextView;
-    /* access modifiers changed from: private */
-    public View.OnClickListener onClickListener;
+    private View.OnClickListener onClickListener;
     private LinearLayout tintButtonsContainer;
-    /* access modifiers changed from: private */
-    public final int[] tintHighlighsColors = {0, -1076602, -1388894, -859780, -5968466, -7742235, -13726776, -3303195};
-    /* access modifiers changed from: private */
-    public final int[] tintShadowColors = {0, -45747, -753630, -13056, -8269183, -9321002, -16747844, -10080879};
+    private final int[] tintHighlighsColors = {0, -1076602, -1388894, -859780, -5968466, -7742235, -13726776, -3303195};
+    private final int[] tintShadowColors = {0, -45747, -753630, -13056, -8269183, -9321002, -16747844, -10080879};
 
     public PhotoEditRadioCell(Context context) {
         super(context);
@@ -44,29 +39,32 @@ public class PhotoEditRadioCell extends FrameLayout {
             radioButton.setTag(Integer.valueOf(i));
             this.tintButtonsContainer.addView(radioButton, LayoutHelper.createLinear(0, -1, 1.0f / ((float) this.tintShadowColors.length)));
             radioButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    RadioButton radioButton = (RadioButton) view;
-                    if (PhotoEditRadioCell.this.currentType == 0) {
-                        PhotoEditRadioCell photoEditRadioCell = PhotoEditRadioCell.this;
-                        int unused = photoEditRadioCell.currentColor = photoEditRadioCell.tintShadowColors[((Integer) radioButton.getTag()).intValue()];
-                    } else {
-                        PhotoEditRadioCell photoEditRadioCell2 = PhotoEditRadioCell.this;
-                        int unused2 = photoEditRadioCell2.currentColor = photoEditRadioCell2.tintHighlighsColors[((Integer) radioButton.getTag()).intValue()];
-                    }
-                    PhotoEditRadioCell.this.updateSelectedTintButton(true);
-                    PhotoEditRadioCell.this.onClickListener.onClick(PhotoEditRadioCell.this);
+                public final void onClick(View view) {
+                    PhotoEditRadioCell.this.lambda$new$0$PhotoEditRadioCell(view);
                 }
             });
         }
         addView(this.tintButtonsContainer, LayoutHelper.createFrame(-1, 40.0f, 51, 96.0f, 0.0f, 24.0f, 0.0f));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$PhotoEditRadioCell(View view) {
+        RadioButton radioButton = (RadioButton) view;
+        if (this.currentType == 0) {
+            this.currentColor = this.tintShadowColors[((Integer) radioButton.getTag()).intValue()];
+        } else {
+            this.currentColor = this.tintHighlighsColors[((Integer) radioButton.getTag()).intValue()];
+        }
+        updateSelectedTintButton(true);
+        this.onClickListener.onClick(this);
+    }
+
     public int getCurrentColor() {
         return this.currentColor;
     }
 
-    /* access modifiers changed from: private */
-    public void updateSelectedTintButton(boolean z) {
+    private void updateSelectedTintButton(boolean z) {
         int i;
         int childCount = this.tintButtonsContainer.getChildCount();
         for (int i2 = 0; i2 < childCount; i2++) {

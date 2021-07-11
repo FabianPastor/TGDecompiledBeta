@@ -1,7 +1,7 @@
 package j$.util.stream;
 
-import a.CLASSNAMEo0;
-import a.CLASSNAMEq0;
+import j$.CLASSNAMEl0;
+import j$.CLASSNAMEn0;
 import j$.util.Spliterator;
 import j$.util.function.B;
 import j$.util.function.BiConsumer;
@@ -11,10 +11,10 @@ import j$.util.function.E;
 import j$.util.function.F;
 import j$.util.function.I;
 import j$.util.function.J;
+import j$.util.n;
 import j$.util.o;
-import j$.util.p;
-import j$.util.r;
-import j$.util.t;
+import j$.util.q;
+import j$.util.s;
 
 public interface H1 extends CLASSNAMEl1<Long, H1> {
     long A(long j, B b);
@@ -25,7 +25,7 @@ public interface H1 extends CLASSNAMEl1<Long, H1> {
 
     CLASSNAMEs1 asDoubleStream();
 
-    p average();
+    o average();
 
     boolean b0(E e);
 
@@ -43,23 +43,23 @@ public interface H1 extends CLASSNAMEl1<Long, H1> {
 
     boolean f0(E e);
 
-    r findAny();
+    q findAny();
 
-    r findFirst();
+    q findFirst();
 
     H1 g0(E e);
 
-    r i(B b);
+    q i(B b);
 
-    t.c iterator();
+    s.c iterator();
 
-    CLASSNAMEs1 j(CLASSNAMEo0 o0Var);
+    CLASSNAMEs1 j(CLASSNAMEl0 l0Var);
 
     H1 limit(long j);
 
-    r max();
+    q max();
 
-    r min();
+    q min();
 
     H1 parallel();
 
@@ -77,11 +77,11 @@ public interface H1 extends CLASSNAMEl1<Long, H1> {
 
     long sum();
 
-    o summaryStatistics();
+    n summaryStatistics();
 
     long[] toArray();
 
-    C1 w(CLASSNAMEq0 q0Var);
+    C1 w(CLASSNAMEn0 n0Var);
 
     H1 x(F f);
 }

@@ -36,6 +36,7 @@ public class SeekBarView extends FrameLayout {
     private int thumbX;
     private float transitionProgress;
     private int transitionThumbX;
+    private boolean twoSided;
 
     public interface SeekBarViewDelegate {
 
@@ -65,6 +66,7 @@ public class SeekBarView extends FrameLayout {
 
     public SeekBarView(Context context, boolean z) {
         super(context);
+        this.progressToSet = -100.0f;
         this.pressedState = new int[]{16842910, 16842919};
         this.transitionProgress = 1.0f;
         setWillNotDraw(false);
@@ -116,6 +118,14 @@ public class SeekBarView extends FrameLayout {
         };
         this.seekBarAccessibilityDelegate = r5;
         setAccessibilityDelegate(r5);
+    }
+
+    public void setTwoSided(boolean z) {
+        this.twoSided = z;
+    }
+
+    public boolean isTwoSided() {
+        return this.twoSided;
     }
 
     public void setInnerColor(int i) {
@@ -176,7 +186,17 @@ public class SeekBarView extends FrameLayout {
             }
             if (this.pressed) {
                 if (motionEvent.getAction() == 1) {
-                    this.delegate.onSeekBarDrag(true, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.selectorWidth)));
+                    if (this.twoSided) {
+                        float measuredWidth = (float) ((getMeasuredWidth() - this.selectorWidth) / 2);
+                        int i = this.thumbX;
+                        if (((float) i) >= measuredWidth) {
+                            this.delegate.onSeekBarDrag(false, (((float) i) - measuredWidth) / measuredWidth);
+                        } else {
+                            this.delegate.onSeekBarDrag(false, -Math.max(0.01f, 1.0f - ((measuredWidth - ((float) i)) / measuredWidth)));
+                        }
+                    } else {
+                        this.delegate.onSeekBarDrag(true, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.selectorWidth)));
+                    }
                 }
                 if (Build.VERSION.SDK_INT >= 21 && (drawable = this.hoverDrawable) != null) {
                     drawable.setState(StateSet.NOTHING);
@@ -223,7 +243,17 @@ public class SeekBarView extends FrameLayout {
                     this.thumbX = getMeasuredWidth() - this.selectorWidth;
                 }
                 if (this.reportChanges) {
-                    this.delegate.onSeekBarDrag(false, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.selectorWidth)));
+                    if (this.twoSided) {
+                        float measuredWidth2 = (float) ((getMeasuredWidth() - this.selectorWidth) / 2);
+                        int i2 = this.thumbX;
+                        if (((float) i2) >= measuredWidth2) {
+                            this.delegate.onSeekBarDrag(false, (((float) i2) - measuredWidth2) / measuredWidth2);
+                        } else {
+                            this.delegate.onSeekBarDrag(false, -Math.max(0.01f, 1.0f - ((measuredWidth2 - ((float) i2)) / measuredWidth2)));
+                        }
+                    } else {
+                        this.delegate.onSeekBarDrag(false, ((float) this.thumbX) / ((float) (getMeasuredWidth() - this.selectorWidth)));
+                    }
                 }
                 if (Build.VERSION.SDK_INT >= 21 && (drawable2 = this.hoverDrawable) != null) {
                     drawable2.setHotspot(motionEvent.getX(), motionEvent.getY());
@@ -247,22 +277,33 @@ public class SeekBarView extends FrameLayout {
     }
 
     public void setProgress(float f, boolean z) {
+        double d;
         if (getMeasuredWidth() == 0) {
             this.progressToSet = f;
             return;
         }
-        this.progressToSet = -1.0f;
-        int ceil = (int) Math.ceil((double) (((float) (getMeasuredWidth() - this.selectorWidth)) * f));
-        int i = this.thumbX;
-        if (i != ceil) {
+        this.progressToSet = -100.0f;
+        if (this.twoSided) {
+            float measuredWidth = (float) ((getMeasuredWidth() - this.selectorWidth) / 2);
+            if (f < 0.0f) {
+                d = Math.ceil((double) (measuredWidth + ((-(f + 1.0f)) * measuredWidth)));
+            } else {
+                d = Math.ceil((double) (measuredWidth + (f * measuredWidth)));
+            }
+        } else {
+            d = Math.ceil((double) (((float) (getMeasuredWidth() - this.selectorWidth)) * f));
+        }
+        int i = (int) d;
+        int i2 = this.thumbX;
+        if (i2 != i) {
             if (z) {
-                this.transitionThumbX = i;
+                this.transitionThumbX = i2;
                 this.transitionProgress = 0.0f;
             }
-            this.thumbX = ceil;
-            if (ceil < 0) {
+            this.thumbX = i;
+            if (i < 0) {
                 this.thumbX = 0;
-            } else if (ceil > getMeasuredWidth() - this.selectorWidth) {
+            } else if (i > getMeasuredWidth() - this.selectorWidth) {
                 this.thumbX = getMeasuredWidth() - this.selectorWidth;
             }
             invalidate();
@@ -277,9 +318,9 @@ public class SeekBarView extends FrameLayout {
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         super.onMeasure(i, i2);
-        if (this.progressToSet >= 0.0f && getMeasuredWidth() > 0) {
+        if (this.progressToSet != -100.0f && getMeasuredWidth() > 0) {
             setProgress(this.progressToSet);
-            this.progressToSet = -1.0f;
+            this.progressToSet = -100.0f;
         }
     }
 
@@ -293,10 +334,10 @@ public class SeekBarView extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x0153  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x019d  */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x01b4  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x01f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x023d  */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x0254  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onDraw(android.graphics.Canvas r12) {
         /*
@@ -366,6 +407,83 @@ public class SeekBarView extends FrameLayout {
             r0 = r12
             r0.drawRect(r1, r2, r3, r4, r5)
         L_0x008a:
+            boolean r0 = r11.twoSided
+            r9 = 1086324736(0x40CLASSNAME, float:6.0)
+            if (r0 == 0) goto L_0x012d
+            int r0 = r11.getMeasuredWidth()
+            int r0 = r0 / 2
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r0 = r0 - r1
+            float r1 = (float) r0
+            int r0 = r11.getMeasuredHeight()
+            int r0 = r0 / 2
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r0 = r0 - r2
+            float r2 = (float) r0
+            int r0 = r11.getMeasuredWidth()
+            int r0 = r0 / 2
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r0 = r0 + r3
+            float r3 = (float) r0
+            int r0 = r11.getMeasuredHeight()
+            int r0 = r0 / 2
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r0 = r0 + r4
+            float r4 = (float) r0
+            android.graphics.Paint r5 = r11.outerPaint1
+            r0 = r12
+            r0.drawRect(r1, r2, r3, r4, r5)
+            int r0 = r11.thumbX
+            int r1 = r11.getMeasuredWidth()
+            int r2 = r11.selectorWidth
+            int r1 = r1 - r2
+            int r1 = r1 / 2
+            if (r0 <= r1) goto L_0x0101
+            int r0 = r11.getMeasuredWidth()
+            int r0 = r0 / 2
+            float r1 = (float) r0
+            int r0 = r11.getMeasuredHeight()
+            int r0 = r0 / 2
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r0 = r0 - r2
+            float r2 = (float) r0
+            int r0 = r11.selectorWidth
+            int r0 = r0 / 2
+            int r3 = r11.thumbX
+            int r0 = r0 + r3
+            float r3 = (float) r0
+            int r0 = r11.getMeasuredHeight()
+            int r0 = r0 / 2
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r0 = r0 + r4
+            float r4 = (float) r0
+            android.graphics.Paint r5 = r11.outerPaint1
+            r0 = r12
+            r0.drawRect(r1, r2, r3, r4, r5)
+            goto L_0x0158
+        L_0x0101:
+            int r0 = r11.thumbX
+            int r2 = r2 / 2
+            int r0 = r0 + r2
+            float r1 = (float) r0
+            int r0 = r11.getMeasuredHeight()
+            int r0 = r0 / 2
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r0 = r0 - r2
+            float r2 = (float) r0
+            int r0 = r11.getMeasuredWidth()
+            int r0 = r0 / 2
+            float r3 = (float) r0
+            int r0 = r11.getMeasuredHeight()
+            int r0 = r0 / 2
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r0 = r0 + r4
+            float r4 = (float) r0
+            android.graphics.Paint r5 = r11.outerPaint1
+            r0 = r12
+            r0.drawRect(r1, r2, r3, r4, r5)
+            goto L_0x0158
+        L_0x012d:
             int r0 = r11.selectorWidth
             int r0 = r0 / 2
             float r1 = (float) r0
@@ -387,8 +505,9 @@ public class SeekBarView extends FrameLayout {
             android.graphics.Paint r5 = r11.outerPaint1
             r0 = r12
             r0.drawRect(r1, r2, r3, r4, r5)
+        L_0x0158:
             android.graphics.drawable.Drawable r0 = r11.hoverDrawable
-            if (r0 == 0) goto L_0x00e7
+            if (r0 == 0) goto L_0x018a
             int r0 = r11.thumbX
             int r1 = r11.selectorWidth
             int r1 = r1 / 2
@@ -410,32 +529,29 @@ public class SeekBarView extends FrameLayout {
             r1.setBounds(r0, r2, r4, r3)
             android.graphics.drawable.Drawable r0 = r11.hoverDrawable
             r0.draw(r12)
-        L_0x00e7:
+        L_0x018a:
             r0 = 0
             boolean r1 = r11.pressed
-            if (r1 == 0) goto L_0x00ef
-            r1 = 1090519040(0x41000000, float:8.0)
-            goto L_0x00f1
-        L_0x00ef:
-            r1 = 1086324736(0x40CLASSNAME, float:6.0)
-        L_0x00f1:
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
+            if (r1 == 0) goto L_0x0191
+            r9 = 1090519040(0x41000000, float:8.0)
+        L_0x0191:
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r9)
             long r2 = android.os.SystemClock.elapsedRealtime()
             long r4 = r11.lastUpdateTime
             long r2 = r2 - r4
             r4 = 18
             int r9 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r9 <= 0) goto L_0x0104
+            if (r9 <= 0) goto L_0x01a4
             r2 = 16
-        L_0x0104:
+        L_0x01a4:
             float r4 = r11.currentRadius
             float r1 = (float) r1
             r5 = 1
             int r9 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r9 == 0) goto L_0x0138
+            if (r9 == 0) goto L_0x01d8
             r0 = 1114636288(0x42700000, float:60.0)
             int r9 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r9 >= 0) goto L_0x0125
+            if (r9 >= 0) goto L_0x01c5
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
             float r9 = (float) r9
             float r10 = (float) r2
@@ -444,10 +560,10 @@ public class SeekBarView extends FrameLayout {
             float r4 = r4 + r9
             r11.currentRadius = r4
             int r0 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r0 <= 0) goto L_0x0137
+            if (r0 <= 0) goto L_0x01d7
             r11.currentRadius = r1
-            goto L_0x0137
-        L_0x0125:
+            goto L_0x01d7
+        L_0x01c5:
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r7)
             float r9 = (float) r9
             float r10 = (float) r2
@@ -456,30 +572,30 @@ public class SeekBarView extends FrameLayout {
             float r4 = r4 - r9
             r11.currentRadius = r4
             int r0 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r0 >= 0) goto L_0x0137
+            if (r0 >= 0) goto L_0x01d7
             r11.currentRadius = r1
-        L_0x0137:
+        L_0x01d7:
             r0 = 1
-        L_0x0138:
+        L_0x01d8:
             float r1 = r11.transitionProgress
             int r4 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1))
-            if (r4 >= 0) goto L_0x014c
+            if (r4 >= 0) goto L_0x01ec
             float r2 = (float) r2
             r3 = 1130430464(0x43610000, float:225.0)
             float r2 = r2 / r3
             float r1 = r1 + r2
             r11.transitionProgress = r1
             int r1 = (r1 > r7 ? 1 : (r1 == r7 ? 0 : -1))
-            if (r1 >= 0) goto L_0x014a
-            goto L_0x014d
-        L_0x014a:
+            if (r1 >= 0) goto L_0x01ea
+            goto L_0x01ed
+        L_0x01ea:
             r11.transitionProgress = r7
-        L_0x014c:
+        L_0x01ec:
             r5 = r0
-        L_0x014d:
+        L_0x01ed:
             float r0 = r11.transitionProgress
             int r1 = (r0 > r7 ? 1 : (r0 == r7 ? 0 : -1))
-            if (r1 >= 0) goto L_0x019d
+            if (r1 >= 0) goto L_0x023d
             android.view.animation.Interpolator r1 = org.telegram.ui.Components.Easings.easeInQuad
             r2 = 1077936128(0x40400000, float:3.0)
             float r0 = r0 * r2
@@ -490,7 +606,7 @@ public class SeekBarView extends FrameLayout {
             float r1 = r11.transitionProgress
             float r0 = r0.getInterpolation(r1)
             int r1 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0185
+            if (r1 <= 0) goto L_0x0225
             int r1 = r11.transitionThumbX
             int r2 = r11.selectorWidth
             int r2 = r2 / 2
@@ -504,7 +620,7 @@ public class SeekBarView extends FrameLayout {
             float r3 = r3 * r7
             android.graphics.Paint r4 = r11.outerPaint1
             r12.drawCircle(r1, r2, r3, r4)
-        L_0x0185:
+        L_0x0225:
             int r1 = r11.thumbX
             int r2 = r11.selectorWidth
             int r2 = r2 / 2
@@ -518,8 +634,8 @@ public class SeekBarView extends FrameLayout {
             float r3 = r3 * r0
             android.graphics.Paint r0 = r11.outerPaint1
             r12.drawCircle(r1, r2, r3, r0)
-            goto L_0x01b2
-        L_0x019d:
+            goto L_0x0252
+        L_0x023d:
             int r0 = r11.thumbX
             int r1 = r11.selectorWidth
             int r1 = r1 / 2
@@ -532,10 +648,10 @@ public class SeekBarView extends FrameLayout {
             float r2 = r11.currentRadius
             android.graphics.Paint r3 = r11.outerPaint1
             r12.drawCircle(r0, r1, r2, r3)
-        L_0x01b2:
-            if (r5 == 0) goto L_0x01b7
+        L_0x0252:
+            if (r5 == 0) goto L_0x0257
             r11.postInvalidateOnAnimation()
-        L_0x01b7:
+        L_0x0257:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SeekBarView.onDraw(android.graphics.Canvas):void");

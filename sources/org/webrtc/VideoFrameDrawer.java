@@ -4,6 +4,7 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.opengl.GLES20;
 import java.nio.ByteBuffer;
+import org.webrtc.GlGenericDrawer;
 import org.webrtc.RendererCommon;
 import org.webrtc.VideoFrame;
 
@@ -14,20 +15,20 @@ public class VideoFrameDrawer {
     private VideoFrame lastI420Frame;
     private int renderHeight;
     private final Matrix renderMatrix = new Matrix();
+    private final Matrix renderRotateMatrix = new Matrix();
     private final Point renderSize = new Point();
     private int renderWidth;
     private final YuvUploader yuvUploader = new YuvUploader((AnonymousClass1) null);
 
-    public static void drawTexture(RendererCommon.GlDrawer glDrawer, VideoFrame.TextureBuffer textureBuffer, Matrix matrix, int i, int i2, int i3, int i4, int i5, int i6) {
+    public static void drawTexture(RendererCommon.GlDrawer glDrawer, VideoFrame.TextureBuffer textureBuffer, Matrix matrix, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8, boolean z) {
         Matrix matrix2 = new Matrix(textureBuffer.getTransformMatrix());
-        Matrix matrix3 = matrix;
         matrix2.preConcat(matrix);
         float[] convertMatrixFromAndroidGraphicsMatrix = RendererCommon.convertMatrixFromAndroidGraphicsMatrix(matrix2);
-        int i7 = AnonymousClass1.$SwitchMap$org$webrtc$VideoFrame$TextureBuffer$Type[textureBuffer.getType().ordinal()];
-        if (i7 == 1) {
-            glDrawer.drawOes(textureBuffer.getTextureId(), convertMatrixFromAndroidGraphicsMatrix, i, i2, i3, i4, i5, i6);
-        } else if (i7 == 2) {
-            glDrawer.drawRgb(textureBuffer.getTextureId(), convertMatrixFromAndroidGraphicsMatrix, i, i2, i3, i4, i5, i6);
+        int i9 = AnonymousClass1.$SwitchMap$org$webrtc$VideoFrame$TextureBuffer$Type[textureBuffer.getType().ordinal()];
+        if (i9 == 1) {
+            glDrawer.drawOes(textureBuffer.getTextureId(), textureBuffer.getWidth(), textureBuffer.getHeight(), i, i2, convertMatrixFromAndroidGraphicsMatrix, i3, i4, i5, i6, i7, i8, z);
+        } else if (i9 == 2) {
+            glDrawer.drawRgb(textureBuffer.getTextureId(), textureBuffer.getWidth(), textureBuffer.getHeight(), i, i2, convertMatrixFromAndroidGraphicsMatrix, i3, i4, i5, i6, i7, i8, z);
         } else {
             throw new RuntimeException("Unknown texture type.");
         }
@@ -63,6 +64,12 @@ public class VideoFrameDrawer {
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.webrtc.VideoFrameDrawer.AnonymousClass1.<clinit>():void");
+        }
+    }
+
+    public void getRenderBufferBitmap(RendererCommon.GlDrawer glDrawer, int i, GlGenericDrawer.TextureCallback textureCallback) {
+        if (glDrawer instanceof GlGenericDrawer) {
+            ((GlGenericDrawer) glDrawer).getRenderBufferBitmap(i, textureCallback);
         }
     }
 
@@ -145,10 +152,9 @@ public class VideoFrameDrawer {
         for (int i3 = 0; i3 < 3; i3++) {
             float[] fArr = this.dstPoints;
             int i4 = i3 * 2;
-            int i5 = i4 + 0;
-            fArr[i5] = fArr[i5] * ((float) i);
-            int i6 = i4 + 1;
-            fArr[i6] = fArr[i6] * ((float) i2);
+            fArr[i4] = fArr[i4] * ((float) i);
+            int i5 = i4 + 1;
+            fArr[i5] = fArr[i5] * ((float) i2);
         }
         float[] fArr2 = this.dstPoints;
         this.renderWidth = distance(fArr2[0], fArr2[1], fArr2[2], fArr2[3]);
@@ -161,31 +167,32 @@ public class VideoFrameDrawer {
     }
 
     public void drawFrame(VideoFrame videoFrame, RendererCommon.GlDrawer glDrawer, Matrix matrix) {
-        drawFrame(videoFrame, glDrawer, matrix, 0, 0, videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight(), false);
+        drawFrame(videoFrame, glDrawer, matrix, 0, 0, videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight(), false, false);
     }
 
-    public void drawFrame(VideoFrame videoFrame, RendererCommon.GlDrawer glDrawer, Matrix matrix, int i, int i2, int i3, int i4, boolean z) {
+    public void drawFrame(VideoFrame videoFrame, RendererCommon.GlDrawer glDrawer, Matrix matrix, int i, int i2, int i3, int i4, boolean z, boolean z2) {
         VideoFrame videoFrame2 = videoFrame;
         Matrix matrix2 = matrix;
-        calculateTransformedRenderSize(z ? videoFrame.getRotatedHeight() : videoFrame.getRotatedWidth(), z ? videoFrame.getRotatedWidth() : videoFrame.getRotatedHeight(), matrix);
+        calculateTransformedRenderSize(z ? videoFrame.getRotatedHeight() : videoFrame.getRotatedWidth(), z ? videoFrame.getRotatedWidth() : videoFrame.getRotatedHeight(), matrix2);
         if (this.renderWidth <= 0 || this.renderHeight <= 0) {
             Logging.w("VideoFrameDrawer", "Illegal frame size: " + this.renderWidth + "x" + this.renderHeight);
             return;
         }
-        boolean z2 = videoFrame.getBuffer() instanceof VideoFrame.TextureBuffer;
+        boolean z3 = videoFrame.getBuffer() instanceof VideoFrame.TextureBuffer;
         this.renderMatrix.reset();
         this.renderMatrix.preTranslate(0.5f, 0.5f);
-        if (!z2) {
+        if (!z3) {
             this.renderMatrix.preScale(1.0f, -1.0f);
         }
         this.renderMatrix.preRotate((float) videoFrame.getRotation());
         this.renderMatrix.preTranslate(-0.5f, -0.5f);
+        this.renderRotateMatrix.set(this.renderMatrix);
         if (matrix2 != null) {
-            this.renderMatrix.preConcat(matrix);
+            this.renderMatrix.preConcat(matrix2);
         }
-        if (z2) {
+        if (z3) {
             this.lastI420Frame = null;
-            drawTexture(glDrawer, (VideoFrame.TextureBuffer) videoFrame.getBuffer(), this.renderMatrix, this.renderWidth, this.renderHeight, i, i2, i3, i4);
+            drawTexture(glDrawer, (VideoFrame.TextureBuffer) videoFrame.getBuffer(), this.renderMatrix, videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight(), this.renderWidth, this.renderHeight, i, i2, i3, i4, z2);
             return;
         }
         if (videoFrame2 != this.lastI420Frame) {
@@ -194,7 +201,7 @@ public class VideoFrameDrawer {
             this.yuvUploader.uploadFromBuffer(i420);
             i420.release();
         }
-        glDrawer.drawYuv(this.yuvUploader.getYuvTextures(), RendererCommon.convertMatrixFromAndroidGraphicsMatrix(this.renderMatrix), this.renderWidth, this.renderHeight, i, i2, i3, i4);
+        glDrawer.drawYuv(this.yuvUploader.getYuvTextures(), videoFrame.getBuffer().getWidth(), videoFrame.getBuffer().getHeight(), videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight(), RendererCommon.convertMatrixFromAndroidGraphicsMatrix(this.renderMatrix), this.renderWidth, this.renderHeight, i, i2, i3, i4, z2);
     }
 
     public VideoFrame.Buffer prepareBufferForViewportSize(VideoFrame.Buffer buffer, int i, int i2) {

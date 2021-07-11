@@ -36,6 +36,7 @@ public class PipVideoView {
     public View controlsView;
     private DecelerateInterpolator decelerateInterpolator;
     private boolean isInAppOnly;
+    private Activity parentActivity;
     /* access modifiers changed from: private */
     public EmbedBottomSheet parentSheet;
     /* access modifiers changed from: private */
@@ -285,6 +286,7 @@ public class PipVideoView {
     public TextureView show(Activity activity, PhotoViewer photoViewer2, EmbedBottomSheet embedBottomSheet, View view, float f, int i, WebView webView) {
         TextureView textureView;
         this.parentSheet = embedBottomSheet;
+        this.parentActivity = activity;
         this.photoViewer = photoViewer2;
         this.windowView = new FrameLayout(activity) {
             private boolean dragging;
@@ -477,6 +479,7 @@ public class PipVideoView {
         }
         this.parentSheet = null;
         this.photoViewer = null;
+        this.parentActivity = null;
     }
 
     public void onConfigurationChanged() {

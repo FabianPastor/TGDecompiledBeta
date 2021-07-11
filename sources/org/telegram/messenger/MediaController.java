@@ -50,6 +50,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.MediaController;
+import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
@@ -1315,7 +1316,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     /* renamed from: lambda$new$4 */
     public /* synthetic */ void lambda$new$4$MediaController() {
         for (int i = 0; i < 3; i++) {
-            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.fileDidLoad);
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.fileLoaded);
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.httpFileDidLoad);
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.didReceiveNewMessages);
             NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagesDeleted);
@@ -1753,7 +1754,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         int indexOf;
         int indexOf2;
         int i3 = 0;
-        if (i == NotificationCenter.fileDidLoad || i == NotificationCenter.httpFileDidLoad) {
+        if (i == NotificationCenter.fileLoaded || i == NotificationCenter.httpFileDidLoad) {
             String str = objArr[0];
             MessageObject messageObject = this.playingMessageObject;
             if (messageObject != null && messageObject.currentAccount == i2 && FileLoader.getAttachFileName(messageObject.getDocument()).equals(str)) {
@@ -2896,13 +2897,13 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         long j2 = messageObject2.messageOwner.grouped_id;
         if (id >= 0 || id2 >= 0) {
             if (j == 0 || j != j2) {
-                return C$r8$backportedMethods$utility$Integer$2$compare.compare(id, id2);
+                return ChatObject$Call$$ExternalSynthetic0.m0(id, id2);
             }
-            return C$r8$backportedMethods$utility$Integer$2$compare.compare(id2, id);
+            return ChatObject$Call$$ExternalSynthetic0.m0(id2, id);
         } else if (j == 0 || j != j2) {
-            return C$r8$backportedMethods$utility$Integer$2$compare.compare(id2, id);
+            return ChatObject$Call$$ExternalSynthetic0.m0(id2, id);
         } else {
-            return C$r8$backportedMethods$utility$Integer$2$compare.compare(id, id2);
+            return ChatObject$Call$$ExternalSynthetic0.m0(id, id2);
         }
     }
 
@@ -3696,11 +3697,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:207:0x0549  */
-    /* JADX WARNING: Removed duplicated region for block: B:221:0x0592 A[SYNTHETIC, Splitter:B:221:0x0592] */
-    /* JADX WARNING: Removed duplicated region for block: B:238:0x05f4  */
-    /* JADX WARNING: Removed duplicated region for block: B:253:0x0652  */
-    /* JADX WARNING: Removed duplicated region for block: B:258:0x0666  */
+    /* JADX WARNING: Removed duplicated region for block: B:207:0x054b  */
+    /* JADX WARNING: Removed duplicated region for block: B:221:0x0594 A[SYNTHETIC, Splitter:B:221:0x0594] */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x05f6  */
+    /* JADX WARNING: Removed duplicated region for block: B:253:0x0654  */
+    /* JADX WARNING: Removed duplicated region for block: B:258:0x0668  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean playMessage(org.telegram.messenger.MessageObject r29) {
         /*
@@ -3889,12 +3890,12 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r19 = r10
             java.lang.String r10 = "other"
             r20 = r4
-            if (r2 != 0) goto L_0x038c
+            if (r2 != 0) goto L_0x038d
             if (r1 == 0) goto L_0x017c
             r22 = r5
             r4 = r20
             r2 = 0
-            goto L_0x0393
+            goto L_0x0394
         L_0x017c:
             org.telegram.ui.Components.PipRoundVideoView r1 = r7.pipRoundVideoView
             if (r1 == 0) goto L_0x0187
@@ -3903,216 +3904,216 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r1 = 0
             r7.pipRoundVideoView = r1
         L_0x0187:
-            org.telegram.ui.Components.VideoPlayer r1 = new org.telegram.ui.Components.VideoPlayer     // Catch:{ Exception -> 0x0353 }
-            r1.<init>()     // Catch:{ Exception -> 0x0353 }
-            r7.audioPlayer = r1     // Catch:{ Exception -> 0x0353 }
-            int r2 = r7.playerNum     // Catch:{ Exception -> 0x0353 }
+            org.telegram.ui.Components.VideoPlayer r1 = new org.telegram.ui.Components.VideoPlayer     // Catch:{ Exception -> 0x0354 }
+            r1.<init>()     // Catch:{ Exception -> 0x0354 }
+            r7.audioPlayer = r1     // Catch:{ Exception -> 0x0354 }
+            int r2 = r7.playerNum     // Catch:{ Exception -> 0x0354 }
             r18 = 1
             int r2 = r2 + 1
-            r7.playerNum = r2     // Catch:{ Exception -> 0x0353 }
-            org.telegram.messenger.MediaController$10 r4 = new org.telegram.messenger.MediaController$10     // Catch:{ Exception -> 0x0353 }
-            r4.<init>(r2, r8)     // Catch:{ Exception -> 0x0353 }
-            r1.setDelegate(r4)     // Catch:{ Exception -> 0x0353 }
-            org.telegram.ui.Components.VideoPlayer r1 = r7.audioPlayer     // Catch:{ Exception -> 0x0353 }
-            org.telegram.messenger.MediaController$11 r2 = new org.telegram.messenger.MediaController$11     // Catch:{ Exception -> 0x0353 }
-            r2.<init>()     // Catch:{ Exception -> 0x0353 }
-            r1.setAudioVisualizerDelegate(r2)     // Catch:{ Exception -> 0x0353 }
+            r7.playerNum = r2     // Catch:{ Exception -> 0x0354 }
+            org.telegram.messenger.MediaController$10 r4 = new org.telegram.messenger.MediaController$10     // Catch:{ Exception -> 0x0354 }
+            r4.<init>(r2, r8)     // Catch:{ Exception -> 0x0354 }
+            r1.setDelegate(r4)     // Catch:{ Exception -> 0x0354 }
+            org.telegram.ui.Components.VideoPlayer r1 = r7.audioPlayer     // Catch:{ Exception -> 0x0354 }
+            org.telegram.messenger.MediaController$11 r2 = new org.telegram.messenger.MediaController$11     // Catch:{ Exception -> 0x0354 }
+            r2.<init>()     // Catch:{ Exception -> 0x0354 }
+            r1.setAudioVisualizerDelegate(r2)     // Catch:{ Exception -> 0x0354 }
             if (r16 == 0) goto L_0x01c8
-            boolean r1 = r8.mediaExists     // Catch:{ Exception -> 0x0353 }
+            boolean r1 = r8.mediaExists     // Catch:{ Exception -> 0x0354 }
             if (r1 != 0) goto L_0x01b8
             if (r5 == r0) goto L_0x01b8
-            org.telegram.messenger.-$$Lambda$MediaController$RVuoBKzPQ3I7pN_rS3J9MG7KpVc r0 = new org.telegram.messenger.-$$Lambda$MediaController$RVuoBKzPQ3I7pN_rS3J9MG7KpVc     // Catch:{ Exception -> 0x0353 }
-            r0.<init>(r5)     // Catch:{ Exception -> 0x0353 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0353 }
+            org.telegram.messenger.-$$Lambda$MediaController$RVuoBKzPQ3I7pN_rS3J9MG7KpVc r0 = new org.telegram.messenger.-$$Lambda$MediaController$RVuoBKzPQ3I7pN_rS3J9MG7KpVc     // Catch:{ Exception -> 0x0354 }
+            r0.<init>(r5)     // Catch:{ Exception -> 0x0354 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0354 }
         L_0x01b8:
-            org.telegram.ui.Components.VideoPlayer r0 = r7.audioPlayer     // Catch:{ Exception -> 0x0353 }
-            android.net.Uri r1 = android.net.Uri.fromFile(r5)     // Catch:{ Exception -> 0x0353 }
-            r0.preparePlayer(r1, r10)     // Catch:{ Exception -> 0x0353 }
+            org.telegram.ui.Components.VideoPlayer r0 = r7.audioPlayer     // Catch:{ Exception -> 0x0354 }
+            android.net.Uri r1 = android.net.Uri.fromFile(r5)     // Catch:{ Exception -> 0x0354 }
+            r0.preparePlayer(r1, r10)     // Catch:{ Exception -> 0x0354 }
             r1 = 0
-            r7.isStreamingCurrentAudio = r1     // Catch:{ Exception -> 0x0353 }
+            r7.isStreamingCurrentAudio = r1     // Catch:{ Exception -> 0x0354 }
             r22 = r5
-            goto L_0x0263
+            goto L_0x0264
         L_0x01c8:
-            int r0 = r8.currentAccount     // Catch:{ Exception -> 0x0353 }
-            org.telegram.messenger.FileLoader r0 = org.telegram.messenger.FileLoader.getInstance(r0)     // Catch:{ Exception -> 0x0353 }
-            int r0 = r0.getFileReference(r8)     // Catch:{ Exception -> 0x0353 }
-            org.telegram.tgnet.TLRPC$Document r1 = r29.getDocument()     // Catch:{ Exception -> 0x0353 }
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0353 }
-            r2.<init>()     // Catch:{ Exception -> 0x0353 }
-            r2.append(r13)     // Catch:{ Exception -> 0x0353 }
-            int r4 = r8.currentAccount     // Catch:{ Exception -> 0x0353 }
-            r2.append(r4)     // Catch:{ Exception -> 0x0353 }
-            r2.append(r9)     // Catch:{ Exception -> 0x0353 }
+            int r0 = r8.currentAccount     // Catch:{ Exception -> 0x0354 }
+            org.telegram.messenger.FileLoader r0 = org.telegram.messenger.FileLoader.getInstance(r0)     // Catch:{ Exception -> 0x0354 }
+            int r0 = r0.getFileReference(r8)     // Catch:{ Exception -> 0x0354 }
+            org.telegram.tgnet.TLRPC$Document r1 = r29.getDocument()     // Catch:{ Exception -> 0x0354 }
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0354 }
+            r2.<init>()     // Catch:{ Exception -> 0x0354 }
+            r2.append(r13)     // Catch:{ Exception -> 0x0354 }
+            int r4 = r8.currentAccount     // Catch:{ Exception -> 0x0354 }
+            r2.append(r4)     // Catch:{ Exception -> 0x0354 }
+            r2.append(r9)     // Catch:{ Exception -> 0x0354 }
             r22 = r5
-            long r4 = r1.id     // Catch:{ Exception -> 0x0353 }
-            r2.append(r4)     // Catch:{ Exception -> 0x0353 }
-            r2.append(r6)     // Catch:{ Exception -> 0x0353 }
-            long r4 = r1.access_hash     // Catch:{ Exception -> 0x0353 }
-            r2.append(r4)     // Catch:{ Exception -> 0x0353 }
-            r2.append(r12)     // Catch:{ Exception -> 0x0353 }
-            int r4 = r1.dc_id     // Catch:{ Exception -> 0x0353 }
-            r2.append(r4)     // Catch:{ Exception -> 0x0353 }
-            r2.append(r15)     // Catch:{ Exception -> 0x0353 }
-            int r4 = r1.size     // Catch:{ Exception -> 0x0353 }
-            r2.append(r4)     // Catch:{ Exception -> 0x0353 }
-            r2.append(r14)     // Catch:{ Exception -> 0x0353 }
-            java.lang.String r4 = r1.mime_type     // Catch:{ Exception -> 0x0353 }
-            java.lang.String r4 = java.net.URLEncoder.encode(r4, r11)     // Catch:{ Exception -> 0x0353 }
-            r2.append(r4)     // Catch:{ Exception -> 0x0353 }
-            r2.append(r3)     // Catch:{ Exception -> 0x0353 }
-            r2.append(r0)     // Catch:{ Exception -> 0x0353 }
+            long r4 = r1.id     // Catch:{ Exception -> 0x0354 }
+            r2.append(r4)     // Catch:{ Exception -> 0x0354 }
+            r2.append(r6)     // Catch:{ Exception -> 0x0354 }
+            long r4 = r1.access_hash     // Catch:{ Exception -> 0x0354 }
+            r2.append(r4)     // Catch:{ Exception -> 0x0354 }
+            r2.append(r12)     // Catch:{ Exception -> 0x0354 }
+            int r4 = r1.dc_id     // Catch:{ Exception -> 0x0354 }
+            r2.append(r4)     // Catch:{ Exception -> 0x0354 }
+            r2.append(r15)     // Catch:{ Exception -> 0x0354 }
+            int r4 = r1.size     // Catch:{ Exception -> 0x0354 }
+            r2.append(r4)     // Catch:{ Exception -> 0x0354 }
+            r2.append(r14)     // Catch:{ Exception -> 0x0354 }
+            java.lang.String r4 = r1.mime_type     // Catch:{ Exception -> 0x0354 }
+            java.lang.String r4 = java.net.URLEncoder.encode(r4, r11)     // Catch:{ Exception -> 0x0354 }
+            r2.append(r4)     // Catch:{ Exception -> 0x0354 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0354 }
+            r2.append(r0)     // Catch:{ Exception -> 0x0354 }
             r4 = r20
-            r2.append(r4)     // Catch:{ Exception -> 0x0353 }
-            java.lang.String r0 = org.telegram.messenger.FileLoader.getDocumentFileName(r1)     // Catch:{ Exception -> 0x0353 }
-            java.lang.String r0 = java.net.URLEncoder.encode(r0, r11)     // Catch:{ Exception -> 0x0353 }
-            r2.append(r0)     // Catch:{ Exception -> 0x0353 }
+            r2.append(r4)     // Catch:{ Exception -> 0x0354 }
+            java.lang.String r0 = org.telegram.messenger.FileLoader.getDocumentFileName(r1)     // Catch:{ Exception -> 0x0354 }
+            java.lang.String r0 = java.net.URLEncoder.encode(r0, r11)     // Catch:{ Exception -> 0x0354 }
+            r2.append(r0)     // Catch:{ Exception -> 0x0354 }
             java.lang.String r0 = "&reference="
-            r2.append(r0)     // Catch:{ Exception -> 0x0353 }
-            byte[] r0 = r1.file_reference     // Catch:{ Exception -> 0x0353 }
+            r2.append(r0)     // Catch:{ Exception -> 0x0354 }
+            byte[] r0 = r1.file_reference     // Catch:{ Exception -> 0x0354 }
             if (r0 == 0) goto L_0x0231
             goto L_0x0234
         L_0x0231:
             r1 = 0
-            byte[] r0 = new byte[r1]     // Catch:{ Exception -> 0x0353 }
+            byte[] r0 = new byte[r1]     // Catch:{ Exception -> 0x0354 }
         L_0x0234:
-            java.lang.String r0 = org.telegram.messenger.Utilities.bytesToHex(r0)     // Catch:{ Exception -> 0x0353 }
-            r2.append(r0)     // Catch:{ Exception -> 0x0353 }
-            java.lang.String r0 = r2.toString()     // Catch:{ Exception -> 0x0353 }
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0353 }
-            r1.<init>()     // Catch:{ Exception -> 0x0353 }
+            java.lang.String r0 = org.telegram.messenger.Utilities.bytesToHex(r0)     // Catch:{ Exception -> 0x0354 }
+            r2.append(r0)     // Catch:{ Exception -> 0x0354 }
+            java.lang.String r0 = r2.toString()     // Catch:{ Exception -> 0x0354 }
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0354 }
+            r1.<init>()     // Catch:{ Exception -> 0x0354 }
             java.lang.String r2 = "tg://"
-            r1.append(r2)     // Catch:{ Exception -> 0x0353 }
-            java.lang.String r2 = r29.getFileName()     // Catch:{ Exception -> 0x0353 }
-            r1.append(r2)     // Catch:{ Exception -> 0x0353 }
-            r1.append(r0)     // Catch:{ Exception -> 0x0353 }
-            java.lang.String r0 = r1.toString()     // Catch:{ Exception -> 0x0353 }
-            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x0353 }
-            org.telegram.ui.Components.VideoPlayer r1 = r7.audioPlayer     // Catch:{ Exception -> 0x0353 }
-            r1.preparePlayer(r0, r10)     // Catch:{ Exception -> 0x0353 }
+            r1.append(r2)     // Catch:{ Exception -> 0x0354 }
+            java.lang.String r2 = r29.getFileName()     // Catch:{ Exception -> 0x0354 }
+            r1.append(r2)     // Catch:{ Exception -> 0x0354 }
+            r1.append(r0)     // Catch:{ Exception -> 0x0354 }
+            java.lang.String r0 = r1.toString()     // Catch:{ Exception -> 0x0354 }
+            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x0354 }
+            org.telegram.ui.Components.VideoPlayer r1 = r7.audioPlayer     // Catch:{ Exception -> 0x0354 }
+            r1.preparePlayer(r0, r10)     // Catch:{ Exception -> 0x0354 }
             r1 = 1
-            r7.isStreamingCurrentAudio = r1     // Catch:{ Exception -> 0x0353 }
-        L_0x0263:
-            boolean r0 = r29.isVoice()     // Catch:{ Exception -> 0x0353 }
+            r7.isStreamingCurrentAudio = r1     // Catch:{ Exception -> 0x0354 }
+        L_0x0264:
+            boolean r0 = r29.isVoice()     // Catch:{ Exception -> 0x0354 }
             java.lang.String r1 = "media_saved_pos"
             r2 = -1082130432(0xffffffffbvar_, float:-1.0)
-            if (r0 == 0) goto L_0x02ac
-            java.lang.String r0 = r29.getFileName()     // Catch:{ Exception -> 0x0353 }
-            if (r0 == 0) goto L_0x0298
-            int r3 = r29.getDuration()     // Catch:{ Exception -> 0x0353 }
+            if (r0 == 0) goto L_0x02ad
+            java.lang.String r0 = r29.getFileName()     // Catch:{ Exception -> 0x0354 }
+            if (r0 == 0) goto L_0x0299
+            int r3 = r29.getDuration()     // Catch:{ Exception -> 0x0354 }
             r4 = 300(0x12c, float:4.2E-43)
-            if (r3 < r4) goto L_0x0298
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0353 }
+            if (r3 < r4) goto L_0x0299
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0354 }
             r4 = 0
-            android.content.SharedPreferences r1 = r3.getSharedPreferences(r1, r4)     // Catch:{ Exception -> 0x0353 }
-            float r1 = r1.getFloat(r0, r2)     // Catch:{ Exception -> 0x0353 }
+            android.content.SharedPreferences r1 = r3.getSharedPreferences(r1, r4)     // Catch:{ Exception -> 0x0354 }
+            float r1 = r1.getFloat(r0, r2)     // Catch:{ Exception -> 0x0354 }
             r3 = 0
             int r4 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r4 <= 0) goto L_0x0296
+            if (r4 <= 0) goto L_0x0297
             r3 = 1065185444(0x3f7d70a4, float:0.99)
             int r3 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r3 >= 0) goto L_0x0296
-            r7.seekToProgressPending = r1     // Catch:{ Exception -> 0x0353 }
-            r8.audioProgress = r1     // Catch:{ Exception -> 0x0353 }
-        L_0x0296:
-            r7.shouldSavePositionForCurrentAudio = r0     // Catch:{ Exception -> 0x0353 }
-        L_0x0298:
-            float r0 = r7.currentPlaybackSpeed     // Catch:{ Exception -> 0x0353 }
+            if (r3 >= 0) goto L_0x0297
+            r7.seekToProgressPending = r1     // Catch:{ Exception -> 0x0354 }
+            r8.audioProgress = r1     // Catch:{ Exception -> 0x0354 }
+        L_0x0297:
+            r7.shouldSavePositionForCurrentAudio = r0     // Catch:{ Exception -> 0x0354 }
+        L_0x0299:
+            float r0 = r7.currentPlaybackSpeed     // Catch:{ Exception -> 0x0354 }
             r1 = 1065353216(0x3var_, float:1.0)
             int r3 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r3 <= 0) goto L_0x02a5
-            org.telegram.ui.Components.VideoPlayer r1 = r7.audioPlayer     // Catch:{ Exception -> 0x0353 }
-            r1.setPlaybackSpeed(r0)     // Catch:{ Exception -> 0x0353 }
-        L_0x02a5:
+            if (r3 <= 0) goto L_0x02a6
+            org.telegram.ui.Components.VideoPlayer r1 = r7.audioPlayer     // Catch:{ Exception -> 0x0354 }
+            r1.setPlaybackSpeed(r0)     // Catch:{ Exception -> 0x0354 }
+        L_0x02a6:
             r1 = 0
-            r7.audioInfo = r1     // Catch:{ Exception -> 0x0353 }
-            r28.clearPlaylist()     // Catch:{ Exception -> 0x0353 }
-            goto L_0x02f3
-        L_0x02ac:
-            org.telegram.messenger.audioinfo.AudioInfo r0 = org.telegram.messenger.audioinfo.AudioInfo.getAudioInfo(r22)     // Catch:{ Exception -> 0x02b3 }
-            r7.audioInfo = r0     // Catch:{ Exception -> 0x02b3 }
-            goto L_0x02b7
-        L_0x02b3:
+            r7.audioInfo = r1     // Catch:{ Exception -> 0x0354 }
+            r28.clearPlaylist()     // Catch:{ Exception -> 0x0354 }
+            goto L_0x02f4
+        L_0x02ad:
+            org.telegram.messenger.audioinfo.AudioInfo r0 = org.telegram.messenger.audioinfo.AudioInfo.getAudioInfo(r22)     // Catch:{ Exception -> 0x02b4 }
+            r7.audioInfo = r0     // Catch:{ Exception -> 0x02b4 }
+            goto L_0x02b8
+        L_0x02b4:
             r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x0353 }
-        L_0x02b7:
-            java.lang.String r0 = r29.getFileName()     // Catch:{ Exception -> 0x0353 }
-            boolean r3 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x0353 }
-            if (r3 != 0) goto L_0x02f3
-            int r3 = r29.getDuration()     // Catch:{ Exception -> 0x0353 }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x0354 }
+        L_0x02b8:
+            java.lang.String r0 = r29.getFileName()     // Catch:{ Exception -> 0x0354 }
+            boolean r3 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x0354 }
+            if (r3 != 0) goto L_0x02f4
+            int r3 = r29.getDuration()     // Catch:{ Exception -> 0x0354 }
             r4 = 1200(0x4b0, float:1.682E-42)
-            if (r3 < r4) goto L_0x02f3
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0353 }
+            if (r3 < r4) goto L_0x02f4
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0354 }
             r4 = 0
-            android.content.SharedPreferences r1 = r3.getSharedPreferences(r1, r4)     // Catch:{ Exception -> 0x0353 }
-            float r1 = r1.getFloat(r0, r2)     // Catch:{ Exception -> 0x0353 }
+            android.content.SharedPreferences r1 = r3.getSharedPreferences(r1, r4)     // Catch:{ Exception -> 0x0354 }
+            float r1 = r1.getFloat(r0, r2)     // Catch:{ Exception -> 0x0354 }
             r3 = 0
             int r4 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r4 <= 0) goto L_0x02e4
+            if (r4 <= 0) goto L_0x02e5
             r3 = 1065336439(0x3f7fbe77, float:0.999)
             int r3 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r3 >= 0) goto L_0x02e4
-            r7.seekToProgressPending = r1     // Catch:{ Exception -> 0x0353 }
-            r8.audioProgress = r1     // Catch:{ Exception -> 0x0353 }
-        L_0x02e4:
-            r7.shouldSavePositionForCurrentAudio = r0     // Catch:{ Exception -> 0x0353 }
-            float r0 = r7.currentMusicPlaybackSpeed     // Catch:{ Exception -> 0x0353 }
+            if (r3 >= 0) goto L_0x02e5
+            r7.seekToProgressPending = r1     // Catch:{ Exception -> 0x0354 }
+            r8.audioProgress = r1     // Catch:{ Exception -> 0x0354 }
+        L_0x02e5:
+            r7.shouldSavePositionForCurrentAudio = r0     // Catch:{ Exception -> 0x0354 }
+            float r0 = r7.currentMusicPlaybackSpeed     // Catch:{ Exception -> 0x0354 }
             r1 = 1065353216(0x3var_, float:1.0)
             int r3 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r3 <= 0) goto L_0x02f3
-            org.telegram.ui.Components.VideoPlayer r1 = r7.audioPlayer     // Catch:{ Exception -> 0x0353 }
-            r1.setPlaybackSpeed(r0)     // Catch:{ Exception -> 0x0353 }
-        L_0x02f3:
-            float r0 = r8.forceSeekTo     // Catch:{ Exception -> 0x0353 }
+            if (r3 <= 0) goto L_0x02f4
+            org.telegram.ui.Components.VideoPlayer r1 = r7.audioPlayer     // Catch:{ Exception -> 0x0354 }
+            r1.setPlaybackSpeed(r0)     // Catch:{ Exception -> 0x0354 }
+        L_0x02f4:
+            float r0 = r8.forceSeekTo     // Catch:{ Exception -> 0x0354 }
             r17 = 0
             int r1 = (r0 > r17 ? 1 : (r0 == r17 ? 0 : -1))
-            if (r1 < 0) goto L_0x0301
-            r7.seekToProgressPending = r0     // Catch:{ Exception -> 0x0353 }
-            r8.audioProgress = r0     // Catch:{ Exception -> 0x0353 }
-            r8.forceSeekTo = r2     // Catch:{ Exception -> 0x0353 }
-        L_0x0301:
-            org.telegram.ui.Components.VideoPlayer r0 = r7.audioPlayer     // Catch:{ Exception -> 0x0353 }
-            boolean r1 = r7.useFrontSpeaker     // Catch:{ Exception -> 0x0353 }
-            if (r1 == 0) goto L_0x0309
+            if (r1 < 0) goto L_0x0302
+            r7.seekToProgressPending = r0     // Catch:{ Exception -> 0x0354 }
+            r8.audioProgress = r0     // Catch:{ Exception -> 0x0354 }
+            r8.forceSeekTo = r2     // Catch:{ Exception -> 0x0354 }
+        L_0x0302:
+            org.telegram.ui.Components.VideoPlayer r0 = r7.audioPlayer     // Catch:{ Exception -> 0x0354 }
+            boolean r1 = r7.useFrontSpeaker     // Catch:{ Exception -> 0x0354 }
+            if (r1 == 0) goto L_0x030a
             r1 = 0
-            goto L_0x030a
-        L_0x0309:
-            r1 = 3
+            goto L_0x030b
         L_0x030a:
-            r0.setStreamType(r1)     // Catch:{ Exception -> 0x0353 }
-            org.telegram.ui.Components.VideoPlayer r0 = r7.audioPlayer     // Catch:{ Exception -> 0x0353 }
-            r0.play()     // Catch:{ Exception -> 0x0353 }
-            boolean r0 = r29.isVoice()     // Catch:{ Exception -> 0x0353 }
-            if (r0 != 0) goto L_0x034a
-            android.animation.ValueAnimator r0 = r7.audioVolumeAnimator     // Catch:{ Exception -> 0x0353 }
-            if (r0 == 0) goto L_0x0324
-            r0.removeAllListeners()     // Catch:{ Exception -> 0x0353 }
-            android.animation.ValueAnimator r0 = r7.audioVolumeAnimator     // Catch:{ Exception -> 0x0353 }
-            r0.cancel()     // Catch:{ Exception -> 0x0353 }
-        L_0x0324:
+            r1 = 3
+        L_0x030b:
+            r0.setStreamType(r1)     // Catch:{ Exception -> 0x0354 }
+            org.telegram.ui.Components.VideoPlayer r0 = r7.audioPlayer     // Catch:{ Exception -> 0x0354 }
+            r0.play()     // Catch:{ Exception -> 0x0354 }
+            boolean r0 = r29.isVoice()     // Catch:{ Exception -> 0x0354 }
+            if (r0 != 0) goto L_0x034b
+            android.animation.ValueAnimator r0 = r7.audioVolumeAnimator     // Catch:{ Exception -> 0x0354 }
+            if (r0 == 0) goto L_0x0325
+            r0.removeAllListeners()     // Catch:{ Exception -> 0x0354 }
+            android.animation.ValueAnimator r0 = r7.audioVolumeAnimator     // Catch:{ Exception -> 0x0354 }
+            r0.cancel()     // Catch:{ Exception -> 0x0354 }
+        L_0x0325:
             r1 = 2
-            float[] r0 = new float[r1]     // Catch:{ Exception -> 0x0353 }
-            float r1 = r7.audioVolume     // Catch:{ Exception -> 0x0353 }
+            float[] r0 = new float[r1]     // Catch:{ Exception -> 0x0354 }
+            float r1 = r7.audioVolume     // Catch:{ Exception -> 0x0354 }
             r2 = 0
-            r0[r2] = r1     // Catch:{ Exception -> 0x0353 }
+            r0[r2] = r1     // Catch:{ Exception -> 0x0354 }
             r1 = 1065353216(0x3var_, float:1.0)
             r2 = 1
-            r0[r2] = r1     // Catch:{ Exception -> 0x0353 }
-            android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)     // Catch:{ Exception -> 0x0353 }
-            r7.audioVolumeAnimator = r0     // Catch:{ Exception -> 0x0353 }
-            android.animation.ValueAnimator$AnimatorUpdateListener r1 = r7.audioVolumeUpdateListener     // Catch:{ Exception -> 0x0353 }
-            r0.addUpdateListener(r1)     // Catch:{ Exception -> 0x0353 }
-            android.animation.ValueAnimator r0 = r7.audioVolumeAnimator     // Catch:{ Exception -> 0x0353 }
+            r0[r2] = r1     // Catch:{ Exception -> 0x0354 }
+            android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)     // Catch:{ Exception -> 0x0354 }
+            r7.audioVolumeAnimator = r0     // Catch:{ Exception -> 0x0354 }
+            android.animation.ValueAnimator$AnimatorUpdateListener r1 = r7.audioVolumeUpdateListener     // Catch:{ Exception -> 0x0354 }
+            r0.addUpdateListener(r1)     // Catch:{ Exception -> 0x0354 }
+            android.animation.ValueAnimator r0 = r7.audioVolumeAnimator     // Catch:{ Exception -> 0x0354 }
             r1 = 300(0x12c, double:1.48E-321)
-            r0.setDuration(r1)     // Catch:{ Exception -> 0x0353 }
-            android.animation.ValueAnimator r0 = r7.audioVolumeAnimator     // Catch:{ Exception -> 0x0353 }
-            r0.start()     // Catch:{ Exception -> 0x0353 }
-            goto L_0x0536
-        L_0x034a:
+            r0.setDuration(r1)     // Catch:{ Exception -> 0x0354 }
+            android.animation.ValueAnimator r0 = r7.audioVolumeAnimator     // Catch:{ Exception -> 0x0354 }
+            r0.start()     // Catch:{ Exception -> 0x0354 }
+            goto L_0x0538
+        L_0x034b:
             r5 = 1065353216(0x3var_, float:1.0)
-            r7.audioVolume = r5     // Catch:{ Exception -> 0x0353 }
-            r28.setPlayerVolume()     // Catch:{ Exception -> 0x0353 }
-            goto L_0x0536
-        L_0x0353:
+            r7.audioVolume = r5     // Catch:{ Exception -> 0x0354 }
+            r28.setPlayerVolume()     // Catch:{ Exception -> 0x0354 }
+            goto L_0x0538
+        L_0x0354:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             int r0 = r8.currentAccount
@@ -4121,18 +4122,18 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r2 = 1
             java.lang.Object[] r3 = new java.lang.Object[r2]
             org.telegram.messenger.MessageObject r4 = r7.playingMessageObject
-            if (r4 == 0) goto L_0x036b
+            if (r4 == 0) goto L_0x036c
             int r4 = r4.getId()
-            goto L_0x036c
-        L_0x036b:
-            r4 = 0
+            goto L_0x036d
         L_0x036c:
+            r4 = 0
+        L_0x036d:
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             r5 = 0
             r3[r5] = r4
             r0.postNotificationName(r1, r3)
             org.telegram.ui.Components.VideoPlayer r0 = r7.audioPlayer
-            if (r0 == 0) goto L_0x038b
+            if (r0 == 0) goto L_0x038c
             r0.releasePlayer(r2)
             r1 = 0
             r7.audioPlayer = r1
@@ -4141,14 +4142,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r7.isPaused = r5
             r7.playingMessageObject = r1
             r7.downloadingCurrentMessage = r5
-        L_0x038b:
-            return r5
         L_0x038c:
+            return r5
+        L_0x038d:
             r22 = r5
             r4 = r20
             r2 = 0
             r5 = 1065353216(0x3var_, float:1.0)
-        L_0x0393:
+        L_0x0394:
             r17 = 0
             int r5 = r8.currentAccount
             org.telegram.messenger.FileLoader r5 = org.telegram.messenger.FileLoader.getInstance(r5)
@@ -4158,36 +4159,36 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r4 = 1
             r5.setLoadingVideoForPlayer(r3, r4)
             r7.playerWasReady = r2
-            if (r1 == 0) goto L_0x03c0
+            if (r1 == 0) goto L_0x03c1
             org.telegram.tgnet.TLRPC$Message r2 = r8.messageOwner
             org.telegram.tgnet.TLRPC$Peer r2 = r2.peer_id
             int r2 = r2.channel_id
-            if (r2 != 0) goto L_0x03bd
+            if (r2 != 0) goto L_0x03be
             float r2 = r8.audioProgress
             r3 = 1036831949(0x3dcccccd, float:0.1)
             int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r2 > 0) goto L_0x03bd
-            goto L_0x03c0
-        L_0x03bd:
+            if (r2 > 0) goto L_0x03be
+            goto L_0x03c1
+        L_0x03be:
             r24 = 0
-            goto L_0x03c2
-        L_0x03c0:
+            goto L_0x03c3
+        L_0x03c1:
             r24 = 1
-        L_0x03c2:
-            if (r1 == 0) goto L_0x03d4
+        L_0x03c3:
+            if (r1 == 0) goto L_0x03d5
             int r1 = r29.getDuration()
             r2 = 30
-            if (r1 > r2) goto L_0x03d4
+            if (r1 > r2) goto L_0x03d5
             r1 = 1
             int[] r2 = new int[r1]
             r3 = 0
             r2[r3] = r1
             r5 = r2
-            goto L_0x03d6
-        L_0x03d4:
+            goto L_0x03d7
+        L_0x03d5:
             r1 = 1
             r5 = 0
-        L_0x03d6:
+        L_0x03d7:
             r28.clearPlaylist()
             org.telegram.ui.Components.VideoPlayer r4 = new org.telegram.ui.Components.VideoPlayer
             r4.<init>()
@@ -4216,141 +4217,141 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r1 = 0
             r7.currentAspectRatioFrameLayoutReady = r1
             org.telegram.ui.Components.PipRoundVideoView r1 = r7.pipRoundVideoView
-            if (r1 != 0) goto L_0x042c
+            if (r1 != 0) goto L_0x042d
             int r1 = r8.currentAccount
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
             long r2 = r29.getDialogId()
             boolean r4 = r8.scheduled
             boolean r1 = r1.isDialogVisible(r2, r4)
-            if (r1 != 0) goto L_0x0422
-            goto L_0x042c
-        L_0x0422:
+            if (r1 != 0) goto L_0x0423
+            goto L_0x042d
+        L_0x0423:
             android.view.TextureView r1 = r7.currentTextureView
-            if (r1 == 0) goto L_0x0452
+            if (r1 == 0) goto L_0x0453
             org.telegram.ui.Components.VideoPlayer r2 = r7.videoPlayer
             r2.setTextureView(r1)
-            goto L_0x0452
-        L_0x042c:
+            goto L_0x0453
+        L_0x042d:
             org.telegram.ui.Components.PipRoundVideoView r1 = r7.pipRoundVideoView
-            if (r1 != 0) goto L_0x0445
-            org.telegram.ui.Components.PipRoundVideoView r1 = new org.telegram.ui.Components.PipRoundVideoView     // Catch:{ Exception -> 0x0442 }
-            r1.<init>()     // Catch:{ Exception -> 0x0442 }
-            r7.pipRoundVideoView = r1     // Catch:{ Exception -> 0x0442 }
-            android.app.Activity r2 = r7.baseActivity     // Catch:{ Exception -> 0x0442 }
-            org.telegram.messenger.-$$Lambda$MediaController$nLvm-S0tkI10tAtBsgeDqiwed_o r3 = new org.telegram.messenger.-$$Lambda$MediaController$nLvm-S0tkI10tAtBsgeDqiwed_o     // Catch:{ Exception -> 0x0442 }
-            r3.<init>()     // Catch:{ Exception -> 0x0442 }
-            r1.show(r2, r3)     // Catch:{ Exception -> 0x0442 }
-            goto L_0x0445
-        L_0x0442:
+            if (r1 != 0) goto L_0x0446
+            org.telegram.ui.Components.PipRoundVideoView r1 = new org.telegram.ui.Components.PipRoundVideoView     // Catch:{ Exception -> 0x0443 }
+            r1.<init>()     // Catch:{ Exception -> 0x0443 }
+            r7.pipRoundVideoView = r1     // Catch:{ Exception -> 0x0443 }
+            android.app.Activity r2 = r7.baseActivity     // Catch:{ Exception -> 0x0443 }
+            org.telegram.messenger.-$$Lambda$MediaController$nLvm-S0tkI10tAtBsgeDqiwed_o r3 = new org.telegram.messenger.-$$Lambda$MediaController$nLvm-S0tkI10tAtBsgeDqiwed_o     // Catch:{ Exception -> 0x0443 }
+            r3.<init>()     // Catch:{ Exception -> 0x0443 }
+            r1.show(r2, r3)     // Catch:{ Exception -> 0x0443 }
+            goto L_0x0446
+        L_0x0443:
             r1 = 0
             r7.pipRoundVideoView = r1
-        L_0x0445:
+        L_0x0446:
             org.telegram.ui.Components.PipRoundVideoView r1 = r7.pipRoundVideoView
-            if (r1 == 0) goto L_0x0452
+            if (r1 == 0) goto L_0x0453
             org.telegram.ui.Components.VideoPlayer r2 = r7.videoPlayer
             android.view.TextureView r1 = r1.getTextureView()
             r2.setTextureView(r1)
-        L_0x0452:
-            if (r16 == 0) goto L_0x046d
+        L_0x0453:
+            if (r16 == 0) goto L_0x046e
             boolean r1 = r8.mediaExists
-            if (r1 != 0) goto L_0x0462
-            if (r15 == r0) goto L_0x0462
+            if (r1 != 0) goto L_0x0463
+            if (r15 == r0) goto L_0x0463
             org.telegram.messenger.-$$Lambda$MediaController$cGsOczlYRHDIzZOlesR9YFXk5CE r0 = new org.telegram.messenger.-$$Lambda$MediaController$cGsOczlYRHDIzZOlesR9YFXk5CE
             r0.<init>(r15)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-        L_0x0462:
+        L_0x0463:
             org.telegram.ui.Components.VideoPlayer r0 = r7.videoPlayer
             android.net.Uri r1 = android.net.Uri.fromFile(r15)
             r0.preparePlayer(r1, r10)
-            goto L_0x0512
-        L_0x046d:
-            int r0 = r8.currentAccount     // Catch:{ Exception -> 0x050e }
-            org.telegram.messenger.FileLoader r0 = org.telegram.messenger.FileLoader.getInstance(r0)     // Catch:{ Exception -> 0x050e }
-            int r0 = r0.getFileReference(r8)     // Catch:{ Exception -> 0x050e }
-            org.telegram.tgnet.TLRPC$Document r1 = r29.getDocument()     // Catch:{ Exception -> 0x050e }
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x050e }
-            r2.<init>()     // Catch:{ Exception -> 0x050e }
-            r2.append(r13)     // Catch:{ Exception -> 0x050e }
-            int r3 = r8.currentAccount     // Catch:{ Exception -> 0x050e }
-            r2.append(r3)     // Catch:{ Exception -> 0x050e }
-            r2.append(r9)     // Catch:{ Exception -> 0x050e }
-            long r3 = r1.id     // Catch:{ Exception -> 0x050e }
-            r2.append(r3)     // Catch:{ Exception -> 0x050e }
-            r2.append(r12)     // Catch:{ Exception -> 0x050e }
-            long r3 = r1.access_hash     // Catch:{ Exception -> 0x050e }
-            r2.append(r3)     // Catch:{ Exception -> 0x050e }
+            goto L_0x0514
+        L_0x046e:
+            int r0 = r8.currentAccount     // Catch:{ Exception -> 0x0510 }
+            org.telegram.messenger.FileLoader r0 = org.telegram.messenger.FileLoader.getInstance(r0)     // Catch:{ Exception -> 0x0510 }
+            int r0 = r0.getFileReference(r8)     // Catch:{ Exception -> 0x0510 }
+            org.telegram.tgnet.TLRPC$Document r1 = r29.getDocument()     // Catch:{ Exception -> 0x0510 }
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0510 }
+            r2.<init>()     // Catch:{ Exception -> 0x0510 }
+            r2.append(r13)     // Catch:{ Exception -> 0x0510 }
+            int r3 = r8.currentAccount     // Catch:{ Exception -> 0x0510 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0510 }
+            r2.append(r9)     // Catch:{ Exception -> 0x0510 }
+            long r3 = r1.id     // Catch:{ Exception -> 0x0510 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0510 }
+            r2.append(r12)     // Catch:{ Exception -> 0x0510 }
+            long r3 = r1.access_hash     // Catch:{ Exception -> 0x0510 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0510 }
             r3 = r22
-            r2.append(r3)     // Catch:{ Exception -> 0x050e }
-            int r3 = r1.dc_id     // Catch:{ Exception -> 0x050e }
-            r2.append(r3)     // Catch:{ Exception -> 0x050e }
+            r2.append(r3)     // Catch:{ Exception -> 0x0510 }
+            int r3 = r1.dc_id     // Catch:{ Exception -> 0x0510 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0510 }
             r3 = r23
-            r2.append(r3)     // Catch:{ Exception -> 0x050e }
-            int r3 = r1.size     // Catch:{ Exception -> 0x050e }
-            r2.append(r3)     // Catch:{ Exception -> 0x050e }
+            r2.append(r3)     // Catch:{ Exception -> 0x0510 }
+            int r3 = r1.size     // Catch:{ Exception -> 0x0510 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0510 }
             r3 = r20
-            r2.append(r3)     // Catch:{ Exception -> 0x050e }
-            java.lang.String r3 = r1.mime_type     // Catch:{ Exception -> 0x050e }
+            r2.append(r3)     // Catch:{ Exception -> 0x0510 }
+            java.lang.String r3 = r1.mime_type     // Catch:{ Exception -> 0x0510 }
             r4 = r25
-            java.lang.String r3 = java.net.URLEncoder.encode(r3, r4)     // Catch:{ Exception -> 0x050e }
-            r2.append(r3)     // Catch:{ Exception -> 0x050e }
+            java.lang.String r3 = java.net.URLEncoder.encode(r3, r4)     // Catch:{ Exception -> 0x0510 }
+            r2.append(r3)     // Catch:{ Exception -> 0x0510 }
             r3 = r26
-            r2.append(r3)     // Catch:{ Exception -> 0x050e }
-            r2.append(r0)     // Catch:{ Exception -> 0x050e }
+            r2.append(r3)     // Catch:{ Exception -> 0x0510 }
+            r2.append(r0)     // Catch:{ Exception -> 0x0510 }
             r0 = r27
-            r2.append(r0)     // Catch:{ Exception -> 0x050e }
-            java.lang.String r0 = org.telegram.messenger.FileLoader.getDocumentFileName(r1)     // Catch:{ Exception -> 0x050e }
-            java.lang.String r0 = java.net.URLEncoder.encode(r0, r4)     // Catch:{ Exception -> 0x050e }
-            r2.append(r0)     // Catch:{ Exception -> 0x050e }
+            r2.append(r0)     // Catch:{ Exception -> 0x0510 }
+            java.lang.String r0 = org.telegram.messenger.FileLoader.getDocumentFileName(r1)     // Catch:{ Exception -> 0x0510 }
+            java.lang.String r0 = java.net.URLEncoder.encode(r0, r4)     // Catch:{ Exception -> 0x0510 }
+            r2.append(r0)     // Catch:{ Exception -> 0x0510 }
             java.lang.String r0 = "&reference="
-            r2.append(r0)     // Catch:{ Exception -> 0x050e }
-            byte[] r0 = r1.file_reference     // Catch:{ Exception -> 0x050e }
-            if (r0 == 0) goto L_0x04de
-            goto L_0x04e1
-        L_0x04de:
+            r2.append(r0)     // Catch:{ Exception -> 0x0510 }
+            byte[] r0 = r1.file_reference     // Catch:{ Exception -> 0x0510 }
+            if (r0 == 0) goto L_0x04df
+            goto L_0x04e2
+        L_0x04df:
             r1 = 0
-            byte[] r0 = new byte[r1]     // Catch:{ Exception -> 0x050e }
-        L_0x04e1:
-            java.lang.String r0 = org.telegram.messenger.Utilities.bytesToHex(r0)     // Catch:{ Exception -> 0x050e }
-            r2.append(r0)     // Catch:{ Exception -> 0x050e }
-            java.lang.String r0 = r2.toString()     // Catch:{ Exception -> 0x050e }
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x050e }
-            r1.<init>()     // Catch:{ Exception -> 0x050e }
+            byte[] r0 = new byte[r1]     // Catch:{ Exception -> 0x0510 }
+        L_0x04e2:
+            java.lang.String r0 = org.telegram.messenger.Utilities.bytesToHex(r0)     // Catch:{ Exception -> 0x0510 }
+            r2.append(r0)     // Catch:{ Exception -> 0x0510 }
+            java.lang.String r0 = r2.toString()     // Catch:{ Exception -> 0x0510 }
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0510 }
+            r1.<init>()     // Catch:{ Exception -> 0x0510 }
             java.lang.String r2 = "tg://"
-            r1.append(r2)     // Catch:{ Exception -> 0x050e }
-            java.lang.String r2 = r29.getFileName()     // Catch:{ Exception -> 0x050e }
-            r1.append(r2)     // Catch:{ Exception -> 0x050e }
-            r1.append(r0)     // Catch:{ Exception -> 0x050e }
-            java.lang.String r0 = r1.toString()     // Catch:{ Exception -> 0x050e }
-            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x050e }
-            org.telegram.ui.Components.VideoPlayer r1 = r7.videoPlayer     // Catch:{ Exception -> 0x050e }
-            r1.preparePlayer(r0, r10)     // Catch:{ Exception -> 0x050e }
-            goto L_0x0512
-        L_0x050e:
+            r1.append(r2)     // Catch:{ Exception -> 0x0510 }
+            java.lang.String r2 = r29.getFileName()     // Catch:{ Exception -> 0x0510 }
+            r1.append(r2)     // Catch:{ Exception -> 0x0510 }
+            r1.append(r0)     // Catch:{ Exception -> 0x0510 }
+            java.lang.String r0 = r1.toString()     // Catch:{ Exception -> 0x0510 }
+            android.net.Uri r0 = android.net.Uri.parse(r0)     // Catch:{ Exception -> 0x0510 }
+            org.telegram.ui.Components.VideoPlayer r1 = r7.videoPlayer     // Catch:{ Exception -> 0x0510 }
+            r1.preparePlayer(r0, r10)     // Catch:{ Exception -> 0x0510 }
+            goto L_0x0514
+        L_0x0510:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0512:
+        L_0x0514:
             boolean r0 = r29.isRoundVideo()
-            if (r0 == 0) goto L_0x0530
+            if (r0 == 0) goto L_0x0532
             org.telegram.ui.Components.VideoPlayer r0 = r7.videoPlayer
             boolean r1 = r7.useFrontSpeaker
-            if (r1 == 0) goto L_0x0520
+            if (r1 == 0) goto L_0x0522
             r1 = 0
-            goto L_0x0521
-        L_0x0520:
+            goto L_0x0523
+        L_0x0522:
             r1 = 3
-        L_0x0521:
+        L_0x0523:
             r0.setStreamType(r1)
             float r0 = r7.currentPlaybackSpeed
             int r1 = (r0 > r21 ? 1 : (r0 == r21 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0536
+            if (r1 <= 0) goto L_0x0538
             org.telegram.ui.Components.VideoPlayer r1 = r7.videoPlayer
             r1.setPlaybackSpeed(r0)
-            goto L_0x0536
-        L_0x0530:
+            goto L_0x0538
+        L_0x0532:
             org.telegram.ui.Components.VideoPlayer r0 = r7.videoPlayer
             r1 = 3
             r0.setStreamType(r1)
-        L_0x0536:
+        L_0x0538:
             r28.checkAudioFocus(r29)
             r28.setPlayerVolume()
             r1 = 0
@@ -4359,26 +4360,26 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r7.lastProgress = r1
             r7.playingMessageObject = r8
             boolean r0 = org.telegram.messenger.SharedConfig.raiseToSpeak
-            if (r0 != 0) goto L_0x054e
+            if (r0 != 0) goto L_0x0550
             org.telegram.ui.ChatActivity r0 = r7.raiseChat
             r7.startRaiseToEarSensors(r0)
-        L_0x054e:
+        L_0x0550:
             boolean r0 = org.telegram.messenger.ApplicationLoader.mainInterfacePaused
-            if (r0 != 0) goto L_0x0571
+            if (r0 != 0) goto L_0x0573
             android.os.PowerManager$WakeLock r0 = r7.proximityWakeLock
-            if (r0 == 0) goto L_0x0571
+            if (r0 == 0) goto L_0x0573
             boolean r0 = r0.isHeld()
-            if (r0 != 0) goto L_0x0571
+            if (r0 != 0) goto L_0x0573
             org.telegram.messenger.MessageObject r0 = r7.playingMessageObject
             boolean r0 = r0.isVoice()
-            if (r0 != 0) goto L_0x056c
+            if (r0 != 0) goto L_0x056e
             org.telegram.messenger.MessageObject r0 = r7.playingMessageObject
             boolean r0 = r0.isRoundVideo()
-            if (r0 == 0) goto L_0x0571
-        L_0x056c:
+            if (r0 == 0) goto L_0x0573
+        L_0x056e:
             android.os.PowerManager$WakeLock r0 = r7.proximityWakeLock
             r0.acquire()
-        L_0x0571:
+        L_0x0573:
             org.telegram.messenger.MessageObject r0 = r7.playingMessageObject
             r7.startProgressTimer(r0)
             int r0 = r8.currentAccount
@@ -4392,42 +4393,42 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             org.telegram.ui.Components.VideoPlayer r0 = r7.videoPlayer
             r1 = 1000(0x3e8, double:4.94E-321)
             r3 = -9223372036854775807(0xNUM, double:-4.9E-324)
-            if (r0 == 0) goto L_0x05f4
-            org.telegram.messenger.MessageObject r5 = r7.playingMessageObject     // Catch:{ Exception -> 0x05c5 }
-            float r5 = r5.audioProgress     // Catch:{ Exception -> 0x05c5 }
+            if (r0 == 0) goto L_0x05f6
+            org.telegram.messenger.MessageObject r5 = r7.playingMessageObject     // Catch:{ Exception -> 0x05c7 }
+            float r5 = r5.audioProgress     // Catch:{ Exception -> 0x05c7 }
             r6 = 0
             int r5 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r5 == 0) goto L_0x05ee
-            long r9 = r0.getDuration()     // Catch:{ Exception -> 0x05c3 }
+            if (r5 == 0) goto L_0x05f0
+            long r9 = r0.getDuration()     // Catch:{ Exception -> 0x05c5 }
             int r0 = (r9 > r3 ? 1 : (r9 == r3 ? 0 : -1))
-            if (r0 != 0) goto L_0x05ac
-            org.telegram.messenger.MessageObject r0 = r7.playingMessageObject     // Catch:{ Exception -> 0x05c3 }
-            int r0 = r0.getDuration()     // Catch:{ Exception -> 0x05c3 }
-            long r3 = (long) r0     // Catch:{ Exception -> 0x05c3 }
+            if (r0 != 0) goto L_0x05ae
+            org.telegram.messenger.MessageObject r0 = r7.playingMessageObject     // Catch:{ Exception -> 0x05c5 }
+            int r0 = r0.getDuration()     // Catch:{ Exception -> 0x05c5 }
+            long r3 = (long) r0     // Catch:{ Exception -> 0x05c5 }
             long r9 = r3 * r1
-        L_0x05ac:
-            float r0 = (float) r9     // Catch:{ Exception -> 0x05c3 }
-            org.telegram.messenger.MessageObject r1 = r7.playingMessageObject     // Catch:{ Exception -> 0x05c3 }
-            float r2 = r1.audioProgress     // Catch:{ Exception -> 0x05c3 }
+        L_0x05ae:
+            float r0 = (float) r9     // Catch:{ Exception -> 0x05c5 }
+            org.telegram.messenger.MessageObject r1 = r7.playingMessageObject     // Catch:{ Exception -> 0x05c5 }
+            float r2 = r1.audioProgress     // Catch:{ Exception -> 0x05c5 }
             float r0 = r0 * r2
-            int r0 = (int) r0     // Catch:{ Exception -> 0x05c3 }
-            int r2 = r1.audioProgressMs     // Catch:{ Exception -> 0x05c3 }
-            if (r2 == 0) goto L_0x05bc
+            int r0 = (int) r0     // Catch:{ Exception -> 0x05c5 }
+            int r2 = r1.audioProgressMs     // Catch:{ Exception -> 0x05c5 }
+            if (r2 == 0) goto L_0x05be
             r3 = 0
-            r1.audioProgressMs = r3     // Catch:{ Exception -> 0x05c3 }
+            r1.audioProgressMs = r3     // Catch:{ Exception -> 0x05c5 }
             r0 = r2
-        L_0x05bc:
-            org.telegram.ui.Components.VideoPlayer r1 = r7.videoPlayer     // Catch:{ Exception -> 0x05c3 }
-            long r2 = (long) r0     // Catch:{ Exception -> 0x05c3 }
-            r1.seekTo(r2)     // Catch:{ Exception -> 0x05c3 }
-            goto L_0x05ee
-        L_0x05c3:
-            r0 = move-exception
-            goto L_0x05c7
+        L_0x05be:
+            org.telegram.ui.Components.VideoPlayer r1 = r7.videoPlayer     // Catch:{ Exception -> 0x05c5 }
+            long r2 = (long) r0     // Catch:{ Exception -> 0x05c5 }
+            r1.seekTo(r2)     // Catch:{ Exception -> 0x05c5 }
+            goto L_0x05f0
         L_0x05c5:
             r0 = move-exception
-            r6 = 0
+            goto L_0x05c9
         L_0x05c7:
+            r0 = move-exception
+            r6 = 0
+        L_0x05c9:
             org.telegram.messenger.MessageObject r1 = r7.playingMessageObject
             r1.audioProgress = r6
             r2 = 0
@@ -4445,36 +4446,36 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r4[r2] = r19
             r1.postNotificationName(r3, r4)
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x05ee:
+        L_0x05f0:
             org.telegram.ui.Components.VideoPlayer r0 = r7.videoPlayer
             r0.play()
-            goto L_0x0648
-        L_0x05f4:
+            goto L_0x064a
+        L_0x05f6:
             r6 = 0
             org.telegram.ui.Components.VideoPlayer r0 = r7.audioPlayer
-            if (r0 == 0) goto L_0x0648
-            org.telegram.messenger.MessageObject r5 = r7.playingMessageObject     // Catch:{ Exception -> 0x0621 }
-            float r5 = r5.audioProgress     // Catch:{ Exception -> 0x0621 }
+            if (r0 == 0) goto L_0x064a
+            org.telegram.messenger.MessageObject r5 = r7.playingMessageObject     // Catch:{ Exception -> 0x0623 }
+            float r5 = r5.audioProgress     // Catch:{ Exception -> 0x0623 }
             int r5 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r5 == 0) goto L_0x0648
-            long r5 = r0.getDuration()     // Catch:{ Exception -> 0x0621 }
+            if (r5 == 0) goto L_0x064a
+            long r5 = r0.getDuration()     // Catch:{ Exception -> 0x0623 }
             int r0 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1))
-            if (r0 != 0) goto L_0x0612
-            org.telegram.messenger.MessageObject r0 = r7.playingMessageObject     // Catch:{ Exception -> 0x0621 }
-            int r0 = r0.getDuration()     // Catch:{ Exception -> 0x0621 }
-            long r3 = (long) r0     // Catch:{ Exception -> 0x0621 }
+            if (r0 != 0) goto L_0x0614
+            org.telegram.messenger.MessageObject r0 = r7.playingMessageObject     // Catch:{ Exception -> 0x0623 }
+            int r0 = r0.getDuration()     // Catch:{ Exception -> 0x0623 }
+            long r3 = (long) r0     // Catch:{ Exception -> 0x0623 }
             long r5 = r3 * r1
-        L_0x0612:
-            float r0 = (float) r5     // Catch:{ Exception -> 0x0621 }
-            org.telegram.messenger.MessageObject r1 = r7.playingMessageObject     // Catch:{ Exception -> 0x0621 }
-            float r1 = r1.audioProgress     // Catch:{ Exception -> 0x0621 }
+        L_0x0614:
+            float r0 = (float) r5     // Catch:{ Exception -> 0x0623 }
+            org.telegram.messenger.MessageObject r1 = r7.playingMessageObject     // Catch:{ Exception -> 0x0623 }
+            float r1 = r1.audioProgress     // Catch:{ Exception -> 0x0623 }
             float r0 = r0 * r1
-            int r0 = (int) r0     // Catch:{ Exception -> 0x0621 }
-            org.telegram.ui.Components.VideoPlayer r1 = r7.audioPlayer     // Catch:{ Exception -> 0x0621 }
-            long r2 = (long) r0     // Catch:{ Exception -> 0x0621 }
-            r1.seekTo(r2)     // Catch:{ Exception -> 0x0621 }
-            goto L_0x0648
-        L_0x0621:
+            int r0 = (int) r0     // Catch:{ Exception -> 0x0623 }
+            org.telegram.ui.Components.VideoPlayer r1 = r7.audioPlayer     // Catch:{ Exception -> 0x0623 }
+            long r2 = (long) r0     // Catch:{ Exception -> 0x0623 }
+            r1.seekTo(r2)     // Catch:{ Exception -> 0x0623 }
+            goto L_0x064a
+        L_0x0623:
             r0 = move-exception
             org.telegram.messenger.MessageObject r1 = r7.playingMessageObject
             r1.resetPlayingProgress()
@@ -4492,30 +4493,30 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r3[r4] = r19
             r1.postNotificationName(r2, r3)
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0648:
+        L_0x064a:
             org.telegram.messenger.MessageObject r0 = r7.playingMessageObject
-            if (r0 == 0) goto L_0x0666
+            if (r0 == 0) goto L_0x0668
             boolean r0 = r0.isMusic()
-            if (r0 == 0) goto L_0x0666
+            if (r0 == 0) goto L_0x0668
             android.content.Intent r0 = new android.content.Intent
             android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext
             java.lang.Class<org.telegram.messenger.MusicPlayerService> r2 = org.telegram.messenger.MusicPlayerService.class
             r0.<init>(r1, r2)
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0661 }
-            r1.startService(r0)     // Catch:{ all -> 0x0661 }
-            goto L_0x0674
-        L_0x0661:
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0663 }
+            r1.startService(r0)     // Catch:{ all -> 0x0663 }
+            goto L_0x0676
+        L_0x0663:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x0674
-        L_0x0666:
+            goto L_0x0676
+        L_0x0668:
             android.content.Intent r0 = new android.content.Intent
             android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext
             java.lang.Class<org.telegram.messenger.MusicPlayerService> r2 = org.telegram.messenger.MusicPlayerService.class
             r0.<init>(r1, r2)
             android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext
             r1.stopService(r0)
-        L_0x0674:
+        L_0x0676:
             r1 = 1
             return r1
         */
@@ -5016,7 +5017,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         if (j > 700) {
             if (i3 == 1) {
                 c = 1;
-                SendMessagesHelper.getInstance(this.recordingCurrentAccount).sendMessage(tLRPC$TL_document, (VideoEditedInfo) null, file.getAbsolutePath(), this.recordDialogId, this.recordReplyingMsg, this.recordReplyingTopMsg, (String) null, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2, 0, (Object) null);
+                SendMessagesHelper.getInstance(this.recordingCurrentAccount).sendMessage(tLRPC$TL_document, (VideoEditedInfo) null, file.getAbsolutePath(), this.recordDialogId, this.recordReplyingMsg, this.recordReplyingTopMsg, (String) null, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2, 0, (Object) null, (MessageObject.SendAnimationData) null);
             } else {
                 c = 1;
             }
@@ -5140,9 +5141,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             this.messageObjects = arrayList;
             this.onFinishRunnable = intCallback;
             this.isMusic = arrayList.get(0).isMusic();
-            this.currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileDidLoad);
-            this.currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.FileLoadProgressChanged);
-            this.currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileDidFailToLoad);
+            this.currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileLoaded);
+            this.currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileLoadProgressChanged);
+            this.currentAccount.getNotificationCenter().addObserver(this, NotificationCenter.fileLoadFailed);
             AlertDialog alertDialog = new AlertDialog(context, 2);
             this.progressDialog = alertDialog;
             alertDialog.setMessage(LocaleController.getString("Loading", NUM));
@@ -5274,9 +5275,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
-            this.currentAccount.getNotificationCenter().removeObserver(this, NotificationCenter.fileDidLoad);
-            this.currentAccount.getNotificationCenter().removeObserver(this, NotificationCenter.FileLoadProgressChanged);
-            this.currentAccount.getNotificationCenter().removeObserver(this, NotificationCenter.fileDidFailToLoad);
+            this.currentAccount.getNotificationCenter().removeObserver(this, NotificationCenter.fileLoaded);
+            this.currentAccount.getNotificationCenter().removeObserver(this, NotificationCenter.fileLoadProgressChanged);
+            this.currentAccount.getNotificationCenter().removeObserver(this, NotificationCenter.fileLoadFailed);
         }
 
         /* access modifiers changed from: private */
@@ -5309,64 +5310,64 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:104:0x017b, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:101:0x0175, code lost:
             r0 = move-exception;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:105:0x017c, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:102:0x0176, code lost:
             r2 = r0;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:106:0x017d, code lost:
-            if (r10 != null) goto L_0x017f;
+        /* JADX WARNING: Code restructure failed: missing block: B:103:0x0177, code lost:
+            if (r10 != null) goto L_0x0179;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:108:?, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:105:?, code lost:
             r10.close();
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:110:?, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:107:?, code lost:
             throw r2;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:111:0x0183, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:108:0x017d, code lost:
             r0 = th;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:117:0x018b, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:114:0x0185, code lost:
             r0 = move-exception;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:118:0x018c, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:115:0x0186, code lost:
             r2 = r0;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:120:?, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:117:?, code lost:
             r21.close();
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:122:?, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:119:?, code lost:
             throw r2;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:123:0x0191, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:120:0x018b, code lost:
             r0 = e;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:90:0x0169, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:87:0x0163, code lost:
             r0 = move-exception;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:91:0x016a, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:88:0x0164, code lost:
             r2 = r0;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:92:0x016b, code lost:
-            if (r12 != null) goto L_0x016d;
+        /* JADX WARNING: Code restructure failed: missing block: B:89:0x0165, code lost:
+            if (r12 != null) goto L_0x0167;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:94:?, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:91:?, code lost:
             r12.close();
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:96:?, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:93:?, code lost:
             throw r2;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:97:0x0171, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:94:0x016b, code lost:
             r0 = th;
          */
-        /* JADX WARNING: Exception block dominator not found, dom blocks: [B:28:0x0062, B:115:0x018a, B:121:0x0190] */
-        /* JADX WARNING: Exception block dominator not found, dom blocks: [B:69:0x0149, B:88:0x0168, B:95:0x0170] */
-        /* JADX WARNING: Exception block dominator not found, dom blocks: [B:72:0x014e, B:102:0x017a, B:109:0x0182] */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:109:0x0182 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:121:0x0190 */
-        /* JADX WARNING: Missing exception handler attribute for start block: B:95:0x0170 */
-        /* JADX WARNING: Unknown top exception splitter block from list: {B:121:0x0190=Splitter:B:121:0x0190, B:74:0x0151=Splitter:B:74:0x0151, B:28:0x0062=Splitter:B:28:0x0062, B:83:0x015f=Splitter:B:83:0x015f} */
+        /* JADX WARNING: Exception block dominator not found, dom blocks: [B:26:0x005c, B:112:0x0184, B:118:0x018a] */
+        /* JADX WARNING: Exception block dominator not found, dom blocks: [B:68:0x0147, B:85:0x0162, B:92:0x016a] */
+        /* JADX WARNING: Exception block dominator not found, dom blocks: [B:70:0x014a, B:99:0x0174, B:106:0x017c] */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:106:0x017c */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:118:0x018a */
+        /* JADX WARNING: Missing exception handler attribute for start block: B:92:0x016a */
+        /* JADX WARNING: Unknown top exception splitter block from list: {B:78:0x0156=Splitter:B:78:0x0156, B:70:0x014a=Splitter:B:70:0x014a, B:106:0x017c=Splitter:B:106:0x017c} */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         private boolean copyFile(java.io.File r32, java.io.File r33, java.lang.String r34) {
             /*
@@ -5378,62 +5379,59 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 if (r0 == 0) goto L_0x000e
                 return r2
             L_0x000e:
-                java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0193 }
+                java.io.FileInputStream r3 = new java.io.FileInputStream     // Catch:{ Exception -> 0x018d }
                 r0 = r32
-                r3.<init>(r0)     // Catch:{ Exception -> 0x0193 }
-                java.nio.channels.FileChannel r10 = r3.getChannel()     // Catch:{ all -> 0x0185 }
-                java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ all -> 0x0175 }
+                r3.<init>(r0)     // Catch:{ Exception -> 0x018d }
+                java.nio.channels.FileChannel r10 = r3.getChannel()     // Catch:{ all -> 0x017f }
+                java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ all -> 0x016f }
                 r11 = r33
-                r0.<init>(r11)     // Catch:{ all -> 0x0173 }
-                java.nio.channels.FileChannel r12 = r0.getChannel()     // Catch:{ all -> 0x0173 }
-                long r13 = r10.size()     // Catch:{ all -> 0x0165 }
+                r0.<init>(r11)     // Catch:{ all -> 0x016d }
+                java.nio.channels.FileChannel r12 = r0.getChannel()     // Catch:{ all -> 0x016d }
+                long r13 = r10.size()     // Catch:{ all -> 0x015f }
                 java.lang.Class<java.io.FileDescriptor> r0 = java.io.FileDescriptor.class
                 java.lang.String r4 = "getInt$"
-                java.lang.Class[] r5 = new java.lang.Class[r2]     // Catch:{ all -> 0x0066 }
-                java.lang.reflect.Method r0 = r0.getDeclaredMethod(r4, r5)     // Catch:{ all -> 0x0066 }
-                java.io.FileDescriptor r4 = r3.getFD()     // Catch:{ all -> 0x0066 }
-                java.lang.Object[] r5 = new java.lang.Object[r2]     // Catch:{ all -> 0x0066 }
-                java.lang.Object r0 = r0.invoke(r4, r5)     // Catch:{ all -> 0x0066 }
-                java.lang.Integer r0 = (java.lang.Integer) r0     // Catch:{ all -> 0x0066 }
-                int r0 = r0.intValue()     // Catch:{ all -> 0x0066 }
-                boolean r0 = org.telegram.messenger.AndroidUtilities.isInternalUri((int) r0)     // Catch:{ all -> 0x0066 }
-                if (r0 == 0) goto L_0x006a
-                org.telegram.ui.ActionBar.AlertDialog r0 = r1.progressDialog     // Catch:{ all -> 0x0066 }
+                java.lang.Class[] r5 = new java.lang.Class[r2]     // Catch:{ all -> 0x0063 }
+                java.lang.reflect.Method r0 = r0.getDeclaredMethod(r4, r5)     // Catch:{ all -> 0x0063 }
+                java.io.FileDescriptor r4 = r3.getFD()     // Catch:{ all -> 0x0063 }
+                java.lang.Object[] r5 = new java.lang.Object[r2]     // Catch:{ all -> 0x0063 }
+                java.lang.Object r0 = r0.invoke(r4, r5)     // Catch:{ all -> 0x0063 }
+                java.lang.Integer r0 = (java.lang.Integer) r0     // Catch:{ all -> 0x0063 }
+                int r0 = r0.intValue()     // Catch:{ all -> 0x0063 }
+                boolean r0 = org.telegram.messenger.AndroidUtilities.isInternalUri((int) r0)     // Catch:{ all -> 0x0063 }
+                if (r0 == 0) goto L_0x0067
+                org.telegram.ui.ActionBar.AlertDialog r0 = r1.progressDialog     // Catch:{ all -> 0x0063 }
                 if (r0 == 0) goto L_0x0054
-                org.telegram.messenger.-$$Lambda$MediaController$MediaLoader$AhWed4ydFVrtLT8l_TqVfs_-1l0 r0 = new org.telegram.messenger.-$$Lambda$MediaController$MediaLoader$AhWed4ydFVrtLT8l_TqVfs_-1l0     // Catch:{ all -> 0x0066 }
-                r0.<init>()     // Catch:{ all -> 0x0066 }
-                org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ all -> 0x0066 }
+                org.telegram.messenger.-$$Lambda$MediaController$MediaLoader$AhWed4ydFVrtLT8l_TqVfs_-1l0 r0 = new org.telegram.messenger.-$$Lambda$MediaController$MediaLoader$AhWed4ydFVrtLT8l_TqVfs_-1l0     // Catch:{ all -> 0x0063 }
+                r0.<init>()     // Catch:{ all -> 0x0063 }
+                org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ all -> 0x0063 }
             L_0x0054:
                 if (r12 == 0) goto L_0x0059
-                r12.close()     // Catch:{ all -> 0x0173 }
+                r12.close()     // Catch:{ all -> 0x016d }
             L_0x0059:
-                if (r10 == 0) goto L_0x0062
-                r10.close()     // Catch:{ all -> 0x005f }
-                goto L_0x0062
-            L_0x005f:
-                r0 = move-exception
-                goto L_0x0188
-            L_0x0062:
-                r3.close()     // Catch:{ Exception -> 0x0191 }
+                r10.close()     // Catch:{ all -> 0x0060 }
+                r3.close()     // Catch:{ Exception -> 0x018b }
                 return r2
-            L_0x0066:
+            L_0x0060:
                 r0 = move-exception
-                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0165 }
-            L_0x006a:
+                goto L_0x0182
+            L_0x0063:
+                r0 = move-exception
+                org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x015f }
+            L_0x0067:
                 r4 = 0
                 r8 = r4
                 r15 = r8
-            L_0x006e:
+            L_0x006b:
                 r0 = 1120403456(0x42CLASSNAME, float:100.0)
                 int r4 = (r8 > r13 ? 1 : (r8 == r13 ? 0 : -1))
-                if (r4 >= 0) goto L_0x00c1
-                boolean r4 = r1.cancelled     // Catch:{ all -> 0x0165 }
-                if (r4 == 0) goto L_0x0079
-                goto L_0x00c1
-            L_0x0079:
+                if (r4 >= 0) goto L_0x00be
+                boolean r4 = r1.cancelled     // Catch:{ all -> 0x015f }
+                if (r4 == 0) goto L_0x0076
+                goto L_0x00be
+            L_0x0076:
                 long r4 = r13 - r8
                 r6 = 4096(0x1000, double:2.0237E-320)
-                long r17 = java.lang.Math.min(r6, r4)     // Catch:{ all -> 0x0165 }
+                long r17 = java.lang.Math.min(r6, r4)     // Catch:{ all -> 0x015f }
                 r4 = r12
                 r5 = r10
                 r19 = r6
@@ -5441,176 +5439,172 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 r21 = r3
                 r2 = r8
                 r8 = r17
-                r4.transferFrom(r5, r6, r8)     // Catch:{ all -> 0x0163 }
+                r4.transferFrom(r5, r6, r8)     // Catch:{ all -> 0x015d }
                 long r8 = r2 + r19
                 int r4 = (r8 > r13 ? 1 : (r8 == r13 ? 0 : -1))
-                if (r4 >= 0) goto L_0x009f
-                long r4 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x0163 }
+                if (r4 >= 0) goto L_0x009c
+                long r4 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x015d }
                 r6 = 500(0x1f4, double:2.47E-321)
                 long r4 = r4 - r6
                 int r6 = (r15 > r4 ? 1 : (r15 == r4 ? 0 : -1))
-                if (r6 > 0) goto L_0x00bd
-            L_0x009f:
-                long r4 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x0163 }
-                float r6 = r1.finishedProgress     // Catch:{ all -> 0x0163 }
-                java.util.ArrayList<org.telegram.messenger.MessageObject> r7 = r1.messageObjects     // Catch:{ all -> 0x0163 }
-                int r7 = r7.size()     // Catch:{ all -> 0x0163 }
-                float r7 = (float) r7     // Catch:{ all -> 0x0163 }
+                if (r6 > 0) goto L_0x00ba
+            L_0x009c:
+                long r4 = android.os.SystemClock.elapsedRealtime()     // Catch:{ all -> 0x015d }
+                float r6 = r1.finishedProgress     // Catch:{ all -> 0x015d }
+                java.util.ArrayList<org.telegram.messenger.MessageObject> r7 = r1.messageObjects     // Catch:{ all -> 0x015d }
+                int r7 = r7.size()     // Catch:{ all -> 0x015d }
+                float r7 = (float) r7     // Catch:{ all -> 0x015d }
                 float r0 = r0 / r7
-                float r2 = (float) r2     // Catch:{ all -> 0x0163 }
+                float r2 = (float) r2     // Catch:{ all -> 0x015d }
                 float r0 = r0 * r2
-                float r2 = (float) r13     // Catch:{ all -> 0x0163 }
+                float r2 = (float) r13     // Catch:{ all -> 0x015d }
                 float r0 = r0 / r2
                 float r6 = r6 + r0
-                int r0 = (int) r6     // Catch:{ all -> 0x0163 }
-                org.telegram.messenger.-$$Lambda$MediaController$MediaLoader$SnHE8B84nWdyFiAl03Ud-KrXKTc r2 = new org.telegram.messenger.-$$Lambda$MediaController$MediaLoader$SnHE8B84nWdyFiAl03Ud-KrXKTc     // Catch:{ all -> 0x0163 }
-                r2.<init>(r0)     // Catch:{ all -> 0x0163 }
-                org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ all -> 0x0163 }
+                int r0 = (int) r6     // Catch:{ all -> 0x015d }
+                org.telegram.messenger.-$$Lambda$MediaController$MediaLoader$SnHE8B84nWdyFiAl03Ud-KrXKTc r2 = new org.telegram.messenger.-$$Lambda$MediaController$MediaLoader$SnHE8B84nWdyFiAl03Ud-KrXKTc     // Catch:{ all -> 0x015d }
+                r2.<init>(r0)     // Catch:{ all -> 0x015d }
+                org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ all -> 0x015d }
                 r15 = r4
-            L_0x00bd:
+            L_0x00ba:
                 r3 = r21
                 r2 = 0
-                goto L_0x006e
-            L_0x00c1:
+                goto L_0x006b
+            L_0x00be:
                 r21 = r3
-                boolean r2 = r1.cancelled     // Catch:{ all -> 0x0163 }
-                if (r2 != 0) goto L_0x0155
-                boolean r2 = r1.isMusic     // Catch:{ all -> 0x0163 }
+                boolean r2 = r1.cancelled     // Catch:{ all -> 0x015d }
+                if (r2 != 0) goto L_0x0151
+                boolean r2 = r1.isMusic     // Catch:{ all -> 0x015d }
                 r3 = 1
-                if (r2 == 0) goto L_0x00d4
-                android.net.Uri r2 = android.net.Uri.fromFile(r33)     // Catch:{ all -> 0x0163 }
-                org.telegram.messenger.AndroidUtilities.addMediaToGallery((android.net.Uri) r2)     // Catch:{ all -> 0x0163 }
-                goto L_0x012c
-            L_0x00d4:
-                android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0163 }
+                if (r2 == 0) goto L_0x00d1
+                android.net.Uri r2 = android.net.Uri.fromFile(r33)     // Catch:{ all -> 0x015d }
+                org.telegram.messenger.AndroidUtilities.addMediaToGallery((android.net.Uri) r2)     // Catch:{ all -> 0x015d }
+                goto L_0x012a
+            L_0x00d1:
+                android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x015d }
                 java.lang.String r4 = "download"
-                java.lang.Object r2 = r2.getSystemService(r4)     // Catch:{ all -> 0x0163 }
+                java.lang.Object r2 = r2.getSystemService(r4)     // Catch:{ all -> 0x015d }
                 r22 = r2
-                android.app.DownloadManager r22 = (android.app.DownloadManager) r22     // Catch:{ all -> 0x0163 }
-                boolean r2 = android.text.TextUtils.isEmpty(r34)     // Catch:{ all -> 0x0163 }
+                android.app.DownloadManager r22 = (android.app.DownloadManager) r22     // Catch:{ all -> 0x015d }
+                boolean r2 = android.text.TextUtils.isEmpty(r34)     // Catch:{ all -> 0x015d }
                 java.lang.String r4 = "text/plain"
-                if (r2 == 0) goto L_0x0113
-                android.webkit.MimeTypeMap r2 = android.webkit.MimeTypeMap.getSingleton()     // Catch:{ all -> 0x0163 }
-                java.lang.String r5 = r33.getName()     // Catch:{ all -> 0x0163 }
+                if (r2 == 0) goto L_0x0111
+                android.webkit.MimeTypeMap r2 = android.webkit.MimeTypeMap.getSingleton()     // Catch:{ all -> 0x015d }
+                java.lang.String r5 = r33.getName()     // Catch:{ all -> 0x015d }
                 r6 = 46
-                int r6 = r5.lastIndexOf(r6)     // Catch:{ all -> 0x0163 }
+                int r6 = r5.lastIndexOf(r6)     // Catch:{ all -> 0x015d }
                 r7 = -1
-                if (r6 == r7) goto L_0x0110
+                if (r6 == r7) goto L_0x010e
                 int r6 = r6 + r3
-                java.lang.String r5 = r5.substring(r6)     // Catch:{ all -> 0x0163 }
-                java.lang.String r5 = r5.toLowerCase()     // Catch:{ all -> 0x0163 }
-                java.lang.String r2 = r2.getMimeTypeFromExtension(r5)     // Catch:{ all -> 0x0163 }
-                boolean r5 = android.text.TextUtils.isEmpty(r2)     // Catch:{ all -> 0x0163 }
-                if (r5 == 0) goto L_0x010d
+                java.lang.String r5 = r5.substring(r6)     // Catch:{ all -> 0x015d }
+                java.lang.String r5 = r5.toLowerCase()     // Catch:{ all -> 0x015d }
+                java.lang.String r2 = r2.getMimeTypeFromExtension(r5)     // Catch:{ all -> 0x015d }
+                boolean r5 = android.text.TextUtils.isEmpty(r2)     // Catch:{ all -> 0x015d }
+                if (r5 == 0) goto L_0x010b
                 r2 = r4
-            L_0x010d:
+            L_0x010b:
                 r26 = r2
-                goto L_0x0115
-            L_0x0110:
+                goto L_0x0113
+            L_0x010e:
                 r26 = r4
-                goto L_0x0115
-            L_0x0113:
+                goto L_0x0113
+            L_0x0111:
                 r26 = r34
-            L_0x0115:
-                java.lang.String r23 = r33.getName()     // Catch:{ all -> 0x0163 }
-                java.lang.String r24 = r33.getName()     // Catch:{ all -> 0x0163 }
+            L_0x0113:
+                java.lang.String r23 = r33.getName()     // Catch:{ all -> 0x015d }
+                java.lang.String r24 = r33.getName()     // Catch:{ all -> 0x015d }
                 r25 = 0
-                java.lang.String r27 = r33.getAbsolutePath()     // Catch:{ all -> 0x0163 }
-                long r28 = r33.length()     // Catch:{ all -> 0x0163 }
+                java.lang.String r27 = r33.getAbsolutePath()     // Catch:{ all -> 0x015d }
+                long r28 = r33.length()     // Catch:{ all -> 0x015d }
                 r30 = 1
-                r22.addCompletedDownload(r23, r24, r25, r26, r27, r28, r30)     // Catch:{ all -> 0x0163 }
-            L_0x012c:
-                float r2 = r1.finishedProgress     // Catch:{ all -> 0x0163 }
-                java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r1.messageObjects     // Catch:{ all -> 0x0163 }
-                int r4 = r4.size()     // Catch:{ all -> 0x0163 }
-                float r4 = (float) r4     // Catch:{ all -> 0x0163 }
+                r22.addCompletedDownload(r23, r24, r25, r26, r27, r28, r30)     // Catch:{ all -> 0x015d }
+            L_0x012a:
+                float r2 = r1.finishedProgress     // Catch:{ all -> 0x015d }
+                java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r1.messageObjects     // Catch:{ all -> 0x015d }
+                int r4 = r4.size()     // Catch:{ all -> 0x015d }
+                float r4 = (float) r4     // Catch:{ all -> 0x015d }
                 float r0 = r0 / r4
                 float r2 = r2 + r0
-                r1.finishedProgress = r2     // Catch:{ all -> 0x0163 }
-                int r0 = (int) r2     // Catch:{ all -> 0x0163 }
-                org.telegram.messenger.-$$Lambda$MediaController$MediaLoader$rkTlsTzRKy1M7QGQqs1I4zaTL-k r2 = new org.telegram.messenger.-$$Lambda$MediaController$MediaLoader$rkTlsTzRKy1M7QGQqs1I4zaTL-k     // Catch:{ all -> 0x0163 }
-                r2.<init>(r0)     // Catch:{ all -> 0x0163 }
-                org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ all -> 0x0163 }
-                int r0 = r1.copiedFiles     // Catch:{ all -> 0x0163 }
+                r1.finishedProgress = r2     // Catch:{ all -> 0x015d }
+                int r0 = (int) r2     // Catch:{ all -> 0x015d }
+                org.telegram.messenger.-$$Lambda$MediaController$MediaLoader$rkTlsTzRKy1M7QGQqs1I4zaTL-k r2 = new org.telegram.messenger.-$$Lambda$MediaController$MediaLoader$rkTlsTzRKy1M7QGQqs1I4zaTL-k     // Catch:{ all -> 0x015d }
+                r2.<init>(r0)     // Catch:{ all -> 0x015d }
+                org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ all -> 0x015d }
+                int r0 = r1.copiedFiles     // Catch:{ all -> 0x015d }
                 int r0 = r0 + r3
-                r1.copiedFiles = r0     // Catch:{ all -> 0x0163 }
-                if (r12 == 0) goto L_0x014c
-                r12.close()     // Catch:{ all -> 0x0171 }
-            L_0x014c:
-                if (r10 == 0) goto L_0x0151
-                r10.close()     // Catch:{ all -> 0x0183 }
-            L_0x0151:
-                r21.close()     // Catch:{ Exception -> 0x0191 }
+                r1.copiedFiles = r0     // Catch:{ all -> 0x015d }
+                if (r12 == 0) goto L_0x014a
+                r12.close()     // Catch:{ all -> 0x016b }
+            L_0x014a:
+                r10.close()     // Catch:{ all -> 0x017d }
+                r21.close()     // Catch:{ Exception -> 0x018b }
                 return r3
-            L_0x0155:
-                if (r12 == 0) goto L_0x015a
-                r12.close()     // Catch:{ all -> 0x0171 }
-            L_0x015a:
-                if (r10 == 0) goto L_0x015f
-                r10.close()     // Catch:{ all -> 0x0183 }
+            L_0x0151:
+                if (r12 == 0) goto L_0x0156
+                r12.close()     // Catch:{ all -> 0x016b }
+            L_0x0156:
+                r10.close()     // Catch:{ all -> 0x017d }
+                r21.close()     // Catch:{ Exception -> 0x018b }
+                goto L_0x0193
+            L_0x015d:
+                r0 = move-exception
+                goto L_0x0162
             L_0x015f:
-                r21.close()     // Catch:{ Exception -> 0x0191 }
-                goto L_0x0199
+                r0 = move-exception
+                r21 = r3
+            L_0x0162:
+                throw r0     // Catch:{ all -> 0x0163 }
             L_0x0163:
                 r0 = move-exception
-                goto L_0x0168
-            L_0x0165:
-                r0 = move-exception
-                r21 = r3
-            L_0x0168:
-                throw r0     // Catch:{ all -> 0x0169 }
-            L_0x0169:
-                r0 = move-exception
                 r2 = r0
-                if (r12 == 0) goto L_0x0170
-                r12.close()     // Catch:{ all -> 0x0170 }
-            L_0x0170:
-                throw r2     // Catch:{ all -> 0x0171 }
-            L_0x0171:
+                if (r12 == 0) goto L_0x016a
+                r12.close()     // Catch:{ all -> 0x016a }
+            L_0x016a:
+                throw r2     // Catch:{ all -> 0x016b }
+            L_0x016b:
                 r0 = move-exception
-                goto L_0x017a
-            L_0x0173:
+                goto L_0x0174
+            L_0x016d:
                 r0 = move-exception
-                goto L_0x0178
+                goto L_0x0172
+            L_0x016f:
+                r0 = move-exception
+                r11 = r33
+            L_0x0172:
+                r21 = r3
+            L_0x0174:
+                throw r0     // Catch:{ all -> 0x0175 }
             L_0x0175:
                 r0 = move-exception
-                r11 = r33
-            L_0x0178:
-                r21 = r3
-            L_0x017a:
-                throw r0     // Catch:{ all -> 0x017b }
-            L_0x017b:
-                r0 = move-exception
                 r2 = r0
-                if (r10 == 0) goto L_0x0182
-                r10.close()     // Catch:{ all -> 0x0182 }
-            L_0x0182:
-                throw r2     // Catch:{ all -> 0x0183 }
-            L_0x0183:
+                if (r10 == 0) goto L_0x017c
+                r10.close()     // Catch:{ all -> 0x017c }
+            L_0x017c:
+                throw r2     // Catch:{ all -> 0x017d }
+            L_0x017d:
                 r0 = move-exception
-                goto L_0x018a
+                goto L_0x0184
+            L_0x017f:
+                r0 = move-exception
+                r11 = r33
+            L_0x0182:
+                r21 = r3
+            L_0x0184:
+                throw r0     // Catch:{ all -> 0x0185 }
             L_0x0185:
                 r0 = move-exception
-                r11 = r33
-            L_0x0188:
-                r21 = r3
+                r2 = r0
+                r21.close()     // Catch:{ all -> 0x018a }
             L_0x018a:
-                throw r0     // Catch:{ all -> 0x018b }
+                throw r2     // Catch:{ Exception -> 0x018b }
             L_0x018b:
                 r0 = move-exception
-                r2 = r0
-                r21.close()     // Catch:{ all -> 0x0190 }
-            L_0x0190:
-                throw r2     // Catch:{ Exception -> 0x0191 }
-            L_0x0191:
-                r0 = move-exception
-                goto L_0x0196
-            L_0x0193:
+                goto L_0x0190
+            L_0x018d:
                 r0 = move-exception
                 r11 = r33
-            L_0x0196:
+            L_0x0190:
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0199:
+            L_0x0193:
                 r33.delete()
                 r2 = 0
                 return r2
@@ -5649,11 +5643,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
 
         public void didReceivedNotification(int i, int i2, Object... objArr) {
-            if (i == NotificationCenter.fileDidLoad || i == NotificationCenter.fileDidFailToLoad) {
+            if (i == NotificationCenter.fileLoaded || i == NotificationCenter.fileLoadFailed) {
                 if (this.loadingMessageObjects.remove(objArr[0]) != null) {
                     this.waitingForFile.countDown();
                 }
-            } else if (i == NotificationCenter.FileLoadProgressChanged) {
+            } else if (i == NotificationCenter.fileLoadProgressChanged) {
                 if (this.loadingMessageObjects.containsKey(objArr[0])) {
                     AndroidUtilities.runOnUIThread(new Runnable((int) (this.finishedProgress + (((((float) objArr[1].longValue()) / ((float) objArr[2].longValue())) / ((float) this.messageObjects.size())) * 100.0f))) {
                         public final /* synthetic */ int f$1;
@@ -5734,7 +5728,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r5 = 2
             r4.<init>(r14, r5)     // Catch:{ Exception -> 0x0066 }
             java.lang.String r1 = "Loading"
-            r5 = 2131625984(0x7f0e0800, float:1.8879191E38)
+            r5 = 2131626018(0x7f0e0822, float:1.887926E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r5)     // Catch:{ Exception -> 0x0066 }
             r4.setMessage(r1)     // Catch:{ Exception -> 0x0066 }
             r4.setCanceledOnTouchOutside(r2)     // Catch:{ Exception -> 0x0066 }
@@ -5780,58 +5774,57 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:100:0x016e, code lost:
-        if (r18 != null) goto L_0x0170;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:102:?, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:100:?, code lost:
         r18.close();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:104:?, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:102:?, code lost:
         throw r3;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:105:0x0174, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:103:0x0170, code lost:
         r0 = th;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:86:0x015e, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:84:0x015a, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:87:0x015f, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:85:0x015b, code lost:
         r3 = r0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:88:0x0160, code lost:
-        if (r19 != null) goto L_0x0162;
+    /* JADX WARNING: Code restructure failed: missing block: B:86:0x015c, code lost:
+        if (r19 != null) goto L_0x015e;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:90:?, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:88:?, code lost:
         r19.close();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:92:?, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:90:?, code lost:
         throw r3;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:93:0x0166, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:91:0x0162, code lost:
         r0 = th;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:98:0x016c, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:96:0x0168, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:99:0x016d, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:97:0x0169, code lost:
         r3 = r0;
      */
-    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:74:0x014c, B:84:0x015d, B:91:0x0165] */
-    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:77:0x0151, B:96:0x016b, B:103:0x0173] */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:103:0x0173 */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:114:0x017f */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:91:0x0165 */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x018a A[Catch:{ Exception -> 0x0014 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x018f A[Catch:{ Exception -> 0x0014 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:124:0x0192 A[Catch:{ Exception -> 0x0014 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x01cb  */
-    /* JADX WARNING: Removed duplicated region for block: B:141:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Code restructure failed: missing block: B:98:0x016a, code lost:
+        if (r18 != null) goto L_0x016c;
+     */
+    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:73:0x014a, B:82:0x0159, B:89:0x0161] */
+    /* JADX WARNING: Exception block dominator not found, dom blocks: [B:75:0x014d, B:94:0x0167, B:101:0x016f] */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:101:0x016f */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:112:0x017b */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:89:0x0161 */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x0186 A[Catch:{ Exception -> 0x0014 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:120:0x018b A[Catch:{ Exception -> 0x0014 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:122:0x018e A[Catch:{ Exception -> 0x0014 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:130:0x01c7  */
+    /* JADX WARNING: Removed duplicated region for block: B:139:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:29:0x00a0 A[Catch:{ Exception -> 0x0014 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:44:0x00e2 A[Catch:{ all -> 0x00fa, all -> 0x015a }] */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x0109  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x014c A[SYNTHETIC, Splitter:B:74:0x014c] */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x0151 A[SYNTHETIC, Splitter:B:77:0x0151] */
-    /* JADX WARNING: Unknown top exception splitter block from list: {B:79:0x0154=Splitter:B:79:0x0154, B:52:0x00f6=Splitter:B:52:0x00f6, B:114:0x017f=Splitter:B:114:0x017f} */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x00e2 A[Catch:{ all -> 0x00f8, all -> 0x0156 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x0107  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x014a A[SYNTHETIC, Splitter:B:73:0x014a] */
+    /* JADX WARNING: Unknown top exception splitter block from list: {B:75:0x014d=Splitter:B:75:0x014d, B:101:0x016f=Splitter:B:101:0x016f} */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     static /* synthetic */ void lambda$saveFile$38(int r20, java.io.File r21, java.lang.String r22, org.telegram.ui.ActionBar.AlertDialog r23, boolean[] r24, java.lang.String r25, java.lang.Runnable r26, boolean[] r27) {
         /*
@@ -5847,7 +5840,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             goto L_0x001d
         L_0x0014:
             r0 = move-exception
-            goto L_0x01c6
+            goto L_0x01c2
         L_0x0017:
             if (r1 != r4) goto L_0x0020
             java.io.File r0 = org.telegram.messenger.AndroidUtilities.generateVideoPath()     // Catch:{ Exception -> 0x0014 }
@@ -5918,76 +5911,74 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             long r8 = java.lang.System.currentTimeMillis()     // Catch:{ Exception -> 0x0014 }
             r10 = 500(0x1f4, double:2.47E-321)
             long r8 = r8 - r10
-            java.io.FileInputStream r6 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0180 }
+            java.io.FileInputStream r6 = new java.io.FileInputStream     // Catch:{ Exception -> 0x017c }
             r0 = r21
-            r6.<init>(r0)     // Catch:{ Exception -> 0x0180 }
-            java.nio.channels.FileChannel r18 = r6.getChannel()     // Catch:{ all -> 0x0176 }
-            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ all -> 0x0168 }
-            r0.<init>(r7)     // Catch:{ all -> 0x0168 }
-            java.nio.channels.FileChannel r19 = r0.getChannel()     // Catch:{ all -> 0x0168 }
-            long r14 = r18.size()     // Catch:{ all -> 0x015a }
+            r6.<init>(r0)     // Catch:{ Exception -> 0x017c }
+            java.nio.channels.FileChannel r18 = r6.getChannel()     // Catch:{ all -> 0x0172 }
+            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ all -> 0x0164 }
+            r0.<init>(r7)     // Catch:{ all -> 0x0164 }
+            java.nio.channels.FileChannel r19 = r0.getChannel()     // Catch:{ all -> 0x0164 }
+            long r14 = r18.size()     // Catch:{ all -> 0x0156 }
             java.lang.Class<java.io.FileDescriptor> r0 = java.io.FileDescriptor.class
             java.lang.String r12 = "getInt$"
-            java.lang.Class[] r13 = new java.lang.Class[r5]     // Catch:{ all -> 0x00fa }
-            java.lang.reflect.Method r0 = r0.getDeclaredMethod(r12, r13)     // Catch:{ all -> 0x00fa }
-            java.io.FileDescriptor r12 = r6.getFD()     // Catch:{ all -> 0x00fa }
-            java.lang.Object[] r13 = new java.lang.Object[r5]     // Catch:{ all -> 0x00fa }
-            java.lang.Object r0 = r0.invoke(r12, r13)     // Catch:{ all -> 0x00fa }
-            java.lang.Integer r0 = (java.lang.Integer) r0     // Catch:{ all -> 0x00fa }
-            int r0 = r0.intValue()     // Catch:{ all -> 0x00fa }
-            boolean r0 = org.telegram.messenger.AndroidUtilities.isInternalUri((int) r0)     // Catch:{ all -> 0x00fa }
-            if (r0 == 0) goto L_0x00fe
+            java.lang.Class[] r13 = new java.lang.Class[r5]     // Catch:{ all -> 0x00f8 }
+            java.lang.reflect.Method r0 = r0.getDeclaredMethod(r12, r13)     // Catch:{ all -> 0x00f8 }
+            java.io.FileDescriptor r12 = r6.getFD()     // Catch:{ all -> 0x00f8 }
+            java.lang.Object[] r13 = new java.lang.Object[r5]     // Catch:{ all -> 0x00f8 }
+            java.lang.Object r0 = r0.invoke(r12, r13)     // Catch:{ all -> 0x00f8 }
+            java.lang.Integer r0 = (java.lang.Integer) r0     // Catch:{ all -> 0x00f8 }
+            int r0 = r0.intValue()     // Catch:{ all -> 0x00f8 }
+            boolean r0 = org.telegram.messenger.AndroidUtilities.isInternalUri((int) r0)     // Catch:{ all -> 0x00f8 }
+            if (r0 == 0) goto L_0x00fc
             if (r2 == 0) goto L_0x00ec
-            org.telegram.messenger.-$$Lambda$MediaController$Nnzv67BfVXhlLWmZKv1aRMvdq_M r0 = new org.telegram.messenger.-$$Lambda$MediaController$Nnzv67BfVXhlLWmZKv1aRMvdq_M     // Catch:{ all -> 0x00fa }
-            r0.<init>()     // Catch:{ all -> 0x00fa }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ all -> 0x00fa }
+            org.telegram.messenger.-$$Lambda$MediaController$Nnzv67BfVXhlLWmZKv1aRMvdq_M r0 = new org.telegram.messenger.-$$Lambda$MediaController$Nnzv67BfVXhlLWmZKv1aRMvdq_M     // Catch:{ all -> 0x00f8 }
+            r0.<init>()     // Catch:{ all -> 0x00f8 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ all -> 0x00f8 }
         L_0x00ec:
             if (r19 == 0) goto L_0x00f1
-            r19.close()     // Catch:{ all -> 0x0168 }
+            r19.close()     // Catch:{ all -> 0x0164 }
         L_0x00f1:
-            if (r18 == 0) goto L_0x00f6
-            r18.close()     // Catch:{ all -> 0x0176 }
-        L_0x00f6:
-            r6.close()     // Catch:{ Exception -> 0x0180 }
+            r18.close()     // Catch:{ all -> 0x0172 }
+            r6.close()     // Catch:{ Exception -> 0x017c }
             return
-        L_0x00fa:
+        L_0x00f8:
             r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x015a }
-        L_0x00fe:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0156 }
+        L_0x00fc:
             r12 = 0
-        L_0x0100:
+        L_0x00fe:
             int r0 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1))
-            if (r0 >= 0) goto L_0x0148
-            boolean r0 = r24[r5]     // Catch:{ all -> 0x015a }
-            if (r0 == 0) goto L_0x0109
-            goto L_0x0148
-        L_0x0109:
+            if (r0 >= 0) goto L_0x0146
+            boolean r0 = r24[r5]     // Catch:{ all -> 0x0156 }
+            if (r0 == 0) goto L_0x0107
+            goto L_0x0146
+        L_0x0107:
             long r3 = r14 - r12
             r22 = r6
             r5 = 4096(0x1000, double:2.0237E-320)
-            long r16 = java.lang.Math.min(r5, r3)     // Catch:{ all -> 0x0146 }
+            long r16 = java.lang.Math.min(r5, r3)     // Catch:{ all -> 0x0144 }
             r3 = r12
             r12 = r19
             r13 = r18
             r5 = r14
             r14 = r3
-            r12.transferFrom(r13, r14, r16)     // Catch:{ all -> 0x0146 }
-            if (r2 == 0) goto L_0x013c
-            long r12 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x0146 }
+            r12.transferFrom(r13, r14, r16)     // Catch:{ all -> 0x0144 }
+            if (r2 == 0) goto L_0x013a
+            long r12 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x0144 }
             long r12 = r12 - r10
             int r0 = (r8 > r12 ? 1 : (r8 == r12 ? 0 : -1))
-            if (r0 > 0) goto L_0x013c
-            long r8 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x0146 }
-            float r0 = (float) r3     // Catch:{ all -> 0x0146 }
-            float r12 = (float) r5     // Catch:{ all -> 0x0146 }
+            if (r0 > 0) goto L_0x013a
+            long r8 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x0144 }
+            float r0 = (float) r3     // Catch:{ all -> 0x0144 }
+            float r12 = (float) r5     // Catch:{ all -> 0x0144 }
             float r0 = r0 / r12
             r12 = 1120403456(0x42CLASSNAME, float:100.0)
             float r0 = r0 * r12
-            int r0 = (int) r0     // Catch:{ all -> 0x0146 }
-            org.telegram.messenger.-$$Lambda$MediaController$ajb4ultJdUDtupAuVv042t0yNC8 r12 = new org.telegram.messenger.-$$Lambda$MediaController$ajb4ultJdUDtupAuVv042t0yNC8     // Catch:{ all -> 0x0146 }
-            r12.<init>(r0)     // Catch:{ all -> 0x0146 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r12)     // Catch:{ all -> 0x0146 }
-        L_0x013c:
+            int r0 = (int) r0     // Catch:{ all -> 0x0144 }
+            org.telegram.messenger.-$$Lambda$MediaController$ajb4ultJdUDtupAuVv042t0yNC8 r12 = new org.telegram.messenger.-$$Lambda$MediaController$ajb4ultJdUDtupAuVv042t0yNC8     // Catch:{ all -> 0x0144 }
+            r12.<init>(r0)     // Catch:{ all -> 0x0144 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r12)     // Catch:{ all -> 0x0144 }
+        L_0x013a:
             r12 = 4096(0x1000, double:2.0237E-320)
             long r12 = r12 + r3
             r14 = r5
@@ -5995,80 +5986,78 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r4 = 1
             r5 = 0
             r6 = r22
-            goto L_0x0100
-        L_0x0146:
+            goto L_0x00fe
+        L_0x0144:
             r0 = move-exception
-            goto L_0x015d
-        L_0x0148:
+            goto L_0x0159
+        L_0x0146:
             r22 = r6
-            if (r19 == 0) goto L_0x014f
-            r19.close()     // Catch:{ all -> 0x0166 }
-        L_0x014f:
-            if (r18 == 0) goto L_0x0154
-            r18.close()     // Catch:{ all -> 0x0174 }
-        L_0x0154:
-            r22.close()     // Catch:{ Exception -> 0x0180 }
+            if (r19 == 0) goto L_0x014d
+            r19.close()     // Catch:{ all -> 0x0162 }
+        L_0x014d:
+            r18.close()     // Catch:{ all -> 0x0170 }
+            r22.close()     // Catch:{ Exception -> 0x017c }
             r3 = 0
             r4 = 1
-            goto L_0x0186
+            goto L_0x0182
+        L_0x0156:
+            r0 = move-exception
+            r22 = r6
+        L_0x0159:
+            throw r0     // Catch:{ all -> 0x015a }
         L_0x015a:
             r0 = move-exception
-            r22 = r6
-        L_0x015d:
-            throw r0     // Catch:{ all -> 0x015e }
-        L_0x015e:
-            r0 = move-exception
             r3 = r0
-            if (r19 == 0) goto L_0x0165
-            r19.close()     // Catch:{ all -> 0x0165 }
-        L_0x0165:
-            throw r3     // Catch:{ all -> 0x0166 }
-        L_0x0166:
+            if (r19 == 0) goto L_0x0161
+            r19.close()     // Catch:{ all -> 0x0161 }
+        L_0x0161:
+            throw r3     // Catch:{ all -> 0x0162 }
+        L_0x0162:
             r0 = move-exception
-            goto L_0x016b
+            goto L_0x0167
+        L_0x0164:
+            r0 = move-exception
+            r22 = r6
+        L_0x0167:
+            throw r0     // Catch:{ all -> 0x0168 }
         L_0x0168:
             r0 = move-exception
-            r22 = r6
-        L_0x016b:
-            throw r0     // Catch:{ all -> 0x016c }
-        L_0x016c:
-            r0 = move-exception
             r3 = r0
-            if (r18 == 0) goto L_0x0173
-            r18.close()     // Catch:{ all -> 0x0173 }
-        L_0x0173:
-            throw r3     // Catch:{ all -> 0x0174 }
-        L_0x0174:
+            if (r18 == 0) goto L_0x016f
+            r18.close()     // Catch:{ all -> 0x016f }
+        L_0x016f:
+            throw r3     // Catch:{ all -> 0x0170 }
+        L_0x0170:
             r0 = move-exception
-            goto L_0x0179
+            goto L_0x0175
+        L_0x0172:
+            r0 = move-exception
+            r22 = r6
+        L_0x0175:
+            throw r0     // Catch:{ all -> 0x0176 }
         L_0x0176:
             r0 = move-exception
-            r22 = r6
-        L_0x0179:
-            throw r0     // Catch:{ all -> 0x017a }
-        L_0x017a:
-            r0 = move-exception
             r3 = r0
-            r22.close()     // Catch:{ all -> 0x017f }
-        L_0x017f:
-            throw r3     // Catch:{ Exception -> 0x0180 }
-        L_0x0180:
+            r22.close()     // Catch:{ all -> 0x017b }
+        L_0x017b:
+            throw r3     // Catch:{ Exception -> 0x017c }
+        L_0x017c:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x0014 }
             r3 = 0
             r4 = 0
-        L_0x0186:
+        L_0x0182:
             boolean r0 = r24[r3]     // Catch:{ Exception -> 0x0014 }
-            if (r0 == 0) goto L_0x018f
+            if (r0 == 0) goto L_0x018b
             r7.delete()     // Catch:{ Exception -> 0x0014 }
             r5 = 0
-            goto L_0x0190
-        L_0x018f:
+            goto L_0x018c
+        L_0x018b:
             r5 = r4
-        L_0x0190:
-            if (r5 == 0) goto L_0x01c9
+        L_0x018c:
+            if (r5 == 0) goto L_0x01c5
             r3 = 2
-            if (r1 != r3) goto L_0x01b9
+            if (r1 != r3) goto L_0x01b5
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0014 }
             java.lang.String r1 = "download"
             java.lang.Object r0 = r0.getSystemService(r1)     // Catch:{ Exception -> 0x0014 }
@@ -6082,23 +6071,23 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r16 = 1
             r12 = r25
             r8.addCompletedDownload(r9, r10, r11, r12, r13, r14, r16)     // Catch:{ Exception -> 0x0014 }
-            goto L_0x01c0
-        L_0x01b9:
+            goto L_0x01bc
+        L_0x01b5:
             android.net.Uri r0 = android.net.Uri.fromFile(r7)     // Catch:{ Exception -> 0x0014 }
             org.telegram.messenger.AndroidUtilities.addMediaToGallery((android.net.Uri) r0)     // Catch:{ Exception -> 0x0014 }
-        L_0x01c0:
-            if (r26 == 0) goto L_0x01c9
+        L_0x01bc:
+            if (r26 == 0) goto L_0x01c5
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r26)     // Catch:{ Exception -> 0x0014 }
-            goto L_0x01c9
-        L_0x01c6:
+            goto L_0x01c5
+        L_0x01c2:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x01c9:
-            if (r2 == 0) goto L_0x01d5
+        L_0x01c5:
+            if (r2 == 0) goto L_0x01d1
             org.telegram.messenger.-$$Lambda$MediaController$XQyblpNQGfsp8JlZDOUs7YDcFcw r0 = new org.telegram.messenger.-$$Lambda$MediaController$XQyblpNQGfsp8JlZDOUs7YDcFcw
             r1 = r27
             r0.<init>(r1)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-        L_0x01d5:
+        L_0x01d1:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.lambda$saveFile$38(int, java.io.File, java.lang.String, org.telegram.ui.ActionBar.AlertDialog, boolean[], java.lang.String, java.lang.Runnable, boolean[]):void");
@@ -6132,6 +6121,128 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x00a0 A[SYNTHETIC, Splitter:B:59:0x00a0] */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00ad A[SYNTHETIC, Splitter:B:67:0x00ad] */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static java.lang.String getStickerExt(android.net.Uri r8) {
+        /*
+            java.lang.String r0 = "webp"
+            r1 = 0
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0099, all -> 0x0097 }
+            android.content.ContentResolver r2 = r2.getContentResolver()     // Catch:{ Exception -> 0x0099, all -> 0x0097 }
+            java.io.InputStream r8 = r2.openInputStream(r8)     // Catch:{ Exception -> 0x0099, all -> 0x0097 }
+            r2 = 12
+            byte[] r3 = new byte[r2]     // Catch:{ Exception -> 0x0095 }
+            r4 = 0
+            int r5 = r8.read(r3, r4, r2)     // Catch:{ Exception -> 0x0095 }
+            if (r5 != r2) goto L_0x0091
+            byte r2 = r3[r4]     // Catch:{ Exception -> 0x0095 }
+            r5 = -119(0xfffffffffffffvar_, float:NaN)
+            r6 = 1
+            if (r2 != r5) goto L_0x0059
+            byte r2 = r3[r6]     // Catch:{ Exception -> 0x0095 }
+            r5 = 80
+            if (r2 != r5) goto L_0x0059
+            r2 = 2
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x0095 }
+            r5 = 78
+            if (r2 != r5) goto L_0x0059
+            r2 = 3
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x0095 }
+            r5 = 71
+            if (r2 != r5) goto L_0x0059
+            r2 = 4
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x0095 }
+            r5 = 13
+            if (r2 != r5) goto L_0x0059
+            r2 = 5
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x0095 }
+            r5 = 10
+            if (r2 != r5) goto L_0x0059
+            r2 = 6
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x0095 }
+            r7 = 26
+            if (r2 != r7) goto L_0x0059
+            r2 = 7
+            byte r2 = r3[r2]     // Catch:{ Exception -> 0x0095 }
+            if (r2 != r5) goto L_0x0059
+            java.lang.String r0 = "png"
+            r8.close()     // Catch:{ Exception -> 0x0054 }
+            goto L_0x0058
+        L_0x0054:
+            r8 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
+        L_0x0058:
+            return r0
+        L_0x0059:
+            byte r2 = r3[r4]     // Catch:{ Exception -> 0x0095 }
+            r4 = 31
+            if (r2 != r4) goto L_0x0071
+            byte r2 = r3[r6]     // Catch:{ Exception -> 0x0095 }
+            r4 = -117(0xffffffffffffff8b, float:NaN)
+            if (r2 != r4) goto L_0x0071
+            java.lang.String r0 = "tgs"
+            r8.close()     // Catch:{ Exception -> 0x006c }
+            goto L_0x0070
+        L_0x006c:
+            r8 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
+        L_0x0070:
+            return r0
+        L_0x0071:
+            java.lang.String r2 = new java.lang.String     // Catch:{ Exception -> 0x0095 }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x0095 }
+            java.lang.String r2 = r2.toLowerCase()     // Catch:{ Exception -> 0x0095 }
+            java.lang.String r3 = "riff"
+            boolean r3 = r2.startsWith(r3)     // Catch:{ Exception -> 0x0095 }
+            if (r3 == 0) goto L_0x0091
+            boolean r2 = r2.endsWith(r0)     // Catch:{ Exception -> 0x0095 }
+            if (r2 == 0) goto L_0x0091
+            r8.close()     // Catch:{ Exception -> 0x008c }
+            goto L_0x0090
+        L_0x008c:
+            r8 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
+        L_0x0090:
+            return r0
+        L_0x0091:
+            r8.close()     // Catch:{ Exception -> 0x00a4 }
+            goto L_0x00a8
+        L_0x0095:
+            r0 = move-exception
+            goto L_0x009b
+        L_0x0097:
+            r0 = move-exception
+            goto L_0x00ab
+        L_0x0099:
+            r0 = move-exception
+            r8 = r1
+        L_0x009b:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x00a9 }
+            if (r8 == 0) goto L_0x00a8
+            r8.close()     // Catch:{ Exception -> 0x00a4 }
+            goto L_0x00a8
+        L_0x00a4:
+            r8 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
+        L_0x00a8:
+            return r1
+        L_0x00a9:
+            r0 = move-exception
+            r1 = r8
+        L_0x00ab:
+            if (r1 == 0) goto L_0x00b5
+            r1.close()     // Catch:{ Exception -> 0x00b1 }
+            goto L_0x00b5
+        L_0x00b1:
+            r8 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
+        L_0x00b5:
+            throw r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.getStickerExt(android.net.Uri):java.lang.String");
+    }
+
     public static boolean isWebp(Uri uri) {
         InputStream inputStream = null;
         try {
@@ -6140,22 +6251,18 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (openInputStream.read(bArr, 0, 12) == 12) {
                 String lowerCase = new String(bArr).toLowerCase();
                 if (lowerCase.startsWith("riff") && lowerCase.endsWith("webp")) {
-                    if (openInputStream != null) {
-                        try {
-                            openInputStream.close();
-                        } catch (Exception e) {
-                            FileLog.e((Throwable) e);
-                        }
+                    try {
+                        openInputStream.close();
+                    } catch (Exception e) {
+                        FileLog.e((Throwable) e);
                     }
                     return true;
                 }
             }
-            if (openInputStream != null) {
-                try {
-                    openInputStream.close();
-                } catch (Exception e2) {
-                    FileLog.e((Throwable) e2);
-                }
+            try {
+                openInputStream.close();
+            } catch (Exception e2) {
+                FileLog.e((Throwable) e2);
             }
         } catch (Exception e3) {
             FileLog.e((Throwable) e3);
@@ -6181,21 +6288,17 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             InputStream openInputStream = ApplicationLoader.applicationContext.getContentResolver().openInputStream(uri);
             byte[] bArr = new byte[3];
             if (openInputStream.read(bArr, 0, 3) != 3 || !new String(bArr).equalsIgnoreCase("gif")) {
-                if (openInputStream != null) {
-                    try {
-                        openInputStream.close();
-                    } catch (Exception e) {
-                        FileLog.e((Throwable) e);
-                    }
+                try {
+                    openInputStream.close();
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
                 }
                 return false;
             }
-            if (openInputStream != null) {
-                try {
-                    openInputStream.close();
-                } catch (Exception e2) {
-                    FileLog.e((Throwable) e2);
-                }
+            try {
+                openInputStream.close();
+            } catch (Exception e2) {
+                FileLog.e((Throwable) e2);
             }
             return true;
         } catch (Exception e3) {
@@ -6215,16 +6318,17 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:21:0x003f, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:20:0x003d, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:22:0x0040, code lost:
-        if (r3 != null) goto L_0x0042;
+    /* JADX WARNING: Code restructure failed: missing block: B:21:0x003e, code lost:
+        if (r3 != null) goto L_0x0040;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:24:?, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:23:?, code lost:
         r3.close();
      */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:25:0x0045 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:24:0x0043 */
+    /* JADX WARNING: Unknown top exception splitter block from list: {B:24:0x0043=Splitter:B:24:0x0043, B:15:0x0037=Splitter:B:15:0x0037} */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.lang.String getFileName(android.net.Uri r11) {
         /*
@@ -6234,54 +6338,53 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             return r1
         L_0x0007:
             r2 = 0
-            java.lang.String r3 = r11.getScheme()     // Catch:{ Exception -> 0x005f }
+            java.lang.String r3 = r11.getScheme()     // Catch:{ Exception -> 0x005d }
             java.lang.String r4 = "content"
-            boolean r3 = r3.equals(r4)     // Catch:{ Exception -> 0x005f }
+            boolean r3 = r3.equals(r4)     // Catch:{ Exception -> 0x005d }
             r4 = 1
-            if (r3 == 0) goto L_0x004a
-            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0046 }
-            android.content.ContentResolver r5 = r3.getContentResolver()     // Catch:{ Exception -> 0x0046 }
-            java.lang.String[] r7 = new java.lang.String[r4]     // Catch:{ Exception -> 0x0046 }
+            if (r3 == 0) goto L_0x0048
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0044 }
+            android.content.ContentResolver r5 = r3.getContentResolver()     // Catch:{ Exception -> 0x0044 }
+            java.lang.String[] r7 = new java.lang.String[r4]     // Catch:{ Exception -> 0x0044 }
             r3 = 0
-            r7[r3] = r0     // Catch:{ Exception -> 0x0046 }
+            r7[r3] = r0     // Catch:{ Exception -> 0x0044 }
             r8 = 0
             r9 = 0
             r10 = 0
             r6 = r11
-            android.database.Cursor r3 = r5.query(r6, r7, r8, r9, r10)     // Catch:{ Exception -> 0x0046 }
-            boolean r5 = r3.moveToFirst()     // Catch:{ all -> 0x003d }
+            android.database.Cursor r3 = r5.query(r6, r7, r8, r9, r10)     // Catch:{ Exception -> 0x0044 }
+            boolean r5 = r3.moveToFirst()     // Catch:{ all -> 0x003b }
             if (r5 == 0) goto L_0x0037
-            int r0 = r3.getColumnIndex(r0)     // Catch:{ all -> 0x003d }
-            java.lang.String r0 = r3.getString(r0)     // Catch:{ all -> 0x003d }
+            int r0 = r3.getColumnIndex(r0)     // Catch:{ all -> 0x003b }
+            java.lang.String r0 = r3.getString(r0)     // Catch:{ all -> 0x003b }
             r2 = r0
         L_0x0037:
-            if (r3 == 0) goto L_0x004a
-            r3.close()     // Catch:{ Exception -> 0x0046 }
-            goto L_0x004a
+            r3.close()     // Catch:{ Exception -> 0x0044 }
+            goto L_0x0048
+        L_0x003b:
+            r0 = move-exception
+            throw r0     // Catch:{ all -> 0x003d }
         L_0x003d:
             r0 = move-exception
-            throw r0     // Catch:{ all -> 0x003f }
-        L_0x003f:
+            if (r3 == 0) goto L_0x0043
+            r3.close()     // Catch:{ all -> 0x0043 }
+        L_0x0043:
+            throw r0     // Catch:{ Exception -> 0x0044 }
+        L_0x0044:
             r0 = move-exception
-            if (r3 == 0) goto L_0x0045
-            r3.close()     // Catch:{ all -> 0x0045 }
-        L_0x0045:
-            throw r0     // Catch:{ Exception -> 0x0046 }
-        L_0x0046:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x005f }
-        L_0x004a:
-            if (r2 != 0) goto L_0x005e
-            java.lang.String r2 = r11.getPath()     // Catch:{ Exception -> 0x005f }
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x005d }
+        L_0x0048:
+            if (r2 != 0) goto L_0x005c
+            java.lang.String r2 = r11.getPath()     // Catch:{ Exception -> 0x005d }
             r11 = 47
-            int r11 = r2.lastIndexOf(r11)     // Catch:{ Exception -> 0x005f }
+            int r11 = r2.lastIndexOf(r11)     // Catch:{ Exception -> 0x005d }
             r0 = -1
-            if (r11 == r0) goto L_0x005e
+            if (r11 == r0) goto L_0x005c
             int r11 = r11 + r4
-            java.lang.String r2 = r2.substring(r11)     // Catch:{ Exception -> 0x005f }
-        L_0x005e:
+            java.lang.String r2 = r2.substring(r11)     // Catch:{ Exception -> 0x005d }
+        L_0x005c:
             return r2
-        L_0x005f:
+        L_0x005d:
             r11 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
             return r1
@@ -6289,174 +6392,288 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.getFileName(android.net.Uri):java.lang.String");
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x00cb A[SYNTHETIC, Splitter:B:59:0x00cb] */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x00d5 A[SYNTHETIC, Splitter:B:64:0x00d5] */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00e3 A[SYNTHETIC, Splitter:B:72:0x00e3] */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ed A[SYNTHETIC, Splitter:B:77:0x00ed] */
+    public static String copyFileToCache(Uri uri, String str) {
+        return copyFileToCache(uri, str, -1);
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:69:?, code lost:
+        r0 = r5.getAbsolutePath();
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:71:?, code lost:
+        r11.close();
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:72:0x00da, code lost:
+        r11 = move-exception;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:73:0x00db, code lost:
+        org.telegram.messenger.FileLog.e((java.lang.Throwable) r11);
+     */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x0132 A[SYNTHETIC, Splitter:B:112:0x0132] */
+    /* JADX WARNING: Removed duplicated region for block: B:117:0x013c A[SYNTHETIC, Splitter:B:117:0x013c] */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x0157 A[SYNTHETIC, Splitter:B:131:0x0157] */
+    /* JADX WARNING: Removed duplicated region for block: B:136:0x0161 A[SYNTHETIC, Splitter:B:136:0x0161] */
     @android.annotation.SuppressLint({"DiscouragedPrivateApi"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static java.lang.String copyFileToCache(android.net.Uri r7, java.lang.String r8) {
+    public static java.lang.String copyFileToCache(android.net.Uri r11, java.lang.String r12, long r13) {
         /*
             r0 = 0
-            java.lang.String r1 = getFileName(r7)     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            java.lang.String r1 = org.telegram.messenger.FileLoader.fixFileName(r1)     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            r2 = 0
-            if (r1 != 0) goto L_0x0027
-            int r1 = org.telegram.messenger.SharedConfig.getLastLocalId()     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            org.telegram.messenger.SharedConfig.saveConfig()     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            java.util.Locale r3 = java.util.Locale.US     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            java.lang.String r4 = "%d.%s"
-            r5 = 2
-            java.lang.Object[] r5 = new java.lang.Object[r5]     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            r5[r2] = r1     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            r1 = 1
-            r5[r1] = r8     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            java.lang.String r1 = java.lang.String.format(r3, r4, r5)     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-        L_0x0027:
-            java.io.File r8 = org.telegram.messenger.AndroidUtilities.getSharingDirectory()     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            r8.mkdirs()     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            java.io.File r3 = new java.io.File     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            r3.<init>(r8, r1)     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            android.net.Uri r8 = android.net.Uri.fromFile(r3)     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            boolean r8 = org.telegram.messenger.AndroidUtilities.isInternalUri((android.net.Uri) r8)     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            if (r8 == 0) goto L_0x003e
-            return r0
-        L_0x003e:
-            android.content.Context r8 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            android.content.ContentResolver r8 = r8.getContentResolver()     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            java.io.InputStream r7 = r8.openInputStream(r7)     // Catch:{ Exception -> 0x00c3, all -> 0x00c0 }
-            boolean r8 = r7 instanceof java.io.FileInputStream     // Catch:{ Exception -> 0x00ba, all -> 0x00b4 }
-            if (r8 == 0) goto L_0x007e
-            r8 = r7
-            java.io.FileInputStream r8 = (java.io.FileInputStream) r8     // Catch:{ Exception -> 0x00ba, all -> 0x00b4 }
-            java.lang.Class<java.io.FileDescriptor> r1 = java.io.FileDescriptor.class
-            java.lang.String r4 = "getInt$"
-            java.lang.Class[] r5 = new java.lang.Class[r2]     // Catch:{ all -> 0x007a }
-            java.lang.reflect.Method r1 = r1.getDeclaredMethod(r4, r5)     // Catch:{ all -> 0x007a }
-            java.io.FileDescriptor r8 = r8.getFD()     // Catch:{ all -> 0x007a }
-            java.lang.Object[] r4 = new java.lang.Object[r2]     // Catch:{ all -> 0x007a }
-            java.lang.Object r8 = r1.invoke(r8, r4)     // Catch:{ all -> 0x007a }
-            java.lang.Integer r8 = (java.lang.Integer) r8     // Catch:{ all -> 0x007a }
-            int r8 = r8.intValue()     // Catch:{ all -> 0x007a }
-            boolean r8 = org.telegram.messenger.AndroidUtilities.isInternalUri((int) r8)     // Catch:{ all -> 0x007a }
-            if (r8 == 0) goto L_0x007e
-            if (r7 == 0) goto L_0x0079
-            r7.close()     // Catch:{ Exception -> 0x0075 }
-            goto L_0x0079
-        L_0x0075:
-            r7 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)
-        L_0x0079:
-            return r0
-        L_0x007a:
-            r8 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)     // Catch:{ Exception -> 0x00ba, all -> 0x00b4 }
-        L_0x007e:
-            java.io.FileOutputStream r8 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x00ba, all -> 0x00b4 }
-            r8.<init>(r3)     // Catch:{ Exception -> 0x00ba, all -> 0x00b4 }
-            r1 = 20480(0x5000, float:2.8699E-41)
-            byte[] r1 = new byte[r1]     // Catch:{ Exception -> 0x00ae, all -> 0x00a9 }
-        L_0x0087:
-            int r4 = r7.read(r1)     // Catch:{ Exception -> 0x00ae, all -> 0x00a9 }
-            r5 = -1
-            if (r4 == r5) goto L_0x0092
-            r8.write(r1, r2, r4)     // Catch:{ Exception -> 0x00ae, all -> 0x00a9 }
+            r1 = 0
+            r3 = 0
+            java.lang.String r4 = getFileName(r11)     // Catch:{ Exception -> 0x0128, all -> 0x0124 }
+            java.lang.String r4 = org.telegram.messenger.FileLoader.fixFileName(r4)     // Catch:{ Exception -> 0x0128, all -> 0x0124 }
+            if (r4 != 0) goto L_0x0029
+            int r4 = org.telegram.messenger.SharedConfig.getLastLocalId()     // Catch:{ Exception -> 0x0128, all -> 0x0124 }
+            org.telegram.messenger.SharedConfig.saveConfig()     // Catch:{ Exception -> 0x0128, all -> 0x0124 }
+            java.util.Locale r5 = java.util.Locale.US     // Catch:{ Exception -> 0x0128, all -> 0x0124 }
+            java.lang.String r6 = "%d.%s"
+            r7 = 2
+            java.lang.Object[] r7 = new java.lang.Object[r7]     // Catch:{ Exception -> 0x0128, all -> 0x0124 }
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)     // Catch:{ Exception -> 0x0128, all -> 0x0124 }
+            r7[r0] = r4     // Catch:{ Exception -> 0x0128, all -> 0x0124 }
+            r4 = 1
+            r7[r4] = r12     // Catch:{ Exception -> 0x0128, all -> 0x0124 }
+            java.lang.String r4 = java.lang.String.format(r5, r6, r7)     // Catch:{ Exception -> 0x0128, all -> 0x0124 }
+        L_0x0029:
+            java.io.File r12 = org.telegram.messenger.AndroidUtilities.getSharingDirectory()     // Catch:{ Exception -> 0x0128, all -> 0x0124 }
+            r12.mkdirs()     // Catch:{ Exception -> 0x011f, all -> 0x011b }
+            java.io.File r5 = new java.io.File     // Catch:{ Exception -> 0x011f, all -> 0x011b }
+            r5.<init>(r12, r4)     // Catch:{ Exception -> 0x011f, all -> 0x011b }
+            android.net.Uri r12 = android.net.Uri.fromFile(r5)     // Catch:{ Exception -> 0x0119, all -> 0x0117 }
+            boolean r12 = org.telegram.messenger.AndroidUtilities.isInternalUri((android.net.Uri) r12)     // Catch:{ Exception -> 0x0119, all -> 0x0117 }
+            if (r12 == 0) goto L_0x004c
+            int r11 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
+            if (r11 <= 0) goto L_0x004b
+            long r11 = (long) r0
+            int r0 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1))
+            if (r0 <= 0) goto L_0x004b
+            r5.delete()
+        L_0x004b:
+            return r3
+        L_0x004c:
+            android.content.Context r12 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0119, all -> 0x0117 }
+            android.content.ContentResolver r12 = r12.getContentResolver()     // Catch:{ Exception -> 0x0119, all -> 0x0117 }
+            java.io.InputStream r11 = r12.openInputStream(r11)     // Catch:{ Exception -> 0x0119, all -> 0x0117 }
+            boolean r12 = r11 instanceof java.io.FileInputStream     // Catch:{ Exception -> 0x0110, all -> 0x010a }
+            if (r12 == 0) goto L_0x0098
+            r12 = r11
+            java.io.FileInputStream r12 = (java.io.FileInputStream) r12     // Catch:{ Exception -> 0x0110, all -> 0x010a }
+            java.lang.Class<java.io.FileDescriptor> r4 = java.io.FileDescriptor.class
+            java.lang.String r6 = "getInt$"
+            java.lang.Class[] r7 = new java.lang.Class[r0]     // Catch:{ all -> 0x0094 }
+            java.lang.reflect.Method r4 = r4.getDeclaredMethod(r6, r7)     // Catch:{ all -> 0x0094 }
+            java.io.FileDescriptor r12 = r12.getFD()     // Catch:{ all -> 0x0094 }
+            java.lang.Object[] r6 = new java.lang.Object[r0]     // Catch:{ all -> 0x0094 }
+            java.lang.Object r12 = r4.invoke(r12, r6)     // Catch:{ all -> 0x0094 }
+            java.lang.Integer r12 = (java.lang.Integer) r12     // Catch:{ all -> 0x0094 }
+            int r12 = r12.intValue()     // Catch:{ all -> 0x0094 }
+            boolean r12 = org.telegram.messenger.AndroidUtilities.isInternalUri((int) r12)     // Catch:{ all -> 0x0094 }
+            if (r12 == 0) goto L_0x0098
+            if (r11 == 0) goto L_0x0087
+            r11.close()     // Catch:{ Exception -> 0x0083 }
             goto L_0x0087
-        L_0x0092:
-            java.lang.String r0 = r3.getAbsolutePath()     // Catch:{ Exception -> 0x00ae, all -> 0x00a9 }
-            if (r7 == 0) goto L_0x00a0
-            r7.close()     // Catch:{ Exception -> 0x009c }
-            goto L_0x00a0
-        L_0x009c:
-            r7 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)
-        L_0x00a0:
-            r8.close()     // Catch:{ Exception -> 0x00a4 }
-            goto L_0x00a8
-        L_0x00a4:
-            r7 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)
-        L_0x00a8:
-            return r0
-        L_0x00a9:
-            r0 = move-exception
-            r6 = r0
-            r0 = r7
-            r7 = r6
-            goto L_0x00e1
-        L_0x00ae:
-            r1 = move-exception
-            r6 = r8
-            r8 = r7
-            r7 = r1
-            r1 = r6
-            goto L_0x00c6
-        L_0x00b4:
-            r8 = move-exception
-            r6 = r0
-            r0 = r7
-            r7 = r8
-            r8 = r6
-            goto L_0x00e1
+        L_0x0083:
+            r11 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
+        L_0x0087:
+            int r11 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
+            if (r11 <= 0) goto L_0x0093
+            long r11 = (long) r0
+            int r0 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1))
+            if (r0 <= 0) goto L_0x0093
+            r5.delete()
+        L_0x0093:
+            return r3
+        L_0x0094:
+            r12 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)     // Catch:{ Exception -> 0x0110, all -> 0x010a }
+        L_0x0098:
+            java.io.FileOutputStream r12 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x0110, all -> 0x010a }
+            r12.<init>(r5)     // Catch:{ Exception -> 0x0110, all -> 0x010a }
+            r4 = 20480(0x5000, float:2.8699E-41)
+            byte[] r4 = new byte[r4]     // Catch:{ Exception -> 0x0104, all -> 0x00fe }
+            r6 = 0
+        L_0x00a2:
+            int r7 = r11.read(r4)     // Catch:{ Exception -> 0x00f8, all -> 0x00f3 }
+            r8 = -1
+            if (r7 == r8) goto L_0x00d2
+            r12.write(r4, r0, r7)     // Catch:{ Exception -> 0x00f8, all -> 0x00f3 }
+            int r6 = r6 + r7
+            int r7 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
+            if (r7 <= 0) goto L_0x00a2
+            long r7 = (long) r6
+            int r9 = (r7 > r13 ? 1 : (r7 == r13 ? 0 : -1))
+            if (r9 <= 0) goto L_0x00a2
+            r11.close()     // Catch:{ Exception -> 0x00ba }
+            goto L_0x00be
         L_0x00ba:
-            r8 = move-exception
-            r1 = r0
-            r6 = r8
-            r8 = r7
-            r7 = r6
+            r11 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
+        L_0x00be:
+            r12.close()     // Catch:{ Exception -> 0x00c2 }
             goto L_0x00c6
-        L_0x00c0:
-            r7 = move-exception
-            r8 = r0
-            goto L_0x00e1
-        L_0x00c3:
-            r7 = move-exception
-            r8 = r0
-            r1 = r8
+        L_0x00c2:
+            r11 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
         L_0x00c6:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)     // Catch:{ all -> 0x00de }
-            if (r8 == 0) goto L_0x00d3
-            r8.close()     // Catch:{ Exception -> 0x00cf }
-            goto L_0x00d3
-        L_0x00cf:
-            r7 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)
-        L_0x00d3:
-            if (r1 == 0) goto L_0x00dd
-            r1.close()     // Catch:{ Exception -> 0x00d9 }
-            goto L_0x00dd
-        L_0x00d9:
-            r7 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r7)
-        L_0x00dd:
-            return r0
+            int r11 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
+            if (r11 <= 0) goto L_0x00d1
+            int r11 = (r7 > r13 ? 1 : (r7 == r13 ? 0 : -1))
+            if (r11 <= 0) goto L_0x00d1
+            r5.delete()
+        L_0x00d1:
+            return r3
+        L_0x00d2:
+            java.lang.String r0 = r5.getAbsolutePath()     // Catch:{ Exception -> 0x00f8, all -> 0x00f3 }
+            r11.close()     // Catch:{ Exception -> 0x00da }
+            goto L_0x00de
+        L_0x00da:
+            r11 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
         L_0x00de:
-            r7 = move-exception
-            r0 = r8
-            r8 = r1
-        L_0x00e1:
-            if (r0 == 0) goto L_0x00eb
-            r0.close()     // Catch:{ Exception -> 0x00e7 }
-            goto L_0x00eb
-        L_0x00e7:
+            r12.close()     // Catch:{ Exception -> 0x00e2 }
+            goto L_0x00e6
+        L_0x00e2:
+            r11 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
+        L_0x00e6:
+            int r11 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
+            if (r11 <= 0) goto L_0x00f2
+            long r11 = (long) r6
+            int r1 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1))
+            if (r1 <= 0) goto L_0x00f2
+            r5.delete()
+        L_0x00f2:
+            return r0
+        L_0x00f3:
             r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00eb:
-            if (r8 == 0) goto L_0x00f5
-            r8.close()     // Catch:{ Exception -> 0x00f1 }
-            goto L_0x00f5
-        L_0x00f1:
-            r8 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x00f5:
-            goto L_0x00f7
-        L_0x00f6:
-            throw r7
-        L_0x00f7:
-            goto L_0x00f6
+            r3 = r11
+            r11 = r0
+            goto L_0x0154
+        L_0x00f8:
+            r0 = move-exception
+            r10 = r12
+            r12 = r11
+            r11 = r0
+            r0 = r10
+            goto L_0x012d
+        L_0x00fe:
+            r3 = move-exception
+            r10 = r3
+            r3 = r11
+            r11 = r10
+            goto L_0x0155
+        L_0x0104:
+            r4 = move-exception
+            r0 = r12
+            r6 = 0
+            r12 = r11
+            r11 = r4
+            goto L_0x012d
+        L_0x010a:
+            r12 = move-exception
+            r10 = r3
+            r3 = r11
+            r11 = r12
+            r12 = r10
+            goto L_0x0155
+        L_0x0110:
+            r12 = move-exception
+            r0 = r3
+            r6 = 0
+            r10 = r12
+            r12 = r11
+            r11 = r10
+            goto L_0x012d
+        L_0x0117:
+            r11 = move-exception
+            goto L_0x011d
+        L_0x0119:
+            r11 = move-exception
+            goto L_0x0121
+        L_0x011b:
+            r11 = move-exception
+            r5 = r12
+        L_0x011d:
+            r12 = r3
+            goto L_0x0155
+        L_0x011f:
+            r11 = move-exception
+            r5 = r12
+        L_0x0121:
+            r12 = r3
+            r0 = r12
+            goto L_0x012c
+        L_0x0124:
+            r11 = move-exception
+            r12 = r3
+            r5 = r12
+            goto L_0x0155
+        L_0x0128:
+            r11 = move-exception
+            r12 = r3
+            r0 = r12
+            r5 = r0
+        L_0x012c:
+            r6 = 0
+        L_0x012d:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)     // Catch:{ all -> 0x0151 }
+            if (r12 == 0) goto L_0x013a
+            r12.close()     // Catch:{ Exception -> 0x0136 }
+            goto L_0x013a
+        L_0x0136:
+            r11 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
+        L_0x013a:
+            if (r0 == 0) goto L_0x0144
+            r0.close()     // Catch:{ Exception -> 0x0140 }
+            goto L_0x0144
+        L_0x0140:
+            r11 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)
+        L_0x0144:
+            int r11 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
+            if (r11 <= 0) goto L_0x0150
+            long r11 = (long) r6
+            int r0 = (r11 > r13 ? 1 : (r11 == r13 ? 0 : -1))
+            if (r0 <= 0) goto L_0x0150
+            r5.delete()
+        L_0x0150:
+            return r3
+        L_0x0151:
+            r11 = move-exception
+            r3 = r12
+            r12 = r0
+        L_0x0154:
+            r0 = r6
+        L_0x0155:
+            if (r3 == 0) goto L_0x015f
+            r3.close()     // Catch:{ Exception -> 0x015b }
+            goto L_0x015f
+        L_0x015b:
+            r3 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
+        L_0x015f:
+            if (r12 == 0) goto L_0x0169
+            r12.close()     // Catch:{ Exception -> 0x0165 }
+            goto L_0x0169
+        L_0x0165:
+            r12 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)
+        L_0x0169:
+            int r12 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
+            if (r12 <= 0) goto L_0x0175
+            long r0 = (long) r0
+            int r12 = (r0 > r13 ? 1 : (r0 == r13 ? 0 : -1))
+            if (r12 <= 0) goto L_0x0175
+            r5.delete()
+        L_0x0175:
+            goto L_0x0177
+        L_0x0176:
+            throw r11
+        L_0x0177:
+            goto L_0x0176
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.copyFileToCache(android.net.Uri, java.lang.String):java.lang.String");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.copyFileToCache(android.net.Uri, java.lang.String, long):java.lang.String");
     }
 
     public static void loadGalleryPhotosAlbums(int i) {
@@ -6505,20 +6722,20 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v19, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v23, resolved type: org.telegram.messenger.MediaController$AlbumEntry} */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:123:0x0264  */
-    /* JADX WARNING: Removed duplicated region for block: B:125:0x027a A[SYNTHETIC, Splitter:B:125:0x027a] */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x02b3 A[SYNTHETIC, Splitter:B:138:0x02b3] */
-    /* JADX WARNING: Removed duplicated region for block: B:147:0x02c4 A[ADDED_TO_REGION, Catch:{ all -> 0x0433 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:154:0x02e9 A[Catch:{ all -> 0x0433 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:155:0x02ec A[Catch:{ all -> 0x0433 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:158:0x0300 A[Catch:{ all -> 0x0433 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x0062 A[Catch:{ all -> 0x0293 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x042c A[SYNTHETIC, Splitter:B:211:0x042c] */
-    /* JADX WARNING: Removed duplicated region for block: B:220:0x043a A[SYNTHETIC, Splitter:B:220:0x043a] */
-    /* JADX WARNING: Removed duplicated region for block: B:228:0x0450 A[LOOP:2: B:226:0x044a->B:228:0x0450, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x00a2  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x00a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x00b7 A[SYNTHETIC, Splitter:B:29:0x00b7] */
+    /* JADX WARNING: Removed duplicated region for block: B:122:0x0262  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x0278 A[SYNTHETIC, Splitter:B:124:0x0278] */
+    /* JADX WARNING: Removed duplicated region for block: B:137:0x02b1 A[SYNTHETIC, Splitter:B:137:0x02b1] */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x02c2 A[ADDED_TO_REGION, Catch:{ all -> 0x0431 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:153:0x02e7 A[Catch:{ all -> 0x0431 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:154:0x02ea A[Catch:{ all -> 0x0431 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x02fe A[Catch:{ all -> 0x0431 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x0062 A[Catch:{ all -> 0x0291 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x042a A[SYNTHETIC, Splitter:B:210:0x042a] */
+    /* JADX WARNING: Removed duplicated region for block: B:219:0x0438 A[SYNTHETIC, Splitter:B:219:0x0438] */
+    /* JADX WARNING: Removed duplicated region for block: B:227:0x044e A[LOOP:2: B:225:0x0448->B:227:0x044e, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:23:0x00a0  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x00a3  */
+    /* JADX WARNING: Removed duplicated region for block: B:28:0x00b5 A[SYNTHETIC, Splitter:B:28:0x00b5] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     static /* synthetic */ void lambda$loadGalleryPhotosAlbums$40(int r51) {
         /*
@@ -6567,15 +6784,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r12 = r17
         L_0x005a:
             r18 = r11
-            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x0293 }
+            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x0291 }
             r11 = 23
-            if (r0 < r11) goto L_0x0089
-            if (r0 < r11) goto L_0x006d
-            android.content.Context r11 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0293 }
-            int r11 = r11.checkSelfPermission(r10)     // Catch:{ all -> 0x0293 }
-            if (r11 != 0) goto L_0x006d
-            goto L_0x0089
-        L_0x006d:
+            if (r0 < r11) goto L_0x0087
+            android.content.Context r11 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0291 }
+            int r11 = r11.checkSelfPermission(r10)     // Catch:{ all -> 0x0291 }
+            if (r11 != 0) goto L_0x006b
+            goto L_0x0087
+        L_0x006b:
             r35 = r2
             r30 = r3
             r28 = r4
@@ -6587,165 +6803,165 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r29 = r10
             r10 = r17
             r31 = r10
-        L_0x0083:
+        L_0x0081:
             r32 = r31
             r33 = r32
-            goto L_0x0278
-        L_0x0089:
-            android.content.Context r11 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0293 }
-            android.content.ContentResolver r23 = r11.getContentResolver()     // Catch:{ all -> 0x0293 }
-            android.net.Uri r24 = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI     // Catch:{ all -> 0x0293 }
-            java.lang.String[] r25 = projectionPhotos     // Catch:{ all -> 0x0293 }
+            goto L_0x0276
+        L_0x0087:
+            android.content.Context r11 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0291 }
+            android.content.ContentResolver r23 = r11.getContentResolver()     // Catch:{ all -> 0x0291 }
+            android.net.Uri r24 = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI     // Catch:{ all -> 0x0291 }
+            java.lang.String[] r25 = projectionPhotos     // Catch:{ all -> 0x0291 }
             r26 = 0
             r27 = 0
-            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ all -> 0x0293 }
-            r11.<init>()     // Catch:{ all -> 0x0293 }
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ all -> 0x0291 }
+            r11.<init>()     // Catch:{ all -> 0x0291 }
             r29 = r10
             r10 = 28
-            if (r0 <= r10) goto L_0x00a5
+            if (r0 <= r10) goto L_0x00a3
             r10 = r16
-            goto L_0x00a7
-        L_0x00a5:
+            goto L_0x00a5
+        L_0x00a3:
             r10 = r19
-        L_0x00a7:
-            r11.append(r10)     // Catch:{ all -> 0x0281 }
-            r11.append(r9)     // Catch:{ all -> 0x0281 }
-            java.lang.String r28 = r11.toString()     // Catch:{ all -> 0x0281 }
-            android.database.Cursor r10 = android.provider.MediaStore.Images.Media.query(r23, r24, r25, r26, r27, r28)     // Catch:{ all -> 0x0281 }
-            if (r10 == 0) goto L_0x0264
-            int r11 = r10.getColumnIndex(r8)     // Catch:{ all -> 0x0250 }
+        L_0x00a5:
+            r11.append(r10)     // Catch:{ all -> 0x027f }
+            r11.append(r9)     // Catch:{ all -> 0x027f }
+            java.lang.String r28 = r11.toString()     // Catch:{ all -> 0x027f }
+            android.database.Cursor r10 = android.provider.MediaStore.Images.Media.query(r23, r24, r25, r26, r27, r28)     // Catch:{ all -> 0x027f }
+            if (r10 == 0) goto L_0x0262
+            int r11 = r10.getColumnIndex(r8)     // Catch:{ all -> 0x024e }
             r23 = r8
-            int r8 = r10.getColumnIndex(r7)     // Catch:{ all -> 0x0242 }
+            int r8 = r10.getColumnIndex(r7)     // Catch:{ all -> 0x0240 }
             r24 = r7
-            int r7 = r10.getColumnIndex(r6)     // Catch:{ all -> 0x0236 }
+            int r7 = r10.getColumnIndex(r6)     // Catch:{ all -> 0x0234 }
             r25 = r6
-            int r6 = r10.getColumnIndex(r5)     // Catch:{ all -> 0x022c }
+            int r6 = r10.getColumnIndex(r5)     // Catch:{ all -> 0x022a }
             r26 = r5
             r5 = 28
-            if (r0 <= r5) goto L_0x00d6
+            if (r0 <= r5) goto L_0x00d4
             r0 = r16
-            goto L_0x00d8
-        L_0x00d6:
+            goto L_0x00d6
+        L_0x00d4:
             r0 = r19
-        L_0x00d8:
-            int r0 = r10.getColumnIndex(r0)     // Catch:{ all -> 0x0224 }
+        L_0x00d6:
+            int r0 = r10.getColumnIndex(r0)     // Catch:{ all -> 0x0222 }
             java.lang.String r5 = "orientation"
-            int r5 = r10.getColumnIndex(r5)     // Catch:{ all -> 0x0224 }
+            int r5 = r10.getColumnIndex(r5)     // Catch:{ all -> 0x0222 }
             r27 = r9
-            int r9 = r10.getColumnIndex(r4)     // Catch:{ all -> 0x021c }
+            int r9 = r10.getColumnIndex(r4)     // Catch:{ all -> 0x021a }
             r28 = r4
-            int r4 = r10.getColumnIndex(r3)     // Catch:{ all -> 0x0216 }
+            int r4 = r10.getColumnIndex(r3)     // Catch:{ all -> 0x0214 }
             r30 = r3
-            int r3 = r10.getColumnIndex(r2)     // Catch:{ all -> 0x0212 }
+            int r3 = r10.getColumnIndex(r2)     // Catch:{ all -> 0x0210 }
             r31 = r17
             r32 = r31
             r33 = r32
             r34 = r33
-        L_0x00fc:
-            boolean r35 = r10.moveToNext()     // Catch:{ all -> 0x020d }
-            if (r35 == 0) goto L_0x0209
+        L_0x00fa:
+            boolean r35 = r10.moveToNext()     // Catch:{ all -> 0x020b }
+            if (r35 == 0) goto L_0x0207
             r35 = r2
-            java.lang.String r2 = r10.getString(r6)     // Catch:{ all -> 0x0206 }
-            boolean r36 = android.text.TextUtils.isEmpty(r2)     // Catch:{ all -> 0x0206 }
-            if (r36 == 0) goto L_0x0111
+            java.lang.String r2 = r10.getString(r6)     // Catch:{ all -> 0x0204 }
+            boolean r36 = android.text.TextUtils.isEmpty(r2)     // Catch:{ all -> 0x0204 }
+            if (r36 == 0) goto L_0x010f
             r2 = r35
-            goto L_0x00fc
-        L_0x0111:
-            int r38 = r10.getInt(r11)     // Catch:{ all -> 0x0206 }
+            goto L_0x00fa
+        L_0x010f:
+            int r38 = r10.getInt(r11)     // Catch:{ all -> 0x0204 }
             r48 = r6
-            int r6 = r10.getInt(r8)     // Catch:{ all -> 0x0206 }
+            int r6 = r10.getInt(r8)     // Catch:{ all -> 0x0204 }
             r49 = r8
-            java.lang.String r8 = r10.getString(r7)     // Catch:{ all -> 0x0206 }
-            long r39 = r10.getLong(r0)     // Catch:{ all -> 0x0206 }
-            int r42 = r10.getInt(r5)     // Catch:{ all -> 0x0206 }
-            int r44 = r10.getInt(r9)     // Catch:{ all -> 0x0206 }
-            int r45 = r10.getInt(r4)     // Catch:{ all -> 0x0206 }
-            long r46 = r10.getLong(r3)     // Catch:{ all -> 0x0206 }
+            java.lang.String r8 = r10.getString(r7)     // Catch:{ all -> 0x0204 }
+            long r39 = r10.getLong(r0)     // Catch:{ all -> 0x0204 }
+            int r42 = r10.getInt(r5)     // Catch:{ all -> 0x0204 }
+            int r44 = r10.getInt(r9)     // Catch:{ all -> 0x0204 }
+            int r45 = r10.getInt(r4)     // Catch:{ all -> 0x0204 }
+            long r46 = r10.getLong(r3)     // Catch:{ all -> 0x0204 }
             r50 = r0
-            org.telegram.messenger.MediaController$PhotoEntry r0 = new org.telegram.messenger.MediaController$PhotoEntry     // Catch:{ all -> 0x0206 }
+            org.telegram.messenger.MediaController$PhotoEntry r0 = new org.telegram.messenger.MediaController$PhotoEntry     // Catch:{ all -> 0x0204 }
             r43 = 0
             r36 = r0
             r37 = r6
             r41 = r2
-            r36.<init>(r37, r38, r39, r41, r42, r43, r44, r45, r46)     // Catch:{ all -> 0x0206 }
-            if (r31 != 0) goto L_0x015f
+            r36.<init>(r37, r38, r39, r41, r42, r43, r44, r45, r46)     // Catch:{ all -> 0x0204 }
+            if (r31 != 0) goto L_0x015d
             r36 = r3
-            org.telegram.messenger.MediaController$AlbumEntry r3 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0206 }
+            org.telegram.messenger.MediaController$AlbumEntry r3 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0204 }
             r37 = r4
             java.lang.String r4 = "AllPhotos"
             r38 = r5
             r5 = 2131624240(0x7f0e0130, float:1.8875654E38)
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)     // Catch:{ all -> 0x0206 }
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)     // Catch:{ all -> 0x0204 }
             r5 = 0
-            r3.<init>(r5, r4, r0)     // Catch:{ all -> 0x0206 }
-            r15.add(r5, r3)     // Catch:{ all -> 0x017c }
-            goto L_0x0167
-        L_0x015f:
+            r3.<init>(r5, r4, r0)     // Catch:{ all -> 0x0204 }
+            r15.add(r5, r3)     // Catch:{ all -> 0x017a }
+            goto L_0x0165
+        L_0x015d:
             r36 = r3
             r37 = r4
             r38 = r5
             r3 = r31
-        L_0x0167:
-            if (r32 != 0) goto L_0x0181
-            org.telegram.messenger.MediaController$AlbumEntry r4 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x017c }
+        L_0x0165:
+            if (r32 != 0) goto L_0x017f
+            org.telegram.messenger.MediaController$AlbumEntry r4 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x017a }
             r39 = r7
             r5 = 2131624239(0x7f0e012f, float:1.8875652E38)
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r5)     // Catch:{ all -> 0x017c }
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r5)     // Catch:{ all -> 0x017a }
             r5 = 0
-            r4.<init>(r5, r7, r0)     // Catch:{ all -> 0x017c }
-            r14.add(r5, r4)     // Catch:{ all -> 0x01ff }
-            goto L_0x0185
-        L_0x017c:
+            r4.<init>(r5, r7, r0)     // Catch:{ all -> 0x017a }
+            r14.add(r5, r4)     // Catch:{ all -> 0x01fd }
+            goto L_0x0183
+        L_0x017a:
             r0 = move-exception
             r31 = r3
-            goto L_0x02ae
-        L_0x0181:
+            goto L_0x02ac
+        L_0x017f:
             r39 = r7
             r4 = r32
-        L_0x0185:
-            r3.addPhoto(r0)     // Catch:{ all -> 0x01ff }
-            r4.addPhoto(r0)     // Catch:{ all -> 0x01ff }
-            java.lang.Object r5 = r13.get(r6)     // Catch:{ all -> 0x01ff }
-            org.telegram.messenger.MediaController$AlbumEntry r5 = (org.telegram.messenger.MediaController.AlbumEntry) r5     // Catch:{ all -> 0x01ff }
-            if (r5 != 0) goto L_0x01b5
-            org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x01ff }
-            r5.<init>(r6, r8, r0)     // Catch:{ all -> 0x01ff }
-            r13.put(r6, r5)     // Catch:{ all -> 0x01ff }
-            if (r33 != 0) goto L_0x01b2
-            if (r12 == 0) goto L_0x01b2
-            if (r2 == 0) goto L_0x01b2
-            boolean r7 = r2.startsWith(r12)     // Catch:{ all -> 0x01ff }
-            if (r7 == 0) goto L_0x01b2
+        L_0x0183:
+            r3.addPhoto(r0)     // Catch:{ all -> 0x01fd }
+            r4.addPhoto(r0)     // Catch:{ all -> 0x01fd }
+            java.lang.Object r5 = r13.get(r6)     // Catch:{ all -> 0x01fd }
+            org.telegram.messenger.MediaController$AlbumEntry r5 = (org.telegram.messenger.MediaController.AlbumEntry) r5     // Catch:{ all -> 0x01fd }
+            if (r5 != 0) goto L_0x01b3
+            org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x01fd }
+            r5.<init>(r6, r8, r0)     // Catch:{ all -> 0x01fd }
+            r13.put(r6, r5)     // Catch:{ all -> 0x01fd }
+            if (r33 != 0) goto L_0x01b0
+            if (r12 == 0) goto L_0x01b0
+            if (r2 == 0) goto L_0x01b0
+            boolean r7 = r2.startsWith(r12)     // Catch:{ all -> 0x01fd }
+            if (r7 == 0) goto L_0x01b0
             r7 = 0
-            r14.add(r7, r5)     // Catch:{ all -> 0x01ff }
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r6)     // Catch:{ all -> 0x01ff }
+            r14.add(r7, r5)     // Catch:{ all -> 0x01fd }
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r6)     // Catch:{ all -> 0x01fd }
             r33 = r7
-            goto L_0x01b5
-        L_0x01b2:
-            r14.add(r5)     // Catch:{ all -> 0x01ff }
-        L_0x01b5:
-            r5.addPhoto(r0)     // Catch:{ all -> 0x01ff }
+            goto L_0x01b3
+        L_0x01b0:
+            r14.add(r5)     // Catch:{ all -> 0x01fd }
+        L_0x01b3:
+            r5.addPhoto(r0)     // Catch:{ all -> 0x01fd }
             r5 = r18
-            java.lang.Object r7 = r5.get(r6)     // Catch:{ all -> 0x01ff }
-            org.telegram.messenger.MediaController$AlbumEntry r7 = (org.telegram.messenger.MediaController.AlbumEntry) r7     // Catch:{ all -> 0x01ff }
-            if (r7 != 0) goto L_0x01e4
-            org.telegram.messenger.MediaController$AlbumEntry r7 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x01ff }
-            r7.<init>(r6, r8, r0)     // Catch:{ all -> 0x01ff }
-            r5.put(r6, r7)     // Catch:{ all -> 0x01ff }
-            if (r34 != 0) goto L_0x01e1
-            if (r12 == 0) goto L_0x01e1
-            if (r2 == 0) goto L_0x01e1
-            boolean r2 = r2.startsWith(r12)     // Catch:{ all -> 0x01ff }
-            if (r2 == 0) goto L_0x01e1
+            java.lang.Object r7 = r5.get(r6)     // Catch:{ all -> 0x01fd }
+            org.telegram.messenger.MediaController$AlbumEntry r7 = (org.telegram.messenger.MediaController.AlbumEntry) r7     // Catch:{ all -> 0x01fd }
+            if (r7 != 0) goto L_0x01e2
+            org.telegram.messenger.MediaController$AlbumEntry r7 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x01fd }
+            r7.<init>(r6, r8, r0)     // Catch:{ all -> 0x01fd }
+            r5.put(r6, r7)     // Catch:{ all -> 0x01fd }
+            if (r34 != 0) goto L_0x01df
+            if (r12 == 0) goto L_0x01df
+            if (r2 == 0) goto L_0x01df
+            boolean r2 = r2.startsWith(r12)     // Catch:{ all -> 0x01fd }
+            if (r2 == 0) goto L_0x01df
             r2 = 0
-            r15.add(r2, r7)     // Catch:{ all -> 0x01ff }
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r6)     // Catch:{ all -> 0x01ff }
+            r15.add(r2, r7)     // Catch:{ all -> 0x01fd }
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r6)     // Catch:{ all -> 0x01fd }
             r34 = r2
-            goto L_0x01e4
-        L_0x01e1:
-            r15.add(r7)     // Catch:{ all -> 0x01ff }
-        L_0x01e4:
-            r7.addPhoto(r0)     // Catch:{ all -> 0x01ff }
+            goto L_0x01e2
+        L_0x01df:
+            r15.add(r7)     // Catch:{ all -> 0x01fd }
+        L_0x01e2:
+            r7.addPhoto(r0)     // Catch:{ all -> 0x01fd }
             r31 = r3
             r32 = r4
             r18 = r5
@@ -6757,59 +6973,59 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r6 = r48
             r8 = r49
             r0 = r50
-            goto L_0x00fc
-        L_0x01ff:
+            goto L_0x00fa
+        L_0x01fd:
             r0 = move-exception
             r31 = r3
             r32 = r4
-            goto L_0x02ae
-        L_0x0206:
+            goto L_0x02ac
+        L_0x0204:
             r0 = move-exception
-            goto L_0x02ae
-        L_0x0209:
+            goto L_0x02ac
+        L_0x0207:
             r35 = r2
-            goto L_0x0278
-        L_0x020d:
-            r0 = move-exception
-            r35 = r2
-            goto L_0x02ae
-        L_0x0212:
+            goto L_0x0276
+        L_0x020b:
             r0 = move-exception
             r35 = r2
-            goto L_0x0261
-        L_0x0216:
+            goto L_0x02ac
+        L_0x0210:
             r0 = move-exception
             r35 = r2
-            r30 = r3
-            goto L_0x0261
-        L_0x021c:
+            goto L_0x025f
+        L_0x0214:
             r0 = move-exception
             r35 = r2
             r30 = r3
-            r28 = r4
-            goto L_0x0261
-        L_0x0224:
+            goto L_0x025f
+        L_0x021a:
             r0 = move-exception
             r35 = r2
             r30 = r3
             r28 = r4
             goto L_0x025f
-        L_0x022c:
+        L_0x0222:
+            r0 = move-exception
+            r35 = r2
+            r30 = r3
+            r28 = r4
+            goto L_0x025d
+        L_0x022a:
             r0 = move-exception
             r35 = r2
             r30 = r3
             r28 = r4
             r26 = r5
-            goto L_0x025f
-        L_0x0236:
+            goto L_0x025d
+        L_0x0234:
             r0 = move-exception
             r35 = r2
             r30 = r3
             r28 = r4
             r26 = r5
             r25 = r6
-            goto L_0x025f
-        L_0x0242:
+            goto L_0x025d
+        L_0x0240:
             r0 = move-exception
             r35 = r2
             r30 = r3
@@ -6817,8 +7033,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r26 = r5
             r25 = r6
             r24 = r7
-            goto L_0x025f
-        L_0x0250:
+            goto L_0x025d
+        L_0x024e:
             r0 = move-exception
             r35 = r2
             r30 = r3
@@ -6827,12 +7043,12 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r25 = r6
             r24 = r7
             r23 = r8
+        L_0x025d:
+            r27 = r9
         L_0x025f:
-            r27 = r9
-        L_0x0261:
             r31 = r17
-            goto L_0x02aa
-        L_0x0264:
+            goto L_0x02a8
+        L_0x0262:
             r35 = r2
             r30 = r3
             r28 = r4
@@ -6842,16 +7058,16 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r23 = r8
             r27 = r9
             r31 = r17
-            goto L_0x0083
-        L_0x0278:
-            if (r10 == 0) goto L_0x02bc
-            r10.close()     // Catch:{ Exception -> 0x027e }
-            goto L_0x02bc
-        L_0x027e:
+            goto L_0x0081
+        L_0x0276:
+            if (r10 == 0) goto L_0x02ba
+            r10.close()     // Catch:{ Exception -> 0x027c }
+            goto L_0x02ba
+        L_0x027c:
             r0 = move-exception
             r2 = r0
-            goto L_0x02b9
-        L_0x0281:
+            goto L_0x02b7
+        L_0x027f:
             r0 = move-exception
             r35 = r2
             r30 = r3
@@ -6861,8 +7077,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r24 = r7
             r23 = r8
             r27 = r9
-            goto L_0x02a6
-        L_0x0293:
+            goto L_0x02a4
+        L_0x0291:
             r0 = move-exception
             r35 = r2
             r30 = r3
@@ -6873,185 +7089,185 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r23 = r8
             r27 = r9
             r29 = r10
-        L_0x02a6:
+        L_0x02a4:
             r10 = r17
             r31 = r10
-        L_0x02aa:
+        L_0x02a8:
             r32 = r31
             r33 = r32
-        L_0x02ae:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0476 }
-            if (r10 == 0) goto L_0x02bc
-            r10.close()     // Catch:{ Exception -> 0x02b7 }
-            goto L_0x02bc
-        L_0x02b7:
+        L_0x02ac:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0474 }
+            if (r10 == 0) goto L_0x02ba
+            r10.close()     // Catch:{ Exception -> 0x02b5 }
+            goto L_0x02ba
+        L_0x02b5:
             r0 = move-exception
             r2 = r0
-        L_0x02b9:
+        L_0x02b7:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x02bc:
+        L_0x02ba:
             r18 = r31
-            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x0433 }
+            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x0431 }
             r2 = 23
-            if (r0 < r2) goto L_0x02d4
-            if (r0 < r2) goto L_0x02d1
-            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0433 }
+            if (r0 < r2) goto L_0x02d2
+            if (r0 < r2) goto L_0x02cf
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0431 }
             r3 = r29
-            int r2 = r2.checkSelfPermission(r3)     // Catch:{ all -> 0x0433 }
-            if (r2 != 0) goto L_0x02d1
-            goto L_0x02d4
-        L_0x02d1:
+            int r2 = r2.checkSelfPermission(r3)     // Catch:{ all -> 0x0431 }
+            if (r2 != 0) goto L_0x02cf
+            goto L_0x02d2
+        L_0x02cf:
             r3 = 0
-            goto L_0x042a
-        L_0x02d4:
-            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0433 }
-            android.content.ContentResolver r3 = r2.getContentResolver()     // Catch:{ all -> 0x0433 }
-            android.net.Uri r4 = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI     // Catch:{ all -> 0x0433 }
-            java.lang.String[] r5 = projectionVideo     // Catch:{ all -> 0x0433 }
+            goto L_0x0428
+        L_0x02d2:
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0431 }
+            android.content.ContentResolver r3 = r2.getContentResolver()     // Catch:{ all -> 0x0431 }
+            android.net.Uri r4 = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI     // Catch:{ all -> 0x0431 }
+            java.lang.String[] r5 = projectionVideo     // Catch:{ all -> 0x0431 }
             r6 = 0
             r7 = 0
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ all -> 0x0433 }
-            r2.<init>()     // Catch:{ all -> 0x0433 }
+            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ all -> 0x0431 }
+            r2.<init>()     // Catch:{ all -> 0x0431 }
             r8 = 28
-            if (r0 <= r8) goto L_0x02ec
+            if (r0 <= r8) goto L_0x02ea
             r8 = r16
-            goto L_0x02ee
-        L_0x02ec:
+            goto L_0x02ec
+        L_0x02ea:
             r8 = r19
-        L_0x02ee:
-            r2.append(r8)     // Catch:{ all -> 0x0433 }
+        L_0x02ec:
+            r2.append(r8)     // Catch:{ all -> 0x0431 }
             r8 = r27
-            r2.append(r8)     // Catch:{ all -> 0x0433 }
-            java.lang.String r8 = r2.toString()     // Catch:{ all -> 0x0433 }
-            android.database.Cursor r10 = android.provider.MediaStore.Images.Media.query(r3, r4, r5, r6, r7, r8)     // Catch:{ all -> 0x0433 }
-            if (r10 == 0) goto L_0x02d1
+            r2.append(r8)     // Catch:{ all -> 0x0431 }
+            java.lang.String r8 = r2.toString()     // Catch:{ all -> 0x0431 }
+            android.database.Cursor r10 = android.provider.MediaStore.Images.Media.query(r3, r4, r5, r6, r7, r8)     // Catch:{ all -> 0x0431 }
+            if (r10 == 0) goto L_0x02cf
             r2 = r23
-            int r2 = r10.getColumnIndex(r2)     // Catch:{ all -> 0x0433 }
+            int r2 = r10.getColumnIndex(r2)     // Catch:{ all -> 0x0431 }
             r3 = r24
-            int r3 = r10.getColumnIndex(r3)     // Catch:{ all -> 0x0433 }
+            int r3 = r10.getColumnIndex(r3)     // Catch:{ all -> 0x0431 }
             r4 = r25
-            int r4 = r10.getColumnIndex(r4)     // Catch:{ all -> 0x0433 }
+            int r4 = r10.getColumnIndex(r4)     // Catch:{ all -> 0x0431 }
             r5 = r26
-            int r5 = r10.getColumnIndex(r5)     // Catch:{ all -> 0x0433 }
+            int r5 = r10.getColumnIndex(r5)     // Catch:{ all -> 0x0431 }
             r6 = 28
-            if (r0 <= r6) goto L_0x031f
+            if (r0 <= r6) goto L_0x031d
             r11 = r16
-            goto L_0x0321
-        L_0x031f:
+            goto L_0x031f
+        L_0x031d:
             r11 = r19
-        L_0x0321:
-            int r0 = r10.getColumnIndex(r11)     // Catch:{ all -> 0x0433 }
+        L_0x031f:
+            int r0 = r10.getColumnIndex(r11)     // Catch:{ all -> 0x0431 }
             java.lang.String r6 = "duration"
-            int r6 = r10.getColumnIndex(r6)     // Catch:{ all -> 0x0433 }
+            int r6 = r10.getColumnIndex(r6)     // Catch:{ all -> 0x0431 }
             r7 = r28
-            int r7 = r10.getColumnIndex(r7)     // Catch:{ all -> 0x0433 }
+            int r7 = r10.getColumnIndex(r7)     // Catch:{ all -> 0x0431 }
             r8 = r30
-            int r8 = r10.getColumnIndex(r8)     // Catch:{ all -> 0x0433 }
+            int r8 = r10.getColumnIndex(r8)     // Catch:{ all -> 0x0431 }
             r9 = r35
-            int r9 = r10.getColumnIndex(r9)     // Catch:{ all -> 0x0433 }
-        L_0x033d:
-            boolean r11 = r10.moveToNext()     // Catch:{ all -> 0x0433 }
-            if (r11 == 0) goto L_0x02d1
-            java.lang.String r11 = r10.getString(r5)     // Catch:{ all -> 0x0433 }
-            boolean r16 = android.text.TextUtils.isEmpty(r11)     // Catch:{ all -> 0x0433 }
-            if (r16 == 0) goto L_0x034e
-            goto L_0x033d
-        L_0x034e:
-            int r36 = r10.getInt(r2)     // Catch:{ all -> 0x0433 }
+            int r9 = r10.getColumnIndex(r9)     // Catch:{ all -> 0x0431 }
+        L_0x033b:
+            boolean r11 = r10.moveToNext()     // Catch:{ all -> 0x0431 }
+            if (r11 == 0) goto L_0x02cf
+            java.lang.String r11 = r10.getString(r5)     // Catch:{ all -> 0x0431 }
+            boolean r16 = android.text.TextUtils.isEmpty(r11)     // Catch:{ all -> 0x0431 }
+            if (r16 == 0) goto L_0x034c
+            goto L_0x033b
+        L_0x034c:
+            int r36 = r10.getInt(r2)     // Catch:{ all -> 0x0431 }
             r16 = r2
-            int r2 = r10.getInt(r3)     // Catch:{ all -> 0x0433 }
+            int r2 = r10.getInt(r3)     // Catch:{ all -> 0x0431 }
             r19 = r3
-            java.lang.String r3 = r10.getString(r4)     // Catch:{ all -> 0x0433 }
-            long r37 = r10.getLong(r0)     // Catch:{ all -> 0x0433 }
-            long r21 = r10.getLong(r6)     // Catch:{ all -> 0x0433 }
-            int r42 = r10.getInt(r7)     // Catch:{ all -> 0x0433 }
-            int r43 = r10.getInt(r8)     // Catch:{ all -> 0x0433 }
-            long r44 = r10.getLong(r9)     // Catch:{ all -> 0x0433 }
+            java.lang.String r3 = r10.getString(r4)     // Catch:{ all -> 0x0431 }
+            long r37 = r10.getLong(r0)     // Catch:{ all -> 0x0431 }
+            long r21 = r10.getLong(r6)     // Catch:{ all -> 0x0431 }
+            int r42 = r10.getInt(r7)     // Catch:{ all -> 0x0431 }
+            int r43 = r10.getInt(r8)     // Catch:{ all -> 0x0431 }
+            long r44 = r10.getLong(r9)     // Catch:{ all -> 0x0431 }
             r23 = r0
-            org.telegram.messenger.MediaController$PhotoEntry r0 = new org.telegram.messenger.MediaController$PhotoEntry     // Catch:{ all -> 0x0433 }
+            org.telegram.messenger.MediaController$PhotoEntry r0 = new org.telegram.messenger.MediaController$PhotoEntry     // Catch:{ all -> 0x0431 }
             r24 = 1000(0x3e8, double:4.94E-321)
             r26 = r4
             r27 = r5
             long r4 = r21 / r24
-            int r5 = (int) r4     // Catch:{ all -> 0x0433 }
+            int r5 = (int) r4     // Catch:{ all -> 0x0431 }
             r41 = 1
             r34 = r0
             r35 = r2
             r39 = r11
             r40 = r5
-            r34.<init>(r35, r36, r37, r39, r40, r41, r42, r43, r44)     // Catch:{ all -> 0x0433 }
-            if (r17 != 0) goto L_0x03ae
-            org.telegram.messenger.MediaController$AlbumEntry r4 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0433 }
+            r34.<init>(r35, r36, r37, r39, r40, r41, r42, r43, r44)     // Catch:{ all -> 0x0431 }
+            if (r17 != 0) goto L_0x03ac
+            org.telegram.messenger.MediaController$AlbumEntry r4 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0431 }
             java.lang.String r5 = "AllVideos"
             r21 = r6
             r6 = 2131624241(0x7f0e0131, float:1.8875656E38)
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)     // Catch:{ all -> 0x0433 }
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)     // Catch:{ all -> 0x0431 }
             r6 = 0
-            r4.<init>(r6, r5, r0)     // Catch:{ all -> 0x0433 }
+            r4.<init>(r6, r5, r0)     // Catch:{ all -> 0x0431 }
             r5 = 1
-            r4.videoOnly = r5     // Catch:{ all -> 0x03ce }
-            if (r32 == 0) goto L_0x03a5
-            goto L_0x03a6
-        L_0x03a5:
+            r4.videoOnly = r5     // Catch:{ all -> 0x03cc }
+            if (r32 == 0) goto L_0x03a3
+            goto L_0x03a4
+        L_0x03a3:
             r5 = 0
-        L_0x03a6:
-            if (r18 == 0) goto L_0x03aa
+        L_0x03a4:
+            if (r18 == 0) goto L_0x03a8
             int r5 = r5 + 1
-        L_0x03aa:
-            r14.add(r5, r4)     // Catch:{ all -> 0x03ce }
-            goto L_0x03b2
-        L_0x03ae:
+        L_0x03a8:
+            r14.add(r5, r4)     // Catch:{ all -> 0x03cc }
+            goto L_0x03b0
+        L_0x03ac:
             r21 = r6
             r4 = r17
-        L_0x03b2:
-            if (r32 != 0) goto L_0x03d3
-            org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x03ce }
+        L_0x03b0:
+            if (r32 != 0) goto L_0x03d1
+            org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x03cc }
             r20 = r7
             r6 = 2131624239(0x7f0e012f, float:1.8875652E38)
-            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r6)     // Catch:{ all -> 0x03ce }
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r6)     // Catch:{ all -> 0x03cc }
             r6 = 0
-            r5.<init>(r6, r7, r0)     // Catch:{ all -> 0x03ce }
-            r14.add(r6, r5)     // Catch:{ all -> 0x03c7 }
-            goto L_0x03d7
-        L_0x03c7:
+            r5.<init>(r6, r7, r0)     // Catch:{ all -> 0x03cc }
+            r14.add(r6, r5)     // Catch:{ all -> 0x03c5 }
+            goto L_0x03d5
+        L_0x03c5:
             r0 = move-exception
             r17 = r4
             r32 = r5
-            goto L_0x0434
-        L_0x03ce:
+            goto L_0x0432
+        L_0x03cc:
             r0 = move-exception
             r17 = r4
-            goto L_0x0434
-        L_0x03d3:
+            goto L_0x0432
+        L_0x03d1:
             r20 = r7
             r5 = r32
-        L_0x03d7:
-            r4.addPhoto(r0)     // Catch:{ all -> 0x0423 }
-            r5.addPhoto(r0)     // Catch:{ all -> 0x0423 }
-            java.lang.Object r6 = r13.get(r2)     // Catch:{ all -> 0x0423 }
-            org.telegram.messenger.MediaController$AlbumEntry r6 = (org.telegram.messenger.MediaController.AlbumEntry) r6     // Catch:{ all -> 0x0423 }
-            if (r6 != 0) goto L_0x0409
-            org.telegram.messenger.MediaController$AlbumEntry r6 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0423 }
-            r6.<init>(r2, r3, r0)     // Catch:{ all -> 0x0423 }
-            r13.put(r2, r6)     // Catch:{ all -> 0x0423 }
-            if (r33 != 0) goto L_0x0404
-            if (r12 == 0) goto L_0x0404
-            if (r11 == 0) goto L_0x0404
-            boolean r3 = r11.startsWith(r12)     // Catch:{ all -> 0x0423 }
-            if (r3 == 0) goto L_0x0404
+        L_0x03d5:
+            r4.addPhoto(r0)     // Catch:{ all -> 0x0421 }
+            r5.addPhoto(r0)     // Catch:{ all -> 0x0421 }
+            java.lang.Object r6 = r13.get(r2)     // Catch:{ all -> 0x0421 }
+            org.telegram.messenger.MediaController$AlbumEntry r6 = (org.telegram.messenger.MediaController.AlbumEntry) r6     // Catch:{ all -> 0x0421 }
+            if (r6 != 0) goto L_0x0407
+            org.telegram.messenger.MediaController$AlbumEntry r6 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0421 }
+            r6.<init>(r2, r3, r0)     // Catch:{ all -> 0x0421 }
+            r13.put(r2, r6)     // Catch:{ all -> 0x0421 }
+            if (r33 != 0) goto L_0x0402
+            if (r12 == 0) goto L_0x0402
+            if (r11 == 0) goto L_0x0402
+            boolean r3 = r11.startsWith(r12)     // Catch:{ all -> 0x0421 }
+            if (r3 == 0) goto L_0x0402
             r3 = 0
-            r14.add(r3, r6)     // Catch:{ all -> 0x0421 }
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)     // Catch:{ all -> 0x0421 }
+            r14.add(r3, r6)     // Catch:{ all -> 0x041f }
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)     // Catch:{ all -> 0x041f }
             r33 = r2
-            goto L_0x040a
-        L_0x0404:
+            goto L_0x0408
+        L_0x0402:
             r3 = 0
-            r14.add(r6)     // Catch:{ all -> 0x0421 }
-            goto L_0x040a
-        L_0x0409:
+            r14.add(r6)     // Catch:{ all -> 0x041f }
+            goto L_0x0408
+        L_0x0407:
             r3 = 0
-        L_0x040a:
-            r6.addPhoto(r0)     // Catch:{ all -> 0x0421 }
+        L_0x0408:
+            r6.addPhoto(r0)     // Catch:{ all -> 0x041f }
             r17 = r4
             r32 = r5
             r2 = r16
@@ -7061,87 +7277,87 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r0 = r23
             r4 = r26
             r5 = r27
-            goto L_0x033d
+            goto L_0x033b
+        L_0x041f:
+            r0 = move-exception
+            goto L_0x0423
         L_0x0421:
             r0 = move-exception
-            goto L_0x0425
-        L_0x0423:
-            r0 = move-exception
             r3 = 0
-        L_0x0425:
+        L_0x0423:
             r17 = r4
             r32 = r5
-            goto L_0x0435
-        L_0x042a:
-            if (r10 == 0) goto L_0x0443
-            r10.close()     // Catch:{ Exception -> 0x0430 }
-            goto L_0x0443
-        L_0x0430:
+            goto L_0x0433
+        L_0x0428:
+            if (r10 == 0) goto L_0x0441
+            r10.close()     // Catch:{ Exception -> 0x042e }
+            goto L_0x0441
+        L_0x042e:
             r0 = move-exception
             r1 = r0
-            goto L_0x0440
-        L_0x0433:
+            goto L_0x043e
+        L_0x0431:
             r0 = move-exception
-        L_0x0434:
+        L_0x0432:
             r3 = 0
-        L_0x0435:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0468 }
-            if (r10 == 0) goto L_0x0443
-            r10.close()     // Catch:{ Exception -> 0x043e }
-            goto L_0x0443
-        L_0x043e:
+        L_0x0433:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x0466 }
+            if (r10 == 0) goto L_0x0441
+            r10.close()     // Catch:{ Exception -> 0x043c }
+            goto L_0x0441
+        L_0x043c:
             r0 = move-exception
             r1 = r0
-        L_0x0440:
+        L_0x043e:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-        L_0x0443:
+        L_0x0441:
             r19 = r17
             r17 = r32
             r16 = r33
             r11 = 0
-        L_0x044a:
+        L_0x0448:
             int r0 = r14.size()
-            if (r11 >= r0) goto L_0x0460
+            if (r11 >= r0) goto L_0x045e
             java.lang.Object r0 = r14.get(r11)
             org.telegram.messenger.MediaController$AlbumEntry r0 = (org.telegram.messenger.MediaController.AlbumEntry) r0
             java.util.ArrayList<org.telegram.messenger.MediaController$PhotoEntry> r0 = r0.photos
             org.telegram.messenger.-$$Lambda$MediaController$F6SXaphXXYjgd_pcwAjMPqQu_nI r1 = org.telegram.messenger.$$Lambda$MediaController$F6SXaphXXYjgd_pcwAjMPqQu_nI.INSTANCE
             java.util.Collections.sort(r0, r1)
             int r11 = r11 + 1
-            goto L_0x044a
-        L_0x0460:
+            goto L_0x0448
+        L_0x045e:
             r20 = 0
             r13 = r51
             broadcastNewPhotos(r13, r14, r15, r16, r17, r18, r19, r20)
             return
-        L_0x0468:
+        L_0x0466:
             r0 = move-exception
             r1 = r0
-            if (r10 == 0) goto L_0x0475
-            r10.close()     // Catch:{ Exception -> 0x0470 }
-            goto L_0x0475
-        L_0x0470:
+            if (r10 == 0) goto L_0x0473
+            r10.close()     // Catch:{ Exception -> 0x046e }
+            goto L_0x0473
+        L_0x046e:
             r0 = move-exception
             r2 = r0
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x0475:
+        L_0x0473:
             throw r1
-        L_0x0476:
+        L_0x0474:
             r0 = move-exception
             r1 = r0
-            if (r10 == 0) goto L_0x0483
-            r10.close()     // Catch:{ Exception -> 0x047e }
+            if (r10 == 0) goto L_0x0481
+            r10.close()     // Catch:{ Exception -> 0x047c }
+            goto L_0x0481
+        L_0x047c:
+            r0 = move-exception
+            r2 = r0
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
+        L_0x0481:
             goto L_0x0483
-        L_0x047e:
-            r0 = move-exception
-            r2 = r0
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r2)
-        L_0x0483:
-            goto L_0x0485
-        L_0x0484:
+        L_0x0482:
             throw r1
-        L_0x0485:
-            goto L_0x0484
+        L_0x0483:
+            goto L_0x0482
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.lambda$loadGalleryPhotosAlbums$40(int):void");
     }

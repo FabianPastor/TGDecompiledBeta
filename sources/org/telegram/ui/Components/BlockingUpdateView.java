@@ -28,7 +28,7 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
@@ -150,8 +150,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.pressCount = i;
         if (i >= 10) {
             setVisibility(8);
-            UserConfig.getInstance(0).pendingAppUpdate = null;
-            UserConfig.getInstance(0).saveConfig(false);
+            SharedConfig.pendingAppUpdate = null;
+            SharedConfig.saveConfig();
         }
     }
 
@@ -174,27 +174,27 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     public void setVisibility(int i) {
         super.setVisibility(i);
         if (i == 8) {
-            NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidLoad);
-            NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileDidFailToLoad);
-            NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
+            NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileLoaded);
+            NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileLoadFailed);
+            NotificationCenter.getInstance(this.accountNum).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
         }
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        if (i == NotificationCenter.fileDidLoad) {
+        if (i == NotificationCenter.fileLoaded) {
             String str = objArr[0];
             String str2 = this.fileName;
             if (str2 != null && str2.equals(str)) {
                 showProgress(false);
                 openApkInstall((Activity) getContext(), this.appUpdate.document);
             }
-        } else if (i == NotificationCenter.fileDidFailToLoad) {
+        } else if (i == NotificationCenter.fileLoadFailed) {
             String str3 = objArr[0];
             String str4 = this.fileName;
             if (str4 != null && str4.equals(str3)) {
                 showProgress(false);
             }
-        } else if (i == NotificationCenter.FileLoadProgressChanged) {
+        } else if (i == NotificationCenter.fileLoadProgressChanged) {
             String str5 = objArr[0];
             String str6 = this.fileName;
             if (str6 != null && str6.equals(str5)) {
@@ -316,9 +316,9 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         } else {
             this.acceptTextView.setText(LocaleController.getString("Update", NUM));
         }
-        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileDidFailToLoad);
-        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.FileLoadProgressChanged);
+        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileLoaded);
+        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileLoadFailed);
+        NotificationCenter.getInstance(this.accountNum).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         if (z) {
             TLRPC$TL_help_getAppUpdate tLRPC$TL_help_getAppUpdate = new TLRPC$TL_help_getAppUpdate();
             try {
@@ -357,8 +357,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
     public /* synthetic */ void lambda$null$3$BlockingUpdateView(TLObject tLObject) {
         if ((tLObject instanceof TLRPC$TL_help_appUpdate) && !((TLRPC$TL_help_appUpdate) tLObject).can_not_skip) {
             setVisibility(8);
-            UserConfig.getInstance(0).pendingAppUpdate = null;
-            UserConfig.getInstance(0).saveConfig(false);
+            SharedConfig.pendingAppUpdate = null;
+            SharedConfig.saveConfig();
         }
     }
 }

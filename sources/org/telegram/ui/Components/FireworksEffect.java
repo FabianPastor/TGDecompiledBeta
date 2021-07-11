@@ -10,6 +10,7 @@ import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class FireworksEffect {
+    final float angleDiff = 1.0471976f;
     private ArrayList<Particle> freeParticles = new ArrayList<>();
     private long lastAnimationTime;
     /* access modifiers changed from: private */

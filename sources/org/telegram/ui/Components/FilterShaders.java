@@ -180,10 +180,15 @@ public class FilterShaders {
 
     /* access modifiers changed from: private */
     public static String vertexShaderForOptimizedBlurOfRadius(int i, float f) {
-        int i2 = i + 1;
-        float[] fArr = new float[i2];
+        int i2;
+        float[] fArr = new float[((i * 2) + 1)];
         float f2 = 0.0f;
-        for (int i3 = 0; i3 < i2; i3++) {
+        int i3 = 0;
+        while (true) {
+            i2 = i + 1;
+            if (i3 >= i2) {
+                break;
+            }
             double d = (double) f;
             fArr[i3] = (float) ((1.0d / Math.sqrt(Math.pow(d, 2.0d) * 6.283185307179586d)) * Math.exp((-Math.pow((double) i3, 2.0d)) / (Math.pow(d, 2.0d) * 2.0d)));
             if (i3 == 0) {
@@ -195,6 +200,7 @@ public class FilterShaders {
                 Double.isNaN(d2);
                 f2 = (float) (d2 + (d3 * 2.0d));
             }
+            i3++;
         }
         for (int i4 = 0; i4 < i2; i4++) {
             fArr[i4] = fArr[i4] / f2;
@@ -230,10 +236,15 @@ public class FilterShaders {
 
     /* access modifiers changed from: private */
     public static String fragmentShaderForOptimizedBlurOfRadius(int i, float f) {
-        int i2 = i + 1;
-        float[] fArr = new float[i2];
+        int i2;
+        float[] fArr = new float[((i * 2) + 1)];
         float f2 = 0.0f;
-        for (int i3 = 0; i3 < i2; i3++) {
+        int i3 = 0;
+        while (true) {
+            i2 = i + 1;
+            if (i3 >= i2) {
+                break;
+            }
             double d = (double) f;
             fArr[i3] = (float) ((1.0d / Math.sqrt(Math.pow(d, 2.0d) * 6.283185307179586d)) * Math.exp((-Math.pow((double) i3, 2.0d)) / (Math.pow(d, 2.0d) * 2.0d)));
             if (i3 == 0) {
@@ -245,6 +256,7 @@ public class FilterShaders {
                 Double.isNaN(d2);
                 f2 = (float) (d2 + (d3 * 2.0d));
             }
+            i3++;
         }
         for (int i4 = 0; i4 < i2; i4++) {
             fArr[i4] = fArr[i4] / f2;

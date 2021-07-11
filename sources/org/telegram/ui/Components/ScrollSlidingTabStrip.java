@@ -40,12 +40,13 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     private LinearLayout.LayoutParams defaultExpandLayoutParams;
     private LinearLayout.LayoutParams defaultTabLayoutParams;
     private ScrollSlidingTabStripDelegate delegate;
+    private int dividerPadding = AndroidUtilities.dp(12.0f);
     private SparseArray<View> futureTabsPositions = new SparseArray<>();
     private int indicatorColor = -10066330;
     private GradientDrawable indicatorDrawable = new GradientDrawable();
     private int indicatorHeight;
     private long lastAnimationTime;
-    private int lastScrollX;
+    private int lastScrollX = 0;
     private float positionAnimationProgress;
     private HashMap<String, View> prevTypes = new HashMap<>();
     private Paint rectPaint;
@@ -53,6 +54,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
     private boolean shouldExpand;
     private float startAnimationPosition;
     private int tabCount;
+    private int tabPadding = AndroidUtilities.dp(24.0f);
     private HashMap<String, View> tabTypes = new HashMap<>();
     private LinearLayout tabsContainer;
     private Type type = Type.LINE;
@@ -70,9 +72,6 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
 
     public ScrollSlidingTabStrip(Context context) {
         super(context);
-        AndroidUtilities.dp(12.0f);
-        AndroidUtilities.dp(24.0f);
-        this.lastScrollX = 0;
         setFillViewport(true);
         setWillNotDraw(false);
         setHorizontalScrollBarEnabled(false);
@@ -393,7 +392,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
             if (z) {
                 imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
             } else if (tag instanceof TLRPC$PhotoSize) {
-                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) tag, tLRPC$Document);
+                imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) tag, tLRPC$Document, tag2 instanceof TLRPC$TL_messages_stickerSet ? ((TLRPC$TL_messages_stickerSet) tag2).set.thumb_version : 0);
             } else {
                 scrollX++;
             }
@@ -434,7 +433,7 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                 if (z) {
                     imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
                 } else if (tag instanceof TLRPC$PhotoSize) {
-                    imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) tag, tLRPC$Document);
+                    imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) tag, tLRPC$Document, tag2 instanceof TLRPC$TL_messages_stickerSet ? ((TLRPC$TL_messages_stickerSet) tag2).set.thumb_version : 0);
                 }
                 if (imageLocation != null) {
                     BackupImageView backupImageView = (BackupImageView) ((FrameLayout) childAt).getChildAt(0);

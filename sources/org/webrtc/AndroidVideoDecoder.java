@@ -16,6 +16,7 @@ import org.webrtc.EncodedImage;
 import org.webrtc.ThreadUtils;
 import org.webrtc.VideoDecoder;
 import org.webrtc.VideoFrame;
+import org.webrtc.VideoSink;
 
 class AndroidVideoDecoder implements VideoDecoder, VideoSink {
     private static final int DEQUEUE_INPUT_TIMEOUT_US = 500000;
@@ -61,6 +62,10 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
 
     public boolean getPrefersLateDecoding() {
         return true;
+    }
+
+    public /* synthetic */ void setParentSink(VideoSink videoSink) {
+        VideoSink.CC.$default$setParentSink(this, videoSink);
     }
 
     private static class FrameInfo {
@@ -443,52 +448,52 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
         throw new AssertionError("Stride is not divisible by two: " + i5);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:25:0x00b7, code lost:
-        if (r5.surfaceTextureHelper != null) goto L_0x0109;
+    /* JADX WARNING: Code restructure failed: missing block: B:28:0x00bd, code lost:
+        if (r5.surfaceTextureHelper != null) goto L_0x010f;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:27:0x00bf, code lost:
-        if (r6.containsKey("color-format") == false) goto L_0x0109;
+    /* JADX WARNING: Code restructure failed: missing block: B:30:0x00c5, code lost:
+        if (r6.containsKey("color-format") == false) goto L_0x010f;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:28:0x00c1, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:31:0x00c7, code lost:
         r5.colorFormat = r6.getInteger("color-format");
         org.webrtc.Logging.d("AndroidVideoDecoder", "Color: 0x" + java.lang.Integer.toHexString(r5.colorFormat));
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:29:0x00eb, code lost:
-        if (isSupportedColorFormat(r5.colorFormat) != false) goto L_0x0109;
+    /* JADX WARNING: Code restructure failed: missing block: B:32:0x00f1, code lost:
+        if (isSupportedColorFormat(r5.colorFormat) != false) goto L_0x010f;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:30:0x00ed, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:33:0x00f3, code lost:
         stopOnOutputThread(new java.lang.IllegalStateException("Unsupported color format: " + r5.colorFormat));
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:31:0x0108, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:34:0x010e, code lost:
         return;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:32:0x0109, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:35:0x010f, code lost:
         r0 = r5.dimensionLock;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:33:0x010b, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:36:0x0111, code lost:
         monitor-enter(r0);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:37:0x0112, code lost:
-        if (r6.containsKey("stride") == false) goto L_0x011c;
+    /* JADX WARNING: Code restructure failed: missing block: B:40:0x0118, code lost:
+        if (r6.containsKey("stride") == false) goto L_0x0122;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:38:0x0114, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:41:0x011a, code lost:
         r5.stride = r6.getInteger("stride");
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:40:0x0122, code lost:
-        if (r6.containsKey("slice-height") == false) goto L_0x012c;
+    /* JADX WARNING: Code restructure failed: missing block: B:43:0x0128, code lost:
+        if (r6.containsKey("slice-height") == false) goto L_0x0132;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:41:0x0124, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:44:0x012a, code lost:
         r5.sliceHeight = r6.getInteger("slice-height");
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:42:0x012c, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:45:0x0132, code lost:
         org.webrtc.Logging.d("AndroidVideoDecoder", "Frame stride and slice height: " + r5.stride + " x " + r5.sliceHeight);
         r5.stride = java.lang.Math.max(r5.width, r5.stride);
         r5.sliceHeight = java.lang.Math.max(r5.height, r5.sliceHeight);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:43:0x0162, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:46:0x0168, code lost:
         monitor-exit(r0);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:44:0x0163, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:47:0x0169, code lost:
         return;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -539,44 +544,49 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
         L_0x006a:
             java.lang.Object r2 = r5.dimensionLock
             monitor-enter(r2)
-            boolean r3 = r5.hasDecodedFirstFrame     // Catch:{ all -> 0x0167 }
+            int r3 = r5.width     // Catch:{ all -> 0x01a6 }
+            if (r0 != r3) goto L_0x0075
+            int r3 = r5.height     // Catch:{ all -> 0x01a6 }
+            if (r1 == r3) goto L_0x00ba
+        L_0x0075:
+            boolean r3 = r5.hasDecodedFirstFrame     // Catch:{ all -> 0x01a6 }
             if (r3 == 0) goto L_0x00b0
-            int r3 = r5.width     // Catch:{ all -> 0x0167 }
-            if (r3 != r0) goto L_0x0079
-            int r3 = r5.height     // Catch:{ all -> 0x0167 }
-            if (r3 == r1) goto L_0x00b0
-        L_0x0079:
-            java.lang.RuntimeException r6 = new java.lang.RuntimeException     // Catch:{ all -> 0x0167 }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x0167 }
-            r3.<init>()     // Catch:{ all -> 0x0167 }
+            java.lang.RuntimeException r6 = new java.lang.RuntimeException     // Catch:{ all -> 0x01a6 }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x01a6 }
+            r3.<init>()     // Catch:{ all -> 0x01a6 }
             java.lang.String r4 = "Unexpected size change. Configured "
-            r3.append(r4)     // Catch:{ all -> 0x0167 }
-            int r4 = r5.width     // Catch:{ all -> 0x0167 }
-            r3.append(r4)     // Catch:{ all -> 0x0167 }
+            r3.append(r4)     // Catch:{ all -> 0x01a6 }
+            int r4 = r5.width     // Catch:{ all -> 0x01a6 }
+            r3.append(r4)     // Catch:{ all -> 0x01a6 }
             java.lang.String r4 = "*"
-            r3.append(r4)     // Catch:{ all -> 0x0167 }
-            int r4 = r5.height     // Catch:{ all -> 0x0167 }
-            r3.append(r4)     // Catch:{ all -> 0x0167 }
+            r3.append(r4)     // Catch:{ all -> 0x01a6 }
+            int r4 = r5.height     // Catch:{ all -> 0x01a6 }
+            r3.append(r4)     // Catch:{ all -> 0x01a6 }
             java.lang.String r4 = ". New "
-            r3.append(r4)     // Catch:{ all -> 0x0167 }
-            r3.append(r0)     // Catch:{ all -> 0x0167 }
+            r3.append(r4)     // Catch:{ all -> 0x01a6 }
+            r3.append(r0)     // Catch:{ all -> 0x01a6 }
             java.lang.String r0 = "*"
-            r3.append(r0)     // Catch:{ all -> 0x0167 }
-            r3.append(r1)     // Catch:{ all -> 0x0167 }
-            java.lang.String r0 = r3.toString()     // Catch:{ all -> 0x0167 }
-            r6.<init>(r0)     // Catch:{ all -> 0x0167 }
-            r5.stopOnOutputThread(r6)     // Catch:{ all -> 0x0167 }
-            monitor-exit(r2)     // Catch:{ all -> 0x0167 }
+            r3.append(r0)     // Catch:{ all -> 0x01a6 }
+            r3.append(r1)     // Catch:{ all -> 0x01a6 }
+            java.lang.String r0 = r3.toString()     // Catch:{ all -> 0x01a6 }
+            r6.<init>(r0)     // Catch:{ all -> 0x01a6 }
+            r5.stopOnOutputThread(r6)     // Catch:{ all -> 0x01a6 }
+            monitor-exit(r2)     // Catch:{ all -> 0x01a6 }
             return
         L_0x00b0:
-            r5.width = r0     // Catch:{ all -> 0x0167 }
-            r5.height = r1     // Catch:{ all -> 0x0167 }
-            monitor-exit(r2)     // Catch:{ all -> 0x0167 }
+            if (r0 <= 0) goto L_0x016d
+            if (r1 > 0) goto L_0x00b6
+            goto L_0x016d
+        L_0x00b6:
+            r5.width = r0     // Catch:{ all -> 0x01a6 }
+            r5.height = r1     // Catch:{ all -> 0x01a6 }
+        L_0x00ba:
+            monitor-exit(r2)     // Catch:{ all -> 0x01a6 }
             org.webrtc.SurfaceTextureHelper r0 = r5.surfaceTextureHelper
-            if (r0 != 0) goto L_0x0109
+            if (r0 != 0) goto L_0x010f
             java.lang.String r0 = "color-format"
             boolean r0 = r6.containsKey(r0)
-            if (r0 == 0) goto L_0x0109
+            if (r0 == 0) goto L_0x010f
             java.lang.String r0 = "color-format"
             int r0 = r6.getInteger(r0)
             r5.colorFormat = r0
@@ -592,7 +602,7 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
             org.webrtc.Logging.d(r0, r1)
             int r0 = r5.colorFormat
             boolean r0 = r5.isSupportedColorFormat(r0)
-            if (r0 != 0) goto L_0x0109
+            if (r0 != 0) goto L_0x010f
             java.lang.IllegalStateException r6 = new java.lang.IllegalStateException
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
@@ -604,53 +614,77 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
             r6.<init>(r0)
             r5.stopOnOutputThread(r6)
             return
-        L_0x0109:
+        L_0x010f:
             java.lang.Object r0 = r5.dimensionLock
             monitor-enter(r0)
             java.lang.String r1 = "stride"
-            boolean r1 = r6.containsKey(r1)     // Catch:{ all -> 0x0164 }
-            if (r1 == 0) goto L_0x011c
+            boolean r1 = r6.containsKey(r1)     // Catch:{ all -> 0x016a }
+            if (r1 == 0) goto L_0x0122
             java.lang.String r1 = "stride"
-            int r1 = r6.getInteger(r1)     // Catch:{ all -> 0x0164 }
-            r5.stride = r1     // Catch:{ all -> 0x0164 }
-        L_0x011c:
+            int r1 = r6.getInteger(r1)     // Catch:{ all -> 0x016a }
+            r5.stride = r1     // Catch:{ all -> 0x016a }
+        L_0x0122:
             java.lang.String r1 = "slice-height"
-            boolean r1 = r6.containsKey(r1)     // Catch:{ all -> 0x0164 }
-            if (r1 == 0) goto L_0x012c
+            boolean r1 = r6.containsKey(r1)     // Catch:{ all -> 0x016a }
+            if (r1 == 0) goto L_0x0132
             java.lang.String r1 = "slice-height"
-            int r6 = r6.getInteger(r1)     // Catch:{ all -> 0x0164 }
-            r5.sliceHeight = r6     // Catch:{ all -> 0x0164 }
-        L_0x012c:
+            int r6 = r6.getInteger(r1)     // Catch:{ all -> 0x016a }
+            r5.sliceHeight = r6     // Catch:{ all -> 0x016a }
+        L_0x0132:
             java.lang.String r6 = "AndroidVideoDecoder"
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ all -> 0x0164 }
-            r1.<init>()     // Catch:{ all -> 0x0164 }
+            java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ all -> 0x016a }
+            r1.<init>()     // Catch:{ all -> 0x016a }
             java.lang.String r2 = "Frame stride and slice height: "
-            r1.append(r2)     // Catch:{ all -> 0x0164 }
-            int r2 = r5.stride     // Catch:{ all -> 0x0164 }
-            r1.append(r2)     // Catch:{ all -> 0x0164 }
+            r1.append(r2)     // Catch:{ all -> 0x016a }
+            int r2 = r5.stride     // Catch:{ all -> 0x016a }
+            r1.append(r2)     // Catch:{ all -> 0x016a }
             java.lang.String r2 = " x "
-            r1.append(r2)     // Catch:{ all -> 0x0164 }
-            int r2 = r5.sliceHeight     // Catch:{ all -> 0x0164 }
-            r1.append(r2)     // Catch:{ all -> 0x0164 }
-            java.lang.String r1 = r1.toString()     // Catch:{ all -> 0x0164 }
-            org.webrtc.Logging.d(r6, r1)     // Catch:{ all -> 0x0164 }
-            int r6 = r5.width     // Catch:{ all -> 0x0164 }
-            int r1 = r5.stride     // Catch:{ all -> 0x0164 }
-            int r6 = java.lang.Math.max(r6, r1)     // Catch:{ all -> 0x0164 }
-            r5.stride = r6     // Catch:{ all -> 0x0164 }
-            int r6 = r5.height     // Catch:{ all -> 0x0164 }
-            int r1 = r5.sliceHeight     // Catch:{ all -> 0x0164 }
-            int r6 = java.lang.Math.max(r6, r1)     // Catch:{ all -> 0x0164 }
-            r5.sliceHeight = r6     // Catch:{ all -> 0x0164 }
-            monitor-exit(r0)     // Catch:{ all -> 0x0164 }
+            r1.append(r2)     // Catch:{ all -> 0x016a }
+            int r2 = r5.sliceHeight     // Catch:{ all -> 0x016a }
+            r1.append(r2)     // Catch:{ all -> 0x016a }
+            java.lang.String r1 = r1.toString()     // Catch:{ all -> 0x016a }
+            org.webrtc.Logging.d(r6, r1)     // Catch:{ all -> 0x016a }
+            int r6 = r5.width     // Catch:{ all -> 0x016a }
+            int r1 = r5.stride     // Catch:{ all -> 0x016a }
+            int r6 = java.lang.Math.max(r6, r1)     // Catch:{ all -> 0x016a }
+            r5.stride = r6     // Catch:{ all -> 0x016a }
+            int r6 = r5.height     // Catch:{ all -> 0x016a }
+            int r1 = r5.sliceHeight     // Catch:{ all -> 0x016a }
+            int r6 = java.lang.Math.max(r6, r1)     // Catch:{ all -> 0x016a }
+            r5.sliceHeight = r6     // Catch:{ all -> 0x016a }
+            monitor-exit(r0)     // Catch:{ all -> 0x016a }
             return
-        L_0x0164:
+        L_0x016a:
             r6 = move-exception
-            monitor-exit(r0)     // Catch:{ all -> 0x0164 }
+            monitor-exit(r0)     // Catch:{ all -> 0x016a }
             throw r6
-        L_0x0167:
+        L_0x016d:
+            java.lang.String r6 = "AndroidVideoDecoder"
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ all -> 0x01a6 }
+            r3.<init>()     // Catch:{ all -> 0x01a6 }
+            java.lang.String r4 = "Unexpected format dimensions. Configured "
+            r3.append(r4)     // Catch:{ all -> 0x01a6 }
+            int r4 = r5.width     // Catch:{ all -> 0x01a6 }
+            r3.append(r4)     // Catch:{ all -> 0x01a6 }
+            java.lang.String r4 = "*"
+            r3.append(r4)     // Catch:{ all -> 0x01a6 }
+            int r4 = r5.height     // Catch:{ all -> 0x01a6 }
+            r3.append(r4)     // Catch:{ all -> 0x01a6 }
+            java.lang.String r4 = ". New "
+            r3.append(r4)     // Catch:{ all -> 0x01a6 }
+            r3.append(r0)     // Catch:{ all -> 0x01a6 }
+            java.lang.String r0 = "*"
+            r3.append(r0)     // Catch:{ all -> 0x01a6 }
+            r3.append(r1)     // Catch:{ all -> 0x01a6 }
+            java.lang.String r0 = ". Skip it"
+            r3.append(r0)     // Catch:{ all -> 0x01a6 }
+            java.lang.String r0 = r3.toString()     // Catch:{ all -> 0x01a6 }
+            org.webrtc.Logging.w(r6, r0)     // Catch:{ all -> 0x01a6 }
+            monitor-exit(r2)     // Catch:{ all -> 0x01a6 }
+            return
+        L_0x01a6:
             r6 = move-exception
-            monitor-exit(r2)     // Catch:{ all -> 0x0167 }
+            monitor-exit(r2)     // Catch:{ all -> 0x01a6 }
             throw r6
         */
         throw new UnsupportedOperationException("Method not decompiled: org.webrtc.AndroidVideoDecoder.reformat(android.media.MediaFormat):void");

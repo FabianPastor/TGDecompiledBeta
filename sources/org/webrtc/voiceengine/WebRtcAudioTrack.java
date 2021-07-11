@@ -136,6 +136,7 @@ public class WebRtcAudioTrack {
                     }
                     WebRtcAudioTrack.this.byteBuffer.rewind();
                 } catch (Throwable unused) {
+                    this.keepAlive = false;
                 }
             }
             if (WebRtcAudioTrack.this.audioTrack != null) {

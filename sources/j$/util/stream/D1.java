@@ -1,8 +1,8 @@
 package j$.util.stream;
 
-import a.CLASSNAMEm0;
-import a.CLASSNAMEo0;
-import a.CLASSNAMEq0;
+import j$.CLASSNAMEj0;
+import j$.CLASSNAMEl0;
+import j$.CLASSNAMEn0;
 import j$.util.Spliterator;
 import j$.util.function.B;
 import j$.util.function.BiConsumer;
@@ -13,16 +13,16 @@ import j$.util.function.F;
 import j$.util.function.I;
 import j$.util.function.J;
 import j$.util.function.x;
+import j$.util.n;
 import j$.util.o;
-import j$.util.p;
-import j$.util.r;
+import j$.util.q;
+import j$.util.s;
 import j$.util.stream.A2;
 import j$.util.stream.CLASSNAMEp1;
 import j$.util.stream.CLASSNAMEw1;
 import j$.util.stream.CLASSNAMEy2;
 import j$.util.stream.R1;
-import j$.util.t;
-import j$.util.v;
+import j$.util.u;
 import java.util.Iterator;
 
 abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
@@ -36,7 +36,7 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
             }
 
             public void accept(long j) {
-                this.var_a.accept((double) j);
+                this.a.accept((double) j);
             }
         }
 
@@ -59,7 +59,7 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
             }
 
             public void accept(long j) {
-                this.var_a.accept(b.this.l.applyAsLong(j));
+                this.a.accept(b.this.l.applyAsLong(j));
             }
         }
 
@@ -84,7 +84,7 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
             }
 
             public void accept(long j) {
-                this.var_a.accept(c.this.l.apply(j));
+                this.a.accept(c.this.l.apply(j));
             }
         }
 
@@ -124,8 +124,8 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
                 throw th;
             }
 
-            public void n(long j) {
-                this.var_a.n(-1);
+            public void m(long j) {
+                this.a.m(-1);
             }
         }
 
@@ -150,13 +150,13 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
             }
 
             public void accept(long j) {
-                if (((CLASSNAMEm0) e.this.l).b(j)) {
-                    this.var_a.accept(j);
+                if (((CLASSNAMEj0) e.this.l).b(j)) {
+                    this.a.accept(j);
                 }
             }
 
-            public void n(long j) {
-                this.var_a.n(-1);
+            public void m(long j) {
+                this.a.m(-1);
             }
         }
 
@@ -182,7 +182,7 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
 
             public void accept(long j) {
                 f.this.l.accept(j);
-                this.var_a.accept(j);
+                this.a.accept(j);
             }
         }
 
@@ -296,7 +296,7 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
         if (spliterator instanceof Spliterator.c) {
             return (Spliterator.c) spliterator;
         }
-        if (i3.var_a) {
+        if (i3.a) {
             i3.a(CLASSNAMEh1.class, "using LongStream.adapt(Spliterator<Long> s)");
             throw null;
         }
@@ -320,7 +320,7 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
 
     public final Stream N(D d2) {
         d2.getClass();
-        return new c(this, this, U2.LONG_VALUE, T2.p | T2.n, d2);
+        return new c(this, this, U2.LONG_VALUE, T2.k | T2.i, d2);
     }
 
     public void Y(C c2) {
@@ -329,19 +329,19 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
     }
 
     public final CLASSNAMEs1 asDoubleStream() {
-        return new a(this, this, U2.LONG_VALUE, T2.p | T2.n);
+        return new a(this, this, U2.LONG_VALUE, T2.k | T2.i);
     }
 
-    public final p average() {
-        long[] jArr = (long[]) d0(V.var_a, O.var_a, N.var_a);
+    public final o average() {
+        long[] jArr = (long[]) d0(V.a, O.a, N.a);
         if (jArr[0] <= 0) {
-            return p.a();
+            return o.a();
         }
         double d2 = (double) jArr[1];
         double d3 = (double) jArr[0];
         Double.isNaN(d2);
         Double.isNaN(d3);
-        return p.d(d2 / d3);
+        return o.d(d2 / d3);
     }
 
     public final boolean b0(E e2) {
@@ -349,7 +349,7 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
     }
 
     public final Stream boxed() {
-        return N(CLASSNAMEa.var_a);
+        return N(CLASSNAMEa.a);
     }
 
     public final boolean c(E e2) {
@@ -357,7 +357,7 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
     }
 
     public final long count() {
-        return ((D1) x(U.var_a)).sum();
+        return ((D1) x(U.a)).sum();
     }
 
     public final Object d0(J j, I i2, BiConsumer biConsumer) {
@@ -368,7 +368,7 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
     }
 
     public final H1 distinct() {
-        return ((CLASSNAMEy2) ((CLASSNAMEy2) N(CLASSNAMEa.var_a)).distinct()).e0(T.var_a);
+        return ((CLASSNAMEy2) N(CLASSNAMEa.a)).distinct().e0(T.a);
     }
 
     public void f(C c2) {
@@ -380,36 +380,36 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
         return ((Boolean) w0(Q1.t(e2, N1.ALL))).booleanValue();
     }
 
-    public final r findAny() {
-        return (r) w0(new CLASSNAMEt1(false, U2.LONG_VALUE, r.a(), Z0.var_a, CLASSNAMEe0.var_a));
+    public final q findAny() {
+        return (q) w0(new CLASSNAMEt1(false, U2.LONG_VALUE, q.a(), Z0.a, CLASSNAMEe0.a));
     }
 
-    public final r findFirst() {
-        return (r) w0(new CLASSNAMEt1(true, U2.LONG_VALUE, r.a(), Z0.var_a, CLASSNAMEe0.var_a));
+    public final q findFirst() {
+        return (q) w0(new CLASSNAMEt1(true, U2.LONG_VALUE, q.a(), Z0.a, CLASSNAMEe0.a));
     }
 
     public final H1 g0(E e2) {
         e2.getClass();
-        return new e(this, this, U2.LONG_VALUE, T2.t, e2);
+        return new e(this, this, U2.LONG_VALUE, T2.o, e2);
     }
 
-    public final r i(B b2) {
+    public final q i(B b2) {
         b2.getClass();
-        return (r) w0(new CLASSNAMEs2(U2.LONG_VALUE, b2));
+        return (q) w0(new CLASSNAMEs2(U2.LONG_VALUE, b2));
     }
 
-    public final t.c iterator() {
-        return v.h(spliterator());
+    public final s.c iterator() {
+        return u.h(spliterator());
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m11iterator() {
-        return v.h(spliterator());
+    public Iterator m5iterator() {
+        return u.h(spliterator());
     }
 
-    public final CLASSNAMEs1 j(CLASSNAMEo0 o0Var) {
-        o0Var.getClass();
-        return new F1(this, this, U2.LONG_VALUE, T2.p | T2.n, o0Var);
+    public final CLASSNAMEs1 j(CLASSNAMEl0 l0Var) {
+        l0Var.getClass();
+        return new F1(this, this, U2.LONG_VALUE, T2.k | T2.i, l0Var);
     }
 
     public final H1 limit(long j) {
@@ -419,12 +419,12 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
         throw new IllegalArgumentException(Long.toString(j));
     }
 
-    public final r max() {
-        return i(Y0.var_a);
+    public final q max() {
+        return i(Y0.a);
     }
 
-    public final r min() {
-        return i(Y.var_a);
+    public final q min() {
+        return i(Y.a);
     }
 
     public final H1 q(C c2) {
@@ -433,7 +433,7 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
     }
 
     public final H1 r(D d2) {
-        return new d(this, this, U2.LONG_VALUE, T2.p | T2.n | T2.t, d2);
+        return new d(this, this, U2.LONG_VALUE, T2.k | T2.i | T2.o, d2);
     }
 
     /* access modifiers changed from: package-private */
@@ -458,29 +458,29 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
     }
 
     public final long sum() {
-        return ((Long) w0(new CLASSNAMEq2(U2.LONG_VALUE, J0.var_a, 0))).longValue();
+        return ((Long) w0(new CLASSNAMEq2(U2.LONG_VALUE, J0.a, 0))).longValue();
     }
 
-    public final o summaryStatistics() {
-        return (o) d0(CLASSNAMEf1.var_a, CLASSNAMEm0.var_a, CLASSNAMEw0.var_a);
+    public final n summaryStatistics() {
+        return (n) d0(CLASSNAMEf1.a, CLASSNAMEm0.a, CLASSNAMEw0.a);
     }
 
     public final long[] toArray() {
-        return (long[]) S1.o((R1.d) x0(Q.var_a)).e();
+        return (long[]) S1.o((R1.d) x0(Q.a)).e();
     }
 
     public CLASSNAMEl1 unordered() {
-        return !B0() ? this : new G1(this, this, U2.LONG_VALUE, T2.r);
+        return !B0() ? this : new G1(this, this, U2.LONG_VALUE, T2.m);
     }
 
-    public final C1 w(CLASSNAMEq0 q0Var) {
-        q0Var.getClass();
-        return new E1(this, this, U2.LONG_VALUE, T2.p | T2.n, q0Var);
+    public final C1 w(CLASSNAMEn0 n0Var) {
+        n0Var.getClass();
+        return new E1(this, this, U2.LONG_VALUE, T2.k | T2.i, n0Var);
     }
 
     public final H1 x(F f2) {
         f2.getClass();
-        return new b(this, this, U2.LONG_VALUE, T2.p | T2.n, f2);
+        return new b(this, this, U2.LONG_VALUE, T2.k | T2.i, f2);
     }
 
     /* access modifiers changed from: package-private */
@@ -501,14 +501,14 @@ abstract class D1<E_IN> extends CLASSNAMEh1<E_IN, Long, H1> implements H1 {
             j$.util.function.C r0 = (j$.util.function.C) r0
             goto L_0x0015
         L_0x000c:
-            boolean r0 = j$.util.stream.i3.var_a
+            boolean r0 = j$.util.stream.i3.a
             if (r0 != 0) goto L_0x0022
             j$.util.stream.K0 r0 = new j$.util.stream.K0
             r0.<init>(r4)
         L_0x0015:
-            boolean r1 = r4.p()
+            boolean r1 = r4.o()
             if (r1 != 0) goto L_0x0021
-            boolean r1 = r3.j(r0)
+            boolean r1 = r3.i(r0)
             if (r1 != 0) goto L_0x0015
         L_0x0021:
             return

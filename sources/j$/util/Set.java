@@ -1,6 +1,6 @@
 package j$.util;
 
-import j$.util.v;
+import j$.util.u;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -10,7 +10,7 @@ public interface Set<E> extends Collection<E> {
     public final /* synthetic */ class CC {
         public static Spliterator $default$spliterator(java.util.Set set) {
             set.getClass();
-            return new v.i((Collection) set, 1);
+            return new u.i((Collection) set, 1);
         }
     }
 

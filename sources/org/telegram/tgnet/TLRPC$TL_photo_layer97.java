@@ -16,7 +16,7 @@ public class TLRPC$TL_photo_layer97 extends TLRPC$TL_photo {
         if (readInt322 == NUM) {
             int readInt323 = abstractSerializedData.readInt32(z);
             while (i < readInt323) {
-                TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(0, 0, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize != null) {
                     this.sizes.add(TLdeserialize);
                     i++;

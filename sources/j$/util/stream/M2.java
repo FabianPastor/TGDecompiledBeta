@@ -13,13 +13,13 @@ final class M2<T> extends CLASSNAMEy2.l<T, T> {
     private final Comparator m;
 
     M2(CLASSNAMEh1 h1Var) {
-        super(h1Var, U2.REFERENCE, T2.q | T2.o);
+        super(h1Var, U2.REFERENCE, T2.l | T2.j);
         this.l = true;
-        this.m = Comparator.CC.b();
+        this.m = Comparator.CC.a();
     }
 
     M2(CLASSNAMEh1 h1Var, java.util.Comparator comparator) {
-        super(h1Var, U2.REFERENCE, T2.q | T2.p);
+        super(h1Var, U2.REFERENCE, T2.l | T2.k);
         this.l = false;
         comparator.getClass();
         this.m = comparator;
@@ -29,16 +29,13 @@ final class M2<T> extends CLASSNAMEy2.l<T, T> {
         if (T2.SORTED.d(t1.r0()) && this.l) {
             return t1.o0(spliterator, false, xVar);
         }
-        Object[] q = t1.o0(spliterator, true, xVar).q(xVar);
-        Arrays.sort(q, this.m);
-        return new S1.c(q);
+        Object[] p = t1.o0(spliterator, true, xVar).p(xVar);
+        Arrays.sort(p, this.m);
+        return new S1.c(p);
     }
 
     public A2 G0(int i, A2 a2) {
         a2.getClass();
-        if (!T2.SORTED.d(i) || !this.l) {
-            return T2.SIZED.d(i) ? new R2(a2, this.m) : new N2(a2, this.m);
-        }
-        return a2;
+        return (!T2.SORTED.d(i) || !this.l) ? T2.SIZED.d(i) ? new R2(a2, this.m) : new N2(a2, this.m) : a2;
     }
 }

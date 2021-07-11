@@ -118,6 +118,9 @@ public abstract class TLRPC$Update extends TLObject {
             case 125178264:
                 tLRPC$Update = new TLRPC$TL_updateChatParticipants();
                 break;
+            case 192428418:
+                tLRPC$Update = new TLRPC$TL_updateGroupCallConnection();
+                break;
             case 196268545:
                 tLRPC$Update = new TLRPC$TL_updateStickerSetsOrder();
                 break;

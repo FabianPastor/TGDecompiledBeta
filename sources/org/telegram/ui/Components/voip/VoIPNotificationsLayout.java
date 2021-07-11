@@ -42,7 +42,7 @@ public class VoIPNotificationsLayout extends LinearLayout {
         if (Build.VERSION.SDK_INT >= 19) {
             TransitionSet transitionSet2 = new TransitionSet();
             this.transitionSet = transitionSet2;
-            transitionSet2.addTransition(new Fade(2).setDuration(150)).addTransition(new ChangeBounds().setDuration(200)).addTransition(new Visibility(this) {
+            transitionSet2.addTransition(new Fade(2).setDuration(150)).addTransition(new ChangeBounds().setDuration(200)).addTransition(new Visibility() {
                 public Animator onAppear(ViewGroup viewGroup, View view, TransitionValues transitionValues, TransitionValues transitionValues2) {
                     AnimatorSet animatorSet = new AnimatorSet();
                     view.setAlpha(0.0f);

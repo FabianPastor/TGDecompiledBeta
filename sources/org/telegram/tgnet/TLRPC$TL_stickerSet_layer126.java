@@ -23,7 +23,7 @@ public class TLRPC$TL_stickerSet_layer126 extends TLRPC$TL_stickerSet {
             if (readInt322 == NUM) {
                 int readInt323 = abstractSerializedData.readInt32(z);
                 while (i < readInt323) {
-                    TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                    TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(0, 0, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z);
                     if (TLdeserialize != null) {
                         this.thumbs.add(TLdeserialize);
                         i++;

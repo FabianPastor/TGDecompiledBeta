@@ -17,7 +17,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SearchCounterView extends View {
-    int animationType;
+    int animationType = -1;
     /* access modifiers changed from: private */
     public StaticLayout countAnimationInLayout;
     private boolean countAnimationIncrement;
@@ -117,6 +117,7 @@ public class SearchCounterView extends View {
                         SearchCounterView.this.invalidate();
                     }
                 });
+                this.animationType = 2;
                 this.countAnimator.setDuration(200);
                 this.countAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
                 if (this.countLayout != null) {

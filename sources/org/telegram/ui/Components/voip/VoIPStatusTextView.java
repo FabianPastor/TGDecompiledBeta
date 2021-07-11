@@ -20,6 +20,7 @@ import org.telegram.ui.Components.voip.VoIPStatusTextView;
 public class VoIPStatusTextView extends FrameLayout {
     boolean animationInProgress;
     ValueAnimator animator;
+    private boolean attachedToWindow;
     EllipsizeSpanAnimator ellipsizeAnimator;
     CharSequence nextTextToSet;
     TextView reconnectTextView;
@@ -324,12 +325,14 @@ public class VoIPStatusTextView extends FrameLayout {
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
+        this.attachedToWindow = true;
         this.ellipsizeAnimator.onAttachedToWindow();
     }
 
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        this.attachedToWindow = false;
         this.ellipsizeAnimator.onDetachedFromWindow();
     }
 }

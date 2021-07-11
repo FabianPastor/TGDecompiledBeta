@@ -3,7 +3,6 @@ package org.telegram.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Shader;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -16,7 +15,6 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.viewpager.widget.PagerAdapter;
@@ -26,6 +24,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
+import javax.microedition.khronos.opengles.GL;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
@@ -46,6 +45,7 @@ import org.telegram.tgnet.TLRPC$Vector;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BottomPagesView;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.IntroActivity;
 
 public class IntroActivity extends Activity implements NotificationCenter.NotificationCenterDelegate {
@@ -232,12 +232,15 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         if (AndroidUtilities.isTablet()) {
             FrameLayout frameLayout3 = new FrameLayout(this);
             setContentView(frameLayout3);
-            ImageView imageView = new ImageView(this);
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(NUM);
-            Shader.TileMode tileMode = Shader.TileMode.REPEAT;
-            bitmapDrawable.setTileModeXY(tileMode, tileMode);
-            imageView.setBackgroundDrawable(bitmapDrawable);
-            frameLayout3.addView(imageView, LayoutHelper.createFrame(-1, -1.0f));
+            AnonymousClass4 r42 = new SizeNotifierFrameLayout(this) {
+                /* access modifiers changed from: protected */
+                public boolean isActionBarVisible() {
+                    return false;
+                }
+            };
+            r42.setOccupyStatusBar(false);
+            r42.setBackgroundImage(Theme.getCachedWallpaper(), Theme.isWallpaperMotion());
+            frameLayout3.addView(r42, LayoutHelper.createFrame(-1, -1.0f));
             FrameLayout frameLayout4 = new FrameLayout(this);
             frameLayout4.setBackgroundResource(NUM);
             frameLayout4.addView(scrollView, LayoutHelper.createFrame(-1, -1.0f));
@@ -420,7 +423,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         public Object instantiateItem(ViewGroup viewGroup, int i) {
             final TextView textView = new TextView(viewGroup.getContext());
             final TextView textView2 = new TextView(viewGroup.getContext());
-            AnonymousClass1 r2 = new FrameLayout(this, viewGroup.getContext()) {
+            AnonymousClass1 r2 = new FrameLayout(viewGroup.getContext()) {
                 /* access modifiers changed from: protected */
                 public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                     int dp = (((((i4 - i2) / 4) * 3) - AndroidUtilities.dp(275.0f)) / 2) + AndroidUtilities.dp(166.0f);
@@ -666,6 +669,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 public EGLDisplay eglDisplay;
                 /* access modifiers changed from: private */
                 public EGLSurface eglSurface;
+                private GL gl;
                 /* access modifiers changed from: private */
                 public boolean initied;
                 private SurfaceTexture surfaceTexture;
@@ -732,7 +736,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                                 finish();
                                 return false;
                             } else {
-                                this.eglContext.getGL();
+                                this.gl = this.eglContext.getGL();
                                 GLES20.glGenTextures(23, this.textures, 0);
                                 loadTexture(NUM, 0);
                                 loadTexture(NUM, 1);

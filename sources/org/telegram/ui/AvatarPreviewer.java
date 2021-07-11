@@ -40,6 +40,8 @@ import org.telegram.ui.Components.RadialProgress2;
 
 public class AvatarPreviewer {
     private static AvatarPreviewer INSTANCE;
+    private Callback callback;
+    private Context context;
     private Layout layout;
     private ViewGroup view;
     private boolean visible;
@@ -65,16 +67,17 @@ public class AvatarPreviewer {
         return (data == null || (data.imageLocation == null && data.thumbImageLocation == null)) ? false : true;
     }
 
-    public void show(ViewGroup viewGroup, Data data, Callback callback) {
+    public void show(ViewGroup viewGroup, Data data, Callback callback2) {
         Preconditions.checkNotNull(viewGroup);
         Preconditions.checkNotNull(data);
-        Preconditions.checkNotNull(callback);
-        Context context = viewGroup.getContext();
+        Preconditions.checkNotNull(callback2);
+        Context context2 = viewGroup.getContext();
         if (this.view != viewGroup) {
             close();
             this.view = viewGroup;
-            this.windowManager = (WindowManager) ContextCompat.getSystemService(context, WindowManager.class);
-            this.layout = new Layout(context, callback) {
+            this.context = context2;
+            this.windowManager = (WindowManager) ContextCompat.getSystemService(context2, WindowManager.class);
+            this.layout = new Layout(context2, callback2) {
                 /* access modifiers changed from: protected */
                 public void onHide() {
                     AvatarPreviewer.this.close();
@@ -106,7 +109,9 @@ public class AvatarPreviewer {
             this.layout = null;
             this.view.requestDisallowInterceptTouchEvent(false);
             this.view = null;
+            this.context = null;
             this.windowManager = null;
+            this.callback = null;
         }
     }
 
@@ -287,8 +292,8 @@ public class AvatarPreviewer {
         /* access modifiers changed from: protected */
         public abstract void onReceiveNotification(Object... objArr);
 
-        public InfoLoadTask(A a2, int i, int i2) {
-            this.argument = a2;
+        public InfoLoadTask(A a, int i, int i2) {
+            this.argument = a;
             this.classGuid = i;
             this.notificationId = i2;
             this.notificationCenter = NotificationCenter.getInstance(UserConfig.selectedAccount);
@@ -321,13 +326,14 @@ public class AvatarPreviewer {
 
     private static abstract class Layout extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
         private final Drawable arrowDrawable;
-        private final ColorDrawable backgroundDrawable;
+        private final ColorDrawable backgroundDrawable = new ColorDrawable(NUM);
         private final Callback callback;
+        private final int[] coords = new int[2];
         private float downY;
         private final ImageReceiver imageReceiver;
         private InfoLoadTask<?, ?> infoLoadTask;
         private WindowInsets insets;
-        private final Interpolator interpolator;
+        private final Interpolator interpolator = new AccelerateDecelerateInterpolator();
         private long lastUpdateTime;
         private MenuItem[] menuItems;
         private ValueAnimator moveAnimator;
@@ -337,6 +343,7 @@ public class AvatarPreviewer {
         private ValueAnimator progressShowAnimator;
         private final RadialProgress2 radialProgress;
         private final int radialProgressSize = AndroidUtilities.dp(64.0f);
+        private final Rect rect = new Rect();
         private boolean recycled;
         /* access modifiers changed from: private */
         public boolean showProgress;
@@ -349,9 +356,6 @@ public class AvatarPreviewer {
 
         public Layout(Context context, Callback callback2) {
             super(context);
-            new Rect();
-            this.interpolator = new AccelerateDecelerateInterpolator();
-            this.backgroundDrawable = new ColorDrawable(NUM);
             ImageReceiver imageReceiver2 = new ImageReceiver();
             this.imageReceiver = imageReceiver2;
             this.downY = -1.0f;
@@ -373,24 +377,24 @@ public class AvatarPreviewer {
         /* access modifiers changed from: protected */
         public void onAttachedToWindow() {
             super.onAttachedToWindow();
-            NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileDidLoad);
-            NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
+            NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileLoaded);
+            NotificationCenter.getInstance(UserConfig.selectedAccount).addObserver(this, NotificationCenter.fileLoadProgressChanged);
         }
 
         /* access modifiers changed from: protected */
         public void onDetachedFromWindow() {
             super.onDetachedFromWindow();
-            NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileDidLoad);
-            NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
+            NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileLoaded);
+            NotificationCenter.getInstance(UserConfig.selectedAccount).removeObserver(this, NotificationCenter.fileLoadProgressChanged);
         }
 
         public void didReceivedNotification(int i, int i2, Object... objArr) {
             if (this.showProgress && !TextUtils.isEmpty(this.videoFileName)) {
-                if (i == NotificationCenter.fileDidLoad) {
+                if (i == NotificationCenter.fileLoaded) {
                     if (TextUtils.equals(objArr[0], this.videoFileName)) {
                         this.radialProgress.setProgress(1.0f, true);
                     }
-                } else if (i == NotificationCenter.FileLoadProgressChanged && TextUtils.equals(objArr[0], this.videoFileName) && this.radialProgress != null) {
+                } else if (i == NotificationCenter.fileLoadProgressChanged && TextUtils.equals(objArr[0], this.videoFileName) && this.radialProgress != null) {
                     this.radialProgress.setProgress(Math.min(1.0f, ((float) objArr[1].longValue()) / ((float) objArr[2].longValue())), true);
                 }
             }
@@ -449,13 +453,11 @@ public class AvatarPreviewer {
                     iArr[i] = this.menuItems[i].iconResId;
                     i++;
                 } else {
-                    BottomSheet.Builder builder = new BottomSheet.Builder(getContext());
-                    builder.setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener() {
+                    BottomSheet dimBehind = new BottomSheet.Builder(getContext()).setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
                             AvatarPreviewer.Layout.this.lambda$showBottomSheet$1$AvatarPreviewer$Layout(dialogInterface, i);
                         }
-                    });
-                    BottomSheet dimBehind = builder.setDimBehind(false);
+                    }).setDimBehind(false);
                     this.visibleSheet = dimBehind;
                     dimBehind.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         public final void onDismiss(DialogInterface dialogInterface) {

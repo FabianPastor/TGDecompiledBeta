@@ -4,6 +4,7 @@ public class TLRPC$TL_document_layer113 extends TLRPC$TL_document {
     public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
+        boolean z2 = z;
         this.flags = abstractSerializedData.readInt32(z);
         this.id = abstractSerializedData.readInt64(z);
         this.access_hash = abstractSerializedData.readInt64(z);
@@ -18,15 +19,16 @@ public class TLRPC$TL_document_layer113 extends TLRPC$TL_document {
                 int readInt322 = abstractSerializedData.readInt32(z);
                 int i2 = 0;
                 while (i2 < readInt322) {
-                    TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                    int i3 = i2;
+                    TLRPC$PhotoSize TLdeserialize = TLRPC$PhotoSize.TLdeserialize(0, 0, 0, abstractSerializedData, abstractSerializedData.readInt32(z), z);
                     if (TLdeserialize != null) {
                         this.thumbs.add(TLdeserialize);
-                        i2++;
+                        i2 = i3 + 1;
                     } else {
                         return;
                     }
                 }
-            } else if (z) {
+            } else if (z2) {
                 throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt32)}));
             } else {
                 return;
@@ -37,7 +39,7 @@ public class TLRPC$TL_document_layer113 extends TLRPC$TL_document {
         if (readInt323 == NUM) {
             int readInt324 = abstractSerializedData.readInt32(z);
             while (i < readInt324) {
-                TLRPC$DocumentAttribute TLdeserialize2 = TLRPC$DocumentAttribute.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                TLRPC$DocumentAttribute TLdeserialize2 = TLRPC$DocumentAttribute.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z2);
                 if (TLdeserialize2 != null) {
                     this.attributes.add(TLdeserialize2);
                     i++;
@@ -45,7 +47,7 @@ public class TLRPC$TL_document_layer113 extends TLRPC$TL_document {
                     return;
                 }
             }
-        } else if (z) {
+        } else if (z2) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt323)}));
         }
     }

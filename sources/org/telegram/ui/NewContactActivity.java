@@ -84,7 +84,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
     public void onNothingSelected(AdapterView<?> adapterView) {
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x0510  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x0512  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r26) {
         /*
@@ -92,7 +92,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r1 = r25
             r0 = r26
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
-            r3 = 2131165469(0x7var_d, float:1.7945156E38)
+            r3 = 2131165461(0x7var_, float:1.794514E38)
             r2.setBackButtonImage(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             r3 = 1
@@ -116,11 +116,11 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.ActionBar.ActionBarMenu r2 = r2.createMenu()
             r5 = 1113587712(0x42600000, float:56.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r6 = 2131165499(0x7var_b, float:1.7945217E38)
+            r6 = 2131165491(0x7var_, float:1.79452E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r2.addItemWithWidth(r3, r6, r5)
             r1.editDoneItem = r2
             java.lang.String r5 = "Done"
-            r6 = 2131625212(0x7f0e04fc, float:1.8877626E38)
+            r6 = 2131625229(0x7f0e050d, float:1.887766E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
             r2.setContentDescription(r5)
             org.telegram.ui.Components.ContextProgressView r2 = new org.telegram.ui.Components.ContextProgressView
@@ -214,7 +214,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r7.setImeOptions(r4)
             org.telegram.ui.Components.EditTextBoldCursor r7 = r1.firstNameField
             java.lang.String r15 = "FirstName"
-            r5 = 2131625557(0x7f0e0655, float:1.8878325E38)
+            r5 = 2131625574(0x7f0e0666, float:1.887836E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r15, r5)
             r7.setHint(r5)
             org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
@@ -282,7 +282,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.Components.EditTextBoldCursor r6 = r1.lastNameField
             r6.setImeOptions(r4)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            r6 = 2131625917(0x7f0e07bd, float:1.8879055E38)
+            r6 = 2131625951(0x7f0e07df, float:1.8879124E38)
             java.lang.String r8 = "LastName"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
             r4.setHint(r6)
@@ -598,11 +598,11 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             goto L_0x048d
         L_0x04ca:
             r1.initialPhoneNumber = r2
-            goto L_0x0524
+            goto L_0x0528
         L_0x04cd:
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x04e3 }
-            java.lang.String r3 = "phone"
-            java.lang.Object r0 = r0.getSystemService(r3)     // Catch:{ Exception -> 0x04e3 }
+            java.lang.String r4 = "phone"
+            java.lang.Object r0 = r0.getSystemService(r4)     // Catch:{ Exception -> 0x04e3 }
             android.telephony.TelephonyManager r0 = (android.telephony.TelephonyManager) r0     // Catch:{ Exception -> 0x04e3 }
             if (r0 == 0) goto L_0x04e7
             java.lang.String r0 = r0.getSimCountryIso()     // Catch:{ Exception -> 0x04e3 }
@@ -615,32 +615,34 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         L_0x04e7:
             r4 = 0
         L_0x04e8:
-            if (r4 == 0) goto L_0x0508
+            if (r4 == 0) goto L_0x050a
             java.lang.Object r0 = r2.get(r4)
             java.lang.String r0 = (java.lang.String) r0
-            if (r0 == 0) goto L_0x0508
+            if (r0 == 0) goto L_0x050a
             java.util.ArrayList<java.lang.String> r2 = r1.countriesArray
             int r2 = r2.indexOf(r0)
-            r3 = -1
-            if (r2 == r3) goto L_0x0508
+            r4 = -1
+            if (r2 == r4) goto L_0x050a
             org.telegram.ui.Components.EditTextBoldCursor r2 = r1.codeField
-            java.util.HashMap<java.lang.String, java.lang.String> r3 = r1.countriesMap
-            java.lang.Object r0 = r3.get(r0)
+            java.util.HashMap<java.lang.String, java.lang.String> r4 = r1.countriesMap
+            java.lang.Object r0 = r4.get(r0)
             java.lang.CharSequence r0 = (java.lang.CharSequence) r0
             r2.setText(r0)
-        L_0x0508:
+            r1.countryState = r9
+        L_0x050a:
             org.telegram.ui.Components.EditTextBoldCursor r0 = r1.codeField
             int r0 = r0.length()
-            if (r0 != 0) goto L_0x0524
+            if (r0 != 0) goto L_0x0528
             android.widget.TextView r0 = r1.countryButton
-            r2 = 2131624870(0x7f0e03a6, float:1.8876932E38)
-            java.lang.String r3 = "ChooseCountry"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r2 = 2131624886(0x7f0e03b6, float:1.8876964E38)
+            java.lang.String r4 = "ChooseCountry"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setText(r2)
             org.telegram.ui.Components.HintEditText r0 = r1.phoneField
             r2 = 0
             r0.setHintText(r2)
-        L_0x0524:
+            r1.countryState = r3
+        L_0x0528:
             android.view.View r0 = r1.fragmentView
             return r0
         */
@@ -794,6 +796,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             this.countryButton.setText(str);
             String str3 = this.phoneFormatMap.get(str2);
             this.phoneField.setHintText(str3 != null ? str3.replace('X', 8211) : null);
+            this.countryState = 0;
             this.ignoreOnTextChange = false;
         }
     }

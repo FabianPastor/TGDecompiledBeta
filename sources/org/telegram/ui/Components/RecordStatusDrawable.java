@@ -8,6 +8,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class RecordStatusDrawable extends StatusDrawable {
+    int alpha = 255;
     Paint currentPaint;
     private boolean isChat = false;
     private long lastUpdateTime = 0;
@@ -17,9 +18,6 @@ public class RecordStatusDrawable extends StatusDrawable {
 
     public int getOpacity() {
         return 0;
-    }
-
-    public void setAlpha(int i) {
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
@@ -84,11 +82,11 @@ public class RecordStatusDrawable extends StatusDrawable {
         canvas.translate(0.0f, (float) ((getIntrinsicHeight() / 2) + AndroidUtilities.dp(this.isChat ? 1.0f : 2.0f)));
         for (int i = 0; i < 4; i++) {
             if (i == 0) {
-                paint.setAlpha((int) (this.progress * 255.0f));
+                paint.setAlpha((int) (((float) this.alpha) * this.progress));
             } else if (i == 3) {
-                paint.setAlpha((int) ((1.0f - this.progress) * 255.0f));
+                paint.setAlpha((int) (((float) this.alpha) * (1.0f - this.progress)));
             } else {
-                paint.setAlpha(255);
+                paint.setAlpha(this.alpha);
             }
             float dp = ((float) (AndroidUtilities.dp(4.0f) * i)) + (((float) AndroidUtilities.dp(4.0f)) * this.progress);
             float f = -dp;
@@ -99,6 +97,10 @@ public class RecordStatusDrawable extends StatusDrawable {
         if (this.started) {
             update();
         }
+    }
+
+    public void setAlpha(int i) {
+        this.alpha = i;
     }
 
     public int getIntrinsicWidth() {

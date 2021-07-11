@@ -146,9 +146,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 }
             }
         });
-        ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(0, NUM);
-        addItem.setIsSearchField(true);
-        addItem.setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
+        ActionBarMenuItem actionBarMenuItemSearchListener = this.actionBar.createMenu().addItem(0, NUM).setIsSearchField(true).setActionBarMenuItemSearchListener(new ActionBarMenuItem.ActionBarMenuItemSearchListener() {
             boolean expanded = false;
 
             public void onSearchCollapse() {
@@ -191,8 +189,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 }
             }
         });
-        addItem.setContentDescription(LocaleController.getString("Search", NUM));
-        addItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
+        actionBarMenuItemSearchListener.setContentDescription(LocaleController.getString("Search", NUM));
+        actionBarMenuItemSearchListener.setSearchFieldHint(LocaleController.getString("Search", NUM));
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         RecyclerListView recyclerListView = new RecyclerListView(context);
@@ -240,7 +238,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         frameLayout.addView(this.searchViewContainer);
         loadInactiveChannels();
         this.fragmentView.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        AnonymousClass5 r3 = new FrameLayout(this, context) {
+        AnonymousClass5 r3 = new FrameLayout(context) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 super.onDraw(canvas);
@@ -525,7 +523,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r3, r4, r5, r6)
                 r8 = 54
                 r9.setHeight(r8)
-                r8 = 2131625815(0x7f0e0757, float:1.8878849E38)
+                r8 = 2131625849(0x7f0e0779, float:1.8878918E38)
                 java.lang.String r0 = "InactiveChats"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r9.setText(r8)
@@ -535,7 +533,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 android.content.Context r1 = r8.getContext()
                 r9.<init>(r1)
                 android.content.Context r8 = r8.getContext()
-                r1 = 2131165449(0x7var_, float:1.7945115E38)
+                r1 = 2131165441(0x7var_, float:1.79451E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -558,18 +556,18 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
                 if (r8 != 0) goto L_0x00a1
-                r8 = 2131627761(0x7f0e0ef1, float:1.8882796E38)
+                r8 = 2131627808(0x7f0e0var_, float:1.888289E38)
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b6
             L_0x00a1:
                 if (r8 != r0) goto L_0x00ad
-                r8 = 2131627760(0x7f0e0ef0, float:1.8882794E38)
+                r8 = 2131627807(0x7f0e0f1f, float:1.8882889E38)
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b6
             L_0x00ad:
-                r8 = 2131627759(0x7f0e0eef, float:1.8882792E38)
+                r8 = 2131627806(0x7f0e0f1e, float:1.8882887E38)
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
             L_0x00b6:

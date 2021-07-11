@@ -93,6 +93,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     /* access modifiers changed from: private */
     public int passwordEnabledDetailRow;
     private boolean passwordEntered = true;
+    private boolean paused;
     private AlertDialog progressDialog;
     /* access modifiers changed from: private */
     public int rowCount;
@@ -207,7 +208,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 return TwoStepVerificationActivity.this.lambda$createView$0$TwoStepVerificationActivity(textView, i, keyEvent);
             }
         });
-        this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback(this) {
+        this.passwordEditText.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 return false;
             }
@@ -426,10 +427,12 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     public void onPause() {
         super.onPause();
+        this.paused = true;
     }
 
     public void onResume() {
         super.onResume();
+        this.paused = false;
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
 

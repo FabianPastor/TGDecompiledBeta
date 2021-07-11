@@ -279,7 +279,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         recyclerListView.setFocusable(true);
         this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
         this.listView.setLayoutAnimation((LayoutAnimationController) null);
-        AnonymousClass4 r4 = new LinearLayoutManager(this, context2) {
+        AnonymousClass4 r4 = new LinearLayoutManager(context2) {
             public boolean requestChildRectangleOnScreen(RecyclerView recyclerView, View view, Rect rect, boolean z, boolean z2) {
                 return false;
             }

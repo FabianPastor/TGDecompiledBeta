@@ -216,7 +216,7 @@ public class PinchToZoomHelper {
             int[] iArr = new int[1];
             ImageLocation imageLocation = getImageLocation(messageObject2, iArr);
             if (imageLocation != null) {
-                this.fullImage.setImage(imageLocation, (String) null, (ImageLocation) null, (String) null, (Drawable) null, iArr[0], (String) null, messageObject2, (messageObject2 == null || !messageObject2.isWebpage()) ? 0 : 1);
+                this.fullImage.setImage(imageLocation, (String) null, (ImageLocation) null, (String) null, (Drawable) null, iArr[0], (String) null, messageObject2, messageObject2.isWebpage() ? 1 : 0);
                 this.fullImage.setCrossfadeAlpha((byte) 2);
             }
             updateViewsLocation();
@@ -368,7 +368,7 @@ public class PinchToZoomHelper {
             if (Build.VERSION.SDK_INT >= 21) {
                 FrameLayout frameLayout = new FrameLayout(context);
                 this.videoPlayerContainer = frameLayout;
-                frameLayout.setOutlineProvider(new ViewOutlineProvider(this, PinchToZoomHelper.this) {
+                frameLayout.setOutlineProvider(new ViewOutlineProvider(PinchToZoomHelper.this) {
                     @TargetApi(21)
                     public void getOutline(View view, Outline outline) {
                         ImageReceiver imageReceiver = (ImageReceiver) view.getTag(NUM);

@@ -5,15 +5,13 @@ import java.lang.reflect.Modifier;
 import sun.misc.Unsafe;
 
 final class c {
-
-    /* renamed from: a  reason: collision with root package name */
-    private static final Unsafe var_a;
+    private static final Unsafe a;
 
     static {
         Field b = b();
         b.setAccessible(true);
         try {
-            var_a = (Unsafe) b.get((Object) null);
+            a = (Unsafe) b.get((Object) null);
         } catch (IllegalAccessException e) {
             throw new Error("Couldn't get the Unsafe", e);
         }
@@ -43,6 +41,6 @@ final class c {
     }
 
     public static Unsafe c() {
-        return var_a;
+        return a;
     }
 }

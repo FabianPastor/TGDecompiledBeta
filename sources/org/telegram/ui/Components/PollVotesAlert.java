@@ -183,7 +183,7 @@ public class PollVotesAlert extends BottomSheet {
         /* JADX INFO: super call moved to the top of the method (can break code semantics) */
         public SectionCell(PollVotesAlert pollVotesAlert, Context context) {
             super(context);
-            PollVotesAlert pollVotesAlert2 = pollVotesAlert;
+            final PollVotesAlert pollVotesAlert2 = pollVotesAlert;
             this.this$0 = pollVotesAlert2;
             setBackgroundColor(Theme.getColor("graySection"));
             TextView textView2 = new TextView(getContext());
@@ -201,7 +201,7 @@ public class PollVotesAlert extends BottomSheet {
             textView3.setTextSize(1, 14.0f);
             this.middleTextView.setTextColor(Theme.getColor("key_graySectionText"));
             this.middleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
-            AnonymousClass1 r2 = new TextView(getContext(), pollVotesAlert2) {
+            AnonymousClass1 r2 = new TextView(getContext()) {
                 public boolean post(Runnable runnable) {
                     return SectionCell.this.this$0.containerView.post(runnable);
                 }
@@ -287,6 +287,7 @@ public class PollVotesAlert extends BottomSheet {
         public ArrayList<Animator> animators;
         private AvatarDrawable avatarDrawable;
         private BackupImageView avatarImageView;
+        private int currentAccount = UserConfig.selectedAccount;
         /* access modifiers changed from: private */
         public TLRPC$User currentUser;
         private boolean drawPlaceholder;
@@ -304,7 +305,6 @@ public class PollVotesAlert extends BottomSheet {
 
         public UserCell(Context context) {
             super(context);
-            int i = UserConfig.selectedAccount;
             setWillNotDraw(false);
             this.avatarDrawable = new AvatarDrawable();
             BackupImageView backupImageView = new BackupImageView(context);
@@ -312,7 +312,7 @@ public class PollVotesAlert extends BottomSheet {
             backupImageView.setRoundRadius(AndroidUtilities.dp(18.0f));
             BackupImageView backupImageView2 = this.avatarImageView;
             boolean z = LocaleController.isRTL;
-            int i2 = 5;
+            int i = 5;
             addView(backupImageView2, LayoutHelper.createFrame(36, 36.0f, (z ? 5 : 3) | 48, z ? 0.0f : 14.0f, 6.0f, z ? 14.0f : 0.0f, 0.0f));
             SimpleTextView simpleTextView = new SimpleTextView(context);
             this.nameTextView = simpleTextView;
@@ -322,7 +322,7 @@ public class PollVotesAlert extends BottomSheet {
             this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
             SimpleTextView simpleTextView2 = this.nameTextView;
             boolean z2 = LocaleController.isRTL;
-            addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (!z2 ? 3 : i2) | 48, z2 ? 28.0f : 65.0f, 14.0f, z2 ? 65.0f : 28.0f, 0.0f));
+            addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (!z2 ? 3 : i) | 48, z2 ? 28.0f : 65.0f, 14.0f, z2 ? 65.0f : 28.0f, 0.0f));
         }
 
         public void setData(TLRPC$User tLRPC$User, int i, boolean z) {
@@ -1269,7 +1269,12 @@ public class PollVotesAlert extends BottomSheet {
     }
 
     public class Adapter extends RecyclerListView.SectionsAdapter {
+        private int currentAccount = UserConfig.selectedAccount;
         private Context mContext;
+
+        public Object getItem(int i, int i2) {
+            return null;
+        }
 
         public String getLetter(int i) {
             return null;
@@ -1280,11 +1285,10 @@ public class PollVotesAlert extends BottomSheet {
         }
 
         public Adapter(Context context) {
-            int i = UserConfig.selectedAccount;
             this.mContext = context;
         }
 
-        public boolean isEnabled(int i, int i2) {
+        public boolean isEnabled(RecyclerView.ViewHolder viewHolder, int i, int i2) {
             if (i == 0 || i2 == 0) {
                 return false;
             }

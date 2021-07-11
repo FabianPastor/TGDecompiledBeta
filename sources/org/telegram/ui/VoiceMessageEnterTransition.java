@@ -142,7 +142,7 @@ public class VoiceMessageEnterTransition {
         final AnonymousClass1 r2 = r0;
         final ChatMessageCell chatMessageCell3 = chatMessageCell;
         final ChatActivityEnterView.RecordCircle recordCircle2 = recordCicle;
-        ofFloat.addListener(new AnimatorListenerAdapter(this) {
+        ofFloat.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 if (r2.getParent() != null) {
                     chatMessageCell3.setVoiceTransitionInProgress(false);

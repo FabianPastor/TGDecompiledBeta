@@ -239,6 +239,7 @@ public class FilterTabsView extends FrameLayout {
 
     public class TabView extends View {
         public boolean animateChange;
+        public boolean animateCounterChange;
         private float animateFromCountWidth;
         private float animateFromCounterWidth;
         int animateFromTabCount;
@@ -267,6 +268,7 @@ public class FilterTabsView extends FrameLayout {
         private float lastTabWidth;
         float lastTextX;
         String lastTitle;
+        StaticLayout lastTitleLayout;
         private int lastTitleWidth;
         private float lastWidth;
         StaticLayout outCounter;
@@ -303,6 +305,7 @@ public class FilterTabsView extends FrameLayout {
             super.onDetachedFromWindow();
             this.animateChange = false;
             this.animateTabCounter = false;
+            this.animateCounterChange = false;
             this.animateTextChange = false;
             this.animateTextX = false;
             this.animateTabWidth = false;
@@ -1258,6 +1261,8 @@ public class FilterTabsView extends FrameLayout {
                 org.telegram.ui.Components.FilterTabsView$Tab r1 = r0.currentTab
                 int r3 = r1.counter
                 r0.lastTabCount = r3
+                android.text.StaticLayout r3 = r0.textLayout
+                r0.lastTitleLayout = r3
                 java.lang.String r3 = r0.currentText
                 r0.lastTitle = r3
                 int r1 = r1.titleWidth
@@ -1409,6 +1414,7 @@ public class FilterTabsView extends FrameLayout {
         public void clearTransitionParams() {
             this.animateChange = false;
             this.animateTabCounter = false;
+            this.animateCounterChange = false;
             this.animateTextChange = false;
             this.animateTextX = false;
             this.animateTabWidth = false;
@@ -1532,7 +1538,7 @@ public class FilterTabsView extends FrameLayout {
                                 FilterTabsView.AnonymousClass4.lambda$animateMoveImpl$1(FilterTabsView.TabView.this, valueAnimator);
                             }
                         });
-                        ofFloat.addListener(new AnimatorListenerAdapter(this) {
+                        ofFloat.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
                                 tabView.clearTransitionParams();
                             }
@@ -2109,7 +2115,10 @@ public class FilterTabsView extends FrameLayout {
             this.additionalTabWidth = size2;
             if (i3 != size2) {
                 this.ignoreLayout = true;
+                RecyclerView.ItemAnimator itemAnimator2 = this.listView.getItemAnimator();
+                this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
                 this.adapter.notifyDataSetChanged();
+                this.listView.setItemAnimator(itemAnimator2);
                 this.ignoreLayout = false;
             }
             updateTabsWidths();

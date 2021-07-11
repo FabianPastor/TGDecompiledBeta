@@ -2,23 +2,19 @@ package j$.util.stream;
 
 import j$.util.Spliterator;
 import j$.util.function.C;
-import j$.util.function.CLASSNAMEe;
 import j$.util.function.CLASSNAMEf;
 import j$.util.function.CLASSNAMEg;
 import j$.util.function.CLASSNAMEh;
 import j$.util.function.Consumer;
 import j$.util.function.q;
 import j$.util.function.w;
-import j$.util.k;
-import j$.util.s;
+import j$.util.r;
 import j$.util.stream.X2;
 import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicLong;
 
 abstract class d3<T, T_SPLITR extends Spliterator<T>> {
-
-    /* renamed from: a  reason: collision with root package name */
-    protected final Spliterator var_a;
+    protected final Spliterator a;
     protected final boolean b;
     private final long c;
     private final AtomicLong d;
@@ -39,30 +35,30 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
         }
 
         public /* synthetic */ boolean b(Consumer consumer) {
-            return s.d(this, consumer);
+            return r.e(this, consumer);
         }
 
         public /* synthetic */ void forEachRemaining(Consumer consumer) {
-            s.a(this, consumer);
+            r.a(this, consumer);
         }
 
-        public q k(q qVar) {
+        public q j(q qVar) {
             qVar.getClass();
             return new CLASSNAMEf(this, qVar);
         }
 
         /* access modifiers changed from: protected */
-        public Spliterator r(Spliterator spliterator) {
+        public Spliterator q(Spliterator spliterator) {
             return new a((Spliterator.a) spliterator, this);
         }
 
         /* access modifiers changed from: protected */
-        public void t(Object obj) {
+        public void s(Object obj) {
             ((q) obj).accept(this.e);
         }
 
         /* access modifiers changed from: protected */
-        public X2.d u(int i) {
+        public X2.d t(int i) {
             return new X2.a(i);
         }
     }
@@ -83,30 +79,30 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
         }
 
         public /* synthetic */ boolean b(Consumer consumer) {
-            return s.e(this, consumer);
+            return r.f(this, consumer);
         }
 
         public /* synthetic */ void forEachRemaining(Consumer consumer) {
-            s.b(this, consumer);
+            r.b(this, consumer);
         }
 
-        public w l(w wVar) {
+        public w k(w wVar) {
             wVar.getClass();
             return new CLASSNAMEg(this, wVar);
         }
 
         /* access modifiers changed from: protected */
-        public Spliterator r(Spliterator spliterator) {
+        public Spliterator q(Spliterator spliterator) {
             return new b((Spliterator.b) spliterator, this);
         }
 
         /* access modifiers changed from: protected */
-        public void t(Object obj) {
+        public void s(Object obj) {
             ((w) obj).accept(this.e);
         }
 
         /* access modifiers changed from: protected */
-        public X2.d u(int i) {
+        public X2.d t(int i) {
             return new X2.b(i);
         }
     }
@@ -127,30 +123,30 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
         }
 
         public /* synthetic */ boolean b(Consumer consumer) {
-            return s.f(this, consumer);
+            return r.g(this, consumer);
         }
 
-        public /* synthetic */ void forEachRemaining(Consumer consumer) {
-            s.c(this, consumer);
-        }
-
-        public C g(C c) {
+        public C f(C c) {
             c.getClass();
             return new CLASSNAMEh(this, c);
         }
 
+        public /* synthetic */ void forEachRemaining(Consumer consumer) {
+            r.c(this, consumer);
+        }
+
         /* access modifiers changed from: protected */
-        public Spliterator r(Spliterator spliterator) {
+        public Spliterator q(Spliterator spliterator) {
             return new c((Spliterator.c) spliterator, this);
         }
 
         /* access modifiers changed from: protected */
-        public void t(Object obj) {
+        public void s(Object obj) {
             ((C) obj).accept(this.e);
         }
 
         /* access modifiers changed from: protected */
-        public X2.d u(int i) {
+        public X2.d t(int i) {
             return new X2.c(i);
         }
     }
@@ -169,30 +165,30 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
             obj.getClass();
             X2.d dVar = null;
             while (true) {
-                f s = s();
-                if (s == f.NO_MORE) {
+                f r = r();
+                if (r == f.NO_MORE) {
                     return;
                 }
-                if (s == f.MAYBE_MORE) {
+                if (r == f.MAYBE_MORE) {
                     if (dVar == null) {
-                        dVar = u(128);
+                        dVar = t(128);
                     } else {
                         dVar.b = 0;
                     }
                     long j = 0;
-                    while (((Spliterator.d) this.var_a).tryAdvance(dVar)) {
+                    while (((Spliterator.d) this.a).tryAdvance(dVar)) {
                         j++;
                         if (j >= 128) {
                             break;
                         }
                     }
                     if (j != 0) {
-                        dVar.b(obj, q(j));
+                        dVar.b(obj, p(j));
                     } else {
                         return;
                     }
                 } else {
-                    ((Spliterator.d) this.var_a).forEachRemaining(obj);
+                    ((Spliterator.d) this.a).forEachRemaining(obj);
                     return;
                 }
             }
@@ -203,30 +199,30 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
         }
 
         public /* synthetic */ long getExactSizeIfKnown() {
-            return k.e(this);
+            return j$.time.a.e(this);
         }
 
         public /* synthetic */ boolean hasCharacteristics(int i) {
-            return k.f(this, i);
+            return j$.time.a.f(this, i);
         }
 
         /* access modifiers changed from: protected */
-        public abstract void t(Object obj);
+        public abstract void s(Object obj);
+
+        /* access modifiers changed from: protected */
+        public abstract X2.d t(int i);
 
         /* renamed from: tryAdvance */
-        public boolean o(Object obj) {
+        public boolean n(Object obj) {
             obj.getClass();
-            while (s() != f.NO_MORE && ((Spliterator.d) this.var_a).tryAdvance(this)) {
-                if (q(1) == 1) {
-                    t(obj);
+            while (r() != f.NO_MORE && ((Spliterator.d) this.a).tryAdvance(this)) {
+                if (p(1) == 1) {
+                    s(obj);
                     return true;
                 }
             }
             return false;
         }
-
-        /* access modifiers changed from: protected */
-        public abstract X2.d u(int i);
     }
 
     static final class e<T> extends d3<T, Spliterator<T>> implements Spliterator<T>, Consumer<T> {
@@ -244,10 +240,14 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
             this.e = obj;
         }
 
+        public /* synthetic */ Consumer andThen(Consumer consumer) {
+            return Consumer.CC.$default$andThen(this, consumer);
+        }
+
         public boolean b(Consumer consumer) {
             consumer.getClass();
-            while (s() != f.NO_MORE && this.var_a.b(this)) {
-                if (q(1) == 1) {
+            while (r() != f.NO_MORE && this.a.b(this)) {
+                if (p(1) == 1) {
                     consumer.accept(this.e);
                     this.e = null;
                     return true;
@@ -256,42 +256,37 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
             return false;
         }
 
-        public Consumer f(Consumer consumer) {
-            consumer.getClass();
-            return new CLASSNAMEe(this, consumer);
-        }
-
         public void forEachRemaining(Consumer consumer) {
             consumer.getClass();
             X2.e eVar = null;
             while (true) {
-                f s = s();
-                if (s == f.NO_MORE) {
+                f r = r();
+                if (r == f.NO_MORE) {
                     return;
                 }
-                if (s == f.MAYBE_MORE) {
+                if (r == f.MAYBE_MORE) {
                     if (eVar == null) {
                         eVar = new X2.e(128);
                     } else {
-                        eVar.var_a = 0;
+                        eVar.a = 0;
                     }
                     long j = 0;
-                    while (this.var_a.b(eVar)) {
+                    while (this.a.b(eVar)) {
                         j++;
                         if (j >= 128) {
                             break;
                         }
                     }
                     if (j != 0) {
-                        long q = q(j);
-                        for (int i = 0; ((long) i) < q; i++) {
+                        long p = p(j);
+                        for (int i = 0; ((long) i) < p; i++) {
                             consumer.accept(eVar.b[i]);
                         }
                     } else {
                         return;
                     }
                 } else {
-                    this.var_a.forEachRemaining(consumer);
+                    this.a.forEachRemaining(consumer);
                     return;
                 }
             }
@@ -302,15 +297,15 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
         }
 
         public /* synthetic */ long getExactSizeIfKnown() {
-            return k.e(this);
+            return j$.time.a.e(this);
         }
 
         public /* synthetic */ boolean hasCharacteristics(int i) {
-            return k.f(this, i);
+            return j$.time.a.f(this, i);
         }
 
         /* access modifiers changed from: protected */
-        public Spliterator r(Spliterator spliterator) {
+        public Spliterator q(Spliterator spliterator) {
             return new e(spliterator, this);
         }
     }
@@ -322,7 +317,7 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
     }
 
     d3(Spliterator spliterator, long j, long j2) {
-        this.var_a = spliterator;
+        this.a = spliterator;
         long j3 = 0;
         int i = (j2 > 0 ? 1 : (j2 == 0 ? 0 : -1));
         this.b = i < 0;
@@ -331,24 +326,24 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
     }
 
     d3(Spliterator spliterator, d3 d3Var) {
-        this.var_a = spliterator;
+        this.a = spliterator;
         this.b = d3Var.b;
         this.d = d3Var.d;
         this.c = d3Var.c;
     }
 
     public final int characteristics() {
-        return this.var_a.characteristics() & -16465;
+        return this.a.characteristics() & -16465;
     }
 
     public final long estimateSize() {
-        return this.var_a.estimateSize();
+        return this.a.estimateSize();
     }
 
     /* access modifiers changed from: protected */
     /* JADX WARNING: Removed duplicated region for block: B:0:0x0000 A[LOOP_START, MTH_ENTER_BLOCK] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public final long q(long r10) {
+    public final long p(long r10) {
         /*
             r9 = this;
         L_0x0000:
@@ -389,22 +384,22 @@ abstract class d3<T, T_SPLITR extends Spliterator<T>> {
         L_0x003c:
             return r4
         */
-        throw new UnsupportedOperationException("Method not decompiled: j$.util.stream.d3.q(long):long");
+        throw new UnsupportedOperationException("Method not decompiled: j$.util.stream.d3.p(long):long");
     }
 
     /* access modifiers changed from: protected */
-    public abstract Spliterator r(Spliterator spliterator);
+    public abstract Spliterator q(Spliterator spliterator);
 
     /* access modifiers changed from: protected */
-    public final f s() {
+    public final f r() {
         return this.d.get() > 0 ? f.MAYBE_MORE : this.b ? f.UNLIMITED : f.NO_MORE;
     }
 
     public final Spliterator trySplit() {
         Spliterator trySplit;
-        if (this.d.get() == 0 || (trySplit = this.var_a.trySplit()) == null) {
+        if (this.d.get() == 0 || (trySplit = this.a.trySplit()) == null) {
             return null;
         }
-        return r(trySplit);
+        return q(trySplit);
     }
 }

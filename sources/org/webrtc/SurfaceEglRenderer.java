@@ -79,7 +79,7 @@ public class SurfaceEglRenderer extends EglRenderer implements SurfaceHolder.Cal
             public final void run() {
                 this.f$0.countDown();
             }
-        });
+        }, false);
         ThreadUtils.awaitUninterruptibly(countDownLatch);
     }
 

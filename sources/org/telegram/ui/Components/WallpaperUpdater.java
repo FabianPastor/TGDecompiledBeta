@@ -30,6 +30,7 @@ public class WallpaperUpdater {
     /* access modifiers changed from: private */
     public Activity parentActivity;
     private BaseFragment parentFragment;
+    private File picturePath = null;
 
     public interface WallpaperUpdaterDelegate {
         void didSelectWallpaper(File file, Bitmap bitmap, boolean z);

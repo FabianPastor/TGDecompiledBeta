@@ -122,14 +122,13 @@ public final class FloatingActionMode extends ActionMode {
     }
 
     private void setFloatingToolbar(FloatingToolbar floatingToolbar) {
-        floatingToolbar.setMenu(this.mMenu);
-        floatingToolbar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        FloatingToolbar onMenuItemClickListener = floatingToolbar.setMenu(this.mMenu).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             public final boolean onMenuItemClick(MenuItem menuItem) {
                 return FloatingActionMode.this.lambda$setFloatingToolbar$1$FloatingActionMode(menuItem);
             }
         });
-        this.mFloatingToolbar = floatingToolbar;
-        FloatingToolbarVisibilityHelper floatingToolbarVisibilityHelper = new FloatingToolbarVisibilityHelper(floatingToolbar);
+        this.mFloatingToolbar = onMenuItemClickListener;
+        FloatingToolbarVisibilityHelper floatingToolbarVisibilityHelper = new FloatingToolbarVisibilityHelper(onMenuItemClickListener);
         this.mFloatingToolbarVisibilityHelper = floatingToolbarVisibilityHelper;
         floatingToolbarVisibilityHelper.activate();
     }

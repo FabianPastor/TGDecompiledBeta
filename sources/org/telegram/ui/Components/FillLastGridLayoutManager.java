@@ -8,15 +8,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class FillLastGridLayoutManager extends GridLayoutManager {
     private int additionalHeight;
+    private boolean bind = true;
+    private boolean canScrollVertically = true;
     private SparseArray<RecyclerView.ViewHolder> heights = new SparseArray<>();
-    private int lastItemHeight = -1;
+    protected int lastItemHeight = -1;
     private int listHeight;
     private RecyclerView listView;
     private int listWidth;
 
     /* access modifiers changed from: protected */
     public boolean shouldCalcLastItemHeight() {
-        throw null;
+        return true;
+    }
+
+    public void setBind(boolean z) {
+        this.bind = z;
     }
 
     public FillLastGridLayoutManager(Context context, int i, int i2, RecyclerView recyclerView) {
@@ -25,7 +31,14 @@ public class FillLastGridLayoutManager extends GridLayoutManager {
         this.additionalHeight = i2;
     }
 
-    private void calcLastItemHeight() {
+    public FillLastGridLayoutManager(Context context, int i, int i2, boolean z, int i3, RecyclerView recyclerView) {
+        super(context, i, i2, z);
+        this.listView = recyclerView;
+        this.additionalHeight = i3;
+    }
+
+    /* access modifiers changed from: protected */
+    public void calcLastItemHeight() {
         RecyclerView.Adapter adapter;
         if (this.listHeight > 0 && shouldCalcLastItemHeight() && (adapter = this.listView.getAdapter()) != null) {
             int spanCount = getSpanCount();
@@ -51,7 +64,9 @@ public class FillLastGridLayoutManager extends GridLayoutManager {
                             viewHolder.itemView.setLayoutParams(generateDefaultLayoutParams());
                         }
                     }
-                    adapter.onBindViewHolder(viewHolder, i3);
+                    if (this.bind) {
+                        adapter.onBindViewHolder(viewHolder, i3);
+                    }
                     RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) viewHolder.itemView.getLayoutParams();
                     viewHolder.itemView.measure(RecyclerView.LayoutManager.getChildMeasureSpec(this.listWidth, getWidthMode(), getPaddingLeft() + getPaddingRight() + layoutParams.leftMargin + layoutParams.rightMargin, layoutParams.width, canScrollHorizontally()), RecyclerView.LayoutManager.getChildMeasureSpec(this.listHeight, getHeightMode(), getPaddingTop() + getPaddingBottom() + layoutParams.topMargin + layoutParams.bottomMargin, layoutParams.height, canScrollVertically()));
                     i2 += viewHolder.itemView.getMeasuredHeight();
@@ -119,5 +134,13 @@ public class FillLastGridLayoutManager extends GridLayoutManager {
             ((RecyclerView.LayoutParams) view.getLayoutParams()).height = Math.max(this.lastItemHeight, 0);
         }
         super.measureChild(view, i, z);
+    }
+
+    public void setCanScrollVertically(boolean z) {
+        this.canScrollVertically = z;
+    }
+
+    public boolean canScrollVertically() {
+        return this.canScrollVertically;
     }
 }
