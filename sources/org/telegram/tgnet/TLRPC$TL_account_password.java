@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_account_password extends TLObject {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
     public TLRPC$PasswordKdfAlgo current_algo;
     public String email_unconfirmed_pattern;
     public int flags;
@@ -11,6 +11,7 @@ public class TLRPC$TL_account_password extends TLObject {
     public String hint;
     public TLRPC$PasswordKdfAlgo new_algo;
     public TLRPC$SecurePasswordKdfAlgo new_secure_algo;
+    public int pending_reset_date;
     public byte[] secure_random;
     public byte[] srp_B;
     public long srp_id;
@@ -55,6 +56,9 @@ public class TLRPC$TL_account_password extends TLObject {
         this.new_algo = TLRPC$PasswordKdfAlgo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.new_secure_algo = TLRPC$SecurePasswordKdfAlgo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.secure_random = abstractSerializedData.readByteArray(z);
+        if ((this.flags & 32) != 0) {
+            this.pending_reset_date = abstractSerializedData.readInt32(z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -84,5 +88,8 @@ public class TLRPC$TL_account_password extends TLObject {
         this.new_algo.serializeToStream(abstractSerializedData);
         this.new_secure_algo.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeByteArray(this.secure_random);
+        if ((this.flags & 32) != 0) {
+            abstractSerializedData.writeInt32(this.pending_reset_date);
+        }
     }
 }

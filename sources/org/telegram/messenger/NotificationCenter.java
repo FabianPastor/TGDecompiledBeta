@@ -1121,6 +1121,10 @@ public class NotificationCenter {
         }
     }
 
+    public void removeDelayed(Runnable runnable) {
+        this.delayedRunnables.remove(runnable);
+    }
+
     private static class AllowedNotifications {
         int[] allowedIds;
         final long time;

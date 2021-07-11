@@ -46,6 +46,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
@@ -55,6 +56,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.camera.CameraView;
 import org.telegram.messenger.video.MP4Builder;
@@ -89,6 +91,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     boolean flipHalfReached;
     private int focusAreaSize;
     private float focusProgress = 1.0f;
+    /* access modifiers changed from: private */
+    public int fpsLimit = -1;
     CameraInfo info;
     private boolean initialFrontface;
     private boolean initied;
@@ -107,6 +111,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     private boolean mirror;
     /* access modifiers changed from: private */
     public float[] moldSTMatrix = new float[16];
+    long nextFrameTimeNs;
     /* access modifiers changed from: private */
     public int[] oldCameraTexture = new int[1];
     Runnable onRecordingFinishRunnable;
@@ -115,7 +120,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     private Paint outerPaint = new Paint(1);
     private Size pictureSize;
     private int[] position = new int[2];
-    private Size previewSize;
+    /* access modifiers changed from: private */
+    public Size previewSize;
     File recordFile;
     private volatile int surfaceHeight;
     private volatile int surfaceWidth;
@@ -257,13 +263,13 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         CameraSession cameraSession2;
         int i3;
         int i4;
-        if (!(this.pictureSize == null || (cameraSession2 = this.cameraSession) == null)) {
+        if (!(this.previewSize == null || (cameraSession2 = this.cameraSession) == null)) {
             if (cameraSession2.getWorldAngle() == 90 || this.cameraSession.getWorldAngle() == 270) {
-                i4 = this.pictureSize.getWidth();
-                i3 = this.pictureSize.getHeight();
+                i4 = this.previewSize.getWidth();
+                i3 = this.previewSize.getHeight();
             } else {
-                i4 = this.pictureSize.getHeight();
-                i3 = this.pictureSize.getWidth();
+                i4 = this.previewSize.getHeight();
+                i3 = this.previewSize.getWidth();
             }
             float f = (float) i4;
             float f2 = (float) i3;
@@ -284,15 +290,15 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         CameraSession cameraSession2;
         int i;
         int i2;
-        if (this.pictureSize == null || (cameraSession2 = this.cameraSession) == null) {
+        if (this.previewSize == null || (cameraSession2 = this.cameraSession) == null) {
             return f2;
         }
         if (cameraSession2.getWorldAngle() == 90 || this.cameraSession.getWorldAngle() == 270) {
-            i2 = this.pictureSize.getWidth();
-            i = this.pictureSize.getHeight();
+            i2 = this.previewSize.getWidth();
+            i = this.previewSize.getHeight();
         } else {
-            i2 = this.pictureSize.getHeight();
-            i = this.pictureSize.getWidth();
+            i2 = this.previewSize.getHeight();
+            i = this.previewSize.getWidth();
         }
         float f3 = f / ((float) i2);
         float f4 = (float) i;
@@ -352,7 +358,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         this.surfaceWidth = i;
         if (this.cameraThread == null && surfaceTexture != null) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("start create thread");
+                FileLog.d("CameraView start create thread");
             }
             this.cameraThread = new CameraGLThread(surfaceTexture);
             checkPreviewMatrix();
@@ -361,24 +367,19 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
 
     private void updateCameraInfoSize() {
         int i;
-        int i2;
-        int i3;
-        int i4;
         Size size;
-        Size size2;
-        int i5;
         CameraInfo cameraInfo;
         ArrayList<CameraInfo> cameras = CameraController.getInstance().getCameras();
         if (cameras != null) {
-            int i6 = 0;
+            int i2 = 0;
             while (true) {
-                if (i6 >= cameras.size()) {
+                if (i2 >= cameras.size()) {
                     break;
                 }
-                cameraInfo = cameras.get(i6);
+                cameraInfo = cameras.get(i2);
                 boolean z = this.isFrontface;
                 if ((!z || cameraInfo.frontCamera == 0) && (z || cameraInfo.frontCamera != 0)) {
-                    i6++;
+                    i2++;
                 }
             }
             this.info = cameraInfo;
@@ -386,50 +387,34 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 Point point = AndroidUtilities.displaySize;
                 Point point2 = AndroidUtilities.displaySize;
                 float max = ((float) Math.max(point.x, point.y)) / ((float) Math.min(point2.x, point2.y));
+                int i3 = 1920;
+                int i4 = 960;
+                int i5 = 1280;
                 if (this.initialFrontface) {
                     size = new Size(16, 9);
-                    i4 = 480;
                     i3 = 480;
-                    i2 = 270;
+                    i4 = 270;
                     i = 270;
+                    i5 = 480;
                 } else if (Math.abs(max - 1.3333334f) < 0.1f) {
                     size = new Size(4, 3);
-                    i4 = 1280;
-                    i3 = 1920;
-                    i2 = 960;
-                    i = 1440;
+                    if (SharedConfig.getDevicePerformanceClass() == 0) {
+                        i = 960;
+                        i3 = 1280;
+                    } else {
+                        i = 1440;
+                    }
                 } else {
                     size = new Size(16, 9);
-                    i4 = 1280;
-                    i3 = 1920;
-                    i2 = 720;
-                    i = 1080;
-                }
-                if (this.textureView.getWidth() > 0 && this.textureView.getHeight() > 0) {
-                    if (this.useMaxPreview) {
-                        Point point3 = AndroidUtilities.displaySize;
-                        i5 = Math.max(point3.x, point3.y);
+                    if (SharedConfig.getDevicePerformanceClass() == 0) {
+                        i = 960;
+                        i3 = 1280;
                     } else {
-                        Point point4 = AndroidUtilities.displaySize;
-                        i5 = Math.min(point4.x, point4.y);
+                        i = 1080;
                     }
-                    this.previewSize = CameraController.chooseOptimalSize(this.info.getPreviewSizes(), i5, (size.getHeight() * i5) / size.getWidth(), size);
+                    i4 = 720;
                 }
-                Size chooseOptimalSize = CameraController.chooseOptimalSize(this.info.getPictureSizes(), i4, i2, size);
-                this.pictureSize = chooseOptimalSize;
-                if (chooseOptimalSize.getWidth() >= 1280 && this.pictureSize.getHeight() >= 1280) {
-                    if (Math.abs(max - 1.3333334f) < 0.1f) {
-                        size2 = new Size(3, 4);
-                    } else {
-                        size2 = new Size(9, 16);
-                    }
-                    size = size2;
-                    Size chooseOptimalSize2 = CameraController.chooseOptimalSize(this.info.getPictureSizes(), i2, i4, size);
-                    if (chooseOptimalSize2.getWidth() < 1280 || chooseOptimalSize2.getHeight() < 1280) {
-                        this.pictureSize = chooseOptimalSize2;
-                    }
-                }
-                this.previewSize = this.pictureSize;
+                this.previewSize = CameraController.chooseOptimalSize(this.info.getPreviewSizes(), i5, i4, size);
                 this.pictureSize = CameraController.chooseOptimalSize(this.info.getPictureSizes(), i3, i, size);
                 requestLayout();
             }
@@ -692,7 +677,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
 
         private boolean initGL() {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("start init gl");
+                FileLog.d("CameraView start init gl");
             }
             EGL10 egl102 = (EGL10) EGLContext.getEGL();
             this.egl10 = egl102;
@@ -702,6 +687,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("eglGetDisplay failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
+                this.eglDisplay = null;
                 finish();
                 return false;
             }
@@ -725,7 +711,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 this.eglConfig = eGLConfig;
                 EGLContext eglCreateContext = this.egl10.eglCreateContext(this.eglDisplay, eGLConfig, EGL10.EGL_NO_CONTEXT, new int[]{12440, 2, 12344});
                 this.eglContext = eglCreateContext;
-                if (eglCreateContext == null) {
+                if (eglCreateContext == null || eglCreateContext == EGL10.EGL_NO_CONTEXT) {
+                    this.eglContext = null;
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.e("eglCreateContext failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                     }
@@ -786,6 +773,13 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                         GLES20.glTexParameteri(36197, 10242, 33071);
                         GLES20.glTexParameteri(36197, 10243, 33071);
                         android.opengl.Matrix.setIdentityM(CameraView.this.mMVPMatrix, 0);
+                        if (BuildVars.LOGS_ENABLED) {
+                            FileLog.e("gl initied");
+                        }
+                        FloatBuffer unused = CameraView.this.vertexBuffer = ByteBuffer.allocateDirect(48).order(ByteOrder.nativeOrder()).asFloatBuffer();
+                        CameraView.this.vertexBuffer.put(new float[]{-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f}).position(0);
+                        FloatBuffer unused2 = CameraView.this.textureBuffer = ByteBuffer.allocateDirect(32).order(ByteOrder.nativeOrder()).asFloatBuffer();
+                        CameraView.this.textureBuffer.put(new float[]{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f}).position(0);
                         SurfaceTexture surfaceTexture3 = new SurfaceTexture(CameraView.this.cameraTexture[0]);
                         this.cameraSurface = surfaceTexture3;
                         surfaceTexture3.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
@@ -794,13 +788,6 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                             }
                         });
                         CameraView.this.createCamera(this.cameraSurface);
-                        if (BuildVars.LOGS_ENABLED) {
-                            FileLog.e("gl initied");
-                        }
-                        FloatBuffer unused = CameraView.this.vertexBuffer = ByteBuffer.allocateDirect(48).order(ByteOrder.nativeOrder()).asFloatBuffer();
-                        CameraView.this.vertexBuffer.put(new float[]{-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f}).position(0);
-                        FloatBuffer unused2 = CameraView.this.textureBuffer = ByteBuffer.allocateDirect(32).order(ByteOrder.nativeOrder()).asFloatBuffer();
-                        CameraView.this.textureBuffer.put(new float[]{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f}).position(0);
                         return true;
                     }
                 } else {
@@ -858,6 +845,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         }
 
         private void onDraw(Integer num, boolean z) {
+            boolean z2;
             if (this.initied) {
                 if (!this.eglContext.equals(this.egl10.eglGetCurrentContext()) || !this.eglSurface.equals(this.egl10.eglGetCurrentSurface(12377))) {
                     EGL10 egl102 = this.egl10;
@@ -878,41 +866,58 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                         FileLog.e(th);
                     }
                 }
+                synchronized (CameraView.this.layoutLock) {
+                    if (CameraView.this.fpsLimit > 0) {
+                        long nanoTime = System.nanoTime();
+                        CameraView cameraView = CameraView.this;
+                        long j = cameraView.nextFrameTimeNs;
+                        if (nanoTime < j) {
+                            z2 = false;
+                        } else {
+                            cameraView.nextFrameTimeNs = j + (TimeUnit.SECONDS.toNanos(1) / ((long) CameraView.this.fpsLimit));
+                            CameraView cameraView2 = CameraView.this;
+                            cameraView2.nextFrameTimeNs = Math.max(cameraView2.nextFrameTimeNs, nanoTime);
+                        }
+                    }
+                    z2 = true;
+                }
                 CameraSession cameraSession = this.currentSession;
                 if (cameraSession != null && cameraSession.cameraInfo.cameraId == num.intValue()) {
                     if (this.recording && CameraView.this.videoEncoder != null) {
                         CameraView.this.videoEncoder.frameAvailable(this.cameraSurface, num, System.nanoTime());
                     }
-                    this.cameraSurface.getTransformMatrix(CameraView.this.mSTMatrix);
-                    this.egl10.eglQuerySurface(this.eglDisplay, this.eglSurface, 12375, this.array);
-                    int[] iArr = this.array;
-                    int i = iArr[0];
-                    this.egl10.eglQuerySurface(this.eglDisplay, this.eglSurface, 12374, iArr);
-                    GLES20.glViewport(0, 0, i, this.array[0]);
-                    GLES20.glUseProgram(this.drawProgram);
-                    GLES20.glActiveTexture(33984);
-                    GLES20.glBindTexture(36197, CameraView.this.cameraTexture[0]);
-                    GLES20.glVertexAttribPointer(this.positionHandle, 3, 5126, false, 12, CameraView.this.vertexBuffer);
-                    GLES20.glEnableVertexAttribArray(this.positionHandle);
-                    GLES20.glVertexAttribPointer(this.textureHandle, 2, 5126, false, 8, CameraView.this.textureBuffer);
-                    GLES20.glEnableVertexAttribArray(this.textureHandle);
-                    GLES20.glUniformMatrix4fv(this.textureMatrixHandle, 1, false, CameraView.this.mSTMatrix, 0);
-                    GLES20.glUniformMatrix4fv(this.vertexMatrixHandle, 1, false, CameraView.this.mMVPMatrix, 0);
-                    GLES20.glDrawArrays(5, 0, 4);
-                    GLES20.glDisableVertexAttribArray(this.positionHandle);
-                    GLES20.glDisableVertexAttribArray(this.textureHandle);
-                    GLES20.glBindTexture(36197, 0);
-                    GLES20.glUseProgram(0);
-                    this.egl10.eglSwapBuffers(this.eglDisplay, this.eglSurface);
-                    synchronized (CameraView.this.layoutLock) {
-                        CameraView cameraView = CameraView.this;
-                        if (!cameraView.firstFrameRendered) {
-                            cameraView.firstFrameRendered = true;
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public final void run() {
-                                    CameraView.CameraGLThread.this.lambda$onDraw$1$CameraView$CameraGLThread();
-                                }
-                            });
+                    if (z2) {
+                        this.cameraSurface.getTransformMatrix(CameraView.this.mSTMatrix);
+                        this.egl10.eglQuerySurface(this.eglDisplay, this.eglSurface, 12375, this.array);
+                        int[] iArr = this.array;
+                        int i = iArr[0];
+                        this.egl10.eglQuerySurface(this.eglDisplay, this.eglSurface, 12374, iArr);
+                        GLES20.glViewport(0, 0, i, this.array[0]);
+                        GLES20.glUseProgram(this.drawProgram);
+                        GLES20.glActiveTexture(33984);
+                        GLES20.glBindTexture(36197, CameraView.this.cameraTexture[0]);
+                        GLES20.glVertexAttribPointer(this.positionHandle, 3, 5126, false, 12, CameraView.this.vertexBuffer);
+                        GLES20.glEnableVertexAttribArray(this.positionHandle);
+                        GLES20.glVertexAttribPointer(this.textureHandle, 2, 5126, false, 8, CameraView.this.textureBuffer);
+                        GLES20.glEnableVertexAttribArray(this.textureHandle);
+                        GLES20.glUniformMatrix4fv(this.textureMatrixHandle, 1, false, CameraView.this.mSTMatrix, 0);
+                        GLES20.glUniformMatrix4fv(this.vertexMatrixHandle, 1, false, CameraView.this.mMVPMatrix, 0);
+                        GLES20.glDrawArrays(5, 0, 4);
+                        GLES20.glDisableVertexAttribArray(this.positionHandle);
+                        GLES20.glDisableVertexAttribArray(this.textureHandle);
+                        GLES20.glBindTexture(36197, 0);
+                        GLES20.glUseProgram(0);
+                        this.egl10.eglSwapBuffers(this.eglDisplay, this.eglSurface);
+                        synchronized (CameraView.this.layoutLock) {
+                            CameraView cameraView3 = CameraView.this;
+                            if (!cameraView3.firstFrameRendered) {
+                                cameraView3.firstFrameRendered = true;
+                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                    public final void run() {
+                                        CameraView.CameraGLThread.this.lambda$onDraw$1$CameraView$CameraGLThread();
+                                    }
+                                });
+                            }
                         }
                     }
                 }
@@ -969,11 +974,11 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                     });
                     CameraView.this.createCamera(this.cameraSurface);
                 } else if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
+                    FileLog.d("CameraView eglMakeCurrent failed " + GLUtils.getEGLErrorString(this.egl10.eglGetError()));
                 }
             } else if (i == 3) {
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("set gl rednderer session");
+                    FileLog.d("CameraView set gl rednderer session");
                 }
                 CameraSession cameraSession = (CameraSession) message.obj;
                 CameraSession cameraSession2 = this.currentSession;
@@ -1091,7 +1096,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     public /* synthetic */ void lambda$createCamera$3$CameraView(SurfaceTexture surfaceTexture) {
         if (this.cameraThread != null) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("create camera session");
+                FileLog.d("CameraView create camera session");
             }
             if (this.previewSize == null) {
                 updateCameraInfoSize();
@@ -1099,7 +1104,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             Size size = this.previewSize;
             if (size != null) {
                 surfaceTexture.setDefaultBufferSize(size.getWidth(), this.previewSize.getHeight());
-                CameraSession cameraSession2 = new CameraSession(this.info, this.previewSize, this.pictureSize, 256);
+                CameraSession cameraSession2 = new CameraSession(this.info, this.previewSize, this.pictureSize, 256, false);
                 this.cameraSession = cameraSession2;
                 this.cameraThread.setCurrentSession(cameraSession2);
                 requestLayout();
@@ -1121,7 +1126,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
     public /* synthetic */ void lambda$createCamera$1$CameraView() {
         if (this.cameraSession != null) {
             if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("camera initied");
+                FileLog.d("CameraView camera initied");
             }
             this.cameraSession.setInitied();
         }
@@ -1215,7 +1220,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             this.keyframeThumbs = new ArrayList<>();
             this.recorderRunnable = new Runnable() {
                 /* JADX WARNING: Code restructure failed: missing block: B:12:0x002d, code lost:
-                    if (org.telegram.messenger.camera.CameraView.VideoRecorder.access$1600(r13.this$1) == 0) goto L_0x00e4;
+                    if (org.telegram.messenger.camera.CameraView.VideoRecorder.access$1700(r13.this$1) == 0) goto L_0x00e4;
                  */
                 /* Code decompiled incorrectly, please refer to instructions dump. */
                 public void run() {
@@ -1362,125 +1367,118 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             };
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:25:0x008e, code lost:
-            r4.keyframeThumbs.clear();
-            r4.frameCount = 0;
-            r6 = r4.generateKeyframeThumbsQueue;
+        /* JADX WARNING: Code restructure failed: missing block: B:25:0x007d, code lost:
+            r3.keyframeThumbs.clear();
+            r3.frameCount = 0;
+            r5 = r3.generateKeyframeThumbsQueue;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:26:0x0098, code lost:
-            if (r6 == null) goto L_0x00a2;
+        /* JADX WARNING: Code restructure failed: missing block: B:26:0x0087, code lost:
+            if (r5 == null) goto L_0x0091;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:27:0x009a, code lost:
-            r6.cleanupQueue();
-            r4.generateKeyframeThumbsQueue.recycle();
+        /* JADX WARNING: Code restructure failed: missing block: B:27:0x0089, code lost:
+            r5.cleanupQueue();
+            r3.generateKeyframeThumbsQueue.recycle();
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:28:0x00a2, code lost:
-            r4.generateKeyframeThumbsQueue = new org.telegram.messenger.DispatchQueue("keyframes_thumb_queque");
-            r4.handler.sendMessage(r4.handler.obtainMessage(0));
+        /* JADX WARNING: Code restructure failed: missing block: B:28:0x0091, code lost:
+            r3.generateKeyframeThumbsQueue = new org.telegram.messenger.DispatchQueue("keyframes_thumb_queque");
+            r3.handler.sendMessage(r3.handler.obtainMessage(0));
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:29:0x00b6, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:29:0x00a5, code lost:
             return;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void startRecording(java.io.File r5, android.opengl.EGLContext r6) {
+        public void startRecording(java.io.File r4, android.opengl.EGLContext r5) {
             /*
-                r4 = this;
+                r3 = this;
                 java.lang.String r0 = android.os.Build.DEVICE
-                org.telegram.messenger.camera.Size r0 = new org.telegram.messenger.camera.Size
-                r1 = 16
-                r2 = 9
-                r0.<init>(r1, r2)
-                org.telegram.messenger.camera.CameraView r1 = org.telegram.messenger.camera.CameraView.this
-                org.telegram.messenger.camera.CameraInfo r1 = r1.info
-                java.util.ArrayList r1 = r1.getPictureSizes()
-                r2 = 480(0x1e0, float:6.73E-43)
-                r3 = 720(0x2d0, float:1.009E-42)
-                org.telegram.messenger.camera.Size r0 = org.telegram.messenger.camera.CameraController.chooseOptimalSize(r1, r3, r2, r0)
+                org.telegram.messenger.camera.CameraView r0 = org.telegram.messenger.camera.CameraView.this
+                org.telegram.messenger.camera.Size r0 = r0.previewSize
                 int r1 = r0.mHeight
                 int r2 = r0.mWidth
                 int r1 = java.lang.Math.min(r1, r2)
-                if (r1 < r3) goto L_0x0029
+                r2 = 720(0x2d0, float:1.009E-42)
+                if (r1 < r2) goto L_0x0018
                 r1 = 3500000(0x3567e0, float:4.904545E-39)
-                goto L_0x002c
-            L_0x0029:
+                goto L_0x001b
+            L_0x0018:
                 r1 = 1800000(0x1b7740, float:2.522337E-39)
-            L_0x002c:
-                r4.videoFile = r5
-                org.telegram.messenger.camera.CameraView r5 = org.telegram.messenger.camera.CameraView.this
-                org.telegram.messenger.camera.CameraSession r5 = r5.cameraSession
-                int r5 = r5.getWorldAngle()
+            L_0x001b:
+                r3.videoFile = r4
+                org.telegram.messenger.camera.CameraView r4 = org.telegram.messenger.camera.CameraView.this
+                org.telegram.messenger.camera.CameraSession r4 = r4.cameraSession
+                int r4 = r4.getWorldAngle()
                 r2 = 90
-                if (r5 == r2) goto L_0x0058
-                org.telegram.messenger.camera.CameraView r5 = org.telegram.messenger.camera.CameraView.this
-                org.telegram.messenger.camera.CameraSession r5 = r5.cameraSession
-                int r5 = r5.getWorldAngle()
+                if (r4 == r2) goto L_0x0047
+                org.telegram.messenger.camera.CameraView r4 = org.telegram.messenger.camera.CameraView.this
+                org.telegram.messenger.camera.CameraSession r4 = r4.cameraSession
+                int r4 = r4.getWorldAngle()
                 r2 = 270(0x10e, float:3.78E-43)
-                if (r5 != r2) goto L_0x004b
-                goto L_0x0058
-            L_0x004b:
-                int r5 = r0.getHeight()
-                r4.videoWidth = r5
-                int r5 = r0.getWidth()
-                r4.videoHeight = r5
-                goto L_0x0064
-            L_0x0058:
-                int r5 = r0.getWidth()
-                r4.videoWidth = r5
-                int r5 = r0.getHeight()
-                r4.videoHeight = r5
-            L_0x0064:
-                r4.videoBitrate = r1
-                r4.sharedEglContext = r6
-                java.lang.Object r5 = r4.sync
-                monitor-enter(r5)
-                boolean r6 = r4.running     // Catch:{ all -> 0x00b7 }
-                if (r6 == 0) goto L_0x0071
-                monitor-exit(r5)     // Catch:{ all -> 0x00b7 }
+                if (r4 != r2) goto L_0x003a
+                goto L_0x0047
+            L_0x003a:
+                int r4 = r0.getHeight()
+                r3.videoWidth = r4
+                int r4 = r0.getWidth()
+                r3.videoHeight = r4
+                goto L_0x0053
+            L_0x0047:
+                int r4 = r0.getWidth()
+                r3.videoWidth = r4
+                int r4 = r0.getHeight()
+                r3.videoHeight = r4
+            L_0x0053:
+                r3.videoBitrate = r1
+                r3.sharedEglContext = r5
+                java.lang.Object r4 = r3.sync
+                monitor-enter(r4)
+                boolean r5 = r3.running     // Catch:{ all -> 0x00a6 }
+                if (r5 == 0) goto L_0x0060
+                monitor-exit(r4)     // Catch:{ all -> 0x00a6 }
                 return
-            L_0x0071:
-                r6 = 1
-                r4.running = r6     // Catch:{ all -> 0x00b7 }
-                java.lang.Thread r6 = new java.lang.Thread     // Catch:{ all -> 0x00b7 }
+            L_0x0060:
+                r5 = 1
+                r3.running = r5     // Catch:{ all -> 0x00a6 }
+                java.lang.Thread r5 = new java.lang.Thread     // Catch:{ all -> 0x00a6 }
                 java.lang.String r0 = "TextureMovieEncoder"
-                r6.<init>(r4, r0)     // Catch:{ all -> 0x00b7 }
+                r5.<init>(r3, r0)     // Catch:{ all -> 0x00a6 }
                 r0 = 10
-                r6.setPriority(r0)     // Catch:{ all -> 0x00b7 }
-                r6.start()     // Catch:{ all -> 0x00b7 }
-            L_0x0083:
-                boolean r6 = r4.ready     // Catch:{ all -> 0x00b7 }
-                if (r6 != 0) goto L_0x008d
-                java.lang.Object r6 = r4.sync     // Catch:{ InterruptedException -> 0x0083 }
-                r6.wait()     // Catch:{ InterruptedException -> 0x0083 }
-                goto L_0x0083
-            L_0x008d:
-                monitor-exit(r5)     // Catch:{ all -> 0x00b7 }
-                java.util.ArrayList<android.graphics.Bitmap> r5 = r4.keyframeThumbs
-                r5.clear()
-                r5 = 0
-                r4.frameCount = r5
-                org.telegram.messenger.DispatchQueue r6 = r4.generateKeyframeThumbsQueue
-                if (r6 == 0) goto L_0x00a2
-                r6.cleanupQueue()
-                org.telegram.messenger.DispatchQueue r6 = r4.generateKeyframeThumbsQueue
-                r6.recycle()
-            L_0x00a2:
-                org.telegram.messenger.DispatchQueue r6 = new org.telegram.messenger.DispatchQueue
+                r5.setPriority(r0)     // Catch:{ all -> 0x00a6 }
+                r5.start()     // Catch:{ all -> 0x00a6 }
+            L_0x0072:
+                boolean r5 = r3.ready     // Catch:{ all -> 0x00a6 }
+                if (r5 != 0) goto L_0x007c
+                java.lang.Object r5 = r3.sync     // Catch:{ InterruptedException -> 0x0072 }
+                r5.wait()     // Catch:{ InterruptedException -> 0x0072 }
+                goto L_0x0072
+            L_0x007c:
+                monitor-exit(r4)     // Catch:{ all -> 0x00a6 }
+                java.util.ArrayList<android.graphics.Bitmap> r4 = r3.keyframeThumbs
+                r4.clear()
+                r4 = 0
+                r3.frameCount = r4
+                org.telegram.messenger.DispatchQueue r5 = r3.generateKeyframeThumbsQueue
+                if (r5 == 0) goto L_0x0091
+                r5.cleanupQueue()
+                org.telegram.messenger.DispatchQueue r5 = r3.generateKeyframeThumbsQueue
+                r5.recycle()
+            L_0x0091:
+                org.telegram.messenger.DispatchQueue r5 = new org.telegram.messenger.DispatchQueue
                 java.lang.String r0 = "keyframes_thumb_queque"
-                r6.<init>(r0)
-                r4.generateKeyframeThumbsQueue = r6
-                org.telegram.messenger.camera.CameraView$EncoderHandler r6 = r4.handler
-                org.telegram.messenger.camera.CameraView$EncoderHandler r0 = r4.handler
-                android.os.Message r5 = r0.obtainMessage(r5)
-                r6.sendMessage(r5)
+                r5.<init>(r0)
+                r3.generateKeyframeThumbsQueue = r5
+                org.telegram.messenger.camera.CameraView$EncoderHandler r5 = r3.handler
+                org.telegram.messenger.camera.CameraView$EncoderHandler r0 = r3.handler
+                android.os.Message r4 = r0.obtainMessage(r4)
+                r5.sendMessage(r4)
                 return
-            L_0x00b7:
-                r6 = move-exception
-                monitor-exit(r5)     // Catch:{ all -> 0x00b7 }
-                goto L_0x00bb
-            L_0x00ba:
-                throw r6
-            L_0x00bb:
-                goto L_0x00ba
+            L_0x00a6:
+                r5 = move-exception
+                monitor-exit(r4)     // Catch:{ all -> 0x00a6 }
+                goto L_0x00aa
+            L_0x00a9:
+                throw r5
+            L_0x00aa:
+                goto L_0x00a9
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraView.VideoRecorder.startRecording(java.io.File, android.opengl.EGLContext):void");
         }
@@ -1500,7 +1498,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             if (org.telegram.messenger.BuildVars.LOGS_ENABLED == false) goto L_0x002b;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:14:0x0020, code lost:
-            org.telegram.messenger.FileLog.d("fix timestamp enabled");
+            org.telegram.messenger.FileLog.d("CameraView fix timestamp enabled");
          */
         /* JADX WARNING: Code restructure failed: missing block: B:15:0x0026, code lost:
             return;
@@ -1544,7 +1542,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 if (r5 <= r0) goto L_0x0026
                 boolean r5 = org.telegram.messenger.BuildVars.LOGS_ENABLED
                 if (r5 == 0) goto L_0x002b
-                java.lang.String r5 = "fix timestamp enabled"
+                java.lang.String r5 = "CameraView fix timestamp enabled"
                 org.telegram.messenger.FileLog.d(r5)
                 goto L_0x002b
             L_0x0026:
@@ -1611,7 +1609,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 if (r0 != 0) goto L_0x0028
                 boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED
                 if (r0 == 0) goto L_0x0027
-                java.lang.String r0 = "video record not yet started"
+                java.lang.String r0 = "CameraView video record not yet started"
                 org.telegram.messenger.FileLog.d(r0)
             L_0x0027:
                 return
@@ -1640,7 +1638,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 if (r0 == 0) goto L_0x009d
                 java.lang.StringBuilder r0 = new java.lang.StringBuilder
                 r0.<init>()
-                java.lang.String r3 = "detected desync between audio and video "
+                java.lang.String r3 = "CameraView detected desync between audio and video "
                 r0.append(r3)
                 long r3 = r1.desyncTime
                 r0.append(r3)
@@ -1661,7 +1659,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 if (r3 == 0) goto L_0x009d
                 java.lang.StringBuilder r3 = new java.lang.StringBuilder
                 r3.<init>()
-                java.lang.String r9 = "found first audio frame at "
+                java.lang.String r9 = "CameraView found first audio frame at "
                 r3.append(r9)
                 r3.append(r0)
                 r3.append(r4)
@@ -1678,7 +1676,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 if (r3 == 0) goto L_0x00c1
                 java.lang.StringBuilder r3 = new java.lang.StringBuilder
                 r3.<init>()
-                java.lang.String r9 = "ignore first audio frame at "
+                java.lang.String r9 = "CameraView ignore first audio frame at "
                 r3.append(r9)
                 r3.append(r0)
                 r3.append(r4)
@@ -1698,7 +1696,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 if (r0 == 0) goto L_0x00e2
                 java.lang.StringBuilder r0 = new java.lang.StringBuilder
                 r0.<init>()
-                java.lang.String r3 = "first audio frame not found, removing buffers "
+                java.lang.String r3 = "CameraView first audio frame not found, removing buffers "
                 r0.append(r3)
                 int r3 = r2.results
                 r0.append(r3)
@@ -1781,7 +1779,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 if (r0 == 0) goto L_0x018c
                 java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ all -> 0x0208 }
                 r0.<init>()     // Catch:{ all -> 0x0208 }
-                java.lang.String r4 = "stop audio encoding because of stoped video recording at "
+                java.lang.String r4 = "CameraView stop audio encoding because of stoped video recording at "
                 r0.append(r4)     // Catch:{ all -> 0x0208 }
                 long[] r2 = r2.offset     // Catch:{ all -> 0x0208 }
                 r4 = r2[r9]     // Catch:{ all -> 0x0208 }
@@ -1926,7 +1924,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
             if (this.videoFirst == -1) {
                 this.videoFirst = j / 1000;
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("first video frame was at " + this.videoFirst);
+                    FileLog.d("CameraView first video frame was at " + this.videoFirst);
                 }
             }
             this.videoLast = j;
@@ -2026,6 +2024,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         /* access modifiers changed from: private */
         /* renamed from: lambda$handleStopRecording$0 */
         public /* synthetic */ void lambda$handleStopRecording$0$CameraView$VideoRecorder() {
+            CameraView.this.cameraSession.stopVideoRecording();
             CameraView.this.onRecordingFinishRunnable.run();
         }
 
@@ -2048,7 +2047,7 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                 this.audioRecorder = audioRecord;
                 audioRecord.startRecording();
                 if (BuildVars.LOGS_ENABLED) {
-                    FileLog.d("initied audio record with channels " + this.audioRecorder.getChannelCount() + " sample rate = " + this.audioRecorder.getSampleRate() + " bufferSize = " + i);
+                    FileLog.d("CameraView initied audio record with channels " + this.audioRecorder.getChannelCount() + " sample rate = " + this.audioRecorder.getSampleRate() + " bufferSize = " + i);
                 }
                 Thread thread = new Thread(this.recorderRunnable);
                 thread.setPriority(10);
@@ -2375,5 +2374,9 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         public void exit() {
             Looper.myLooper().quit();
         }
+    }
+
+    public void setFpsLimit(int i) {
+        this.fpsLimit = i;
     }
 }

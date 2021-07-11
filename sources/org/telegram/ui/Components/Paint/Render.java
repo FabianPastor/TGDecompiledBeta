@@ -46,7 +46,7 @@ public class Render {
         Point substract = point4.substract(point3);
         Point point5 = new Point(1.0d, 1.0d, 0.0d);
         float atan2 = Math.abs(renderState2.angle) > 0.0f ? renderState2.angle : (float) Math.atan2(substract.y, substract.x);
-        float f2 = renderState2.baseWeight * renderState2.scale;
+        float f2 = ((renderState2.baseWeight * renderState2.scale) * 1.0f) / renderState2.viewportScale;
         double max = (double) Math.max(1.0f, renderState2.spacing * f2);
         if (distanceTo > 0.0d) {
             Double.isNaN(distanceTo);
@@ -99,7 +99,7 @@ public class Render {
     }
 
     private static void PaintStamp(Point point, RenderState renderState) {
-        float f = renderState.baseWeight * renderState.scale;
+        float f = ((renderState.baseWeight * renderState.scale) * 1.0f) / renderState.viewportScale;
         PointF pointF = point.toPointF();
         float f2 = Math.abs(renderState.angle) > 0.0f ? renderState.angle : 0.0f;
         float f3 = renderState.alpha;

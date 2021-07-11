@@ -15,11 +15,13 @@ public abstract class TLRPC$GroupCall extends TLObject {
     public boolean schedule_start_subscribed;
     public int stream_dc_id;
     public String title;
+    public int unmuted_video_count;
+    public int unmuted_video_limit;
     public int version;
 
     public static TLRPC$GroupCall TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$GroupCall tLRPC$GroupCall;
-        if (i != NUM) {
+        if (i != -NUM) {
             tLRPC$GroupCall = i != NUM ? null : new TLRPC$TL_groupCallDiscarded();
         } else {
             tLRPC$GroupCall = new TLRPC$TL_groupCall();

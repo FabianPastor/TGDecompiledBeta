@@ -2304,7 +2304,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 java.lang.String r0 = r0.textKey
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r5.setTextColor(r0)
-                android.widget.ImageView r5 = r6.imageView
+                org.telegram.ui.Components.RLottieImageView r5 = r6.imageView
                 android.graphics.PorterDuffColorFilter r0 = new android.graphics.PorterDuffColorFilter
                 java.lang.String r1 = "voipgroup_mutedIcon"
                 int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)

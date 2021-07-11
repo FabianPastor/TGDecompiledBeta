@@ -1,6 +1,5 @@
 package org.webrtc.voiceengine;
 
-import android.annotation.TargetApi;
 import android.media.AudioFormat;
 import android.media.AudioPlaybackCaptureConfiguration;
 import android.media.AudioRecord;
@@ -11,7 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.Utilities;
+import org.telegram.messenger.voip.VideoCapturerDevice;
 import org.webrtc.Logging;
 import org.webrtc.ThreadUtils;
 
@@ -22,7 +21,6 @@ public class WebRtcAudioRecord {
     private static final int BUFFER_SIZE_FACTOR = 2;
     private static final int CALLBACK_BUFFER_SIZE_MS = 10;
     private static final int DEFAULT_AUDIO_SOURCE;
-    public static WebRtcAudioRecord Instance = null;
     private static final String TAG = "WebRtcAudioRecord";
     /* access modifiers changed from: private */
     public static WebRtcAudioRecordSamplesReadyCallback audioSamplesReadyCallback;
@@ -35,17 +33,12 @@ public class WebRtcAudioRecord {
     private AudioRecordThread audioThread;
     /* access modifiers changed from: private */
     public ByteBuffer byteBuffer;
-    /* access modifiers changed from: private */
-    public AudioRecord deviceAudioRecord;
-    /* access modifiers changed from: private */
-    public ByteBuffer deviceByteBuffer;
-    private WebRtcAudioEffects effects;
+    private WebRtcAudioEffects effects = WebRtcAudioEffects.create();
     /* access modifiers changed from: private */
     public byte[] emptyBytes;
+    private boolean isScreenCapture;
     /* access modifiers changed from: private */
     public final long nativeAudioRecord;
-    private int requestedChannels = 1;
-    private int requestedSampleRate = 48000;
 
     public enum AudioRecordStartErrorCode {
         AUDIO_RECORD_START_EXCEPTION,
@@ -135,26 +128,10 @@ public class WebRtcAudioRecord {
             System.nanoTime();
             while (this.keepAlive) {
                 int read = WebRtcAudioRecord.this.audioRecord.read(WebRtcAudioRecord.this.byteBuffer, WebRtcAudioRecord.this.byteBuffer.capacity());
-                int read2 = WebRtcAudioRecord.this.deviceAudioRecord != null ? WebRtcAudioRecord.this.deviceAudioRecord.read(WebRtcAudioRecord.this.deviceByteBuffer, WebRtcAudioRecord.this.deviceByteBuffer.capacity()) : 0;
                 if (read == WebRtcAudioRecord.this.byteBuffer.capacity()) {
                     if (WebRtcAudioRecord.microphoneMute) {
                         WebRtcAudioRecord.this.byteBuffer.clear();
                         WebRtcAudioRecord.this.byteBuffer.put(WebRtcAudioRecord.this.emptyBytes);
-                    }
-                    if (read == read2) {
-                        WebRtcAudioRecord.this.deviceByteBuffer.position(0);
-                        WebRtcAudioRecord.this.byteBuffer.position(0);
-                        for (int i = 0; i < read / 2; i++) {
-                            int i2 = i * 2;
-                            int i3 = WebRtcAudioRecord.this.byteBuffer.getShort(i2) + WebRtcAudioRecord.this.deviceByteBuffer.getShort(i2);
-                            if (i3 > 32767) {
-                                i3 = 32767;
-                            }
-                            if (i3 < -32768) {
-                                i3 = -32768;
-                            }
-                            WebRtcAudioRecord.this.byteBuffer.putShort(i2, (short) i3);
-                        }
                     }
                     if (this.keepAlive) {
                         WebRtcAudioRecord webRtcAudioRecord = WebRtcAudioRecord.this;
@@ -187,20 +164,10 @@ public class WebRtcAudioRecord {
         }
     }
 
-    WebRtcAudioRecord(long j) {
+    WebRtcAudioRecord(long j, boolean z) {
         Logging.d("WebRtcAudioRecord", "ctor" + WebRtcAudioUtils.getThreadInfo());
         this.nativeAudioRecord = j;
-        this.effects = WebRtcAudioEffects.create();
-        if (Instance == null) {
-            Instance = this;
-        }
-    }
-
-    private void onDestroy() {
-        stopDeviceAudioRecord();
-        if (Instance == this) {
-            Instance = null;
-        }
+        this.isScreenCapture = z;
     }
 
     private boolean enableBuiltInAEC(boolean z) {
@@ -224,8 +191,10 @@ public class WebRtcAudioRecord {
     }
 
     private int initRecording(int i, int i2) {
-        this.requestedSampleRate = i;
-        this.requestedChannels = i2;
+        WebRtcAudioEffects webRtcAudioEffects;
+        if (this.isScreenCapture && Build.VERSION.SDK_INT < 29) {
+            return -1;
+        }
         Logging.d("WebRtcAudioRecord", "initRecording(sampleRate=" + i + ", channels=" + i2 + ")");
         if (this.audioRecord != null) {
             reportWebRtcAudioRecordInitError("InitRecording called twice without StopRecording.");
@@ -247,144 +216,67 @@ public class WebRtcAudioRecord {
         Logging.d("WebRtcAudioRecord", "AudioRecord.getMinBufferSize: " + minBufferSize);
         int max = Math.max(minBufferSize * 2, this.byteBuffer.capacity());
         Logging.d("WebRtcAudioRecord", "bufferSizeInBytes: " + max);
-        try {
-            AudioRecord audioRecord2 = new AudioRecord(audioSource, i, channelCountToConfiguration, 2, max);
-            this.audioRecord = audioRecord2;
-            if (audioRecord2.getState() != 1) {
-                reportWebRtcAudioRecordInitError("Failed to create a new AudioRecord instance");
-                releaseAudioResources(false);
+        if (!this.isScreenCapture) {
+            try {
+                this.audioRecord = new AudioRecord(audioSource, i, channelCountToConfiguration, 2, max);
+            } catch (IllegalArgumentException e) {
+                reportWebRtcAudioRecordInitError("AudioRecord ctor error: " + e.getMessage());
+                releaseAudioResources();
                 return -1;
             }
-            WebRtcAudioEffects webRtcAudioEffects = this.effects;
-            if (webRtcAudioEffects != null) {
-                webRtcAudioEffects.enable(this.audioRecord.getAudioSessionId());
+        } else if (Build.VERSION.SDK_INT >= 29) {
+            try {
+                MediaProjection mediaProjection = VideoCapturerDevice.getMediaProjection();
+                if (mediaProjection == null) {
+                    return -1;
+                }
+                AudioPlaybackCaptureConfiguration.Builder builder = new AudioPlaybackCaptureConfiguration.Builder(mediaProjection);
+                builder.addMatchingUsage(1);
+                builder.addMatchingUsage(14);
+                AudioRecord.Builder builder2 = new AudioRecord.Builder();
+                builder2.setAudioPlaybackCaptureConfig(builder.build());
+                builder2.setAudioFormat(new AudioFormat.Builder().setChannelMask(channelCountToConfiguration).setSampleRate(i).setEncoding(2).build());
+                builder2.setBufferSizeInBytes(max);
+                this.audioRecord = builder2.build();
+            } catch (Throwable th) {
+                reportWebRtcAudioRecordInitError("AudioRecord ctor error: " + th.getMessage());
+                releaseAudioResources();
+                return -1;
             }
-            logMainParameters();
-            logMainParametersExtended();
-            return i3;
-        } catch (IllegalArgumentException e) {
-            reportWebRtcAudioRecordInitError("AudioRecord ctor error: " + e.getMessage());
-            releaseAudioResources(false);
+        }
+        AudioRecord audioRecord2 = this.audioRecord;
+        if (audioRecord2 == null || audioRecord2.getState() != 1) {
+            reportWebRtcAudioRecordInitError("Failed to create a new AudioRecord instance");
+            releaseAudioResources();
             return -1;
         }
-    }
-
-    @TargetApi(29)
-    public void initDeviceAudioRecord(MediaProjection mediaProjection) {
-        if (Build.VERSION.SDK_INT >= 29) {
-            Utilities.globalQueue.postRunnable(new Runnable(mediaProjection) {
-                public final /* synthetic */ MediaProjection f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    WebRtcAudioRecord.this.lambda$initDeviceAudioRecord$0$WebRtcAudioRecord(this.f$1);
-                }
-            });
+        if (!this.isScreenCapture && (webRtcAudioEffects = this.effects) != null) {
+            webRtcAudioEffects.enable(this.audioRecord.getAudioSessionId());
         }
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$initDeviceAudioRecord$0 */
-    public /* synthetic */ void lambda$initDeviceAudioRecord$0$WebRtcAudioRecord(MediaProjection mediaProjection) {
-        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(this.requestedChannels * 2 * (this.requestedSampleRate / 100));
-        this.deviceByteBuffer = allocateDirect;
-        allocateDirect.order(ByteOrder.nativeOrder());
-        int channelCountToConfiguration = channelCountToConfiguration(this.requestedChannels);
-        int minBufferSize = AudioRecord.getMinBufferSize(this.requestedSampleRate, channelCountToConfiguration, 2);
-        if (minBufferSize == -1 || minBufferSize == -2) {
-            reportWebRtcAudioRecordInitError("AudioRecord.getMinBufferSize failed: " + minBufferSize);
-            return;
-        }
-        int max = Math.max(minBufferSize * 2, this.deviceByteBuffer.capacity());
-        try {
-            AudioPlaybackCaptureConfiguration.Builder builder = new AudioPlaybackCaptureConfiguration.Builder(mediaProjection);
-            builder.addMatchingUsage(1);
-            builder.addMatchingUsage(14);
-            AudioRecord.Builder builder2 = new AudioRecord.Builder();
-            builder2.setAudioPlaybackCaptureConfig(builder.build());
-            builder2.setAudioFormat(new AudioFormat.Builder().setChannelMask(channelCountToConfiguration).setSampleRate(this.requestedSampleRate).setEncoding(2).build());
-            builder2.setBufferSizeInBytes(max);
-            AudioRecord build = builder2.build();
-            this.deviceAudioRecord = build;
-            if (build == null || build.getState() != 1) {
-                reportWebRtcAudioRecordInitError("Failed to create a new AudioRecord instance");
-                releaseAudioResources(true);
-                return;
-            }
-            try {
-                this.deviceAudioRecord.startRecording();
-                if (this.deviceAudioRecord.getRecordingState() != 3) {
-                    AudioRecordStartErrorCode audioRecordStartErrorCode = AudioRecordStartErrorCode.AUDIO_RECORD_START_STATE_MISMATCH;
-                    reportWebRtcAudioRecordStartError(audioRecordStartErrorCode, "AudioRecord.startRecording failed - incorrect state :" + this.deviceAudioRecord.getRecordingState());
-                }
-            } catch (IllegalStateException e) {
-                AudioRecordStartErrorCode audioRecordStartErrorCode2 = AudioRecordStartErrorCode.AUDIO_RECORD_START_EXCEPTION;
-                reportWebRtcAudioRecordStartError(audioRecordStartErrorCode2, "AudioRecord.startRecording failed: " + e.getMessage());
-            }
-        } catch (Throwable th) {
-            reportWebRtcAudioRecordInitError("AudioRecord ctor error: " + th.getMessage());
-            releaseAudioResources(true);
-        }
-    }
-
-    @TargetApi(29)
-    public void stopDeviceAudioRecord() {
-        Utilities.globalQueue.postRunnable(new Runnable() {
-            public final void run() {
-                WebRtcAudioRecord.this.lambda$stopDeviceAudioRecord$1$WebRtcAudioRecord();
-            }
-        });
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$stopDeviceAudioRecord$1 */
-    public /* synthetic */ void lambda$stopDeviceAudioRecord$1$WebRtcAudioRecord() {
-        AudioRecord audioRecord2 = this.deviceAudioRecord;
-        if (audioRecord2 != null) {
-            try {
-                audioRecord2.stop();
-            } catch (Throwable th) {
-                FileLog.e(th);
-            }
-            releaseAudioResources(true);
-        }
+        logMainParameters();
+        logMainParametersExtended();
+        return i3;
     }
 
     private boolean startRecording() {
-        Utilities.globalQueue.postRunnable(new Runnable() {
-            public final void run() {
-                WebRtcAudioRecord.this.lambda$startRecording$2$WebRtcAudioRecord();
-            }
-        });
-        return true;
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$startRecording$2 */
-    public /* synthetic */ void lambda$startRecording$2$WebRtcAudioRecord() {
         Logging.d("WebRtcAudioRecord", "startRecording");
-        boolean z = true;
         assertTrue(this.audioRecord != null);
-        if (this.audioThread != null) {
-            z = false;
-        }
-        assertTrue(z);
+        assertTrue(this.audioThread == null);
         try {
             this.audioRecord.startRecording();
             if (this.audioRecord.getRecordingState() != 3) {
                 AudioRecordStartErrorCode audioRecordStartErrorCode = AudioRecordStartErrorCode.AUDIO_RECORD_START_STATE_MISMATCH;
                 reportWebRtcAudioRecordStartError(audioRecordStartErrorCode, "AudioRecord.startRecording failed - incorrect state :" + this.audioRecord.getRecordingState());
-                return;
+                return false;
             }
             AudioRecordThread audioRecordThread = new AudioRecordThread("AudioRecordJavaThread");
             this.audioThread = audioRecordThread;
             audioRecordThread.start();
+            return true;
         } catch (IllegalStateException e) {
             AudioRecordStartErrorCode audioRecordStartErrorCode2 = AudioRecordStartErrorCode.AUDIO_RECORD_START_EXCEPTION;
             reportWebRtcAudioRecordStartError(audioRecordStartErrorCode2, "AudioRecord.startRecording failed: " + e.getMessage());
+            return false;
         }
     }
 
@@ -406,7 +298,7 @@ public class WebRtcAudioRecord {
         } catch (Throwable th) {
             FileLog.e(th);
         }
-        releaseAudioResources(false);
+        releaseAudioResources();
         return true;
     }
 
@@ -438,20 +330,11 @@ public class WebRtcAudioRecord {
         microphoneMute = z;
     }
 
-    private void releaseAudioResources(boolean z) {
-        Logging.d("WebRtcAudioRecord", "releaseAudioResources " + z);
-        if (z) {
-            AudioRecord audioRecord2 = this.deviceAudioRecord;
-            if (audioRecord2 != null) {
-                audioRecord2.release();
-                this.deviceAudioRecord = null;
-                return;
-            }
-            return;
-        }
-        AudioRecord audioRecord3 = this.audioRecord;
-        if (audioRecord3 != null) {
-            audioRecord3.release();
+    private void releaseAudioResources() {
+        Logging.d("WebRtcAudioRecord", "releaseAudioResources");
+        AudioRecord audioRecord2 = this.audioRecord;
+        if (audioRecord2 != null) {
+            audioRecord2.release();
             this.audioRecord = null;
         }
     }

@@ -113,6 +113,24 @@ public class UserConfig extends BaseController {
     }
 
     public void saveConfig(boolean z, File file) {
+        NotificationCenter.getInstance(this.currentAccount).doOnIdle(new Runnable(z, file) {
+            public final /* synthetic */ boolean f$1;
+            public final /* synthetic */ File f$2;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+            }
+
+            public final void run() {
+                UserConfig.this.lambda$saveConfig$0$UserConfig(this.f$1, this.f$2);
+            }
+        });
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$saveConfig$0 */
+    public /* synthetic */ void lambda$saveConfig$0$UserConfig(boolean z, File file) {
         synchronized (this.sync) {
             try {
                 SharedPreferences.Editor edit = getPreferences().edit();

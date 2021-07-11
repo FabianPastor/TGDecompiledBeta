@@ -15,10 +15,11 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.RLottieImageView;
 
 public class TextCell extends FrameLayout {
     private int imageLeft;
-    public final ImageView imageView;
+    public final RLottieImageView imageView;
     private boolean inDialogs;
     private int leftPadding;
     private boolean needDivider;
@@ -51,14 +52,14 @@ public class TextCell extends FrameLayout {
         simpleTextView2.setGravity(LocaleController.isRTL ? 3 : i2);
         simpleTextView2.setImportantForAccessibility(2);
         addView(simpleTextView2);
+        RLottieImageView rLottieImageView = new RLottieImageView(context);
+        this.imageView = rLottieImageView;
+        rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
+        rLottieImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
+        addView(rLottieImageView);
         ImageView imageView2 = new ImageView(context);
-        this.imageView = imageView2;
+        this.valueImageView = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor(z ? "dialogIcon" : "windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
-        addView(imageView2);
-        ImageView imageView3 = new ImageView(context);
-        this.valueImageView = imageView3;
-        imageView3.setScaleType(ImageView.ScaleType.CENTER);
         addView(this.valueImageView);
         setFocusable(true);
     }
@@ -118,14 +119,14 @@ public class TextCell extends FrameLayout {
         if (this.imageView.getVisibility() == 0) {
             int dp2 = AndroidUtilities.dp(5.0f);
             int dp3 = !LocaleController.isRTL ? AndroidUtilities.dp((float) this.imageLeft) : (i7 - this.imageView.getMeasuredWidth()) - AndroidUtilities.dp((float) this.imageLeft);
-            ImageView imageView2 = this.imageView;
-            imageView2.layout(dp3, dp2, imageView2.getMeasuredWidth() + dp3, this.imageView.getMeasuredHeight() + dp2);
+            RLottieImageView rLottieImageView = this.imageView;
+            rLottieImageView.layout(dp3, dp2, rLottieImageView.getMeasuredWidth() + dp3, this.imageView.getMeasuredHeight() + dp2);
         }
         if (this.valueImageView.getVisibility() == 0) {
             int measuredHeight = (i6 - this.valueImageView.getMeasuredHeight()) / 2;
             int dp4 = LocaleController.isRTL ? AndroidUtilities.dp(23.0f) : (i7 - this.valueImageView.getMeasuredWidth()) - AndroidUtilities.dp(23.0f);
-            ImageView imageView3 = this.valueImageView;
-            imageView3.layout(dp4, measuredHeight, imageView3.getMeasuredWidth() + dp4, this.valueImageView.getMeasuredHeight() + measuredHeight);
+            ImageView imageView2 = this.valueImageView;
+            imageView2.layout(dp4, measuredHeight, imageView2.getMeasuredWidth() + dp4, this.valueImageView.getMeasuredHeight() + measuredHeight);
         }
     }
 

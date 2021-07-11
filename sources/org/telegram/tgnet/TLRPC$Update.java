@@ -82,6 +82,9 @@ public abstract class TLRPC$Update extends TLObject {
             case -1015733815:
                 tLRPC$Update = new TLRPC$TL_updateDeleteChannelMessages();
                 break;
+            case -813823885:
+                tLRPC$Update = new TLRPC$TL_updateBotCommands();
+                break;
             case -513517117:
                 tLRPC$Update = new TLRPC$TL_updateDialogUnreadMark();
                 break;

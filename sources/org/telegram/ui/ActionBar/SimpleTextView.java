@@ -319,6 +319,10 @@ public class SimpleTextView extends View implements Drawable.Callback {
         setLeftDrawable(i == 0 ? null : getContext().getResources().getDrawable(i));
     }
 
+    public Drawable getLeftDrawable() {
+        return this.leftDrawable;
+    }
+
     public void setRightDrawable(int i) {
         setRightDrawable(i == 0 ? null : getContext().getResources().getDrawable(i));
     }

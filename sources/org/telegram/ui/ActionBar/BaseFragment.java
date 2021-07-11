@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -279,6 +280,7 @@ public abstract class BaseFragment {
     public void setParentLayout(ActionBarLayout actionBarLayout) {
         ViewGroup viewGroup;
         if (this.parentLayout != actionBarLayout) {
+            FileLog.d("UI create11-506 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
             this.parentLayout = actionBarLayout;
             boolean z = true;
             this.inBubbleMode = actionBarLayout != null && actionBarLayout.isInBubbleMode();
@@ -298,6 +300,7 @@ public abstract class BaseFragment {
                     this.fragmentView = null;
                 }
             }
+            FileLog.d("UI create11-507 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
             if (this.actionBar != null) {
                 ActionBarLayout actionBarLayout3 = this.parentLayout;
                 if (actionBarLayout3 == null || actionBarLayout3.getContext() == this.actionBar.getContext()) {
@@ -314,12 +317,14 @@ public abstract class BaseFragment {
                     this.actionBar = null;
                 }
             }
+            FileLog.d("UI create11-508 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
             ActionBarLayout actionBarLayout4 = this.parentLayout;
             if (actionBarLayout4 != null && this.actionBar == null) {
                 ActionBar createActionBar = createActionBar(actionBarLayout4.getContext());
                 this.actionBar = createActionBar;
                 createActionBar.parentFragment = this;
             }
+            FileLog.d("UI create11-509 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         }
     }
 

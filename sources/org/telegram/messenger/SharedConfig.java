@@ -1157,6 +1157,10 @@ public class SharedConfig {
     }
 
     public static void checkSaveToGalleryFiles() {
+        Utilities.globalQueue.postRunnable($$Lambda$SharedConfig$WtKrEMvWhflILeb19kJG2qAkvWc.INSTANCE);
+    }
+
+    static /* synthetic */ void lambda$checkSaveToGalleryFiles$2() {
         try {
             File file = new File(Environment.getExternalStorageDirectory(), "Telegram");
             File file2 = new File(file, "Telegram Images");

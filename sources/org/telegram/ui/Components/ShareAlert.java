@@ -124,6 +124,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
     public int previousScrollOffsetY;
     /* access modifiers changed from: private */
     public RectF rect;
+    RecyclerItemsEnterAnimator recyclerItemsEnterAnimator;
     /* access modifiers changed from: private */
     public int scrollOffsetY;
     /* access modifiers changed from: private */
@@ -683,6 +684,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r15.<init>(r12, r6)
             r0.layoutManager = r15
             r7.setLayoutManager(r15)
+            org.telegram.ui.Components.RecyclerItemsEnterAnimator r7 = new org.telegram.ui.Components.RecyclerItemsEnterAnimator
+            org.telegram.ui.Components.RecyclerListView r12 = r0.gridView
+            r7.<init>(r12, r5)
+            r0.recyclerItemsEnterAnimator = r7
             androidx.recyclerview.widget.GridLayoutManager r7 = r0.layoutManager
             org.telegram.ui.Components.ShareAlert$4 r12 = new org.telegram.ui.Components.ShareAlert$4
             r12.<init>()
@@ -720,12 +725,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r7.setAdapter(r12)
             org.telegram.ui.Components.RecyclerListView r7 = r0.gridView
             boolean r12 = r0.darkTheme
-            if (r12 == 0) goto L_0x01f2
+            if (r12 == 0) goto L_0x01fb
             r12 = r11
-            goto L_0x01f4
-        L_0x01f2:
+            goto L_0x01fd
+        L_0x01fb:
             java.lang.String r12 = "dialogScrollGlow"
-        L_0x01f4:
+        L_0x01fd:
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
             r7.setGlowColor(r12)
             org.telegram.ui.Components.RecyclerListView r7 = r0.gridView
@@ -736,20 +741,26 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.ShareAlert$6 r7 = new org.telegram.ui.Components.ShareAlert$6
             r7.<init>()
             r3.setOnScrollListener(r7)
-            org.telegram.ui.Components.EmptyTextProgressView r3 = new org.telegram.ui.Components.EmptyTextProgressView
+            org.telegram.ui.Components.FlickerLoadingView r3 = new org.telegram.ui.Components.FlickerLoadingView
             r3.<init>(r1)
-            r0.searchEmptyView = r3
-            r3.setShowAtCenter(r5)
+            r7 = 12
+            r3.setViewType(r7)
+            org.telegram.ui.Components.EmptyTextProgressView r7 = new org.telegram.ui.Components.EmptyTextProgressView
+            r7.<init>(r1, r3)
+            r0.searchEmptyView = r7
+            r7.setShowAtCenter(r5)
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
             r3.showTextView()
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r7 = 2131626303(0x7f0e093f, float:1.8879838E38)
+            r7 = 2131626321(0x7f0e0951, float:1.8879875E38)
             java.lang.String r12 = "NoChats"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r12, r7)
             r3.setText(r7)
             org.telegram.ui.Components.RecyclerListView r3 = r0.gridView
             org.telegram.ui.Components.EmptyTextProgressView r7 = r0.searchEmptyView
             r3.setEmptyView(r7)
+            org.telegram.ui.Components.RecyclerListView r3 = r0.gridView
+            r3.setAnimateEmptyView(r5, r8)
             android.view.ViewGroup r3 = r0.containerView
             org.telegram.ui.Components.EmptyTextProgressView r7 = r0.searchEmptyView
             r12 = -1
@@ -773,15 +784,15 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r12 = 51
             r3.<init>(r9, r7, r12)
             boolean r7 = r0.darkTheme
-            if (r7 == 0) goto L_0x0271
+            if (r7 == 0) goto L_0x0289
             java.lang.String[] r7 = r0.linkToCopy
             r7 = r7[r5]
-            if (r7 == 0) goto L_0x0271
+            if (r7 == 0) goto L_0x0289
             r7 = 1121845248(0x42de0000, float:111.0)
-            goto L_0x0273
-        L_0x0271:
+            goto L_0x028b
+        L_0x0289:
             r7 = 1114112000(0x42680000, float:58.0)
-        L_0x0273:
+        L_0x028b:
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r3.topMargin = r7
             android.view.View[] r7 = r0.shadow
@@ -808,15 +819,15 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.view.ViewGroup r3 = r0.containerView
             android.widget.FrameLayout r6 = r0.frameLayout
             boolean r7 = r0.darkTheme
-            if (r7 == 0) goto L_0x02bc
+            if (r7 == 0) goto L_0x02d4
             java.lang.String[] r7 = r0.linkToCopy
             r7 = r7[r5]
-            if (r7 == 0) goto L_0x02bc
+            if (r7 == 0) goto L_0x02d4
             r7 = 111(0x6f, float:1.56E-43)
-            goto L_0x02be
-        L_0x02bc:
+            goto L_0x02d6
+        L_0x02d4:
             r7 = 58
-        L_0x02be:
+        L_0x02d6:
             android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r7, r12)
             r3.addView(r6, r7)
             android.widget.FrameLayout$LayoutParams r3 = new android.widget.FrameLayout$LayoutParams
@@ -838,35 +849,35 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r6.addView(r7, r3)
             boolean r3 = r0.isChannel
             java.lang.String r6 = "fonts/rmedium.ttf"
-            if (r3 != 0) goto L_0x0308
+            if (r3 != 0) goto L_0x0320
             java.lang.String[] r3 = r0.linkToCopy
             r3 = r3[r8]
-            if (r3 == 0) goto L_0x02fe
-            goto L_0x0308
-        L_0x02fe:
+            if (r3 == 0) goto L_0x0316
+            goto L_0x0320
+        L_0x0316:
             android.view.View[] r3 = r0.shadow
             r3 = r3[r5]
             r7 = 0
             r3.setAlpha(r7)
-            goto L_0x04b0
-        L_0x0308:
+            goto L_0x04c8
+        L_0x0320:
             android.widget.TextView r3 = new android.widget.TextView
             r3.<init>(r1)
             r0.pickerBottomLayout = r3
             boolean r7 = r0.darkTheme
-            if (r7 == 0) goto L_0x0314
+            if (r7 == 0) goto L_0x032c
             r10 = r11
-        L_0x0314:
+        L_0x032c:
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r10)
             boolean r10 = r0.darkTheme
             java.lang.String r11 = "voipgroup_listSelector"
             java.lang.String r12 = "listSelectorSDK21"
-            if (r10 == 0) goto L_0x0322
+            if (r10 == 0) goto L_0x033a
             r10 = r11
-            goto L_0x0323
-        L_0x0322:
+            goto L_0x033b
+        L_0x033a:
             r10 = r12
-        L_0x0323:
+        L_0x033b:
             int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
             android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.createSelectorWithBackgroundDrawable(r7, r10)
             r3.setBackgroundDrawable(r7)
@@ -874,12 +885,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             boolean r7 = r0.darkTheme
             java.lang.String r10 = "voipgroup_listeningText"
             java.lang.String r14 = "dialogTextBlue2"
-            if (r7 == 0) goto L_0x033a
+            if (r7 == 0) goto L_0x0352
             r7 = r10
-            goto L_0x033b
-        L_0x033a:
+            goto L_0x0353
+        L_0x0352:
             r7 = r14
-        L_0x033b:
+        L_0x0353:
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
             r3.setTextColor(r7)
             android.widget.TextView r3 = r0.pickerBottomLayout
@@ -898,25 +909,25 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r7 = 17
             r3.setGravity(r7)
             boolean r3 = r0.darkTheme
-            if (r3 == 0) goto L_0x0387
+            if (r3 == 0) goto L_0x039f
             java.lang.String[] r3 = r0.linkToCopy
             r3 = r3[r5]
-            if (r3 == 0) goto L_0x0387
+            if (r3 == 0) goto L_0x039f
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r7 = 2131628111(0x7f0e104f, float:1.8883505E38)
+            r7 = 2131628141(0x7f0e106d, float:1.8883566E38)
             java.lang.String r15 = "VoipGroupCopySpeakerLink"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r15, r7)
             java.lang.String r7 = r7.toUpperCase()
             r3.setText(r7)
-            goto L_0x0399
-        L_0x0387:
+            goto L_0x03b1
+        L_0x039f:
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r7 = 2131625013(0x7f0e0435, float:1.8877222E38)
+            r7 = 2131625030(0x7f0e0446, float:1.8877256E38)
             java.lang.String r15 = "CopyLink"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r15, r7)
             java.lang.String r7 = r7.toUpperCase()
             r3.setText(r7)
-        L_0x0399:
+        L_0x03b1:
             android.widget.TextView r3 = r0.pickerBottomLayout
             org.telegram.ui.Components.-$$Lambda$ShareAlert$Jk_mrfDjAsna0QY0gGjdECS7var_ r7 = new org.telegram.ui.Components.-$$Lambda$ShareAlert$Jk_mrfDjAsna0QY0gGjdECS7var_
             r7.<init>()
@@ -927,24 +938,24 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.widget.FrameLayout$LayoutParams r15 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r15, r13)
             r3.addView(r7, r15)
             org.telegram.ui.ChatActivity r3 = r0.parentFragment
-            if (r3 == 0) goto L_0x04b0
+            if (r3 == 0) goto L_0x04c8
             org.telegram.tgnet.TLRPC$Chat r3 = r3.getCurrentChat()
             boolean r3 = org.telegram.messenger.ChatObject.hasAdminRights(r3)
-            if (r3 == 0) goto L_0x04b0
+            if (r3 == 0) goto L_0x04c8
             java.util.ArrayList<org.telegram.messenger.MessageObject> r3 = r0.sendingMessageObjects
             int r3 = r3.size()
-            if (r3 <= 0) goto L_0x04b0
+            if (r3 <= 0) goto L_0x04c8
             java.util.ArrayList<org.telegram.messenger.MessageObject> r3 = r0.sendingMessageObjects
             java.lang.Object r3 = r3.get(r8)
             org.telegram.messenger.MessageObject r3 = (org.telegram.messenger.MessageObject) r3
             org.telegram.tgnet.TLRPC$Message r3 = r3.messageOwner
             int r3 = r3.forwards
-            if (r3 <= 0) goto L_0x04b0
+            if (r3 <= 0) goto L_0x04c8
             java.util.ArrayList<org.telegram.messenger.MessageObject> r3 = r0.sendingMessageObjects
             java.lang.Object r3 = r3.get(r8)
             org.telegram.messenger.MessageObject r3 = (org.telegram.messenger.MessageObject) r3
             boolean r7 = r3.isForwarded()
-            if (r7 != 0) goto L_0x04b0
+            if (r7 != 0) goto L_0x04c8
             android.widget.LinearLayout r7 = new android.widget.LinearLayout
             r7.<init>(r1)
             r0.sharesCountLayout = r7
@@ -954,11 +965,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r7.setGravity(r15)
             android.widget.LinearLayout r7 = r0.sharesCountLayout
             boolean r15 = r0.darkTheme
-            if (r15 == 0) goto L_0x03fa
-            goto L_0x03fb
-        L_0x03fa:
+            if (r15 == 0) goto L_0x0412
+            goto L_0x0413
+        L_0x0412:
             r11 = r12
-        L_0x03fb:
+        L_0x0413:
             int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             r12 = 2
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r11, r12)
@@ -984,12 +995,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r7.setImageResource(r11)
             android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
             boolean r12 = r0.darkTheme
-            if (r12 == 0) goto L_0x043d
+            if (r12 == 0) goto L_0x0455
             r12 = r10
-            goto L_0x043e
-        L_0x043d:
+            goto L_0x0456
+        L_0x0455:
             r12 = r14
-        L_0x043e:
+        L_0x0456:
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r12)
             android.graphics.PorterDuff$Mode r15 = android.graphics.PorterDuff.Mode.MULTIPLY
             r11.<init>(r12, r15)
@@ -1017,11 +1028,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3 = 1096810496(0x41600000, float:14.0)
             r7.setTextSize(r5, r3)
             boolean r3 = r0.darkTheme
-            if (r3 == 0) goto L_0x0485
-            goto L_0x0486
-        L_0x0485:
+            if (r3 == 0) goto L_0x049d
+            goto L_0x049e
+        L_0x049d:
             r10 = r14
-        L_0x0486:
+        L_0x049e:
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r10)
             r7.setTextColor(r3)
             r3 = 16
@@ -1038,7 +1049,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r23 = 0
             android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
             r3.addView(r7, r10)
-        L_0x04b0:
+        L_0x04c8:
             org.telegram.ui.Components.ShareAlert$7 r3 = new org.telegram.ui.Components.ShareAlert$7
             r3.<init>(r1)
             r0.frameLayout2 = r3
@@ -1068,14 +1079,14 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r31 = r9
             r26.<init>(r28, r29, r30, r31)
             r0.commentTextView = r3
-            if (r4 == 0) goto L_0x04fd
+            if (r4 == 0) goto L_0x0515
             org.telegram.ui.Components.EditTextCaption r2 = r3.getEditText()
             java.lang.String r3 = "voipgroup_nameText"
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             r2.setTextColor(r3)
-        L_0x04fd:
+        L_0x0515:
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
-            r3 = 2131627471(0x7f0e0dcf, float:1.8882207E38)
+            r3 = 2131627501(0x7f0e0ded, float:1.8882268E38)
             java.lang.String r4 = "ShareComment"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r2.setHint(r3)
@@ -1139,12 +1150,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r7)
             int r10 = android.os.Build.VERSION.SDK_INT
             r11 = 21
-            if (r10 < r11) goto L_0x0595
+            if (r10 < r11) goto L_0x05ad
             java.lang.String r7 = "dialogFloatingButtonPressed"
-        L_0x0595:
+        L_0x05ad:
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r5, r9, r7)
-            if (r10 >= r11) goto L_0x05cb
+            if (r10 >= r11) goto L_0x05e3
             android.content.res.Resources r7 = r25.getResources()
             r9 = 2131165412(0x7var_e4, float:1.794504E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r9)
@@ -1160,7 +1171,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r9.setIconSize(r5, r7)
             r5 = r9
-        L_0x05cb:
+        L_0x05e3:
             r2.setBackgroundDrawable(r5)
             r5 = 2131165269(0x7var_, float:1.794475E38)
             r2.setImageResource(r5)
@@ -1174,30 +1185,30 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r2.setColorFilter(r5)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r5)
-            if (r10 < r11) goto L_0x05f7
+            if (r10 < r11) goto L_0x060f
             org.telegram.ui.Components.ShareAlert$10 r5 = new org.telegram.ui.Components.ShareAlert$10
             r5.<init>()
             r2.setOutlineProvider(r5)
-        L_0x05f7:
+        L_0x060f:
             android.widget.FrameLayout r5 = r0.writeButtonContainer
-            if (r10 < r11) goto L_0x05fe
+            if (r10 < r11) goto L_0x0616
             r7 = 56
-            goto L_0x0600
-        L_0x05fe:
+            goto L_0x0618
+        L_0x0616:
             r7 = 60
-        L_0x0600:
-            if (r10 < r11) goto L_0x0603
-            goto L_0x0605
-        L_0x0603:
+        L_0x0618:
+            if (r10 < r11) goto L_0x061b
+            goto L_0x061d
+        L_0x061b:
             r4 = 1114636288(0x42700000, float:60.0)
-        L_0x0605:
+        L_0x061d:
             r9 = 51
-            if (r10 < r11) goto L_0x060c
+            if (r10 < r11) goto L_0x0624
             r10 = 1073741824(0x40000000, float:2.0)
-            goto L_0x060d
-        L_0x060c:
+            goto L_0x0625
+        L_0x0624:
             r10 = 0
-        L_0x060d:
+        L_0x0625:
             r11 = 0
             r12 = 0
             r13 = 0
@@ -1255,12 +1266,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.ShareAlert$ShareDialogsAdapter r1 = r0.listAdapter
             java.util.ArrayList r1 = r1.dialogs
             boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x069f
+            if (r1 == 0) goto L_0x06b7
             int r1 = r0.currentAccount
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
             int r2 = org.telegram.messenger.NotificationCenter.dialogsNeedReload
             r1.addObserver(r0, r2)
-        L_0x069f:
+        L_0x06b7:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ShareAlert.<init>(android.content.Context, org.telegram.ui.ChatActivity, java.util.ArrayList, java.lang.String, java.lang.String, boolean, java.lang.String, java.lang.String, boolean, boolean):void");
@@ -1925,28 +1936,24 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
     public class ShareSearchAdapter extends RecyclerListView.SelectionAdapter {
         private Context context;
+        boolean internalDialogsIsSearching = false;
         /* access modifiers changed from: private */
         public int lastGlobalSearchId;
+        int lastItemCont;
         /* access modifiers changed from: private */
         public int lastLocalSearchId;
         /* access modifiers changed from: private */
         public int lastSearchId;
         private String lastSearchText;
-        private SearchAdapterHelper searchAdapterHelper;
+        /* access modifiers changed from: private */
+        public SearchAdapterHelper searchAdapterHelper;
         /* access modifiers changed from: private */
         public ArrayList<Object> searchResult = new ArrayList<>();
         private Runnable searchRunnable;
         private Runnable searchRunnable2;
-        private int waitingResponseCount;
 
         public int getItemViewType(int i) {
             return i == 0 ? 1 : 0;
-        }
-
-        static /* synthetic */ int access$8210(ShareSearchAdapter shareSearchAdapter) {
-            int i = shareSearchAdapter.waitingResponseCount;
-            shareSearchAdapter.waitingResponseCount = i - 1;
-            return i;
         }
 
         public ShareSearchAdapter(Context context2) {
@@ -1967,11 +1974,20 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 }
 
                 public void onDataSetChanged(int i) {
-                    ShareSearchAdapter.access$8210(ShareSearchAdapter.this);
                     int unused = ShareSearchAdapter.this.lastGlobalSearchId = i;
                     if (ShareSearchAdapter.this.lastLocalSearchId != i) {
                         ShareSearchAdapter.this.searchResult.clear();
                     }
+                    ShareSearchAdapter shareSearchAdapter = ShareSearchAdapter.this;
+                    int i2 = shareSearchAdapter.lastItemCont;
+                    if (shareSearchAdapter.getItemCount() == 0 && !ShareSearchAdapter.this.searchAdapterHelper.isSearchInProgress()) {
+                        ShareSearchAdapter shareSearchAdapter2 = ShareSearchAdapter.this;
+                        if (!shareSearchAdapter2.internalDialogsIsSearching) {
+                            ShareAlert.this.searchEmptyView.showTextView();
+                            ShareSearchAdapter.this.notifyDataSetChanged();
+                        }
+                    }
+                    ShareAlert.this.recyclerItemsEnterAnimator.showItemsAnimated(i2);
                     ShareSearchAdapter.this.notifyDataSetChanged();
                 }
 
@@ -2552,6 +2568,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         public /* synthetic */ void lambda$updateSearchResults$2$ShareAlert$ShareSearchAdapter(int i, ArrayList arrayList) {
             boolean z;
             if (i == this.lastSearchId) {
+                getItemCount();
+                this.internalDialogsIsSearching = false;
                 this.lastLocalSearchId = i;
                 if (this.lastGlobalSearchId != i) {
                     this.searchAdapterHelper.clear();
@@ -2559,7 +2577,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 if (ShareAlert.this.gridView.getAdapter() != ShareAlert.this.searchAdapter) {
                     ShareAlert shareAlert = ShareAlert.this;
                     int unused = shareAlert.topBeforeSwitch = shareAlert.getCurrentTop();
-                    ShareAlert.this.gridView.setAdapter(ShareAlert.this.searchAdapter);
                     ShareAlert.this.searchAdapter.notifyDataSetChanged();
                 }
                 int i2 = 0;
@@ -2586,12 +2603,17 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 }
                 this.searchResult = arrayList;
                 this.searchAdapterHelper.mergeResults(arrayList);
+                int i3 = this.lastItemCont;
+                if (getItemCount() != 0 || this.searchAdapterHelper.isSearchInProgress() || this.internalDialogsIsSearching) {
+                    ShareAlert.this.recyclerItemsEnterAnimator.showItemsAnimated(i3);
+                } else {
+                    ShareAlert.this.searchEmptyView.showTextView();
+                }
                 notifyDataSetChanged();
                 if (!z && !z2 && ShareAlert.this.topBeforeSwitch > 0) {
                     ShareAlert.this.layoutManager.scrollToPositionWithOffset(0, -ShareAlert.this.topBeforeSwitch);
                     int unused3 = ShareAlert.this.topBeforeSwitch = -1000;
                 }
-                ShareAlert.this.searchEmptyView.showTextView();
             }
         }
 
@@ -2607,20 +2629,25 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     AndroidUtilities.cancelRunOnUIThread(runnable);
                     this.searchRunnable2 = null;
                 }
+                this.searchResult.clear();
+                this.searchAdapterHelper.mergeResults((ArrayList<Object>) null);
+                this.searchAdapterHelper.queryServerSearch((String) null, true, true, true, true, false, 0, false, 0, 0);
+                notifyDataSetChanged();
                 if (TextUtils.isEmpty(str)) {
-                    this.searchResult.clear();
-                    this.searchAdapterHelper.mergeResults((ArrayList<Object>) null);
-                    this.searchAdapterHelper.queryServerSearch((String) null, true, true, true, true, false, 0, false, 0, 0);
                     ShareAlert shareAlert = ShareAlert.this;
                     int unused = shareAlert.topBeforeSwitch = shareAlert.getCurrentTop();
                     this.lastSearchId = -1;
-                    notifyDataSetChanged();
+                    this.internalDialogsIsSearching = false;
+                    ShareAlert.this.gridView.setAdapter(ShareAlert.this.listAdapter);
                     return;
                 }
+                ShareAlert.this.gridView.setAdapter(ShareAlert.this.searchAdapter);
+                this.internalDialogsIsSearching = true;
                 int i = this.lastSearchId + 1;
                 this.lastSearchId = i;
+                ShareAlert.this.searchEmptyView.showProgress(false);
                 DispatchQueue dispatchQueue = Utilities.searchQueue;
-                $$Lambda$ShareAlert$ShareSearchAdapter$xWORWmbZu4PZ9TNXoxvlvdahI r2 = new Runnable(str, i) {
+                $$Lambda$ShareAlert$ShareSearchAdapter$xWORWmbZu4PZ9TNXoxvlvdahI r1 = new Runnable(str, i) {
                     public final /* synthetic */ String f$1;
                     public final /* synthetic */ int f$2;
 
@@ -2633,8 +2660,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         ShareAlert.ShareSearchAdapter.this.lambda$searchDialogs$4$ShareAlert$ShareSearchAdapter(this.f$1, this.f$2);
                     }
                 };
-                this.searchRunnable = r2;
-                dispatchQueue.postRunnable(r2, 300);
+                this.searchRunnable = r1;
+                dispatchQueue.postRunnable(r1, 300);
             }
         }
 
@@ -2671,7 +2698,11 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         public int getItemCount() {
             int size = this.searchResult.size() + this.searchAdapterHelper.getLocalServerSearch().size();
-            return size != 0 ? size + 1 : size;
+            if (size != 0) {
+                size++;
+            }
+            this.lastItemCont = size;
+            return size;
         }
 
         public TLRPC$Dialog getItem(int i) {

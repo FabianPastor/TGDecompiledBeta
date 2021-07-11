@@ -169,6 +169,7 @@ public class Painting {
                     GLES20.glBindTexture(3553, this.brushTexture.texture());
                     GLES20.glUniformMatrix4fv(shader.getUniform("mvpMatrix"), 1, false, FloatBuffer.wrap(this.projection));
                     GLES20.glUniform1i(shader.getUniform("texture"), 0);
+                    this.renderState.viewportScale = this.renderView.getScaleX();
                     rectF = Render.RenderPath(path, this.renderState);
                 } else {
                     return;

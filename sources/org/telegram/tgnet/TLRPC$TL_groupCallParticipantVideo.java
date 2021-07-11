@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class TLRPC$TL_groupCallParticipantVideo extends TLObject {
     public static int constructor = NUM;
+    public int audio_source;
     public String endpoint;
     public int flags;
     public boolean paused;
@@ -39,6 +40,9 @@ public class TLRPC$TL_groupCallParticipantVideo extends TLObject {
                     return;
                 }
             }
+            if ((this.flags & 2) != 0) {
+                this.audio_source = abstractSerializedData.readInt32(z);
+            }
         } else if (z) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
         }
@@ -55,6 +59,9 @@ public class TLRPC$TL_groupCallParticipantVideo extends TLObject {
         abstractSerializedData.writeInt32(size);
         for (int i2 = 0; i2 < size; i2++) {
             this.source_groups.get(i2).serializeToStream(abstractSerializedData);
+        }
+        if ((this.flags & 2) != 0) {
+            abstractSerializedData.writeInt32(this.audio_source);
         }
     }
 }

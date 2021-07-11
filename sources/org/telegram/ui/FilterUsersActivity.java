@@ -1148,13 +1148,13 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 android.view.View r12 = r12.itemView
                 org.telegram.ui.Cells.GraySectionCell r12 = (org.telegram.ui.Cells.GraySectionCell) r12
                 if (r13 != 0) goto L_0x0020
-                r13 = 2131625507(0x7f0e0623, float:1.8878224E38)
+                r13 = 2131625524(0x7f0e0634, float:1.8878258E38)
                 java.lang.String r0 = "FilterChatTypes"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)
                 goto L_0x022d
             L_0x0020:
-                r13 = 2131625508(0x7f0e0624, float:1.8878226E38)
+                r13 = 2131625525(0x7f0e0635, float:1.887826E38)
                 java.lang.String r0 = "FilterChats"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 r12.setText(r13)
@@ -1281,7 +1281,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 boolean r0 = r0.isInclude
                 if (r0 == 0) goto L_0x0175
                 if (r13 != r2) goto L_0x0135
-                r13 = 2131625513(0x7f0e0629, float:1.8878236E38)
+                r13 = 2131625530(0x7f0e063a, float:1.887827E38)
                 java.lang.String r0 = "FilterContacts"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
@@ -1289,7 +1289,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 goto L_0x01a2
             L_0x0135:
                 if (r13 != r1) goto L_0x0145
-                r13 = 2131625543(0x7f0e0647, float:1.8878297E38)
+                r13 = 2131625560(0x7f0e0658, float:1.8878331E38)
                 java.lang.String r0 = "FilterNonContacts"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
@@ -1298,7 +1298,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             L_0x0145:
                 r0 = 3
                 if (r13 != r0) goto L_0x0156
-                r13 = 2131625530(0x7f0e063a, float:1.887827E38)
+                r13 = 2131625547(0x7f0e064b, float:1.8878305E38)
                 java.lang.String r0 = "FilterGroups"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
@@ -1307,14 +1307,14 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
             L_0x0156:
                 r0 = 4
                 if (r13 != r0) goto L_0x0167
-                r13 = 2131625504(0x7f0e0620, float:1.8878218E38)
+                r13 = 2131625521(0x7f0e0631, float:1.8878252E38)
                 java.lang.String r0 = "FilterChannels"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
                 java.lang.String r1 = "channels"
                 goto L_0x01a2
             L_0x0167:
-                r13 = 2131625503(0x7f0e061f, float:1.8878216E38)
+                r13 = 2131625520(0x7f0e0630, float:1.887825E38)
                 java.lang.String r0 = "FilterBots"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
@@ -1322,7 +1322,7 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 goto L_0x01a2
             L_0x0175:
                 if (r13 != r2) goto L_0x0185
-                r13 = 2131625533(0x7f0e063d, float:1.8878277E38)
+                r13 = 2131625550(0x7f0e064e, float:1.8878311E38)
                 java.lang.String r0 = "FilterMuted"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
@@ -1330,14 +1330,14 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                 goto L_0x01a2
             L_0x0185:
                 if (r13 != r1) goto L_0x0195
-                r13 = 2131625544(0x7f0e0648, float:1.8878299E38)
+                r13 = 2131625561(0x7f0e0659, float:1.8878333E38)
                 java.lang.String r0 = "FilterRead"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_READ
                 java.lang.String r1 = "read"
                 goto L_0x01a2
             L_0x0195:
-                r13 = 2131625500(0x7f0e061c, float:1.887821E38)
+                r13 = 2131625517(0x7f0e062d, float:1.8878244E38)
                 java.lang.String r0 = "FilterArchived"
                 java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
                 int r0 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED

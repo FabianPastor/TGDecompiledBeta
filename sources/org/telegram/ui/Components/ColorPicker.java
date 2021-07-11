@@ -506,6 +506,9 @@ public class ColorPicker extends FrameLayout {
                     RadioButton[] radioButtonArr = this.radioButton;
                     radioButtonArr[1].setColor(generateGradientColors(radioButtonArr[0].getColor()));
                 }
+                if (this.myMessagesColor) {
+                    this.delegate.setColor(this.radioButton[0].getColor(), 0, true);
+                }
                 this.delegate.setColor(this.radioButton[1].getColor(), 1, true);
                 this.colorsCount = 2;
                 this.clearButton.setVisibility(0);

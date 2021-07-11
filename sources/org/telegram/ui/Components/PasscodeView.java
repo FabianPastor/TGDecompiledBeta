@@ -248,65 +248,67 @@ public class PasscodeView extends FrameLayout {
             return this.stringBuilder.length();
         }
 
-        public void eraseLastCharacter() {
-            if (this.stringBuilder.length() != 0) {
-                try {
-                    performHapticFeedback(3);
-                } catch (Exception e) {
-                    FileLog.e((Throwable) e);
-                }
-                ArrayList arrayList = new ArrayList();
-                int length = this.stringBuilder.length() - 1;
-                if (length != 0) {
-                    this.stringBuilder.deleteCharAt(length);
-                }
-                for (int i = length; i < 4; i++) {
-                    TextView textView = this.characterTextViews.get(i);
-                    if (textView.getAlpha() != 0.0f) {
-                        arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, View.ALPHA, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_Y, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_X, new float[]{(float) getXForTextView(i)}));
-                    }
-                    TextView textView2 = this.dotTextViews.get(i);
-                    if (textView2.getAlpha() != 0.0f) {
-                        arrayList.add(ObjectAnimator.ofFloat(textView2, View.SCALE_X, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView2, View.SCALE_Y, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView2, View.ALPHA, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView2, View.TRANSLATION_Y, new float[]{0.0f}));
-                        arrayList.add(ObjectAnimator.ofFloat(textView2, View.TRANSLATION_X, new float[]{(float) getXForTextView(i)}));
-                    }
-                }
-                if (length == 0) {
-                    this.stringBuilder.deleteCharAt(length);
-                }
-                for (int i2 = 0; i2 < length; i2++) {
-                    arrayList.add(ObjectAnimator.ofFloat(this.characterTextViews.get(i2), View.TRANSLATION_X, new float[]{(float) getXForTextView(i2)}));
-                    arrayList.add(ObjectAnimator.ofFloat(this.dotTextViews.get(i2), View.TRANSLATION_X, new float[]{(float) getXForTextView(i2)}));
-                }
-                Runnable runnable = this.dotRunnable;
-                if (runnable != null) {
-                    AndroidUtilities.cancelRunOnUIThread(runnable);
-                    this.dotRunnable = null;
-                }
-                AnimatorSet animatorSet = this.currentAnimation;
-                if (animatorSet != null) {
-                    animatorSet.cancel();
-                }
-                AnimatorSet animatorSet2 = new AnimatorSet();
-                this.currentAnimation = animatorSet2;
-                animatorSet2.setDuration(150);
-                this.currentAnimation.playTogether(arrayList);
-                this.currentAnimation.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        if (AnimatingTextView.this.currentAnimation != null && AnimatingTextView.this.currentAnimation.equals(animator)) {
-                            AnimatorSet unused = AnimatingTextView.this.currentAnimation = null;
-                        }
-                    }
-                });
-                this.currentAnimation.start();
+        public boolean eraseLastCharacter() {
+            if (this.stringBuilder.length() == 0) {
+                return false;
             }
+            try {
+                performHapticFeedback(3);
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+            }
+            ArrayList arrayList = new ArrayList();
+            int length = this.stringBuilder.length() - 1;
+            if (length != 0) {
+                this.stringBuilder.deleteCharAt(length);
+            }
+            for (int i = length; i < 4; i++) {
+                TextView textView = this.characterTextViews.get(i);
+                if (textView.getAlpha() != 0.0f) {
+                    arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_X, new float[]{0.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView, View.SCALE_Y, new float[]{0.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView, View.ALPHA, new float[]{0.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_Y, new float[]{0.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView, View.TRANSLATION_X, new float[]{(float) getXForTextView(i)}));
+                }
+                TextView textView2 = this.dotTextViews.get(i);
+                if (textView2.getAlpha() != 0.0f) {
+                    arrayList.add(ObjectAnimator.ofFloat(textView2, View.SCALE_X, new float[]{0.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView2, View.SCALE_Y, new float[]{0.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView2, View.ALPHA, new float[]{0.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView2, View.TRANSLATION_Y, new float[]{0.0f}));
+                    arrayList.add(ObjectAnimator.ofFloat(textView2, View.TRANSLATION_X, new float[]{(float) getXForTextView(i)}));
+                }
+            }
+            if (length == 0) {
+                this.stringBuilder.deleteCharAt(length);
+            }
+            for (int i2 = 0; i2 < length; i2++) {
+                arrayList.add(ObjectAnimator.ofFloat(this.characterTextViews.get(i2), View.TRANSLATION_X, new float[]{(float) getXForTextView(i2)}));
+                arrayList.add(ObjectAnimator.ofFloat(this.dotTextViews.get(i2), View.TRANSLATION_X, new float[]{(float) getXForTextView(i2)}));
+            }
+            Runnable runnable = this.dotRunnable;
+            if (runnable != null) {
+                AndroidUtilities.cancelRunOnUIThread(runnable);
+                this.dotRunnable = null;
+            }
+            AnimatorSet animatorSet = this.currentAnimation;
+            if (animatorSet != null) {
+                animatorSet.cancel();
+            }
+            AnimatorSet animatorSet2 = new AnimatorSet();
+            this.currentAnimation = animatorSet2;
+            animatorSet2.setDuration(150);
+            this.currentAnimation.playTogether(arrayList);
+            this.currentAnimation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    if (AnimatingTextView.this.currentAnimation != null && AnimatingTextView.this.currentAnimation.equals(animator)) {
+                        AnimatorSet unused = AnimatingTextView.this.currentAnimation = null;
+                    }
+                }
+            });
+            this.currentAnimation.start();
+            return true;
         }
 
         /* access modifiers changed from: private */
@@ -694,13 +696,19 @@ public class PasscodeView extends FrameLayout {
     public /* synthetic */ boolean lambda$new$2$PasscodeView(View view) {
         this.passwordEditText.setText("");
         this.passwordEditText2.eraseAllCharacters(true);
+        Drawable drawable = this.backgroundDrawable;
+        if (drawable instanceof MotionBackgroundDrawable) {
+            ((MotionBackgroundDrawable) drawable).switchToPrevPosition();
+        }
         return true;
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$3 */
     public /* synthetic */ void lambda$new$3$PasscodeView(View view) {
-        switch (((Integer) view.getTag()).intValue()) {
+        boolean z;
+        int intValue = ((Integer) view.getTag()).intValue();
+        switch (intValue) {
             case 0:
                 this.passwordEditText2.appendCharacter("0");
                 break;
@@ -732,11 +740,23 @@ public class PasscodeView extends FrameLayout {
                 this.passwordEditText2.appendCharacter("9");
                 break;
             case 10:
-                this.passwordEditText2.eraseLastCharacter();
+                z = this.passwordEditText2.eraseLastCharacter();
                 break;
         }
+        z = false;
         if (this.passwordEditText2.length() == 4) {
             processDone(false);
+        }
+        if (intValue != 10) {
+            Drawable drawable = this.backgroundDrawable;
+            if (drawable instanceof MotionBackgroundDrawable) {
+                ((MotionBackgroundDrawable) drawable).switchToNextPosition();
+            }
+        } else if (z) {
+            Drawable drawable2 = this.backgroundDrawable;
+            if (drawable2 instanceof MotionBackgroundDrawable) {
+                ((MotionBackgroundDrawable) drawable2).switchToPrevPosition();
+            }
         }
     }
 
@@ -1061,7 +1081,7 @@ public class PasscodeView extends FrameLayout {
         if (getVisibility() != 0) {
             setAlpha(1.0f);
             setTranslationY(0.0f);
-            if (Theme.isCustomTheme()) {
+            if (Theme.isCustomTheme() || (Theme.getCachedWallpaper() instanceof MotionBackgroundDrawable)) {
                 this.backgroundDrawable = Theme.getCachedWallpaper();
                 this.backgroundFrameLayout.setBackgroundColor(-NUM);
             } else if ("d".equals(Theme.getSelectedBackgroundSlug())) {
@@ -1074,6 +1094,10 @@ public class PasscodeView extends FrameLayout {
                 } else {
                     this.backgroundFrameLayout.setBackgroundColor(-11436898);
                 }
+            }
+            if (this.backgroundDrawable instanceof MotionBackgroundDrawable) {
+                this.backgroundFrameLayout.setBackgroundColor(NUM);
+                ((MotionBackgroundDrawable) this.backgroundDrawable).setParentView(this);
             }
             this.passcodeTextView.setText(LocaleController.getString("EnterYourPasscode", NUM));
             int i = SharedConfig.passcodeType;
@@ -1373,16 +1397,12 @@ public class PasscodeView extends FrameLayout {
                 drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 this.backgroundDrawable.draw(canvas);
             } else {
-                float measuredWidth = ((float) getMeasuredWidth()) / ((float) this.backgroundDrawable.getIntrinsicWidth());
-                float measuredHeight = ((float) (getMeasuredHeight() + this.keyboardHeight)) / ((float) this.backgroundDrawable.getIntrinsicHeight());
-                if (measuredWidth < measuredHeight) {
-                    measuredWidth = measuredHeight;
-                }
-                int ceil = (int) Math.ceil((double) (((float) this.backgroundDrawable.getIntrinsicWidth()) * measuredWidth));
-                int ceil2 = (int) Math.ceil((double) (((float) this.backgroundDrawable.getIntrinsicHeight()) * measuredWidth));
-                int measuredWidth2 = (getMeasuredWidth() - ceil) / 2;
-                int measuredHeight2 = ((getMeasuredHeight() - ceil2) + this.keyboardHeight) / 2;
-                this.backgroundDrawable.setBounds(measuredWidth2, measuredHeight2, ceil + measuredWidth2, ceil2 + measuredHeight2);
+                float max = Math.max(((float) getMeasuredWidth()) / ((float) this.backgroundDrawable.getIntrinsicWidth()), ((float) (getMeasuredHeight() + this.keyboardHeight)) / ((float) this.backgroundDrawable.getIntrinsicHeight()));
+                int ceil = (int) Math.ceil((double) (((float) this.backgroundDrawable.getIntrinsicWidth()) * max));
+                int ceil2 = (int) Math.ceil((double) (((float) this.backgroundDrawable.getIntrinsicHeight()) * max));
+                int measuredWidth = (getMeasuredWidth() - ceil) / 2;
+                int measuredHeight = ((getMeasuredHeight() - ceil2) + this.keyboardHeight) / 2;
+                this.backgroundDrawable.setBounds(measuredWidth, measuredHeight, ceil + measuredWidth, ceil2 + measuredHeight);
                 this.backgroundDrawable.draw(canvas);
             }
         }

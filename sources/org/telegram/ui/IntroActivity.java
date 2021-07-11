@@ -3,6 +3,8 @@ package org.telegram.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -46,6 +48,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BottomPagesView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
+import org.telegram.ui.Components.voip.CellFlickerDrawable;
 import org.telegram.ui.IntroActivity;
 
 public class IntroActivity extends Activity implements NotificationCenter.NotificationCenterDelegate {
@@ -193,16 +196,43 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 }
             }
         });
-        TextView textView2 = new TextView(this);
-        this.startMessagingButton = textView2;
-        textView2.setText(LocaleController.getString("StartMessaging", NUM));
+        AnonymousClass4 r7 = new TextView(this) {
+            CellFlickerDrawable cellFlickerDrawable;
+
+            /* access modifiers changed from: protected */
+            public void onDraw(Canvas canvas) {
+                super.onDraw(canvas);
+                if (this.cellFlickerDrawable == null) {
+                    CellFlickerDrawable cellFlickerDrawable2 = new CellFlickerDrawable();
+                    this.cellFlickerDrawable = cellFlickerDrawable2;
+                    cellFlickerDrawable2.drawFrame = false;
+                    cellFlickerDrawable2.repeatProgress = 2.0f;
+                }
+                this.cellFlickerDrawable.setParentWidth(getMeasuredWidth());
+                RectF rectF = AndroidUtilities.rectTmp;
+                rectF.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+                this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(4.0f));
+                invalidate();
+            }
+
+            /* access modifiers changed from: protected */
+            public void onMeasure(int i, int i2) {
+                if (View.MeasureSpec.getSize(i) > AndroidUtilities.dp(260.0f)) {
+                    super.onMeasure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(320.0f), NUM), i2);
+                } else {
+                    super.onMeasure(i, i2);
+                }
+            }
+        };
+        this.startMessagingButton = r7;
+        r7.setText(LocaleController.getString("StartMessaging", NUM));
         this.startMessagingButton.setGravity(17);
         this.startMessagingButton.setTextColor(-1);
         this.startMessagingButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.startMessagingButton.setTextSize(1, 14.0f);
+        this.startMessagingButton.setTextSize(1, 15.0f);
         this.startMessagingButton.setBackgroundDrawable(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), -11491093, -12346402));
         this.startMessagingButton.setPadding(AndroidUtilities.dp(34.0f), 0, AndroidUtilities.dp(34.0f), 0);
-        r4.addView(this.startMessagingButton, LayoutHelper.createFrame(-2, 42.0f, 81, 10.0f, 0.0f, 10.0f, 76.0f));
+        r4.addView(this.startMessagingButton, LayoutHelper.createFrame(-1, 42.0f, 81, 36.0f, 0.0f, 36.0f, 76.0f));
         this.startMessagingButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 IntroActivity.this.lambda$onCreate$0$IntroActivity(view);
@@ -218,9 +248,9 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         BottomPagesView bottomPagesView = new BottomPagesView(this, this.viewPager, 6);
         this.bottomPages = bottomPagesView;
         r4.addView(bottomPagesView, LayoutHelper.createFrame(66, 5.0f, 49, 0.0f, 350.0f, 0.0f, 0.0f));
-        TextView textView3 = new TextView(this);
-        this.textView = textView3;
-        textView3.setTextColor(-15494190);
+        TextView textView2 = new TextView(this);
+        this.textView = textView2;
+        textView2.setTextColor(-15494190);
         this.textView.setGravity(17);
         this.textView.setTextSize(1, 16.0f);
         r4.addView(this.textView, LayoutHelper.createFrame(-2, 30.0f, 81, 0.0f, 0.0f, 0.0f, 20.0f));
@@ -232,7 +262,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         if (AndroidUtilities.isTablet()) {
             FrameLayout frameLayout3 = new FrameLayout(this);
             setContentView(frameLayout3);
-            AnonymousClass4 r42 = new SizeNotifierFrameLayout(this) {
+            AnonymousClass5 r42 = new SizeNotifierFrameLayout(this) {
                 /* access modifiers changed from: protected */
                 public boolean isActionBarVisible() {
                     return false;

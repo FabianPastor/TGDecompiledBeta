@@ -18,6 +18,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.SystemClock;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -32,6 +33,7 @@ import androidx.annotation.Keep;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
@@ -375,9 +377,12 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void drawHeaderShadow(Canvas canvas, int i, int i2) {
-        Drawable drawable = headerShadowDrawable;
-        if (drawable != null) {
-            drawable.setAlpha(i);
+        if (headerShadowDrawable != null) {
+            if (Build.VERSION.SDK_INT < 19) {
+                headerShadowDrawable.setAlpha(i);
+            } else if (headerShadowDrawable.getAlpha() != i) {
+                headerShadowDrawable.setAlpha(i);
+            }
             headerShadowDrawable.setBounds(0, i2, getMeasuredWidth(), headerShadowDrawable.getIntrinsicHeight() + i2);
             headerShadowDrawable.draw(canvas);
         }
@@ -1339,7 +1344,9 @@ public class ActionBarLayout extends FrameLayout {
         if ((actionBarLayoutDelegate != null && !actionBarLayoutDelegate.needAddFragmentToStack(baseFragment, this)) || !baseFragment.onFragmentCreate()) {
             return false;
         }
+        FileLog.d("UI create11-500 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         baseFragment.setParentLayout(this);
+        FileLog.d("UI create11-501 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         if (i == -1) {
             if (!this.fragmentsStack.isEmpty()) {
                 ArrayList<BaseFragment> arrayList = this.fragmentsStack;
@@ -1349,16 +1356,20 @@ public class ActionBarLayout extends FrameLayout {
                 if (!(actionBar == null || !actionBar.shouldAddToContainer() || (viewGroup2 = (ViewGroup) baseFragment2.actionBar.getParent()) == null)) {
                     viewGroup2.removeView(baseFragment2.actionBar);
                 }
+                FileLog.d("UI create11-502 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
                 View view = baseFragment2.fragmentView;
                 if (!(view == null || (viewGroup = (ViewGroup) view.getParent()) == null)) {
                     baseFragment2.onRemoveFromParent();
                     viewGroup.removeView(baseFragment2.fragmentView);
                 }
+                FileLog.d("UI create11-503 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
             }
             this.fragmentsStack.add(baseFragment);
+            FileLog.d("UI create11-504 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         } else {
             this.fragmentsStack.add(i, baseFragment);
         }
+        FileLog.d("UI create11-505 time = " + (SystemClock.elapsedRealtime() - ApplicationLoader.startTime));
         return true;
     }
 

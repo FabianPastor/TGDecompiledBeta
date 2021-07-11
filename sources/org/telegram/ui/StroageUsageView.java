@@ -4,7 +4,9 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.text.SpannableString;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -15,18 +17,25 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.TextSettingsCell;
+import org.telegram.ui.Components.EllipsizeSpanAnimator;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.voip.CellFlickerDrawable;
 
 class StroageUsageView extends FrameLayout {
     /* access modifiers changed from: private */
     public Paint bgPaint = new Paint();
     /* access modifiers changed from: private */
     public boolean calculating;
+    float calculatingProgress;
+    boolean calculatingProgressIncrement;
     TextView calculatingTextView;
+    CellFlickerDrawable cellFlickerDrawable = new CellFlickerDrawable(220, 255);
     View divider;
+    EllipsizeSpanAnimator ellipsizeSpanAnimator;
     TextView freeSizeTextView;
     int lastProgressColor;
     ViewGroup legendLayout;
+    private Paint paintCalculcating = new Paint(1);
     /* access modifiers changed from: private */
     public Paint paintFill = new Paint(1);
     /* access modifiers changed from: private */
@@ -49,10 +58,13 @@ class StroageUsageView extends FrameLayout {
     public StroageUsageView(Context context) {
         super(context);
         setWillNotDraw(false);
+        this.cellFlickerDrawable.drawFrame = false;
         this.paintFill.setStrokeWidth((float) AndroidUtilities.dp(6.0f));
+        this.paintCalculcating.setStrokeWidth((float) AndroidUtilities.dp(6.0f));
         this.paintProgress.setStrokeWidth((float) AndroidUtilities.dp(6.0f));
         this.paintProgress2.setStrokeWidth((float) AndroidUtilities.dp(6.0f));
         this.paintFill.setStrokeCap(Paint.Cap.ROUND);
+        this.paintCalculcating.setStrokeCap(Paint.Cap.ROUND);
         this.paintProgress.setStrokeCap(Paint.Cap.ROUND);
         this.paintProgress2.setStrokeCap(Paint.Cap.ROUND);
         ProgressView progressView2 = new ProgressView(context);
@@ -104,7 +116,17 @@ class StroageUsageView extends FrameLayout {
         TextView textView = new TextView(context);
         this.calculatingTextView = textView;
         textView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
-        this.calculatingTextView.setText(LocaleController.getString("CalculatingSize", NUM));
+        String string = LocaleController.getString("CalculatingSize", NUM);
+        int indexOf = string.indexOf("...");
+        if (indexOf >= 0) {
+            SpannableString spannableString = new SpannableString(string);
+            EllipsizeSpanAnimator ellipsizeSpanAnimator2 = new EllipsizeSpanAnimator(this.calculatingTextView);
+            this.ellipsizeSpanAnimator = ellipsizeSpanAnimator2;
+            ellipsizeSpanAnimator2.wrap(spannableString, indexOf);
+            this.calculatingTextView.setText(spannableString);
+        } else {
+            this.calculatingTextView.setText(string);
+        }
         TextView textView2 = new TextView(context);
         this.telegramCacheTextView = textView2;
         textView2.setCompoundDrawablePadding(AndroidUtilities.dp(6.0f));
@@ -167,7 +189,15 @@ class StroageUsageView extends FrameLayout {
             this.textSettingsCell.setVisibility(8);
             this.progress = 0.0f;
             this.progress2 = 0.0f;
+            EllipsizeSpanAnimator ellipsizeSpanAnimator2 = this.ellipsizeSpanAnimator;
+            if (ellipsizeSpanAnimator2 != null) {
+                ellipsizeSpanAnimator2.addView(this.calculatingTextView);
+            }
         } else {
+            EllipsizeSpanAnimator ellipsizeSpanAnimator3 = this.ellipsizeSpanAnimator;
+            if (ellipsizeSpanAnimator3 != null) {
+                ellipsizeSpanAnimator3.removeView(this.calculatingTextView);
+            }
             this.calculatingTextView.setVisibility(8);
             if (j5 > 0) {
                 this.divider.setVisibility(0);
@@ -277,13 +307,46 @@ class StroageUsageView extends FrameLayout {
             StroageUsageView.this.bgPaint.setColor(Theme.getColor("windowBackgroundWhite"));
             Canvas canvas2 = canvas;
             canvas2.drawLine((float) AndroidUtilities.dp(24.0f), (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredWidth() - AndroidUtilities.dp(24.0f)), (float) AndroidUtilities.dp(20.0f), StroageUsageView.this.paintFill);
+            if (StroageUsageView.this.calculating || StroageUsageView.this.calculatingProgress != 0.0f) {
+                if (StroageUsageView.this.calculating) {
+                    StroageUsageView stroageUsageView = StroageUsageView.this;
+                    if (stroageUsageView.calculatingProgressIncrement) {
+                        float f = stroageUsageView.calculatingProgress + 0.024615385f;
+                        stroageUsageView.calculatingProgress = f;
+                        if (f > 1.0f) {
+                            stroageUsageView.calculatingProgress = 1.0f;
+                            stroageUsageView.calculatingProgressIncrement = false;
+                        }
+                    } else {
+                        float f2 = stroageUsageView.calculatingProgress - 0.024615385f;
+                        stroageUsageView.calculatingProgress = f2;
+                        if (f2 < 0.0f) {
+                            stroageUsageView.calculatingProgress = 0.0f;
+                            stroageUsageView.calculatingProgressIncrement = true;
+                        }
+                    }
+                } else {
+                    StroageUsageView stroageUsageView2 = StroageUsageView.this;
+                    float f3 = stroageUsageView2.calculatingProgress - 0.10666667f;
+                    stroageUsageView2.calculatingProgress = f3;
+                    if (f3 < 0.0f) {
+                        stroageUsageView2.calculatingProgress = 0.0f;
+                    }
+                }
+                invalidate();
+                RectF rectF = AndroidUtilities.rectTmp;
+                rectF.set((float) AndroidUtilities.dp(24.0f), (float) AndroidUtilities.dp(17.0f), (float) (getMeasuredWidth() - AndroidUtilities.dp(24.0f)), (float) AndroidUtilities.dp(23.0f));
+                StroageUsageView.this.cellFlickerDrawable.setParentWidth(getMeasuredWidth());
+                StroageUsageView.this.cellFlickerDrawable.draw(canvas, rectF, (float) AndroidUtilities.dp(3.0f));
+            } else {
+                Canvas canvas3 = canvas;
+            }
             int dp = AndroidUtilities.dp(24.0f);
             if (!StroageUsageView.this.calculating) {
                 int measuredWidth = (int) (((float) (getMeasuredWidth() - (AndroidUtilities.dp(24.0f) * 2))) * StroageUsageView.this.progress2);
                 int dp2 = AndroidUtilities.dp(24.0f) + measuredWidth;
                 canvas.drawLine((float) dp, (float) AndroidUtilities.dp(20.0f), (float) (AndroidUtilities.dp(24.0f) + measuredWidth), (float) AndroidUtilities.dp(20.0f), StroageUsageView.this.paintProgress2);
-                Canvas canvas3 = canvas;
-                canvas3.drawRect((float) dp2, (float) (AndroidUtilities.dp(20.0f) - AndroidUtilities.dp(3.0f)), (float) (dp2 + AndroidUtilities.dp(3.0f)), (float) (AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(3.0f)), StroageUsageView.this.bgPaint);
+                canvas.drawRect((float) dp2, (float) (AndroidUtilities.dp(20.0f) - AndroidUtilities.dp(3.0f)), (float) (dp2 + AndroidUtilities.dp(3.0f)), (float) (AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(3.0f)), StroageUsageView.this.bgPaint);
             }
             if (!StroageUsageView.this.calculating) {
                 int measuredWidth2 = (int) (((float) (getMeasuredWidth() - (AndroidUtilities.dp(24.0f) * 2))) * StroageUsageView.this.progress);
@@ -291,10 +354,28 @@ class StroageUsageView extends FrameLayout {
                     measuredWidth2 = AndroidUtilities.dp(1.0f);
                 }
                 int dp3 = AndroidUtilities.dp(24.0f) + measuredWidth2;
-                canvas.drawLine((float) dp, (float) AndroidUtilities.dp(20.0f), (float) (AndroidUtilities.dp(24.0f) + measuredWidth2), (float) AndroidUtilities.dp(20.0f), StroageUsageView.this.paintProgress);
                 Canvas canvas4 = canvas;
+                canvas4.drawLine((float) dp, (float) AndroidUtilities.dp(20.0f), (float) (AndroidUtilities.dp(24.0f) + measuredWidth2), (float) AndroidUtilities.dp(20.0f), StroageUsageView.this.paintProgress);
                 canvas4.drawRect((float) dp3, (float) (AndroidUtilities.dp(20.0f) - AndroidUtilities.dp(3.0f)), (float) (dp3 + AndroidUtilities.dp(3.0f)), (float) (AndroidUtilities.dp(20.0f) + AndroidUtilities.dp(3.0f)), StroageUsageView.this.bgPaint);
             }
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        EllipsizeSpanAnimator ellipsizeSpanAnimator2 = this.ellipsizeSpanAnimator;
+        if (ellipsizeSpanAnimator2 != null) {
+            ellipsizeSpanAnimator2.onAttachedToWindow();
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        EllipsizeSpanAnimator ellipsizeSpanAnimator2 = this.ellipsizeSpanAnimator;
+        if (ellipsizeSpanAnimator2 != null) {
+            ellipsizeSpanAnimator2.onDetachedFromWindow();
         }
     }
 }

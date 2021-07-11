@@ -272,9 +272,6 @@ public class Emoji {
             return -2;
         }
 
-        public void setAlpha(int i) {
-        }
-
         public void setColorFilter(ColorFilter colorFilter) {
         }
 
@@ -315,6 +312,11 @@ public class Emoji {
                 DrawableInfo drawableInfo2 = this.info;
                 canvas.drawBitmap(access$500[drawableInfo2.page][drawableInfo2.page2], (Rect) null, rect2, paint);
             }
+        }
+
+        public void setAlpha(int i) {
+            Emoji.placeholderPaint.setAlpha(i);
+            paint.setAlpha(i);
         }
 
         public boolean isLoaded() {
@@ -806,6 +808,20 @@ public class Emoji {
                 drawable.setBounds(0, 0, i5, i5);
             }
             return this.size;
+        }
+
+        public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
+            boolean z;
+            if (paint.getAlpha() != 255) {
+                z = true;
+                getDrawable().setAlpha(paint.getAlpha());
+            } else {
+                z = false;
+            }
+            super.draw(canvas, charSequence, i, i2, f, i3, i4, i5, paint);
+            if (z) {
+                getDrawable().setAlpha(255);
+            }
         }
     }
 

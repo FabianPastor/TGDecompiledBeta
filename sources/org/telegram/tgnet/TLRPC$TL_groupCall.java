@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
-    public static int constructor = NUM;
+    public static int constructor = -NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -30,6 +30,10 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         if ((this.flags & 128) != 0) {
             this.schedule_date = abstractSerializedData.readInt32(z);
         }
+        if ((this.flags & 1024) != 0) {
+            this.unmuted_video_count = abstractSerializedData.readInt32(z);
+        }
+        this.unmuted_video_limit = abstractSerializedData.readInt32(z);
         this.version = abstractSerializedData.readInt32(z);
     }
 
@@ -61,6 +65,10 @@ public class TLRPC$TL_groupCall extends TLRPC$GroupCall {
         if ((this.flags & 128) != 0) {
             abstractSerializedData.writeInt32(this.schedule_date);
         }
+        if ((this.flags & 1024) != 0) {
+            abstractSerializedData.writeInt32(this.unmuted_video_count);
+        }
+        abstractSerializedData.writeInt32(this.unmuted_video_limit);
         abstractSerializedData.writeInt32(this.version);
     }
 }

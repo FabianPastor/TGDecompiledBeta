@@ -832,7 +832,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r6.doneItem = r15
             r15.setLongClickEnabled(r10)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.doneItem
-            r1 = 2131625022(0x7f0e043e, float:1.887724E38)
+            r1 = 2131625039(0x7f0e044f, float:1.8877275E38)
             java.lang.String r2 = "Create"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -865,7 +865,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1 = 2131165471(0x7var_f, float:1.794516E38)
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
-            r1 = 2131627311(0x7f0e0d2f, float:1.8881883E38)
+            r1 = 2131627341(0x7f0e0d4d, float:1.8881944E38)
             java.lang.String r2 = "Search"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -1083,7 +1083,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r5 = r16
             r0.<init>(r2, r3, r4, r5)
             r6.commentTextView = r14
-            r0 = 2131624192(0x7f0e0100, float:1.8875557E38)
+            r0 = 2131624194(0x7f0e0102, float:1.887556E38)
             java.lang.String r1 = "AddCaption"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r14.setHint(r0)

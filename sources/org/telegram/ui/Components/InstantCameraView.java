@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -116,8 +117,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public TLRPC$InputEncryptedFile encryptedFile;
     /* access modifiers changed from: private */
     public TLRPC$InputFile file;
+    ValueAnimator finishZoomTransition;
     /* access modifiers changed from: private */
     public boolean isFrontface = true;
+    boolean isInPinchToZoomTouchMode;
     /* access modifiers changed from: private */
     public boolean isSecretChat;
     /* access modifiers changed from: private */
@@ -143,6 +146,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     private float panTranslationY;
     private View parentView;
     private Size pictureSize;
+    float pinchScale;
+    float pinchStartDistance;
+    private int pointerId1;
+    private int pointerId2;
     private int[] position = new int[2];
     /* access modifiers changed from: private */
     public Size previewSize;
@@ -185,6 +192,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         return f2;
     }
 
+    @SuppressLint({"ClickableViewAccessibility"})
     public InstantCameraView(Context context, ChatActivity chatActivity) {
         super(context);
         this.aspectRatio = SharedConfig.roundCamera16to9 ? new Size(16, 9) : new Size(4, 3);
@@ -192,16 +200,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.mSTMatrix = new float[16];
         this.moldSTMatrix = new float[16];
         this.parentView = chatActivity.getFragmentView();
-        setOnTouchListener(new View.OnTouchListener() {
-            public final boolean onTouch(View view, MotionEvent motionEvent) {
-                return InstantCameraView.this.lambda$new$0$InstantCameraView(view, motionEvent);
-            }
-        });
         setWillNotDraw(false);
         this.baseFragment = chatActivity;
         this.recordingGuid = chatActivity.getClassGuid();
         this.isSecretChat = this.baseFragment.getCurrentEncryptedChat() != null;
-        AnonymousClass2 r14 = new Paint(1) {
+        AnonymousClass1 r14 = new Paint(1) {
             public void setAlpha(int i) {
                 super.setAlpha(i);
                 InstantCameraView.this.invalidate();
@@ -214,7 +217,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.paint.setColor(-1);
         this.rect = new RectF();
         if (Build.VERSION.SDK_INT >= 21) {
-            AnonymousClass3 r142 = new InstantViewCameraContainer(context) {
+            AnonymousClass2 r142 = new InstantViewCameraContainer(context) {
                 public void setScaleX(float f) {
                     super.setScaleX(f);
                     InstantCameraView.this.invalidate();
@@ -240,7 +243,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             final Paint paint2 = new Paint(1);
             paint2.setColor(-16777216);
             paint2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-            AnonymousClass5 r0 = new InstantViewCameraContainer(context) {
+            AnonymousClass4 r0 = new InstantViewCameraContainer(context) {
                 public void setScaleX(float f) {
                     super.setScaleX(f);
                     InstantCameraView.this.invalidate();
@@ -278,7 +281,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         addView(this.switchCameraButton, LayoutHelper.createFrame(62, 62.0f, 83, 8.0f, 0.0f, 0.0f, 0.0f));
         this.switchCameraButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                InstantCameraView.this.lambda$new$1$InstantCameraView(view);
+                InstantCameraView.this.lambda$new$0$InstantCameraView(view);
             }
         });
         ImageView imageView2 = new ImageView(context);
@@ -300,60 +303,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$0 */
-    public /* synthetic */ boolean lambda$new$0$InstantCameraView(View view, MotionEvent motionEvent) {
-        ChatActivity chatActivity;
-        if (motionEvent.getAction() == 0 && (chatActivity = this.baseFragment) != null) {
-            VideoPlayer videoPlayer2 = this.videoPlayer;
-            if (videoPlayer2 != null) {
-                boolean z = !videoPlayer2.isMuted();
-                this.videoPlayer.setMute(z);
-                AnimatorSet animatorSet2 = this.muteAnimation;
-                if (animatorSet2 != null) {
-                    animatorSet2.cancel();
-                }
-                AnimatorSet animatorSet3 = new AnimatorSet();
-                this.muteAnimation = animatorSet3;
-                Animator[] animatorArr = new Animator[3];
-                ImageView imageView = this.muteImageView;
-                Property property = View.ALPHA;
-                float[] fArr = new float[1];
-                float f = 1.0f;
-                fArr[0] = z ? 1.0f : 0.0f;
-                animatorArr[0] = ObjectAnimator.ofFloat(imageView, property, fArr);
-                ImageView imageView2 = this.muteImageView;
-                Property property2 = View.SCALE_X;
-                float[] fArr2 = new float[1];
-                fArr2[0] = z ? 1.0f : 0.5f;
-                animatorArr[1] = ObjectAnimator.ofFloat(imageView2, property2, fArr2);
-                ImageView imageView3 = this.muteImageView;
-                Property property3 = View.SCALE_Y;
-                float[] fArr3 = new float[1];
-                if (!z) {
-                    f = 0.5f;
-                }
-                fArr3[0] = f;
-                animatorArr[2] = ObjectAnimator.ofFloat(imageView3, property3, fArr3);
-                animatorSet3.playTogether(animatorArr);
-                this.muteAnimation.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        if (animator.equals(InstantCameraView.this.muteAnimation)) {
-                            AnimatorSet unused = InstantCameraView.this.muteAnimation = null;
-                        }
-                    }
-                });
-                this.muteAnimation.setDuration(180);
-                this.muteAnimation.setInterpolator(new DecelerateInterpolator());
-                this.muteAnimation.start();
-            } else {
-                chatActivity.checkRecordLocked(false);
-            }
-        }
-        return true;
-    }
-
-    /* access modifiers changed from: private */
-    /* renamed from: lambda$new$1 */
-    public /* synthetic */ void lambda$new$1$InstantCameraView(View view) {
+    public /* synthetic */ void lambda$new$0$InstantCameraView(View view) {
         CameraSession cameraSession2;
         if (this.cameraReady && (cameraSession2 = this.cameraSession) != null && cameraSession2.isInitied() && this.cameraThread != null) {
             switchCamera();
@@ -366,6 +316,19 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             });
             duration.start();
         }
+    }
+
+    private boolean checkPointerIds(MotionEvent motionEvent) {
+        if (motionEvent.getPointerCount() < 2) {
+            return false;
+        }
+        if (this.pointerId1 == motionEvent.getPointerId(0) && this.pointerId2 == motionEvent.getPointerId(1)) {
+            return true;
+        }
+        if (this.pointerId1 == motionEvent.getPointerId(1) && this.pointerId2 == motionEvent.getPointerId(0)) {
+            return true;
+        }
+        return false;
     }
 
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
@@ -596,7 +559,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
         ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                InstantCameraView.this.lambda$startAnimation$2$InstantCameraView(valueAnimator);
+                InstantCameraView.this.lambda$startAnimation$1$InstantCameraView(valueAnimator);
             }
         });
         AnimatorSet animatorSet3 = this.animatorSet;
@@ -667,8 +630,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$startAnimation$2 */
-    public /* synthetic */ void lambda$startAnimation$2$InstantCameraView(ValueAnimator valueAnimator) {
+    /* renamed from: lambda$startAnimation$1 */
+    public /* synthetic */ void lambda$startAnimation$1$InstantCameraView(ValueAnimator valueAnimator) {
         this.animationTranslationY = (((float) getMeasuredHeight()) / 2.0f) * ((Float) valueAnimator.getAnimatedValue()).floatValue();
         updateTranslationY();
     }
@@ -978,37 +941,37 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
 
             public final void run() {
-                InstantCameraView.this.lambda$createCamera$5$InstantCameraView(this.f$1);
+                InstantCameraView.this.lambda$createCamera$4$InstantCameraView(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createCamera$5 */
-    public /* synthetic */ void lambda$createCamera$5$InstantCameraView(SurfaceTexture surfaceTexture) {
+    /* renamed from: lambda$createCamera$4 */
+    public /* synthetic */ void lambda$createCamera$4$InstantCameraView(SurfaceTexture surfaceTexture) {
         if (this.cameraThread != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("create camera session");
             }
             surfaceTexture.setDefaultBufferSize(this.previewSize.getWidth(), this.previewSize.getHeight());
-            CameraSession cameraSession2 = new CameraSession(this.selectedCamera, this.previewSize, this.pictureSize, 256);
+            CameraSession cameraSession2 = new CameraSession(this.selectedCamera, this.previewSize, this.pictureSize, 256, true);
             this.cameraSession = cameraSession2;
             this.cameraThread.setCurrentSession(cameraSession2);
             CameraController.getInstance().openRound(this.cameraSession, surfaceTexture, new Runnable() {
                 public final void run() {
-                    InstantCameraView.this.lambda$createCamera$3$InstantCameraView();
+                    InstantCameraView.this.lambda$createCamera$2$InstantCameraView();
                 }
             }, new Runnable() {
                 public final void run() {
-                    InstantCameraView.this.lambda$createCamera$4$InstantCameraView();
+                    InstantCameraView.this.lambda$createCamera$3$InstantCameraView();
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createCamera$3 */
-    public /* synthetic */ void lambda$createCamera$3$InstantCameraView() {
+    /* renamed from: lambda$createCamera$2 */
+    public /* synthetic */ void lambda$createCamera$2$InstantCameraView() {
         if (this.cameraSession != null) {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("camera initied");
@@ -1018,8 +981,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createCamera$4 */
-    public /* synthetic */ void lambda$createCamera$4$InstantCameraView() {
+    /* renamed from: lambda$createCamera$3 */
+    public /* synthetic */ void lambda$createCamera$3$InstantCameraView() {
         this.cameraThread.setCurrentSession(this.cameraSession);
     }
 
@@ -1057,14 +1020,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             public void run() {
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public final void run() {
-                        InstantCameraView.AnonymousClass9.this.lambda$run$0$InstantCameraView$9();
+                        InstantCameraView.AnonymousClass8.this.lambda$run$0$InstantCameraView$8();
                     }
                 });
             }
 
             /* access modifiers changed from: private */
             /* renamed from: lambda$run$0 */
-            public /* synthetic */ void lambda$run$0$InstantCameraView$9() {
+            public /* synthetic */ void lambda$run$0$InstantCameraView$8() {
                 try {
                     if (InstantCameraView.this.videoPlayer != null && InstantCameraView.this.videoEditedInfo != null) {
                         long j = 0;
@@ -2540,7 +2503,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
 
         private void createKeyframeThumb() {
-            if (Build.VERSION.SDK_INT >= 21 && this.frameCount % 33 == 0) {
+            if (Build.VERSION.SDK_INT >= 21 && SharedConfig.getDevicePerformanceClass() != 0 && this.frameCount % 33 == 0) {
                 this.generateKeyframeThumbsQueue.postRunnable(new GenerateKeyframeThumbTask());
             }
         }
@@ -3264,5 +3227,121 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     canvas.restore();
                 }
             }
+        }
+
+        public boolean onTouchEvent(MotionEvent motionEvent) {
+            VideoPlayer videoPlayer2;
+            if (!(motionEvent.getAction() != 0 || this.baseFragment == null || (videoPlayer2 = this.videoPlayer) == null)) {
+                boolean z = !videoPlayer2.isMuted();
+                this.videoPlayer.setMute(z);
+                AnimatorSet animatorSet2 = this.muteAnimation;
+                if (animatorSet2 != null) {
+                    animatorSet2.cancel();
+                }
+                AnimatorSet animatorSet3 = new AnimatorSet();
+                this.muteAnimation = animatorSet3;
+                Animator[] animatorArr = new Animator[3];
+                ImageView imageView = this.muteImageView;
+                Property property = View.ALPHA;
+                float[] fArr = new float[1];
+                fArr[0] = z ? 1.0f : 0.0f;
+                animatorArr[0] = ObjectAnimator.ofFloat(imageView, property, fArr);
+                ImageView imageView2 = this.muteImageView;
+                Property property2 = View.SCALE_X;
+                float[] fArr2 = new float[1];
+                float f = 0.5f;
+                fArr2[0] = z ? 1.0f : 0.5f;
+                animatorArr[1] = ObjectAnimator.ofFloat(imageView2, property2, fArr2);
+                ImageView imageView3 = this.muteImageView;
+                Property property3 = View.SCALE_Y;
+                float[] fArr3 = new float[1];
+                if (z) {
+                    f = 1.0f;
+                }
+                fArr3[0] = f;
+                animatorArr[2] = ObjectAnimator.ofFloat(imageView3, property3, fArr3);
+                animatorSet3.playTogether(animatorArr);
+                this.muteAnimation.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        if (animator.equals(InstantCameraView.this.muteAnimation)) {
+                            AnimatorSet unused = InstantCameraView.this.muteAnimation = null;
+                        }
+                    }
+                });
+                this.muteAnimation.setDuration(180);
+                this.muteAnimation.setInterpolator(new DecelerateInterpolator());
+                this.muteAnimation.start();
+            }
+            if (motionEvent.getActionMasked() == 0 || motionEvent.getActionMasked() == 5) {
+                if (!this.isInPinchToZoomTouchMode && motionEvent.getPointerCount() == 2 && this.finishZoomTransition == null && this.recording) {
+                    this.pinchStartDistance = (float) Math.hypot((double) (motionEvent.getX(1) - motionEvent.getX(0)), (double) (motionEvent.getY(1) - motionEvent.getY(0)));
+                    this.pinchScale = 1.0f;
+                    this.pointerId1 = motionEvent.getPointerId(0);
+                    this.pointerId2 = motionEvent.getPointerId(1);
+                    this.isInPinchToZoomTouchMode = true;
+                }
+                if (motionEvent.getActionMasked() != 0) {
+                    return true;
+                }
+                RectF rectF = AndroidUtilities.rectTmp;
+                rectF.set(this.cameraContainer.getX(), this.cameraContainer.getY(), this.cameraContainer.getX() + ((float) this.cameraContainer.getMeasuredWidth()), this.cameraContainer.getY() + ((float) this.cameraContainer.getMeasuredHeight()));
+                return rectF.contains(motionEvent.getX(), motionEvent.getY());
+            }
+            if (motionEvent.getActionMasked() == 2 && this.isInPinchToZoomTouchMode) {
+                int i = -1;
+                int i2 = -1;
+                for (int i3 = 0; i3 < motionEvent.getPointerCount(); i3++) {
+                    if (this.pointerId1 == motionEvent.getPointerId(i3)) {
+                        i = i3;
+                    }
+                    if (this.pointerId2 == motionEvent.getPointerId(i3)) {
+                        i2 = i3;
+                    }
+                }
+                if (i == -1 || i2 == -1) {
+                    this.isInPinchToZoomTouchMode = false;
+                    finishZoom();
+                    return false;
+                }
+                float hypot = ((float) Math.hypot((double) (motionEvent.getX(i2) - motionEvent.getX(i)), (double) (motionEvent.getY(i2) - motionEvent.getY(i)))) / this.pinchStartDistance;
+                this.pinchScale = hypot;
+                this.cameraSession.setZoom(Math.min(1.0f, Math.max(0.0f, hypot - 1.0f)));
+            } else if ((motionEvent.getActionMasked() == 1 || ((motionEvent.getActionMasked() == 6 && checkPointerIds(motionEvent)) || motionEvent.getActionMasked() == 3)) && this.isInPinchToZoomTouchMode) {
+                this.isInPinchToZoomTouchMode = false;
+                finishZoom();
+            }
+            return this.isInPinchToZoomTouchMode;
+        }
+
+        public void finishZoom() {
+            if (this.finishZoomTransition == null) {
+                float min = Math.min(1.0f, Math.max(0.0f, this.pinchScale - 1.0f));
+                if (min > 0.0f) {
+                    ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{min, 0.0f});
+                    this.finishZoomTransition = ofFloat;
+                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            InstantCameraView.this.lambda$finishZoom$5$InstantCameraView(valueAnimator);
+                        }
+                    });
+                    this.finishZoomTransition.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            InstantCameraView instantCameraView = InstantCameraView.this;
+                            if (instantCameraView.finishZoomTransition != null) {
+                                instantCameraView.finishZoomTransition = null;
+                            }
+                        }
+                    });
+                    this.finishZoomTransition.setDuration(350);
+                    this.finishZoomTransition.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                    this.finishZoomTransition.start();
+                }
+            }
+        }
+
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$finishZoom$5 */
+        public /* synthetic */ void lambda$finishZoom$5$InstantCameraView(ValueAnimator valueAnimator) {
+            this.cameraSession.setZoom(((Float) valueAnimator.getAnimatedValue()).floatValue());
         }
     }
