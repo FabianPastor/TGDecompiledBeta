@@ -425,8 +425,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         int size = arrayList.size();
         Boolean bool = null;
         for (int i2 = 0; i2 < size; i2++) {
-            Parcelable parcelable = (Parcelable) arrayList.get(i2);
-            if ((parcelable instanceof Uri) && (stickerExt = MediaController.getStickerExt(uri)) != null) {
+            Object obj = arrayList.get(i2);
+            if ((obj instanceof Uri) && (stickerExt = MediaController.getStickerExt(uri)) != null) {
                 boolean equals = "tgs".equals(stickerExt);
                 if (bool == null) {
                     bool = Boolean.valueOf(equals);
@@ -436,7 +436,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 if (!isDismissed()) {
                     SendMessagesHelper.ImportingSticker importingSticker = new SendMessagesHelper.ImportingSticker();
                     importingSticker.animated = equals;
-                    String copyFileToCache = MediaController.copyFileToCache((uri = (Uri) parcelable), stickerExt, (long) ((equals ? 64 : 512) * 1024));
+                    String copyFileToCache = MediaController.copyFileToCache((uri = (Uri) obj), stickerExt, (long) ((equals ? 64 : 512) * 1024));
                     importingSticker.path = copyFileToCache;
                     if (copyFileToCache != null) {
                         if (!equals) {
@@ -449,7 +449,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                         } else {
                             importingSticker.mimeType = "application/x-tgsticker";
                         }
-                        if (arrayList2 == null || arrayList2.size() != size) {
+                        if (arrayList2 == null || arrayList2.size() != size || !(arrayList2.get(i2) instanceof String)) {
                             importingSticker.emoji = "#️⃣";
                         } else {
                             importingSticker.emoji = (String) arrayList2.get(i2);
@@ -1411,7 +1411,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r12.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r2 = r0.set
             boolean r2 = r2.masks
-            r3 = 2131627174(0x7f0e0ca6, float:1.8881605E38)
+            r3 = 2131627171(0x7f0e0ca3, float:1.8881599E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r2 == 0) goto L_0x00d1
             java.lang.Object[] r2 = new java.lang.Object[r6]
@@ -1495,7 +1495,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             if (r0 == 0) goto L_0x0171
             goto L_0x0189
         L_0x0171:
-            r0 = 2131625833(0x7f0e0769, float:1.8878885E38)
+            r0 = 2131625832(0x7f0e0768, float:1.8878883E38)
             java.lang.String r1 = "ImportStickersProcessing"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -1507,7 +1507,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         L_0x0189:
             org.telegram.ui.Components.-$$Lambda$StickersAlert$ekNx1b09uSe2umZqR4EaIlPaJH0 r0 = new org.telegram.ui.Components.-$$Lambda$StickersAlert$ekNx1b09uSe2umZqR4EaIlPaJH0
             r0.<init>()
-            r1 = 2131625820(0x7f0e075c, float:1.8878859E38)
+            r1 = 2131625819(0x7f0e075b, float:1.8878857E38)
             java.lang.Object[] r3 = new java.lang.Object[r6]
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$ImportingSticker> r7 = r12.importingStickersPaths
             if (r7 == 0) goto L_0x0198
@@ -1526,7 +1526,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.setEnabled(r6)
             goto L_0x01cc
         L_0x01b7:
-            r0 = 2131624929(0x7f0e03e1, float:1.8877052E38)
+            r0 = 2131624928(0x7f0e03e0, float:1.887705E38)
             java.lang.String r1 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -2203,7 +2203,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     public /* synthetic */ void lambda$didReceivedNotification$32$StickersAlert(String str, SendMessagesHelper.ImportingSticker importingSticker) {
         if (!isDismissed()) {
             this.uploadImportStickers.remove(str);
-            if ("application/x-bad-tgsticker".equals(importingSticker.mimeType)) {
+            if (!"application/x-tgsticker".equals(importingSticker.mimeType)) {
                 removeSticker(importingSticker);
             } else {
                 importingSticker.validated = true;

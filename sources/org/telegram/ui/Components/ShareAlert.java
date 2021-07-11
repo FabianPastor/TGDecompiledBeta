@@ -743,7 +743,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
             r3.showTextView()
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r7 = 2131626304(0x7f0e0940, float:1.887984E38)
+            r7 = 2131626302(0x7f0e093e, float:1.8879836E38)
             java.lang.String r12 = "NoChats"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r12, r7)
             r3.setText(r7)
@@ -903,7 +903,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3 = r3[r5]
             if (r3 == 0) goto L_0x0387
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r7 = 2131628113(0x7f0e1051, float:1.888351E38)
+            r7 = 2131628110(0x7f0e104e, float:1.8883503E38)
             java.lang.String r15 = "VoipGroupCopySpeakerLink"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r15, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -911,7 +911,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             goto L_0x0399
         L_0x0387:
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r7 = 2131625014(0x7f0e0436, float:1.8877224E38)
+            r7 = 2131625013(0x7f0e0435, float:1.8877222E38)
             java.lang.String r15 = "CopyLink"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r15, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -1075,7 +1075,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r2.setTextColor(r3)
         L_0x04fd:
             org.telegram.ui.Components.EditTextEmoji r2 = r0.commentTextView
-            r3 = 2131627473(0x7f0e0dd1, float:1.8882211E38)
+            r3 = 2131627470(0x7f0e0dce, float:1.8882205E38)
             java.lang.String r4 = "ShareComment"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r2.setHint(r3)
